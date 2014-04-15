@@ -38,7 +38,7 @@ app.all('/*', function(req, res) { proxy.web(req, res, { target: 'http://us1.lb.
 
 // Start server
 
-server.listen(8000, '127.0.0.1');
+server.listen(process.env.PORT || 8000, '127.0.0.1');
 
 server.on('listening', function () {
 	console.log('Server listening on %j', this.address());
