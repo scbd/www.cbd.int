@@ -34,7 +34,7 @@ app.get('/reports/test3', sendTemplate);
 
 // Configure proxy to legacy website
 
-app.all('/*', function(req, res) { proxy.web(req, res, { target: 'http://us1.lb.infra.cbd.int', secure: false } ); } );
+app.all('/*', function(req, res) { proxy.web(req, res, { target: 'https://us1.lb.infra.cbd.int', secure: false } ); } );
 
 // Start server
 
