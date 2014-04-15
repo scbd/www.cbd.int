@@ -24,20 +24,28 @@ app.configure(function() {
 
 app.get('/app/*', function(req, res) { res.send('404', 404); } );
 app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'https://api.cbd.int', secure: false } ); } );
+
+// Configure template
+
+app.get('/reports/test', sendTemplate);
+app.get('/reports/test1', sendTemplate);
+app.get('/reports/test2', sendTemplate);
+app.get('/reports/test3', sendTemplate);
+
+// Configure proxy to legacy website
+
 app.all('/*', function(req, res) { proxy.web(req, res, { target: 'http://us1.lb.infra.cbd.int', secure: false } ); } );
-
-// Configure template file
-
-app.get('/*', function(req, res) {
-	fs.readFile(__dirname + '/app/template.html', 'utf8', function (error, text) {
-		res.send(text);
-	});
-});
 
 // Start server
 
-server.listen(2060, '127.0.0.1');
+server.listen(8000, '127.0.0.1');
 
 server.on('listening', function () {
 	console.log('Server listening on %j', this.address());
 });
+
+function sendTemplate (req, res) {
+	fs.readFile(__dirname + '/app/template.html', 'utf8', function (error, text) {
+		res.send(text);
+	});
+}
