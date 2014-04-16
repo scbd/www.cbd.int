@@ -1,0 +1,26 @@
+1. Query 1
+2. Dropdown only makes 1st-5th nationalReport types.
+3. Map shows any country that submitted that report type.
+4. 5th is the latest.
+5. clicking on the country opens the corresponding report.
+6. Infobox with report info + link to actual report PDF.
+url: http://www.cbd.int/reports/ -- click on fifth national repot
+  http://www.cbd.int/reports/search/ -- search for report nth type.
+
+1. Query 2.
+2. Has a country entered nationalTarget - show countries that have submitted one
+3. clicking show info box with targets.
+4. https://chm.cbd.int/database/ -- under document types select National Targets.
+5. For aichi target filtering, show all countries who submitted nationalTargets that are
+related to that AichiTarget. A country can have multiple national targets and each target
+can have multiple aichi targets.
+nationalTarget can have multiple indicators AND aichi targets.
+
+1. Query 3.
+2. This query depends on the selecting an Aichi Target.
+3. Shade countries according to their reported progress. Darker the further along they are on the cycle.
+4. Not a filter, always display this coloring
+5. This is submenu of aichi targets.
+6. when selecting aichi target 1, color the conutries based on their progress towards that aichi target.
+7. Use latest assesment for the country.
+8. GUID in progressAssessment record will represent one of the 5 on track categories.
