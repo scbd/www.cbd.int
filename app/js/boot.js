@@ -10,7 +10,7 @@ require.config({
         'angular-cookies' : '../libs/angular-cookies/angular-cookies',
         'domReady'        : '../libs/requirejs-domready/domReady',
         'jquery'          : '../libs/jquery/jquery',
-        'bootstrap'       : '../libs/bootstrap/dist/js/bootstrap.min',
+        'bootstrap'       : '../libs/bootstrap-sass/dist/js/bootstrap.min',
         'underscore'      : '../libs/underscore/underscore'
     },
     shim: {
