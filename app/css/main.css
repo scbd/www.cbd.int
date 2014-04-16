@@ -7628,3 +7628,308 @@ td.visible-print {
     display: none !important;
   }
 }
+/*
+ * Base structure
+ */
+/* Move down content because we have a fixed navbar that is 50px tall */
+/* line 6, dashboard.scss */
+body {
+  padding-top: 50px;
+}
+
+/*
+ * Global add-ons
+ */
+/* line 15, dashboard.scss */
+.sub-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/*
+ * Sidebar
+ */
+/* Hide for mobile, show later */
+/* line 26, dashboard.scss */
+.sidebar {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  /* line 30, dashboard.scss */
+  .sidebar {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-right: 1px solid #eee;
+  }
+}
+/* Sidebar navigation */
+/* line 46, dashboard.scss */
+.nav-sidebar {
+  margin-right: -21px;
+  /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+
+/* line 51, dashboard.scss */
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+/* line 55, dashboard.scss */
+.nav-sidebar > .active > a {
+  color: #fff;
+  background-color: #428bca;
+}
+
+/*
+ * Main content
+ */
+/* line 65, dashboard.scss */
+.main {
+  padding: 20px;
+}
+
+@media (min-width: 768px) {
+  /* line 69, dashboard.scss */
+  .main {
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+}
+/* line 74, dashboard.scss */
+.main .page-header {
+  margin-top: 0;
+}
+
+/*
+ * Placeholder dashboard ideas
+ */
+/* line 83, dashboard.scss */
+.placeholders {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* line 87, dashboard.scss */
+.placeholders h4 {
+  margin-bottom: 0;
+}
+
+/* line 90, dashboard.scss */
+.placeholder {
+  margin-bottom: 20px;
+}
+
+/* line 93, dashboard.scss */
+.placeholder img {
+  display: inline-block;
+  border-radius: 50%;
+}
+
+/* line 7, main.scss */
+html, body, #map {
+  height: 100%;
+  background: #F6F6F6;
+}
+
+/* line 12, main.scss */
+.container-fluid {
+  width: 980px;
+  margin: 0 auto;
+  background: #fff;
+}
+
+/* line 18, main.scss */
+.row {
+  width: 950px;
+  margin: 0px auto;
+}
+
+/* line 23, main.scss */
+.sidebar {
+  left: auto;
+  position: relative;
+  top: auto;
+  bottom: auto;
+}
+
+/* line 30, main.scss */
+.main {
+  padding: 0px 0px 0px 12px;
+}
+
+/* line 34, main.scss */
+.push50 {
+  height: 50px;
+  display: block;
+}
+
+/* line 39, main.scss */
+.clear {
+  clear: both;
+}
+
+/* line 43, main.scss */
+.white, .white a {
+  color: #fff;
+}
+
+/* line 47, main.scss */
+p.important {
+  font-weight: bold;
+}
+
+/* line 51, main.scss */
+.google-map {
+  height: 500px;
+  width: 700px;
+  padding-right: 0px;
+  background: #e6e6e6;
+}
+
+/* line 58, main.scss */
+h4 a {
+  font-size: 12px;
+  font-weight: normal;
+}
+
+/* line 63, main.scss */
+.nav > li > a {
+  padding: 7px 15px;
+  font-size: 11px;
+  color: #009b48;
+}
+
+/* line 69, main.scss */
+.nav-sidebar > .active > a {
+  background: #009b48;
+}
+
+/* line 73, main.scss */
+.nav-sidebar {
+  margin-bottom: 0px;
+}
+
+/* line 77, main.scss */
+.nav-sidebar li {
+  border: 1px solid #ddd;
+}
+
+/* line 81, main.scss */
+.nav-sidebar li a {
+  padding-left: 30px;
+}
+
+/* line 85, main.scss */
+.nav-sidebar li:first-child a {
+  padding-left: 15px;
+  font-weight: bold;
+}
+
+/* line 90, main.scss */
+.sidebar {
+  background: #fff;
+  padding-top: 0px;
+}
+
+/* line 95, main.scss */
+.panel-body {
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
+
+/* line 101, main.scss */
+.panel-default > .panel-heading {
+  padding: 10px;
+  background: #007C35;
+  border-radius: 0px;
+}
+
+/* line 107, main.scss */
+.panel-heading > .panel-title > button {
+  border: none;
+  padding: 0px;
+  background: none;
+}
+
+/* line 113, main.scss */
+.panel-title > a {
+  color: #fff;
+  font-weight: bold;
+}
+
+/* line 118, main.scss */
+.panel-group .panel {
+  border-radius: 0px;
+}
+
+/* line 122, main.scss */
+.popover-content {
+  font-size: 13px;
+}
+
+/* line 127, main.scss */
+.form-control {
+  display: inline;
+  width: auto;
+  font-size: 12px;
+  padding: 0px;
+  height: 28px;
+  margin-top: 7px;
+}
+
+/* line 136, main.scss */
+.datepicker {
+  padding: 3px 7px;
+  margin-top: 7px;
+}
+
+/* line 141, main.scss */
+.datepicker span {
+  color: #999;
+}
+
+/* line 145, main.scss */
+.datepicker table tr td.active:hover, .datepicker table tr td.active:hover:hover, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active.disabled:hover:hover, .datepicker table tr td.active:active, .datepicker table tr td.active:hover:active, .datepicker table tr td.active.disabled:active, .datepicker table tr td.active.disabled:hover:active, .datepicker table tr td.active.active, .datepicker table tr td.active:hover.active, .datepicker table tr td.active.disabled.active, .datepicker table tr td.active.disabled:hover.active, .datepicker table tr td.active.disabled, .datepicker table tr td.active:hover.disabled, .datepicker table tr td.active.disabled.disabled, .datepicker table tr td.active.disabled:hover.disabled, .datepicker table tr td.active[disabled], .datepicker table tr td.active:hover[disabled], .datepicker table tr td.active.disabled[disabled], .datepicker table tr td.active.disabled:hover[disabled] {
+  background-color: #009b48 !important;
+  background-image: none;
+}
+
+/* line 151, main.scss */
+.input-group-btn:last-child > .btn {
+  margin-top: 7px;
+}
+
+/* line 155, main.scss */
+.aichi-targets {
+  width: 70%;
+  margin: 0px 0px 15px 25px;
+  border: none;
+  padding-left: 10px;
+}
+
+/* line 162, main.scss */
+div.datepicker {
+  margin-top: 15px;
+  line-height: 16px;
+  font-size: 14px;
+}
+
+/* line 168, main.scss */
+p.disclaimer {
+  margin-top: 10px;
+  color: #999;
+  font-size: 12px;
+}
