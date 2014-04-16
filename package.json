@@ -9,7 +9,17 @@
     "bower": "~1.3.x"
   },
   "devDependencies": {
-    "awsbox": "~0.7.x"
+    "grunt": "~0.4.2",
+    "load-grunt-tasks": "~0.2.1",
+    "grunt-express-server": "~0.4.5",
+    "grunt-concurrent": "~0.4.1",
+    "grunt-contrib-compass": "~0.6.0",
+    "grunt-contrib-watch": "~0.5.2",
+    "grunt-newer": "~0.5.4",
+    "connect-livereload": "^0.3.2",
+    "grunt-cli": "~0.1.13",
+    "awsbox": "~0.7.x",
+    "connect-livereload": "^0.4.0"
   },
   "scripts": {
     "start": "node server.js",
