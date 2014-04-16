@@ -1,3 +1,4 @@
+/* jshint node: true, browser: false */
 'use strict';
 
 var fs = require('fs');
@@ -11,14 +12,15 @@ var app    = express();
 var server = http.createServer(app);
 var proxy  = httpProxy.createProxyServer({});
 
-app.configure(function() {
+// Configure options
 
-    app.use(express.logger('dev'));
-    app.use(express.compress());
+app.use(express.logger('dev'));
+app.use(express.compress());
 
-    app.use('/app', express.static(__dirname + '/app'));
-    app.use('/favicon.png', express.static(__dirname + '/app/images/favicon.png', { maxAge: 86400000 }));
-});
+// Configure static files to serve
+
+app.use('/favicon.png', express.static(__dirname + '/app/images/favicon.png', { maxAge: 86400000 }));
+app.use('/app', express.static(__dirname + '/app'));
 
 // Configure routes
 
