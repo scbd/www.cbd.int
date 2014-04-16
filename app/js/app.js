@@ -1,8 +1,8 @@
 'use strict';
 
-define(['angular'], function(angular) {
+define(['angular', '/app/directives/index.js'], function(angular) {
 
-	var app = angular.module('app', ['ngRoute', 'ngCookies']);
+	var app = angular.module('app', ['ngRoute', 'ngCookies', 'app.directives']);
 
 	app.config(['$controllerProvider', '$compileProvider', '$provide', '$filterProvider', function($controllerProvider, $compileProvider, $provide, $filterProvider) {
 
@@ -13,7 +13,7 @@ define(['angular'], function(angular) {
 		app.value      = $provide.value;
 		app.controller = $controllerProvider.register;
 		app.directive  = $compileProvider.directive;
-		
+
 	}]);
 
 	return app;

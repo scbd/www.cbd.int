@@ -1,0 +1,1 @@
+define(['./gmap.js'], function() {});
