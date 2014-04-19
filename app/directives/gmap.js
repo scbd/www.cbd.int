@@ -33,7 +33,6 @@ define(['angular', 'underscore'],
           link: function(scope, element, attrs) {
             require(['async!http://maps.google.com/maps/api/js?v=3.exp&sensor=false'], function(maps) {
               init(element.get(0));
-              console.log('init');
               scope.$on('$destroy', cleanupListeners);
             });
           }
