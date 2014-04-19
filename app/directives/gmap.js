@@ -1,7 +1,8 @@
+var g_reports;
 define(['angular', 'underscore'],
   function(angular, _) {
-    return angular.module('app.directives', []).directive('gmap', ['$window',
-      function($window) {
+    return angular.module('app.directives', []).directive('gmap', ['$window', 'reports',
+      function($window, reports) {
         var map, infowindow;
 
 
@@ -34,6 +35,8 @@ define(['angular', 'underscore'],
             require(['async!http://maps.google.com/maps/api/js?v=3.exp&sensor=false'], function(maps) {
               init(element.get(0));
               scope.$on('$destroy', cleanupListeners);
+
+              g_reports = reports;
             });
           }
         };

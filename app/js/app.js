@@ -1,20 +1,26 @@
 'use strict';
 
-define(['angular', '/app/directives/index.js'], function(angular) {
+define([
+  'angular',
+  '/app/directives/index.js',
+  '/app/services/index.js'
+], function(angular) {
 
-	var app = angular.module('app', ['ngRoute', 'ngCookies', 'app.directives']);
+  var app = angular.module('app', ['ngRoute', 'ngCookies', 'app.services', 'app.directives']);
 
-	app.config(['$controllerProvider', '$compileProvider', '$provide', '$filterProvider', function($controllerProvider, $compileProvider, $provide, $filterProvider) {
+  app.config(['$controllerProvider', '$compileProvider', '$provide', '$filterProvider',
+    function($controllerProvider, $compileProvider, $provide, $filterProvider) {
 
-		// Allow dynamic registration
+      // Allow dynamic registration
 
-		app.filter     = $filterProvider.register;
-		app.factory    = $provide.factory;
-		app.value      = $provide.value;
-		app.controller = $controllerProvider.register;
-		app.directive  = $compileProvider.directive;
+      app.filter = $filterProvider.register;
+      app.factory = $provide.factory;
+      app.value = $provide.value;
+      app.controller = $controllerProvider.register;
+      app.directive = $compileProvider.directive;
 
-	}]);
+    }
+  ]);
 
-	return app;
+  return app;
 });
