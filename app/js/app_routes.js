@@ -9,7 +9,7 @@ define(['app', 'extended-route-provider'], function(app) {
       $locationProvider.hashPrefix('!');
 
       $routeProvider
-        .when('/reports/', {templateUrl: '/app/views/index.html', resolveController: true, resolveUser: true })
+        .when('/reports/', {templateUrl: '/app/views/reports/reports.html', resolveController: true, resolveUser: true })
         .when('/about', {templateUrl: '/app/views/about.html', resolveUser: true })
         .when('/cms/management/papersmart.shtml', {templateUrl: '/app/views/samples/country-index.html', resolveController: true, resolveUser: true })
         .when('/cms/management/papersmart.shtml/:country', {templateUrl: '/app/views/samples/country.html', resolveController: true, resolveUser: true })

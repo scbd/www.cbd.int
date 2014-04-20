@@ -1,3 +1,4 @@
+/*jshint unused:false*/
 var g_reports;
 define(['angular', 'underscore'],
   function(angular, _) {
@@ -18,6 +19,50 @@ define(['angular', 'underscore'],
             }
           });
         }
+
+        function setInfoWindow(event) {
+          var content = '<div id="infoBox" class="scrollFix">',
+            key,
+            CBDbaseUrl = 'https://chm.cbd.int/database/record?documentID=',
+            ebsaID = event.feature.getProperty('KEY');
+
+          event.feature.forEachProperty(function(propVal, propName) {
+            if (propName == 'NAME') {
+              content += '<strong>' + propVal + '</strong><br /><br />';
+            } else if (_.indexOf(['KEY', 'style', 'WORKSHOP'] !== -1)) {
+              return;
+            } else {
+              content += propName + ': ' + propVal + '<br /><br />';
+            }
+          });
+
+          content += '<a class="pull-right" target="_blank" href="' + CBDbaseUrl + ebsaID + '">Details »</a>';
+          content += '</div>';
+          infowindow.setContent(content);
+          infowindow.setPosition(event.latLng);
+          infowindow.open(map);
+        }
+
+
+        function clearMap(map) {
+          if (infowindow.getMap()) infowindow.close();
+          map.data.forEach(function(feature) {
+            map.data.remove(feature);
+          });
+        }
+
+
+        function displayRegion(regionData, color) {
+          map.data.addGeoJson(regionData);
+          listeners.push(map.data.addListener('click', setInfoWindow));
+        }
+
+        function applyStyles() {
+          map.data.setStyle(function(feature) {
+            return angular.extend({}, defaultStyle, feature.getProperty('style'));
+          });
+        }
+
 
         function cleanupListeners(e) {
           $window.google.maps.event.removeListener(listener);

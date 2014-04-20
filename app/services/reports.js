@@ -4,7 +4,6 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
 
       var baseUrl = '/api/v2013/index',
         baseQuery = 'schema_s:meeting',
-        documentsBaseUrl = 'http://www.cbd.int/doc/?meeting=',
         reports = {},
         fieldMap = {
           schema: 'schema_s',
@@ -15,7 +14,7 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
           reportType: 'reportType_s',
         },
         reportTypes = {
-          'nbsap': 'B0EBAE91-9581-4BB2-9C02-52FCF9D82721', //National Biodiversity Strategies and Action Plan(NBSAP)
+          'nbsap': 'B0EBAE91-9581-4BB2-9C02-52FCF9D82721', //National Biodiversity Strategies and reportTypes[Action Plan(NBSAP])
           'status': '5471756B-6B33-46AD-9D51-15443C5E5315', //Status of the programme of work for the Global Taxonomy Initiative(2004)
           'forests': '98B63E49-28D0-4D65-A7A4-A56D0CC97B4B', //Voluntary report on the implementation of the expanded work programme for forests(2003)
           '5th': 'B3079A36-32A3-41E2-BDE0-65E4E3A51601', //5th National Report(2009 - 2014)
@@ -151,13 +150,13 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
         return fieldMap[fieldName] || fieldName;
       };
 
-      reports.getReportCountByCountry = function(options) {
+      reports.getReports = function(options) {
         options = options || {};
 
         var solrQuery = reports._buildSolrQuery({
           schema: 'nationalReport',
           // reportType: reportTypes['5th'],
-          reportType: reportTypes['nbsap'],
+          reportType: reportTypes[options.reportType],
           facet: {
             on: true,
             field: 'government_s'
