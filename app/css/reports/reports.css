@@ -1,0 +1,195 @@
+/* line 1, reports.scss */
+html, body, #map {
+  height: 100%;
+  background: #F6F6F6;
+}
+
+/* line 6, reports.scss */
+.container-fluid {
+  width: 980px;
+  margin: 0 auto;
+  background: #fff;
+}
+
+/* line 12, reports.scss */
+.row {
+  width: 950px;
+  margin: 0px auto;
+}
+
+/* line 17, reports.scss */
+.sidebar {
+  left: auto;
+  position: relative;
+  top: auto;
+  bottom: auto;
+}
+
+/* line 24, reports.scss */
+.main {
+  padding: 0px 0px 0px 12px;
+}
+
+/* line 28, reports.scss */
+.push50 {
+  height: 50px;
+  display: block;
+}
+
+/* line 33, reports.scss */
+.clear {
+  clear: both;
+}
+
+/* line 37, reports.scss */
+.white, .white a {
+  color: #fff;
+}
+
+/* line 41, reports.scss */
+p.important {
+  font-weight: bold;
+}
+
+/* line 45, reports.scss */
+.google-map {
+  height: 500px;
+  width: 700px;
+  padding-right: 0px;
+  background: #e6e6e6;
+}
+
+/* line 52, reports.scss */
+h4 a {
+  font-size: 12px;
+  font-weight: normal;
+}
+
+/* line 57, reports.scss */
+.nav > li > a {
+  padding: 7px 15px;
+  font-size: 11px;
+  color: #009b48;
+}
+
+/* line 63, reports.scss */
+.nav-sidebar > .active > a {
+  background: #009b48;
+}
+
+/* line 67, reports.scss */
+.nav-sidebar {
+  margin-bottom: 0px;
+}
+
+/* line 71, reports.scss */
+.nav-sidebar li {
+  border: 1px solid #ddd;
+}
+
+/* line 75, reports.scss */
+.nav-sidebar li a {
+  padding-left: 30px;
+}
+
+/* line 79, reports.scss */
+.nav-sidebar li:first-child a {
+  padding-left: 15px;
+  font-weight: bold;
+}
+
+/* line 84, reports.scss */
+.sidebar {
+  background: #fff;
+  padding-top: 0px;
+}
+
+/* line 89, reports.scss */
+.panel-body {
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
+
+/* line 95, reports.scss */
+.panel-default > .panel-heading {
+  padding: 10px;
+  background: #007C35;
+  border-radius: 0px;
+}
+
+/* line 101, reports.scss */
+.panel-heading > .panel-title > button {
+  border: none;
+  padding: 0px;
+  background: none;
+}
+
+/* line 107, reports.scss */
+.panel-title > a {
+  color: #fff;
+  font-weight: bold;
+}
+
+/* line 112, reports.scss */
+.panel-group .panel {
+  border-radius: 0px;
+}
+
+/* line 116, reports.scss */
+.popover-content {
+  font-size: 13px;
+}
+
+/* line 121, reports.scss */
+.form-control {
+  display: inline;
+  width: auto;
+  font-size: 12px;
+  padding: 0px;
+  height: 28px;
+  margin-top: 7px;
+}
+
+/* line 130, reports.scss */
+.datepicker {
+  padding: 3px 7px;
+  margin-top: 7px;
+}
+
+/* line 135, reports.scss */
+.datepicker span {
+  color: #999;
+}
+
+/* line 139, reports.scss */
+.datepicker table tr td.active:hover, .datepicker table tr td.active:hover:hover, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active.disabled:hover:hover, .datepicker table tr td.active:active, .datepicker table tr td.active:hover:active, .datepicker table tr td.active.disabled:active, .datepicker table tr td.active.disabled:hover:active, .datepicker table tr td.active.active, .datepicker table tr td.active:hover.active, .datepicker table tr td.active.disabled.active, .datepicker table tr td.active.disabled:hover.active, .datepicker table tr td.active.disabled, .datepicker table tr td.active:hover.disabled, .datepicker table tr td.active.disabled.disabled, .datepicker table tr td.active.disabled:hover.disabled, .datepicker table tr td.active[disabled], .datepicker table tr td.active:hover[disabled], .datepicker table tr td.active.disabled[disabled], .datepicker table tr td.active.disabled:hover[disabled] {
+  background-color: #009b48 !important;
+  background-image: none;
+}
+
+/* line 145, reports.scss */
+.input-group-btn:last-child > .btn {
+  margin-top: 7px;
+}
+
+/* line 149, reports.scss */
+.aichi-targets {
+  width: 70%;
+  margin: 0px 0px 15px 25px;
+  border: none;
+  padding-left: 10px;
+}
+
+/* line 156, reports.scss */
+div.datepicker {
+  margin-top: 15px;
+  line-height: 16px;
+  font-size: 14px;
+}
+
+/* line 162, reports.scss */
+p.disclaimer {
+  margin-top: 10px;
+  color: #999;
+  font-size: 12px;
+}

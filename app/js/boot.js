@@ -9,10 +9,12 @@ require.config({
     'angular-route'   : '../libs/angular-route/angular-route',
     'angular-cookies' : '../libs/angular-cookies/angular-cookies',
     'async'           : '../libs/requirejs-plugins/src/async',
+    'text'            : '../libs/requirejs-text/text',
     'domReady'        : '../libs/requirejs-domready/domReady',
     'jquery'          : '../libs/jquery/jquery',
     'bootstrap'       : '../libs/bootstrap-sass/dist/js/bootstrap.min',
-    'underscore'      : '../libs/underscore/underscore'
+    'underscore'      : '../libs/underscore/underscore',
+    'angular-growl'   : '../libs/angular-growl/build/angular-growl'
   },
   shim: {
     'angular'         : { 'deps': ['jquery'], 'exports': 'angular' },
@@ -22,7 +24,7 @@ require.config({
   }
 });
 
-require(['angular', 'angular-route', 'angular-cookies', 'bootstrap', 'domReady'], function (ng) {
+require(['angular', 'angular-route', 'angular-cookies', 'bootstrap', 'domReady', 'text'], function (ng) {
 
   // NOTE: place operations that need to initialize prior to app start here using the `run` function on the top-level module
 

@@ -1,6 +1,6 @@
 define(['app'], function(app) {
-  app.controller('ReportsCtrl', ['$scope', 'reports', '$rootScope',
-    function($scope, reports, $rootScope) {
+  app.controller('ReportsCtrl', ['$scope', 'reports', '$rootScope', 'growl',
+    function($scope, reports, $rootScope, growl) {
       var self = this;
 
       $scope.nationalReportQueries = [{
@@ -32,15 +32,20 @@ define(['app'], function(app) {
         self.getReportsByType(qid);
       };
 
-      this.getReportsByType(type) {
+      this.getReportsByType = function(type) {
         reports.getReports({
           reportType: type
-        }).then(function(reports) {
-          $scope.reports = reports;
-          $rootScope.$emit('updateMap', reports);
-        });
-      }
+        })
+          .then(function(reports) {
+            if (!reports.length) growl.addInfoMessage('No reports of this type were found...');
+            else $rootScope.$emit('updateMap', reports);
+          });
+      };
 
+      $scope.resetCenterAndZoom = function() {
+        console.log('resetting');
+        $rootScope.$emit('resetCenterZoom');
+      };
     }
   ]);
 });

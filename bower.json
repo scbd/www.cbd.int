@@ -1,16 +1,17 @@
 {
-    "name": "SEED",
-    "dependencies": {
-        "requirejs": "latest",
-        "requirejs-domready": "latest",
-        "requirejs-text": "latest",
-        "requirejs-plugins": "latest",
-        "jquery": "2.0.x",
-        "angular": "1.2.x",
-        "angular-route": "1.2.x",
-        "angular-cookies": "1.2.x",
-        "bootstrap-sass": "3.0.2",
-        "font-awesome": "4.0.x",
-        "underscore": "1.6.x"
-    }
+  "name": "SEED",
+  "dependencies": {
+    "requirejs": "latest",
+    "requirejs-domready": "latest",
+    "requirejs-text": "latest",
+    "requirejs-plugins": "latest",
+    "jquery": "2.0.x",
+    "angular": "1.2.x",
+    "angular-route": "1.2.x",
+    "angular-cookies": "1.2.x",
+    "bootstrap-sass": "3.0.2",
+    "font-awesome": "4.0.x",
+    "underscore": "1.6.x",
+    "angular-growl": "~0.4.0"
+  }
 }

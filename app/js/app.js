@@ -2,14 +2,15 @@
 
 define([
   'angular',
+  'angular-growl',
   '/app/directives/index.js',
   '/app/services/index.js'
 ], function(angular) {
 
-  var app = angular.module('app', ['ngRoute', 'ngCookies', 'app.services', 'app.directives']);
+  var app = angular.module('app', ['ngRoute', 'ngCookies', 'angular-growl', 'app.services', 'app.directives']);
 
-  app.config(['$controllerProvider', '$compileProvider', '$provide', '$filterProvider',
-    function($controllerProvider, $compileProvider, $provide, $filterProvider) {
+  app.config(['$controllerProvider', '$compileProvider', '$provide', '$filterProvider', 'growlProvider',
+    function($controllerProvider, $compileProvider, $provide, $filterProvider, growlProvider) {
 
       // Allow dynamic registration
 
@@ -18,6 +19,8 @@ define([
       app.value = $provide.value;
       app.controller = $controllerProvider.register;
       app.directive = $compileProvider.directive;
+
+      growlProvider.globalTimeToLive(10000);
 
     }
   ]);
