@@ -24,20 +24,21 @@ define(['app'], function(app) {
       $scope.selectedQuery = '';
       $scope.loading = false;
 
-      $scope.setQuery = function(id) {
-        $scope.setSelectedQuery(id);
+      $scope.setQuery = function(schema, id) {
+        $scope.setSelectedQuery(schema, id);
       };
 
-      $scope.setSelectedQuery = function(qid) {
+      $scope.setSelectedQuery = function(schema, qid) {
         if ($scope.selectedQuery === qid) return;
         $scope.selectedQuery = qid;
-        self.getReportsByType(qid);
+        self.getReportsByType(schema, qid);
       };
 
-      this.getReportsByType = function(type) {
+      this.getReportsByType = function(schema, type) {
         $scope.loading = true;
         reports.getReports({
-          reportType: type
+          reportType: type,
+          schema: schema,
         })
           .then(function(reports) {
             $scope.loading = false;

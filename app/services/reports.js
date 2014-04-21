@@ -163,7 +163,7 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
         options = options || {};
 
         var solrQuery = reports._buildSolrQuery({
-          schema: 'nationalReport',
+          schema: options.schema,
           reportType: reportTypes[options.reportType],
           facet: {
             on: true,

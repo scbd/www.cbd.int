@@ -39,7 +39,7 @@
               <ul class="nav nav-sidebar">
                 <li class="active"><a href="#">Any reports</a></li>
                 <li ng-repeat="query in nationalReportQueries">
-                  <a href="" ng-click="setQuery(query.id)">{{query.name}}</a>
+                  <a href="" ng-click="setQuery('nationalReport', query.id)">{{query.name}}</a>
                 </li>
               </ul>
             </div>
@@ -59,9 +59,7 @@
           <div id="collapseTwo" class="panel-collapse collapse">
             <div class="panel-body">
               <ul class="nav nav-sidebar">
-                <li><a href="">Any national targets</a></li>
-                <li><a href="">primary targets</a></li>
-                <li><a href="">also relevant targets</a></li>
+                <li><a href="" ng-click="setQuery('nationalTarget')">Any national targets</a></li>
               </ul>
               <ul class="nav nav-sidebar">
                 <li><a href="">National Indicators</a></li>
