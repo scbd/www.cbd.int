@@ -21,30 +21,33 @@ define(['app'], function(app) {
       }];
 
 
-      $scope.selectedQuery = '5th';
+      $scope.selectedQuery = '';
+      $scope.loading = false;
 
       $scope.setQuery = function(id) {
         $scope.setSelectedQuery(id);
       };
 
       $scope.setSelectedQuery = function(qid) {
+        if ($scope.selectedQuery === qid) return;
         $scope.selectedQuery = qid;
         self.getReportsByType(qid);
       };
 
       this.getReportsByType = function(type) {
+        $scope.loading = true;
         reports.getReports({
           reportType: type
         })
           .then(function(reports) {
+            $scope.loading = false;
             if (!reports.length) growl.addInfoMessage('No reports of this type were found...');
-            else $rootScope.$emit('updateMap', reports);
+            $rootScope.$emit('updateMap', reports);
           });
       };
 
-      $scope.resetCenterAndZoom = function() {
-        console.log('resetting');
-        $rootScope.$emit('resetCenterZoom');
+      $scope.resetCenter = function() {
+        $rootScope.$emit('resetCenter');
       };
     }
   ]);

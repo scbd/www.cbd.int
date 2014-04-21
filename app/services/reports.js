@@ -28,7 +28,16 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
         var processed = [];
 
         response.docs.forEach(function(doc) {
-          var r = doc;
+          var r = {};
+
+          r.id = doc.id;
+          r.reportUrl = doc.url_ss;
+          r.title = doc.title_s;
+          r.summary = doc.summary_s;
+          r.startDate = doc.startDate_s;
+          r.endDate = doc.endDate_s;
+          r.countryCode = doc.government_s.toUpperCase();
+
           processed.push(r);
         });
 
@@ -155,7 +164,6 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
 
         var solrQuery = reports._buildSolrQuery({
           schema: 'nationalReport',
-          // reportType: reportTypes['5th'],
           reportType: reportTypes[options.reportType],
           facet: {
             on: true,

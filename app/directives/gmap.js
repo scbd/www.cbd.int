@@ -16,10 +16,15 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
 
         // array for gmap listeners that we can clean
         // when the directive is destoryed.
-        this.listeners = [];
+        this.listener = null;
 
         function init(rootEl) {
-          infowindow = new $window.google.maps.InfoWindow();
+          infowindow = new $window.google.maps.InfoWindow({
+            minHeight: 100,
+            minWidth: 100,
+            maxWidth: 360,
+            maxHeight: 400
+          });
 
           map = new $window.google.maps.Map(rootEl, {
             zoom: 1,
@@ -32,20 +37,23 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
         }
 
         function setInfoWindow(event) {
-          var content = '<div id="infoBox" class="scrollFix">',
+          var content = '<div id="infoBox" class="infobox scrollFix">',
             key;
 
-          event.feature.forEachProperty(function(propVal, propName) {
-            if (propName === 'NAME') {
-              content += '<strong>' + propVal + '</strong><br /><br />';
-            } else if (_.indexOf(['KEY', 'style', 'WORKSHOP'] !== -1)) {
-              return;
-            } else {
-              content += propName + ': ' + propVal + '<br /><br />';
-            }
-          });
+          var report = event.feature.getProperty('report');
+          content += '<strong>' + report.title + '</strong><br />';
+          content += '<p class="infobox-summary">' + report.summary + '</p>';
+          // event.feature.forEachProperty(function(propVal, propName) {
+          //   if (propName === 'NAME') {
+          //     content += '<strong>' + propVal + '</strong><br /><br />';
+          //   } else if (_.indexOf(['KEY', 'style', 'WORKSHOP'] !== -1)) {
+          //     return;
+          //   } else {
+          //     content += propName + ': ' + propVal + '<br /><br />';
+          //   }
+          // });
 
-          content += '<a class="pull-right" target="_blank" href="' + CBDbaseUrl + ebsaID + '">Details »</a>';
+          content += '<a class="pull-right" target="_blank" href="' + report.reportUrl + '">View Report »</a>';
           content += '</div>';
           infowindow.setContent(content);
           infowindow.setPosition(event.latLng);
@@ -61,9 +69,9 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
         }
 
 
-        function displayRegion(regionData) {
+        function displayRegion(regionData, reports) {
           map.data.addGeoJson(regionData);
-          this.listeners.push(map.data.addListener('click', setInfoWindow));
+          // var boundInfoWindow = _.partial(setInfoWindow, reports);
           applyStyles();
         }
 
@@ -71,21 +79,43 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
           map.data.setStyle(function(feature) {
             var strokeColor = colors.randomHexColor();
             return {
-              strokeColor: strokeColor,
-              fillColor: colors.changeLuminance(strokeColor, 0.1)
+              strokeColor: colors.changeLum(strokeColor, -0.5),
+              fillColor: colors.changeLum(strokeColor, -0.5)
             };
           });
         }
 
 
         function cleanupListeners(e) {
-          // $window.google.maps.event.removeListener(listener);
-          angular.forEach(this.listeners, function(l) {
-            $window.googlemaps.event.removeListener(l);
-          });
+          // This seems a little heavy handed for cleanup but
+          // gmaps has known bugs with memory leaks.
+          $window.google.maps.event.removeListener(this.listener);
+          $window.google.maps.event.clearInstanceListeners(infowindow);
           $window.google.maps.event.clearInstanceListeners($window);
           $window.google.maps.event.clearInstanceListeners($window.document);
           $window.google.maps.event.clearInstanceListeners(map);
+        }
+
+        function updateMap(e, newReports) {
+          cleanupListeners();
+          clearMap(map);
+          angular.forEach(newReports, function(report) {
+            var countryCode = report.countryCode;
+
+            var shape = _.find(geojsonCache.features, function(feature) {
+              return feature.properties.iso_a2 === countryCode;
+            });
+
+            var shapeClone = angular.copy(shape);
+            shapeClone.properties.report = report;
+
+            displayRegion(shapeClone);
+          });
+          this.listener = map.data.addListener('click', setInfoWindow);
+        }
+
+        function resetMap() {
+          map.setCenter(new $window.google.maps.LatLng(0, 0));
         }
 
         return {
@@ -99,23 +129,8 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
               scope.$on('$destroy', cleanupListeners);
             });
 
-            $rootScope.$on('updateMap', function(e, newReports) {
-              clearMap(map);
-              angular.forEach(newReports, function(report) {
-                console.log(report);
-                var countryCode = report.government_s.toUpperCase();
-                var shape = _.find(geojsonCache.features, function(feature) {
-                  return feature.properties.iso_a2 === countryCode;
-                });
-                displayRegion(shape);
-              });
-            });
-
-            $rootScope.$on('resetCenterZoom', function() {
-              console.log('reset');
-              map.setCenter(new $window.google.maps.LatLng(0,0));
-              map.setZoom(1);
-            });
+            $rootScope.$on('updateMap', updateMap);
+            $rootScope.$on('resetCenter', resetMap);
           }
         };
 

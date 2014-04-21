@@ -7,7 +7,7 @@ define([], function() {
     return '#' + Math.floor(start + Math.random() * end).toString(16);
   }
 
-  function changeLuminance(hex, lum) {
+  function changeLum(hex, lum) {
 
     // validate hex string
     hex = String(hex).replace(/[^0-9a-f]/gi, '');
@@ -29,7 +29,7 @@ define([], function() {
   }
 
   return {
-    changeLuminance: changeLuminance,
+    changeLum: changeLum,
     randomHexColor: randomHexColor
   };
 });
