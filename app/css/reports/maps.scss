@@ -1,11 +1,12 @@
 .scrollFix {
-  line-height: 1.35;
-  overflow: hidden;
+  // line-height: 1.35;
+  overflow: auto;
   // white-space: nowrap;
 }
 
 .infobox {
   max-width: 360px;
+  max-height: 300px;
 }
 .infobox-summary {
   max-width: 80%;

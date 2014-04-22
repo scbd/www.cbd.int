@@ -20,10 +20,8 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
 
         function init(rootEl) {
           infowindow = new $window.google.maps.InfoWindow({
-            minHeight: 100,
             minWidth: 100,
-            maxWidth: 360,
-            maxHeight: 400
+            maxWidth: 360
           });
 
           map = new $window.google.maps.Map(rootEl, {
@@ -40,20 +38,18 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
           var content = '<div id="infoBox" class="infobox scrollFix">',
             key;
 
-          var report = event.feature.getProperty('report');
-          content += '<strong>' + report.title + '</strong><br />';
-          content += '<p class="infobox-summary">' + report.summary + '</p>';
-          // event.feature.forEachProperty(function(propVal, propName) {
-          //   if (propName === 'NAME') {
-          //     content += '<strong>' + propVal + '</strong><br /><br />';
-          //   } else if (_.indexOf(['KEY', 'style', 'WORKSHOP'] !== -1)) {
-          //     return;
-          //   } else {
-          //     content += propName + ': ' + propVal + '<br /><br />';
-          //   }
-          // });
+          var reports = event.feature.getProperty('reports');
+          angular.forEach(reports, function(report) {
+            content += '<strong>' + report.title + '</strong><br />';
+            if (report.summary) {
+              content += '<p class="infobox-summary">' + report.summary + '</p>';
+            }
 
-          content += '<a class="pull-right" target="_blank" href="' + report.reportUrl + '">View Report »</a>';
+            content += '<div class="clearfix"></div>';
+            content += '<a class="pull-right" target="_blank" href="' + report.reportUrl + '">View Report »</a>';
+            content += '<hr>';
+          });
+
           content += '</div>';
           infowindow.setContent(content);
           infowindow.setPosition(event.latLng);
@@ -99,15 +95,15 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
         function updateMap(e, newReports) {
           cleanupListeners();
           clearMap(map);
-          angular.forEach(newReports, function(report) {
-            var countryCode = report.countryCode;
+          var groupedReports = _.groupBy(newReports, 'countryCode');
 
+          angular.forEach(groupedReports, function(reports, countryCode) {
             var shape = _.find(geojsonCache.features, function(feature) {
               return feature.properties.iso_a2 === countryCode;
             });
 
             var shapeClone = angular.copy(shape);
-            shapeClone.properties.report = report;
+            shapeClone.properties.reports = reports;
 
             displayRegion(shapeClone);
           });

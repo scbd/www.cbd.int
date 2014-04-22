@@ -7947,21 +7947,21 @@ p.disclaimer {
 
 /* line 1, reports/maps.scss */
 .scrollFix {
-  line-height: 1.35;
-  overflow: hidden;
+  overflow: auto;
 }
 
 /* line 7, reports/maps.scss */
 .infobox {
   max-width: 360px;
+  max-height: 300px;
 }
 
-/* line 10, reports/maps.scss */
+/* line 11, reports/maps.scss */
 .infobox-summary {
   max-width: 80%;
 }
 
-/* line 14, reports/maps.scss */
+/* line 15, reports/maps.scss */
 .loading-overlay {
   position: absolute;
   width: 100%;
@@ -7971,7 +7971,7 @@ p.disclaimer {
   display: none;
 }
 
-/* line 23, reports/maps.scss */
+/* line 24, reports/maps.scss */
 .loading-text {
   width: 50%;
   margin: 30% auto;

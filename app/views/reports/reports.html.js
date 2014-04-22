@@ -29,7 +29,7 @@ define(['app'], function(app) {
       };
 
       $scope.setSelectedQuery = function(schema, qid) {
-        if ($scope.selectedQuery === qid) return;
+        if ($scope.selectedQuery === schema) return;
         $scope.selectedQuery = qid;
         self.getReportsByType(schema, qid);
       };
