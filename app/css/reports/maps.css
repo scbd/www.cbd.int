@@ -15,6 +15,11 @@
 }
 
 /* line 15, maps.scss */
+.infobox-hr {
+  margin-bottom: 5px;
+}
+
+/* line 19, maps.scss */
 .loading-overlay {
   position: absolute;
   width: 100%;
@@ -24,7 +29,7 @@
   display: none;
 }
 
-/* line 24, maps.scss */
+/* line 28, maps.scss */
 .loading-text {
   width: 50%;
   margin: 30% auto;

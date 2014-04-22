@@ -7962,6 +7962,11 @@ p.disclaimer {
 }
 
 /* line 15, reports/maps.scss */
+.infobox-hr {
+  margin-bottom: 5px;
+}
+
+/* line 19, reports/maps.scss */
 .loading-overlay {
   position: absolute;
   width: 100%;
@@ -7971,7 +7976,7 @@ p.disclaimer {
   display: none;
 }
 
-/* line 24, reports/maps.scss */
+/* line 28, reports/maps.scss */
 .loading-text {
   width: 50%;
   margin: 30% auto;

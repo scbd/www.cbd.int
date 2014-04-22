@@ -40,14 +40,14 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
 
           var reports = event.feature.getProperty('reports');
           angular.forEach(reports, function(report) {
-            content += '<strong>' + report.title + '</strong><br />';
+            content += '<strong>' + report.title + '</strong>';
             if (report.summary) {
               content += '<p class="infobox-summary">' + report.summary + '</p>';
             }
 
             content += '<div class="clearfix"></div>';
             content += '<a class="pull-right" target="_blank" href="' + report.reportUrl + '">View Report »</a>';
-            content += '<hr>';
+            content += '<hr class="infobox-hr">';
           });
 
           content += '</div>';
