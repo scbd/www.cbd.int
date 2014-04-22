@@ -6,12 +6,12 @@
     "requirejs-text": "latest",
     "requirejs-plugins": "latest",
     "jquery": "2.0.x",
-    "angular": "1.2.x",
-    "angular-route": "1.2.x",
-    "angular-cookies": "1.2.x",
+    "angular": "1.2.16",
+    "angular-route": "1.2.16",
+    "angular-cookies": "1.2.16",
     "bootstrap-sass": "3.0.2",
-    "font-awesome": "4.0.x",
-    "underscore": "1.6.x",
+    "font-awesome": "4.0.3",
+    "underscore": "1.6.0",
     "angular-growl": "~0.4.0"
   }
 }
