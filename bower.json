@@ -13,5 +13,8 @@
     "font-awesome": "4.0.3",
     "underscore": "1.6.0",
     "angular-growl": "~0.4.0"
+  },
+  "resolutions": {
+    "angular": "1.2.16"
   }
 }
