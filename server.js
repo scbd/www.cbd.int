@@ -32,7 +32,7 @@ app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'https://ap
 
 // Configure template
 
-app.get('/reports/*', sendTemplate);
+app.get('/national-reports', sendTemplate);
 // app.get('/reports/test1', sendTemplate);
 // app.get('/reports/test2', sendTemplate);
 // app.get('/reports/test3', sendTemplate);
