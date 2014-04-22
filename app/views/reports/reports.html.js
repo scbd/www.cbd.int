@@ -1,4 +1,4 @@
-define(['app'], function(app) {
+define(['app', 'underscore'], function(app, _) {
   app.controller('ReportsCtrl', ['$scope', 'reports', '$rootScope', 'growl',
     function($scope, reports, $rootScope, growl) {
       var self = this;
@@ -19,6 +19,8 @@ define(['app'], function(app) {
         id: '1st',
         name: '1st National Report'
       }];
+
+      $scope.aichiTargetOptions = _.range(0, 20);
 
 
       $scope.selectedQuery = '';
