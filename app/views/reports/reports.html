@@ -21,7 +21,7 @@
             <h4 class="panel-title">
 
               <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                Report(s) submitted
+                National Reports
               </a>
               <button type="button" id="reports" class="pull-right btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Countries having submitted or updated their report(s) since">
                 <span class="glyphicon glyphicon-info-sign white"></span>
@@ -49,7 +49,7 @@
           <div class="panel-heading">
             <h4 class="panel-title">
               <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                NBSAP national targets
+                Targets and Indicators
               </a>
               <button type="button" id="nbsap" class="pull-right btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Countries having identified in their NBSAP national targets that contribute to the achievement of Aichi Biodiversity Target AND/OR national indicators used track progress towards the national targets relevant to Aichi Biodiversity Target">
                 <span class="glyphicon glyphicon-info-sign white"></span>
@@ -67,7 +67,7 @@
               <ul class="nav nav-sidebar">
                 <li><a href="">Any relevant Aichi targets</a></li>
                 <li><a href="">Aichi Target:</a>
-                  <select class="aichi-targets form-control" ng-model="selectedAichiTarget" ng-options="option for option in aichiTargetOptions">
+                  <select class="aichi-targets form-control" ng-model="aichiIndex" ng-options="option for option in aichiTargetOptions" ng-change="setQuery('nationalTarget', 'AICHI-TARGET-' + aichiIndex)">
                     <option value="">Aichi Target</option>
                   </select>
                 </li>

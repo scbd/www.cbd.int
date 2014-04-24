@@ -20,7 +20,8 @@ define(['app', 'underscore'], function(app, _) {
         name: '1st National Report'
       }];
 
-      $scope.aichiTargetOptions = _.range(0, 20);
+      // The range is [start, end);
+      $scope.aichiTargetOptions = _.range(1, 21);
 
 
       $scope.selectedQuery = '';
@@ -38,14 +39,21 @@ define(['app', 'underscore'], function(app, _) {
 
       this.getReportsByType = function(schema, type) {
         $scope.loading = true;
-        reports.getReports({
-          reportType: type,
-          schema: schema,
-        })
+        var params = {
+          schema: schema
+        };
+        params[(/aichi/.test(type)) ? 'reportType' : 'aichiTarget'] = type;
+        console.log(params);
+
+        reports.getReports(params)
           .then(function(reports) {
             $scope.loading = false;
             if (!reports.length) growl.addInfoMessage('No reports of this type were found...');
             $rootScope.$emit('updateMap', reports);
+          })
+          .catch(function(err) {
+            $scope.loading = false;
+            growl.addErrorMessage(err + ': Please try again.');
           });
       };
 

@@ -12,6 +12,7 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
           year: 'startDate_dt',
           sort: 'sort',
           reportType: 'reportType_s',
+          aichiTarget: 'aichiTarget_ss'
         },
         reportTypes = {
           'nbsap': 'B0EBAE91-9581-4BB2-9C02-52FCF9D82721', //National Biodiversity Strategies and reportTypes[Action Plan(NBSAP])
@@ -67,9 +68,8 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
           })
           .catch(function(results) {
             if (results.status !== 200) {
-              deferred.reject();
+              deferred.reject(results.statusText);
               // growl.addErrorMessage('Failed to fetch meetings! Please refresh the page.');
-              console.log('Error processing the request.');
             }
           });
 
@@ -99,8 +99,11 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
 
             case 'schema':
             case 'country':
-            case 'reportType':
               q[reports._translateFieldName(fname)] = val;
+              break;
+
+            case 'reportType':
+              q[reports._translateFieldName(fname)] = reportTypes[val];
               break;
 
             case 'startDate':
@@ -136,6 +139,10 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
               query.rows(val);
               break;
 
+            case 'aichiTarget':
+              q[reports._translateFieldName(fname)] = ['(', val, ')'].join('');
+              break;
+
             case 'facet':
               // for facets we pass the options object directly to
               // the underlying solrQuery.
@@ -162,15 +169,9 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
       reports.getReports = function(options) {
         options = options || {};
 
-        var solrQuery = reports._buildSolrQuery({
-          schema: options.schema,
-          reportType: reportTypes[options.reportType],
-          facet: {
-            on: true,
-            field: 'government_s'
-          },
-          rows: 0
-        });
+        var params = angular.extend({}, options);
+        params.rows = 0;
+        var solrQuery = reports._buildSolrQuery(params);
 
         return issueRequest(solrQuery);
       };
