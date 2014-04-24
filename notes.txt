@@ -52,5 +52,20 @@ schema_s:  (usefull schema)
         "progressAssessment",
         "strategicPlanIndicator",
 
-Progress assessment values
+Progress assessment values:
 http://api.cbd.int/api/v2013/thesaurus/domains/EF99BEFD-5070-41C4-91F0-C051B338EEA6/terms
+
+<identifier>884D8D8C-F2AE-4AAC-82E3-5B73CE627D45</identifier>
+<name>On track to exceed target</name>
+
+<identifier>E49EF94E-0590-486C-903B-68C5E54EC089</identifier>
+<name>On track to achieve target</name>
+
+<identifier>486C27A7-6BDF-460D-92F8-312D337EC6E2</identifier>
+<name> Progress towards target but at an insufficient rate </name>
+
+<identifier>2D241E0A-1D17-4A0A-9D52-B570D34B23BF</identifier>
+<name>No significant change</name>
+
+<identifier>36A174B8-085A-4363-AE11-E34163A9209C</identifier>
+<name>Moving away from target</name>
