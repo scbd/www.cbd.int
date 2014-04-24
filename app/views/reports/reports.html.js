@@ -43,7 +43,6 @@ define(['app', 'underscore'], function(app, _) {
           schema: schema
         };
         params[(/aichi/.test(type)) ? 'reportType' : 'aichiTarget'] = type;
-        console.log(params);
 
         reports.getReports(params)
           .then(function(reports) {

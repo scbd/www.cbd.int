@@ -51,3 +51,6 @@ schema_s:  (usefull schema)
         "nationalTarget",
         "progressAssessment",
         "strategicPlanIndicator",
+
+Progress assessment values
+http://api.cbd.int/api/v2013/thesaurus/domains/EF99BEFD-5070-41C4-91F0-C051B338EEA6/terms
