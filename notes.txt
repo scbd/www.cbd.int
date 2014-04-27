@@ -15,6 +15,7 @@ url: http://www.cbd.int/reports/ -- click on fifth national repot
 related to that AichiTarget. A country can have multiple national targets and each target
 can have multiple aichi targets.
 nationalTarget can have multiple indicators AND aichi targets.
+6. For aichiTargets, show the the total number of countries for the result set.
 
 1. Query 3.
 2. This query depends on the selecting an Aichi Target.
@@ -24,7 +25,9 @@ nationalTarget can have multiple indicators AND aichi targets.
 6. when selecting aichi target 1, color the conutries based on their progress towards that aichi target.
 7. Use latest assesment for the country.
 8. GUID in progressAssessment record will represent one of the 5 on track categories.
-
+9. Show the color of progress next to each report in a country.
+10. Paint the country according to the color of it's most advanced project
+report.
 Ex queries:
 
 http://api.cbd.int/api/v2013/index?q=schema_s%3A%22nationalReport%22+AND+reportType_s%3A%22B0EBAE91-9581-4BB2-9C02-52FCF9D82721%22&rows=0&wt=json&indent=true&facet=true&facet.field=government_s
