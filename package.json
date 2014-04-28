@@ -18,7 +18,7 @@
     "grunt-newer": "~0.5.4",
     "connect-livereload": "^0.3.2",
     "grunt-cli": "~0.1.13",
-    "awsbox": "~0.7.x",
+    "awsbox": "~0.6.x",
     "connect-livereload": "^0.4.0"
   },
   "scripts": {
