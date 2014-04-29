@@ -67,11 +67,10 @@ define(['app', 'underscore'], function(app, _) {
             if (!reports.length) growl.addInfoMessage('No reports of this type were found...');
             $rootScope.$emit('updateMap', reports);
           })
-          .
-        catch (function(err) {
-          $scope.loading = false;
-          growl.addErrorMessage(err + ': Please try again.');
-        });
+          .catch (function(err) {
+            $scope.loading = false;
+            growl.addErrorMessage(err + ': Please try again.');
+          });
       };
 
       $scope.resetCenter = function() {
