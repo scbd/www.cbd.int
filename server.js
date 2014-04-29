@@ -18,7 +18,7 @@ app.use(express.logger('dev'));
 app.use(express.compress());
 
 app.configure('development', function() {
-  //app.use(require('connect-livereload')());
+  app.use(require('connect-livereload')());
 });
 // Configure static files to serve
 
