@@ -63,9 +63,17 @@ define(['app', 'underscore'], function(app, _) {
 
         reports.getReports(params)
           .then(function(reports) {
-            $scope.loading = false;
-            if (!reports.length) growl.addInfoMessage('No reports of this type were found...');
-            $rootScope.$emit('updateMap', reports);
+            if (!reports.length) {
+              $scope.loading = false;
+              growl.addInfoMessage('No reports of this type were found...');
+              return;
+            }
+            reports.getProgressAssessments()
+              .then(function(assessments) {
+                $scope.loading = false;
+                reports = self.mergeAssessmentsAndReports(reports, assessments);
+                $rootScope.$emit('updateMap', reports);
+              });
           })
           .catch (function(err) {
             $scope.loading = false;

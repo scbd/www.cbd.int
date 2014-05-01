@@ -12,7 +12,8 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
           year: 'startDate_dt',
           sort: 'sort',
           reportType: 'reportType_s',
-          aichiTarget: 'aichiTarget_ss'
+          aichiTarget: 'aichiTarget_ss',
+          nationalTarget: 'nationalTarget_s'
         },
         reportTypes = {
           'nbsap': 'B0EBAE91-9581-4BB2-9C02-52FCF9D82721', //National Biodiversity Strategies and reportTypes[Action Plan(NBSAP])
@@ -32,6 +33,7 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
           var r = {};
 
           r.id = doc.id;
+          r.identifier = doc.identifier_s;
           r.reportUrl = doc.url_ss;
           r.title = doc.title_s;
           r.summary = doc.summary_s;
@@ -143,6 +145,10 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
               q[reports._translateFieldName(fname)] = ['(', val, ')'].join('');
               break;
 
+            case 'nationalTarget':
+              q[reports._translateFieldName(fname)] = ['(', val.join(','), ')'].join('');
+              break;
+
             case 'facet':
               // for facets we pass the options object directly to
               // the underlying solrQuery.
@@ -164,6 +170,15 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
 
       reports._translateFieldName = function(fieldName) {
         return fieldMap[fieldName] || fieldName;
+      };
+
+      reports.getProgressAssessments = function(relatedSchema, guids) {
+        var query = reports._buildSolrQuery({
+          schema: relatedSchema,
+          nationalTarget: guids
+        });
+
+        return issueRequest(query);
       };
 
       reports.getReports = function(options) {
