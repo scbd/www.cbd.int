@@ -32,7 +32,7 @@ define(['app', 'underscore'], function(app, _) {
           score: 4
         },
         "486C27A7-6BDF-460D-92F8-312D337EC6E2": {
-          verbal: "Progress towards target but at an insufficient rate",
+          verbal: "Insufficient rate of change",
           color: '#00C655',
           score: 3
         },
