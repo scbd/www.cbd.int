@@ -37,8 +37,14 @@ define(['app', 'underscore'], function(app, _) {
         "verbal": "Moving away from target"
       }];
 
-      // The range is [start, end);
-      $scope.aichiTargetOptions = _.range(1, 21);
+      // Range is 0,20. The number are converted to string and the
+      // first ten digits are padded with a zero to become proper
+      // arguements to query solr with.
+      $scope.aichiTargetOptions = _.range(1, 21).map(function(val) {
+        var str = val.toString();
+        if (str.length === 1) str = '0' + str;
+        return str;
+      });
 
 
       $scope.selectedQuery = '';
@@ -54,6 +60,15 @@ define(['app', 'underscore'], function(app, _) {
         self.getReportsByType(schema, qid);
       };
 
+      this.mergeAssessmentsAndReports = function(reports, assessments) {
+        reports.forEach(function(report) {
+          assessments.forEach(function(assessment) {
+            if (assessment) {}
+          });
+        });
+        return reports;
+      };
+
       this.getReportsByType = function(schema, type) {
         $scope.loading = true;
         var params = {
@@ -62,18 +77,31 @@ define(['app', 'underscore'], function(app, _) {
         params[(/AICHI/.test(type)) ? 'aichiTarget' : 'reportType'] = type;
 
         reports.getReports(params)
-          .then(function(reports) {
-            if (!reports.length) {
+          .then(function(results) {
+            if (!results.length) {
               $scope.loading = false;
               growl.addInfoMessage('No reports of this type were found...');
               return;
             }
-            reports.getProgressAssessments()
-              .then(function(assessments) {
-                $scope.loading = false;
-                reports = self.mergeAssessmentsAndReports(reports, assessments);
-                $rootScope.$emit('updateMap', reports);
-              });
+
+            if (schema === 'nationalTarget' || schema === 'nationalIndicator') {
+              var isAichi = !!params.aichiTarget;
+              var guids = _.pluck(results, isAichi ? 'aichiTargets' : 'identifier'),
+                targetType = isAichi ? 'aichi' : 'national';
+
+              reports.getProgressAssessments('progressAssessment', guids, targetType)
+                .then(function(assessments) {
+                  console.log(assessments);
+                  $scope.loading = false;
+                  results = self.mergeAssessmentsAndReports(results, assessments);
+                  $rootScope.$emit('updateMap', results);
+                });
+
+              return;
+            }
+
+            $scope.loading = false;
+            $rootScope.$emit('updateMap', results);
           })
           .catch (function(err) {
             $scope.loading = false;

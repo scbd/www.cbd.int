@@ -13,7 +13,8 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
           sort: 'sort',
           reportType: 'reportType_s',
           aichiTarget: 'aichiTarget_ss',
-          nationalTarget: 'nationalTarget_s'
+          byNationalTarget: 'nationalTarget_s',
+          byAichiTarget: 'aichiTarget_s'
         },
         reportTypes = {
           'nbsap': 'B0EBAE91-9581-4BB2-9C02-52FCF9D82721', //National Biodiversity Strategies and reportTypes[Action Plan(NBSAP])
@@ -26,7 +27,7 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
           '1st': 'F27DBC9B-FF25-471B-B624-C0F73E76C8B3', //1st National Report(1992 - 1998)
         };
 
-      reports.normalize = function(response, counts) {
+      reports.normalizeReports = function(response, counts) {
         var processed = [];
 
         response.docs.forEach(function(doc) {
@@ -34,6 +35,7 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
 
           r.id = doc.id;
           r.identifier = doc.identifier_s;
+          r.aichiTargets = doc.aichiTarget_ss;
           r.reportUrl = doc.url_ss;
           r.title = doc.title_s;
           r.summary = doc.summary_s;
@@ -51,6 +53,25 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
         return processed;
       };
 
+      reports.normalizeAssessments = function(response) {
+        var processed = [];
+
+        response.docs.forEach(function(assessment) {
+          console.log(assessment);
+          var a = {};
+
+          a.aichiTarget = assessment.aichiTarget_s;
+          a.progressGuid =  assessment.progress_s;
+          a.title = assessment.title_s;
+          a.updated = assessment.updateDate_dt;
+          a.nationalTarget = assessment.nationalTarget_s;
+
+          processed.push(a);
+        });
+
+        return processed;
+      };
+
       reports.getAll = function(cb) {
         $http.get(baseUrl, { params: {q: baseQuery } })
           .then(function(results) {
@@ -58,7 +79,7 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
           });
       };
 
-      function issueRequest(query) {
+      function issueRequest(query, shouldNormalize, normalizationFunction) {
         // because we build the query by hand using solrQuery, we
         // dont use the usual params hash the $http.get() accepts, otherwise
         // angular will escape our already escaped characters.
@@ -66,12 +87,14 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
         $http.get([baseUrl, query].join('?'))
           .then(function(results) {
             var counts = !(_.isEmpty(results.data.facet_counts)) ? results.data.facet_counts : false;
-            deferred.resolve(reports.normalize(results.data.response, counts));
+            var data;
+            if (shouldNormalize) data = normalizationFunction(results.data.response, counts);
+            else data = results.data.response.docs;
+            deferred.resolve(data);
           })
           .catch(function(results) {
             if (results.status !== 200) {
               deferred.reject(results.statusText);
-              // growl.addErrorMessage('Failed to fetch meetings! Please refresh the page.');
             }
           });
 
@@ -145,8 +168,13 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
               q[reports._translateFieldName(fname)] = ['(', val, ')'].join('');
               break;
 
-            case 'nationalTarget':
-              q[reports._translateFieldName(fname)] = ['(', val.join(','), ')'].join('');
+            case 'byNationalTarget':
+            case 'byAichiTarget':
+              if (val.length) {
+                // Add quotes to the values otherwise solr fails.
+                val = val.map(function(guid) { return '"' + guid + '"'; });
+                q[reports._translateFieldName(fname)] = ['(', val.join(', '), ')'].join('');
+              }
               break;
 
             case 'facet':
@@ -172,23 +200,25 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
         return fieldMap[fieldName] || fieldName;
       };
 
-      reports.getProgressAssessments = function(relatedSchema, guids) {
-        var query = reports._buildSolrQuery({
-          schema: relatedSchema,
-          nationalTarget: guids
-        });
+      reports.getProgressAssessments = function(schema, guids, targetType) {
+        var params = {schema: schema};
 
-        return issueRequest(query);
+        // possible values for targetType are 'national' and 'aichi';
+        params[targetType === 'national' ? 'byNationalTarget' : 'byAichiTarget'] = guids;
+
+        var query = reports._buildSolrQuery(params);
+
+        return issueRequest(query, true, reports.normalizeAssessments);
       };
 
       reports.getReports = function(options) {
         options = options || {};
 
         var params = angular.extend({}, options);
-        params.rows = 0;
+        params.rows = 1000;
         var solrQuery = reports._buildSolrQuery(params);
 
-        return issueRequest(solrQuery);
+        return issueRequest(solrQuery, true, reports.normalizeReports);
       };
 
       return reports;
