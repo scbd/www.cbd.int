@@ -115,6 +115,10 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
             if (!_.isEmpty(bestAssess)) countryColor = bestAssess.assessment.meta.color;
 
             var shapeClone = angular.copy(shape);
+            
+            if(!shapeClone) 
+              return;
+            
             shapeClone.properties.reports = reports;
             shapeClone.properties.color = countryColor;
 
