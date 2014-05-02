@@ -70,7 +70,8 @@
             </div>
           </div>
         </div>
-        <div class="panel panel-default">
+
+        <!-- <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
               <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
@@ -93,11 +94,11 @@
               </ul>
             </div>
           </div>
-        </div>
-      </div>
-      <button type="button" ng-click="resetCenter()" class="btn btn-primary btn-info">Reset Center</button>
+        </div> -->
 
-      <div class="legend m-t-l">
+      </div>
+
+      <div class="legend m-t-xl">
         <span class="legend-title">Assessment Legend</span>
         <ul class="legend-list">
           <li class="legend-item" ng-repeat="setting in progressSettings | orderObjectBy:'-score'">
@@ -106,6 +107,8 @@
           </li>
         </ul>
       </div>
+
+      <!-- <button type="button" ng-click="resetCenter()" class="btn btn-primary btn-info m-t-xl">Reset Center</button> -->
     </div>
     <div class="col-sm-9 col-md-9 main">
       <div class="panel-group" id="accordion">

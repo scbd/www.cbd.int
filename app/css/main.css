@@ -7689,6 +7689,26 @@ td.visible-print {
   margin-right: 15px;
 }
 
+/* line 41, reports/helpers.scss */
+.m-t-xl {
+  margin-top: 25px;
+}
+
+/* line 44, reports/helpers.scss */
+.m-b-xl {
+  margin-bottom: 25px;
+}
+
+/* line 47, reports/helpers.scss */
+.m-l-xl {
+  margin-left: 25px;
+}
+
+/* line 50, reports/helpers.scss */
+.m-r-xl {
+  margin-right: 25px;
+}
+
 /*
  * Base structure
  */
@@ -8007,14 +8027,15 @@ p.disclaimer {
   background-color: #007C35;
   color: #fff;
   padding: 5px;
+  font-size: 12px;
 }
-/* line 180, reports/reports.scss */
+/* line 181, reports/reports.scss */
 .legend .legend-list {
   list-style: none;
   padding-left: 0;
   margin-bottom: 0;
 }
-/* line 186, reports/reports.scss */
+/* line 187, reports/reports.scss */
 .legend .legend-item {
   max-width: 90%;
   padding: 5px 0 5px 10px;

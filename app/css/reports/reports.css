@@ -206,14 +206,15 @@ p.disclaimer {
   background-color: #007C35;
   color: #fff;
   padding: 5px;
+  font-size: 12px;
 }
-/* line 180, reports.scss */
+/* line 181, reports.scss */
 .legend .legend-list {
   list-style: none;
   padding-left: 0;
   margin-bottom: 0;
 }
-/* line 186, reports.scss */
+/* line 187, reports.scss */
 .legend .legend-item {
   max-width: 90%;
   padding: 5px 0 5px 10px;

@@ -57,3 +57,23 @@
 .m-r-l {
   margin-right: 15px;
 }
+
+/* line 41, helpers.scss */
+.m-t-xl {
+  margin-top: 25px;
+}
+
+/* line 44, helpers.scss */
+.m-b-xl {
+  margin-bottom: 25px;
+}
+
+/* line 47, helpers.scss */
+.m-l-xl {
+  margin-left: 25px;
+}
+
+/* line 50, helpers.scss */
+.m-r-xl {
+  margin-right: 25px;
+}
