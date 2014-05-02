@@ -97,7 +97,6 @@ define(['app', 'underscore'], function(app, _) {
             if (!results.length) {
               $scope.loading = false;
               growl.addInfoMessage('No reports of this type were found...');
-              return;
             }
 
             if (schema === 'nationalTarget' || schema === 'nationalIndicator') {

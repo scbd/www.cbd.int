@@ -11,7 +11,7 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
             fillColor: null,
             fillOpacity: 0.25
           },
-          defaultCountryColor = null,
+          defaultCountryColor = '#ccc',
           geojsonCache = JSON.parse(countriesGeoJson);
 
         // array for gmap listeners that we can clean
