@@ -65,7 +65,7 @@ http://api.cbd.int/api/v2013/thesaurus/domains/EF99BEFD-5070-41C4-91F0-C051B338E
 <name>On track to achieve target</name>
 
 <identifier>486C27A7-6BDF-460D-92F8-312D337EC6E2</identifier>
-<name> Progress towards target but at an insufficient rate </name>
+<name>Progress towards target but at an insufficient rate</name>
 
 <identifier>2D241E0A-1D17-4A0A-9D52-B570D34B23BF</identifier>
 <name>No significant change</name>

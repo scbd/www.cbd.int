@@ -4,10 +4,11 @@ define([
   'angular',
   'angular-growl',
   '/app/directives/index.js',
-  '/app/services/index.js'
+  '/app/services/index.js',
+  '/app/filters/index.js'
 ], function(angular) {
 
-  var app = angular.module('app', ['ngRoute', 'ngCookies', 'angular-growl', 'app.services', 'app.directives']);
+  var app = angular.module('app', ['ngRoute', 'ngCookies', 'angular-growl', 'app.services', 'app.directives', 'app.filters']);
 
   app.config(['$controllerProvider', '$compileProvider', '$provide', '$filterProvider', 'growlProvider',
     function($controllerProvider, $compileProvider, $provide, $filterProvider, growlProvider) {

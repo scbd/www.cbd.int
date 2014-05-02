@@ -164,3 +164,29 @@ p.disclaimer{
   color: #999;
   font-size: 12px;
 }
+
+.legend {
+  border: 1px solid #007C35;
+
+  .legend-title {
+    font-weight: bold;
+    display: inline-block;
+    width: 100%;
+    background-color: #007C35;
+    color: #fff;
+    padding: 5px;
+  }
+
+  .legend-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+  }
+
+  .legend-item {
+    max-width: 90%;
+    padding: 5px 0 5px 10px;
+    font-size: 0.9em;
+  }
+
+}

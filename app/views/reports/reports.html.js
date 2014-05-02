@@ -20,24 +20,35 @@ define(['app', 'underscore'], function(app, _) {
         name: '1st National Report'
       }];
 
-      $scope.progress = [{
-        "guid": "884D8D8C-F2AE-4AAC-82E3-5B73CE627D45",
-        "verbal": "On track to exceed target"
-      }, {
-        "guid": "E49EF94E-0590-486C-903B-68C5E54EC089",
-        "verbal": "On track to achieve target"
-      }, {
-        "guid": "486C27A7-6BDF-460D-92F8-312D337EC6E2",
-        "verbal": " Progress towards target but at an insufficient rate "
-      }, {
-        "guid": "2D241E0A-1D17-4A0A-9D52-B570D34B23BF",
-        "verbal": "No significant change"
-      }, {
-        "guid": "36A174B8-085A-4363-AE11-E34163A9209C",
-        "verbal": "Moving away from target"
-      }];
+      $scope.progressSettings = {
+        "884D8D8C-F2AE-4AAC-82E3-5B73CE627D45": {
+          verbal: "On track to exceed target",
+          color: '#007C35',
+          score: 5
+        },
+        "E49EF94E-0590-486C-903B-68C5E54EC089": {
+          verbal: "On track to achieve target",
+          color: '#00AB49',
+          score: 4
+        },
+        "486C27A7-6BDF-460D-92F8-312D337EC6E2": {
+          verbal: "Progress towards target but at an insufficient rate",
+          color: '#00C655',
+          score: 3
+        },
+        "2D241E0A-1D17-4A0A-9D52-B570D34B23BF": {
+          verbal: "No significant change",
+          color: '#00E362',
+          score: 2
+        },
+        "36A174B8-085A-4363-AE11-E34163A9209C": {
+          verbal: "Moving away from target",
+          color: '#00FF6E',
+          score: 1
+        }
+      };
 
-      // Range is 0,20. The number are converted to string and the
+      // Range is 0,20. The numbers are converted to string and the
       // first ten digits are padded with a zero to become proper
       // arguements to query solr with.
       $scope.aichiTargetOptions = _.range(1, 21).map(function(val) {
@@ -63,9 +74,14 @@ define(['app', 'underscore'], function(app, _) {
       this.mergeAssessmentsAndReports = function(reports, assessments) {
         reports.forEach(function(report) {
           assessments.forEach(function(assessment) {
-            if (assessment) {}
+            if (report.aichiTargets.indexOf(assessment.aichiTarget) !== -1 ||
+                report.identifier === assessment.nationalTarget) {
+              assessment.meta = $scope.progressSettings[assessment.progressGuid];
+              report.assessment = assessment;
+            }
           });
         });
+        // reports.map(function(report) {console.log(report.assessment)});
         return reports;
       };
 
@@ -91,7 +107,7 @@ define(['app', 'underscore'], function(app, _) {
 
               reports.getProgressAssessments('progressAssessment', guids, targetType)
                 .then(function(assessments) {
-                  console.log(assessments);
+                  // console.log(assessments);
                   $scope.loading = false;
                   results = self.mergeAssessmentsAndReports(results, assessments);
                   $rootScope.$emit('updateMap', results);

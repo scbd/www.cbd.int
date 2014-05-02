@@ -4,6 +4,7 @@ $img-path: "/app/images";
 
 
 /* Reports related stuff */
+@import 'reports/helpers';
 @import 'reports/dashboard';
 @import 'reports/reports';
 @import 'reports/growl';

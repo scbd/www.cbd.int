@@ -193,3 +193,29 @@ p.disclaimer {
   color: #999;
   font-size: 12px;
 }
+
+/* line 168, reports.scss */
+.legend {
+  border: 1px solid #007C35;
+}
+/* line 171, reports.scss */
+.legend .legend-title {
+  font-weight: bold;
+  display: inline-block;
+  width: 100%;
+  background-color: #007C35;
+  color: #fff;
+  padding: 5px;
+}
+/* line 180, reports.scss */
+.legend .legend-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+/* line 186, reports.scss */
+.legend .legend-item {
+  max-width: 90%;
+  padding: 5px 0 5px 10px;
+  font-size: 0.9em;
+}

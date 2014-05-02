@@ -57,7 +57,6 @@ define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, 
         var processed = [];
 
         response.docs.forEach(function(assessment) {
-          console.log(assessment);
           var a = {};
 
           a.aichiTarget = assessment.aichiTarget_s;

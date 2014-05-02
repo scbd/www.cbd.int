@@ -96,6 +96,16 @@
         </div>
       </div>
       <button type="button" ng-click="resetCenter()" class="btn btn-primary btn-info">Reset Center</button>
+
+      <div class="legend m-t-l">
+        <span class="legend-title">Assessment Legend</span>
+        <ul class="legend-list">
+          <li class="legend-item" ng-repeat="setting in progressSettings | orderObjectBy:'-score'">
+            <div class="color-box" style="background-color:{{setting.color}}"></div>
+            <span class="verbal">{{setting.verbal}}</span>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="col-sm-9 col-md-9 main">
       <div class="panel-group" id="accordion">

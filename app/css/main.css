@@ -7629,6 +7629,66 @@ td.visible-print {
   }
 }
 /* Reports related stuff */
+/* line 1, reports/helpers.scss */
+.m-t-s {
+  margin-top: 5px;
+}
+
+/* line 4, reports/helpers.scss */
+.m-b-s {
+  margin-bottom: 5px;
+}
+
+/* line 7, reports/helpers.scss */
+.m-l-s {
+  margin-left: 5px;
+}
+
+/* line 10, reports/helpers.scss */
+.m-r-s {
+  margin-right: 5px;
+}
+
+/* line 14, reports/helpers.scss */
+.m-t {
+  margin-top: 10px;
+}
+
+/* line 17, reports/helpers.scss */
+.m-b {
+  margin-bottom: 10px;
+}
+
+/* line 20, reports/helpers.scss */
+.m-l {
+  margin-left: 10px;
+}
+
+/* line 23, reports/helpers.scss */
+.m-r {
+  margin-right: 10px;
+}
+
+/* line 28, reports/helpers.scss */
+.m-t-l {
+  margin-top: 15px;
+}
+
+/* line 31, reports/helpers.scss */
+.m-b-l {
+  margin-bottom: 15px;
+}
+
+/* line 34, reports/helpers.scss */
+.m-l-l {
+  margin-left: 15px;
+}
+
+/* line 37, reports/helpers.scss */
+.m-r-l {
+  margin-right: 15px;
+}
+
 /*
  * Base structure
  */
@@ -7935,6 +7995,32 @@ p.disclaimer {
   font-size: 12px;
 }
 
+/* line 168, reports/reports.scss */
+.legend {
+  border: 1px solid #007C35;
+}
+/* line 171, reports/reports.scss */
+.legend .legend-title {
+  font-weight: bold;
+  display: inline-block;
+  width: 100%;
+  background-color: #007C35;
+  color: #fff;
+  padding: 5px;
+}
+/* line 180, reports/reports.scss */
+.legend .legend-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+/* line 186, reports/reports.scss */
+.legend .legend-item {
+  max-width: 90%;
+  padding: 5px 0 5px 10px;
+  font-size: 0.9em;
+}
+
 /* line 1, reports/growl.scss */
 .growl {
   width: 50%;
@@ -7983,4 +8069,11 @@ p.disclaimer {
   text-align: center;
   font-weight: bold;
   font-size: 1.4em;
+}
+
+/* line 36, reports/maps.scss */
+.color-box {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
 }

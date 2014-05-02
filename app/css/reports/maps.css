@@ -37,3 +37,10 @@
   font-weight: bold;
   font-size: 1.4em;
 }
+
+/* line 36, maps.scss */
+.color-box {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+}

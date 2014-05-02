@@ -1,4 +1,3 @@
-/*jshint unused:false*/
 define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '../util/colors.js'],
   function(module, _, countriesGeoJson, colors) {
     return module.directive('gmap', ['$window', 'reports', '$rootScope',
@@ -12,6 +11,7 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
             fillColor: null,
             fillOpacity: 0.25
           },
+          defaultCountryColor = null,
           geojsonCache = JSON.parse(countriesGeoJson);
 
         // array for gmap listeners that we can clean
@@ -35,12 +35,17 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
         }
 
         function setInfoWindow(event) {
-          var content = '<div id="infoBox" class="infobox scrollFix">',
-            key;
+          var content = '<div id="infoBox" class="infobox scrollFix">';
 
           var reports = event.feature.getProperty('reports');
           angular.forEach(reports, function(report) {
-            content += '<strong>' + report.title + '</strong>';
+            content += '<strong>' + report.title + '</strong><br/>';
+            if (report.assessment) {
+              content += '<strong>Progress:</strong> ' +
+                '<div class="color-box" style="background-color: ' +
+                  report.assessment.meta.color +
+                ';"></div>';
+            }
             if (report.summary) {
               content += '<p class="infobox-summary">' + report.summary + '</p>';
             }
@@ -65,15 +70,15 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
         }
 
 
-        function displayRegion(regionData, reports) {
+        function displayRegion(regionData) {
           map.data.addGeoJson(regionData);
-          // var boundInfoWindow = _.partial(setInfoWindow, reports);
           applyStyles();
         }
 
         function applyStyles() {
           map.data.setStyle(function(feature) {
-            var strokeColor = colors.randomHexColor();
+            var strokeColor = feature.getProperty('color');
+            if (!strokeColor) strokeColor = defaultCountryColor;
             return {
               strokeColor: colors.changeLum(strokeColor, -0.5),
               fillColor: colors.changeLum(strokeColor, -0.5)
@@ -82,7 +87,7 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
         }
 
 
-        function cleanupListeners(e) {
+        function cleanupListeners() {
           // This seems a little heavy handed for cleanup but
           // gmaps has known bugs with memory leaks.
           $window.google.maps.event.removeListener(this.listener);
@@ -102,8 +107,16 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
               return feature.properties.iso_a2 === countryCode;
             });
 
+            var countryColor,
+              bestAssess = _.max(reports, function(report) {
+                return report.assessment && report.assessment.meta.score;
+              });
+              console.log(bestAssess.assessment);
+            if (!_.isEmpty(bestAssess)) countryColor = bestAssess.assessment.meta.color;
+
             var shapeClone = angular.copy(shape);
             shapeClone.properties.reports = reports;
+            shapeClone.properties.color = countryColor;
 
             displayRegion(shapeClone);
           });
@@ -119,8 +132,8 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
           template: '<div id="map"></div>',
           replace: true,
           scope: {},
-          link: function(scope, element, attrs) {
-            require(['async!//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false'], function(a, maps) {
+          link: function(scope, element) {
+            require(['async!//maps.googleapis.com/maps/api/js?v=3.exp&sensor=false'], function() {
               init(element.get(0));
               scope.$on('$destroy', cleanupListeners);
             });
