@@ -103,22 +103,25 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
           var groupedReports = _.groupBy(newReports, 'countryCode');
 
           angular.forEach(groupedReports, function(reports, countryCode) {
+            if (countryCode === 'EUR') return;
+            console.log(countryCode);
             var shape = _.find(geojsonCache.features, function(feature) {
               return feature.properties.iso_a2 === countryCode;
             });
+            // console.log(shape);
 
             var countryColor,
               bestAssess = _.max(reports, function(report) {
                 return report.assessment && report.assessment.meta.score;
               });
-              console.log(bestAssess.assessment);
+
             if (!_.isEmpty(bestAssess)) countryColor = bestAssess.assessment.meta.color;
 
             var shapeClone = angular.copy(shape);
-            
-            if(!shapeClone) 
-              return;
-            
+
+            // if(!shapeClone)
+            //   return;
+
             shapeClone.properties.reports = reports;
             shapeClone.properties.color = countryColor;
 
