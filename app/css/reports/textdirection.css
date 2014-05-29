@@ -12,85 +12,85 @@
 
 /* line 11, textdirection.scss */
 .ltr .banner {
-  background: url(../images/banner-0.jpg) no-repeat left top;
+  background: url("/app/images/banner-0.jpg") no-repeat left top;
 }
 
 /* line 15, textdirection.scss */
 .rtl .banner {
-  background: url(../images/banner-0.jpg) no-repeat right top;
+  background: url("/app/images/banner-0.jpg") no-repeat right top;
 }
 
-/* line 20, textdirection.scss */
+/* line 19, textdirection.scss */
 .ltr .banner .main-title {
   border-left: 4px solid #009B48;
   float: left;
 }
 
-/* line 24, textdirection.scss */
+/* line 23, textdirection.scss */
 .rtl .banner .main-title {
   border-right: 4px solid #009B48;
   float: right;
 }
 
-/* line 29, textdirection.scss */
+/* line 28, textdirection.scss */
 .ltr .Menulang {
   padding-left: 0px;
 }
 
-/* line 32, textdirection.scss */
+/* line 31, textdirection.scss */
 .rtl .Menulang {
   padding-right: 0px;
 }
 
-/* line 36, textdirection.scss */
+/* line 35, textdirection.scss */
 .ltr .padding66 {
   padding-left: 0px;
 }
 
-/* line 39, textdirection.scss */
+/* line 38, textdirection.scss */
 .rtl .padding66 {
   padding-right: 66px;
 }
 
-/* line 44, textdirection.scss */
+/* line 43, textdirection.scss */
 .ltr .Menulang li {
   border-right: 1px solid #666;
   float: left;
 }
 
-/* line 48, textdirection.scss */
+/* line 47, textdirection.scss */
 .rtl .Menulang li {
   border-left: 1px solid #666;
   float: right;
 }
 
-/* line 52, textdirection.scss */
+/* line 51, textdirection.scss */
 .ltr .Menulang li:last-child {
   border-right: 0px;
 }
 
-/* line 55, textdirection.scss */
+/* line 54, textdirection.scss */
 .rtl .Menulang li:last-child {
   border-left: 0px;
 }
 
-/* line 59, textdirection.scss */
+/* line 58, textdirection.scss */
 .rtl .navbar-nav {
   padding-right: 0px;
 }
 
-/* line 63, textdirection.scss */
+/* line 62, textdirection.scss */
 .rtl .navbar-nav li {
   float: right;
 }
 
-/* line 67, textdirection.scss */
+/* line 66, textdirection.scss */
 .ltr .sidebar {
   left: auto;
   float: left;
 }
 
-/* line 71, textdirection.scss */
+/* line 70, textdirection.scss */
 .rtl .sidebar {
   right: auto;
   padding-right: 15px;
@@ -99,67 +99,67 @@
   float: right;
 }
 
-/* line 79, textdirection.scss */
+/* line 78, textdirection.scss */
 .ltr .main {
   padding: 0px 0px 0px 12px;
 }
 
-/* line 82, textdirection.scss */
+/* line 81, textdirection.scss */
 .rtl .main {
   padding: 0px 12px 0px 0px;
 }
 
-/* line 86, textdirection.scss */
+/* line 85, textdirection.scss */
 .ltr .left {
   text-align: left;
 }
 
-/* line 89, textdirection.scss */
+/* line 88, textdirection.scss */
 .rtl .left {
   text-align: right;
 }
 
-/* line 93, textdirection.scss */
+/* line 92, textdirection.scss */
 .ltr .fright {
   float: right;
 }
 
-/* line 96, textdirection.scss */
+/* line 95, textdirection.scss */
 .rtl .fright {
   float: left;
 }
 
-/* line 100, textdirection.scss */
+/* line 99, textdirection.scss */
 .ltr .fleft {
   float: left;
 }
 
-/* line 103, textdirection.scss */
+/* line 102, textdirection.scss */
 .rtl .fleft {
   float: right;
 }
 
-/* line 107, textdirection.scss */
+/* line 106, textdirection.scss */
 .ltr .offset25 {
   margin-left: 25%;
 }
 
-/* line 111, textdirection.scss */
+/* line 110, textdirection.scss */
 .rtl .offset25 {
   margin-right: 25%;
 }
 
-/* line 115, textdirection.scss */
+/* line 114, textdirection.scss */
 .ltr .google-map {
   padding-right: 0px;
 }
 
-/* line 118, textdirection.scss */
+/* line 117, textdirection.scss */
 .rtl .google-map {
   padding-left: 0px;
 }
 
-/* line 122, textdirection.scss */
+/* line 121, textdirection.scss */
 .ltr .input-group .form-control:first-child, .rtl .input-group-btn:last-child > .btn {
   -webkit-border-top-right-radius: 0px;
   -webkit-border-bottom-right-radius: 0px;
@@ -175,7 +175,7 @@
   border-bottom-left-radius: 4px;
 }
 
-/* line 138, textdirection.scss */
+/* line 137, textdirection.scss */
 .rtl .input-group .form-control:first-child, .ltr .input-group-btn:last-child > .btn {
   -webkit-border-top-left-radius: 0px;
   -webkit-border-bottom-left-radius: 0px;
@@ -191,83 +191,83 @@
   border-bottom-right-radius: 4px;
 }
 
-/* line 156, textdirection.scss */
+/* line 155, textdirection.scss */
 .ltr .nav-sidebar {
   padding-left: 0px;
 }
 
-/* line 159, textdirection.scss */
+/* line 158, textdirection.scss */
 .rtl .nav-sidebar {
   padding-right: 0px;
 }
 
-/* line 163, textdirection.scss */
+/* line 162, textdirection.scss */
 .ltr .nav-sidebar li a {
   padding-left: 30px;
 }
 
-/* line 166, textdirection.scss */
+/* line 165, textdirection.scss */
 .rtl .nav-sidebar li a {
   padding-right: 30px;
 }
 
-/* line 170, textdirection.scss */
+/* line 169, textdirection.scss */
 .ltr .nav-sidebar li:first-child a {
   padding-left: 15px;
 }
 
-/* line 173, textdirection.scss */
+/* line 172, textdirection.scss */
 .rtl .nav-sidebar li:first-child a {
   padding-right: 15px;
 }
 
-/* line 177, textdirection.scss */
+/* line 176, textdirection.scss */
 .ltr .searchBox .form-control {
   -webkit-border-radius: 3px 0 0 3px;
   border-radius: 3px 0 0 3px;
 }
 
-/* line 181, textdirection.scss */
+/* line 180, textdirection.scss */
 .rtl .searchBox .form-control {
   -webkit-border-radius: 3px 3px 0 0px;
   border-radius: 3px 3px 0 0px;
 }
 
-/* line 186, textdirection.scss */
+/* line 185, textdirection.scss */
 .ltr .aichi-targets {
   margin: 0px 0px 15px 25px;
   padding-left: 10px;
 }
 
-/* line 190, textdirection.scss */
+/* line 189, textdirection.scss */
 .rtl .aichi-targets {
   margin: 0px 25px 15px 0px;
   padding-right: 10px;
 }
 
-/* line 195, textdirection.scss */
+/* line 194, textdirection.scss */
 .ltr .group-targets {
   padding-left: 0px;
 }
 
-/* line 198, textdirection.scss */
+/* line 197, textdirection.scss */
 .rtl .group-targets {
   padding-right: 0px;
 }
 
-/* line 202, textdirection.scss */
+/* line 201, textdirection.scss */
 .ltr div.footer ul {
   padding-left: 0px;
 }
 
-/* line 205, textdirection.scss */
+/* line 204, textdirection.scss */
 .rtl div.footer ul {
   padding-right: 0px;
 }
 
 /*  Mobile Version   */
 @media screen and (max-width: 480px) {
-  /* line 214, textdirection.scss */
+  /* line 213, textdirection.scss */
   .ltr .offset25 {
     margin-left: 0px;
   }

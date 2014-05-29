@@ -9,13 +9,12 @@
 
 
 .ltr .banner{
-	background: url(../images/banner-0.jpg) no-repeat left top;
+	background: url("/app/images/banner-0.jpg") no-repeat left top;
 }
 
 .rtl .banner{
-	background: url(../images/banner-0.jpg) no-repeat right top;
+	background: url("/app/images/banner-0.jpg") no-repeat right top;
 }
-
 
 	.ltr .banner .main-title{
 		border-left: 4px solid #009B48;

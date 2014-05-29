@@ -8694,56 +8694,61 @@ body {
 }
 
 /* line 106, reports/default.scss */
+.margin-minus {
+  margin-left: -15px;
+}
+
+/* line 110, reports/default.scss */
 .white, .white a {
   color: #fff;
 }
 
-/* line 110, reports/default.scss */
+/* line 114, reports/default.scss */
 p.important {
   font-weight: bold;
 }
 
-/* line 114, reports/default.scss */
+/* line 118, reports/default.scss */
 a {
   color: #0066CC;
 }
 
-/* line 118, reports/default.scss */
+/* line 122, reports/default.scss */
 .google-map {
   height: 500px;
   width: 696px;
   background: #e6e6e6;
 }
 
-/* line 124, reports/default.scss */
+/* line 128, reports/default.scss */
 h4 a {
   font-size: 12px;
   font-weight: normal;
 }
 
-/* line 129, reports/default.scss */
+/* line 133, reports/default.scss */
 nav .row-fluid {
   border-bottom: 1px solid #eee;
 }
 
-/* line 133, reports/default.scss */
+/* line 137, reports/default.scss */
 .navbar {
   min-height: 30px;
   margin-bottom: 10px;
 }
 
-/* line 138, reports/default.scss */
+/* line 142, reports/default.scss */
 .navbar-default .navbar-nav > li > a, .nav > li > a {
   padding: 7px 15px;
   color: #009b48;
 }
 
-/* line 143, reports/default.scss */
+/* line 147, reports/default.scss */
 .navbar-default .navbar-nav > li > a {
   font-size: 15px;
 }
 
-/* line 148, reports/default.scss */
+/* line 152, reports/default.scss */
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus, .navbar-default .navbar-nav > li > a:active,
 .navbar-default .navbar-nav > li.open > a:hover, .navbar-default .navbar-nav > li.open > a:focus, .navbar-default .navbar-nav > li.open > a:active {
   -webkit-border-radius: 7px 7px 0 0;
@@ -8756,36 +8761,36 @@ nav .row-fluid {
   color: #fff;
 }
 
-/* line 159, reports/default.scss */
+/* line 163, reports/default.scss */
 .alignL, .alingR {
   background: #ffffE0;
   color: #000;
   font-size: 11px;
 }
 
-/* line 164, reports/default.scss */
+/* line 168, reports/default.scss */
 .navbar-right .dropdown-menu {
   border: 5px solid #009b48;
 }
 
-/* line 168, reports/default.scss */
+/* line 172, reports/default.scss */
 .navbar-right .alignL {
   left: 0;
   right: auto;
 }
 
-/* line 173, reports/default.scss */
+/* line 177, reports/default.scss */
 .navbar-right .alignR {
   left: auto;
   right: 0;
 }
 
-/* line 178, reports/default.scss */
+/* line 182, reports/default.scss */
 .navbar-right li:last-child .dropdown-menu {
   min-width: 260px;
 }
 
-/* line 182, reports/default.scss */
+/* line 186, reports/default.scss */
 .dropdown-menu div.firstcolumn-menu, .dropdown-menu div.scndcolumn-menu {
   float: left;
   display: inline;
@@ -8794,12 +8799,12 @@ nav .row-fluid {
   padding: 5px;
 }
 
-/* line 190, reports/default.scss */
+/* line 194, reports/default.scss */
 .dropdown-menu ul {
   padding-left: 5px;
 }
 
-/* line 194, reports/default.scss */
+/* line 198, reports/default.scss */
 .dropdown-menu ul li {
   text-align: left;
   list-style-type: none;
@@ -8807,14 +8812,14 @@ nav .row-fluid {
   font-size: 11px;
 }
 
-/* line 201, reports/default.scss */
+/* line 205, reports/default.scss */
 .dropdown-menu ul li:first-child {
   color: #009b48;
   font-weight: bold;
   font-size: 12px;
 }
 
-/* line 207, reports/default.scss */
+/* line 211, reports/default.scss */
 .dropdown-menu ul li a {
   color: #000;
   padding: 2px;
@@ -8822,7 +8827,7 @@ nav .row-fluid {
   font-size: 11px;
 }
 
-/* line 214, reports/default.scss */
+/* line 218, reports/default.scss */
 .dropdown-menu ul li a:hover, .dropdown-menu div.scndcolumn-menu > a:hover {
   background: #009b48;
   color: #fff;
@@ -8831,7 +8836,7 @@ nav .row-fluid {
   border-radius: 99px;
 }
 
-/* line 222, reports/default.scss */
+/* line 226, reports/default.scss */
 .dropdown-menu div.scndcolumn-menu > a {
   color: #009b48;
   text-align: left;
@@ -8840,18 +8845,18 @@ nav .row-fluid {
   padding: 2px;
 }
 
-/* line 230, reports/default.scss */
+/* line 234, reports/default.scss */
 .nav > li > a {
   font-size: 11px;
 }
 
-/* line 234, reports/default.scss */
+/* line 238, reports/default.scss */
 .navbar-default {
   background: none;
   border: none;
 }
 
-/* line 239, reports/default.scss */
+/* line 243, reports/default.scss */
 .breadcrumb {
   background: none;
   margin-bottom: 0px;
@@ -8860,80 +8865,80 @@ nav .row-fluid {
   border-radius: 0px;
 }
 
-/* line 247, reports/default.scss */
+/* line 251, reports/default.scss */
 .breadcrumb a {
   color: #06c;
 }
 
-/* line 251, reports/default.scss */
+/* line 255, reports/default.scss */
 .breadcrumb > li + li:before {
   content: ">\00a0";
 }
 
-/* line 255, reports/default.scss */
+/* line 259, reports/default.scss */
 .nav-sidebar > .active > a {
   background: #009b48;
 }
 
-/* line 259, reports/default.scss */
+/* line 263, reports/default.scss */
 .nav-sidebar {
   margin-bottom: 0px;
 }
 
-/* line 263, reports/default.scss */
+/* line 267, reports/default.scss */
 .nav-sidebar li {
   border: 1px solid #ddd;
 }
 
-/* line 267, reports/default.scss */
+/* line 271, reports/default.scss */
 .nav-sidebar li:first-child a {
   font-weight: bold;
 }
 
-/* line 271, reports/default.scss */
+/* line 275, reports/default.scss */
 .sidebar {
   background: #fff;
   padding-top: 0px;
   z-index: 1;
 }
 
-/* line 277, reports/default.scss */
+/* line 281, reports/default.scss */
 .panel-body {
   padding-bottom: 0px;
   padding-top: 0px;
 }
 
-/* line 283, reports/default.scss */
+/* line 287, reports/default.scss */
 .panel-default > .panel-heading {
   padding: 10px;
   background: #007C35;
   border-radius: 0px;
 }
 
-/* line 289, reports/default.scss */
+/* line 293, reports/default.scss */
 .panel-heading > .panel-title > button {
   border: none;
   padding: 0px;
   background: none;
 }
 
-/* line 295, reports/default.scss */
+/* line 299, reports/default.scss */
 .panel-title > a {
   color: #fff;
   font-weight: bold;
 }
 
-/* line 300, reports/default.scss */
+/* line 304, reports/default.scss */
 .panel-group .panel {
   border-radius: 0px;
 }
 
-/* line 304, reports/default.scss */
+/* line 308, reports/default.scss */
 .popover-content {
   font-size: 13px;
 }
 
-/* line 309, reports/default.scss */
+/* line 313, reports/default.scss */
 .form-control {
   display: inline;
   width: auto;
@@ -8943,7 +8948,7 @@ nav .row-fluid {
   margin-top: 7px;
 }
 
-/* line 318, reports/default.scss */
+/* line 322, reports/default.scss */
 .searchBox {
   height: 25px;
   border: none;
@@ -8955,54 +8960,54 @@ nav .row-fluid {
   */
 }
 
-/* line 329, reports/default.scss */
+/* line 333, reports/default.scss */
 .datepicker {
   padding: 3px 7px;
   margin-top: 7px;
 }
 
-/* line 334, reports/default.scss */
+/* line 338, reports/default.scss */
 .datepicker span {
   color: #999;
 }
 
-/* line 338, reports/default.scss */
+/* line 342, reports/default.scss */
 .datepicker table tr td.active:hover, .datepicker table tr td.active:hover:hover, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active.disabled:hover:hover, .datepicker table tr td.active:active, .datepicker table tr td.active:hover:active, .datepicker table tr td.active.disabled:active, .datepicker table tr td.active.disabled:hover:active, .datepicker table tr td.active.active, .datepicker table tr td.active:hover.active, .datepicker table tr td.active.disabled.active, .datepicker table tr td.active.disabled:hover.active, .datepicker table tr td.active.disabled, .datepicker table tr td.active:hover.disabled, .datepicker table tr td.active.disabled.disabled, .datepicker table tr td.active.disabled:hover.disabled, .datepicker table tr td.active[disabled], .datepicker table tr td.active:hover[disabled], .datepicker table tr td.active.disabled[disabled], .datepicker table tr td.active.disabled:hover[disabled] {
   background-color: #009b48 !important;
   background-image: none;
 }
 
-/* line 344, reports/default.scss */
+/* line 348, reports/default.scss */
 .input-group-btn:last-child > .btn {
   margin-top: 7px;
 }
 
-/* line 348, reports/default.scss */
+/* line 352, reports/default.scss */
 .aichi-targets {
   width: 70%;
   border: none;
 }
 
-/* line 353, reports/default.scss */
+/* line 357, reports/default.scss */
 .group-targets li {
   display: inline;
   list-style-type: none;
 }
 
-/* line 358, reports/default.scss */
+/* line 362, reports/default.scss */
 .group-targets li button {
   border: none;
   background: none;
 }
 
-/* line 365, reports/default.scss */
+/* line 369, reports/default.scss */
 div.datepicker {
   margin-top: 15px;
   line-height: 16px;
   font-size: 14px;
 }
 
-/* line 371, reports/default.scss */
+/* line 375, reports/default.scss */
 p.disclaimer {
   margin-top: 10px;
   color: #999;
@@ -9010,94 +9015,94 @@ p.disclaimer {
 }
 
 /* Footer */
-/* line 378, reports/default.scss */
+/* line 382, reports/default.scss */
 div.greybg {
   background: #f4f4f4;
 }
 
-/* line 382, reports/default.scss */
+/* line 386, reports/default.scss */
 div.footer {
   padding: 15px 20px;
 }
 
-/* line 386, reports/default.scss */
+/* line 390, reports/default.scss */
 div.footer h4 {
   font-size: 14px;
   color: #666;
   font-weight: bold;
 }
 
-/* line 392, reports/default.scss */
+/* line 396, reports/default.scss */
 div.footer ul {
   list-style-type: none;
 }
 
-/* line 396, reports/default.scss */
+/* line 400, reports/default.scss */
 div.footer ul li a {
   font-size: 14px;
   color: #666;
 }
 
-/* line 401, reports/default.scss */
+/* line 405, reports/default.scss */
 div.footer ul li a:hover {
   color: #000;
 }
 
 /*  Mobile Version   */
 @media screen and (min-width: 481px) {
-  /* line 408, reports/default.scss */
+  /* line 412, reports/default.scss */
   .alignL, .alingR {
     min-width: 570px;
   }
 }
 @media screen and (max-width: 480px) {
-  /* line 416, reports/default.scss */
+  /* line 420, reports/default.scss */
   .Menulang {
     margin-top: 10px;
   }
 
-  /* line 420, reports/default.scss */
+  /* line 424, reports/default.scss */
   .navbar-header {
     background: #009b48;
   }
 
-  /* line 424, reports/default.scss */
+  /* line 428, reports/default.scss */
   .navbar-header .navbar-toggle {
     background: #fff;
   }
 
-  /* line 428, reports/default.scss */
+  /* line 432, reports/default.scss */
   .google-map {
     width: 340px;
   }
 
-  /* line 432, reports/default.scss */
+  /* line 436, reports/default.scss */
   .navbar-nav {
     text-align: left;
   }
 
-  /* line 436, reports/default.scss */
+  /* line 440, reports/default.scss */
   .navbar-nav > li {
     width: 45%;
   }
 
-  /* line 440, reports/default.scss */
+  /* line 444, reports/default.scss */
   .ltr .sidebar {
     display: block;
     width: 100%;
   }
 
-  /* line 445, reports/default.scss */
+  /* line 449, reports/default.scss */
   .alignL, .alingR {
     width: 340px;
   }
 
-  /* line 449, reports/default.scss */
+  /* line 453, reports/default.scss */
   .input-group {
     width: 120px;
   }
 
-  /* line 453, reports/default.scss */
+  /* line 457, reports/default.scss */
   .input-group .form-control {
     width: auto;
   }
@@ -9116,85 +9121,85 @@ div.footer ul li a:hover {
 
 /* line 11, reports/textdirection.scss */
 .ltr .banner {
-  background: url(../images/banner-0.jpg) no-repeat left top;
+  background: url("/app/images/banner-0.jpg") no-repeat left top;
 }
 
 /* line 15, reports/textdirection.scss */
 .rtl .banner {
-  background: url(../images/banner-0.jpg) no-repeat right top;
+  background: url("/app/images/banner-0.jpg") no-repeat right top;
 }
 
-/* line 20, reports/textdirection.scss */
+/* line 19, reports/textdirection.scss */
 .ltr .banner .main-title {
   border-left: 4px solid #009B48;
   float: left;
 }
 
-/* line 24, reports/textdirection.scss */
+/* line 23, reports/textdirection.scss */
 .rtl .banner .main-title {
   border-right: 4px solid #009B48;
   float: right;
 }
 
-/* line 29, reports/textdirection.scss */
+/* line 28, reports/textdirection.scss */
 .ltr .Menulang {
   padding-left: 0px;
 }
 
-/* line 32, reports/textdirection.scss */
+/* line 31, reports/textdirection.scss */
 .rtl .Menulang {
   padding-right: 0px;
 }
 
-/* line 36, reports/textdirection.scss */
+/* line 35, reports/textdirection.scss */
 .ltr .padding66 {
   padding-left: 0px;
 }
 
-/* line 39, reports/textdirection.scss */
+/* line 38, reports/textdirection.scss */
 .rtl .padding66 {
   padding-right: 66px;
 }
 
-/* line 44, reports/textdirection.scss */
+/* line 43, reports/textdirection.scss */
 .ltr .Menulang li {
   border-right: 1px solid #666;
   float: left;
 }
 
-/* line 48, reports/textdirection.scss */
+/* line 47, reports/textdirection.scss */
 .rtl .Menulang li {
   border-left: 1px solid #666;
   float: right;
 }
 
-/* line 52, reports/textdirection.scss */
+/* line 51, reports/textdirection.scss */
 .ltr .Menulang li:last-child {
   border-right: 0px;
 }
 
-/* line 55, reports/textdirection.scss */
+/* line 54, reports/textdirection.scss */
 .rtl .Menulang li:last-child {
   border-left: 0px;
 }
 
-/* line 59, reports/textdirection.scss */
+/* line 58, reports/textdirection.scss */
 .rtl .navbar-nav {
   padding-right: 0px;
 }
 
-/* line 63, reports/textdirection.scss */
+/* line 62, reports/textdirection.scss */
 .rtl .navbar-nav li {
   float: right;
 }
 
-/* line 67, reports/textdirection.scss */
+/* line 66, reports/textdirection.scss */
 .ltr .sidebar {
   left: auto;
   float: left;
 }
 
-/* line 71, reports/textdirection.scss */
+/* line 70, reports/textdirection.scss */
 .rtl .sidebar {
   right: auto;
   padding-right: 15px;
@@ -9203,67 +9208,67 @@ div.footer ul li a:hover {
   float: right;
 }
 
-/* line 79, reports/textdirection.scss */
+/* line 78, reports/textdirection.scss */
 .ltr .main {
   padding: 0px 0px 0px 12px;
 }
 
-/* line 82, reports/textdirection.scss */
+/* line 81, reports/textdirection.scss */
 .rtl .main {
   padding: 0px 12px 0px 0px;
 }
 
-/* line 86, reports/textdirection.scss */
+/* line 85, reports/textdirection.scss */
 .ltr .left {
   text-align: left;
 }
 
-/* line 89, reports/textdirection.scss */
+/* line 88, reports/textdirection.scss */
 .rtl .left {
   text-align: right;
 }
 
-/* line 93, reports/textdirection.scss */
+/* line 92, reports/textdirection.scss */
 .ltr .fright {
   float: right;
 }
 
-/* line 96, reports/textdirection.scss */
+/* line 95, reports/textdirection.scss */
 .rtl .fright {
   float: left;
 }
 
-/* line 100, reports/textdirection.scss */
+/* line 99, reports/textdirection.scss */
 .ltr .fleft {
   float: left;
 }
 
-/* line 103, reports/textdirection.scss */
+/* line 102, reports/textdirection.scss */
 .rtl .fleft {
   float: right;
 }
 
-/* line 107, reports/textdirection.scss */
+/* line 106, reports/textdirection.scss */
 .ltr .offset25 {
   margin-left: 25%;
 }
 
-/* line 111, reports/textdirection.scss */
+/* line 110, reports/textdirection.scss */
 .rtl .offset25 {
   margin-right: 25%;
 }
 
-/* line 115, reports/textdirection.scss */
+/* line 114, reports/textdirection.scss */
 .ltr .google-map {
   padding-right: 0px;
 }
 
-/* line 118, reports/textdirection.scss */
+/* line 117, reports/textdirection.scss */
 .rtl .google-map {
   padding-left: 0px;
 }
 
-/* line 122, reports/textdirection.scss */
+/* line 121, reports/textdirection.scss */
 .ltr .input-group .form-control:first-child, .rtl .input-group-btn:last-child > .btn {
   -webkit-border-top-right-radius: 0px;
   -webkit-border-bottom-right-radius: 0px;
@@ -9279,7 +9284,7 @@ div.footer ul li a:hover {
   border-bottom-left-radius: 4px;
 }
 
-/* line 138, reports/textdirection.scss */
+/* line 137, reports/textdirection.scss */
 .rtl .input-group .form-control:first-child, .ltr .input-group-btn:last-child > .btn {
   -webkit-border-top-left-radius: 0px;
   -webkit-border-bottom-left-radius: 0px;
@@ -9295,83 +9300,83 @@ div.footer ul li a:hover {
   border-bottom-right-radius: 4px;
 }
 
-/* line 156, reports/textdirection.scss */
+/* line 155, reports/textdirection.scss */
 .ltr .nav-sidebar {
   padding-left: 0px;
 }
 
-/* line 159, reports/textdirection.scss */
+/* line 158, reports/textdirection.scss */
 .rtl .nav-sidebar {
   padding-right: 0px;
 }
 
-/* line 163, reports/textdirection.scss */
+/* line 162, reports/textdirection.scss */
 .ltr .nav-sidebar li a {
   padding-left: 30px;
 }
 
-/* line 166, reports/textdirection.scss */
+/* line 165, reports/textdirection.scss */
 .rtl .nav-sidebar li a {
   padding-right: 30px;
 }
 
-/* line 170, reports/textdirection.scss */
+/* line 169, reports/textdirection.scss */
 .ltr .nav-sidebar li:first-child a {
   padding-left: 15px;
 }
 
-/* line 173, reports/textdirection.scss */
+/* line 172, reports/textdirection.scss */
 .rtl .nav-sidebar li:first-child a {
   padding-right: 15px;
 }
 
-/* line 177, reports/textdirection.scss */
+/* line 176, reports/textdirection.scss */
 .ltr .searchBox .form-control {
   -webkit-border-radius: 3px 0 0 3px;
   border-radius: 3px 0 0 3px;
 }
 
-/* line 181, reports/textdirection.scss */
+/* line 180, reports/textdirection.scss */
 .rtl .searchBox .form-control {
   -webkit-border-radius: 3px 3px 0 0px;
   border-radius: 3px 3px 0 0px;
 }
 
-/* line 186, reports/textdirection.scss */
+/* line 185, reports/textdirection.scss */
 .ltr .aichi-targets {
   margin: 0px 0px 15px 25px;
   padding-left: 10px;
 }
 
-/* line 190, reports/textdirection.scss */
+/* line 189, reports/textdirection.scss */
 .rtl .aichi-targets {
   margin: 0px 25px 15px 0px;
   padding-right: 10px;
 }
 
-/* line 195, reports/textdirection.scss */
+/* line 194, reports/textdirection.scss */
 .ltr .group-targets {
   padding-left: 0px;
 }
 
-/* line 198, reports/textdirection.scss */
+/* line 197, reports/textdirection.scss */
 .rtl .group-targets {
   padding-right: 0px;
 }
 
-/* line 202, reports/textdirection.scss */
+/* line 201, reports/textdirection.scss */
 .ltr div.footer ul {
   padding-left: 0px;
 }
 
-/* line 205, reports/textdirection.scss */
+/* line 204, reports/textdirection.scss */
 .rtl div.footer ul {
   padding-right: 0px;
 }
 
 /*  Mobile Version   */
 @media screen and (max-width: 480px) {
-  /* line 214, reports/textdirection.scss */
+  /* line 213, reports/textdirection.scss */
   .ltr .offset25 {
     margin-left: 0px;
   }
