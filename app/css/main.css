@@ -8762,7 +8762,7 @@ nav .row-fluid {
 }
 
 /* line 163, reports/default.scss */
-.alignL, .alingR {
+.alignL, .alignR {
   background: #ffffE0;
   color: #000;
   font-size: 11px;
@@ -9051,7 +9051,7 @@ div.footer ul li a:hover {
 /*  Mobile Version   */
 @media screen and (min-width: 481px) {
   /* line 412, reports/default.scss */
-  .alignL, .alingR {
+  .alignL, .alignR {
     min-width: 570px;
   }
 }
@@ -9093,7 +9093,7 @@ div.footer ul li a:hover {
   }
 
   /* line 449, reports/default.scss */
-  .alignL, .alingR {
+  .alignL, .alignR {
     width: 340px;
   }
 
