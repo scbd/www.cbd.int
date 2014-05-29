@@ -1,221 +1,274 @@
-.ltr{
-	direction: ltr;
-	text-align: left;
-}
-.rtl{
-	direction: rtl;
-	text-align: right;
+/* line 1, textdirection.scss */
+.ltr {
+  direction: ltr;
+  text-align: left;
 }
 
-
-.ltr .banner{
-	background: url(../images/banner-0.jpg) no-repeat left top;
+/* line 5, textdirection.scss */
+.rtl {
+  direction: rtl;
+  text-align: right;
 }
 
-.rtl .banner{
-	background: url(../images/banner-0.jpg) no-repeat right top;
+/* line 11, textdirection.scss */
+.ltr .banner {
+  background: url(../images/banner-0.jpg) no-repeat left top;
 }
 
-
-	.ltr .banner .main-title{
-		border-left: 4px solid #009B48;
-		float: left;
-	}
-	.rtl .banner .main-title{
-		border-right: 4px solid #009B48;
-		float: right;
-	}
-	
-.ltr .Menulang{
-	padding-left: 0px
-}
-.rtl .Menulang{
-	padding-right: 0px
+/* line 15, textdirection.scss */
+.rtl .banner {
+  background: url(../images/banner-0.jpg) no-repeat right top;
 }
 
-.ltr .padding66{
-	padding-left: 0px
-}
-.rtl .padding66{
-	padding-right:66px
-}
-
-
-.ltr .Menulang li{
-	border-right: 1px solid #666;
-	float: left;
-}
-.rtl .Menulang li{
-	border-left: 1px solid #666;
-	float: right;
-}
-	.ltr .Menulang li:last-child{
-		border-right: 0px;
-	}
-	.rtl .Menulang li:last-child{
-		border-left: 0px;
-	}
-
-.rtl .navbar-nav{
-	padding-right: 0px;
+/* line 20, textdirection.scss */
+.ltr .banner .main-title {
+  border-left: 4px solid #009B48;
+  float: left;
 }
 
-.rtl .navbar-nav li{
-	float: right;
-}
-		
-.ltr .sidebar{
-	left: auto;
-	float: left;
-}
-.rtl .sidebar{
-	right: auto;
-	padding-right:15px;
-	padding-left:0;
-	border-left:0;
-	float: right;
+/* line 24, textdirection.scss */
+.rtl .banner .main-title {
+  border-right: 4px solid #009B48;
+  float: right;
 }
 
-.ltr .main{
-	padding:0px 0px 0px 12px;
-}
-.rtl .main{
-	padding:0px 12px 0px 0px;
+/* line 29, textdirection.scss */
+.ltr .Menulang {
+  padding-left: 0px;
 }
 
-.ltr .left{
-	text-align: left;
-}
-.rtl .left{
-	text-align: right;
+/* line 32, textdirection.scss */
+.rtl .Menulang {
+  padding-right: 0px;
 }
 
-.ltr .fright{
-	float: right;
-}
-.rtl .fright{
-	float: left;
+/* line 36, textdirection.scss */
+.ltr .padding66 {
+  padding-left: 0px;
 }
 
-.ltr .fleft{
-	float: left;
-}
-.rtl .fleft{
-	float: right;
+/* line 39, textdirection.scss */
+.rtl .padding66 {
+  padding-right: 66px;
 }
 
-.ltr .offset25{
-	margin-left: 25%;
+/* line 44, textdirection.scss */
+.ltr .Menulang li {
+  border-right: 1px solid #666;
+  float: left;
 }
 
-.rtl .offset25{
-	margin-right: 25%;
+/* line 48, textdirection.scss */
+.rtl .Menulang li {
+  border-left: 1px solid #666;
+  float: right;
 }
 
-.ltr .google-map{
-	padding-right: 0px;
-}
-.rtl .google-map{
-	padding-left: 0px;
+/* line 52, textdirection.scss */
+.ltr .Menulang li:last-child {
+  border-right: 0px;
 }
 
-.ltr .input-group .form-control:first-child, .rtl .input-group-btn:last-child>.btn{
-	-webkit-border-top-right-radius: 0px;
-	-webkit-border-bottom-right-radius: 0px;
-	-moz-border-radius-topright: 0px;
-	-moz-border-radius-bottomright: 0px;
-	border-top-right-radius: 0px;
-	border-bottom-right-radius: 0px;
-	
-	-webkit-border-top-left-radius: 4px;
-	-webkit-border-bottom-left-radius: 4px;
-	-moz-border-radius-topleft: 4px;
-	-moz-border-radius-bottomleft: 4px;
-	border-top-left-radius: 4px;
-	border-bottom-left-radius: 4px;
+/* line 55, textdirection.scss */
+.rtl .Menulang li:last-child {
+  border-left: 0px;
 }
 
-.rtl .input-group .form-control:first-child, .ltr .input-group-btn:last-child>.btn{
-	-webkit-border-top-left-radius: 0px;
-	-webkit-border-bottom-left-radius: 0px;
-	-moz-border-radius-topleft: 0px;
-	-moz-border-radius-bottomleft: 0px;
-	border-top-left-radius: 0px;
-	border-bottom-left-radius: 0px;
-	
-	-webkit-border-top-right-radius: 4px;
-	-webkit-border-bottom-right-radius: 4px;
-	-moz-border-radius-topright: 4px;
-	-moz-border-radius-bottomright: 4px;
-	border-top-right-radius: 4px;
-	border-bottom-right-radius: 4px;
+/* line 59, textdirection.scss */
+.rtl .navbar-nav {
+  padding-right: 0px;
 }
 
-
-
-.ltr .nav-sidebar{
-	padding-left: 0px;
-}
-.rtl .nav-sidebar{
-	padding-right: 0px;
+/* line 63, textdirection.scss */
+.rtl .navbar-nav li {
+  float: right;
 }
 
-	.ltr .nav-sidebar li a{
-		padding-left: 30px;
-	}
-	.rtl .nav-sidebar li a{
-		padding-right: 30px;
-	}
-
-	.ltr .nav-sidebar li:first-child a{
-		padding-left: 15px;
-	}
-	.rtl .nav-sidebar li:first-child a{
-		padding-right: 15px;
-	}
-
-.ltr .searchBox .form-control{
-	-webkit-border-radius: 3px 0 0 3px;
-	border-radius: 3px 0 0 3px;
-}
-.rtl .searchBox .form-control{
-	-webkit-border-radius: 3px 3px 0 0px;
-	border-radius: 3px 3px 0 0px;
+/* line 67, textdirection.scss */
+.ltr .sidebar {
+  left: auto;
+  float: left;
 }
 
-.ltr .aichi-targets{
-	margin: 0px 0px 15px 25px;	
-	padding-left: 10px;
-}
-.rtl .aichi-targets{
-	margin: 0px 25px 15px 0px;	
-	padding-right: 10px;
-}
-
-.ltr .group-targets{
-	padding-left: 0px;
-}
-.rtl .group-targets{
-	padding-right: 0px;
-}
-	
-.ltr div.footer ul{
-	padding-left: 0px;
-}
-.rtl div.footer ul{
-	padding-right: 0px;
-}
-		
-		
-		
-/*  Mobile Version   */		
-@media screen and (max-width: 480px){
-
-.ltr .offset25{
-	margin-left: 0px;
+/* line 71, textdirection.scss */
+.rtl .sidebar {
+  right: auto;
+  padding-right: 15px;
+  padding-left: 0;
+  border-left: 0;
+  float: right;
 }
 
-
+/* line 79, textdirection.scss */
+.ltr .main {
+  padding: 0px 0px 0px 12px;
 }
-		
-		
+
+/* line 82, textdirection.scss */
+.rtl .main {
+  padding: 0px 12px 0px 0px;
+}
+
+/* line 86, textdirection.scss */
+.ltr .left {
+  text-align: left;
+}
+
+/* line 89, textdirection.scss */
+.rtl .left {
+  text-align: right;
+}
+
+/* line 93, textdirection.scss */
+.ltr .fright {
+  float: right;
+}
+
+/* line 96, textdirection.scss */
+.rtl .fright {
+  float: left;
+}
+
+/* line 100, textdirection.scss */
+.ltr .fleft {
+  float: left;
+}
+
+/* line 103, textdirection.scss */
+.rtl .fleft {
+  float: right;
+}
+
+/* line 107, textdirection.scss */
+.ltr .offset25 {
+  margin-left: 25%;
+}
+
+/* line 111, textdirection.scss */
+.rtl .offset25 {
+  margin-right: 25%;
+}
+
+/* line 115, textdirection.scss */
+.ltr .google-map {
+  padding-right: 0px;
+}
+
+/* line 118, textdirection.scss */
+.rtl .google-map {
+  padding-left: 0px;
+}
+
+/* line 122, textdirection.scss */
+.ltr .input-group .form-control:first-child, .rtl .input-group-btn:last-child > .btn {
+  -webkit-border-top-right-radius: 0px;
+  -webkit-border-bottom-right-radius: 0px;
+  -moz-border-radius-topright: 0px;
+  -moz-border-radius-bottomright: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  -webkit-border-top-left-radius: 4px;
+  -webkit-border-bottom-left-radius: 4px;
+  -moz-border-radius-topleft: 4px;
+  -moz-border-radius-bottomleft: 4px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+/* line 138, textdirection.scss */
+.rtl .input-group .form-control:first-child, .ltr .input-group-btn:last-child > .btn {
+  -webkit-border-top-left-radius: 0px;
+  -webkit-border-bottom-left-radius: 0px;
+  -moz-border-radius-topleft: 0px;
+  -moz-border-radius-bottomleft: 0px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  -webkit-border-top-right-radius: 4px;
+  -webkit-border-bottom-right-radius: 4px;
+  -moz-border-radius-topright: 4px;
+  -moz-border-radius-bottomright: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+/* line 156, textdirection.scss */
+.ltr .nav-sidebar {
+  padding-left: 0px;
+}
+
+/* line 159, textdirection.scss */
+.rtl .nav-sidebar {
+  padding-right: 0px;
+}
+
+/* line 163, textdirection.scss */
+.ltr .nav-sidebar li a {
+  padding-left: 30px;
+}
+
+/* line 166, textdirection.scss */
+.rtl .nav-sidebar li a {
+  padding-right: 30px;
+}
+
+/* line 170, textdirection.scss */
+.ltr .nav-sidebar li:first-child a {
+  padding-left: 15px;
+}
+
+/* line 173, textdirection.scss */
+.rtl .nav-sidebar li:first-child a {
+  padding-right: 15px;
+}
+
+/* line 177, textdirection.scss */
+.ltr .searchBox .form-control {
+  -webkit-border-radius: 3px 0 0 3px;
+  border-radius: 3px 0 0 3px;
+}
+
+/* line 181, textdirection.scss */
+.rtl .searchBox .form-control {
+  -webkit-border-radius: 3px 3px 0 0px;
+  border-radius: 3px 3px 0 0px;
+}
+
+/* line 186, textdirection.scss */
+.ltr .aichi-targets {
+  margin: 0px 0px 15px 25px;
+  padding-left: 10px;
+}
+
+/* line 190, textdirection.scss */
+.rtl .aichi-targets {
+  margin: 0px 25px 15px 0px;
+  padding-right: 10px;
+}
+
+/* line 195, textdirection.scss */
+.ltr .group-targets {
+  padding-left: 0px;
+}
+
+/* line 198, textdirection.scss */
+.rtl .group-targets {
+  padding-right: 0px;
+}
+
+/* line 202, textdirection.scss */
+.ltr div.footer ul {
+  padding-left: 0px;
+}
+
+/* line 205, textdirection.scss */
+.rtl div.footer ul {
+  padding-right: 0px;
+}
+
+/*  Mobile Version   */
+@media screen and (max-width: 480px) {
+  /* line 214, textdirection.scss */
+  .ltr .offset25 {
+    margin-left: 0px;
+  }
+}
