@@ -84,7 +84,7 @@ h4 a {
 
 /* line 71, reports.scss */
 .nav-sidebar li {
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
 }
 
 /* line 75, reports.scss */
@@ -196,7 +196,7 @@ p.disclaimer {
 
 /* line 168, reports.scss */
 .legend {
-  border: 1px solid #007C35;
+  border: 1px solid #ddd;
 }
 /* line 171, reports.scss */
 .legend .legend-title {

@@ -7905,7 +7905,7 @@ h4 a {
 
 /* line 71, reports/reports.scss */
 .nav-sidebar li {
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
 }
 
 /* line 75, reports/reports.scss */
@@ -8017,7 +8017,7 @@ p.disclaimer {
 
 /* line 168, reports/reports.scss */
 .legend {
-  border: 1px solid #007C35;
+  border: 1px solid #ddd;
 }
 /* line 171, reports/reports.scss */
 .legend .legend-title {
@@ -8876,69 +8876,90 @@ nav .row-fluid {
 }
 
 /* line 259, reports/default.scss */
-.nav-sidebar > .active > a {
-  background: #009b48;
+.nav-sidebar > .active {
+  border-left: 6px solid #009b48;
 }
 
 /* line 263, reports/default.scss */
+.nav-sidebar > .active > a {
+  background: #fafafa;
+  color: #333;
+  font-weight: normal;
+  border-left: 3px solid #009b48;
+}
+
+/* line 270, reports/default.scss */
 .nav-sidebar {
   margin-bottom: 0px;
 }
 
-/* line 267, reports/default.scss */
+/* line 274, reports/default.scss */
 .nav-sidebar li {
-  border: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+  background: #fafafa;
 }
 
-/* line 271, reports/default.scss */
+/* line 279, reports/default.scss */
+.nav-sidebar li a {
+  color: #333;
+}
+
+/* line 283, reports/default.scss */
+.nav-sidebar li a:hover {
+  border-bottom: 1px solid #ddd;
+  background: #009B48;
+  color: #fff;
+}
+
+/* line 289, reports/default.scss */
 .nav-sidebar li:first-child a {
-  font-weight: bold;
+  font-weight: normal;
 }
 
-/* line 275, reports/default.scss */
+/* line 293, reports/default.scss */
 .sidebar {
   background: #fff;
   padding-top: 0px;
   z-index: 1;
 }
 
-/* line 281, reports/default.scss */
+/* line 299, reports/default.scss */
 .panel-body {
   padding-bottom: 0px;
   padding-top: 0px;
 }
 
-/* line 287, reports/default.scss */
+/* line 305, reports/default.scss */
 .panel-default > .panel-heading {
   padding: 10px;
   background: #007C35;
   border-radius: 0px;
 }
 
-/* line 293, reports/default.scss */
+/* line 311, reports/default.scss */
 .panel-heading > .panel-title > button {
   border: none;
   padding: 0px;
   background: none;
 }
 
-/* line 299, reports/default.scss */
+/* line 317, reports/default.scss */
 .panel-title > a {
   color: #fff;
   font-weight: bold;
 }
 
-/* line 304, reports/default.scss */
+/* line 322, reports/default.scss */
 .panel-group .panel {
   border-radius: 0px;
 }
 
-/* line 308, reports/default.scss */
+/* line 326, reports/default.scss */
 .popover-content {
   font-size: 13px;
 }
 
-/* line 313, reports/default.scss */
+/* line 331, reports/default.scss */
 .form-control {
   display: inline;
   width: auto;
@@ -8948,7 +8969,7 @@ nav .row-fluid {
   margin-top: 7px;
 }
 
-/* line 322, reports/default.scss */
+/* line 340, reports/default.scss */
 .searchBox {
   height: 25px;
   border: none;
@@ -8960,54 +8981,54 @@ nav .row-fluid {
   */
 }
 
-/* line 333, reports/default.scss */
+/* line 351, reports/default.scss */
 .datepicker {
   padding: 3px 7px;
   margin-top: 7px;
 }
 
-/* line 338, reports/default.scss */
+/* line 356, reports/default.scss */
 .datepicker span {
   color: #999;
 }
 
-/* line 342, reports/default.scss */
+/* line 360, reports/default.scss */
 .datepicker table tr td.active:hover, .datepicker table tr td.active:hover:hover, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active.disabled:hover:hover, .datepicker table tr td.active:active, .datepicker table tr td.active:hover:active, .datepicker table tr td.active.disabled:active, .datepicker table tr td.active.disabled:hover:active, .datepicker table tr td.active.active, .datepicker table tr td.active:hover.active, .datepicker table tr td.active.disabled.active, .datepicker table tr td.active.disabled:hover.active, .datepicker table tr td.active.disabled, .datepicker table tr td.active:hover.disabled, .datepicker table tr td.active.disabled.disabled, .datepicker table tr td.active.disabled:hover.disabled, .datepicker table tr td.active[disabled], .datepicker table tr td.active:hover[disabled], .datepicker table tr td.active.disabled[disabled], .datepicker table tr td.active.disabled:hover[disabled] {
   background-color: #009b48 !important;
   background-image: none;
 }
 
-/* line 348, reports/default.scss */
+/* line 366, reports/default.scss */
 .input-group-btn:last-child > .btn {
   margin-top: 7px;
 }
 
-/* line 352, reports/default.scss */
+/* line 370, reports/default.scss */
 .aichi-targets {
   width: 70%;
   border: none;
 }
 
-/* line 357, reports/default.scss */
+/* line 375, reports/default.scss */
 .group-targets li {
   display: inline;
   list-style-type: none;
 }
 
-/* line 362, reports/default.scss */
+/* line 380, reports/default.scss */
 .group-targets li button {
   border: none;
   background: none;
 }
 
-/* line 369, reports/default.scss */
+/* line 387, reports/default.scss */
 div.datepicker {
   margin-top: 15px;
   line-height: 16px;
   font-size: 14px;
 }
 
-/* line 375, reports/default.scss */
+/* line 393, reports/default.scss */
 p.disclaimer {
   margin-top: 10px;
   color: #999;
@@ -9015,94 +9036,94 @@ p.disclaimer {
 }
 
 /* Footer */
-/* line 382, reports/default.scss */
+/* line 400, reports/default.scss */
 div.greybg {
   background: #f4f4f4;
 }
 
-/* line 386, reports/default.scss */
+/* line 404, reports/default.scss */
 div.footer {
   padding: 15px 20px;
 }
 
-/* line 390, reports/default.scss */
+/* line 408, reports/default.scss */
 div.footer h4 {
   font-size: 14px;
   color: #666;
   font-weight: bold;
 }
 
-/* line 396, reports/default.scss */
+/* line 414, reports/default.scss */
 div.footer ul {
   list-style-type: none;
 }
 
-/* line 400, reports/default.scss */
+/* line 418, reports/default.scss */
 div.footer ul li a {
   font-size: 14px;
   color: #666;
 }
 
-/* line 405, reports/default.scss */
+/* line 423, reports/default.scss */
 div.footer ul li a:hover {
   color: #000;
 }
 
 /*  Mobile Version   */
 @media screen and (min-width: 481px) {
-  /* line 412, reports/default.scss */
+  /* line 430, reports/default.scss */
   .alignL, .alignR {
     min-width: 570px;
   }
 }
 @media screen and (max-width: 480px) {
-  /* line 420, reports/default.scss */
+  /* line 438, reports/default.scss */
   .Menulang {
     margin-top: 10px;
   }
 
-  /* line 424, reports/default.scss */
+  /* line 442, reports/default.scss */
   .navbar-header {
     background: #009b48;
   }
 
-  /* line 428, reports/default.scss */
+  /* line 446, reports/default.scss */
   .navbar-header .navbar-toggle {
     background: #fff;
   }
 
-  /* line 432, reports/default.scss */
+  /* line 450, reports/default.scss */
   .google-map {
     width: 340px;
   }
 
-  /* line 436, reports/default.scss */
+  /* line 454, reports/default.scss */
   .navbar-nav {
     text-align: left;
   }
 
-  /* line 440, reports/default.scss */
+  /* line 458, reports/default.scss */
   .navbar-nav > li {
     width: 45%;
   }
 
-  /* line 444, reports/default.scss */
+  /* line 462, reports/default.scss */
   .ltr .sidebar {
     display: block;
     width: 100%;
   }
 
-  /* line 449, reports/default.scss */
+  /* line 467, reports/default.scss */
   .alignL, .alignR {
     width: 340px;
   }
 
-  /* line 453, reports/default.scss */
+  /* line 471, reports/default.scss */
   .input-group {
     width: 120px;
   }
 
-  /* line 457, reports/default.scss */
+  /* line 475, reports/default.scss */
   .input-group .form-control {
     width: auto;
   }
@@ -9312,71 +9333,61 @@ div.footer ul li a:hover {
 
 /* line 162, reports/textdirection.scss */
 .ltr .nav-sidebar li a {
-  padding-left: 30px;
+  padding-left: 15px;
 }
 
 /* line 165, reports/textdirection.scss */
 .rtl .nav-sidebar li a {
-  padding-right: 30px;
-}
-
-/* line 169, reports/textdirection.scss */
-.ltr .nav-sidebar li:first-child a {
-  padding-left: 15px;
-}
-
-/* line 172, reports/textdirection.scss */
-.rtl .nav-sidebar li:first-child a {
   padding-right: 15px;
 }
 
-/* line 176, reports/textdirection.scss */
+/* line 169, reports/textdirection.scss */
 .ltr .searchBox .form-control {
   -webkit-border-radius: 3px 0 0 3px;
   border-radius: 3px 0 0 3px;
 }
 
-/* line 180, reports/textdirection.scss */
+/* line 173, reports/textdirection.scss */
 .rtl .searchBox .form-control {
   -webkit-border-radius: 3px 3px 0 0px;
   border-radius: 3px 3px 0 0px;
 }
 
-/* line 185, reports/textdirection.scss */
+/* line 178, reports/textdirection.scss */
 .ltr .aichi-targets {
   margin: 0px 0px 15px 25px;
   padding-left: 10px;
 }
 
-/* line 189, reports/textdirection.scss */
+/* line 182, reports/textdirection.scss */
 .rtl .aichi-targets {
   margin: 0px 25px 15px 0px;
   padding-right: 10px;
 }
 
-/* line 194, reports/textdirection.scss */
+/* line 187, reports/textdirection.scss */
 .ltr .group-targets {
   padding-left: 0px;
 }
 
-/* line 197, reports/textdirection.scss */
+/* line 190, reports/textdirection.scss */
 .rtl .group-targets {
   padding-right: 0px;
 }
 
-/* line 201, reports/textdirection.scss */
+/* line 194, reports/textdirection.scss */
 .ltr div.footer ul {
   padding-left: 0px;
 }
 
-/* line 204, reports/textdirection.scss */
+/* line 197, reports/textdirection.scss */
 .rtl div.footer ul {
   padding-right: 0px;
 }
 
 /*  Mobile Version   */
 @media screen and (max-width: 480px) {
-  /* line 213, reports/textdirection.scss */
+  /* line 206, reports/textdirection.scss */
   .ltr .offset25 {
     margin-left: 0px;
   }

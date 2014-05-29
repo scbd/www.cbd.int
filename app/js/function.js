@@ -24,31 +24,25 @@ var layer = new google.maps.FusionTablesLayer({
     },
     styles: [{
       polygonOptions: {
-        fillColor: '#B1FF1F',
+        fillColor: '#DDDDDD', // white-grey   
         fillOpacity: 0.5
       }
-    }, {
-      where: 'Shape_Area > 50',
+    },{
+      where: 'Shape_Area > 75',
       polygonOptions: {
-        fillColor: '#E8D21E',
+        fillColor: '#DD5112', // orange  
         infoText: 'National Report, date, country name, report title, list of available languages'
       }
     }, {
-      where: 'Shape_Area > 100',
+      where: 'Shape_Area > 125',
       polygonOptions: {
-        fillColor: '#FFBB2B',
-        infoText: 'National Report, date, country name, report title, list of available languages'
-      }
-    }, {
-      where: 'Shape_Area > 200',
-      polygonOptions: {
-        fillColor: '#E8711C',
+        fillColor: '#E5D220', // yellow   
         infoText: 'National Target, link to more details »'
       }
     }, {
-      where: 'Shape_Area > 300',
+      where: 'Shape_Area > 250',
       polygonOptions: {
-        fillColor: '#FF3E46',
+        fillColor: '#36C941', // light green  
         infoText: 'National Target, link to more details »'
       }
     }]

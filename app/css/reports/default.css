@@ -307,69 +307,90 @@ nav .row-fluid {
 }
 
 /* line 259, default.scss */
-.nav-sidebar > .active > a {
-  background: #009b48;
+.nav-sidebar > .active {
+  border-left: 6px solid #009b48;
 }
 
 /* line 263, default.scss */
+.nav-sidebar > .active > a {
+  background: #fafafa;
+  color: #333;
+  font-weight: normal;
+  border-left: 3px solid #009b48;
+}
+
+/* line 270, default.scss */
 .nav-sidebar {
   margin-bottom: 0px;
 }
 
-/* line 267, default.scss */
+/* line 274, default.scss */
 .nav-sidebar li {
-  border: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+  background: #fafafa;
 }
 
-/* line 271, default.scss */
+/* line 279, default.scss */
+.nav-sidebar li a {
+  color: #333;
+}
+
+/* line 283, default.scss */
+.nav-sidebar li a:hover {
+  border-bottom: 1px solid #ddd;
+  background: #009B48;
+  color: #fff;
+}
+
+/* line 289, default.scss */
 .nav-sidebar li:first-child a {
-  font-weight: bold;
+  font-weight: normal;
 }
 
-/* line 275, default.scss */
+/* line 293, default.scss */
 .sidebar {
   background: #fff;
   padding-top: 0px;
   z-index: 1;
 }
 
-/* line 281, default.scss */
+/* line 299, default.scss */
 .panel-body {
   padding-bottom: 0px;
   padding-top: 0px;
 }
 
-/* line 287, default.scss */
+/* line 305, default.scss */
 .panel-default > .panel-heading {
   padding: 10px;
   background: #007C35;
   border-radius: 0px;
 }
 
-/* line 293, default.scss */
+/* line 311, default.scss */
 .panel-heading > .panel-title > button {
   border: none;
   padding: 0px;
   background: none;
 }
 
-/* line 299, default.scss */
+/* line 317, default.scss */
 .panel-title > a {
   color: #fff;
   font-weight: bold;
 }
 
-/* line 304, default.scss */
+/* line 322, default.scss */
 .panel-group .panel {
   border-radius: 0px;
 }
 
-/* line 308, default.scss */
+/* line 326, default.scss */
 .popover-content {
   font-size: 13px;
 }
 
-/* line 313, default.scss */
+/* line 331, default.scss */
 .form-control {
   display: inline;
   width: auto;
@@ -379,7 +400,7 @@ nav .row-fluid {
   margin-top: 7px;
 }
 
-/* line 322, default.scss */
+/* line 340, default.scss */
 .searchBox {
   height: 25px;
   border: none;
@@ -391,54 +412,54 @@ nav .row-fluid {
   */
 }
 
-/* line 333, default.scss */
+/* line 351, default.scss */
 .datepicker {
   padding: 3px 7px;
   margin-top: 7px;
 }
 
-/* line 338, default.scss */
+/* line 356, default.scss */
 .datepicker span {
   color: #999;
 }
 
-/* line 342, default.scss */
+/* line 360, default.scss */
 .datepicker table tr td.active:hover, .datepicker table tr td.active:hover:hover, .datepicker table tr td.active.disabled:hover, .datepicker table tr td.active.disabled:hover:hover, .datepicker table tr td.active:active, .datepicker table tr td.active:hover:active, .datepicker table tr td.active.disabled:active, .datepicker table tr td.active.disabled:hover:active, .datepicker table tr td.active.active, .datepicker table tr td.active:hover.active, .datepicker table tr td.active.disabled.active, .datepicker table tr td.active.disabled:hover.active, .datepicker table tr td.active.disabled, .datepicker table tr td.active:hover.disabled, .datepicker table tr td.active.disabled.disabled, .datepicker table tr td.active.disabled:hover.disabled, .datepicker table tr td.active[disabled], .datepicker table tr td.active:hover[disabled], .datepicker table tr td.active.disabled[disabled], .datepicker table tr td.active.disabled:hover[disabled] {
   background-color: #009b48 !important;
   background-image: none;
 }
 
-/* line 348, default.scss */
+/* line 366, default.scss */
 .input-group-btn:last-child > .btn {
   margin-top: 7px;
 }
 
-/* line 352, default.scss */
+/* line 370, default.scss */
 .aichi-targets {
   width: 70%;
   border: none;
 }
 
-/* line 357, default.scss */
+/* line 375, default.scss */
 .group-targets li {
   display: inline;
   list-style-type: none;
 }
 
-/* line 362, default.scss */
+/* line 380, default.scss */
 .group-targets li button {
   border: none;
   background: none;
 }
 
-/* line 369, default.scss */
+/* line 387, default.scss */
 div.datepicker {
   margin-top: 15px;
   line-height: 16px;
   font-size: 14px;
 }
 
-/* line 375, default.scss */
+/* line 393, default.scss */
 p.disclaimer {
   margin-top: 10px;
   color: #999;
@@ -446,94 +467,94 @@ p.disclaimer {
 }
 
 /* Footer */
-/* line 382, default.scss */
+/* line 400, default.scss */
 div.greybg {
   background: #f4f4f4;
 }
 
-/* line 386, default.scss */
+/* line 404, default.scss */
 div.footer {
   padding: 15px 20px;
 }
 
-/* line 390, default.scss */
+/* line 408, default.scss */
 div.footer h4 {
   font-size: 14px;
   color: #666;
   font-weight: bold;
 }
 
-/* line 396, default.scss */
+/* line 414, default.scss */
 div.footer ul {
   list-style-type: none;
 }
 
-/* line 400, default.scss */
+/* line 418, default.scss */
 div.footer ul li a {
   font-size: 14px;
   color: #666;
 }
 
-/* line 405, default.scss */
+/* line 423, default.scss */
 div.footer ul li a:hover {
   color: #000;
 }
 
 /*  Mobile Version   */
 @media screen and (min-width: 481px) {
-  /* line 412, default.scss */
+  /* line 430, default.scss */
   .alignL, .alignR {
     min-width: 570px;
   }
 }
 @media screen and (max-width: 480px) {
-  /* line 420, default.scss */
+  /* line 438, default.scss */
   .Menulang {
     margin-top: 10px;
   }
 
-  /* line 424, default.scss */
+  /* line 442, default.scss */
   .navbar-header {
     background: #009b48;
   }
 
-  /* line 428, default.scss */
+  /* line 446, default.scss */
   .navbar-header .navbar-toggle {
     background: #fff;
   }
 
-  /* line 432, default.scss */
+  /* line 450, default.scss */
   .google-map {
     width: 340px;
   }
 
-  /* line 436, default.scss */
+  /* line 454, default.scss */
   .navbar-nav {
     text-align: left;
   }
 
-  /* line 440, default.scss */
+  /* line 458, default.scss */
   .navbar-nav > li {
     width: 45%;
   }
 
-  /* line 444, default.scss */
+  /* line 462, default.scss */
   .ltr .sidebar {
     display: block;
     width: 100%;
   }
 
-  /* line 449, default.scss */
+  /* line 467, default.scss */
   .alignL, .alignR {
     width: 340px;
   }
 
-  /* line 453, default.scss */
+  /* line 471, default.scss */
   .input-group {
     width: 120px;
   }
 
-  /* line 457, default.scss */
+  /* line 475, default.scss */
   .input-group .form-control {
     width: auto;
   }

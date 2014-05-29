@@ -256,8 +256,15 @@ nav .row-fluid{
 		content: ">\00a0";
 	}
 
+.nav-sidebar > .active{
+	border-left: 6px solid #009b48;
+}
+
 .nav-sidebar > .active > a{
-	background: #009b48;
+	background: #fafafa;
+	color: #333;
+	font-weight: normal;
+	border-left: 3px solid #009b48;
 }
 
 .nav-sidebar{
@@ -265,11 +272,22 @@ nav .row-fluid{
 }
 
 .nav-sidebar li{
-	border: 1px solid #ddd;
+	border-top: 1px solid #ddd;
+	background: #fafafa;
 }
 
+	.nav-sidebar li a{
+		color: #333;
+	}
+	
+	.nav-sidebar li a:hover{
+		border-bottom: 1px solid #ddd;
+		background: #009B48;
+		color: #fff;
+	}
+
 	.nav-sidebar li:first-child a{
-		font-weight: bold;
+		font-weight: normal;
 	}
 
 .sidebar{

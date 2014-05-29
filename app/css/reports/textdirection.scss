@@ -160,16 +160,9 @@
 }
 
 	.ltr .nav-sidebar li a{
-		padding-left: 30px;
-	}
-	.rtl .nav-sidebar li a{
-		padding-right: 30px;
-	}
-
-	.ltr .nav-sidebar li:first-child a{
 		padding-left: 15px;
 	}
-	.rtl .nav-sidebar li:first-child a{
+	.rtl .nav-sidebar li a{
 		padding-right: 15px;
 	}
 

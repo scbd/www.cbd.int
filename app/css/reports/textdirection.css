@@ -203,71 +203,61 @@
 
 /* line 162, textdirection.scss */
 .ltr .nav-sidebar li a {
-  padding-left: 30px;
+  padding-left: 15px;
 }
 
 /* line 165, textdirection.scss */
 .rtl .nav-sidebar li a {
-  padding-right: 30px;
-}
-
-/* line 169, textdirection.scss */
-.ltr .nav-sidebar li:first-child a {
-  padding-left: 15px;
-}
-
-/* line 172, textdirection.scss */
-.rtl .nav-sidebar li:first-child a {
   padding-right: 15px;
 }
 
-/* line 176, textdirection.scss */
+/* line 169, textdirection.scss */
 .ltr .searchBox .form-control {
   -webkit-border-radius: 3px 0 0 3px;
   border-radius: 3px 0 0 3px;
 }
 
-/* line 180, textdirection.scss */
+/* line 173, textdirection.scss */
 .rtl .searchBox .form-control {
   -webkit-border-radius: 3px 3px 0 0px;
   border-radius: 3px 3px 0 0px;
 }
 
-/* line 185, textdirection.scss */
+/* line 178, textdirection.scss */
 .ltr .aichi-targets {
   margin: 0px 0px 15px 25px;
   padding-left: 10px;
 }
 
-/* line 189, textdirection.scss */
+/* line 182, textdirection.scss */
 .rtl .aichi-targets {
   margin: 0px 25px 15px 0px;
   padding-right: 10px;
 }
 
-/* line 194, textdirection.scss */
+/* line 187, textdirection.scss */
 .ltr .group-targets {
   padding-left: 0px;
 }
 
-/* line 197, textdirection.scss */
+/* line 190, textdirection.scss */
 .rtl .group-targets {
   padding-right: 0px;
 }
 
-/* line 201, textdirection.scss */
+/* line 194, textdirection.scss */
 .ltr div.footer ul {
   padding-left: 0px;
 }
 
-/* line 204, textdirection.scss */
+/* line 197, textdirection.scss */
 .rtl div.footer ul {
   padding-right: 0px;
 }
 
 /*  Mobile Version   */
 @media screen and (max-width: 480px) {
-  /* line 213, textdirection.scss */
+  /* line 206, textdirection.scss */
   .ltr .offset25 {
     margin-left: 0px;
   }
