@@ -1,4 +1,4 @@
-define(['app', 'underscore'], function(app, _) {
+define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json'], function(app, _, aichiTargetJson) {
   app.controller('ReportsCtrl', ['$scope', 'reports', '$rootScope', 'growl',
     function($scope, reports, $rootScope, growl) {
       var self = this;
@@ -19,6 +19,8 @@ define(['app', 'underscore'], function(app, _) {
         id: '1st',
         name: '1st National Report'
       }];
+
+      $scope.aichiTargets = JSON.parse(aichiTargetJson);
 
       $scope.progressSettings = {
         "884D8D8C-F2AE-4AAC-82E3-5B73CE627D45": {
@@ -51,11 +53,11 @@ define(['app', 'underscore'], function(app, _) {
       // Range is 0,20. The numbers are converted to string and the
       // first ten digits are padded with a zero to become proper
       // arguements to query solr with.
-      $scope.aichiTargetOptions = _.range(1, 21).map(function(val) {
-        var str = val.toString();
-        if (str.length === 1) str = '0' + str;
-        return str;
-      });
+      // $scope.aichiTargetOptions = _.range(1, 21).map(function(val) {
+      //   var str = val.toString();
+      //   if (str.length === 1) str = '0' + str;
+      //   return str;
+      // });
 
 
       $scope.selectedQuery = '';
