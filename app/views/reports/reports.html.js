@@ -25,27 +25,27 @@ define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json'], funct
       $scope.progressSettings = {
         "884D8D8C-F2AE-4AAC-82E3-5B73CE627D45": {
           verbal: "On track to exceed target",
-          color: '#007C35',
+          color: '#36C941',
           score: 5
         },
         "E49EF94E-0590-486C-903B-68C5E54EC089": {
           verbal: "On track to achieve target",
-          color: '#00AB49',
+          color: '#36C941',
           score: 4
         },
         "486C27A7-6BDF-460D-92F8-312D337EC6E2": {
           verbal: "Insufficient rate of change",
-          color: '#00C655',
+          color: '#E5D220',
           score: 3
         },
         "2D241E0A-1D17-4A0A-9D52-B570D34B23BF": {
           verbal: "No significant change",
-          color: '#00E362',
+          color: '#E5D220',
           score: 2
         },
         "36A174B8-085A-4363-AE11-E34163A9209C": {
           verbal: "Moving away from target",
-          color: '#00FF6E',
+          color: '#DD5112',
           score: 1
         }
       };

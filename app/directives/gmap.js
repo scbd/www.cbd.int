@@ -11,7 +11,7 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
             fillColor: null,
             fillOpacity: 0.25
           },
-          defaultCountryColor = '#ccc',
+          defaultCountryColor = '#DDDDDD',
           geojsonCache = JSON.parse(countriesGeoJson);
 
         // array for gmap listeners that we can clean
@@ -80,8 +80,8 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
             var strokeColor = feature.getProperty('color');
             if (!strokeColor) strokeColor = defaultCountryColor;
             return {
-              strokeColor: colors.changeLum(strokeColor, -0.5),
-              fillColor: colors.changeLum(strokeColor, -0.5)
+              strokeColor: colors.changeLum(strokeColor, -0.35),
+              fillColor: colors.changeLum(strokeColor, -0.35)
             };
           });
         }
@@ -109,7 +109,6 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
             var shape = _.find(geojsonCache.features, function(feature) {
               return feature.properties.iso_a2 === countryCode;
             });
-            // console.log(shape);
 
             var countryColor,
               bestAssess = _.max(reports, function(report) {
@@ -119,9 +118,6 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
             if (!_.isEmpty(bestAssess)) countryColor = bestAssess.assessment.meta.color;
 
             var shapeClone = angular.copy(shape);
-
-            // if(!shapeClone)
-            //   return;
 
             shapeClone.properties.reports = reports;
             shapeClone.properties.color = countryColor;
