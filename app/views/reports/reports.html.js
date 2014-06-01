@@ -52,6 +52,7 @@ define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json'], funct
 
 
       $scope.selectedQuery = '';
+      $scope.selectedSchema = '';
       $scope.loading = false;
 
       $scope.setQuery = function(schema, id) {
@@ -61,6 +62,7 @@ define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json'], funct
       $scope.setSelectedQuery = function(schema, qid) {
         if ($scope.selectedQuery === schema) return;
         $scope.selectedQuery = qid;
+        $scope.selectedSchema = schema;
         self.getReportsByType(schema, qid);
       };
 
@@ -88,7 +90,7 @@ define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json'], funct
           .then(function(results) {
             if (!results.length) {
               $scope.loading = false;
-              growl.addInfoMessage('No reports of this type were found...');
+              growl.addWarnMessage('No reports of this type were found...');
             }
 
             if (schema === 'nationalTarget' || schema === 'nationalIndicator') {

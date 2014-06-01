@@ -367,10 +367,14 @@
                 <div id="collapseTwo" class="panel-collapse collapse">
                   <div class="panel-body">
                     <ul class="nav nav-sidebar">
-                      <li><a href="" ng-click="setQuery('nationalTarget')">National Targets</a></li>
+                      <li ng-class="{active: selectedSchema === 'nationalTarget' }">
+                        <a href="" ng-click="setQuery('nationalTarget')">National Targets</a>
+                      </li>
                     </ul>
                     <ul class="nav nav-sidebar">
-                      <li><a href="" ng-click="setQuery('nationalIndicator')">National Indicators</a></li>
+                      <li ng-class="{active: selectedSchema === 'nationalIndicator' }">
+                        <a href="" ng-click="setQuery('nationalIndicator')">National Indicators</a>
+                      </li>
                     </ul>
                     <!--
                     <ul class="nav nav-sidebar">
@@ -390,7 +394,7 @@
                       <li ng-repeat="target in aichiTargets">
                         <button type="button" id="target-{{target.index}}" class="targets" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="top" data-content="{{target.description}}" ng-click="setQuery('nationalTarget', 'AICHI-TARGET-' + target.index)">
                         <span>
-                        <img src="/app/images/abt-{{target.index}}-48.png" /></span>
+                        <img ng-src="/app/images/abt-{{target.index}}-48.png" /></span>
                         </button>
                       </li>
                     </ul>
@@ -422,7 +426,7 @@
                 </div>
               </div> -->
             </div>
-            <div class="legend m-t-xl">
+            <div class="legend m-t-xl" ng-show="selectedQuery">
               <span class="legend-title">Assessment Legend</span>
               <ul class="legend-list">
                 <li class="legend-item" ng-repeat="setting in progressSettings | orderObjectBy:'-score'">
