@@ -8,7 +8,7 @@ define([
   '/app/filters/index.js'
 ], function(angular) {
 
-  var app = angular.module('app', ['ngRoute', 'ngCookies', 'angular-growl', 'app.services', 'app.directives', 'app.filters']);
+  var app = angular.module('app', ['ngRoute', 'ngCookies', 'angular-growl', 'app.services', 'app.directives', 'app.filters', 'ui.bootstrap']);
 
   app.config(['$controllerProvider', '$compileProvider', '$provide', '$filterProvider', 'growlProvider',
     function($controllerProvider, $compileProvider, $provide, $filterProvider, growlProvider) {

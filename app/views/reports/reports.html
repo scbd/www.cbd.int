@@ -334,10 +334,10 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                  National Reports
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" ng-click="setSection('nationalReports')">
+                    National Reports
                   </a>
-                  <button type="button" id="reports" class="pull-right btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Countries having submitted or updated their report(s) since">
+                  <button type="button" id="reports" class="pull-right btn btn-default" popover-append-to-body="true" popover-placement="top" popover="Countries having submitted or updated their report(s) since">
                   <span class="glyphicon glyphicon-info-sign white"></span>
                   </button>
                   </h4>
@@ -356,10 +356,10 @@
               <div class="panel panel-default">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                  Targets and Indicators
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" ng-click="setSection('targetsAndIndicators')">
+                    Targets and Indicators
                   </a>
-                  <button type="button" id="nbsap" class="pull-right btn btn-default" data-container="body" data-toggle="popover" data-placement="top" data-content="Countries having identified in their NBSAP national targets that contribute to the achievement of Aichi Biodiversity Target AND/OR national indicators used track progress towards the national targets relevant to Aichi Biodiversity Target">
+                  <button type="button" id="nbsap" class="pull-right btn btn-default" popover-append-to-body="true" popover-placement="top" popover="Countries having identified in their NBSAP national targets that contribute to the achievement of Aichi Biodiversity Target AND/OR national indicators used track progress towards the national targets relevant to Aichi Biodiversity Target">
                   <span class="glyphicon glyphicon-info-sign white"></span>
                   </button>
                   </h4>
@@ -387,12 +387,12 @@
                     </ul>
                     -->
                     <ul class="nav nav-sidebar">
-                      <li><a href="">Any relevant Aichi targets</a></li>
+                      <!-- <li><a href="">Any relevant Aichi targets</a></li> -->
                       <li><a href="">Aichi Target:</a></li>
                     </ul>
                     <ul class="group-targets">
                       <li ng-repeat="target in aichiTargets">
-                        <button type="button" id="target-{{target.index}}" class="targets" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="top" data-content="{{target.description}}" ng-click="setQuery('nationalTarget', 'AICHI-TARGET-' + target.index)">
+                        <button type="button" id="target-{{target.index}}" class="targets" popover-trigger="mouseenter" popover-append-to-body="true" popover-placement="top" popover="{{target.description}}" ng-click="setQuery('nationalTarget', 'AICHI-TARGET-' + target.index)">
                         <span>
                         <img ng-src="/app/images/abt-{{target.index}}-48.png" /></span>
                         </button>
@@ -426,7 +426,7 @@
                 </div>
               </div> -->
             </div>
-            <div class="legend m-t-xl" ng-show="selectedQuery">
+            <div class="legend m-t-xl" ng-show="selectedSection === 'targetsAndIndicators'">
               <span class="legend-title">Assessment Legend</span>
               <ul class="legend-list">
                 <li class="legend-item" ng-repeat="setting in progressSettings | orderObjectBy:'-score'">
@@ -510,4 +510,3 @@
       </div>
     </div>
   </div>
-  <script src="/app/js/function.js"></script>

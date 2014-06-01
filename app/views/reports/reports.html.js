@@ -66,6 +66,10 @@ define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json'], funct
         self.getReportsByType(schema, qid);
       };
 
+      $scope.setSection = function(sectionName) {
+        $scope.selectedSection = sectionName;
+      };
+
       this.mergeAssessmentsAndReports = function(reports, assessments) {
         reports.forEach(function(report) {
           assessments.forEach(function(assessment) {

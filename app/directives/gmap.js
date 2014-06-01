@@ -103,6 +103,7 @@ define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '
           var groupedReports = _.groupBy(newReports, 'countryCode');
 
           angular.forEach(groupedReports, function(reports, countryCode) {
+            console.log(countryCode);
             if (countryCode === 'EUR') return;
             // console.log(countryCode);
             var shape = _.find(geojsonCache.features, function(feature) {
