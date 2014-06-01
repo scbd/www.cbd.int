@@ -50,15 +50,6 @@ define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json'], funct
         }
       };
 
-      // Range is 0,20. The numbers are converted to string and the
-      // first ten digits are padded with a zero to become proper
-      // arguements to query solr with.
-      // $scope.aichiTargetOptions = _.range(1, 21).map(function(val) {
-      //   var str = val.toString();
-      //   if (str.length === 1) str = '0' + str;
-      //   return str;
-      // });
-
 
       $scope.selectedQuery = '';
       $scope.loading = false;
@@ -83,7 +74,6 @@ define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json'], funct
             }
           });
         });
-        // reports.map(function(report) {console.log(report.assessment)});
         return reports;
       };
 
@@ -108,7 +98,6 @@ define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json'], funct
 
               reports.getProgressAssessments('progressAssessment', guids, targetType)
                 .then(function(assessments) {
-                  // console.log(assessments);
                   $scope.loading = false;
                   results = self.mergeAssessmentsAndReports(results, assessments);
                   $rootScope.$emit('updateMap', results);
@@ -125,6 +114,9 @@ define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json'], funct
             growl.addErrorMessage(err + ': Please try again.');
           });
       };
+
+      // Init the page with the 5th national reports.
+      $scope.setSelectedQuery('nationalReport', '5th');
 
       $scope.resetCenter = function() {
         $rootScope.$emit('resetCenter');
