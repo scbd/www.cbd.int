@@ -1,0 +1,27 @@
+<div>
+<table>
+<tr>
+	<td>Number of document to print:</td>
+	<td>{{documents.length}}</td>
+</tr>
+
+<tr>
+	<td>Prefered print language:</td>
+	<td>
+		<select style="width:150px" ng-model="preferedLanguage" ng-options="l.code as l.name for l in languages">
+		</select>
+	</td>
+</tr>
+		
+<tr>
+	<td>Badge number</td>
+	<td>
+		<input type="text" style="width:150px;text-align:center" ng-bind="BadgeCode" value="" />
+	</td>
+</tr>
+
+</table>
+
+<input type="button" ng-click="print()" value="Print!" />
+
+</div>
