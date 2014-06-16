@@ -10,16 +10,15 @@ require.config({
     'ngCookies'  : '/app/libs/angular-cookies/angular-cookies',
     'domReady'   : '/app/libs/requirejs-domready/domReady',
     'underscore' : '/app/libs/underscore/underscore',
+    'bootstrap'  : '/app/libs/bootstrap-sass/dist/js/bootstrap.min',
     'jquery'     : '/app/libs/jquery/jquery',
   },
   shim: {
     'angular'         : { 'deps': ['jquery'], 'exports': 'angular' },
+    'bootstrap'       : { 'deps': ['jquery'] },
     'angular-cookies' : { 'deps': ['angular'] },
   }
 });
-
-if(window.$)
-	define("jquery", function() { return window.$ } );
 
 require(['angular', 'domReady'], function (ng) {
 

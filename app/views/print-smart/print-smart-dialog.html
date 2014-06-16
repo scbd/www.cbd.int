@@ -1,27 +1,51 @@
-<div>
-<table>
-<tr>
-	<td>Number of document to print:</td>
-	<td>{{documents.length}}</td>
-</tr>
-
-<tr>
-	<td>Prefered print language:</td>
-	<td>
-		<select style="width:150px" ng-model="preferedLanguage" ng-options="l.code as l.name for l in languages">
-		</select>
-	</td>
-</tr>
+<div class="modal fade" id="printSmartDialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="close()" aria-hidden="true">×</button>
+        <h4 class="modal-title">Print Smart <i class="fa fa-cog fa-spin" ng-show="isNetworkCall"></i></h4>
+      </div>
+      <div class="modal-body">
 		
-<tr>
-	<td>Badge number</td>
-	<td>
-		<input type="text" style="width:150px;text-align:center" ng-bind="BadgeCode" value="" />
-	</td>
-</tr>
+		<form class="form-horizontal">
 
-</table>
+			<div class="form-group">
+				<label for="documentCount" class="col-sm-5 control-label">Number of documents to print</label>
+				<div class="col-sm-5">
+					<input type="text" readonly="true" class="form-control" id="documentCount" value="{{documents.length}}">
+				</div>
+			</div>
 
-<input type="button" ng-click="print()" value="Print!" />
+			<div class="form-group">
+				<label for="preferedLanguage" class="col-sm-5 control-label">Prefered print language</label>
+				<div class="col-sm-5">
+					<select class="form-control" ng-model="preferedLanguage" id="preferedLanguage" ng-options="l.code as l.name for l in languages"></select>
+				</div>
+			</div>
 
+			<div class="form-group" ng-class="{ 'has-error' : error && error.error=='INVALID_BADGE_ID', 'has-warning' : cleanBadge().length>0 && cleanBadge().length<8 }">
+				<label for="badgeCode" class="col-sm-5 control-label">Badge number</label>
+				<div class="col-sm-5">
+					<input type="text" ng-change="clearError()" class="form-control" id="badgeCode" placeholder="1234-5678" maxlength="9" pattern="\d*" ng-model="badgeCode">
+				</div>
+			</div>
+
+			<div class="alert alert-danger" ng-show="error && error.error=='INVALID_BADGE_ID'">
+				<b>Oh snap!</b> Your CBD Badge {{badgeCode}} code is invalid. Please re-type it again.
+			</div>
+
+			<div class="alert alert-danger" ng-show="error && error.error!='INVALID_BADGE_ID'">
+				<b>Oh snap!</b> {{error.message}}
+			</div>
+
+		</form>
+
+      </div>
+      <div class="modal-footer">
+      	<i class="fa fa-cog fa-spin" ng-show="isNetworkCall"></i>
+        <button type="button" class="btn btn-default" ng-click="close()">Close</button>
+		<button type="button" class="btn btn-primary" ng-click="print()" ng-disabled="!canPrint() || isNetworkCall">Print »</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
 </div>

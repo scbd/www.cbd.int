@@ -1,57 +1,60 @@
-define(['app'], function(app) {
+define(['app', 'bootstrap', 'print-smart-checkout.html', 'print-smart-dialog.html', 'print-smart-help.html'], function(app) {
 
 	//==============================================
 	//
 	//
 	//==============================================
 	app.directive('printSmart', ["$compile", function($compile) {
+
 		return {
 			restrict : "AE",
 			scope : {},
 			link : function(scope, element) {
 
-				console.log(scope);
+				$("#t-header").css("z-index", "999"); // Fix header over dialog
 
-				var dialog = angular.element("<div print-smart-dialog></div>");
+				var printDialog = angular.element("<div print-smart-dialog></div>");
+				var helpDialog  = angular.element("<div print-smart-help></div>");
 
-				element.prepend(dialog);
+				element.prepend(printDialog);
+				element.prepend(helpDialog);
 
-				$compile(dialog)(scope);
+				scope.__printDialog = $compile(printDialog)(scope);
+				scope.__helpDialog  = $compile(helpDialog )(scope);
 
 			},
-			controller: ["$scope", function() {
+			controller: ["$scope", function($scope) {
 
 				var documents    = [];
 				var documentsMap = {};
-				var printDialogVisible = false;
 
-				this.addDocument = function(code, url) {
+				this.addDocument = function(symbol, urls) {
 
-					console.log("add", code);
+					console.log("add", symbol);
 
-					var n = { DocumentSymbol : code, DocumentUrl : url };
-					var o = documentsMap[code];
+					var n = { symbol : symbol, urls : urls };
+					var o = documentsMap[symbol];
 					var i = documents.indexOf(o);
 
 					if(i>=0)
 						documents.splice(i, 1);
 
-					documentsMap[code] = n;
+					documentsMap[symbol] = n;
 					documents.push(n);
 				};
 
-				this.removeDocument = function(code) {
+				this.removeDocument = function(symbol) {
 
-					console.log("del", code);
+					console.log("del", symbol);
 
-					var o = documentsMap[code];
+					var o = documentsMap[symbol];
 					var i = documents.indexOf(o);
 
 					if(i>=0)
 						documents.splice(i, 1);
 
 					if(o!==undefined)
-						delete documentsMap[code];
+						delete documentsMap[symbol];
 				};
 
 				this.clearDocuments = function() {
@@ -64,16 +67,24 @@ define(['app'], function(app) {
 					return documents;
 				};
 
-				this.hasDocument = function(code) {
-					return !!documentsMap[code];
+				this.hasDocument = function(symbol) {
+					return !!documentsMap[symbol];
 				};
 
-				this.showPrintDialog = function(visible) {
-					printDialogVisible = visible;
+				this.showPrint = function(visible) {
+
+					if($scope.__printDialog.is(":visible")===visible)
+						return;
+
+					$scope.__printDialog.modal(!!visible ? "show" : "hide");
 				};
 
-				this.isPrintDialogVisible = function() {
-					return printDialogVisible;
+				this.showHelp = function(visible) {
+
+					if($scope.__helpDialog.is(":visible")===visible)
+						return;
+
+					$scope.__helpDialog.modal(!!visible ? "show" : "hide");
 				};
 			}]
 		};
@@ -90,27 +101,34 @@ define(['app'], function(app) {
 			require: '^printSmart',
 			link: function (scope, element, attrs, psCtrl) {
 
-				var re    = /(http[s]?:\/\/[a-z\.]+\/)(.*)([a-z]{2})(.pdf)/gi;
-				var host  = attrs.documentUrl.replace(re, "$1");
-				var ext   = attrs.documentUrl.replace(re, "$4");
-				var path  = attrs.documentUrl.replace(re, "$2");
-				var paths = { 
-					ar : '/'+path+'ar'+ext,
-					es : '/'+path+'es'+ext,
-					fr : '/'+path+'fr'+ext,
-					ru : '/'+path+'ru'+ext,
-					zh : '/'+path+'zh'+ext
-				};
-
 				var code = attrs.documentCode;
 				var urls = { en : attrs.documentUrl };
-				var qPS  = element.parents("div[print-smart]:first");
 
-				if(qPS.find('a[href="'+paths.ar+'"]').size()!==0) urls.ar = host+paths.ar;
-				if(qPS.find('a[href="'+paths.es+'"]').size()!==0) urls.es = host+paths.es;
-				if(qPS.find('a[href="'+paths.fr+'"]').size()!==0) urls.fr = host+paths.fr;
-				if(qPS.find('a[href="'+paths.ru+'"]').size()!==0) urls.ru = host+paths.ru;
-				if(qPS.find('a[href="'+paths.zh+'"]').size()!==0) urls.zh = host+paths.zh;
+				try
+				{
+					var qPS   = element.parents("div[print-smart]:first");
+					var re    = /(http[s]?:\/\/[a-z\.]+\/)(.*)([a-z]{2})(.pdf)/i;
+					var host  = attrs.documentUrl.replace(re, "$1");
+					var ext   = attrs.documentUrl.replace(re, "$4");
+					var path  = attrs.documentUrl.replace(re, "$2");
+					var paths = { 
+						ar : '/'+path+'ar'+ext,
+						es : '/'+path+'es'+ext,
+						fr : '/'+path+'fr'+ext,
+						ru : '/'+path+'ru'+ext,
+						zh : '/'+path+'zh'+ext
+					};
+
+					if(qPS.find('a[href="'+paths.ar+'"]').size()!==0) urls.ar = host+paths.ar;
+					if(qPS.find('a[href="'+paths.es+'"]').size()!==0) urls.es = host+paths.es;
+					if(qPS.find('a[href="'+paths.fr+'"]').size()!==0) urls.fr = host+paths.fr;
+					if(qPS.find('a[href="'+paths.ru+'"]').size()!==0) urls.ru = host+paths.ru;
+					if(qPS.find('a[href="'+paths.zh+'"]').size()!==0) urls.zh = host+paths.zh;
+				}
+				catch(e)
+				{
+					console.log("Error looking for other language of :", attrs.documentUrl);
+				}
 
 				scope.$watch(function() { return psCtrl.getDocuments().length;  }, function() {
 
@@ -130,64 +148,6 @@ define(['app'], function(app) {
 			}
 		};
 	}]);
-
-
-	//==============================================
-	//
-	//
-	//==============================================
-	app.directive('printSmartCheckout', ["$timeout", function($timeout) {
-		return {
-			restrict : "C",
-			require: '^printSmart',
-			link: function (scope, element, attrs, psCtrl) {
-
-				scope.$watch(function() {  return psCtrl.getDocuments().length;  }, function(count) {
-
-					element.prop("disabled", !count);
-				});
-
-				element.bind("click", function() {
-					$timeout(function() { 
-						psCtrl.showPrintDialog(psCtrl.getDocuments().length===0);
-					});
-				});
-			}
-		};
-	}]);
-
-	//==============================================
-	//
-	//
-	//==============================================
-	app.directive('printSmartDialog', function() {
-		return {
-			restrict : "AC",
-			require: '^printSmart',
-			replace : true,
-			scope :  {},
-			templateUrl : "/app/views/print-smart/print-smart-dialog.html",
-			link: function (scope, element, attrs, psCtrl) {
-
-				scope.documents = psCtrl.getDocuments();
-				scope.preferedLanguage = "en";
-
-				scope.languages = [
-				{ code : "ar", name : "العربية" },
-				{ code : "en", name : "English" },
-				{ code : "es", name : "Español" },
-				{ code : "fr", name : "Français" },
-				{ code : "ru", name : "Русский" },
-				{ code : "zh", name : "中文" },
-				];
-
-				scope.print = function() {
-					alert("printed!");
-					psCtrl.clearDocuments();
-				};
-			}
-		};
-	});
 
 	console.log("Print smart app loaded");
 });
