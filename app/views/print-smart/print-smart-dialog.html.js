@@ -11,7 +11,9 @@ define(['app', 'underscore'], function(app, _) {
 
 				element.on("show.bs.modal", function() {
 					scope.documents = psCtrl.getDocuments();
+					scope.badgeCode = "";
 					scope.error     = null;
+					scope.success   = null;
 				});
 
 				scope.preferedLanguage = "en";
@@ -28,7 +30,6 @@ define(['app', 'underscore'], function(app, _) {
 					{ code : "ru", name : "Русский" },
 					{ code : "zh", name : "中文" },
 				];
-
 
 				//==============================================
 				//
@@ -63,6 +64,7 @@ define(['app', 'underscore'], function(app, _) {
 				scope.print = function() {
 
 					scope.error = null;
+					scope.success = null;
 
 					var postData = {
 						badge     : cleanBadge(),
@@ -79,12 +81,16 @@ define(['app', 'underscore'], function(app, _) {
 
 					scope.isNetworkCall = true;
 
-					$http.post("/api/v2014/papersmart-requests", postData).success(function() {
+					$http.post("/api/v2014/papersmart-requests", postData).success(function(data) {
 
 						scope.isNetworkCall = false;
-						psCtrl.clearDocuments();
-						psCtrl.showPrint(false);
 
+						if(angular.isObject(data)) 
+							scope.success = data
+
+						if(!scope.success.delay)
+							scope.success.delay = 10;
+						
 					}).error(function(data, status){
 
 						scope.isNetworkCall = false;
@@ -99,7 +105,11 @@ define(['app', 'underscore'], function(app, _) {
 				//
 				//
 				//==============================================
-				scope.close = function() {
+				scope.close = function(clearDocuments) {
+
+					if(!!clearDocuments)
+						psCtrl.clearDocuments();
+
 					psCtrl.showPrint(false);
 				};
 			}

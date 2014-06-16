@@ -29,6 +29,14 @@ define(['app'], function(app) {
 				//
 				//
 				//==============================================
+				scope.getDocuments = function() {  
+					return psCtrl.getDocuments();
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
 				scope.isDisabled = function() {  
 					return psCtrl.getDocuments().length===0;  
 				};

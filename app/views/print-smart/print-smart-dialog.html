@@ -1,13 +1,13 @@
-<div class="modal fade" id="printSmartDialog">
+<div class="modal fade" id="printSmartDialog" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" ng-click="close()" aria-hidden="true">×</button>
+        <button type="button" class="close" ng-click="close(success)" aria-hidden="true">×</button>
         <h4 class="modal-title">Print Smart <i class="fa fa-cog fa-spin" ng-show="isNetworkCall"></i></h4>
       </div>
       <div class="modal-body">
 		
-		<form class="form-horizontal">
+		<form class="form-horizontal" ng-hide="success">
 
 			<div class="form-group">
 				<label for="documentCount" class="col-sm-5 control-label">Number of documents to print</label>
@@ -30,6 +30,7 @@
 				</div>
 			</div>
 
+
 			<div class="alert alert-danger" ng-show="error && error.error=='INVALID_BADGE_ID'">
 				<b>Oh snap!</b> Your CBD Badge {{badgeCode}} code is invalid. Please re-type it again.
 			</div>
@@ -38,13 +39,23 @@
 				<b>Oh snap!</b> {{error.message}}
 			</div>
 
+
 		</form>
+
+		<div class="alert alert alert-success" ng-show="success">
+			<b>Well done!</b> <br/><br/>
+			
+			You successfully requested {{documents.length}} document(s) for printing. You are invited to visite document distribution counter
+			in {{success.delay}} minutes to claim your printed copy of your document.<br/><br/>
+
+			<em>Heavy printer load may cause delay</em>.
+		</div>
 
       </div>
       <div class="modal-footer">
       	<i class="fa fa-cog fa-spin" ng-show="isNetworkCall"></i>
-        <button type="button" class="btn btn-default" ng-click="close()">Close</button>
-		<button type="button" class="btn btn-primary" ng-click="print()" ng-disabled="!canPrint() || isNetworkCall">Print »</button>
+        <button type="button" class="btn btn-default" ng-click="close(success)">Close</button>
+		<button type="button" class="btn btn-primary" ng-click="print()" ng-hide="success" ng-disabled="!canPrint() || isNetworkCall">Print »</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
