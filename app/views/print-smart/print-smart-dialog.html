@@ -30,35 +30,35 @@
 				</div>
 			</div>
 
-			<div class="alert alert-danger"> <!-- ng-show="error && error.error=='INVALID_BADGE_ID'"> -->
-				<img class="pull-right" src="/app/views/print-smart/sample-barcode.png">
+			<div class="alert alert-danger" ng-show="error.error=='INVALID_BADGE_ID'">
+				<img style="margin:3px" class="pull-right" src="/app/views/print-smart/sample-barcode.png">
 				<b>Sorry!</b> Your CBD Badge {{badgeCode}} number is invalid.
 				<br/>You must provide the number located on the top right of your CBD meeting access badge.
 			</div>
 
-			<div class="alert alert-danger"> <!-- ng-show="error.error=='INVALID_BADGE_REVOKED'"> -->
+			<div class="alert alert-danger" ng-show="error.error=='INVALID_BADGE_REVOKED'">
 				<b>Sorry!</b> Your CBD Badge {{badgeCode}} has been revoked. <br>
 				Please visit the registration desk for assitance.
 			</div>
 
-			<div class="alert alert-danger"> <!-- ng-show="error.error=='INVALID_BADGE_EXPIRED'"> -->
+			<div class="alert alert-danger" ng-show="error.error=='INVALID_BADGE_EXPIRED'">
 				<b>Sorry!</b> Your CBD Badge {{badgeCode}} has expired. <br>
 				Please visit the registration desk for assitance.
 			</div>
 
-			<div class="alert alert-danger"> <!-- ng-show="error.error=='NO_SERVICE'"> -->
+			<div class="alert alert-danger" ng-show="error.error=='NO_SERVICE'">
 				<b>Error: service is unavailable!</b> Sorry, the PrintSmart service is not available at this moment.<br>
 				Please wait 5 minutes and try again or go to the registration desk for further assitance.
 			</div>
 
-			<div class="alert alert-danger" ><!-- ng-show="isCustomError()"> -->
+			<div class="alert alert-danger" ng-show="isCustomError()">
 				<b>Sorry!</b> {{error.message||'Unknown error.'}} <br>
 				Please visit the registration desk for assitance.
 			</div>
 
 		</form>
 
-		<div class="alert alert alert-success"> <!-- ng-show="success"> -->
+		<div class="alert alert alert-success" ng-show="success">
 			<b>Well done!</b> <br/><br/>
 			
 			You successfully requested {{documents.length}} document(s) for printing. You are invited to visit the documents distribution counter
@@ -69,7 +69,7 @@
 
       </div>
       <div class="modal-footer">
-      	<i class="fa fa-cog fa-spin" ng-show="isNetworkCall"></i>
+      	<i class="fa fa-cog fa-spin" ng-show="isNetworkCall" style="margin:5px"></i>
         <button type="button" class="btn btn-default" ng-click="close(success)">Close</button>
 		<button type="button" class="btn btn-primary" ng-click="print()" ng-hide="success" ng-disabled="!canPrint() || isNetworkCall">Print »</button>
       </div>

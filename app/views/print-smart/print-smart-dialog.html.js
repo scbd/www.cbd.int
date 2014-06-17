@@ -81,40 +81,18 @@ define(['app', 'underscore'], function(app, _) {
 
 					scope.isNetworkCall = true;
 
-
-					if(window.location.hash=="#fakeSuccess")
-					{
-						$timeout(function(){
-							scope.isNetworkCall = false;
-
-							var data = {};
-
-							if(angular.isObject(data)) 
-								scope.success = data
-
-							if(!scope.success.delay)
-								scope.success.delay = 10;
-						}, 1000);
-						return;
-					}
-
-
 					$http.post("/api/v2014/papersmart-requests", postData).success(function(data) {
 
 						scope.isNetworkCall = false;
-
-						if(angular.isObject(data)) 
-							scope.success = data
-
-						if(!scope.success.delay)
-							scope.success.delay = 10;
+						scope.success       = angular.isObject(data) ? data : {};
 
 					}).error(function(data, status){
 
 						scope.isNetworkCall = false;
 
 						if(angular.isObject(data)) scope.error = data
-						else if(status==404)       scope.error = { error: "NO_SERVICE", message : "Sevice is unavailable." };
+						else if(status==404)       scope.error = { error: "NO_SERVICE" };
+						else if(status==500)       scope.error = { error: "NO_SERVICE" };
 						else                       scope.error = { error: "UNKNOWN",    message : "Unknown error" };
 					});
 				};
@@ -124,12 +102,14 @@ define(['app', 'underscore'], function(app, _) {
 				//
 				//==============================================
 				scope.isCustomError = function() {
-					if(!error)
+
+					if(!scope.error)
 						return false;
 
 					return scope.error.error!="INVALID_BADGE_ID" &&
 						   scope.error.error!="INVALID_BADGE_REVOKED" && 
-						   scope.error.error!="INVALID_BADGE_EXPIRED"
+						   scope.error.error!="INVALID_BADGE_EXPIRED" &&
+						   scope.error.error!="NO_SERVICE";
 				}
 
 				//==============================================

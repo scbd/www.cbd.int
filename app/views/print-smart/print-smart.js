@@ -22,6 +22,8 @@ define(['app', 'bootstrap', 'print-smart-checkout.html', 'print-smart-dialog.htm
 				scope.__printDialog = $compile(printDialog)(scope);
 				scope.__helpDialog  = $compile(helpDialog )(scope);
 
+				element.find(".printSmartVisible").fadeIn();
+
 			},
 			controller: ["$scope", function($scope) {
 
