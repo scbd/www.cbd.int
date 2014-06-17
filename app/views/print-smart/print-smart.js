@@ -32,8 +32,6 @@ define(['app', 'bootstrap', 'print-smart-checkout.html', 'print-smart-dialog.htm
 
 				this.addDocument = function(symbol, urls) {
 
-					console.log("add", symbol);
-
 					var n = { symbol : symbol, urls : urls };
 					var o = documentsMap[symbol];
 					var i = documents.indexOf(o);
@@ -46,8 +44,6 @@ define(['app', 'bootstrap', 'print-smart-checkout.html', 'print-smart-dialog.htm
 				};
 
 				this.removeDocument = function(symbol) {
-
-					console.log("del", symbol);
 
 					var o = documentsMap[symbol];
 					var i = documents.indexOf(o);
@@ -151,5 +147,5 @@ define(['app', 'bootstrap', 'print-smart-checkout.html', 'print-smart-dialog.htm
 		};
 	}]);
 
-	console.log("Print smart app loaded");
+	console.log("PrintSmart app loaded");
 });

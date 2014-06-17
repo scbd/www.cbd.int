@@ -77,8 +77,6 @@ define(['app', 'underscore'], function(app, _) {
 						})
 					};
 
-					console.log(postData);
-
 					scope.isNetworkCall = true;
 
 					$http.post("/api/v2014/papersmart-requests", postData).success(function(data) {
