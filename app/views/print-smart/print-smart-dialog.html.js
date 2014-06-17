@@ -79,7 +79,7 @@ define(['app', 'underscore'], function(app, _) {
 
 					scope.isNetworkCall = true;
 
-					$http.post("/api/v2014/papersmart-requests", postData).success(function(data) {
+					$http.post("/api/v2014/printsmart-requests/batch", postData).success(function(data) {
 
 						scope.isNetworkCall = false;
 						scope.success       = angular.isObject(data) ? data : {};
