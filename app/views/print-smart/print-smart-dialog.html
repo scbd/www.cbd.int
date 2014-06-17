@@ -32,28 +32,28 @@
 
 			<div class="alert alert-danger"> <!-- ng-show="error && error.error=='INVALID_BADGE_ID'"> -->
 				<img class="pull-right" src="/app/views/print-smart/sample-barcode.png">
-				<b>Oh snap!</b> Your CBD Badge {{badgeCode}} number is invalid.
-				<br/>You must provide the number on the top right of your CBD access badge.
+				<b>Sorry!</b> Your CBD Badge {{badgeCode}} number is invalid.
+				<br/>You must provide the number located on the top right of your CBD meeting access badge.
 			</div>
 
 			<div class="alert alert-danger"> <!-- ng-show="error.error=='INVALID_BADGE_REVOKED'"> -->
-				<b>Oh snap!</b> Your CBD Badge {{badgeCode}} has been revoked. <br>
-				Please visite the registration desk for assitance.
+				<b>Sorry!</b> Your CBD Badge {{badgeCode}} has been revoked. <br>
+				Please visit the registration desk for assitance.
 			</div>
 
 			<div class="alert alert-danger"> <!-- ng-show="error.error=='INVALID_BADGE_EXPIRED'"> -->
-				<b>Oh snap!</b> Your CBD Badge {{badgeCode}} has expired. <br>
-				Please visite the registration desk for assitance.
+				<b>Sorry!</b> Your CBD Badge {{badgeCode}} has expired. <br>
+				Please visit the registration desk for assitance.
 			</div>
 
 			<div class="alert alert-danger"> <!-- ng-show="error.error=='NO_SERVICE'"> -->
-				<b>Service is unavailable!</b> The PrintSmart service is temporary not available<br>
-				Please wait 5 minutes and try it again or visite the registration desk for assitance.
+				<b>Error: service is unavailable!</b> Sorry, the PrintSmart service is not available at this moment.<br>
+				Please wait 5 minutes and try again or go to the registration desk for further assitance.
 			</div>
 
 			<div class="alert alert-danger" ><!-- ng-show="isCustomError()"> -->
-				<b>Oh snap!</b> {{error.message||'Unknown error'}} <br>
-				Please visite the registration desk for assitance.
+				<b>Sorry!</b> {{error.message||'Unknown error.'}} <br>
+				Please visit the registration desk for assitance.
 			</div>
 
 		</form>
@@ -61,10 +61,10 @@
 		<div class="alert alert alert-success"> <!-- ng-show="success"> -->
 			<b>Well done!</b> <br/><br/>
 			
-			You successfully requested {{documents.length}} document(s) for printing. You are invited to visite document distribution counter
-			in about {{success.delay||10}} minutes to claim your printed copy of your document.<br/><br/>
+			You successfully requested {{documents.length}} document(s) for printing. You are invited to visit the documents distribution counter
+			in about {{success.delay||10}} minutes to claim your printed document(s).<br/><br/>
 
-			<em>Heavy printer load may cause delay</em>.
+			<em>Sometimes higher printing requests may cause additional delays</em>.
 		</div>
 
       </div>
