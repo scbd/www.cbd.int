@@ -106,17 +106,17 @@ define(['app', 'bootstrap', 'print-smart-checkout.html', 'print-smart-dialog.htm
 				{
 					var qPS   = element.parents("div[print-smart]:first");
 					var re    = /(http[s]?:\/\/[a-z\.]+\/)(.*)([a-z]{2})(.pdf)/i;
-					var host  = attrs.documentUrl.replace(re, "$1");
+					var host  = attrs.documentUrl.replace(re, "$1").replace(/\/$/, "");
 					var ext   = attrs.documentUrl.replace(re, "$4");
-					var path  = attrs.documentUrl.replace(re, "$2");
+					var path  = '/'+attrs.documentUrl.replace(re, "$2");
 					var paths = { 
-						ar : '/'+path+'ar'+ext,
-						es : '/'+path+'es'+ext,
-						fr : '/'+path+'fr'+ext,
-						ru : '/'+path+'ru'+ext,
-						zh : '/'+path+'zh'+ext
+						ar : path+'ar'+ext,
+						es : path+'es'+ext,
+						fr : path+'fr'+ext,
+						ru : path+'ru'+ext,
+						zh : path+'zh'+ext
 					};
-
+					
 					if(qPS.find('a[href="'+paths.ar+'"]').size()!==0) urls.ar = host+paths.ar;
 					if(qPS.find('a[href="'+paths.es+'"]').size()!==0) urls.es = host+paths.es;
 					if(qPS.find('a[href="'+paths.fr+'"]').size()!==0) urls.fr = host+paths.fr;
