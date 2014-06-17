@@ -14,7 +14,10 @@ define(['app'], function(app) {
 				//
 				//==============================================
 				scope.print = function() {  
-					psCtrl.showPrint(psCtrl.getDocuments().length!==0);
+					if(psCtrl.getDocuments().length!==0)
+						psCtrl.showPrint(psCtrl.getDocuments().length!==0);
+					else 
+						psCtrl.showHelp(true);
 				};
 
 				//==============================================
@@ -31,14 +34,6 @@ define(['app'], function(app) {
 				//==============================================
 				scope.getDocuments = function() {  
 					return psCtrl.getDocuments();
-				};
-
-				//==============================================
-				//
-				//
-				//==============================================
-				scope.isDisabled = function() {  
-					return psCtrl.getDocuments().length===0;  
 				};
 			}
 		};

@@ -1,6 +1,6 @@
 define(['app', 'underscore'], function(app, _) {
 
-	app.directive('printSmartDialog', ["$http", function($http) {
+	app.directive('printSmartDialog', ["$http", "$timeout", function($http, $timeout) {
 		return {
 			restrict : "AC",
 			require: '^printSmart',
@@ -81,6 +81,24 @@ define(['app', 'underscore'], function(app, _) {
 
 					scope.isNetworkCall = true;
 
+
+					if(window.location.hash=="#fakeSuccess")
+					{
+						$timeout(function(){
+							scope.isNetworkCall = false;
+
+							var data = {};
+
+							if(angular.isObject(data)) 
+								scope.success = data
+
+							if(!scope.success.delay)
+								scope.success.delay = 10;
+						}, 1000);
+						return;
+					}
+
+
 					$http.post("/api/v2014/papersmart-requests", postData).success(function(data) {
 
 						scope.isNetworkCall = false;
@@ -90,7 +108,7 @@ define(['app', 'underscore'], function(app, _) {
 
 						if(!scope.success.delay)
 							scope.success.delay = 10;
-						
+
 					}).error(function(data, status){
 
 						scope.isNetworkCall = false;
@@ -100,6 +118,19 @@ define(['app', 'underscore'], function(app, _) {
 						else                       scope.error = { error: "UNKNOWN",    message : "Unknown error" };
 					});
 				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				scope.isCustomError = function() {
+					if(!error)
+						return false;
+
+					return scope.error.error!="INVALID_BADGE_ID" &&
+						   scope.error.error!="INVALID_BADGE_REVOKED" && 
+						   scope.error.error!="INVALID_BADGE_EXPIRED"
+				}
 
 				//==============================================
 				//
