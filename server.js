@@ -32,7 +32,8 @@ app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'https://ap
 
 // Configure template
 
-app.get('/national-reports', sendTemplate);
+app.get('/internal/printsmart*', sendTemplate);
+app.get('/national-reports',      sendTemplate);
 
 // Configure proxy to legacy website
 
@@ -40,7 +41,7 @@ app.all('/*', function(req, res) { proxy.web(req, res, { target: 'https://us1.lb
 
 // Start server
 
-server.listen(process.env.PORT || 8000, '0.0.0.0');
+server.listen(process.env.PORT || 8001, '0.0.0.0');
 
 server.on('listening', function () {
 	console.log('Server listening on %j', this.address());

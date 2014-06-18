@@ -1,0 +1,36 @@
+
+<div class="container ng-cloak">
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+        <div class="panel-heading clearfix">
+          <h1 class="panel-title">SCBD PrintSmart - Document requests - {{badge}}</h1>
+        </div>
+        <table width="100%" style="margin:20px 10px" class="table">
+          <tr>
+            <th></th>
+            <th>Document</th>
+            <th>Language</th>
+            <th>Requested</th>
+            <th>Delivered</th>
+          </tr>
+          <tr ng-repeat="printsmartRequest in printsmartRequests track by $index">
+            <td>
+              <!--a.pull-right(ng-click="openModal(printsmartRequest)")-->
+              <!--i.fa.fa-edit--><a ng-click="toggleCompleted(printsmartRequest)"><i ng-class="{ fa: true, 'fa-lg': true, 'fa-check-circle-o': printsmartRequest.isComplete, 'fa-circle-o': !printsmartRequest.isComplete }"></i></a> 
+            </td>
+            <td><span ng-class="{ strikethru: printsmartRequest.isComplete }">{{printsmartRequest.documentSymbol}}</span></td>
+            <td>{{printsmartRequest.documentLanguage}}</td>
+            <td><span am-time-ago="{{fixDate(printsmartRequest.createdOn)}}"></span></td>
+            <td><span am-time-ago="{{fixDate(printsmartRequest.deliveredOn)}}"></span></td>
+            <td>
+              <button class="btn small">reprint</button>
+            </td>
+          </tr>
+        </table>
+        <div class="panel-footer clearfix"><span class="pull-left"><strong>{{remainingCount}} </strong>
+            <ng-pluralize count="remainingCount" when="{ one: 'item left', other: 'items left' }"></ng-pluralize></span>
+          <button ng-click="clearCompleted()" ng-show="remainingCount &lt; printsmartRequests.length" class="btn btn-default btn-xs pull-right">Clear completed ({{printsmartRequests.length - remainingCount}})</button>
+        </div>
+    </div>
+  </div>
+</div>
