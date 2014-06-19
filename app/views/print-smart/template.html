@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Convention on Biological Diversity</title>
+
+	<link rel="stylesheet" type="text/css" href="/app/libs/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="/app/libs/bootstrap-sass/dist/css/bootstrap.min.css">
+
+	<style>[ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }</style>
+</head>
+<body class="ltr">
+
+	<!--<iframe id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none"></iframe>-->
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-8">
+				<h1><img src="/app/images/cbd-leaf-green.svg" style="height:55px;vertical-align:bottom"  />SCBD PrintSmart</h1>
+			</div>
+		</div>
+	</div>
+
+	<ng-view></ng-view>
+
+	<!-- Boot the app -->
+	<script src="/app/libs/requirejs/require.js" data-main="/app/js/boot.js"></script>
+
+</body>
+</html>
