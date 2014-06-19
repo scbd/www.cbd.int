@@ -1,22 +1,14 @@
 <div>
 	<style> .strikethru { text-decoration:line-through; } </style>
-	<ng-include src="'/app/views/print-smart/header.html'"></ng-include>
 
 	<div class="container ng-cloak">
+		
 		<div class="row" ng-hide="badge">
 			<div class="col-md-12">
 				<b><i class="fa fa-cog fa-spin"></i> Loading....</b>
 			</div>
 		</div>
-				<div class="panel-heading clearfix">
-				</div>
-		<div class="row" ng-show="badge">
-			<div class="col-md-4">
-				<h3>{{model.name}}</h3>
-				<div ng-show="model.government"><b>{{model.government}}</b></div>
-				{{model.organization}}
-			</div>
-</div>
+
 		<div class="row" ng-show="badge" >
 			<div class="col-md-12">
 				<table width="100%" style="margin:20px 10px" class="table">

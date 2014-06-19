@@ -32,8 +32,8 @@ app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'https://ap
 
 // Configure template
 
-app.get('/internal/printsmart*', sendTemplate);
-app.get('/national-reports',      sendTemplate);
+app.get('/internal/printsmart*', function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/print-smart/template.html'); });
+app.get('/national-reports',     sendTemplate);
 
 // Configure proxy to legacy website
 
