@@ -9,17 +9,20 @@ require.config({
     'angular-route'   : '../libs/angular-route/angular-route',
     'angular-cookies' : '../libs/angular-cookies/angular-cookies',
     'async'           : '../libs/requirejs-plugins/src/async',
-    'text'            : '../libs/requirejs-text/text',
     'domReady'        : '../libs/requirejs-domready/domReady',
+    'text'            : '../libs/requirejs-text/text',
     'jquery'          : '../libs/jquery/jquery',
     'bootstrap'       : '../libs/bootstrap-sass/dist/js/bootstrap.min',
     'underscore'      : '../libs/underscore/underscore',
-    'angular-growl'   : '../libs/angular-growl/build/angular-growl'
+    'angular-growl'   : '../libs/angular-growl/build/angular-growl',
+    'angular-moment'  : '../libs/angular-moment/angular-moment',
+    'moment'          : '../libs/moment/moment'
   },
   shim: {
     'angular'         : { 'deps': ['jquery'], 'exports': 'angular' },
     'angular-route'   : { 'deps': ['angular'] },
     'angular-cookies' : { 'deps': ['angular'] },
+    'angular-moment'  : { 'deps': ['moment'] },
     'bootstrap'       : { 'deps': ['jquery'] }
   }
 });

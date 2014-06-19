@@ -3,10 +3,11 @@
 define([
   'angular',
   'angular-growl',
+  'angular-moment',
   '/app/directives/ui-bootstrap-custom.js'
 ], function(angular) {
   
-  var app = angular.module('app', ['ngRoute', 'ngCookies', 'angular-growl', 'ui.bootstrap']);
+  var app = angular.module('app', ['ngRoute', 'ngCookies', 'angular-growl', 'angularMoment', 'ui.bootstrap']);
 
   app.config(['$controllerProvider', '$compileProvider', '$provide', '$filterProvider', 'growlProvider',
     function($controllerProvider, $compileProvider, $provide, $filterProvider, growlProvider) {
