@@ -46,7 +46,7 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 
 		    	$scope.badge = badge;
 		        $scope.printsmartRequests = data;
-		        
+
 		    }).error(function(data) {
 
 		    	$scope.error = data;
@@ -56,18 +56,22 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 		}
 
 
-	    $scope.flagCompleted = function (elements, value) {
+	    $scope.flagCompleted = function (element, value) {
 		
-			if(!elements)
+			if(!element)
 				return;
 
-			if(!_.isArray(elements))
-				elements = [elements];
+			if(!_.isArray(element)) {
+			 	
+			 	element.isComplete = value;
+			}
+			else {
 
-			_.each(elements, function(r) {
-			 	if(r.deliveredOn)
-			 		r.isComplete = value;
-			 });
+				_.each(element, function(r) {
+				 	if(r.deliveredOn)
+				 		r.isComplete = value;
+				 });
+			}
 		};
 
 	    $scope.clearCompleted = function () {
