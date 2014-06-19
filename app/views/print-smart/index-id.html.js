@@ -1,6 +1,6 @@
 define(['underscore', 'app', 'bootstrap'], function(_) {
 
-	return ["$scope", "$route", "$location", "$http", function ($scope, $route, $location, $http) {
+	return ["$scope", "$route", "$location", "$http", "$q", "growl", function ($scope, $route, $location, $http, $q, growl) {
 
 		$scope.requestsToCommit = requestsToCommit;
 		$scope.commit    = commit;
@@ -33,15 +33,11 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 
 			}).then(function(badgeInfo) {
 
-				console.log("badgeInfo", badgeInfo);
-
 				$scope.$root.contact = badgeInfo;
 
 				return $http.get('/api/v2014/printsmart-requests', { params : { q : { participant : badgeInfo.ContactID, completed:false } } });
 
 			}).then(function(res) {
-
-				console.log("res", res);
 
 				var requests = res.data;
 
@@ -100,21 +96,45 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 		//=============================================
 		function commit() {
 
+			var qPromises  = []
+			var errorCount = 0;
+
 			_.each(requestsToCommit(), function(request) {
 
 				request.loading = true;
 
-				$http.post('/api/v2014/printsmart-requests/'+request._id+'/deliveries', {}).then(function(res) {
+				qPromises.push($http.post('/api/v2014/printsmart-requests/'+request._id+'/deliveries', {}).then(function(res) {
 					
 					delete request.loading;
+
 					_.extend(request, res.data);
 
 				}).catch(function(err){
+					
+					errorCount++;
 
 					delete request.loading;
+
+					growl.addErrorMessage("Error with document: "+request.documentSymbol);
+
 					console.log(err);
-				});
+
+				}));
 			});
+
+			$q.all(qPromises).then(function(){
+
+				if(errorCount==0)
+					close();
+			})
+		};
+
+		//=============================================
+		//
+		//
+		//=============================================
+		function close() {
+			$location.path("/internal/printsmart");
 		};
 
 		//=============================================

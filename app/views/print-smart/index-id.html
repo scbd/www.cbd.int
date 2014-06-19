@@ -13,7 +13,7 @@
 			<div class="col-md-12">
 
 				<div class="text-right">
-					<button class="btn btn-primary btn-lg" ng-disabled="requestsToCommit().length==0" ng-click="commit()">Deliver {{requestsToCommit().length}}  documents »</button>
+					<button class="btn btn-primary btn-lg" ng-disabled="requestsToCommit().length==0" ng-click="commit()">Clear {{requestsToCommit().length}}  documents »</button>
 				</div>
 
 				<table width="100%" style="margin:20px 10px" class="table">
@@ -32,18 +32,18 @@
 							<i ng-show="request.deliveredOn" class="fa fa-lg" ng-class="{ 'fa-check-circle-o': request.completed, 'fa-circle-o': !request.completed }"></i>
 							<a ng-hide="request.deliveredOn || request.loading" ng-click="flag(request,!request.completed)"><i class="fa fa-lg" ng-class="{ 'fa-check-circle-o': request.completed, 'fa-circle-o': !request.completed }"></i></a> 
 						</td>
-						<td ng-class="{ strikethru: request.deliveredOn }">{{request.documentSymbol}}</td>
-						<td ng-class="{ strikethru: request.deliveredOn }">{{languages[request.documentLanguage]}}</td>
-						<td ng-class="{ strikethru: request.deliveredOn }"><span am-time-ago="{{fixDate(request.createdOn)}}"></span></td>
+						<td ng-class="{ strikethru: request.completed }">{{request.documentSymbol}}</td>
+						<td ng-class="{ strikethru: request.completed }">{{languages[request.documentLanguage]}}</td>
+						<td ng-class="{ strikethru: request.completed }"><span am-time-ago="{{fixDate(request.createdOn)}}"></span></td>
 						<td colspan="2">
-							<span ng-class="{ strikethru: request.deliveredOn }" am-time-ago="{{fixDate(request.printedOn)}}"></span>
+							<span ng-class="{ strikethru: request.completed }" am-time-ago="{{fixDate(request.printedOn)}}"></span>
 							<span ng-show="!request.printedOn" class="label label-default" ng-class="{'label-warning':request.completed}">Document is not printed</span>
 						</td>
 					</tr>
 					<tr ng-repeat-end="" style="height:60px">
 						<td></td>
 						<td colspan="4">{{box.requests.length}} document(s).</td>
-						<td class="text-right"><button class="btn btn-primary btn-lg" ng-disabled="requestsToCommit().length==0" ng-click="commit()">Deliver {{requestsToCommit().length}}  documents »</button></td>
+						<td class="text-right"><button ng-show="box.requests.length>10" class="btn btn-primary btn-lg" ng-disabled="requestsToCommit().length==0" ng-click="commit()">Clear {{requestsToCommit().length}}  documents »</button></td>
 					</tr>
 				</table>
 			</div>

@@ -3,10 +3,7 @@ function PrintSmartCtrl($scope, $location, $timeout) {
 
 	$scope.$watch(function() { return $location.path() }, function(path, oldPath){
 
-		if(path == "/internal/printsmart")
-		{
-			console.log(path, oldPath);
-
+		if(path == "/internal/printsmart") {
 			$scope.badge = "";
 			$scope.$root.contact = null;
 		}
@@ -24,7 +21,7 @@ function PrintSmartCtrl($scope, $location, $timeout) {
     	$scope.badge = "";
     },
 
-	$scope.close = function () {
+	$scope.close = function() {
 		$location.path("/internal/printsmart");
 	};
 

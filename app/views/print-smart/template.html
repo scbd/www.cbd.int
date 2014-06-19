@@ -8,11 +8,34 @@
 
 	<link rel="stylesheet" type="text/css" href="/app/libs/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="/app/libs/bootstrap-sass/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="https://raw.githack.com/daneden/animate.css/master/animate.css">
 
 	<style>[ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }</style>
+	<style type="text/css">
+		.growl {
+		    position: fixed;
+		    top: 25px;
+		    right: 10px;
+		    float: right;
+		    width: 400px;
+		    z-index: 9999;
+		}
+		.growl-item.ng-enter {
+		    -webkit-animation: bounceIn 0.5s;
+		    animation: bounceIn 0.5s;
+		}
+		.growl-item.ng-leave {
+		    -webkit-animation: bounceOut 0.5s;
+		    animation: bounceOut 0.5s;
+		}
+		.buttons {
+		    margin: 220px 4px;
+		}
+		</style>
 </head>
 <body class="ltr" ng-cloak>
 
+	<div data-growl=""></div>
 	<!--<iframe id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none"></iframe>-->
 	
 	<div class="container">

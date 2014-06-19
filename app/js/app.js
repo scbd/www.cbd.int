@@ -4,10 +4,11 @@ define([
   'angular',
   'angular-growl',
   'angular-moment',
+  'angular-animate',
   '/app/directives/ui-bootstrap-custom.js'
 ], function(angular) {
   
-  var app = angular.module('app', ['ngRoute', 'ngCookies', 'angular-growl', 'angularMoment', 'ui.bootstrap']);
+  var app = angular.module('app', ['ngRoute', 'ngCookies', 'ngAnimate','angular-growl', 'angularMoment', 'ui.bootstrap']);
 
   app.config(['$controllerProvider', '$compileProvider', '$provide', '$filterProvider', 'growlProvider',
     function($controllerProvider, $compileProvider, $provide, $filterProvider, growlProvider) {
@@ -20,7 +21,8 @@ define([
       app.controller = $controllerProvider.register;
       app.directive  = $compileProvider.directive;
 
-      growlProvider.globalTimeToLive(10000);
+      growlProvider.globalTimeToLive(7000);
+      growlProvider.globalEnableHtml(false);
 
     }
   ]);
