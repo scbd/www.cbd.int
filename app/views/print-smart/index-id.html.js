@@ -2,8 +2,7 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 
 	return ["$scope", "$route", "$location", "$http", "$q", function ($scope, $route, $location, $http, $q) {
 
-	    $scope.badge              = null;
-	    $scope.printsmartRequests = [];
+	    $scope.badge     = null;
 	    $scope.languages = {
 			"ar" : "العربية / Arabic" ,
 			"en" : "English" ,
@@ -18,34 +17,40 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 		function load(badge) {
 
 			 $scope.badge = badge;
-			 $scope.printsmartRequests = [
-			 {
-			 	id : "463785432",
-			 	documentSymbol: "WGRI/05/ZYZ",
-			 	documentLanguage : "zh",
-			 	createdOn : function() { var d =  new Date(); d.setDate(17); return d; }(),
-			 	deliveredOn : new Date()
-			 },
-			 {
-			 	id : "54543",
-			 	documentSymbol: "WGRI/05/543",
-			 	documentLanguage : "en",
-			 	createdOn : function() { var d =  new Date(); d.setDate(15); return d; }(),
-			 	deliveredOn : new Date()
-			 },
-			 {
-			 	id : "7754",
-			 	documentSymbol: "WGRI/05/7765",
-			 	documentLanguage : "fr",
-			 	createdOn : function() { var d =  new Date(); d.setDate(12); return d; }(),
-			 },
-			 ];
+			 $scope.model = {
+				 box        : "045",
+				 government : "Canada *",
+				 name         : "Stephane Bilodeau *",
+				 organization : "SCBD *",
+				 requests : [
+				 {
+				 	id : "463785432",
+				 	documentSymbol: "WGRI/05/ZYZ",
+				 	documentLanguage : "zh",
+				 	createdOn : function() { var d =  new Date(); d.setDate(17); return d; }(),
+				 	deliveredOn : new Date()
+				 },
+				 {
+				 	id : "54543",
+				 	documentSymbol: "WGRI/05/543",
+				 	documentLanguage : "en",
+				 	createdOn : function() { var d =  new Date(); d.setDate(15); return d; }(),
+				 	deliveredOn : new Date()
+				 },
+				 {
+				 	id : "7754",
+				 	documentSymbol: "WGRI/05/7765",
+				 	documentLanguage : "fr",
+				 	createdOn : function() { var d =  new Date(); d.setDate(12); return d; }(),
+				}
+				]
+			};
 			 return;
 
 		    $http.get('/api/v2014/printsmartrequests/', { params : { q : { badge : badge } } }).success(function(data) {
 
 		    	$scope.badge = badge;
-		        $scope.printsmartRequests = data;
+		        $scope.model = data;
 
 		    }).error(function(data) {
 
@@ -78,7 +83,7 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 
 	    	var qPendingQueries = [];
 
-	    	angular.forEach($scope.printsmartRequests, function (r) {
+	    	angular.forEach($scope.model.requests, function (r) {
 	    		if(r.isComplete)
 	    			qPendingQueries.push($http.post('/api/v2014/printsmartrequests/'+r.id+'/deliveries', {}));
 	    	});
