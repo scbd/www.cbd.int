@@ -3,49 +3,68 @@
 
 	<div class="container ng-cloak">
 		
-		<div class="row" ng-hide="badge">
+		<div class="row" ng-show="loading">
 			<div class="col-md-12">
-				<b><i class="fa fa-cog fa-spin"></i> Loading....</b>
+				<h3><i class="fa fa-cog fa-spin"></i> Loading....</h3>
 			</div>
 		</div>
 
-		<div class="row" ng-show="badge" >
+		<div class="row" ng-hide="loading" >
 			<div class="col-md-12">
+
+				<div class="text-right">
+					<button class="btn btn-primary btn-lg" ng-disabled="requestsToCommit().length==0" ng-click="commit()">Deliver {{requestsToCommit().length}}  documents »</button>
+				</div>
+
 				<table width="100%" style="margin:20px 10px" class="table">
 
 					<tr ng-repeat-start="box in boxes">
-						<th style="vertical-align:middle"><a ng-click="flagCompleted(box.requests, true)"><i class="fa fa-lg fa-check-circle-o" style="color:gray"></i></a> </th>
+						<th style="vertical-align:middle"></th>
 						<th style="vertical-align:middle">Document</th>
 						<th style="vertical-align:middle">Language</th>
 						<th style="vertical-align:middle">Requested</th>
-						<th style="vertical-align:middle">Delivered</th>
+						<th style="vertical-align:middle">Printed</th>
 						<th style="vertical-align:middle;font-size:200%;white-space:no-wrap" class="text-right"><span class="label label-info">&nbsp;{{box.id}}&nbsp;</span></th>
 					</tr>
 					<tr ng-repeat="request in box.requests" style="height:40px">
-						<td>
-							<a ng-click="flagCompleted(request, !request.isComplete)"><i ng-class="{ fa: true, 'fa-lg': true, 'fa-check-circle-o': request.isComplete, 'fa-circle-o': !request.isComplete }"></i></a> 
+						<td class="text-center">
+							<i ng-show="request.loading"     class="fa fa-lg fa-cog fa-spin"></i>
+							<i ng-show="request.deliveredOn" class="fa fa-lg" ng-class="{ 'fa-check-circle-o': request.completed, 'fa-circle-o': !request.completed }"></i>
+							<a ng-hide="request.deliveredOn || request.loading" ng-click="flag(request,!request.completed)"><i class="fa fa-lg" ng-class="{ 'fa-check-circle-o': request.completed, 'fa-circle-o': !request.completed }"></i></a> 
 						</td>
-						<td><span ng-class="{ strikethru: request.isComplete }">{{request.documentSymbol}}</span></td>
-						<td>{{languages[request.documentLanguage]}}</td>
-						<td><span am-time-ago="{{fixDate(request.createdOn)}}"></span></td>
-						<td>
-							<span am-time-ago="{{fixDate(request.deliveredOn)}}"></span>
-							<span ng-show="!request.deliveredOn" class="label label-default" ng-class="{'label-warning':request.isComplete}"><i class="fa fa-exclamation"></i> Not delivered</span>
-						</td>
-						<td  class="text-right">
-							<button ng-show="!request.isComplete" class="btn btn-default btn-xs">reprint</button>
+						<td ng-class="{ strikethru: request.deliveredOn }">{{request.documentSymbol}}</td>
+						<td ng-class="{ strikethru: request.deliveredOn }">{{languages[request.documentLanguage]}}</td>
+						<td ng-class="{ strikethru: request.deliveredOn }"><span am-time-ago="{{fixDate(request.createdOn)}}"></span></td>
+						<td colspan="2">
+							<span ng-class="{ strikethru: request.deliveredOn }" am-time-ago="{{fixDate(request.printedOn)}}"></span>
+							<span ng-show="!request.printedOn" class="label label-default" ng-class="{'label-warning':request.completed}">Document is not printed</span>
 						</td>
 					</tr>
 					<tr ng-repeat-end="" style="height:60px">
 						<td></td>
-						<td colspan="5">{{box.requests.length}} document(s).</td>
+						<td colspan="4">{{box.requests.length}} document(s).</td>
+						<td class="text-right"><button class="btn btn-primary btn-lg" ng-disabled="requestsToCommit().length==0" ng-click="commit()">Deliver {{requestsToCommit().length}}  documents »</button></td>
 					</tr>
 				</table>
-				<div class="panel-footer clearfix"><span class="pull-left"><strong>{{remainingCount}} </strong>
-					<ng-pluralize count="remainingCount" when="{ one: 'item left', other: 'items left' }"></ng-pluralize></span>
-					<button ng-click="clearCompleted()" ng-show="remainingCount &lt; requests.length" class="btn btn-default btn-xs pull-right">Clear completed ({{requests.length - remainingCount}})</button>
-				</div>
 			</div>
 		</div>
+
+
+		<div class="row" ng-show="error">
+			<div class="col-md-offset-2 col-md-8 col-sm-12">
+
+				<div class="alert alert-danger" ng-show="error.status==403">
+				  <b>You are not authorized!</b> Please contact tech support!
+				</div>
+
+				<div class="alert alert-danger" ng-show="error.data.error=='INVALID_BADGE_ID'">
+					<img style="margin:3px" class="pull-right" src="/app/views/print-smart/sample-barcode.png">
+					<b>Badge number is invalid.</b><br/>
+					You must provide the number located on the top right of the CBD meeting access badge.
+				</div>
+
+			</div>
+		</div>
+
 	</div>
 </div>
