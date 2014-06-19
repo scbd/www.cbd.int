@@ -3,6 +3,8 @@ define(['angular'], function(angular) {
 
 		angular.element("#badge").focus();
 
+		var qError=null;
+
 	    $scope.error  = error;
 	    $scope.submit = function () {
 
@@ -22,6 +24,7 @@ define(['angular'], function(angular) {
 	    }
 
 	    function clearError() {
+
 	    	if(qError) {
 	    		$timeout.cancel(qError);
 	    		qError = null;
