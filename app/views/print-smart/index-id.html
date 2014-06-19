@@ -12,10 +12,16 @@
 		<div class="row" ng-hide="loading" >
 			<div class="col-md-12">
 
-				<div class="text-right">
-					<button class="btn btn-primary btn-lg" ng-disabled="requestsToCommit().length==0" ng-click="commit()">Clear {{requestsToCommit().length}}  documents »</button>
-				</div>
-
+				<table width="100%" style="margin:20px 10px" ng-hide="error">
+					<tr >
+						<td>
+							<h3>{{allRequests().length}} document(s).</h3>
+						</td>
+						<td class="text-right" ng-show="allRequests().length">
+							<button class="btn btn-primary btn-lg" ng-disabled="requestsToCommit().length==0" ng-click="commit()">Clear {{requestsToCommit().length}}  documents »</button>
+						</td>
+					</tr>
+				</table>
 				<table width="100%" style="margin:20px 10px" class="table">
 
 					<tr ng-repeat-start="box in boxes">
@@ -42,8 +48,9 @@
 					</tr>
 					<tr ng-repeat-end="" style="height:60px">
 						<td></td>
-						<td colspan="4">{{box.requests.length}} document(s).</td>
-						<td class="text-right"><button ng-show="box.requests.length>10" class="btn btn-primary btn-lg" ng-disabled="requestsToCommit().length==0" ng-click="commit()">Clear {{requestsToCommit().length}}  documents »</button></td>
+						<td colspan="5" class="text-right">
+							<button ng-show="box.requests.length>10" class="btn btn-primary btn-lg" ng-disabled="requestsToCommit().length==0" ng-click="commit()">Clear {{requestsToCommit().length}}  documents »</button>
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -53,14 +60,19 @@
 		<div class="row" ng-show="error">
 			<div class="col-md-offset-2 col-md-8 col-sm-12">
 
-				<div class="alert alert-danger" ng-show="error.status==403">
+				<div class="alert alert-danger" ng-show="isNotAuthorized()">
 				  <b>You are not authorized!</b> Please contact tech support!
 				</div>
 
-				<div class="alert alert-danger" ng-show="error.data.error=='INVALID_BADGE_ID'">
+				<div class="alert alert-danger" ng-show="isBadgeInvalid()">
 					<img style="margin:3px" class="pull-right" src="/app/views/print-smart/sample-barcode.png">
 					<b>Badge number is invalid.</b><br/>
 					You must provide the number located on the top right of the CBD meeting access badge.
+				</div>
+
+				<div class="alert alert-danger" ng-show="isOtherError()">
+					<b>Unknown error has occured.</b><br/>
+					Please retry or contact tech support.
 				</div>
 
 			</div>

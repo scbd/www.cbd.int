@@ -3,6 +3,7 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 	return ["$scope", "$route", "$location", "$http", "$q", "growl", function ($scope, $route, $location, $http, $q, growl) {
 
 		$scope.requestsToCommit = requestsToCommit;
+		$scope.allRequests      = allRequests;
 		$scope.commit    = commit;
 		$scope.flag      = flag;
 		$scope.badge     = null;
@@ -80,9 +81,9 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 		function requestsToCommit() {
 			
 			var requests = [];
-			var allRequests = _.flatten(_.pluck($scope.boxes, "requests"));
 
-			_.each(allRequests, function(r) {
+			_.each(allRequests(), function(r) {
+
 				if(!!r.completed && !r.deliveredOn)
 					requests.push(r);
 			});
@@ -94,12 +95,22 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 		//
 		//
 		//=============================================
+		function allRequests() {
+			
+			return _.flatten(_.pluck($scope.boxes, "requests"));
+		}
+
+		//=============================================
+		//
+		//
+		//=============================================
 		function commit() {
 
 			var qPromises  = []
 			var errorCount = 0;
+			var requests   = requestsToCommit();
 
-			_.each(requestsToCommit(), function(request) {
+			_.each(requests, function(request) {
 
 				request.loading = true;
 
@@ -125,7 +136,10 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 			$q.all(qPromises).then(function(){
 
 				if(errorCount==0)
+				{
+					growl.addSuccessMessage(''+requests.length+' document(s) cleared!', {ttl: 2000});
 					close();
+				}
 			})
 		};
 
@@ -152,5 +166,28 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 		$scope.fixDate = function (dt) {
 			return dt ? new Date(dt) : dt;
 		};
+
+		//=============================================
+		//
+		// ERRORS
+		//
+		//=============================================
+		$scope.isNotAuthorized = function() {
+			return $scope.error && 
+				   $scope.error.status==403;
+		}
+
+		$scope.isBadgeInvalid = function() {
+			return $scope.error && 
+				   $scope.error.data && 
+				   $scope.error.data.error=='INVALID_BADGE_ID';
+		}
+
+		$scope.isOtherError = function() {
+			return $scope.error && 
+				  !$scope.isNotAuthorized() &&
+				  !$scope.isBadgeInvalid();
+		}
+
 	}];
 });
