@@ -1,4 +1,4 @@
-define(['./module.js', './solrQuery.js', 'underscore'], function(module, Query, _) {
+define(['app', './solrQuery.js', 'underscore'], function(module, Query, _) {
   return module.factory('reports', ['$http', '$locale', '$q',
     function($http, $locale, $q) {
 

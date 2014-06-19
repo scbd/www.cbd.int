@@ -1,1 +1,0 @@
-define(['./orderObjectBy.js'], function() {});

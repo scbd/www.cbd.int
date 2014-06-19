@@ -1,4 +1,4 @@
-define(['./module.js', 'underscore', 'text!../data/reports/countries.geojson', '../util/colors.js'],
+define(['app', 'underscore', 'text!../data/reports/countries.geojson', '../util/colors.js'],
   function(module, _, countriesGeoJson, colors) {
     return module.directive('gmap', ['$window', 'reports', '$rootScope',
       function($window, reports, $rootScope) {

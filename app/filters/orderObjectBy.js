@@ -1,4 +1,4 @@
-define(['./module.js'], function(module) {
+define(['app'], function(module) {
   module.filter('orderObjectBy', function() {
     return function(items, field, reverse) {
       var filtered = [];

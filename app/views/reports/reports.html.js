@@ -1,4 +1,4 @@
-define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json'], function(app, _, aichiTargetJson) {
+define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json', './dependencies.js'], function(app, _, aichiTargetJson) {
   app.controller('ReportsCtrl', ['$scope', 'reports', '$rootScope', 'growl',
     function($scope, reports, $rootScope, growl) {
       var self = this;

@@ -1,4 +1,4 @@
-define(['./module.js', 'underscore'], function(module, _) {
+define(['app', 'underscore'], function(module, _) {
   return module.factory('geojson', ['$http', '$locale',
     function($http, $locale) {
       var geojson = {};

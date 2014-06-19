@@ -1,1 +1,0 @@
-define(['./gmap.js', './ui-bootstrap-custom.js'], function() {});
