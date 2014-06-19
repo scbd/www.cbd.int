@@ -16,22 +16,20 @@
 				<div ng-show="model.government"><b>{{model.government}}</b></div>
 				{{model.organization}}
 			</div>
-			<div class="col-md-offset-5 col-md-3">
-				<h2>Box: <b>{{model.box}}</b></h2>
-			</div>
-
-		<div class="row" ng-show="badge">
+</div>
+		<div class="row" ng-show="badge" >
 			<div class="col-md-12">
 				<table width="100%" style="margin:20px 10px" class="table">
-					<tr>
-						<th><a ng-click="flagCompleted(model.requests, true)"><i class="fa fa-lg fa-check-circle-o" style="color:gray"></i></a> </th>
-						<th>Document</th>
-						<th>Language</th>
-						<th>Requested</th>
-						<th>Delivered</th>
-						<th style="width:100px"></th>
+
+					<tr ng-repeat-start="box in boxes">
+						<th style="vertical-align:middle"><a ng-click="flagCompleted(box.requests, true)"><i class="fa fa-lg fa-check-circle-o" style="color:gray"></i></a> </th>
+						<th style="vertical-align:middle">Document</th>
+						<th style="vertical-align:middle">Language</th>
+						<th style="vertical-align:middle">Requested</th>
+						<th style="vertical-align:middle">Delivered</th>
+						<th style="vertical-align:middle;font-size:200%;white-space:no-wrap" class="text-right"><span class="label label-info">&nbsp;{{box.id}}&nbsp;</span></th>
 					</tr>
-					<tr ng-repeat="request in model.requests track by $index">
+					<tr ng-repeat="request in box.requests" style="height:40px">
 						<td>
 							<a ng-click="flagCompleted(request, !request.isComplete)"><i ng-class="{ fa: true, 'fa-lg': true, 'fa-check-circle-o': request.isComplete, 'fa-circle-o': !request.isComplete }"></i></a> 
 						</td>
@@ -40,16 +38,20 @@
 						<td><span am-time-ago="{{fixDate(request.createdOn)}}"></span></td>
 						<td>
 							<span am-time-ago="{{fixDate(request.deliveredOn)}}"></span>
-							<span ng-show="!request.deliveredOn && request.isComplete" class="label label-warning">Document is not delivered</span>
+							<span ng-show="!request.deliveredOn" class="label label-default" ng-class="{'label-warning':request.isComplete}"><i class="fa fa-exclamation"></i> Not delivered</span>
 						</td>
-						<td>
-							<button ng-show="!request.isComplete" class="btn small">reprint</button>
+						<td  class="text-right">
+							<button ng-show="!request.isComplete" class="btn btn-default btn-xs">reprint</button>
 						</td>
+					</tr>
+					<tr ng-repeat-end="" style="height:60px">
+						<td></td>
+						<td colspan="5">{{box.requests.length}} document(s).</td>
 					</tr>
 				</table>
 				<div class="panel-footer clearfix"><span class="pull-left"><strong>{{remainingCount}} </strong>
 					<ng-pluralize count="remainingCount" when="{ one: 'item left', other: 'items left' }"></ng-pluralize></span>
-					<button ng-click="clearCompleted()" ng-show="remainingCount &lt; model.requests.length" class="btn btn-default btn-xs pull-right">Clear completed ({{model.requests.length - remainingCount}})</button>
+					<button ng-click="clearCompleted()" ng-show="remainingCount &lt; requests.length" class="btn btn-default btn-xs pull-right">Clear completed ({{requests.length - remainingCount}})</button>
 				</div>
 			</div>
 		</div>
