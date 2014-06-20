@@ -1,76 +1,108 @@
 <div class="modal fade" id="printSmartDialog" data-backdrop="static">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" ng-click="close(success)" aria-hidden="true">×</button>
-        <h4 class="modal-title">PrintSmart <i class="fa fa-cog fa-spin" ng-show="isNetworkCall"></i></h4>
-      </div>
-      <div class="modal-body">
-		
-		<form class="form-horizontal" ng-hide="success">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" ng-click="close(success)" aria-hidden="true">×</button>
+				<h4 class="modal-title">PrintSmart <i class="fa fa-cog fa-spin" ng-show="isNetworkCall"></i></h4>
+			</div>
+			<div class="modal-body">
 
-			<div class="form-group">
-				<label for="documentCount" class="col-sm-5 control-label">Number of documents to print</label>
-				<div class="col-sm-5">
-					<input type="text" readonly="true" class="form-control" id="documentCount" value="{{documents.length}}">
+
+				<div ng-hide="target">
+					<table style="width:100%">
+						<tr>
+							<td class="text-center" style="width:50%" >
+								<button type="button" class="btn btn-success" ng-click="target='download'" style="width:200px">
+									<span style="font-size: 2em;">Download</span><br/><br/>
+									<i class="fa fa-arrow-circle-down" style="font-size: 7em;"></i>
+								</button>
+							</td>
+							<td class="text-center" style="width:50%">
+								<button type="button" class="btn btn-primary" ng-click="target='print'" style="width:200px">
+									<span style="font-size: 2em;">Print</span><br/><br/>
+									<i class="fa fa-print" style="font-size: 7em;"></i>
+
+								</button>
+							</td>
+						</tr>
+					</table>
 				</div>
-			</div>
 
-			<div class="form-group">
-				<label for="preferedLanguage" class="col-sm-5 control-label">Prefered print language</label>
-				<div class="col-sm-5">
-					<select class="form-control" ng-model="preferedLanguage" id="preferedLanguage" ng-options="l.code as l.name for l in languages"></select>
+				<div ng-show="target">
+
+					<form class="form-horizontal" ng-hide="success">
+
+						<div class="form-group">
+							<label for="documentCount" class="col-sm-5 control-label">Number of documents to print</label>
+							<div class="col-sm-5">
+								<input type="text" readonly="true" class="form-control" id="documentCount" value="{{documents.length}}">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="preferedLanguage" class="col-sm-5 control-label">Prefered print language</label>
+							<div class="col-sm-5">
+								<select class="form-control" ng-model="preferedLanguage" id="preferedLanguage" ng-options="l.code as l.name for l in languages"></select>
+							</div>
+						</div>
+
+						<div class="form-group" ng-show="target=='print'" ng-class="{ 'has-error' : error && error.error=='INVALID_BADGE_ID', 'has-warning' : cleanBadge().length>0 && cleanBadge().length<8 }">
+							<label for="badgeCode" class="col-sm-5 control-label">Badge number</label>
+							<div class="col-sm-5">
+								<input type="text" ng-change="clearError()" class="form-control" id="badgeCode" placeholder="1234-5678" maxlength="9" pattern="\d*" ng-model="badgeCode">
+								<span class="help-block">Enter badge number to request printed hard copies.</span>
+							</div>
+						</div>
+
+						<div class="alert alert-danger" ng-show="error.error=='INVALID_BADGE_ID'">
+							<img style="margin:3px" class="pull-right" src="/app/views/print-smart/sample-barcode.png">
+							<b>Sorry!</b> Your CBD Badge {{badgeCode}} number is invalid.
+							<br/>You must provide the number located on the top right of your CBD meeting access badge.
+						</div>
+
+						<div class="alert alert-danger" ng-show="error.error=='INVALID_BADGE_REVOKED'">
+							<b>Sorry!</b> Your CBD Badge {{badgeCode}} has been revoked. <br>
+							Please visit the registration desk for assitance.
+						</div>
+
+						<div class="alert alert-danger" ng-show="error.error=='INVALID_BADGE_EXPIRED'">
+							<b>Sorry!</b> Your CBD Badge {{badgeCode}} has expired. <br>
+							Please visit the registration desk for assitance.
+						</div>
+
+						<div class="alert alert-danger" ng-show="error.error=='NO_SERVICE'">
+							<b>Error: service is unavailable!</b> Sorry, the PrintSmart service is not available at this moment.<br>
+							Please wait 5 minutes and try again or go to the registration desk for further assitance.
+						</div>
+
+						<div class="alert alert-danger" ng-show="isCustomError()">
+							<b>Sorry!</b> {{error.message||'Unknown error.'}} <br>
+							Please visit the registration desk for assitance.
+						</div>
+
+					</form>
+
 				</div>
-			</div>
 
-			<div class="form-group" ng-class="{ 'has-error' : error && error.error=='INVALID_BADGE_ID', 'has-warning' : cleanBadge().length>0 && cleanBadge().length<8 }">
-				<label for="badgeCode" class="col-sm-5 control-label">Badge number</label>
-				<div class="col-sm-5">
-					<input type="text" ng-change="clearError()" class="form-control" id="badgeCode" placeholder="1234-5678" maxlength="9" pattern="\d*" ng-model="badgeCode">
-					<span class="help-block">Enter badge number to request printed hard copies.</span>
+				<div class="alert alert alert-success" ng-show="success">
+					<b>Your hard copies are on their way...</b> <br/>			
+					The document(s) you requested are getting printed. You are invited to claim them at the document distribution counter.
 				</div>
+
 			</div>
-
-			<div class="alert alert-danger" ng-show="error.error=='INVALID_BADGE_ID'">
-				<img style="margin:3px" class="pull-right" src="/app/views/print-smart/sample-barcode.png">
-				<b>Sorry!</b> Your CBD Badge {{badgeCode}} number is invalid.
-				<br/>You must provide the number located on the top right of your CBD meeting access badge.
+			<div class="modal-footer">
+				<table style="width:100%">
+					<tr>
+						<td class="text-left"  style="vertical-align:middle">{{documents.length}} document(s) selected</td>
+						<td class="text-right" style="vertical-align:middle">
+							<i class="fa fa-cog fa-spin" ng-show="isNetworkCall" style="margin:5px"></i>
+							<button type="button" ng-show="target=='download'" class="btn btn-success" ng-click="download()"><i class="fa fa-leaf"></i> Download {{documents.length}} document(s)</button>
+							<button type="button" ng-show="target=='print' && !success"    class="btn" ng-class="{ 'btn-primary' : canPrint() }" ng-click="print()" ng-disabled="!canPrint() || isNetworkCall">Print »</button>
+							<button type="button" class="btn btn-default" ng-click="close(success)">Close</button>
+						</td>
+					</tr>
+				</table>
 			</div>
-
-			<div class="alert alert-danger" ng-show="error.error=='INVALID_BADGE_REVOKED'">
-				<b>Sorry!</b> Your CBD Badge {{badgeCode}} has been revoked. <br>
-				Please visit the registration desk for assitance.
-			</div>
-
-			<div class="alert alert-danger" ng-show="error.error=='INVALID_BADGE_EXPIRED'">
-				<b>Sorry!</b> Your CBD Badge {{badgeCode}} has expired. <br>
-				Please visit the registration desk for assitance.
-			</div>
-
-			<div class="alert alert-danger" ng-show="error.error=='NO_SERVICE'">
-				<b>Error: service is unavailable!</b> Sorry, the PrintSmart service is not available at this moment.<br>
-				Please wait 5 minutes and try again or go to the registration desk for further assitance.
-			</div>
-
-			<div class="alert alert-danger" ng-show="isCustomError()">
-				<b>Sorry!</b> {{error.message||'Unknown error.'}} <br>
-				Please visit the registration desk for assitance.
-			</div>
-
-		</form>
-
-		<div class="alert alert alert-success" ng-show="success">
-			<b>Your hard copies are on their way...</b> <br/>			
-			The document(s) you requested are getting printed. You are invited to claim them at the document distribution counter.
-		</div>
-
-      </div>
-      <div class="modal-footer">
-      	<i class="fa fa-cog fa-spin" ng-show="isNetworkCall" style="margin:5px"></i>
-        <button type="button" class="btn btn-default" ng-click="close(success)">Close</button>
-        <button type="button" class="btn btn-success" ng-click="download()"><i class="fa fa-leaf"></i> Download {{documents.length}} document(s)</button>
-		<button type="button" class="btn" ng-class="{ 'btn-primary' : canPrint() }" ng-click="print()" ng-hide="success" ng-disabled="!canPrint() || isNetworkCall">Print »</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
 </div>

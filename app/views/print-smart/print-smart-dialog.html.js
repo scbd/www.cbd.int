@@ -14,6 +14,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 					scope.badgeCode = "";
 					scope.error     = null;
 					scope.success   = null;
+					scope.target    = null;
 				});
 
 				scope.preferedLanguage = "en";
