@@ -71,7 +71,7 @@ define(['app', 'underscore'], function(app, _) {
 						documents : _.map(scope.documents, function(d) {
 							return {
 								symbol   : d.symbol,
-								url      : d.urls[scope.preferedLanguage] || d.en,
+								url      : d.urls[scope.preferedLanguage] || d.urls.en,
 								language : d.urls[scope.preferedLanguage] ? scope.preferedLanguage : "en"
 							};
 						})
