@@ -15,7 +15,8 @@
 				<table width="100%" style="margin:20px 10px" ng-hide="error">
 					<tr >
 						<td>
-							<h3>{{allRequests().length}} document(s).</h3>
+							<h3 ng-hide="allRequests().length">No document</h3>
+							<h3 ng-show="allRequests().length">{{requestsToCommit().length}} of {{allRequests().length}} document(s) ready</h3>
 						</td>
 						<td class="text-right" ng-show="allRequests().length">
 							<button class="btn btn-primary btn-lg" ng-disabled="requestsToCommit().length==0" ng-click="commit()">Clear {{requestsToCommit().length}}  documents »</button>

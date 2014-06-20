@@ -115,13 +115,13 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 				request.loading = true;
 
 				qPromises.push($http.post('/api/v2014/printsmart-requests/'+request._id+'/deliveries', {}).then(function(res) {
-					
+					debugger;
 					delete request.loading;
 
 					_.extend(request, res.data);
 
 				}).catch(function(err){
-					
+					debugger;
 					errorCount++;
 
 					delete request.loading;
