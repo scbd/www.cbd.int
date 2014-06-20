@@ -3,7 +3,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" ng-click="close(success)" aria-hidden="true">×</button>
-				<h4 class="modal-title">PrintSmart <i class="fa fa-cog fa-spin" ng-show="isNetworkCall"></i></h4>
+				<h4 class="modal-title">Request copies <i class="fa fa-cog fa-spin" ng-show="isNetworkCall"></i></h4>
 			</div>
 			<div class="modal-body">
 
@@ -96,8 +96,9 @@
 						<td class="text-left"  style="vertical-align:middle">{{documents.length}} document(s) selected</td>
 						<td class="text-right" style="vertical-align:middle">
 							<i class="fa fa-cog fa-spin" ng-show="isNetworkCall" style="margin:5px"></i>
-							<button type="button" ng-show="target=='download'" class="btn btn-success" ng-click="download()"><i class="fa fa-leaf"></i> Download {{documents.length}} document(s)</button>
-							<button type="button" ng-show="target=='print' && !success"    class="btn" ng-class="{ 'btn-primary' : canPrint() }" ng-click="print()" ng-disabled="!canPrint() || isNetworkCall">Print »</button>
+							<button type="button" ng-show="target  && !success"          class="btn btn-default" ng-click="target=null"><i class="fa fa-arrow-left"></i> Back</button>
+							<button type="button" ng-show="target=='download'"           class="btn btn-success" ng-click="download()"><i class="fa fa-arrow-circle-down"></i> Download</button>
+							<button type="button" ng-show="target=='print' && !success"  class="btn" ng-class="{ 'btn-primary' : canPrint() }" ng-click="print()" ng-disabled="!canPrint() || isNetworkCall"><i class="fa fa-print"></i> Print</button>
 							<button type="button" class="btn btn-default" ng-click="close(success)">Close</button>
 						</td>
 					</tr>
