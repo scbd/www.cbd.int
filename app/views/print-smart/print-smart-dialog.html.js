@@ -1,4 +1,4 @@
-define(['app', 'underscore'], function(app, _) {
+define(['app', 'angular', 'underscore'], function(app, angular, _) {
 
 	app.directive('printSmartDialog', ["$http", "$timeout", function($http, $timeout) {
 		return {
@@ -61,6 +61,35 @@ define(['app', 'underscore'], function(app, _) {
 				//
 				//
 				//==============================================
+				function prepareDocuments()	{
+
+					return  _.map(scope.documents, function(d) {
+						return {
+							symbol   : d.symbol,
+							url      : d.urls[scope.preferedLanguage] || d.urls.en,
+							language : d.urls[scope.preferedLanguage] ? scope.preferedLanguage : "en"
+						};
+					});
+				}
+
+				//==============================================
+				//
+				//
+				//==============================================
+				scope.download = function() {
+
+					_.each(prepareDocuments(), function(d){
+						angular.element("body").append('<iframe src="'+d.url+'?download" style="display:none"></iframe>');
+					});
+
+					if(cleanBadge()=="")
+						scope.close(true);
+				}
+
+				//==============================================
+				//
+				//
+				//==============================================
 				scope.print = function() {
 
 					scope.error = null;
@@ -68,13 +97,7 @@ define(['app', 'underscore'], function(app, _) {
 
 					var postData = {
 						badge     : cleanBadge(),
-						documents : _.map(scope.documents, function(d) {
-							return {
-								symbol   : d.symbol,
-								url      : d.urls[scope.preferedLanguage] || d.urls.en,
-								language : d.urls[scope.preferedLanguage] ? scope.preferedLanguage : "en"
-							};
-						})
+						documents : prepareDocuments()
 					};
 
 					scope.isNetworkCall = true;

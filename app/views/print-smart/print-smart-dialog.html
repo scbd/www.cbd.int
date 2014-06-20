@@ -27,6 +27,7 @@
 				<label for="badgeCode" class="col-sm-5 control-label">Badge number</label>
 				<div class="col-sm-5">
 					<input type="text" ng-change="clearError()" class="form-control" id="badgeCode" placeholder="1234-5678" maxlength="9" pattern="\d*" ng-model="badgeCode">
+					<span class="help-block">Enter badge number to request printed hard copies.</span>
 				</div>
 			</div>
 
@@ -67,7 +68,8 @@
       <div class="modal-footer">
       	<i class="fa fa-cog fa-spin" ng-show="isNetworkCall" style="margin:5px"></i>
         <button type="button" class="btn btn-default" ng-click="close(success)">Close</button>
-		<button type="button" class="btn btn-primary" ng-click="print()" ng-hide="success" ng-disabled="!canPrint() || isNetworkCall">Print »</button>
+        <button type="button" class="btn btn-success" ng-click="download()"><i class="fa fa-leaf"></i> Download {{documents.length}} document(s)</button>
+		<button type="button" class="btn" ng-class="{ 'btn-primary' : canPrint() }" ng-click="print()" ng-hide="success" ng-disabled="!canPrint() || isNetworkCall">Print »</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
