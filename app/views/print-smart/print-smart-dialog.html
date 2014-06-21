@@ -33,13 +33,6 @@
 					<form class="form-horizontal" ng-hide="success">
 
 						<div class="form-group">
-							<label for="documentCount" class="col-sm-5 control-label">Number of documents to print</label>
-							<div class="col-sm-5">
-								<input type="text" readonly="true" class="form-control" id="documentCount" value="{{documents.length}}">
-							</div>
-						</div>
-
-						<div class="form-group">
 							<label for="preferedLanguage" class="col-sm-5 control-label">Prefered print language</label>
 							<div class="col-sm-5">
 								<select class="form-control" ng-model="preferedLanguage" id="preferedLanguage" ng-options="l.code as l.name for l in languages"></select>
@@ -93,7 +86,7 @@
 			<div class="modal-footer">
 				<table style="width:100%">
 					<tr>
-						<td class="text-left"  style="vertical-align:middle">{{documents.length}} document(s) selected</td>
+						<td class="text-left"  style="vertical-align:middle">{{documents.length}} document(s)</td>
 						<td class="text-right" style="vertical-align:middle">
 							<i class="fa fa-cog fa-spin" ng-show="isNetworkCall" style="margin:5px"></i>
 							<button type="button" ng-show="target  && !success"          class="btn btn-default" ng-click="target=null"><i class="fa fa-arrow-left"></i> Back</button>
