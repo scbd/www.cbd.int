@@ -13,7 +13,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 					$scope.badgeCode = "";
 					$scope.error     = null;
 					$scope.success   = null;
-					$scope.target    = null;
+					$scope.target    = $scope.canDownload ? null : "print";
 					$scope.format    = "doc";
 					$scope.documents = psCtrl.documents();
 					$scope.localizedDocuments = {
@@ -41,8 +41,16 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				$scope.cleanBadge       = cleanBadge;
 				$scope.clearError       = clearError;
 				$scope.isNetworkCall    = false;
-				$scope.multiDownloads   = /chrom(e|ium)/i.test(navigator.userAgent) ||
-										  /safari/i      .test(navigator.userAgent);
+				$scope.canDownload      = !/mobile/i .test(navigator.userAgent) && 
+										  !/android/i.test(navigator.userAgent) &&
+										  !/tablet/i .test(navigator.userAgent) &&
+										  !/phone/i  .test(navigator.userAgent) &&
+										  !/RIM/     .test(navigator.userAgent);
+
+				$scope.multiDownloads   = $scope.canDownload &&
+										  (/chrom(e|ium)/i.test(navigator.userAgent) ||
+										   /safari/i      .test(navigator.userAgent));
+
 
 				$scope.languages = {
 					ar : "العربية",

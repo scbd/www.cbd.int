@@ -103,7 +103,7 @@
 						</tr>
 						<tr ng-repeat="d in localizedDocuments[format][preferedLanguage]|orderBy:'symbol'">
 							<td>{{$index+1}}</td>
-							<td ng-class="{'striked' : d.downloaded }"><a href="{{d.url}}?download" ng-click="d.downloaded=true"><i class="fa fa-arrow-circle-down"></i> {{d.symbol}}</a></td>
+							<td ng-class="{'striked' : d.downloaded }"><a target="_self" href="{{d.url}}?download" ng-click="d.downloaded=true"><i class="fa fa-arrow-circle-down"></i> {{d.symbol}}</a></td>
 							<td>{{languages[d.language]}} <span ng-show="d.language!=preferedLanguage"> * </span></td>
 						</tr>
 					</table>
@@ -122,9 +122,9 @@
 						<td class="text-left"  style="vertical-align:middle">{{documents.length}} document(s)</td>
 						<td class="text-right" style="vertical-align:middle">
 							<i class="fa fa-cog fa-spin" ng-show="isNetworkCall" style="margin:5px"></i>
-							<button type="button" ng-show="target  && !success"          class="btn btn-default" ng-click="target=null"><i class="fa fa-arrow-left"></i> Back</button>
+							<button type="button" ng-show="target && canDownload && !success"          class="btn btn-default" ng-click="target=null"><i class="fa fa-arrow-left"></i> Back</button>
 
-							<a      type="button" ng-show="target=='download' && documents.length==1"                   class="btn btn-success" ng-click="close()" href="{{localizedDocuments[format][preferedLanguage][0].url}}?download"><i class="fa fa-arrow-circle-down"></i> Download the document</a>
+							<a target="_self"     ng-show="target=='download' && documents.length==1"                   class="btn btn-success" ng-click="close()" href="{{localizedDocuments[format][preferedLanguage][0].url}}?download"><i class="fa fa-arrow-circle-down"></i> Download the document</a>
 							<button type="button" ng-show="target=='download' && documents.length!=1 && multiDownloads" class="btn btn-success" ng-click="download()"><i class="fa fa-arrow-circle-down"></i> Download {{documents.length}} document(s)</button>
 
 							<button type="button" ng-show="target=='print' && !success"  class="btn" ng-class="{ 'btn-primary' : canPrint() }" ng-click="print()" ng-disabled="!canPrint() || isNetworkCall"><i class="fa fa-print"></i> Print</button>
