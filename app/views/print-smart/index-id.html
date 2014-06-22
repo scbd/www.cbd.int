@@ -34,10 +34,10 @@
 						<th style="vertical-align:middle;font-size:200%;white-space:no-wrap" class="text-right"><span class="label label-info">&nbsp;{{box.id}}&nbsp;</span></th>
 					</tr>
 					<tr ng-repeat="request in box.requests" style="height:40px">
-						<td class="text-center">
-							<i ng-show="request.loading"     class="fa fa-lg fa-cog fa-spin"></i>
-							<i ng-show="request.deliveredOn" class="fa fa-lg" ng-class="{ 'fa-check-circle-o': request.completed, 'fa-circle-o': !request.completed }"></i>
-							<a ng-hide="request.deliveredOn || request.loading" ng-click="flag(request,!request.completed)"><i class="fa fa-lg" ng-class="{ 'fa-check-circle-o': request.completed, 'fa-circle-o': !request.completed }"></i></a> 
+						<td class="text-left">
+							<i ng-show="request.loading"     style="font-size:24px;" class="fa fa-cog fa-spin"></i>
+							<i ng-show="request.deliveredOn" style="font-size:24px;" class="fa" ng-class="{ 'fa-check-square-o': request.completed, 'fa-square-o': !request.completed }"></i>
+							<a ng-hide="request.deliveredOn || request.loading" ng-click="flag(request,!request.completed)"><i style="font-size:24px;" class="fa" ng-class="{ 'fa-check-square-o': request.completed, 'fa-square-o': !request.completed }"></i></a> 
 						</td>
 						<td ng-class="{ strikethru: request.completed }">{{request.documentSymbol}}</td>
 						<td ng-class="{ strikethru: request.completed }">{{languages[request.documentLanguage]}}</td>
