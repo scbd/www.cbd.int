@@ -66,6 +66,19 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 			});
 		}
 
+		
+
+		//=============================================
+		//
+		//
+		//=============================================
+		$scope.jobStatus = function (request) {
+			var status = request.status ? request.status['job-state'] || 'pending' : 'pending';
+
+			console.log(status)
+			return status;
+		};
+
 		//=============================================
 		//
 		//

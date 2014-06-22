@@ -31,7 +31,7 @@
 						<th style="vertical-align:middle">Printed</th>
 						<th style="vertical-align:middle;font-size:200%;white-space:no-wrap" class="text-right"><span class="label label-info">&nbsp;{{box.id}}&nbsp;</span></th>
 					</tr>
-					<tr ng-repeat="request in box.requests" ng-class="{ info: request.completed }" style="height:40px">
+					<tr ng-repeat="request in box.requests|orderBy:'createdOn'" ng-class="{ info: request.completed, danger : (request.status['job-state']=='aborted' || request.status['job-state']=='canceled'), warning : (request.status['job-state']=='pending-held'||request.status['job-state']=='processing-stopped'), }" style="height:40px">
 						<td class="text-left">
 							<i ng-show="request.loading"     style="font-size:24px;" class="fa fa-cog fa-spin"></i>
 							<i ng-show="request.deliveredOn" style="font-size:24px;" class="fa" ng-class="{ 'fa-check-square-o': request.completed, 'fa-square-o': !request.completed }"></i>
@@ -41,8 +41,17 @@
 						<td>{{languages[request.documentLanguage]}}</td>
 						<td><span am-time-ago="{{fixDate(request.createdOn)}}"></span></td>
 						<td colspan="2">
-							<span am-time-ago="{{fixDate(request.printedOn)}}"></span>
-							<span ng-show="!request.printedOn" class="label label-default" ng-class="{'label-warning':request.completed}">Document is not printed</span>
+							
+							<span ng-switch="request.status['job-state'] || 'pending' ">
+								<span class="label label-default" ng-switch-when="pending">Document is not printed yet!</span>
+								<span class="label label-default" ng-switch-when="processing">Document is not printed yet!</span>
+								<span class="label label-info"    ng-switch-when="pending-held">Document printing has been paused ({{request.status['job-id']}})</span>
+								<span class="label label-warning" ng-switch-when="processing-stopped">Document printing has been stopped ({{request.status['job-id']}})</span>
+								<span class="label label-warning" ng-switch-when="aborted">Document printing has been aborted ({{request.status['job-id']}})</span>
+								<span class="label label-warning" ng-switch-when="canceled">Document printing has been canceled ({{request.status['job-id']}})</span>
+								<span                             ng-switch-when="completed"><span am-time-ago="{{fixDate(request.printedOn)}}"></span></span>
+								<span class="label label-danger"  ng-switch-default>Unknown error: {{request.status['job-state']}} (({{request.status['job-id']}}))</span>
+							</span>
 						</td>
 					</tr>
 					<tr ng-repeat-end="" style="height:60px">
