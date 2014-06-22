@@ -1,4 +1,4 @@
-define(['app', 'bootstrap', 'print-smart-checkout.html', 'print-smart-document.html', 'print-smart-dialog.html'], function(app) {
+define(['app', 'bootstrap', 'print-smart-checkout.html', 'print-smart-document.html', 'print-smart-dialog.html', 'meeting-documents.html'], function(app) {
 
 	//==============================================
 	//

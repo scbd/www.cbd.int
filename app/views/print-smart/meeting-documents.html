@@ -1,0 +1,32 @@
+<table style="width:100%">
+	<tr class="itemRow">
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr ng-repeat="d in documents" class="itemRow">
+		<td style="vertical-align:top;padding-top:8px">{{d.item}}</td>
+		<td>
+			<table>
+				<tr>
+					<td style="padding:2px" ><img src="/cms/images/icon-doc.gif" border="0" alt="File Type: DOC"></td>
+					<td style="padding:2px" ng-repeat="locale in d.locales">
+						<a class="tip"  target="_self" href="{{d.urlPattern}}{{locale}}.doc">{{locale}}</a>
+					</td>
+				</tr>
+				<tr>
+					<td style="padding:2px" ><img src="/images/pdf_button.png" border="0" alt="File Type: PDF"></td>
+					<td style="padding:2px"  ng-repeat="locale in d.locales">
+						<a class="tip"  target="_self" href="{{d.urlPattern}}{{locale}}.pdf">{{locale}}</a>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td style="vertical-align:top;padding-top:8px">
+			<div ng-show="d.symbol"><b>{{d.symbol}}</b></div>
+			{{d.title}}
+		</td>
+		<td style="width:27px"><div class="printSmartDocument" document-url="http://www.cbd.int{{d.urlPattern}}en.pdf" document-code="{{d.symbol||d.urlPattern+'xx'}}"></div></td>
+	</tr>
+</table>

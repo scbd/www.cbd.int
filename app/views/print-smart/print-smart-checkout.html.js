@@ -5,6 +5,7 @@ define(['app'], function(app) {
 			restrict : "AEC",
 			require: '^printSmart',
 			replace : true,
+			priority: 1000,
 			scope : {},
 			templateUrl : "/app/views/print-smart/print-smart-checkout.html",
 			link: function ($scope, element, attrs, psCtrl) {

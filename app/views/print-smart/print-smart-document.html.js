@@ -9,33 +9,61 @@ define(['app', 'underscore'], function(app, _) {
 			restrict : "AEC",
 			require: '^printSmart',
 			replace : true,
-			scope :  { },
+			priority: 10,
+			scope :  {
+				documentUrl : "@",
+				documentCode : "@",
+			 },
 			templateUrl : "/app/views/print-smart/print-smart-document.html",
 			link: function ($scope, element, attrs, psCtrl) {
+				$scope.element = element;
+				$scope.psCtrl  = psCtrl;
+			},
+			controller : ["$scope", function($scope) {
 
 				//========================================
 				// INIT
 				//
 				//========================================
 
-				var code = attrs.documentCode;
-				var pdfs = loadLocalizedLinks(attrs.documentUrl, ".pdf");
-				var docs = _.extend(loadLocalizedLinks(attrs.documentUrl, ".doc"), 
-								    loadLocalizedLinks(attrs.documentUrl, ".docx"));
+				$scope.$watch('documentCode', init);
+				$scope.$watch('documentUrl',  init);
 
-				if(!pdfs.en && /.pdf$/i .test(attrs.documentUrl)) pdfs.en = attrs.documentUrl;
-				if(!docs.en && /.doc$/i .test(attrs.documentUrl)) docs.en = attrs.documentUrl;
-				if(!docs.en && /.docx$/i.test(attrs.documentUrl)) docs.en = attrs.documentUrl;
+				var code = null;
+				var pdfs = null;
+				var docs = null;
+
+				function init(v) {
+
+					console.log("init", v);
+
+					if(!$scope.documentCode && !$scope.documentUrl)
+					{
+						console.log("skip");
+						return;
+					}
+					
+					console.log("ok");
+
+					code = $scope.documentCode;
+					pdfs = loadLocalizedLinks($scope.documentUrl, ".pdf");
+					docs = _.extend(loadLocalizedLinks($scope.documentUrl, ".doc"), 
+									    loadLocalizedLinks($scope.documentUrl, ".docx"));
+
+					if(!pdfs.en && /.pdf$/i .test($scope.documentUrl)) pdfs.en = $scope.documentUrl;
+					if(!docs.en && /.doc$/i .test($scope.documentUrl)) docs.en = $scope.documentUrl;
+					if(!docs.en && /.docx$/i.test($scope.documentUrl)) docs.en = $scope.documentUrl;
 
 
-				$scope.valid = code && pdfs.en || docs.en;
+					$scope.valid = code && pdfs.en || docs.en;
+				}
 
 				//========================================
 				//
 				//
 				//========================================
 				$scope.selected = function() {
-					return psCtrl.hasDocument(code);
+					return $scope.psCtrl.hasDocument(code);
 				};
 
 				//========================================
@@ -44,8 +72,11 @@ define(['app', 'underscore'], function(app, _) {
 				//========================================
 				$scope.select = function(check) {
 
-					if(check) psCtrl.add   (code, { pdf: pdfs, doc : docs });
-					else      psCtrl.remove(code);
+					if(check)
+						init();
+
+					if(check) $scope.psCtrl.add   (code, { pdf: pdfs, doc : docs });
+					else      $scope.psCtrl.remove(code);
 				};
 
 				//========================================
@@ -53,7 +84,7 @@ define(['app', 'underscore'], function(app, _) {
 				//
 				//========================================
 				$scope.help = function(o) {
-					return psCtrl.help(o);
+					return $scope.psCtrl.help(o);
 				};
 
 				//========================================
@@ -66,7 +97,7 @@ define(['app', 'underscore'], function(app, _) {
 
 					try
 					{
-						var qPS   = element.parents("div[print-smart]:first");
+						var qPS   = $scope.element.parents("div[print-smart]:first");
 						var re    = /(http[s]?:\/\/[a-z\.]+\/)(.*)([a-z]{2})(.\w+)/i;
 						var host  = documentUrl.replace(re, "$1").replace(/\/$/, "");
 						//var ext   = documentUrl.replace(re, "$4");
@@ -94,7 +125,7 @@ define(['app', 'underscore'], function(app, _) {
 
 					return urls;
 				}
-			},
+			}]
 		};
 	}]);
 });
