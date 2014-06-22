@@ -33,9 +33,9 @@
 					<form class="form-horizontal" ng-hide="success">
 
 						<div class="form-group">
-							<label for="preferedLanguage" class="col-sm-5 control-label">Prefered print language</label>
+							<label for="preferedLanguage" class="col-sm-5 control-label">Prefered language</label>
 							<div class="col-sm-5">
-								<select class="form-control" ng-model="preferedLanguage" id="preferedLanguage" ng-options="l.code as l.name for l in languages"></select>
+								<select class="form-control" ng-model="preferedLanguage" id="preferedLanguage" ng-options="key as value for (key, value) in languages"></select>
 							</div>
 						</div>
 
@@ -75,6 +75,26 @@
 
 					</form>
 
+					<div class="alert alert-warning" ng-show="target=='download' && !multiDownloads && documents.length>1">
+						<b>Sorry!</b> Your browser does not support automatic download of multiple files.<br>
+						Please click on each document to download them one by one.
+					</div>
+
+					<style type="text/css"> .striked {text-decoration:line-through;}</style>
+
+					<table class="table table-striped" ng-show="target=='download' && !multiDownloads && documents.length>1">
+						<tr>
+							<th>#</th>
+							<th>Document</th>
+							<th>Language</th>
+						</tr>
+						<tr ng-repeat="d in localizedDocuments[preferedLanguage]|orderBy:'symbol'">
+							<td>{{$index+1}}</td>
+							<td ng-class="{'striked' : d.downloaded }"><a href="{{d.url}}?download" ng-click="d.downloaded=true"><i class="fa fa-arrow-circle-down"></i> {{d.symbol}}</a></td>
+							<td>{{languages[d.language]}} <span ng-show="d.language!=preferedLanguage"> * </span></td>
+						</tr>
+					</table>
+
 				</div>
 
 				<div class="alert alert alert-success" ng-show="success">
@@ -90,8 +110,12 @@
 						<td class="text-right" style="vertical-align:middle">
 							<i class="fa fa-cog fa-spin" ng-show="isNetworkCall" style="margin:5px"></i>
 							<button type="button" ng-show="target  && !success"          class="btn btn-default" ng-click="target=null"><i class="fa fa-arrow-left"></i> Back</button>
-							<button type="button" ng-show="target=='download'"           class="btn btn-success" ng-click="download()"><i class="fa fa-arrow-circle-down"></i> Download</button>
+
+							<a      type="button" ng-show="target=='download' && documents.length==1"                   class="btn btn-success" ng-click="close()" href="{{localizedDocuments[preferedLanguage][0].url}}?download"><i class="fa fa-arrow-circle-down"></i> Download the document</a>
+							<button type="button" ng-show="target=='download' && documents.length!=1 && multiDownloads" class="btn btn-success" ng-click="download()"><i class="fa fa-arrow-circle-down"></i> Download {{documents.length}} document(s)</button>
+
 							<button type="button" ng-show="target=='print' && !success"  class="btn" ng-class="{ 'btn-primary' : canPrint() }" ng-click="print()" ng-disabled="!canPrint() || isNetworkCall"><i class="fa fa-print"></i> Print</button>
+
 							<button type="button" class="btn btn-default" ng-click="close(success)">Close</button>
 						</td>
 					</tr>

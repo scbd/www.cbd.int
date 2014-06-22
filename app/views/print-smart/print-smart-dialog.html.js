@@ -10,11 +10,19 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 			link: function ($scope, element, attrs, psCtrl) {
 
 				element.on("show.bs.modal", function() {
-					$scope.documents = psCtrl.documents();
 					$scope.badgeCode = "";
 					$scope.error     = null;
 					$scope.success   = null;
 					$scope.target    = null;
+					$scope.documents = psCtrl.documents();
+					$scope.localizedDocuments = {
+						ar : mapDocuments(psCtrl.documents(), 'ar'),
+						en : mapDocuments(psCtrl.documents(), 'en'),
+						es : mapDocuments(psCtrl.documents(), 'es'),
+						fr : mapDocuments(psCtrl.documents(), 'fr'),
+						ru : mapDocuments(psCtrl.documents(), 'ru'),
+						zh : mapDocuments(psCtrl.documents(), 'zh'),
+					};
 				});
 
 				$scope.preferedLanguage = "en";
@@ -22,15 +30,30 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				$scope.cleanBadge       = cleanBadge;
 				$scope.clearError       = clearError;
 				$scope.isNetworkCall    = false;
+				$scope.multiDownloads   = /chrom(e|ium)/i.test(navigator.userAgent.toLowerCase());
 
-				$scope.languages = [
-					{ code : "ar", name : "العربية" },
-					{ code : "en", name : "English" },
-					{ code : "es", name : "Español" },
-					{ code : "fr", name : "Français" },
-					{ code : "ru", name : "Русский" },
-					{ code : "zh", name : "中文" },
-				];
+				$scope.languages = {
+					ar : "العربية",
+					en : "English",
+					es : "Español",
+					fr : "Français",
+					ru : "Русский",
+					zh : "中文"
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				function mapDocuments(documents, lang)	{
+					return  _.map(documents, function(d) {
+						return {
+							symbol   : d.symbol,
+							url      : d.urls[lang] || d.urls.en,
+							language : d.urls[lang] ? lang : "en"
+						};
+					});
+				}
 
 				//==============================================
 				//
@@ -62,24 +85,10 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//
 				//
 				//==============================================
-				function prepareDocuments()	{
-
-					return  _.map($scope.documents, function(d) {
-						return {
-							symbol   : d.symbol,
-							url      : d.urls[$scope.preferedLanguage] || d.urls.en,
-							language : d.urls[$scope.preferedLanguage] ? $scope.preferedLanguage : "en"
-						};
-					});
-				}
-
-				//==============================================
-				//
-				//
-				//==============================================
 				$scope.download = function() {
 
-					_.each(prepareDocuments(), function(d){
+					_.each($scope.localizedDocuments[$scope.preferedLanguage], function(d){
+						d.downloaded = true;
 						angular.element("body").append('<iframe src="'+d.url+'?download" style="display:none"></iframe>');
 					});
 
@@ -98,7 +107,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 
 					var postData = {
 						badge     : cleanBadge(),
-						documents : prepareDocuments()
+						documents : $scope.localizedDocuments[$scope.preferedLanguage]
 					};
 
 					$scope.isNetworkCall = true;
