@@ -39,6 +39,20 @@
 							</div>
 						</div>
 
+						<div class="form-group" ng-show="target=='download'">
+							<label for="format" class="col-sm-5 control-label">Prefered language</label>
+							<div class="col-sm-5">
+
+								<div class="checkbox">
+									<a ng-show="format=='doc'" ng-click="format='doc'"><i class="fa fa-check-square-o" style="width:25px;vertical-align:middle;font-size:24px;"></i></a>
+									<a ng-show="format!='doc'" ng-click="format='doc'"><i class="fa fa-square-o"       style="width:25px;vertical-align:middle;font-size:24px;"></i></a> MS-Word
+									&nbsp; &nbsp; &nbsp; 
+									<a ng-show="format=='pdf'" ng-click="format='pdf'"><i class="fa fa-check-square-o" style="width:25px;vertical-align:middle;font-size:24px;"></i></a>
+									<a ng-show="format!='pdf'" ng-click="format='pdf'"><i class="fa fa-square-o"       style="width:25px;vertical-align:middle;font-size:24px;"></i></a> PDF
+								</div>
+							</div>
+						</div>
+
 						<div class="form-group" ng-show="target=='print'" ng-class="{ 'has-error' : error && error.error=='INVALID_BADGE_ID', 'has-warning' : cleanBadge().length>0 && cleanBadge().length<8 }">
 							<label for="badgeCode" class="col-sm-5 control-label">Badge number</label>
 							<div class="col-sm-5">
@@ -75,9 +89,8 @@
 
 					</form>
 
-					<div class="alert alert-warning" ng-show="target=='download' && !multiDownloads && documents.length>1">
-						<b>Sorry!</b> Your browser does not support automatic download of multiple files.<br>
-						Please click on each document to download them one by one.
+					<div class="alert alert-success" ng-show="target=='download' && !multiDownloads && documents.length>1">
+						Please click on each document below to download.
 					</div>
 
 					<style type="text/css"> .striked {text-decoration:line-through;}</style>
@@ -88,7 +101,7 @@
 							<th>Document</th>
 							<th>Language</th>
 						</tr>
-						<tr ng-repeat="d in localizedDocuments[preferedLanguage]|orderBy:'symbol'">
+						<tr ng-repeat="d in localizedDocuments[format][preferedLanguage]|orderBy:'symbol'">
 							<td>{{$index+1}}</td>
 							<td ng-class="{'striked' : d.downloaded }"><a href="{{d.url}}?download" ng-click="d.downloaded=true"><i class="fa fa-arrow-circle-down"></i> {{d.symbol}}</a></td>
 							<td>{{languages[d.language]}} <span ng-show="d.language!=preferedLanguage"> * </span></td>
@@ -111,7 +124,7 @@
 							<i class="fa fa-cog fa-spin" ng-show="isNetworkCall" style="margin:5px"></i>
 							<button type="button" ng-show="target  && !success"          class="btn btn-default" ng-click="target=null"><i class="fa fa-arrow-left"></i> Back</button>
 
-							<a      type="button" ng-show="target=='download' && documents.length==1"                   class="btn btn-success" ng-click="close()" href="{{localizedDocuments[preferedLanguage][0].url}}?download"><i class="fa fa-arrow-circle-down"></i> Download the document</a>
+							<a      type="button" ng-show="target=='download' && documents.length==1"                   class="btn btn-success" ng-click="close()" href="{{localizedDocuments[format][preferedLanguage][0].url}}?download"><i class="fa fa-arrow-circle-down"></i> Download the document</a>
 							<button type="button" ng-show="target=='download' && documents.length!=1 && multiDownloads" class="btn btn-success" ng-click="download()"><i class="fa fa-arrow-circle-down"></i> Download {{documents.length}} document(s)</button>
 
 							<button type="button" ng-show="target=='print' && !success"  class="btn" ng-class="{ 'btn-primary' : canPrint() }" ng-click="print()" ng-disabled="!canPrint() || isNetworkCall"><i class="fa fa-print"></i> Print</button>

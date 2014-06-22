@@ -1,6 +1,6 @@
 define(['app', 'angular', 'underscore'], function(app, angular, _) {
 
-	app.directive('printSmartDialog', ["$http", "$timeout", function($http, $timeout) {
+	app.directive('printSmartDialog', ["$http", function($http) {
 		return {
 			restrict : "AEC",
 			require: '^printSmart',
@@ -14,14 +14,25 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 					$scope.error     = null;
 					$scope.success   = null;
 					$scope.target    = null;
+					$scope.format    = "doc";
 					$scope.documents = psCtrl.documents();
 					$scope.localizedDocuments = {
-						ar : mapDocuments(psCtrl.documents(), 'ar'),
-						en : mapDocuments(psCtrl.documents(), 'en'),
-						es : mapDocuments(psCtrl.documents(), 'es'),
-						fr : mapDocuments(psCtrl.documents(), 'fr'),
-						ru : mapDocuments(psCtrl.documents(), 'ru'),
-						zh : mapDocuments(psCtrl.documents(), 'zh'),
+						pdf : {
+							ar : mapDocuments(psCtrl.documents(), 'pdf', 'ar'),
+							en : mapDocuments(psCtrl.documents(), 'pdf', 'en'),
+							es : mapDocuments(psCtrl.documents(), 'pdf', 'es'),
+							fr : mapDocuments(psCtrl.documents(), 'pdf', 'fr'),
+							ru : mapDocuments(psCtrl.documents(), 'pdf', 'ru'),
+							zh : mapDocuments(psCtrl.documents(), 'pdf', 'zh')
+						},
+						doc: {
+							ar : mapDocuments(psCtrl.documents(), 'doc', 'ar'),
+							en : mapDocuments(psCtrl.documents(), 'doc', 'en'),
+							es : mapDocuments(psCtrl.documents(), 'doc', 'es'),
+							fr : mapDocuments(psCtrl.documents(), 'doc', 'fr'),
+							ru : mapDocuments(psCtrl.documents(), 'doc', 'ru'),
+							zh : mapDocuments(psCtrl.documents(), 'doc', 'zh')
+						}
 					};
 				});
 
@@ -46,12 +57,13 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//
 				//
 				//==============================================
-				function mapDocuments(documents, lang)	{
+				function mapDocuments(documents, slot, lang)	{
+
 					return  _.map(documents, function(d) {
 						return {
 							symbol   : d.symbol,
-							url      : d.urls[lang] || d.urls.en,
-							language : d.urls[lang] ? lang : "en"
+							url      : d.urls[slot][lang] || d.urls[slot].en,
+							language : d.urls[slot][lang] ? lang : "en"
 						};
 					});
 				}
@@ -88,14 +100,14 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//==============================================
 				$scope.download = function() {
 
-					_.each($scope.localizedDocuments[$scope.preferedLanguage], function(d){
+					_.each($scope.localizedDocuments[$scope.format][$scope.preferedLanguage], function(d){
 						d.downloaded = true;
 						angular.element("body").append('<iframe src="'+d.url+'?download" style="display:none"></iframe>');
 					});
 
-					if(cleanBadge()=="")
+					if(cleanBadge()==="")
 						$scope.close(true);
-				}
+				};
 
 				//==============================================
 				//
@@ -108,7 +120,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 
 					var postData = {
 						badge     : cleanBadge(),
-						documents : $scope.localizedDocuments[$scope.preferedLanguage]
+						documents : $scope.localizedDocuments.pdf[$scope.preferedLanguage]
 					};
 
 					$scope.isNetworkCall = true;
@@ -122,7 +134,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 
 						$scope.isNetworkCall = false;
 
-						if(angular.isObject(data)) $scope.error = data
+						if(angular.isObject(data)) $scope.error = data;
 						else if(status==404)       $scope.error = { error: "NO_SERVICE" };
 						else if(status==500)       $scope.error = { error: "NO_SERVICE" };
 						else                       $scope.error = { error: "UNKNOWN",    message : "Unknown error" };
@@ -138,11 +150,11 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 					if(!$scope.error)
 						return false;
 
-					return $scope.error.error!="INVALID_BADGE_ID" &&
-						   $scope.error.error!="INVALID_BADGE_REVOKED" && 
-						   $scope.error.error!="INVALID_BADGE_EXPIRED" &&
-						   $scope.error.error!="NO_SERVICE";
-				}
+					return $scope.error.error!=="INVALID_BADGE_ID" &&
+						   $scope.error.error!=="INVALID_BADGE_REVOKED" && 
+						   $scope.error.error!=="INVALID_BADGE_EXPIRED" &&
+						   $scope.error.error!=="NO_SERVICE";
+				};
 
 				//==============================================
 				//

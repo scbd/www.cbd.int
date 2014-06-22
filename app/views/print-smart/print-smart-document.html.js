@@ -1,4 +1,4 @@
-define(['app'], function(app) {
+define(['app', 'underscore'], function(app, _) {
 
 	//==============================================
 	//
@@ -19,35 +19,16 @@ define(['app'], function(app) {
 				//========================================
 
 				var code = attrs.documentCode;
-				var urls = { en : attrs.documentUrl };
+				var pdfs = loadLocalizedLinks(attrs.documentUrl, ".pdf");
+				var docs = _.extend(loadLocalizedLinks(attrs.documentUrl, ".doc"), 
+								    loadLocalizedLinks(attrs.documentUrl, ".docx"));
 
-				try
-				{
-					var qPS   = element.parents("div[print-smart]:first");
-					var re    = /(http[s]?:\/\/[a-z\.]+\/)(.*)([a-z]{2})(.pdf)/i;
-					var host  = attrs.documentUrl.replace(re, "$1").replace(/\/$/, "");
-					var ext   = attrs.documentUrl.replace(re, "$4");
-					var path  = '/'+attrs.documentUrl.replace(re, "$2");
-					var paths = { 
-						ar : path+'ar'+ext,
-						es : path+'es'+ext,
-						fr : path+'fr'+ext,
-						ru : path+'ru'+ext,
-						zh : path+'zh'+ext
-					};
-					
-					if(qPS.find('a[href="'+paths.ar+'"]').size()!==0) urls.ar = host+paths.ar;
-					if(qPS.find('a[href="'+paths.es+'"]').size()!==0) urls.es = host+paths.es;
-					if(qPS.find('a[href="'+paths.fr+'"]').size()!==0) urls.fr = host+paths.fr;
-					if(qPS.find('a[href="'+paths.ru+'"]').size()!==0) urls.ru = host+paths.ru;
-					if(qPS.find('a[href="'+paths.zh+'"]').size()!==0) urls.zh = host+paths.zh;
-				}
-				catch(e)
-				{
-					console.log("Error looking for other language of :", attrs.documentUrl);
-				}
+				if(!pdfs.en && /.pdf$/i .test(attrs.documentUrl)) pdfs.en = attrs.documentUrl;
+				if(!docs.en && /.doc$/i .test(attrs.documentUrl)) docs.en = attrs.documentUrl;
+				if(!docs.en && /.docx$/i.test(attrs.documentUrl)) docs.en = attrs.documentUrl;
 
-				$scope.valid = code && urls && urls.en;
+
+				$scope.valid = code && pdfs.en || docs.en;
 
 				//========================================
 				//
@@ -55,7 +36,7 @@ define(['app'], function(app) {
 				//========================================
 				$scope.selected = function() {
 					return psCtrl.hasDocument(code);
-				}
+				};
 
 				//========================================
 				//
@@ -63,9 +44,9 @@ define(['app'], function(app) {
 				//========================================
 				$scope.select = function(check) {
 
-					if(check) psCtrl.add   (code, urls);
+					if(check) psCtrl.add   (code, { pdf: pdfs, doc : docs });
 					else      psCtrl.remove(code);
-				}
+				};
 
 				//========================================
 				//
@@ -73,6 +54,45 @@ define(['app'], function(app) {
 				//========================================
 				$scope.help = function(o) {
 					return psCtrl.help(o);
+				};
+
+				//========================================
+				//
+				//
+				//========================================
+				function loadLocalizedLinks(documentUrl, extension)
+				{
+					var urls = { };
+
+					try
+					{
+						var qPS   = element.parents("div[print-smart]:first");
+						var re    = /(http[s]?:\/\/[a-z\.]+\/)(.*)([a-z]{2})(.\w+)/i;
+						var host  = documentUrl.replace(re, "$1").replace(/\/$/, "");
+						//var ext   = documentUrl.replace(re, "$4");
+						var path  = '/'+documentUrl.replace(re, "$2");
+						var paths = { 
+							ar : path+'ar'+extension,
+							en : path+'en'+extension,
+							es : path+'es'+extension,
+							fr : path+'fr'+extension,
+							ru : path+'ru'+extension,
+							zh : path+'zh'+extension
+						};
+						
+						if(qPS.find('a[href="'+paths.ar+'"]').size()!==0) urls.ar = host+paths.ar;
+						if(qPS.find('a[href="'+paths.en+'"]').size()!==0) urls.en = host+paths.en;
+						if(qPS.find('a[href="'+paths.es+'"]').size()!==0) urls.es = host+paths.es;
+						if(qPS.find('a[href="'+paths.fr+'"]').size()!==0) urls.fr = host+paths.fr;
+						if(qPS.find('a[href="'+paths.ru+'"]').size()!==0) urls.ru = host+paths.ru;
+						if(qPS.find('a[href="'+paths.zh+'"]').size()!==0) urls.zh = host+paths.zh;
+					}
+					catch(e)
+					{
+						console.log("Error looking for other language of : %s for extension: %s", documentUrl, extension);
+					}
+
+					return urls;
 				}
 			},
 		};
