@@ -30,7 +30,8 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				$scope.cleanBadge       = cleanBadge;
 				$scope.clearError       = clearError;
 				$scope.isNetworkCall    = false;
-				$scope.multiDownloads   = /chrom(e|ium)/i.test(navigator.userAgent.toLowerCase());
+				$scope.multiDownloads   = /chrom(e|ium)/i.test(navigator.userAgent) ||
+										  /safari/i      .test(navigator.userAgent);
 
 				$scope.languages = {
 					ar : "العربية",
