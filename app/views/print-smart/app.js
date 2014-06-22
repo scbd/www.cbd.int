@@ -1,5 +1,3 @@
-console.log("app.js");
-
 define(['angular', 'ngCookies'], function(angular) {
 
 	var app = angular.module('app', ['ngCookies']);

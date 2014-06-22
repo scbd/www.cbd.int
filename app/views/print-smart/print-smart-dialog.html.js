@@ -2,28 +2,28 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 
 	app.directive('printSmartDialog', ["$http", "$timeout", function($http, $timeout) {
 		return {
-			restrict : "AC",
+			restrict : "AEC",
 			require: '^printSmart',
 			replace : true,
 			scope :  {},
 			templateUrl : "/app/views/print-smart/print-smart-dialog.html",
-			link: function (scope, element, attrs, psCtrl) {
+			link: function ($scope, element, attrs, psCtrl) {
 
 				element.on("show.bs.modal", function() {
-					scope.documents = psCtrl.getDocuments();
-					scope.badgeCode = "";
-					scope.error     = null;
-					scope.success   = null;
-					scope.target    = null;
+					$scope.documents = psCtrl.documents();
+					$scope.badgeCode = "";
+					$scope.error     = null;
+					$scope.success   = null;
+					$scope.target    = null;
 				});
 
-				scope.preferedLanguage = "en";
-				scope.badgeCode        = "";
-				scope.cleanBadge       = cleanBadge;
-				scope.clearError       = clearError;
-				scope.isNetworkCall    = false;
+				$scope.preferedLanguage = "en";
+				$scope.badgeCode        = "";
+				$scope.cleanBadge       = cleanBadge;
+				$scope.clearError       = clearError;
+				$scope.isNetworkCall    = false;
 
-				scope.languages = [
+				$scope.languages = [
 					{ code : "ar", name : "العربية" },
 					{ code : "en", name : "English" },
 					{ code : "es", name : "Español" },
@@ -37,7 +37,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//
 				//==============================================
 				function cleanBadge() {
-					return (scope.badgeCode||"").replace(/[^0-9]/g, "");
+					return ($scope.badgeCode||"").replace(/[^0-9]/g, "");
 				}
 
 				//==============================================
@@ -45,17 +45,17 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//
 				//==============================================
 				function clearError() {
-					scope.error = null;
+					$scope.error = null;
 				}
 
 				//==============================================
 				//
 				//
 				//==============================================
-				scope.canPrint = function() {
+				$scope.canPrint = function() {
 					return cleanBadge().length >= 8 &&
-						   scope.documents.length > 0 &&
-						   !!scope.preferedLanguage;
+						   $scope.documents.length > 0 &&
+						   !!$scope.preferedLanguage;
 				};
 
 				//==============================================
@@ -64,11 +64,11 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//==============================================
 				function prepareDocuments()	{
 
-					return  _.map(scope.documents, function(d) {
+					return  _.map($scope.documents, function(d) {
 						return {
 							symbol   : d.symbol,
-							url      : d.urls[scope.preferedLanguage] || d.urls.en,
-							language : d.urls[scope.preferedLanguage] ? scope.preferedLanguage : "en"
+							url      : d.urls[$scope.preferedLanguage] || d.urls.en,
+							language : d.urls[$scope.preferedLanguage] ? $scope.preferedLanguage : "en"
 						};
 					});
 				}
@@ -77,45 +77,45 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//
 				//
 				//==============================================
-				scope.download = function() {
+				$scope.download = function() {
 
 					_.each(prepareDocuments(), function(d){
 						angular.element("body").append('<iframe src="'+d.url+'?download" style="display:none"></iframe>');
 					});
 
 					if(cleanBadge()=="")
-						scope.close(true);
+						$scope.close(true);
 				}
 
 				//==============================================
 				//
 				//
 				//==============================================
-				scope.print = function() {
+				$scope.print = function() {
 
-					scope.error = null;
-					scope.success = null;
+					$scope.error = null;
+					$scope.success = null;
 
 					var postData = {
 						badge     : cleanBadge(),
 						documents : prepareDocuments()
 					};
 
-					scope.isNetworkCall = true;
+					$scope.isNetworkCall = true;
 
 					$http.post("/api/v2014/printsmart-requests/batch", postData).success(function(data) {
 
-						scope.isNetworkCall = false;
-						scope.success       = angular.isObject(data) ? data : {};
+						$scope.isNetworkCall = false;
+						$scope.success       = angular.isObject(data) ? data : {};
 
 					}).error(function(data, status){
 
-						scope.isNetworkCall = false;
+						$scope.isNetworkCall = false;
 
-						if(angular.isObject(data)) scope.error = data
-						else if(status==404)       scope.error = { error: "NO_SERVICE" };
-						else if(status==500)       scope.error = { error: "NO_SERVICE" };
-						else                       scope.error = { error: "UNKNOWN",    message : "Unknown error" };
+						if(angular.isObject(data)) $scope.error = data
+						else if(status==404)       $scope.error = { error: "NO_SERVICE" };
+						else if(status==500)       $scope.error = { error: "NO_SERVICE" };
+						else                       $scope.error = { error: "UNKNOWN",    message : "Unknown error" };
 					});
 				};
 
@@ -123,27 +123,27 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//
 				//
 				//==============================================
-				scope.isCustomError = function() {
+				$scope.isCustomError = function() {
 
-					if(!scope.error)
+					if(!$scope.error)
 						return false;
 
-					return scope.error.error!="INVALID_BADGE_ID" &&
-						   scope.error.error!="INVALID_BADGE_REVOKED" && 
-						   scope.error.error!="INVALID_BADGE_EXPIRED" &&
-						   scope.error.error!="NO_SERVICE";
+					return $scope.error.error!="INVALID_BADGE_ID" &&
+						   $scope.error.error!="INVALID_BADGE_REVOKED" && 
+						   $scope.error.error!="INVALID_BADGE_EXPIRED" &&
+						   $scope.error.error!="NO_SERVICE";
 				}
 
 				//==============================================
 				//
 				//
 				//==============================================
-				scope.close = function(clearDocuments) {
+				$scope.close = function(clear) {
 
-					if(!!clearDocuments)
-						psCtrl.clearDocuments();
+					if(!!clear)
+						psCtrl.clear();
 
-					psCtrl.showPrint(false);
+					psCtrl.print(false);
 				};
 			}
 		};

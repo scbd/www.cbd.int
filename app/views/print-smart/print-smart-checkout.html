@@ -1,5 +1,5 @@
- <button type="button" class="btn btn-primary" ng-click="print()">
-	<ng-pluralize count="getDocuments().length"
+ <button type="button" class="btn btn-primary" ng-click="print()" data-placement="top" data-content="Please select document(s) using the checkbox!">
+	<ng-pluralize count="documents().length"
                 when="{'0': 'Request copy »',
                        'one': 'Request copy »',
                        'other': 'Request copies »'}">
