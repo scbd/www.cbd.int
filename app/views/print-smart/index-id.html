@@ -1,6 +1,4 @@
 <div>
-	<style> .strikethru { text-decoration:line-through; } </style>
-
 	<div class="container ng-cloak">
 		
 		<div class="row" ng-show="loading">
@@ -33,17 +31,17 @@
 						<th style="vertical-align:middle">Printed</th>
 						<th style="vertical-align:middle;font-size:200%;white-space:no-wrap" class="text-right"><span class="label label-info">&nbsp;{{box.id}}&nbsp;</span></th>
 					</tr>
-					<tr ng-repeat="request in box.requests" style="height:40px">
+					<tr ng-repeat="request in box.requests" ng-class="{ info: request.completed }" style="height:40px">
 						<td class="text-left">
 							<i ng-show="request.loading"     style="font-size:24px;" class="fa fa-cog fa-spin"></i>
 							<i ng-show="request.deliveredOn" style="font-size:24px;" class="fa" ng-class="{ 'fa-check-square-o': request.completed, 'fa-square-o': !request.completed }"></i>
 							<a ng-hide="request.deliveredOn || request.loading" ng-click="flag(request,!request.completed)"><i style="font-size:24px;" class="fa" ng-class="{ 'fa-check-square-o': request.completed, 'fa-square-o': !request.completed }"></i></a> 
 						</td>
-						<td ng-class="{ strikethru: request.completed }">{{request.documentSymbol}}</td>
-						<td ng-class="{ strikethru: request.completed }">{{languages[request.documentLanguage]}}</td>
-						<td ng-class="{ strikethru: request.completed }"><span am-time-ago="{{fixDate(request.createdOn)}}"></span></td>
+						<td>{{request.documentSymbol}}</td>
+						<td>{{languages[request.documentLanguage]}}</td>
+						<td><span am-time-ago="{{fixDate(request.createdOn)}}"></span></td>
 						<td colspan="2">
-							<span ng-class="{ strikethru: request.completed }" am-time-ago="{{fixDate(request.printedOn)}}"></span>
+							<span am-time-ago="{{fixDate(request.printedOn)}}"></span>
 							<span ng-show="!request.printedOn" class="label label-default" ng-class="{'label-warning':request.completed}">Document is not printed</span>
 						</td>
 					</tr>
