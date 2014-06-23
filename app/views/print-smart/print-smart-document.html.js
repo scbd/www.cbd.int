@@ -33,18 +33,11 @@ define(['app', 'underscore'], function(app, _) {
 				var pdfs = null;
 				var docs = null;
 
-				function init(v) {
-
-					console.log("init", v);
+				function init() {
 
 					if(!$scope.documentCode && !$scope.documentUrl)
-					{
-						console.log("skip");
 						return;
-					}
 					
-					console.log("ok");
-
 					code = $scope.documentCode;
 					pdfs = loadLocalizedLinks($scope.documentUrl, ".pdf");
 					docs = _.extend(loadLocalizedLinks($scope.documentUrl, ".doc"), 
