@@ -14,7 +14,6 @@
 			</div>
 			<div class="modal-body">
 
-
 				<div ng-hide="target">
 					<table style="width:100%">
 						<tr>
@@ -40,9 +39,8 @@
 					<form class="form-horizontal" ng-hide="success">
 
 						<div class="alert alert-info" ng-show="!canDownload">
-							You can only request hard copies from mobile device.
+							Only hard copies can be requested from mobile device.
 						</div>
-
 
 						<div class="form-group">
 							<label for="preferedLanguage" class="col-sm-5 control-label">Prefered language</label>
@@ -101,25 +99,6 @@
 
 					</form>
 
-					<div class="alert alert-success" ng-show="target=='download' && !multiDownloads && documents.length>1">
-						Please click on each document below to download.
-					</div>
-
-					<style type="text/css"> .striked {text-decoration:line-through;}</style>
-
-					<table class="table table-striped" ng-show="target=='download' && !multiDownloads && documents.length>1">
-						<tr>
-							<th>#</th>
-							<th>Document</th>
-							<th>Language</th>
-						</tr>
-						<tr ng-repeat="d in localizedDocuments[format][preferedLanguage]|orderBy:'symbol'">
-							<td>{{$index+1}}</td>
-							<td ng-class="{'striked' : d.downloaded }"><a target="_self" href="{{d.url}}?download" ng-click="d.downloaded=true"><i class="fa fa-arrow-circle-down"></i> {{d.symbol}}</a></td>
-							<td>{{languages[d.language]}} <span ng-show="d.language!=preferedLanguage"> * </span></td>
-						</tr>
-					</table>
-
 				</div>
 
 				<div class="alert alert alert-success" ng-show="success">
@@ -136,8 +115,7 @@
 							<i class="fa fa-cog fa-spin" ng-show="isNetworkCall" style="margin:5px"></i>
 							<button type="button" ng-show="target && canDownload && !success"          class="btn btn-default" ng-click="target=null"><i class="fa fa-arrow-left"></i> Back</button>
 
-							<a target="_self"     ng-show="target=='download' && documents.length==1"                   class="btn btn-success" ng-click="close()" href="{{localizedDocuments[format][preferedLanguage][0].url}}?download"><i class="fa fa-arrow-circle-down"></i> Download the document</a>
-							<button type="button" ng-show="target=='download' && documents.length!=1 && multiDownloads" class="btn btn-success" ng-click="download()"><i class="fa fa-arrow-circle-down"></i> Download {{documents.length}} document(s)</button>
+							<a target="_self"     ng-show="target=='download'" class="btn btn-success" ng-disabled="!downloadLink" ng-click="close(true)" href="{{downloadLink}}"><i class="fa fa-arrow-circle-down"></i> Download the document</a>
 
 							<button type="button" ng-show="target=='print' && !success"  class="btn" ng-class="{ 'btn-primary' : canPrint() }" ng-click="print()" ng-disabled="!canPrint() || isNetworkCall"><i class="fa fa-print"></i> Print</button>
 

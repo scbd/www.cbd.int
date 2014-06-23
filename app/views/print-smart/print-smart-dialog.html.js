@@ -15,6 +15,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 					$scope.success   = null;
 					$scope.target    = $scope.canDownload ? null : "print";
 					$scope.format    = "doc";
+					$scope.downloadLink = null;
 					$scope.documents = psCtrl.documents();
 					$scope.localizedDocuments = {
 						pdf : {
@@ -47,11 +48,6 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 										  !/phone/i  .test(navigator.userAgent) &&
 										  !/RIM/     .test(navigator.userAgent);
 
-				$scope.multiDownloads   = $scope.canDownload &&
-										  (/chrom(e|ium)/i.test(navigator.userAgent) ||
-										   /safari/i      .test(navigator.userAgent));
-
-
 				$scope.languages = {
 					ar : "العربية",
 					en : "English",
@@ -60,6 +56,41 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 					ru : "Русский",
 					zh : "中文"
 				};
+
+				$scope.$watch('target', initDownloadLink);
+				$scope.$watch('format', initDownloadLink);
+				$scope.$watch('preferedLanguage', initDownloadLink);
+
+				//==============================================
+				//
+				//
+				//==============================================
+				function initDownloadLink()	{
+
+					$scope.downloadLink = null;
+
+					if( $scope.target!='download') return;
+					if(!$scope.preferedLanguage) return;
+					if(!$scope.format) return;
+
+					var urls = _.compact(_.map($scope.localizedDocuments[$scope.format][$scope.preferedLanguage], function(d){
+						return d.url;
+					}));
+
+					if(urls.length==0) {
+						return;
+					}
+					else if(urls.length==1) {
+						$scope.downloadLink = urls[0];
+					}
+					else {
+						$http.post('/api/v2014/printsmart-downloads', urls).then(function(res){
+							$scope.downloadLink = 'http://www.infra.cbd.int/api/v2014/printsmart-downloads/'+res.data._id;
+						}).catch(function(err){
+							console.log(err);
+						});
+					}
+				}
 
 				//==============================================
 				//
