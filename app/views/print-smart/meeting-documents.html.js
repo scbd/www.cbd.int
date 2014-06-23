@@ -11,8 +11,8 @@ define(['app', 'underscore'], function(app, _) {
 			scope :  { },
 			templateUrl : "/app/views/print-smart/meeting-documents.html",
 			link: function ($scope, element, attrs, psCtrl) {
-
-				$scope.documents = window.meetingDocuments || [];
+debugger;
+				$scope.documents = window[attrs.data || 'meetingDocuments'] || [];
 			}
 		};
 	}]);
