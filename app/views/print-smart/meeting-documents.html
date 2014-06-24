@@ -1,11 +1,5 @@
-<table style="width:100%">
-	<tr class="itemRow">
-		<td>&nbsp;</td>
-		<td>&nbsp;</td>
-		<td>&nbsp;</td>
-		<td>&nbsp;</td>
-	</tr>
-	<tr ng-repeat="d in documents" class="itemRow">
+<table class="table table-striped table-hover">
+	<tr ng-repeat="d in documents">
 		<td style="vertical-align:top;padding-top:8px">{{d.item}}</td>
 		<td>
 			<table>
@@ -28,5 +22,8 @@
 			{{d.title}}
 		</td>
 		<td style="width:27px"><div class="printSmartDocument" document-url="http://www.cbd.int{{d.urlPattern}}en.pdf" document-code="{{d.symbol||d.urlPattern+'xx'}}"></div></td>
+	</tr>
+	<tr ng-repeat-end="">
+		<td colspan="4" style="height:1px;padding:0px"></td>
 	</tr>
 </table>
