@@ -10,6 +10,7 @@ define(['app', 'extended-route-provider'], function(app) {
 
       $routeProvider
         .when('/internal/printsmart',                      {templateUrl: '/app/views/print-smart/index.html',     resolveController: true })
+        .when('/internal/printsmart/statistics',           {templateUrl: '/app/views/print-smart/stats.html',     resolveController: true })
         .when('/internal/printsmart/:badge',               {templateUrl: '/app/views/print-smart/index-id.html',  resolveController: true })
         .when('/national-reports',                         {templateUrl: '/app/views/reports/reports.html',       resolveController: true, resolveUser: true })
         .when('/about',                                    {templateUrl: '/app/views/about.html',                 resolveUser: true })

@@ -1,0 +1,84 @@
+<div class="container">
+
+	<div class="text-right">
+		<button class="btn btn-default" ng-click="refresh()">Refresh</button>
+	</div>
+
+	<table class="table table-striped table-hover">
+		<tr>
+			<td><b>Number of documents</b></td>
+			<td class="text-right">{{requests.length}}</td>
+			<td>documents</td>
+		</tr>
+		<tr>
+			<td>Cleared documents</td>
+			<td class="text-right">{{(requests|filter:isCleared).length}}</td>
+			<td>documents</td>
+		</tr>
+		<tr>
+			<td><b>Number of pages</b></td>
+			<td class="text-right">{{sum(requests, 'status', 'job-media-sheets-completed')}}</td>
+			<td>pages</td>
+		</tr>
+		<tr>
+			<td><b>Number of Participants</b></td>
+			<td class="text-right">{{distinct(requests, 'participant').length}}</td>
+			<td>participants</td>
+		</tr>
+		<tr>
+			<td><b>Completed documents</b> (accepted by the printer)</td>
+			<td class="text-right">{{(requests|filter:isComplete).length}}</td>
+			<td>documents</td>
+		</tr>
+		<tr>
+			<td>Pending documents (accepted by the print queue)</td>
+			<td class="text-right">{{(requests|filter:isPending).length}}</td>
+			<td>documents</td>
+		</tr>
+		<tr>
+			<td>Processing documents  (processed by the print queue)</td>
+			<td class="text-right">{{(requests|filter:isProcessing).length}}</td>
+			<td>documents</td>
+		</tr>
+		<tr>
+			<td>Pending Held documents</td>
+			<td class="text-right">{{(requests|filter:isPendingHeld).length}}</td>
+			<td>documents</td>
+		</tr>
+		<tr>
+			<td>Processing Stop documents</td>
+			<td class="text-right">{{(requests|filter:isProcessingStop).length}}</td>
+			<td>documents</td>
+		</tr>
+		<tr>
+			<td>Canceled documents</td>
+			<td class="text-right">{{(requests|filter:isCanceled).length}}</td>
+			<td>documents</td>
+		</tr>
+		<tr>
+			<td>Aborted documents</td>
+			<td class="text-right">{{(requests|filter:isAborted).length}}</td>
+			<td>documents</td>
+		</tr>
+		<tr>
+			<td>Average last 10 jobs process time</td>
+			<td class="text-right">{{averageJobTime('time-at-processing', 10)}}</td>
+			<td>secondes</td>
+		</tr>
+		<tr>
+			<td>Average last 10 jobs complete time </td>
+			<td class="text-right">{{averageJobTime('time-at-completed', 10)}}</td>
+			<td>secondes</td>
+		</tr>
+		<tr>
+			<td>Average last 100 jobs process time</td>
+			<td class="text-right">{{averageJobTime('time-at-processing', 100)}}</td>
+			<td>secondes</td>
+		</tr>
+		<tr>
+			<td>Average last 100 jobs complete time </td>
+			<td class="text-right">{{averageJobTime('time-at-completed', 100)}}</td>
+			<td>secondes</td>
+		</tr>
+	</table>
+</div>
