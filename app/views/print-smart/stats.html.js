@@ -44,7 +44,7 @@ define(['underscore'], function(_) {
 			
 			refresh();
 			
-			$timeout(autoRefresh, 30*1000);
+			qAutoRefresh = $timeout(autoRefresh, 30*1000);
 		}
 
 		function refresh() {
