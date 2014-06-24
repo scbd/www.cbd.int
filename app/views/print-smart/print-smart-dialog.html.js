@@ -81,7 +81,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 						return;
 					}
 					else if(urls.length==1) {
-						$scope.downloadLink = urls[0];
+						$scope.downloadLink = urls[0]+"?download";
 					}
 					else {
 						$http.post('/api/v2014/printsmart-downloads', urls).then(function(res){
