@@ -22,6 +22,8 @@ function PrintSmartCtrl($scope, $location, $timeout) {
     },
 
 	$scope.close = function() {
+		$location.hash('');
+		$location.search({});
 		$location.path("/internal/printsmart");
 	};
 
