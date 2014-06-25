@@ -1,6 +1,6 @@
 define(['app', 'angular', 'underscore'], function(app, angular, _) {
 
-	app.directive('printSmartDialog', ["$http", function($http) {
+	app.directive('printSmartDialog', ["$http", "$cookies", function($http, $cookies) {
 		return {
 			restrict : "AEC",
 			require: '^printSmart',
@@ -14,7 +14,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 					$scope.error     = null;
 					$scope.success   = null;
 					$scope.target    = $scope.canDownload ? null : "print";
-					$scope.format    = "doc";
+					$scope.format    = "doca";
 					$scope.downloadLink = null;
 					$scope.documents = psCtrl.documents();
 					$scope.localizedDocuments = {
@@ -42,11 +42,16 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				$scope.cleanBadge       = cleanBadge;
 				$scope.clearError       = clearError;
 				$scope.isNetworkCall    = false;
-				$scope.canDownload      = !/mobile/i .test(navigator.userAgent) && 
-										  !/android/i.test(navigator.userAgent) &&
-										  !/tablet/i .test(navigator.userAgent) &&
-										  !/phone/i  .test(navigator.userAgent) &&
-										  !/RIM/     .test(navigator.userAgent);
+				$scope.isKiosk          = !!$cookies.kiosk;
+				$scope.isMobileDevice   = /mobile/i .test(navigator.userAgent) ||
+										  /android/i.test(navigator.userAgent) ||
+										  /tablet/i .test(navigator.userAgent) ||
+										  /phone/i  .test(navigator.userAgent) ||
+										  /RIM/     .test(navigator.userAgent);
+				$scope.canDownload = !$scope.isKiosk &&
+									 !$scope.isMobileDevice;
+
+
 
 				$scope.languages = {
 					ar : "العربية",
@@ -190,7 +195,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 						return false;
 
 					return $scope.error.error!=="INVALID_BADGE_ID" &&
-						   $scope.error.error!=="INVALID_BADGE_REVOKED" && 
+						   $scope.error.error!=="INVALID_BADGE_REVOKED" &&
 						   $scope.error.error!=="INVALID_BADGE_EXPIRED" &&
 						   $scope.error.error!=="NO_SERVICE";
 				};

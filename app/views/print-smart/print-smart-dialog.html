@@ -38,7 +38,7 @@
 
 					<form class="form-horizontal" ng-hide="success">
 
-						<div class="alert alert-info" ng-show="!canDownload">
+						<div class="alert alert-info" ng-show="isMobileDevice">
 							Only hard copies can be requested from mobile device.
 						</div>
 
@@ -56,7 +56,7 @@
 								<div class="checkbox">
 									<a ng-show="format=='doc'" ng-click="format='doc'"><i class="fa fa-check-square-o" style="width:25px;vertical-align:middle;font-size:24px;"></i></a>
 									<a ng-show="format!='doc'" ng-click="format='doc'"><i class="fa fa-square-o"       style="width:25px;vertical-align:middle;font-size:24px;"></i></a> MS-Word
-									&nbsp; &nbsp; &nbsp; 
+									&nbsp; &nbsp; &nbsp;
 									<a ng-show="format=='pdf'" ng-click="format='pdf'"><i class="fa fa-check-square-o" style="width:25px;vertical-align:middle;font-size:24px;"></i></a>
 									<a ng-show="format!='pdf'" ng-click="format='pdf'"><i class="fa fa-square-o"       style="width:25px;vertical-align:middle;font-size:24px;"></i></a> PDF
 								</div>
@@ -102,7 +102,7 @@
 				</div>
 
 				<div class="alert alert alert-success" ng-show="success">
-					<b>Your hard copies are on their way...</b> <br/>			
+					<b>Your hard copies are on their way...</b> <br/>
 					The document(s) you requested are getting printed. You are invited to claim them at the document distribution counter.
 				</div>
 
