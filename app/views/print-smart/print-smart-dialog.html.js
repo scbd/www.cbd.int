@@ -14,7 +14,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 					$scope.error     = null;
 					$scope.success   = null;
 					$scope.target    = $scope.canDownload ? null : "print";
-					$scope.format    = "doca";
+					$scope.format    = "doc";
 					$scope.downloadLink = null;
 					$scope.documents = psCtrl.documents();
 					$scope.localizedDocuments = {
@@ -84,9 +84,6 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 
 					if(urls.length==0) {
 						return;
-					}
-					else if(urls.length==1) {
-						$scope.downloadLink = urls[0]+"?download";
 					}
 					else {
 						$http.post('/api/v2014/printsmart-downloads', urls).then(function(res){
