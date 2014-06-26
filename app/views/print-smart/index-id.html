@@ -1,5 +1,5 @@
 <div>
-	<style> .middle {vertical-align:middle}</style>
+	<style> .delivered {text-decoration:line-through;} </style>
 	<div class="container ng-cloak">
 
 		<div class="row" ng-show="loading">
@@ -16,7 +16,7 @@
 				<div ng-repeat="box in boxes" >
 
 
-					<button class="btn btn-primary pull-right" ng-disabled="(box.requests|filter:toCommit).length==0" ng-click="commit((box.requests|filter:toCommit))">Clear {{(box.requests|filter:toCommit).length}} document(s) »</button>
+					<button class="btn btn-primary pull-right" ng-disabled="(box.requests|filter:toCommit).length==0" ng-click="commit((box.requests|filter:toCommit), boxes.length==1)">Clear {{(box.requests|filter:toCommit).length}} document(s) »</button>
 					<h3>{{box.participantName}} - {{(box.requests|filter:toCommit).length}} / {{box.requests.length}}</h3>
 
 					<table width="100%" style="margin:20px 10px" class="table">
@@ -30,7 +30,7 @@
 							<th style="vertical-align:middle;font-size:200%" class="text-right"><span class="label label-info">&nbsp;{{box.box}}&nbsp;</span></td>
 						</tr>
 
-						<tr ng-repeat="request in box.requests|orderBy:'documentSymbol'" ng-class="{ info: request.completed, danger : (request.status['job-state']=='aborted' || request.status['job-state']=='canceled'), warning : (request.status['job-state']=='pending-held'||request.status['job-state']=='processing-stopped'), }" style="height:40px">
+						<tr ng-repeat="request in box.requests|orderBy:'documentSymbol'" ng-class="{ info: request.completed && !request.deliveredOn, delivered : request.deliveredOn, danger : (request.status['job-state']=='aborted' || request.status['job-state']=='canceled'), warning : (request.status['job-state']=='pending-held'||request.status['job-state']=='processing-stopped'), }" style="height:40px">
 							<td class="text-left">
 								<i ng-show="request.loading"     style="font-size:24px;" class="fa fa-cog fa-spin"></i>
 								<i ng-show="request.deliveredOn" style="font-size:24px;" class="fa" ng-class="{ 'fa-check-square-o': request.completed, 'fa-square-o': !request.completed }"></i>

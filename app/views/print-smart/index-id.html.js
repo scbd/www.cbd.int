@@ -45,7 +45,15 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 
 					return $http.get('/api/v2014/printsmart-requests', { params : { q : { participant : badgeInfo.ContactID, completed:false } } });
 
-				});
+				}).then(function(res){
+
+					var qBoxes = _.uniq(_.pluck(res.data, 'box'));
+
+					if(qBoxes.length) // show all requests in the box(es)
+						return $http.get('/api/v2014/printsmart-requests', { params : { q : JSON.stringify({ box : { $in : qBoxes }, completed:false }) } });
+					else
+						return res;
+				})
 			}
 
 
@@ -53,21 +61,23 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 
 				var requests = res.data;
 
-				if(badge!="boxes") {
+				if($scope.$root.contact) { // flag ready for clear
+
 					_.each(requests, function(r){
-						if(r.printedOn)
+						if(r.printedOn && r.participant == $scope.$root.contact.ContactID)
 							flag(r, true);
 					});
 				}
 
 				var qBoxGroup = _.groupBy(res.data, function(r){
-					return r.participantName +'|'+ r.box;
+					return r.participant +'|'+ r.box;
 				});
 
 
 				var boxes = _.map(qBoxGroup, function(requests) {
 					return {
 						box : _.first(requests).box,
+						participant : _.first(requests).participant,
 						participantName : _.first(requests).participantName,
 						requests : requests
 					};
@@ -75,6 +85,9 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 
 				$scope.allRequests = requests;
 				$scope.boxes       = _.sortBy(boxes, function(b){
+
+					if($scope.$root.contact && $scope.$root.contact.ContactID == b.participant)
+						return ""; // Put current user at first
 
 					return b.box+b.participantName;
 				});
@@ -131,9 +144,6 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 			var errorCount = 0;
 
 			_.each(requests, function(request) {
-
-				console.log(request.documentSymbol);
-				return;
 
 				request.loading = true;
 
