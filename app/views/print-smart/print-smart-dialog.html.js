@@ -9,36 +9,6 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 			templateUrl : "/app/views/print-smart/print-smart-dialog.html",
 			link: function ($scope, element, attrs, psCtrl) {
 
-				element.on("show.bs.modal", function() {
-					$scope.badgeCode = "";
-					$scope.error     = null;
-					$scope.success   = null;
-					$scope.target    = $scope.canDownload ? null : "print";
-					$scope.format    = "doc";
-					$scope.downloadLink = null;
-					$scope.documents = psCtrl.documents();
-					$scope.localizedDocuments = {
-						pdf : {
-							ar : mapDocuments(psCtrl.documents(), 'pdf', 'ar'),
-							en : mapDocuments(psCtrl.documents(), 'pdf', 'en'),
-							es : mapDocuments(psCtrl.documents(), 'pdf', 'es'),
-							fr : mapDocuments(psCtrl.documents(), 'pdf', 'fr'),
-							ru : mapDocuments(psCtrl.documents(), 'pdf', 'ru'),
-							zh : mapDocuments(psCtrl.documents(), 'pdf', 'zh')
-						},
-						doc: {
-							ar : mapDocuments(psCtrl.documents(), 'doc', 'ar'),
-							en : mapDocuments(psCtrl.documents(), 'doc', 'en'),
-							es : mapDocuments(psCtrl.documents(), 'doc', 'es'),
-							fr : mapDocuments(psCtrl.documents(), 'doc', 'fr'),
-							ru : mapDocuments(psCtrl.documents(), 'doc', 'ru'),
-							zh : mapDocuments(psCtrl.documents(), 'doc', 'zh')
-						}
-					};
-				});
-
-				$scope.preferedLanguage = "en";
-				$scope.badgeCode        = "";
 				$scope.cleanBadge       = cleanBadge;
 				$scope.clearError       = clearError;
 				$scope.isNetworkCall    = false;
@@ -51,9 +21,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				$scope.canDownload = !$scope.isKiosk &&
 									 !$scope.isMobileDevice;
 
-
-
-				$scope.languages = {
+				var allLanguages = {
 					ar : "العربية",
 					en : "English",
 					es : "Español",
@@ -62,9 +30,31 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 					zh : "中文"
 				};
 
-				$scope.$watch('target', initDownloadLink);
-				$scope.$watch('format', initDownloadLink);
+
+				$scope.$watch('target',           initDownloadLink);
+				$scope.$watch('format',           initDownloadLink);
 				$scope.$watch('preferedLanguage', initDownloadLink);
+
+				element.on("show.bs.modal", function() {
+					$scope.preferedLanguage = "en";
+					$scope.badgeCode = "";
+					$scope.error     = null;
+					$scope.success   = null;
+					$scope.target    = $scope.canDownload ? null : "print";
+					$scope.format    = "doc";
+					$scope.downloadLink = null;
+					$scope.documents = psCtrl.documents();
+					$scope.languages = {};
+					$scope.localizedDocuments = { pdf : {}, doc : {} };
+
+					_.each(documentsLocales($scope.documents), function(locale) {
+
+						$scope.languages             [locale] = allLanguages[locale];
+						$scope.localizedDocuments.pdf[locale] = mapDocuments($scope.documents, 'pdf', locale);
+						$scope.localizedDocuments.doc[locale] = mapDocuments($scope.documents, 'doc', locale);
+					});
+				});
+
 
 				//==============================================
 				//
@@ -92,6 +82,18 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 							console.log(err);
 						});
 					}
+				}
+
+				//==============================================
+				//
+				//
+				//==============================================
+				function documentsLocales(documents) {
+
+					return _.uniq(_.flatten(_.map(documents, function(d){
+						return _.union(_.keys(d.urls.pdf), _.keys(d.urls.doc));
+					})))
+
 				}
 
 				//==============================================
