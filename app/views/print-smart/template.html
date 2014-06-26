@@ -37,12 +37,12 @@
 
 	<div data-growl=""></div>
 	<!--<iframe id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none"></iframe>-->
-	
+
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-6">
+			<div class="col-sm-5 col-xs-8">
 				<table>
-					<tr>
+					<tr class="hidden-xs hidden-sm">
 						<td>
 							<img src="/app/images/cbd-leaf-green.svg" style="height:110px;vertical-align:bottom"/>
 						</td>
@@ -51,29 +51,51 @@
 							<h3>Document distribution</h3>
 						</td>
 					</tr>
+					<tr class="visible-sm">
+						<td>
+							<img src="/app/images/cbd-leaf-green.svg" style="height:80px;vertical-align:bottom"/>
+						</td>
+						<td>
+							<h3>SCBD PrintSmart</h2>
+							<h4>Document distribution</h4>
+						</td>
+					</tr>
+					<tr class="visible-xs">
+						<td>
+							<img src="/app/images/cbd-leaf-green.svg" style="height:50px;vertical-align:bottom"/>
+						</td>
+						<td>
+							<h4>SCBD PrintSmart</h4>
+							<h5>Document distribution</h5>
+						</td>
+					</tr>
 				</table>
 			</div>
 
-			<div class="col-sm-6 text-right" style="padding-top:25px" ng-show="isHome()">
-				<form ro<form class="form-inline" role="form" ng-submit="submit()">
-					<label class="sr-only" for="badge">Participant Badge Number</label>
-					<input class="form-control input-lg" type="text" maxlength="9" style="width:250px" ng-model="badge" id="badge" placeholder="Scan badge number">
-					<button type="submit" class="btn btn-default btn-lg">Submit</button>
-				</form>    
+			<div class="col-xs-4 visible-xs text-right" style="padding-top:25px">
+				<button id="close" class="btn btn-default" ng-hide="isHome()" ng-click="close()">Close</button>
 			</div>
 
-			<div class="col-sm-5"  ng-hide="isHome()">
+			<div class="col-sm-5 text-right" style="padding-top:25px" ng-show="isHome()">
+				<form class="form-inline" role="form" ng-submit="submit()">
+					<label class="sr-only" for="badge">Participant Badge Number</label>
+					<input class="form-control input-lg" type="text" maxlength="9" style="width:250px" ng-model="badge" id="badge" placeholder="Scan badge number">
+					<button type="submit" class="hidden-xs btn btn-default btn-lg">Submit</button>
+				</form>
+			</div>
+
+			<div class="col-sm-5 col-xs-12" ng-hide="isHome()">
 				<div ng-show="$root.contact">
 					<h3>{{$root.contact.FirstName}} {{$root.contact.LastName}} ({{formatBadge($root.contact.BadgeCode)}})</h3>
 					<div>
-						<b ng-show="$root.contact.Government">{{$root.contact.Government}} - </b> 
+						<b ng-show="$root.contact.Government">{{$root.contact.Government}} - </b>
 						{{$root.contact.Organization}}
 					</div>
 					<div>{{$root.contact.JobTitle}}</div>
 				</div>
 			</div>
-			<div class="col-sm-1 text-right" style="padding-top:25px" ng-hide="isHome()">
-				<button id="close" class="btn btn-default btn-lg" ng-click="close()">Close</button>
+			<div class="col-sm-2 hidden-xs text-right" style="padding-top:25px">
+				<button id="close" class="btn btn-default btn-lg"  ng-hide="isHome()" ng-click="close()">Close</button>
 			</div>
 		</div>
 	</div>
