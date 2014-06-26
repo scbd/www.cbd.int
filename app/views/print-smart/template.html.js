@@ -13,7 +13,7 @@ function PrintSmartCtrl($scope, $location, $timeout) {
 
     	if($scope.badge) {
 
-    		var badge = ($scope.badge||"").replace(/[^0-9]/g, "") || "INVALID_BADGE_ID";
+    		var badge = $scope.badge=='boxes' ? "boxes" : (($scope.badge||"").replace(/[^0-9]/g, "") || "INVALID_BADGE_ID");
 
     	   	$location.path('/internal/printsmart/'+escape(badge));
     	}

@@ -17,7 +17,7 @@ define(['underscore'], function(_) {
 
 		var qAutoRefresh = null;
 
-		$scope.$on('$routeChangeStart', function(next, current) { 
+		$scope.$on('$routeChangeStart', function(next, current) {
 			if(!qAutoRefresh)
 				return;
 
@@ -41,17 +41,29 @@ define(['underscore'], function(_) {
 		function autoRefresh() {
 
 			qAutoRefresh = null;
-			
+
 			refresh();
-			
+
 			qAutoRefresh = $timeout(autoRefresh, 30*1000);
 		}
 
 		function refresh() {
 
-			return $http.get("/api/v2014/printsmart-requests", { params : { badge : $location.search().badge } }).success(function(requests){
+			$http.get("/api/v2014/printsmart-requests", { params : { badge : $location.search().badge } }).success(function(requests){
 				console.log('Requests loaded');
 				$scope.requests = requests;
+			});
+
+			$http.get("/api/v2014/printsmart-downloads", { params : { badge : $location.search().badge } }).success(function(downloads){
+				console.log('Downloads loaded');
+
+				var totalDownloads = 0;
+
+				_.each(downloads, function(d){
+					totalDownloads += d.items.length * (d.downloads||0);
+				})
+
+				$scope.totalDownloads = totalDownloads;
 			});
 		}
 
@@ -70,11 +82,11 @@ define(['underscore'], function(_) {
 		function is(request, status) {
 
 			if(status=="cleared") {
-				return request && 
+				return request &&
 					   request.completed;
 			}
 
-			return request && 
+			return request &&
 				   request.status &&
 				   request.status['job-state'] === status;
 		}
@@ -89,7 +101,7 @@ define(['underscore'], function(_) {
 			if(_.isArray(value)) {
 
 				_.each(value, function(entry) {
-	
+
 					if(member1)
 						values = _.union(values, distinct(entry[member1], member2, member3, member4, member5));
 					else if(value!==undefined && value!==null)
@@ -115,13 +127,13 @@ define(['underscore'], function(_) {
 			if(_.isArray(value)) {
 
 				_.each(value, function(entry) {
-	
+
 					if(member1)
 						total += sum(entry[member1], member2, member3, member4, member5);
 					else if(_.isNumber(entry))
 						total += entry;
 				});
-			} 
+			}
 			else if(member1) {
 				total += sum(value[member1], member2, member3, member4, member5);
 			}

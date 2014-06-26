@@ -1,6 +1,7 @@
 <div>
+	<style> .middle {vertical-align:middle}</style>
 	<div class="container ng-cloak">
-		
+
 		<div class="row" ng-show="loading">
 			<div class="col-md-12">
 				<h3><i class="fa fa-cog fa-spin"></i> Loading....</h3>
@@ -10,59 +11,53 @@
 		<div class="row" ng-hide="loading" >
 			<div class="col-md-12">
 
-				<table width="100%" style="margin:20px 10px" ng-hide="error">
-					<tr >
-						<td>
-							<h3 ng-hide="allRequests().length">No document</h3>
-							<h3 ng-show="allRequests().length">{{requestsToCommit().length}} of {{allRequests().length}} document(s) ready</h3>
-						</td>
-						<td class="text-right" ng-show="allRequests().length">
-							<button class="btn btn-primary btn-lg" ng-disabled="requestsToCommit().length==0" ng-click="commit()">Clear {{requestsToCommit().length}}  documents »</button>
-						</td>
-					</tr>
-				</table>
-				<table width="100%" style="margin:20px 10px" class="table">
+				<h3 ng-hide="allRequests.length">No document</h3>
 
-					<tr ng-repeat-start="box in boxes">
-						<th style="vertical-align:middle;width:26px"></th>
-						<th style="vertical-align:middle;width:26px">#</th>
-						<th style="vertical-align:middle">Document</th>
-						<th style="vertical-align:middle">Language</th>
-						<th style="vertical-align:middle">Requested</th>
-						<th style="vertical-align:middle">Printed</th>
-						<th style="vertical-align:middle;font-size:200%;white-space:no-wrap" class="text-right"><span class="label label-info">&nbsp;{{box.id}}&nbsp;</span></th>
-					</tr>
-					<tr ng-repeat="request in box.requests|orderBy:'createdOn'" ng-class="{ info: request.completed, danger : (request.status['job-state']=='aborted' || request.status['job-state']=='canceled'), warning : (request.status['job-state']=='pending-held'||request.status['job-state']=='processing-stopped'), }" style="height:40px">
-						<td class="text-left">
-							<i ng-show="request.loading"     style="font-size:24px;" class="fa fa-cog fa-spin"></i>
-							<i ng-show="request.deliveredOn" style="font-size:24px;" class="fa" ng-class="{ 'fa-check-square-o': request.completed, 'fa-square-o': !request.completed }"></i>
-							<a ng-hide="request.deliveredOn || request.loading" ng-click="flag(request,!request.completed)"><i style="font-size:24px;" class="fa" ng-class="{ 'fa-check-square-o': request.completed, 'fa-square-o': !request.completed }"></i></a> 
-						</td>
-						<td class="text-right">{{$index+1}}.</td>
-						<td>{{request.documentSymbol}}</td>
-						<td>{{languages[request.documentLanguage]}}</td>
-						<td><span am-time-ago="{{fixDate(request.createdOn)}}"></span></td>
-						<td colspan="2">
-							
-							<span ng-switch="request.status['job-state'] || 'pending' ">
-								<span class="label label-default" ng-switch-when="pending">Document is not printed yet!</span>
-								<span class="label label-default" ng-switch-when="processing">Document is not printed yet!</span>
-								<span class="label label-info"    ng-switch-when="pending-held">Document printing has been paused ({{request.status['job-id']}})</span>
-								<span class="label label-warning" ng-switch-when="processing-stopped">Document printing has been stopped ({{request.status['job-id']}})</span>
-								<span class="label label-warning" ng-switch-when="aborted">Document printing has been aborted ({{request.status['job-id']}})</span>
-								<span class="label label-warning" ng-switch-when="canceled">Document printing has been canceled ({{request.status['job-id']}})</span>
-								<span                             ng-switch-when="completed"><span am-time-ago="{{fixDate(request.printedOn)}}"></span></span>
-								<span class="label label-danger"  ng-switch-default>Unknown error: {{request.status['job-state']}} (({{request.status['job-id']}}))</span>
-							</span>
-						</td>
-					</tr>
-					<tr ng-repeat-end="" style="height:60px">
-						<td></td>
-						<td colspan="5" class="text-right">
-							<button ng-show="box.requests.length>10" class="btn btn-primary btn-lg" ng-disabled="requestsToCommit().length==0" ng-click="commit()">Clear {{requestsToCommit().length}}  documents »</button>
-						</td>
-					</tr>
-				</table>
+				<div ng-repeat="box in boxes" >
+
+
+					<button class="btn btn-primary pull-right" ng-disabled="(box.requests|filter:toCommit).length==0" ng-click="commit((box.requests|filter:toCommit))">Clear {{(box.requests|filter:toCommit).length}} document(s) »</button>
+					<h3>{{box.participantName}} - {{(box.requests|filter:toCommit).length}} / {{box.requests.length}}</h3>
+
+					<table width="100%" style="margin:20px 10px" class="table">
+						<tr>
+							<th style="vertical-align:middle;width:26px"></th>
+							<th style="vertical-align:middle;width:26px">#</th>
+							<th style="vertical-align:middle">Document</th>
+							<th style="vertical-align:middle">Language</th>
+							<th style="vertical-align:middle">Requested</th>
+							<th style="vertical-align:middle">Printed</th>
+							<th style="vertical-align:middle;font-size:200%" class="text-right"><span class="label label-info">&nbsp;{{box.box}}&nbsp;</span></td>
+						</tr>
+
+						<tr ng-repeat="request in box.requests|orderBy:'documentSymbol'" ng-class="{ info: request.completed, danger : (request.status['job-state']=='aborted' || request.status['job-state']=='canceled'), warning : (request.status['job-state']=='pending-held'||request.status['job-state']=='processing-stopped'), }" style="height:40px">
+							<td class="text-left">
+								<i ng-show="request.loading"     style="font-size:24px;" class="fa fa-cog fa-spin"></i>
+								<i ng-show="request.deliveredOn" style="font-size:24px;" class="fa" ng-class="{ 'fa-check-square-o': request.completed, 'fa-square-o': !request.completed }"></i>
+								<a ng-hide="request.deliveredOn || request.loading" ng-click="flag(request,!request.completed)"><i style="font-size:24px;" class="fa" ng-class="{ 'fa-check-square-o': request.completed, 'fa-square-o': !request.completed }"></i></a>
+							</td>
+							<td class="text-right">{{$index+1}}.</td>
+							<td>{{request.documentSymbol}}</td>
+							<td>{{languages[request.documentLanguage]}}</td>
+							<td><span am-time-ago="{{fixDate(request.createdOn)}}"></span></td>
+							<td colspan="2">
+								<span ng-switch="request.status['job-state'] || 'pending' ">
+									<span class="label label-default" ng-switch-when="pending">Document is not printed yet!</span>
+									<span class="label label-default" ng-switch-when="processing">Document is not printed yet!</span>
+									<span class="label label-info"    ng-switch-when="pending-held">Document printing has been paused ({{request.status['job-id']}})</span>
+									<span class="label label-warning" ng-switch-when="processing-stopped">Document printing has been stopped ({{request.status['job-id']}})</span>
+									<span class="label label-warning" ng-switch-when="aborted">Document printing has been aborted ({{request.status['job-id']}})</span>
+									<span class="label label-warning" ng-switch-when="canceled">Document printing has been canceled ({{request.status['job-id']}})</span>
+									<span                             ng-switch-when="completed"><span am-time-ago="{{fixDate(request.printedOn)}}"></span></span>
+									<span class="label label-danger"  ng-switch-default>Unknown error: {{request.status['job-state']}} (({{request.status['job-id']}}))</span>
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="7">&nbsp;</td>
+						</tr>
+					</table>
+				</div>
 			</div>
 		</div>
 

@@ -2,8 +2,7 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 
 	return ["$scope", "$route", "$location", "$http", "$q", "growl", function ($scope, $route, $location, $http, $q, growl) {
 
-		$scope.requestsToCommit = requestsToCommit;
-		$scope.allRequests      = allRequests;
+		$scope.toCommit  = toCommit;
 		$scope.commit    = commit;
 		$scope.flag      = flag;
 		$scope.badge     = null;
@@ -28,30 +27,56 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 			$scope.error    = null;
 			$scope.loading  = true;
 
-			$http.get('/api/v2014/kronos/badges/'+escape(badge)).then(function(res) {
+			var qRequests = null;
 
-				return res.data;
+			if(badge=="boxes") {
 
-			}).then(function(badgeInfo) {
+				qRequests = $http.get('/api/v2014/printsmart-requests', { params : { q : { completed:false } } });
+			}
+			else {
 
-				$scope.$root.contact = badgeInfo;
+				qRequests = $http.get('/api/v2014/kronos/badges/'+escape(badge)).then(function(res) {
 
-				return $http.get('/api/v2014/printsmart-requests', { params : { q : { participant : badgeInfo.ContactID, completed:false } } });
+					return res.data;
 
-			}).then(function(res) {
+				}).then(function(badgeInfo) {
+
+					$scope.$root.contact = badgeInfo;
+
+					return $http.get('/api/v2014/printsmart-requests', { params : { q : { participant : badgeInfo.ContactID, completed:false } } });
+
+				});
+			}
+
+
+			qRequests.then(function(res) {
 
 				var requests = res.data;
 
-				_.each(requests, function(r){
-					if(r.printedOn)
-						flag(r, true);
+				if(badge!="boxes") {
+					_.each(requests, function(r){
+						if(r.printedOn)
+							flag(r, true);
+					});
+				}
+
+				var qBoxGroup = _.groupBy(res.data, function(r){
+					return r.participantName +'|'+ r.box;
 				});
 
-				$scope.boxes = _.map(_.groupBy(res.data, "box"), function(val, key){
-					return { 
-						id : key,
-						requests : val
+
+				var boxes = _.map(qBoxGroup, function(requests) {
+					return {
+						box : _.first(requests).box,
+						participantName : _.first(requests).participantName,
+						requests : requests
 					};
+				});
+
+				$scope.allRequests = requests;
+				$scope.boxes       = _.sortBy(boxes, function(b){
+
+					return b.box+b.participantName;
 				});
 
 				$scope.loading = false;
@@ -66,7 +91,7 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 			});
 		}
 
-		
+
 
 		//=============================================
 		//
@@ -91,39 +116,24 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 		//
 		//
 		//=============================================
-		function requestsToCommit() {
-			
-			var requests = [];
+		function toCommit(request) {
 
-			_.each(allRequests(), function(r) {
-
-				if(!!r.completed && !r.deliveredOn)
-					requests.push(r);
-			});
-
-			return requests;
+			return request.completed && !request.deliveredOn;
 		}
 
 		//=============================================
 		//
 		//
 		//=============================================
-		function allRequests() {
-			
-			return _.flatten(_.pluck($scope.boxes, "requests"));
-		}
-
-		//=============================================
-		//
-		//
-		//=============================================
-		function commit() {
+		function commit(requests, closeOnSuccess) {
 
 			var qPromises  = []
 			var errorCount = 0;
-			var requests   = requestsToCommit();
 
 			_.each(requests, function(request) {
+
+				console.log(request.documentSymbol);
+				return;
 
 				request.loading = true;
 
@@ -151,7 +161,9 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 				if(errorCount==0)
 				{
 					growl.addSuccessMessage(''+requests.length+' document(s) cleared!', {ttl: 2000});
-					close();
+
+					if(closeOnSuccess)
+						close();
 				}
 			})
 		};
@@ -186,18 +198,18 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 		//
 		//=============================================
 		$scope.isNotAuthorized = function() {
-			return $scope.error && 
+			return $scope.error &&
 				   $scope.error.status==403;
 		}
 
 		$scope.isBadgeInvalid = function() {
-			return $scope.error && 
-				   $scope.error.data && 
+			return $scope.error &&
+				   $scope.error.data &&
 				   $scope.error.data.error=='INVALID_BADGE_ID';
 		}
 
 		$scope.isOtherError = function() {
-			return $scope.error && 
+			return $scope.error &&
 				  !$scope.isNotAuthorized() &&
 				  !$scope.isBadgeInvalid();
 		}
