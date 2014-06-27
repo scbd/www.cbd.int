@@ -26,6 +26,7 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 			$scope.boxes    = null;
 			$scope.error    = null;
 			$scope.loading  = true;
+			$scope.$root.contact = null;
 
 			var qRequests = null;
 
