@@ -1,4 +1,4 @@
-define(['angular', 'ngCookies'], function(angular) {
+define(['angular', 'angular-cookies'], function(angular) {
 
 	var app = angular.module('app', ['ngCookies']);
 

@@ -1,5 +1,9 @@
 'use strict';
 
+if (!window.console) { // FIX old IE console.log not exist!
+	window.console = { log : function() { }	}; 
+}
+
 window.name = 'NG_DEFER_BOOTSTRAP!';
 
 require.config({
@@ -7,7 +11,7 @@ require.config({
   baseUrl : '/app/views/print-smart',
   paths: {
     'angular'    : '/app/libs/angular/angular',
-    'ngCookies'  : '/app/libs/angular-cookies/angular-cookies',
+    'angular-cookies'  : '/app/libs/angular-cookies/angular-cookies',
     'domReady'   : '/app/libs/requirejs-domready/domReady',
     'underscore' : '/app/libs/underscore/underscore',
     'bootstrap'  : '/app/libs/bootstrap-sass/dist/js/bootstrap.min',
