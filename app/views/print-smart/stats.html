@@ -6,6 +6,8 @@
 	</div>
 
 	<table class="table table-striped table-hover">
+
+
 		<tr class="info">
 			<th colspan="3">Downloads</td>
 		</tr>
@@ -14,12 +16,34 @@
 			<td class="text-right">{{totalDownloads}}</td>
 			<td>documents</td>
 		</tr>
+
+
 		<tr class="info">
 			<th colspan="3">Prints</td>
 		</tr>
 		<tr>
 			<td><b>Number of documents</b></td>
 			<td class="text-right">{{requests.length}}</td>
+			<td>documents</td>
+		</tr>
+		<tr>
+			<td>Number of requests (last hour)</td>
+			<td class="text-right">{{getFromLast(60).length}}</td>
+			<td>documents</td>
+		</tr>
+		<tr>
+			<td>Number of requests (last 3 hours)</td>
+			<td class="text-right">{{getFromLast(60*3).length}}</td>
+			<td>documents</td>
+		</tr>
+		<tr>
+			<td>Number of requests (last 6 hours)</td>
+			<td class="text-right">{{getFromLast(60*6).length}}</td>
+			<td>documents</td>
+		</tr>
+		<tr>
+			<td>Number of requests (last 12 hours)</td>
+			<td class="text-right">{{getFromLast(60*12).length}}</td>
 			<td>documents</td>
 		</tr>
 		<tr>

@@ -5,7 +5,8 @@ define(['underscore'], function(_) {
 		$scope.refresh  = refresh;
 		$scope.sum      = sum;
 		$scope.distinct = distinct;
-		$scope.averageJobTime = averageJobTime;
+		$scope.averageJobTime   = averageJobTime;
+		$scope.getFromLast      = getFromLast;
 		$scope.isPending        = function(r) { return  is(r, 'pending' ); };
 		$scope.isPendingHeld    = function(r) { return  is(r, 'pending-held' ); };
 		$scope.isProcessing     = function(r) { return  is(r, 'processing' ); };
@@ -91,6 +92,22 @@ define(['underscore'], function(_) {
 				   request.status['job-state'] === status;
 		}
 
+		function getFromLast(minutes) {
+
+			var time = new Date();
+
+			time.setMinutes(time.getMinutes()-minutes);
+
+			var sTime = formatDate(time);
+
+			 return _.filter($scope.requests, function(r) {
+
+				return r && r.createdOn && r.createdOn > sTime;
+
+			});
+		}
+
+
 		function distinct(value, member1, member2, member3, member4, member5) {
 
 			if(value===undefined) return [];
@@ -143,5 +160,21 @@ define(['underscore'], function(_) {
 
 			return total;
 		}
+
+		//============================================================
+	    //
+	    //
+	    //============================================================
+	    function formatDate(date) {
+
+	        var pad = function(s) { s = ''+s; return s.length<2 ? '0'+s : s; };
+
+	        return pad(date.getUTCFullYear())+'-'+
+	               pad(date.getUTCMonth()+1) +'-'+
+	               pad(date.getUTCDate())     +'T'+
+	               pad(date.getUTCHours())   +':'+
+	               pad(date.getUTCMinutes()) +':'+
+	               pad(date.getUTCSeconds()) +'.000Z';
+	    }
 	}];
 });
