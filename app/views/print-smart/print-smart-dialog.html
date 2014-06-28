@@ -5,9 +5,9 @@
 				<button type="button" class="close" ng-click="close(success)" aria-hidden="true">×</button>
 				<h4 class="modal-title">
 					<span ng-switch="target">
-						<span ng-switch-when="download">Download copies</span>
-						<span ng-switch-when="print">Request hard copies</span>
-						<span ng-switch-default>Request copies</span>
+						<span ng-switch-when="download">Download copies - {{selectedLinks().length}} document(s)</span>
+						<span ng-switch-when="print">Request hard copies - {{selectedLinks().length}} document(s)</span>
+						<span ng-switch-default>Request copies - {{documents.length}} document(s)</span>
 					</span>
 				<i class="fa fa-cog fa-spin" ng-show="isNetworkCall"></i>
 				</h4>
@@ -37,10 +37,6 @@
 				<div ng-show="target">
 
 					<form class="form-horizontal" ng-hide="success">
-
-						<div class="alert alert-info" ng-show="isMobileDevice">
-							Only hard copies can be requested from mobile device.
-						</div>
 
 						<div class="form-group">
 							<label for="preferedLanguage" class="col-sm-5 control-label">Prefered language</label>
@@ -101,28 +97,40 @@
 
 				</div>
 
-				<div class="alert alert alert-success" ng-show="success">
+				<div class="alert alert alert-success" ng-show="success=='print'">
 					<b>Your hard copies are on their way...</b> <br/>
 					The document(s) you requested are getting printed. You are invited to claim them at the document distribution counter.
 				</div>
 
+				<div class="alert alert alert-info" ng-show="success=='download' || success=='dropbox'">
+					<table style="width:100%">
+						<tr>
+							<td>
+								<div ng-show="success=='dropbox'"  style="font-weight:bold">File(s) saving to dropbox...</div>
+								<div ng-show="success=='download'" style="font-weight:bold">File(s) download started...</div>
+								Do you want additionnal language(s)?
+							</td>
+							<td class="text-right">
+								<button type="button" class="btn btn-default" ng-click="success=null">Yes</button>
+								<button type="button" class="btn btn-default" ng-click="close(success)">No</button>
+							</td>
+						</tr>
+					</table>
+				</div>
 			</div>
+
 			<div class="modal-footer">
-				<table style="width:100%">
-					<tr>
-						<td class="text-left"  style="vertical-align:middle">{{documents.length}} document(s)</td>
-						<td class="text-right" style="vertical-align:middle">
-							<i class="fa fa-cog fa-spin" ng-show="isNetworkCall" style="margin:5px"></i>
-							<button type="button" ng-show="target && canDownload && !success"          class="btn btn-default" ng-click="target=null"><i class="fa fa-arrow-left"></i> Back</button>
 
-							<a target="_self"     ng-show="target=='download'" class="btn btn-success" ng-disabled="!downloadLink" ng-click="close(true)" href="{{downloadLink}}"><i class="fa fa-arrow-circle-down"></i> Download the document</a>
+				<i class="fa fa-cog fa-spin" ng-show="isNetworkCall" style="margin:5px"></i>
 
-							<button type="button" ng-show="target=='print' && !success"  class="btn" ng-class="{ 'btn-primary' : canPrint() }" ng-click="print()" ng-disabled="!canPrint() || isNetworkCall"><i class="fa fa-print"></i> Print</button>
+				<button type="button" ng-show="target && canDownload()" class="btn btn-default" ng-click="back()"><i class="fa fa-arrow-left"></i> Back</button>
 
-							<button type="button" class="btn btn-default" ng-click="close(success)">Close</button>
-						</td>
-					</tr>
-				</table>
+				<a      target="_self" ng-show="target=='download' && !success" class="btn btn-success" ng-disabled="!downloadLink" ng-click="success='download'" href="{{downloadLink}}"><i class="fa fa-arrow-circle-down"></i> Download</a>
+				<button type="button"  ng-show="target=='download' && !success && canDropbox()" class="btn btn-primary" ng-disabled="!downloadLink" ng-click="sendToDropbox()"><i class="fa fa-dropbox"></i> Dropbox</button>
+				<button type="button"  ng-show="target=='print'    && !success" class="btn" ng-class="{ 'btn-primary' : canPrint() }" ng-click="print()" ng-disabled="!canPrint() || isNetworkCall"><i class="fa fa-print"></i> Print</button>
+
+				<button type="button" class="btn btn-default" ng-click="close(success)"><i class="fa fa-power-off"></i> Close</button>
+
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->

@@ -1,6 +1,9 @@
+/* global -close */
+// define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angular, _, Dropbox) {
 define(['app', 'angular', 'underscore'], function(app, angular, _) {
+   var Dropbox = undefined;
 
-	app.directive('printSmartDialog', ["$http", "$cookies", function($http, $cookies) {
+	app.directive('printSmartDialog', ["$http", "$timeout", "$cookies", function($http, $timeout, $cookies) {
 		return {
 			restrict : "AEC",
 			require: '^printSmart',
@@ -9,17 +12,14 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 			templateUrl : "/app/views/print-smart/print-smart-dialog.html",
 			link: function ($scope, element, attrs, psCtrl) {
 
-				$scope.cleanBadge       = cleanBadge;
-				$scope.clearError       = clearError;
-				$scope.isNetworkCall    = false;
-				$scope.isKiosk          = !!$cookies.kiosk;
-				$scope.isMobileDevice   = /mobile/i .test(navigator.userAgent) ||
-										  /android/i.test(navigator.userAgent) ||
-										  /tablet/i .test(navigator.userAgent) ||
-										  /phone/i  .test(navigator.userAgent) ||
-										  /RIM/     .test(navigator.userAgent);
-				$scope.canDownload = !$scope.isKiosk &&
-									 !$scope.isMobileDevice;
+				$scope.cleanBadge    = cleanBadge;
+				$scope.clearError    = clearError;
+				$scope.close         = close;
+				$scope.selectedLinks = selectedLinks;
+				$scope.isNetworkCall = false;
+
+				var kiosk             = $cookies.kiosk!==undefined;
+				var signedInToDropbox = false;
 
 				var allLanguages = {
 					ar : "العربية",
@@ -36,11 +36,14 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				$scope.$watch('preferedLanguage', initDownloadLink);
 
 				element.on("show.bs.modal", function() {
+
+					signedInToDropbox = false;
+
 					$scope.preferedLanguage = "en";
 					$scope.badgeCode = "";
 					$scope.error     = null;
 					$scope.success   = null;
-					$scope.target    = $scope.canDownload ? null : "print";
+					$scope.target    = null;
 					$scope.format    = "doc";
 					$scope.downloadLink = null;
 					$scope.documents = psCtrl.documents();
@@ -53,6 +56,9 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 						$scope.localizedDocuments.pdf[locale] = mapDocuments($scope.documents, 'pdf', locale);
 						$scope.localizedDocuments.doc[locale] = mapDocuments($scope.documents, 'doc', locale);
 					});
+
+					if($scope.canDropbox() && kiosk)
+						signoutDropbox();
 				});
 
 
@@ -62,20 +68,13 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//==============================================
 				function initDownloadLink()	{
 
+					$scope.success = null;
 					$scope.downloadLink = null;
 
-					if( $scope.target!='download') return;
-					if(!$scope.preferedLanguage) return;
-					if(!$scope.format) return;
+					var urls = selectedLinks();
 
-					var urls = _.compact(_.map($scope.localizedDocuments[$scope.format][$scope.preferedLanguage], function(d){
-						return d.url;
-					}));
+					if(urls.length) {
 
-					if(urls.length==0) {
-						return;
-					}
-					else {
 						$http.post('/api/v2014/printsmart-downloads', urls).then(function(res){
 							$scope.downloadLink = 'http://www.infra.cbd.int/api/v2014/printsmart-downloads/'+res.data._id;
 						}).catch(function(err){
@@ -88,11 +87,27 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//
 				//
 				//==============================================
+				function selectedLinks() {
+
+					if( $scope.target!='download') return [];
+					if(!$scope.preferedLanguage)   return [];
+					if(!$scope.format)             return [];
+
+					return _.compact(_.map($scope.localizedDocuments[$scope.format][$scope.preferedLanguage], function(d){
+						return d.url;
+					}));
+				}
+
+
+				//==============================================
+				//
+				//
+				//==============================================
 				function documentsLocales(documents) {
 
 					return _.uniq(_.flatten(_.map(documents, function(d){
 						return _.union(_.keys(d.urls.pdf), _.keys(d.urls.doc));
-					})))
+					})));
 
 				}
 
@@ -131,26 +146,97 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//
 				//
 				//==============================================
-				$scope.canPrint = function() {
-					return cleanBadge().length >= 8 &&
-						   $scope.documents.length > 0 &&
-						   !!$scope.preferedLanguage;
+				$scope.isMobileDevice = function() {
+					return /mobile/i .test(navigator.userAgent) ||
+						   /android/i.test(navigator.userAgent) ||
+						   /tablet/i .test(navigator.userAgent) ||
+						   /phone/i  .test(navigator.userAgent) ||
+						   /RIM/     .test(navigator.userAgent);
 				};
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.download = function() {
+				$scope.canPrint = function() {
+					return cleanBadge()   .length >= 8 &&
+						   selectedLinks().length >  0;
+				};
 
-					_.each($scope.localizedDocuments[$scope.format][$scope.preferedLanguage], function(d){
-						d.downloaded = true;
-						angular.element("body").append('<iframe src="'+d.url+'?download" style="display:none"></iframe>');
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.canDownload = function() {
+					return $scope.documents.length > 0;
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.canDropbox = function() {
+					return $scope.canDownload() &&
+						   Dropbox &&
+						   Dropbox.isBrowserSupported();
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.sendToDropbox = function() {
+
+					$scope.success = null;
+
+					var files = _.map(selectedLinks(), function(url) {
+						return { url : url };
 					});
 
-					if(cleanBadge()==="")
-						$scope.close(true);
+					if(!files.length)
+						return;
+
+					signedInToDropbox = true;
+
+					var started = false;
+
+					Dropbox.save({
+					    files : files,
+					    progress : function () {
+
+							if(started)
+								return;
+
+							started = true;
+
+							$scope.$apply(function() {
+								$scope.success = 'dropbox';
+							});
+						},
+					    error : function (errorMessage) {
+
+							console.log('DROPBOX ERROR', errorMessage);
+
+							$scope.$apply(function() {
+								$scope.error = {
+									error   : 'DROPBOX',
+									message : errorMessage
+								};
+							});
+						}
+					});
 				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				function signoutDropbox() {
+
+					console.log("signout from dropbox");
+					angular.element('body').append('<iframe height="0" width="0" style="display:none" src="https://www.dropbox.com/logout"></iframe>');
+				}
+
 
 				//==============================================
 				//
@@ -203,13 +289,27 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//
 				//
 				//==============================================
-				$scope.close = function(clear) {
+				$scope.back = function() {
+
+					$scope.error   = null;
+					$scope.target  = null;
+					$scope.success = null;
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				function close(clear) {
+
+					if(kiosk && signedInToDropbox)
+						signoutDropbox();
 
 					if(!!clear)
 						psCtrl.clear();
 
 					psCtrl.print(false);
-				};
+				}
 			}
 		};
 	}]);

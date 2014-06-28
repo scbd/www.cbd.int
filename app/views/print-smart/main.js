@@ -1,7 +1,7 @@
 'use strict';
 
 if (!window.console) { // FIX old IE console.log not exist!
-	window.console = { log : function() { }	}; 
+	window.console = { log : function() { }	};
 }
 
 window.name = 'NG_DEFER_BOOTSTRAP!';
@@ -16,11 +16,18 @@ require.config({
     'underscore' : '/app/libs/underscore/underscore',
     'bootstrap'  : '/app/libs/bootstrap-sass/dist/js/bootstrap.min',
     'jquery'     : '/app/libs/jquery/jquery',
+	'dropbox-dropins' : 'https://www.dropbox.com/static/api/2/dropins'
   },
   shim: {
     'angular'         : { 'deps': ['jquery'], 'exports': 'angular' },
     'bootstrap'       : { 'deps': ['jquery'] },
     'angular-cookies' : { 'deps': ['angular'] },
+	'dropbox-dropins' : { deps: [], exports: "Dropbox",
+        init: function () {
+            window.Dropbox.appKey = "uvo7kuhmckw68pl"; //registration@cbd.int
+			return window.Dropbox;
+        }
+	}
   }
 });
 
