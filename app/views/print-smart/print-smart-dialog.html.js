@@ -1,9 +1,7 @@
 /* global -close */
-// define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angular, _, Dropbox) {
-define(['app', 'angular', 'underscore'], function(app, angular, _) {
-   var Dropbox = undefined;
+define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angular, _, Dropbox) {
 
-	app.directive('printSmartDialog', ["$http", "$timeout", "$cookies", function($http, $timeout, $cookies) {
+	app.directive('printSmartDialog', ["$http", function($http) {
 		return {
 			restrict : "AEC",
 			require: '^printSmart',
@@ -17,8 +15,8 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				$scope.close         = close;
 				$scope.selectedLinks = selectedLinks;
 				$scope.isNetworkCall = false;
+				$scope.isPublicComputer = true; // TODO
 
-				var kiosk             = $cookies.kiosk!==undefined;
 				var signedInToDropbox = false;
 
 				var allLanguages = {
@@ -57,7 +55,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 						$scope.localizedDocuments.doc[locale] = mapDocuments($scope.documents, 'doc', locale);
 					});
 
-					if($scope.canDropbox() && kiosk)
+					if($scope.canDropbox() && $scope.isPublicComputer)
 						signoutDropbox();
 				});
 
@@ -87,13 +85,19 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//
 				//
 				//==============================================
-				function selectedLinks() {
+				function selectedLinks(options) {
 
-					if( $scope.target!='download') return [];
-					if(!$scope.preferedLanguage)   return [];
-					if(!$scope.format)             return [];
+                    options = options || {};
 
-					return _.compact(_.map($scope.localizedDocuments[$scope.format][$scope.preferedLanguage], function(d){
+                    var target   = options.target   || $scope.target;
+                    var language = options.language || $scope.preferedLanguage;
+                    var format   = options.format   || $scope.format;
+
+					if(!target)   return [];
+					if(!language) return [];
+					if(!format)   return [];
+
+					return _.compact(_.map($scope.localizedDocuments[format][language], function(d){
 						return d.url;
 					}));
 				}
@@ -160,7 +164,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//==============================================
 				$scope.canPrint = function() {
 					return cleanBadge()   .length >= 8 &&
-						   selectedLinks().length >  0;
+						   selectedLinks({ format:'pdf'}).length >  0;
 				};
 
 				//==============================================
@@ -176,8 +180,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//
 				//==============================================
 				$scope.canDropbox = function() {
-					return $scope.canDownload() &&
-						   Dropbox &&
+					return Dropbox &&
 						   Dropbox.isBrowserSupported();
 				};
 
@@ -302,7 +305,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//==============================================
 				function close(clear) {
 
-					if(kiosk && signedInToDropbox)
+					if(signedInToDropbox && $scope.isPublicComputer)
 						signoutDropbox();
 
 					if(!!clear)
