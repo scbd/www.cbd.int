@@ -51,7 +51,8 @@ app.all('/*', function(req, res) { proxy.web(req, res, { target: 'https://us1.lb
 // LOG PROXY ERROR & RETURN http:500
 
 proxy.on('error', function (e, req, res) {
-    console.error(new Date().toUTCString() + ' proxy error:', e);
+    console.error(new Date().toUTCString() + ' error proxying: '+req.url);
+    console.error('proxy error:', e);
     res.send( { code: 500, source:'www.infra/proxy', message : 'proxy error', proxyError: e }, 500);
 });
 
