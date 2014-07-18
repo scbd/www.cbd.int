@@ -1,8 +1,17 @@
 /* jshint node: true, browser: false */
 'use strict';
+// LOG UNHANDLED EXCEPTION AND EXIT
+process.on('uncaughtException', function (err) {
+  console.error((new Date()).toUTCString() + ' uncaughtException:', err.message);
+  console.error(err.stack);
+  process.exit(1);
+});
 
-var fs = require('fs'),
-  http = require('http'),
+/////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
+
+var http = require('http'),
   express = require('express'),
   httpProxy = require('http-proxy');
 
@@ -39,10 +48,16 @@ app.get('/national-reports',     sendTemplate);
 
 app.all('/*', function(req, res) { proxy.web(req, res, { target: 'https://us1.lb.infra.cbd.int', secure: false } ); } );
 
-// Start server
+// LOG PROXY ERROR & RETURN http:500
+
+proxy.on('error', function (e, req, res) {
+    console.error(new Date().toUTCString() + ' proxy error:', e);
+    res.send( { code: 500, source:'www.infra/proxy', message : 'proxy error', proxyError: e }, 500);
+});
+
+// START HTTP SERVER
 
 server.listen(process.env.PORT || 8001, '0.0.0.0');
-
 server.on('listening', function () {
 	console.log('Server listening on %j', this.address());
 });
