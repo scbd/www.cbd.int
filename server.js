@@ -37,7 +37,7 @@ app.use('/app', express.static(__dirname + '/app'));
 // Configure routes
 
 app.get('/app/*', function(req, res) { res.send('404', 404); } );
-app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'https://api.cbd.int', secure: false } ); } );
+app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'https://api.cbd.int:443', secure: false } ); } );
 
 // Configure template
 
@@ -46,7 +46,7 @@ app.get('/national-reports',     sendTemplate);
 
 // Configure proxy to legacy website
 
-app.all('/*', function(req, res) { proxy.web(req, res, { target: 'https://us1.lb.infra.cbd.int', secure: false } ); } );
+app.all('/*', function(req, res) { proxy.web(req, res, { target: 'https://us1.lb.infra.cbd.int:443', secure: false } ); } );
 
 // LOG PROXY ERROR & RETURN http:500
 
