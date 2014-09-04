@@ -1,13 +1,14 @@
-'use strict';
-
 define([
   'angular',
+  'angular-route',
+  'angular-cookies',
   'angular-growl',
   'angular-moment',
   'angular-animate',
-  '/app/directives/ui-bootstrap-custom.js'
-], function(angular) {
-  
+  'bootstrap',
+  'text',
+  '/app/directives/ui-bootstrap-custom.js'], function(angular) { 'use strict';
+
   var app = angular.module('app', ['ngRoute', 'ngCookies', 'ngAnimate','angular-growl', 'angularMoment', 'ui.bootstrap']);
 
   app.config(['$controllerProvider', '$compileProvider', '$provide', '$filterProvider', 'growlProvider',

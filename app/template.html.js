@@ -1,5 +1,4 @@
-'use strict';
-define(['app', 'authentication'], function(app) {
+define(['app', 'authentication'], function(app) { 'use strict';
 
   app.controller('TemplateController', ['$scope', '$window', '$browser', '$document', '$location', 'authentication',
 	function($scope, $window, $browser, $document, $location, authentication) {
@@ -107,7 +106,7 @@ define(['app', 'authentication'], function(app) {
         }, false);
 
         var qAuthenticationFrame = $document.find('#authenticationFrame');
-        
+
         if(qAuthenticationFrame.size())
             qAuthenticationFrame[0].contentWindow.postMessage('{"type":"getAuthenticationToken"}', 'https://accounts.cbd.int');
 

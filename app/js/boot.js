@@ -1,5 +1,3 @@
-'use strict';
-
 window.name = 'NG_DEFER_BOOTSTRAP!';
 
 require.config({
@@ -17,24 +15,42 @@ require.config({
     'underscore'      : '../libs/underscore/underscore',
     'angular-growl'   : '../libs/angular-growl/build/angular-growl',
     'angular-moment'  : '../libs/angular-moment/angular-moment',
-    'moment'          : '../libs/moment/moment'
+    'moment'          : '../libs/moment/moment',
+    'dropbox-dropins' : 'https://www.dropbox.com/static/api/2/dropins'
   },
   shim: {
-    'angular'         : { 'deps': ['jquery'], 'exports': 'angular' },
+    'angular'         : { 'deps': ['jquery' ], 'exports': 'angular' },
     'angular-route'   : { 'deps': ['angular'] },
     'angular-cookies' : { 'deps': ['angular'] },
     'angular-animate' : { 'deps': ['angular'] },
-    'angular-moment'  : { 'deps': ['moment'] },
-    'bootstrap'       : { 'deps': ['jquery'] }
+    'angular-moment'  : { 'deps': ['moment' ] },
+    'bootstrap'       : { 'deps': ['jquery' ] },
+	'dropbox-dropins' : { deps: [], exports: "Dropbox",
+        init: function () {
+            window.Dropbox.appKey = "uvo7kuhmckw68pl"; //registration@cbd.int
+			return window.Dropbox;
+        }
+	}
   }
 });
 
-require(['angular', 'angular-route', 'angular-cookies', 'angular-animate', 'bootstrap', 'domReady', 'text'], function (ng) {
+require(['angular', 'domReady'], function (angular) {
 
   // NOTE: place operations that need to initialize prior to app start here using the `run` function on the top-level module
 
-  require(['domReady!', 'app', 'app_routes', '../template.html'], function (document) {
-    ng.bootstrap(document, ['app']);
-    ng.resumeBootstrap();
+  var modules     = [ 'domReady!' ];
+  var bootModules = angular.extend({ 'app' : true }, window.require_modules || {});
+
+  angular.forEach(bootModules, function(value, key) {
+
+      if(value) {
+          modules.push(key);
+      }
   });
+
+  require(modules, function (document) {
+    angular.bootstrap(document, ['app']);
+    angular.resumeBootstrap();
+  });
+
 });

@@ -3,14 +3,20 @@ define(['app'], function(app) {
 	app.directive('printSmartCheckout', ["$timeout", function($timeout) {
 		return {
 			restrict : "AEC",
-			require: '^printSmart',
+			require: '?^printSmart',
 			replace : true,
 			priority: 1000,
 			scope : {},
-			templateUrl : "/app/views/print-smart/print-smart-checkout.html",
+			templateUrl : "/app/js/directives/print-smart/print-smart-checkout.html",
 			link: function ($scope, element, attrs, psCtrl) {
 
-				element.popover({ 
+				$scope.disabled = !psCtrl;  //optional directive is disabled if no controller
+
+				if(!psCtrl)	return;
+
+				///////////////////////////////////////////////
+
+				element.popover({
 					delay : { show: 500, hide: 250 },
 					trigger : 'manual'
 				});
@@ -21,11 +27,11 @@ define(['app'], function(app) {
 				//
 				//
 				//==============================================
-				$scope.print = function() {  
+				$scope.print = function() {
 
 					if(psCtrl.documents().length!==0)
 						psCtrl.print(true);
-					else 
+					else
 						psCtrl.help(!psCtrl.help());
 				};
 
@@ -33,7 +39,7 @@ define(['app'], function(app) {
 				//
 				//
 				//==============================================
-				$scope.$watch( function() { return psCtrl.help() }, function(visible){
+				$scope.$watch( function() { return psCtrl.help(); }, function(visible){
 
 					if(autoKillHelp) {
 						$timeout.cancel(autoKillHelp);
@@ -51,14 +57,14 @@ define(['app'], function(app) {
 							psCtrl.help(false);
 						}, 3000);
 
-					}  
+					}
 				});
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.documents = function() {  
+				$scope.documents = function() {
 					return psCtrl.documents();
 				};
 			}

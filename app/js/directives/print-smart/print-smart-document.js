@@ -7,17 +7,18 @@ define(['app', 'underscore'], function(app, _) {
 	app.directive('printSmartDocument', [function() {
 		return {
 			restrict : "AEC",
-			require: '^printSmart',
+			require: '?^printSmart',
 			replace : true,
 			priority: 10,
 			scope :  {
 				documentUrl : "@",
 				documentCode : "@",
 			 },
-			templateUrl : "/app/views/print-smart/print-smart-document.html",
+			templateUrl : "/app/js/directives/print-smart/print-smart-document.html",
 			link: function ($scope, element, attrs, psCtrl) {
-				$scope.element = element;
-				$scope.psCtrl  = psCtrl;
+				$scope.element  =  element;
+				$scope.psCtrl   =  psCtrl;
+				$scope.disabled = !psCtrl;  //optional directive is disabled if no controller
 			},
 			controller : ["$scope", function($scope) {
 
@@ -37,10 +38,10 @@ define(['app', 'underscore'], function(app, _) {
 
 					if(!$scope.documentCode && !$scope.documentUrl)
 						return;
-					
+
 					code = $scope.documentCode;
 					pdfs = loadLocalizedLinks($scope.documentUrl, ".pdf");
-					docs = _.extend(loadLocalizedLinks($scope.documentUrl, ".doc"), 
+					docs = _.extend(loadLocalizedLinks($scope.documentUrl, ".doc"),
 									    loadLocalizedLinks($scope.documentUrl, ".docx"));
 
 					if(!pdfs.en && /.pdf$/i .test($scope.documentUrl)) pdfs.en = $scope.documentUrl;
@@ -56,7 +57,7 @@ define(['app', 'underscore'], function(app, _) {
 				//
 				//========================================
 				$scope.selected = function() {
-					return $scope.psCtrl.hasDocument(code);
+					return $scope.psCtrl && $scope.psCtrl.hasDocument(code);
 				};
 
 				//========================================
@@ -77,7 +78,7 @@ define(['app', 'underscore'], function(app, _) {
 				//
 				//========================================
 				$scope.help = function(o) {
-					return $scope.psCtrl.help(o);
+					return $scope.psCtrl && $scope.psCtrl.help(o);
 				};
 
 				//========================================
@@ -95,7 +96,7 @@ define(['app', 'underscore'], function(app, _) {
 						var host  = documentUrl.replace(re, "$1").replace(/\/$/, "");
 						//var ext   = documentUrl.replace(re, "$4");
 						var path  = '/'+documentUrl.replace(re, "$2");
-						var paths = { 
+						var paths = {
 							ar : path+'ar'+extension,
 							en : path+'en'+extension,
 							es : path+'es'+extension,
@@ -103,7 +104,7 @@ define(['app', 'underscore'], function(app, _) {
 							ru : path+'ru'+extension,
 							zh : path+'zh'+extension
 						};
-						
+
 						if(qPS.find('a[href="'+paths.ar+'"]').size()!==0) urls.ar = host+paths.ar;
 						if(qPS.find('a[href="'+paths.en+'"]').size()!==0) urls.en = host+paths.en;
 						if(qPS.find('a[href="'+paths.es+'"]').size()!==0) urls.es = host+paths.es;

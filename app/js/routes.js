@@ -1,6 +1,4 @@
-'use strict';
-
-define(['app', 'extended-route-provider'], function(app) {
+define(['app', 'extended-route-provider'], function(app) { 'use strict';
 
   app.config(['extendedRouteProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
@@ -22,5 +20,4 @@ define(['app', 'extended-route-provider'], function(app) {
         .otherwise({redirectTo: '/404'});
     }
   ]);
-
 });

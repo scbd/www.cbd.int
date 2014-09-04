@@ -1,4 +1,4 @@
-define(['app', 'bootstrap', 'print-smart-checkout.html', 'print-smart-document.html', 'print-smart-dialog.html', 'meeting-documents.html'], function(app) {
+define(['app', 'bootstrap', './print-smart-checkout', './print-smart-document', './print-smart-dialog'], function(app) {
 
 	//==============================================
 	//
@@ -70,7 +70,7 @@ define(['app', 'bootstrap', 'print-smart-checkout.html', 'print-smart-document.h
 				this.print = function(visible) {
 
 					if(visible===undefined)
-						return $scope.__printDialog.is(":visible")						
+						return $scope.__printDialog.is(":visible");
 
 					if($scope.__printDialog.is(":visible")===visible)
 						return;

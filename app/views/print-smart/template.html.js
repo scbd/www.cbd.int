@@ -1,7 +1,7 @@
-
+/* global escape : true  */
 function PrintSmartCtrl($scope, $location, $timeout) {
 
-	$scope.$watch(function() { return $location.path() }, function(path, oldPath){
+	$scope.$watch(function() { return $location.path(); }, function(path){
 
 		if(path == "/internal/printsmart") {
 			$scope.badge = "";
@@ -11,15 +11,15 @@ function PrintSmartCtrl($scope, $location, $timeout) {
 
     $scope.submit = function () {
 
-    	if($scope.badge) {
+		if($scope.badge) {
 
-    		var badge = $scope.badge=='boxes' ? "boxes" : (($scope.badge||"").replace(/[^0-9]/g, "") || "INVALID_BADGE_ID");
+			var badge = $scope.badge=='boxes' ? "boxes" : (($scope.badge||"").replace(/[^0-9]/g, "") || "INVALID_BADGE_ID");
 
-    	   	$location.path('/internal/printsmart/'+escape(badge));
-    	}
+			$location.path('/internal/printsmart/'+escape(badge));
+		}
 
-    	$scope.badge = "";
-    },
+		$scope.badge = "";
+    };
 
 	$scope.close = function() {
 		$location.hash('');

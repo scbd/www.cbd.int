@@ -2,7 +2,7 @@
 
 define(['app'], function (app) {
 
-	app.factory('authentication', ["$http", "$browser", function($http, $browser) { 
+	app.factory('authentication', ["$http", "$browser", function($http, $browser) {
 
 		var currentUser = null;
 
@@ -51,7 +51,7 @@ define(['app'], function (app) {
 	app.factory('authHttp', ["$http", "$browser", function($http, $browser) {
 
 		function addAuthentication(config) {
-		
+
 			if(!config)         config         = {};
 			if(!config.headers) config.headers = {};
 
