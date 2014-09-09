@@ -53,7 +53,8 @@ define(['app', 'angular', 'authentication'], function(app, angular) { 'use stric
         function resolveUser() {
             return ['$rootScope', 'authentication', function($rootScope, authentication) {
                 return authentication.getUser().then(function (user) {
-                    return $rootScope.user = user;
+                    $rootScope.user = user;
+                    return user;
                 });
             }];
         }

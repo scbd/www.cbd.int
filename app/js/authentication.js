@@ -16,7 +16,7 @@ define(['app'], function (app) { 'use strict';
 
 			currentUser = $http.get('/api/v2013/authentication/user', { headers: headers}).then(function onsuccess (response) {
 				return response.data;
-			}, function onerror (error) {
+			}, function onerror () {
 				return { userID: 1, name: 'anonymous', email: 'anonymous@domain', government: null, userGroups: null, isAuthenticated: false, isOffline: true, roles: [] };
 			});
 
