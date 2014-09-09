@@ -1,6 +1,4 @@
-'use strict';
-
-define(['app'], function (app) {
+define(['app'], function (app) { 'use strict';
 
 	app.factory('authentication', ["$http", "$browser", function($http, $browser) {
 

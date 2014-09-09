@@ -1,6 +1,4 @@
-'use strict';
-
-define(['app', 'angular', 'authentication'], function(app, angular) {
+define(['app', 'angular', 'authentication'], function(app, angular) { 'use strict';
 
     app.provider('extendedRoute', ["$routeProvider", function($routeProvider) {
 

@@ -36,7 +36,7 @@ require.config({
   }
 });
 
-require(['angular', 'domReady'], function (angular) {
+require(['angular', 'domReady'], function (angular) { 'use strict';
 
   // NOTE: place operations that need to initialize prior to app start here using the `run` function on the top-level module
 
