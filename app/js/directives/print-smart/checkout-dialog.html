@@ -1,0 +1,38 @@
+<div class="modal fade" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" ng-click="close()" aria-hidden="true">×</button>
+				<h4 class="modal-title">Request copies - {{documents().length}} document(s)
+				</h4>
+			</div>
+			<div class="modal-body">
+
+				<div ng-hide="target">
+					<table style="width:100%">
+						<tr>
+							<td class="text-center" style="width:50%" >
+								<button type="button" class="btn btn-success" ng-click="download()" style="width:200px">
+									<span style="font-size: 2em;">Download</span><br/><br/>
+									<i class="fa fa-arrow-circle-down" style="font-size: 7em;"></i>
+								</button>
+							</td>
+							<td class="text-center" style="width:50%">
+								<button type="button" class="btn btn-primary" ng-click="print()" style="width:200px">
+									<span style="font-size: 2em;">Print</span><br/><br/>
+									<i class="fa fa-print" style="font-size: 7em;"></i>
+
+								</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+
+			<div class="modal-footer">
+
+				<button type="button" class="btn btn-default" ng-click="close()"><i class="fa fa-power-off"></i> Close</button>
+
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div>

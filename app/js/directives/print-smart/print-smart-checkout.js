@@ -1,4 +1,4 @@
-define(['app'], function(app) {
+define(['app', './checkout-dialog', './print-dialog', './download-dialog'], function(app) {
 
 	app.directive('printSmartCheckout', ["$timeout", function($timeout) {
 		return {
@@ -22,18 +22,6 @@ define(['app'], function(app) {
 				});
 
 				var autoKillHelp = null;
-
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.print = function() {
-
-					if(psCtrl.documents().length!==0)
-						psCtrl.print(true);
-					else
-						psCtrl.help(!psCtrl.help());
-				};
 
 				//==============================================
 				//
@@ -66,6 +54,14 @@ define(['app'], function(app) {
 				//==============================================
 				$scope.documents = function() {
 					return psCtrl.documents();
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.checkout = function() {
+					psCtrl.open('checkout');
 				};
 			}
 		};

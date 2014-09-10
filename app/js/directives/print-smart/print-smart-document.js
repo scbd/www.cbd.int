@@ -11,8 +11,9 @@ define(['app', 'underscore'], function(app, _) {
 			replace : true,
 			priority: 10,
 			scope :  {
-				documentUrl : "@",
+				documentUrl  : "@",
 				documentCode : "@",
+				documentTag  : "@",
 			 },
 			templateUrl : "/app/js/directives/print-smart/print-smart-document.html",
 			link: function ($scope, element, attrs, psCtrl) {
@@ -29,27 +30,30 @@ define(['app', 'underscore'], function(app, _) {
 
 				$scope.$watch('documentCode', init);
 				$scope.$watch('documentUrl',  init);
+				$scope.$watch('documentTag',  init);
 
-				var code = null;
-				var pdfs = null;
-				var docs = null;
+				var symbol = null;
+				var tag    = null;
+				var pdfs   = null;
+				var docs   = null;
 
 				function init() {
 
 					if(!$scope.documentCode && !$scope.documentUrl)
 						return;
 
-					code = $scope.documentCode;
-					pdfs = loadLocalizedLinks($scope.documentUrl, ".pdf");
-					docs = _.extend(loadLocalizedLinks($scope.documentUrl, ".doc"),
-									    loadLocalizedLinks($scope.documentUrl, ".docx"));
+					symbol = $scope.documentCode;
+					tag    = $scope.documentTag;
+					pdfs   =          loadLocalizedLinks($scope.documentUrl, ".pdf");
+					docs   = _.extend(loadLocalizedLinks($scope.documentUrl, ".doc"),
+									loadLocalizedLinks($scope.documentUrl, ".docx"));
 
 					if(!pdfs.en && /.pdf$/i .test($scope.documentUrl)) pdfs.en = $scope.documentUrl;
 					if(!docs.en && /.doc$/i .test($scope.documentUrl)) docs.en = $scope.documentUrl;
 					if(!docs.en && /.docx$/i.test($scope.documentUrl)) docs.en = $scope.documentUrl;
 
 
-					$scope.valid = code && pdfs.en || docs.en;
+					$scope.valid = symbol && pdfs.en || docs.en;
 				}
 
 				//========================================
@@ -57,7 +61,7 @@ define(['app', 'underscore'], function(app, _) {
 				//
 				//========================================
 				$scope.selected = function() {
-					return $scope.psCtrl && $scope.psCtrl.hasDocument(code);
+					return $scope.psCtrl && $scope.psCtrl.hasDocument(symbol);
 				};
 
 				//========================================
@@ -69,8 +73,8 @@ define(['app', 'underscore'], function(app, _) {
 					if(check)
 						init();
 
-					if(check) $scope.psCtrl.add   (code, { pdf: pdfs, doc : docs });
-					else      $scope.psCtrl.remove(code);
+					if(check) $scope.psCtrl.add   (symbol, { pdf: pdfs, doc : docs }, tag);
+					else      $scope.psCtrl.remove(symbol);
 				};
 
 				//========================================

@@ -1,13 +1,13 @@
 /* global -close */
 define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angular, _, Dropbox) {
 
-	app.directive('printSmartDialog', ["$http", function($http) {
+	app.directive('printSmartDownloadDialog', ["$http", function($http) {
 		return {
 			restrict : "AEC",
 			require: '?^printSmart',
 			replace : true,
 			scope :  {},
-			templateUrl : "/app/js/directives/print-smart/print-smart-dialog.html",
+			templateUrl : "/app/js/directives/print-smart/download-dialog.html",
 			link: function ($scope, element, attrs, psCtrl) {
 
 				$scope.disabled = !psCtrl;  //optional directive is disabled if no controller

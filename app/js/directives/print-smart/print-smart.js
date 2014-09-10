@@ -1,36 +1,107 @@
-define(['app', 'bootstrap', './print-smart-checkout', './print-smart-document', './print-smart-dialog'], function(app) {
+define(['app', 'bootstrap', './print-smart-document', './print-smart-checkout'], function(app) {
 
 	//==============================================
 	//
 	//
 	//==============================================
-	app.directive('printSmart', ["$compile", function($compile) {
+	app.directive('printSmart', ["$timeout", "$compile", '$q',  function($timeout, $compile, $q) {
 
 		return {
 			restrict : "AEC",
 			scope : {},
-			link : function(scope, element) {
+			link : function($scope, element) {
 
 				$("#t-header").css("z-index", "999"); // Fix header over dialog
 
-				var printDialog = angular.element("<div print-smart-dialog></div>");
+				///////////////////////////////////////////////
 
-				element.prepend(printDialog);
+				var checkoutDialog = angular.element("<div print-smart-checkout-dialog></div>");
+				var downloadDialog = angular.element("<div print-smart-download-dialog></div>");
+				var printDialog    = angular.element("<div print-smart-print-dialog></div>");
 
-				scope.__printDialog = $compile(printDialog)(scope);
+				element.append(checkoutDialog);
+				element.append(downloadDialog);
+				element.append(printDialog);
+
+				checkoutDialog = $compile(checkoutDialog)($scope);
+				downloadDialog = $compile(downloadDialog)($scope);
+				printDialog    = $compile(printDialog   )($scope);
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.showModal = function(target, visible) {
+
+					if(target=='checkout') target = checkoutDialog;
+					if(target=='download') target = downloadDialog;
+					if(target=='print'   ) target = printDialog;
+
+					if(!target && visible)
+						return;
+
+					if(target && target.is(':visible') == visible)
+						return;
+
+					var promises = [];
+
+					if(checkoutDialog.is(':visible')) promises.push(showModalQ(checkoutDialog, false));
+					if(downloadDialog.is(':visible')) promises.push(showModalQ(downloadDialog, false));
+					if(printDialog   .is(':visible')) promises.push(showModalQ(printDialog,    false));
+
+					return $q.all(promises).then(function(){
+
+						if(target)
+							return showModalQ(target, visible);
+					});
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				function showModalQ(target, visible) {
+
+					var defer = $q.defer();
+
+					if(target.is(':visible') == visible) {
+						$timeout(defer.resolve);
+					}
+					else {
+						target.on('shown.bs.modal',  null, defer, eventResolver);
+						target.on('hidden.bs.modal', null, defer, eventResolver);
+						target.modal(visible ? 'show' : 'hide');
+					}
+
+					return defer.promise;
+				}
+
+				//==============================================
+				//
+				//
+				//==============================================
+				function eventResolver(evt) {
+
+					angular.element(this).off('shown.bs.modal',  eventResolver);
+					angular.element(this).off('hidden.bs.modal', eventResolver);
+					$timeout(evt.data.resolve);
+				}
+
+
+				///////////////////////////////////////////////
 
 				element.find(".printSmartVisible").fadeIn();
-
 			},
 			controller: ["$scope", function($scope) {
 
+				var _self         = this;
 				var documents     = [];
 				var documentsMap  = {};
 				var isHelpVisible = false;
 
-				this.add = function(symbol, urls) {
+				this.add = function(symbol, urls, tag) {
 
-					var n = { symbol : symbol, urls : urls };
+					var n = { symbol : symbol, urls : urls, tag : tag };
 					var o = documentsMap[symbol];
 					var i = documents.indexOf(o);
 
@@ -67,17 +138,6 @@ define(['app', 'bootstrap', './print-smart-checkout', './print-smart-document', 
 					return !!documentsMap[symbol];
 				};
 
-				this.print = function(visible) {
-
-					if(visible===undefined)
-						return $scope.__printDialog.is(":visible");
-
-					if($scope.__printDialog.is(":visible")===visible)
-						return;
-
-					$scope.__printDialog.modal(!!visible ? "show" : "hide");
-				};
-
 				this.help = function(visible) {
 
 					if(visible===undefined)
@@ -87,6 +147,25 @@ define(['app', 'bootstrap', './print-smart-checkout', './print-smart-document', 
 
 					return isHelpVisible;
 				};
+
+				this.open = function(target) {
+
+					if(documents.length!==0) {
+						     if(target=='checkout') $scope.showModal('checkout', true);
+						else if(target=='download') $scope.showModal('download', true);
+						else if(target=='print'   ) $scope.showModal('print',    true);
+						else console.log('Unknown dialog',target);
+
+					}
+					else {
+						_self.help(!_self.help());
+					}
+				};
+
+				this.close = function() {
+					$scope.showModal(null, false);
+				};
+
 			}]
 		};
 	}]);
