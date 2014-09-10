@@ -85,28 +85,28 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 				//==============================================
 				function documentsToPrint() {
 
-					var documentsToPrint = [];
+					var documents = [];
 
 					_.each($scope.documents, function(doc) {
 
 						_.each($scope.locales, function(active, locale) {
 
-							if(active) {
-								documentsToPrint.push({
-									symbol  : doc.symbol,
-									tag     : doc.tag,
-									url     : doc.urls.pdf[locale] || doc.urls.pdf.en,
-									language: doc.urls.pdf[locale] ?  locale : 'en'
-								});
-							}
+							if(!active) return;
+
+							documents.push({
+								symbol  : doc.symbol,
+								tag     : doc.tag,
+								url     : doc.urls.pdf[locale] || doc.urls.pdf.en,
+								language: doc.urls.pdf[locale] ?  locale : 'en'
+							});
 						});
 					});
 
-					documentsToPrint = _.uniq(documentsToPrint, function(doc){
+					documents = _.uniq(documents, function(doc){
 						return doc.url;
 					});
 
-					return documentsToPrint;
+					return documents;
 
 				}
 
