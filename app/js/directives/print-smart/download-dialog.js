@@ -16,53 +16,35 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 
 				///////////////////////////////////////////////
 
-
-				$scope.cleanBadge    = cleanBadge;
-				$scope.clearError    = clearError;
-				$scope.close         = close;
-				$scope.selectedLinks = selectedLinks;
-				$scope.isNetworkCall = false;
-				$scope.isPublicComputer = true; // TODO
-
+				var publicComputer    = true; // TODO
 				var signedInToDropbox = false;
 
-				var allLanguages = {
-					ar : "العربية",
-					en : "English",
-					es : "Español",
-					fr : "Français",
-					ru : "Русский",
-					zh : "中文"
-				};
+				$scope.clearError       = clearError;
+				$scope.close            = close;
+				$scope.loading          = false;
+				$scope.allLanguages     = {  en : "English",   es : "Español", fr : "Français", ar : "العربية", ru : "Русский", zh : "中文" };
+				$scope.allFormats       = { doc : "MS-Words", pdf : "PDF" };
+				$scope.documentLocales  = [];
+				$scope.documentFormats  = [];
+				$scope.locales          = {};
+				$scope.formats          = {};
 
-
-				$scope.$watch('target',           initDownloadLink);
-				$scope.$watch('format',           initDownloadLink);
-				$scope.$watch('preferedLanguage', initDownloadLink);
+				$scope.$watch('formats', initDownloadLink, true);
+				$scope.$watch('locales', initDownloadLink, true);
 
 				element.on("show.bs.modal", function() {
+					$scope.error     = null;
+					$scope.success   = null;
+					$scope.documents = psCtrl.documents();
+					$scope.documentLocales = getDocumentLocales();
+					$scope.documentFormats = getDocumentFormats();
+					$scope.locales  = {};
+					$scope.formats  = {};
+					$scope.downloadLink = null;
 
 					signedInToDropbox = false;
 
-					$scope.preferedLanguage = "en";
-					$scope.badgeCode = "";
-					$scope.error     = null;
-					$scope.success   = null;
-					$scope.target    = null;
-					$scope.format    = "doc";
-					$scope.downloadLink = null;
-					$scope.documents = psCtrl.documents();
-					$scope.languages = {};
-					$scope.localizedDocuments = { pdf : {}, doc : {} };
-
-					_.each(documentsLocales($scope.documents), function(locale) {
-
-						$scope.languages             [locale] = allLanguages[locale];
-						$scope.localizedDocuments.pdf[locale] = mapDocuments($scope.documents, 'pdf', locale);
-						$scope.localizedDocuments.doc[locale] = mapDocuments($scope.documents, 'doc', locale);
-					});
-
-					if($scope.canDropbox() && $scope.isPublicComputer)
+					if($scope.canDropbox() && publicComputer)
 						signoutDropbox();
 				});
 
@@ -78,6 +60,8 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 
 					var urls = selectedLinks();
 
+					console.log(urls);
+
 					if(urls.length) {
 
 						$http.post('/api/v2014/printsmart-downloads', urls).then(function(res){
@@ -92,57 +76,56 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 				//
 				//
 				//==============================================
-				function selectedLinks(options) {
+				function selectedLinks() {
 
-                    options = options || {};
+					var urls = [];
 
-                    var target   = options.target   || $scope.target;
-                    var language = options.language || $scope.preferedLanguage;
-                    var format   = options.format   || $scope.format;
+					_.each($scope.documents, function(doc) {
 
-					if(!target)   return [];
-					if(!language) return [];
-					if(!format)   return [];
+						_.each($scope.formats, function(active, format) {
 
-					return _.compact(_.map($scope.localizedDocuments[format][language], function(d){
-						return d.url;
-					}));
-				}
+							if(!active)           return;
+							if(!doc.urls[format]) return;
 
+							_.each($scope.locales, function(active, locale) {
 
-				//==============================================
-				//
-				//
-				//==============================================
-				function documentsLocales(documents) {
+								if(!active) return;
 
-					return _.uniq(_.flatten(_.map(documents, function(d){
-						return _.union(_.keys(d.urls.pdf), _.keys(d.urls.doc));
-					})));
-
-				}
-
-				//==============================================
-				//
-				//
-				//==============================================
-				function mapDocuments(documents, slot, lang)	{
-
-					return  _.map(documents, function(d) {
-						return {
-							symbol   : d.symbol,
-							url      : d.urls[slot][lang] || d.urls[slot].en,
-							language : d.urls[slot][lang] ? lang : "en"
-						};
+								urls.push(doc.urls[format][locale] || doc.urls[format].en);
+							});
+						});
 					});
+
+					return _.chain(urls).uniq().compact().value();
+				}
+
+
+				//==============================================
+				//
+				//
+				//==============================================
+				function getDocumentLocales() {
+
+					var locales = _($scope.documents).map(function(doc){
+						return _.union(_.keys(doc.urls.pdf), _.keys(doc.urls.doc));
+					});
+
+					return _.chain(locales).flatten().uniq().sortBy(_.identity).value();
 				}
 
 				//==============================================
 				//
 				//
 				//==============================================
-				function cleanBadge() {
-					return ($scope.badgeCode||"").replace(/[^0-9]/g, "");
+				function getDocumentFormats() {
+
+					var formats = _($scope.documents).map(function(doc){
+						return _.map(doc.urls, function(value, format){
+							return _.isEmpty(value) ? undefined : format;
+						});
+					});
+
+					return _.chain(formats).flatten().uniq().compact().sortBy(_.identity).value();
 				}
 
 				//==============================================
@@ -163,15 +146,6 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 						   /tablet/i .test(navigator.userAgent) ||
 						   /phone/i  .test(navigator.userAgent) ||
 						   /RIM/     .test(navigator.userAgent);
-				};
-
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.canPrint = function() {
-					return cleanBadge()   .length >= 8 &&
-						   selectedLinks({ format:'pdf'}).length >  0;
 				};
 
 				//==============================================
@@ -247,39 +221,6 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 					angular.element('body').append('<iframe height="0" width="0" style="display:none" src="https://www.dropbox.com/logout"></iframe>');
 				}
 
-
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.print = function() {
-
-					$scope.error = null;
-					$scope.success = null;
-
-					var postData = {
-						badge     : cleanBadge(),
-						documents : $scope.localizedDocuments.pdf[$scope.preferedLanguage]
-					};
-
-					$scope.isNetworkCall = true;
-
-					$http.post("/api/v2014/printsmart-requests/batch", postData).success(function(data) {
-
-						$scope.isNetworkCall = false;
-						$scope.success       = angular.isObject(data) ? data : {};
-
-					}).error(function(data, status){
-
-						$scope.isNetworkCall = false;
-
-						if(angular.isObject(data)) $scope.error = data;
-						else if(status==404)       $scope.error = { error: "NO_SERVICE" };
-						else if(status==500)       $scope.error = { error: "NO_SERVICE" };
-						else                       $scope.error = { error: "UNKNOWN",    message : "Unknown error" };
-					});
-				};
-
 				//==============================================
 				//
 				//
@@ -289,10 +230,7 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 					if(!$scope.error)
 						return false;
 
-					return $scope.error.error!=="INVALID_BADGE_ID" &&
-						   $scope.error.error!=="INVALID_BADGE_REVOKED" &&
-						   $scope.error.error!=="INVALID_BADGE_EXPIRED" &&
-						   $scope.error.error!=="NO_SERVICE";
+					return $scope.error.error!=="NO_SERVICE";
 				};
 
 				//==============================================
@@ -302,8 +240,9 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 				$scope.back = function() {
 
 					$scope.error   = null;
-					$scope.target  = null;
 					$scope.success = null;
+
+					psCtrl.open('checkout');
 				};
 
 				//==============================================
@@ -312,13 +251,13 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 				//==============================================
 				function close(clear) {
 
-					if(signedInToDropbox && $scope.isPublicComputer)
+					if(signedInToDropbox && publicComputer)
 						signoutDropbox();
 
 					if(!!clear)
 						psCtrl.clear();
 
-					psCtrl.print(false);
+					psCtrl.close();
 				}
 			}
 		};

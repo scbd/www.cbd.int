@@ -4,58 +4,42 @@
 			<div class="modal-header">
 				<button type="button" class="close" ng-click="close(success)" aria-hidden="true">×</button>
 				<h4 class="modal-title">
-					Download copies - {{selectedLinks().length}} document(s)
-					<i class="fa fa-cog fa-spin" ng-show="isNetworkCall"></i>
+					Download copies - {{documents.length}} document(s)
+					<i class="fa fa-cog fa-spin" ng-show="loading"></i>
 				</h4>
 			</div>
 			<div class="modal-body">
 
-
 				<form class="form-horizontal" ng-hide="success">
 
 					<div class="form-group">
-						<label for="preferedLanguage" class="col-sm-5 control-label">Prefered language</label>
-						<div class="col-sm-5">
-							<select class="form-control" ng-model="preferedLanguage" id="preferedLanguage" ng-options="key as value for (key, value) in languages"></select>
-						</div>
-					</div>
-
-					<div class="form-group" ng-show="target=='download'">
-						<label for="format" class="col-sm-5 control-label">Prefered format</label>
-						<div class="col-sm-5">
-
-							<div class="checkbox">
-								<a ng-show="format=='doc'" ng-click="format='doc'"><i class="fa fa-check-square-o" style="width:25px;vertical-align:middle;font-size:24px;"></i></a>
-								<a ng-show="format!='doc'" ng-click="format='doc'"><i class="fa fa-square-o"       style="width:25px;vertical-align:middle;font-size:24px;"></i></a> MS-Word
-								&nbsp; &nbsp; &nbsp;
-								<a ng-show="format=='pdf'" ng-click="format='pdf'"><i class="fa fa-check-square-o" style="width:25px;vertical-align:middle;font-size:24px;"></i></a>
-								<a ng-show="format!='pdf'" ng-click="format='pdf'"><i class="fa fa-square-o"       style="width:25px;vertical-align:middle;font-size:24px;"></i></a> PDF
+						<label for="preferedLanguage" class="col-sm-4 control-label">Prefered language(s)</label>
+						<div class="col-sm-6">
+							<div class="row">
+								<div ng-repeat="locale in documentLocales" class="col-sm-6 col-xs-6">
+									<a class="btn btn-link" ng-click="locales[locale] = !locales[locale]" style="color:black;text-decoration:none;text-align:left" ng-class="{ opacity55: !locales[locale] }" >
+										<i class="fa fa-square-o"       ng-hide="locales[locale]" style="font-size:20px;width:20px"></i>
+										<i class="fa fa-check-square-o" ng-show="locales[locale]" style="font-size:20px;width:20px"></i>
+										{{allLanguages[locale]||locale}}
+									</a>
+								</div>
 							</div>
 						</div>
 					</div>
 
-					<div class="form-group" ng-show="target=='print'" ng-class="{ 'has-error' : error && error.error=='INVALID_BADGE_ID', 'has-warning' : cleanBadge().length>0 && cleanBadge().length<8 }">
-						<label for="badgeCode" class="col-sm-5 control-label">Badge number</label>
-						<div class="col-sm-5">
-							<input type="text" ng-change="clearError()" class="form-control" id="badgeCode" placeholder="1234-5678" maxlength="9" pattern="\d*" ng-model="badgeCode">
-							<span class="help-block">Enter badge number to request printed hard copies.</span>
+					<div class="form-group">
+						<label for="format" class="col-sm-4 control-label">Prefered format(s)</label>
+						<div class="col-sm-6">
+							<div class="row">
+								<div ng-repeat="format in documentFormats" class="col-sm-6 col-xs-6">
+									<a class="btn btn-link" ng-click="formats[format] = !formats[format]" style="color:black;text-decoration:none;text-align:left" ng-class="{ opacity55: !formats[format] }" >
+										<i class="fa fa-square-o"       ng-hide="formats[format]" style="font-size:20px;width:20px"></i>
+										<i class="fa fa-check-square-o" ng-show="formats[format]" style="font-size:20px;width:20px"></i>
+										{{allFormats[format]||format}}
+									</a>
+								</div>
+							</div>
 						</div>
-					</div>
-
-					<div class="alert alert-danger" ng-show="error.error=='INVALID_BADGE_ID'">
-						<img style="margin:3px" class="pull-right" src="/app/views/print-smart/sample-barcode.png">
-						<b>Sorry!</b> Your CBD Badge {{badgeCode}} number is invalid.
-						<br/>You must provide the number located on the top right of your CBD meeting access badge.
-					</div>
-
-					<div class="alert alert-danger" ng-show="error.error=='INVALID_BADGE_REVOKED'">
-						<b>Sorry!</b> Your CBD Badge {{badgeCode}} has been revoked. <br>
-						Please visit the registration desk for assitance.
-					</div>
-
-					<div class="alert alert-danger" ng-show="error.error=='INVALID_BADGE_EXPIRED'">
-						<b>Sorry!</b> Your CBD Badge {{badgeCode}} has expired. <br>
-						Please visit the registration desk for assitance.
 					</div>
 
 					<div class="alert alert-danger" ng-show="error.error=='NO_SERVICE'">
@@ -84,14 +68,14 @@
 
 			<div class="modal-footer">
 
-				<i class="fa fa-cog fa-spin" ng-show="isNetworkCall" style="margin:5px"></i>
+				<i class="fa fa-cog fa-spin" ng-show="loading" style="margin:5px"></i>
 
-				<button type="button" ng-show="target && canDownload()" class="btn btn-default" ng-click="back()"><i class="fa fa-arrow-left"></i> Back</button>
+				<button type="button" ng-hide="success"  class="btn btn-default" ng-click="back()"  ng-disabled="loading"><i class="fa fa-arrow-left"></i> Back</button>
 
-				<a      target="_self" ng-show="target=='download' && !success" class="btn btn-success" ng-disabled="!downloadLink" ng-click="success='download'" href="{{downloadLink}}"><i class="fa fa-arrow-circle-down"></i> Download</a>
-				<button type="button"  ng-show="target=='download' && !success && canDropbox()" class="btn btn-primary" ng-disabled="!downloadLink" ng-click="sendToDropbox()"><i class="fa fa-dropbox"></i> Dropbox</button>
+				<a      target="_self" ng-show="!success" class="btn btn-success" ng-disabled="!downloadLink" ng-click="success='download'" href="{{downloadLink}}"><i class="fa fa-arrow-circle-down"></i> Download</a>
+				<button type="button"  ng-show="!success && canDropbox()" class="btn btn-primary" ng-disabled="!downloadLink" ng-click="sendToDropbox()"><i class="fa fa-dropbox"></i> Dropbox</button>
 
-				<button type="button" class="btn btn-default" ng-click="close(success)"><i class="fa fa-power-off"></i> Close</button>
+				<button type="button" class="btn btn-default" ng-click="close(!!success)"><i class="fa fa-power-off"></i> Close</button>
 
 			</div>
 		</div><!-- /.modal-content -->
