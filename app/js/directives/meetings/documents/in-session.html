@@ -25,7 +25,7 @@
 				<div ng-show="d.symbol"><b>{{d.symbol}}</b></div>
 				{{d.title}}
 			</td>
-			<td style="width:27px"><div class="printSmartDocument" document-url="http://www.cbd.int{{d.urlPattern}}en.pdf" document-code="{{d.symbol||d.urlPattern+'xx'}}"></div></td>
+			<td style="width:27px"><div class="printSmartDocument" document-url="http://www.cbd.int{{d.urlPattern}}en.pdf" document-code="{{d.symbol||d.urlPattern+'xx'}}" document-tag={{d.tag||tag}}></div></td>
 		</tr>
 		<tr ng-repeat-end="">
 			<td colspan="4" style="height:1px;padding:0px"></td>

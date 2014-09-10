@@ -12,7 +12,8 @@ define(['app', 'directives/print-smart/print-smart'], function(app) {
 			templateUrl : "/app/js/directives/meetings/documents/in-session.html",
 			link: function ($scope, element, attrs) {
 
-				$scope.documents = window[attrs.data || 'repository'] || [];
+				$scope.documents = window[attrs.data || 'meetingDocuments'] || [];
+				$scope.tag       = attrs.tag;
 			}
 		};
 	}]);
