@@ -23,7 +23,7 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 				$scope.close            = close;
 				$scope.loading          = false;
 				$scope.allLanguages     = {  en : "English",   es : "Español", fr : "Français", ar : "العربية", ru : "Русский", zh : "中文" };
-				$scope.allFormats       = { doc : "MS-Words", pdf : "PDF" };
+				$scope.allFormats       = { doc : "MS Word", pdf : "PDF" };
 				$scope.documentLocales  = [];
 				$scope.documentFormats  = [];
 				$scope.locales          = {};
