@@ -31,16 +31,15 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 				$scope.loading    = false;
 				$scope.allLanguages    = allLanguages;
 				$scope.documentLocales = [];
-				$scope.locales = [];
+				$scope.locales         = {};
 
 				element.on("show.bs.modal", function() {
-					$scope.preferedLanguage = "en";
 					$scope.badgeCode = "";
 					$scope.error     = null;
 					$scope.success   = null;
 					$scope.documents = psCtrl.documents();
 					$scope.documentLocales = getDocumentLocales();
-					$scope.locales   = [];
+					$scope.locales   = {};
 				});
 
 				//==============================================
@@ -64,7 +63,7 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 				//
 				//==============================================
 				$scope.canPrint = function() {
-					return cleanBadge().length >= 8 && $scope.locales.length>0;
+					return cleanBadge().length >= 8 && _.compact(_.values($scope.locales)).length>0;
 				};
 
 				//==============================================
@@ -84,20 +83,22 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 				//
 				//
 				//==============================================
-				function getDocumentsToPrint() {
+				function documentsToPrint() {
 
 					var documentsToPrint = [];
 
-					_.each($scope.documents, function(doc){
+					_.each($scope.documents, function(doc) {
 
-						_.each($scope.locales, function(locale){
+						_.each($scope.locales, function(active, locale) {
 
-							documentsToPrint.push({
-								symbol  : doc.symbol,
-								tag     : doc.tag,
-								url     : doc.urls.pdf[locale] || doc.urls.pdf.en,
-								language: doc.urls.pdf[locale] ?  locale : 'en'
-							});
+							if(active) {
+								documentsToPrint.push({
+									symbol  : doc.symbol,
+									tag     : doc.tag,
+									url     : doc.urls.pdf[locale] || doc.urls.pdf.en,
+									language: doc.urls.pdf[locale] ?  locale : 'en'
+								});
+							}
 						});
 					});
 
@@ -120,7 +121,7 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 
 					var postData = {
 						badge     : cleanBadge(),
-						documents : getDocumentsToPrint()
+						documents : documentsToPrint()
 					};
 
 					$scope.loading = true;
@@ -168,28 +169,6 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 					psCtrl.open('checkout');
 				};
 
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.toggleLocale = function(locale) {
-
-					if(_.contains($scope.locales, locale)) {
-						$scope.locales = _.without($scope.locales, locale);
-					}
-					else {
-						$scope.locales = _.union($scope.locales, [locale]);
-					}
-				};
-
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.localeSelected = function(locale) {
-
-					return _.contains($scope.locales, locale);
-				};
 
 				//==============================================
 				//

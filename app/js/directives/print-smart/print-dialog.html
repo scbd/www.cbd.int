@@ -19,9 +19,9 @@
 						<div class="col-sm-6">
 							<div class="row">
 								<div ng-repeat="locale in documentLocales" class="col-sm-6 col-xs-6">
-									<a class="btn btn-link" ng-click="toggleLocale(locale)" style="color:black;text-decoration:none;text-align:left" ng-class="{ opacity55: !localeSelected(locale) }" >
-										<i class="fa fa-square-o"       ng-hide="localeSelected(locale)" style="font-size:20px;width:20px"></i>
-										<i class="fa fa-check-square-o" ng-show="localeSelected(locale)" style="font-size:20px;width:20px"></i>
+									<a class="btn btn-link" ng-click="locales[locale] = !locales[locale]" style="color:black;text-decoration:none;text-align:left" ng-class="{ opacity55: !locales[locale] }" >
+										<i class="fa fa-square-o"       ng-hide="locales[locale]" style="font-size:20px;width:20px"></i>
+										<i class="fa fa-check-square-o" ng-show="locales[locale]" style="font-size:20px;width:20px"></i>
 										{{allLanguages[locale]}}
 									</a>
 								</div>
