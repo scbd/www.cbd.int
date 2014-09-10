@@ -11,7 +11,7 @@ define(['app', 'extended-route-provider'], function(app) { 'use strict';
         .when('/internal/printsmart/statistics',           {templateUrl: '/app/views/print-smart/stats.html',     resolveController: true })
         .when('/internal/printsmart/authorization',        {templateUrl: '/app/views/print-smart/authorization.html',  resolveController: true })
         .when('/internal/printsmart/:badge',               {templateUrl: '/app/views/print-smart/index-id.html',  resolveController: true })
-        .when('/national-reports',                         {templateUrl: '/app/views/reports/reports.html',       resolveController: true, resolveUser: true })
+        .when('/reports/map',                              {templateUrl: '/app/views/reports/reports.html',       resolveController: true, resolveUser: true })
         .when('/about',                                    {templateUrl: '/app/views/about.html',                 resolveUser: true })
         .when('/cms/management/papersmart.shtml',          {templateUrl: '/app/views/samples/country-index.html', resolveController: true, resolveUser: true })
         .when('/cms/management/papersmart.shtml/:country', {templateUrl: '/app/views/samples/country.html',       resolveController: true, resolveUser: true })
