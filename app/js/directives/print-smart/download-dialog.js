@@ -22,7 +22,7 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 				$scope.clearError       = clearError;
 				$scope.close            = close;
 				$scope.loading          = false;
-				$scope.allLanguages     = {  en : "English",   es : "Español", fr : "Français", ar : "العربية", ru : "Русский", zh : "中文" };
+				$scope.allLanguages     = {  en : "English",  es : "Español", fr : "Français", ar : "العربية", ru : "Русский", zh : "中文" };
 				$scope.allFormats       = { doc : "MS Word", pdf : "PDF" };
 				$scope.documentLocales  = [];
 				$scope.documentFormats  = [];
@@ -59,8 +59,6 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 					$scope.downloadLink = null;
 
 					var urls = selectedLinks();
-
-					console.log(urls);
 
 					if(urls.length) {
 
