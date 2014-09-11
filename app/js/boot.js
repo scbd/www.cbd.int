@@ -3,6 +3,7 @@ fixIEConsole();
 window.name = 'NG_DEFER_BOOTSTRAP!';
 
 require.config({
+  waitSeconds: 60,
   baseUrl : '/app/js',
   paths: {
     'angular'         : '../libs/angular/angular',
