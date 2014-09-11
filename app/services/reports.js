@@ -8,8 +8,10 @@ define(['app', './solrQuery.js', 'underscore'], function(module, Query, _) {
         fieldMap = {
           schema: 'schema_s',
           country: 'eventCountry_s',
-          startDate: 'startDate_dt',
-          year: 'startDate_dt',
+          //startDate: 'startDate_dt',
+          //year: 'startDate_dt',
+          startDate: 'startDate_s',
+          year: 'startDate_s',
           sort: 'sort',
           reportType: 'reportType_s',
           aichiTarget: 'aichiTarget_ss',
@@ -212,7 +214,9 @@ define(['app', './solrQuery.js', 'underscore'], function(module, Query, _) {
 
       reports.getReports = function(options) {
         options = options || {};
-
+		if(options.reportType === 'nbsap'){
+  			options.startDate_s = '[2010-12-22 TO *]';
+  		} 
         var params = angular.extend({}, options);
         params.rows = 1000;
         var solrQuery = reports._buildSolrQuery(params);
