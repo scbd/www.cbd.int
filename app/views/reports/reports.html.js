@@ -1,6 +1,6 @@
 define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json', './dependencies.js'], function(app, _, aichiTargetJson) {
-  app.controller('ReportsCtrl', ['$scope', 'reports', '$rootScope', 'growl',
-    function($scope, reports, $rootScope, growl) {
+  app.controller('ReportsCtrl', ['$scope', '$window', 'reports', '$rootScope', 'growl',
+    function($scope, $window, reports, $rootScope, growl) {
       var self = this;
 
       $scope.nationalReportQueries = [{
@@ -50,10 +50,18 @@ define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json', './dep
         }
       };
 
-
       $scope.selectedQuery = '';
       $scope.selectedSchema = '';
       $scope.loading = false;
+	  $scope.navTagName='';
+
+	  $scope.setNavTagName = function (name) {$scope.navTagName = name;};
+      
+      $scope.doSearch = function () {
+        $window.location.href='http://chm.cbd.int/database/?q=' + $scope.searchQuery;
+        $scope.searchQuery = '';
+        console.log($window.location.href );
+      }
 
       $scope.setQuery = function(schema, id) {
         $scope.setSelectedQuery(schema, id);
@@ -64,6 +72,23 @@ define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json', './dep
         $scope.selectedQuery = qid;
         $scope.selectedSchema = schema;
         self.getReportsByType(schema, qid);
+		if(schema === 'nationalReport'){
+			if(qid === 'nbsap') {
+				$scope.navTagName = 'NBSAPs (post-Nagoya)';
+			} 
+			else {
+				$scope.navTagName = qid + ' National Report';
+			}
+		}
+		if(schema === 'nationalTarget'){ 
+			if(typeof qid === 'undefined'){
+				$scope.navTagName = 'National Targets';
+			}
+			else $scope.navTagName = 'Aichi Target ' + qid.substring(13);
+		}
+		if(schema==='nationalIndicator'){
+			$scope.navTagName = 'National Indicators';
+		}
       };
 
       $scope.setSection = function(sectionName) {
