@@ -9142,12 +9142,12 @@ div.footer ul li a:hover {
 
 /* line 11, reports/textdirection.scss */
 .ltr .banner {
-  background: url("/app/images/banner-0.jpg") no-repeat left top;
+  background: url("/app/images/landscape.jpg") no-repeat left top;
 }
 
 /* line 15, reports/textdirection.scss */
 .rtl .banner {
-  background: url("/app/images/banner-0.jpg") no-repeat right top;
+  background: url("/app/images/landscape.jpg") no-repeat right top;
 }
 
 /* line 19, reports/textdirection.scss */
