@@ -1,5 +1,5 @@
 /* global */
-define(['jquery'], function($) {
+require(['jquery'], function($) {
 
     var hidden  = "hidden-xs";
 
