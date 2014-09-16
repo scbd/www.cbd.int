@@ -1,4 +1,4 @@
-define(['app', 'directives/print-smart/print-smart'], function(app) {
+define(['app', 'directives/print-smart/print-smart', 'mobile/template-hacker'], function(app) {
 
 	//==============================================
 	//
