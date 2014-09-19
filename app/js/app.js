@@ -6,7 +6,6 @@ define([
   'angular-moment',
   'angular-animate',
   'bootstrap',
-  'text',
   '/app/directives/ui-bootstrap-custom.js'], function(angular) { 'use strict';
 
   var app = angular.module('app', ['ngRoute', 'ngCookies', 'ngAnimate','angular-growl', 'angularMoment', 'ui.bootstrap']);
