@@ -146,21 +146,6 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 				//
 				//
 				//==============================================
-				$scope.isCustomError = function() {
-
-					if(!$scope.error)
-						return false;
-
-					return $scope.error.error!=="INVALID_BADGE_ID" &&
-						   $scope.error.error!=="INVALID_BADGE_REVOKED" &&
-						   $scope.error.error!=="INVALID_BADGE_EXPIRED" &&
-						   $scope.error.error!=="NO_SERVICE";
-				};
-
-				//==============================================
-				//
-				//
-				//==============================================
 				$scope.back = function() {
 
 					$scope.error   = null;

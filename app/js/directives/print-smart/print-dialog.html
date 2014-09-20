@@ -6,6 +6,7 @@
 			<div class="modal-header">
 				<button type="button" class="close" ng-click="close(success)" aria-hidden="true">×</button>
 				<h4 class="modal-title">
+					<i class="fa fa-print"></i>
 					Request hard copies - {{documents.length}} document(s)
 					<i class="fa fa-cog fa-spin" ng-show="loading"></i>
 				</h4>
@@ -26,6 +27,9 @@
 									</a>
 								</div>
 							</div>
+							
+							<span class="help-block">Select at least one language.</span>
+
 						</div>
 					</div>
 
@@ -40,30 +44,39 @@
 
 				</form>
 
-				<div class="alert alert-danger" ng-show="error.error=='INVALID_BADGE_ID'">
-					<img style="margin:3px" class="pull-right" src="/app/views/print-smart/sample-barcode.png">
-					<b>Sorry!</b> Your CBD Badge {{badgeCode}} number is invalid.
-					<br/>You must provide the number located on the top right of your CBD meeting access badge.
-				</div>
+				<div class="alert alert-danger" ng-show="error" ng-switch="error.error">
 
-				<div class="alert alert-danger" ng-show="error.error=='INVALID_BADGE_REVOKED'">
-					<b>Sorry!</b> Your CBD Badge {{badgeCode}} has been revoked. <br>
-					Please visit the registration desk for assitance.
-				</div>
+					<span ng-switch-when="INVALID_BADGE_ID">
+						<img style="margin:3px" class="pull-right" src="/app/views/print-smart/sample-barcode.png">
+						<b>Sorry!</b> Your CBD Badge number is invalid.
+						<br/>You must provide the number located on the top right of your CBD meeting access badge.
+					</span>
 
-				<div class="alert alert-danger" ng-show="error.error=='INVALID_BADGE_EXPIRED'">
-					<b>Sorry!</b> Your CBD Badge {{badgeCode}} has expired. <br>
-					Please visit the registration desk for assitance.
-				</div>
+					<span ng-switch-when="INVALID_BADGE_REVOKED">
+						<b>Sorry!</b> Your CBD Badge has been revoked. <br>
+						Please visit the registration desk or document distribution counter for assitance.
+					</span>
 
-				<div class="alert alert-danger" ng-show="error.error=='NO_SERVICE'">
-					<b>Error: service is unavailable!</b> Sorry, the PrintSmart service is not available at this moment.<br>
-					Please wait 5 minutes and try again or go to the registration desk for further assitance.
-				</div>
+					<span ng-switch-when="INVALID_BADGE_EXPIRED">
+						<b>Sorry!</b> Your CBD Badge has expired. <br>
+						Please visit the registration desk or document distribution counter for assitance.
+					</span>
 
-				<div class="alert alert-danger" ng-show="isCustomError()">
-					<b>Sorry!</b> {{error.message||'Unknown error.'}} <br>
-					Please visit the registration desk for assitance.
+					<span ng-switch-when="INVALID_BADGE_NOT_PRINTSMART_ENABLED">
+						<b>Sorry!</b> Your CBD Badge is not enabled for PrintSmart. <br>
+						Please visit the registration desk or document distribution counter for assitance.
+					</span>
+
+					<span ng-switch-when="NO_SERVICE">
+						<b>Error: service is unavailable!</b> Sorry, the PrintSmart service is not available at this moment.<br>
+						Please wait 5 minutes and try again or go to the registration desk or document distribution counter for further assitance.
+					</span>
+
+					<span ng-switch-default>
+						<b>Sorry!</b> {{error.message||'Unknown error.'}} <br>
+						Please visit the registration desk or document distribution counter for assitance.
+					</span>
+
 				</div>
 
 				<div class="alert alert alert-success" ng-show="success">
