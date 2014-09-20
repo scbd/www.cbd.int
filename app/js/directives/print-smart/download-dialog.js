@@ -42,6 +42,12 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 					$scope.formats  = {};
 					$scope.downloadLink = null;
 
+					if($scope.documentLocales.length==1)
+						$scope.locales[$scope.documentLocales[0]] = true;
+
+					if($scope.documentFormats.length==1)
+						$scope.formats[$scope.documentFormats[0]] = true;
+
 					signedInToDropbox = false;
 
 					if($scope.canDropbox() && publicComputer)

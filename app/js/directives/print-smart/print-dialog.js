@@ -40,6 +40,9 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 					$scope.documents = psCtrl.documents();
 					$scope.documentLocales = getDocumentLocales();
 					$scope.locales   = {};
+
+					if($scope.documentLocales.length==1)
+						$scope.locales[$scope.documentLocales[0]] = true;
 				});
 
 				//==============================================
