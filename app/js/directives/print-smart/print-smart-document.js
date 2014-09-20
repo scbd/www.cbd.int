@@ -20,6 +20,18 @@ define(['app', 'underscore'], function(app, _) {
 				$scope.element  =  element;
 				$scope.psCtrl   =  psCtrl;
 				$scope.disabled = !psCtrl;  //optional directive is disabled if no controller
+
+				if(!psCtrl)
+					return;
+
+				var psSelectable = element.parents("tr:first").find(".ps-selectable");
+
+				psSelectable.css("cursor", 'pointer');
+				psSelectable.on('click', function(){
+					$scope.$apply(function(){
+						$scope.select(!$scope.selected());
+					});
+				});
 			},
 			controller : ["$scope", function($scope) {
 
