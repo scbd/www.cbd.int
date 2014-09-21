@@ -1,7 +1,7 @@
 
 require(['jquery', 'text!mobile/header.html', 'text!mobile/footer.html'], function($, header, footer) {
 
-    $("head"             ).prepend('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
+    $("head"             ).prepend('<meta name="viewport" content="width=device-width, user-scalable=no">');
     $(".cmsDesignBar"    ).parent().parent().addClass("hidden-xs");
     $("#t-header"        ).addClass("hidden-xs");
     $(".t-catHeader"     ).addClass("hidden-xs");
