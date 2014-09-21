@@ -1,22 +1,20 @@
-/* global */
-require(['jquery'], function($) {
 
-    var hidden  = "hidden-xs";
+require(['jquery', 'text!mobile/header.html', 'text!mobile/footer.html'], function($, header, footer) {
 
-    $("body").append("<style>@media (max-width: 767px){#t-centerWrap{width:auto !important}}</style>");
-    $("body").append("<style>@media (max-width: 767px){#t-content   {width:auto !important;float:none !important;margin:auto !important}}</style>");
-    $("body").append("<style>@media (max-width: 767px){#CPageContent{margin-right:auto !important;padding-right:inherit !important}}</style>");
-
-
-    $(".cmsDesignBar"    ).parent().parent().addClass(hidden);
-    $("#t-header"        ).addClass(hidden);
-    $(".t-catHeader"     ).addClass(hidden);
+    $("head"             ).prepend('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
+    $(".cmsDesignBar"    ).parent().parent().addClass("hidden-xs");
+    $("#t-header"        ).addClass("hidden-xs");
+    $(".t-catHeader"     ).addClass("hidden-xs");
     $("#t-centerWrap"    );// by style
-    $("#t-sidebarMenu"   ).addClass(hidden);
-    $("#t-pageHeader"    ).addClass(hidden);
-    $("#CRightContainer" ).addClass(hidden);
+    $("#t-sidebarMenu"   ).addClass("hidden-xs");
+    $("#t-pageHeader"    ).addClass("hidden-xs");
+    $("#CRightContainer" ).addClass("hidden-xs");
     $("#t-content"       ); //by style
     $("#CPageContent"    ); //by style
-    $("#t-footer"        ).addClass(hidden);
-    $("#t-additionalInfo").addClass(hidden);
+    $("#t-footer"        ).addClass("hidden-xs");
+    $("#t-additionalInfo").addClass("hidden-xs");
+
+    $('#t-pageHeader').after ('<div class="visible-xs">'+header+'</div>');
+    $('#t-footer'    ).before('<div class="visible-xs">'+footer+'</div>');
+
 });
