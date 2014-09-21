@@ -1,6 +1,24 @@
- <button ng-hide="disabled" type="button" class="btn btn-primary" ng-click="checkout()" data-content="Please select document(s) using the checkbox!">
-	<ng-pluralize count="documents().length"
-                when="{'0': 'Request copy »',
-                       'one': 'Request copy »',
-                       'other': 'Request copies »'}">
-  </button>
+<div>
+    <div class="btn-group" ng-show="documents().length">
+        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+            <ng-pluralize count="documents().length" when="{'one': '1 document', 'other': '{{documents().length}} documents'}"></ng-pluralize>
+            <span class="caret"></span>
+        </button>
+
+        <ul class="dropdown-menu text-left" role="menu">
+            <li style="font-size:inherit"><a style="cursor:pointer;font-size:14px" ng-click="clear()">Clear selection</a></li>
+            <li style="font-size:inherit">
+                <a style="cursor:pointer;font-size:14px" ng-click="checkout()">
+                    <ng-pluralize count="documents().length" when="{'0': 'Request copy »', 'one': 'Request copy »', 'other': 'Request copies »'}">
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li ng-repeat="d in documents()"><a style="font-size:14px">{{d.symbol}}</a></li>
+        </ul>
+    </div>
+
+    <button id="checkout" ng-hide="disabled" type="button" class="btn btn-primary" ng-click="checkout()" data-content="Please select document(s) using the checkbox!">
+        <ng-pluralize count="documents().length" when="{'0': 'Request copy »', 'one': 'Request copy »', 'other': 'Request copies »'}">
+    </button>
+
+</div>

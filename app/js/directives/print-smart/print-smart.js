@@ -8,9 +8,8 @@ define(['app', 'bootstrap', './print-smart-document', './print-smart-checkout'],
 
 		return {
 			restrict : "AEC",
-			require : 'printSmart',
 			scope : {},
-			link : function($scope, element, attr, psCtrl) {
+			link : function($scope, element) {
 
 				$("#t-header").css("z-index", "999"); // Fix header over dialog
 
@@ -19,30 +18,14 @@ define(['app', 'bootstrap', './print-smart-document', './print-smart-checkout'],
 				var checkoutDialog = angular.element("<div print-smart-checkout-dialog></div>");
 				var downloadDialog = angular.element("<div print-smart-download-dialog></div>");
 				var printDialog    = angular.element("<div print-smart-print-dialog></div>");
-				var documentsInfo  = angular.element('<div class="btn-group" style="position:fixed;top:5px;left:5px;" ng-show="documentCount()">'+
-														'<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">{{documentCount()}} document(s) <span class="caret"></span></button>'+
-														'<ul class="dropdown-menu" role="menu">'+
-															'<li><a style="cursor:pointer" ng-click="clear()">Clear selection</a></li>'+
-														'</ul>'+
-													 '</div>');
 
 				element.append(checkoutDialog);
 				element.append(downloadDialog);
 				element.append(printDialog);
-				element.append(documentsInfo);
 
 				checkoutDialog = $compile(checkoutDialog)($scope);
 				downloadDialog = $compile(downloadDialog)($scope);
 				printDialog    = $compile(printDialog   )($scope);
-				documentsInfo  = $compile(documentsInfo )($scope);
-
-				$scope.documentCount = function() {
-					return psCtrl.documents().length;
-				};
-
-				$scope.clear = function() {
-					return psCtrl.clear();
-				};
 
 				//==============================================
 				//

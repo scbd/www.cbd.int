@@ -16,7 +16,9 @@ define(['app', './checkout-dialog', './print-dialog', './download-dialog'], func
 
 				///////////////////////////////////////////////
 
-				element.popover({
+				var popover = element.find('#checkout');
+
+				popover.popover({
 					delay : { show: 500, hide: 250 },
 					trigger : 'manual',
 					placement : function() {
@@ -24,20 +26,24 @@ define(['app', './checkout-dialog', './print-dialog', './download-dialog'], func
 					}
 				});
 
-				if(element.hasClass('fixed-top-right-xs')) {
+				if(element.hasClass('fixed-top-right')) {
 
-					element.removeClass("fixed-top-right-xs");
+					element.removeClass("fixed-top-right");
 
 					var pos = element.position();
 
 					$(window).scroll(function() {
+
 				        var windowpos = $(window).scrollTop();
 
 				        if (windowpos >= pos.top) {
-				            element.addClass("fixed-top-right-xs");
+				            element.addClass("fixed-top-right");
 				        } else {
-				            element.removeClass("fixed-top-right-xs");
+				            element.removeClass("fixed-top-right");
 				        }
+
+						if(windowpos==0)
+							pos = element.position();
 				    });
 				}
 
@@ -56,10 +62,10 @@ define(['app', './checkout-dialog', './print-dialog', './download-dialog'], func
 					}
 
 
-					if(visible===false) element.popover('hide');
+					if(visible===false) popover.popover('hide');
 					if(visible===true) {
 
-						element.popover('show');
+						popover.popover('show');
 
 						autoKillHelp = $timeout(function() {
 							autoKillHelp = null;
@@ -75,6 +81,14 @@ define(['app', './checkout-dialog', './print-dialog', './download-dialog'], func
 				//==============================================
 				$scope.documents = function() {
 					return psCtrl.documents();
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.clear = function() {
+					return psCtrl.clear();
 				};
 
 				//==============================================
