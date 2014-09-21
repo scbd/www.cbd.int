@@ -15,6 +15,14 @@ define(['app', 'directives/print-smart/print-smart', 'mobile/template-hacker'], 
 				$scope.allLanguages     = {  en : "English",  es : "Español", fr : "Français", ar : "العربية", ru : "Русский", zh : "中文" };
 				$scope.documents = window[attrs.data || 'meetingDocuments'] || [];
 				$scope.tag       = attrs.tag;
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.breakable = function(text) {
+					return (text||"").replace(/\//g, '/\u200b');
+				};
 			}
 		};
 	}]);
