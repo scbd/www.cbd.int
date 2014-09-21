@@ -8,20 +8,32 @@
 			</div>
 			<div class="modal-body">
 
+				<style>
+
+				.btn-xxl        { width:     200px; }
+				.btn-xxl > span { font-size:   2em; }
+				.btn-xxl > i.fa { font-size:   7em; }
+
+				@media (max-width: 767px) {
+					.btn-xxl        { width:     125px; }
+					.btn-xxl > span { font-size:   1em; }
+					.btn-xxl > i.fa { font-size:   5em; }
+				}
+				</style>
+
 				<div ng-hide="target">
 					<table style="width:100%">
 						<tr>
 							<td class="text-center" style="width:50%" >
-								<button type="button" class="btn btn-success" ng-click="download()" style="width:200px">
-									<span style="font-size: 2em;">Download</span><br/><br/>
-									<i class="fa fa-arrow-circle-down" style="font-size: 7em;"></i>
+								<button type="button" class="btn btn-success btn-xxl" ng-click="download()">
+									<span >Download</span><br/><br/>
+									<i class="fa fa-arrow-circle-down"></i>
 								</button>
 							</td>
 							<td class="text-center" style="width:50%">
-								<button type="button" class="btn btn-primary" ng-click="print()" style="width:200px">
-									<span style="font-size: 2em;">Print</span><br/><br/>
-									<i class="fa fa-print" style="font-size: 7em;"></i>
-
+								<button type="button" class="btn btn-primary btn-xxl" ng-click="print()">
+									<span>Print</span><br/><br/>
+									<i class="fa fa-print"></i>
 								</button>
 							</td>
 						</tr>
@@ -30,7 +42,7 @@
 
 			<div class="modal-footer">
 
-				<button type="button" class="btn btn-default" ng-click="close()"><i class="fa fa-power-off"></i> Close</button>
+				<button type="button" class="btn btn-default" ng-click="close()"><i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
 
 			</div>
 		</div><!-- /.modal-content -->

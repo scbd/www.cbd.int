@@ -27,8 +27,8 @@
 									</a>
 								</div>
 							</div>
-							
-							<span class="help-block">Select at least one language.</span>
+
+							<span class="help-block hidden-xs">Select at least one language.</span>
 
 						</div>
 					</div>
@@ -38,7 +38,7 @@
 						<label for="badgeCode" class="col-sm-4 control-label">Badge number</label>
 						<div class="col-sm-6">
 							<input type="text" ng-change="clearError()" class="form-control" id="badgeCode" placeholder="1234-5678" maxlength="9" pattern="\d*" ng-model="badgeCode">
-							<span class="help-block">Enter badge number to request printed hard copies.</span>
+							<span class="help-block hidden-xs">Enter badge number to request printed hard copies.</span>
 						</div>
 					</div>
 
@@ -90,9 +90,9 @@
 
 				<i class="fa fa-cog fa-spin" ng-show="loading" style="margin:5px"></i>
 
-				<button type="button" ng-hide="success"  class="btn btn-default" ng-click="back()"  ng-disabled="loading"><i class="fa fa-arrow-left"></i> Back</button>
+				<button type="button" ng-hide="success"  class="btn btn-default hidden-xs" ng-click="back()"  ng-disabled="loading"><i class="fa fa-arrow-left"></i> Back</button>
 				<button type="button" ng-show="!success" class="btn btn-primary" ng-click="print()" ng-disabled="!canPrint() || loading"><i class="fa fa-print"></i> Print</button>
-				<button type="button" class="btn btn-default" ng-click="close(success)"             ng-disabled="loading"><i class="fa fa-power-off"></i> Close</button>
+				<button type="button" class="btn btn-default" ng-click="close(success)"             ng-disabled="loading"><i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
 
 			</div>
 		</div><!-- /.modal-content -->

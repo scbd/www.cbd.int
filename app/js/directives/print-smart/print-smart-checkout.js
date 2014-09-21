@@ -18,8 +18,29 @@ define(['app', './checkout-dialog', './print-dialog', './download-dialog'], func
 
 				element.popover({
 					delay : { show: 500, hide: 250 },
-					trigger : 'manual'
+					trigger : 'manual',
+					placement : function() {
+						return element.css('position') == 'fixed' ? 'bottom' : 'top';
+					}
 				});
+
+				if(element.hasClass('fixed-top-right-xs')) {
+
+					element.removeClass("fixed-top-right-xs");
+
+					var pos = element.position();
+
+					$(window).scroll(function() {
+				        var windowpos = $(window).scrollTop();
+
+				        if (windowpos >= pos.top) {
+				            element.addClass("fixed-top-right-xs");
+				        } else {
+				            element.removeClass("fixed-top-right-xs");
+				        }
+				    });
+				}
+
 
 				var autoKillHelp = null;
 
