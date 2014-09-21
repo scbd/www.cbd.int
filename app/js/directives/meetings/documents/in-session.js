@@ -12,6 +12,7 @@ define(['app', 'directives/print-smart/print-smart', 'mobile/template-hacker'], 
 			templateUrl : "/app/js/directives/meetings/documents/in-session.html",
 			link: function ($scope, element, attrs) {
 
+				$scope.allLanguages     = {  en : "English",  es : "Español", fr : "Français", ar : "العربية", ru : "Русский", zh : "中文" };
 				$scope.documents = window[attrs.data || 'meetingDocuments'] || [];
 				$scope.tag       = attrs.tag;
 			}
