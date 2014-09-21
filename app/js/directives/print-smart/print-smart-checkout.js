@@ -95,6 +95,14 @@ define(['app', './checkout-dialog', './print-dialog', './download-dialog'], func
 				//
 				//
 				//==============================================
+				$scope.remove = function(symbol) {
+					return psCtrl.remove(symbol);
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
 				$scope.checkout = function() {
 					psCtrl.open('checkout');
 				};

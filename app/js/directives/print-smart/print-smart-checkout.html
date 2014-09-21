@@ -13,7 +13,9 @@
                 </a>
             </li>
             <li class="divider"></li>
-            <li ng-repeat="d in documents()"><a style="font-size:14px">{{d.symbol}}</a></li>
+            <li ng-repeat="d in documents()|orderBy:'symbol'">
+                <a style="cursor:pointer;font-size:14px" ng-click="remove(d.symbol)" style="font-size:14px"><span style="font-size:18px;margin-left:-14px;color:#999">&times;</span> {{d.symbol}}</a>
+            </li>
         </ul>
     </div>
 
