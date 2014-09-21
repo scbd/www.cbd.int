@@ -68,11 +68,11 @@
 
 			</div>
 
-			<div class="modal-footer">
+			<div class="modal-footer" style="white-space:nowrap">
 
 				<i class="fa fa-cog fa-spin" ng-show="loading" style="margin:5px"></i>
 
-				<button type="button" ng-hide="success"  class="btn btn-default" ng-click="back()"  ng-disabled="loading"><i class="fa fa-arrow-left"></i> <span class="hidden-xs">Back</span></button>
+				<button type="button" ng-hide="success"  class="btn btn-default hidden-xs" ng-click="back()"  ng-disabled="loading"><i class="fa fa-arrow-left"></i> Back</button>
 
 				<a      target="_self" ng-show="!success" class="btn btn-success" ng-disabled="!downloadLink" ng-click="success='download'" href="{{downloadLink}}"><i class="fa fa-arrow-circle-down"></i> Download</a>
 				<button type="button"  ng-show="!success && canDropbox()" class="btn btn-primary" ng-disabled="!downloadLink" ng-click="sendToDropbox()"><i class="fa fa-dropbox"></i> Dropbox</button>
