@@ -1,4 +1,4 @@
-define(['app', 'authentication'], function(app) { 'use strict';
+define(['app', 'security/authentication'], function(app) { 'use strict';
 
   app.controller('TemplateController', ['$scope', '$window', '$browser', '$document', '$location', 'authentication',
 	function($scope, $window, $browser, $document, $location, authentication) {
