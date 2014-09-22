@@ -8,9 +8,10 @@ define(['app', 'directives/print-smart/print-smart', 'mobile/template-hacker'], 
 		return {
 			restrict : "AEC",
 			replace : true,
+			require: '?^printSmart',
 			scope :  { },
 			templateUrl : "/app/js/directives/meetings/documents/in-session.html",
-			link: function ($scope, element, attrs) {
+			link: function ($scope, element, attrs, psCtrl) {
 
 				$scope.allLanguages     = {  en : "English",  es : "Español", fr : "Français", ar : "العربية", ru : "Русский", zh : "中文" };
 				$scope.documents = window[attrs.data || 'meetingDocuments'] || [];
@@ -22,6 +23,14 @@ define(['app', 'directives/print-smart/print-smart', 'mobile/template-hacker'], 
 				//==============================================
 				$scope.breakable = function(text) {
 					return (text||"").replace(/\//g, '/\u200b');
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.selected = function(symbol) {
+					return psCtrl && psCtrl.hasDocument(symbol);
 				};
 			}
 		};

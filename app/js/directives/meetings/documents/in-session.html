@@ -3,7 +3,7 @@
 
 	<table class="table table-striped table-hover">
 
-		<tr ng-repeat="d in documents" ng-hide="d.visible===false" ng-class="{ noborder: documents[$index-1].visible===false }">
+		<tr ng-repeat="d in documents" ng-hide="d.visible===false" ng-class="{ info: selected(d.symbol||d.urlPattern+'xx'), noborder: documents[$index-1].visible===false }">
 			<td style="width:60px;vertical-align:middle;padding-top:8px;">
 
 				<div class="visible-xs dropdown">
