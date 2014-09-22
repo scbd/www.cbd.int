@@ -1,26 +1,195 @@
 <!DOCTYPE html>
 <html lang="en" ng-controller="TemplateController">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Convention on Biological Diversity</title>
-  <!-- <link rel="stylesheet" href="/app/libs/bootstrap/dist/css/bootstrap.min.css"> -->
-  <link rel="stylesheet" href="/app/css/main.css">
-  <style>[ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }</style>
+    <title>Convention on Biological Diversity</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/app/libs/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/app/libs/font-awesome/css/font-awesome.min.css">
+    <style>
+
+    [ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }
+
+    body, .greybg { background: #f4f4f4; }
+    .whitebg      { background: #FFFFFF; }
+
+    header.mobile.navbar              { color:#009B48; background-color:white; }
+    header.mobile.navbar a            { color:#009B48; }
+    header.mobile .navbar-nav a:hover { color:white;background-color:#009B48 }
+    header.mobile .navbar-header      { font-weight:semi-bold; }
+    header.mobile .navbar-header img.logo {
+        height:55px;
+        vertical-align:middle;
+        margin-left:3px;
+    }
+
+    header.large > div.container > div { border-bottom:solid 1px #f4f4f4; }
+    header.large   img.logo          { height:70px }
+    header.large .navbar-nav a       { color:#009B48; }
+    header.large .navbar-nav a:hover { color:white; background-color:#009B48; }
+
+
+    footer {  display: block; padding: 15px 20px; }
+    footer ul { list-style-type: none; padding:0px; }
+    footer ul li a { font-size: 14px; color: #666; }
+    footer ul li a:hover { color: #000; }
+    footer h4 {
+      font-size: 14px;
+      color: #666;
+      font-weight: bold;
+    }
+
+    footer.standard ul.list-inline > li { padding: 0px 5px; border-right:solid 1px #666;font-size: 14px;}
+    footer.standard ul.list-inline > li:last-child { border-right: none; }
+
+    .view h1, .view h2, .view h3, .view h4, .view h5, .view h6, .view .h1, .view .h2, .view .h3, .view .h4, .view .h5, .view .h6 {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color:#009B48;
+    }
+
+    @media (min-width: 768px) {
+        button.hidden-xs { display: inline-block !important; }
+        span.hidden-xs   { display: inline !important; }
+    }
+
+    @media (max-width: 767px) {
+        button.visible-xs { display: inline-block !important; }
+        span.visible-xs   { display: inline !important; }
+    }
+
+    </style>
 </head>
 <body class="ltr">
 
-  <!--<iframe id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none"></iframe>-->
-  <ng-view></ng-view>
+    <!-- HEADER (LARGE) -->
+    <header class="mobile navbar visible-xs" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                    <i class="fa fa-bars" style="font-size:1.66em;"></i>
+                </button>
 
+                <a href="/" target="_self">
+                    <img class="logo" src="/app/images/cbd-logo-green-en.svg"/>
+                </a>
 
+            </div>
 
-  <div growl></div>
+            <nav class="collapse navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a target="_self" href="/">The Convention</a></li>
+                    <li class="active"><a target="_self" href="/biosafety">Cartagena Protocol</a></li>
+                    <li class="active"><a target="_self" href="/abs">Nagoya Protocol</a></li>
+                    <li class="active"><a target="_self" href="/programmes">Programmes</a></li>
+                    <li class="active"><a target="_self" href="/information">Information</a></li>
+                    <li class="active"><a target="_self" href="/secretariat">Secretariat</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-  <!-- Boot the app -->
+    <!-- HEADER (MOBILE) -->
+    <header class="large hidden-xs">
+        <div class="container whitebg">
+            <div>
+                <div style="padding:5px 0px">
+                    <img class="logo" src="/app/images/cbd-logo-green-en.svg"/>
+                </div>
 
-  <script src="/app/libs/requirejs/require.js" data-main="/app/js/apps/national-reports/config.js"></script>
+                <div class="pull-right">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a target="_self" href="/">The Convention</a></li>
+                        <li class="active"><a target="_self" href="/biosafety">Cartagena Protocol</a></li>
+                        <li class="active"><a target="_self" href="/abs">Nagoya Protocol</a></li>
+                        <li class="active"><a target="_self" href="/programmes">Programmes</a></li>
+                        <li class="active"><a target="_self" href="/information">Information</a></li>
+                        <li class="active hidden-sm"><a target="_self" href="/secretariat">Secretariat</a></li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENT -->
+    <div class="container whitebg view">
+
+        <ng-view></ng-view>
+
+    </div>
+
+    <!--  FOOTER   -->
+    <footer class="container whitebg">
+        <div class="greybg">
+            <div class="col-sm-4 fleft">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a target="_self" href="/decisions/">Decisions</a></li>
+                    <li><a target="_self" href="/meetings/">Meetings</a></li>
+                    <li><a target="_self" href="/notifications/">Notifications</a></li>
+                    <li><a target="_self" href="/news/">News Headlines</a></li>
+                    <li><a target="_self" href="/publications/">Publications</a></li>
+                    <li><a target="_self" href="/chm/">CHM</a></li>
+                    <li><a target="_self" href="http://bch.cbd.int/">BCH</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-4 fleft">
+                <h4 class="hidden-xs">&nbsp;</h4>
+                <ul>
+                    <li><a target="_self" href="/parties/">Parties</a></li>
+                    <li><a target="_self" href="/countries/">Country Profiles</a></li>
+                    <li><a target="_self" href="/nfp/">National Focal Point</a></li>
+                    <li><a target="_self" href="/nbsap/">National Strategies (NBSAPs)</a></li>
+                    <li><a target="_self" href="/reports/">National Reports</a></li>
+                    <li><a target="_self" href="/contributions/">Contributions</a></li>
+                    <li><a target="_self" href="/cooperation/">Cooperation & Partnerships</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-4 fleft">
+                <h4>Follow us</h4>
+                <ul>
+                    <li><a target="_self" href="/rss/" target="_blank"><img src="/app/images/ic-rss.png" alt="Rss of the CBD" /> RSS</a></li>
+                    <li><a href="https://twitter.com/cbdnews" target="_blank"><img src="/app/images/ic-twitter.png" alt="Twitter of the CBD" /> Twitter</a></li>
+                    <li><a href="https://www.facebook.com/UNBiodiversity" target="_blank"><img src="/app/images/ic-facebook.png" alt="Facebook of the CBD" /> Facebook</a></li>
+                    <li><a href="https://www.youtube.com/user/chmcbd" target="_blank"><img src="/app/images/ic-youtube.png" alt="Youtube of the CBD" /> YouTube</a></li>
+                </ul>
+            </div>
+
+            <div class="clearfix"></div>
+
+        </div>
+    </footer>
+
+    <footer class="container standard whitebg">
+        <div class="col-md-9">
+            <ul class="list-inline">
+                <li><a target="_self" href="/feedback/">Feedback</a></li>
+                <li><a target="_self" href="/map/">Site Map</a></li>
+                <li><a target="_self" href="/contact/">Contact Us</a></li>
+                <li><a target="_self" href="/terms/">Terms of Use</a></li>
+                <li><a target="_self" href="/privacy/">Privacy Policy</a></li>
+                <li><a target="_self" href="/credits/">Credits</a></li>
+                <li><a target="_self" href="/copyright/">&copy; CBD Secretariat</a></li>
+            </ul>
+        </div>
+        <div class="col-md-3 pull-right">
+            <a href="http://www.un.org/" target="_blank"><img src="/app/images/un-logo-white.gif" alt="UN logo" /></a>
+            <a href="http://unep.org/"   target="_blank"><img src="/app/images/unep-logo-white-en.gif" alt="UNEP logo" /></a>
+        </div>
+    </footer>
+
+    <!-- Boot the app -->
+    <script>
+    var require = {
+        config : {
+            boot : {
+                modules : ['/app/template.html.js', 'apps/www/routes']
+            }
+        }
+    };
+    </script>
+    <script src="/app/libs/requirejs/require.js" data-main="/app/js/apps/www/config.js"></script>
 
 </body>
 </html>

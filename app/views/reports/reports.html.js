@@ -56,7 +56,7 @@ define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json', './dep
 	  $scope.navTagName='';
 
 	  $scope.setNavTagName = function (name) {$scope.navTagName = name;};
-      
+
       $scope.doSearch = function () {
         $window.location.href='http://chm.cbd.int/database/?q=' + $scope.searchQuery;
         $scope.searchQuery = '';
@@ -75,12 +75,12 @@ define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json', './dep
 		if(schema === 'nationalReport'){
 			if(qid === 'nbsap') {
 				$scope.navTagName = 'NBSAPs (post-Nagoya)';
-			} 
+			}
 			else {
 				$scope.navTagName = qid + ' National Report';
 			}
 		}
-		if(schema === 'nationalTarget'){ 
+		if(schema === 'nationalTarget'){
 			if(typeof qid === 'undefined'){
 				$scope.navTagName = 'National Targets';
 			}
