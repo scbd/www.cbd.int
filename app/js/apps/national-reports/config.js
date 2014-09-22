@@ -19,7 +19,7 @@ require(["apps/generic-config"], function() { 'use strict';
         },
         config : {
             boot : {
-                modules : ['apps/national-reports/routes', '../template.html']
+                modules : ['apps/national-reports/routes', '../views/reports/template.html']
             }
         }
     });
