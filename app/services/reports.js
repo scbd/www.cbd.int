@@ -24,8 +24,8 @@ define(['app', './solrQuery.js', 'underscore'], function(module, Query, _) {
           'forests': '98B63E49-28D0-4D65-A7A4-A56D0CC97B4B', //Voluntary report on the implementation of the expanded work programme for forests(2003)
           '5th': 'B3079A36-32A3-41E2-BDE0-65E4E3A51601', //5th National Report(2009 - 2014)
           '4th': '272B0A17-5569-429D-ADF5-2A55C588F7A7', //4th National Report(2005 - 2009)
-          '3rd': 'A49393CA-2950-4EFD-8BCC-33266D69232F', //2nd National Report(1997 - 2001)
-          '2nd': 'DA7E04F1-D2EA-491E-9503-F7923B1FD7D4', //3rd National Report(2001 - 2005)
+          '2nd': 'A49393CA-2950-4EFD-8BCC-33266D69232F', //2nd National Report(1997 - 2001)
+          '3rd': 'DA7E04F1-D2EA-491E-9503-F7923B1FD7D4', //3rd National Report(2001 - 2005)
           '1st': 'F27DBC9B-FF25-471B-B624-C0F73E76C8B3', //1st National Report(1992 - 1998)
         };
 
