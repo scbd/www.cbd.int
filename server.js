@@ -44,6 +44,8 @@ app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'https://ap
 app.get('/internal/printsmart*', function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/print-smart/template.html'); });
 app.get('/reports/map*',         function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/reports/template.html'); });
 //app.get('/*', sendTemplate);
+app.get('/~', sendTemplate);
+app.get('/cms/management/ps.shtml', sendTemplate);
 
 // Configure proxy to legacy website
 
