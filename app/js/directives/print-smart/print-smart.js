@@ -163,7 +163,7 @@ define(['app', 'angular', 'bootstrap', './print-smart-document', './print-smart-
 				};
 
 				this.close = function() {
-					$scope.showModal(null, false);
+					return $scope.showModal(null, false);
 				};
 
 			}]

@@ -1,6 +1,6 @@
-define(['angular', 'angular-route', 'bootstrap'], function(angular) { 'use strict';
+define(['angular', 'angular-route', 'angular-cookies', 'bootstrap'], function(angular) { 'use strict';
 
-    var app = angular.module('app', ['ngRoute']);
+    var app = angular.module('app', ['ngRoute', 'ngCookies']);
 
     app.config(['$controllerProvider', '$compileProvider', '$provide', '$filterProvider',
       function(  $controllerProvider,   $compileProvider,   $provide,   $filterProvider) {

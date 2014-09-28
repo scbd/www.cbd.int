@@ -1,7 +1,7 @@
 /* global -close */
-define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angular, _, Dropbox) {
+define(['app', 'angular', 'underscore'], function(app, angular, _) {
 
-	app.directive('printSmartPrintDialog', ["$http", function($http) {
+	app.directive('printSmartPrintDialog', ["$http", "$location", "$cookies", function($http, $location, $cookies) {
 		return {
 			restrict : "AEC",
 			require: '?^printSmart',
@@ -67,6 +67,22 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 				//==============================================
 				$scope.canPrint = function() {
 					return cleanBadge().length >= 8 && _.compact(_.values($scope.locales)).length>0;
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.canPrintShop = function() {
+					return !!$cookies.machineAuthorization && _.compact(_.values($scope.locales)).length>0;
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.hasPrintShop = function() {
+					return !!$cookies.machineAuthorization;
 				};
 
 				//==============================================
@@ -149,6 +165,25 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 				//
 				//
 				//==============================================
+				$scope.printShop = function() {
+
+					$scope.error = null;
+					$scope.success = null;
+
+					$scope.$root.printShop = {
+						badge     : cleanBadge(),
+						documents : documentsToPrint()
+					};
+
+					close().then(function(){
+						$location.url('/internal/printsmart/printshop');
+					});
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
 				$scope.back = function() {
 
 					$scope.error   = null;
@@ -167,7 +202,7 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 					if(!!clear)
 						psCtrl.clear();
 
-					psCtrl.close();
+					return psCtrl.close();
 				}
 			}
 		};

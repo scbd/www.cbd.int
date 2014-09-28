@@ -1,0 +1,49 @@
+<div class="container">
+
+	<div ng-hide="printShopEnabled">
+		<div class="alert alert-warning" role="alert">The print shop is not enabled from your computer</div>
+	</div>
+
+	<div ng-show="printShopEnabled">
+
+		<div class="pull-right">
+
+			<input class="form-control input-lg" type="text" maxlength="9" style="width:250px;display:inline-block" ng-model="badgeCode" id="badge" placeholder="Scan badge number">
+
+			<button type="button" ng-click="printAll()" ng-disabled="cleanBadge().length<8 ||	 !readyDocuments().length" class="btn btn-primary btn-lg"><i class="fa fa-print"></i> Print all</button>
+
+		</div>
+
+		<h1>SCBD Print Shop!</h1>
+
+		<div ng-show="error" class="alert alert-danger">
+			{{error}}
+		</div>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Document Url</th>
+					<th style="width:150px;white-space:nowrap">Copies
+						<input style="width:90px;text-align:right" type="number" ng-model="allCopies">
+					</th>
+				</tr>
+			</thead>
+
+			<tr ng-repeat="d in documents" ng-class="{ success : d.printed, warning : !isReady(d), danger : d.error }">
+				<td>
+					<input ng-hide="d.printed" type="url" style="width:100%" ng-model="d.url">
+					<span  ng-show="d.printed">{{d.url}}</span>
+				</td>
+				<td style="text-align:right">
+					<input ng-disabled="d.printed" style="width:90px;text-align:right" type="number" ng-model="d.copies">
+				</td>
+			</tr>
+
+		</table>
+
+		<button type="button" ng-click="add()" class="btn btn-default">Add document</button>
+
+	<div>
+
+</div>
