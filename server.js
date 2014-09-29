@@ -49,6 +49,70 @@ app.get('/cop12/insession', sendTemplate);
 app.get('/mop1/insession',  sendTemplate);
 app.get('/~', sendTemplate);
 app.get('/cms/management/ps.shtml', sendTemplate);
+app.get('/cms/management/ps.json', function(req, res) {
+
+    res.send(
+[
+{
+    "item"       : "",
+	"group"      : "PLENARY",
+    "symbol"     : "PLENARY/L.1",
+    "title"      : "TITLE OF THE REPORT 1",
+    "urlPattern" : "/doc/meetings/bs/mop-07/official/mop-07-01-",
+    "locales"    : ["en", "es", "fr", "ar", "ru", "zh"]
+},
+{
+    "item"       : "",
+	"group"      : "PLENARY",
+    "symbol"     : "PLENARY/L.2",
+    "title"      : "TITLE OF THE REPORT 2",
+    "urlPattern" : "/doc/meetings/bs/mop-07/official/mop-07-01-",
+    "locales"    : ["en", "es", "fr", "ar", "ru", "zh"]
+},
+{
+    "item"       : "",
+	"group"      : "WG1",
+    "symbol"     : "WG1/L.1",
+    "title"      : "TITLE OF THE REPORT 1",
+    "urlPattern" : "/doc/meetings/bs/mop-07/official/mop-07-01-",
+    "locales"    : ["en", "es", "fr", "ar", "ru", "zh"]
+},
+{
+    "item"       : "",
+	"group"      : "WG2",
+    "symbol"     : "WG2/L.1",
+    "title"      : "TITLE OF THE REPORT 1",
+    "urlPattern" : "/doc/meetings/bs/mop-07/official/mop-07-01-",
+    "locales"    : ["en", "es", "fr", "ar", "ru", "zh"]
+},
+{
+    "item"       : "Item 1, 3, 4",
+	"group"      : "WG2",
+    "symbol"     : "WG2/L.2",
+    "title"      : "TITLE OF THE REPORT 2",
+    "urlPattern" : "/doc/meetings/bs/mop-07/official/mop-07-01-",
+    "locales"    : ["en", "es", "fr", "ar", "ru", "zh"]
+},
+{
+    "item"       : "",
+	"group"      : "WG2",
+    "symbol"     : "WG2/L.3",
+    "title"      : "TITLE OF THE REPORT 3",
+    "urlPattern" : "/doc/meetings/bs/mop-07/official/mop-07-01-",
+    "locales"    : ["en", "es", "fr", "ar", "ru", "zh"]
+},
+{
+    "item"       : "",
+	"group"      : "",
+    "symbol"     : "",
+    "title"      : "NONPAPER 1",
+    "urlPattern" : "/doc/meetings/bs/mop-07/official/mop-07-01-",
+    "locales"    : ["en", "es", "fr", "ar", "ru", "zh"]
+},
+]
+);
+
+} );
 
 // Configure proxy to legacy website
 
