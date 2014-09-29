@@ -9,13 +9,22 @@ define(['app', 'directives/print-smart/print-smart', 'mobile/template-hacker'], 
 			restrict : "AEC",
 			replace : true,
 			require: '?^printSmart',
-			scope :  { },
+			scope :  {
+				documentsFn : "&documents"
+			},
 			templateUrl : "/app/js/directives/meetings/documents/in-session.html",
 			link: function ($scope, element, attrs, psCtrl) {
 
-				$scope.allLanguages     = {  en : "English",  es : "Español", fr : "Français", ar : "العربية", ru : "Русский", zh : "中文" };
-				$scope.documents = window[attrs.data || 'meetingDocuments'] || [];
-				$scope.tag       = attrs.tag;
+				$scope.allLanguages = {  en : "English",  es : "Español", fr : "Français", ar : "العربية", ru : "Русский", zh : "中文" };
+				$scope.tag          = attrs.tag;
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.documents = function(){
+					return $scope.documentsFn() || window[attrs.data];
+				};
 
 				//==============================================
 				//

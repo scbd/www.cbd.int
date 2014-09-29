@@ -44,6 +44,9 @@ app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'https://ap
 app.get('/internal/printsmart*', function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/print-smart/template.html'); });
 app.get('/reports/map*',         function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/reports/template.html'); });
 //app.get('/*', sendTemplate);
+app.get('/mop7/insession',  sendTemplate);
+app.get('/cop12/insession', sendTemplate);
+app.get('/mop1/insession',  sendTemplate);
 app.get('/~', sendTemplate);
 app.get('/cms/management/ps.shtml', sendTemplate);
 

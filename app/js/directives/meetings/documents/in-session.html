@@ -3,7 +3,7 @@
 
 	<table class="table table-striped table-hover">
 
-		<tr ng-repeat="d in documents" ng-hide="d.visible===false" ng-class="{ info: selected(d.symbol||d.urlPattern+'xx'), noborder: documents[$index-1].visible===false }">
+		<tr ng-repeat="d in documents()" ng-class="{ info: selected(d.symbol||d.urlPattern+'xx') }">
 			<td style="width:60px;vertical-align:middle;padding-top:8px;">
 
 				<div class="visible-xs dropdown">
@@ -16,7 +16,6 @@
 				    <li role="presentation" ng-repeat="locale in d.locales | orderBy:'toString()'" style="font-size:16px;margin:4px 0px;white-space:nowrap;">
 
 						<a role="menuitem" tabindex="-1" style="display:inline-block;width:120px;font-size:inherit;" >{{allLanguages[locale]||locale}}</a>
-
 						<span>
 							<a class="btn btn-primary btn-sm" style="margin-right:5px;font-size:16px;" target="_blank" href="{{d.urlPattern}}{{locale}}.doc">
 								<i class="fa fa-file-word-o"></i>
@@ -46,6 +45,7 @@
 						</td>
 					</tr>
 				</table>
+
 			</td>
 
 			<td class="ps-selectable" style="vertical-align:top;padding-top:8px">

@@ -1,239 +1,54 @@
-<h1>In sesssion</h1>
+<h1>CBD Meetings In Session Documents</h1>
 <style>
  .fixed-top-right { position:fixed;top:5px;right:5px;z-index:200}</style>
+
 <div print-smart="">
 
-    <div style="float:right;text-align: right; margin:5px; clear:both;" visible="true">
+    <div ng-show="documents" style="float:right;text-align: right; margin:5px; clear:both;">
         <div class="print-smart-checkout fixed-top-right"></div>
     </div>
 
-    <h3>L Document(s)</h3>
-    <div class="clearfix"></div>
-    <div class="in-session-documents" data="LDocuments"><i class="fa fa-cog fa-spin fa-lg"></i> Loading...</div>
+    <div ng-show="error" ng-switch="error">
 
-    <h3>CRP Document(s)</h3>
-    <div class="in-session-documents" data="CRPDocuments"><i class="fa fa-cog fa-spin fa-lg"></i> Loading...</div>
+        <div ng-switch-when="TIMEOUT"   class="alert alert-info"    role="alert">timout...</div>
+        <div ng-switch-when="NOT_FOUND" class="alert alert-warning" role="alert">notfound...</div>
+        <div ng-switch-default     class="alert alert-danger"  role="alert">unknown...</div>
 
-    <h3>Non-Paper Document(s)</h3>
-    <div class="in-session-documents" data="NonPaperDocuments"><i class="fa fa-cog fa-spin fa-lg"></i> Loading...</div>
+    </div>
+
+    <div ng-show="documents===undefined"><i class="fa fa-cog fa-spin fa-lg"></i> Loading...</div>
+    <div ng-show="documents.length==0">No documents available</div>
+
+
+
+    <div ng-show="(PLENARY = (documents|filter:{ group : 'PLENARY', visible : true })).length">
+        <h3>Plenary</h3>
+        <div class="clearfix"></div>
+        <div class="in-session-documents" documents="PLENARY"></div>
+    </div>
+
+
+
+    <div ng-show="(WG1 = (documents|filter:{ group : 'WG1', visible : true })).length">
+        <h3>Working Group I</h3>
+        <div class="clearfix"></div>
+        <div class="in-session-documents" documents="WG1"></div>
+    </div>
+
+
+
+    <div ng-show="(WG2 = (documents|filter:{ group : 'WG2', visible : true })).length">
+        <h3>Working Group II</h3>
+        <div class="clearfix"></div>
+        <div class="in-session-documents" documents="WG2"></div>
+    </div>
+
+
+
+    <div ng-show="(OTHER = (documents|filter:{ group : 'OTHER', visible : true })).length">
+        <h3>Other</h3>
+        <div class="clearfix"></div>
+        <div class="in-session-documents" documents="OTHER"></div>
+    </div>
 
 </div>
-
-
-<script>
-window.LDocuments= [
-
-  {
-    item       : "",
-    symbol     : "UNEP/CBD/SBSTTA/18/L.1",
-    title      : "DRAFT REPORT OF THE MEETING ",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-L-01-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Item 3.1",
-    symbol     : "UNEP/CBD/SBSTTA/18/L.5",
-    title      : "FOURTH EDITION OF THE GLOBAL BIODIVERSITY OUTLOOK ",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-L-05-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Item 3.2",
-    symbol     : "UNEP/CBD/SBSTTA/18/L.2",
-    title      : "PROGRESS IN ACHIEVING THE TARGETS OF THE GLOBAL STRATEGY FOR PLANT CONSERVATION 2011-2020",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-L-02-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
- },
- {
-    item       : "Item 4.1",
-    symbol     : "UNEP/CBD/SBSTTA/18/L.9 (68 PAGES)",
-    title      : "MARINE AND COASTAL BIODIVERSITY: ECOLOGICALLY OR BIOLOGICALLY SIGNIFICANT MARINE AREAS",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-L-09-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
- {
-    item       : "Item 4.2; 4.3; 4.4 and 4.5",
-    symbol     : "UNEP/CBD/SBSTTA/18/L.7",
-    title      : "MARINE AND COASTAL BIODIVERSITY: OTHER MATTERS",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-L-07-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
- {
-    item       : "Item 5.1",
-    symbol     : "UNEP/CBD/SBSTTA/18/L.4",
-    title      : "MANAGEMENT OF RISKS ASSOCIATED WITH INTRODUCTION OF ALIEN SPECIES AS PETS, AQUARIUM AND TERRARIUM SPECIES, AND AS LIVE BAIT AND LIVE FOOD, AND RELATED ISSUES",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-L-04-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Item 5.2",
-    symbol     : "UNEP/CBD/SBSTTA/18/L.8",
-    title      : "REVIEW OF WORK ON INVASIVE ALIEN SPECIES AND CONSIDERATIONS FOR FUTURE WORK",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-L-08-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
- {
-    item       : "Item 6",
-    symbol     : "UNEP/CBD/SBSTTA/18/L.6",
-    title      : "NEW AND EMERGING ISSUES: SYNTHETIC BIOLOGY",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-L-06-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
- {
-    item       : "Item 7",
-    symbol     : "UNEP/CBD/SBSTTA/18/L.3",
-    title      : "OBSTACLES ENCOUNTERED IN IMPLEMENTING OPTIONS IDENTIFIED FOR ELIMINATING, PHASING OUT OR REFORMING INCENTIVES THAT ARE HARMFUL FOR BIODIVERSITY",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-L-03-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Items 9.1, 9.2 and 9.3",
-    symbol     : "UNEP/CBD/SBSTTA/18/L.10",
-    title      : "CONSIDERATION OF ISSUES IN PROGRESS: BIODIVERSITY AND CLIMATE CHANGE",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-L-10-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Item 9.4",
-    symbol     : "UNEP/CBD/SBSTTA/18/L.11",
-    title      : "CONSIDERATION OF ISSUES IN PROGRESS: ECOSYSTEM CONSERVATION AND RESTORATION",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-L-11-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-];
-
-window.CRPDocuments= [
-  {
-    item       : "Item 3.1",
-    symbol     : "UNEP/CBD/SBSTTA/18/CRP.4",
-    title      : "FOURTH EDITION OF THE GLOBAL BIODIVERSITY OUTLOOK ",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-crp-04-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Item 3.2",
-    symbol     : "UNEP/CBD/SBSTTA/18/CRP.1",
-    title      : "PROGRESS IN ACHIEVING THE TARGETS OF THE GLOBAL STRATEGY FOR PLANT CONSERVATION 2011-2020",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-crp-01-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Item 4.1",
-    symbol     : "UNEP/CBD/SBSTTA/18/CRP.5",
-    title      : "MARINE AND COASTAL BIODIVERSITY: ECOLOGICALLY OR BIOLOGICALLY SIGNIFICANT MARINE AREAS",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-crp-05-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Items 4.2; 4.3; 4.4 and 4.5",
-    symbol     : "UNEP/CBD/SBSTTA/18/CRP.9",
-    title      : "MARINE AND COASTAL BIODIVERSITY: OTHER MATTERS",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-crp-09-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Item 5.1",
-    symbol     : "UNEP/CBD/SBSTTA/18/CRP.6",
-    title      : "MANAGEMENT OF RISKS ASSOCIATED WITH INTRODUCTION OF ALIEN SPECIES AS PETS, AQUARIUM AND TERRARIUM SPECIES, AND AS LIVE BAIT AND LIVE FOOD, AND RELATED ISSUES",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-crp-06-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Item 5.2",
-    symbol     : "UNEP/CBD/SBSTTA/18/CRP.8",
-    title      : "REVIEW OF WORK ON INVASIVE ALIEN SPECIES AND CONSIDERATIONS FOR FUTURE WORK",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-crp-08-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Item 6",
-    symbol     : "UNEP/CBD/SBSTTA/18/CRP.7",
-    title      : "NEW AND EMERGING ISSUES: SYNTHETIC BIOLOGY",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-crp-07-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Item 7 ",
-    symbol     : "UNEP/CBD/SBSTTA/18/CRP.2",
-    title      : "OBSTACLES ENCOUNTERED IN IMPLEMENTING OPTIONS IDENTIFIED FOR ELIMINATING, PHASING OUT OR REFORMING INCENTIVES THAT ARE HARMFUL FOR BIODIVERSITY",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-crp-02-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Item 8 ",
-    symbol     : "UNEP/CBD/SBSTTA/18/CRP.3/Rev.1",
-    title      : "THE INTERGOVERNMENTAL SCIENCE-POLICY PLATFORM ON BIODIVERSITY AND ECOSYSTEM SERVICES",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-crp-03-rev1-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Items 9.1, 9.2 and 9.3",
-    symbol     : "UNEP/CBD/SBSTTA/18/CRP.10",
-    title      : "CONSIDERATION OF ISSUES IN PROGRESS: BIODIVERSITY AND CLIMATE CHANGE",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-crp-10-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Item 9.4",
-    symbol     : "UNEP/CBD/SBSTTA/18/CRP.11",
-    title      : "CONSIDERATION OF ISSUES IN PROGRESS: ECOSYSTEM CONSERVATION AND RESTORATION",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-crp-11-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Item 9.5 ",
-    symbol     : "UNEP/CBD/SBSTTA/18/CRP.12",
-    title      : "BIOFUELS AND BIODIVERSITY: INFORMATION ON RELEVANT DEFINITIONS OF RELEVANT KEY TERMS TO ENABLE PARTIES TO IMPLEMENT DECISIONS IX/2 AND X/37",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-crp-12-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Item 9.6 ",
-    symbol     : "UNEP/CBD/SBSTTA/18/CRP.13",
-    title      : "SUSTAINABLE USE OF BIODIVERSITY: BUSHMEAT AND SUSTAINABLE WILDLIFE MANAGEMENT",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-crp-13-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-  {
-    item       : "Item 9.7 ",
-    symbol     : "UNEP/CBD/SBSTTA/18/CRP.14",
-    title      : "CONSIDERATION OF ISSUES IN PROGRESS: HEALTH AND BIODIVERSITY",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-crp-14-",
-    locales    : ["en", "es", "fr", "ar", "ru", "zh"]
-  },
-];
-
-
-
-
-window.NonPaperDocuments= [
-  {
-    item       : "Item 4.1",
-    symbol     : "",
-    title      : "MARINE AND COASTAL BIODIVERSITY: ECOLOGICALLY OR BIOLOGICALLY SIGNIFICANT MARINE AREAS",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-non-paper-item-4-1-25June-",
-    locales    : ["en"]
-  },
-  {
-    item       : "Item 4.2",
-    symbol     : "",
-    title      : "MARINE AND COASTAL BIODIVERSITY: OTHER MATTERS",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-non-paper-item-4-2-25June-",
-    locales    : ["en"]
-  },
-  {
-    item       : "Item 5.1",
-    symbol     : "",
-    title      : "MANAGEMENT OF RISKS ASSOCIATED WITH INTRODUCTION OF ALIEN SPECIES AS PETS, AQUARIUM AND TERRARIUM SPECIES, AND AS LIVE BAIT AND LIVE FOOD, AND RELATED ISSUES",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-non-paper-item-5-1-26June-tracked-",
-    locales    : ["en"]
-  },
-  {
-    item       : "Item 6",
-    symbol     : "",
-    title      : "NEW AND EMERGING ISSUES: SYNTHETIC BIOLOGY",
-    urlPattern : "/doc/meetings/sbstta/sbstta-18/in-session/sbstta-18-non-paper-item-6-25June201418h12m-",
-    locales    : ["en"]
-  },
-];
-</script>
