@@ -27,34 +27,77 @@
     <div ng-show="loading"><i class="fa fa-cog fa-spin fa-lg"></i> Loading...</div>
     <div ng-show="documents.length==0">No documents available</div>
 
-    <div ng-show="(PLENARY = (documents|filter:{ group : 'PLENARY', visible : true })).length">
-        <h3>Plenary</h3>
-        <div class="clearfix"></div>
-        <div class="in-session-documents" documents="PLENARY"></div>
-    </div>
+    <div class="clearfix"></div>
+
+    <div class="panel-group" id="accordion">
+
+        <div class="panel panel-default" ng-show="(PLENARY = (documents|filter:{ group : 'PLENARY', visible : true })).length">
+
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <a data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapsePlenary">Plenary</a>
+                </h3>
+            </div>
+
+            <div id="collapsePlenary" class="panel-collapse collapse">
+                <div class="panel-bodyX">
+                    <div class="in-session-documents" documents="PLENARY"></div>
+                </div>
+            </div>
+
+        </div>
 
 
+        <div class="panel panel-default" ng-show="(WG1 = (documents|filter:{ group : 'WG1', visible : true })).length">
 
-    <div ng-show="(WG1 = (documents|filter:{ group : 'WG1', visible : true })).length">
-        <h3>Working Group I</h3>
-        <div class="clearfix"></div>
-        <div class="in-session-documents" documents="WG1" tag="WG.1"></div>
-    </div>
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <a data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapseWG1">Working Group I</a>
+                </h3>
+            </div>
+
+            <div id="collapseWG1" class="panel-collapse collapse">
+                <div class="panel-bodyX">
+                    <div class="in-session-documents" documents="WG1"></div>
+                </div>
+            </div>
+
+        </div>
 
 
+        <div class="panel panel-default" ng-show="(WG2 = (documents|filter:{ group : 'WG2', visible : true })).length">
 
-    <div ng-show="(WG2 = (documents|filter:{ group : 'WG2', visible : true })).length">
-        <h3>Working Group II</h3>
-        <div class="clearfix"></div>
-        <div class="in-session-documents" documents="WG2" tag="WG.2"></div>
-    </div>
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <a data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapseWG2">Working Group II</a>
+                </h3>
+            </div>
+
+            <div id="collapseWG2" class="panel-collapse collapse">
+                <div class="panel-bodyX">
+                    <div class="in-session-documents" documents="WG2"></div>
+                </div>
+            </div>
+
+        </div>
 
 
+        <div class="panel panel-default" ng-show="(OTHER = (documents|filter:{ group : 'OTHER', visible : true })).length">
 
-    <div ng-show="(OTHER = (documents|filter:{ group : 'OTHER', visible : true })).length">
-        <h3>Other</h3>
-        <div class="clearfix"></div>
-        <div class="in-session-documents" documents="OTHER"></div>
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <a data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapseOTHER">Other</a>
+                </h3>
+            </div>
+
+            <div id="collapseOTHER" class="panel-collapse collapse">
+                <div class="panel-bodyX">
+                    <div class="in-session-documents" documents="OTHER"></div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 
 </div>
