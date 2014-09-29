@@ -1,4 +1,4 @@
-<h1>CBD Meetings In Session Documents</h1>
+<h2>CBD Meetings In Session Documents</h2>
 <style>
  .fixed-top-right { position:fixed;top:5px;right:5px;z-index:200}</style>
 
@@ -10,16 +10,22 @@
 
     <div ng-show="error" ng-switch="error">
 
-        <div ng-switch-when="TIMEOUT"   class="alert alert-info"    role="alert">timout...</div>
-        <div ng-switch-when="NOT_FOUND" class="alert alert-warning" role="alert">notfound...</div>
-        <div ng-switch-default     class="alert alert-danger"  role="alert">unknown...</div>
+        <div ng-switch-when="TIMEOUT"   class="alert alert-info"    role="alert">
+            <b>Loading list of files takes longer than expected...</b><br/>
+            Please allow a couples of seconds more for files to load... <i class="fa fa-cog fa-spin fa-lg"></i>
+        </div>
+        <div ng-switch-default class="alert alert-warning" role="alert">
+            <b>Oh, no!</b> An error occured.
+            Please <a href="#" ng-click="reloadPage()">refresh the page</a>.<br/>
+            If you continue experiencing problems,
+            please visit document distribution center for assistance.
+            <span class="hidden">{{error}}</span>
+        </div>
 
     </div>
 
-    <div ng-show="documents===undefined"><i class="fa fa-cog fa-spin fa-lg"></i> Loading...</div>
+    <div ng-show="loading"><i class="fa fa-cog fa-spin fa-lg"></i> Loading...</div>
     <div ng-show="documents.length==0">No documents available</div>
-
-
 
     <div ng-show="(PLENARY = (documents|filter:{ group : 'PLENARY', visible : true })).length">
         <h3>Plenary</h3>
@@ -32,7 +38,7 @@
     <div ng-show="(WG1 = (documents|filter:{ group : 'WG1', visible : true })).length">
         <h3>Working Group I</h3>
         <div class="clearfix"></div>
-        <div class="in-session-documents" documents="WG1"></div>
+        <div class="in-session-documents" documents="WG1" tag="WG.1"></div>
     </div>
 
 
@@ -40,7 +46,7 @@
     <div ng-show="(WG2 = (documents|filter:{ group : 'WG2', visible : true })).length">
         <h3>Working Group II</h3>
         <div class="clearfix"></div>
-        <div class="in-session-documents" documents="WG2"></div>
+        <div class="in-session-documents" documents="WG2" tag="WG.2"></div>
     </div>
 
 
