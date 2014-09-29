@@ -15,8 +15,10 @@ require(["apps/generic-config"], function() { 'use strict';
                 deps: [],
                 exports: "Dropbox",
                 init: function () {
-                    window.Dropbox.appKey = "uvo7kuhmckw68pl"; //registration@cbd.int
-                    return window.Dropbox;
+                    if(window.Dropbox) {
+                        window.Dropbox.appKey = "uvo7kuhmckw68pl"; //registration@cbd.int
+                        return window.Dropbox;
+                    }
                 }
             }
         }
