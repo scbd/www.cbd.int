@@ -1,12 +1,36 @@
-<h2>CBD Meetings In Session Documents</h2>
 <style>
- .fixed-top-right { position:fixed;top:5px;right:5px;z-index:200}</style>
+
+    .panel-title > a {
+        text-decoration:none;
+    }
+    .panel-title > a:before {
+        content:"\f077";
+        font-family: FontAwesome;
+        margin-right:-4px;
+        float:right;
+        color:#777;
+    }
+
+    .panel-title > a.collapsed:before {
+        content:"\f078";
+    }
+
+</style>
 
 <div print-smart="">
 
-    <div ng-show="documents" style="float:right;text-align: right; margin:5px; clear:both;">
+    <div ng-show="(documents|filter:{ visible : true }).length" style="float:right;text-align: right; margin:5px; clear:both;">
         <div class="print-smart-checkout fixed-top-right"></div>
     </div>
+
+    <h3>{{title || 'CBD Meetings In Session Documents'}}</h3>
+    <div class="clearfix"></div>
+    <p>The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.</p>
+
+    <style>
+     .fixed-top-right { position:fixed;top:5px;right:5px;z-index:200}
+    </style>
+
 
     <div ng-show="error" ng-switch="error">
 
@@ -25,18 +49,18 @@
     </div>
 
     <div ng-show="loading"><i class="fa fa-cog fa-spin fa-lg"></i> Loading...</div>
-    <div ng-show="documents.length==0">No documents available</div>
+    <div ng-show="(documents|filter:{ visible : true }).length==0">No documents available</div>
 
     <div class="clearfix"></div>
 
-    <div class="panel-group" id="accordion">
+    <div class="panel-group" id="accordionX">
 
         <div class="panel panel-default" ng-show="(PLENARY = (documents|filter:{ group : 'PLENARY', visible : true })).length">
 
             <div class="panel-heading">
-                <h3 class="panel-title">
-                    <a data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapsePlenary">Plenary</a>
-                </h3>
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapsePlenary">Plenary</a>
+                </h4>
             </div>
 
             <div id="collapsePlenary" class="panel-collapse collapse">
@@ -51,9 +75,9 @@
         <div class="panel panel-default" ng-show="(WG1 = (documents|filter:{ group : 'WG1', visible : true })).length">
 
             <div class="panel-heading">
-                <h3 class="panel-title">
-                    <a data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapseWG1">Working Group I</a>
-                </h3>
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapseWG1">Working Group I</a>
+                </h4>
             </div>
 
             <div id="collapseWG1" class="panel-collapse collapse">
@@ -68,9 +92,9 @@
         <div class="panel panel-default" ng-show="(WG2 = (documents|filter:{ group : 'WG2', visible : true })).length">
 
             <div class="panel-heading">
-                <h3 class="panel-title">
-                    <a data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapseWG2">Working Group II</a>
-                </h3>
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapseWG2">Working Group II</a>
+                </h4>
             </div>
 
             <div id="collapseWG2" class="panel-collapse collapse">
@@ -85,9 +109,9 @@
         <div class="panel panel-default" ng-show="(OTHER = (documents|filter:{ group : 'OTHER', visible : true })).length">
 
             <div class="panel-heading">
-                <h3 class="panel-title">
-                    <a data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapseOTHER">Other</a>
-                </h3>
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapseOTHER">Other</a>
+                </h4>
             </div>
 
             <div id="collapseOTHER" class="panel-collapse collapse">

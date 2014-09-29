@@ -3,6 +3,8 @@ define(['underscore', 'directives/meetings/documents/in-session'], function(_) {
 
 		var loadTimeout = 10000;
 
+		$scope.title = $route.current.$$route.title;
+
 		//=============================================
 		//
 		//
