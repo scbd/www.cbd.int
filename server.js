@@ -42,9 +42,7 @@ app.all('/doc/*', function(req, res) { proxy.web(req, res, { target: 'http://www
 app.all('/cms/images/*', function(req, res) { proxy.web(req, res, { target: 'http://www.cbd.int',    secure: false } ); } );
 app.all('/images/*',     function(req, res) { proxy.web(req, res, { target: 'http://www.cbd.int',    secure: false } ); } );
 
-
 // Configure template
-
 
 app.get('/internal/printsmart/ps6d7wgr67ewfgr6dq7gr23786rgd78r6', sendTemplate);
 app.get('/internal/printsmart*', function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/print-smart/template.html'); });
@@ -52,8 +50,7 @@ app.get('/reports/map*',         function sendTemplate(req, res) { res.sendfile(
 app.get('/*', sendTemplate);
 
 // Configure proxy to legacy website
-
-app.all('/*', function(req, res) { proxy.web(req, res, { target: 'https://us1.lb.infra.cbd.int:443', secure: false } ); } );
+// app.all('/*', function(req, res) { proxy.web(req, res, { target: 'https://us1.lb.infra.cbd.int:443', secure: false } ); } );
 
 // LOG PROXY ERROR & RETURN http:500
 
