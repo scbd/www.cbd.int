@@ -38,81 +38,18 @@ app.use('/app', express.static(__dirname + '/app'));
 
 app.get('/app/*', function(req, res) { res.send('404', 404); } );
 app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'https://api.cbd.int:443', secure: false } ); } );
+app.all('/doc/*', function(req, res) { proxy.web(req, res, { target: 'http://www.cbd.int',    secure: false } ); } );
+app.all('/cms/images/*', function(req, res) { proxy.web(req, res, { target: 'http://www.cbd.int',    secure: false } ); } );
+app.all('/images/*',     function(req, res) { proxy.web(req, res, { target: 'http://www.cbd.int',    secure: false } ); } );
+
 
 // Configure template
 
+
+app.get('/internal/printsmart/ps6d7wgr67ewfgr6dq7gr23786rgd78r6', sendTemplate);
 app.get('/internal/printsmart*', function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/print-smart/template.html'); });
 app.get('/reports/map*',         function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/reports/template.html'); });
-//app.get('/*', sendTemplate);
-app.get('/mop7/insession',  sendTemplate);
-app.get('/cop12/insession', sendTemplate);
-app.get('/mop1/insession',  sendTemplate);
-app.get('/~', sendTemplate);
-app.get('/cms/management/ps.shtml', sendTemplate);
-app.get('/cms/management/ps.json', function(req, res) {
-
-    res.send(
-[
-{
-    "item"       : "",
-	"group"      : "PLENARY",
-    "symbol"     : "PLENARY/L.1",
-    "title"      : "TITLE OF THE REPORT 1",
-    "urlPattern" : "/doc/meetings/bs/mop-07/official/mop-07-01-",
-    "locales"    : ["en", "es", "fr", "ar", "ru", "zh"]
-},
-{
-    "item"       : "",
-	"group"      : "PLENARY",
-    "symbol"     : "PLENARY/L.2",
-    "title"      : "TITLE OF THE REPORT 2",
-    "urlPattern" : "/doc/meetings/bs/mop-07/official/mop-07-01-",
-    "locales"    : ["en", "es", "fr", "ar", "ru", "zh"]
-},
-{
-    "item"       : "",
-	"group"      : "WG1",
-    "symbol"     : "WG1/L.1",
-    "title"      : "TITLE OF THE REPORT 1",
-    "urlPattern" : "/doc/meetings/bs/mop-07/official/mop-07-01-",
-    "locales"    : ["en", "es", "fr", "ar", "ru", "zh"]
-},
-{
-    "item"       : "",
-	"group"      : "WG2",
-    "symbol"     : "WG2/L.1",
-    "title"      : "TITLE OF THE REPORT 1",
-    "urlPattern" : "/doc/meetings/bs/mop-07/official/mop-07-01-",
-    "locales"    : ["en", "es", "fr", "ar", "ru", "zh"]
-},
-{
-    "item"       : "Item 1, 3, 4",
-	"group"      : "WG2",
-    "symbol"     : "WG2/L.2",
-    "title"      : "TITLE OF THE REPORT 2",
-    "urlPattern" : "/doc/meetings/bs/mop-07/official/mop-07-01-",
-    "locales"    : ["en", "es", "fr", "ar", "ru", "zh"]
-},
-{
-    "item"       : "",
-	"group"      : "WG2",
-    "symbol"     : "WG2/L.3",
-    "title"      : "TITLE OF THE REPORT 3",
-    "urlPattern" : "/doc/meetings/bs/mop-07/official/mop-07-01-",
-    "locales"    : ["en", "es", "fr", "ar", "ru", "zh"]
-},
-{
-    "item"       : "",
-	"group"      : "",
-    "symbol"     : "",
-    "title"      : "NONPAPER 1",
-    "urlPattern" : "/doc/meetings/bs/mop-07/official/mop-07-01-",
-    "locales"    : ["en", "es", "fr", "ar", "ru", "zh"]
-},
-]
-);
-
-} );
+app.get('/*', sendTemplate);
 
 // Configure proxy to legacy website
 

@@ -6,11 +6,11 @@ define(['app', 'providers/routes/extended-route-provider'], function(app) { 'use
       $locationProvider.hashPrefix('!');
 
       $routeProvider
-        .when('/npmop1/doc/insession',           {templateUrl: '/app/views/meetings/documents/in-session.html',  resolveController: true, documentsUrl : "/doc/meetings/abs/np-mop-01/insession/documents.json" })
-        .when('/mop7/doc/insession',             {templateUrl: '/app/views/meetings/documents/in-session.html',  resolveController: true, documentsUrl : "/doc/meetings/bs/mop-07/insession/documents.json" })
-        .when('/cop12/doc/insession',            {templateUrl: '/app/views/meetings/documents/in-session.html',  resolveController: true, documentsUrl : "/doc/meetings/cop/cop-12/insession/documents.json" })
+        .when('/npmop1/insession',           {templateUrl: '/app/views/meetings/documents/in-session.html',  resolveController: true, title : "NP-MOP 1 In Session Documents", documentsUrl : "/doc/meetings/abs/np-mop-01/insession/documents.js" })
+        .when('/mop7/insession',             {templateUrl: '/app/views/meetings/documents/in-session.html',  resolveController: true, title : "MOP 7 In Session Documents",    documentsUrl : "/doc/meetings/bs/mop-07/insession/documents.js" })
+        .when('/cop12/insession',            {templateUrl: '/app/views/meetings/documents/in-session.html',  resolveController: true, title : "COP 12 In Session Documents",   documentsUrl : "/doc/meetings/cop/cop-12/insession/documents.js" })
 
-        .when('/cms/management/ps.shtml',        {templateUrl: '/app/views/meetings/documents/in-session.html',  resolveController: true, documentsUrl : "/cms/management/ps.json" })
+        .when('/internal/printsmart/ps6d7wgr67ewfgr6dq7gr23786rgd78r6',        {templateUrl: '/app/views/meetings/documents/in-session.html',  resolveController: true, title : "TEST In Session Documents", documentsUrl : "/doc/meetings/bs/mop-07/insession/test-documents.js" })
 
         .when('/internal/printsmart/printshop',  {templateUrl: '/app/views/print-smart/printshop.html',  resolveController: true })
         .when('/404',                            {templateUrl: '/app/views/404.html',                   resolveUser: true })
