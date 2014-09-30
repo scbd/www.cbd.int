@@ -44,8 +44,8 @@ app.all('/images/*',     function(req, res) { proxy.web(req, res, { target: 'htt
 
 // Configure template
 
-app.get('/internal/printsmart/ps6d7wgr67ewfgr6dq7gr23786rgd78r6', sendTemplate);
-app.get('/internal/printsmart*', function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/print-smart/template.html'); });
+app.get('/printsmart/ps6d7wgr67ewfgr6dq7gr23786rgd78r6', sendTemplate);
+app.get('/printsmart*', function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/print-smart/template.html'); });
 app.get('/reports/map*',         function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/reports/template.html'); });
 app.get('/*', sendTemplate);
 

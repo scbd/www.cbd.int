@@ -10,9 +10,9 @@ define(['app', 'providers/routes/extended-route-provider'], function(app) { 'use
         .when('/mop7/insession',             {templateUrl: '/app/views/meetings/documents/in-session.html',  resolveController: true, title : "MOP 7 In Session Documents",    documentsUrl : "/doc/meetings/bs/mop-07/insession/documents.js" })
         .when('/cop12/insession',            {templateUrl: '/app/views/meetings/documents/in-session.html',  resolveController: true, title : "COP 12 In Session Documents",   documentsUrl : "/doc/meetings/cop/cop-12/insession/documents.js" })
 
-        .when('/internal/printsmart/ps6d7wgr67ewfgr6dq7gr23786rgd78r6',        {templateUrl: '/app/views/meetings/documents/in-session.html',  resolveController: true, title : "TEST In Session Documents", documentsUrl : "/doc/meetings/bs/mop-07/insession/test-documents.js" })
+        .when('/printsmart/ps6d7wgr67ewfgr6dq7gr23786rgd78r6',        {templateUrl: '/app/views/meetings/documents/in-session.html',  resolveController: true, title : "TEST In Session Documents", documentsUrl : "/doc/meetings/bs/mop-07/insession/test-documents.js" })
 
-        .when('/internal/printsmart/printshop',  {templateUrl: '/app/views/print-smart/printshop.html',  resolveController: true })
+        .when('/printsmart/printshop',  {templateUrl: '/app/views/print-smart/printshop.html',  resolveController: true })
         .when('/404',                            {templateUrl: '/app/views/404.html',                   resolveUser: true })
         .otherwise({redirectTo: '/404'});
     }

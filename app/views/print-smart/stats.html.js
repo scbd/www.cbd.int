@@ -31,7 +31,7 @@ define(['underscore'], function(_) {
 
 		$scope.$watch(function() { return $location.path() }, function(path, oldPath){
 
-			if(path != "/internal/printsmart/") {
+			if(path != "/printsmart/") {
 				$scope.badge = "";
 				$scope.$root.contact = null;
 			}

@@ -3,7 +3,7 @@ function PrintSmartCtrl($scope, $location, $timeout) {
 
 	$scope.$watch(function() { return $location.path(); }, function(path){
 
-		if(path == "/internal/printsmart") {
+		if(path == "/printsmart") {
 			$scope.badge = "";
 			$scope.$root.contact = null;
 		}
@@ -15,7 +15,7 @@ function PrintSmartCtrl($scope, $location, $timeout) {
 
 			var badge = $scope.badge=='boxes' ? "boxes" : (($scope.badge||"").replace(/[^0-9]/g, "") || "INVALID_BADGE_ID");
 
-			$location.path('/internal/printsmart/'+escape(badge));
+			$location.path('/printsmart/'+escape(badge));
 		}
 
 		$scope.badge = "";
@@ -24,11 +24,11 @@ function PrintSmartCtrl($scope, $location, $timeout) {
 	$scope.close = function() {
 		$location.hash('');
 		$location.search({});
-		$location.path("/internal/printsmart");
+		$location.path("/printsmart");
 	};
 
 	$scope.isHome = function () {
-		return $location.path() == "/internal/printsmart";
+		return $location.path() == "/printsmart";
 	};
 
 	$scope.formatBadge = function (code) {

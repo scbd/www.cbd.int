@@ -18,7 +18,7 @@ define(['angular'], function(angular) {
 			$scope.authorizationKey = '';
 
 
-			$location.path('/internal/printsmart');
+			$location.path('/printsmart');
 
 
 		};

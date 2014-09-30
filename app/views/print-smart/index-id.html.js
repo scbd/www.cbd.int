@@ -184,7 +184,7 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 		//
 		//=============================================
 		function close() {
-			$location.path("/internal/printsmart");
+			$location.path("/printsmart");
 		};
 
 		//=============================================

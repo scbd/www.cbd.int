@@ -176,7 +176,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 					};
 
 					close().then(function(){
-						$location.url('/internal/printsmart/printshop');
+						$location.url('/printsmart/printshop');
 					});
 				};
 
