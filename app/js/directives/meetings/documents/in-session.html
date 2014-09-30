@@ -15,10 +15,10 @@
 
 						<a role="menuitem" tabindex="-1" style="display:inline-block;width:120px;font-size:inherit;" >{{allLanguages[locale]||locale}}</a>
 						<span>
-							<a class="btn btn-primary btn-sm" style="margin-right:5px;font-size:16px;" target="_blank" href="{{d.urlPattern}}{{locale}}.doc">
+							<a ng-show="hasFormat(d, 'doc')" class="btn btn-primary btn-sm" style="margin-right:5px;font-size:16px;" target="_blank" href="{{d.urlPattern}}{{locale}}.doc">
 								<i class="fa fa-file-word-o"></i>
 							</a>
-							<a class="btn btn-danger  btn-sm" style="margin-right:5px;font-size:16px;" target="_blank" href="{{d.urlPattern}}{{locale}}.pdf">
+							<a ng-show="hasFormat(d, 'pdf')" class="btn btn-danger  btn-sm" style="margin-right:5px;font-size:16px;" target="_blank" href="{{d.urlPattern}}{{locale}}.pdf">
 								<i class="fa fa-file-pdf-o"></i>
 							</a>
 						</span>
