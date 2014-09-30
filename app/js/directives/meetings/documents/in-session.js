@@ -56,7 +56,7 @@ define(['app', 'underscore', 'directives/print-smart/print-smart', 'mobile/templ
 				//==============================================
 				$scope.getUrl = function(d, locale, format) {
 
-					if(!$scope.hasFormat(d))
+					if(!$scope.hasFormat(d, format))
 						return "";
 
 					return d.urlPattern + locale + '.' + format;
