@@ -15,6 +15,10 @@
         content:"\f078";
     }
 
+    .in-session-documents > .table {
+        margin-bottom:0px;
+    }
+
 </style>
 
 <div print-smart="">
@@ -24,7 +28,9 @@
     </div>
 
     <h3>{{title || 'CBD Meetings In Session Documents'}}</h3>
+
     <div class="clearfix"></div>
+
     <p>The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.</p>
 
     <style>
@@ -35,11 +41,11 @@
     <div ng-show="error" ng-switch="error">
 
         <div ng-switch-when="TIMEOUT"   class="alert alert-info"    role="alert">
-            <b>Loading list of files takes longer than expected...</b><br/>
-            Please allow a couples of seconds more for files to load... <i class="fa fa-cog fa-spin fa-lg"></i>
+            <b>Loading documents takes longer than expected.</b><br/>
+            Please wait a few seconds for documents to load... <i class="fa fa-cog fa-spin fa-lg"></i>
         </div>
         <div ng-switch-default class="alert alert-warning" role="alert">
-            <b>Oh, no!</b> An error occured.
+            <b>An error occured.</b>
             Please <a href="#" ng-click="reloadPage()">refresh the page</a>.<br/>
             If you continue experiencing problems,
             please visit document distribution center for assistance.
@@ -49,7 +55,7 @@
     </div>
 
     <div ng-show="loading"><i class="fa fa-cog fa-spin fa-lg"></i> Loading...</div>
-    <div ng-show="(documents|filter:{ visible : true }).length==0">No documents available</div>
+    <div ng-show="(documents|filter:{ visible : true }).length==0">No documents available at the moment.</div>
 
     <div class="clearfix"></div>
 
@@ -117,6 +123,22 @@
             <div id="collapseOTHER" class="panel-collapse collapse">
                 <div class="panel-bodyX">
                     <div class="in-session-documents" documents="OTHER"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="panel panel-default" ng-show="(PRESENTATION = (documents|filter:{ group : 'PRESENTATION', visible : true })).length">
+
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapsePRESENTATION">Presentations</a>
+                </h4>
+            </div>
+
+            <div id="collapsePRESENTATION" class="panel-collapse collapse">
+                <div class="panel-bodyX">
+                    <div class="in-session-documents" documents="PRESENTATION"></div>
                 </div>
             </div>
 
