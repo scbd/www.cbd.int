@@ -1,9 +1,7 @@
-define(['underscore', 'directives/meetings/documents/in-session'], function(_) {
+define(['underscore', 'nprogress', 'directives/meetings/documents/in-session'], function(_, nprogress) {
 	return ["$scope", "$route", "$http", '$timeout', function ($scope, $route, $http, $timeout) {
 
 		var loadTimeout = 10000;
-
-		$scope.title = $route.current.$$route.title;
 
 		//=============================================
 		//
@@ -11,11 +9,12 @@ define(['underscore', 'directives/meetings/documents/in-session'], function(_) {
 		//=============================================
 		function load() {
 
-			$scope.loading = true;
+			nprogress.start();
 
 			$http.get($route.current.$$route.documentsUrl, { timeout : loadTimeout }).success(function(data){
 
-				delete $scope.loading;
+				nprogress.done();
+
 				delete $scope.error;
 
 				$scope.documents = _(data || []).map(function(d) {  //patch serie & tag
@@ -42,8 +41,7 @@ define(['underscore', 'directives/meetings/documents/in-session'], function(_) {
 				else if(status==404) $scope.error = "NOT_FOUND";
 				else            $scope.error = "UNKNOWN";
 
-				delete $scope.loading;
-
+				nprogress.done();
 			});
 		}
 
@@ -53,7 +51,7 @@ define(['underscore', 'directives/meetings/documents/in-session'], function(_) {
 		//=============================================
 		$scope.reloadPage = function () {
 			window.location.reload();
-		}
+		};
 
 		load();
 	}];

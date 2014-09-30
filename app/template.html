@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/app/libs/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/app/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/app/libs/nprogress/nprogress.css">
     <style>
 
     [ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }
@@ -44,6 +45,7 @@
     footer.standard ul.list-inline > li { padding: 0px 5px; border-right:solid 1px #666;font-size: 14px;}
     footer.standard ul.list-inline > li:last-child { border-right: none; }
 
+    h1 { font-size: 28px; }
     .view h1, .view h2, .view h3, .view h4, .view h5, .view h6, .view .h1, .view .h2, .view .h3, .view .h4, .view .h5, .view .h6 {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       color:#009B48;
@@ -115,7 +117,7 @@
 
     <!-- CONTENT -->
     <div class="container whitebg view">
-
+        <h1 ng-cloak>{{title}}</h1>
         <ng-view></ng-view>
 
     </div>

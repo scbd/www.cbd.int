@@ -8,6 +8,7 @@ require(["apps/generic-config"], function() { 'use strict';
         paths: {
             'app'  : 'apps/www/app',
             'boot' : 'apps/generic-boot',
+            'nprogress' : '../libs/nprogress/nprogress',
             'dropbox-dropins' : 'https://www.dropbox.com/static/api/2/dropins'
         },
         shim: {
@@ -25,6 +26,6 @@ require(["apps/generic-config"], function() { 'use strict';
     });
 
     // BOOT
-
+    require(['nprogress'], function(p) { p.start() });
     require(['boot']);
 });

@@ -27,10 +27,6 @@
         <div class="print-smart-checkout fixed-top-right"></div>
     </div>
 
-    <h3>{{title || 'CBD Meetings In Session Documents'}}</h3>
-
-    <div class="clearfix"></div>
-
     <p>The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.</p>
 
     <style>
@@ -54,7 +50,6 @@
 
     </div>
 
-    <div ng-show="loading"><i class="fa fa-cog fa-spin fa-lg"></i> Loading...</div>
     <div ng-show="(documents|filter:{ visible : true }).length==0">No documents available at the moment.</div>
 
     <div class="clearfix"></div>
