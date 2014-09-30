@@ -15,10 +15,10 @@
 
 						<a role="menuitem" tabindex="-1" style="display:inline-block;width:120px;font-size:inherit;" >{{allLanguages[locale]||locale}}</a>
 						<span>
-							<a ng-show="hasFormat(d, 'doc')" class="btn btn-primary btn-sm" style="margin-right:5px;font-size:16px;" target="_blank" href="{{d.urlPattern}}{{locale}}.doc">
+							<a ng-show="hasFormat(d, 'doc')" class="btn btn-primary btn-sm" style="margin-right:5px;font-size:16px;" target="_blank" ng-href="{{getUrl(d, locale, 'doc')}}">
 								<i class="fa fa-file-word-o"></i>
 							</a>
-							<a ng-show="hasFormat(d, 'pdf')" class="btn btn-danger  btn-sm" style="margin-right:5px;font-size:16px;" target="_blank" href="{{d.urlPattern}}{{locale}}.pdf">
+							<a ng-show="hasFormat(d, 'pdf')" class="btn btn-danger  btn-sm" style="margin-right:5px;font-size:16px;" target="_blank" ng-href="{{getUrl(d, locale, 'pdf')}}">
 								<i class="fa fa-file-pdf-o"></i>
 							</a>
 						</span>
@@ -33,13 +33,13 @@
 					<tr ng-show="hasFormat(d, 'doc')">
 						<td style="padding:2px" ><img src="/cms/images/icon-doc.gif" border="0" alt="File Type: DOC"></td>
 						<td style="padding:2px" ng-repeat="locale in d.locales | orderBy:'toString()'">
-							<a class="tip"  target="_blank" href="{{d.urlPattern}}{{locale}}.doc">{{locale}}</a>
+							<a class="tip"  target="_blank" ng-href="{{getUrl(d, locale, 'doc')}}">{{locale}}</a>
 						</td>
 					</tr>
 					<tr ng-show="hasFormat(d, 'pdf')">
 						<td style="padding:2px" ><img src="/images/pdf_button.png" border="0" alt="File Type: PDF"></td>
 						<td style="padding:2px"  ng-repeat="locale in d.locales | orderBy:'toString()'">
-							<a class="tip"  target="_blank" href="{{d.urlPattern}}{{locale}}.pdf">{{locale}}</a>
+							<a class="tip"  target="_blank" ng-href="{{getUrl(d, locale, 'pdf')}}">{{locale}}</a>
 						</td>
 					</tr>
 				</table>

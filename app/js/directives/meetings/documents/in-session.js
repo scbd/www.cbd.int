@@ -49,6 +49,18 @@ define(['app', 'underscore', 'directives/print-smart/print-smart', 'mobile/templ
 				$scope.hasFormat = function(d, format) {
 					return !d.formats || _.contains(d.formats, format);
 				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.getUrl = function(d, locale, format) {
+
+					if(!$scope.hasFormat(d))
+						return "";
+
+					return d.urlPattern + locale + '.' + format;
+				};
 			}
 		};
 	}]);
