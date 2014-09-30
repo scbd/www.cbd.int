@@ -1,4 +1,4 @@
-define(['app', 'directives/print-smart/print-smart', 'mobile/template-hacker'], function(app) {
+define(['app', 'underscore', 'directives/print-smart/print-smart', 'mobile/template-hacker'], function(app, _) {
 
 	//==============================================
 	//
@@ -40,6 +40,14 @@ define(['app', 'directives/print-smart/print-smart', 'mobile/template-hacker'], 
 				//==============================================
 				$scope.selected = function(symbol) {
 					return psCtrl && psCtrl.hasDocument(symbol);
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.hasFormat = function(d, format) {
+					return !d.formats || _.contains(d.formats, format);
 				};
 			}
 		};
