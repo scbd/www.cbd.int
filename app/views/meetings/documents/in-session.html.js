@@ -1,7 +1,5 @@
 define(['underscore', 'nprogress', 'directives/meetings/documents/in-session'], function(_, nprogress) {
-	return ["$scope", "$route", "$http", '$timeout', function ($scope, $route, $http, $timeout) {
-
-		var loadTimeout = 10000;
+	return ["$scope", "$route", "$http", '$q', function ($scope, $route, $http, $q) {
 
 		//=============================================
 		//
@@ -11,37 +9,55 @@ define(['underscore', 'nprogress', 'directives/meetings/documents/in-session'], 
 
 			nprogress.start();
 
-			$http.get($route.current.$$route.documentsUrl, { timeout : loadTimeout }).success(function(data){
+			var queries = [
+				loadDocuments('plenary'),
+				loadDocuments('wg1'),
+				loadDocuments('wg2'),
+				loadDocuments('other'),
+				loadDocuments('presentations')
+			];
 
-				nprogress.done();
+			$q.all(queries).then(function() {
 
 				delete $scope.error;
 
-				$scope.documents = _(data || []).map(function(d) {  //patch serie & tag
+			}).catch(function() {
+
+				$scope.error = "ERROR";
+
+			}).finally(nprogress.done);
+
+		}
+
+		//=============================================
+		//
+		//
+		//=============================================
+		function loadDocuments(name) {
+
+			var url   = $route.current.$$route.documentsUrl + name + '.json';
+			var field = name.toUpperCase();
+
+			$http.get(url).success(function(data){
+
+				$scope[field] = _.chain(data || []).map(function(d) {  //patch serie & tag
 
 					d.group   = d.group || 'OTHER';
 					d.visible = d.visible!==false ? true : false;
 
 					return d;
-				});
 
-			}).error(function(data, status){
+				}).where({
 
-				if(status===0 && loadTimeout<15000) {
+					visible : true
 
-					$scope.error = "TIMEOUT";
-					loadTimeout  = 30000;
+				}).value();
 
-					$timeout(load, 1000);
+			}).error(function(data, status) {
 
-					return;
-				}
-
-				     if(status=== 0) $scope.error = "TIMEOUT-X";
-				else if(status==404) $scope.error = "NOT_FOUND";
-				else            $scope.error = "UNKNOWN";
-
-				nprogress.done();
+				     if(status==403) $scope[field] = "RESTRICTED";
+				else if(status==404) $scope[field] = [];
+				else  throw "UNKNOWN_ERROR";
 			});
 		}
 

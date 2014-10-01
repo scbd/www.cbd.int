@@ -23,7 +23,7 @@
 
 <div print-smart="">
 
-    <div ng-show="(documents|filter:{ visible : true }).length" style="float:right;text-align: right; margin:5px; clear:both;">
+    <div ng-show="PLENARY||WG1||WG2||OTHER||PRESENTATIONS" style="float:right;text-align: right; margin:5px; clear:both;">
         <div class="print-smart-checkout fixed-top-right"></div>
     </div>
 
@@ -50,13 +50,11 @@
 
     </div>
 
-    <div ng-show="(documents|filter:{ visible : true }).length==0">No documents available at the moment.</div>
-
     <div class="clearfix"></div>
 
     <div class="panel-group" id="accordionX">
 
-        <div class="panel panel-default" style="overflow:visible" ng-show="(PLENARY = (documents|filter:{ group : 'PLENARY', visible : true })).length">
+        <div class="panel panel-default" style="overflow:visible" ng-show="PLENARY">
 
             <div class="panel-heading">
                 <h4 class="panel-title">
@@ -73,7 +71,7 @@
         </div>
 
 
-        <div class="panel panel-default" style="overflow:visible" ng-show="(WG1 = (documents|filter:{ group : 'WG1', visible : true })).length">
+        <div class="panel panel-default" style="overflow:visible" ng-show="WG1">
 
             <div class="panel-heading">
                 <h4 class="panel-title">
@@ -90,7 +88,7 @@
         </div>
 
 
-        <div class="panel panel-default" style="overflow:visible" ng-show="(WG2 = (documents|filter:{ group : 'WG2', visible : true })).length">
+        <div class="panel panel-default" style="overflow:visible" ng-show="WG2">
 
             <div class="panel-heading">
                 <h4 class="panel-title">
@@ -107,7 +105,7 @@
         </div>
 
 
-        <div class="panel panel-default" style="overflow:visible" ng-show="(OTHER = (documents|filter:{ group : 'OTHER', visible : true })).length">
+        <div class="panel panel-default" style="overflow:visible" ng-show="OTHER">
 
             <div class="panel-heading">
                 <h4 class="panel-title">
@@ -123,17 +121,17 @@
 
         </div>
 
-        <div class="panel panel-default" style="overflow:visible" ng-show="(PRESENTATION = (documents|filter:{ group : 'PRESENTATION', visible : true })).length">
+        <div class="panel panel-default" style="overflow:visible" ng-show="PRESENTATIONS">
 
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapsePRESENTATION">Special Session on Implementation</a>
+                    <a class="collapsed" data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapsePRESENTATIONS">Special Session on Implementation</a>
                 </h4>
             </div>
 
-            <div id="collapsePRESENTATION" class="panel-collapse collapse">
+            <div id="collapsePRESENTATIONS" class="panel-collapse collapse">
                 <div class="panel-bodyX">
-                    <div class="in-session-documents" documents="PRESENTATION"></div>
+                    <div class="in-session-documents" documents="PRESENTATIONS"></div>
                 </div>
             </div>
 

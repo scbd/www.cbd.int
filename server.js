@@ -35,8 +35,7 @@ app.configure('development', function() {
 
 app.use('/favicon.png', express.static(__dirname + '/app/images/favicon.png', { maxAge: 86400000 }));
 app.use('/app', express.static(__dirname + '/app'));
-app.use(  '/doc/no-cache/', express.static(path.join(process.env.HOME, 'doc')));
-app.use('/~/doc/no-cache/', express.static(path.join(process.env.HOME, 'doc')));
+app.use('/doc/no-cache/', express.static(path.join(process.env.HOME, 'doc')));
 
 // Configure routes
 
