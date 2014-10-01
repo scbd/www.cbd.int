@@ -6,15 +6,21 @@
         </button>
 
         <ul class="dropdown-menu text-left" role="menu">
-            <li style="font-size:inherit"><a style="cursor:pointer;font-size:14px" ng-click="clear()">Clear selection</a></li>
             <li style="font-size:inherit">
-                <a style="cursor:pointer;font-size:14px" ng-click="checkout()">
-                    <ng-pluralize count="documents().length" when="{'0': 'Request copy »', 'one': 'Request copy »', 'other': 'Request copies »'}">
+                <a style="cursor:pointer;font-size:14px" ng-click="download()">
+                    <i class="fa fa-arrow-circle-down"></i> Download
+                </a>
+                <a style="cursor:pointer;font-size:14px" ng-click="print()">
+                    <i class="fa fa-print"></i> Print
                 </a>
             </li>
             <li class="divider"></li>
+            <li style="font-size:inherit">
+                <a style="cursor:pointer;font-size:14px" ng-click="clear()"><i class="fa fa-times-circle"></i> Clear selection</a>
+            </li>
+            <li class="divider"></li>
             <li ng-repeat="d in documents()|orderBy:'symbol'">
-                <a style="cursor:pointer;font-size:14px" ng-click="remove(d.symbol)" style="font-size:14px"><span style="font-size:18px;margin-left:-14px;color:#999">&times;</span> {{d.symbol}}</a>
+                <a style="cursor:pointer;font-size:14px" ng-click="remove(d.symbol)" style="font-size:14px"><i class="fa fa-times"></i> {{d.symbol}}</a>
             </li>
         </ul>
     </div>

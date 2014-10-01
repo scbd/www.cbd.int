@@ -31,13 +31,13 @@
 			<td style="width:130px;" class="hidden-xs">
 				<table>
 					<tr ng-show="hasFormat(d, 'doc')">
-						<td style="padding:2px" ><img src="/cms/images/icon-doc.gif" border="0" alt="File Type: DOC"></td>
+						<td style="padding:2px" ><i style="color:#0000E1;font-size:110%" class="fa fa-file-word-o"></i> </td>
 						<td style="padding:2px" ng-repeat="locale in d.locales | orderBy:'toString()'">
 							<a class="tip"  target="_blank" ng-href="{{getUrl(d, locale, 'doc')}}">{{locale}}</a>
 						</td>
 					</tr>
 					<tr ng-show="hasFormat(d, 'pdf')">
-						<td style="padding:2px" ><img src="/images/pdf_button.png" border="0" alt="File Type: PDF"></td>
+						<td style="padding:2px" ><i style="color:#CF1312;font-size:110%" class="fa fa-file-pdf-o"></i> </td>
 						<td style="padding:2px"  ng-repeat="locale in d.locales | orderBy:'toString()'">
 							<a class="tip"  target="_blank" ng-href="{{getUrl(d, locale, 'pdf')}}">{{locale}}</a>
 						</td>

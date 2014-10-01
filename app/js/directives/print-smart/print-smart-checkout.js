@@ -106,6 +106,22 @@ define(['app', './checkout-dialog', './print-dialog', './download-dialog'], func
 				$scope.checkout = function() {
 					psCtrl.open('checkout');
 				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.print = function() {
+					psCtrl.open('print');
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.download = function() {
+					psCtrl.open('download');
+				};
 			}
 		};
 	}]);
