@@ -39,14 +39,14 @@ app.use('/app', express.static(__dirname + '/app'));
 app.get('/app/*', function(req, res) { res.send('404', 404); } );
 app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'https://api.cbd.int:443', secure: false } ); } );
 app.all('/doc/*', function(req, res) { proxy.web(req, res, { target: 'http://www.cbd.int',    secure: false } ); } );
-app.all('/cms/images/*', function(req, res) { proxy.web(req, res, { target: 'http://www.cbd.int',    secure: false } ); } );
-app.all('/images/*',     function(req, res) { proxy.web(req, res, { target: 'http://www.cbd.int',    secure: false } ); } );
+//app.all('/cms/images/*', function(req, res) { proxy.web(req, res, { target: 'http://www.cbd.int',    secure: false } ); } );
+//app.all('/images/*',     function(req, res) { proxy.web(req, res, { target: 'http://www.cbd.int',    secure: false } ); } );
 
 // Configure template
 
 app.get('/printsmart/ps6d7wgr67ewfgr6dq7gr23786rgd78r6', sendTemplate);
-app.get('/printsmart*', function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/print-smart/template.html'); });
-app.get('/reports/map*',         function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/reports/template.html'); });
+app.get('/printsmart*',  function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/print-smart/template.html'); });
+app.get('/reports/map*', function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/reports/template.html'); });
 app.get('/*', sendTemplate);
 
 // Configure proxy to legacy website
