@@ -11,9 +11,11 @@ process.on('uncaughtException', function (err) {
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 
-var http = require('http'),
-  express = require('express'),
-  httpProxy = require('http-proxy');
+var path      = require('path');
+var http      = require('http');
+var express   = require('express');
+var httpProxy = require('http-proxy');
+
 
 // Create server & proxy
 
@@ -33,18 +35,17 @@ app.configure('development', function() {
 
 app.use('/favicon.png', express.static(__dirname + '/app/images/favicon.png', { maxAge: 86400000 }));
 app.use('/app', express.static(__dirname + '/app'));
+app.use(  '/doc/no-cache/', express.static(path.join(process.env.HOME, 'doc')));
+app.use('/~/doc/no-cache/', express.static(path.join(process.env.HOME, 'doc')));
 
 // Configure routes
 
 app.get('/app/*', function(req, res) { res.send('404', 404); } );
 app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'https://api.cbd.int:443', secure: false } ); } );
 app.all('/doc/*', function(req, res) { proxy.web(req, res, { target: 'http://www.cbd.int',    secure: false } ); } );
-//app.all('/cms/images/*', function(req, res) { proxy.web(req, res, { target: 'http://www.cbd.int',    secure: false } ); } );
-//app.all('/images/*',     function(req, res) { proxy.web(req, res, { target: 'http://www.cbd.int',    secure: false } ); } );
 
 // Configure template
 
-app.get('/printsmart/ps6d7wgr67ewfgr6dq7gr23786rgd78r6', sendTemplate);
 app.get('/printsmart*',  function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/print-smart/template.html'); });
 app.get('/reports/map*', function sendTemplate(req, res) { res.sendfile(__dirname + '/app/views/reports/template.html'); });
 app.get('/*', sendTemplate);
