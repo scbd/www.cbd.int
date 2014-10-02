@@ -41,7 +41,7 @@ app.use('/doc/no-cache/', express.static(path.join(process.env.HOME, 'doc')));
 
 app.get('/app/*', function(req, res) { res.send('404', 404); } );
 app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'https://api.cbd.int:443', secure: false } ); } );
-app.all('/doc/*', function(req, res) { proxy.web(req, res, { target: 'http://www.cbd.int',    secure: false } ); } );
+app.all('/doc/*', function(req, res) { res.send('404', 404); } );//proxy.web(req, res, { target: 'http://www.cbd.int',    secure: false } ); } );
 
 // Configure template
 
