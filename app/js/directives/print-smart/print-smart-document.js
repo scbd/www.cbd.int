@@ -32,6 +32,13 @@ define(['app', 'underscore'], function(app, _) {
 						$scope.select(!$scope.selected());
 					});
 				});
+
+
+				$scope.$on('printsmart-refresh', function(){
+					if($scope.selected()) {// Force refresh of file lists
+						$scope.select(true);
+					}
+				});
 			},
 			controller : ["$scope", function($scope) {
 
@@ -58,7 +65,7 @@ define(['app', 'underscore'], function(app, _) {
 					tag    = $scope.documentTag;
 					pdfs   =          loadLocalizedLinks($scope.documentUrl, ".pdf");
 					docs   = _.extend(loadLocalizedLinks($scope.documentUrl, ".doc"),
-									loadLocalizedLinks($scope.documentUrl, ".docx"));
+									  loadLocalizedLinks($scope.documentUrl, ".docx"));
 
 					if(!pdfs.en && /.pdf$/i .test($scope.documentUrl)) pdfs.en = $scope.documentUrl;
 					if(!docs.en && /.doc$/i .test($scope.documentUrl)) docs.en = $scope.documentUrl;

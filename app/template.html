@@ -2,7 +2,7 @@
 <html lang="en" ng-controller="TemplateController">
 <head>
     <base href="/~">
-    <title>Convention on Biological Diversity</title>
+    <title>In-Session documents - Convention on Biological Diversity</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -59,6 +59,15 @@
     @media (max-width: 767px) {
         button.visible-xs { display: inline-block !important; }
         span.visible-xs   { display: inline !important; }
+    }
+
+    .growl {
+        width: 50%;
+        position: fixed;
+        right: 5px;
+        margin: 0 0 0 -25%;
+        top: 5px;
+        z-index: 9999;
     }
 
     </style>
@@ -119,7 +128,6 @@
     <div class="container whitebg view">
         <h1 ng-cloak>{{title}}</h1>
         <ng-view></ng-view>
-
     </div>
 
     <!--  FOOTER   -->
@@ -181,6 +189,8 @@
             <a href="http://unep.org/"   target="_blank"><img src="/app/images/unep-logo-white-en.gif" alt="UNEP logo" /></a>
         </div>
     </footer>
+
+    <div growl></div>
 
     <!-- Boot the app -->
     <script>

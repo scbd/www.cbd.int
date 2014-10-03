@@ -8,10 +8,14 @@ require(["apps/generic-config"], function() { 'use strict';
         paths: {
             'app'  : 'apps/www/app',
             'boot' : 'apps/generic-boot',
-            'nprogress' : '../libs/nprogress/nprogress',
+            'angular-growl'   : '../libs/angular-growl/build/angular-growl.min',
+            'angular-moment'  : '../libs/angular-moment/angular-moment.min',
+            'nprogress'       : '../libs/nprogress/nprogress',
             'dropbox-dropins' : 'https://www.dropbox.com/static/api/2/dropins'
         },
         shim: {
+            'angular-growl'   : { 'deps': ['angular'] },
+            'angular-moment'  : { 'deps': ['angular', 'moment'] },
             'dropbox-dropins' : {
                 deps: [],
                 exports: "Dropbox",
