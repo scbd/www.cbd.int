@@ -1,4 +1,4 @@
-define(['underscore', 'app', 'bootstrap'], function(_) {
+define(['underscore', 'angular', 'app', 'bootstrap'], function(_, angular) {
 
 	return ["$scope", "$route", "$location", "$http", "$q", "growl", function ($scope, $route, $location, $http, $q, growl) {
 
@@ -54,7 +54,7 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 						return $http.get('/api/v2014/printsmart-requests', { params : { q : JSON.stringify({ box : { $in : qBoxes }, completed:false }) } });
 					else
 						return res;
-				})
+				});
 			}
 
 
@@ -114,7 +114,7 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 		$scope.jobStatus = function (request) {
 			var status = request.status ? request.status['job-state'] || 'pending' : 'pending';
 
-			console.log(status)
+			console.log(status);
 			return status;
 		};
 
@@ -124,7 +124,7 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 		//=============================================
 		function flag(request, value) {
 			request.completed = (!!value || !!request.deliveredOn);
-		};
+		}
 
 		//=============================================
 		//
@@ -141,7 +141,7 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 		//=============================================
 		function commit(requests, closeOnSuccess) {
 
-			var qPromises  = []
+			var qPromises  = [];
 			var errorCount = 0;
 
 			_.each(requests, function(request) {
@@ -176,8 +176,8 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 					if(closeOnSuccess)
 						close();
 				}
-			})
-		};
+			});
+		}
 
 		//=============================================
 		//
@@ -185,7 +185,7 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 		//=============================================
 		function close() {
 			$location.path("/printsmart");
-		};
+		}
 
 		//=============================================
 		//
@@ -193,7 +193,7 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 		//=============================================
 		$scope.printed = function (r) {
 			return !!r.printedOn;
-		}
+		};
 
 		//=============================================
 		//
@@ -211,19 +211,19 @@ define(['underscore', 'app', 'bootstrap'], function(_) {
 		$scope.isNotAuthorized = function() {
 			return $scope.error &&
 				   $scope.error.status==403;
-		}
+		};
 
 		$scope.isBadgeInvalid = function() {
 			return $scope.error &&
 				   $scope.error.data &&
 				   $scope.error.data.error=='INVALID_BADGE_ID';
-		}
+		};
 
 		$scope.isOtherError = function() {
 			return $scope.error &&
 				  !$scope.isNotAuthorized() &&
 				  !$scope.isBadgeInvalid();
-		}
+		};
 
 	}];
 });
