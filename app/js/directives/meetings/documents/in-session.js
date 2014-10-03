@@ -4,7 +4,7 @@ define(['app', 'underscore', 'directives/print-smart/print-smart', 'mobile/templ
 	//
 	//
 	//==============================================
-	app.directive('inSessionDocuments', [function() {
+	app.directive('inSessionDocuments', ["$http", function($http) {
 		return {
 			restrict : "AEC",
 			replace : true,
@@ -60,6 +60,19 @@ define(['app', 'underscore', 'directives/print-smart/print-smart', 'mobile/templ
 						return "";
 
 					return d.urlPattern + locale + '.' + format;
+				};
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.hit = function(d, locale, format) {
+
+					var url = $scope.getUrl(d, locale, format);
+
+					if(!url) return;
+					if( url.indexOf('/')===0) url = 'http://www.cbd.int/' + url.replace(/^\/+/g, "");
+
+					$http.post("/api/v2014/printsmart-downloads?hit", [url]);
 				};
 			}
 		};
