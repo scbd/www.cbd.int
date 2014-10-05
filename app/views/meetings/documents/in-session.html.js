@@ -41,7 +41,8 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 		//=============================================
 		function loadDocuments(name) {
 
-			var url = $route.current.$$route.documentsUrl + name + '.json';
+			var field = name.toUpperCase();
+			var url   = $route.current.$$route.documentsUrl + name + '.json';
 
 			return $http.get(url).then(function(res){
 
@@ -53,12 +54,10 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 
 				}).where({ visible : true }).value();
 
-
-				var field   = name.toUpperCase();
 				var oldDocs = $scope[field];
 
 				if(ng.toJson(oldDocs) != ng.toJson(docs))
-					$scope[field] = docs;
+					return docs;
 
 				return $scope[field];
 
@@ -68,6 +67,9 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 				if(res && res.status==404) return [];
 
 				throw "UNKNOWN_ERROR";
+			}).then(function(docs){
+
+				$scope[field] = docs;
 			});
 		}
 
