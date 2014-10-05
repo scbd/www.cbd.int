@@ -1,4 +1,4 @@
-define(['app', 'underscore', 'directives/print-smart/print-smart', 'mobile/template-hacker'], function(app, _) {
+define(['app', 'underscore', 'directives/print-smart/print-smart'], function(app, _) {
 
 	//==============================================
 	//
