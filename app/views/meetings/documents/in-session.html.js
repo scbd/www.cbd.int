@@ -1,13 +1,35 @@
 define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/documents/in-session'], function(_, nprogress, ng, $) {
 	return ["$scope", "$route", "$http", '$q', '$timeout', 'growl', function ($scope, $route, $http, $q, $timeout, growl) {
 
-		var sections = [ 'plenary', 'wg1', 'wg2', 'other', 'presentations' ];
+		$scope.title        = $route.current.$$route.title;
+		$scope.intro        = $route.current.$$route.intro;
+		$scope.sections     = JSON.parse(JSON.stringify($route.current.$$route.documents)); //clone
+		$scope.sectionsKeys = _.keys($scope.sections);
 
-		_(sections).each(function(s){
 
-			$scope.$watch(s.toUpperCase(), applyChanges);
 
-		});
+
+		//=============================================
+		//
+		//
+		//=============================================
+		$scope.totalDocuments = function () {
+
+			return _($scope.sections).reduce(function(sum, v){
+
+				return sum + (v.documents||[]).length;
+
+			}, 0);
+		};
+
+		//=============================================
+		//
+		//
+		//=============================================
+		$scope.allLoaded = function () {
+
+			return _(_($scope.sections).pluck('documents')).every();
+		};
 
 		//=============================================
 		//
@@ -17,15 +39,15 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 
 			nprogress.start();
 
-			var queries = _(sections).map(loadDocuments);
+			var queries = _($scope.sections).map(loadDocuments);
 
 			$q.all(queries).then(function() {
 
 				delete $scope.error;
 
-			}).catch(function() {
+			}).catch(function(e) {
 
-				$scope.error = "ERROR";
+				$scope.error = "ERROR:"+(e||'').toString();
 
 			}).finally(function() {
 
@@ -39,12 +61,9 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 		//
 		//
 		//=============================================
-		function loadDocuments(name) {
+		function loadDocuments(section) {
 
-			var field = name.toUpperCase();
-			var url   = $route.current.$$route.documentsUrl + name + '.json';
-
-			return $http.get(url).then(function(res){
+			return $http.get(section.url).then(function(res){
 
 				var docs = _.chain(res.data || []).map(function(d) {  //patch serie & tag
 
@@ -52,14 +71,16 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 
 					return d;
 
-				}).where({ visible : true }).value();
+				}).filter(function(d) {
 
-				var oldDocs = $scope[field];
+					return d.visible && d.locales && d.locales.length;
 
-				if(ng.toJson(oldDocs) != ng.toJson(docs))
-					return docs;
+				}).value();
 
-				return $scope[field];
+				if(ng.toJson(docs) == ng.toJson(section.documents)) // do not update if values are ==
+					return section.documents;
+
+				return docs;
 
 			}).catch(function(res) {
 
@@ -67,9 +88,11 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 				if(res && res.status==404) return [];
 
 				throw "UNKNOWN_ERROR";
+
 			}).then(function(docs){
 
-				$scope[field] = docs;
+				section.documents = docs;
+
 			});
 		}
 
@@ -77,14 +100,32 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 		//
 		//
 		//=============================================
+
+		var refreshKeys  = _.keys($scope.sections);
+
 		function refresh() {
 
-			sections.push(sections.shift());
+			if($('.modal:visible').size()===0) {
 
-			if($('.modal:visible').size()===0)
-				loadDocuments(sections[0]);
+				refreshKeys.push(refreshKeys.shift());
 
-			$timeout(refresh, 30*1000);
+				var section = $scope.sections[refreshKeys[0]];
+				var oldDocs  = section.documents;
+
+				loadDocuments(section).then(function(newDocs) {
+
+					if(newDocs!=oldDocs)
+						applyChanges(newDocs, oldDocs);
+
+				}).finally(function(){
+
+					$timeout(refresh, 30*1000);
+				});
+			}
+			else {
+
+				$timeout(refresh, 30*1000);
+			}
 		}
 
 		//=============================================
@@ -123,14 +164,6 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 				$scope.$broadcast('printsmart-refresh');
 			}, 500);
 		}
-
-		//=============================================
-		//
-		//
-		//=============================================
-		$scope.reloadPage = function () {
-			window.location.reload();
-		};
 
 		load();
 	}];

@@ -23,13 +23,13 @@
 
 <div print-smart="">
 
-    <div ng-show="PLENARY||WG1||WG2||OTHER||PRESENTATIONS" style="float:right;text-align: right; margin:5px; clear:both;">
+    <div ng-show="totalDocuments()>0" style="float:right;text-align: right; margin:5px; clear:both;">
         <div class="print-smart-checkout fixed-top-right"></div>
     </div>
 
-    <p>The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.</p>
+    <p>{{intro}}</p>
 
-    <div ng-show="PLENARY.length==0 && WG1.length==0 && WG2.length==0 && OTHER.length==0 && PRESENTATIONS.length==0">
+    <div ng-show="allLoaded() && !totalDocuments()">
         No document
     </div>
 
@@ -58,84 +58,17 @@
 
     <div class="panel-group" id="accordionX">
 
-        <div class="panel panel-default" style="overflow:visible" ng-show="PLENARY">
+        <div ng-repeat="key in sectionsKeys" class="panel panel-default" style="overflow:visible" ng-show="sections[key].documents">
 
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapsePlenary">Plenary</a>
+                    <a ng-class="{ collapsed : !sections[key].open }"  data-toggle="collapse" style="display:block" data-parent="#accordion" ng-href="#collapse{{$index}}">{{sections[key].title}}</a>
                 </h4>
             </div>
 
-            <div id="collapsePlenary" class="panel-collapse collapse">
+            <div id="collapse{{$index}}" class="panel-collapse" ng-class="{ collapse : !sections[key].open, in : sections[key].open }">
                 <div class="panel-bodyX">
-                    <div class="in-session-documents" documents="PLENARY"></div>
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="panel panel-default" style="overflow:visible" ng-show="WG1">
-
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapseWG1">Working Group I</a>
-                </h4>
-            </div>
-
-            <div id="collapseWG1" class="panel-collapse collapse">
-                <div class="panel-bodyX">
-                    <div class="in-session-documents" documents="WG1"></div>
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="panel panel-default" style="overflow:visible" ng-show="WG2">
-
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapseWG2">Working Group II</a>
-                </h4>
-            </div>
-
-            <div id="collapseWG2" class="panel-collapse collapse">
-                <div class="panel-bodyX">
-                    <div class="in-session-documents" documents="WG2"></div>
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="panel panel-default" style="overflow:visible" ng-show="OTHER">
-
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapseOTHER">Other</a>
-                </h4>
-            </div>
-
-            <div id="collapseOTHER" class="panel-collapse collapse">
-                <div class="panel-bodyX">
-                    <div class="in-session-documents" documents="OTHER"></div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="panel panel-default" style="overflow:visible" ng-show="PRESENTATIONS">
-
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" style="display:block" data-parent="#accordion" href="#collapsePRESENTATIONS">Special Session on Implementation</a>
-                </h4>
-            </div>
-
-            <div id="collapsePRESENTATIONS" class="panel-collapse collapse">
-                <div class="panel-bodyX">
-                    <div class="in-session-documents" documents="PRESENTATIONS"></div>
+                    <div class="in-session-documents" documents="sections[key].documents"></div>
                 </div>
             </div>
 
