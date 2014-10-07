@@ -52,8 +52,8 @@ define(['app', 'providers/routes/extended-route-provider'], function(app) { 'use
             title     : "High Level Segment of COP 12",
             intro     : "The CBD Secretariat is making the following documents available on behalf of the Government of the Republic of Korea.",
             documents : {
-                plenary     : { title : "HLS Documents",                                                                          open : true, url : "/doc/no-cache/cop12/hls/insession/plenary.json" },
-                initiatives : { title : "COP 12 Information documents on Initiatives of the Government of the Republic of Korea", open : true, url : "/doc/no-cache/cop12/hls/insession/initiatives.json" }
+                plenary     : { title : "HLS Documents",                                                                          open : true, url : "/doc/no-cache/cop12/insession/hls/plenary.json" },
+                initiatives : { title : "COP 12 Information documents on Initiatives of the Government of the Republic of Korea", open : true, url : "/doc/no-cache/cop12/insession/hls/initiatives.json" }
             }
         })
 
