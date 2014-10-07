@@ -45,7 +45,7 @@ define(['app', 'providers/routes/extended-route-provider'], function(app) { 'use
                 wg2           : { title : "Working Group II", url : "/doc/no-cache/cop12/insession/wg2.json" },
                 other         : { title : "Other",            url : "/doc/no-cache/cop12/insession/other.json" }
             }
-        }).when('/cop12/hls/insession',  {
+        }).when('/cop12/insession/hls',  {
             templateUrl : '/app/views/meetings/documents/in-session.html',
             resolveController : true,
             progress  : { stop : false },
