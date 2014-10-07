@@ -28,10 +28,10 @@ define(['app', 'providers/routes/extended-route-provider'], function(app) { 'use
             title     : "NP COP-MOP 1 In In-session Documents",
             intro     : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
             documents : {
-                plenary       : { title : "Plenary",          url : "/doc/no-cache/npmop1/plenary.json" },
-                wg1           : { title : "Working Group I",  url : "/doc/no-cache/npmop1/wg1.json" },
-                wg2           : { title : "Working Group II", url : "/doc/no-cache/npmop1/wg2.json" },
-                other         : { title : "Other",            url : "/doc/no-cache/npmop1/other.json" }
+                plenary       : { title : "Plenary",          url : "/doc/no-cache/npmop1/insession/plenary.json" },
+                wg1           : { title : "Working Group I",  url : "/doc/no-cache/npmop1/insession/wg1.json" },
+                wg2           : { title : "Working Group II", url : "/doc/no-cache/npmop1/insession/wg2.json" },
+                other         : { title : "Other",            url : "/doc/no-cache/npmop1/insession/other.json" }
             }
         }).when('/cop12/insession',  {
             templateUrl : '/app/views/meetings/documents/in-session.html',
