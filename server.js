@@ -41,9 +41,9 @@ app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'https://ap
 
 // Configure template
 
-app.get('/printsmart*',  function(req, res) { res.sendfile(__dirname + '/app/views/print-smart/template.html', {maxAge:300000}); });
-app.get('/reports/map*', function(req, res) { res.sendfile(__dirname + '/app/views/reports/template.html',     {maxAge:300000}); });
-app.get('/*',            function(req, res) { res.sendfile(__dirname + '/app/template.html',                   {maxAge:300000}); });
+app.get('/printsmart*',  function(req, res) { res.sendFile(__dirname + '/app/views/print-smart/template.html', {maxAge:300000}); });
+app.get('/reports/map*', function(req, res) { res.sendFile(__dirname + '/app/views/reports/template.html',     {maxAge:300000}); });
+app.get('/*',            function(req, res) { res.sendFile(__dirname + '/app/template.html',                   {maxAge:300000}); });
 
 // app.all('/*', function(req, res) { proxy.web(req, res, { target: 'https://www.cbd.int:443', secure: false } ); } );
 
