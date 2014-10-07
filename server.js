@@ -32,6 +32,7 @@ app.use(require('compression')({ threshold: 512 }));
 app.use('/favicon.png',   express.static(__dirname + '/app/images/favicon.png', { maxAge: 86400000 }));
 app.use('/app',           express.static(__dirname + '/app', { maxAge: 300000 })); //5 minutes
 app.use('/doc/no-cache/', express.static(path.join(process.env.HOME, 'doc')));
+app.get('/doc/*',         function(req, res) { res.send('404', 404); } );
 
 // Configure routes
 
