@@ -34,7 +34,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				$scope.locales         = {};
 
 				element.on("show.bs.modal", function() {
-					$scope.badgeCode = "";
+					$scope.badgeCode = cleanBadge($scope.$root.badgeCode || "");
 					$scope.error     = null;
 					$scope.success   = null;
 					$scope.documents = psCtrl.documents();
@@ -49,8 +49,8 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 				//
 				//
 				//==============================================
-				function cleanBadge() {
-					return ($scope.badgeCode||"").replace(/[^0-9]/g, "");
+				function cleanBadge(code) {
+					return (code||$scope.badgeCode||"").replace(/[^0-9]/g, "");
 				}
 
 				//==============================================

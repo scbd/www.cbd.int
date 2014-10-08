@@ -31,6 +31,7 @@ define(['app', 'providers/routes/extended-route-provider'], function(app) { 'use
                 plenary       : { title : "Plenary",          url : "/doc/no-cache/npmop1/insession/plenary.json" },
                 wg1           : { title : "Working Group I",  url : "/doc/no-cache/npmop1/insession/wg1.json" },
                 wg2           : { title : "Working Group II", url : "/doc/no-cache/npmop1/insession/wg2.json" },
+                restricted    : { title : "Non-Papers",       url : "/doc/no-cache/npmop1/insession/restricted.json" },
                 other         : { title : "Other",            url : "/doc/no-cache/npmop1/insession/other.json" }
             }
         }).when('/cop12/insession',  {
@@ -43,6 +44,7 @@ define(['app', 'providers/routes/extended-route-provider'], function(app) { 'use
                 plenary       : { title : "Plenary",          url : "/doc/no-cache/cop12/insession/plenary.json" },
                 wg1           : { title : "Working Group I",  url : "/doc/no-cache/cop12/insession/wg1.json" },
                 wg2           : { title : "Working Group II", url : "/doc/no-cache/cop12/insession/wg2.json" },
+                restricted    : { title : "Non-Papers",       url : "/doc/no-cache/cop12/insession/restricted.json" },
                 other         : { title : "Other",            url : "/doc/no-cache/cop12/insession/other.json" }
             }
         }).when('/cop12/insession/hls',  {

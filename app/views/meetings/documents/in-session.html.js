@@ -25,10 +25,49 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 		//
 		//
 		//=============================================
+		$scope.unlock = function () {
+
+			var lockedSections = _($scope.sections).filter(function(s){
+				delete s.error;
+				return s.status==="RESTRICTED";
+			});
+
+			if(lockedSections.length)
+				nprogress.start();
+
+				console.log(lockedSections);
+
+
+			var queries = _(lockedSections).map(function(s){
+
+				return loadDocuments(s).then(function(d){
+
+					if(d=="RESTRICTED")
+						s.error =  "INVALID_BADGE_ID";
+				});
+			});
+
+			$q.all(queries).finally(function() {
+				nprogress.done();
+			});
+		};
+
+		//=============================================
+		//
+		//
+		//=============================================
 		$scope.allLoaded = function () {
 
 			return _(_($scope.sections).pluck('documents')).every();
 		};
+
+		//==============================================
+		//
+		//
+		//==============================================
+		function cleanBadge(code) {
+			return (code||$scope.$root.badgeCode||"").replace(/[^0-9]/g, "");
+		}
 
 		//=============================================
 		//
@@ -62,7 +101,9 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 		//=============================================
 		function loadDocuments(section) {
 
-			return $http.get(section.url).then(function(res){
+			section.loading = true;
+
+			return $http.get(section.url, { headers : { badge : cleanBadge() } }).then(function(res){
 
 				var docs = _.chain(res.data || []).map(function(d) {  //patch serie & tag
 
@@ -90,8 +131,15 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 
 			}).then(function(docs){
 
+				if(docs == "RESTRICTED")                    section.status = "RESTRICTED";
+				if(section.status &&  docs != "RESTRICTED") section.status = "UNRESTRICTED";
+
 				section.documents = docs;
 
+				return docs;
+
+			}).finally(function(){
+				delete section.loading;
 			});
 		}
 

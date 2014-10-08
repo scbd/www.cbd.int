@@ -62,13 +62,55 @@
 
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a ng-class="{ collapsed : !sections[key].open }"  data-toggle="collapse" style="display:block" data-parent="#accordion" ng-href="#collapse{{$index}}">{{sections[key].title}}</a>
+                    <a ng-class="{ collapsed : !sections[key].open }"  data-toggle="collapse" style="display:block" data-parent="#accordion" ng-href="#collapse{{$index}}">{{sections[key].title}} <i ng-show="sections[key].status=='RESTRICTED'" class="fa fa-lock"></i><i ng-show="sections[key].status=='UNRESTRICTED'" class="fa fa-unlock"></i></a>
                 </h4>
             </div>
 
             <div id="collapse{{$index}}" class="panel-collapse" ng-class="{ collapse : !sections[key].open, in : sections[key].open }">
                 <div class="panel-bodyX">
-                    <div class="in-session-documents" documents="sections[key].documents"></div>
+
+                    <div ng-show="sections[key].documents=='RESTRICTED'" class="panel panel-info" style="margin:10px">
+                        <div class="panel-heading">
+                            <i ng-show="sections[key].documents=='RESTRICTED'" class="fa fa-lock"></i>
+                            This section is restricted to participants of the CBD meeting.
+                        </div>
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="col-md-7 col-sm-6 col-xs-12" style="margin-bottom:10px">
+                                    Access is granted automatically through the meeting venue's network.<br/> If you are ouside the venue (e.g. in your hotel),
+                                    you have to provide your CBD Badge number to unlock and display the document(s) in this section.
+                                </div>
+
+                                <div class="col-md-5 col-sm-6 col-xs-12">
+
+                                    <form class="form-inline" ng-submit="unlock()">
+
+                                        <label> CBD Badge number </label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-barcode"></i></span>
+                                            <input type="text" ng-model="$root.badgeCode" placeholder="1234-5678" maxlength="9" pattern="[0-9\-]*" ng-disabled="sections[key].loading" class="form-control">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-success" ng-disabled="sections[key].loading" type="submit">
+                                                    <i ng-hide="sections[key].loading" class="fa fa-unlock-alt"></i>
+                                                    <i ng-show="sections[key].loading" class="fa fa-cog fa-spin"></i>
+                                                    Unlock
+                                                </button>
+                                            </span>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div ng-show="sections[key].error" class="alert alert-warning" style="margin-top:10px" role="alert">
+                                <img style="margin:3px" class="pull-right" src="/app/views/print-smart/sample-barcode.png">
+        						<b>Sorry!</b> Your CBD Badge number is invalid.
+        						<br/>You must provide the number located on the top right of your CBD meeting access badge.
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show="sections[key].documents!='RESTRICTED'"  class="in-session-documents" documents="sections[key].documents"></div>
                 </div>
             </div>
 
