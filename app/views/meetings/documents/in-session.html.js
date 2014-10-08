@@ -6,8 +6,7 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 		$scope.sections     = JSON.parse(JSON.stringify($route.current.$$route.documents)); //clone
 		$scope.sectionsKeys = _.keys($scope.sections);
 
-
-
+		var refreshTimeout = 2*60*1000; // 2 minutes
 
 		//=============================================
 		//
@@ -54,7 +53,7 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 				nprogress.done();
 			});
 
-			$timeout(refresh, 30*1000);
+			$timeout(refresh, refreshTimeout);
 		}
 
 		//=============================================
@@ -119,12 +118,12 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 
 				}).finally(function(){
 
-					$timeout(refresh, 30*1000);
+					$timeout(refresh, refreshTimeout);
 				});
 			}
 			else {
 
-				$timeout(refresh, 30*1000);
+				$timeout(refresh, refreshTimeout);
 			}
 		}
 
