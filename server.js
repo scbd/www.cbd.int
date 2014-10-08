@@ -46,11 +46,11 @@ app.get('/doc/no-cache/cop12/insession/restricted.json',  getRestrictedFile);
 app.get('/doc/no-cache/npmop1/insession/restricted.json', getRestrictedFile);
 
 app.use('/doc/no-cache/', express.static(path.join(process.env.HOME, 'doc')));
-app.get('/doc/*',         function(req, res) { res.send('404', 404); } );
+app.get('/doc/*',         function(req, res) { res.sendStatus(404); } );
 
 // Configure routes
 
-app.get('/app/*', function(req, res) { res.send('404', 404); } );
+app.get('/app/*', function(req, res) { res.sendStatus(404); } );
 app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiBaseUrl, secure: false } ); } );
 
 // Configure template
