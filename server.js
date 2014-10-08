@@ -11,8 +11,7 @@ process.on('uncaughtException', function (err) {
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 
-var _           = require('underscore');
-var fs          = require('fs');
+var FS          = require("q-io/fs");
 var path        = require('path');
 var http        = require('http');
 var express     = require('express');
@@ -85,23 +84,17 @@ function getRestrictedFile(req, res) {
 
     var filePath = path.join(process.env.HOME, 'doc', req.path.substr("/doc/no-cache/".length));
 
-    var ips = (req.ips && req.ips.length) ? req.ips : [req.ip];
+    return FS.exists(filePath).then(function(exists){
 
-    console.log("ips: ", ips);
+        if(!exists)
+            throw { code: 404 };
 
-    if(!fs.existsSync(filePath)) {
-        res.sendStatus(404);
-        return;
-    }
+        return superAgentq.get(apiBaseUrl+'/api/v2014/meetings/cop-12/securities/canDownloadRestricted').
+                           set('X-Forwarded-For', req.ip).
+                           set("badge", req.get("badge")||"").
+                           end();
 
-    var q = superAgentq.get(apiBaseUrl+'/api/v2014/meetings/cop-12/securities/canDownloadRestricted');
-
-    q.set('X-Forwarded-For', ips.join(', '));
-
-    if(req.get("badge"))
-        q.set("badge", req.get("badge"));
-
-    q.end().then(function(result){
+    }).then(function(result){
 
         if(result.statusCode!=200)
             throw { code: 500, data : res.body };
