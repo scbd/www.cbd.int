@@ -85,7 +85,7 @@ function getRestrictedFile(req, res) {
 
     var filePath = path.join(process.env.HOME, 'doc', req.path.substr("/doc/no-cache/".length));
 
-    var ips = _.union([req.ip], req.ips);
+    var ips = (req.ips && req.ips.length) ? req.ips : [req.ip];
 
     console.log("ips: ", ips);
 
