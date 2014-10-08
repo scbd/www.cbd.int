@@ -11,10 +11,16 @@ process.on('uncaughtException', function (err) {
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 
+var _           = require('underscore');
+var fs          = require('fs');
 var path        = require('path');
 var http        = require('http');
 var express     = require('express');
 var httpProxy   = require('http-proxy');
+var superAgentq = require('superagent-promise');
+var config      = require(path.join(process.env.HOME,'config.json'));
+
+var apiBaseUrl  = 'http://localhost:8000';
 
 // Create server & proxy
 
@@ -24,6 +30,11 @@ var proxy  = httpProxy.createProxyServer({});
 
 // Configure options
 
+if(config.trustedProxies) {
+    console.log('trusted proxies:', config.trustedProxies);
+    app.set('trust proxy', config.trustedProxies.join(', '));
+}
+
 app.use(require('morgan')('dev'));
 app.use(require('compression')({ threshold: 512 }));
 
@@ -31,13 +42,17 @@ app.use(require('compression')({ threshold: 512 }));
 
 app.use('/favicon.png',   express.static(__dirname + '/app/images/favicon.png', { maxAge: 86400000 }));
 app.use('/app',           express.static(__dirname + '/app', { maxAge: 300000 })); //5 minutes
+
+app.get('/doc/no-cache/cop12/insession/restricted.json',  getRestrictedFile);
+app.get('/doc/no-cache/npmop1/insession/restricted.json', getRestrictedFile);
+
 app.use('/doc/no-cache/', express.static(path.join(process.env.HOME, 'doc')));
 app.get('/doc/*',         function(req, res) { res.send('404', 404); } );
 
 // Configure routes
 
 app.get('/app/*', function(req, res) { res.send('404', 404); } );
-app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'https://api.cbd.int:443', secure: false } ); } );
+app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiBaseUrl, secure: false } ); } );
 
 // Configure template
 
@@ -61,3 +76,54 @@ server.listen(process.env.PORT || 8001, '0.0.0.0');
 server.on('listening', function () {
 	console.log('Server listening on %j', this.address());
 });
+
+//============================================================
+//
+//
+//============================================================
+function getRestrictedFile(req, res) {
+
+    var filePath = path.join(process.env.HOME, 'doc', req.path.substr("/doc/no-cache/".length));
+
+    var ips = _.union([req.ip], req.ips);
+
+    console.log("ips: ", ips);
+
+    if(!fs.existsSync(filePath)) {
+        res.sendStatus(404);
+        return;
+    }
+
+    var q = superAgentq.get(apiBaseUrl+'/api/v2014/meetings/cop-12/securities/canDownloadRestricted');
+
+    q.set('X-Forwarded-For', ips.join(', '));
+
+    if(req.get("badge"))
+        q.set("badge", req.get("badge"));
+
+    q.end().then(function(result){
+
+        if(result.statusCode!=200)
+            throw { code: 500, data : res.body };
+
+        return result.body;
+
+    }).then(function(authorization) {
+
+        console.log(authorization);
+
+        if(!authorization || !authorization.allow)
+            throw { code : 403 };
+
+        res.sendFile(filePath);
+
+    }).catch(function(error){
+
+        console.error(error);
+
+        if(error && error.code) res.sendStatus(error.code);
+        else                    res.sendStatus(500);
+
+    });
+
+}
