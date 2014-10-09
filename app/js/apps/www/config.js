@@ -1,4 +1,4 @@
-require.config({ waitSeconds: 120, baseUrl : '/app/js' });
+require.config({ waitSeconds: 5*60, baseUrl : '/app/js' });
 
 require(["apps/generic-config"], function() { 'use strict';
 
@@ -30,6 +30,6 @@ require(["apps/generic-config"], function() { 'use strict';
     });
 
     // BOOT
-    require(['nprogress'], function(p) { p.start() });
+    require(['nprogress'], function(p) { p.start(); });
     require(['boot']);
 });
