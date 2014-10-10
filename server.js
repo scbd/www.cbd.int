@@ -17,7 +17,10 @@ var http        = require('http');
 var express     = require('express');
 var httpProxy   = require('http-proxy');
 var superAgentq = require('superagent-promise');
+var mime        = require("mime");
 var config      = require(path.join(process.env.HOME,'config.json'));
+
+mime.define({ "application/json" : ["geojson"] });
 
 var apiBaseUrl  = (config.api||{}).baseUrl || 'https://api.cbd.int:443';
 
