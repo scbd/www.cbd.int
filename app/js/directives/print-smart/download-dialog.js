@@ -69,7 +69,7 @@ define(['app', 'angular', 'underscore', 'dropbox-dropins'], function(app, angula
 					if(urls.length) {
 
 						$http.post('/api/v2014/printsmart-downloads', urls).then(function(res){
-							$scope.downloadLink = 'http://www.infra.cbd.int/api/v2014/printsmart-downloads/'+res.data._id;
+							$scope.downloadLink = '/api/v2014/printsmart-downloads/'+res.data._id;
 						}).catch(function(err){
 							console.log(err);
 						});
