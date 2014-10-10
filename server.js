@@ -19,7 +19,7 @@ var httpProxy   = require('http-proxy');
 var superAgentq = require('superagent-promise');
 var config      = require(path.join(process.env.HOME,'config.json'));
 
-var apiBaseUrl  = 'https://api.cbd.int:443';
+var apiBaseUrl  = (config.api||{}).baseUrl || 'https://api.cbd.int:443';
 
 // Create server & proxy
 
