@@ -21,6 +21,8 @@ var config      = require(path.join(process.env.HOME,'config.json'));
 
 var apiBaseUrl  = (config.api||{}).baseUrl || 'https://api.cbd.int:443';
 
+console.log("API BaseUrl", apiBaseUrl);
+
 // Create server & proxy
 
 var app    = express();
