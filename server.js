@@ -17,10 +17,7 @@ var http        = require('http');
 var express     = require('express');
 var httpProxy   = require('http-proxy');
 var superAgentq = require('superagent-promise');
-var mime        = require("mime");
 var config      = require(path.join(process.env.HOME,'config.json'));
-
-mime.define({ "application/json" : ["geojson"] });
 
 var apiBaseUrl  = (config.api||{}).baseUrl || 'https://api.cbd.int:443';
 
@@ -41,7 +38,13 @@ if(config.trustedProxies) {
 
 app.use(require('morgan')('dev'));
 app.use(require('compression')({ threshold: 512 }));
+app.use(function(req, res, next) {
 
+    if(req.url.indexOf(".geojson")>0)
+        res.contentType('application/json');
+    next();
+
+});
 // Configure static files to serve
 
 app.use('/favicon.png',   express.static(__dirname + '/app/images/favicon.png', { maxAge: 86400000 }));
