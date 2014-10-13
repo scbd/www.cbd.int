@@ -16,8 +16,8 @@ define(['app', 'providers/routes/extended-route-provider'], function(app) { 'use
             intro     : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
             documents : {
                 plenary       : { title : "Plenary",                           url : "/doc/no-cache/mop7/insession/plenary.json" },
-                wg1           : { title : "Working Group I",                   url : "/doc/no-cache/mop7/insession/wg1.json" },
-                wg2           : { title : "Working Group II",                  url : "/doc/no-cache/mop7/insession/wg2.json" },
+                wg1           : { title : "Working Group I",                   url : "/doc/no-cache/mop7/insession/wg1.json", tag : "WG.1" },
+                wg2           : { title : "Working Group II",                  url : "/doc/no-cache/mop7/insession/wg2.json", tag : "WG.2" },
                 other         : { title : "Other",                             url : "/doc/no-cache/mop7/insession/other.json" },
                 presentations : { title : "Special Session on Implementation", url : "/doc/no-cache/mop7/insession/presentations.json" }
             }
@@ -29,8 +29,8 @@ define(['app', 'providers/routes/extended-route-provider'], function(app) { 'use
             intro     : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
             documents : {
                 plenary       : { title : "Plenary",          url : "/doc/no-cache/npmop1/insession/plenary.json" },
-                wg1           : { title : "Working Group I",  url : "/doc/no-cache/npmop1/insession/wg1.json" },
-                wg2           : { title : "Working Group II", url : "/doc/no-cache/npmop1/insession/wg2.json" },
+                wg1           : { title : "Working Group I",  url : "/doc/no-cache/npmop1/insession/wg1.json", tag : "WG.1" },
+                wg2           : { title : "Working Group II", url : "/doc/no-cache/npmop1/insession/wg2.json", tag : "WG.2" },
                 restricted    : { title : "Non-Papers",       url : "/doc/no-cache/npmop1/insession/restricted.json" },
                 other         : { title : "Other",            url : "/doc/no-cache/npmop1/insession/other.json" }
             }
@@ -42,8 +42,8 @@ define(['app', 'providers/routes/extended-route-provider'], function(app) { 'use
             intro     : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
             documents : {
                 plenary       : { title : "Plenary",          url : "/doc/no-cache/cop12/insession/plenary.json" },
-                wg1           : { title : "Working Group I",  url : "/doc/no-cache/cop12/insession/wg1.json" },
-                wg2           : { title : "Working Group II", url : "/doc/no-cache/cop12/insession/wg2.json" },
+                wg1           : { title : "Working Group I",  url : "/doc/no-cache/cop12/insession/wg1.json", tag : "WG.1" },
+                wg2           : { title : "Working Group II", url : "/doc/no-cache/cop12/insession/wg2.json", tag : "WG.2" },
                 restricted    : { title : "Non-Papers",       url : "/doc/no-cache/cop12/insession/restricted.json" },
                 other         : { title : "Other",            url : "/doc/no-cache/cop12/insession/other.json" }
             }
