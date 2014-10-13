@@ -72,7 +72,7 @@ define(['app', 'underscore', 'directives/print-smart/print-smart'], function(app
 					if(!url) return;
 					if( url.indexOf('/')===0) url = 'http://www.cbd.int/' + url.replace(/^\/+/g, "");
 
-					$http.post("/api/v2014/printsmart-downloads?hit", [url]);
+					$http.post("/api/v2014/printsmart-downloads/hit", [url]);
 				};
 			}
 		};
