@@ -54,6 +54,8 @@
 					<span ng-show="d.item" class="label label-default">{{d.item}}</span>
 				</span>
 
+				<span ng-show="d.warning" class="label label-danger" style="white-space: normal;">{{d.warning}}</span>
+
 			</td>
 			<td style="width:27px;vertical-align:middle"><div class="printSmartDocument" document-url="http://www.cbd.int{{d.urlPattern}}en.pdf" document-code="{{d.symbol||d.urlPattern+'xx'}}" document-tag={{d.tag||tag}}></div></td>
 		</tr>
