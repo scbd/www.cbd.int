@@ -203,9 +203,7 @@ define(['app', './solrQuery.js', 'underscore', 'angular'], function(module, Quer
 
         return query.build();
       };
-/*
-aichiTargets: undefinedcountryCode: "AZ"endDate: undefinedid: undefinedidentifier: undefinedreportUrl: undefinedstartDate: "2014-04-29"summary: undefinedtitle: undefined__proto__: Object
-*/
+
       reports._translateFieldName = function(fieldName) {
         return fieldMap[fieldName] || fieldName;
       };
