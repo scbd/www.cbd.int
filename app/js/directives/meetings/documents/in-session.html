@@ -1,4 +1,8 @@
 <div>
+	<style>
+	  .superseded { text-decoration: line-through; color:#888; }
+	</style>
+
 	<table class="table table-striped table-hover">
 		<tr class="hidden"></tr>
 		<tr ng-repeat="d in documents()" ng-class="{ info: selected(d.symbol||d.urlPattern+'xx') }">
@@ -26,7 +30,7 @@
 				  </ul>
 				</div>
 
-				<span class="hidden-xs">{{d.item}}</span>
+				<span class="hidden-xs" ng-class="{ superseded : d.superseded }">{{d.item}}</span>
 			</td>
 			<td style="width:130px;" class="hidden-xs">
 				<table>
@@ -47,14 +51,18 @@
 			</td>
 
 			<td class="ps-selectable" style="vertical-align:top;padding-top:8px">
-				<div ng-show="d.symbol"><b style="word-wrap: break-word">{{breakable(d.symbol)}}</b></div>
-				<div>{{d.title}}</div>
+				<div ng-class="{ superseded : d.superseded }" ng-show="d.symbol"><b style="word-wrap: break-word">{{breakable(d.symbol)}}</b></div>
+				<div ng-class="{ superseded : d.superseded }">{{d.title}}</div>
 				<div ng-show="!d.symbol && !d.title">{{d.urlPattern}}</div>
+				<div ng-show="d.superseded"><em>Superseded by {{d.superseded}}</em></div>
+
 				<span class="visible-xs">
 					<span ng-show="d.item" class="label label-default">{{d.item}}</span>
 				</span>
 
-				<span ng-show="d.warning" class="label label-danger" style="white-space: normal;">{{d.warning}}</span>
+				<span ng-show="d.alert"   class="label label-danger"   style="white-space: normal;">{{d.alert}}</span>
+				<span ng-show="d.warning" class="label label-danger"   style="white-space: normal;">{{d.warning}}</span>
+				<span ng-show="d.info"    class="label label-success"  style="white-space: normal;">{{d.info}}</span>
 
 			</td>
 			<td style="width:27px;vertical-align:middle"><div class="printSmartDocument" document-url="http://www.cbd.int{{d.urlPattern}}en.pdf" document-code="{{d.symbol||d.urlPattern+'xx'}}" document-tag={{d.tag||tag}}></div></td>
