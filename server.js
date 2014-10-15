@@ -126,5 +126,4 @@ function getRestrictedFile(req, res) {
         else                    res.sendStatus(500);
 
     });
-
 }

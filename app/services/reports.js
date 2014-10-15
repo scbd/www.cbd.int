@@ -1,4 +1,4 @@
-define(['app', './solrQuery.js', 'underscore'], function(module, Query, _) {
+define(['app', './solrQuery.js', 'underscore', 'angular'], function(module, Query, _, angular) {
   return module.factory('reports', ['$http', '$locale', '$q',
     function($http, $locale, $q) {
 
@@ -6,17 +6,22 @@ define(['app', './solrQuery.js', 'underscore'], function(module, Query, _) {
         baseQuery = 'schema_s:meeting',
         reports = {},
         fieldMap = {
-          schema: 'schema_s',
-          country: 'eventCountry_s',
-          //startDate: 'startDate_dt',
-          //year: 'startDate_dt',
-          startDate: 'startDate_s',
-          year: 'startDate_s',
-          sort: 'sort',
+          id :  "id",
+          aichiTarget :  "aichiTarget_s",
+          aichiTargets : 'aichiTarget_ss',
+          countryCode :  "government_s",
+          endDate :  "endDate_s",
+          government : 'government_s',
+          identifier :  "identifier_s",
+          reportUrl :  "url_ss",
+          progressGuid :  "progress_s",
           reportType: 'reportType_s',
-          aichiTarget: 'aichiTarget_ss',
-          byNationalTarget: 'nationalTarget_s',
-          byAichiTarget: 'aichiTarget_s'
+          schema: 'schema_s',
+          startDate :  "startDate_s",
+          title :  "title_s",
+          summary :  "summary_s",
+          updated :  "updateDate_dt",
+          nationalTarget :  "nationalTarget_s"
         },
         reportTypes = {
           'nbsap': 'B0EBAE91-9581-4BB2-9C02-52FCF9D82721', //National Biodiversity Strategies and reportTypes[Action Plan(NBSAP])
@@ -120,6 +125,8 @@ define(['app', './solrQuery.js', 'underscore'], function(module, Query, _) {
         var query = new Query();
         var q = {}, sortParams, start;
 
+        query.fl(_.uniq(_.values(fieldMap)));
+
         angular.forEach(cleanMap, function(val, fname) {
           switch (fname) {
 
@@ -196,7 +203,9 @@ define(['app', './solrQuery.js', 'underscore'], function(module, Query, _) {
 
         return query.build();
       };
-
+/*
+aichiTargets: undefinedcountryCode: "AZ"endDate: undefinedid: undefinedidentifier: undefinedreportUrl: undefinedstartDate: "2014-04-29"summary: undefinedtitle: undefined__proto__: Object
+*/
       reports._translateFieldName = function(fieldName) {
         return fieldMap[fieldName] || fieldName;
       };
@@ -216,7 +225,7 @@ define(['app', './solrQuery.js', 'underscore'], function(module, Query, _) {
         options = options || {};
 		if(options.reportType === 'nbsap'){
   			options.startDate_s = '[2010-12-22 TO *]';
-  		} 
+  		}
         var params = angular.extend({}, options);
         params.rows = 1000;
         var solrQuery = reports._buildSolrQuery(params);

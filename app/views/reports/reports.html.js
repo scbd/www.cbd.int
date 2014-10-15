@@ -1,5 +1,6 @@
 define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json', './dependencies.js'], function(app, _, aichiTargetJson) {
-  app.controller('ReportsCtrl', ['$scope', '$window', 'reports', '$rootScope', 'growl',
+
+  return ['$scope', '$window', 'reports', '$rootScope', 'growl',
     function($scope, $window, reports, $rootScope, growl) {
       var self = this;
 
@@ -61,7 +62,7 @@ define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json', './dep
         $window.location.href='http://chm.cbd.int/database/?q=' + $scope.searchQuery;
         $scope.searchQuery = '';
         console.log($window.location.href );
-      }
+    };
 
       $scope.setQuery = function(schema, id) {
         $scope.setSelectedQuery(schema, id);
@@ -153,5 +154,5 @@ define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json', './dep
         $rootScope.$emit('resetCenter');
       };
     }
-  ]);
+  ];
 });

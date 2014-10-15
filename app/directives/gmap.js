@@ -1,7 +1,7 @@
-define(['app', 'underscore', 'text!../data/reports/countries.geojson', '../util/colors.js'],
-  function(module, _, countriesGeoJson, colors) {
-    return module.directive('gmap', ['$window', 'reports', '$rootScope',
-      function($window, reports, $rootScope) {
+define(['app', 'underscore', '../util/colors.js'],
+  function(module, _, colors) {
+    return module.directive('gmap', ['$window', 'reports', '$rootScope', '$http', '$q',
+      function($window, reports, $rootScope, $http, $q) {
         var map,
           infowindow,
           defaultStyle = {
@@ -11,8 +11,11 @@ define(['app', 'underscore', 'text!../data/reports/countries.geojson', '../util/
             fillColor: null,
             fillOpacity: 0.25
           },
-          defaultCountryColor = '#DDDDDD',
-          geojsonCache = JSON.parse(countriesGeoJson);
+          defaultCountryColor = '#DDDDDD';
+
+        var geojsonCache = $http.get('/app/data/reports/countries.geojson').then(function(res){
+            geojsonCache = res.data;
+        });
 
         // array for gmap listeners that we can clean
         // when the directive is destoryed.
@@ -98,33 +101,42 @@ define(['app', 'underscore', 'text!../data/reports/countries.geojson', '../util/
         }
 
         function updateMap(e, newReports) {
-          cleanupListeners();
-          clearMap(map);
-          var groupedReports = _.groupBy(newReports, 'countryCode');
 
-          angular.forEach(groupedReports, function(reports, countryCode) {
-            console.log(countryCode);
-            if (countryCode === 'EUR') return;
-            // console.log(countryCode);
-            var shape = _.find(geojsonCache.features, function(feature) {
-              return feature.properties.iso_a2 === countryCode;
-            });
+            var _this = this;
 
-            var countryColor,
-              bestAssess = _.max(reports, function(report) {
-                return report.assessment && report.assessment.meta.score;
+            $q.when(geojsonCache).then(function(geojsonCache){
+
+              cleanupListeners();
+              clearMap(map);
+              var groupedReports = _.groupBy(newReports, 'countryCode');
+
+              angular.forEach(groupedReports, function(reports, countryCode) {
+
+                if (countryCode === 'EUR') return;
+
+                var shape = _.find(geojsonCache.features, function(feature) {
+                  return feature.properties.iso_a2 === countryCode;
+                });
+
+                var countryColor,
+                  bestAssess = _.max(reports, function(report) {
+                    return report.assessment && report.assessment.meta.score;
+                  });
+
+                if (!_.isEmpty(bestAssess)) countryColor = bestAssess.assessment.meta.color;
+
+                var shapeClone = angular.copy(shape);
+
+                shapeClone.properties.reports = reports;
+                shapeClone.properties.color = countryColor;
+
+                displayRegion(shapeClone);
               });
 
-            if (!_.isEmpty(bestAssess)) countryColor = bestAssess.assessment.meta.color;
+              _this.listener = map.data.addListener('click', setInfoWindow);
 
-            var shapeClone = angular.copy(shape);
+            });
 
-            shapeClone.properties.reports = reports;
-            shapeClone.properties.color = countryColor;
-
-            displayRegion(shapeClone);
-          });
-          this.listener = map.data.addListener('click', setInfoWindow);
         }
 
         function resetMap() {
