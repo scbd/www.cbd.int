@@ -25,7 +25,7 @@ define(['app', 'providers/routes/extended-route-provider'], function(app) { 'use
             templateUrl : '/app/views/meetings/documents/in-session.html',
             resolveController : true,
             progress  : { stop : false },
-            title     : "NP COP-MOP 1 In In-session Documents",
+            title     : "NP COP-MOP 1 In-session Documents",
             intro     : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
             documents : {
                 plenary       : { title : "Plenary",          url : "/doc/no-cache/npmop1/insession/plenary.json" },
