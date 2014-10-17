@@ -122,6 +122,14 @@ define(['app', './checkout-dialog', './print-dialog', './download-dialog'], func
 				$scope.download = function() {
 					psCtrl.open('download');
 				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.canPrint = function() {
+					return psCtrl.canPrint();
+				};
 			}
 		};
 	}]);

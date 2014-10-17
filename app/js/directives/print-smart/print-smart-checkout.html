@@ -10,7 +10,7 @@
                 <a style="cursor:pointer;font-size:14px" ng-click="download()">
                     <i class="fa fa-arrow-circle-down"></i> Download
                 </a>
-                <a style="cursor:pointer;font-size:14px" ng-click="print()">
+                <a style="cursor:pointer;font-size:14px" ng-show="canPrint()" ng-click="print()">
                     <i class="fa fa-print"></i> Print
                 </a>
             </li>

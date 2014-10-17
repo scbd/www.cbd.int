@@ -8,7 +8,10 @@ define(['app', 'angular', 'bootstrap', './print-smart-document', './print-smart-
 
 		return {
 			restrict : "AEC",
-			scope : {},
+			scope : {
+
+				canPrint : "@"
+			},
 			link : function($scope, element) {
 
 				$("#t-header").css("z-index", "999"); // Fix header over dialog
@@ -98,6 +101,10 @@ define(['app', 'angular', 'bootstrap', './print-smart-document', './print-smart-
 				var documents     = [];
 				var documentsMap  = {};
 				var isHelpVisible = false;
+
+				this.canPrint = function() {
+					return $scope.canPrint!="false";
+				};
 
 				this.add = function(symbol, urls, tag) {
 
