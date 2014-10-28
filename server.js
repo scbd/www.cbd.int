@@ -11,12 +11,12 @@ process.on('uncaughtException', function (err) {
 /////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 
-var FS          = require("q-io/fs");
+//var FS          = require("q-io/fs");
 var path        = require('path');
 var http        = require('http');
 var express     = require('express');
 var httpProxy   = require('http-proxy');
-var superAgentq = require('superagent-promise');
+//var superAgentq = require('superagent-promise');
 var config      = require(path.join(process.env.HOME,'config.json'));
 
 var apiBaseUrl  = (config.api||{}).baseUrl || 'https://api.cbd.int:443';
