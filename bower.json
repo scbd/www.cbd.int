@@ -10,7 +10,6 @@
     "angular-route": "1.2.16",
     "angular-cookies": "1.2.16",
     "angular-animate": "1.2.16",
-    "bootstrap-sass": "3.0.2",
     "font-awesome": "4.1.x",
     "underscore": "1.6.0",
     "angular-growl": "~0.4.0",

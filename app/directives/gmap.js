@@ -94,7 +94,7 @@ define(['app', 'underscore', '../util/colors.js'],
           // This seems a little heavy handed for cleanup but
           // gmaps has known bugs with memory leaks.
           $window.google.maps.event.removeListener(this.listener);
-          $window.google.maps.event.clearInstanceListeners(infowindow);
+          //$window.google.maps.event.clearInstanceListeners(infowindow);
           $window.google.maps.event.clearInstanceListeners($window);
           $window.google.maps.event.clearInstanceListeners($window.document);
           $window.google.maps.event.clearInstanceListeners(map);

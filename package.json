@@ -28,8 +28,8 @@
     "awsbox": "~0.6.x"
   },
   "scripts": {
-    "start": "node server.js",
-    "postinstall": "node ./node_modules/bower/bin/bower install"
+    "postinstall": "bash -c './node_modules/.bin/bower install --config.interactive=false'",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
