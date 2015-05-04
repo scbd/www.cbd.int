@@ -17,7 +17,11 @@ var http        = require('http');
 var express     = require('express');
 var httpProxy   = require('http-proxy');
 //var superAgentq = require('superagent-promise');
-var config      = require(path.join(process.env.HOME,'config.json'));
+
+var config      = {
+    "public_url": "http://54.211.181.151",
+    "trustedProxies" : ["loopback", "69.90.183.226"]
+};
 
 var apiBaseUrl  = (config.api||{}).baseUrl || 'https://api.cbd.int:443';
 
@@ -79,7 +83,7 @@ proxy.on('error', function (e, req, res) {
 
 // START HTTP SERVER
 
-server.listen(process.env.PORT || 8001, '0.0.0.0');
+server.listen(process.env.PORT || 8000, '0.0.0.0');
 server.on('listening', function () {
 	console.log('Server listening on %j', this.address());
 });
