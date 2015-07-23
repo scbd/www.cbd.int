@@ -41,7 +41,6 @@ if(config.trustedProxies) {
 }
 
 app.use(require('morgan')('dev'));
-app.use(require('compression')({ threshold: 512 }));
 app.use(function(req, res, next) {
 
     if(req.url.indexOf(".geojson")>0)
