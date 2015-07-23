@@ -1,23 +1,23 @@
 {
-  "name": "SEED",
-  "dependencies": {
-    "requirejs": "latest",
-    "requirejs-domready": "latest",
-    "requirejs-text": "latest",
-    "requirejs-plugins": "latest",
-    "jquery": "2.0.x",
-    "angular": "1.2.16",
-    "angular-route": "1.2.16",
-    "angular-cookies": "1.2.16",
-    "angular-animate": "1.2.16",
-    "font-awesome": "4.1.x",
-    "underscore": "1.6.0",
-    "angular-growl": "~0.4.0",
-    "angular-moment": "~0.7.1",
-    "bootstrap": "~3.1.1",
-    "nprogress": "~0.1.6"
-  },
-  "resolutions": {
-    "angular": "1.2.16"
-  }
+    "name": "www.cbd.int",
+    "dependencies": {
+        "requirejs": "2.1.19",
+        "requirejs-domready": "2.0.1",
+        "requirejs-text": "2.0.14",
+        "requirejs-plugins": "1.0.3",
+        "jquery": "2.1.4",
+        "angular": "1.2.28",
+        "angular-route": "1.2.28",
+        "angular-cookies": "1.2.28",
+        "angular-animate": "1.2.28",
+        "angular-growl": "0.4.0",
+        "angular-moment": "0.7.1",
+        "bootstrap": "3.3.4",
+        "font-awesome": "4.3.0",
+        "nprogress": "0.1.6",
+        "underscore": "1.6.0"
+    },
+    "resolutions": {
+        "angular": "1.2.28"
+    }
 }
