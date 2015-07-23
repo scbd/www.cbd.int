@@ -1,7 +1,5 @@
 #!/bin/sh
 
-export DOCKER_HOST=tcp://localhost:2375
+docker build -t localhost:5000/www-cbd-int git@github.com:scbd/www.cbd.int.git
 
-docker build -t registry.infra.cbd.int:5000/www-cbd-int .
-
-docker push registry.infra.cbd.int:5000/www-cbd-int
+docker push localhost:5000/www-cbd-int
