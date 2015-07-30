@@ -6,6 +6,7 @@ define(['app', 'js/providers/routes/extended-route-provider'], function(app) { '
       $locationProvider.hashPrefix('!');
 
       $routeProvider
+        .when('/decisionsx',                 {templateUrl: '/app/views/decisions/index.html',        resolveController: true })
         .when('/printsmart/printshop',       {templateUrl: '/app/views/print-smart/printshop.html',  resolveController: true })
 
         .when('/mop7/insession',  {
