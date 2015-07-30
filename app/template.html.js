@@ -1,4 +1,4 @@
-define(['app', 'nprogress', 'security/authentication'], function(app, nprogress) { 'use strict';
+define(['app', 'nprogress', 'js/security/authentication'], function(app, nprogress) { 'use strict';
 
   app.controller('TemplateController', ['$scope', '$window', '$browser', '$document', '$location', 'authentication',
 	function($scope, $window, $browser, $document, $location, authentication) {

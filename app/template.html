@@ -192,17 +192,7 @@
 
     <div growl></div>
 
-    <!-- Boot the app -->
-    <script>
-    var require = {
-        config : {
-            boot : {
-                modules : ['/app/template.html.js', 'apps/www/routes']
-            }
-        }
-    };
-    </script>
-    <script src="/app/libs/requirejs/require.js" data-main="/app/js/apps/www/config.js"></script>
+    <script src="/app/libs/requirejs/require.js" data-main="/app/boot.js"></script>
 
 </body>
 </html>

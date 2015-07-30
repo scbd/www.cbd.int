@@ -15,8 +15,6 @@ define(['angular', 'angular-route', 'angular-cookies', 'angular-growl', 'bootstr
 
         growlProvider.globalTimeToLive(5000);
         growlProvider.globalEnableHtml(false);
-
-
     }]);
 
     return app;
