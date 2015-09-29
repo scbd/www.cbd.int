@@ -1,89 +1,55 @@
 /* jshint node: true, browser: false */
 'use strict';
-// LOG UNHANDLED EXCEPTION AND EXIT
-process.on('uncaughtException', function (err) {
-  console.error((new Date()).toUTCString() + ' uncaughtException:', err.message);
-  console.error(err.stack);
-  process.exit(1);
-});
 
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-
-//var FS          = require("q-io/fs");
-var path        = require('path');
-var http        = require('http');
 var express     = require('express');
 var httpProxy   = require('http-proxy');
-//var superAgentq = require('superagent-promise');
-
-var config      = {
-    "public_url": "http://54.211.181.151",
-    "trustedProxies" : ["loopback", "69.90.183.226"]
-};
-
-var apiBaseUrl  = (config.api||{}).baseUrl || 'https://api.cbd.int:443';
-
-console.log("API BaseUrl", apiBaseUrl);
 
 // Create server & proxy
-
 var app    = express();
-var server = http.createServer(app);
 var proxy  = httpProxy.createProxyServer({});
 
 // Configure options
 
-if(config.trustedProxies) {
-    console.log('trusted proxies:', config.trustedProxies);
-    app.set('trust proxy', config.trustedProxies.join(', '));
+var trustedProxies = [ "52.6.60.249", "54.84.233.250", "52.74.118.238", "52.28.21.144", "52.7.14.126" ];
+
+if(trustedProxies) {
+    console.log('trusted proxies:', trustedProxies);
+    app.set('trust proxy', trustedProxies.join(', '));
 }
 
 app.use(require('morgan')('dev'));
-app.use(function(req, res, next) {
+app.use(function(req, res, next) {  if(req.url.indexOf(".geojson")>0) res.contentType('application/json'); next(); } ); // override contentType for geojson files
 
-    if(req.url.indexOf(".geojson")>0)
-        res.contentType('application/json');
-    next();
-
-});
 // Configure static files to serve
 
-app.use('/favicon.png',   express.static(__dirname + '/app/images/favicon.png', { maxAge: 86400000 }));
-//app.use('/app',           express.static(__dirname + '/app-built', { maxAge: 300000 })); //5 minutes
-app.use('/app',           express.static(__dirname + '/app',       { maxAge: 300000 })); //5 minutes
+app.use('/favicon.png',   express.static(__dirname + '/app/images/favicon.png', { maxAge: 24*60*60*1000 }));
+app.use('/app',           express.static(__dirname + '/app',                    { maxAge: 5*60*1000 }));
+app.all('/app/*',         function(req, res) { res.status(404).send(); } );
 
-// app.get('/doc/no-cache/cop12/insession/restricted.json',  getRestrictedFile);
-// app.get('/doc/no-cache/npmop1/insession/restricted.json', getRestrictedFile);
-// app.use('/doc/no-cache/', express.static(path.join(process.env.HOME, 'doc')));
-app.get('/doc/*',         function(req, res) { res.sendStatus(404); } );
+app.get('/doc/*', function(req, res) { proxy.web(req, res, { target: "https://www.cbd.int:443", secure: false } ); } );
+app.all('/doc/*', function(req, res) { res.status(404).send(); } );
 
 // Configure routes
 
-app.get('/app/*', function(req, res) { res.sendStatus(404); } );
-app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiBaseUrl, secure: false } ); } );
+app.all('/api/*', function(req, res) { proxy.web(req, res, { target: "https://api.cbd.int:443", secure: false } ); } );
 
-// Configure template
+// Configure template(s)
 
-app.get('/reports/map*', function(req, res) { res.sendFile(__dirname + '/app/views/reports/template.html',     {maxAge:300000}); });
-app.get('/*',            function(req, res) { res.sendFile(__dirname + '/app/template.html',                   {maxAge:300000}); });
-
-// app.all('/*', function(req, res) { proxy.web(req, res, { target: 'https://www.cbd.int:443', secure: false } ); } );
-
-// LOG PROXY ERROR & RETURN http:500
-
-proxy.on('error', function (e, req, res) {
-    console.error(new Date().toUTCString() + ' error proxying: '+req.url);
-    console.error('proxy error:', e);
-    res.send( { code: 500, source:'www.infra/proxy', message : 'proxy error', proxyError: e }, 500);
-});
+app.get('/reports/map*', function(req, res) { res.sendFile(__dirname + '/app/views/reports/template.html', { maxAge : 5*60*1000 }); });
+app.get('/insession/*',  function(req, res) { res.sendFile(__dirname + '/app/template.html',               { maxAge : 5*60*1000 }); });
+app.get('/decisions/x',  function(req, res) { res.sendFile(__dirname + '/app/template.html',               { maxAge : 5*60*1000 }); });
+app.all('/*',            function(req, res) { proxy.web(req, res, { target: 'https://www.cbd.int:443', secure: false } ); } );
 
 // START HTTP SERVER
 
-server.listen(process.env.PORT || 8000, '0.0.0.0');
-server.on('listening', function () {
-	console.log('Server listening on %j', this.address());
+app.listen(process.env.PORT || 2000, '0.0.0.0', function(){
+    console.log('Server listening on %j', this.address());
+});
+
+// Handle proxy errors ignore
+
+proxy.on('error', function (e) {
+    console.error('proxy error:', e);
 });
 
 // //============================================================
