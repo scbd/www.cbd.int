@@ -1,0 +1,15 @@
+
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker info
+    - docker build -t www-cbd-int .
+
+test:
+  override:
+    - docker run -d -p 8000:8000 www-cbd-int; sleep 10
+    - curl --retry 10 --retry-delay 5 -v http://localhost:8000/insession/
+    - curl --retry 10 --retry-delay 5 -v http://localhost:8000/reports/map/
