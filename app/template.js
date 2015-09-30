@@ -1,9 +1,22 @@
-define(['app', 'security/authentication'], function(app) { 'use strict';
+define(['app', 'nprogress', 'bootstrap', 'authentication', ], function(app, nprogress) { 'use strict';
 
-  app.controller('NRTemplateController', ['$scope', '$window', '$browser', '$document', '$location', 'authentication',
+  app.controller('TemplateController', ['$scope', '$window', '$browser', '$document', '$location', 'authentication',
 	function($scope, $window, $browser, $document, $location, authentication) {
 
-        $scope.$root.pageTitle = { text: "not set" };
+        $scope.title = "";
+
+        $scope.$on("$routeChangeStart", function(e,r){
+
+            $scope.title = r.$$route.title || '';
+
+            if(!r.$$route.progress || r.$$route.progress.start!==false)
+                nprogress.start();
+        });
+
+        $scope.$on("$routeChangeSuccess", function(e,r){
+            if(!r.$$route.progress || r.$$route.progress.stop!==false)
+                nprogress.done();
+        });
 
 
         //============================================================
@@ -78,37 +91,6 @@ define(['app', 'security/authentication'], function(app) { 'use strict';
             var redirect_uri = $window.encodeURIComponent($location.protocol()+'://'+$location.host()+':'+$location.port()+'/');
             $window.location.href = 'https://accounts.cbd.int/profile?redirect_uri='+redirect_uri;
         };
-
-        //============================================================
-        //
-        //
-        //============================================================
-        $window.addEventListener('message', function receiveMessage(event)
-        {
-            if(event.origin!='https://accounts.cbd.int')
-                return;
-
-            var message = JSON.parse(event.data);
-
-            if(message.type=='ready')
-                event.source.postMessage('{"type":"getAuthenticationToken"}', event.origin);
-
-            if(message.type=='authenticationToken') {
-                if(message.authenticationToken && !$browser.cookies().authenticationToken) {
-                    setCookie('authenticationToken', message.authenticationToken, 7, '/');
-                    $window.location.href = $window.location.href;
-                }
-                if(!message.authenticationToken && $browser.cookies().authenticationToken) {
-                    authentication.signOut();
-                    $window.location.href = $window.location.href;
-                }
-            }
-        }, false);
-
-        var qAuthenticationFrame = $document.find('#authenticationFrame');
-
-        if(qAuthenticationFrame.size())
-            qAuthenticationFrame[0].contentWindow.postMessage('{"type":"getAuthenticationToken"}', 'https://accounts.cbd.int');
 
   }]);
 });

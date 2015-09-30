@@ -1,4 +1,4 @@
-define(['app', './checkout-dialog', './print-dialog', './download-dialog'], function(app) {
+define(['app', 'text!./print-smart-checkout.html', './checkout-dialog', './print-dialog', './download-dialog'], function(app, templateHtml) {
 
 	app.directive('printSmartCheckout', ["$timeout", function($timeout) {
 		return {
@@ -7,7 +7,7 @@ define(['app', './checkout-dialog', './print-dialog', './download-dialog'], func
 			replace : true,
 			priority: 1000,
 			scope : {},
-			templateUrl : "/app/js/directives/print-smart/print-smart-checkout.html",
+			template : templateHtml,
 			link: function ($scope, element, attrs, psCtrl) {
 
 				$scope.disabled = !psCtrl;  //optional directive is disabled if no controller
@@ -42,7 +42,7 @@ define(['app', './checkout-dialog', './print-dialog', './download-dialog'], func
 				            element.removeClass("fixed-top-right");
 				        }
 
-						if(windowpos==0)
+						if(!windowpos)
 							pos = element.position();
 				    });
 				}

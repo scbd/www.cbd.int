@@ -1,5 +1,5 @@
 /* global -close */
-define(['app', 'angular', 'underscore'], function(app, angular, _) {
+define(['app', 'text!./print-dialog.html','angular', 'underscore', 'ngCookies'], function(app, templateHtml, angular, _) {
 
 	app.directive('printSmartPrintDialog', ["$http", "$location", "$cookies", function($http, $location, $cookies) {
 		return {
@@ -7,7 +7,7 @@ define(['app', 'angular', 'underscore'], function(app, angular, _) {
 			require: '?^printSmart',
 			replace : true,
 			scope :  {},
-			templateUrl : "/app/js/directives/print-smart/print-dialog.html",
+			template : templateHtml,
 			link: function ($scope, element, attrs, psCtrl) {
 
 				$scope.disabled = !psCtrl;  //optional directive is disabled if no controller

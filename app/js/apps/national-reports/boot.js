@@ -4,20 +4,21 @@ require.config({
     waitSeconds: 30,
     baseUrl : '/app/',
     paths: {
-        'authentication'  : 'services/authentication',
-        'angular'         : 'libs/angular-flex/angular-flex',
-        'ngRoute'         : 'libs/angular-route/angular-route.min',
-        'ngCookies'       : 'libs/angular-cookies/angular-cookies.min',
-        'ngAnimate'       : 'libs/angular-animate/angular-animate.min',
-        'domReady'        : 'libs/requirejs-domready/domReady',
-        'text'            : 'libs/requirejs-text/text',
-        'jquery'          : 'libs/jquery/dist/jquery.min',
-        'bootstrap'       : 'libs/bootstrap/dist/js/bootstrap.min',
-        'underscore'      : 'libs/lodash/lodash.min',
-        'angular-growl'   : 'libs/angular-growl/build/angular-growl.min',
-        'angularMoment'   : 'libs/angular-moment/angular-moment.min',
-        'nprogress'       : 'libs/nprogress/nprogress',
-        'dropbox-dropins' : 'https://www.dropbox.com/static/api/2/dropins'
+        'app'            : 'js/apps/national-reports/app',
+        'authentication' : 'services/authentication',
+        'angular'        : 'libs/angular-flex/angular-flex',
+        'ngRoute'        : 'libs/angular-route/angular-route.min',
+        'ngCookies'      : 'libs/angular-cookies/angular-cookies.min',
+        'ngAnimate'      : 'libs/angular-animate/angular-animate.min',
+        'domReady'       : 'libs/requirejs-domready/domReady',
+        'async'          : 'libs/requirejs-plugins/src/async',
+        'text'           : 'libs/requirejs-text/text',
+        'jquery'         : 'libs/jquery/dist/jquery.min',
+        'bootstrap'      : 'libs/bootstrap/dist/js/bootstrap.min',
+        'angular-growl'  : 'libs/angular-growl/build/angular-growl.min',
+        'angularMoment'  : 'libs/angular-moment/angular-moment.min',
+        'moment'         : 'libs/moment/min/moment.min',
+        'underscore'     : 'libs/lodash/lodash.min'
     },
     shim: {
         'libs/angular/angular' : { deps : ['jquery'] },
@@ -28,23 +29,13 @@ require.config({
         'bootstrap'            : { deps : ['jquery' ] },
         'angular-growl'        : { deps : ['angular'] },
         'angularMoment'        : { deps : ['angular', 'moment'] },
-        'dropbox-dropins'      : {
-            deps: [],
-            exports: "Dropbox",
-            init: function () {
-                if(window.Dropbox) {
-                    window.Dropbox.appKey = "uvo7kuhmckw68pl"; //registration@cbd.int
-                    return window.Dropbox;
-                }
-            }
-        }
-    },
+        'moment'               : { 'deps': ['jquery' ] }
+    }
 });
 
 // BOOT
-require(['nprogress'], function(p) { p.start(); });
 
-require(['angular', 'domReady!', 'bootstrap', 'app', 'routes', 'template'], function(ng, doc) {
+require(['angular', 'domReady!', 'bootstrap', 'app', 'js/apps/national-reports/routes', 'views/reports/template'], function(ng, doc) {
 
     ng.bootstrap(doc, ['app']);
     ng.resumeBootstrap();

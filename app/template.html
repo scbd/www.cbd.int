@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" ng-controller="TemplateController">
 <head>
-    <base href="/~">
+    <base href="/">
     <title>In-Session documents - Convention on Biological Diversity</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -73,6 +73,7 @@
     </style>
 </head>
 <body class="ltr">
+    <iframe id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none" onload="(event.target || event.srcElement).ready = true"></iframe>
 
     <!-- HEADER (LARGE) -->
     <header class="mobile navbar visible-xs" role="banner">
@@ -83,19 +84,19 @@
                 </button>
 
                 <a href="/" target="_self">
-                    <a target="_self" href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg"/></a>
+                    <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg"/></a>
                 </a>
 
             </div>
 
             <nav class="collapse navbar-collapse" role="navigation">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a target="_self" href="/convention">The Convention</a></li>
-                    <li class="active"><a target="_self" href="/biosafety">Cartagena Protocol</a></li>
-                    <li class="active"><a target="_self" href="/abs">Nagoya Protocol</a></li>
-                    <li class="active"><a target="_self" href="/programmes">Programmes</a></li>
-                    <li class="active"><a target="_self" href="/information">Information</a></li>
-                    <li class="active"><a target="_self" href="/secretariat">Secretariat</a></li>
+                    <li class="active"><a href="/convention">The Convention</a></li>
+                    <li class="active"><a href="/biosafety">Cartagena Protocol</a></li>
+                    <li class="active"><a href="/abs">Nagoya Protocol</a></li>
+                    <li class="active"><a href="/programmes">Programmes</a></li>
+                    <li class="active"><a href="/information">Information</a></li>
+                    <li class="active"><a href="/secretariat">Secretariat</a></li>
                 </ul>
             </nav>
         </div>
@@ -106,17 +107,17 @@
         <div class="container whitebg">
             <div>
                 <div style="padding:5px 0px">
-                    <a target="_self" href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg"/></a>
+                    <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg"/></a>
                 </div>
 
                 <div class="pull-right">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a target="_self" href="/convention">The Convention</a></li>
-                        <li class="active"><a target="_self" href="/biosafety">Cartagena Protocol</a></li>
-                        <li class="active"><a target="_self" href="/abs">Nagoya Protocol</a></li>
-                        <li class="active"><a target="_self" href="/programmes">Programmes</a></li>
-                        <li class="active"><a target="_self" href="/information">Information</a></li>
-                        <li class="active hidden-sm"><a target="_self" href="/secretariat">Secretariat</a></li>
+                        <li class="active"><a href="/convention">The Convention</a></li>
+                        <li class="active"><a href="/biosafety">Cartagena Protocol</a></li>
+                        <li class="active"><a href="/abs">Nagoya Protocol</a></li>
+                        <li class="active"><a href="/programmes">Programmes</a></li>
+                        <li class="active"><a href="/information">Information</a></li>
+                        <li class="active hidden-sm"><a href="/secretariat">Secretariat</a></li>
                     </ul>
                 </div>
                 <div class="clearfix"></div>
@@ -136,31 +137,31 @@
             <div class="col-sm-4 fleft">
                 <h4>Quick Links</h4>
                 <ul>
-                    <li><a target="_self" href="/decisions/">Decisions</a></li>
-                    <li><a target="_self" href="/meetings/">Meetings</a></li>
-                    <li><a target="_self" href="/notifications/">Notifications</a></li>
-                    <li><a target="_self" href="/news/">News Headlines</a></li>
-                    <li><a target="_self" href="/publications/">Publications</a></li>
-                    <li><a target="_self" href="/chm/">CHM</a></li>
-                    <li><a target="_self" href="http://bch.cbd.int/">BCH</a></li>
+                    <li><a href="/decisions">Decisions</a></li>
+                    <li><a href="/meetings">Meetings</a></li>
+                    <li><a href="/notifications">Notifications</a></li>
+                    <li><a href="/news">News Headlines</a></li>
+                    <li><a href="/publications">Publications</a></li>
+                    <li><a href="/chm">CHM</a></li>
+                    <li><a href="http://bch.cbd.int/">BCH</a></li>
                 </ul>
             </div>
             <div class="col-sm-4 fleft">
                 <h4 class="hidden-xs">&nbsp;</h4>
                 <ul>
-                    <li><a target="_self" href="/parties/">Parties</a></li>
-                    <li><a target="_self" href="/countries/">Country Profiles</a></li>
-                    <li><a target="_self" href="/nfp/">National Focal Point</a></li>
-                    <li><a target="_self" href="/nbsap/">National Strategies (NBSAPs)</a></li>
-                    <li><a target="_self" href="/reports/">National Reports</a></li>
-                    <li><a target="_self" href="/contributions/">Contributions</a></li>
-                    <li><a target="_self" href="/cooperation/">Cooperation & Partnerships</a></li>
+                    <li><a href="/parties">Parties</a></li>
+                    <li><a href="/countries">Country Profiles</a></li>
+                    <li><a href="/nfp">National Focal Point</a></li>
+                    <li><a href="/nbsap">National Strategies (NBSAPs)</a></li>
+                    <li><a href="/reports">National Reports</a></li>
+                    <li><a href="/contributions">Contributions</a></li>
+                    <li><a href="/cooperation">Cooperation & Partnerships</a></li>
                 </ul>
             </div>
             <div class="col-sm-4 fleft">
                 <h4>Follow us</h4>
                 <ul>
-                    <li><a target="_self" href="/rss/" target="_blank"><i class="fa fa-rss-square"></i> RSS</a></li>
+                    <li><a href="/rss" target="_blank"><i class="fa fa-rss-square"></i> RSS</a></li>
                     <li><a href="https://twitter.com/cbdnews" target="_blank"><i class="fa fa-twitter-square"></i> Twitter</a></li>
                     <li><a href="https://www.facebook.com/UNBiodiversity" target="_blank"><i class="fa fa-facebook-square"></i> Facebook</a></li>
                     <li><a href="https://www.youtube.com/user/chmcbd" target="_blank"><i class="fa fa-youtube-play"></i> YouTube</a></li>
@@ -175,13 +176,13 @@
     <footer class="container standard whitebg">
         <div class="col-md-9">
             <ul class="list-inline">
-                <li><a target="_self" href="/feedback/">Feedback</a></li>
-                <li><a target="_self" href="/map/">Site Map</a></li>
-                <li><a target="_self" href="/contact/">Contact Us</a></li>
-                <li><a target="_self" href="/terms/">Terms of Use</a></li>
-                <li><a target="_self" href="/privacy/">Privacy Policy</a></li>
-                <li><a target="_self" href="/credits/">Credits</a></li>
-                <li><a target="_self" href="/copyright/">&copy; CBD Secretariat</a></li>
+                <li><a href="/feedback">Feedback</a></li>
+                <li><a href="/map">Site Map</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/terms">Terms of Use</a></li>
+                <li><a href="/privacy">Privacy Policy</a></li>
+                <li><a href="/credits">Credits</a></li>
+                <li><a href="/copyright">&copy; CBD Secretariat</a></li>
             </ul>
         </div>
         <div class="col-md-3 pull-right">

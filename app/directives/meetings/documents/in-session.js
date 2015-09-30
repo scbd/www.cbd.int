@@ -1,4 +1,4 @@
-define(['app', 'underscore', 'directives/print-smart/print-smart'], function(app, _) {
+define(['app', 'underscore', 'text!./in-session.html', 'directives/print-smart/print-smart'], function(app, _, templateHtml) {
 
 	//==============================================
 	//
@@ -8,12 +8,12 @@ define(['app', 'underscore', 'directives/print-smart/print-smart'], function(app
 		return {
 			restrict : "AEC",
 			replace : true,
+			template : templateHtml,
 			require: '?^printSmart',
 			scope :  {
 				documentsFn : "&documents",
 				tag : "@tag"
 			},
-			templateUrl : "/app/js/directives/meetings/documents/in-session.html",
 			link: function ($scope, element, attrs, psCtrl) {
 
 				$scope.allLanguages = {  en : "English",  es : "Español", fr : "Français", ar : "العربية", ru : "Русский", zh : "中文" };

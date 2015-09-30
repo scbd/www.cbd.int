@@ -1,4 +1,4 @@
-define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/documents/in-session'], function(_, nprogress, ng, $) {
+define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/documents/in-session', 'angular-growl'], function(_, nprogress, ng, $) {
 	return ["$scope", "$route", "$http", '$q', '$timeout', 'growl', function ($scope, $route, $http, $q, $timeout, growl) {
 
 		$scope.title        = $route.current.$$route.title;
@@ -77,7 +77,7 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 
 			nprogress.start();
 
-			var queries = _($scope.sections).map(loadDocuments);
+			var queries = _.map($scope.sections, loadDocuments);
 
 			$q.all(queries).then(function() {
 

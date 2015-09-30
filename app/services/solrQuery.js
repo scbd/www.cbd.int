@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 
 
-define(['../util/querystring.js', '../util/format.js'], function(querystring, format) {
+define(['util/querystring', 'util/format'], function(querystring, format) {
 
   /**
    * Create a new `Query`

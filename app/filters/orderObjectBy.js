@@ -14,4 +14,3 @@ define(['app'], function(module) {
   });
 
 });
-

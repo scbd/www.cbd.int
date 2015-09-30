@@ -1,4 +1,5 @@
-define(['app', 'underscore', 'text!../../data/reports/aichiTargets.json', './dependencies.js'], function(app, _, aichiTargetJson) {
+define(['app', 'underscore',  'text!data/reports/aichiTargets.json',
+        'directives/gmap', 'services/geojson', 'services/reports', 'filters/orderObjectBy', 'directives/ui-bootstrap-custom'], function(app, _, aichiTargetJson) {
 
   return ['$scope', '$window', 'reports', '$rootScope', 'growl',
     function($scope, $window, reports, $rootScope, growl) {

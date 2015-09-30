@@ -9,7 +9,6 @@ define(['app', 'angular', 'bootstrap', './print-smart-document', './print-smart-
 		return {
 			restrict : "AEC",
 			scope : {
-
 				canPrint : "@"
 			},
 			link : function($scope, element) {

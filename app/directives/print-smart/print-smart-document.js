@@ -1,4 +1,4 @@
-define(['app', 'underscore'], function(app, _) {
+define(['app', 'text!./print-smart-document.html', 'underscore'], function(app, templateHtml, _) {
 
 	//==============================================
 	//
@@ -15,7 +15,7 @@ define(['app', 'underscore'], function(app, _) {
 				documentCode : "@",
 				documentTag  : "@",
 			 },
-			templateUrl : "/app/js/directives/print-smart/print-smart-document.html",
+			template : templateHtml,
 			link: function ($scope, element, attrs, psCtrl) {
 				$scope.element  =  element;
 				$scope.psCtrl   =  psCtrl;

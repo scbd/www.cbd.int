@@ -1,13 +1,13 @@
 /* global -close */
-define(['app'], function(app, angular, _, Dropbox) {
+define(['app', 'text!./checkout-dialog.html'], function(app, templateHtml) {
 
-	app.directive('printSmartCheckoutDialog', ["$http", function($http) {
+	app.directive('printSmartCheckoutDialog', [function() {
 		return {
 			restrict : "AEC",
 			require: '?^printSmart',
 			replace : true,
 			scope :  {},
-			templateUrl : "/app/js/directives/print-smart/checkout-dialog.html",
+			template : templateHtml,
 			link: function ($scope, element, attrs, psCtrl) {
 
 				$scope.disabled = !psCtrl;  //optional directive is disabled if no controller

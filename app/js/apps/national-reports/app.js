@@ -1,31 +1,27 @@
 define([
     'angular',
-    'angular-route',
-    'angular-cookies',
+    'ngRoute',
+    'ngCookies',
     'angular-growl',
-    'angular-moment',
-    'angular-animate',
+    'angularMoment',
+    'ngAnimate',
     'bootstrap',
-    '/app/directives/ui-bootstrap-custom.js'], function(angular) { 'use strict';
+    'directives/ui-bootstrap-custom'], function(angular) { 'use strict';
 
-    var app = angular.module('app', ['ngRoute', 'ngCookies', 'ngAnimate','angular-growl', 'angularMoment', 'ui.bootstrap']);
+    var deps = ['ngRoute', 'ngCookies', 'ngAnimate','angular-growl', 'angularMoment', 'ui.bootstrap'];
 
-    app.config(['$controllerProvider', '$compileProvider', '$provide', '$filterProvider', 'growlProvider',
-    function($controllerProvider, $compileProvider, $provide, $filterProvider, growlProvider) {
+    angular.defineModules(deps);
 
-        // Allow dynamic registration
+    var app = angular.module('app', deps);
 
-        app.filter     = $filterProvider.register;
-        app.factory    = $provide.factory;
-        app.value      = $provide.value;
-        app.controller = $controllerProvider.register;
-        app.directive  = $compileProvider.directive;
+    app.config(['$httpProvider', 'growlProvider', function($httpProvider, growlProvider) {
+
+        $httpProvider.useApplyAsync(true);
+        $httpProvider.interceptors.push('authenticationHttpIntercepter');
 
         growlProvider.globalTimeToLive(7000);
         growlProvider.globalEnableHtml(false);
-
-    }
-    ]);
+    }]);
 
     return app;
 });
