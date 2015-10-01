@@ -1,9 +1,11 @@
 define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/documents/in-session', 'angular-growl'], function(_, nprogress, ng, $) {
-	return ["$scope", "$route", "$http", '$q', '$timeout', 'growl', function ($scope, $route, $http, $q, $timeout, growl) {
+	return ["$scope", "$route", "$http", '$q', '$timeout', 'growl', 'insessionConfig', function ($scope, $route, $http, $q, $timeout, growl, insessionConfig) {
 
-		$scope.title        = $route.current.$$route.title;
-		$scope.intro        = $route.current.$$route.intro;
-		$scope.sections     = JSON.parse(JSON.stringify($route.current.$$route.documents)); //clone
+		console.log(insessionConfig);
+
+		$scope.title        = insessionConfig.title;
+		$scope.intro        = insessionConfig.intro;
+		$scope.sections     = JSON.parse(JSON.stringify(insessionConfig.documents)); //clone
 		$scope.sectionsKeys = _.keys($scope.sections);
 
 		var refreshTimeout = 2*60*1000; // 2 minutes

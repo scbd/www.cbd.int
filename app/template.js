@@ -3,11 +3,7 @@ define(['app', 'nprogress', 'bootstrap', 'authentication', ], function(app, npro
   app.controller('TemplateController', ['$scope', '$window', '$browser', '$document', '$location', 'authentication',
 	function($scope, $window, $browser, $document, $location, authentication) {
 
-        $scope.title = "";
-
         $scope.$on("$routeChangeStart", function(e,r){
-
-            $scope.title = r.$$route.title || '';
 
             if(!r.$$route.progress || r.$$route.progress.start!==false)
                 nprogress.start();
