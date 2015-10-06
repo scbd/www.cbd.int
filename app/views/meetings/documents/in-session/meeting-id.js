@@ -1,8 +1,6 @@
 define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/documents/in-session', 'angular-growl'], function(_, nprogress, ng, $) {
 	return ["$scope", "$route", "$http", '$q', '$timeout', 'growl', 'insessionConfig', function ($scope, $route, $http, $q, $timeout, growl, insessionConfig) {
 
-		console.log(insessionConfig);
-
 		$scope.title        = insessionConfig.title;
 		$scope.intro        = insessionConfig.intro;
 		$scope.sections     = JSON.parse(JSON.stringify(insessionConfig.documents)); //clone

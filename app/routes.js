@@ -39,7 +39,7 @@ define(['app', 'jquery', 'providers/extended-route', 'ngRoute'], function(app, $
       $("base").attr('href', '/insession/'); // allow full page reload outside of  /insession/*
 
       routeProvider
-      .when('/',                     { templateUrl : 'views/meetings/documents/in-session-index.html'})
+      .when('/',                     { templateUrl : 'views/meetings/documents/in-session/index.html'})
       .when('/mop7',  {
           templateUrl : 'views/meetings/documents/in-session.html',
           resolveController : true,
@@ -56,7 +56,7 @@ define(['app', 'jquery', 'providers/extended-route', 'ngRoute'], function(app, $
               }
           }
       }).when('/npmop1',  {
-          templateUrl : 'views/meetings/documents/in-session.html',
+          templateUrl : 'views/meetings/documents/in-session/meeting-id.html',
           resolveController : true,
           progress  : { stop : false },
           resolve : {
@@ -71,7 +71,7 @@ define(['app', 'jquery', 'providers/extended-route', 'ngRoute'], function(app, $
               }
           }
       }).when('/cop12/hls',  {
-          templateUrl : 'views/meetings/documents/in-session.html',
+          templateUrl : 'views/meetings/documents/in-session/meeting-id.html',
           resolveController : true,
           progress  : { stop : false },
           resolve : {
@@ -87,7 +87,7 @@ define(['app', 'jquery', 'providers/extended-route', 'ngRoute'], function(app, $
               }
           }
       }).when('/cop12',  {
-          templateUrl : 'views/meetings/documents/in-session.html',
+          templateUrl : 'views/meetings/documents/in-session/meeting-id.html',
           resolveController : true,
           progress  : { stop : false },
           resolve : {
