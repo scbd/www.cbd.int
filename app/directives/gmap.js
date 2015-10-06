@@ -15,6 +15,7 @@ define(['app', 'underscore', 'util/colors'],
 
         var geojsonCache = $http.get('/app/data/reports/countries.geojson').then(function(res){
             geojsonCache = res.data;
+            return res.data;
         });
 
         // array for gmap listeners that we can clean
