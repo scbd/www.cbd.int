@@ -21,7 +21,7 @@ require.config({
         'underscore'     : 'libs/lodash/lodash.min'
     },
     shim: {
-        'libs/angular/angular' : { deps : ['jquery'] },
+        'libs/angular/angular.min' : { deps : ['jquery'] },
         'angular'              : { deps : ['libs/angular/angular.min'] },
         'ngRoute'              : { deps : ['angular'] },
         'ngCookies'            : { deps : ['angular'] },

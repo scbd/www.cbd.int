@@ -20,7 +20,7 @@ require.config({
         'dropbox-dropins' : 'https://www.dropbox.com/static/api/2/dropins'
     },
     shim: {
-        'libs/angular/angular' : { deps : ['jquery'] },
+        'libs/angular/angular.min' : { deps : ['jquery'] },
         'angular'              : { deps : ['libs/angular/angular.min'] },
         'ngRoute'              : { deps : ['angular'] },
         'ngCookies'            : { deps : ['angular'] },
