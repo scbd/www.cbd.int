@@ -14,32 +14,10 @@ define(['app', 'nprogress', 'bootstrap', 'authentication', ], function(app, npro
                 nprogress.done();
         });
 
-
         //============================================================
         //
         //
         //============================================================
-		function setCookie (name, value, days, path) {
-
-            var cookieString = $window.escape(name) + '=';
-
-            if(value) cookieString += $window.escape(value);
-            else      days = -1;
-
-            if(path)
-                cookieString += '; path=' + path;
-
-            if(days || days === 0) {
-
-                var expirationDate = new Date();
-
-                expirationDate.setDate(expirationDate.getDate() + days);
-
-                cookieString += '; expires=' + expirationDate.toUTCString();
-            }
-
-            $document[0].cookie = cookieString;
-        }
 
         //============================================================
         //
