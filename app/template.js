@@ -1,7 +1,12 @@
 define(['app', 'nprogress', 'bootstrap', 'authentication', ], function(app, nprogress) { 'use strict';
 
-  app.controller('TemplateController', ['$scope', '$window', '$browser', '$document', '$location', 'authentication',
-	function($scope, $window, $browser, $document, $location, authentication) {
+  app.controller('TemplateController', ['$scope', '$window', '$browser', '$document', '$location', 'authentication', '$q',
+	function($scope, $window, $browser, $document, $location, authentication, $q) {
+
+        $q.when(authentication.getUser()).then(function(u){
+            console.log(u);
+            $scope.user = u;
+        });
 
         $scope.$on("$routeChangeStart", function(e,r){
 
@@ -18,6 +23,9 @@ define(['app', 'nprogress', 'bootstrap', 'authentication', ], function(app, npro
         //
         //
         //============================================================
+        $scope.encodedReturnUrl = function () {
+            return encodeURIComponent($location.absUrl());
+        };
 
         //============================================================
         //

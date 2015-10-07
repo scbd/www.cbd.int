@@ -74,13 +74,35 @@
 </head>
 <body class="ltr">
 
-    <!-- HEADER (LARGE) -->
+    <!-- HEADER (MOBILE) -->
     <header class="mobile navbar visible-xs" role="banner">
         <div class="container">
+
             <div class="navbar-header">
                 <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
                     <i class="fa fa-bars" style="font-size:1.66em;"></i>
                 </button>
+
+                <div ng-cloak ng-show="user" class="pull-right">
+
+                    <a ng-hide="user.isAuthenticated" class="navbar-toggle collapsed" style="text-decoration:none;color:#009B48" href="https://accounts.cbd.int/signin?returnUrl={{encodedReturnUrl()}}" style="color: black">
+                        <i  class="fa fa-power-off" style="font-size:1.66em;"></i>
+                    </a>
+
+                    <div ng-show="user.isAuthenticated" class="dropdown">
+
+                        <button class="navbar-toggle collapsed" title="{{user.name}}" style="text-decoration:none;color:#009B48" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                          <i class="fa fa-user" style="font-size:1.66em;"></i>
+                        </button>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
+                            <li><a href="https://accounts.cbd.int/profile?returnurl={{encodedReturnUrl()}}" ><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
+                            <li><a href="https://accounts.cbd.int/password?returnurl={{encodedReturnUrl()}}"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
+                            <li><a href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
+                        </ul>
+                    </div>
+
+               </div> <!--  end sign in-->
 
                 <a href="/" target="_self">
                     <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg"/></a>
@@ -101,10 +123,30 @@
         </div>
     </header>
 
-    <!-- HEADER (MOBILE) -->
+    <!-- HEADER (LARGE) -->
     <header class="large hidden-xs">
         <div class="container whitebg">
             <div>
+
+                <div ng-cloak ng-show="user" class="navbar-right" style="margin:5px">
+
+                    <a class="btn btn-link"  style="text-decoration:none;color:#009B48" ng-hide="user.isAuthenticated" href="https://accounts.cbd.int/signin?returnUrl={{encodedReturnUrl()}}" style="color: black">
+                        <i  class="fa fa-power-off"></i> Sign in
+                    </a>
+
+                    <div ng-show="user.isAuthenticated" class="dropdown">
+                        <button class="btn btn-link dropdown-toggle" style="text-decoration:none;color:#009B48" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                          <span class="caret"></span> {{user.name}}
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
+                            <li><a href="https://accounts.cbd.int/profile?returnurl={{encodedReturnUrl()}}" ><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
+                            <li><a href="https://accounts.cbd.int/password?returnurl={{encodedReturnUrl()}}"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
+                            <li><a href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
+                        </ul>
+                    </div>
+
+               </div> <!--  end sign in-->
+
                 <div style="padding:5px 0px">
                     <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg"/></a>
                 </div>
