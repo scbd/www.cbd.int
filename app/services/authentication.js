@@ -1,61 +1,87 @@
 /* jshint sub:true */
 
-define(['app', 'angular'], function (app, ng) { 'use strict';
+define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 
 	app.factory('apiToken', ["$q", "$rootScope", "$window", "$document", "$timeout", function($q, $rootScope, $window, $document, $timeout) {
 
+		var authenticationFrameQ = $q(function(resolve, reject){
+
+			var frame = $('<iframe src="https://accounts.cbd.int/app/authorize.html" style="display:none"></iframe>');
+
+			$("body").prepend(frame);
+
+			frame.load(function(evt){
+				resolve(evt.target || evt.srcElement);
+			});
+
+			$timeout(function(){
+				reject('accounts.cbd.int is not available / call is made from an unauthorized domain');
+			}, 5000);
+		});
+
 		var pToken;
+
 		//============================================================
 		//
 		//
 		//============================================================
 		function getToken() {
-			//incase of iframe not found in $document object search the $ object (for Firefox)
-			var authenticationFrame = $document.find('#authenticationFrame')[0]||$('#authenticationFrame')[0];
 
-			if(!authenticationFrame) {
-				pToken = pToken || null;
-			}
+			return $q.when(authenticationFrameQ).then(function(authenticationFrame){
 
-			if(pToken!==undefined) {
-				return $q.when(pToken || null);
-			}
-
-			pToken = null;
-
-			var defer = $q.defer();
-			var unauthorizedTimeout = $timeout(function(){
-				console.error('accounts.cbd.int is not available / call is made from an unauthorized domain');
-				defer.resolve(null);
-			}, 1000);
-
-			var receiveMessage = function(event)
-			{
-				$timeout.cancel(unauthorizedTimeout);
-
-				if(event.origin!='https://accounts.cbd.int')
-					return;
-
-				var message = JSON.parse(event.data);
-
-				if(message.type=='authenticationToken') {
-					defer.resolve(message.authenticationToken || null);
-
-					if(message.authenticationEmail)
-						$rootScope.lastLoginEmail = message.authenticationEmail;
+				if(!authenticationFrame) {
+					pToken = pToken || null;
 				}
-				else {
-					defer.reject('unsupported message type');
+
+				if(pToken!==undefined) {
+					return $q.when(pToken || null);
 				}
-			};
 
-			$window.addEventListener('message', receiveMessage);
+				pToken = null;
 
-			pToken = defer.promise.then(function(t){
+				var defer = $q.defer();
+				var unauthorizedTimeout = $timeout(function(){
+					console.error('accounts.cbd.int is not available / call is made from an unauthorized domain');
+					defer.resolve(null);
+				}, 1000);
 
-				pToken = t;
+				var receiveMessage = function(event)
+				{
+					$timeout.cancel(unauthorizedTimeout);
 
-				return t;
+					if(event.origin!='https://accounts.cbd.int')
+						return;
+
+					var message = JSON.parse(event.data);
+
+					if(message.type=='authenticationToken') {
+						defer.resolve(message.authenticationToken || null);
+
+						if(message.authenticationEmail)
+							$rootScope.lastLoginEmail = message.authenticationEmail;
+					}
+					else {
+						defer.reject('unsupported message type');
+					}
+				};
+
+				$window.addEventListener('message', receiveMessage);
+
+				pToken = defer.promise.then(function(t){
+
+					pToken = t;
+
+					return t;
+
+				}).finally(function(){
+
+					$window.removeEventListener('message', receiveMessage);
+
+				});
+
+				authenticationFrame.contentWindow.postMessage(JSON.stringify({ type : 'getAuthenticationToken' }), 'https://accounts.cbd.int');
+
+				return pToken;
 
 			}).catch(function(error){
 
@@ -65,15 +91,7 @@ define(['app', 'angular'], function (app, ng) { 'use strict';
 
 				throw error;
 
-			}).finally(function(){
-
-				$window.removeEventListener('message', receiveMessage);
-
 			});
-
-			authenticationFrame.contentWindow.postMessage(JSON.stringify({ type : 'getAuthenticationToken' }), 'https://accounts.cbd.int');
-
-			return pToken;
 		}
 
 		//============================================================
@@ -82,24 +100,25 @@ define(['app', 'angular'], function (app, ng) { 'use strict';
 	    //============================================================
 		function setToken(token, email) { // remoteUpdate:=true
 
-			pToken = token || undefined;
+			return $q.when(authenticationFrameQ).then(function(authenticationFrame){
 
-			var authenticationFrame = $document.find('#authenticationFrame')[0]||$('#authenticationFrame')[0];
+				pToken = token || undefined;
 
-			if(authenticationFrame) {
+				if(authenticationFrame) {
 
-				var msg = {
-					type : "setAuthenticationToken",
-					authenticationToken : token,
-					authenticationEmail : email
-				};
+					var msg = {
+						type : "setAuthenticationToken",
+						authenticationToken : token,
+						authenticationEmail : email
+					};
 
-				authenticationFrame.contentWindow.postMessage(JSON.stringify(msg), 'https://accounts.cbd.int');
-			}
+					authenticationFrame.contentWindow.postMessage(JSON.stringify(msg), 'https://accounts.cbd.int');
+				}
 
-			if(email) {
-				$rootScope.lastLoginEmail = email;
-			}
+				if(email) {
+					$rootScope.lastLoginEmail = email;
+				}
+			});
 		}
 
 		return {
