@@ -50,8 +50,9 @@ app.listen(process.env.PORT || 2000, '0.0.0.0', function(){
 
 // Handle proxy errors ignore
 
-proxy.on('error', function (e) {
+proxy.on('error', function (e,req, res) {
     console.error('proxy error:', e);
+    res.status(502).send();
 });
 
 // //============================================================
