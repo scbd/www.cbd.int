@@ -4,7 +4,6 @@ define(['app', 'nprogress', 'bootstrap', 'authentication', ], function(app, npro
 	function($scope, $window, $browser, $document, $location, authentication, $q) {
 
         $q.when(authentication.getUser()).then(function(u){
-            console.log(u);
             $scope.user = u;
         });
 
