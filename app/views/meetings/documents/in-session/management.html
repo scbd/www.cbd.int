@@ -1,0 +1,223 @@
+<style>
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.striked {
+    text-decoration: line-through;
+}
+
+.superseded { text-decoration: line-through; color:#888; }
+</style>
+
+<div shortcut="{ 'ctrl+down': moveDown, 'ctrl+up': moveUp }">
+
+    <h1>In-Session document posting <i class="fa fa-magic"></i> <i class="fa fa-cog fa-spin" ng-show="loading"></i></h1>
+
+    <div class="row">
+
+        <div class="col-sm-4">
+
+            <div class="form-group" ng-show="meetings">
+                <label for="">Meetings</label>
+                <select ng-disabled="isEditing() || loading" ng-show="meetings" class="form-control" ng-options="meeting.code for meeting in meetings" ng-model="meeting"></select>
+            </div>
+
+        </div>
+        <div class="col-sm-4">
+
+            <div class="form-group" ng-show="sections">
+                <label for="">Sections</label>
+                <select ng-disabled="isEditing() || loading" ng-show="meetings" class="form-control" ng-options="section.title for section in sections" ng-model="section"></select>
+            </div>
+
+        </div>
+
+        <div class="col-sm-3">
+
+            <div class="form-group" ng-show="sections">
+                <label for="">&nbsp;</label><br>
+                <span class="btn btn-default btn-file" ng-disabled="loading || !meeting || !section || isEditing()">
+                    <i class="fa fa-upload"></i> Upload a document
+                    <file ng-model="file" ng-show="!loading && meeting && section && !isEditing()"></file>
+                </span>
+            </div>
+
+        </div>
+
+        <div class="col-sm-1">
+
+            <div class="form-group" ng-show="sections">
+                <label for="">&nbsp;</label>
+                <button ng-disabled="isEditing() || !documents" class="btn btn-default" ng-click="add(0)"><i class="fa fa-plus"></i> Add</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="alert alert-danger" role="alert" ng-show="error">
+        <button type="button" class="close" ng-click="error=null">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div style="white-space:pre">{{error|json}}</div>
+    </div>
+
+    <div class="alert alert-info" role="alert" ng-show="info">
+        <button type="button" class="close" ng-click="info=null">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div>{{info}}</div>
+    </div>
+
+    <div class="alert alert-success" role="alert" ng-show="success">
+        <button type="button" class="close" ng-click="success=null">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div>{{success}}</div>
+    </div>
+
+    <table class="table table-striped" style="border-bottom: 1px solid #ddd;">
+        <tr ng-repeat="d in documents" ng-click="select(d)" ng-class="{info : d.selected, danger : d.delete }">
+            <td style="width:55px">
+                <div ng-show="d.selected">
+                    <button class="btn btn-default" ng-disabled="loading" ng-hide="$first || d.delete"><i class="fa fa-arrow-up"   ng-click="moveTo(d, $index-1)"></i></button><br/>
+                    <button class="btn btn-default" ng-disabled="loading" ng-hide="$last  || d.delete"><i class="fa fa-arrow-down" ng-click="moveTo(d, $index+1)"></i></button>
+                </div>
+            </td>
+            <td ng-hide="d.edit">
+                <div ng-hide="d.edit" ng-class="{ striked : d.delete, superseded : d.superseded }">
+                    {{d.item}}
+                </div>
+            </td>
+            <td colspan="{{d.edit ? 2 : 1}}">
+
+                <div ng-hide="d.edit" ng-class="{ striked : d.delete }">
+                    <b   ng-class="{ superseded : d.superseded }">{{d.symbol}}</b>
+                    <div ng-class="{ superseded : d.superseded }">{{d.title}}</div>
+                    <div ng-show="d.superseded"><em>Superseded by {{d.superseded}}</em></div>
+                    <span ng-show="d.alert"   class="label label-danger" >{{d.alert}}</span>
+                    <span ng-show="d.warning" class="label label-warning">{{d.warning}}</span>
+                    <span ng-show="d.info"    class="label label-success">{{d.info}}</span>
+                    <div style="color:#aaa;">{{d.urlPattern}}</div>
+                </div>
+
+                <form class="form-horizontal" ng-show="d.edit">
+
+                    <div class="alert alert-danger" role="alert" ng-show="d.error">
+                        <button type="button" class="close" ng-click="d.error=undefined;$parent.error=undefined">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div style="white-space:pre">{{d.error|json}}</div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Item</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="d.item"     placeholder="Item(s)"   class="form-control"/><br/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Symbol</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="d.symbol"     placeholder="Symbol"   class="form-control"/><br/>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{ 'has-error' : !d.title }">
+                        <label class="col-sm-2 control-label">Title</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="d.title"      placeholder="Title"    class="form-control"/><br/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Superseded by</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="d.superseded"      placeholder="Symbol"    class="form-control"/><br/>
+                        </div>
+                    </div>
+
+                    <div class="form-group has-success">
+                        <label class="col-sm-2 control-label">Info tag</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="d.info"      placeholder="Info"    class="form-control"/><br/>
+                        </div>
+                    </div>
+
+                    <div class="form-group has-warning">
+                        <label class="col-sm-2 control-label">Warning tag</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="d.warning"      placeholder="Warning"    class="form-control"/><br/>
+                        </div>
+                    </div>
+
+                    <div class="form-group has-error">
+                        <label class="col-sm-2 control-label">Alert tag</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="d.alert"      placeholder="alert"    class="form-control"/><br/>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group" ng-class="{ 'has-error' : (!d.path || !validPattern(d.filePattern)) }">
+                        <label class="col-sm-2 control-label">Path / FilePattern</label>
+                        <div class="col-sm-5">
+                            <input type="text" ng-model="d.path" placeholder="Base path"  class="form-control"/>
+                        </div>
+                        <div class="col-sm-1 text-center">
+                            /
+                        </div>
+                        <div class="col-sm-4" ng-class="{ 'has-error' : !validPattern(d.filePattern) }">
+                            <input type="text" ng-model="d.filePattern" placeholder="File Pattern"  class="form-control"/>
+                            <div class="alert alert-warning" role="alert" ng-hide="validPattern(d.filePattern)">File Pattern is invalid. It must match aaa-123-bbb-456</div>
+                        </div>
+                    </div>
+
+                </form>
+            </td>
+            <td style="white-space:nowrap;width:10px;">
+                <div ng-show="d.locales.length" ng-repeat="f in (d.formats||['doc', 'pdf'])">
+                    <i class="fa" ng-class="{ 'fa-file-word-o' : f=='doc', 'fa-file-pdf-o' : f=='pdf' }"></i>
+                    <span ng-repeat="locale in d.locales"  ng-class="{ striked : d.delete }">
+                        <a target="_blank" ng-href="http://www.cbd.int{{d.path}}/{{d.filePattern}}-{{locale}}.{{f}}">{{locale}}</a>
+                    </span>
+                </div>
+            </td>
+            <td class="text-right" style="vertial-align:middle;white-space:nowrap;width:10px;">
+                <div ng-hide="d.edit || d.delete || d.moved">
+                    <button class="btn btn-default" ng-click="edit(d)"     ng-disabled="isEditing() || loading"><i class="fa fa-pencil"></i></button>
+                    <button class="btn btn-default" ng-click="delete(d)"   ng-disabled="isEditing() || loading"><i class="fa fa-trash"></i></button><br/>
+                    <button class="btn btn-default" ng-click="add($index)" ng-disabled="isEditing() || loading"><i class="fa fa-plus"></i></button>
+                </div>
+                <div ng-show="d.edit || d.delete || d.moved">
+                    <button class="btn btn-primary" ng-click="save(d)"  ng-disabled="!isDirty(d)"><i class="fa fa-floppy-o"></i></button>
+                    <button class="btn btn-default" ng-click="revert(d)"><i class="fa fa-times"></i></button>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="col-sm-offset-11 col-sm-1" ng-show="documents.length">
+        <button ng-disabled="isEditing() || !documents" class="btn btn-default" ng-click="add(999999)"><i class="fa fa-plus"></i> Add</button>
+    </div>
+
+</div>

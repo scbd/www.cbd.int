@@ -1,4 +1,4 @@
-define(['app', 'jquery', 'providers/extended-route', 'ngRoute'], function(app, $) { 'use strict';
+define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'authentication'], function(app, $, _) { 'use strict';
 
     var locationPath = window.location.pathname.toLowerCase().split('?')[0];
 
@@ -40,6 +40,7 @@ define(['app', 'jquery', 'providers/extended-route', 'ngRoute'], function(app, $
 
       routeProvider
       .when('/',                     { templateUrl : 'views/meetings/documents/in-session/index.html'})
+      .when('/management',           { templateUrl : 'views/meetings/documents/in-session/management.html', resolveController : true, resolve : { user : securize(["Administrator"]) } } )
       .when('/mop7',  {
           templateUrl : 'views/meetings/documents/in-session.html',
           resolveController : true,
@@ -102,5 +103,28 @@ define(['app', 'jquery', 'providers/extended-route', 'ngRoute'], function(app, $
               }
           }
       });
-  }
+    }
+
+    //============================================================
+    //
+    //
+    //============================================================
+    function securize(requiredRoles) {
+        return ['$q', '$rootScope', 'authentication', '$location', '$window', function($q, $rootScope, authentication, $location, $window) {
+
+            return $q.when(authentication.getUser()).then(function (user) {
+
+                var hasRole = !!_.intersection(user.roles, requiredRoles).length;
+
+                if (!user.isAuthenticated) {
+                    $window.location.href = 'https://accounts.cbd.int/signin?returnurl='+encodeURIComponent($location.absUrl());
+                    throw user; // stop route change!
+                }
+                else if (!hasRole)
+                    $location.url('/403?returnurl='+encodeURIComponent($location.url()));
+
+                return user;
+            });
+        }];
+    }
 });
