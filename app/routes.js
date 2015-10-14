@@ -39,70 +39,14 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
       $("base").attr('href', '/insession/'); // allow full page reload outside of  /insession/*
 
       routeProvider
-      .when('/',                     { templateUrl : 'views/meetings/documents/in-session/index.html'})
-      .when('/management',           { templateUrl : 'views/meetings/documents/in-session/management.html', resolveController : true, resolve : { user : securize(["Administrator"]) } } )
-      .when('/mop7',  {
-          templateUrl : 'views/meetings/documents/in-session.html',
-          resolveController : true,
-          progress  : { stop : false },
-          resolve : {
-              insessionConfig : function() {
-                  return {
-                      title     : "BS COP-MOP 7 In-session Documents",
-                      intro     : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
-                      documents : {
-                          plenary : { title : "Plenary", open : true, url : "/doc/meetings/bs/mop-07/insession/src/plenary.json" },
-                      }
-                  };
-              }
-          }
-      }).when('/npmop1',  {
-          templateUrl : 'views/meetings/documents/in-session/meeting-id.html',
-          resolveController : true,
-          progress  : { stop : false },
-          resolve : {
-              insessionConfig : function() {
-                  return {
-                      title     : "NP COP-MOP 1 In-session Documents",
-                      intro     : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
-                      documents : {
-                          plenary : { title : "Plenary", open : true, url : "/doc/meetings/abs/np-mop-01/insession/src/plenary.json" }
-                      }
-                  };
-              }
-          }
-      }).when('/cop12/hls',  {
-          templateUrl : 'views/meetings/documents/in-session/meeting-id.html',
-          resolveController : true,
-          progress  : { stop : false },
-          resolve : {
-              insessionConfig : function() {
-                  return {
-                      title     : "High Level Segment of COP 12",
-                      intro     : "The CBD Secretariat is making the following documents available on behalf of the Government of the Republic of Korea.",
-                      documents : {
-                          plenary     : { title : "HLS Documents",                                                                          open : true, url : "/doc/meetings/cop/cop-12/insession/hls/src/plenary.json" },
-                          initiatives : { title : "COP 12 Information documents on Initiatives of the Government of the Republic of Korea", open : true, url : "/doc/meetings/cop/cop-12/insession/hls/src/initiatives.json" }
-                      }
-                  };
-              }
-          }
-      }).when('/cop12',  {
-          templateUrl : 'views/meetings/documents/in-session/meeting-id.html',
-          resolveController : true,
-          progress  : { stop : false },
-          resolve : {
-              insessionConfig : function() {
-                  return {
-                      title     : "COP 12 In-Session Documents",
-                      intro     : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
-                      documents : {
-                          plenary : { title : "Plenary", open : true, url : "/doc/meetings/cop/cop-12/insession/src/plenary.json" }
-                      }
-                  };
-              }
-          }
-      });
+      .when('/',           { templateUrl : 'views/meetings/documents/in-session/index.html',      resolveController : true})
+      .when('/management', { templateUrl : 'views/meetings/documents/in-session/management.html', resolveController : true, resolve : { user : securize(["Administrator"]) } } )
+
+      .when('/cop12/hls',  { redirectTo: '/COP-12-HLS'})
+      .when('/cop12',      { redirectTo: '/COP-12'})
+      .when('/mop7',       { redirectTo: '/MOP-07'})
+      .when('/npmop1',     { redirectTo: '/NP-MOP-01'})
+      .when('/:meeting',   { templateUrl : 'views/meetings/documents/in-session/meeting-id.html', resolveController : true, progress  : { stop : false } } );
     }
 
     //============================================================

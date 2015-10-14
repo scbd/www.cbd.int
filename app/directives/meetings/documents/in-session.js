@@ -59,7 +59,7 @@ define(['app', 'underscore', 'text!./in-session.html', 'directives/print-smart/p
 					if(!$scope.hasFormat(d, format))
 						return "";
 
-					return d.urlPattern + locale + '.' + format;
+					return d.path +'/'+ d.filePattern + '-' + locale + '.' + format;
 				};
 				//==============================================
 				//

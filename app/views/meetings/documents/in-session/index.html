@@ -4,16 +4,8 @@
 
     <div class="row">
 
-        <div class="col-lg-2 col-sm-3 col-xs-12">
-            <a class="btn btn-lg btn-success" href="cop12"     role="button" style="margin-bottom:10px;width:175px"><br>COP 12<br><br></a>
-        </div>
-
-        <div class="col-lg-2 col-sm-3 col-xs-12" style="text-center">
-            <a class="btn btn-lg btn-primary" href="npmop1"    role="button" style="margin-bottom:10px;width:175px"><br>NP-MOP 1<br><br></a>
-        </div>
-
-        <div class="col-lg-2 col-sm-3 col-xs-12" style="text-center">
-            <a class="btn btn-lg btn-info"    href="cop12/hls" role="button" style="margin-bottom:10px;width:175px"><br>COP 12 - HLS<br><br></a>
+        <div class="col-lg-2 col-sm-3 col-xs-12" ng-repeat="m in (meetings | filter : { list : true })">
+            <a class="btn btn-lg btn-info" href="{{m.code}}" role="button" style="margin-bottom:10px;width:175px"><br>{{m.code.toUpperCase()}}<br><br></a>
         </div>
     </div>
 </div>

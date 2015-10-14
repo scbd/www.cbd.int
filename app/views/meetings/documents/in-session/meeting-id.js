@@ -1,9 +1,11 @@
-define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/documents/in-session', 'angular-growl'], function(_, nprogress, ng, $) {
-	return ["$scope", "$route", "$http", '$q', '$timeout', 'growl', 'insessionConfig', function ($scope, $route, $http, $q, $timeout, growl, insessionConfig) {
+define(['underscore', 'nprogress', 'angular', 'jquery', 'underscore', 'data/in-session/meetings', 'directives/meetings/documents/in-session', 'angular-growl'], function(_, nprogress, ng, $, _, meetingsData) {
+	return ["$scope", "$route", "$http", '$q', '$timeout', 'growl', function ($scope, $route, $http, $q, $timeout, growl) {
 
-		$scope.title        = insessionConfig.title;
-		$scope.intro        = insessionConfig.intro;
-		$scope.sections     = JSON.parse(JSON.stringify(insessionConfig.documents)); //clone
+		var meeting = _.findWhere(meetingsData, { code : $route.current.params.meeting });
+
+		$scope.title        = meeting.title;
+		$scope.intro        = meeting.intro;
+		$scope.sections     = JSON.parse(JSON.stringify(meeting.sections)); //clone
 		$scope.sectionsKeys = _.keys($scope.sections);
 
 		var refreshTimeout = 2*60*1000; // 2 minutes
@@ -103,7 +105,16 @@ define(['underscore', 'nprogress', 'angular', 'jquery' ,'directives/meetings/doc
 
 			section.loading = true;
 
-			return $http.get(section.url, { headers : { badge : cleanBadge() } }).then(function(res){
+			var query = {
+				q : {
+					meeting : meeting.code,
+					section : section.code
+				},
+				s : {
+					position : 1
+				}
+			};
+			return $http.get("/api/v2015/insession-documents", { params : query, headers : { badge : cleanBadge() } }).then(function(res){
 
 				var docs = _.chain(res.data || []).map(function(d) {  //patch serie & tag
 
