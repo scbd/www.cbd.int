@@ -9,12 +9,10 @@ require.config({
         'ngRoute'         : 'libs/angular-route/angular-route.min',
         'ngCookies'       : 'libs/angular-cookies/angular-cookies.min',
         'ngAnimate'       : 'libs/angular-animate/angular-animate.min',
-        'domReady'        : 'libs/requirejs-domready/domReady',
         'text'            : 'libs/requirejs-text/text',
         'jquery'          : 'libs/jquery/dist/jquery.min',
         'bootstrap'       : 'libs/bootstrap/dist/js/bootstrap.min',
         'underscore'      : 'libs/lodash/lodash.min',
-        'angularMoment'   : 'libs/angular-moment/angular-moment.min',
         'bootstrap-notify': 'libs/remarkable-bootstrap-notify/bootstrap-notify.min',
         'nprogress'       : 'libs/nprogress/nprogress',
         'dropbox-dropins' : 'https://www.dropbox.com/static/api/2/dropins'
