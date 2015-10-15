@@ -1,4 +1,4 @@
-window.name = 'NG_DEFER_BOOTSTRAP!';
+(function(document) { 'use strict';
 
 require.config({
     waitSeconds: 30,
@@ -41,12 +41,14 @@ require.config({
 
 // BOOT
 require(['nprogress'], function(p) { p.start(); });
+require(['angular', 'app', 'bootstrap', 'routes', 'template'], function(ng, app) {
 
-require(['angular', 'domReady!', 'bootstrap', 'app', 'routes', 'template'], function(ng, doc) {
+    ng.element(document).ready(function(){
+        ng.bootstrap(document, [app.name]);
+    });
 
-    ng.bootstrap(doc, ['app']);
-    ng.resumeBootstrap();
 });
+})(document);
 
 // MISC
 
