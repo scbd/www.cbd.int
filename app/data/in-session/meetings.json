@@ -5,11 +5,12 @@
         "intro"   : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
         "baseUrl" : "/doc/meetings/sbstta/sbstta-19/insession",
         "list"    : false,
+        "print"   : true,
         "sections" : [
-            { "code" : "plenary", "open" : true, "title" : "Plenary"           },
-            { "code" : "wg1",     "open" : true, "title" : "Working Group I"   },
-            { "code" : "wg2",     "open" : true, "title" : "Working Group II"  },
-            { "code" : "other",   "open" : true, "title" : "Other documents"   }
+            { "code" : "plenary", "open" : true, "title" : "Plenary" },
+            { "code" : "wg1",     "open" : true, "title" : "Working Group I",  "tag" : "WG.1" },
+            { "code" : "wg2",     "open" : true, "title" : "Working Group II", "tag" : "WG.2" },
+            { "code" : "other",   "open" : true, "title" : "Other documents" }
         ]
     },
     {
@@ -18,11 +19,12 @@
         "intro"   : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
         "baseUrl" : "/doc/meetings/tk/wg8j-09/insession",
         "list"    : false,
+        "print"   : true,
         "sections" : [
-            { "code" : "plenary", "open" : true, "title" : "Plenary"           },
-            { "code" : "wg1",     "open" : true, "title" : "Working Group I"   },
-            { "code" : "wg2",     "open" : true, "title" : "Working Group II"  },
-            { "code" : "other",   "open" : true, "title" : "Other documents"   }
+            { "code" : "plenary", "open" : true, "title" : "Plenary" },
+            { "code" : "wg1",     "open" : true, "title" : "Working Group I",  "tag" : "WG.1" },
+            { "code" : "wg2",     "open" : true, "title" : "Working Group II", "tag" : "WG.2" },
+            { "code" : "other",   "open" : true, "title" : "Other documents" }
         ]
     },
     {
@@ -31,8 +33,9 @@
         "intro"   : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
         "baseUrl" : "/doc/meetings/cop/cop-12/insession",
         "list"    : true,
+        "print"   : false,
         "sections" : [
-            { "code" : "plenary", "open" : true, "title" : "Plenary"  }
+            { "code" : "plenary", "open" : true, "title" : "Plenary" }
         ]
     },
     {
@@ -41,9 +44,10 @@
         "intro"   : "The CBD Secretariat is making the following documents available on behalf of the Government of the Republic of Korea.",
         "baseUrl" : "/doc/meetings/cop/cop-12/insession/hls",
         "list"    : false,
+        "print"   : true,
         "sections" : {
             "sections" : [
-                { "code" : "plenary",     "open" : true,  "title" : "COP 12 HLS Documents"  },
+                { "code" : "plenary",     "open" : true,  "title" : "COP 12 HLS Documents" },
                 { "code" : "initiatives", "open" : false, "title" : "COP 12 Information documents on Initiatives of the Government of the Republic of Korea" }
             ]
         }
@@ -54,8 +58,9 @@
         "intro"   : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
         "baseUrl" : "/doc/meetings/cop/cop-12/insession",
         "list"    : true,
+        "print"   : true,
         "sections" : [
-            { "code" : "plenary", "open" : true, "title" : "Plenary"  }
+            { "code" : "plenary", "open" : true, "title" : "Plenary" }
         ]
     },
     {
@@ -64,6 +69,7 @@
         "intro"   : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
         "baseUrl" : "/doc/meetings/bs/mop-07/insession",
         "list"    : true,
+        "print"   : true,
         "sections" : [
             { "code" : "plenary", "open" : true, "title" : "Plenary"  }
         ]
