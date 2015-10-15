@@ -77,7 +77,9 @@ define(['require', 'app', 'angular', 'ngRoute'], function(require, app, angular)
 
                 require([controllerModule], function (module) {
                     deferred.resolve(module);
-                }, function(){
+                }, function(error){
+                    console.error  (error);
+                    console.error  ("controller not found: " + controllerModule);
                     deferred.reject("controller not found: " + controllerModule);
                 });
 

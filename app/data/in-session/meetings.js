@@ -1,4 +1,12 @@
 define(['text!./meetings.json'], function(rawData) {
 
-    return JSON.parse(rawData);
+    try
+    {
+        return JSON.parse(rawData);
+    }
+    catch(e)
+    {
+        console.error("Errro parsing meetings.json: "+e);
+
+    }
 });
