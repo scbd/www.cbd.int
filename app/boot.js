@@ -26,7 +26,7 @@ require.config({
         'ngCookies'            : { deps : ['angular'] },
         'ngAnimate'            : { deps : ['angular'] },
         'bootstrap'            : { deps : ['jquery' ] },
-        'angular-growl'        : { deps : ['angular'] },
+        'bootstrap-notify'     : { deps : ['jquery', 'bootstrap'] },
         'angularMoment'        : { deps : ['angular', 'moment'] },
         'dropbox-dropins'      : {
             deps: [],
