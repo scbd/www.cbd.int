@@ -20,16 +20,16 @@
     }
 
 </style>
-<h1 ng-cloak>{{title}}</h1>
-<div print-smart="" can-print="false">
+<h1 ng-cloak>{{meeting.title}}</h1>
+<div print-smart="" can-print="{{meeting.print}}">
 
     <div ng-show="totalDocuments()>0" style="float:right;text-align: right; margin:5px; clear:both;">
         <div class="print-smart-checkout fixed-top-right"></div>
     </div>
 
-    <p>{{intro}}</p>
+    <p>{{meeting.intro}}</p>
 
-    <div ng-show="allLoaded() && !totalDocuments()">
+    <div ng-show="documents && totalDocuments()===0">
         No document
     </div>
 
@@ -58,20 +58,20 @@
 
     <div class="panel-group" id="accordionX">
 
-        <div ng-repeat="key in sectionsKeys" class="panel panel-default" style="overflow:visible" ng-show="sections[key].documents">
+        <div ng-repeat="section in meeting.sections | filter:isVisible" class="panel panel-default" style="overflow:visible">
 
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a ng-class="{ collapsed : !sections[key].open }"  data-toggle="collapse" style="display:block" data-parent="#accordion" ng-href="#collapse{{$index}}">{{sections[key].title}} <i ng-show="sections[key].status=='RESTRICTED'" class="fa fa-lock"></i><i ng-show="sections[key].status=='UNRESTRICTED'" class="fa fa-unlock"></i></a>
+                    <a ng-class="{ collapsed : !section.open }"  data-toggle="collapse" style="display:block" data-parent="#accordion" ng-href="#collapse{{$index}}">{{section.title}} <i ng-show="section.status=='RESTRICTED'" class="fa fa-lock"></i><i ng-show="section.status=='UNRESTRICTED'" class="fa fa-unlock"></i></a>
                 </h4>
             </div>
 
-            <div id="collapse{{$index}}" class="panel-collapse" ng-class="{ collapse : !sections[key].open, in : sections[key].open }">
+            <div id="collapse{{$index}}" class="panel-collapse" ng-class="{ collapse : !section.open, in : section.open }">
                 <div class="panel-bodyX">
 
-                    <div ng-show="sections[key].documents=='RESTRICTED'" class="panel panel-info" style="margin:10px">
+                    <div ng-show="section.restricted" class="panel panel-info" style="margin:10px">
                         <div class="panel-heading">
-                            <i ng-show="sections[key].documents=='RESTRICTED'" class="fa fa-lock"></i>
+                            <i ng-show="section.restricted" class="fa fa-lock"></i>
                             This section is restricted to participants of the CBD meeting.
                         </div>
                         <div class="panel-body">
@@ -89,11 +89,11 @@
                                         <label> CBD Badge number </label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="fa fa-barcode"></i></span>
-                                            <input type="text" ng-model="$root.badgeCode" placeholder="1234-5678" maxlength="9" pattern="[0-9\-]*" ng-disabled="sections[key].loading" class="form-control">
+                                            <input type="text" ng-model="$root.badgeCode" placeholder="1234-5678" maxlength="9" pattern="[0-9\-]*" ng-disabled="section.loading" class="form-control">
                                             <span class="input-group-btn">
-                                                <button class="btn btn-success" ng-disabled="sections[key].loading" type="submit">
-                                                    <i ng-hide="sections[key].loading" class="fa fa-unlock-alt"></i>
-                                                    <i ng-show="sections[key].loading" class="fa fa-cog fa-spin"></i>
+                                                <button class="btn btn-success" ng-disabled="section.loading" type="submit">
+                                                    <i ng-hide="section.loading" class="fa fa-unlock-alt"></i>
+                                                    <i ng-show="section.loading" class="fa fa-cog fa-spin"></i>
                                                     Unlock
                                                 </button>
                                             </span>
@@ -103,14 +103,14 @@
                                 </div>
                             </div>
 
-                            <div ng-show="sections[key].error" class="alert alert-warning" style="margin-top:10px" role="alert">
+                            <div ng-show="section.error" class="alert alert-warning" style="margin-top:10px" role="alert">
                                 <img style="margin:3px" class="pull-right" src="/app/images/sample-barcode.png">
         						<b>Sorry!</b> Your CBD Badge number is invalid.
         						<br/>You must provide the number located on the top right of your CBD meeting access badge.
                             </div>
                         </div>
                     </div>
-                    <div ng-show="sections[key].documents!='RESTRICTED'"  class="in-session-documents" documents="sections[key].documents" tag="{{sections[key].tag}}"></div>
+                    <in-session-documents ng-show="!section.restricted"  documents="documents|filter:{section:section.code}" tag="{{section.tag}}"></in-session-documents>
                 </div>
             </div>
 
