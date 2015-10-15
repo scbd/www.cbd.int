@@ -19,7 +19,7 @@ define(['app', 'underscore', 'angular', 'data/in-session/meetings'], function(ap
 	    };
 	});
 
-	return ['$scope', '$http', '$location', '$q', 'apiToken', function($scope, $http, $location, $q, apiToken) {
+	return ['$scope', '$http', '$location', '$q', function($scope, $http, $location, $q) {
 
 		loadMeetings();
 
@@ -210,7 +210,7 @@ define(['app', 'underscore', 'angular', 'data/in-session/meetings'], function(ap
 					return target;
 				});
 
-	        }).then(function(target){
+	        }).then(function(){
 
 	            delete $scope.info;
 	            $scope.success = file.name + " " + Math.round(file.size/1024) + " kB uploaded successfully";
