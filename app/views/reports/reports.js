@@ -62,7 +62,6 @@ define(['app', 'underscore',  'text!data/reports/aichiTargets.json',
       $scope.doSearch = function () {
         $window.location.href='http://chm.cbd.int/database/?q=' + $scope.searchQuery;
         $scope.searchQuery = '';
-        console.log($window.location.href );
     };
 
       $scope.setQuery = function(schema, id) {

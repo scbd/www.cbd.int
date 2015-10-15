@@ -71,7 +71,7 @@ define(['app', 'text!./download-dialog.html', 'angular', 'underscore', 'dropbox-
 						$http.post('/api/v2014/printsmart-downloads', urls).then(function(res){
 							$scope.downloadLink = '/api/v2014/printsmart-downloads/'+res.data._id;
 						}).catch(function(err){
-							console.log(err);
+							console.error(err);
 						});
 					}
 				}
@@ -203,7 +203,7 @@ define(['app', 'text!./download-dialog.html', 'angular', 'underscore', 'dropbox-
 						},
 					    error : function (errorMessage) {
 
-							console.log('DROPBOX ERROR', errorMessage);
+							console.error('DROPBOX ERROR', errorMessage);
 
 							$scope.$apply(function() {
 								$scope.error = {
@@ -221,7 +221,6 @@ define(['app', 'text!./download-dialog.html', 'angular', 'underscore', 'dropbox-
 				//==============================================
 				function signoutDropbox() {
 
-					console.log("signout from dropbox");
 					angular.element('body').append('<iframe height="0" width="0" style="display:none" src="https://www.dropbox.com/logout"></iframe>');
 				}
 

@@ -137,7 +137,7 @@ define(['app', 'text!./print-smart-document.html', 'underscore'], function(app, 
 					}
 					catch(e)
 					{
-						console.log("Error looking for other language of : %s for extension: %s", documentUrl, extension);
+						console.error("Error looking for other language of : %s for extension: %s", documentUrl, extension);
 					}
 
 					return urls;
