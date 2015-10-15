@@ -175,6 +175,4 @@ define(['app', 'angular', 'bootstrap', './print-smart-document', './print-smart-
 			}]
 		};
 	}]);
-
-	console.log("PrintSmart app loaded");
 });
