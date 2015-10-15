@@ -44,7 +44,7 @@
         "intro"   : "The CBD Secretariat is making the following documents available on behalf of the Government of the Republic of Korea.",
         "baseUrl" : "/doc/meetings/cop/cop-12/insession/hls",
         "list"    : false,
-        "print"   : true,
+        "print"   : false,
         "sections" : {
             "sections" : [
                 { "code" : "plenary",     "open" : true,  "title" : "COP 12 HLS Documents" },
@@ -58,7 +58,7 @@
         "intro"   : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
         "baseUrl" : "/doc/meetings/cop/cop-12/insession",
         "list"    : true,
-        "print"   : true,
+        "print"   : false,
         "sections" : [
             { "code" : "plenary", "open" : true, "title" : "Plenary" }
         ]
@@ -69,7 +69,7 @@
         "intro"   : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
         "baseUrl" : "/doc/meetings/bs/mop-07/insession",
         "list"    : true,
-        "print"   : true,
+        "print"   : false,
         "sections" : [
             { "code" : "plenary", "open" : true, "title" : "Plenary"  }
         ]
