@@ -1,5 +1,5 @@
-define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meetings', 'directives/meetings/documents/in-session', 'angular-growl'], function(_, nprogress, ng, $, meetings) {
-	return ["$scope", "$route", "$http", '$q', '$timeout', '$location', 'growl', function ($scope, $route, $http, $q, $timeout, growl, $location) {
+define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meetings', 'directives/meetings/documents/in-session', 'bootstrap-notify'], function(_, nprogress, ng, $, meetings) {
+	return ["$scope", "$route", "$http", '$q', '$timeout', '$location', function ($scope, $route, $http, $q, $timeout, $location) {
 
 		var refreshTimeout = 2*60*1000; // 2 minutes
 		var meeting        = _.findWhere(meetings, { code : $route.current.params.meeting });
@@ -151,24 +151,34 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meeting
 			var now   = new Date();
 			var time  = now.getHours() + ":" + now.getMinutes();
 			var count = 0;
+			var message = null;
 
 			if(_new.length > _old.length) {
-
-				count = _new.length - _old.length;
-
-				growl.addInfoMessage(time + ' - '+count+' new document(s) available', { ttl: 10000 });
+				count   = _new.length - _old.length;
+				message = time + ' - '+count+' new document(s) available';
 			}
 
 			if(_new.length>0 && _new.length == _old.length) {
 
-				var o = _(_old).map(function(d) { return ng.toJson(d); });
-				var n = _(_new).map(function(d) { return ng.toJson(d); });
+				var o = _.map(_old, function(d) { return ng.toJson(_.pick(d, ["symbol","superseded","item","title","alert","warning","info","filePattern","locales"])); });
+				var n = _.map(_new, function(d) { return ng.toJson(_.pick(d, ["symbol","superseded","item","title","alert","warning","info","filePattern","locales"])); });
 
 				count = _.difference(n, o).length;
 
-				if(count) {
-					growl.addInfoMessage(time + ' - '+count+' document(s) updated', { ttl: 10000 });
-				}
+				if(count)
+					message = time + ' - '+count+' document(s) updated';
+			}
+
+			if(message) {
+				$.notify({ message: message, icon: "fa fa-files-o" }, {
+					delay: 10000,
+					type: 'info',
+					placement : { align : "center" },
+					animate: {
+						enter: 'animated bounceInDown',
+						exit: 'animated bounceOutUp'
+					},
+				});
 			}
 
 			$timeout(function(){

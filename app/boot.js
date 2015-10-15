@@ -14,8 +14,8 @@ require.config({
         'jquery'          : 'libs/jquery/dist/jquery.min',
         'bootstrap'       : 'libs/bootstrap/dist/js/bootstrap.min',
         'underscore'      : 'libs/lodash/lodash.min',
-        'angular-growl'   : 'libs/angular-growl/build/angular-growl.min',
         'angularMoment'   : 'libs/angular-moment/angular-moment.min',
+        'bootstrap-notify': 'libs/remarkable-bootstrap-notify/bootstrap-notify.min',
         'nprogress'       : 'libs/nprogress/nprogress',
         'dropbox-dropins' : 'https://www.dropbox.com/static/api/2/dropins'
     },

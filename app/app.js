@@ -1,6 +1,6 @@
 define(['angular'], function(angular) { 'use strict';
 
-    var deps = ['ngRoute', 'ngCookies', 'angular-growl'];
+    var deps = ['ngRoute', 'ngCookies'];
 
     angular.defineModules(deps);
 
