@@ -1,14 +1,16 @@
-define(['underscore', 'nprogress', 'angular', 'jquery', 'underscore', 'data/in-session/meetings', 'directives/meetings/documents/in-session', 'angular-growl'], function(_, nprogress, ng, $, _, meetingsData) {
-	return ["$scope", "$route", "$http", '$q', '$timeout', 'growl', function ($scope, $route, $http, $q, $timeout, growl) {
-
-		var meeting = _.findWhere(meetingsData, { code : $route.current.params.meeting });
-
-		$scope.title        = meeting.title;
-		$scope.intro        = meeting.intro;
-		$scope.sections     = JSON.parse(JSON.stringify(meeting.sections)); //clone
-		$scope.sectionsKeys = _.keys($scope.sections);
+define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meetings', 'directives/meetings/documents/in-session', 'angular-growl'], function(_, nprogress, ng, $, meetings) {
+	return ["$scope", "$route", "$http", '$q', '$timeout', '$location', 'growl', function ($scope, $route, $http, $q, $timeout, growl, $location) {
 
 		var refreshTimeout = 2*60*1000; // 2 minutes
+		var meeting        = _.findWhere(meetings, { code : $route.current.params.meeting });
+
+		if(!meeting) {
+			$location.url("/404");
+			return;
+		}
+
+		meeting = _.clone(meeting, true);
+		$scope.meeting = meeting;
 
 		//=============================================
 		//
@@ -16,9 +18,9 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'underscore', 'data/in-s
 		//=============================================
 		$scope.totalDocuments = function () {
 
-			return _($scope.sections).reduce(function(sum, v){
+			return _(meeting.sections).filter($scope.isVisible).reduce(function(sum, section){
 
-				return sum + (v.documents||[]).length;
+				return sum + _.where($scope.documents, { section : section.code }).length;
 
 			}, 0);
 		};
@@ -29,38 +31,40 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'underscore', 'data/in-s
 		//=============================================
 		$scope.unlock = function () {
 
-			var lockedSections = _($scope.sections).filter(function(s){
-				delete s.error;
-				return s.status==="RESTRICTED";
-			});
+			throw "TO RE-IMPLEMENT";
 
-			if(lockedSections.length)
-				nprogress.start();
-
-				console.log(lockedSections);
-
-
-			var queries = _(lockedSections).map(function(s){
-
-				return loadDocuments(s).then(function(d){
-
-					if(d=="RESTRICTED")
-						s.error =  "INVALID_BADGE_ID";
-				});
-			});
-
-			$q.all(queries).finally(function() {
-				nprogress.done();
-			});
+			// var lockedSections = _.filter(meeting.sections, function(s){
+			// 	delete s.error;
+			// 	return s.status==="RESTRICTED";
+			// });
+			//
+			// if(lockedSections.length)
+			// 	nprogress.start();
+			//
+			// var queries = _(lockedSections).map(function(s){
+			//
+			// 	return loadDocuments(s).then(function(d){
+			//
+			// 		if(d=="RESTRICTED")
+			// 			s.error =  "INVALID_BADGE_ID";
+			// 	});
+			// });
+			//
+			// $q.all(queries).finally(function() {
+			// 	nprogress.done();
+			// });
 		};
 
 		//=============================================
 		//
 		//
 		//=============================================
-		$scope.allLoaded = function () {
+		$scope.isVisible = function (section) {
 
-			return _(_($scope.sections).pluck('documents')).every();
+			var visible    = section.visible   || section.visible===undefined;
+			var hasDocs    = _($scope.documents||[]).some({ section : section.code });
+
+			return visible && hasDocs;
 		};
 
 		//==============================================
@@ -79,44 +83,20 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'underscore', 'data/in-s
 
 			nprogress.start();
 
-			var queries = _.map($scope.sections, loadDocuments);
-
-			$q.all(queries).then(function() {
-
-				delete $scope.error;
-
-			}).catch(function(e) {
-
-				$scope.error = "ERROR:"+(e||'').toString();
-
-			}).finally(function() {
-
-				nprogress.done();
-			});
-
-			$timeout(refresh, refreshTimeout);
-		}
-
-		//=============================================
-		//
-		//
-		//=============================================
-		function loadDocuments(section) {
-
-			section.loading = true;
-
 			var query = {
 				q : {
 					meeting : meeting.code,
-					section : section.code
+					section : { $in : _.pluck(meeting.sections, "code") }
 				},
 				s : {
+					section : 1,
 					position : 1
 				}
 			};
+
 			return $http.get("/api/v2015/insession-documents", { params : query, headers : { badge : cleanBadge() } }).then(function(res){
 
-				var docs = _.chain(res.data || []).map(function(d) {  //patch serie & tag
+				$scope.documents = _(res.data || []).map(function(d) {  //patch serie & tag
 
 					d.visible = d.visible!==false ? true : false;
 
@@ -128,60 +108,33 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'underscore', 'data/in-s
 
 				}).value();
 
-				if(ng.toJson(docs) == ng.toJson(section.documents)) // do not update if values are ==
-					return section.documents;
+				return $scope.documents;
 
-				return docs;
+			}).catch(function(e) {
 
-			}).catch(function(res) {
+				$scope.error = "ERROR:"+(e||'').toString();
 
-				if(res && res.status==403) return "RESTRICTED";
-				if(res && res.status==404) return [];
+			}).finally(function() {
 
-				throw "UNKNOWN_ERROR";
-
-			}).then(function(docs){
-
-				if(docs == "RESTRICTED")                    section.status = "RESTRICTED";
-				if(section.status &&  docs != "RESTRICTED") section.status = "UNRESTRICTED";
-
-				section.documents = docs;
-
-				return docs;
-
-			}).finally(function(){
-				delete section.loading;
+				nprogress.done();
+				$timeout(refresh, refreshTimeout);
 			});
+
 		}
 
 		//=============================================
 		//
 		//
 		//=============================================
-
-		var refreshKeys  = _.keys($scope.sections);
-
 		function refresh() {
 
 			if($('.modal:visible').size()===0) {
 
-				refreshKeys.push(refreshKeys.shift());
-
-				var section = $scope.sections[refreshKeys[0]];
-				var oldDocs  = section.documents;
-
-				loadDocuments(section).then(function(newDocs) {
-
-					if(newDocs!=oldDocs)
-						applyChanges(newDocs, oldDocs);
-
-				}).finally(function(){
-
+				return load().finally(function(){
 					$timeout(refresh, refreshTimeout);
 				});
 			}
 			else {
-
 				$timeout(refresh, refreshTimeout);
 			}
 		}
@@ -190,7 +143,7 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'underscore', 'data/in-s
 		//
 		//
 		//=============================================
-		function applyChanges(_new, _old) {
+		$scope.$watch("documents", function(_new, _old) {
 
 			if(!_.isArray(_new) || !_.isArray(_old))
 				return;
@@ -221,8 +174,8 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'underscore', 'data/in-s
 			$timeout(function(){
 				$scope.$broadcast('printsmart-refresh');
 			}, 500);
-		}
+		});
 
-		load();
+		refresh();
 	}];
 });
