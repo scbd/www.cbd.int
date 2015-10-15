@@ -6,7 +6,7 @@ define(['app', 'underscore', 'text!./in-session.html', 'directives/print-smart/p
 	//==============================================
 	app.directive('inSessionDocuments', ["$http", function($http) {
 		return {
-			restrict : "AEC",
+			restrict : "E",
 			replace : true,
 			template : templateHtml,
 			require: '?^printSmart',
