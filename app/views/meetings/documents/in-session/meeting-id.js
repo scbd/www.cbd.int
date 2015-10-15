@@ -117,7 +117,6 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meeting
 			}).finally(function() {
 
 				nprogress.done();
-				$timeout(refresh, refreshTimeout);
 			});
 
 		}
