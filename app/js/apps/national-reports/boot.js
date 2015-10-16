@@ -1,5 +1,3 @@
-window.name = 'NG_DEFER_BOOTSTRAP!';
-
 require.config({
     waitSeconds: 30,
     baseUrl : '/app/',
@@ -10,7 +8,6 @@ require.config({
         'ngRoute'        : 'libs/angular-route/angular-route.min',
         'ngCookies'      : 'libs/angular-cookies/angular-cookies.min',
         'ngAnimate'      : 'libs/angular-animate/angular-animate.min',
-        'domReady'       : 'libs/requirejs-domready/domReady',
         'async'          : 'libs/requirejs-plugins/src/async',
         'text'           : 'libs/requirejs-text/text',
         'jquery'         : 'libs/jquery/dist/jquery.min',
@@ -35,10 +32,11 @@ require.config({
 
 // BOOT
 
-require(['angular', 'domReady!', 'bootstrap', 'app', 'js/apps/national-reports/routes', 'views/reports/template'], function(ng, doc) {
+require(['angular', 'app', 'bootstrap', 'js/apps/national-reports/routes', 'views/reports/template'], function(ng, app) {
 
-    ng.bootstrap(doc, ['app']);
-    ng.resumeBootstrap();
+        ng.element(document).ready(function(){
+            ng.bootstrap(document, [app.name]);
+        });
 });
 
 // MISC
