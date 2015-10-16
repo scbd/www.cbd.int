@@ -2,15 +2,35 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meeting
 	return ["$scope", "$route", "$http", '$q', '$timeout', '$location', function ($scope, $route, $http, $q, $timeout, $location) {
 
 		var refreshTimeout = 2*60*1000; // 2 minutes
-		var meeting        = _.findWhere(meetings, { code : $route.current.params.meeting });
 
-		if(!meeting) {
-			$location.url("/404");
+		$scope.meeting = lookupMeeting($route.current.params.meeting);
+
+		if(!$scope.meeting)
 			return;
-		}
 
-		meeting = _.clone(meeting, true);
-		$scope.meeting = meeting;
+		//=============================================
+		//
+		//
+		//=============================================
+		function lookupMeeting(code)
+		{
+			var meeting = _.find(meetings, function(m) {
+				return code.toUpperCase() == m.code.toUpperCase() ||
+					   code.toUpperCase() == m.code.toUpperCase().replace(/-/g, "");
+			});
+
+			if(!meeting) {
+				$location.url("/404");
+				return;
+			}
+
+			if(meeting.code!=code) {
+				$location.url("/"+meeting.code);
+				return;
+			}
+
+			return _.clone(meeting, true); //deep clone
+		}
 
 		//=============================================
 		//
@@ -18,7 +38,7 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meeting
 		//=============================================
 		$scope.totalDocuments = function () {
 
-			return _(meeting.sections).filter($scope.isVisible).reduce(function(sum, section){
+			return _($scope.meeting.sections).filter($scope.isVisible).reduce(function(sum, section){
 
 				return sum + _.where($scope.documents, { section : section.code }).length;
 
@@ -85,8 +105,8 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meeting
 
 			var query = {
 				q : {
-					meeting : meeting.code,
-					section : { $in : _.pluck(meeting.sections, "code") }
+					meeting : $scope.meeting.code,
+					section : { $in : _.pluck($scope.meeting.sections, "code") }
 				},
 				s : {
 					section : 1,

@@ -41,12 +41,7 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
       routeProvider
       .when('/',           { templateUrl : 'views/meetings/documents/in-session/index.html',      resolveController : true})
       .when('/management', { templateUrl : 'views/meetings/documents/in-session/management.html', resolveController : true, resolve : { user : securize(["Administrator"]) } } )
-
-      .when('/cop12/hls',  { redirectTo: '/COP-12-HLS'})
-      .when('/cop12',      { redirectTo: '/COP-12'})
-      .when('/mop7',       { redirectTo: '/MOP-07'})
-      .when('/npmop1',     { redirectTo: '/NP-MOP-01'})
-      .when('/:meeting',   { templateUrl : 'views/meetings/documents/in-session/meeting-id.html', resolveController : true, progress  : { stop : false } } );
+      .when('/:meeting',   { templateUrl : 'views/meetings/documents/in-session/meeting-id.html', resolveController : true, progress : { stop : false } } );
     }
 
     //============================================================
