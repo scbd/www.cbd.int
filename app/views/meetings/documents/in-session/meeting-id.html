@@ -20,7 +20,10 @@
     }
 
 </style>
-<h1 ng-cloak>{{meeting.title}}</h1>
+<h1 ng-cloak>
+    {{meeting.title}}
+    <a ng-show="isAdmin" ng-href="management?meeting={{meeting.code}}"<i class="fa fa-pencil-square-o"></i></a>
+</h1>
 <div print-smart="" can-print="{{meeting.print}}">
 
     <div ng-show="totalDocuments()>0" style="float:right;text-align: right; margin:5px; clear:both;">

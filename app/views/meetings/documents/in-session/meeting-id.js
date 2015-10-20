@@ -1,5 +1,5 @@
-define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meetings', 'directives/meetings/documents/in-session', 'bootstrap-notify'], function(_, nprogress, ng, $, meetings) {
-	return ["$scope", "$route", "$http", '$q', '$timeout', '$location', function ($scope, $route, $http, $q, $timeout, $location) {
+define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meetings', 'directives/meetings/documents/in-session', 'bootstrap-notify', 'authentication'], function(_, nprogress, ng, $, meetings) {
+	return ["$scope", "$route", "$http", '$q', '$timeout', '$location', 'authentication', function ($scope, $route, $http, $q, $timeout, $location, authentication) {
 
 		var refreshTimeout = 2*60*1000; // 2 minutes
 
@@ -7,6 +7,10 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meeting
 
 		if(!$scope.meeting)
 			return;
+
+		$q.when(authentication.getUser()).then(function(u){
+			$scope.isAdmin = !!_.intersection(u.roles, ["Administrator"]).length;
+		});
 
 		//=============================================
 		//
