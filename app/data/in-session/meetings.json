@@ -2,7 +2,6 @@
     {
         "code"    : "SBSTTA-19",
         "title"   : "SBSTTA-19 In-Session Documents",
-        "intro"   : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
         "baseUrl" : "/doc/meetings/sbstta/sbstta-19/insession",
         "list"    : false,
         "print"   : true,
@@ -16,7 +15,6 @@
     {
         "code"    : "WG8J-09",
         "title"   : "WG8J-09 In-Session Documents",
-        "intro"   : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
         "baseUrl" : "/doc/meetings/tk/wg8j-09/insession",
         "list"    : false,
         "print"   : true,
@@ -30,7 +28,6 @@
     {
         "code"    : "COP-12",
         "title"   : "COP 12 In-Session Documents",
-        "intro"   : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
         "baseUrl" : "/doc/meetings/cop/cop-12/insession",
         "list"    : true,
         "print"   : false,
@@ -41,7 +38,6 @@
     {
         "code"    : "COP-12-HLS",
         "title"   : "High Level Segment of COP 12",
-        "intro"   : "The CBD Secretariat is making the following documents available on behalf of the Government of the Republic of Korea.",
         "baseUrl" : "/doc/meetings/cop/cop-12/insession/hls",
         "list"    : false,
         "print"   : false,
@@ -55,7 +51,6 @@
     {
         "code"    : "MOP-07",
         "title"   : "BS COP-MOP 7 In-session Documents",
-        "intro"   : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
         "baseUrl" : "/doc/meetings/cop/cop-12/insession",
         "list"    : true,
         "print"   : false,
@@ -66,7 +61,6 @@
     {
         "code"    : "NP-MOP-01" ,
         "title"   : "NP COP-MOP 1 In-session Documents",
-        "intro"   : "The documents below are in session documents made available for the convenience of the participants. They do not represent final decisions.",
         "baseUrl" : "/doc/meetings/bs/mop-07/insession",
         "list"    : true,
         "print"   : false,
