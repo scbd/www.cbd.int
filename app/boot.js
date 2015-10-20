@@ -25,7 +25,6 @@ require.config({
         'ngAnimate'            : { deps : ['angular'] },
         'bootstrap'            : { deps : ['jquery' ] },
         'bootstrap-notify'     : { deps : ['jquery', 'bootstrap'] },
-        'angularMoment'        : { deps : ['angular', 'moment'] },
         'dropbox-dropins'      : {
             deps: [],
             exports: "Dropbox",
