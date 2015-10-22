@@ -30,7 +30,7 @@
         "title"   : "COP 12 In-Session Documents",
         "baseUrl" : "/doc/meetings/cop/cop-12/insession",
         "list"    : true,
-        "print"   : false,
+        "print"   : true,
         "sections" : [
             { "code" : "plenary", "open" : true, "title" : "Plenary" }
         ]
