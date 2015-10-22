@@ -3,7 +3,7 @@
         "code"    : "SBSTTA-19",
         "title"   : "SBSTTA-19 In-Session Documents",
         "baseUrl" : "/doc/meetings/sbstta/sbstta-19/insession",
-        "list"    : false,
+        "list"    : true,
         "print"   : true,
         "sections" : [
             { "code" : "plenary", "open" : true, "title" : "Plenary" },
@@ -16,7 +16,7 @@
         "code"    : "WG8J-09",
         "title"   : "WG8J-09 In-Session Documents",
         "baseUrl" : "/doc/meetings/tk/wg8j-09/insession",
-        "list"    : false,
+        "list"    : true,
         "print"   : true,
         "sections" : [
             { "code" : "plenary", "open" : true, "title" : "Plenary" },
