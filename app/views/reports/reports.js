@@ -112,7 +112,8 @@ define(['app', 'underscore',  'text!data/reports/aichiTargets.json',
       this.getReportsByType = function(schema, type) {
         $scope.loading = true;
         var params = {
-          schema: schema
+          schema: schema,
+          realm_ss: 'chm'
         };
         params[(/AICHI/.test(type)) ? 'aichiTarget' : 'reportType'] = type;
 
