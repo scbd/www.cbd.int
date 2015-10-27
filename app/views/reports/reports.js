@@ -59,11 +59,6 @@ define(['app', 'underscore',  'text!data/reports/aichiTargets.json',
 
 	  $scope.setNavTagName = function (name) {$scope.navTagName = name;};
 
-      $scope.doSearch = function () {
-        $window.location.href='http://chm.cbd.int/database/?q=' + $scope.searchQuery;
-        $scope.searchQuery = '';
-    };
-
       $scope.setQuery = function(schema, id) {
         $scope.setSelectedQuery(schema, id);
       };
