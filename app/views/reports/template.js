@@ -6,7 +6,11 @@ define(['app', 'authentication'], function(app) { 'use strict';
         $scope.$root.pageTitle = { text: "not set" };
 
         $scope.doSearch = function () {
-          $window.location.href='http://chm.cbd.int/database/?keywords=' + $scope.searchQuery;
+          if($scope.searchQuery)
+            $window.location.href='http://chm.cbd.int/database?keywords=' + $scope.searchQuery;
+          else
+            $window.location.href='http://chm.cbd.int/database';
+
           $scope.searchQuery = '';
       };
 
