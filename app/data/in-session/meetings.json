@@ -29,8 +29,8 @@
         "code"    : "COP-12",
         "title"   : "COP 12 In-Session Documents",
         "baseUrl" : "/doc/meetings/cop/cop-12/insession",
-        "list"    : true,
-        "print"   : true,
+        "list"    : false,
+        "print"   : false,
         "sections" : [
             { "code" : "plenary", "open" : true, "title" : "Plenary" }
         ]
@@ -52,7 +52,7 @@
         "code"    : "MOP-07",
         "title"   : "BS COP-MOP 7 In-session Documents",
         "baseUrl" : "/doc/meetings/cop/cop-12/insession",
-        "list"    : true,
+        "list"    : false,
         "print"   : false,
         "sections" : [
             { "code" : "plenary", "open" : true, "title" : "Plenary" }
@@ -62,7 +62,7 @@
         "code"    : "NP-MOP-01" ,
         "title"   : "NP COP-MOP 1 In-session Documents",
         "baseUrl" : "/doc/meetings/bs/mop-07/insession",
-        "list"    : true,
+        "list"    : false,
         "print"   : false,
         "sections" : [
             { "code" : "plenary", "open" : true, "title" : "Plenary"  }
