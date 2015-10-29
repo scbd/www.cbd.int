@@ -1,6 +1,4 @@
-/* jshint node: true, browser: false */
-'use strict';
-
+'use strict'; // jshint node: true, browser: false, esnext: true
 var express     = require('express');
 var httpProxy   = require('http-proxy');
 
