@@ -198,7 +198,7 @@
                 <div ng-show="d.locales.length" ng-repeat="f in (d.formats||['doc', 'pdf'])">
                     <i class="fa" ng-class="{ 'fa-file-word-o' : f=='doc', 'fa-file-pdf-o' : f=='pdf' }"></i>
                     <span ng-repeat="locale in d.locales"  ng-class="{ striked : d.delete }">
-                        <a target="_blank" ng-href="http://www.cbd.int{{d.path}}/{{d.filePattern}}-{{locale}}.{{f}}">{{locale}}</a>
+                        <a target="_blank" ng-href="https://www.cbd.int{{d.path}}/{{d.filePattern}}-{{locale}}.{{f}}">{{locale}}</a>
                     </span>
                 </div>
             </td>

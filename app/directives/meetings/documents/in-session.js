@@ -70,7 +70,7 @@ define(['app', 'underscore', 'text!./in-session.html', 'directives/print-smart/p
 					var url = $scope.getUrl(d, locale, format);
 
 					if(!url) return;
-					if( url.indexOf('/')===0) url = 'http://www.cbd.int/' + url.replace(/^\/+/g, "");
+					if( url.indexOf('/')===0) url = 'https://www.cbd.int/' + url.replace(/^\/+/g, "");
 
 					$http.post("/api/v2014/printsmart-downloads/hit", [url]);
 				};
