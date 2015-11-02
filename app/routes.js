@@ -40,7 +40,7 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
 
       routeProvider
       .when('/',           { templateUrl : 'views/meetings/documents/in-session/index.html',      resolveController : true})
-      .when('/management', { templateUrl : 'views/meetings/documents/in-session/management.html', resolveController : true, resolve : { user : securize(["Administrator"]) } } )
+      .when('/management', { templateUrl : 'views/meetings/documents/in-session/management.html', resolveController : true, resolve : { user : securize(["Administrator","EditorialService"]) } } )
       .when('/:meeting',   { templateUrl : 'views/meetings/documents/in-session/meeting-id.html', resolveController : true, progress : { stop : false } } );
     }
 

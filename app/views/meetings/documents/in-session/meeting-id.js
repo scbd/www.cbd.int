@@ -9,7 +9,7 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meeting
 			return;
 
 		$q.when(authentication.getUser()).then(function(u){
-			$scope.isAdmin = !!_.intersection(u.roles, ["Administrator"]).length;
+			$scope.isAdmin = !!_.intersection(u.roles, ["Administrator","EditorialService"]).length;
 		});
 
 		//=============================================
