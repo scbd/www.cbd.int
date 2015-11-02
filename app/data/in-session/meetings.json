@@ -7,8 +7,6 @@
         "print"   : true,
         "sections" : [
             { "code" : "plenary", "open" : true, "title" : "Plenary" },
-            { "code" : "wg1",     "open" : true, "title" : "Working Group I",  "tag" : "WG.1" },
-            { "code" : "wg2",     "open" : true, "title" : "Working Group II", "tag" : "WG.2" },
             { "code" : "other",   "open" : true, "title" : "Other documents" }
         ]
     },
@@ -20,8 +18,6 @@
         "print"   : true,
         "sections" : [
             { "code" : "plenary", "open" : true, "title" : "Plenary" },
-            { "code" : "wg1",     "open" : true, "title" : "Working Group I",  "tag" : "WG.1" },
-            { "code" : "wg2",     "open" : true, "title" : "Working Group II", "tag" : "WG.2" },
             { "code" : "other",   "open" : true, "title" : "Other documents" }
         ]
     },
