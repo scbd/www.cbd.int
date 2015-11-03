@@ -8,13 +8,6 @@ var proxy  = httpProxy.createProxyServer({});
 
 // Configure options
 
-var trustedProxies = [ "52.6.60.249", "54.84.233.250", "52.74.118.238", "52.28.21.144", "52.7.14.126" ];
-
-if(trustedProxies) {
-    console.log('trusted proxies:', trustedProxies);
-    app.set('trust proxy', trustedProxies.join(', '));
-}
-
 app.use(require('morgan')('dev'));
 app.use(require('compression')());
 app.use(function(req, res, next) {  if(req.url.indexOf(".geojson")>0) res.contentType('application/json'); next(); } ); // override contentType for geojson files
@@ -52,47 +45,3 @@ proxy.on('error', function (e,req, res) {
     console.error('proxy error:', e);
     res.status(502).send();
 });
-
-// //============================================================
-// //
-// //
-// //============================================================
-// function getRestrictedFile(req, res) {
-//
-//     var filePath = path.join(process.env.HOME, 'doc', req.path.substr("/doc/no-cache/".length));
-//
-//     return FS.exists(filePath).then(function(exists){
-//
-//         if(!exists)
-//             throw { code: 404 };
-//
-//         return superAgentq.get(apiBaseUrl+'/api/v2014/meetings/cop-12/securities/canDownloadRestricted').
-//                            set('X-Forwarded-For', req.ip).
-//                            set("badge", req.get("badge")||"").
-//                            end();
-//
-//     }).then(function(result){
-//
-//         if(result.statusCode!=200)
-//             throw { code: 500, data : res.body };
-//
-//         return result.body;
-//
-//     }).then(function(authorization) {
-//
-//         console.log(authorization);
-//
-//         if(!authorization || !authorization.allow)
-//             throw { code : 403 };
-//
-//         res.sendFile(filePath);
-//
-//     }).catch(function(error){
-//
-//         console.error(error);
-//
-//         if(error && error.code) res.sendStatus(error.code);
-//         else                    res.sendStatus(500);
-//
-//     });
-// }
