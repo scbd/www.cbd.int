@@ -2,6 +2,7 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meeting
 	return ["$scope", "$route", "$http", '$q', '$timeout', '$location', 'authentication', function ($scope, $route, $http, $q, $timeout, $location, authentication) {
 
 		var refreshTimeout = 2*60*1000; // 2 minutes
+        var refreshTimer = null;
 
 		$scope.meeting = lookupMeeting($route.current.params.meeting);
 
@@ -146,13 +147,21 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meeting
 			if($('.modal:visible').size()===0) {
 
 				return load().finally(function(){
-					$timeout(refresh, refreshTimeout);
+					refreshTimer = $timeout(refresh, refreshTimeout);
 				});
 			}
 			else {
-				$timeout(refresh, refreshTimeout);
+				refreshTimer = $timeout(refresh, refreshTimeout);
 			}
 		}
+
+        //=============================================
+		//
+		//
+		//=============================================
+        $scope.$on("$destroy", function() {
+            $timeout.cancel(refreshTimer);
+        });
 
 		//=============================================
 		//
