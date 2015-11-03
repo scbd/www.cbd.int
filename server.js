@@ -45,3 +45,5 @@ proxy.on('error', function (e,req, res) {
     console.error('proxy error:', e);
     res.status(502).send();
 });
+
+process.on('SIGTERM', ()=>process.exit());
