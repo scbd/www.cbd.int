@@ -91,14 +91,6 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meeting
 			return visible && hasDocs;
 		};
 
-		//==============================================
-		//
-		//
-		//==============================================
-		function cleanBadge(code) {
-			return (code||$scope.$root.badgeCode||"").replace(/[^0-9]/g, "");
-		}
-
 		//=============================================
 		//
 		//
@@ -118,7 +110,7 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meeting
 				}
 			};
 
-			return $http.get("/api/v2015/insession-documents", { params : query, headers : { badge : cleanBadge() } }).then(function(res){
+			return $http.get("/api/v2015/insession-documents", { params : query }).then(function(res){
 
 				$scope.documents = _(res.data || []).map(function(d) {  //patch serie & tag
 
