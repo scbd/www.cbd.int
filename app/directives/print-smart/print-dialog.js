@@ -34,6 +34,7 @@ define(['app', 'text!./print-dialog.html','angular', 'underscore', 'ngCookies'],
 				$scope.locales         = {};
 
 				element.on("show.bs.modal", function() {
+                    $scope.badgeCode = "";
 					$scope.badgeCode = cleanBadge($scope.$root.badgeCode || "");
 					$scope.error     = null;
 					$scope.success   = null;
@@ -176,7 +177,7 @@ define(['app', 'text!./print-dialog.html','angular', 'underscore', 'ngCookies'],
 					};
 
 					close().then(function(){
-						$location.url('/printsmart/printshop');
+						$location.url('/printshop');
 					});
 				};
 
