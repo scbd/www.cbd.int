@@ -37,7 +37,7 @@
 					<div class="form-group" ng-class="{ 'has-error' : error && error.error=='INVALID_BADGE_ID', 'has-warning' : cleanBadge().length>0 && cleanBadge().length<8 }">
 						<label for="badgeCode" class="col-sm-4 control-label">Badge number</label>
 						<div class="col-sm-6">
-							<input type="text" ng-change="clearError()" class="form-control" id="badgeCode" placeholder="1234-5678" maxlength="9" pattern="\d*" ng-model="badgeCode">
+							<input type="text" ng-change="clearError()" class="form-control" id="badgeCode" placeholder="1234-5678" maxlength="9" ng-model="badgeCode">
 							<span class="help-block hidden-xs">Enter badge number to request printed hard copies.</span>
 						</div>
 					</div>
