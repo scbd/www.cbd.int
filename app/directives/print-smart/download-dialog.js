@@ -1,7 +1,7 @@
 /* global -close */
 define(['app', 'text!./download-dialog.html', 'angular', 'underscore', 'dropbox-dropins'], function(app, templateHtml, angular, _, Dropbox) {
 
-	app.directive('printSmartDownloadDialog', ["$http", function($http) {
+	app.directive('printSmartDownloadDialog', ['$http', '$timeout', function($http, $timeout) {
 		return {
 			restrict : "AEC",
 			require: '?^printSmart',
@@ -75,6 +75,19 @@ define(['app', 'text!./download-dialog.html', 'angular', 'underscore', 'dropbox-
 						});
 					}
 				}
+
+                //==============================================
+                //
+                //
+                //==============================================
+                function logDownloadLinkHit() {
+
+                    var urls = selectedLinks();
+
+                    if(urls.length) {
+                        $http.post('/api/v2014/printsmart-downloads/hit', urls);
+                    }
+                }
 
 				//==============================================
 				//
@@ -196,6 +209,8 @@ define(['app', 'text!./download-dialog.html', 'angular', 'underscore', 'dropbox-
 								return;
 
 							started = true;
+
+                            $timeout(logDownloadLinkHit);
 
 							$scope.$apply(function() {
 								$scope.success = 'dropbox';
