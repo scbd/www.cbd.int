@@ -1,7 +1,7 @@
 /* global -close */
 define(['app', 'text!./print-dialog.html','angular', 'underscore', 'ngCookies'], function(app, templateHtml, angular, _) {
 
-	app.directive('printSmartPrintDialog', ["$http", "$location", "$cookies", function($http, $location, $cookies) {
+	app.directive('printSmartPrintDialog', ["$http", "$location", "$cookies", "$window", function($http, $location, $cookies, $window) {
 		return {
 			restrict : "AEC",
 			require: '?^printSmart',
@@ -75,7 +75,7 @@ define(['app', 'text!./print-dialog.html','angular', 'underscore', 'ngCookies'],
 				//
 				//==============================================
 				$scope.canPrintShop = function() {
-					return !!$cookies.machineAuthorization && _.compact(_.values($scope.locales)).length>0;
+					return $cookies.get("printShop")=="true" && _.compact(_.values($scope.locales)).length>0;
 				};
 
 				//==============================================
@@ -83,7 +83,7 @@ define(['app', 'text!./print-dialog.html','angular', 'underscore', 'ngCookies'],
 				//
 				//==============================================
 				$scope.hasPrintShop = function() {
-					return !!$cookies.machineAuthorization;
+					return $cookies.get("printShop")=="true" && (typeof(Storage) !== "undefined");
 				};
 
 				//==============================================
@@ -171,13 +171,13 @@ define(['app', 'text!./print-dialog.html','angular', 'underscore', 'ngCookies'],
 					$scope.error = null;
 					$scope.success = null;
 
-					$scope.$root.printShop = {
-						badge     : cleanBadge(),
-						documents : documentsToPrint()
-					};
+                    localStorage.setItem("printShop", JSON.stringify({
+                        badge     : cleanBadge(),
+                        documents : documentsToPrint()
+                    }));
 
 					close().then(function(){
-						$location.url('/printshop');
+                        $window.location = '/printsmart/printshop';
 					});
 				};
 
