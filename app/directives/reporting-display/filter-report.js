@@ -1,6 +1,6 @@
-define(['text!./filter-report.html', 'app', 'lodash'], function(template, app, _) {
+define(['text!./filter-report.html', 'app', 'underscore'], function(template, app, _) {
   'use strict';
-  app.directive('filterReport', ['$http', 'Thesaurus', '$location', function($http, thesaurus, $location) {
+  app.directive('filterReport', ['$http',  '$location', function($http, $location) {
     return {
       restrict: 'EAC',
       template: template,

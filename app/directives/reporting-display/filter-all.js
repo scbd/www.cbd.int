@@ -1,4 +1,4 @@
-define(['text!./filter-all.html', 'app', 'lodash'], function(template, app, _) {
+define(['text!./filter-all.html', 'app', 'underscore'], function(template, app, _) {
   'use strict';
   app.directive('filterAll', [function() {
     return {

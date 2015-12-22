@@ -1,4 +1,4 @@
-define(['text!./ammap3.html', 'app', 'lodash', 'ammap3', 'ammap3WorldHigh', 'ammap-theme', 'ammap-export','ammap-ex-fabric','ammap-ex-filesaver','ammap-ex-pdfmake','ammap-ex-vfs-fonts','ammap-ex-jszip','ammap-ex-xlsx'], function(template, app, _) {
+define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 'ammap-theme', 'ammap-export','ammap-ex-fabric','ammap-ex-filesaver','ammap-ex-pdfmake','ammap-ex-vfs-fonts','ammap-ex-jszip','ammap-ex-xlsx'], function(template, app, _) {
   'use strict';
 
   app.directive('ammap3', ['$timeout', function($timeout) {

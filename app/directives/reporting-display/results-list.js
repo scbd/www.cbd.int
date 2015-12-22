@@ -1,4 +1,4 @@
-define(['text!./results-list.html', 'app', 'lodash'], function(template, app, _) {
+define(['text!./results-list.html', 'app', 'underscore'], function(template, app, _) {
   'use strict';
 
   app.directive('resultsList', [function() {
@@ -141,7 +141,7 @@ define(['text!./results-list.html', 'app', 'lodash'], function(template, app, _)
     }; // return
   }]); //app.directive('searchFilterCountries
 
-  app.filter('orderObjectBy', function() {
+  app.filter('orderObjectB', function() {
     return function(items, field, reverse) {
       var filtered = [];
       _.each(items, function(item) {

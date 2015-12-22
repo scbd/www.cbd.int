@@ -16,7 +16,7 @@ require.config({
         'angularMoment'  : 'libs/angular-moment/angular-moment.min',
         'moment'         : 'libs/moment/min/moment.min',
         'underscore'     : 'libs/lodash/lodash.min',
-        'lodash'     : 'libs/lodash/lodash.min',
+
         'ammap3WorldHigh'     : 'directives/reporting-display/worldEUHigh',
         'ammap3'              : 'libs/ammap3/ammap/ammap',
         'ammap-theme'         : 'libs/ammap3/ammap/themes/light',

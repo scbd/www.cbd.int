@@ -1,4 +1,4 @@
-define(['app', 'text!./filter-resource-mobilisation.html','lodash'], function(app, template,_) {
+define(['app', 'text!./filter-resource-mobilisation.html','underscore'], function(app, template,_) {
   'use strict';
   app.directive('filterResourceMobilisation', [function() {
     return {

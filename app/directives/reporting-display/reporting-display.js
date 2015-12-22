@@ -1,7 +1,7 @@
 define(['text!./reporting-display.html',
   'app',
   'jquery',
-  'lodash',
+  'underscore',
   './ammap3',
   "./results-list",
   "./filter-assessment",
@@ -14,7 +14,7 @@ define(['text!./reporting-display.html',
 ], function(template, app, $, _) {
   'use strict';
 
-  app.directive('reportingDisplay', ['$http', 'realm', '$q', '$timeout', '$location', '$filter', function($http, realm, $q, $timeout, $location, $filter) {
+  app.directive('reportingDisplay', ['$http',  '$q', '$timeout', '$location', '$filter', function($http,  $q, $timeout, $location, $filter) {
     return {
       restrict: 'E',
       template: template,
@@ -32,7 +32,7 @@ define(['text!./reporting-display.html',
         $http.get("/api/v2013/thesaurus/domains/countries/terms", {
           cache: true
         }).then(function(o) {
-          $scope.countries = $filter('orderBy')(o.data, 'title|lstring');
+          $scope.countries = $filter('orderBy')(o.data, 'title');
           return;
         }).then(function() {
           reportingDisplay.search();
@@ -233,7 +233,7 @@ define(['text!./reporting-display.html',
         //=======================================================================
         $scope.buildQuery = function() {
           // NOT version_s:* remove non-public records from resultset
-          var q = 'NOT version_s:* AND realm_ss:' + realm.toLowerCase(); //+ ' AND schema_s:* '
+          var q = 'NOT version_s:* AND realm_ss:chm'; //+ ' AND schema_s:* '
 
           var subQueries = [];
 

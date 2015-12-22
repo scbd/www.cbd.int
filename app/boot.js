@@ -16,7 +16,7 @@ require.config({
         'bootstrap-notify': 'libs/remarkable-bootstrap-notify/bootstrap-notify.min',
         'nprogress'       : 'libs/nprogress/nprogress',
         'dropbox-dropins' : 'https://www.dropbox.com/static/api/2/dropins',
-        'lodash'              : 'libs/lodash/lodash.min',
+
 
     },
     shim: {

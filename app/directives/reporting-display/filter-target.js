@@ -1,4 +1,4 @@
-define(['app', 'text!./filter-target.html', 'lodash'], function(app, template, _) {
+define(['app', 'text!./filter-target.html', 'underscore'], function(app, template, _) {
   'use strict';
   app.directive('filterTarget', [function() {
     return {

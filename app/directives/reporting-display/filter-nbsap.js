@@ -1,4 +1,4 @@
-define(['text!./filter-nbsap.html', 'app', 'lodash'], function(template, app, _) {
+define(['text!./filter-nbsap.html', 'app', 'underscore'], function(template, app, _) {
   'use strict';
 
   app.directive('filterNbsap', [function() {
