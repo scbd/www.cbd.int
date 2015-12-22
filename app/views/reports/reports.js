@@ -1,5 +1,5 @@
 define(['app', 'underscore',  'text!data/reports/aichiTargets.json',
-        'directives/gmap', 'services/geojson', 'services/reports', 'filters/orderObjectBy', 'directives/ui-bootstrap-custom'], function(app, _, aichiTargetJson) {
+        'directives/gmap', 'services/geojson', 'services/reports', 'filters/orderObjectBy', 'directives/ui-bootstrap-custom','directives/reporting-display/reporting-display'], function(app, _, aichiTargetJson) {
 
   return ['$scope', '$window', 'reports', '$rootScope', 'growl',
     function($scope, $window, reports, $rootScope, growl) {
