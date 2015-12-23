@@ -228,10 +228,10 @@ define(['text!./filter-assessment.html', 'app', 'underscore'], function(template
           function makeLocalIcons(targets) {
 
             _.each(targets, function(target) {
-              target.localIcon = "app/images/targets/" + $scope.aichiTargetNumber(target.identifier_s) + ".png";
-              target.localIconBW = "app/images/targets_bw/" + $scope.aichiTargetNumber(target.identifier_s) + ".png";
+              target.localIcon = "/app/images/targets/" + $scope.aichiTargetNumber(target.identifier_s) + ".png";
+              target.localIconBW = "/app/images/targets_bw/" + $scope.aichiTargetNumber(target.identifier_s) + ".png";
               target.selected = true;
-              target.selectedIcon = "app/images/targets/" + $scope.aichiTargetNumber(target.identifier_s) + ".png";
+              target.selectedIcon = "/app/images/targets/" + $scope.aichiTargetNumber(target.identifier_s) + ".png";
             });
 
           } //aichiTargetReadable
