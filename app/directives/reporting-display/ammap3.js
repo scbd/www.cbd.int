@@ -42,7 +42,7 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
             color: '#fec210'
           }, {
             id: 4,
-            title: 'Meet Target',
+            title: 'Met Target',
             visible: true,
             color: '#109e49'
           }, {
@@ -62,7 +62,7 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
               id: 1,
               title: 'Reported',
               visible: true,
-              color: '#428bca'
+              color: '#007c35'
             },
 
           ],
@@ -75,7 +75,7 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
             id: 1,
             title: 'Reported',
             visible: true,
-            color: '#428bca'
+            color: '#007c35'
           }, ],
         };
         //generates new map with new data
@@ -102,15 +102,14 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
           //  });
           //                 $scope.$apply();
           // reportingDIsplay.showCountryResultList(event.mapObject.id);
-
-          $scope.$applyAsync(function() {
-            reportingDIsplay.showCountryResultList(event.mapObject.id);
-          });
-          $timeout(function() {
-            reportingDIsplay.showCountryResultList(event.mapObject.id);
-          });
+          var id = event.mapObject.id;
+          if(event.mapObject.id === 'GL')
+          {
+              $scope.map.clickMapObject(ammap3.getMapObject('DK'));
+              id = 'DK';
+          }
           $scope.$evalAsync(function() {
-            reportingDIsplay.showCountryResultList(event.mapObject.id);
+            reportingDIsplay.showCountryResultList(id);
           });
 
         }); //
@@ -163,10 +162,10 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
             },
             "areasSettings": {
               "autoZoom": true,
-              "selectedColor": "#7fc3f4",
+              "selectedColor": "#4eba7d",
               "rollOverColor": "#423f3f",
               "selectable": true,
-              "color": "#428bca",
+              "color": "#007c35",
             },
             "smallMap": {},
             "export": {
@@ -183,7 +182,7 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
         //
         //=======================================================================
         function generateMap(schema) {
-
+ console.log('items',$scope.items);
           if (!schema) return;
           if (schema.indexOf('AICHI-TARGET-') > -1)
             progressColorMap(aichiMap);
@@ -224,15 +223,25 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
         //
         //=======================================================================
         $scope.legendHide = function(legendItem) {
+          var area2 ={};
+
 
           _.each($scope.map.dataProvider.areas, function(area) {
-            if (legendItem.color === area.originalColor && area.mouseEnabled === true) {
+
+            if (legendItem.color === area.originalColor && area.mouseEnabled === true && 'GL' !==area.id) {
               area.colorReal = '#FFFFFF';
               area.mouseEnabled = false;
-            } else if (legendItem.color === area.originalColor && area.mouseEnabled === false) {
+
+            } else if (legendItem.color === area.originalColor && area.mouseEnabled === false && 'GL' !==area.id) {
               area.colorReal = legendItem.color;
               area.mouseEnabled = true;
-            }
+
+          }            if(area.id.toUpperCase()==='DK'){
+                          area2 = getMapObject('gl');
+                          //area2.originalColor = area.originalColor;
+                          area2.colorReal = area.colorReal;
+                          area2.mouseEnabled = area.mouseEnabled;
+                      }
           });
           if (legendItem.visible)
             legendItem.visible = false;
@@ -293,7 +302,7 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
         //=======================================================================
         function defaultMap(country, schema, schemaName) {
 
-          changeAreaColor(country.identifier, '#428bca');
+          changeAreaColor(country.identifier, '#007c35');
           buildBaloon(country);
           legendTitle(country, schema, schemaName);
           restLegend($scope.leggends.default);
@@ -328,10 +337,16 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
         // //=======================================================================
         // //
         // //=======================================================================
-        function changeAreaColor(id, color) {
+        function changeAreaColor(id, color,area) {
+          if(!area)
+            area = getMapObject(id);
+            area.colorReal = area.originalColor = color;
+          if(id.toUpperCase()==='DK'){
+              var area2 = getMapObject('GL');
+              area2.colorReal = area.colorReal;
+              area2.originalColor = area.originalColor;
+          }
 
-          var area = getMapObject(id);
-          area.colorReal = area.originalColor = color;
         } //getMapObject
 
         // //=======================================================================
@@ -350,8 +365,8 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
         function buildProgressBaloon(country, progress, target) {
 
           var area = getMapObject(country.identifier);
-          area.balloonText = "<div class='panel panel-default' ><div class='panel-heading' style='font-weight:bold; font-size:medium; white-space: nowrap;'><i class='flag-icon flag-icon-" + country.identifier + " ng-if='country.isEUR'></i>&nbsp;";
-          var euImg = "<img src='app/images/flags/Flag_of_Europe.svg' style='width:25px;hight:21px;' ng-if='country.isEUR'></img>&nbsp;";
+          area.balloonText = "<div class='panel panel-default' ><div class='panel-heading' style='font-weight:bold; font-size:medium; white-space: nowrap;color:#ffffff;'><i class='flag-icon flag-icon-" + country.identifier + " ng-if='country.isEUR'></i>&nbsp;";
+          var euImg = "<img src='/app/images/flags/Flag_of_Europe.svg' style='width:25px;hight:21px;' ng-if='country.isEUR'></img>&nbsp;";
           var balloonText2 = area.title + "</div> <div class='panel-body' style='text-align:left;'><img style='float:right;width:60px;hight:60px;' src='" + getProgressIcon(progress) + "' >" + getProgressText(progress, target) + "</div> </div>";
           if (country.isEUR)
             area.balloonText += euImg;
@@ -364,8 +379,8 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
         function buildBaloon(country) {
 
           var area = getMapObject(country.identifier);
-          area.balloonText = "<div class='panel panel-default' ><div class='panel-heading' style='font-weight:bold; font-size:large;''>";
-          var euImg = "<img src='app/images/flags/Flag_of_Europe.svg' style='width:25px;hight:21px;' ng-if='country.isEUR'></img>";
+          area.balloonText = "<div class='panel panel-default' ><div class='panel-heading' style='font-weight:bold; font-size:large;color:#ffffff;'>";
+          var euImg = "<img src='/app/images/flags/Flag_of_Europe.svg' style='width:25px;hight:21px;' ng-if='country.isEUR'></img>";
           if (country.isEUR)
             area.balloonText += euImg + area.title + "</div>";
           else
@@ -399,7 +414,7 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
                   break;
                 case 'resourceMobilisation':
                   if ($scope.schema !== 'all')
-                    balloonBody = " <div class='panel-body' style='text-align:left;'>" + country.docs.nationalTarget[0].title_t + "</div>";
+                    balloonBody = " <div class='panel-body' style='text-align:left;'>" + country.docs.resourceMobilisation[0].title_t + "</div>";
                   break;
               }
             }); //_.each
@@ -414,15 +429,15 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
 
           switch (progress) {
             case 1:
-              return 'app/img/ratings/36A174B8-085A-4363-AE11-E34163A9209C.png';
+              return '/app/images/ratings/36A174B8-085A-4363-AE11-E34163A9209C.png';
             case 2:
-              return 'app/img/ratings/2D241E0A-1D17-4A0A-9D52-B570D34B23BF.png';
+              return '/app/images/ratings/2D241E0A-1D17-4A0A-9D52-B570D34B23BF.png';
             case 3:
-              return 'app/img/ratings/486C27A7-6BDF-460D-92F8-312D337EC6E2.png';
+              return '/app/images/ratings/486C27A7-6BDF-460D-92F8-312D337EC6E2.png';
             case 4:
-              return 'app/img/ratings/E49EF94E-0590-486C-903B-68C5E54EC089.png';
+              return '/app/images/ratings/E49EF94E-0590-486C-903B-68C5E54EC089.png';
             case 5:
-              return 'app/img/ratings/884D8D8C-F2AE-4AAC-82E3-5B73CE627D45.png';
+              return '/app/images/ratings/884D8D8C-F2AE-4AAC-82E3-5B73CE627D45.png';
           }
         } //getProgressIcon(progress)
 

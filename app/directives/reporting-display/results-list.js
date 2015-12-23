@@ -18,10 +18,10 @@ define(['text!./results-list.html', 'app', 'underscore'], function(template, app
 
             'nationalAssessment': 'National Assessments',
             'nationalReport': 'National Reports',
-            'nbsaps': 'Nat. Bio. Strategies and Action Plans',
+            'nbsaps': 'NBSAPs',
             'nationalIndicator': 'National Indicators',
             'nationalTarget': 'National Targets',
-            'resourceMobilisation': 'Financial Resource Mobilization'
+            'resourceMobilisation': 'Resource Mobilization'
           };
           $scope.$watch('items', function() {
             init();
