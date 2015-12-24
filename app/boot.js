@@ -15,7 +15,9 @@ require.config({
         'underscore'      : 'libs/lodash/lodash.min',
         'bootstrap-notify': 'libs/remarkable-bootstrap-notify/bootstrap-notify.min',
         'nprogress'       : 'libs/nprogress/nprogress',
-        'dropbox-dropins' : 'https://www.dropbox.com/static/api/2/dropins'
+        'dropbox-dropins' : 'https://www.dropbox.com/static/api/2/dropins',
+
+
     },
     shim: {
         'libs/angular/angular.min' : { deps : ['jquery'] },
@@ -25,6 +27,7 @@ require.config({
         'ngAnimate'            : { deps : ['angular'] },
         'bootstrap'            : { deps : ['jquery' ] },
         'bootstrap-notify'     : { deps : ['jquery', 'bootstrap'] },
+
         'dropbox-dropins'      : {
             deps: [],
             exports: "Dropbox",

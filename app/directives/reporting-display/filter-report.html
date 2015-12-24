@@ -1,0 +1,21 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" ng-href="#reports">
+        {{title}} </a>
+      <button type="button" id="reportP" class="pull-right btn btn-default" popover-append-to-body="true" popover-placement="top" popover="Countries having submitted or updated their report(s) since">
+        <span class="glyphicon glyphicon-info-sign white"></span>
+      </button>
+    </h4>
+  </div>
+
+  <div id="reports" ng-class="[classPanelCollapse, classCollapse]">
+    <div class="panel-body">
+      <ul class="nav nav-sidebar" style="cursor:pointer">
+        <li ng-repeat="term in terms track by $index" ng-class="term.selected ? 'active' : 'nactive'" ng-click="loadReports(term.id); termsNotSelected(); term.selected = !term.selected;">
+          <a src="#">{{term.title}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -15,7 +15,19 @@ require.config({
         'angular-growl'  : 'libs/angular-growl/build/angular-growl.min',
         'angularMoment'  : 'libs/angular-moment/angular-moment.min',
         'moment'         : 'libs/moment/min/moment.min',
-        'underscore'     : 'libs/lodash/lodash.min'
+        'underscore'     : 'libs/lodash/lodash.min',
+
+        'ammap3WorldHigh'     : 'directives/reporting-display/worldEUHigh',
+        'ammap3'              : 'libs/ammap3/ammap/ammap',
+        'ammap-theme'         : 'libs/ammap3/ammap/themes/light',
+        'ammap-resp'          : 'libs/ammap3/ammap/plugins/responsive/responsive',
+        'ammap-export'        : 'libs/ammap3/ammap/plugins/export/export.min',
+        'ammap-ex-fabric'     : 'libs/ammap3/ammap/plugins/export/libs/fabric.js/fabric.min',
+        'ammap-ex-filesaver'  : 'libs/ammap3/ammap/plugins/export/libs/FileSaver.js/FileSaver.min',
+        'ammap-ex-pdfmake'    : 'libs/ammap3/ammap/plugins/export/libs/pdfmake/pdfmake.min',
+        'ammap-ex-vfs-fonts'  : 'libs/ammap3/ammap/plugins/export/libs/pdfmake/vfs_fonts',
+        'ammap-ex-jszip'      : 'libs/ammap3/ammap/plugins/export/libs/jszip/jszip.min',
+        'ammap-ex-xlsx'       : 'libs/ammap3/ammap/plugins/export/libs/xlsx/xlsx.min'
     },
     shim: {
         'libs/angular/angular.min' : { deps : ['jquery'] },
@@ -26,7 +38,11 @@ require.config({
         'bootstrap'            : { deps : ['jquery' ] },
         'angular-growl'        : { deps : ['angular'] },
         'angularMoment'        : { deps : ['angular', 'moment'] },
-        'moment'               : { 'deps': ['jquery' ] }
+        'moment'               : { 'deps': ['jquery' ] },
+        'ammap3WorldHigh'      : { deps: ['ammap3'] },
+        'ammap-theme'          : { deps: ['ammap3']},
+        'ammap-resp'           : { deps: ['ammap3']},
+        'ammap-export'         : { deps: ['ammap3']},
     }
 });
 
