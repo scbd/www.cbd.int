@@ -11,8 +11,8 @@
 
 	<div id="aichi" ng-class="[classPanelCollapse, classCollapse]">
 		<div class="panel-body" style="padding-left:0px;">
-			<div class="row" style="width:150px;">
-				<div class="col-xs-3 " ng-repeat="target in aichiTargets track by $index"  ng-click="loadAssements(target.identifier_s);toggleTarget(aichiTargets,target);">
+			<div class="row" style="width:150px;text-align:center;">
+				<div class="col-xs-3 " style="padding:2px 2px 2px 2px;" ng-repeat="target in aichiTargets track by $index"  ng-click="loadAssements(target.identifier_s);toggleTarget(aichiTargets,target);">
 					<script>
 						$(document).ready(function() {
 							$('[data-toggle="{{target.identifier_s}}"]').popover({
