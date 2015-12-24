@@ -42,6 +42,40 @@ define(['text!./reporting-display.html',
           $scope.$broadcast('customHome', 'show');
         });
 
+        $scope.navTag = {
+
+          'nr5': '5th National Report (2009-2014)',
+          'nr4': '4th National Report (2005-2009)',
+          'nr3': '3rd National Report (2001-2005)',
+          'nr2': '2nd National Report (1997-2001)',
+          'nr1': '1st National Report (1992-1998)',
+          'AICHI-TARGET-01': 'Aichi Target 01 Assessments',
+          'AICHI-TARGET-02': 'Aichi Target 02 Assessments',
+          'AICHI-TARGET-03': 'Aichi Target 03 Assessments',
+          'AICHI-TARGET-04': 'Aichi Target 04 Assessments',
+          'AICHI-TARGET-05': 'Aichi Target 05 Assessments',
+          'AICHI-TARGET-06': 'Aichi Target 06 Assessments',
+          'AICHI-TARGET-07': 'Aichi Target 07 Assessments',
+          'AICHI-TARGET-08': 'Aichi Target 08 Assessments',
+          'AICHI-TARGET-09': 'Aichi Target 09 Assessments',
+          'AICHI-TARGET-10': 'Aichi Target 10 Assessments',
+          'AICHI-TARGET-11': 'Aichi Target 11 Assessments',
+          'AICHI-TARGET-12': 'Aichi Target 12 Assessments',
+          'AICHI-TARGET-13': 'Aichi Target 13 Assessments',
+          'AICHI-TARGET-14': 'Aichi Target 14 Assessments',
+          'AICHI-TARGET-15': 'Aichi Target 15 Assessments',
+          'AICHI-TARGET-16': 'Aichi Target 17 Assessments',
+          'AICHI-TARGET-18': 'Aichi Target 18 Assessments',
+          'AICHI-TARGET-19': 'Aichi Target 19 Assessments',
+          'AICHI-TARGET-20': 'Aichi Target 20 Assessments',
+
+          'nbsaps': 'National Biodiversity Strategies and Action Plans',
+          'nationalIndicator': 'National Indicators',
+          'nationalTarget': 'National Targets',
+          'resourceMobilisation': 'Financial Reporting Framework: Reporting on Baseline and Progress',
+          'all':'All Reports Submitted'
+        };
+
         $scope.urlStrings = {
           'all': {
             'schema_s': [
