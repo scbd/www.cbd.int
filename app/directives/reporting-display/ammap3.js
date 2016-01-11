@@ -182,7 +182,6 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
         //
         //=======================================================================
         function generateMap(schema) {
- console.log('items',$scope.items);
           if (!schema) return;
           if (schema.indexOf('AICHI-TARGET-') > -1)
             progressColorMap(aichiMap);
