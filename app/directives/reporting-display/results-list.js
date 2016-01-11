@@ -27,8 +27,8 @@ define(['text!./results-list.html', 'app', 'underscore'], function(template, app
             init();
           });
           $scope.$watch('show', function() {
+            $scope.numRecords =0;
             showCountry($scope.show);
-            $scope.numCountries =0;
           }, true);
 
           //=======================================================================
