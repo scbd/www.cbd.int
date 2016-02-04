@@ -1,0 +1,37 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeThisDialog()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Select a notification</h4>
+    </div>
+    <div class="modal-body">
+        <form name="form" novalidate>
+
+            <div class="form-group">
+                <label for="symbol">Symbol</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="symbol" name="symbol" ng-model="symbol" ng-model-options="{ debounce : { 'default': 300, 'blur': 0 } }" ng-change="search(symbol)">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" ng-disabled="true">Search</button>
+                    </span>
+                </div>
+            </div>
+
+        </form>
+
+        <div class="panel panel-default" ng-show="notification">
+          <div class="panel-heading">
+            <h3 class="panel-title"><em class="pull-right">{{notification.reference_t}}</em>{{notification.symbol_t}} </h3>
+          </div>
+          <div class="panel-body">
+            {{notification.title_t}}
+          </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" aria-label="Close" ng-click="closeThisDialog()">Cancel</button>
+        <button type="button" class="btn btn-primary" aria-label="Save" ng-click="closeThisDialog(notification.symbol_t)" ng-disabled="!notification">Next »</button>
+    </div>
+</div>

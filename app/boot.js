@@ -9,7 +9,9 @@ require.config({
         'ngRoute'         : 'libs/angular-route/angular-route.min',
         'ngCookies'       : 'libs/angular-cookies/angular-cookies.min',
         'ngAnimate'       : 'libs/angular-animate/angular-animate.min',
+        'ngDialog'        : 'libs/ng-dialog/js/ngDialog.min',
         'text'            : 'libs/requirejs-text/text',
+        'css'             : 'libs/require-css/css.min',
         'jquery'          : 'libs/jquery/dist/jquery.min',
         'bootstrap'       : 'libs/bootstrap/dist/js/bootstrap.min',
         'underscore'      : 'libs/lodash/lodash.min',
@@ -25,6 +27,7 @@ require.config({
         'ngRoute'              : { deps : ['angular'] },
         'ngCookies'            : { deps : ['angular'] },
         'ngAnimate'            : { deps : ['angular'] },
+        'ngDialog'             : { deps : ['angular', 'css!libs/ng-dialog/css/ngDialog.min', 'css!libs/ng-dialog/css/ngDialog-theme-default.css'] },
         'bootstrap'            : { deps : ['jquery' ] },
         'bootstrap-notify'     : { deps : ['jquery', 'bootstrap'] },
 

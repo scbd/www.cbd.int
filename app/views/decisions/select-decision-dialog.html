@@ -1,0 +1,34 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeThisDialog()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Select a decision</h4>
+    </div>
+    <div class="modal-body">
+        <form name="form" novalidate>
+
+            <div class="form-group">
+                <label for="body">Body</label>
+                <select class="form-control" id="body" name="body" ng-model="body" ng-options="o.code as o.title for o in ::getBodies()">
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="meeting">Meeting</label>
+                <select class="form-control" id="meeting" name="meeting" ng-model="meeting" ng-options="o.code as o.title for o in getMeetings(body)" ng-disabled="!body">
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="decision">Decision /  Recommendation</label>
+                <select class="form-control" id="decision" name="decision" ng-model="decision" ng-options="o.code as o.symbol for o in getDecisions(meeting)" ng-disabled="!body || !meeting">
+                </select>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" aria-label="Close" ng-click="closeThisDialog()">Cancel</button>
+        <button type="button" class="btn btn-primary" aria-label="Save" ng-click="closeThisDialog(decision)" ng-disabled="!meeting">Next »</button>
+    </div>
+</div>
