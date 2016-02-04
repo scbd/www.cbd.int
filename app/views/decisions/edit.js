@@ -86,7 +86,7 @@ define(['app', 'underscore', 'authentication'], function(app, _) { 'use strict';
 
         function editable() {
 
-            var $div = $('div'), isEditable = $div.is('.editable');
+            var $div = $('#content'), isEditable = $div.is('.editable');
             $div.prop('contenteditable', !isEditable).toggleClass('editable');
         }
 
