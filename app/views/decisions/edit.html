@@ -1,5 +1,7 @@
 
 <style>
+    .ngdialog-content { background: transparent !important };
+
     H1 {
         font-size: 18px;
     }
@@ -303,7 +305,7 @@
     						</div>
     					</div>
     				</div>
-    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1"><i class="fa fa-plus-circle"></i> add decision</button>
+    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1" ng-click="selectDecision()"><i class="fa fa-plus-circle"></i> add decision</button>
     			</div>
     		</div>
     		<div class="col-sm-6">
@@ -320,7 +322,7 @@
     						</div>
     					</div>
     				</div>
-    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1"><i class="fa fa-plus-circle"></i> add notification</button>
+    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1" ng-click="selectNotification()"><i class="fa fa-plus-circle"></i> add notification</button>
     			</div>
     		</div>
     	</div>

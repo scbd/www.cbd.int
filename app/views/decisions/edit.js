@@ -1,11 +1,13 @@
-define(['app', 'underscore', 'authentication'], function(app, _) { 'use strict';
+define(['underscore', 'require', 'ngDialog', 'authentication'], function(_, require) { 'use strict';
 
-    return ['$scope', '$http', '$route', '$location', '$filter', '$q', function($scope, $http, $route, $location, $filter, $q) {
+    return ['$scope', '$http', '$route', '$location', '$filter', '$q', 'ngDialog', function($scope, $http, $route, $location, $filter, $q, ngDialog) {
 
         var data = { title: 'agenda', content: 'loading...' };
 
         $scope.symbol = $route.current.params.meeting + '/' + $route.current.params.number;
         $scope.save   = save;
+        $scope.selectDecision = selectDecision;
+        $scope.selectNotification = selectNotification;
 
         load();
 
@@ -123,5 +125,64 @@ define(['app', 'underscore', 'authentication'], function(app, _) { 'use strict';
         }
 
         //************************************************************
+
+        //===========================
+        //
+        //===========================
+        function selectDecision() {
+
+            openDialog('./select-decision-dialog', { showClose: false }).then(function(dialog){
+
+                dialog.closePromise.then(function(res){
+                    if(res.value)
+                       console.log(res.value);
+                });
+            });
+        }
+
+        //===========================
+        //
+        //===========================
+        function selectNotification() {
+
+            openDialog('./select-notification-dialog', { showClose: false }).then(function(dialog){
+
+                dialog.closePromise.then(function(res){
+                    if(res.value)
+                       console.log(res.value);
+                });
+            });
+        }
+
+        //===========================
+        //
+        //===========================
+        function openDialog(dialog, options) {
+
+            options = options || {};
+
+            return $q(function(resolve, reject) {
+
+                require(['text!'+dialog+'.html', dialog], function(template, controller) {
+
+                    options.plain = true;
+                    options.template = template;
+                    options.controller = controller;
+
+                    var dialog = ngDialog.open(options);
+
+                    dialog.closePromise.then(function(res){
+
+                        if(res.value=="$escape")      delete res.value;
+                        if(res.value=="$closeButton") delete res.value;
+
+                        return res;
+                    });
+
+                    resolve(dialog);
+
+                }, reject);
+            });
+        }
     }];
 });
