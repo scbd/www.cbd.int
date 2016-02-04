@@ -18,7 +18,7 @@ define([], function() {
 
             var qsParams = {
                 q : "schema_s:notification AND (symbol_s:"+text+"* OR reference_t:"+text+"*)" + " AND (symbol_t:*)",
-                fl : "symbol_t,reference_t,title_t",
+                fl : "symbol_?,reference_?,title_?",
                 sort: "symbol_s ASC",
                 rows: 1
             };
