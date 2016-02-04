@@ -7,8 +7,8 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
         $locationProvider.html5Mode(true);
         $locationProvider.hashPrefix('!');
 
-        // /decisions/*
-        if(/^\/decisions($|\/.*)/.test(locationPath))
+        // /management/decisions/*
+        if(/^\/management\/decisions($|\/.*)/.test(locationPath))
             registerRoutes_Decisions($routeProvider);
 
         // /insession/*
@@ -25,9 +25,10 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
   //============================================================
   function registerRoutes_Decisions(routeProvider) {
 
-      $("base").attr('href', '/decisions/'); // allow full page reload outside of  /decisions/*
+      $("base").attr('href', '/management/decisions/'); // allow full page reload outside of  /decisions/*
 
-      routeProvider.when('/x', { templateUrl: 'views/decisions/index.html', resolveController: true });
+      routeProvider.when('/', { templateUrl: 'views/decisions/index.html', resolveController: true });
+      routeProvider.when('/:meeting/:number', { templateUrl: 'views/decisions/edit.html', resolveController: true });
   }
 
   //============================================================
