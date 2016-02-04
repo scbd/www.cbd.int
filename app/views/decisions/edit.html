@@ -1,0 +1,390 @@
+
+<style>
+    H1 {
+        font-size: 18px;
+    }
+    #content var {
+        border: 1px solid #c7254e;
+        background-color: #f9f2f4;
+        padding: 0 1px 0 2px;
+        color: #c7254e;
+        margin-right: 4px;
+        font-style: normal;
+    }
+    #content i {
+        border: 1px solid #337ab7;
+        background-color: #f9f2f4;
+        padding: 0 2px 0 2px;
+        color: #337ab7;
+        margin-right: 4px;
+        font-style: normal;
+    }
+    #content em {
+        background-color: #f4f2f9;
+        color: #4e25c7;
+    }
+    div {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    element::before {
+        content: "paragraph";
+        border-right: 1px solid #888;
+        border-bottom: 1px solid #888;
+        border-radius: 4px;
+        position: relative;
+        padding:3px 6px;
+        display: block;
+        top:-7px;
+        left: -9px;
+        font-family: "Helvetica Neue";
+        font-size: 13px;
+        font-weight: bold;
+        color: #888;
+        width: 80px;
+        ;z-index:1;
+    }
+    element {
+        display: block;
+        border: 1px solid #888;
+        border-radius: 4px;
+        padding:8px;
+        margin-top:6px;
+        margin-bottom:6px;
+        background-color: #fff;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        cursor: pointer;
+    }
+    element.selected {
+        border: 4px solid blue;
+        border-radius: 4px;
+        padding:5px;
+        background-color: #dfd;
+        -moz-user-select: all;
+        -webkit-user-select: all;
+        -ms-user-select: all;
+        user-select: all;
+        cursor: text;
+    }
+    element.selected div {
+        -moz-user-select: all;
+        -webkit-user-select: all;
+        -ms-user-select: all;
+        user-select: all;
+    }
+
+    #content.selected div {
+        -moz-user-select: all;
+        -webkit-user-select: all;
+        -ms-user-select: all;
+        user-select: all;
+    }
+
+    .bg-orange{
+        background-color:#fa6938!important;
+        color:white!important;
+        font-family: "Helvetica Neue", Helvetica, sans-serif, "Trebuchet MS";
+        font-size: 14px;
+        font-weight: bold;
+        -webkit-font-smoothing:antialiased;
+        padding: 10px;
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 0 6px rgba(0, 0, 0, 0.23);
+        border-bottom-color: rgb(221, 221, 221);
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        border-left-color: rgb(221, 221, 221);
+        border-right-color: rgb(221, 221, 221);
+        border-top-color: rgb(221, 221, 221);
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+
+    .document {
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    }
+</style>
+
+<div style="position:fixed;top:0px;left:0px;right:0px;bottom:0px;z-index:4000;background-color:white">
+
+    <div class="container" style="margin-left:0;margin-right:0;width:100%;height:100%">
+
+        <div style="position:fixed;top:0px;left:0px;right:0px;background-color:#ddd;z-index:1000">
+            <button ng-click="save()">Save</button>
+            <button ng-click="surroundSelection('element')">Element</button>
+            <button ng-click="unsurroundSelection()">Free</button>
+            <button ng-click="surroundSelection('var')">ID</button>
+            <button ng-click="surroundSelection('action')">Action</button>
+            <button ng-click="editable()">Editable</button>
+        </div>
+
+        <div class="row" style="margin-top:40px;height:100%">
+            <div class="col-sm-6" style="height:90%">
+                <div class="bg-orange">Text of the decision</div>
+                <div class="document" style="height:100%;overflow-y:scroll">
+                    <div style="margin:-36px 8px 0px 0px">
+                        <element id='content' class='decision'></element>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6" style="height:100%;overflow-y:scroll;background-color:#f8f8f8;padding:10px">
+
+                <h4>
+                    Formatting
+                </h4>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="elementType">Level</label>
+                            <select class="form-control" id="elementType">
+                                <option>Decision Title</option>
+                                <option>Body (preamble and paragraphs)</option>
+                                <option>Heading (group of paragraphs)</option>
+                                <option>Paragraph (e.g. para 10)</option>
+                                <option>Paragraph Item (e.g. para 10 b)</option>
+                                <option>Paragraph Item Sub-Item (e.g. para 10 b iii)</option>
+                                <option>Annex</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="elementParagraph">Paragraph</label>
+                            <select class="form-control" id="elementParagraph">
+                                <option>1.</option>
+                                <option>2.</option>
+                                <option>3.</option>
+                                <option>4.</option>
+                                <option>5.</option>
+                                <option>6.</option>
+                                <option>7.</option>
+                                <option>8.</option>
+                                <option>9.</option>
+                                <option>10.</option>
+                                <option>11.</option>
+                                <option>12.</option>
+                                <option>13.</option>
+                                <option>14.</option>
+                                <option>15.</option>
+                                <option>16.</option>
+                                <option>17.</option>
+                                <option>18.</option>
+                                <option>19.</option>
+                                <option>20.</option>
+                                <option>21.</option>
+                                <option>22.</option>
+                                <option>23.</option>
+                                <option>24.</option>
+                                <option>25.</option>
+                                <option>26.</option>
+                                <option>27.</option>
+                                <option>28.</option>
+                                <option>29.</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="elementItem">Item</label>
+                            <select class="form-control" id="elementItem">
+                                <option>a.</option>
+                                <option>b.</option>
+                                <option>c.</option>
+                                <option>d.</option>
+                                <option>e.</option>
+                                <option>f.</option>
+                                <option>g.</option>
+                                <option>h.</option>
+                                <option>i.</option>
+                                <option>j.</option>
+                                <option>k.</option>
+                                <option>l.</option>
+                                <option>m.</option>
+                                <option>n.</option>
+                                <option>o.</option>
+                                <option>p.</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="elementSubitem">Subitem</label>
+                            <select class="form-control" id="elementSubitem">
+                                <option>(i)</option>
+                                <option>(ii)</option>
+                                <option>(iii)</option>
+                                <option>(iv)</option>
+                                <option>(v)</option>
+                                <option>(vi)</option>
+                                <option>(vii)</option>
+                                <option>(viii)</option>
+                                <option>(ix)</option>
+                                <option>(x)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+        <h4>
+            Details
+        </h4>
+    	<div class="row">
+    		<div class="col-sm-6">
+    			<div class="form-group">
+    		    	<label for="exampleInputEmail1">Type of decision</label>
+    		    	<select class="form-control" id="exampleInputEmail1">
+    					<option>Operational</option>
+    					<option>For‎ information</option>
+    				</select>
+    		  	</div>
+    		</div>
+    		<div class="col-sm-6">
+    			<div class="form-group">
+    		    	<label for="exampleInputEmail1">Status of the decision</label>
+    		    	<select class="form-control" id="exampleInputEmail1">
+    					<option>Implemented</option>
+    					<option>Superseded ***</option>
+    					<option>Elapsed</option>
+    					<option>Active‎</option>
+    				</select>
+    		  	</div>
+    		</div>
+    	</div>
+    	<div class="row">
+    		<div class="col-sm-6">
+    			<div class="form-group">
+    		    	<label for="exampleInputEmail1">Directed to</label>
+    		    	<select class="form-control" id="exampleInputEmail1">
+                        <option>Parties</option>
+                        <option>Government(s) ***</option>
+                        <option>Executive Secretary</option>
+    					<option>Conference of the Parties</option>
+                        <option>Subsidiary Body</option>
+                        <option>- SBSTTA</option>
+                        <option>- WGRI/SBI</option>
+                        <option>- WG8J</option>
+                        <option>- WGPA</option>
+                        <option>- WGABS</option>
+    					<option>Global Environment Facility</option>
+    					<option>ILPC</option>
+    					<option>Other stakeholder(s) ***</option>
+    				</select>
+    		  	</div>
+    		</div>
+    		<div class="col-sm-6">
+    			<div class="form-group">
+    		    	<label for="exampleInputEmail1">Timelines</label>
+    		    	<select class="form-control" id="exampleInputEmail1">
+    					<option>Not applicable</option>
+    					<option>Due date (todo: show calendar)</option>
+    				</select>
+    		  	</div>
+    		</div>
+    	</div>
+        <hr/>
+    	<h4>
+    		Related Information
+    	</h4>
+    	<div class="row">
+    		<div class="col-sm-6">
+    			<div class="form-group">
+    				<label for="exampleInputEmail1">Related decisions</label><br>
+    				<div class="panel panel-default" style="margin-top:4px;margin-bottom:4px">
+    		  			<div class="panel-body" style="padding:12px;font-size:0.9em">
+    						<button class="btn btn-danger btn-xs pull-right" id="exampleInputEmail1"><i class="fa fa-minus-circle"></i> remove</button>
+    						<a href="#"><b>Decision XII/25</b></a>
+    						<div style="max-height:50px;overflow:hidden">
+    							Intergovernmental Science-Policy Platform on Biodiversity and Ecosystem Services
+    						</div>
+    					</div>
+    				</div>
+    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1"><i class="fa fa-plus-circle"></i> add decision</button>
+    			</div>
+    		</div>
+    		<div class="col-sm-6">
+    			<div class="form-group">
+    				<label for="exampleInputEmail1">Notifications issued</label><br>
+    				<div class="panel panel-default" style="margin-bottom:4px">
+    		  			<div class="panel-body" style="padding:12px;font-size:0.9em">
+    						<button class="btn btn-danger btn-xs pull-right" id="exampleInputEmail1"><i class="fa fa-minus-circle"></i> remove</button>
+    						27 May 2015<br>
+    						<a href="#"><b>SCBD/TSI/RS/YX/LZ/84244</b></a>
+    						<div style="max-height:50px;overflow:hidden">
+    							Selection of experts to prepare a report on the full assessment of funding necessary and
+    							available for the implementation of the Convention for the period July 2018 to June 2022
+    						</div>
+    					</div>
+    				</div>
+    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1"><i class="fa fa-plus-circle"></i> add notification</button>
+    			</div>
+    		</div>
+    	</div>
+        <div class="row">
+    		<div class="col-sm-6">
+    			<div class="form-group">
+    				<label for="exampleInputEmail1">Related documents</label>
+    				<div class="panel panel-default" style="margin-bottom:4px">
+    					<div class="panel-body" style="padding:12px;font-size:0.9em">
+    						<button class="btn btn-danger btn-xs pull-right" id="exampleInputEmail1"><i class="fa fa-minus-circle"></i> remove</button>
+    						<a href="#"><b>RMWS-2015-02</b></a>
+    						<div style="max-height:50px;overflow:hidden">
+    							Dialogue Workshop on Assessment of Collective Action of Indigenous Peoples and Local
+    							Communities in Biodiversity Conservation and Resource Mobilization
+    						</div>
+    						<div style="margin-top:4px">
+    							<i class="fa fa-file-pdf-o"></i>
+    							<a href="#">arabic</a> |
+    							<a href="#">chinese</a> |
+    							<a href="#">english</a> |
+    							<a href="#">french</a> |
+    							<a href="#">spanish</a> |
+    							<a href="#">russian</a>
+    						</div>
+    					</div>
+    				</div>
+    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1"><i class="fa fa-plus-circle"></i> add document</button>
+    			</div>
+    		</div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Related activities / outcomes</label><br>
+                    <div class="panel panel-default" style="margin-bottom:4px">
+                          <div class="panel-body" style="padding:12px;font-size:0.9em">
+                            <button class="btn btn-danger btn-xs pull-right" id="exampleInputEmail1"><i class="fa fa-minus-circle"></i> remove</button>
+                            11 - 13 June 2015 &nbsp; &nbsp; &nbsp; <i class="fa fa-map-marker"></i> Panajachel, Guatemala<br>
+                            <a href="#"><b>RMWS-2015-02</b></a>
+                            <div style="max-height:50px;overflow:hidden">
+                                Dialogue Workshop on Assessment of Collective Action of Indigenous Peoples and Local
+                                Communities in Biodiversity Conservation and Resource Mobilization
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-xs" id="exampleInputEmail1"><i class="fa fa-plus-circle"></i> add activity</button>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <h4>
+            <button class="btn btn-primary btn-xs pull-right" id="exampleInputEmail1"><i class="fa fa-plus-circle"></i> upload document</button>
+            Submissions
+    	</h4>
+    	<div>
+    		<div class="form-group">
+    			<div style="display:inline-block">
+    				<imgx src="/app/images/file.png" style="height:128px">
+    				<center>file_abc.pdf</center>
+    			</div>
+    			<div style="display:inline-block">
+    				<imgx src="/app/images/file.png" style="height:128px">
+    				<center>file_xyz.pdf</center>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+
+</div>
