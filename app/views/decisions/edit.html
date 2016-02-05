@@ -14,12 +14,10 @@
         font-style: normal;
     }
     #content i {
-        border: 1px solid #337ab7;
+        border-right: 2px solid #c7254e;
+        border-left: 2px solid #c7254e;
         background-color: #f9f2f4;
-        padding: 0 2px 0 2px;
         color: #337ab7;
-        margin-right: 4px;
-        font-style: normal;
     }
     #content em {
         background-color: #f4f2f9;
@@ -125,6 +123,7 @@
             <button ng-click="actionBox('var')">ID</button>
             <button ng-click="actionBox('action')">Action</button>
             <button ng-click="actionEdit()">Editable</button>
+            <button ng-click="actionClean()">Clean</button>
         </div>
 
         <div class="row" style="margin-top:40px;height:100%">
@@ -147,10 +146,9 @@
                                 <option></option>
                                 <option>Decision</option>
                                 <option value="title">Decision Title</option>
-                                <option>Decision Body</option>
-                                <option>Decision Annex</option>
-                                <option>Section</option>
-                                <option>Heading</option>
+                                <option value="body">Decision Body</option>
+                                <option value="annex">Decision Annex</option>
+                                <option value="section">Section</option>
                                 <option value="paragraph">Paragraph</option>
                             </select>
                         </div>
@@ -235,7 +233,6 @@
                         </div>
                     </div>
                 </div>
-<pre>{{element|json}}</pre>
 
         <h4>
             Details
@@ -392,6 +389,12 @@
     			</div>
     		</div>
     	</div>
+
+        <h4>
+    		Debug
+    	</h4>
+        <pre>{{element|json}}</pre>
+
     </div>
 
 </div>

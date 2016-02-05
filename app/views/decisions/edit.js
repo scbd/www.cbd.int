@@ -1,7 +1,7 @@
-define(['underscore', 'require', 'ngDialog', 'authentication'], function(_, require) { 'use strict';
+define(['underscore', 'require', 'rangy', 'ngDialog', 'authentication'], function(_, require, rangy) { 'use strict';
 
     return ['$scope', '$http', '$route', '$location', '$filter', '$q', 'ngDialog', function($scope, $http, $route, $location, $filter, $q, ngDialog) {
-
+console.log(rangy);
         var data = { title: 'agenda', content: 'loading...' };
 
         $scope.symbol = $route.current.params.meeting + '/' + $route.current.params.number;
@@ -11,6 +11,7 @@ define(['underscore', 'require', 'ngDialog', 'authentication'], function(_, requ
         $scope.actionEdit  = edit;
         $scope.actionBox   = function(tag) { surroundSelection(tag); };
         $scope.actionUnbox = function()    { unsurroundSelection(); };
+        $scope.actionClean = function()    { removeSelectionFormatting(); };
         $scope.element     = {};
 
         load();
@@ -85,6 +86,15 @@ define(['underscore', 'require', 'ngDialog', 'authentication'], function(_, requ
         }
 
         var selectedElement = null;
+
+        function unsurroundSelection() {
+
+            if(!selectedElement) return alert('no selectedElement');
+
+            $(selectedElement).contents().unwrap();
+
+            selectedElement = null;
+        }
 
         function unsurroundSelection() {
 
@@ -214,6 +224,46 @@ define(['underscore', 'require', 'ngDialog', 'authentication'], function(_, requ
             });
         }
     }];
+
+    var getComputedDisplay = (typeof window.getComputedStyle != "undefined") ?
+    function(el) {
+        return window.getComputedStyle(el, null).display;
+    } :
+    function(el) {
+        return el.currentStyle.display;
+    };
+
+    function replaceWithOwnChildren(el) {
+        var parent = el.parentNode;
+        while (el.hasChildNodes()) {
+            parent.insertBefore(el.firstChild, el);
+        }
+        parent.removeChild(el);
+    }
+
+    function removeSelectionFormatting() {
+        var sel = rangy.getSelection();
+
+        if (!sel.isCollapsed) {
+            for (var i = 0, range; i < sel.rangeCount; ++i) {
+                range = sel.getRangeAt(i);
+
+                // Split partially selected nodes
+                range.splitBoundaries();
+
+                // Get formatting elements. For this example, we'll count any
+                // element with display: inline, except <br>s.
+                var formattingEls = range.getNodes([1], function(el) {
+                    return el.tagName != "BR";// && getComputedDisplay(el) == "inline";
+                });
+
+                // Remove the formatting elements
+                for (var i = 0, el; el = formattingEls[i++]; ) {
+                    replaceWithOwnChildren(el);
+                }
+            }
+        }
+    }
 });
 
 (function(){

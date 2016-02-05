@@ -18,8 +18,7 @@ require.config({
         'bootstrap-notify': 'libs/remarkable-bootstrap-notify/bootstrap-notify.min',
         'nprogress'       : 'libs/nprogress/nprogress',
         'dropbox-dropins' : 'https://www.dropbox.com/static/api/2/dropins',
-
-
+        'rangy'           : 'libs/rangy-release/rangy-core.min'
     },
     shim: {
         'libs/angular/angular.min' : { deps : ['jquery'] },
