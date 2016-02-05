@@ -25,19 +25,19 @@
         background-color: #f4f2f9;
         color: #4e25c7;
     }
-    div {
+    /*div {
         -moz-user-select: none;
         -webkit-user-select: none;
         -ms-user-select: none;
         user-select: none;
-    }
-    element::before {
-        content: "paragraph";
+    }*/
+    element[data-type]::before {
+        content: attr(data-type);
         border-right: 1px solid #888;
         border-bottom: 1px solid #888;
         border-radius: 4px;
         position: relative;
-        padding:3px 6px;
+        padding:3px 8px;
         display: block;
         top:-7px;
         left: -9px;
@@ -45,7 +45,7 @@
         font-size: 13px;
         font-weight: bold;
         color: #888;
-        width: 80px;
+        width: 140px;
         ;z-index:1;
     }
     element {
@@ -56,10 +56,10 @@
         margin-top:6px;
         margin-bottom:6px;
         background-color: #fff;
-        -moz-user-select: none;
+        /*-moz-user-select: none;
         -webkit-user-select: none;
         -ms-user-select: none;
-        user-select: none;
+        user-select: none;*/
         cursor: pointer;
     }
     element.selected {
@@ -67,13 +67,16 @@
         border-radius: 4px;
         padding:5px;
         background-color: #dfd;
-        -moz-user-select: all;
+        /*-moz-user-select: all;
         -webkit-user-select: all;
         -ms-user-select: all;
-        user-select: all;
+        user-select: all;*/
         cursor: text;
     }
-    element.selected div {
+    element[data-type=title] {
+        font-size: 20px;
+    }
+    /*element.selected div {
         -moz-user-select: all;
         -webkit-user-select: all;
         -ms-user-select: all;
@@ -85,7 +88,7 @@
         -webkit-user-select: all;
         -ms-user-select: all;
         user-select: all;
-    }
+    }*/
 
     .bg-orange{
         background-color:#fa6938!important;
@@ -117,20 +120,18 @@
 
         <div style="position:fixed;top:0px;left:0px;right:0px;background-color:#ddd;z-index:1000">
             <button ng-click="save()">Save</button>
-            <button ng-click="surroundSelection('element')">Element</button>
-            <button ng-click="unsurroundSelection()">Free</button>
-            <button ng-click="surroundSelection('var')">ID</button>
-            <button ng-click="surroundSelection('action')">Action</button>
-            <button ng-click="editable()">Editable</button>
+            <button ng-click="actionBox('element')">Element</button>
+            <button ng-click="actionUnbox()">Free</button>
+            <button ng-click="actionBox('var')">ID</button>
+            <button ng-click="actionBox('action')">Action</button>
+            <button ng-click="actionEdit()">Editable</button>
         </div>
 
         <div class="row" style="margin-top:40px;height:100%">
             <div class="col-sm-6" style="height:90%">
                 <div class="bg-orange">Text of the decision</div>
-                <div class="document" style="height:100%;overflow-y:scroll">
-                    <div style="margin:-36px 8px 0px 0px">
-                        <element id='content' class='decision'></element>
-                    </div>
+                <div class="document" style="height:100%;overflow-y:scroll;padding:5px">
+                    <div id='content' class='decision' style="min-height:100%"></div>
                 </div>
             </div>
             <div class="col-sm-6" style="height:100%;overflow-y:scroll;background-color:#f8f8f8;padding:10px">
@@ -142,95 +143,99 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="elementType">Level</label>
-                            <select class="form-control" id="elementType">
-                                <option>Decision Title</option>
-                                <option>Body (preamble and paragraphs)</option>
-                                <option>Heading (group of paragraphs)</option>
-                                <option>Paragraph (e.g. para 10)</option>
-                                <option>Paragraph Item (e.g. para 10 b)</option>
-                                <option>Paragraph Item Sub-Item (e.g. para 10 b iii)</option>
-                                <option>Annex</option>
+                            <select class="form-control" id="elementType" ng-model="element.type">
+                                <option></option>
+                                <option>Decision</option>
+                                <option value="title">Decision Title</option>
+                                <option>Decision Body</option>
+                                <option>Decision Annex</option>
+                                <option>Section</option>
+                                <option>Heading</option>
+                                <option value="paragraph">Paragraph</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementParagraph">Paragraph</label>
-                            <select class="form-control" id="elementParagraph">
-                                <option>1.</option>
-                                <option>2.</option>
-                                <option>3.</option>
-                                <option>4.</option>
-                                <option>5.</option>
-                                <option>6.</option>
-                                <option>7.</option>
-                                <option>8.</option>
-                                <option>9.</option>
-                                <option>10.</option>
-                                <option>11.</option>
-                                <option>12.</option>
-                                <option>13.</option>
-                                <option>14.</option>
-                                <option>15.</option>
-                                <option>16.</option>
-                                <option>17.</option>
-                                <option>18.</option>
-                                <option>19.</option>
-                                <option>20.</option>
-                                <option>21.</option>
-                                <option>22.</option>
-                                <option>23.</option>
-                                <option>24.</option>
-                                <option>25.</option>
-                                <option>26.</option>
-                                <option>27.</option>
-                                <option>28.</option>
-                                <option>29.</option>
+                            <select class="form-control" id="elementParagraph" ng-model="element.paragraph">
+                                <option></option>
+                                <option value="1">1.</option>
+                                <option value="2">2.</option>
+                                <option value="3">3.</option>
+                                <option value="4">4.</option>
+                                <option value="5">5.</option>
+                                <option value="6">6.</option>
+                                <option value="7">7.</option>
+                                <option value="8">8.</option>
+                                <option value="9">9.</option>
+                                <option value="10">10.</option>
+                                <option value="11">11.</option>
+                                <option value="12">12.</option>
+                                <option value="13">13.</option>
+                                <option value="14">14.</option>
+                                <option value="15">15.</option>
+                                <option value="16">16.</option>
+                                <option value="17">17.</option>
+                                <option value="18">18.</option>
+                                <option value="19">19.</option>
+                                <option value="20">20.</option>
+                                <option value="21">21.</option>
+                                <option value="22">22.</option>
+                                <option value="23">23.</option>
+                                <option value="24">24.</option>
+                                <option value="25">25.</option>
+                                <option value="26">26.</option>
+                                <option value="27">27.</option>
+                                <option value="28">28.</option>
+                                <option value="29">29.</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementItem">Item</label>
-                            <select class="form-control" id="elementItem">
-                                <option>a.</option>
-                                <option>b.</option>
-                                <option>c.</option>
-                                <option>d.</option>
-                                <option>e.</option>
-                                <option>f.</option>
-                                <option>g.</option>
-                                <option>h.</option>
-                                <option>i.</option>
-                                <option>j.</option>
-                                <option>k.</option>
-                                <option>l.</option>
-                                <option>m.</option>
-                                <option>n.</option>
-                                <option>o.</option>
-                                <option>p.</option>
+                            <select class="form-control" id="elementItem" ng-model="element.item">
+                                <option></option>
+                                <option value="a">a.</option>
+                                <option value="b">b.</option>
+                                <option value="c">c.</option>
+                                <option value="d">d.</option>
+                                <option value="e">e.</option>
+                                <option value="f">f.</option>
+                                <option value="g">g.</option>
+                                <option value="h">h.</option>
+                                <option value="i">i.</option>
+                                <option value="j">j.</option>
+                                <option value="k">k.</option>
+                                <option value="l">l.</option>
+                                <option value="m">m.</option>
+                                <option value="n">n.</option>
+                                <option value="o">o.</option>
+                                <option value="p">p.</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementSubitem">Subitem</label>
-                            <select class="form-control" id="elementSubitem">
-                                <option>(i)</option>
-                                <option>(ii)</option>
-                                <option>(iii)</option>
-                                <option>(iv)</option>
-                                <option>(v)</option>
-                                <option>(vi)</option>
-                                <option>(vii)</option>
-                                <option>(viii)</option>
-                                <option>(ix)</option>
-                                <option>(x)</option>
+                            <select class="form-control" id="elementSubitem" ng-model="element.subitem">
+                                <option></option>
+                                <option value="i">(i)</option>
+                                <option value="ii">(ii)</option>
+                                <option value="iii">(iii)</option>
+                                <option value="iv">(iv)</option>
+                                <option value="v">(v)</option>
+                                <option value="vi">(vi)</option>
+                                <option value="vii">(vii)</option>
+                                <option value="viii">(viii)</option>
+                                <option value="ix">(ix)</option>
+                                <option value="x">(x)</option>
                             </select>
                         </div>
                     </div>
                 </div>
-
+<pre>{{element|json}}</pre>
 
         <h4>
             Details
@@ -238,8 +243,8 @@
     	<div class="row">
     		<div class="col-sm-6">
     			<div class="form-group">
-    		    	<label for="exampleInputEmail1">Type of decision</label>
-    		    	<select class="form-control" id="exampleInputEmail1">
+    		    	<label for="elementType">Type of decision</label>
+    		    	<select class="form-control" id="elementType" ng-model="element.elementType">
     					<option>Operational</option>
     					<option>For‎ information</option>
     				</select>
@@ -247,8 +252,8 @@
     		</div>
     		<div class="col-sm-6">
     			<div class="form-group">
-    		    	<label for="exampleInputEmail1">Status of the decision</label>
-    		    	<select class="form-control" id="exampleInputEmail1">
+    		    	<label for="elementStatus">Status of the decision</label>
+    		    	<select class="form-control" id="elementStatus" ng-model="element.elementStatus">
     					<option>Implemented</option>
     					<option>Superseded ***</option>
     					<option>Elapsed</option>
@@ -260,8 +265,8 @@
     	<div class="row">
     		<div class="col-sm-6">
     			<div class="form-group">
-    		    	<label for="exampleInputEmail1">Directed to</label>
-    		    	<select class="form-control" id="exampleInputEmail1">
+    		    	<label for="elementDirectedTo">Directed to</label>
+    		    	<select class="form-control" id="elementDirectedTo" ng-model="element.elementDirectedTo">
                         <option>Parties</option>
                         <option>Government(s) ***</option>
                         <option>Executive Secretary</option>
@@ -280,8 +285,8 @@
     		</div>
     		<div class="col-sm-6">
     			<div class="form-group">
-    		    	<label for="exampleInputEmail1">Timelines</label>
-    		    	<select class="form-control" id="exampleInputEmail1">
+    		    	<label for="elementTimeline">Timelines</label>
+    		    	<select class="form-control" id="elementTimeline" ng-model="element.elementTimeline">
     					<option>Not applicable</option>
     					<option>Due date (todo: show calendar)</option>
     				</select>
