@@ -89,13 +89,14 @@
     }*/
 
     .bg-orange{
-        background-color:#fa6938!important;
+        background-color:#6F5495!important;
+        xbackground-color:#fa6938!important;
         color:white!important;
         font-family: "Helvetica Neue", Helvetica, sans-serif, "Trebuchet MS";
         font-size: 14px;
         font-weight: bold;
         -webkit-font-smoothing:antialiased;
-        padding: 10px;
+        padding: 10px 16px;
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 0 6px rgba(0, 0, 0, 0.23);
         border-bottom-color: rgb(221, 221, 221);
         border-bottom-style: solid;
@@ -116,18 +117,18 @@
 
     <div class="container" style="margin-left:0;margin-right:0;width:100%;height:100%">
 
-        <div style="position:fixed;top:0px;left:0px;right:0px;background-color:#ddd;z-index:1000">
-            <button class="btn btn-success" ng-click="save()">Save</button>
+        <div style="position:fixed;top:0px;left:0px;right:0px;background-color:#ddd;z-index:1000;padding:6px">&nbsp;
+            <button class="btn btn-success" ng-click="save()">Save</button> &nbsp; &nbsp;
             <button class="btn btn-primary" ng-click="actionBox('element')">Box</button>
             <button class="btn btn-primary" ng-click="actionUnbox()">Unbox</button>
             <button class="btn btn-primary" ng-click="actionBox('var')">ID</button>
-            <button class="btn btn-primary" ng-click="actionEdit()">Edit</button>
+            <button class="btn btn-primary" ng-click="actionEdit()">Edit</button> &nbsp; &nbsp;
             <button class="btn btn-danger" ng-click="actionClean()">Remove formatting</button>
         </div>
 
-        <div class="row" style="margin-top:40px;height:100%">
-            <div class="col-sm-6" style="height:90%">
-                <div class="bg-orange">Text of the decision</div>
+        <div class="row" style="margin-top:60px;height:100%">
+            <div class="col-sm-6" style="height:86%">
+                <div class="bg-orange">Decision {{symbol}}</div>
                 <div class="document" style="height:100%;overflow-y:scroll;padding:5px">
                     <div id='content' class='decision' style="min-height:100%"></div>
                 </div>
@@ -250,13 +251,13 @@
     			<div class="form-group">
     		    	<label for="elementStatus">Status of the decision</label>
     		    	<select class="form-control" id="elementStatus" ng-model="element.elementStatus">
-    					<option>Implemented</option>
-    					<option>Superseded</option>
-    					<option>Elapsed</option>
-    					<option>Active‎</option>
+    					<option value='implemented'>Implemented</option>
+    					<option value='superseded'>Superseded (with details)</option>
+    					<option value='elapsed'>Elapsed</option>
+    					<option value='active‎'>Active‎</option>
     				</select>
     		  	</div>
-                <div class="form-group">
+                <div class="form-group" ng-show="element.elementStatus=='superseded'">
     		    	<label for="elementStatus">Details</label>
     		    	<textarea class="form-control" id="elementStatusDetails" ng-model="element.elementStatusDetails"></textarea>
     		  	</div>
@@ -267,22 +268,22 @@
     			<div class="form-group">
     		    	<label for="elementDirectedTo">Directed to</label>
     		    	<select class="form-control" id="elementDirectedTo" ng-model="element.elementDirectedTo">
-                        <option>Parties</option>
-                        <option>Government(s)</option>
-                        <option>Executive Secretary</option>
-    					<option>Conference of the Parties</option>
-                        <option>Subsidiary Body</option>
-                        <option>- SBSTTA</option>
-                        <option>- WGRI/SBI</option>
-                        <option>- WG8J</option>
-                        <option>- WGPA</option>
-                        <option>- WGABS</option>
-    					<option>Global Environment Facility</option>
-    					<option>ILPC</option>
-    					<option>Other stakeholder(s)</option>
+                        <option value='parties'>Parties</option>
+                        <option value='governments'>Government(s)</option>
+                        <option value='es'>Executive Secretary</option>
+    					<option value='cop'>Conference of the Parties</option>
+                        <option value='other'>Subsidiary Body</option>
+                        <option value='sbstta'>- SBSTTA</option>
+                        <option value='sbi'>- WGRI/SBI</option>
+                        <option value='wg8j'>- WG8J</option>
+                        <option value='wgpa'>- WGPA</option>
+                        <option value='wgabs'>- WGABS</option>
+    					<option value='gef'>Global Environment Facility</option>
+    					<option value='ilpc'>ILPC</option>
+    					<option value='other'>Other stakeholder(s) (with details)</option>
     				</select>
     		  	</div>
-                <div class="form-group">
+                <div class="form-group" ng-show="element.elementDirectedTo=='other'">
     		    	<label for="elementDirectedToDetails">Details</label>
     		    	<textarea class="form-control" id="elementDirectedToDetails" ng-model="element.elementDirectedToDetails"></textarea>
     		  	</div>
@@ -314,7 +315,7 @@
     						</div>
     					</div>
     				</div>
-    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1" ng-click="selectDecision()"><i class="fa fa-plus-circle"></i> add decision</button>
+    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1" ng-click="selectDecision()"><i class="fa fa-plus-circle"></i> add a decision</button>
     			</div>
     		</div>
     		<div class="col-sm-6">
@@ -330,14 +331,14 @@
     						</div>
     					</div>
     				</div>
-    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1" ng-click="selectNotification()"><i class="fa fa-plus-circle"></i> add notification</button>
+    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1" ng-click="selectNotification()"><i class="fa fa-plus-circle"></i> add a notification</button>
     			</div>
     		</div>
     	</div>
         <div class="row">
     		<div class="col-sm-6">
     			<div class="form-group">
-    				<label for="exampleInputEmail1">Related documents</label>
+    				<label for="exampleInputEmail1">Related documents</label><br>
     				<div ng-hide="true" class="panel panel-default" style="margin-bottom:4px">
     					<div class="panel-body" style="padding:12px;font-size:0.9em">
     						<button class="btn btn-danger btn-xs pull-right" id="exampleInputEmail1"><i class="fa fa-minus-circle"></i> remove</button>
@@ -357,7 +358,7 @@
     						</div>
     					</div>
     				</div>
-    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1"><i class="fa fa-plus-circle"></i> add document</button>
+    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1"><i class="fa fa-plus-circle"></i> add a document</button>
     			</div>
     		</div>
             <div class="col-sm-6">
@@ -374,13 +375,12 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-xs" id="exampleInputEmail1"><i class="fa fa-plus-circle"></i> add activity</button>
+                    <button class="btn btn-primary btn-xs" id="exampleInputEmail1"><i class="fa fa-plus-circle"></i> add an event</button>
                 </div>
             </div>
         </div>
         <hr/>
         <h4>
-            <button class="btn btn-primary btn-xs pull-right" id="exampleInputEmail1" ng-click="upload()"><i class="fa fa-plus-circle"></i> upload document</button>
             <input type="file" id="fileUpload" accept="application/pdf" style="display:none">
             Submissions
     	</h4>
@@ -391,6 +391,7 @@
     				<center> {{item.filename}} <i>({{item.size/1024 | number:1}} kB)</i> &nbsp; </center>
     			</div>
     		</div>
+            <button class="btn btn-primary btn-xs" id="exampleInputEmail1" ng-click="upload()"><i class="fa fa-plus-circle"></i> upload a document</button>
     	</div>
         <br><br>
 
