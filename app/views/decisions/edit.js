@@ -226,7 +226,7 @@ console.log(rangy);
             var items = $scope.element.decisions || [];
             var index = items.indexOf(item);
 
-            if(index>0) {
+            if(index>=0) {
                 items.splice(index, 1);
             }
         }
@@ -257,7 +257,7 @@ console.log(rangy);
             var items = $scope.element.notifications || [];
             var index = items.indexOf(item);
 
-            if(index>0)
+            if(index>=0)
                 items.splice(index, 1);
         }
 
