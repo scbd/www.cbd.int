@@ -1,4 +1,4 @@
-define(['underscore', 'require', 'rangy', 'ngDialog', 'authentication'], function(_, require, rangy) { 'use strict';
+define(['underscore', 'require', 'rangy', 'jquery', 'ngDialog', 'authentication'], function(_, require, rangy, $) { 'use strict';
 
     return ['$scope', '$http', '$route', '$location', '$filter', '$q', 'ngDialog', function($scope, $http, $route, $location, $filter, $q, ngDialog) {
 console.log(rangy);
@@ -6,6 +6,7 @@ console.log(rangy);
 
         $scope.symbol = $route.current.params.meeting + '/' + $route.current.params.number;
         $scope.save   = save;
+        $scope.upload = upload;
         $scope.selectDecision = selectDecision;
         $scope.deleteDecision = deleteDecision;
         $scope.selectNotification = selectNotification;
@@ -164,6 +165,38 @@ console.log(rangy);
                 }
             }
         }
+
+        //===========================
+        //
+        //===========================
+        function upload() {
+
+            var fileUpload = $("#fileUpload");
+
+            fileUpload.bind("change", upload_fileSelected);
+            fileUpload.click();
+        }
+
+        //===========================
+        //
+        //===========================
+        function upload_fileSelected() {
+
+            var fileUpload = $("#fileUpload");
+
+            fileUpload.unbind("change", upload_fileSelected);
+
+            var file = fileUpload[0].files[0];
+
+            if(!file)
+                return;
+
+            $scope.element.files = $scope.element.files || [];
+            $scope.element.files.push({ filename : file.name.toLowerCase(), size : file.size });
+            $scope.$digest();
+        }
+
+
 
         //************************************************************
 

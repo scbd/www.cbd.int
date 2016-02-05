@@ -374,14 +374,14 @@
         <hr/>
         <h4>
             <button class="btn btn-primary btn-xs pull-right" id="exampleInputEmail1" ng-click="upload()"><i class="fa fa-plus-circle"></i> upload document</button>
-            <input type="file" id="fileUpload"/>
+            <input type="file" id="fileUpload" accept="application/pdf" style="display:none">
             Submissions
     	</h4>
     	<div>
     		<div class="form-group">
-    			<div style="display:inline-block" ng-repeat="item in element.files">
+    			<div style="display:inline-block" ng-repeat="item in element.files" style="padding-right:1em">
     				<imgx src="/app/images/file.png" style="height:128px">
-    				<center>{{item.filename}}</center>
+    				<center> {{item.filename}} <i>({{item.size/1024 | number:1}} kB)</i> &nbsp; </center>
     			</div>
     		</div>
     	</div>
