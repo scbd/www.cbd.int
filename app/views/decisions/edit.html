@@ -292,10 +292,14 @@
     			<div class="form-group">
     		    	<label for="elementTimeline">Timelines</label>
     		    	<select class="form-control" id="elementTimeline" ng-model="element.elementTimeline">
-    					<option>Not applicable</option>
-    					<option>Due date (todo: show calendar)</option>
+    					<option value='na'>Not applicable</option>
+    					<option value='due'>Due date</option>
     				</select>
     		  	</div>
+                <div class="form-group" ng-show="element.elementTimeline=='due'">
+                    <label for="elementTimelineDate">Details</label>
+                    <input type='date' class="form-control" id="elementTimelineDate" ng-model="element.elementTimelineDate">
+                </div>
     		</div>
     	</div>
         <hr/>
