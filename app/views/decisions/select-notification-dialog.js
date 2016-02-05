@@ -20,7 +20,7 @@ define([], function() {
                 q : "schema_s:notification AND (symbol_s:"+text+"* OR reference_t:"+text+"*)" + " AND (symbol_t:*)",
                 fl : "symbol_?,reference_?,title_?",
                 sort: "symbol_s ASC",
-                rows: 1
+                rows: 3
             };
 
             $http.get("/api/v2013/index", { params : qsParams, cache : true }).then(function(res){

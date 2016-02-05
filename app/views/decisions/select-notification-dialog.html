@@ -20,12 +20,12 @@
 
         </form>
 
-        <div class="panel panel-default" ng-show="notification">
+        <div class="panel panel-default" ng-class="{ 'panel-primary' : notification==n }" ng-repeat="n in results.docs" ng-click="$parent.notification = n" style="cursor:pointer" >
           <div class="panel-heading">
-            <h3 class="panel-title"><em class="pull-right">{{notification.reference_t}}</em>{{notification.symbol_t}} </h3>
+            <h3 class="panel-title"><em class="pull-right">{{n.reference_t}}</em>{{n.symbol_t}} </h3>
           </div>
-          <div class="panel-body">
-            {{notification.title_t}}
+          <div class="panel-body" style="max-height:6em;overflow:hidden">
+            {{n.title_t}}
           </div>
         </div>
 
