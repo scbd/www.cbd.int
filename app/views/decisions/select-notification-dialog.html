@@ -32,6 +32,6 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" aria-label="Close" ng-click="closeThisDialog()">Cancel</button>
-        <button type="button" class="btn btn-primary" aria-label="Save" ng-click="closeThisDialog(notification.symbol_t)" ng-disabled="!notification">Next »</button>
+        <button type="button" class="btn btn-primary" aria-label="Save" ng-click="closeThisDialog({ symbol : notification.symbol_t, reference : notification.reference_t, title : notification.title_t })" ng-disabled="!notification">Next »</button>
     </div>
 </div>

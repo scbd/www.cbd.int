@@ -298,10 +298,10 @@
     		<div class="col-sm-6">
     			<div class="form-group">
     				<label for="exampleInputEmail1">Related decisions</label><br>
-    				<div class="panel panel-default" style="margin-top:4px;margin-bottom:4px">
+    				<div class="panel panel-default" style="margin-top:4px;margin-bottom:4px" ng-repeat="item in element.decisions">
     		  			<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button class="btn btn-danger btn-xs pull-right" id="exampleInputEmail1"><i class="fa fa-minus-circle"></i> remove</button>
-    						<a href="#"><b>Decision XII/25</b></a>
+    						<button class="btn btn-danger btn-xs pull-right" id="exampleInputEmail1" ng-click="deleteDecision(item)"><i class="fa fa-minus-circle"></i> remove</button>
+    						<a href="#"><b>{{item.symbol}}</b></a>
     						<div style="max-height:50px;overflow:hidden">
     							Intergovernmental Science-Policy Platform on Biodiversity and Ecosystem Services
     						</div>
@@ -313,14 +313,13 @@
     		<div class="col-sm-6">
     			<div class="form-group">
     				<label for="exampleInputEmail1">Notifications issued</label><br>
-    				<div class="panel panel-default" style="margin-bottom:4px">
+    				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.notifications">
     		  			<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button class="btn btn-danger btn-xs pull-right" id="exampleInputEmail1"><i class="fa fa-minus-circle"></i> remove</button>
+    						<button class="btn btn-danger btn-xs pull-right" id="exampleInputEmail1" ng-click="deleteNotification(item)"><i class="fa fa-minus-circle"></i> remove</button>
     						27 May 2015<br>
-    						<a href="#"><b>SCBD/TSI/RS/YX/LZ/84244</b></a>
+    						<a href="#"><b>{{item.reference}}</b></a>
     						<div style="max-height:50px;overflow:hidden">
-    							Selection of experts to prepare a report on the full assessment of funding necessary and
-    							available for the implementation of the Convention for the period July 2018 to June 2022
+    							{{item.title}}
     						</div>
     					</div>
     				</div>
@@ -374,18 +373,15 @@
         </div>
         <hr/>
         <h4>
-            <button class="btn btn-primary btn-xs pull-right" id="exampleInputEmail1"><i class="fa fa-plus-circle"></i> upload document</button>
+            <button class="btn btn-primary btn-xs pull-right" id="exampleInputEmail1" ng-click="upload()"><i class="fa fa-plus-circle"></i> upload document</button>
+            <input type="file" id="fileUpload"/>
             Submissions
     	</h4>
     	<div>
     		<div class="form-group">
-    			<div style="display:inline-block">
+    			<div style="display:inline-block" ng-repeat="item in element.files">
     				<imgx src="/app/images/file.png" style="height:128px">
-    				<center>file_abc.pdf</center>
-    			</div>
-    			<div style="display:inline-block">
-    				<imgx src="/app/images/file.png" style="height:128px">
-    				<center>file_xyz.pdf</center>
+    				<center>{{item.filename}}</center>
     			</div>
     		</div>
     	</div>

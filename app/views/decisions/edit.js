@@ -7,7 +7,9 @@ console.log(rangy);
         $scope.symbol = $route.current.params.meeting + '/' + $route.current.params.number;
         $scope.save   = save;
         $scope.selectDecision = selectDecision;
+        $scope.deleteDecision = deleteDecision;
         $scope.selectNotification = selectNotification;
+        $scope.deleteNotification = deleteNotification;
         $scope.actionEdit  = edit;
         $scope.actionBox   = function(tag) { surroundSelection(tag); };
         $scope.actionUnbox = function()    { unsurroundSelection(); };
@@ -173,10 +175,27 @@ console.log(rangy);
             openDialog('./select-decision-dialog', { showClose: false }).then(function(dialog){
 
                 dialog.closePromise.then(function(res){
-                    if(res.value)
-                       console.log(res.value);
+
+                    if(!res.value)
+                        return;
+
+                    $scope.element.decisions = $scope.element.decisions || [];
+                    $scope.element.decisions.push(res.value);
                 });
             });
+        }
+
+        //===========================
+        //
+        //===========================
+        function deleteDecision(item) {
+
+            var items = $scope.element.decisions || [];
+            var index = items.indexOf(item);
+
+            if(index>0) {
+                items.splice(index, 1);
+            }
         }
 
         //===========================
@@ -187,10 +206,26 @@ console.log(rangy);
             openDialog('./select-notification-dialog', { showClose: false }).then(function(dialog){
 
                 dialog.closePromise.then(function(res){
-                    if(res.value)
-                       console.log(res.value);
+
+                    if(!res.value)
+                        return;
+
+                    $scope.element.notifications = $scope.element.notifications || [];
+                    $scope.element.notifications.push(res.value);
                 });
             });
+        }
+
+        //===========================
+        //
+        //===========================
+        function deleteNotification(item) {
+
+            var items = $scope.element.notifications || [];
+            var index = items.indexOf(item);
+
+            if(index>0)
+                items.splice(index, 1);
         }
 
         //===========================

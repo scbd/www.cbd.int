@@ -22,13 +22,13 @@
 
             <div class="form-group">
                 <label for="decision">Decision /  Recommendation</label>
-                <select class="form-control" id="decision" name="decision" ng-model="decision" ng-options="o.code as o.symbol for o in getDecisions(meeting)" ng-disabled="!body || !meeting">
+                <select class="form-control" id="decision" name="decision" ng-model="decision" ng-options="o as o.symbol for o in getDecisions(meeting)" ng-disabled="!body || !meeting">
                 </select>
             </div>
         </form>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" aria-label="Close" ng-click="closeThisDialog()">Cancel</button>
-        <button type="button" class="btn btn-primary" aria-label="Save" ng-click="closeThisDialog(decision)" ng-disabled="!meeting">Next »</button>
+        <button type="button" class="btn btn-primary" aria-label="Save" ng-click="closeThisDialog({ code: decision.code, symbol: decision.symbol })" ng-disabled="!meeting">Next »</button>
     </div>
 </div>
