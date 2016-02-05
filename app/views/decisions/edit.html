@@ -338,7 +338,7 @@
     		<div class="col-sm-6">
     			<div class="form-group">
     				<label for="exampleInputEmail1">Related documents</label>
-    				<div class="panel panel-default" style="margin-bottom:4px">
+    				<div ng-hide="true" class="panel panel-default" style="margin-bottom:4px">
     					<div class="panel-body" style="padding:12px;font-size:0.9em">
     						<button class="btn btn-danger btn-xs pull-right" id="exampleInputEmail1"><i class="fa fa-minus-circle"></i> remove</button>
     						<a href="#"><b>RMWS-2015-02</b></a>
@@ -363,7 +363,7 @@
             <div class="col-sm-6">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Related activities / outcomes</label><br>
-                    <div class="panel panel-default" style="margin-bottom:4px">
+                    <div ng-hide="true" class="panel panel-default" style="margin-bottom:4px">
                           <div class="panel-body" style="padding:12px;font-size:0.9em">
                             <button class="btn btn-danger btn-xs pull-right" id="exampleInputEmail1"><i class="fa fa-minus-circle"></i> remove</button>
                             11 - 13 June 2015 &nbsp; &nbsp; &nbsp; <i class="fa fa-map-marker"></i> Panajachel, Guatemala<br>
@@ -392,11 +392,7 @@
     			</div>
     		</div>
     	</div>
-
-        <h4>
-    		Debug
-    	</h4>
-        <pre>{{element|json}}</pre>
+        <br><br>
 
     </div>
 
