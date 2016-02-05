@@ -53,7 +53,7 @@
         padding:8px;
         margin-top:6px;
         margin-bottom:6px;
-        background-color: #fff;
+        background-color: rgba(255,255,255,0.85);
         /*-moz-user-select: none;
         -webkit-user-select: none;
         -ms-user-select: none;
@@ -117,13 +117,12 @@
     <div class="container" style="margin-left:0;margin-right:0;width:100%;height:100%">
 
         <div style="position:fixed;top:0px;left:0px;right:0px;background-color:#ddd;z-index:1000">
-            <button ng-click="save()">Save</button>
-            <button ng-click="actionBox('element')">Element</button>
-            <button ng-click="actionUnbox()">Free</button>
-            <button ng-click="actionBox('var')">ID</button>
-            <button ng-click="actionBox('action')">Action</button>
-            <button ng-click="actionEdit()">Editable</button>
-            <button ng-click="actionClean()">Clean</button>
+            <button class="btn btn-success" ng-click="save()">Save</button>
+            <button class="btn btn-primary" ng-click="actionBox('element')">Box</button>
+            <button class="btn btn-primary" ng-click="actionUnbox()">Unbox</button>
+            <button class="btn btn-primary" ng-click="actionBox('var')">ID</button>
+            <button class="btn btn-primary" ng-click="actionEdit()">Edit</button>
+            <button class="btn btn-danger" ng-click="actionClean()">Remove formatting</button>
         </div>
 
         <div class="row" style="margin-top:40px;height:100%">
@@ -252,10 +251,14 @@
     		    	<label for="elementStatus">Status of the decision</label>
     		    	<select class="form-control" id="elementStatus" ng-model="element.elementStatus">
     					<option>Implemented</option>
-    					<option>Superseded ***</option>
+    					<option>Superseded</option>
     					<option>Elapsed</option>
     					<option>Active‎</option>
     				</select>
+    		  	</div>
+                <div class="form-group">
+    		    	<label for="elementStatus">Details</label>
+    		    	<textarea class="form-control" id="elementStatusDetails" ng-model="element.elementStatusDetails"></textarea>
     		  	</div>
     		</div>
     	</div>
@@ -265,7 +268,7 @@
     		    	<label for="elementDirectedTo">Directed to</label>
     		    	<select class="form-control" id="elementDirectedTo" ng-model="element.elementDirectedTo">
                         <option>Parties</option>
-                        <option>Government(s) ***</option>
+                        <option>Government(s)</option>
                         <option>Executive Secretary</option>
     					<option>Conference of the Parties</option>
                         <option>Subsidiary Body</option>
@@ -276,8 +279,12 @@
                         <option>- WGABS</option>
     					<option>Global Environment Facility</option>
     					<option>ILPC</option>
-    					<option>Other stakeholder(s) ***</option>
+    					<option>Other stakeholder(s)</option>
     				</select>
+    		  	</div>
+                <div class="form-group">
+    		    	<label for="elementDirectedToDetails">Details</label>
+    		    	<textarea class="form-control" id="elementDirectedToDetails" ng-model="element.elementDirectedToDetails"></textarea>
     		  	</div>
     		</div>
     		<div class="col-sm-6">
