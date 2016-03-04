@@ -9,7 +9,6 @@ var proxy  = httpProxy.createProxyServer({});
 // Configure options
 
 app.use(require('morgan')('dev'));
-app.use(require('compression')());
 app.use(function(req, res, next) {  if(req.url.indexOf(".geojson")>0) res.contentType('application/json'); next(); } ); // override contentType for geojson files
 
 // Configure static files to serve

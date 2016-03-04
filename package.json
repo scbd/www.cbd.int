@@ -2,12 +2,10 @@
     "name": "www-cbd-int",
     "description": "Website of the Convention on Biological Diversity",
     "dependencies": {
-        "bower": "1.5.3",
-        "express": "4.13.3",
-        "compression": "1.6.0",
-        "http-proxy": "1.11.2",
-        "morgan": "1.6.1",
-        "serve-static": "1.10.0"
+        "bower": "1.7.7",
+        "express": "4.13.4",
+        "http-proxy": "1.13.2",
+        "morgan": "1.6.1"
     },
     "license": "MIT",
     "private": true,
