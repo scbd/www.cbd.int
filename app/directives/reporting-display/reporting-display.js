@@ -392,7 +392,8 @@ define(['text!./reporting-display.html',
 
             if (docsByCountry.eur)
               docsByCountry.eur.isEUR = true;
-
+              if (docsByCountry.eu)
+                docsByCountry.eu.isEUR = true;
             setNumDocumentsInCountry();
             return docsByCountry;
           } //readQueryString
