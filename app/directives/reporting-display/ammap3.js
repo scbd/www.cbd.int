@@ -113,6 +113,21 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
               $scope.map.clickMapObject(ammap3.getMapObject('DK'));
               id = 'DK';
           }
+          if(event.mapObject.id === 'SJ')
+          {
+              $scope.map.clickMapObject(ammap3.getMapObject('NO'));
+              id = 'NO';
+          }
+          if(event.mapObject.id === 'EH')
+          {
+              $scope.map.clickMapObject(ammap3.getMapObject('MA'));
+              id = 'MA';
+          }
+          if(event.mapObject.id === 'TW')
+          {
+              $scope.map.clickMapObject(ammap3.getMapObject('CN'));
+              id = 'CN';
+          }
           $scope.$evalAsync(function() {
             reportingDIsplay.showCountryResultList(id);
           });
@@ -227,35 +242,57 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
         //
         //=======================================================================
         $scope.legendHide = function(legendItem) {
-          var area2 ={};
+          var area2 = {};
 
 
           _.each($scope.map.dataProvider.areas, function(area) {
 
-                    if(area.id.toUpperCase()==='DK'){
-                                    area2 = getMapObject('gl');
-                                    //area2.originalColor = area.originalColor;
-                                    area2.colorReal = area.colorReal;
-                                    area2.mouseEnabled = area.mouseEnabled;
+            if (area.id.toUpperCase() === 'DK') {
+              area2 = getMapObject('gl');
+              //area2.originalColor = area.originalColor;
+              area2.colorReal = area.colorReal;
+              area2.mouseEnabled = area.mouseEnabled;
 
 
-                                if(area.id.toUpperCase()==='FO'){
-                                                area2 = getMapObject('gl');
-                                                //area2.originalColor = area.originalColor;
-                                                area2.colorReal = area.colorReal;
-                                                area2.mouseEnabled = area.mouseEnabled;
+              if (area.id.toUpperCase() === 'FO') {
+                area2 = getMapObject('gl');
+                //area2.originalColor = area.originalColor;
+                area2.colorReal = area.colorReal;
+                area2.mouseEnabled = area.mouseEnabled;
 
-                                            }
-                    }
-                    if (legendItem.color === area.originalColor && area.mouseEnabled === true ) {
-                      area.colorReal = '#FFFFFF';
-                      area.mouseEnabled = false;
+              }
+            }
+            if (area.id.toUpperCase() === 'NO') {
+              area2 = getMapObject('sj');
+              //area2.originalColor = area.originalColor;
+              area2.colorReal = area.colorReal;
+              area2.mouseEnabled = area.mouseEnabled;
+            }
+            if (area.id.toUpperCase() === 'MA') {
+              area2 = getMapObject('eh');
+              //area2.originalColor = area.originalColor;
+              area2.colorReal = area.colorReal;
+              area2.mouseEnabled = area.mouseEnabled;
+            }
+            if (area.id.toUpperCase() === 'CN') {
+              area2 = getMapObject('tw');
+              //area2.originalColor = area.originalColor;
+              area2.colorReal = area.colorReal;
+              area2.mouseEnabled = area.mouseEnabled;
+            }
 
-                    } else if (legendItem.color === area.originalColor && area.mouseEnabled === false ) {
-                      area.colorReal = legendItem.color;
-                      area.mouseEnabled = true;
 
-                    }
+
+
+            if (legendItem.color === area.originalColor && area.mouseEnabled === true) {
+              area.colorReal = '#FFFFFF';
+              area.mouseEnabled = false;
+
+            } else if (legendItem.color === area.originalColor && area.mouseEnabled === false) {
+              area.colorReal = legendItem.color;
+              area.mouseEnabled = true;
+
+            }
           });
           if (legendItem.visible)
             legendItem.visible = false;
@@ -351,19 +388,35 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
         // //=======================================================================
         // //
         // //=======================================================================
-        function changeAreaColor(id, color,area) {
-          if(!area)
+        function changeAreaColor(id, color, area) {
+          if (!area)
             area = getMapObject(id.toUpperCase());
 
-            area.colorReal = area.originalColor = color;
-          if(id.toUpperCase()==='DK'){
-              var area2 = getMapObject('GL');
-              area2.colorReal = area.colorReal;
-              area2.originalColor = area.originalColor;
-              var area3 = getMapObject('FO');
-              area3.colorReal = area.colorReal;
-              area3.originalColor = area.originalColor;
+          area.colorReal = area.originalColor = color;
+          if (id.toUpperCase() === 'DK') {
+            var area2 = getMapObject('GL');
+            area2.colorReal = area.colorReal;
+            area2.originalColor = area.originalColor;
+            var area3 = getMapObject('FO');
+            area3.colorReal = area.colorReal;
+            area3.originalColor = area.originalColor;
           }
+          if (area.id.toUpperCase() === 'NO') {
+            var area4 = getMapObject('SJ');
+            area4.colorReal = area.colorReal;
+            area4.originalColor = area.originalColor;
+          }
+          if (area.id.toUpperCase() === 'MA') {
+            var area5 = getMapObject('EH');
+            area5.colorReal = area.colorReal;
+            area5.originalColor= area.originalColor;
+          }
+          if(area.id.toUpperCase()==='CN'){
+            var area5 = getMapObject('TW');
+            area5.colorReal = area.colorReal;
+            area5.originalColor = area.originalColor;
+          }
+
 
         } //getMapObject
 
