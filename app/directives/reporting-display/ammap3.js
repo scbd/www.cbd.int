@@ -97,11 +97,6 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
         });
 
         $scope.map.addListener("clickMapObject", function(event) {
-          //  $scope.$apply(function(){
-          //      reportingDIsplay.showCountryResultList(event.mapObject.id);
-          //  });
-          //                 $scope.$apply();
-          // reportingDIsplay.showCountryResultList(event.mapObject.id);
           var id = event.mapObject.id;
           if(event.mapObject.id === 'GL')
           {
@@ -413,8 +408,8 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
           }
           if(area.id.toUpperCase()==='CN'){
             var area5 = getMapObject('TW');
-            area5.colorReal = area.colorReal;
-            area5.originalColor = area.originalColor;
+            area6.colorReal = area.colorReal;
+            area6.originalColor = area.originalColor;
           }
 
 
