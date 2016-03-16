@@ -407,7 +407,7 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
             area5.originalColor= area.originalColor;
           }
           if(area.id.toUpperCase()==='CN'){
-            var area5 = getMapObject('TW');
+            var area6 = getMapObject('TW');
             area6.colorReal = area.colorReal;
             area6.originalColor = area.originalColor;
           }
