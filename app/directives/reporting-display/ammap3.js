@@ -389,27 +389,27 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
 
           area.colorReal = area.originalColor = color;
           if (id.toUpperCase() === 'DK') {
-            var area2 = getMapObject('GL');
-            area2.colorReal = area.colorReal;
-            area2.originalColor = area.originalColor;
-            var area3 = getMapObject('FO');
-            area3.colorReal = area.colorReal;
-            area3.originalColor = area.originalColor;
+            var areaA = getMapObject('GL');
+            areaA.colorReal = area.colorReal;
+            areaA.originalColor = area.originalColor;
+            var areaB = getMapObject('FO');
+            areaB.colorReal = area.colorReal;
+            areaB.originalColor = area.originalColor;
           }
           if (area.id.toUpperCase() === 'NO') {
-            var area4 = getMapObject('SJ');
-            area4.colorReal = area.colorReal;
-            area4.originalColor = area.originalColor;
+            var areaC = getMapObject('SJ');
+            areaC.colorReal = area.colorReal;
+            areaC.originalColor = area.originalColor;
           }
           if (area.id.toUpperCase() === 'MA') {
-            var area5 = getMapObject('EH');
-            area5.colorReal = area.colorReal;
-            area5.originalColor= area.originalColor;
+            var areaD = getMapObject('EH');
+            areaD.colorReal = area.colorReal;
+            areaD.originalColor= area.originalColor;
           }
           if(area.id.toUpperCase()==='CN'){
-            var area6 = getMapObject('TW');
-            area6.colorReal = area.colorReal;
-            area6.originalColor = area.originalColor;
+            var areaE = getMapObject('TW');
+            areaE.colorReal = area.colorReal;
+            areaE.originalColor = area.originalColor;
           }
 
 
