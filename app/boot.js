@@ -17,7 +17,6 @@ require.config({
         'underscore'      : 'libs/lodash/lodash.min',
         'bootstrap-notify': 'libs/remarkable-bootstrap-notify/bootstrap-notify.min',
         'nprogress'       : 'libs/nprogress/nprogress',
-        'dropbox-dropins' : 'https://www.dropbox.com/static/api/2/dropins',
         'rangy'           : 'libs/rangy-release/rangy-core.min'
     },
     shim: {
@@ -28,19 +27,14 @@ require.config({
         'ngAnimate'            : { deps : ['angular'] },
         'ngDialog'             : { deps : ['angular', 'css!libs/ng-dialog/css/ngDialog.min', 'css!libs/ng-dialog/css/ngDialog-theme-default.css'] },
         'bootstrap'            : { deps : ['jquery' ] },
-        'bootstrap-notify'     : { deps : ['jquery', 'bootstrap'] },
-
-        'dropbox-dropins'      : {
-            deps: [],
-            exports: "Dropbox",
-            init: function () {
-                if(window.Dropbox) {
-                    window.Dropbox.appKey = "uvo7kuhmckw68pl"; //registration@cbd.int
-                    return window.Dropbox;
-                }
-            }
-        }
+        'bootstrap-notify'     : { deps : ['jquery', 'bootstrap'] }
     },
+});
+
+define('dropbox-dropins', function(){
+    if(window.Dropbox)
+        window.Dropbox.appKey = "uvo7kuhmckw68pl"; //registration@cbd.int
+    return window.Dropbox;
 });
 
 // BOOT
