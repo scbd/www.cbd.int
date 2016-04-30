@@ -15,6 +15,10 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
         if(/^\/insession($|\/.*)/.test(locationPath))
             registerRoutes_insession($routeProvider);
 
+        // /schedule/*
+        if(/^\/schedules($|\/.*)/.test(locationPath))
+            registerRoutes_schedules($routeProvider);
+
         $routeProvider.when('/404', { templateUrl: '/app/views/404.html', resolveUser: true }).otherwise({redirectTo: '/404'});
     }
   ]);
@@ -45,6 +49,17 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
       .when('/:meeting',   { templateUrl : 'views/meetings/documents/in-session/meeting-id.html', resolveController : true, progress : { stop : false } } );
     }
 
+  //============================================================
+  //
+  //
+  //============================================================
+  function registerRoutes_schedules(routeProvider) {
+
+      $("base").attr('href', '/schedules/'); // allow full page reload outside of  /insession/*
+
+      routeProvider
+          .when('/',       { templateUrl: 'views/schedules/index.html', controllerAs: 'indexCtrl', resolveController: true });
+  }
     //============================================================
     //
     //

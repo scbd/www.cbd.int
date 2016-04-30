@@ -25,12 +25,9 @@ app.all('/doc/*', function(req, res) { res.status(404).send(); } );
 app.all('/api/*', function(req, res) { proxy.web(req, res, { target: "https://api.cbd.int:443", secure: false } ); } );
 
 // Configure template(s)
-app.all('/register*',             function(req, res) {res.redirect("https://www.cbd.int:443/side-events/");  });
-app.get('/reports/map*',          function(req, res) { res.sendFile(__dirname + '/app/views/reports/template.html', { maxAge : 5*60*1000 }); });
-app.get('/insession*',            function(req, res) { res.sendFile(__dirname + '/app/template.html',               { maxAge : 5*60*1000 }); });
-app.get('/management/decisions*', function(req, res) { res.sendFile(__dirname + '/app/template.html',               { maxAge : 5*60*1000 }); });
-app.all('/*',                     function(req, res) { res.status(404).send(); } );
-//app.all('/*',            function(req, res) { proxy.web(req, res, { target: 'https://www.cbd.int:443', secure: false } ); } );
+app.get('/reports/map*', function(req, res) { res.sendFile(__dirname + '/app/views/reports/template.html', { maxAge : 5*60*1000 }); });
+app.get('/*',            function(req, res) { res.sendFile(__dirname + '/app/template.html',               { maxAge : 5*60*1000 }); });
+app.all('/*',            function(req, res) { res.status(404).send(); } );
 
 // START HTTP SERVER
 

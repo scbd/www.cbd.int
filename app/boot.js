@@ -9,14 +9,17 @@ require.config({
         'ngRoute'         : 'libs/angular-route/angular-route.min',
         'ngCookies'       : 'libs/angular-cookies/angular-cookies.min',
         'ngAnimate'       : 'libs/angular-animate/angular-animate.min',
+        'ngSanitize'      : 'libs/angular-sanitize/angular-sanitize.min',
         'ngDialog'        : 'libs/ng-dialog/js/ngDialog.min',
         'text'            : 'libs/requirejs-text/text',
         'css'             : 'libs/require-css/css.min',
         'jquery'          : 'libs/jquery/dist/jquery.min',
         'bootstrap'       : 'libs/bootstrap/dist/js/bootstrap.min',
-        'underscore'      : 'libs/lodash/lodash.min',
+        'lodash'          : 'libs/lodash/lodash.min',
         'bootstrap-notify': 'libs/remarkable-bootstrap-notify/bootstrap-notify.min',
         'nprogress'       : 'libs/nprogress/nprogress',
+        'moment'          : 'libs/moment/min/moment.min',
+        'moment-timezone' : 'libs/moment-timezone/builds/moment-timezone-with-data.min',
         'rangy'           : 'libs/rangy-release/rangy-core.min'
     },
     shim: {
@@ -25,10 +28,15 @@ require.config({
         'ngRoute'              : { deps : ['angular'] },
         'ngCookies'            : { deps : ['angular'] },
         'ngAnimate'            : { deps : ['angular'] },
+        'ngSanitize'           : { deps : ['angular'] },
         'ngDialog'             : { deps : ['angular', 'css!libs/ng-dialog/css/ngDialog.min', 'css!libs/ng-dialog/css/ngDialog-theme-default.css'] },
         'bootstrap'            : { deps : ['jquery' ] },
         'bootstrap-notify'     : { deps : ['jquery', 'bootstrap'] }
     },
+});
+
+define('underscore', ['lodash'], function(_) {
+    return _;
 });
 
 define('dropbox-dropins', function(){

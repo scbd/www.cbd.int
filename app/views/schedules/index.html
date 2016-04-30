@@ -1,0 +1,108 @@
+<div ng-init="levels={ warning : 'warning', alert : 'danger' } ">
+    <style>
+        .announcement h1,
+        .announcement h2,
+        .announcement h3,
+        .announcement h4,
+        .announcement h5,
+        .announcement h6 {
+            color: inherit;
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .announcement h1 { font-size:175% }
+        .announcement h2 { font-size:150% }
+        .announcement h3 { font-size:130% }
+        .announcement h4 { font-size:120% }
+        .announcement h5 { font-size:110% }
+        .announcement h6 { font-size:105% }
+
+        .schedule .schedule-item  > td > table {
+            margin-bottom: 0px;
+        }
+
+        .schedule .schedule-item > td > table > tbody > tr > td {
+            border: none !important;
+        }
+
+        .schedule .schedule-item:not(.success):not(.info):not(.warning):not(.danger)  > td > table {
+            background-color: inherit;
+        }
+
+        .schedule .schedule-item  .schedule-item-message {
+            text-align: center;
+            font-size: 80%;
+            font-weight: bold;
+            margin-top: 7px;
+        }
+
+
+    </style>
+
+    <div class="row" ng-if="(indexCtrl.frames | filter: { 'content' : { 'type':'schedule'} }).length">
+
+        <div class="col-xs-12">
+            <h1>Daily Schedule</h1>
+        </div>
+
+        <div class="col-xs-12 schedule" ng-repeat="frame in (indexCtrl.frames | filter: { 'content' : { 'type':'schedule'} })">
+            <h2>{{frame.content.title}}</h2>
+            <table class="table table-striped">
+                <tr class="schedule-item {{levels[r.message.level]}}" ng-repeat="r in frame.reservations">
+                    <td class="schedule-item">
+                        <table class="table">
+                            <tr>
+                                <td class="schedule-item-time text-right" class="text-nowrap" style="width:55px">
+                                    <div class="text-primary">{{r.start | moment:'tz':indexCtrl.event.timezone | moment:'format':'H:mm'}}</div>
+                                    <div class="small text-muted">
+                                        <span ng-hide="indexCtrl.types[r.type].closed">Open</span>
+                                        <span ng-show="indexCtrl.types[r.type].closed">Closed</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="schedule-item-type pull-right">
+                                        <span class="text-{{indexCtrl.types[r.type].style}}">{{indexCtrl.types[r.type].title}}</span>
+                                        <div  ng-if="r.sideEvent" class="side-event-id hidden-xs text-muted text-right"><em>#{{r.sideEvent.id}}</em></div>
+                                    </div>
+
+                                    <div class="schedule-item-location">
+                                        <b class="room">{{indexCtrl.rooms[r.location.room].title}}</b>
+                                        <em class="small text-muted">{{indexCtrl.rooms[r.location.room].location}}</em>
+                                    </div>
+
+                                    <div class="schedule-item-title">
+                                        {{r.sideEvent.title || r.title}}
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div ng-if="r.message.text" class="schedule-item-message">{{r.message.text}}</div>
+
+                    </td>
+                </tr>
+                <tr><td></td></tr>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="row" ng-if="(indexCtrl.frames | filter: { 'content' : { 'type':'announcement'} }).length">
+
+        <div class="col-xs-12">
+            <h1>Announcements</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 announcement" ng-repeat="frame in (indexCtrl.frames | filter: { 'content' : { 'type':'announcement'} })">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div ng-bind-html="frame.content.html | sanitizeHtml | safeHtml">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

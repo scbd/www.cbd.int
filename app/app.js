@@ -1,6 +1,6 @@
-define(['angular'], function(angular) { 'use strict';
+define(['angular', 'ngSanitize'], function(angular) { 'use strict';
 
-    var deps = ['ngRoute', 'ngCookies', 'ngDialog'];
+    var deps = ['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize'];
 
     angular.defineModules(deps);
 
