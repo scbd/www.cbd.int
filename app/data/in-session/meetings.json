@@ -1,8 +1,8 @@
 [
     {
-        "code"    : "SBSTTA-20",
-        "title"   : "SBSTTA-20 In-Session Documents",
-        "baseUrl" : "/doc/meetings/sbstta/sbstta-20/insession",
+        "code"    : "SBI-01",
+        "title"   : "SBI-01 In-Session Documents",
+        "baseUrl" : "/doc/meetings/sbi/sbi-01/insession",
         "list"    : true,
         "print"   : true,
         "sections" : [
@@ -11,9 +11,9 @@
         ]
     },
     {
-        "code"    : "SBI-01",
-        "title"   : "SBI-01 In-Session Documents",
-        "baseUrl" : "/doc/meetings/sbi/sbi-01/insession",
+        "code"    : "SBSTTA-20",
+        "title"   : "SBSTTA-20 In-Session Documents",
+        "baseUrl" : "/doc/meetings/sbstta/sbstta-20/insession",
         "list"    : true,
         "print"   : true,
         "sections" : [
