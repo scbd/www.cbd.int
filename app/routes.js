@@ -58,7 +58,7 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
       $("base").attr('href', '/schedules/'); // allow full page reload outside of  /insession/*
 
       routeProvider
-          .when('/',       { templateUrl: 'views/schedules/index.html', controllerAs: 'indexCtrl', resolveController: true });
+          .when('/',       { templateUrl: 'views/schedules/index.html', controllerAs: 'indexCtrl', resolveController: true, progress : { stop : false } });
   }
     //============================================================
     //

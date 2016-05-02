@@ -1,4 +1,4 @@
-<div ng-init="levels={ warning : 'warning', alert : 'danger' } ">
+<div>
     <style>
         .announcement h1,
         .announcement h2,
@@ -26,83 +26,97 @@
             border: none !important;
         }
 
-        .schedule .schedule-item:not(.success):not(.info):not(.warning):not(.danger)  > td > table {
+        .schedule .schedule-item:not(.warning):not(.alert)  > td > table {
             background-color: inherit;
         }
 
         .schedule .schedule-item  .schedule-item-message {
             text-align: center;
-            font-size: 80%;
             font-weight: bold;
             margin-top: 7px;
+            color:#555;
         }
+
+        .schedule .schedule-item.warning > td { background-color:#F7ECB5; }
+        .schedule .schedule-item.alert   > td { background-color:#F7B6B6; }
 
 
     </style>
 
-    <div class="row" ng-if="(indexCtrl.frames | filter: { 'content' : { 'type':'schedule'} }).length">
-
-        <div class="col-xs-12">
-            <h1>Daily Schedule</h1>
-        </div>
-
-        <div class="col-xs-12 schedule" ng-repeat="frame in (indexCtrl.frames | filter: { 'content' : { 'type':'schedule'} })">
-            <h2>{{frame.content.title}}</h2>
-            <table class="table table-striped">
-                <tr class="schedule-item {{levels[r.message.level]}}" ng-repeat="r in frame.reservations">
-                    <td class="schedule-item">
-                        <table class="table">
-                            <tr>
-                                <td class="schedule-item-time text-right" class="text-nowrap" style="width:55px">
-                                    <div class="text-primary">{{r.start | moment:'tz':indexCtrl.event.timezone | moment:'format':'H:mm'}}</div>
-                                    <div class="small text-muted">
-                                        <span ng-hide="indexCtrl.types[r.type].closed">Open</span>
-                                        <span ng-show="indexCtrl.types[r.type].closed">Closed</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="schedule-item-type pull-right">
-                                        <span class="text-{{indexCtrl.types[r.type].style}}">{{indexCtrl.types[r.type].title}}</span>
-                                        <div  ng-if="r.sideEvent" class="side-event-id hidden-xs text-muted text-right"><em>#{{r.sideEvent.id}}</em></div>
-                                    </div>
-
-                                    <div class="schedule-item-location">
-                                        <b class="room">{{indexCtrl.rooms[r.location.room].title}}</b>
-                                        <em class="small text-muted">{{indexCtrl.rooms[r.location.room].location}}</em>
-                                    </div>
-
-                                    <div class="schedule-item-title">
-                                        {{r.sideEvent.title || r.title}}
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <div ng-if="r.message.text" class="schedule-item-message">{{r.message.text}}</div>
-
-                    </td>
-                </tr>
-                <tr><td></td></tr>
-            </table>
-        </div>
-    </div>
-
-
-    <div class="row" ng-if="(indexCtrl.frames | filter: { 'content' : { 'type':'announcement'} }).length">
-
-        <div class="col-xs-12">
-            <h1>Announcements</h1>
-        </div>
-    </div>
-
     <div class="row">
-        <div class="col-xs-12 announcement" ng-repeat="frame in (indexCtrl.frames | filter: { 'content' : { 'type':'announcement'} })">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div ng-bind-html="frame.content.html | sanitizeHtml | safeHtml">
+
+        <div class="pull-right hidden-xs" style="margin:15px;margin-top:24px">
+            <input type="text" class="form-control" ng-model="search" placeholder="Search...">
+        </div>
+
+        <div ng-if="(indexCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } }).length">
+
+            <div class="col-sm-8 col-xs-12">
+                <h1>Daily Schedule</h1>
+            </div>
+
+            <div class="col-xs-12 schedule" ng-repeat="frame in (indexCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } })">
+                <h2 class="pull-right"><small ng-if="indexCtrl.now"><em>Current time</em> <b>{{indexCtrl.now | moment:'tz':indexCtrl.event.timezone | moment:'format':'H:mm'}}</b></small></h2>
+                <h2>{{frame.content.title}}</h2>
+                <p class="alert alert-info" ng-if="(frame.reservations | filter:{ type : { _id: '570fd0a52e3fa5cfa61d90ee' } }).length">
+                    <a href='/side-events'  style="color:inherit">For a detailed and complete list of side-events, please click here to visit the CBD Side-Events page</a>.
+                </p>
+                <table class="table table-striped">
+                    <tr class="schedule-item {{r.message.level}}" ng-repeat="r in frame.reservations | filter:search">
+                        <td>
+                            <table class="table">
+                                <tr>
+                                    <td class="schedule-item-time text-right" class="text-nowrap" style="width:55px">
+                                        <div class="text-primary"><b>{{r.start | moment:'tz':indexCtrl.event.timezone | moment:'format':'H:mm'}}</b></div>
+                                        <div class="small text-muted">
+                                            <span ng-hide="r.type.closed">Open</span>
+                                            <span ng-show="r.type.closed">Closed</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="schedule-item-type pull-right">
+                                            <span class="text-{{r.type.style}}">{{r.type.title}}</span>
+                                            <div  ng-if="r.sideEvent" class="side-event-id hidden-xs text-muted text-right"><em>#{{r.sideEvent.id}}</em></div>
+                                        </div>
+
+                                        <div class="schedule-item-location">
+                                            <b class="room">{{r.room.title}}</b>
+                                            <em class="small text-muted">{{r.room.location}}</em>
+                                        </div>
+
+                                        <div class="schedule-item-title">
+                                            {{r.sideEvent.title || r.title}}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div ng-if="r.message.text" class="schedule-item-message">{{r.message.text}}</div>
+
+                        </td>
+                    </tr>
+                    <tr><td></td></tr>
+                </table>
+            </div>
+        </div>
+
+
+        <div ng-if="(indexCtrl.frames | filter: { 'content' : { 'type':'announcement', html : search } }).length">
+
+            <div class="col-sm-8 col-xs-12">
+                <h1>Announcements</h1>
+            </div>
+        </div>
+
+        <div>
+            <div class="col-xs-12 announcement" ng-repeat="frame in (indexCtrl.frames | filter: { 'content' : { 'type':'announcement', html : search} })">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div ng-bind-html="frame.content.html | sanitizeHtml | safeHtml">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
+    </div>
 </div>
