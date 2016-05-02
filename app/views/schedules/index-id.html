@@ -49,14 +49,14 @@
             <input type="text" class="form-control" ng-model="search" placeholder="Search...">
         </div>
 
-        <div ng-if="(indexCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } }).length">
+        <div ng-if="(indexIdCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } }).length">
 
             <div class="col-sm-8 col-xs-12">
                 <h1>Daily Schedule</h1>
             </div>
 
-            <div class="col-xs-12 schedule" ng-repeat="frame in (indexCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } })">
-                <h2 class="pull-right"><small ng-if="indexCtrl.now"><em>Current time</em> <b>{{indexCtrl.now | moment:'tz':indexCtrl.event.timezone | moment:'format':'H:mm'}}</b></small></h2>
+            <div class="col-xs-12 schedule" ng-repeat="frame in (indexIdCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } })">
+                <h2 class="pull-right"><small ng-if="indexIdCtrl.now"><em>Current time</em> <b>{{indexIdCtrl.now | moment:'tz':indexIdCtrl.event.timezone | moment:'format':'H:mm'}}</b></small></h2>
                 <h2>{{frame.content.title}}</h2>
                 <p class="alert alert-info" ng-if="(frame.reservations | filter:{ type : { _id: '570fd0a52e3fa5cfa61d90ee' } }).length">
                     <a href='/side-events'  style="color:inherit">For a detailed and complete list of side-events, please click here to visit the CBD Side-Events page</a>.
@@ -67,7 +67,7 @@
                             <table class="table">
                                 <tr>
                                     <td class="schedule-item-time text-right" class="text-nowrap" style="width:55px">
-                                        <div class="text-primary"><b>{{r.start | moment:'tz':indexCtrl.event.timezone | moment:'format':'H:mm'}}</b></div>
+                                        <div class="text-primary"><b>{{r.start | moment:'tz':indexIdCtrl.event.timezone | moment:'format':'H:mm'}}</b></div>
                                         <div class="small text-muted">
                                             <span ng-hide="r.type.closed">Open</span>
                                             <span ng-show="r.type.closed">Closed</span>
@@ -101,7 +101,7 @@
         </div>
 
 
-        <div ng-if="(indexCtrl.frames | filter: { 'content' : { 'type':'announcement', html : search } }).length">
+        <div ng-if="(indexIdCtrl.frames | filter: { 'content' : { 'type':'announcement', html : search } }).length">
 
             <div class="col-sm-8 col-xs-12">
                 <h1>Announcements</h1>
@@ -109,7 +109,7 @@
         </div>
 
         <div>
-            <div class="col-xs-12 announcement" ng-repeat="frame in (indexCtrl.frames | filter: { 'content' : { 'type':'announcement', html : search} })">
+            <div class="col-xs-12 announcement" ng-repeat="frame in (indexIdCtrl.frames | filter: { 'content' : { 'type':'announcement', html : search} })">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div ng-bind-html="frame.content.html | sanitizeHtml | safeHtml">
