@@ -7,6 +7,10 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
         $locationProvider.html5Mode(true);
         $locationProvider.hashPrefix('!');
 
+        // /decisions/*
+        if(/^\/decisions($|\/.*)/.test(locationPath))
+            registerRoutes_Decisions($routeProvider);
+
         // /management/decisions/*
         if(/^\/management\/decisions($|\/.*)/.test(locationPath))
             registerRoutes_Decisions($routeProvider);
@@ -28,6 +32,20 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
   //
   //============================================================
   function registerRoutes_Decisions(routeProvider) {
+
+      $('base').attr('href', '/decisions/'); // allow full page reload outside of  /decisions/*
+
+      //routeProvider.when('/cop', { templateUrl: 'views/decisions/search.html', resolveController: true });
+      routeProvider.when('/cop/:session', { templateUrl: 'views/decisions/list.html', resolveController: true });
+      routeProvider.when('/cop/:session/:element', { templateUrl: 'views/decisions/view.html', resolveController: true });
+      //routeProvider.when('/', { templateUrl: 'views/decisions/search.html', resolveController: true });
+  }
+
+  //============================================================
+  //
+  //
+  //============================================================
+  function registerRoutes_ManagementDecisions(routeProvider) {
 
       $("base").attr('href', '/management/decisions/'); // allow full page reload outside of  /decisions/*
 

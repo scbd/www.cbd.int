@@ -1,0 +1,54 @@
+<style>
+BODY {
+	height:10000px;
+	-webkit-font-smoothing:antialiased;
+}
+</style>
+<div>
+
+	<ol class="breadcrumb">
+		<li><a href="#">Home</a></li>
+		<li><a href="/decisions/cop">Decisions</a></li>
+		<li class="active">COP-8</li>
+	</ol>
+		<h1>COP-8 Decisions</h1>
+
+	<div class="row">
+  		<div class="col-md-7">
+			<table class="table table-striped" style="margin-top:30px">
+				<tr>
+					<th>Symbol</th>
+		            <th>Title</th>
+				</tr>
+				<tr ng-repeat="decision in decisions">
+					<td nowrap>
+		                <div><a href="/decisions/cop/8/{{decision.number}}"><strong>{{decision.symbol}}</strong></a></div>
+					</td>
+		            <td>
+		                <div>{{decision.title}}</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+  		<div class="col-md-5">
+			<dl>
+			  <dt>Treaty</dt>
+			  <dd>Convention on Biological Diversity (CBD)</dd><br>
+
+			  <dt>Body</dt>
+			  <dd>Conference of the Parties (COP)</dd><br>
+
+			  <dt>Meeting</dt>
+			  <dd>Eight meeting of the Conference of the Parties to the Convention on Biological Diversity</dd><br>
+
+			  <dt>Dates and Venue</dt>
+			  <dd><i class="fa fa-calendar-o" aria-hidden="true"></i> 20 - 31 March 2006</dd>
+			  <dd><i class="fa fa-map-marker" aria-hidden="true"></i> Curitiba, Brazil</dd><br>
+
+			  <dt>Documents</dt>
+			  <dd><a href="https://www.cbd.int/doc/?meeting=COP-08">Go to meeting documents...</a></dd>
+			</dl>
+	  </div>
+  </div>
+
+</div>
