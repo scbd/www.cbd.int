@@ -142,9 +142,14 @@ define(['app', 'underscore'], function(app, _) { 'use strict';
             if(!$scope.list)
                 $scope.filter('current', 1);
         });
-
+console.log(elementLevel2)
         if(!$scope.list) {
             window.scrollTo(0, 0);
+console.log(elementLevel2)
+            $scope.paragraph = parseInt(elementLevel2);
+
+            if(elementLevel3!='00')
+                $scope.paragraph += ' item ('+String.fromCharCode(96+parseInt(elementLevel3))+')';
         }
 
         $scope.filter = function (cls, duration) {
