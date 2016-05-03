@@ -52,10 +52,6 @@ define(['app', 'underscore'], function(app, _) { 'use strict';
 
                 if(type=='information') type = 'informational';
 
-
-                if(info.data)
-                console.log(info.data.code, routeCode)
-
                 if(info.data && info.data.code==routeCode) {
                     $(this).addClass('current');
                     $scope.current = info;
@@ -142,10 +138,10 @@ define(['app', 'underscore'], function(app, _) { 'use strict';
             if(!$scope.list)
                 $scope.filter('current', 1);
         });
-console.log(elementLevel2)
+
         if(!$scope.list) {
             window.scrollTo(0, 0);
-console.log(elementLevel2)
+
             $scope.paragraph = parseInt(elementLevel2);
 
             if(elementLevel3!='00')
