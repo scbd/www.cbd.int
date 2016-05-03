@@ -4,8 +4,6 @@ define(['app', 'underscore'], function(app, _) { 'use strict';
 
         $scope.session      = $route.current.params.session;
         $scope.session0     = $scope.session>9 ? '' : '0' + $scope.session;
-        $scope.decision     = $route.current.params.element;
-        $scope.decision0    = $scope.decision>9 ? '' : '0' + $scope.decision;
         $scope.element      = $route.current.params.element;
         $scope.infoCount    = 0;
         $scope.operCount    = 0;
@@ -14,18 +12,25 @@ define(['app', 'underscore'], function(app, _) { 'use strict';
 
         $scope.list = !$route.current.params.element.includes('.');
 
-        var decision  = $scope.decision.match(/^[0-9]+/)[0];
-        var paragraph = $scope.decision.match(/^[0-9]+.(.*)/);
+        var elements  = $route.current.params.element.match(/^([0-9]+)(?:\.([0-9]+)(?:\.([0-9]+))?)?/);
+        var routeCode = 'CBD/COP/'+$scope.session0;
 
-        if(paragraph && paragraph.length)
-            paragraph = paragraph[1];
+        var elementLevel1 = elements[1] ? elements[1] : '0';
+        var elementLevel2 = elements[2] ? elements[2] : '0';
+        var elementLevel3 = elements[3] ? elements[3] : '0';
 
-        $scope.decision = decision;
-        $scope.paragraph = paragraph;
+        if(elementLevel1.length<2) elementLevel1 = '0' + elementLevel1;
+        if(elementLevel2.length<2) elementLevel2 = '0' + elementLevel2;
+        if(elementLevel3.length<2) elementLevel3 = '0' + elementLevel3;
 
-        var code = romanize($scope.session)+'/'+decision; // e.g. VIII/2
+        if(elementLevel1!='00') routeCode += '/' + elementLevel1;
+        if(elementLevel2!='00') routeCode += '.' + elementLevel2;
+        if(elementLevel3!='00') routeCode += '.' + elementLevel3;
 
-        $http.get('https://api.cbd.int/api/v2015/tests?q={%22decision%22:%22'+code+'%22}&fo=1'/*, { params : query }*/).then(function(res) {
+        $scope.decision  = parseInt(elementLevel1);
+        $scope.decision0 = elementLevel1;
+
+        $http.get('https://api.cbd.int/api/v2015/tests?q={%22decision%22:%22'+romanize($scope.session)+'/'+$scope.decision+'%22}&fo=1'/*, { params : query }*/).then(function(res) {
 
             $('#content').html(res.data.content);
 
@@ -47,7 +52,11 @@ define(['app', 'underscore'], function(app, _) { 'use strict';
 
                 if(type=='information') type = 'informational';
 
-                if(info.paragraph==paragraph) {
+
+                if(info.data)
+                console.log(info.data.code, routeCode)
+
+                if(info.data && info.data.code==routeCode) {
                     $(this).addClass('current');
                     $scope.current = info;
                 }
