@@ -148,6 +148,9 @@ define(['app', 'underscore'], function(app, _) { 'use strict';
                 $scope.paragraph += ' item ('+String.fromCharCode(96+parseInt(elementLevel3))+')';
         }
 
+        if($scope.list) $scope.$root.page   = { title: 'Decision '+romanize($scope.session)+'/'+$scope.decision };
+        else            $scope.$root.page   = { title: 'Paragraph '+$scope.paragraph };
+
         $scope.filter = function (cls, duration) {
 
             $scope.filtered = true;

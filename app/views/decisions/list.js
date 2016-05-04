@@ -3,6 +3,8 @@ define(['app', 'underscore'], function(app, _) { 'use strict';
     return ['$scope', '$http', '$route', '$location', '$filter', '$q', function($scope, $http, $route, $location, $filter, $q) {
 
         $scope.decisions = decisions;
+
+        $scope.$root.page = { title: 'COP-8 Decisions' };
     }];
 });
 
