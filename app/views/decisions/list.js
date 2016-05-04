@@ -183,6 +183,10 @@ decisions = { '8': [{
         symbol: "Decision IX/9",
         title:  "Process for the revision of the Strategic Plan"
     }, {
+        number:  10,
+        symbol: "Decision IX/10",
+        title:  "Preparation of the third edition of the Global Biodiversity Outlook"
+    }, {
         number:  11,
         symbol: "Decision IX/11",
         title:  "Review of implementation of Articles 20 and 21"
