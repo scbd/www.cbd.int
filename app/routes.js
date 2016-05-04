@@ -13,7 +13,7 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
 
         // /management/decisions/*
         if(/^\/management\/decisions($|\/.*)/.test(locationPath))
-            registerRoutes_Decisions($routeProvider);
+            registerRoutes_ManagementDecisions($routeProvider);
 
         // /insession/*
         if(/^\/insession($|\/.*)/.test(locationPath))
