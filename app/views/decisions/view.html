@@ -173,21 +173,31 @@
 
 				<dt>Document</dt>
 				<dd>UNEP/CBD/COP/DEC/{{romanize(session)}}/{{decision}}</dd>
-				<dd><img src="https://www.cbd.int/images/pdf_button.png">
-					<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-ar.doc">اللغة العربية</a> |
-					<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-en.doc">english</a> |
-					<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-es.doc">español</a> |
-					<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-fr.doc">français</a> |
-					<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-ru.doc">русский</a> |
-					<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-zh.doc">中文</a>
-					<br>
-					<img src="https://www.cbd.int/cms/images/icon-doc.gif">
-					<a href="#">اللغة العربية</a> |
-					<a href="#">english</a> |
-					<a href="#">español</a> |
-					<a href="#">français</a> |
-					<a href="#">русский</a> |
-					<a href="#">中文</a><br>
+				<dd>
+					<div ng-if="session==8">
+						<img src="https://www.cbd.int/images/pdf_button.png">
+						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-en.pdf">english</a>
+						<br>
+						<img src="https://www.cbd.int/cms/images/icon-doc.gif">
+						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-en.doc">english</a>
+					</div>
+					<div ng-if="session==9">
+						<img src="https://www.cbd.int/images/pdf_button.png">
+						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-ar.pdf">اللغة العربية</a> |
+						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-en.pdf">english</a> |
+						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-es.pdf">español</a> |
+						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-fr.pdf">français</a> |
+						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-ru.pdf">русский</a> |
+						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-zh.pdf">中文</a>
+						<br>
+						<img src="https://www.cbd.int/cms/images/icon-doc.gif">
+						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-ar.doc">اللغة العربية</a> |
+						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-en.doc">english</a> |
+						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-es.doc">español</a> |
+						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-fr.doc">français</a> |
+						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-ru.doc">русский</a> |
+						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-zh.doc">中文</a>
+					</div>
 				</dd>
 				<br>
 			</dl>
