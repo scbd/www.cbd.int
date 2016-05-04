@@ -9,9 +9,9 @@ BODY {
 	<ol class="breadcrumb">
 		<li><a href="#">Home</a></li>
 		<li><a href="/decisions/cop">Decisions</a></li>
-		<li class="active">COP-8</li>
+		<li class="active">COP-{{session}}</li>
 	</ol>
-		<h1>COP-8 Decisions</h1>
+		<h1>COP-{{session}} Decisions</h1>
 
 	<div class="row">
   		<div class="col-md-7">
@@ -22,7 +22,7 @@ BODY {
 				</tr>
 				<tr ng-repeat="decision in decisions">
 					<td nowrap>
-		                <div><a href="/decisions/cop/8/{{decision.number}}"><strong>{{decision.symbol}}</strong></a></div>
+		                <div><a href="/decisions/cop/{{session}}/{{decision.number}}"><strong>{{decision.symbol}}</strong></a></div>
 					</td>
 		            <td>
 		                <div>{{decision.title}}</div>
@@ -39,14 +39,18 @@ BODY {
 			  <dd>Conference of the Parties (COP)</dd><br>
 
 			  <dt>Meeting</dt>
-			  <dd>Eight meeting of the Conference of the Parties to the Convention on Biological Diversity</dd><br>
+			  <dd ng-if="session==8">Eight meeting of the Conference of the Parties to the Convention on Biological Diversity</dd><br>
+			  <dd ng-if="session==9">Ninth meeting of the Conference of the Parties to the Convention on Biological Diversity</dd><br>
 
 			  <dt>Dates and Venue</dt>
-			  <dd><i class="fa fa-calendar-o" aria-hidden="true"></i> 20 - 31 March 2006</dd>
-			  <dd><i class="fa fa-map-marker" aria-hidden="true"></i> Curitiba, Brazil</dd><br>
+			  <dd ng-if="session==8"><i class="fa fa-calendar-o" aria-hidden="true"></i> 20 - 31 March 2006</dd>
+			  <dd ng-if="session==8"><i class="fa fa-map-marker" aria-hidden="true"></i> Curitiba, Brazil</dd>
+			  <dd ng-if="session==9"><i class="fa fa-calendar-o" aria-hidden="true"></i> 19 - 30 May 2008</dd>
+			  <dd ng-if="session==9"><i class="fa fa-map-marker" aria-hidden="true"></i> Bonn, Germany</dd>
+			  <br>
 
 			  <dt>Documents</dt>
-			  <dd><a href="https://www.cbd.int/doc/?meeting=COP-08">Go to meeting documents...</a></dd>
+			  <dd><a href="https://www.cbd.int/doc/?meeting=COP-0{{session}}">Go to meeting documents...</a></dd>
 			</dl>
 	  </div>
   </div>
