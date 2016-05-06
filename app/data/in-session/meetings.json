@@ -4,7 +4,7 @@
         "title"   : "SBI-01 In-Session Documents",
         "baseUrl" : "/doc/meetings/sbi/sbi-01/insession",
         "list"    : true,
-        "print"   : true,
+        "print"   : false,
         "sections" : [
             { "code" : "plenary", "open" : true, "title" : "Plenary" },
             { "code" : "other",   "open" : true, "title" : "Other documents" }
@@ -15,7 +15,7 @@
         "title"   : "SBSTTA-20 In-Session Documents",
         "baseUrl" : "/doc/meetings/sbstta/sbstta-20/insession",
         "list"    : true,
-        "print"   : true,
+        "print"   : false,
         "sections" : [
             { "code" : "plenary", "open" : true, "title" : "Plenary" },
             { "code" : "other",   "open" : true, "title" : "Other documents" }
