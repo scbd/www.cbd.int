@@ -32,6 +32,7 @@ define(['app', 'text!./print-dialog.html','angular', 'underscore', 'ngCookies'],
 				$scope.allLanguages    = allLanguages;
 				$scope.documentLocales = [];
 				$scope.locales         = {};
+                $scope.focus           = focus;
 
 				element.on("show.bs.modal", function() {
                     $scope.badgeCode = "";
@@ -45,6 +46,8 @@ define(['app', 'text!./print-dialog.html','angular', 'underscore', 'ngCookies'],
 					if($scope.documentLocales.length==1)
 						$scope.locales[$scope.documentLocales[0]] = true;
 				});
+
+				element.on("shown.bs.modal", focus);
 
 				//==============================================
 				//
@@ -61,6 +64,14 @@ define(['app', 'text!./print-dialog.html','angular', 'underscore', 'ngCookies'],
 				function clearError() {
 					$scope.error = null;
 				}
+
+				//==============================================
+				//
+				//
+				//==============================================
+                function focus() {
+                    element.find('#badgeCode:visible').focus();
+                }
 
 				//==============================================
 				//
@@ -84,6 +95,14 @@ define(['app', 'text!./print-dialog.html','angular', 'underscore', 'ngCookies'],
 				//==============================================
 				$scope.hasPrintShop = function() {
 					return $cookies.get("printShop")=="true" && (typeof(Storage) !== "undefined");
+				};
+
+				//==============================================
+				//
+				//
+				//==============================================
+				$scope.hasLocales = function() {
+					return _.some(_.values($scope.locales||{}));
 				};
 
 				//==============================================
@@ -136,6 +155,9 @@ define(['app', 'text!./print-dialog.html','angular', 'underscore', 'ngCookies'],
 				//==============================================
 				$scope.print = function() {
 
+                    if($scope.printForm.$invalid)
+                        return;
+
 					$scope.error = null;
 					$scope.success = null;
 
@@ -187,6 +209,8 @@ define(['app', 'text!./print-dialog.html','angular', 'underscore', 'ngCookies'],
 				//==============================================
 				$scope.back = function() {
 
+                    setUnsubmited();
+
 					$scope.error   = null;
 					$scope.success = null;
 
@@ -200,11 +224,23 @@ define(['app', 'text!./print-dialog.html','angular', 'underscore', 'ngCookies'],
 				//==============================================
 				function close(clear) {
 
+                    setUnsubmited();
+
 					if(!!clear)
 						psCtrl.clear();
 
 					return psCtrl.close();
 				}
+
+				//==============================================
+				//
+				//
+				//==============================================
+                function setUnsubmited() {
+
+                    element.find("form").removeClass('ng-submitted');
+                    $scope.printForm.$submitted = false;
+                }
 			}
 		};
 	}]);

@@ -13,38 +13,40 @@
 			</div>
 			<div class="modal-body">
 
-				<form class="form-horizontal" ng-hide="success">
+				<form id="printForm" name="printForm" novalidate class="form-horizontal" ng-submit="print()" ng-hide="success">
 
-					<div class="form-group">
+					<div class="form-group" ng-class="{ 'has-warning' : (printForm.$submitted && printForm.locales.$error.required) }">
 						<label for="preferedLanguage" class="col-sm-4 control-label">Prefered language(s)</label>
 						<div class="col-sm-6">
 							<div class="row">
 								<div ng-repeat="locale in documentLocales" class="col-sm-6 col-xs-6">
-									<a class="btn btn-link" ng-click="locales[locale] = !locales[locale]" style="color:black;text-decoration:none;text-align:left" ng-class="{ opacity55: !locales[locale] }" >
+									<a class="btn btn-link" ng-click="locales[locale] = !locales[locale]; focus()" style="color:black;text-decoration:none;text-align:left" ng-class="{ opacity55: !locales[locale] }" >
 										<i class="fa fa-square-o"       ng-hide="locales[locale]" style="font-size:20px;width:20px"></i>
 										<i class="fa fa-check-square-o" ng-show="locales[locale]" style="font-size:20px;width:20px"></i>
 										{{allLanguages[locale]}}
 									</a>
+                                    <input name="locales" ng-show="false" type="checkbox" ng-required="!hasLocales()" ng-model="locales[locale]">
 								</div>
 							</div>
 
-							<span class="help-block hidden-xs">Select at least one language.</span>
+							<span class="help-block" ng-show="printForm.$submitted && printForm.locales.$error.required">Select at least one language.</span>
 
 						</div>
+
 					</div>
 
-
-					<div class="form-group" ng-class="{ 'has-error' : error && error.error=='INVALID_BADGE_ID', 'has-warning' : cleanBadge().length>0 && cleanBadge().length<8 }">
+					<div class="form-group" ng-class="{ 'has-warning' : error.error=='INVALID_BADGE_ID' || (printForm.$submitted && (printForm.badgeCode.$error.required || printForm.badgeCode.$error.pattern)) }">
 						<label for="badgeCode" class="col-sm-4 control-label">Badge number</label>
 						<div class="col-sm-6">
-							<input type="text" ng-change="clearError()" class="form-control" id="badgeCode" placeholder="1234-5678" maxlength="9" ng-model="badgeCode">
-							<span class="help-block hidden-xs">Enter badge number to request printed hard copies.</span>
+							<input type="text" required ng-change="clearError()" class="form-control" id="badgeCode" name="badgeCode" placeholder="1234-5678" maxlength="9" ng-model="badgeCode" pattern="[0-9\-]{8,9}">
+							<span class="help-block"ng-show="printForm.$submitted && (printForm.badgeCode.$error.required||printForm.badgeCode.$error.pattern)">Enter badge number to request printed hard copies.</span>
 						</div>
 					</div>
+
 
 				</form>
 
-				<div class="alert alert-danger" ng-show="error" ng-switch="error.error">
+				<div class="alert alert-warning" ng-show="error" ng-switch="error.error">
 
 					<span ng-switch-when="INVALID_BADGE_ID">
 						<img style="margin:3px" class="pull-right" src="/app/images/sample-barcode.png">
@@ -92,7 +94,7 @@
 
 				<button type="button" ng-hide="success"                    class="btn btn-default hidden-xs" ng-click="back()"  ng-disabled="loading">                   <i class="fa fa-arrow-left"></i> Back</button>
 				<button type="button" ng-show="!success && hasPrintShop()" class="btn btn-success" ng-click="printShop()"       ng-disabled="!canPrintShop() || loading"><i class="fa fa-print"></i> <i class="fa fa-print"></i> <i class="fa fa-print"></i> Print Shop</button>
-				<button type="button" ng-show="!success"                   class="btn btn-primary" ng-click="print()"           ng-disabled="!canPrint()     || loading"><i class="fa fa-print"></i> Print</button>
+				<button type="submit" ng-show="!success"                   class="btn btn-primary" form="printForm"             ng-class="{ disabled : !canPrint() }" ng-disabled="loading"><i class="fa fa-print"></i> Print</button>
 				<button type="button"                                      class="btn btn-default" ng-click="close(success)"    ng-disabled="loading">                   <i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
 
 			</div>
