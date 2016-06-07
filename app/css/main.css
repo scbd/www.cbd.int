@@ -8044,16 +8044,6 @@ p.disclaimer {
   font-size: 0.9em;
 }
 
-/* line 1, reports/growl.scss */
-.growl {
-  width: 50%;
-  position: fixed;
-  left: 50%;
-  margin: 0 0 0 -25%;
-  top: 10%;
-  z-index: 9999;
-}
-
 /* line 1, reports/maps.scss */
 .scrollFix {
   overflow: auto;
