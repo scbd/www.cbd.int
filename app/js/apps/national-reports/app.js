@@ -2,12 +2,11 @@ define([
     'angular',
     'ngRoute',
     'ngCookies',
-    'angularMoment',
     'ngAnimate',
     'bootstrap',
     'directives/ui-bootstrap-custom'], function(angular) { 'use strict';
 
-    var deps = ['ngRoute', 'ngCookies', 'ngAnimate', 'angularMoment', 'ui.bootstrap'];
+    var deps = ['ngRoute', 'ngCookies', 'ngAnimate', 'ui.bootstrap'];
 
     angular.defineModules(deps);
 
