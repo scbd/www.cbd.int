@@ -1,0 +1,14 @@
+<div>
+	<p>
+		<span ng-repeat="actor in actors" class="pull-right label label-default" style="opacity:0.5;margin-right:6px">
+			<i class="fa fa-user" aria-hidden="true"></i> {{actor}}
+		</span>
+		<span ng-repeat="status in statuses" class="pull-right label label-default" style="opacity:0.5;margin-right:6px">
+			<i class="fa fa-circle" aria-hidden="true"></i> {{status}}
+		</span>
+		<a type="button" class="btn btn-primary btn-xs" href="/decisions/cop/{{session}}/{{decision}}.{{section}}{{code}}">
+			<i class="fa fa-search" aria-hidden="true"></i> {{name}}
+		</a>
+	</p>
+	<div ng-transclude></div>
+</div>
