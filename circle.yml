@@ -13,3 +13,14 @@ test:
     - docker run -d -p 8000:8000 www-cbd-int; sleep 10
     - curl --retry 10 --retry-delay 5 -v http://localhost:8000/insession/
     - curl --retry 10 --retry-delay 5 -v http://localhost:8000/reports/map/
+
+deployment:
+  hub:
+    tag: /release-.*/
+    owner: scbd
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag www-cbd-int scbd/www-cbd-int:${CIRCLE_TAG//release\-v/}
+      - docker tag www-cbd-int scbd/www-cbd-int:latest
+      - docker push scbd/www-cbd-int:${CIRCLE_TAG//release\-v/}
+      - docker push scbd/www-cbd-int:latest
