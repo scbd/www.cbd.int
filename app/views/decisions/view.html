@@ -53,41 +53,33 @@
 		line-height: normal;
     }
 
-	.document {
+    .document.panel {
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    }
+
+    .document.panel > .panel-heading {
+        font-weight: bold;
+    }
+
+    .document.panel > .panel-body {
 		color:#111;
 		-webkit-font-smoothing:antialiased;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 		font-family: "Times New Roman"
     }
 
-	.document-header {
-		margin-top:6px;
-        background-color:#033957!important;
-        color:white!important;
-        font-family: "Helvetica Neue", Helvetica, sans-serif, "Trebuchet MS";
-        font-size: 14px;
-        font-weight: bold;
-        padding: 10px 16px;
-        box-shadow: 0 0 6px rgba(0, 0, 0, 0.16), 0 0 6px rgba(0, 0, 0, 0.23);
-        border-bottom-color: rgb(221, 221, 221);
-        border-bottom-style: solid;
-        border-bottom-width: 1px;
-        border-left-color: rgb(221, 221, 221);
-        border-right-color: rgb(221, 221, 221);
-        border-top-color: rgb(221, 221, 221);
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-    }
-
-	.document a.btn {
+	.document.panel > .panel-body a.btn {
 		font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 		font-weight: bold
     }
 
-	.document span.label {
+	.document.panel > .panel-body span.label {
 		font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 		font-weight: bold
 	}
+
+    .label.disabled {
+        opacity: 0.5;
+    }
 
 	element.current {
 		border-color: #5bc0de;
@@ -119,23 +111,28 @@
 		<li class="active">Paragraph {{paragraph}}</li>
 	</ol>
 
-	<h1 ng-if='list'>Decision {{romanize(session)}}/{{decision}}</h1>
-	<h1 ng-if='!list'>Decision {{romanize(session)}}/{{decision}} paragraph {{paragraph}}</h1>
+	<h1>Decision {{romanize(session)}}/{{decision}}
+        <span ng-if="!list && section"> section {{section}}</span>
+        <span ng-if="!list && paragraph"> paragraph {{paragraph}}</span>
+        <span ng-if="!list && item"> item ({{item}})</span>
+    </h1>
 
 	<div class="row">
 		<div class="col-md-7">
-			<div class="document-header">
-				UNEP/CBD/COP/DEC/{{romanize(session)}}/{{decision}}
-				<a ng-show="filtered && list" class="pull-right label label-info" ng-click="removeFilter()" style="margin-top:2px">
-					<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> filtered <i class="fa fa-times" aria-hidden="true"></i>
-				</a>
-				<a ng-show="!list" href="/decisions/cop/{{session}}/{{decision}}" class="pull-right label label-info" style="margin-top:2px">
-					up <i class="fa fa-level-up" aria-hidden="true"></i></i>
-				</a>
-			</div>
-			<div class="document" style="padding:6px">
-				<div id='content' class='decision'></div>
-			</div>
+            <div class="document panel panel-primary">
+    			<div class="panel-heading">
+    				UNEP/CBD/COP/DEC/{{romanize(session)}}/{{decision}}
+    				<a ng-show="filters && list" class="pull-right label label-info" ng-click="filter(null)" style="margin-top:2px">
+    					<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> filtered <i class="fa fa-times" aria-hidden="true"></i>
+    				</a>
+    				<a ng-show="!list" href="/decisions/cop/{{session}}/{{decision}}" class="pull-right label label-info" style="margin-top:2px">
+    					up <i class="fa fa-level-up" aria-hidden="true"></i></i>
+    				</a>
+    			</div>
+    			<div class="panel-body">
+    				<div id='content' class='decision'></div>
+    			</div>
+            </div>
 		</div>
 		<div class="col-md-5" style="padding-top:16px" ng-if='list'>
 			<dl>
@@ -145,30 +142,31 @@
 
 				<dt>Meeting</dt>
 				<dd>COP-{{session}}</dd>
-				<dd ng-if="session==8"><i class="fa fa-calendar-o" aria-hidden="true"></i> 20 - 31 March 2006</dd>
-				<dd ng-if="session==8"><i class="fa fa-map-marker" aria-hidden="true"></i> Curitiba, Brazil</dd>
-				<dd ng-if="session==9"><i class="fa fa-calendar-o" aria-hidden="true"></i> 19 - 30 May 2008</dd>
-				<dd ng-if="session==9"><i class="fa fa-map-marker" aria-hidden="true"></i> Bonn, Germany</dd>
+				<dd ng-if="session==8"><i class="fa fa-fw fa-calendar-o" aria-hidden="true"></i> 20 - 31 March 2006</dd>
+				<dd ng-if="session==8"><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> Curitiba, Brazil</dd>
+				<dd ng-if="session==9"><i class="fa fa-fw fa-calendar-o" aria-hidden="true"></i> 19 - 30 May 2008</dd>
+				<dd ng-if="session==9"><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> Bonn, Germany</dd>
 				<br>
 
 				<dt>Elements of decision</dt>
 				<dd>
-					<a class="label label-default" ng-click="removeFilter()">{{infoCount+operCount}}</a>
-					<a class="label label-default" ng-click="filter('informational')">{{infoCount}} informational <i class="fa fa-filter" aria-hidden="true"></i></a>
-					<a class="label label-info" ng-click="filter('operational')">{{operCount}} operational <i class="fa fa-filter" aria-hidden="true"></i></a>
+					<a class="label label-default text-nowrap" ng-click="toggleFilters({ types: null })"              ng-class="{ disabled : filters &&   filters.types }">{{sumValues(typeCounts)}}</a>
+					<a class="label label-default text-nowrap" ng-click="toggleFilters({ types: ['informational'] })" ng-class="{ disabled : filters && (!filters.types || filters.types.indexOf('informational')<0) }">{{typeCounts.informational}} informational <i class="fa fa-filter" aria-hidden="true"></i></a>
+					<a class="label label-info    text-nowrap" ng-click="toggleFilters({ types: ['operational'  ] })" ng-class="{ disabled : filters && (!filters.types || filters.types.indexOf('operational'  )<0) }">{{typeCounts.operational}} operational <i class="fa fa-filter" aria-hidden="true"></i></a>
 				</dd>
 				<dd>
-					<a class="label label-default" ng-click="removeFilter()">{{infoCount+operCount}}</a>
-					<a class="label label-default" ng-click="filter('implemented')">{{statusCounts.implemented}} implemented <i class="fa fa-filter" aria-hidden="true"></i></a>
-					<a class="label label-default" ng-click="filter('superseded')">{{statusCounts.superseded}} superseded <i class="fa fa-filter" aria-hidden="true"></i></a>
-					<a class="label label-default" ng-click="filter('elapsed')">{{statusCounts.elapsed}} elapsed <i class="fa fa-filter" aria-hidden="true"></i></a>
-					<a class="label label-success" ng-click="filter('active')">{{statusCounts.active}} active <i class="fa fa-filter" aria-hidden="true"></i></a>
+					<a class="label label-default text-nowrap" ng-click="toggleFilters({ statuses : null })"            ng-class="{ disabled : filters &&  filters.statuses }">{{sumValues(statusCounts)}}</a>
+					<a class="label label-default text-nowrap" ng-click="toggleFilters({ statuses : ['implemented'] })" ng-class="{ disabled : filters && (!filters.statuses || filters.statuses.indexOf('implemented')<0) }" >{{statusCounts.implemented}} implemented <i class="fa fa-filter" aria-hidden="true"></i></a>
+					<a class="label label-default text-nowrap" ng-click="toggleFilters({ statuses : ['superseded']  })" ng-class="{ disabled : filters && (!filters.statuses || filters.statuses.indexOf('superseded' )<0) }" >{{statusCounts.superseded}} superseded <i class="fa fa-filter" aria-hidden="true"></i></a>
+					<a class="label label-default text-nowrap" ng-click="toggleFilters({ statuses : ['elapsed']     })" ng-class="{ disabled : filters && (!filters.statuses || filters.statuses.indexOf('elapsed'    )<0) }" >{{statusCounts.elapsed}} elapsed <i class="fa fa-filter" aria-hidden="true"></i></a>
+					<a class="label label-success text-nowrap" ng-click="toggleFilters({ statuses : ['active']      })" ng-class="{ disabled : filters && (!filters.statuses || filters.statuses.indexOf('active'     )<0) }" >{{statusCounts.active}} active <i class="fa fa-filter" aria-hidden="true"></i></a>
 				</dd>
 				<br>
 
 				<dt>Actors</dt>
 				<dd>
-					<span ng-repeat="item in actors"><a class="label label-default" ng-click="filter('actor-'+item)">{{item}} <i class="fa fa-filter" aria-hidden="true"></i>&nbsp;</a> </span>
+                    <a class="label label-default text-nowrap" ng-click="toggleFilters({ actors : null })" ng-class="{ disabled : filters &&  filters.actors }">{{sumValues(actorCounts)}}</a>
+					<span ng-repeat="item in actors"><a class="label label-default text-nowrap" ng-click="toggleFilters({ actors : [item] })" ng-class="{ disabled : filters && (!filters.actors || filters.actors.indexOf(item)<0) }">{{actorCounts[item]}} {{item}} <i class="fa fa-filter" aria-hidden="true"></i>&nbsp;</a> </span>
 				</dd>
 				<br>
 
@@ -176,28 +174,28 @@
 				<dd>UNEP/CBD/COP/DEC/{{romanize(session)}}/{{decision}}</dd>
 				<dd>
 					<div ng-if="session==8">
-						<img src="https://www.cbd.int/images/pdf_button.png">
-						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-en.pdf">english</a>
+						<i class="fa fa-fw fa-file-pdf-o" style="color:#ff0500"></i>
+						<a href="/doc/decisions/cop-{{pad0(session)}}/cop-{{pad0(session)}}-dec-{{pad0(decision)}}-en.pdf">english</a>
 						<br>
-						<img src="https://www.cbd.int/cms/images/icon-doc.gif">
-						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-en.doc">english</a>
+                        <i class="fa fa-fw fa-file-word-o" style="color:#265299"></i>
+						<a href="/doc/decisions/cop-{{pad0(session)}}/cop-{{pad0(session)}}-dec-{{pad0(decision)}}-en.doc">english</a>
 					</div>
 					<div ng-if="session==9">
-						<img src="https://www.cbd.int/images/pdf_button.png">
-						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-ar.pdf">اللغة العربية</a> |
-						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-en.pdf">english</a> |
-						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-es.pdf">español</a> |
-						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-fr.pdf">français</a> |
-						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-ru.pdf">русский</a> |
-						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-zh.pdf">中文</a>
+                        <i class="fa fa-fw fa-fw fa-file-pdf-o" style="color:#ff0000"></i>
+						<a href="/doc/decisions/cop-{{pad0(session)}}/cop-{{pad0(session)}}-dec-{{pad0(decision)}}-ar.pdf">اللغة العربية</a> |
+						<a href="/doc/decisions/cop-{{pad0(session)}}/cop-{{pad0(session)}}-dec-{{pad0(decision)}}-en.pdf">english</a> |
+						<a href="/doc/decisions/cop-{{pad0(session)}}/cop-{{pad0(session)}}-dec-{{pad0(decision)}}-es.pdf">español</a> |
+						<a href="/doc/decisions/cop-{{pad0(session)}}/cop-{{pad0(session)}}-dec-{{pad0(decision)}}-fr.pdf">français</a> |
+						<a href="/doc/decisions/cop-{{pad0(session)}}/cop-{{pad0(session)}}-dec-{{pad0(decision)}}-ru.pdf">русский</a> |
+						<a href="/doc/decisions/cop-{{pad0(session)}}/cop-{{pad0(session)}}-dec-{{pad0(decision)}}-zh.pdf">中文</a>
 						<br>
-						<img src="https://www.cbd.int/cms/images/icon-doc.gif">
-						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-ar.doc">اللغة العربية</a> |
-						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-en.doc">english</a> |
-						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-es.doc">español</a> |
-						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-fr.doc">français</a> |
-						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-ru.doc">русский</a> |
-						<a href="https://www.cbd.int/doc/decisions/cop-{{session0}}/cop-{{session0}}-dec-{{decision0}}-zh.doc">中文</a>
+                        <i class="fa fa-fw fa-fw fa-file-word-o" style="color:#265299"></i>
+						<a href="/doc/decisions/cop-{{pad0(session)}}/cop-{{pad0(session)}}-dec-{{pad0(decision)}}-ar.doc">اللغة العربية</a> |
+						<a href="/doc/decisions/cop-{{pad0(session)}}/cop-{{pad0(session)}}-dec-{{pad0(decision)}}-en.doc">english</a> |
+						<a href="/doc/decisions/cop-{{pad0(session)}}/cop-{{pad0(session)}}-dec-{{pad0(decision)}}-es.doc">español</a> |
+						<a href="/doc/decisions/cop-{{pad0(session)}}/cop-{{pad0(session)}}-dec-{{pad0(decision)}}-fr.doc">français</a> |
+						<a href="/doc/decisions/cop-{{pad0(session)}}/cop-{{pad0(session)}}-dec-{{pad0(decision)}}-ru.doc">русский</a> |
+						<a href="/doc/decisions/cop-{{pad0(session)}}/cop-{{pad0(session)}}-dec-{{pad0(decision)}}-zh.doc">中文</a>
 					</div>
 				</dd>
 				<br>
@@ -229,11 +227,11 @@
 				<br>
 
 				<dt>Type</dt>
-				<dd><span class="label label-info">{{current.data.type}}</span></dd>
+				<dd><span class="label label-default" ng-class="{ 'label-info' : current.data.type=='operational'}">{{current.data.type}}</span></dd>
 				<br>
 
 				<dt>Status</dt>
-				<dd ng-repeat="item in current.data.statuses"><span class="label label-info">{{item}}</span></dd>
+				<dd ng-repeat="item in current.data.statuses"><span class="label label-default" ng-class="{ 'label-success' : item=='active' }">{{item}}</span></dd>
 				<br>
 
 				<dt>Actors</dt>

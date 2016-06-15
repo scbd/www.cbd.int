@@ -1,14 +1,43 @@
 <div>
-	<p>
-		<span ng-repeat="actor in actors" class="pull-right label label-default" style="opacity:0.5;margin-right:6px">
-			<i class="fa fa-user" aria-hidden="true"></i> {{actor}}
-		</span>
-		<span ng-repeat="status in statuses" class="pull-right label label-default" style="opacity:0.5;margin-right:6px">
-			<i class="fa fa-circle" aria-hidden="true"></i> {{status}}
-		</span>
-		<a type="button" class="btn btn-primary btn-xs" href="/decisions/cop/{{session}}/{{decision}}.{{section}}{{code}}">
+
+	<span ng-if="type" class="pull-right label label-default" style="opacity:0.5;margin-right:6px"
+        ng-class="::{ 'label-info' : type=='operational' }">
+        <span ng-switch="::type|lowercase">
+            <span ng-switch-when="operational"><i class="fa fa-cog"></i> operational</span>
+            <span ng-switch-when="informational"><i class="fa fa-info-circle"></i> informational</span>
+            <span ng-switch-default>{{::type|uppercase}}</span>
+        </span>
+	</span>
+
+	<span ng-repeat="status in ::statuses" class="pull-right label label-default" style="opacity:0.5;margin-right:6px"
+        ng-class="::{ 'label-success' : status=='active' }">
+        <i class="fa fa-info-circle"></i>
+        <span ng-switch="::status|lowercase">
+            <span ng-switch-when="active">active</span>
+            <span ng-switch-when="implemented">implemented</span>
+            <span ng-switch-when="superseded">superseded</span>
+            <span ng-switch-when="elapsed">elapsed</span>
+            <span ng-switch-default>{{::status|uppercase}}</span>
+        </span>
+	</span>
+
+	<span ng-repeat="actor in ::actors" class="pull-right label label-default" style="opacity:0.5;margin-right:6px">
+		<i class="fa fa-user" aria-hidden="true"></i>
+        <span ng-switch="::actor|lowercase">
+            <span ng-switch-when="executive-secretary">es</span>
+            <span ng-switch-when="parties">parties</span>
+            <span ng-switch-when="other-governments">other governments</span>
+            <span ng-switch-when="others">others</span>
+            <span ng-switch-default>{{::actor}}</span>
+        </span>
+	</span>
+
+	<p ng-if="infoType=='paragraph'">
+		<a type="button" class="btn btn-primary btn-xs" href="/decisions/cop/{{::session}}/{{::decision}}.{{::section}}{{::code}}">
 			<i class="fa fa-search" aria-hidden="true"></i> {{name}}
 		</a>
 	</p>
+
 	<div ng-transclude></div>
+
 </div>
