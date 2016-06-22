@@ -36,8 +36,9 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
       $('base').attr('href', '/decisions/cop/'); // allow full page reload outside of  /decisions/*
 
       //routeProvider.when('/cop', { templateUrl: 'views/decisions/search.html', resolveController: true });
-      routeProvider.when('/:session', { templateUrl: 'views/decisions/list.html', resolveController: true });
-      routeProvider.when('/:session/:element', { templateUrl: 'views/decisions/view.html', resolveController: true });
+      routeProvider.when('/:session',                      { templateUrl: 'views/decisions/list.html', resolveController: true });
+      routeProvider.when('/:session/:decision',            { templateUrl: 'views/decisions/view.html', resolveController: true });
+      routeProvider.when('/:session/:decision/:paragraph', { templateUrl: 'views/decisions/paragraph.html', resolveController: true });
       //routeProvider.when('/', { templateUrl: 'views/decisions/search.html', resolveController: true });
   }
 
