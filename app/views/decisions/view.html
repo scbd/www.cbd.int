@@ -1,132 +1,22 @@
-<style>
-
-	#content {
-		padding:0 16px;
-	}
-
-	#content var {
-        margin-right: 4px;
-        font-style: normal;
-    }
-
-    element {
-        display: block;
-        margin-top:14px;
-        margin-bottom:14px;
-    }
-
-	element.box element {
-		margin-left:30px;
-    }
-
-	element.box {
-        border: 1px solid #e8e8e8;
-        border-radius: 4px;
-		padding:8px;
-		margin-left:-8px;
-		margin-right:-8px;
-    }
-
-	element element element element.box{
-		margin-left:22px;
-		margin-right:0;
-	}
-
-	element.box.xhide {
-        border: 1px solid #fff;
-    }
-
-	element[data-type=title] {
-        font-size: 32px;
-		color: #444;
-		font-variant: small-caps;
-		line-height: normal;
-		margin:0;
-    }
-
-
-	element[data-type=sectionTitle] {
-        font-size: 20px;
-		color: #000;
-		font-style: bold;
-		font-variant: small-caps;
-		line-height: normal;
-    }
-
-    .document.panel {
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    }
-
-    .document.panel > .panel-heading {
-        font-weight: bold;
-    }
-
-    .document.panel > .panel-body {
-		color:#111;
-		-webkit-font-smoothing:antialiased;
-		font-family: "Times New Roman"
-    }
-
-	.document.panel > .panel-body a.btn {
-		font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-		font-weight: bold
-    }
-
-	.document.panel > .panel-body span.label {
-		font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-		font-weight: bold
-	}
-
-    .label.disabled {
-        opacity: 0.5;
-    }
-
-	element.current {
-		border-color: #5bc0de;
-		background-color: #baeaf8;
-	}
-
-	BODY {
-		height:10000px;
-		-webkit-font-smoothing:antialiased;
-	}
-
-</style>
-
 <div class="alert alert-info"><strong>SBI-1 PREVIEW VERSION</strong> - For demonstration purposes only</div>
 <div>
 
-	<ol class="breadcrumb" ng-if='list'>
+	<ol class="breadcrumb">
 		<li><a href="#">Home</a></li>
 		<li><a href="/decisions/tracking">Decision Tracking Tool</a></li>
 		<li><a href="/decisions/cop/{{session}}">COP-{{session}}</a></li>
 		<li class="active">Decision {{romanize(session)}}/{{decision}}</li>
 	</ol>
 
-	<ol class="breadcrumb" ng-if='!list'>
-		<li><a href="#">Home</a></li>
-		<li><a href="/decisions/tracking">Decision Tracking Tool</a></li>
-		<li><a href="/decisions/cop/{{session}}">COP-{{session}}</a></li>
-		<li><a href="/decisions/cop/{{session}}/{{decision}}">Decision {{romanize(session)}}/{{decision}}</a></li>
-		<li class="active">Paragraph {{paragraph}}</li>
-	</ol>
-
-	<h1>Decision {{romanize(session)}}/{{decision}}
-        <span ng-if="!list && section"> section {{section}}</span>
-        <span ng-if="!list && paragraph"> paragraph {{paragraph}}</span>
-        <span ng-if="!list && item"> item ({{item}})</span>
-    </h1>
+	<h1>Decision {{romanize(session)}}/{{decision}}</h1>
 
 	<div class="row">
 		<div class="col-md-7">
             <div class="document panel panel-primary">
     			<div class="panel-heading">
     				UNEP/CBD/COP/DEC/{{romanize(session)}}/{{decision}}
-    				<a ng-show="filters && list" class="pull-right label label-info" ng-click="filter(null)" style="margin-top:2px">
+    				<a ng-show="filters" class="pull-right label label-info" ng-click="filter(null)" style="margin-top:2px">
     					<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> filtered <i class="fa fa-times" aria-hidden="true"></i>
-    				</a>
-    				<a ng-show="!list" href="/decisions/cop/{{session}}/{{decision}}" class="pull-right label label-info" style="margin-top:2px">
-    					up <i class="fa fa-level-up" aria-hidden="true"></i></i>
     				</a>
     			</div>
     			<div class="panel-body">
@@ -134,7 +24,7 @@
     			</div>
             </div>
 		</div>
-		<div class="col-md-5" style="padding-top:16px" ng-if='list'>
+		<div class="col-md-5" style="padding-top:16px">
 			<dl>
 			  	<dt>Body</dt>
   			  	<dd>Conference of the Parties (COP)</dd>
@@ -198,52 +88,6 @@
 						<a href="/doc/decisions/cop-{{pad0(session)}}/cop-{{pad0(session)}}-dec-{{pad0(decision)}}-zh.doc">中文</a>
 					</div>
 				</dd>
-				<br>
-			</dl>
-
-<!--
-
-			element.treaty          = 'CBD';
-			element.body            = 'COP';
-			element.session         = 8;
-			element.decision        = parseDecision(getValue('B'+row));
-			element.paragraph       = parseParagraph(getValue('C'+row));
-			element.code            = generateCode(element.treaty, element.body, element.session, element.decision, element.paragraph)
- -->
-
-		</div>
-		<div class="col-md-5" style="padding-top:16px" ng-if='!list'>
-			<dl>
-				<dt>Body</dt>
-  			  	<dd>Conference of the Parties (COP)</dd>
-			  	<br>
-
-				<dt>Meeting</dt>
-				<dd>COP-{{session}}</dd>
-				<dd ng-if="session==8"><i class="fa fa-calendar-o" aria-hidden="true"></i> 20 - 31 March 2006</dd>
-				<dd ng-if="session==8"><i class="fa fa-map-marker" aria-hidden="true"></i> Curitiba, Brazil</dd>
-				<dd ng-if="session==9"><i class="fa fa-calendar-o" aria-hidden="true"></i> 19 - 30 May 2008</dd>
-				<dd ng-if="session==9"><i class="fa fa-map-marker" aria-hidden="true"></i> Bonn, Germany</dd>
-				<br>
-
-				<dt>Type</dt>
-				<dd><span class="label label-default" ng-class="{ 'label-info' : current.data.type=='operational'}">{{current.data.type}}</span></dd>
-				<br>
-
-				<dt>Status</dt>
-				<dd ng-repeat="item in current.data.statuses"><span class="label label-default" ng-class="{ 'label-success' : item=='active' }">{{item}}</span></dd>
-				<br>
-
-				<dt>Actors</dt>
-				<dd ng-repeat="item in current.data.actors"><span class="label label-default">{{item}}</span></dd>
-				<br>
-
-				<dt>Meeting Documents</dt>
-				<dd ng-repeat="item in current.data.decisions">{{item}}</dd>
-				<br>
-
-				<dt>Notifications</dt>
-				<dd ng-repeat="item in current.data.notifications">{{item}}</dd>
 				<br>
 			</dl>
 		</div>

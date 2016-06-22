@@ -1,0 +1,93 @@
+<style>
+
+	#content {
+		padding:0 16px;
+	}
+
+	#content var {
+        margin-right: 4px;
+        font-style: normal;
+    }
+
+    element {
+        display: block;
+        margin-top:14px;
+        margin-bottom:14px;
+    }
+
+	element.box element {
+		margin-left:30px;
+    }
+
+	element.box {
+        border: 1px solid #e8e8e8;
+        border-radius: 4px;
+		padding:8px;
+		margin-left:-8px;
+		margin-right:-8px;
+    }
+
+	element element element element.box{
+		margin-left:22px;
+		margin-right:0;
+	}
+
+	element.box.xhide {
+        border: 1px solid #fff;
+    }
+
+	element[data-type=title] {
+        font-size: 32px;
+		color: #444;
+		font-variant: small-caps;
+		line-height: normal;
+		margin:0;
+    }
+
+
+	element[data-type=sectionTitle] {
+        font-size: 20px;
+		color: #000;
+		font-style: bold;
+		font-variant: small-caps;
+		line-height: normal;
+    }
+
+    .document.panel {
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    }
+
+    .document.panel > .panel-heading {
+        font-weight: bold;
+    }
+
+    .document.panel > .panel-body {
+		color:#111;
+		-webkit-font-smoothing:antialiased;
+		font-family: "Times New Roman"
+    }
+
+	.document.panel > .panel-body a.btn {
+		font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+		font-weight: bold
+    }
+
+	.document.panel > .panel-body span.label {
+		font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+		font-weight: bold
+	}
+
+    .label.disabled {
+        opacity: 0.5;
+    }
+
+	element.current {
+		border-color: #5bc0de;
+		background-color: #baeaf8;
+	}
+
+	BODY {
+		-webkit-font-smoothing:antialiased;
+	}
+
+</style>

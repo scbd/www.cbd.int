@@ -1,97 +1,58 @@
-define(['app', 'underscore', './view-element'], function(app, _) { 'use strict';
+define(['app', 'underscore', 'angular', 'css!./view.css', './view-element'], function(app, _, ng) { 'use strict';
 
-    return ['$scope', '$http', '$route', '$location', '$filter', '$q', '$compile', '$window', function($scope, $http, $route, $location, $filter, $q, $compile, $window) {
+    return ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', function($scope, $http, $route, $location, $compile, $anchorScroll) {
 
-        var elements  = $route.current.params.element.match(/^([0-9]+)(?:\.([A-Z]*)([0-9]+)(?:\.([0-9]+))?)?/);
-        var session   = $route.current.params.session;
-        var decision  = (elements[1]||'').replace(/^0+/, '');
-        var section   = (elements[2]||'').replace(/^0+/, '').toUpperCase();
-        var paragraph = (elements[3]||'').replace(/^0+/, '');
-        var item      = (elements[4]||'').replace(/^0+/, '');
-        var routeCode;
+        var session   = parseInt($route.current.params.session .replace(/^0+/, ''));
+        var decision  = parseInt($route.current.params.decision.replace(/^0+/, ''));
 
-        if(section||paragraph) {
-
-            routeCode  = 'CBD/COP/'+pad($route.current.params.session) +'/';
-            routeCode += pad(decision);
-            routeCode += '.' + section + pad(paragraph);
-
-            if(item)
-                routeCode += '.' + pad(item);
-        }
-
+        $scope.session       = session;
+        $scope.decision      = decision;
         $scope.romanize      = romanize;
         $scope.pad0          = pad;
         $scope.sumValues     = sumValues;
         $scope.filter        = filter;
-        $scope.toggleFilters = toggleFilters
-        $scope.list          = !routeCode;
-        $scope.session       = session;
-        $scope.decision      = parseInt(decision);
-        $scope.section       = section;
-        $scope.paragraph     = paragraph;
-        $scope.item          = item ? String.fromCharCode(96+parseInt(elements[4])) : '';
+        $scope.toggleFilters = toggleFilters;
         $scope.typeCounts    = { informational: 0, operational: 0 };
         $scope.statusCounts  = { implemented: 0, superseded: 0, elapsed: 0, active: 0 };
         $scope.actorCounts   = { };
         $scope.actors        = [];
         $scope.$root.page    = { title: 'Decision '+romanize(session)+'/'+decision };
 
-        if(!$scope.list) {
-
-            $scope.$root.page.title = '';
-
-            if(section)   $scope.$root.page.title += ' section ' + section;
-            if(paragraph) $scope.$root.page.title += ' paragraph ' + paragraph;
-            if(item)      $scope.$root.page.title += ' item ('+String.fromCharCode(96+parseInt(item))+')';
-        }
-
-        var registeredElements = [];
-
-
         //==============================
         //
         //==============================
-        $http.get('https://api.cbd.int/api/v2015/tests', { params : { q: { decision : romanize($scope.session)+'/'+$scope.decision }, fo: 1 } }).then(function(res) {
+        $http.get('/api/v2015/tests', { params : { q: { decision : romanize(session)+'/'+decision }, fo: 1 }, cache:true }).then(function(res) {
 
             var link    = $compile(res.data.content);
             var content = link($scope);
 
-            $('#content').html(content);
+            content.find('element[data-type~="paragraph"]').each(function(i,e) {
+                $scope.actors = _.union($scope.actors, ng.element(e).data('info').data.actors);
+            });
+
+            ng.element("#content").html(content);
 
         }).then(function(){
 
-            var filter;
+            scrollTo($scope.$root.hiddenHash || $location.hash());
 
-            if(routeCode) {
-                filter = { routeCodes : [routeCode] };
-            }
+            delete $scope.$root.hiddenHash;
 
-            $scope.filter(filter, true);
-
-            if(!$scope.list)
-                $window.scrollTo(0,0);
+        }).catch(function(err){
+            $scope.error = (err||{}).data || err;
+            console.error($scope.error);
         });
-
-
 
         //==============================
         //
         //==============================
-        $scope.$on('registerElement', function (evt, info) {
-
-            evt.stopPropagation();
-
-            if(info.type !='paragraph')
-                return;
-
-            $scope.actors = _.union($scope.actors, info.data.actors);
-
-            if(info.data.code == routeCode)
-                $scope.current = info;
-
-            registeredElements.push(info);
-        });
+        function scrollTo(hash) {
+            if(hash) {
+                $scope.$applyAsync(function() {
+                    $anchorScroll(hash);
+                });
+            }
+        }
 
         //==============================
         //
@@ -100,10 +61,35 @@ define(['app', 'underscore', './view-element'], function(app, _) { 'use strict';
 
             $scope.filters = filters;
 
-            $scope.$broadcast("filterElement", $scope.filters);
+            var content = ng.element("#content");
+            var elements = content.find('element');
 
-            $('#content element.xshow').slideDown({ duration: 250, queue: false });
-            $('#content element.xhide').slideUp  ({ duration: 250, queue: false });
+            if(filters) {
+
+                elements.removeClass('xshow'); // reset
+                elements.addClass   ('xhide'); // reset
+
+                content.find('element[data-type~="paragraph"]').each(function(i,e) {
+                    e = ng.element(e);
+
+                    if(isMatch(e.data('info'), filters))
+                        e.addClass('xshow');
+                });
+
+                content.find('element.xshow element').addClass('xshow');
+                content.find('element.always'       ).addClass('xshow');
+                elements.has("element.xshow"        ).addClass("xshow");
+                content.find('element[data-type~="title"]').addClass('xshow');
+                content.find('element.xshow element[data-type~="sectionTitle"]').addClass('xshow');
+            }
+            else {
+                elements.addClass('xshow'); // reset
+            }
+
+            content.find('element.xshow').removeClass('xhide');
+
+            content.find('.xshow').slideDown({ duration: 250, queue: false });
+            content.find('.xhide').slideUp  ({ duration: 250, queue: false });
 
             updateSums();
         }
@@ -144,6 +130,9 @@ define(['app', 'underscore', './view-element'], function(app, _) { 'use strict';
         function updateSums() {
 
             var filters, entries;
+            var paragraphes = ng.element('#content element[data-type~="paragraph"]').map(function(i,e) {
+                return ng.element(e).data('info');
+            });
 
             $scope.actors.forEach(function(a) {
                 $scope.actorCounts[a] = $scope.actorCounts[a] || 0;
@@ -154,19 +143,19 @@ define(['app', 'underscore', './view-element'], function(app, _) { 'use strict';
             resetSum($scope.actorCounts);
 
             filters = _.omit($scope.filters, 'types');
-            entries = _.filter(registeredElements, function(e) { return isMatch(e, filters); });
+            entries = _.filter(paragraphes, function(e) { return isMatch(e, filters); });
             entries.forEach(function(e){
                 sum($scope.typeCounts, [e.data.type]);
             });
 
             filters = _.omit($scope.filters, 'statuses');
-            entries = _.filter(registeredElements, function(e) { return isMatch(e, filters); });
+            entries = _.filter(paragraphes, function(e) { return isMatch(e, filters); });
             entries.forEach(function(e){
                 sum($scope.statusCounts, e.data.statuses);
             });
 
             filters = _.omit($scope.filters, 'actors');
-            entries = _.filter(registeredElements, function(e) { return isMatch(e, filters); });
+            entries = _.filter(paragraphes, function(e) { return isMatch(e, filters); });
             entries.forEach(function(e){
                 sum($scope.actorCounts, e.data.actors);
             });
@@ -188,7 +177,7 @@ define(['app', 'underscore', './view-element'], function(app, _) { 'use strict';
         //
         //==============================
         function sumValues(o) {
-            return _(o||{}).values().reduce(function(a,v) { return a+v}, 0);
+            return _(o||{}).values().reduce(function(a,v) { return a+v; }, 0);
         }
 
         //==============================
@@ -201,9 +190,9 @@ define(['app', 'underscore', './view-element'], function(app, _) { 'use strict';
 
             var match = true;
 
-            if(match && filters.actors)   match = _(filters.actors  ).intersection( entry.data.actors  ).some();
-            if(match && filters.statuses) match = _(filters.statuses).intersection( entry.data.statuses).some();
-            if(match && filters.types)    match = _(filters.types   ).intersection([entry.data.type]   ).some();
+            if(match && filters.actors)     match = _(filters.actors    ).intersection( entry.data.actors  ).some();
+            if(match && filters.statuses)   match = _(filters.statuses  ).intersection( entry.data.statuses).some();
+            if(match && filters.types)      match = _(filters.types     ).intersection([entry.data.type   ]).some();
 
             return match;
         }
