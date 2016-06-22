@@ -18,6 +18,8 @@ define(['app', 'underscore', 'angular', 'css!./view.css', './view-element'], fun
         $scope.actors        = [];
         $scope.$root.page    = { title: 'Decision '+romanize(session)+'/'+decision };
 
+        ng.element("#decision-meta").affix({ offset: { top: 295, bottom:350 } });
+
         //==============================
         //
         //==============================

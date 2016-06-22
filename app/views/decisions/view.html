@@ -1,3 +1,9 @@
+<style>
+    @media (max-width: 991px)  { #decision-meta.affix { position: relative !important; } }
+    @media (min-width: 992px)  { #decision-meta.affix { position: fixed    !important; width:400px; top:20px; } }
+    @media (min-width: 1200px) { #decision-meta.affix { position: fixed    !important; width:460px; top:20px; } }
+</style>
+
 <div class="alert alert-info"><strong>SBI-1 PREVIEW VERSION</strong> - For demonstration purposes only</div>
 <div>
 
@@ -25,6 +31,7 @@
             </div>
 		</div>
 		<div class="col-md-5" style="padding-top:16px">
+            <div id="decision-meta">
 			<dl>
 			  	<dt>Body</dt>
   			  	<dd>Conference of the Parties (COP)</dd>
@@ -90,6 +97,7 @@
 				</dd>
 				<br>
 			</dl>
+            </div>
 		</div>
 	</div>
 </div>
