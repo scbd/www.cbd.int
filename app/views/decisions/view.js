@@ -28,11 +28,11 @@ define(['app', 'underscore', 'angular', 'css!./view.css', './view-element'], fun
             var link    = $compile(res.data.content);
             var content = link($scope);
 
+            ng.element("#content").html(content);
+
             content.find('element[data-type~="paragraph"]').each(function(i,e) {
                 $scope.actors = _.union($scope.actors, ng.element(e).data('info').data.actors);
             });
-
-            ng.element("#content").html(content);
 
         }).then(function(){
 
