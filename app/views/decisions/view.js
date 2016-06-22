@@ -40,6 +40,8 @@ define(['app', 'underscore', 'angular', 'css!./view.css', './view-element'], fun
 
             delete $scope.$root.hiddenHash;
 
+            updateSums();
+
         }).catch(function(err){
             $scope.error = (err||{}).data || err;
             console.error($scope.error);
