@@ -113,6 +113,8 @@
     }
 </style>
 
+
+
 <div style="position:fixed;top:0px;left:0px;right:0px;bottom:0px;z-index:4000;background-color:white">
 
     <div class="container" style="margin-left:0;margin-right:0;width:100%;height:100%">
@@ -130,7 +132,7 @@
             <div class="col-sm-6" style="height:86%">
                 <div class="bg-orange">Decision {{symbol}}</div>
                 <div class="document" style="height:100%;overflow-y:scroll;padding:5px">
-                    <div id='content' class='decision' style="min-height:100%"></div>
+                    <div id='content' class='decision' style="min-height:100%" ng-keydown="onKeyDown($event)" ng-keyup="onKeyUp($event)" ng-keypress="onKeyPress($event)"></div>
                 </div>
             </div>
             <div class="col-sm-6" style="height:100%;overflow-y:scroll;background-color:#f8f8f8;padding:10px">
@@ -139,7 +141,7 @@
                     Formatting
                 </h4>
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label for="elementType">Level</label>
                             <select class="form-control" id="elementType" ng-model="element.type">
@@ -149,7 +151,32 @@
                                 <option value="body">Decision Body</option>
                                 <option value="annex">Decision Annex</option>
                                 <option value="section">Section</option>
+                                <option value="sectionTitle">Section Title</option>
+                                <option value="secApara">Section A Paragraph</option>
+                                <option value="secBpara">Section B Paragraph</option>
+                                <option value="secCpara">Section C Paragraph</option>
+                                <option value="secDpara">Section D Paragraph</option>
+                                <option value="secEpara">Section E Paragraph</option>
                                 <option value="paragraph">Paragraph</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="elementType">Section</label>
+                            <select class="form-control" id="elementType" ng-model="element.section">
+                                <option></option>
+                                <option>A</option>
+                                <option>B</option>
+                                <option>C</option>
+                                <option>D</option>
+                                <option>E</option>
+                                <option>F</option>
+                                <option>G</option>
+                                <option>H</option>
+                                <option>I</option>
+                                <option>J</option>
+                                <option>K</option>
                             </select>
                         </div>
                     </div>
@@ -187,6 +214,26 @@
                                 <option value="27">27.</option>
                                 <option value="28">28.</option>
                                 <option value="29">29.</option>
+                                <option value="30">30.</option>
+                                <option value="31">31.</option>
+                                <option value="32">32.</option>
+                                <option value="33">33.</option>
+                                <option value="34">34.</option>
+                                <option value="35">35.</option>
+                                <option value="36">36.</option>
+                                <option value="37">37.</option>
+                                <option value="38">38.</option>
+                                <option value="39">39.</option>
+                                <option value="40">40.</option>
+                                <option value="41">41.</option>
+                                <option value="42">42.</option>
+                                <option value="43">43.</option>
+                                <option value="44">44.</option>
+                                <option value="45">45.</option>
+                                <option value="46">46.</option>
+                                <option value="47">47.</option>
+                                <option value="48">48.</option>
+                                <option value="49">49.</option>
                             </select>
                         </div>
                     </div>
@@ -397,6 +444,13 @@
     		</div>
             <button class="btn btn-primary btn-xs" id="exampleInputEmail1" ng-click="upload()"><i class="fa fa-plus-circle"></i> upload a document</button>
     	</div>
+        <hr/>
+        <h4>
+            Debug
+    	</h4>
+            <div>
+                {{element.data | json}}
+            </div>
         <br><br>
 
     </div>
