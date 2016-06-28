@@ -6,7 +6,7 @@
         <h4 class="modal-title">Select a notification</h4>
     </div>
     <div class="modal-body">
-        <form name="form" novalidate>
+        <form name="form" ng-submit="save()" novalidate>
 
             <div class="form-group">
                 <label for="symbol">Symbol</label>
@@ -17,6 +17,8 @@
                     </span>
                 </div>
             </div>
+
+            <button type="submit" class="hidden"></button>
 
         </form>
 
@@ -32,6 +34,6 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" aria-label="Close" ng-click="closeThisDialog()">Cancel</button>
-        <button type="button" class="btn btn-primary" aria-label="Save" ng-click="closeThisDialog({ symbol : notification.symbol_t, reference : notification.reference_t, title : notification.title_t })" ng-disabled="!notification">Next »</button>
+        <button type="button" class="btn btn-primary" aria-label="Save" ng-click="save()" ng-disabled="!notification">Next »</button>
     </div>
 </div>

@@ -1,8 +1,11 @@
-define([], function() {
+define(['jquery'], function($) {
 
-    return ['$scope', '$http', function ($scope, $http) {
+    return ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+        $timeout(function(){ $('form #symbol').focus(); }, 100);
 
         $scope.search = search;
+        $scope.save = save;
 
 		//==========================
 		//
@@ -29,6 +32,21 @@ define([], function() {
 
                 $scope.results = results;
                 $scope.notification = results.numFound ? results.docs[0] : null;
+            });
+        }
+
+		//==========================
+		//
+		//==========================
+        function save() {
+
+            if(!$scope.notification)
+                return;
+
+            $scope.closeThisDialog({
+                symbol : $scope.notification.symbol_t,
+                reference : $scope.notification.reference_t,
+                title : $scope.notification.title_t
             });
         }
 
