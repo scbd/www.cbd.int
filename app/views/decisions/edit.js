@@ -549,14 +549,6 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
         }
     }];
 
-    var getComputedDisplay = (typeof window.getComputedStyle != "undefined") ?
-    function(el) {
-        return window.getComputedStyle(el, null).display;
-    } :
-    function(el) {
-        return el.currentStyle.display;
-    };
-
     function replaceWithOwnChildren(el) {
         var parent = el.parentNode;
         while (el.hasChildNodes()) {
@@ -600,34 +592,3 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
         }
     }
 });
-
-(function(){
-
-    var cache = [0],
-        expando = 'data' +new Date();
-
-    function data(elem) {
-
-        var cacheIndex = elem[expando],
-            nextCacheIndex = cache.length;
-
-        if(!cacheIndex) {
-            cacheIndex = elem[expando] = nextCacheIndex;
-            cache[cacheIndex] = {};
-        }
-
-        return {
-            get : function(key) {
-                return cache[cacheIndex][key];
-            },
-            set : function(key, val) {
-                cache[cacheIndex][key] = val;
-                return val;
-            }
-        }
-
-    }
-
-    window.data = data;
-
-})();
