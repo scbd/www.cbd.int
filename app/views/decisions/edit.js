@@ -1,6 +1,5 @@
-define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './select-statuses-list', 'ngDialog', 'authentication', 'filters/moment'], function(_, require, rangy, $, actorList, statusesList) { 'use strict';
-
-    var roman = [ undefined, 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI', 'XXII', 'XXII', 'XXIV', 'XXV', 'XXVI', 'XXVII', 'XXVIII', 'XXIX', 'XXX' ];
+define(['underscore', 'require', 'rangy', 'jquery', './data/romans', './data/sections', './data/paragraphes', './data/items', './data/sub-items', './data/actors', './data/statuses', 'ngDialog', 'authentication', 'filters/moment'],
+function(_, require, rangy, $, roman, sectionList, paragraphList, itemList, subItemList, actorList, statusesList) { 'use strict';
 
     return ['$scope', '$http', '$route', '$location', '$filter', '$q', 'ngDialog', function($scope, $http, $route, $location, $filter, $q, ngDialog) {
 
@@ -27,13 +26,18 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
         $scope.actionEdit  = edit;
         $scope.isEditable  = isEditable;
         $scope.tag         = tag;
-        $scope.toggle      = toggle;
-        $scope.actionBox   = function(tag) { surroundSelection(tag); };
-        $scope.actionUnbox = function()    { unsurroundSelection(); };
-        $scope.actionClean = function()    { removeSelectionFormatting(); };
+        $scope.actionBox   = surroundSelection;
+        $scope.actionUnbox = unsurroundSelection;
+        $scope.actionClean = removeSelectionFormatting;
         $scope.element     = {};
-        $scope.actorsMap   = _(actorList   ).reduce(function(r,v){ r[v.code] = v; return r; }, {});
-        $scope.statusesMap = _(statusesList).reduce(function(r,v){ r[v.code] = v; return r; }, {});
+        $scope.collections = {
+            sections    : sectionList,
+            paragraphes : paragraphList,
+            items       : itemList,
+            subItems    : subItemList,
+            actorsMap   : _(actorList   ).reduce(function(r,v){ r[v.code] = v; return r; }, {}),
+            statusesMap : _(statusesList).reduce(function(r,v){ r[v.code] = v; return r; }, {})
+        };
 
         load();
 
@@ -116,47 +120,6 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
         //===========================
         //
         //===========================
-        function surroundSelection(tag) {
-
-            var range = window.getSelection().getRangeAt(0);
-
-            var commonAncestor = $(range.commonAncestorContainer);
-
-            if(!commonAncestor.is("#content") && !commonAncestor.parents('#content').size()) {
-                alert('Please select text from the decision');
-                return;
-            }
-
-            var span = document.createElement(tag);
-            var content = range.extractContents();
-
-            span.appendChild(content);
-            range.insertNode(span);
-
-            clean($('#content')[0]);
-            clean($('#content')[0]);
-            clean($('#content')[0]);
-
-            $('element').mousedown(function () { selectNode(this); });
-
-            selectNode(span);
-        }
-
-        //===========================
-        //
-        //===========================
-        function unsurroundSelection() {
-
-            if(!selectedElement) return alert('no selectedElement');
-
-            $(selectedElement).contents().unwrap();
-
-            selectedElement = null;
-        }
-
-        //===========================
-        //
-        //===========================
         function edit(editable) {
 
             var $div = $('#content');
@@ -174,29 +137,6 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
         //===========================
         function isEditable() {
             return $('#content').prop('contenteditable') == 'true';
-        }
-
-        //===========================
-        //
-        //===========================
-        function selectNode(node) {
-
-            delete $scope.formattingLocked;
-
-            $(selectedElement).attr('data-info', JSON.stringify($scope.element));
-
-            $(selectedElement).removeClass('selected');
-
-            selectedElement = node;
-
-            $(selectedElement).addClass('selected');
-
-            $scope.element = $(selectedElement).data('info');
-
-            if($scope.element && $scope.element.data && $scope.element.data.type == 'information')
-                $scope.element.data.type = 'informational';
-
-            $scope.formattingLocked = !!($scope.element && $scope.element.data);
         }
 
         //===========================
@@ -247,6 +187,69 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
 
         }
 
+        //===========================
+        //
+        //===========================
+        function surroundSelection(tag) {
+
+            var range = window.getSelection().getRangeAt(0);
+
+            var commonAncestor = $(range.commonAncestorContainer);
+
+            if(!commonAncestor.is("#content") && !commonAncestor.parents('#content').size()) {
+                alert('Please select text from the decision');
+                return;
+            }
+
+            var span = document.createElement(tag);
+            var content = range.extractContents();
+
+            span.appendChild(content);
+            range.insertNode(span);
+
+            clean($('#content')[0]);
+            clean($('#content')[0]);
+            clean($('#content')[0]);
+
+            $('element').mousedown(function () { selectNode(this); });
+
+            selectNode(span);
+        }
+
+        //===========================
+        //
+        //===========================
+        function unsurroundSelection() {
+
+            if(!selectedElement) return alert('no selectedElement');
+
+            $(selectedElement).contents().unwrap();
+
+            selectedElement = null;
+        }
+
+        //===========================
+        //
+        //===========================
+        function selectNode(node) {
+
+            delete $scope.formattingLocked;
+
+            $(selectedElement).attr('data-info', JSON.stringify($scope.element));
+
+            $(selectedElement).removeClass('selected');
+
+            selectedElement = node;
+
+            $(selectedElement).addClass('selected');
+
+            $scope.element = $(selectedElement).data('info');
+
+            if($scope.element && $scope.element.data && $scope.element.data.type == 'information')
+                $scope.element.data.type = 'informational';
+
+            $scope.formattingLocked = !!($scope.element && $scope.element.data);
+        }
 
         //==============================
         //
@@ -259,27 +262,6 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
                 output = '0' + output;
 
             return output;
-        }
-
-        //==============================
-        //
-        //==============================
-        function toggle(array, value) {
-
-            array = array || [];
-
-            if(~array.indexOf(value)) {
-                while(~array.indexOf(value))
-                    array.splice(array.indexOf(value), 1);
-            }
-            else {
-                array.push(value);
-            }
-
-            if(!array.length)
-                array = undefined;
-
-            return array;
         }
 
         //===========================
@@ -305,6 +287,10 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
                 }
             }
         }
+
+        ////////////////////
+        // FILES
+        ////////////////////
 
         //===========================
         //
@@ -336,9 +322,9 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
             $scope.$digest();
         }
 
-
-
-        //************************************************************
+        ////////////////////
+        // DIALOGS
+        ////////////////////
 
         //===========================
         //
@@ -533,7 +519,6 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
                     var dialog = ngDialog.open(options);
 
                     dialog.closePromise.then(function(res){
-                        console.log(res.value);
 
                         if(res.value=="$escape")      delete res.value;
                         if(res.value=="$document")    delete res.value;
@@ -549,6 +534,9 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
         }
     }];
 
+    //===========================
+    //
+    //===========================
     function replaceWithOwnChildren(el) {
         var parent = el.parentNode;
         while (el.hasChildNodes()) {
@@ -557,6 +545,9 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
         parent.removeChild(el);
     }
 
+    //===========================
+    //
+    //===========================
     function removeSelectionFormatting() {
         var range, sel = rangy.getSelection();
 
@@ -582,7 +573,7 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
             // Get formatting elements. For this example, we'll count any
             // element with display: inline, except <br>s.
             var formattingEls = range.getNodes([1], function(el) {
-                return el.tagName != "BR";// && getComputedDisplay(el) == "inline";
+                return el.tagName != "BR";
             });
 
             // Remove the formatting elements

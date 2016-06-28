@@ -1,4 +1,4 @@
-define(['lodash', './select-actors-list'], function(_, actorList) {
+define(['lodash', './data/actors'], function(_, actorList) {
 
     return ['$scope', 'actors', function ($scope, preSelectedActors) {
 

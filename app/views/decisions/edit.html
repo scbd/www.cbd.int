@@ -162,138 +162,32 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementType">Section</label>
-                            <select class="form-control" id="elementType" ng-model="element.section" ng-change="tag()" ng-disabled="formattingLocked || element.type!='paragraph'">
+                            <select class="form-control" id="elementType" ng-model="element.section" ng-options="o.code as o.title for o in collections.sections" ng-change="tag()" ng-disabled="formattingLocked || element.type!='paragraph'">
                                 <option></option>
-                                <option>A</option>
-                                <option>B</option>
-                                <option>C</option>
-                                <option>D</option>
-                                <option>E</option>
-                                <option>F</option>
-                                <option>G</option>
-                                <option>H</option>
-                                <option>I</option>
-                                <option>J</option>
-                                <option>K</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementParagraph">Paragraph</label>
-                            <select class="form-control" id="elementParagraph" ng-model="element.paragraph" ng-change="tag()" ng-disabled="formattingLocked || element.type!='paragraph'">
+                            <select class="form-control" id="elementParagraph" ng-model="element.paragraph" ng-options="o.code as o.title for o in collections.paragraphes" ng-change="tag()" ng-disabled="formattingLocked || element.type!='paragraph'">
                                 <option></option>
-                                <option value="1">1.</option>
-                                <option value="2">2.</option>
-                                <option value="3">3.</option>
-                                <option value="4">4.</option>
-                                <option value="5">5.</option>
-                                <option value="6">6.</option>
-                                <option value="7">7.</option>
-                                <option value="8">8.</option>
-                                <option value="9">9.</option>
-                                <option value="10">10.</option>
-                                <option value="11">11.</option>
-                                <option value="12">12.</option>
-                                <option value="13">13.</option>
-                                <option value="14">14.</option>
-                                <option value="15">15.</option>
-                                <option value="16">16.</option>
-                                <option value="17">17.</option>
-                                <option value="18">18.</option>
-                                <option value="19">19.</option>
-                                <option value="20">20.</option>
-                                <option value="21">21.</option>
-                                <option value="22">22.</option>
-                                <option value="23">23.</option>
-                                <option value="24">24.</option>
-                                <option value="25">25.</option>
-                                <option value="26">26.</option>
-                                <option value="27">27.</option>
-                                <option value="28">28.</option>
-                                <option value="29">29.</option>
-                                <option value="30">30.</option>
-                                <option value="31">31.</option>
-                                <option value="32">32.</option>
-                                <option value="33">33.</option>
-                                <option value="34">34.</option>
-                                <option value="35">35.</option>
-                                <option value="36">36.</option>
-                                <option value="37">37.</option>
-                                <option value="38">38.</option>
-                                <option value="39">39.</option>
-                                <option value="40">40.</option>
-                                <option value="41">41.</option>
-                                <option value="42">42.</option>
-                                <option value="43">43.</option>
-                                <option value="44">44.</option>
-                                <option value="45">45.</option>
-                                <option value="46">46.</option>
-                                <option value="47">47.</option>
-                                <option value="48">48.</option>
-                                <option value="49">49.</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementItem">Item</label>
-                            <select class="form-control" id="elementItem" ng-model="element.item" ng-change="tag()" ng-disabled="formattingLocked || element.type!='paragraph' || !element.data.paragraph">
+                            <select class="form-control" id="elementItem" ng-model="element.item" ng-options="o.code as o.title for o in collections.items" ng-change="tag()" ng-disabled="formattingLocked || element.type!='paragraph' || !element.data.paragraph">
                                 <option></option>
-                                <option value="a">a.</option>
-                                <option value="b">b.</option>
-                                <option value="c">c.</option>
-                                <option value="d">d.</option>
-                                <option value="e">e.</option>
-                                <option value="f">f.</option>
-                                <option value="g">g.</option>
-                                <option value="h">h.</option>
-                                <option value="i">i.</option>
-                                <option value="j">j.</option>
-                                <option value="k">k.</option>
-                                <option value="l">l.</option>
-                                <option value="m">m.</option>
-                                <option value="n">n.</option>
-                                <option value="o">o.</option>
-                                <option value="p">p.</option>
-                                <option value="q">q.</option>
-                                <option value="r">r.</option>
-                                <option value="s">s.</option>
-                                <option value="t">t.</option>
-                                <option value="u">u.</option>
-                                <option value="v">v.</option>
-                                <option value="w">w.</option>
-                                <option value="x">x.</option>
-                                <option value="y">y.</option>
-                                <option value="z">z.</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementSubitem">Subitem</label>
-                            <select class="form-control" id="elementSubitem" ng-model="element.subitem" ng-change="tag()" ng-disabled="formattingLocked || element.type!='paragraph' || !element.data.paragraph || !element.data.item">
+                            <select class="form-control" id="elementSubitem" ng-model="element.subitem" ng-options="o.code as o.title for o in collections.subItems" ng-change="tag()" ng-disabled="formattingLocked || element.type!='paragraph' || !element.data.paragraph || !element.data.item">
                                 <option></option>
-                                <option value="i">(i)</option>
-                                <option value="ii">(ii)</option>
-                                <option value="iii">(iii)</option>
-                                <option value="iv">(iv)</option>
-                                <option value="v">(v)</option>
-                                <option value="vi">(vi)</option>
-                                <option value="vii">(vii)</option>
-                                <option value="viii">(viii)</option>
-                                <option value="ix">(ix)</option>
-                                <option value="x">(x)</option>
-                                <option value="xi">(xi)</option>
-                                <option value="xii">(xii)</option>
-                                <option value="xiii">(xiii)</option>
-                                <option value="xiv">(xiv)</option>
-                                <option value="xv">(xv)</option>
-                                <option value="xvi">(xvi)</option>
-                                <option value="xvii">(xvii)</option>
-                                <option value="xviii">(xviii)</option>
-                                <option value="xix">(xix)</option>
-                                <option value="xx">(xx)</option>
                             </select>
                         </div>
                     </div>
@@ -316,9 +210,9 @@
                 <div class="form-group">
     		    	<label for="elementDirectedTo">Status of the decision</label><br>
 
-                    <div ng-repeat="item in element.data.statuses" class="form-control" style="margin-bottom:5px" ng-disabled="element.type!='paragraph'">
+                    <div ng-repeat="item in element.data.statuses" class="form-control" style="margin-bottom:2px" ng-disabled="element.type!='paragraph'">
                         <button class="btn btn-danger btn-xs pull-right" ng-click="deleteStatus(item)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
-                         {{statusesMap[item].title||item}}</i>
+                         {{collections.statusesMap[item].title||item}}</i>
                      </div>
 
                     <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectStatuses()"><i class="fa fa-plus-circle"></i> Select status(es)</button>
@@ -350,9 +244,9 @@
                 <div class="form-group">
     		    	<label for="elementDirectedTo">Directed to</label><br>
 
-                    <div ng-repeat="item in element.data.actors" class="form-control" style="margin-bottom:5px" ng-disabled="element.type!='paragraph'">
+                    <div ng-repeat="item in element.data.actors" class="form-control" style="margin-bottom:2px" ng-disabled="element.type!='paragraph'">
                         <button class="btn btn-danger btn-xs pull-right" ng-click="deleteActor(item)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
-                         {{actorsMap[item].title||item}} <i ng-if="actorsMap[item].group">({{actorsMap[item].group}})</i>
+                         {{collections.actorsMap[item].title||item}} <i ng-if="collections.actorsMap[item].group">({{collections.actorsMap[item].group}})</i>
                      </div>
 
                     <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectActors()"><i class="fa fa-plus-circle"></i> Select actor(s)</button>

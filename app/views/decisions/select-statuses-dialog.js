@@ -1,4 +1,4 @@
-define(['lodash', './select-statuses-list'], function(_, statusList) {
+define(['lodash', './data/statuses'], function(_, statusList) {
 
     return ['$scope', 'statuses', function ($scope, preSelectedStatuses) {
 
