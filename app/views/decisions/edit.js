@@ -49,15 +49,11 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
         //===========================
         function load() {
 
-            //var data = { title: 'agenda', content: $('#content').html() };
+            $http.get('/api/v2015/tests', { params : { q : { decision: $scope.symbol }, fo: 1 }}).then(function(res){
 
-            $.ajax({method: 'GET', url: 'https://api.cbd.int/api/v2015/tests?q={"decision":"'+$scope.symbol+'"}&fo=1', contentType: 'application/json' }).done(function( msg ) {
+                data = res.data || { decision: $scope.symbol, content: 'paste here' };
 
-                msg = msg || { decision: $scope.symbol, content: 'paste here' };
-
-                data = msg;
-
-                $('#content').html(msg.content);
+                $('#content').html(data.content);
 
                 clean($('#content')[0]);
                 clean($('#content')[0]);
@@ -65,14 +61,22 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
 
                 $('#content,element').mousedown(function (event) {
 
-                    event.stopPropagation();
-
                     var node = this;
+
+                    event.stopPropagation();
 
                     $scope.$applyAsync(function(){
                         selectNode(node);
                     });
                 });
+
+            }).catch(function(err){
+
+                err = (err||{}).data || err;
+
+                console.error(err);
+
+                alert(err.message||err);
             });
         }
 
@@ -86,16 +90,27 @@ define(['underscore', 'require', 'rangy', 'jquery', './select-actors-list', './s
             data.title = "agenda";
             data.content = $('#content').html();
 
-            if(!data._id) {
-                $.ajax({method: "POST", url: "https://api.cbd.int/api/v2015/tests", data: JSON.stringify(data), contentType: "application/json" }).done(function( msg ) {
-                    data._id = msg.id;
-                    alert( "Your document has been successfully created." );
-                });
-            } else {
-                $.ajax({method: "PUT", url: "https://api.cbd.int/api/v2015/tests/"+data._id, data: JSON.stringify(data), contentType: "application/json" }).done(function() {
-                    alert( "Your document has been successfully updated." );
-                });
-            }
+            var req = {
+                method : data._id ? 'PUT' : 'POST',
+                url    : '/api/v2015/tests' + (data._id ? '/'+data._id : ''),
+                data   : data
+            };
+
+            throw "DISBALED";
+
+            $http(req).then(function(res){
+
+                data._id = data._id || res.data.id;
+                alert( "Your document has been successfully save." );
+
+            }).catch(function(err){
+
+                err = (err||{}).data || err;
+
+                console.error(err);
+
+                alert(err.message||err);
+            });
         }
 
         //===========================
