@@ -375,7 +375,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function deleteActor(item) {
 
-            if(!$scope.data && !$scope.element.data)
+            if(!$scope.element && !$scope.element.data)
                 return;
 
             var items = $scope.element.data.actors || [];
@@ -416,7 +416,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             //===========================
             function deleteStatus(item) {
 
-                if(!$scope.data && !$scope.element.data)
+                if(!$scope.element && !$scope.element.data)
                     return;
 
                 var items = $scope.element.data.statuses || [];
@@ -441,8 +441,10 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                     if(!res.value)
                         return;
 
-                    $scope.element.decisions = $scope.element.decisions || [];
-                    $scope.element.decisions.push(res.value);
+                    $scope.element.data.decisions = $scope.element.data.decisions || [];
+                    $scope.element.data.decisions.push(res.value);
+
+                    $scope.element.data.decisions = _.uniq($scope.element.data.decisions);
                 });
             });
         }
@@ -452,12 +454,17 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function deleteDecision(item) {
 
-            var items = $scope.element.decisions || [];
+            if(!$scope.element && !$scope.element.data)
+                return;
+
+            var items = $scope.element.data.decisions || [];
             var index = items.indexOf(item);
 
             if(index>=0) {
                 items.splice(index, 1);
             }
+
+            $scope.element.data.decisions = items.length ? items : undefined;
         }
 
         //===========================

@@ -6,7 +6,8 @@ define([], function() {
         { code : 'executive-secretary' ,  title: 'Executive Secretary' },
 
         { code : 'SBSTTA' ,               title: 'SBSTTA',     group : 'Subsidiary Body' },
-        { code : 'WGRI' ,                 title: 'WGRI/SBI',   group : 'Subsidiary Body' },
+        { code : 'SBI' ,                  title: 'SBI',        group : 'Subsidiary Body' },
+        { code : 'WGRI' ,                 title: 'WGRI',       group : 'Subsidiary Body' },
         { code : 'WG8J' ,                 title: 'WG8J',       group : 'Subsidiary Body' },
         { code : 'WGABS' ,                title: 'WGABS',      group : 'Subsidiary Body' },
 
