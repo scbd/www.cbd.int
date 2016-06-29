@@ -81,6 +81,19 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             selectNode(null);
 
+            //Cleanup data;
+
+            $('#content element').each(function() {
+                var info = $(this).data('info');
+
+                if(info && info.type!='paragraph') {
+                    delete info.data;
+                    $(this).attr('data-info', ng.toJson(info));
+                }
+            });
+
+            // Save
+
             data.title = "agenda";
             data.content = $('#content').html();
 
