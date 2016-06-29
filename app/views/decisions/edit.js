@@ -29,7 +29,6 @@ function(_, require, rangy, $, roman, sectionList, paragraphList, itemList, subI
         $scope.actionBox   = surroundSelection;
         $scope.actionUnbox = unsurroundSelection;
         $scope.actionClean = removeSelectionFormatting;
-        $scope.element     = {};
         $scope.collections = {
             sections    : sectionList,
             paragraphes : paragraphList,
@@ -63,16 +62,7 @@ function(_, require, rangy, $, roman, sectionList, paragraphList, itemList, subI
                 clean($('#content')[0]);
                 clean($('#content')[0]);
 
-                $('#content,element').mousedown(function (event) {
-
-                    var node = this;
-
-                    event.stopPropagation();
-
-                    $scope.$applyAsync(function(){
-                        selectNode(node);
-                    });
-                });
+                $('#content,element').mousedown(mousedown_selectNode);
 
             }).catch(function(err){
 
@@ -211,7 +201,7 @@ function(_, require, rangy, $, roman, sectionList, paragraphList, itemList, subI
             clean($('#content')[0]);
             clean($('#content')[0]);
 
-            $('element').mousedown(function () { selectNode(this); });
+            $(span).mousedown(mousedown_selectNode);
 
             selectNode(span);
         }
@@ -239,16 +229,35 @@ function(_, require, rangy, $, roman, sectionList, paragraphList, itemList, subI
 
             $(selectedElement).removeClass('selected');
 
+            delete $scope.element;
+
             selectedElement = node;
+
+            if(!selectedElement)
+                return;
 
             $(selectedElement).addClass('selected');
 
-            $scope.element = $(selectedElement).data('info');
+            $scope.element = $(selectedElement).data('info') || {};
 
-            if($scope.element && $scope.element.data && $scope.element.data.type == 'information')
+            if(($scope.element.data||{}).type == 'information')
                 $scope.element.data.type = 'informational';
 
-            $scope.formattingLocked = !!($scope.element && $scope.element.data);
+            $scope.formattingLocked = !!$scope.element.type;
+        }
+
+        //===========================
+        //
+        //===========================
+        function mousedown_selectNode(event) {
+
+            var node = this;
+
+            event.stopPropagation();
+
+            $scope.$applyAsync(function(){
+                selectNode(node);
+            });
         }
 
         //==============================
