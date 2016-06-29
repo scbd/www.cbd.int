@@ -1,0 +1,40 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeThisDialog()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Select a meeting</h4>
+    </div>
+    <div class="modal-body">
+        <form name="form" ng-submit="save()" novalidate>
+
+            <div class="form-group">
+                <label for="symbol">Symbol</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="symbol" name="symbol" ng-model="symbol" ng-model-options="{ debounce : { 'default': 300, 'blur': 0 } }" ng-change="search(symbol)">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" ng-disabled="true">Search</button>
+                    </span>
+                </div>
+            </div>
+
+            <button type="submit" class="hidden"></button>
+
+        </form>
+
+        <div class="panel panel-default" ng-class="{ 'panel-primary' : meeting==n }" ng-repeat="n in results.docs" ng-click="$parent.meeting = n" style="cursor:pointer" >
+          <div class="panel-heading">
+            <h3 class="panel-title">{{n.symbol_s}} </h3>
+          </div>
+          <div class="panel-body">
+            {{n.title_EN_t}}<br>
+            <em>{{n.startDate_dt|moment:'format':'D MMM'}} - {{n.endDate_dt|moment:'format':'D MMMM YYYY'}}, {{n.eventCity_EN_t}}, {{n.eventCountry_EN_t}}</em>
+          </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" aria-label="Close" ng-click="closeThisDialog()">Cancel</button>
+        <button type="button" class="btn btn-primary" aria-label="Save" ng-click="save()" ng-disabled="!meeting">Next »</button>
+    </div>
+</div>

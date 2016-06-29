@@ -322,18 +322,17 @@
 
                 <div class="form-group">
                     <label for="exampleInputEmail1">Related activities / outcomes</label><br>
-                    <div ng-hide="true" class="panel panel-default" style="margin-bottom:4px">
+                    <div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.meetings|orderBy">
                           <div class="panel-body" style="padding:12px;font-size:0.9em">
                             <button class="btn btn-danger btn-xs pull-right"><i class="fa fa-minus-circle"></i></button>
-                            11 - 13 June 2015 &nbsp; &nbsp; &nbsp; <i class="fa fa-map-marker"></i> Panajachel, Guatemala<br>
-                            <a href="#"><b>RMWS-2015-02</b></a>
+                            <a href="#"><b>{{::lookupMeeting(item).symbol_s}}</b></a>
                             <div style="max-height:50px;overflow:hidden">
-                                Dialogue Workshop on Assessment of Collective Action of Indigenous Peoples and Local
-                                Communities in Biodiversity Conservation and Resource Mobilization
+                                {{::lookupMeeting(item).title_EN_t}}
                             </div>
+                            {{lookupMeeting(item).startDate_dt|moment:'format':'D MMM'}}, {{lookupMeeting(item).endDate_dt|moment:'format':'D MMMM YYYY'}}, <i class="fa fa-map-marker"></i> {{::lookupMeeting(item).eventCity_EN_t}}, {{::lookupMeeting(item).eventCountry_EN_t}}
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph' || true"><i class="fa fa-plus-circle"></i> add an event</button>
+                    <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectMeeting()"><i class="fa fa-plus-circle"></i> add an event</button>
                 </div>
 
     		</div>

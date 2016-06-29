@@ -20,6 +20,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         $scope.deleteStatus   = deleteStatus;
         $scope.selectDecision = selectDecision;
         $scope.deleteDecision = deleteDecision;
+        $scope.selectMeeting  = selectMeeting;
+        $scope.deleteMeeting  = deleteMeeting;
+        $scope.lookupMeeting  = lookupMeeting;
         $scope.selectNotification = selectNotification;
         $scope.deleteNotification = deleteNotification;
         $scope.lookupNotification = lookupNotification;
@@ -528,6 +531,71 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             }
 
             return __notifications[code];
+        }
+
+        //===========================
+        //
+        //===========================
+        function selectMeeting() {
+
+            openDialog('./select-meeting-dialog', { showClose: false }).then(function(dialog){
+
+                dialog.closePromise.then(function(res){
+
+                    console.log(res.value);
+
+                    if(!res.value)
+                        return;
+
+                    $scope.element.data.meetings = $scope.element.data.meetings || [];
+                    $scope.element.data.meetings.push(res.value.symbol);
+                });
+            });
+        }
+
+        //===========================
+        //
+        //===========================
+        function deleteMeeting(item) {
+
+            var items = $scope.element.meetings || [];
+            var index = items.indexOf(item);
+
+            if(index>=0)
+                items.splice(index, 1);
+        }
+
+        //===========================
+        //
+        //===========================
+        var __meetings;
+        function lookupMeeting(code) {
+
+            __meetings = __meetings||{};
+
+            if(__meetings[code]===undefined) {
+
+                __meetings[code] = code;
+
+                var options = {
+                    cache : true,
+                    params : {
+                        q : "schema_s:meeting AND symbol_s:"+code,
+                        fl : "symbol_?,title_EN_t,eventCountry_EN_t,eventCity_EN_t,startDate_dt,endDate_dt,url_*",
+                        rows: 1
+                    }
+                 };
+
+                $http.get("/api/v2013/index", options).then(function(res){
+
+                    var results = res.data.response;
+                    __meetings[code] = results.numFound ? results.docs[0] : null;
+
+                    return __meetings[code];
+                });
+            }
+
+            return __meetings[code];
         }
 
         //===========================
