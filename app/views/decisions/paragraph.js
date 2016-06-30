@@ -28,7 +28,7 @@ define(['angular', 'app', 'css!./view.css', './view-element'], function(ng) { 'u
         //==============================
         //
         //==============================
-        $http.get('/api/v2015/tests', { params : { q: { decision : romanize(session)+'/'+decision }, fo: 1 }, cache:true }).then(function(res) {
+        $http.get('/api/v2016/decision-texts', { params : { q: { decision : romanize(session)+'/'+decision }, fo: 1 }, cache:true }).then(function(res) {
 
             var link     = $compile(res.data.content);
             var content  = link($scope);
