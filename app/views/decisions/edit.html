@@ -308,13 +308,13 @@
     		<div class="col-sm-6">
     			<div class="form-group">
     				<label for="exampleInputEmail1">Notifications issued</label><br>
-    				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.notifications|orderBy">
+    				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.notifications|orderBy|_:'map':lookupNotification">
     		  			<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button class="btn btn-danger btn-xs pull-right" ng-click="deleteNotification(item)"><i class="fa fa-minus-circle"></i></button>
-    						{{lookupNotification(item).date_dt|moment:'utc'|moment:'format':'LL'}}<br>
-                            <a ng-href="{{lookupNotification(item).url_ss[0]}}" target="notifications"><b>{{lookupNotification(item).reference_t}}</b> <i>({{lookupNotification(item).symbol_t||item}})</i></a>
-    						<div style="max-height:50px;overflow:hidden" title="{{lookupNotification(item).title_t}}" ng-bind-html="lookupNotification(item).title_t">
+    						<button class="btn btn-danger btn-xs pull-right" ng-click="deleteNotification(item.symbol_s||item)"><i class="fa fa-minus-circle"></i></button>
+                            <a ng-href="{{item.url_ss[0]}}" target="notifications"><b>{{item.reference_t}}</b> <i>({{item.symbol_t||item}})</i></a>
+    						<div style="max-height:50px;overflow:hidden" title="{{item.title_t}}" ng-bind-html="item.title_t">
     						</div>
+    						<i class="fa fa-calendar fa-fw"></i> {{item.date_dt|moment:'utc'|moment:'format':'LL'}}
     					</div>
     				</div>
     				<button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectNotification()"><i class="fa fa-plus-circle"></i> add a notification</button>
@@ -322,14 +322,19 @@
 
                 <div class="form-group">
                     <label for="exampleInputEmail1">Related activities / outcomes</label><br>
-                    <div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.meetings|orderBy">
+                    <div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.meetings|orderBy|_:'map':lookupMeeting">
                           <div class="panel-body" style="padding:12px;font-size:0.9em">
-                            <button class="btn btn-danger btn-xs pull-right"><i class="fa fa-minus-circle"></i></button>
-                            <a href="#"><b>{{::lookupMeeting(item).symbol_s}}</b></a>
+                            <button class="btn btn-danger btn-xs pull-right" ng-click="deleteMeeting(item.symbol_s||item)"><i class="fa fa-minus-circle"></i></button>
+                            <a href="#"><b>{{::item.symbol_s}}</b></a>
                             <div style="max-height:50px;overflow:hidden">
-                                {{::lookupMeeting(item).title_EN_t}}
+                                {{::item.title_EN_t}}
                             </div>
-                            {{lookupMeeting(item).startDate_dt|moment:'format':'D MMM'}}, {{lookupMeeting(item).endDate_dt|moment:'format':'D MMMM YYYY'}}, <i class="fa fa-map-marker"></i> {{::lookupMeeting(item).eventCity_EN_t}}, {{::lookupMeeting(item).eventCountry_EN_t}}
+
+                            <i class="fa fa-calendar fa-fw"></i>
+                            <span ng-if="(item.startDate_dt|moment:'month')==(item.endDate_dt|moment:'month')">{{item.startDate_dt|moment:'format':'D'}} - {{item.endDate_dt|moment:'format':'D MMMM YYYY'}}</span>
+                            <span ng-if="(item.startDate_dt|moment:'month')!=(item.endDate_dt|moment:'month')">{{item.startDate_dt|moment:'format':'D MMM'}} - {{item.endDate_dt|moment:'format':'D MMM YYYY'}}</span>
+                            <br>
+                            <i class="fa fa-map-marker fa-fw"></i> {{::item.eventCity_EN_t}}, {{::item.eventCountry_EN_t}}
                         </div>
                     </div>
                     <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectMeeting()"><i class="fa fa-plus-circle"></i> add an event</button>
