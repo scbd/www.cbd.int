@@ -392,27 +392,27 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         }
 
 
-            //===========================
-            //
-            //===========================
-            function selectStatuses() {
+        //===========================
+        //
+        //===========================
+        function selectStatuses() {
 
-                openDialog('./select-statuses-dialog', { showClose: false, resolve : { statuses: function() { return $scope.element.data.statuses; } } }).then(function(dialog){
+            openDialog('./select-statuses-dialog', { showClose: false, resolve : { statuses: function() { return $scope.element.data.statuses; } } }).then(function(dialog){
 
-                    dialog.closePromise.then(function(res){
+                dialog.closePromise.then(function(res){
 
-                        if(!res.value)
-                            return;
+                    if(!res.value)
+                        return;
 
-                        var statuses = res.value.statuses;
+                    var statuses = res.value.statuses;
 
-                        if(statuses && !statuses.length)
-                            statuses = undefined;
+                    if(statuses && !statuses.length)
+                        statuses = undefined;
 
-                        $scope.element.data.statuses = statuses;
-                    });
+                    $scope.element.data.statuses = statuses;
                 });
-            }
+            });
+        }
 
         //===========================
         //
@@ -544,8 +544,6 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             openDialog('./select-meeting-dialog', { showClose: false }).then(function(dialog){
 
                 dialog.closePromise.then(function(res){
-
-                    console.log(res.value);
 
                     if(!res.value)
                         return;
