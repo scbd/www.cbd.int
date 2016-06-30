@@ -55,7 +55,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function load() {
 
-            $http.get('/api/v2015/tests', { params : { q : { decision: $scope.symbol }, fo: 1 }}).then(function(res){
+            $http.get('/api/v2016/decision-texts', { params : { q : { decision: $scope.symbol }, fo: 1 }}).then(function(res){
 
                 data = res.data || { decision: $scope.symbol, content: 'paste here' };
 
@@ -105,7 +105,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             var req = {
                 method : data._id ? 'PUT' : 'POST',
-                url    : '/api/v2015/tests' + (data._id ? '/'+data._id : ''),
+                url    : '/api/v2016/decision-texts' + (data._id ? '/'+data._id : ''),
                 data   : data
             };
 
