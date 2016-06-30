@@ -414,23 +414,22 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                 });
             }
 
-            //===========================
-            //
-            //===========================
-            function deleteStatus(item) {
+        //===========================
+        //
+        //===========================
+        function deleteStatus(item) {
 
-                if(!$scope.element && !$scope.element.data)
-                    return;
+            if(!$scope.element && !$scope.element.data)
+                return;
 
-                var items = $scope.element.data.statuses || [];
-                var index = items.indexOf(item);
+            var index, items = $scope.element.data.statuses || [];
 
-                if(index>=0) {
-                    items.splice(index, 1);
-                }
+            while((index=items.indexOf(item))>=0)
+                items.splice(index, 1);
 
-                $scope.element.data.statuses = items.length ? items : undefined;
-            }
+            if(!items.length)
+                $scope.element.data.statuses = undefined;
+        }
 
         //===========================
         //
@@ -460,14 +459,13 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             if(!$scope.element && !$scope.element.data)
                 return;
 
-            var items = $scope.element.data.decisions || [];
-            var index = items.indexOf(item);
+            var index, items = $scope.element.data.decisions || [];
 
-            if(index>=0) {
+            while((index=items.indexOf(item))>=0)
                 items.splice(index, 1);
-            }
 
-            $scope.element.data.decisions = items.length ? items : undefined;
+            if(!items.length)
+                $scope.element.data.decisions = undefined;
         }
 
         //===========================
@@ -493,11 +491,16 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function deleteNotification(item) {
 
-            var items = $scope.element.notifications || [];
-            var index = items.indexOf(item);
+            if(!$scope.element && !$scope.element.data)
+                return;
 
-            if(index>=0)
+            var index, items = $scope.element.data.notifications || [];
+
+            while((index=items.indexOf(item))>=0)
                 items.splice(index, 1);
+
+            if(!items.length)
+                $scope.element.data.notifications = undefined;
         }
 
         //===========================
@@ -558,11 +561,16 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function deleteMeeting(item) {
 
-            var items = $scope.element.meetings || [];
-            var index = items.indexOf(item);
+            if(!$scope.element && !$scope.element.data)
+                return;
 
-            if(index>=0)
+            var index, items = $scope.element.data.meetings || [];
+
+            while((index=items.indexOf(item))>=0)
                 items.splice(index, 1);
+
+            if(!items.length)
+                $scope.element.data.meetings = undefined;
         }
 
         //===========================
