@@ -14,6 +14,8 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         $scope.symbol = roman[session] + '/' + decision;
         $scope.save   = save;
         $scope.upload = upload;
+        $scope.buildFileUrl = buildFileUrl;
+        $scope.deleteFile = deleteFile;
         $scope.selectActors = selectActors;
         $scope.deleteActor  = deleteActor;
         $scope.selectStatuses = selectStatuses;
@@ -108,8 +110,6 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                 url    : '/api/v2016/decision-texts' + (data._id ? '/'+data._id : ''),
                 data   : data
             };
-
-            throw "DISBALED";
 
             $http(req).then(function(res){
 
@@ -270,7 +270,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function mousedown_selectNode(event) {
 
-            var node = this;
+            var node = this; // jshint ignore: line
 
             event.stopPropagation();
 
@@ -325,30 +325,100 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function upload() {
 
-            var fileUpload = $("#fileUpload");
+            var fileUpload = $('<input type="file" accept="application/pdf" multiple="" style="display:none">');
 
-            fileUpload.bind("change", upload_fileSelected);
+            $("ng-view").append(fileUpload);
+
+            fileUpload.bind("change", function(){
+                _.forEach(this.files, uploadFile);
+            });
+
             fileUpload.click();
         }
 
         //===========================
         //
         //===========================
-        function upload_fileSelected() {
-
-            var fileUpload = $("#fileUpload");
-
-            fileUpload.unbind("change", upload_fileSelected);
-
-            var file = fileUpload[0].files[0];
+        function uploadFile(file) {
 
             if(!file)
                 return;
 
-            $scope.element.files = $scope.element.files || [];
-            $scope.element.files.push({ filename : file.name.toLowerCase(), size : file.size });
-            $scope.$digest();
+            var fileInfo = {
+                filename : file.name.toLowerCase(),
+                size : file.size
+            };
+
+            $scope.uploads = $scope.uploads || [];
+            $scope.uploads.push(fileInfo);
+
+            var postData = {
+                filename : file.name,
+                metadata : {
+                    source  : 'dtt',
+                    paragraph : $scope.element.data.code
+                }
+            };
+
+            return $http.post('/api/v2015/temporary-files', postData).then(resData).then(function(target) {
+
+                return $http.put(target.url, file, { headers : { 'Content-Type' : target.contentType } }).then(function(){
+                    return target;
+                });
+
+            }).then(function(target) {
+
+                return $http.get('/api/v2015/temporary-files/'+target.uid).then(resData);
+
+            }).then(function(meta) {
+
+                fileInfo.filename    = meta.filename;
+                fileInfo.contentType = meta.contentType;
+                fileInfo.size        = meta.size;
+                fileInfo.hash        = meta.hash;
+
+                var index;
+
+                while(~(index = $scope.uploads.indexOf(fileInfo)))
+                    $scope.uploads.splice(index, 1);
+
+                $scope.element.data.files = $scope.element.data.files||[];
+                $scope.element.data.files.push(fileInfo);
+
+            }).catch(function(err) {
+
+                console.error((err||{}).message || err);
+
+                fileInfo.error = (err||{}).data || err;
+
+            });
         }
+
+        //===========================
+        //
+        //===========================
+        function buildFileUrl(item) {
+            return '/api/v2016/decision-texts/'+data._id+'/attachments/'+item.hash+'/stream';
+        }
+
+        //===========================
+        //
+        //===========================
+        function deleteFile(item) {
+
+            if(!$scope.element && !$scope.element.data)
+                return;
+
+            var items = $scope.element.data.files || [];
+            var index = items.indexOf(item);
+
+            if(index>=0) {
+                items.splice(index, 1);
+            }
+
+            $scope.element.data.files = items.length ? items : undefined;
+        }
+
 
         ////////////////////
         // DIALOGS
@@ -687,5 +757,12 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                 replaceWithOwnChildren(formattingEls[j]);
             }
         }
+    }
+
+    //===========================
+    //
+    //===========================
+    function resData(res) {
+        return res.data;
     }
 });

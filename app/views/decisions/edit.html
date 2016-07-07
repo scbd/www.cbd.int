@@ -344,17 +344,22 @@
     	</div>
         <hr/>
         <h4>
-            <input type="file" id="fileUpload" accept="application/pdf" style="display:none">
             Submissions
     	</h4>
     	<div>
     		<div class="form-group">
-    			<div style="display:inline-block" ng-repeat="item in element.files" style="padding-right:1em">
-    				<imgx src="/app/images/file.png" style="height:128px">
-    				<center> {{item.filename}} <i>({{item.size/1024 | number:1}} kB)</i> &nbsp; </center>
-    			</div>
+
+                <div ng-repeat="item in element.data.files" class="form-control" style="margin-bottom:2px">
+                    <button class="btn btn-danger btn-xs pull-right" ng-click="deleteFile(item)"><i class="fa fa-minus-circle"></i></button>
+                     <i class="fa fa-file-pdf-o" style="color:red"></i> <a ng-href="{{buildFileUrl(item)}}" target="_blank">{{item.filename}}</a> <i>({{item.size/1024 | number:1}} kB)</i>
+                 </div>
+
+                <div ng-repeat="item in uploads" class="form-control" style="margin-bottom:2px">
+                    <button class="btn btn-default btn-xs pull-right"><i class="fa fa-cog fa-spin"></i></button>
+                     <i class="fa fa-file-pdf-o" style="color:red"></i> <a>{{item.filename}}</a> <i>({{item.size/1024 | number:1}} kB)</i>
+                 </div>
     		</div>
-            <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph' || true" ng-click="upload()"><i class="fa fa-plus-circle"></i> upload a document</button>
+            <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="upload()"><i class="fa fa-plus-circle"></i> upload document(s)</button>
     	</div>
         <hr/>
         <h4>
