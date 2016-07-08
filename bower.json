@@ -19,6 +19,8 @@
         "nprogress": "0.2.0",
         "moment-timezone": "0.5.4",
         "lodash": "3.10.1",
+        "magnific-popup" : "1.1.0",
+        "jquery-migrate": "1.2.1",
 
         "animate.css": "3.5.2",
         "remarkable-bootstrap-notify": "3.1.3",
