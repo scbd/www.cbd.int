@@ -1,0 +1,182 @@
+ <style>
+.banner{
+	height: 118px;
+	background: #ab42a6;
+	background: -moz-linear-gradient(top,  #ab42a6 0%, #730094 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ab42a6), color-stop(100%,#730094));
+	background: -webkit-linear-gradient(top,  #ab42a6 0%,#730094 100%);
+	background: -o-linear-gradient(top,  #ab42a6 0%,#730094 100%);
+	background: -ms-linear-gradient(top,  #ab42a6 0%,#730094 100%);
+	background: linear-gradient(to bottom,  #ab42a6 0%,#730094 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ab42a6', endColorstr='#730094',GradientType=0 );
+	text-align: left;
+	overflow-y: hidden;
+
+}
+	.banner .main-title{
+		background-color: rgba(255,255,255,0.4);
+		height: 100%;
+		margin-right: 25px;
+		text-align: center;
+		border-left: 3px solid #00abf3;
+	}
+		.banner .main-title h5{
+			margin: 10px 0 0;
+			font-size: 15px;
+			color: #fff;
+			font-weight: normal;
+		}
+
+	.banner .main-title:hover{
+		background-color: rgba(0,171,243,0.7);
+	}
+		.banner h3{
+			color: white;
+		}
+		.banner h4{
+			margin-top: 5px;
+		}
+
+	.title-global-status {
+	    background: url("/app/images/aichi-targets/global-status-icon.png") no-repeat;
+	    padding-left: 2em;
+	}
+	.title-national-status {
+	    background: url("/app/images/aichi-targets/target-icon.png") no-repeat;
+	    padding-left: 2em;
+	}
+	.title-resources {
+	    background: url("/app/images/aichi-targets/resources-icon.png") no-repeat;
+	    padding-left: 2em;
+	}
+	.title-implementation {
+	    background: url("/app/images/aichi-targets/implementation-activities-icon.png") no-repeat;
+	    padding-left: 2em;
+	}
+
+	.title-talks2020 {
+	    background: url("/app/images/aichi-targets/video-icon.png") no-repeat;
+	    background-size: contain;
+	    padding-left: 2em;
+	}
+
+	.title-calendar {
+	    background: url("/app/images/aichi-targets/calendar-icon.png") no-repeat;
+	    background-size: contain;
+	    padding-left: 2em;
+	}
+
+
+	/* Makes images fully responsive */
+
+	.img-responsive,
+	.thumbnail > img,
+	.thumbnail a > img,
+	.carousel-inner > .item > img,
+	.carousel-inner > .item > a > img {
+	  	display: block;
+	  	width: 100%;
+	  	height: auto;
+	}
+
+	/* ------------------- Carousel Styling ------------------- */
+
+	.carousel-inner {
+		-moz-border-radius:15px;
+ 		-webkit-border-radius: 15px;
+	  	border-radius: 15px;
+	}
+
+	.carousel-control.left,
+	.carousel-control.right {
+	  background-image: none;
+	}
+
+
+
+    </style>
+
+<div class="row">
+    <div class="col-xs-12">
+		<div class="row row-eq-height banner " style="background: {{indexIdCtrl.goal.colors.background}}">
+			<div class="col-sm-3 col-md-3 main-title">
+				<h5>Aichi Target</h5>
+					<img ng-src="/app/images/aichi-targets/abt-{{indexIdCtrl.target.id}}-96.png" width="60px" alt="Aichi target">
+				<h4 style="color: {{indexIdCtrl.goal.colors.text}}">{{indexIdCtrl.goal.title.en}}</h4>
+			</div>
+			<div class="col-sm-8 col-md-8">
+				<h3>{{indexIdCtrl.target.title.en}}</h3>
+				<p style="color: {{indexIdCtrl.goal.colors.aichi}}">{{indexIdCtrl.target.action.en}}</p>
+			</div>
+		</div>
+    </div>
+</div>
+
+<div class="row bg-grey">
+    <div class="col-sm-12 col-xs-12 visible-xs visible-sm" style="z-index:99;">
+        <div fish-eye class="fisheye" max-width='28'></div>
+    </div>
+
+     <div class="col-sm-12 col-md-12 hidden-xs hidden-sm" style="z-index:99;">
+        <div fish-eye class="fisheye" max-width='42'></div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-xs-6">
+        <h4 class="title-global-status">Global Status</h4>
+		<div>GLOABEL STATUS!</div>
+    </div>
+    <div class="col-xs-6">
+        <h4 class="title-national-status">National Status</h4>
+        <div>NATIONAL STATUS!</div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-6">
+        <h4 class="title-talks2020">20/20 talks on Target {{indexIdCtrl.target.id}}</h4>
+        <div class="row">
+			<div class="col-xs-10 col-xs-offset-1">
+				<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+			      <!-- Wrapper for slides -->
+			      <div class="carousel-inner">
+					  	<div class="item" ng-class="{'active': $first}" ng-repeat="video in indexIdCtrl.target.videos" videos-loaded>
+							<a class="vimeo" ng-href="{{video.link}}">
+		                        <img ng-src="{{video.thumbnail}}" alt="{{video.caption}}" title="{{video.caption}}">
+		                    </a>
+		                </div>
+			      </div>
+
+			      <!-- Controls -->
+			      <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+			        <span class="glyphicon glyphicon-chevron-left"></span>
+			      </a>
+			      <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+			        <span class="glyphicon glyphicon-chevron-right"></span>
+			      </a>
+			    </div>
+			</div>
+		</div>
+    </div>
+
+    <div class="col-xs-6">
+        <h4 class="title-implementation">Implementation Activities</h4>
+		<div class="row">
+		    <div class="col-xs-12">
+		        {{indexIdCtrl.activity.country}} &#8212; {{indexIdCtrl.activity.text}}
+		    </div>
+		</div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-6">
+        <h4 class="title-resources">Key resources and partners</h4>
+    </div>
+
+    <div class="col-xs-6">
+        <h4 class="title-calendar">Notifications, Calendar and News</h4>
+    </div>
+</div>

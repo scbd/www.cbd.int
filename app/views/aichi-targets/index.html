@@ -1,0 +1,89 @@
+ <style>
+
+	.banner{
+		height: 120px;
+		background: #ab42a6;
+		background: -moz-linear-gradient(top,  #ab42a6 0%, #730094 100%);
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ab42a6), color-stop(100%,#730094));
+		background: -webkit-linear-gradient(top,  #ab42a6 0%,#730094 100%);
+		background: -o-linear-gradient(top,  #ab42a6 0%,#730094 100%);
+		background: -ms-linear-gradient(top,  #ab42a6 0%,#730094 100%);
+		background: linear-gradient(to bottom,  #ab42a6 0%,#730094 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ab42a6', endColorstr='#730094',GradientType=0 );
+
+		background: url("/app/images/aichi-targets/banner-0-7046.jpg");
+
+		text-align: left;
+	}
+
+	.banner .main-title{
+		background-color: rgba(255,255,255,0.4);
+		height: 100%;
+		margin-right: 25px;
+		text-align: center;
+        border-left: 3px solid #00abf3;
+	}
+
+		.banner .main-title{
+			margin: 10px 0 0;
+			font-size: 25px;
+			color: #fff;
+			font-weight: normal;
+            width: 220px;
+            padding-top: 1.8em;
+		}
+
+	.banner .main-title:hover{
+		background-color: rgba(0,171,243,0.7);
+	}
+
+    .title-national-status {
+        background: url("/app/images/aichi-targets/target-icon.png") no-repeat;
+        padding-left: 2em;
+    }
+ </style>
+
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="banner">
+            <h5 class="main-title">Aichi Targets</h5>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div class="row">
+    <div class="col-xs-12">
+        <p>By clicking on any of the Aichi Biodiversity Target Icons below you can access information on the global status, national targets and status, implementation activities, key resources and partners, and upcoming events relating to each of the Aichi Biodiversity Targets</p>
+        <p>In order to submit information to be displayed on these pages, for country status and activity please go to the <a href="http://chm.cbd.int/submit">online reporting system</a>, for all other information please contact the Secretariat at <a href="mailto:secretariat@cbd.int">secretariat@cbd.int</a></p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <h3 class="title-national-status" style="padding-left: 1.2em;">Aichi Targets</h3>
+    </div>
+</div>
+
+<div class="row" >
+    <div class="col-sm-5" ng-repeat="target in indexCtrl.targets" >
+        <div class="row" >
+            <div class="col-xs-2">
+                <a ng-href="target/{{target.id}}">
+                    <img ng-src="/app/images/aichi-targets/abt-{{target.id}}-96.png" width="50px" alt="Aichi Target {{target.id}}" />
+                </a>
+            </div>
+            <div class="col-xs-10">
+                <h4> Aichi Target {{target.id}}: <small style="font-weight: 600;">{{target.title.en}}</small></h4>
+				<h6>{{getGoal(target.goal.en).title.en}}</h6>
+				<p>{{getGoal(target.goal.en).text.en}}.</p>
+				<a href="target/{{target.id}}">Details&nbsp;»</a>
+            </div>
+        </div>
+		<hr />
+    </div>
+
+</div>
