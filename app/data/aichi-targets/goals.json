@@ -1,0 +1,74 @@
+{
+	"goals" : [
+		{
+			"goal": "A",
+			"title": {
+				"en": "Strategic Goal A"
+			},
+			"text": {
+				"en": "Address the underlying causes of biodiversity loss by mainstreaming biodiversity across government and society"
+			},
+			"colors": {
+				"text": "#BF1E2E",
+				"background": "#0B77BD",
+				"aichi": "#FFFFFF"
+			}
+		},
+		{
+			"goal": "B",
+			"title": {
+				"en": "Strategic Goal B"
+			},
+			"text": {
+				"en": "Reduce the direct pressures on biodiversity and promote sustainable use"
+			},
+			"colors": {
+				"text": "#FCB040",
+				"background": "#CB2E2D",
+				"aichi": "#FFFFFF"
+			}
+		},
+		{
+			"goal": "C",
+			"title": {
+				"en": "Strategic Goal C"
+			},
+			"text": {
+				"en": "To improve the status of biodiversity by safeguarding ecosystems, species and genetic diversity"
+			},
+			"colors": {
+				"text": "#662D91",
+				"background": "#85C240",
+				"aichi": "#FFFFFF"
+			}
+		},
+		{
+			"goal": "D",
+			"title": {
+				"en": "Strategic Goal D"
+			},
+			"text": {
+				"en": "Enhance the benefits to all from biodiversity and ecosystem services"
+			},
+			"colors": {
+				"text": "#00AEEF",
+				"background": "#6B3092",
+				"aichi": "#FFFFFF"
+			}
+		},
+		{
+			"goal": "E",
+			"title": {
+				"en": "Strategic Goal E"
+			},
+			"text": {
+				"en": "Enhance implementation through participatory planning, knowledge management and capacity building"
+			},
+			"colors": {
+				"text": "#F8D52B",
+				"background": "#8DC63F",
+				"aichi": "#FFFFFF"
+			}
+		}
+	]
+}
