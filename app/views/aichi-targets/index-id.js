@@ -1,38 +1,31 @@
-define(['app', 'lodash', 'data/aichi-targets/targets', 'data/aichi-targets/goals', 'directives/aichi-targets/fisheye', 'directives/aichi-targets/videos'], function(app, _, targetsData, goalsData) { 'use strict';
+define(['app', 'lodash', 'data/aichi-targets/targets', 'data/aichi-targets/goals', 'directives/aichi-targets/fisheye', 'directives/aichi-targets/videos', 'directives/aichi-targets/progress-pie','directives/aichi-targets/national-targets-map'], function(app, _, targetsData, goalsData) { 'use strict';
 
-	return ['$scope', '$location', '$routeParams', function($scope, $location, $routeParams) {
+	return ['$location', '$routeParams', function( $location, $routeParams) {
 
 		var _ctrl = this;
 
-		$scope.targetId = parseInt($routeParams.targetId);
+		var targetId = parseInt($routeParams.targetId);
 
-		if(!_.inRange($scope.targetId,1, 21))
+		if(!_.inRange(targetId,1, 21))
 			$location.path('/404');
 
-		_ctrl.target = _.findWhere(targetsData.targets, {'id' : $scope.targetId});
+		_ctrl.target = _.findWhere(targetsData.targets, {'id' : targetId});
 		_ctrl.goal = _.findWhere(goalsData.goals, {'goal': _ctrl.target.goal.en});
 
-
+		getTargetActivity(targetId);
 
 
 		//============================================================
-        //
-        //============================================================
-        $scope.getTargetActivity = function (target) {
-            if(target && _ctrl.target.activities){
-                var max = _ctrl.target.activities.length;
-                var rnd = Math.floor(Math.random() * max );
+    //
+    //============================================================
+    function getTargetActivity (target) {
+        if(target && _ctrl.target.activities){
+            var max = _ctrl.target.activities.length;
+            var rnd = Math.floor(Math.random() * max );
+            _ctrl.activity = _ctrl.target.activities[rnd];
+        }
+    }
 
-                _ctrl.activity = _ctrl.target.activities[rnd];
-            }
-        };
-
-		//============================================================
-        //
-        //============================================================
-        $scope.$watch('targetId', function(newValue) {
-            $scope.getTargetActivity(newValue);
-        });
 
 	}];
 });
