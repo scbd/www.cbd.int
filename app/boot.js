@@ -20,7 +20,11 @@ require.config({
         'nprogress'       : 'libs/nprogress/nprogress',
         'moment'          : 'libs/moment/min/moment.min',
         'moment-timezone' : 'libs/moment-timezone/builds/moment-timezone-with-data.min',
-        'rangy'           : 'libs/rangy-release/rangy-core.min'
+        'shim'            : 'libs/require-shim/src/shim',
+        'interface'       : 'js/interface',
+        'magnific-popup'  : 'libs/magnific-popup/dist/jquery.magnific-popup.min',
+        'jquery-migrate'  : 'libs/jquery-migrate/jquery-migrate.min',
+        'ammap3WorldHigh' : 'directives/reporting-display/worldEUHigh',
     },
     shim: {
         'libs/angular/angular.min' : { deps : ['jquery'] },
@@ -31,8 +35,15 @@ require.config({
         'ngSanitize'           : { deps : ['angular'] },
         'ngDialog'             : { deps : ['angular', 'css!libs/ng-dialog/css/ngDialog.min', 'css!libs/ng-dialog/css/ngDialog-theme-default.css'] },
         'bootstrap'            : { deps : ['jquery' ] },
-        'bootstrap-notify'     : { deps : ['jquery', 'bootstrap'] }
+        'bootstrap-notify'     : { deps : ['jquery', 'bootstrap'] },
+        'jquery-migrate'       : { deps : ['jquery']},
+        'interface'            : { deps : ['jquery-migrate']},
+        'magnific-popup'       : { deps : ['jquery']}
     },
+    packages: [
+    { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },
+    { name: 'ammap'  , main: 'ammap'   , location : 'libs/ammap3/ammap' }
+]
 });
 
 define('underscore', ['lodash'], function(_) {

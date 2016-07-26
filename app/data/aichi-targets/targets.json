@@ -1,0 +1,728 @@
+{
+	"targets" : [
+
+		{
+			"id": 1,
+			"title" : {
+				"en" : "Awareness of biodiversity values"
+			},
+			"goal" : {
+				"en" : "A"
+			},
+			"action" : {
+				"en" : "By 2020, at the latest, people are aware of the values of biodiversity and the steps they can take to conserve and use it sustainably."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87023906",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 1 by Stanley T. Asah",
+					"thumbnail" : "/app/images/aichi-targets/videos/1_87023906.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73254974",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 1 by Tim Hirsch",
+					"thumbnail" : "/app/images/aichi-targets/videos/1_73254974.jpg"
+				}
+			],
+            "activities":[
+                {
+                    "country": "Azerbaijan",
+                    "text"   :"A decision of the Cabinet of Ministers adopted in 2003 established an inter-city commission to coordinate environmental education and awareness-raising in the country. Activities are ongoing."
+                },
+                {
+                    "country": "Belgium",
+                    "text"   :"In 2010, the Royal Belgian Institute of Natural Sciences opened a new permanent exhibition hall on “Biodiversity in Cities”, and plans to dedicate more halls to biodiversity in the coming years."
+                },
+                {
+                    "country": "Cameroon",
+                    "text"   :"Each year, “Traditional African Medicine Day” is held in Cameroon. In 2010, the theme was “conservation of medicinal plants”, with exhibits and a roundtable discussion organized to draw attention to biodiversity loss and the need for the sustainable management of plants and ecosystems."
+                }
+            ]
+		},
+		{
+			"id": 2,
+			"title" : {
+				"en" : "Integration of biodiversity values"
+			},
+			"goal" : {
+				"en" : "A"
+			},
+			"action" : {
+				"en" : "By 2020, at the latest, biodiversity values have been integrated into national and local development and poverty reduction strategies and planning processes and are being incorporated into national accounting, as appropriate, and reporting systems."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73254975",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 2 by Pavan Sukhdev",
+					"thumbnail" : "/app/images/aichi-targets/videos/2_73254975.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87027454",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 2 by Gladman Chibememe",
+					"thumbnail" : "/app/images/aichi-targets/videos/2_87027454.jpg"
+				}
+			],
+            "activities":[
+                {
+                    "country" : "Japan",
+                    "text"    : "Consideration of economic assessments for biodiversity and ecosystem services is increasing, including the development of mechanisms that encourage companies and others to support agricultural production that contributes to conservation carried out by farmers. This is also being done to promote environmental real estate as an initiative for creating real estate markets that encourage sustained investment."
+                },
+                {
+                     "country": "Niue",
+                     "text"   : "Hakupu’s Village Development and Action Plan 2009-2020 contains ecotourism strategies based on the Huvalu Conservation Area and Hakupu Heritage and Conservation Park, and for organic farming. Tuapa’s VDAP 2009-2020 contains strategies for food security, renewable energy and healthy living."
+                }
+            ]
+		},
+		{
+			"id": 3,
+			"title" : {
+				"en" : "Incentives"
+			},
+			"goal" : {
+				"en" : "A"
+			},
+			"action" : {
+				"en" : "By 2020, at the latest, incentives, including subsidies, harmful to biodiversity are eliminated, phased out or reformed in order to minimize or avoid negative impacts, and positive incentives for the conservation and sustainable use of biodiversity are developed and applied, consistent and in harmony with the Convention and other relevant international obligations, taking into account national socio economic conditions."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73254976",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 3 by Katia Karousakis",
+					"thumbnail" : "/app/images/aichi-targets/videos/3_73254976.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87020089",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 3 by Dr. Paul Shrivastava",
+					"thumbnail" : "/app/images/aichi-targets/videos/3_87020089.jpg"
+				}
+			],
+			"activities":[
+			    {
+			        "country": "Ecuador",
+			        "text"   : "The National Program on Incentives for the Conservation and Sustainable Use of Natural Heritage (\"Socio Bosque\") was created in January 2014."
+			    },
+				{
+					"country": "Pakistan",
+					"text"   : "The subsidy on electricity for farm tube wells, which was a major cause of ground water depletion, has been withdrawn."
+				},
+				{
+					"country": "Solomon Islands",
+					"text"   : "Renewable energy, such as solar energy, has been introduced to villages to reduce dependency on lowland forest for fuels under UNFCCC implementation."
+				}
+			]
+		},
+		{
+			"id": 	4,
+			"title" : {
+				"en" : "Use of natural resources"
+			},
+			"goal" : {
+				"en" : "A"
+			},
+			"action" : {
+				"en" : "By 2020, at the latest, Governments, business and stakeholders at all levels have taken steps to achieve or have implemented plans for sustainable production and consumption and have kept the impacts of use of natural resources well within safe ecological limits."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87020090",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 4 by Rajendra Dobriyal",
+					"thumbnail" : "/app/images/aichi-targets/videos/4_87020090.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73254977",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 4 by Ibrahim Thiaw",
+					"thumbnail" : "/app/images/aichi-targets/videos/4_73254977.jpg"
+				}
+			],
+			"activities":[
+			    {
+			        "country": "Colombia",
+			        "text"   : "A National Program on Sustainable Biocommerce (2011-2021) is being implemented."
+			    },
+				{
+					"country": "India",
+					"text"   : "The Government of India has enacted the Companies Act 2013 which makes Corporate social responsibility (CSR) spending mandatory for every company with a net worth of 500 crore rupees or more, a turnover of 1000 crore Rs or more, or a net profit of 5 crore Rs or more during any financial year. Two percent of the average net profits made by the company during every block of 3 years are to be used for CSR activities. Ensuring environmental sustainability has been identified as one of the nine activities to be covered under CSR activities."
+				}
+			]
+		},
+		{
+			"id": 	5,
+			"title" : {
+				"en" : "Loss of habitats"
+			},
+			"goal" : {
+				"en" : "B"
+			},
+			"action" : {
+				"en" : "By 2020, the rate of loss of all natural habitats, including forests, is at least halved and where feasible brought close to zero, and degradation and fragmentation is significantly reduced."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87023908",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 5 by Paul Leadley",
+					"thumbnail" : "/app/images/aichi-targets/videos/5_87023908.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73304208",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 5 by Tim Christophersen",
+					"thumbnail" : "/app/images/aichi-targets/videos/5_73304208.jpg"
+				}
+			],
+			"activities":[
+			    {
+			        "country": "Netherlands",
+			        "text"   : "Construction of fauna passages and ecoducts has led to significant habitat defragmentation. The same is true for aquatic life. Fish species are increasingly able to migrate through seas, rivers, streams and ditches due to the existence of fish passages at barriers."
+			    },
+				{
+			        "country": "South Africa",
+			        "text"   : "Threatened ecosystems have been published in regard to the Biodiversity Act. Biodiversity is increasingly routinely incorporated into EIAs. Norms and Standards for Biodiversity Management Plans for Ecosystems have been finalized. Grasslands Ecosystem Guidelines have also been published, and several biodiversity sector plans and bioregional plans developed to inform land use planning and environmental authorisations."
+			    }
+			]
+		},
+		{
+			"id": 	6,
+			"title" : {
+				"en" : "Sustainable fisheries"
+			},
+			"goal" : {
+				"en" : "B"
+			},
+			"action" : {
+				"en" : "By 2020 all fish and invertebrate stocks and aquatic plants are managed and harvested sustainably, legally and applying ecosystem based approaches, so that overfishing is avoided, recovery plans and measures are in place for all depleted species, fisheries have no significant adverse impacts on threatened species and vulnerable ecosystems and the impacts of fisheries on stocks, species and ecosystems are within safe ecological limits."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87027453",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 6 by Jake Rice",
+					"thumbnail" : "/app/images/aichi-targets/videos/6_87027453.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73304211",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 6 by Serge Garcia",
+					"thumbnail" : "/app/images/aichi-targets/videos/6_73304211.jpg"
+				}
+			],
+			"activities":[
+			    {
+			        "country": "Malaysia",
+			        "text"   : "The Ecosystem Approach for the Management of Fisheries and Other Marine Resources is being fully applied, with the target to have, by 2020, strong related legislative, policy and regulatory frameworks. The target also aims to improve income, livelihoods and food security in an increasingly significant number of coastal communities through new sustainable coastal fisheries and poverty reduction initiatives."
+			    },
+			    {
+			        "country": "Senegal",
+			        "text"   : "A national MPA network comprised of 16 MPAs covering an area of 244,750 hectares has been established. These MPAs are contributing to the reconstitution of fish stocks, protection of threatened marine and coastal species, and to the improvement of livelihood and food security."
+			    }
+			]
+		},
+		{
+			"id": 7,
+			"title" : {
+				"en" : "Areas under sustainable management"
+			},
+			"goal" : {
+				"en" : "B"
+			},
+			"action" : {
+				"en" : "By 2020 areas under agriculture, aquaculture and forestry are managed sustainably, ensuring conservation of biodiversity."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87020092",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 7 by Peter Kevan",
+					"thumbnail" : "/app/images/aichi-targets/videos/7_87020092.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73304212",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 7 by Peter Kenmore",
+					"thumbnail" : "/app/images/aichi-targets/videos/7_73304212.jpg"
+				}
+			],
+			"activities":[
+			    {
+			        "country": "India",
+			        "text"   : "A national project on organic farming is being promoted through various incentives disbursed to farmers. Between 2003 and 2010, the area under certified organic farming increased from 42,000 to 10,050,000 hectares. "
+			    },
+			    {
+			        "country": "Myanmar",
+			        "text"   : "The Myanmar Certification Committee is developing Sustainable Forest Management Certification and a Chain of Custody Certification. It is promoting the Timber Legality Assurance System, in collaboration with the European Forest Institute, NGOs and INGOs. "
+			    }
+			]
+		},
+		{
+			"id": 8,
+			"title" : {
+				"en" : "Pollution"
+			},
+			"goal" : {
+				"en" : "B"
+			},
+			"action" : {
+				"en" : "By 2020, pollution, including from excess nutrients, has been brought to levels that are not detrimental to ecosystem function and biodiversity."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87027455",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 8 by Violet Ford",
+					"thumbnail" : "/app/images/aichi-targets/videos/8_87027455.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73305999",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 8 by Patricio Arturo Bernal",
+					"thumbnail" : "/app/images/aichi-targets/videos/8_73305999.jpg"
+				}
+			],
+			"activities":[
+			    {
+			        "country": "Ecuador",
+			        "text"   : "Adopted in 2010, the National Programme for Integrated Solid Waste Management (PNGIDS) has the primary objective of promoting solid waste management in municipalities throughout the country. A target of the programme is to eliminate open landfills in all municipalities by 2017."
+			    },
+			    {
+			        "country": "Niue",
+			        "text"   : "A National Integrated Waste Management Strategy (2010-2015) and accompanying Action Plan have been developed."
+			    },
+			    {
+			        "country": "Senegal",
+			        "text"   : "An ambitious project to clean up the Bay of Hann is being implemented, with some manufacturers beginning to put in place systems for wastewater treatment. The State intends to impose heavy taxes on companies that are slow to subscribe to the objectives of this project."
+			    }
+			]
+		},
+		{
+			"id": 9,
+			"title" : {
+				"en" : "Invasive Alien Species"
+			},
+			"goal" : {
+				"en" : "B"
+			},
+			"action" : {
+				"en" : "By 2020, invasive alien species and pathways are identified and prioritized, priority species are controlled or eradicated, and measures are in place to manage pathways to prevent their introduction and establishment."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87023905",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 9 by Piero Genovesi",
+					"thumbnail" : "/app/images/aichi-targets/videos/9_87023905.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73311834",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 9 by Melesha Banhan",
+					"thumbnail" : "/app/images/aichi-targets/videos/9_73311834.jpg"
+				}
+			],
+			"activities":[
+			    {
+			        "country": "Canada",
+			        "text"   : "In April 2011, the Governments of Canada and Ontario collaborated to establish the Invasive Species Centre (ISC). The facility houses the Insect Production and Quarantine Laboratories, the only facility of its kind in Canada dedicated to combating insect pests, both alien and domestic, terrestrial and aquatic, that threaten Canada’s natural resources and ecosystems."
+			    },
+			    {
+			        "country": "Iraq",
+			        "text"   : "Two national targets have been adopted to address this issue. The country aims to, by the end of 2016, enact legislation to control the introduction and diffusion of non-native species into the natural environment; and, by the end of 2020, publish the list of invasive species in Iraq and their impacts and invasion pathways."
+			    }
+			]
+		},
+		{
+			"id": 10,
+			"title" : {
+				"en" : "Vulnerable ecosystems"
+			},
+			"goal" : {
+				"en" : "B"
+			},
+			"action" : {
+				"en" : "By 2015, the multiple anthropogenic pressures on coral reefs, and other vulnerable ecosystems impacted by climate change or ocean acidification are minimized, so as to maintain their integrity and functioning."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87026972",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 10 by Nick Davidson",
+					"thumbnail" : "/app/images/aichi-targets/videos/10_87026972.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73306001",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 10 by David Obura",
+					"thumbnail" : "/app/images/aichi-targets/videos/10_73306001.jpg"
+				}
+			],
+			"activities":[
+			    {
+			        "country": "Colombia",
+			        "text"   : "In 2012, the “Blue Agenda” (“Agenda Azul”) was launched to strengthen institutions and organize actions, at public and private levels, and by civil groups, for managing marine, coastal and island resources."
+			    },
+			    {
+			        "country": "Malaysia",
+			        "text"   : "A Coral Reef Bleaching Response Plan has been developed."
+			    },
+			    {
+			        "country": "Poland",
+			        "text"   : "In October 2013, the Council of Ministers passed the Strategic Adaptation Plan for Sectors and Areas Sensitive to Climate Change up to 2020 with a Perspective to 2030 (SAP 2020)."
+			    }
+			]
+		},
+		{
+			"id": 11,
+			"title" : {
+				"en" : "Protected areas"
+			},
+			"goal" : {
+				"en" : "C"
+			},
+			"action" : {
+				"en" : "By 2020, at least 17 per cent of terrestrial and inland water, and 10 per cent of coastal and marine areas, especially areas of particular importance for biodiversity and ecosystem services, are conserved through effectively and equitably managed, ecologically representative and well connected systems of protected areas and other effective area-based conservation measures, and integrated into the wider landscapes and seascapes."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87027459",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 11 by Chrissy Grant",
+					"thumbnail" : "/app/images/aichi-targets/videos/11_87027459.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73306004",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 11 by Trevor Sandwith",
+					"thumbnail" : "/app/images/aichi-targets/videos/11_73306004.jpg"
+				}
+			],
+			"activities":[
+			    {
+			        "country" : "Costa Rica",
+			        "text"    : "In 2011, by Decree of the Ministry of the Environment, Energy and Technology, the first “seamounts” marine management area was declared around Isla del Coco."
+			    },
+			    {
+			        "country" : "Iraq",
+			        "text"    : "In 2014, the Law on the Protected Areas System entered into force."
+			    },
+			    {
+			        "country" : "Spain",
+			        "text"    : "At present, protected areas cover more than 27% of the terrestrial surface in the country. Spain has also declared 26 special marine conservation zones and adopted corresponding management plans and conservation measures for them."
+			    }
+			]
+		},
+		{
+			"id": 12,
+			"title" : {
+				"en" : "Preventing extinctions"
+			},
+			"goal" : {
+				"en" : "C"
+			},
+			"action" : {
+				"en" : "By 2020 the extinction of known threatened species has been prevented and their conservation status, particularly of those most in decline, has been improved and sustained."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87027460",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 12 by Vital Bambanze",
+					"thumbnail" : "/app/images/aichi-targets/videos/12_87027460.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73311838",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 12 by Russ Mittermeier",
+					"thumbnail" : "/app/images/aichi-targets/videos/12_73311838.jpg"
+				}
+			],
+			"activities" :[
+			    {
+			        "country": "Italy",
+			        "text"   : "The Transboundary Biosphere Reserve “Monviso” (Italy/France) was inscribed in the MAB Programme in 2013, following efforts to integrate the management of 2 PAs (Parco del Po Cuneese and Parc National Régional du Queyras) and conserve biodiversity in the alpine ecological corridor."
+			    },
+			    {
+			        "country": "Myanmar",
+			        "text"   : "Endangered sea turtles are being conserved in cooperation with international organizations.  Turtle hatching stations have been established in the Nga Pu Taw and Bogalay townships."
+			    },
+			    {
+			        "country": "Uganda",
+			        "text"   : "A Directive from the President has been instrumental in protecting the threatened shae tree and in stimulating the development of a National Strategy for its protection to be completed in 2014."
+			    }
+			]
+		},
+		{
+			"id" :13,
+			"title" : {
+				"en" : "Agricultural biodiversity"
+			},
+			"goal" : {
+				"en" : "C"
+			},
+			"action" : {
+				"en" : "By 2020, the genetic diversity of cultivated plants and farmed and domesticated animals and of wild relatives, including other socio-economically as well as culturally valuable species, is maintained, and strategies have been developed and implemented for minimizing genetic erosion and safeguarding their genetic diversity."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87028178",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 13 by Maria Yolanda Teran Maigua",
+					"thumbnail" : "/app/images/aichi-targets/videos/13_87028178.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73311840",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 13 by Vandana Shiva",
+					"thumbnail" : "/app/images/aichi-targets/videos/13_73311840.jpg"
+				}
+			],
+			"activities" :[
+			    {
+			        "country": "India",
+			        "text"   : "The Ministry of Agriculture has set up 6 national bureaus (plant genetic resources, animal genetic resources, fish genetic resources, agriculturally important insects, agriculturally important microorganisms and soil sciences) to conserve rich domesticated biodiversity and promote underutilized crops and animal breeds."
+			    },
+			    {
+			        "country": "Nigeria",
+			        "text"   : "Efforts are now being made to domesticate some plants used in traditional medicine. Accordingly, the National Agency for Genetic Resources and Biotechnology is mandated to document and keep essential genetic biodiversity. The National Institute for Pharmaceutical Research and Development also has reliable data on the medicinal and patent value of plant resources in Nigeria."
+			    }
+			]
+		},
+		{
+			"id": 14,
+			"title" : {
+				"en" : "Essential ecosystem services"
+			},
+			"goal" : {
+				"en" : "D"
+			},
+			"action" : {
+				"en" : "By 2020, ecosystems that provide essential services, including services related to water, and contribute to health, livelihoods and well-being, are restored and safeguarded, taking into account the needs of women, indigenous and local communities, and the poor and vulnerable."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87023903",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 14 by Claude Fromageot",
+					"thumbnail" : "/app/images/aichi-targets/videos/14_87023903.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73311844",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 14 by Carlos Manuel Rodriguez",
+					"thumbnail" : "/app/images/aichi-targets/videos/14_73311844.jpg"
+				}
+			],
+			"activities" :[
+			    {
+			        "country": "Canada",
+			        "text"   : "In July 2013, the province of Saskatchewan designated a new protected area in the provincial boreal forest, the Pink Lake Representative Area Ecological Reserve. At 3,660 km2, it is Saskatchewan’s largest protected area. With the Pink Lake designation, protected area coverage in the Churchill River Upland Ecoregion increases from 4.9% to 8.2%. As an ecological reserve, no new industrial development will be allowed in the area. Leases or permits in place at the time of the designation will be grandfathered to allow existing activities to continue. Traditional activities by First Nations and Métis people, as well as recreational hunting and angling, will continue."
+			    }
+			]
+		},
+		{
+			"id": 15,
+			"title" : {
+				"en" : "Ecosystem resilience"
+			},
+			"goal" : {
+				"en" : "D"
+			},
+			"action" : {
+				"en" : "By 2020, ecosystem resilience and the contribution of biodiversity to carbon stocks has been enhanced, through conservation and restoration, including restoration of at least 15 per cent of degraded ecosystems, thereby contributing to climate change mitigation and adaptation and to combating desertification."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87026973",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 15 by Ben ten Brink",
+					"thumbnail" : "/app/images/aichi-targets/videos/15_87026973.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73329402",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 15 by Sasha Alexander",
+					"thumbnail" : "/app/images/aichi-targets/videos/15_73329402.jpg"
+				}
+			],
+			"activities" :[
+			    {
+			        "country": "Azerbaijan",
+			        "text"   : "State programmes are being implemented to expand national forest coverage, green urban areas and rehabilitate ecological functioning in degraded forests. Wide-scale forest planting and greening initiatives have been undertaken over the last 5 years (10,131 ha of forest habitat are under active restoration)."
+			    },
+			    {
+			        "country": "Costa Rica",
+			        "text"   : "The country aims to achieve carbon neutrality by 2021."
+			    },
+			    {
+			        "country": "Madagascar",
+			        "text"   : "Large mining companies are being encouraged to create conservation areas (e.g. cases of QIT Madagascar Minerals (QMM), Ambatovy)."
+			    }
+			]
+		},
+		{
+			"id": 16,
+			"title" : {
+				"en" : "Nagoya Protocol on ABS"
+			},
+			"goal" : {
+				"en" : "D"
+			},
+			"action" : {
+				"en" : "By 2015, the Nagoya Protocol on Access to Genetic Resources and the Fair and Equitable Sharing of Benefits Arising from their Utilization is in force and operational, consistent with national legislation."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73327477",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 16 by Pierre du Plessis",
+					"thumbnail" : "/app/images/aichi-targets/videos/16_73327477.jpg"
+				}
+			],
+			"activities" :[
+			    {
+			        "country": "India",
+			        "text"   : "Ratified in October 2012, the Nagoya Protocol will be implemented through domestic legislation on ABS (Biological Diversity Act) adopted in 2002."
+			    },
+			    {
+			        "country": "Netherlands",
+			        "text"   : "The Government aims to support a Green Deal to apply the international ABS agreements. Through a pilot project, businesses from the Dutch breeding sector, knowledge institutions and Government will set up cooperation with similar parties from a developing country that could provide genetic resources. By the end of 2014, this should result in an agreement on access to genetic resources and the fair and equitable sharing of benefits arising from the use of relevant genetic material, and could serve as a model for future ABS agreements."
+			    }
+			]
+		},
+		{
+			"id": 17,
+			"title" : {
+				"en" : "NBSAPs"
+			},
+			"goal" : {
+				"en" : "E"
+			},
+			"action" : {
+				"en" : "By 2015 each Party has developed, adopted as a policy instrument, and has commenced implementing an effective, participatory and updated national biodiversity strategy and action plan."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87026975",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 17 by Roberto Cavalcanti",
+					"thumbnail" : "/app/images/aichi-targets/videos/17_87026975.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73327478",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 17 by Caroline Petersen",
+					"thumbnail" : "/app/images/aichi-targets/videos/17_73327478.jpg"
+				}
+			],
+			"activities" :[
+			    {
+			        "country": "Australia",
+			        "text"   : "The National Biodiversity Conservation Strategy 2010-2030 functions as a policy umbrella over other more specific national frameworks, and a guiding policy framework for the diverse Australian, state, territory and local government and private sector approaches to conservation."
+			    },
+			    {
+			        "country": "France",
+			        "text"   : "The National Biodiversity Strategy 2011-2020 is prioritized in all public policy and at every territorial scale (e.g. water, soil, sea, climate, energy, agriculture, forestry, spatial planning, infrastructure, industry, trade, education, research, health)."
+			    },
+			    {
+			        "country": "Timor-Leste",
+			        "text"   : "The NBSAP 2011-2020 is a guiding policy framework for district and sub-district authorities, and for civil society groups and the private sector."
+			    }
+			]
+		},
+		{
+			"id": 18,
+			"title" : {
+				"en" : "Traditional knowledge"
+			},
+			"goal" : {
+				"en" : "E"
+			},
+			"action" : {
+				"en" : "By 2020, the traditional knowledge, innovations and practices of indigenous and local communities relevant for the conservation and sustainable use of biodiversity, and their customary use of biological resources, are respected, subject to national legislation and relevant international obligations, and fully integrated and reflected in the implementation of the Convention with the full and effective participation of indigenous and local communities, at all relevant levels."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87028179",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 18 by Malia Nobrega",
+					"thumbnail" : "/app/images/aichi-targets/videos/18_87028179.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73329404",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 18 by Joji Carino",
+					"thumbnail" : "/app/images/aichi-targets/videos/18_73329404.jpg"
+				}
+			],
+			"activities" :[
+			    {
+			        "country": "Malawi",
+			        "text"   : "The Forestry Research Institute is implementing a project on “Useful Plants of Malawi” where Traditional Knowledge is used to identify plants that are useful for nutrition, cosmetics and pharmaceutical use."
+			    },
+			    {
+			        "country": "Malaysia",
+			        "text"   : "A new Strategic Plan of Action to 2020 exists for Sabah state.  The first Plan contributed to implementing the Heart of Borneo Initiative by empowering communities in the management of local natural resources, through the promotion of Indigenous Community and Conserved Areas using the Tagal traditional river management system."
+			    },
+			    {
+			        "country": "New Zealand",
+			        "text"   : "National legislation is in place that recognises tangata whenua (indigenous communities) and their Mātauranga Māori (Traditional Knowledge that underpins Māori culture and identity)."
+			    }
+			]
+		},
+		{
+			"id": 19,
+			"title" : {
+				"en" : "Biodiversity knowledge"
+			},
+			"goal" : {
+				"en" : "E"
+			},
+			"action" : {
+				"en" : "By 2020, knowledge, the science base and technologies relating to biodiversity, its values, functioning, status and trends, and the consequences of its loss, are improved, widely shared and transferred, and applied."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87028180",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 19 by Jennifer Rubis",
+					"thumbnail" : "/app/images/aichi-targets/videos/19_87028180.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73329406",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 19 by Randall Garcia",
+					"thumbnail" : "/app/images/aichi-targets/videos/19_73329406.jpg"
+				}
+			],
+			"activities" :[
+			    {
+			        "country": "Belgium",
+			        "text"   : "The Belgium Ecosystem Services (BEES) network, a community of practice aiming to connect different societal actors involved in ecosystem services research, practice and policy-making was launched in April 2012."
+			    },
+			    {
+			        "country": "Colombia",
+			        "text"   : "A national system for deforestation and carbon monitoring has been developed."
+			    },
+			    {
+			        "country": "Germany",
+			        "text"   : "In 2012, the German Research Association (DFG) decided to support a research centre for integrative biodiversity research (€33 million over a five-year period, including eight new professorships)."
+			    },
+			    {
+			        "country": "Mongolia",
+			        "text"   : "The National University of Mongolia has developed a curriculum on the assessment and monitoring of biodiversity for Ph.D. students."
+			    },
+			    {
+			        "country": "Rwanda",
+			        "text"   : "A Centre of Excellence on Biodiversity has been established (University of Rwanda/Ministry of Education)."
+			    }
+			]
+		},
+		{
+			"id": 20,
+			"title" : {
+				"en" : "Resource mobilization"
+			},
+			"goal" : {
+				"en" : "E"
+			},
+			"action" : {
+				"en" : "By 2020, at the latest, the mobilization of financial resources for effectively implementing the Strategic Plan for Biodiversity 2011-2020 from all sources, and in accordance with the consolidated and agreed process in the Strategy for Resource Mobilization, should increase substantially from the current levels. This target will be subject to changes contingent to resource needs assessments to be developed and reported by Parties."
+			},
+			"videos" : [
+				{
+					"link"      : "https://vimeo.com/album/2738938/video/87020095",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 20 by Claudia Ituarte-Lima",
+					"thumbnail" : "/app/images/aichi-targets/videos/20_87020095.jpg"
+				},
+				{
+					"link"      : "https://vimeo.com/album/2506743/video/73329407",
+					"caption"   : "20/20 Talks: Aichi Biodiversity Target 20 by Gustavo Alberto Fonseca",
+					"thumbnail" : "/app/images/aichi-targets/videos/20_73329407.jpg"
+				}
+			],
+			"activities" :[
+			    {
+			        "country": "Denmark",
+			        "text"   : "Resource mobilization figures for nature preservation indicate an annual contribution of DKK 2.3 billion, equivalent to USD 390 million/year (average for 2006-2010), corresponding to approximately DKK 410 per person/year, or 0.13% of the GNP."
+			    },
+			    {
+			        "country": "Ecuador",
+			        "text"   : "The country is participating in the Biodiversity Finance Initiative (BIOFIN) launched by UNDP in 2012, to determine the costs of NBSAP implementation define financial gaps and design a strategy for mobilizing financial resources."
+			    },
+			    {
+			        "country": "Poland",
+			        "text"   : "An innovative objective of the draft programme of the National Fund for Environmental Protection and Water Management 2014-2020 is to pilot a financial support mechanism for biodiversity-friendly enterprises."
+			    }
+			]
+		}
+	]
+}

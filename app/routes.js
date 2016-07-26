@@ -23,6 +23,10 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
         if(/^\/schedules($|\/.*)/.test(locationPath))
             registerRoutes_schedules($routeProvider);
 
+        // /aichi-targets/*
+        if(/^\/aichi-targets($|\/.*)/.test(locationPath))
+            registerRoutes_aichiTargets($routeProvider);
+
         $routeProvider.when('/404', { templateUrl: '/app/views/404.html', resolveUser: true }).otherwise({redirectTo: '/404'});
     }
   ]);
@@ -78,6 +82,19 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
 
       routeProvider
           .when('/:streamId?',       { templateUrl: 'views/schedules/index-id.html', controllerAs: 'indexIdCtrl', resolveController: true, progress : { stop : false } });
+  }
+
+  //============================================================
+  //
+  //
+  //============================================================
+  function registerRoutes_aichiTargets(routeProvider) {
+
+      $("base").attr('href', '/aichi-targets/'); // allow full page reload outside of  /insession/*
+
+      routeProvider
+        .when('/',                  { templateUrl: 'views/aichi-targets/index.html',    controllerAs: 'indexCtrl',   resolveController: true })
+        .when('/target/:targetId',  { templateUrl: 'views/aichi-targets/index-id.html', controllerAs: 'indexIdCtrl', resolveController: true });
   }
     //============================================================
     //
