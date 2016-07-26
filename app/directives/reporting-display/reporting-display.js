@@ -465,12 +465,9 @@ define(['text!./reporting-display.html',
 
             _.each($scope.subQueries, function(filter, filterName) {
               _.each(filter, function(itemIdArr, schemaKey) {
-
                 $location.replace();
                 $location.search('filter', filterName);
                 $scope.selectedSchema = filterName;
-                //$scope.queriesStrings[filterName]=_.cloneDeep($scope.subQueries[filterName]);
-
               });
             });
 

@@ -34,7 +34,7 @@ require.config({
         'ngCookies'            : { deps : ['angular'] },
         'ngAnimate'            : { deps : ['angular'] },
         'bootstrap'            : { deps : ['jquery' ] },
-        'moment'               : { 'deps': ['jquery' ] },
+        'moment'               : { deps: ['jquery' ] },
         'ammap3WorldHigh'      : { deps: ['ammap3'] },
         'ammap-theme'          : { deps: ['ammap3']},
         'ammap-resp'           : { deps: ['ammap3']},
