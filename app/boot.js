@@ -20,6 +20,7 @@ require.config({
         'nprogress'       : 'libs/nprogress/nprogress',
         'moment'          : 'libs/moment/min/moment.min',
         'moment-timezone' : 'libs/moment-timezone/builds/moment-timezone-with-data.min',
+        'rangy'           : 'libs/rangy-release/rangy-core.min',
         'shim'            : 'libs/require-shim/src/shim',
         'interface'       : 'js/interface',
         'magnific-popup'  : 'libs/magnific-popup/dist/jquery.magnific-popup.min',
