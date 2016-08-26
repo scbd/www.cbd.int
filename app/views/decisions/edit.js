@@ -73,6 +73,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
                 console.error(err);
 
+                if(err.status==403)
+                    $location.url('/403?returnurl='+encodeURIComponent($location.url()));
+
                 alert(err.message||err);
             });
         }
