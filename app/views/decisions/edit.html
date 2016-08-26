@@ -354,9 +354,24 @@
                      <i class="fa fa-file-pdf-o" style="color:red"></i> <a ng-href="{{buildFileUrl(item)}}" target="_blank">{{item.filename}}</a> <i>({{item.size/1024 | number:1}} kB)</i>
                  </div>
 
-                <div ng-repeat="item in uploads" class="form-control" style="margin-bottom:2px">
-                    <button class="btn btn-default btn-xs pull-right"><i class="fa fa-cog fa-spin"></i></button>
-                     <i class="fa fa-file-pdf-o" style="color:red"></i> <a>{{item.filename}}</a> <i>({{item.size/1024 | number:1}} kB)</i>
+    		</div>
+
+    		<div ng-repeat="item in uploads" ng-class="{ 'has-error' : item.error }" class="form-group">
+                <div class="form-control" style="margin-bottom:2px">
+                    <button ng-if=" item.error" class="btn btn-danger  btn-xs pull-right" ng-click="uploads.splice($index, 1)"><i class="fa fa-minus-circle"></i></button>
+
+                    <span ng-if="!item.error">
+                        <button class="btn btn-default btn-xs pull-right"><i class="fa fa-cog fa-spin"></i></button>
+                        <i class="fa fa-file-pdf-o" style="color:red"></i>
+                        <a>{{item.filename}}</a> <i>({{item.size/1024 | number:1}} kB)</i>
+                    </span>
+
+                    <span ng-if="item.error">
+                        <i class="fa fa-exclamation-circle text-danger"></i>
+                        <span class="text-danger"> Error occured while uploading file: </span>
+                        {{item.filename}} <i>({{item.size/1024 | number:1}} kB)</i>
+                    </span>
+
                  </div>
     		</div>
             <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="upload()"><i class="fa fa-plus-circle"></i> upload document(s)</button>
