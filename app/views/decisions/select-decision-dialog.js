@@ -6,7 +6,7 @@ function(sectionList,       paragraphList,        itemList,       subItemList) {
         $scope.collections = {
             bodies : [
                 { code : "COP",     title : "COP" },
-                { code : "NP/COP-MOP", title : "ABS COP-MOP" },
+                { code : "NP/COP-MOP", title : "NP COP-MOP" },
                 { code : "BS/COP-MOP", title : "BS COP-MOP" },
                 { code : "SBSTTA",  title : "SBSTTA" },
                 { code : "SBI",     title : "SBI" },
