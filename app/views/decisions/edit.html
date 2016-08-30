@@ -310,8 +310,8 @@
     				<label for="exampleInputEmail1">Notifications issued</label><br>
     				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.notifications|orderBy|_:'map':lookupNotification">
     		  			<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button class="btn btn-danger btn-xs pull-right" ng-click="deleteNotification(item.symbol_s||item)"><i class="fa fa-minus-circle"></i></button>
-                            <a ng-href="{{item.url_ss[0]}}" target="notifications"><b>{{item.reference_t}}</b> <i>({{item.symbol_t||item}})</i></a>
+    						<button class="btn btn-danger btn-xs pull-right" ng-click="deleteNotification(item.symbol_s||item.symbol_t||item)"><i class="fa fa-minus-circle"></i></button>
+                            <a ng-href="{{item.url_ss[0]}}" target="notifications"><b>{{item.reference_t||item.reference_s}}</b> <i>({{item.symbol_s||item.symbol_t||item}})</i></a>
     						<div style="max-height:50px;overflow:hidden" title="{{item.title_t}}" ng-bind-html="item.title_t">
     						</div>
     						<i class="fa fa-calendar fa-fw"></i> {{item.date_dt|moment:'utc'|moment:'format':'LL'}}

@@ -1,4 +1,4 @@
-define(['angular', 'app', 'css!./view.css', './view-element'], function(ng) { 'use strict';
+define(['angular', 'app', 'css!./view.css', './view-element', 'filters/moment', 'filters/lodash'], function(ng) { 'use strict';
 
     return ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', function($scope, $http, $route, $location, $compile, $anchorScroll) {
 
@@ -20,6 +20,7 @@ define(['angular', 'app', 'css!./view.css', './view-element'], function(ng) { 'u
         $scope.paragraph     = paragraph;
         $scope.item          = item ? String.fromCharCode(96+item) : '';
         $scope.$root.page    = { title: 'Decision '+romanize(session)+'/'+decision };
+        $scope.lookupNotification = lookupNotification;
 
         if(section)   $scope.$root.page.title += ' section ' + section;
         if(paragraph) $scope.$root.page.title += ' paragraph ' + paragraph;
@@ -76,6 +77,39 @@ define(['angular', 'app', 'css!./view.css', './view-element'], function(ng) { 'u
             $scope.error = (err||{}).data || err;
             console.error($scope.error);
         });
+
+        //===========================
+        //
+        //===========================
+        var __notifications;
+        function lookupNotification(code) {
+
+            __notifications = __notifications||{};
+
+            if(__notifications[code]===undefined) {
+
+                __notifications[code] = code;
+
+                var options = {
+                    cache : true,
+                    params : {
+                        q : "schema_s:notification AND symbol_s:"+code,
+                        fl : "symbol_?,reference_?,title_?,date_*,url_*",
+                        rows: 1
+                    }
+                 };
+
+                $http.get("/api/v2013/index", options).then(function(res){
+
+                    var results = res.data.response;
+                    __notifications[code] = results.numFound ? results.docs[0] : null;
+
+                    return __notifications[code];
+                });
+            }
+
+            return __notifications[code];
+        }
 
         //==============================
         //
