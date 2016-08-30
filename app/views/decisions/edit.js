@@ -87,6 +87,8 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function save() {
 
+            var selectedNode = selectedElement;
+
             selectNode(null);
 
             //Cleanup data;
@@ -114,6 +116,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             $http(req).then(function(res){
 
                 data._id = data._id || res.data.id;
+
+                selectNode(selectedNode);
+
                 alert( "Your document has been successfully save." );
 
             }).catch(function(err){
