@@ -1,4 +1,4 @@
-define(['angular', 'app', 'css!./view.css', './view-element'], function(ng) { 'use strict';
+define(['angular', 'lodash', 'app', 'css!./view.css', './view-element', 'filters/moment', 'filters/lodash'], function(ng, _) { 'use strict';
 
     return ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', function($scope, $http, $route, $location, $compile, $anchorScroll) {
 
@@ -20,6 +20,8 @@ define(['angular', 'app', 'css!./view.css', './view-element'], function(ng) { 'u
         $scope.paragraph     = paragraph;
         $scope.item          = item ? String.fromCharCode(96+item) : '';
         $scope.$root.page    = { title: 'Decision '+romanize(session)+'/'+decision };
+        $scope.lookupNotification = lookupNotification;
+        $scope.lookupMeetingDocument = lookupMeetingDocument;
 
         if(section)   $scope.$root.page.title += ' section ' + section;
         if(paragraph) $scope.$root.page.title += ' paragraph ' + paragraph;
@@ -77,6 +79,96 @@ define(['angular', 'app', 'css!./view.css', './view-element'], function(ng) { 'u
             console.error($scope.error);
         });
 
+        //===========================
+        //
+        //===========================
+        var __notifications;
+        function lookupNotification(code) {
+
+            __notifications = __notifications||{};
+
+            if(__notifications[code]===undefined) {
+
+                __notifications[code] = code;
+
+                var options = {
+                    cache : true,
+                    params : {
+                        q : "schema_s:notification AND symbol_s:"+code,
+                        fl : "symbol_?,reference_?,title_?,date_*,url_*",
+                        rows: 1
+                    }
+                 };
+
+                $http.get("/api/v2013/index", options).then(function(res){
+
+                    var results = res.data.response;
+                    __notifications[code] = results.numFound ? results.docs[0] : null;
+
+                    return __notifications[code];
+                });
+            }
+
+            return __notifications[code];
+        }
+
+        //===========================
+        //
+        //===========================
+        var __meetingDocument;
+        function lookupMeetingDocument(code) {
+
+            __meetingDocument = __meetingDocument||{};
+
+            if(__meetingDocument[code]===undefined) {
+
+                var isLink = /http[s]?:\/\//.test(code);
+
+                __meetingDocument[code] = {
+                    symbol_s : code,
+                    url      : isLink ?  code  : undefined,
+                    url_ss   : isLink ? [code] : []
+                };
+
+                if(!isLink) {
+
+                    var options = {
+                        cache : true,
+                        params : {
+                            q : "schema_s:meetingDocument AND symbol_s:"+solrEscape(code),
+                            fl : "symbol_?,reference_?,title_?,date_*,url_*",
+                            rows: 1
+                        }
+                     };
+
+                    $http.get("/api/v2013/index", options).then(function(res){
+
+                        var results = res.data.response;
+
+                        if(results.numFound) {
+                            __meetingDocument[code] = results.docs[0];
+
+                            var url;
+                            var urls = __meetingDocument[code].url_ss;
+
+                            if(!url) url = _(urls).filter(function(u) { return /-en\.pdf$/.test(u); }).first();
+                            if(!url) url = _(urls).filter(function(u) { return /-en\.doc$/.test(u); }).first();
+                            if(!url) url = _(urls).filter(function(u) { return    /\.pdf$/.test(u); }).first();
+                            if(!url) url = _(urls).filter(function(u) { return    /\.doc$/.test(u); }).first();
+                            if(!url) url = _(urls).first();
+
+                            __meetingDocument[code].url = url;
+                        }
+
+                        return __meetingDocument[code];
+                    });
+                }
+
+            }
+
+            return __meetingDocument[code];
+        }
+
         //==============================
         //
         //==============================
@@ -124,4 +216,43 @@ define(['angular', 'app', 'css!./view.css', './view-element'], function(ng) { 'u
         }
 
     }];
+
+    //========================================
+    //
+    //
+    //========================================
+    function solrEscape(value) {
+
+        if(value===undefined) throw "Value is undefined";
+        if(value===null)      throw "Value is null";
+        if(value==="")        throw "Value is null";
+
+        if(_.isNumber(value)) value = value.toString();
+        if(_.isDate  (value)) value = value.toISOString();
+
+        //TODO add more types
+
+        value = value.toString();
+
+        value = value.replace(/\\/g,   '\\\\');
+        value = value.replace(/\+/g,   '\\+');
+        value = value.replace(/\-/g,   '\\-');
+        value = value.replace(/\&\&/g, '\\&&');
+        value = value.replace(/\|\|/g, '\\||');
+        value = value.replace(/\!/g,   '\\!');
+        value = value.replace(/\(/g,   '\\(');
+        value = value.replace(/\)/g,   '\\)');
+        value = value.replace(/\{/g,   '\\{');
+        value = value.replace(/\}/g,   '\\}');
+        value = value.replace(/\[/g,   '\\[');
+        value = value.replace(/\]/g,   '\\]');
+        value = value.replace(/\^/g,   '\\^');
+        value = value.replace(/\"/g,   '\\"');
+        value = value.replace(/\~/g,   '\\~');
+        value = value.replace(/\*/g,   '\\*');
+        value = value.replace(/\?/g,   '\\?');
+        value = value.replace(/\:/g,   '\\:');
+
+        return value;
+    }
 });

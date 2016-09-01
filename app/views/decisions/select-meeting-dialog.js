@@ -14,14 +14,14 @@ define(['jquery'], function($) {
 
             if(!text) {
                 $scope.results = null;
-                $scope.notification = null;
+                $scope.meeting = null;
             }
 
             text = solrEscape(text).toUpperCase();
 
             var qsParams = {
-                q : "schema_s:notification AND (symbol_s:"+text+"* OR reference_t:"+text+"*)" + " AND (symbol_t:*)",
-                fl : "symbol_?,reference_?,title_?",
+                q : "schema_s:meeting AND (symbol_s:"+text+"* OR title_t:"+text+"*)",
+                fl : "symbol_?,title_EN_t,eventCountry_EN_t,eventCity_EN_t,startDate_dt,endDate_dt",
                 sort: "symbol_s ASC",
                 rows: 1
             };
@@ -31,7 +31,7 @@ define(['jquery'], function($) {
                 var results = res.data.response;
 
                 $scope.results = results;
-                $scope.notification = results.numFound ? results.docs[0] : null;
+                $scope.meeting = results.numFound ? results.docs[0] : null;
             });
         }
 
@@ -40,13 +40,12 @@ define(['jquery'], function($) {
 		//==========================
         function save() {
 
-            if(!$scope.notification)
+            if(!$scope.meeting)
                 return;
 
             $scope.closeThisDialog({
-                symbol : $scope.notification.symbol_t,
-                reference : $scope.notification.reference_t,
-                title : $scope.notification.title_t
+                symbol : $scope.meeting.symbol_s,
+                title : $scope.meeting.title_EN_t
             });
         }
 

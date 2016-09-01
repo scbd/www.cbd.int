@@ -10,25 +10,54 @@
 
             <div class="form-group">
                 <label for="body">Body</label>
-                <select class="form-control" id="body" name="body" ng-model="body" ng-options="o.code as o.title for o in ::getBodies()">
+                <select class="form-control" id="body" name="body" ng-model="body" ng-options="o.code as o.title for o in ::collections.bodies">
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="meeting">Meeting</label>
-                <select class="form-control" id="meeting" name="meeting" ng-model="meeting" ng-options="o.code as o.title for o in getMeetings(body)" ng-disabled="!body">
+                <label for="meeting">Session</label>
+                <select class="form-control" id="session" name="session" ng-model="session" ng-options="o.code as o.title for o in ::collections.sessions" ng-disabled="!body">
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="decision">Decision /  Recommendation</label>
-                <select class="form-control" id="decision" name="decision" ng-model="decision" ng-options="o as o.symbol for o in getDecisions(meeting)" ng-disabled="!body || !meeting">
+                <label for="decision">Decision</label>
+                <select class="form-control" id="session" name="decision" ng-model="decision" ng-options="o.value as o.title for o in ::collections.decisions" ng-disabled="!body || !session">
                 </select>
+            </div>
+
+            <div class="form-group">
+                <div style="display:inline-block;width:24%;">
+                    <label for="section" style="font-weight:inherit">Section</label><br>
+                    <select class="form-control" style="width:100%;display:inline" id="section" name="section" ng-model="section" ng-options="o.code as o.title for o in ::collections.sections" ng-disabled="!body || !session || !decision">
+                        <option value=""></option>
+                    </select>
+                </div>
+                <div style="display:inline-block;width:24%;">
+                    <label for="paragraph" style="font-weight:inherit">Paragraph</label><br>
+                    <select class="form-control" style="width:100%;display:inline" id="paragraph" name="paragraph" ng-model="paragraph" ng-options="o.value as o.title for o in ::collections.paragraphes" ng-disabled="!body || !session || !decision">
+                        <option value=""></option>
+                    </select>
+                </div>
+                <div style="display:inline-block;width:24%;">
+                    <label for="item" style="font-weight:inherit">Item</label><br>
+                    <select class="form-control" style="width:100%;display:inline" id="item" name="item" ng-model="item" ng-options="o.value as o.title for o in ::collections.items" ng-disabled="!body || !session || !decision || !paragraph">
+                        <option value=""></option>
+                    </select>
+                </div>
+                <div style="display:inline-block;width:24%;">
+                    <label for="subItem" style="font-weight:inherit">Sub-Item</label><br>
+                    <select class="form-control" style="width:100%;display:inline" id="subItem" name="subItem" ng-model="subItem" ng-options="o.value as o.title for o in ::collections.subItems" ng-disabled="!body || !session || !decision || !paragraph || !item">
+                        <option value=""></option>
+                    </select>
+                </div>
             </div>
         </form>
+
+        {{symbol}}
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" aria-label="Close" ng-click="closeThisDialog()">Cancel</button>
-        <button type="button" class="btn btn-primary" aria-label="Save" ng-click="closeThisDialog({ code: decision.code, symbol: decision.symbol })" ng-disabled="!meeting">Next »</button>
+        <button type="button" class="btn btn-primary" aria-label="Save" ng-click="closeThisDialog(symbol)" ng-disabled="!symbol">Next »</button>
     </div>
 </div>

@@ -12,16 +12,21 @@ define(['jquery'], function($) {
 		//==========================
         function search(text) {
 
-            if(!text) {
-                $scope.results = null;
-                $scope.notification = null;
+            delete $scope.document;
+
+            if(/^http[s]?\:/.test(text)) {
+
+                $scope.document = {
+                    symbol_s : text,
+                    url : text
+                }
+
+                return;
             }
 
-            text = solrEscape(text).toUpperCase();
-
             var qsParams = {
-                q : "schema_s:notification AND (symbol_s:"+text+"* OR reference_t:"+text+"*)" + " AND (symbol_t:*)",
-                fl : "symbol_?,reference_?,title_?",
+                q : "schema_s:meetingDocument AND symbol_s:"+solrEscape(text.toUpperCase()),
+                fl : "symbol_?,reference_?,title_?,date_*,url_*",
                 sort: "symbol_s ASC",
                 rows: 1
             };
@@ -30,8 +35,8 @@ define(['jquery'], function($) {
 
                 var results = res.data.response;
 
-                $scope.results = results;
-                $scope.notification = results.numFound ? results.docs[0] : null;
+                if(results.numFound) $scope.document = results.docs[0];
+                else                 $scope.document = { symbol_s : text.toUpperCase(), notFound : true };
             });
         }
 
@@ -40,14 +45,10 @@ define(['jquery'], function($) {
 		//==========================
         function save() {
 
-            if(!$scope.notification)
+            if(!$scope.document)
                 return;
 
-            $scope.closeThisDialog({
-                symbol : $scope.notification.symbol_t,
-                reference : $scope.notification.reference_t,
-                title : $scope.notification.title_t
-            });
+            $scope.closeThisDialog($scope.document.symbol_s || $scope.document)
         }
 
 		//==========================

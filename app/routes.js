@@ -27,7 +27,8 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
         if(/^\/aichi-targets($|\/.*)/.test(locationPath))
             registerRoutes_aichiTargets($routeProvider);
 
-        $routeProvider.when('/404', { templateUrl: '/app/views/404.html', resolveUser: true }).otherwise({redirectTo: '/404'});
+        $routeProvider.when('/403', { templateUrl: '/app/views/403.html' });
+        $routeProvider.when('/404', { templateUrl: '/app/views/404.html' }).otherwise({redirectTo: '/404'});
     }
   ]);
 
@@ -54,8 +55,8 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
 
       $("base").attr('href', '/management/decisions/'); // allow full page reload outside of  /decisions/*
 
-      routeProvider.when('/', { templateUrl: 'views/decisions/index.html', resolveController: true });
-      routeProvider.when('/:meeting/:number', { templateUrl: 'views/decisions/edit.html', resolveController: true });
+      routeProvider.when('/',                 { templateUrl: 'views/decisions/index.html', resolveController: true, resolve : { user : securize(["Administrator","DecisionTrackingTool"]) } } );
+      routeProvider.when('/:meeting/:number', { templateUrl: 'views/decisions/edit.html',  resolveController: true, resolve : { user : securize(["Administrator","DecisionTrackingTool"]) } } );
   }
 
   //============================================================

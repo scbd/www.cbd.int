@@ -19,6 +19,10 @@
         background-color: #f9f2f4;
         color: #337ab7;
     }
+    #content b {
+        background-color: #f4f2f9;
+        color: #5e15d7;
+    }
     #content em {
         background-color: #f4f2f9;
         color: #4e25c7;
@@ -113,6 +117,8 @@
     }
 </style>
 
+
+
 <div style="position:fixed;top:0px;left:0px;right:0px;bottom:0px;z-index:4000;background-color:white">
 
     <div class="container" style="margin-left:0;margin-right:0;width:100%;height:100%">
@@ -121,9 +127,8 @@
             <button class="btn btn-success" ng-click="save()">Save</button> &nbsp; &nbsp;
             <button class="btn btn-primary" ng-click="actionBox('element')">Box</button>
             <button class="btn btn-primary" ng-click="actionUnbox()">Unbox</button>
-            <button class="btn btn-primary" ng-click="actionBox('var')">ID</button>
-            <button class="btn btn-primary" ng-click="actionEdit()">Edit</button> &nbsp; &nbsp;
-            <button class="btn btn-danger" ng-click="actionClean()">Remove formatting</button>
+            <button class="btn btn-primary" ng-click="actionEdit()" ng-class="{ active: isEditable() }">Edit <i ng-if="isEditable()" class="fa fa-pencil" aria-hidden="true"></i></button> &nbsp; &nbsp;
+            <button class="btn btn-danger"  ng-click="actionClean()">Remove formatting</button>
         </div>
 
         <div class="row" style="margin-top:60px;height:100%">
@@ -136,99 +141,53 @@
             <div class="col-sm-6" style="height:100%;overflow-y:scroll;background-color:#f8f8f8;padding:10px">
 
                 <h4>
-                    Formatting
+                    Formatting <small ng-if="formattingLocked"><button class="btn btn-xs btn-default" ng-click="$parent.formattingLocked=false">edit</button></small>
                 </h4>
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <div class="form-group">
                             <label for="elementType">Level</label>
-                            <select class="form-control" id="elementType" ng-model="element.type">
+                            <select class="form-control" id="elementType" ng-model="element.type" ng-change="tag()" ng-disabled="formattingLocked || !element">
                                 <option></option>
                                 <option>Decision</option>
                                 <option value="title">Decision Title</option>
                                 <option value="body">Decision Body</option>
                                 <option value="annex">Decision Annex</option>
                                 <option value="section">Section</option>
+                                <option value="sectionTitle">Section Title</option>
                                 <option value="paragraph">Paragraph</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
-                            <label for="elementParagraph">Paragraph</label>
-                            <select class="form-control" id="elementParagraph" ng-model="element.paragraph">
+                            <label for="elementType">Section</label>
+                            <select class="form-control" id="elementType" ng-model="element.section" ng-options="o.code as o.title for o in collections.sections" ng-change="tag()" ng-disabled="formattingLocked || element.type!='paragraph'">
                                 <option></option>
-                                <option value="1">1.</option>
-                                <option value="2">2.</option>
-                                <option value="3">3.</option>
-                                <option value="4">4.</option>
-                                <option value="5">5.</option>
-                                <option value="6">6.</option>
-                                <option value="7">7.</option>
-                                <option value="8">8.</option>
-                                <option value="9">9.</option>
-                                <option value="10">10.</option>
-                                <option value="11">11.</option>
-                                <option value="12">12.</option>
-                                <option value="13">13.</option>
-                                <option value="14">14.</option>
-                                <option value="15">15.</option>
-                                <option value="16">16.</option>
-                                <option value="17">17.</option>
-                                <option value="18">18.</option>
-                                <option value="19">19.</option>
-                                <option value="20">20.</option>
-                                <option value="21">21.</option>
-                                <option value="22">22.</option>
-                                <option value="23">23.</option>
-                                <option value="24">24.</option>
-                                <option value="25">25.</option>
-                                <option value="26">26.</option>
-                                <option value="27">27.</option>
-                                <option value="28">28.</option>
-                                <option value="29">29.</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="elementParagraph">Paragraph</label>
+                            <select class="form-control" id="elementParagraph" ng-model="element.paragraph" ng-options="o.code as o.title for o in collections.paragraphes" ng-change="tag()" ng-disabled="formattingLocked || element.type!='paragraph'">
+                                <option></option>
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementItem">Item</label>
-                            <select class="form-control" id="elementItem" ng-model="element.item">
+                            <select class="form-control" id="elementItem" ng-model="element.item" ng-options="o.code as o.title for o in collections.items" ng-change="tag()" ng-disabled="formattingLocked || element.type!='paragraph' || !element.data.paragraph">
                                 <option></option>
-                                <option value="a">a.</option>
-                                <option value="b">b.</option>
-                                <option value="c">c.</option>
-                                <option value="d">d.</option>
-                                <option value="e">e.</option>
-                                <option value="f">f.</option>
-                                <option value="g">g.</option>
-                                <option value="h">h.</option>
-                                <option value="i">i.</option>
-                                <option value="j">j.</option>
-                                <option value="k">k.</option>
-                                <option value="l">l.</option>
-                                <option value="m">m.</option>
-                                <option value="n">n.</option>
-                                <option value="o">o.</option>
-                                <option value="p">p.</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementSubitem">Subitem</label>
-                            <select class="form-control" id="elementSubitem" ng-model="element.subitem">
+                            <select class="form-control" id="elementSubitem" ng-model="element.subitem" ng-options="o.code as o.title for o in collections.subItems" ng-change="tag()" ng-disabled="formattingLocked || element.type!='paragraph' || !element.data.paragraph || !element.data.item">
                                 <option></option>
-                                <option value="i">(i)</option>
-                                <option value="ii">(ii)</option>
-                                <option value="iii">(iii)</option>
-                                <option value="iv">(iv)</option>
-                                <option value="v">(v)</option>
-                                <option value="vi">(vi)</option>
-                                <option value="vii">(vii)</option>
-                                <option value="viii">(viii)</option>
-                                <option value="ix">(ix)</option>
-                                <option value="x">(x)</option>
                             </select>
                         </div>
                     </div>
@@ -241,65 +200,64 @@
     		<div class="col-sm-6">
     			<div class="form-group">
     		    	<label for="elementType">Type of decision</label>
-    		    	<select class="form-control" id="elementType" ng-model="element.elementType">
-    					<option>Operational</option>
-    					<option>For‎ information</option>
+    		    	<select class="form-control" id="elementType" ng-model="element.data.type"  ng-disabled="element.type!='paragraph'">
+                        <option></option>
+    					<option value="operational">Operational</option>
+    					<option value="informational">For‎ information</option>
     				</select>
     		  	</div>
-    		</div>
-    		<div class="col-sm-6">
-    			<div class="form-group">
-    		    	<label for="elementStatus">Status of the decision</label>
-    		    	<select class="form-control" id="elementStatus" ng-model="element.elementStatus">
-    					<option value='implemented'>Implemented</option>
-    					<option value='superseded'>Superseded (with details)</option>
-    					<option value='elapsed'>Elapsed</option>
-    					<option value='active‎'>Active‎</option>
-    				</select>
+
+                <div class="form-group">
+    		    	<label for="elementDirectedTo">Status of the decision</label><br>
+
+                    <div ng-repeat="item in element.data.statuses" class="form-control" style="margin-bottom:2px" ng-disabled="element.type!='paragraph'">
+                        <button class="btn btn-danger btn-xs pull-right" ng-click="deleteStatus(item)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                         {{collections.statusesMap[item].title||item}}</i>
+                     </div>
+
+                    <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectStatuses()"><i class="fa fa-plus-circle"></i> Select status(es)</button>
+
     		  	</div>
-                <div class="form-group" ng-show="element.elementStatus=='superseded'">
-    		    	<label for="elementStatus">Details</label>
+
+                <div class="form-group" ng-show="element.data.statuses.indexOf('superseded')>=0 || element.data.statuses.indexOf('retired')>=0 || element.elementStatusDetails">
+    		    	<label for="elementStatus" style="font-weight:inherit">Details about <i>Superseded / Retired</i> status</label>
     		    	<textarea class="form-control" id="elementStatusDetails" ng-model="element.elementStatusDetails"></textarea>
     		  	</div>
+
     		</div>
-    	</div>
-    	<div class="row">
-    		<div class="col-sm-6">
-    			<div class="form-group">
-    		    	<label for="elementDirectedTo">Directed to</label>
-    		    	<select class="form-control" id="elementDirectedTo" ng-model="element.elementDirectedTo">
-                        <option value='parties'>Parties</option>
-                        <option value='governments'>Government(s)</option>
-                        <option value='es'>Executive Secretary</option>
-    					<option value='cop'>Conference of the Parties</option>
-                        <option value='other'>Subsidiary Body</option>
-                        <option value='sbstta'>- SBSTTA</option>
-                        <option value='sbi'>- WGRI/SBI</option>
-                        <option value='wg8j'>- WG8J</option>
-                        <option value='wgpa'>- WGPA</option>
-                        <option value='wgabs'>- WGABS</option>
-    					<option value='gef'>Global Environment Facility</option>
-    					<option value='ilpc'>ILPC</option>
-    					<option value='other'>Other stakeholder(s) (with details)</option>
-    				</select>
-    		  	</div>
-                <div class="form-group" ng-show="element.elementDirectedTo=='other'">
-    		    	<label for="elementDirectedToDetails">Details</label>
-    		    	<textarea class="form-control" id="elementDirectedToDetails" ng-model="element.elementDirectedToDetails"></textarea>
-    		  	</div>
-    		</div>
-    		<div class="col-sm-6">
-    			<div class="form-group">
+
+            <div class="col-sm-6">
+
+                <div class="form-group">
     		    	<label for="elementTimeline">Timelines</label>
-    		    	<select class="form-control" id="elementTimeline" ng-model="element.elementTimeline">
+    		    	<select class="form-control" id="elementTimeline" ng-model="element.elementTimeline"  ng-disabled="element.type!='paragraph' || true">
     					<option value='na'>Not applicable</option>
     					<option value='due'>Due date</option>
     				</select>
     		  	</div>
+
                 <div class="form-group" ng-show="element.elementTimeline=='due'">
-                    <label for="elementTimelineDate">Details</label>
+                    <label for="elementTimelineDate" style="font-weight:inherit">Details about <i>Timelines</i></label>
                     <input type='date' class="form-control" id="elementTimelineDate" ng-model="element.elementTimelineDate">
                 </div>
+
+                <div class="form-group">
+    		    	<label for="elementDirectedTo">Directed to</label><br>
+
+                    <div ng-repeat="item in element.data.actors" class="form-control" style="margin-bottom:2px" ng-disabled="element.type!='paragraph'">
+                        <button class="btn btn-danger btn-xs pull-right" ng-click="deleteActor(item)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                         {{collections.actorsMap[item].title||item}} <i ng-if="collections.actorsMap[item].group">({{collections.actorsMap[item].group}})</i>
+                     </div>
+
+                    <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectActors()"><i class="fa fa-plus-circle"></i> Select actor(s)</button>
+
+    		  	</div>
+
+                <div class="form-group" ng-show="element.data.actors.indexOf('Others' )>=0 || element.data.actorsInfo">
+    		    	<label for="elementDirectedToDetails" style="font-weight:inherit">Details about <i>Other stakeholder(s)</i></label>
+    		    	<textarea class="form-control" id="elementDirectedToDetails" ng-model="element.data.actorsInfo"></textarea>
+    		  	</div>
+
     		</div>
     	</div>
         <hr/>
@@ -309,49 +267,29 @@
     	<div class="row">
     		<div class="col-sm-6">
     			<div class="form-group">
-    				<label for="exampleInputEmail1">Related decisions</label><br>
-    				<div class="panel panel-default" style="margin-top:4px;margin-bottom:4px" ng-repeat="item in element.decisions">
+    				<label>Related decisions</label><br>
+    				<div class="panel panel-default" style="margin-top:4px;margin-bottom:4px" ng-repeat="item in element.data.decisions">
     		  			<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button class="btn btn-danger btn-xs pull-right" id="exampleInputEmail1" ng-click="deleteDecision(item)"><i class="fa fa-minus-circle"></i> remove</button>
-    						<a href="#"><b>{{item.symbol}}</b></a>
+    						<button class="btn btn-danger btn-xs pull-right" ng-click="deleteDecision(item)"><i class="fa fa-minus-circle"></i></button>
+    						<a href="#"><b>{{item}}</b></a>
     						<div style="max-height:50px;overflow:hidden">
-    							Intergovernmental Science-Policy Platform on Biodiversity and Ecosystem Services
+    							TODO
     						</div>
     					</div>
     				</div>
-    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1" ng-click="selectDecision()"><i class="fa fa-plus-circle"></i> add a decision</button>
+    				<button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectDecision()"><i class="fa fa-plus-circle"></i> add a decision</button>
     			</div>
-    		</div>
-    		<div class="col-sm-6">
-    			<div class="form-group">
-    				<label for="exampleInputEmail1">Notifications issued</label><br>
-    				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.notifications">
-    		  			<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button class="btn btn-danger btn-xs pull-right" id="exampleInputEmail1" ng-click="deleteNotification(item)"><i class="fa fa-minus-circle"></i> remove</button>
-    						27 May 2015<br>
-    						<a href="#"><b>{{item.reference}}</b></a>
-    						<div style="max-height:50px;overflow:hidden">
-    							{{item.title}}
-    						</div>
-    					</div>
-    				</div>
-    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1" ng-click="selectNotification()"><i class="fa fa-plus-circle"></i> add a notification</button>
-    			</div>
-    		</div>
-    	</div>
-        <div class="row">
-    		<div class="col-sm-6">
-    			<div class="form-group">
+
+                <div class="form-group">
     				<label for="exampleInputEmail1">Related documents</label><br>
-    				<div ng-hide="true" class="panel panel-default" style="margin-bottom:4px">
+    				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.documents|orderBy|_:'map':lookupMeetingDocument">
     					<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button class="btn btn-danger btn-xs pull-right" id="exampleInputEmail1"><i class="fa fa-minus-circle"></i> remove</button>
-    						<a href="#"><b>RMWS-2015-02</b></a>
-    						<div style="max-height:50px;overflow:hidden">
-    							Dialogue Workshop on Assessment of Collective Action of Indigenous Peoples and Local
-    							Communities in Biodiversity Conservation and Resource Mobilization
+    						<button class="btn btn-danger btn-xs pull-right" ng-click="deleteMeetingDocument(item.symbol_s||item)"><i class="fa fa-minus-circle"></i></button>
+    						<a href="{{item.url}}" target="meetingDocument"><b>{{item.symbol_s}}</b></a>
+                    		<div ng-show="item.title_t" style="max-height:50px;overflow:hidden">
+    							{{item.title_t}}
     						</div>
-    						<div style="margin-top:4px">
+    						<div ng-hide="true"  style="margin-top:4px">
     							<i class="fa fa-file-pdf-o"></i>
     							<a href="#">arabic</a> |
     							<a href="#">chinese</a> |
@@ -362,41 +300,97 @@
     						</div>
     					</div>
     				</div>
-    				<button class="btn btn-primary btn-xs" id="exampleInputEmail1"><i class="fa fa-plus-circle"></i> add a document</button>
+    				<button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectMeetingDocument()"><i class="fa fa-plus-circle"></i> add a document</button>
     			</div>
+
     		</div>
-            <div class="col-sm-6">
+    		<div class="col-sm-6">
+    			<div class="form-group">
+    				<label for="exampleInputEmail1">Notifications issued</label><br>
+    				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.notifications|orderBy|_:'map':lookupNotification">
+    		  			<div class="panel-body" style="padding:12px;font-size:0.9em">
+    						<button class="btn btn-danger btn-xs pull-right" ng-click="deleteNotification(item.symbol_s||item.symbol_t||item)"><i class="fa fa-minus-circle"></i></button>
+                            <a ng-href="{{item.url_ss[0]}}" target="notifications"><b>{{item.reference_t||item.reference_s}}</b> <i>({{item.symbol_s||item.symbol_t||item}})</i></a>
+    						<div style="max-height:50px;overflow:hidden" title="{{item.title_t}}" ng-bind-html="item.title_t">
+    						</div>
+    						<i class="fa fa-calendar fa-fw"></i> {{item.date_dt|moment:'utc'|moment:'format':'LL'}}
+    					</div>
+    				</div>
+    				<button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectNotification()"><i class="fa fa-plus-circle"></i> add a notification</button>
+    			</div>
+
                 <div class="form-group">
                     <label for="exampleInputEmail1">Related activities / outcomes</label><br>
-                    <div ng-hide="true" class="panel panel-default" style="margin-bottom:4px">
+                    <div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.meetings|orderBy|_:'map':lookupMeeting">
                           <div class="panel-body" style="padding:12px;font-size:0.9em">
-                            <button class="btn btn-danger btn-xs pull-right" id="exampleInputEmail1"><i class="fa fa-minus-circle"></i> remove</button>
-                            11 - 13 June 2015 &nbsp; &nbsp; &nbsp; <i class="fa fa-map-marker"></i> Panajachel, Guatemala<br>
-                            <a href="#"><b>RMWS-2015-02</b></a>
+                            <button class="btn btn-danger btn-xs pull-right" ng-click="deleteMeeting(item.symbol_s||item)"><i class="fa fa-minus-circle"></i></button>
+                            <a href="#"><b>{{::item.symbol_s}}</b></a>
                             <div style="max-height:50px;overflow:hidden">
-                                Dialogue Workshop on Assessment of Collective Action of Indigenous Peoples and Local
-                                Communities in Biodiversity Conservation and Resource Mobilization
+                                {{::item.title_EN_t}}
                             </div>
+
+                            <i class="fa fa-calendar fa-fw"></i>
+                            <span ng-if="(item.startDate_dt|moment:'month')==(item.endDate_dt|moment:'month')">{{item.startDate_dt|moment:'format':'D'}} - {{item.endDate_dt|moment:'format':'D MMMM YYYY'}}</span>
+                            <span ng-if="(item.startDate_dt|moment:'month')!=(item.endDate_dt|moment:'month')">{{item.startDate_dt|moment:'format':'D MMM'}} - {{item.endDate_dt|moment:'format':'D MMM YYYY'}}</span>
+                            <br>
+                            <i class="fa fa-map-marker fa-fw"></i> {{::item.eventCity_EN_t}}, {{::item.eventCountry_EN_t}}
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-xs" id="exampleInputEmail1"><i class="fa fa-plus-circle"></i> add an event</button>
+                    <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectMeeting()"><i class="fa fa-plus-circle"></i> add an event</button>
                 </div>
-            </div>
-        </div>
+
+    		</div>
+    	</div>
         <hr/>
         <h4>
-            <input type="file" id="fileUpload" accept="application/pdf" style="display:none">
             Submissions
     	</h4>
     	<div>
     		<div class="form-group">
-    			<div style="display:inline-block" ng-repeat="item in element.files" style="padding-right:1em">
-    				<imgx src="/app/images/file.png" style="height:128px">
-    				<center> {{item.filename}} <i>({{item.size/1024 | number:1}} kB)</i> &nbsp; </center>
-    			</div>
+
+                <div ng-repeat="item in element.data.files" class="form-control" style="margin-bottom:2px">
+                    <button class="btn btn-danger btn-xs pull-right" ng-click="deleteFile(item)"><i class="fa fa-minus-circle"></i></button>
+                     <i class="fa fa-file-pdf-o" style="color:red"></i> <a ng-href="{{buildFileUrl(item)}}" target="_blank">{{item.filename}}</a> <i>({{item.size/1024 | number:1}} kB)</i>
+                 </div>
+
     		</div>
-            <button class="btn btn-primary btn-xs" id="exampleInputEmail1" ng-click="upload()"><i class="fa fa-plus-circle"></i> upload a document</button>
+
+    		<div ng-repeat="item in uploads" ng-class="{ 'has-error' : item.error }" class="form-group">
+                <div class="form-control" style="margin-bottom:2px">
+                    <button ng-if=" item.error" class="btn btn-danger  btn-xs pull-right" ng-click="uploads.splice($index, 1)"><i class="fa fa-minus-circle"></i></button>
+
+                    <span ng-if="!item.error">
+                        <button class="btn btn-default btn-xs pull-right"><i class="fa fa-cog fa-spin"></i></button>
+                        <i class="fa fa-file-pdf-o" style="color:red"></i>
+                        <a>{{item.filename}}</a> <i>({{item.size/1024 | number:1}} kB)</i>
+                    </span>
+
+                    <span ng-if="item.error">
+                        <i class="fa fa-exclamation-circle text-danger"></i>
+                        <span class="text-danger"> Error occured while uploading file: </span>
+                        {{item.filename}} <i>({{item.size/1024 | number:1}} kB)</i>
+                    </span>
+
+                 </div>
+    		</div>
+            <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="upload()"><i class="fa fa-plus-circle"></i> upload document(s)</button>
     	</div>
+
+        <hr/>
+        <h4>
+            Notes
+    	</h4>
+    	<div>
+    		<div class="form-group">
+                <textarea rows="6" class="form-control" ng-model="element.data.notes" ng-disabled="!element"></textarea>
+            </div>
+        </div>
+
+        <hr/>
+        <h4>
+            Debug
+    	</h4>
+            <pre>{{element | json}}</pre>
         <br><br>
 
     </div>
