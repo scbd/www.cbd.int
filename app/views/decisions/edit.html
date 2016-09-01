@@ -219,7 +219,7 @@
 
     		  	</div>
 
-                <div class="form-group" ng-show="element.data.statuses.indexOf('superseded')>=0 || element.data.statuses.indexOf('retired')>=0">
+                <div class="form-group" ng-show="element.data.statuses.indexOf('superseded')>=0 || element.data.statuses.indexOf('retired')>=0 || element.elementStatusDetails">
     		    	<label for="elementStatus" style="font-weight:inherit">Details about <i>Superseded / Retired</i> status</label>
     		    	<textarea class="form-control" id="elementStatusDetails" ng-model="element.elementStatusDetails"></textarea>
     		  	</div>
@@ -253,7 +253,7 @@
 
     		  	</div>
 
-                <div class="form-group" ng-show="element.data.actors.indexOf('Others' )>=0">
+                <div class="form-group" ng-show="element.data.actors.indexOf('Others' )>=0 || element.data.actorsInfo">
     		    	<label for="elementDirectedToDetails" style="font-weight:inherit">Details about <i>Other stakeholder(s)</i></label>
     		    	<textarea class="form-control" id="elementDirectedToDetails" ng-model="element.data.actorsInfo"></textarea>
     		  	</div>
