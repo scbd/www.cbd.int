@@ -25,6 +25,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         $scope.selectMeeting  = selectMeeting;
         $scope.deleteMeeting  = deleteMeeting;
         $scope.lookupMeeting  = lookupMeeting;
+        $scope.selectMeetingDocument = selectMeetingDocument;
+        $scope.deleteMeetingDocument = deleteMeetingDocument;
+        $scope.lookupMeetingDocument = lookupMeetingDocument;
         $scope.selectNotification = selectNotification;
         $scope.deleteNotification = deleteNotification;
         $scope.lookupNotification = lookupNotification;
@@ -424,6 +427,101 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             $scope.element.data.files = items.length ? items : undefined;
         }
 
+        ////////////////////
+        // DOCUMENTS
+        ////////////////////
+
+        //===========================
+        //
+        //===========================
+        function selectMeetingDocument() {
+
+            openDialog('./select-document-dialog', { showClose: false }).then(function(dialog){
+
+                dialog.closePromise.then(function(res){
+
+                    if(!res.value)
+                        return;
+
+                    $scope.element.data.documents = _.union($scope.element.data.documents||[], [res.value]);
+                });
+            });
+        }
+
+        //===========================
+        //
+        //===========================
+        function deleteMeetingDocument(item) {
+
+            if(!$scope.element && !$scope.element.data)
+                return;
+
+            var items = $scope.element.data.documents || [];
+            var index = items.indexOf(item);
+
+            if(index>=0) {
+                items.splice(index, 1);
+            }
+
+            $scope.element.data.documents = items.length ? items : undefined;
+        }
+
+        //===========================
+        //
+        //===========================
+        var __meetingDocument;
+        function lookupMeetingDocument(code) {
+
+            __meetingDocument = __meetingDocument||{};
+
+            if(__meetingDocument[code]===undefined) {
+
+                var isLink = /http[s]?:\/\//.test(code);
+
+                __meetingDocument[code] = {
+                    symbol_s : code,
+                    url      : isLink ?  code  : undefined,
+                    url_ss   : isLink ? [code] : []
+                };
+
+                if(!isLink) {
+
+                    var options = {
+                        cache : true,
+                        params : {
+                            q : "schema_s:meetingDocument AND symbol_s:"+solrEscape(code),
+                            fl : "symbol_?,reference_?,title_?,date_*,url_*",
+                            rows: 1
+                        }
+                     };
+
+                    $http.get("/api/v2013/index", options).then(function(res){
+
+                        var results = res.data.response;
+
+                        if(results.numFound) {
+                            __meetingDocument[code] = results.docs[0];
+
+                            var url;
+                            var urls = __meetingDocument[code].url_ss;
+
+                            if(!url) url = _(urls).filter(function(u) { return /-en\.pdf$/.test(u); }).first();
+                            if(!url) url = _(urls).filter(function(u) { return /-en\.doc$/.test(u); }).first();
+                            if(!url) url = _(urls).filter(function(u) { return    /\.pdf$/.test(u); }).first();
+                            if(!url) url = _(urls).filter(function(u) { return    /\.doc$/.test(u); }).first();
+                            if(!url) url = _(urls).first();
+
+                            __meetingDocument[code].url = url;
+                        }
+
+                        return __meetingDocument[code];
+                    });
+                }
+
+            }
+
+            return __meetingDocument[code];
+        }
 
         ////////////////////
         // DIALOGS
@@ -769,5 +867,44 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
     //===========================
     function resData(res) {
         return res.data;
+    }
+
+    //========================================
+    //
+    //
+    //========================================
+    function solrEscape(value) {
+
+        if(value===undefined) throw "Value is undefined";
+        if(value===null)      throw "Value is null";
+        if(value==="")        throw "Value is null";
+
+        if(_.isNumber(value)) value = value.toString();
+        if(_.isDate  (value)) value = value.toISOString();
+
+        //TODO add more types
+
+        value = value.toString();
+
+        value = value.replace(/\\/g,   '\\\\');
+        value = value.replace(/\+/g,   '\\+');
+        value = value.replace(/\-/g,   '\\-');
+        value = value.replace(/\&\&/g, '\\&&');
+        value = value.replace(/\|\|/g, '\\||');
+        value = value.replace(/\!/g,   '\\!');
+        value = value.replace(/\(/g,   '\\(');
+        value = value.replace(/\)/g,   '\\)');
+        value = value.replace(/\{/g,   '\\{');
+        value = value.replace(/\}/g,   '\\}');
+        value = value.replace(/\[/g,   '\\[');
+        value = value.replace(/\]/g,   '\\]');
+        value = value.replace(/\^/g,   '\\^');
+        value = value.replace(/\"/g,   '\\"');
+        value = value.replace(/\~/g,   '\\~');
+        value = value.replace(/\*/g,   '\\*');
+        value = value.replace(/\?/g,   '\\?');
+        value = value.replace(/\:/g,   '\\:');
+
+        return value;
     }
 });

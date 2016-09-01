@@ -282,15 +282,14 @@
 
                 <div class="form-group">
     				<label for="exampleInputEmail1">Related documents</label><br>
-    				<div ng-hide="true" class="panel panel-default" style="margin-bottom:4px">
+    				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.documents|orderBy|_:'map':lookupMeetingDocument">
     					<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button class="btn btn-danger btn-xs pull-right"><i class="fa fa-minus-circle"></i></button>
-    						<a href="#"><b>RMWS-2015-02</b></a>
-    						<div style="max-height:50px;overflow:hidden">
-    							Dialogue Workshop on Assessment of Collective Action of Indigenous Peoples and Local
-    							Communities in Biodiversity Conservation and Resource Mobilization
+    						<button class="btn btn-danger btn-xs pull-right" ng-click="deleteMeetingDocument(item.symbol_s||item)"><i class="fa fa-minus-circle"></i></button>
+    						<a href="{{item.url}}" target="meetingDocument"><b>{{item.symbol_s}}</b></a>
+                    		<div ng-show="item.title_t" style="max-height:50px;overflow:hidden">
+    							{{item.title_t}}
     						</div>
-    						<div style="margin-top:4px">
+    						<div ng-hide="true"  style="margin-top:4px">
     							<i class="fa fa-file-pdf-o"></i>
     							<a href="#">arabic</a> |
     							<a href="#">chinese</a> |
@@ -301,7 +300,7 @@
     						</div>
     					</div>
     				</div>
-    				<button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph' || true"><i class="fa fa-plus-circle"></i> add a document</button>
+    				<button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectMeetingDocument()"><i class="fa fa-plus-circle"></i> add a document</button>
     			</div>
 
     		</div>

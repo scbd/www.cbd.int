@@ -72,6 +72,18 @@
                 </dd>
 				<br>
 
+				<dt ng-if="current.data.documents.length">Documents</dt>
+                <dd ng-repeat="item in current.data.documents|orderBy|_:'map':lookupMeetingDocument">
+                    <div class="panel panel-default" style="margin-bottom:4px">
+                        <div class="panel-body" style="padding:12px;font-size:0.9em">
+                            <a ng-href="{{item.url}}" target="meetingDocument"><b>{{item.symbol_s||item.symbol_t||item}}</b></a>
+                            <div style="max-height:50px;overflow:hidden" title="{{item.title_t}}" ng-bind-html="item.title_t">
+                            </div>
+                        </div>
+                    </div>
+                </dd>
+			</dl>
+
 		</div>
 	</div>
 </div>
