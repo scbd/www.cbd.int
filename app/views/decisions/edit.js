@@ -273,6 +273,11 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             if(($scope.element.data||{}).type == 'information')
                 $scope.element.data.type = 'informational';
 
+            if($scope.element.data) {
+                $scope.element.data.statusInfo = $scope.element.data.statusInfo || $scope.element.elementStatusDetails;
+                delete $scope.element.elementStatusDetails;
+            }
+
             $scope.formattingLocked = !!$scope.element.type;
         }
 
