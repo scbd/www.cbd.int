@@ -125,7 +125,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
                 selectNode(selectedNode);
 
-                alert( "Your document has been successfully save." );
+                alert( "Your document has been successfully saved." );
 
             }).catch(function(err){
 
