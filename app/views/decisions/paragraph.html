@@ -49,6 +49,7 @@
 
 				<dt>Status</dt>
 				<dd ng-repeat="item in current.data.statuses"><span class="label label-default" ng-class="{ 'label-success' : item=='active' }">{{item}}</span></dd>
+				<dd ng-if="current.data.statusInfo||current.elementStatusDetails"><i>{{current.data.statusInfo||current.elementStatusDetails}}</i></dd>
 				<br>
 
 				<dt>Actors</dt>
