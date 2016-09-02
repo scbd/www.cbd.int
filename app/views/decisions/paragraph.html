@@ -52,37 +52,46 @@
 				<dd ng-if="current.data.statusInfo||current.elementStatusDetails"><i>{{current.data.statusInfo||current.elementStatusDetails}}</i></dd>
 				<br>
 
-				<dt>Actors</dt>
-				<dd ng-repeat="item in current.data.actors"><span class="label label-default">{{item}}</span></dd>
-				<br>
+                <span ng-if="current.data.actors.length">
+    				<dt>Actors</dt>
+    				<dd ng-repeat="item in current.data.actors"><span class="label label-default">{{item}}</span></dd>
+    				<dd ng-if="current.data.actorsInfo"><i>{{current.data.actorsInfo}}</i></dd>
+    				<br>
+                </span>
 
-				<dt>Related decisions</dt>
-				<dd ng-repeat="item in current.data.decisions">{{item}}</dd>
-				<br>
+                <span ng-if="current.data.decisions.length">
+    				<dt>Related decisions</dt>
+    				<dd ng-repeat="item in current.data.decisions">{{item}}</dd>
+    				<br>
+                </span>
 
-				<dt ng-if="current.data.notifications.length">Notifications</dt>
-                <dd ng-repeat="item in current.data.notifications|orderBy|_:'map':lookupNotification">
-                    <div class="panel panel-default" style="margin-bottom:4px">
-                        <div class="panel-body" style="padding:12px;font-size:0.9em">
-                            <a ng-href="{{item.url_ss[0]}}" target="notifications"><b>{{item.reference_s||item.reference_t}}</b> <i>({{item.symbol_s||item.symbol_t||item}})</i></a>
-                            <div style="max-height:50px;overflow:hidden" title="{{item.title_t}}" ng-bind-html="item.title_t">
-                            </div>
-                            <i class="fa fa-calendar fa-fw"></i> {{item.date_dt|moment:'utc'|moment:'format':'LL'}}
-                        </div>
-                    </div>
-                </dd>
-				<br>
-
-				<dt ng-if="current.data.documents.length">Documents</dt>
-                <dd ng-repeat="item in current.data.documents|orderBy|_:'map':lookupMeetingDocument">
-                    <div class="panel panel-default" style="margin-bottom:4px">
-                        <div class="panel-body" style="padding:12px;font-size:0.9em">
-                            <a ng-href="{{item.url}}" target="meetingDocument"><b>{{item.symbol_s||item.symbol_t||item}}</b></a>
-                            <div style="max-height:50px;overflow:hidden" title="{{item.title_t}}" ng-bind-html="item.title_t">
+                <span ng-if="current.data.notifications.length">
+    				<dt>Notifications</dt>
+                    <dd ng-repeat="item in current.data.notifications|orderBy|_:'map':lookupNotification">
+                        <div class="panel panel-default" style="margin-bottom:4px">
+                            <div class="panel-body" style="padding:12px;font-size:0.9em">
+                                <a ng-href="{{item.url_ss[0]}}" target="notifications"><b>{{item.reference_s||item.reference_t}}</b> <i>({{item.symbol_s||item.symbol_t||item}})</i></a>
+                                <div style="max-height:50px;overflow:hidden" title="{{item.title_t}}" ng-bind-html="item.title_t">
+                                </div>
+                                <i class="fa fa-calendar fa-fw"></i> {{item.date_dt|moment:'utc'|moment:'format':'LL'}}
                             </div>
                         </div>
-                    </div>
-                </dd>
+                    </dd>
+    				<br>
+                </span>
+
+                <span ng-if="(current.data.documents|filter:isPublicMeetingDocument).length">
+    				<dt>Documents</dt>
+                    <dd ng-repeat="item in current.data.documents|filter:isPublicMeetingDocument|orderBy|_:'map':lookupMeetingDocument">
+                        <div class="panel panel-default" style="margin-bottom:4px">
+                            <div class="panel-body" style="padding:12px;font-size:0.9em">
+                                <a ng-href="{{item.url}}" target="meetingDocument"><b>{{item.symbol_s||item.symbol_t||item}}</b></a>
+                                <div style="max-height:50px;overflow:hidden" title="{{item.title_t}}" ng-bind-html="item.title_t">
+                                </div>
+                            </div>
+                        </div>
+                    </dd>
+                </span>
 			</dl>
 
 		</div>

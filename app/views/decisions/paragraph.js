@@ -22,6 +22,7 @@ define(['angular', 'lodash', 'app', 'css!./view.css', './view-element', 'filters
         $scope.$root.page    = { title: 'Decision '+romanize(session)+'/'+decision };
         $scope.lookupNotification = lookupNotification;
         $scope.lookupMeetingDocument = lookupMeetingDocument;
+        $scope.isPublicMeetingDocument = isPublicMeetingDocument;
 
         if(section)   $scope.$root.page.title += ' section ' + section;
         if(paragraph) $scope.$root.page.title += ' paragraph ' + paragraph;
@@ -110,6 +111,13 @@ define(['angular', 'lodash', 'app', 'css!./view.css', './view-element', 'filters
             }
 
             return __notifications[code];
+        }
+
+        //===========================
+        //
+        //===========================
+        function isPublicMeetingDocument(code) {
+            return !/^SCBD\/LOG/.test(code||'');
         }
 
         //===========================
