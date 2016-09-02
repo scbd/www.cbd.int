@@ -5,9 +5,12 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
         var treaty = "CBD";
         var body   = "COP";
-        var session = roman.indexOf($route.current.params.meeting.toUpperCase());
+        var session  = parseInt($route.current.params.meeting);
         var decision = parseInt($route.current.params.number);
         var selectedElement = null;
+
+        if(!_.isFinite(session)  || session <1) { $scope.paramError = "session_invalid";  return this; }
+        if(!_.isFinite(decision) || decision<1) { $scope.paramError = "decision_invalid"; return this; }
 
         var data = { title: 'agenda', content: 'loading...' };
 
