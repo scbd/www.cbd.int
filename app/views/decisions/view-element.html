@@ -18,6 +18,7 @@
             <span ng-switch-when="implemented">implemented</span>
             <span ng-switch-when="superseded">superseded</span>
             <span ng-switch-when="elapsed">elapsed</span>
+            <span ng-switch-when="retired">retired</span>
             <span ng-switch-default>{{::status|uppercase}}</span>
         </span>
 	</span>
@@ -35,7 +36,7 @@
 
 	<p ng-if="::info.type=='paragraph'">
 		<a type="button" class="btn btn-primary btn-xs" ng-href="/decisions/cop/{{::info.data.session}}/{{::info.data.decision}}/{{::info.data.section|lowercase}}{{::info.paragraph}}{{::info.item && ('.'+info.item)}}" ng-click="$root.hiddenHash='view'">
-			<i class="fa fa-search" aria-hidden="true"></i> paragraph {{::info.paragraph}} <span ng-if="info.item">item ({{::info.item}})</span>
+			<i class="fa fa-search" aria-hidden="true"></i> paragraph <span ng-if="::info.data.section">{{::info.data.section}}.</span> {{::info.paragraph}} <span ng-if="::info.item">item ({{::info.item}})</span>
 		</a>
 	</p>
 
