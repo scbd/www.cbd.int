@@ -26,6 +26,10 @@ require.config({
         'magnific-popup'  : 'libs/magnific-popup/dist/jquery.magnific-popup.min',
         'jquery-migrate'  : 'libs/jquery-migrate/jquery-migrate.min',
         'ammap3WorldHigh' : 'directives/reporting-display/worldEUHigh',
+        'alasql'          : 'libs/alasql/dist/alasql.min',
+        'js-xlsx'         : 'libs/js-xlsx/dist/xlsx.min',
+        'js-zip'          : 'libs/js-xlsx/dist/jszip',
+        'ods'             : 'libs/js-xlsx/dist/ods'
     },
     shim: {
         'libs/angular/angular.min' : { deps : ['jquery'] },
@@ -39,12 +43,20 @@ require.config({
         'bootstrap-notify'     : { deps : ['jquery', 'bootstrap'] },
         'jquery-migrate'       : { deps : ['jquery']},
         'interface'            : { deps : ['jquery-migrate']},
-        'magnific-popup'       : { deps : ['jquery']}
+        'magnific-popup'       : { deps : ['jquery']},
+        'alasql'               : { deps : ['js-xlsx']},
+        'js-xlsx'              : { deps : ['js-zip', 'ods']}
+
     },
     packages: [
     { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },
     { name: 'ammap'  , main: 'ammap'   , location : 'libs/ammap3/ammap' }
 ]
+});
+
+define('xlsx', ['js-zip', 'ods'], function (jszip, ods) {
+    window.JSZip = jszip;
+    window.ODS   = ods;
 });
 
 define('underscore', ['lodash'], function(_) {
