@@ -27,6 +27,10 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
         if(/^\/aichi-targets($|\/.*)/.test(locationPath))
             registerRoutes_aichiTargets($routeProvider);
 
+        // /kronos/*
+        if(/^\/kronos\/list-of-participants($|\/.*)/.test(locationPath))
+            registerRoutes_kronos($routeProvider);
+
         $routeProvider.when('/403', { templateUrl: '/app/views/403.html' });
         $routeProvider.when('/404', { templateUrl: '/app/views/404.html' }).otherwise({redirectTo: '/404'});
     }
@@ -97,6 +101,19 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
         .when('/',                  { templateUrl: 'views/aichi-targets/index.html',    controllerAs: 'indexCtrl',   resolveController: true })
         .when('/target/:targetId',  { templateUrl: 'views/aichi-targets/index-id.html', controllerAs: 'indexIdCtrl', resolveController: true });
   }
+
+  //============================================================
+  //
+  //s
+  //============================================================
+  function registerRoutes_kronos(routeProvider) {
+
+      $("base").attr('href', '/kronos/list-of-participants/'); // allow full page reload outside of  /insession/*
+
+      routeProvider
+        .when('/',                  { templateUrl: 'views/meetings/participants/index.html',    controllerAs: 'indexCtrl',   resolveController: true, resolve: { user : securize(["Administrator","KronosAdministrator", "ScbdStaff"]) }  });
+  }
+
     //============================================================
     //
     //
