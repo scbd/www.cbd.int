@@ -231,7 +231,7 @@
 
                 <div class="form-group" ng-show="element.data.statuses.indexOf('superseded')>=0 || element.data.statuses.indexOf('retired')>=0 || element.elementStatusDetails">
     		    	<label for="elementStatus" style="font-weight:inherit">Details about <i>Superseded / Retired</i> status</label>
-    		    	<textarea class="form-control" id="elementStatusDetails" ng-model="element.elementStatusDetails"></textarea>
+    		    	<textarea class="form-control" id="elementStatusDetails" ng-model="element.data.statusInfo"></textarea>
     		  	</div>
 
     		</div>
