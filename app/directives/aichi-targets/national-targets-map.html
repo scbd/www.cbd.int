@@ -22,12 +22,13 @@
       opacity: 0.7;
       display: block;
       right: 65px;
-      bottom: 100px;
+      bottom: 6px;
       cursor: pointer;
     }
+
   </style>
 <link  type="text/css" href="/app/libs/ammap3/ammap/plugins/export/export.css" rel="stylesheet">
-  <div id="mapdiv" style="width:100%;height: 350px;  "></div>
+  <div id="mapdiv" style="width:95%;height: 300px;background-color:#a3ccff;"></div>
   <div class="disclaimer tooltip" data-toggle="modal" href="#dialogDisclaimer">Disclaimer</div>
   <!-- <select id="langselect" onchange="setLanguage(this.options[this.selectedIndex].value);">
     <option value="en" selected="selected">English (default)</option>
@@ -38,25 +39,6 @@
     <option value="ru">Russion</option>
 </select> -->
 
-  <div class="panel panel-default">
-    <div class="row" style="padding-top:3px; width:100%; margin-left:0px;">
-
-      <!-- Legend tittle       -->
-      <div class="col-md-12" style="text-align:center; margin-top:0; margin-bottom:0;" >
-        <h4 style="text-align:center; margin-top:0; margin-bottom:0; padding-bottom:0px;">{{legendTitle}}</h4>
-        <h7 style="text-align:center; font-style: italic; margin-top:0; margin-bottom:0; padding-bottom:0px;">(Interactive Legend)</h7>
-      </div>
-
-      <!-- Aichi Target Legend       -->
-      <div class="col-xs-4 col-md-2 leggendItem" ng-repeat="item in leggends.aichiTarget" ng-click="legendHide(item);" >
-        <i class="fa fa-times fa-2x" ng-if="!item.visible" style="margin: 0 auto; display: block;"></i>
-        <div class="square" ng-style="{'background-color':item.color}" ng-if="item.visible"></div> {{item.title}}
-      </div>
-
-      <!-- NationalReport Legend       -->
-
-    </div>
-  </div>
   <div id="dialogDisclaimer" class="modal fade">
     <div class="modal-dialog">
       <div class="modal-content">
