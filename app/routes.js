@@ -126,7 +126,7 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
                 var hasRole = !!_.intersection(user.roles, requiredRoles).length;
 
                 if (!user.isAuthenticated) {
-                    $window.location.href = 'https://accounts.cbd.int/signin?returnurl='+encodeURIComponent($location.absUrl());
+                    $window.location.href = authentication.accountsBaseUrl()+'/signin?returnurl='+encodeURIComponent($location.absUrl());
                     throw user; // stop route change!
                 }
                 else if (!hasRole)

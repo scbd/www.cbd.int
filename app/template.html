@@ -86,7 +86,7 @@
 
                 <div ng-cloak ng-show="user" class="pull-right">
 
-                    <a ng-hide="user.isAuthenticated" class="navbar-toggle collapsed" style="text-decoration:none;color:#009B48" href="https://accounts.cbd.int/signin?returnUrl={{encodedReturnUrl()}}" style="color: black">
+                    <a ng-hide="user.isAuthenticated"  ng-click="signIn()" href="#" class="navbar-toggle collapsed" style="text-decoration:none;color:#009B48" style="color: black">
                         <i  class="fa fa-power-off" style="font-size:1.66em;"></i>
                     </a>
 
@@ -97,9 +97,9 @@
                         </button>
 
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
-                            <li><a href="https://accounts.cbd.int/profile?returnurl={{encodedReturnUrl()}}" ><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
-                            <li><a href="https://accounts.cbd.int/password?returnurl={{encodedReturnUrl()}}"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
-                            <li><a href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
+                            <li><a ng-click="profile()"  href="#" ><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
+                            <li><a ng-click="password()" href="#"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
+                            <li><a ng-click="signOut()"  href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
                         </ul>
                     </div>
 
@@ -131,7 +131,7 @@
 
                 <div ng-cloak ng-show="user" class="navbar-right" style="margin:5px">
 
-                    <a class="btn btn-link"  style="text-decoration:none;color:#009B48" ng-hide="user.isAuthenticated" href="https://accounts.cbd.int/signin?returnUrl={{encodedReturnUrl()}}" style="color: black">
+                    <a class="btn btn-link" ng-click="signIn()"  href="#"  style="text-decoration:none;color:#009B48" ng-hide="user.isAuthenticated" style="color: black">
                         <i  class="fa fa-power-off"></i> Sign in
                     </a>
 
@@ -140,9 +140,9 @@
                           <span class="caret"></span> {{user.name}}
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
-                            <li><a href="https://accounts.cbd.int/profile?returnurl={{encodedReturnUrl()}}" ><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
-                            <li><a href="https://accounts.cbd.int/password?returnurl={{encodedReturnUrl()}}"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
-                            <li><a href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
+                            <li><a ng-click="profile()"  href="#"><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
+                            <li><a ng-click="password()" href="#"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
+                            <li><a ng-click="signOut()"  href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
                         </ul>
                     </div>
 

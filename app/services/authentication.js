@@ -2,11 +2,22 @@
 
 define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 
+    var accountsBaseUrl = (function(){
+
+        var domain = window.location.hostname.replace(/[^\.]+\./, '');
+
+        if(domain=='localhost')
+            domain = 'staging.cbd.int';
+
+        return 'https://accounts.'+domain;
+
+    })();
+
 	app.factory('apiToken', ["$q", "$rootScope", "$window", "$document", "$timeout", function($q, $rootScope, $window, $document, $timeout) {
 
 		var authenticationFrameQ = $q(function(resolve, reject){
 
-			var frame = $('<iframe src="https://accounts.cbd.int/app/authorize.html" style="display:none"></iframe>');
+			var frame = $('<iframe src="'+accountsBaseUrl+'/app/authorize.html'+'" style="display:none"></iframe>');
 
 			$("body").prepend(frame);
 
@@ -15,7 +26,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 			});
 
 			$timeout(function(){
-				reject('accounts.cbd.int is not available / call is made from an unauthorized domain');
+				reject('accounts is not available / call is made from an unauthorized domain');
 			}, 5000);
 		});
 
@@ -41,7 +52,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 
 				var defer = $q.defer();
 				var unauthorizedTimeout = $timeout(function(){
-					console.error('accounts.cbd.int is not available / call is made from an unauthorized domain');
+					console.error('accounts is not available / call is made from an unauthorized domain');
 					defer.resolve(null);
 				}, 1000);
 
@@ -49,7 +60,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 				{
 					$timeout.cancel(unauthorizedTimeout);
 
-					if(event.origin!='https://accounts.cbd.int')
+					if(event.origin!=accountsBaseUrl)
 						return;
 
 					var message = JSON.parse(event.data);
@@ -79,7 +90,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 
 				});
 
-				authenticationFrame.contentWindow.postMessage(JSON.stringify({ type : 'getAuthenticationToken' }), 'https://accounts.cbd.int');
+				authenticationFrame.contentWindow.postMessage(JSON.stringify({ type : 'getAuthenticationToken' }), accountsBaseUrl);
 
 				return pToken;
 
@@ -112,7 +123,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 						authenticationEmail : email
 					};
 
-					authenticationFrame.contentWindow.postMessage(JSON.stringify(msg), 'https://accounts.cbd.int');
+					authenticationFrame.contentWindow.postMessage(JSON.stringify(msg), accountsBaseUrl);
 				}
 
 				if(email) {
@@ -252,6 +263,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 			signIn   : signIn,
 			signOut  : signOut,
 			user     : LEGACY_user,
+            accountsBaseUrl : function() { return accountsBaseUrl; }
 		};
 
 	}]);

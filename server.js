@@ -6,6 +6,14 @@ var httpProxy   = require('http-proxy');
 var app    = express();
 var proxy  = httpProxy.createProxyServer({});
 
+if(!process.env.API_URL) {
+    console.error("WARNING: evironment API_URL not set. USING default (https://api.cbd.int:443) ");
+}
+
+var apiUrl = process.env.API_URL || 'https://api.cbd.int:443';
+
+console.log("API url: ", apiUrl);
+
 // Configure options
 
 app.use(require('morgan')('dev'));
@@ -21,8 +29,7 @@ app.get('/doc/*', function(req, res) { proxy.web(req, res, { target: "https://ww
 app.all('/doc/*', function(req, res) { res.status(404).send(); } );
 
 // Configure routes
-
-app.all('/api/*', function(req, res) { proxy.web(req, res, { target: "https://api.cbd.int:443", secure: false } ); } );
+app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiUrl, secure: false, changeOrigin:true } ); } );
 
 // Configure template(s)
 
