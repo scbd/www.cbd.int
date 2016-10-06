@@ -190,7 +190,7 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                 //=======================================================================
                 function loadCountries() {
 
-                    return $http.get('/api/v2015/countries', {
+                    return $http.get('https://api.cbddev.xyz/api/v2015/countries', {
                         cache: true,
                     }).then(function(res) {
                         _.each(res.data, function(c) {
