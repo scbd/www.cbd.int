@@ -1,17 +1,17 @@
-define(['app', 'lodash',
+define(['app', 'lodash','text!./progress-pie.html',
     'amchart',
     'shim!amchart/pie[amchart]',
     'shim!amchart/themes/light[amchart]'
-], function(app, _) {
+], function(app, _,template) {
     'use strict';
 
     //============================================================
     //
     //============================================================
-    app.directive('progressPie', function() {
+    app.directive('progressPie', ['$window',function($window) {
         return {
             restrict: 'E',
-            template: '<div id="chartdivpie" style="width:100%;height:350px; font-size	: 8px;"></div><div class="text-center" style="cursor:pointer;" ng-click="showAll()" ng-if="!nothingReported"><span ng-if="!showAllFlag"><a hraf="#" >Show Reported and Unreported</a></span><span ng-if="showAllFlag"><a hraf="#" >Show Reported Only</a></span></div>',
+            template: template,
             require: '^progressPie',
             scope: {
                 aichiTarget: '=aichiTarget',
@@ -71,24 +71,48 @@ define(['app', 'lodash',
                 //============================================================
                 function buildPie() {
 
-                    //if ($scope.nothingReported) return;
+                    var radius = 150;
+                    var legend ={
+                      "position":"right",
+                      "marginRight":20,
+                      "autoMargins":false,
+                      "fontSize":12
+                    };
+
+                    if($window.screen.width<= 750){
+                        radius = 65;
+                        legend ={
+                          "position":"bottom",
+                          "marginRight":20,
+                          "autoMargins":false,
+                          "fontSize":14
+                        };
+                    }
+
                     if (!$scope.chartData) throw "error no chart data loaded";
                     $timeout(function() {
                         $scope.chartPie = AmCharts.makeChart("chartdivpie", { //jshint ignore:line
-                            "showZeroSlices": true,
+                            "showZeroSlices": false,
                             "type": "pie",
+
+                            "legend":legend,
+                            "pieX":'50%',
+                            "innerRadius": "30%",
                             "theme": "light",
                             "dataProvider": $scope.chartData,
                             "valueField": "count",
                             "titleField": "title",
                             "outlineAlpha": 0.4,
-                            "depth3D": 15,
+                            // "depth3D": 15,
                             "colorField": "color",
-                            "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[count]]</b> ([[percents]]%)</span>",
-                            "angle": 20,
-                            "autoResize": true,
+                            // "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[count]]</b> ([[percents]]%)</span>",
+                            // "angle": 20,
+                            // "autoResize": true,
                             "fontSize": 10,
-                            "labelRadius": 10,
+                            "labelRadius": -30,
+                            "labelText" : '[[percents]]%',
+                            "radius":radius
+
                         });
                         _.each($scope.chartPie.dataProvider, function(slice, index) {
                             slice.color = $scope.chartData[index].color;
@@ -128,7 +152,7 @@ define(['app', 'lodash',
                         'rows': 1000000,
                     };
 
-                    return $http.get('/api/v2013/index/select', {
+                    return $http.get('https://www.cbddev.xyz/api/v2013/index/select', {
                         params: queryParameters,
                         cache: true
                     }).success(function(data) {
@@ -243,6 +267,6 @@ define(['app', 'lodash',
 
             }]
         };
-    });
+    }]);
 
 });
