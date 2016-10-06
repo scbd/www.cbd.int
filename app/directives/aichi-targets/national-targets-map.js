@@ -22,7 +22,7 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                   id: 0,
                   title: 'No Data',
                   visible: true,
-                  color: '#dddddd'
+                  color: '#aaaaaa'
                 }, {
                   id: 1,
                   title: 'Moving Away',
@@ -91,18 +91,23 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                       }],
                     },
                     "areasSettings": {
+
                       "autoZoom": true,
                       "selectedColor": "#4eba7d",
                       "rollOverColor": "#423f3f",
                       "selectable": true,
-                      "color": "#007c35",
+                      "color": "#aaaaaa",
                     },
-                    "smallMap": {},
-                    "export": {
-                      "libs": { "autoLoad": false},
-                      "enabled": true,
-                      "position": "bottom-right"
-                    },
+                    "zoomControl": {
+                		"zoomControlEnabled": true,
+                    "right": 10
+                	  }
+                    // "smallMap": {},
+                    // "export": {
+                    //   "libs": { "autoLoad": false},
+                    //   "enabled": true,
+                    //   "position": "bottom-right"
+                    // },
                   }; //
                 } //$scope.initMap
                 //=======================================================================
@@ -170,7 +175,7 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                         'rows': 1000000,
                     };
 
-                    return $http.get('/api/v2013/index/select', {
+                    return $http.get('https://www.cbddev.xyz/api/v2013/index/select', {
                         params: queryParameters,
                         cache: true
                     }).success(function(data) {
@@ -262,7 +267,7 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                 // //=======================================================================
                 function hideAreas(color) {
                   // Walkthrough areas
-                  if (!color) color = '#dddddd';
+                  if (!color) color = '#aaaaaa';
                   _.each($scope.map.dataProvider.areas, function(area) {
                     if (area.id !== 'divider1') {
                       area.colorReal = area.originalColor = color;
