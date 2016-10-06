@@ -175,9 +175,9 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                         'rows': 1000000,
                     };
 
-                    return $http.get('https://api.cbddev.xyz/api/v2013/index/select', {
+                    return $http.get('/api/v2013/index/select', {
                         params: queryParameters,
-
+                        cache: true
                     }).success(function(data) {
                         $scope.count = data.response.numFound;
                         $scope.documents = data.response.docs;
@@ -190,7 +190,7 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                 //=======================================================================
                 function loadCountries() {
 
-                    return $http.get('https://api.cbddev.xyz/api/v2015/countries', {
+                    return $http.get('/api/v2015/countries', {
                         cache: true,
                     }).then(function(res) {
                         _.each(res.data, function(c) {
