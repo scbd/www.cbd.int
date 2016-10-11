@@ -19,7 +19,7 @@
     body, .greybg { background: #f4f4f4; }
     .whitebg      { background: #FFFFFF; }
 
-    header.mobile.navbar              { color:#009B48; background-color:white; }
+    header.mobile.navbar              { color:#009B48; background-color:white; margin-bottom: 1px; }
     header.mobile.navbar a            { color:#009B48; }
     header.mobile .navbar-nav a:hover { color:white;background-color:#009B48 }
     header.mobile .navbar-header      { font-weight:semi-bold; }
@@ -129,13 +129,17 @@
         <div class="container whitebg">
             <div>
 
-                <div ng-cloak ng-show="user" class="navbar-right" style="margin:5px">
+                <div class="pull-left" style="margin:5px 0px">
+                    <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg"/></a>
+                </div>
+
+                <div  class="pull-right">
 
                     <a class="btn btn-link" ng-click="signIn()"  href="#"  style="text-decoration:none;color:#009B48" ng-hide="user.isAuthenticated" style="color: black">
-                        <i  class="fa fa-power-off"></i> Sign in
+                        <i  class="fa fa-power-off"></i> <span ng-cloak ng-show="user && !user.isAuthenticated">Sign in</span>
                     </a>
 
-                    <div ng-show="user.isAuthenticated" class="dropdown">
+                    <div ng-cloak ng-show="user.isAuthenticated" class="dropdown">
                         <button class="btn btn-link dropdown-toggle" style="text-decoration:none;color:#009B48" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                           <span class="caret"></span> {{user.name}}
                         </button>
@@ -148,11 +152,7 @@
 
                </div> <!--  end sign in-->
 
-                <div style="padding:5px 0px">
-                    <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg"/></a>
-                </div>
-
-                <div class="pull-right">
+                <div style="clear:right;" class="pull-right">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="/convention">The Convention</a></li>
                         <li class="active"><a href="/biosafety">Cartagena Protocol</a></li>
