@@ -15,8 +15,16 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
             template : template,
             scope: {
                 aichiTarget: '=aichiTarget',
+                legendHide:'&',
+                itemColor: '='
             },
             link: function ($scope, $elem, $attrs,selfCtrl) {
+              $scope.$watch('itemColor',function(){
+                if($scope.itemColor && $scope.itemColor.color){
+
+                  $scope.legendHide($scope.itemColor);
+                }
+              },true);
               $scope.leggends = {
                 aichiTarget: [{
                   id: 0,
@@ -77,6 +85,7 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                   $scope.mapData = {
                     "type": "map",
                     "theme": "light",
+                    "zoomDuration":0.1,
                     "responsive": {
                       "enabled": true
                     },
@@ -102,12 +111,7 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                 		"zoomControlEnabled": true,
                     "right": 10
                 	  }
-                    // "smallMap": {},
-                    // "export": {
-                    //   "libs": { "autoLoad": false},
-                    //   "enabled": true,
-                    //   "position": "bottom-right"
-                    // },
+
                   }; //
                 } //$scope.initMap
                 //=======================================================================
@@ -184,7 +188,33 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                     });
                 } // query
 
+                //=======================================================================
+                //
+                //=======================================================================
+                function queryTargets() {
+                    var targetText = '';
+                    if ($scope.aichiTarget < 10)
+                        targetText = 'AICHI-TARGET-0' + $scope.aichiTarget;
+                    else
+                        targetText = 'AICHI-TARGET-' + $scope.aichiTarget;
 
+                    var queryParameters = {
+                        'q': 'NOT version_s:* AND realm_ss:chm-dev AND schema_s:nationalTarget AND nationalTarget_EN_t:"' + targetText + '" AND _latest_s:true AND _state_s:public',
+                        'sort': 'createdDate_dt desc, title_t asc',
+                        'fl': 'title_t,reportType_s,documentID,identifier_s,id,title_t,description_t,url_ss,schema_EN_t,date_dt,government_EN_t,schema_s,number_d,aichiTarget_ss,reference_s,sender_s,meeting_ss,recipient_ss,symbol_s,eventCity_EN_t,eventCountry_EN_t,startDate_s,endDate_s,body_s,code_s,meeting_s,group_s,function_t,department_t,organization_t,summary_EN_t,reportType_EN_t,completion_EN_t,jurisdiction_EN_t,development_EN_t,_latest_s,nationalTarget_EN_t,progress_EN_t,year_i,text_EN_txt,nationalTarget_EN_t,government_s',
+                        'wt': 'json',
+                        'start': 0,
+                        'rows': 1000000,
+                    };
+
+                    return $http.get('https://api.cbddev.xyz/api/v2013/index/select', {
+                        params: queryParameters,
+
+                    }).success(function(data) {
+                        $scope.tcount = data.response.numFound;
+                        $scope.documents = data.response.docs;
+                    });
+                } // query
                 //=======================================================================
                 //
                 //=======================================================================
@@ -209,9 +239,9 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                   if(_.isEmpty(country.docs)) return;
 
                   changeAreaColor(country.code, progressToColor(progressToNumber(country.docs[0].progress_EN_t)));
-                  buildProgressBaloon(country, progressToNumber(country.docs[0].progress_EN_t), country.docs[0].nationalTarget_EN_t);
-                  legendTitle(country);
-                  restLegend($scope.leggends.aichiTarget);
+                  // buildProgressBaloon(country, progressToNumber(country.docs[0].progress_EN_t), country.docs[0].nationalTarget_EN_t);
+                  // legendTitle(country);
+                  // restLegend($scope.leggends.aichiTarget);
                 } // aichiMap
                 //=======================================================================
                 function legendTitle(country) {
@@ -280,62 +310,19 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                 //
                 //=======================================================================
                 $scope.legendHide = function(legendItem) {
-                  var area2 = {};
 
 
                   _.each($scope.map.dataProvider.areas, function(area) {
+                      if (legendItem.color === area.originalColor && area.mouseEnabled === true) {
+                        area.colorReal = '#a3ccff';
+                        area.mouseEnabled = false;
 
-                    if (area.id.toUpperCase() === 'DK') {
-                      area2 = getMapObject('gl');
-                      //area2.originalColor = area.originalColor;
-                      area2.colorReal = area.colorReal;
-                      area2.mouseEnabled = area.mouseEnabled;
-
-
-                      if (area.id.toUpperCase() === 'FO') {
-                        area2 = getMapObject('gl');
-                        //area2.originalColor = area.originalColor;
-                        area2.colorReal = area.colorReal;
-                        area2.mouseEnabled = area.mouseEnabled;
-
+                      } else if (legendItem.color === area.originalColor && area.mouseEnabled === false) {
+                        area.colorReal = legendItem.color;
+                        area.mouseEnabled = true;
                       }
-                    }
-                    if (area.id.toUpperCase() === 'NO') {
-                      area2 = getMapObject('sj');
-                      //area2.originalColor = area.originalColor;
-                      area2.colorReal = area.colorReal;
-                      area2.mouseEnabled = area.mouseEnabled;
-                    }
-                    if (area.id.toUpperCase() === 'MA') {
-                      area2 = getMapObject('eh');
-                      //area2.originalColor = area.originalColor;
-                      area2.colorReal = area.colorReal;
-                      area2.mouseEnabled = area.mouseEnabled;
-                    }
-                    if (area.id.toUpperCase() === 'CN') {
-                      area2 = getMapObject('tw');
-                      //area2.originalColor = area.originalColor;
-                      area2.colorReal = area.colorReal;
-                      area2.mouseEnabled = area.mouseEnabled;
-                    }
-
-
-
-
-                    if (legendItem.color === area.originalColor && area.mouseEnabled === true) {
-                      area.colorReal = '#FFFFFF';
-                      area.mouseEnabled = false;
-
-                    } else if (legendItem.color === area.originalColor && area.mouseEnabled === false) {
-                      area.colorReal = legendItem.color;
-                      area.mouseEnabled = true;
-
-                    }
                   });
-                  if (legendItem.visible)
-                    legendItem.visible = false;
-                  else
-                    legendItem.visible = true;
+
                   $scope.map.validateData();
                 }; //$scope.legendHide
 
@@ -422,6 +409,7 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                       return 'On track to exceed ' + aichiTargetReadable(target) + ' (we expect to achieve the ' + aichiTargetReadable(target) + ' before its deadline).';
                   }
                 } //getProgressText(progress, target)
+
                 //=======================================================================
                 //
                 //=======================================================================
@@ -436,35 +424,33 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                 // //
                 // //=======================================================================
                 function changeAreaColor(id, color, area) {
-                  if (!area)
-                    area = getMapObject(id.toUpperCase());
+                    if (!area)
+                      area = getMapObject(id.toUpperCase());
 
-                  area.colorReal = area.originalColor = color;
-                  if (id.toUpperCase() === 'DK') {
-                    var areaA = getMapObject('GL');
-                    areaA.colorReal = area.colorReal;
-                    areaA.originalColor = area.originalColor;
-                    var areaB = getMapObject('FO');
-                    areaB.colorReal = area.colorReal;
-                    areaB.originalColor = area.originalColor;
-                  }
-                  if (area.id.toUpperCase() === 'NO') {
-                    var areaC = getMapObject('SJ');
-                    areaC.colorReal = area.colorReal;
-                    areaC.originalColor = area.originalColor;
-                  }
-                  if (area.id.toUpperCase() === 'MA') {
-                    var areaD = getMapObject('EH');
-                    areaD.colorReal = area.colorReal;
-                    areaD.originalColor= area.originalColor;
-                  }
-                  if(area.id.toUpperCase()==='CN'){
-                    var areaE = getMapObject('TW');
-                    areaE.colorReal = area.colorReal;
-                    areaE.originalColor = area.originalColor;
-                  }
-
-
+                    area.colorReal = area.originalColor = color;
+                    if (id.toUpperCase() === 'DK') {
+                      var areaA = getMapObject('GL');
+                      areaA.colorReal = area.colorReal;
+                      areaA.originalColor = area.originalColor;
+                      var areaB = getMapObject('FO');
+                      areaB.colorReal = area.colorReal;
+                      areaB.originalColor = area.originalColor;
+                    }
+                    if (area.id.toUpperCase() === 'NO') {
+                      var areaC = getMapObject('SJ');
+                      areaC.colorReal = area.colorReal;
+                      areaC.originalColor = area.originalColor;
+                    }
+                    if (area.id.toUpperCase() === 'MA') {
+                      var areaD = getMapObject('EH');
+                      areaD.colorReal = area.colorReal;
+                      areaD.originalColor= area.originalColor;
+                    }
+                    if(area.id.toUpperCase()==='CN'){
+                      var areaE = getMapObject('TW');
+                      areaE.colorReal = area.colorReal;
+                      areaE.originalColor = area.originalColor;
+                    }
                 } //getMapObject
 
 
@@ -491,13 +477,13 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                 //=======================================================================
                 function buildProgressBaloon(country, progress, target) {
 
-                  var area = getMapObject(country.code);
-                  area.balloonText = "<div class='panel panel-default' ><div class='panel-heading' style='font-weight:bold; font-size:medium; white-space: nowrap;color:#009B48;'><i class='flag-icon flag-icon-" + country.code.toLowerCase() + " ng-if='country.isEUR'></i>&nbsp;";
-                  var euImg = "<img src='/app/images/flags/Flag_of_Europe.svg' style='width:25px;hight:21px;' ng-if='country.isEUR'></img>&nbsp;";
-                  var balloonText2 = area.title + "</div> <div class='panel-body' style='text-align:left;'><img style='float:right;width:60px;hight:60px;' src='" + getProgressIcon(progress) + "' >" + getProgressText(progress, target) + "</div> </div>";
-                  if (country.isEUR)
-                    area.balloonText += euImg;
-                  area.balloonText += balloonText2;
+                    var area = getMapObject(country.code);
+                    area.balloonText = "<div class='panel panel-default' ><div class='panel-heading' style='font-weight:bold; font-size:medium; white-space: nowrap;color:#009B48;'><i class='flag-icon flag-icon-" + country.code.toLowerCase() + " ng-if='country.isEUR'></i>&nbsp;";
+                    var euImg = "<img src='/app/images/flags/Flag_of_Europe.svg' style='width:25px;hight:21px;' ng-if='country.isEUR'></img>&nbsp;";
+                    var balloonText2 = area.title + "</div> <div class='panel-body' style='text-align:left;'><img style='float:right;width:60px;hight:60px;' src='" + getProgressIcon(progress) + "' >" + getProgressText(progress, target) + "</div> </div>";
+                    if (country.isEUR)
+                      area.balloonText += euImg;
+                    area.balloonText += balloonText2;
                 } //buildProgressBaloon
 
                 //============================================================
