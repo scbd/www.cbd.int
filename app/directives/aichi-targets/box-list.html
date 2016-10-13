@@ -1,0 +1,45 @@
+<div class="table-responsive">
+  <!-- <i class="fa fa-search" ng-click="searchBox()"></i> -->
+
+  <table class="table table table-striped">
+    <thead>
+     <tr>
+       <th width="95%">
+         <sorter label-name="Title" ng-model="sort" property="title_s"></sorter><br>
+       </th>
+
+       <th width="5%">
+          <sorter label-name="Year" ng-model="sort" property="publicationYear_i"></sorter>
+       </th>
+     </tr>
+   </thead>
+   <tbody>
+     <tr ng-repeat="row in docs" ng-click="goTo(row.url_ss[0])" style="cursor:pointer;">
+       <td>{{row.title_s}}
+          <hr style="margin-bottom:0;">
+          <span class="pull-right"><span class="small" ng-repeat="type in row.resourceTypes_EN_ss">(<a href="{{row.url_ss[0]}}">{{type}}</a>)<span ng-if="!$last">, </span></span></span>
+       </td>
+
+       <td>{{row.publicationYear_i}}</td>
+     </tr>
+     <tr ng-if="!count">
+       <td class="text-center"  colspan="2" >
+         <span ng-if="searchText" ><b>No records found</b></span>
+       </td>
+     </tr>
+     <tr>
+       <td  colspan="2" style="border-top-width:3px">
+         <span class="small" ng-if="searchText" >Search for <span style="color:#009B48;">"{{searchText}}"</span></span>
+            <span class="small pull-right"><a ng-href="https://chm.cbd.int/database?schema_s={{schema}}&aichiTarget_ss=AICHI-TARGET-{{target2}}"><i class="fa fa-search"></i> Advansed Search </a></span>
+       </td>
+     </tr>
+
+     <tr>
+       <td class="text-center" colspan="2" >
+            <pagination pages="pages" current-page="currentPage" items-per-page="itemsPerPage" filtered="docs" search="search"  on-page="onPage(pageIndex)" count="count"> </pagination>
+       </td>
+
+     </tr>
+   </tbody>
+  </table>
+</div>
