@@ -37,47 +37,14 @@
 			margin-top: 5px;
 		}
 
-	.title-global-status {
-	    background: url("/app/images/aichi-targets/global-status-icon.png") no-repeat;
-	    padding-left: 2em;
-      height:25px;
-	}
-	.title-national-status {
-	    background: url("/app/images/aichi-targets/target-icon.png") no-repeat;
-	    padding-left: 2em;
-      height:25px;
-	}
-	.title-resources {
-	    background: url("/app/images/aichi-targets/resources-icon.png") no-repeat;
-	    padding-left: 2em;
-      height:25px;
-	}
-	.title-implementation {
-	    background: url("/app/images/aichi-targets/implementation-activities-icon.png") no-repeat;
-	    padding-left: 2em;
-      height:25px;
-	}
 
-	.title-talks2020 {
-	    background: url("/app/images/aichi-targets/video-icon.png") no-repeat;
-	    background-size: contain;
-	    padding-left: 2em;
-      height:25px;
-	}
-
-	.title-calendar {
+	/*.title-calendar {
 	    background: url("/app/images/aichi-targets/calendar-icon.png") no-repeat;
 	    background-size: contain;
 	    padding-left: 2em;
       height:25px;
-	}
+	}*/
 
-  .title-online {
-	    background: url("/app/images/aichi-targets/online-icon.jpg") no-repeat;
-	    background-size: contain;
-	    padding-left: 2em;
-      height:25px;
-	}
 
 	/* Makes images fully responsive */
 
@@ -133,25 +100,129 @@
   line-height: 85px;
   text-transform:capitalize;
 }
-    </style>
+.debug-border-thin{
+  border-style: dashed;
+  border-color: red;
+  border-width: 1px;
+}
+.center-div
+{
+     margin: 0 auto;
+     max-width: 700px;
+}
+.Absolute-Center {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+.sub-title{
+  background-color:#eeeeee;
+margin: 0 10px 10px 0px;
+  line-height: 25px;
+  height:27px;
+  -webkit-box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.12), 0 1px 6px 0 rgba(0, 0, 0, 0.12);
+          box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.12), 0 1px 6px 0 rgba(0, 0, 0, 0.12);
+  border-radius: 2px;
+  /*display:inline-block;*/
 
+}
+.sub-title-text{
+    display:inline;
+  /*padding-left:30px;*/
+  line-height: 25px;
+}
+.new-title{
+  background-image:url({{indexIdCtrl.target.banner}});
+  background-repeat:no-repeat;
+  background-size:100%;
+  height:123px;
+}
+.overlay {
+    background: rgba(0, 0, 0, 0.5);
+}
+.vertical-center{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    height: 25%;
+    margin: auto;
+}
+.vertical-center-large{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    height: 45%;
+    margin: auto;
+}
+.search {
+    padding: 0px 0;
+    width: 230px;
+    height: 25px;
+    position: relative;
+    left: 10px;
+    float: left;
+    line-height: 22px;
+}
+
+    .search input {
+        position: absolute;
+        width: 0px;
+        float: Left;
+        margin-left: 210px;
+        -webkit-transition: all 0.7s ease-in-out;
+        -moz-transition: all 0.7s ease-in-out;
+        -o-transition: all 0.7s ease-in-out;
+        transition: all 0.7s ease-in-out;
+        height: 25px;
+        line-height: 18px;
+        padding: 0 2px 0 2px;
+        border-radius:1px;
+    }
+
+        .search:hover input, .search input:focus {
+            width: 200px;
+            margin-left: 0px;
+        }
+
+.btn {
+    height: 25px;
+    position: absolute;
+    right: 0;
+    top: 0px;
+    border-radius:1px;
+}
+
+    </style>
+<div style="position:absolute;top:15px;left:40%;">
+<h1>Aichi Target Pages </h1>
+</div>
 <div class="row">
-    <div class="col-xs-12">
-		<div class="row row-eq-height banner " style="background: {{indexIdCtrl.goal.colors.background}}">
-			<div class="col-sm-3 col-md-3 main-title">
+    <div class="col-xs-12" >
+		<div class="row new-title "  >
+			<div class="col-xs-4 overlay" style="height:100%;">
 				<!-- <h5>Aichi Target</h5> -->
-					<img ng-src="/app/images/aichi-targets/abt-{{indexIdCtrl.target.id}}-96.png" width="120px" alt="Aichi target">
+        <div  style="height:100%;">
+					<div class="col-xs-4 " style="padding-left:0;"><img style="margin-top:2px;" ng-src="/app/images/aichi-targets/abt-{{indexIdCtrl.target.id}}-96.png" width="120px" alt="Aichi target"></div>
+          <div class="col-xs-8 " style="position:relative;color:#eeeeee;font-size:18px;height:100%;" ><div ng-class="{'vertical-center-large':indexIdCtrl.target.title.en.length>30}" class="vertical-center text-center">{{indexIdCtrl.target.title.en}}</div></div>
+        </div>
 				<!-- <h4 style="color: {{indexIdCtrl.goal.colors.text}}">{{indexIdCtrl.goal.title.en}}</h4> -->
 			</div>
-			<div class="col-sm-8 col-md-8">
-				<h3 class="page-title">{{indexIdCtrl.target.title.en}}</h3>
+			<div class="col-xs-7 " style="padding-left:0;">
+        <!-- <img src="https://www.cbd.int/images/banners/banner-0-3712.jpg" width="130%"></img> -->
+				<!-- <h3 class="page-title">{{indexIdCtrl.target.title.en}}</h3> -->
 				<!-- <p style="color: {{indexIdCtrl.goal.colors.aichi}}">{{indexIdCtrl.target.action.en}}</p> -->
 			</div>
 		</div>
     </div>
 </div>
 
-<div class="row bg-grey">
+<div class="row">
     <div class="col-sm-12 col-xs-12 visible-xs visible-sm" style="z-index:99;">
         <div fish-eye class="fisheye" max-width='28'></div>
     </div>
@@ -162,44 +233,79 @@
 </div>
 <div class="row">
   <div class="divider"></div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-      	<img  ng-src="/app/images/aichi-targets/abt-{{indexIdCtrl.target.id}}-96.png" width="25px" alt="Aichi target">
-        <h4 class="inline" style="margin-top:10px;">Target {{indexIdCtrl.target.id}}</h4>
 
-        <div class="row">
-    		    <div class="col-xs-12" style="margin-top:10px;">
-              <h5 class="hidden-md hidden-lg hidden-xl">{{indexIdCtrl.target.title.en}}</h5>
-              <p >{{indexIdCtrl.target.action.en}}</p>
-            </div>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <div class="sub-title" >
+        <div class="col-xs-1" style="padding: 0 10px 0 10px;width:50px;">
+          <img src="/app/images/aichi-targets/abt-{{indexIdCtrl.target.id}}-96.png" width="25" style="margin: 1px 1px 1px 1px;">
+        </div>
+        <div class="col-xs-10" style="padding-left: 0;">
+            <h4 class="sub-title-text" >Aichi Target {{indexIdCtrl.target.id}}</h4>
+        </div>
+        <div class="col-xs-1" style="padding-left: 0;">
+          <a type="button" class="btn btn-xs btn-default" href="https://chm.cbd.int/submit/online-reporting">Submit Information</a>
+        </div>
+      </div>
 
+          <div class="col-xs-12" style="margin-top:10px;">
+            <h5 class="hidden-md hidden-lg hidden-xl">{{indexIdCtrl.target.title.en}}</h5>
+            <p >{{indexIdCtrl.target.action.en}}</p>
           </div>
-    </div>
+  </div>
+  <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+
+      <div class="row">
+          <div class="col-xs-12" style="margin-top:10px;">
+            <p style="display:inline-block;"><img src="/app/images/aichi-targets/abt-{{indexIdCtrl.target.id}}-96.png"  width="25"  style="margin: 1px 1px 1px 1px;">
+            <h4 class="sub-title-text" style="display:inline-block;"> &nbsp; Aichi Target {{indexIdCtrl.target.id}}</h4>
+            {{indexIdCtrl.target.action.en}}</p>
+          </div>
+
+      </div>
+  </div> -->
 
 </div>
 <div class="row">
   <div class="divider"></div>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-        <h4 class="title-global-status">Global Status</h4>
-    <progress-pie el-id="pie1" aichi-target="indexIdCtrl.target.id" radius="150" ></progress-pie>
-
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-        <div class="divider-sm hidden-md hidden-lg hidden-xl" ></div>
-        <h4 class="title-national-status">National Status</h4>
-        <national-targets-map aichi-target="indexIdCtrl.target.id"></national-targets-map>
-    </div>
+  <legend42></legend42>
 </div>
 
 <div class="row" >
   <div class="divider"></div>
 
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-        <h4 class="title-resources">Key Resources</h4>
+      <div class="sub-title" >
+        <div class="col-xs-1" style="padding: 0 10px 0 10px;">
+          <img src="/app/images/aichi-targets/resources-icon.png" style="margin: 1px 1px 1px 1px;">
+        </div>
+        <div class="col-xs-5" style="padding-left: 0;">
+            <h4 class="sub-title-text">Key Resources</h4>
+        </div>
+        <div class="col-xs-6">
+          <div class="search">
+            <input type="text" class="form-control input-xs" maxlength="64" placeholder="Search" ng-model="indexIdCtrl.searchRes" />
+            <button type="submit" class="btn  btn-xs" style="background-color:#eeeeee;"><i class="fa fa-close" ng-if="indexIdCtrl.searchRes" ng-click="indexIdCtrl.searchRes='';"></i><i class="fa fa-search" ng-if="!indexIdCtrl.searchRes"></i></button>
+          </div>
+        </div>
+        <div class="col-xs-12" >
+            <box-list schema="resource" target="{{indexIdCtrl.target.id}}" search-text="indexIdCtrl.searchRes"></box-list>
+        </div>
+      </div>
+
     </div>
 
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
         <div class="divider-sm hidden-md hidden-lg hidden-xl" ></div>
-        <h4 class="title-implementation">Implementation Activities</h4>
+
+        <div class="sub-title" >
+          <div class="col-xs-1" style="padding: 0 10px 0 10px;">
+            <img src="/app/images/aichi-targets/implementation-activities-icon.png" style="margin: 1px 1px 1px 1px;">
+          </div>
+          <div class="col-xs-11" style="padding-left: 0;">
+              <h4 class="sub-title-text">Implementation Measures</h4>
+          </div>
+        </div>
     		<div class="row" >
     		    <div class="col-xs-12">
     		        {{indexIdCtrl.activity.country}} &#8212; {{indexIdCtrl.activity.text}}
@@ -211,23 +317,63 @@
 <div class="row">
     <div class="divider"></div>
 
+
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-        <h4 class="title-online"> On Line Reporting System</h4>
+        <div class="divider-sm hidden-md hidden-lg hidden-xl" ></div>
+        <div class="sub-title" >
+          <div class="col-xs-1" style="padding: 0 10px 0 10px;">
+            <!-- <img src="/app/images/aichi-targets/implementation-activities-icon.png" style="margin: 1px 1px 1px 1px;"> -->
+<i class="fa fa-external-link fa-2x" style="font-weight:lighter;" aria-hidden="true"></i>
+          </div>
+          <div class="col-xs-11" style="padding-left: 0;">
+              <h4 class="sub-title-text">Links</h4>
+              <div>
+                 <ul>
+                    <li><span>Technical Quick Guides (<span ng-repeat="guide in indexIdCtrl.target.links.techGuides"><a ng-href="{{guide.link}}" ng-if="guide.link">{{guide.lang}}</a><span ng-if="!$last && indexIdCtrl.target.links.techGuides[$index+1].link">, </span></span>)</span></li>
+                    <li><span>Related Programmes</span>
+                        <ul>
+                            <li ><a ng-href="#">Prog 1<a/></li>
+                            <li ><a ng-href="#">Prog 2<a/></li>
+                            <li ><a ng-href="#">Prog 3<a/></li>
+                        </ul>
+                    </li>
+                    <li><span><a ng-href="{{indexIdCtrl.target.links.nbsapForum}}">NBSAP Forum</a></span></li>
+                 </ul>
+
+
+
+              </div>
+          </div>
+        </div>
+
+
+    		<!-- <div class="row" >
+    		    <div class="col-xs-12">
+    		        {{indexIdCtrl.activity.country}} &#8212; {{indexIdCtrl.activity.text}}
+    		    </div>
+    		</div> -->
     </div>
 
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
       <div class="divider-sm hidden-md hidden-lg hidden-xl" ></div>
-        <h4 class="title-talks2020">20/20 talks on Target {{indexIdCtrl.target.id}}</h4>
+      <div class="sub-title" >
+        <div class="col-xs-1" style="padding: 0 10px 0 10px;">
+          <img src="/app/images/aichi-targets/video-icon.png" style="margin: 1px 1px 1px 1px;">
+        </div>
+        <div class="col-xs-11" style="padding-left: 0;">
+            <h4 class="sub-title-text">20/20 talks on Target {{indexIdCtrl.target.id}}</h4>
+        </div>
+      </div>
         <div class="row">
-			<div class="col-xs-10 col-xs-offset-1">
-				<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+			<div class="col-xs-10">
+				<div id="carousel-example-generic" class="carousel slide" data-ride="carousel" >
 			      <!-- Wrapper for slides -->
 			      <div class="carousel-inner">
 					  	<div class="item" ng-class="{'active': $first}" ng-repeat="video in indexIdCtrl.target.videos" videos-loaded>
-							<a class="vimeo" ng-href="{{video.link}}">
-		                        <img ng-src="{{video.thumbnail}}" alt="{{video.caption}}" title="{{video.caption}}">
-		                    </a>
-		                </div>
+    							<a class="vimeo" ng-href="{{video.link}}">
+    		              <img ng-src="{{video.thumbnail}}" alt="{{video.caption}}" title="{{video.caption}}">
+    		          </a>
+		          </div>
 			      </div>
 
 			      <!-- Controls -->
@@ -246,16 +392,35 @@
   <div class="divider"></div>
 
     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-        <h4 class="title-resources">Partners</h4>
+        <div class="sub-title" >
+          <div class="col-xs-1" style="padding: 0 10px 0 10px;">
+            <i class="fa fa-users" aria-hidden="true" style="font-size:25px;"></i>
+          </div>
+          <div class="col-xs-11" style="padding-left: 0;">
+              <h4 class="sub-title-text">Partners</h4>
+          </div>
+        </div>
+        <div class="text-center" style="margin: 0 auto;"><img style=" margin:0 auto;"src="/app/images/aichi-targets/coming-soon.jpg"> </img></div>
     </div>
 
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-        <div class="divider-sm hidden-md hidden-lg hidden-xl" ></div>
-        <h4 class="title-implementation">Links</h4>
-    		<!-- <div class="row" >
-    		    <div class="col-xs-12">
-    		        {{indexIdCtrl.activity.country}} &#8212; {{indexIdCtrl.activity.text}}
-    		    </div>
-    		</div> -->
-    </div>
+
 </div>
+<!-- <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" style="min-height:328px;">
+
+  <div class="sub-title">
+    <div class="col-xs-1" style="padding: 0 10px 0 10px;">
+      <img src="/app/images/aichi-targets/online-icon.jpg">
+    </div>
+    <div class="col-xs-11" style="padding-left: 0;">
+      <span><h4 class="sub-title-text"> On Line Reporting System</h4></span>
+    </div>
+  </div>
+    <div class="text-center" ><br><br><br>
+      <div class="btn-group-vertical text-left">
+        <a type="button" class="btn btn-default" href="https://chm.cbd.int/submit/online-reporting">Submit National Assesment</a>
+        <a type="button" class="btn btn-default" href="https://chm.cbd.int/submit/online-reporting">Submit National Target</a>
+        <a type="button" class="btn btn-default" href="https://chm.cbd.int/submit/nationalReport?type=nbsap">Submit NBSAP</button>
+        <a type="button" class="btn btn-default" href="https://chm.cbd.int/submit/nationalReport?type=nr">Submit National Report</a>
+      </div>
+    </div>
+</div> -->
