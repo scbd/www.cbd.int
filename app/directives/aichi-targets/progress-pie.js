@@ -12,16 +12,18 @@ define(['app', 'lodash','text!./progress-pie.html',
         return {
             restrict: 'E',
             template: template,
-            require: '^progressPie',
+            require: ['^progressPie','^legend42'],
             scope: {
                 aichiTarget: '=aichiTarget',
+                itemColor:'='
             },
-            link: function($scope, $elem, $attrs, progressPieCtrl) {
+            link: function($scope, $elem, $attrs, ctrls) {
 
-                progressPieCtrl.init();
+                ctrls[0].init();
+
             },
             controller: ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
-                $scope.showAllFlag=false;
+                $scope.showAllFlag=true;
                 $scope.leggends = {
                     aichiTarget: [{
                         id: 0,
@@ -71,7 +73,7 @@ define(['app', 'lodash','text!./progress-pie.html',
                 //============================================================
                 function buildPie() {
 
-                    var radius = 150;
+                    var radius = 100;
                     var legend ={
                       "position":"right",
                       "marginRight":20,
@@ -82,7 +84,7 @@ define(['app', 'lodash','text!./progress-pie.html',
                     if($window.screen.width<= 750){
                         radius = 65;
                         legend ={
-                          "position":"bottom",
+                          // "position":"bottom",
                           "marginRight":20,
                           "autoMargins":false,
                           "fontSize":14
@@ -94,8 +96,10 @@ define(['app', 'lodash','text!./progress-pie.html',
                         $scope.chartPie = AmCharts.makeChart("chartdivpie", { //jshint ignore:line
                             "showZeroSlices": false,
                             "type": "pie",
-
-                            "legend":legend,
+                            "legend": {
+                              "divId": "legend-div",
+                              "spacing":10
+                            },
                             "pieX":'50%',
                             "innerRadius": "30%",
                             "theme": "light",
@@ -103,23 +107,39 @@ define(['app', 'lodash','text!./progress-pie.html',
                             "valueField": "count",
                             "titleField": "title",
                             "outlineAlpha": 0.4,
-                            // "depth3D": 15,
                             "colorField": "color",
-                            // "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[count]]</b> ([[percents]]%)</span>",
-                            // "angle": 20,
-                            // "autoResize": true,
                             "fontSize": 10,
                             "labelRadius": -30,
                             "labelText" : '[[percents]]%',
-                            "radius":radius
+                            "radius":radius,
+                            'startDuration':0.01
 
                         });
+
                         _.each($scope.chartPie.dataProvider, function(slice, index) {
                             slice.color = $scope.chartData[index].color;
                         });
-                        $scope.chartPie.validateNow();
-                        $scope.chartPie.animateAgain();
 
+                        $scope.chartPie.legend.addListener('hideItem', function(e){
+                             $timeout(function(){  $scope.itemColor.color=false;});
+                             $timeout(function(){
+                               if(e.dataItem.color==='#bbbbbb')
+                                  $scope.itemColor.color='#aaaaaa';
+                               else{
+                                 $scope.itemColor.color=e.dataItem.color;
+                               }
+                             });
+                        });
+                        $scope.chartPie.legend.addListener('showItem', function(e){
+                            $timeout(function(){ $scope.itemColor.color=false; });
+                            $timeout(function(){
+                              if(e.dataItem.color==='#bbbbbb')
+                                 $scope.itemColor.color='#aaaaaa';
+                              else{
+                                $scope.itemColor.color=e.dataItem.color;
+                              }
+                            });
+                        });
                     });
                 }
 
@@ -159,7 +179,7 @@ define(['app', 'lodash','text!./progress-pie.html',
 
                         $scope.count = data.response.numFound;
                         $scope.documents = data.response.docs;
-                        progressCounts($scope.documents);
+                        progressCounts($scope.documents,$scope.showAllFlag);
                     });
                 } // query
 
