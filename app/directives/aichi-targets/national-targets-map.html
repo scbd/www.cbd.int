@@ -28,9 +28,10 @@
 
   </style>
 <link  type="text/css" href="/app/libs/ammap3/ammap/plugins/export/export.css" rel="stylesheet">
+<div>
 
-  <div id="mapdiv" style="width:98%;height: 250px;background-color:#a3ccff;"></div>
-  <div class="disclaimer tooltip" data-toggle="modal" href="#dialogDisclaimer">Disclaimer</div>
+  <div id="mapdiv" style="width:98%;height: 250px;background-color:#a3ccff;" ng-show="showMap"></div>
+  <div class="disclaimer tooltip" data-toggle="modal" href="#dialogDisclaimer" ng-show="showMap">Disclaimer</div>
   <!-- <select id="langselect" onchange="setLanguage(this.options[this.selectedIndex].value);">
     <option value="en" selected="selected">English (default)</option>
     <option value="ar" >Arabic</option>
@@ -39,6 +40,12 @@
     <option value="es">Spanish</option>
     <option value="ru">Russion</option>
 </select> -->
+
+  <div class="col-xs-12" ng-show="!showMap">
+    <span> <i class="flag-icon flag-icon-{{selectedCountry.code.toLowerCase()}}" ></i> {{selectedCountry.name}}</span>
+    <span class="pull-right"><a href="#" ng-click="showMap=!showMap;"><i class="fa fa-arrow-circle-left"></i> Back to Map </a></span>
+    <box-list schema="nationalTarget" country="selectedCountry.code" target="{{aichiTarget}}" search-text="searchTarget"></box-list>
+  </div>
 
   <div id="dialogDisclaimer" class="modal fade">
     <div class="modal-dialog">

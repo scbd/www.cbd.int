@@ -1,14 +1,17 @@
-define(['app', 'lodash', 'text!./national-targets-map.html',
+define(['app', 'lodash',
+'text!./national-targets-map.html',
+'text!./target.html',
+'text!./target-row.html',
 'ammap',
 'shim!directives/reporting-display/worldEUHigh[ammap]',
 'shim!ammap/themes/light[ammap]',
 'providers/locale'
-], function(app,_,template) { 'use strict';
+], function(app,_,template,targetTemplate,row) { 'use strict';
 
     //============================================================
     //
     //============================================================
-    app.directive('nationalTargetsMap',['$http','$q','locale',  function($http,$q,locale) {
+    app.directive('nationalTargetsMap',['$http','$q','locale','$interpolate','$timeout',  function($http,$q,locale,$interpolate,$timeout) {
         return {
             restrict: 'E',
             require:'nationalTargetsMap',
@@ -16,7 +19,9 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
             scope: {
                 aichiTarget: '=aichiTarget',
                 legendHide:'&',
-                itemColor: '='
+                itemColor: '=',
+                searchTarget:'=',
+                showMap:'='
             },
             link: function ($scope, $elem, $attrs,selfCtrl) {
               $scope.$watch('itemColor',function(){
@@ -25,6 +30,7 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                   $scope.legendHide($scope.itemColor);
                 }
               },true);
+
               $scope.leggends = {
                 aichiTarget: [{
                   id: 0,
@@ -66,8 +72,10 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                 //
                 //============================================================
                 function init() {
+                    $scope.showMap = true;
+                    $scope.selectedCountry={};
 
-                    $q.all([loadCountries(), query()])
+                    $q.all([loadCountries(), query(),queryTargets()])
                       .then(function(){
                         groupByCountry();
                         initMap();
@@ -89,7 +97,10 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                     "responsive": {
                       "enabled": true
                     },
-
+                    "balloon": {
+                      "adjustBorderColor": true,
+                      "maxWidth":500
+                    },
                     "dataProvider": {
                       "map": "worldEUHigh",
                       "getAreasFromMap": true,
@@ -181,7 +192,7 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
 
                     return $http.get('https://api.cbddev.xyz/api/v2013/index/select', {
                         params: queryParameters,
-
+                        cache:true
                     }).success(function(data) {
                         $scope.count = data.response.numFound;
                         $scope.documents = data.response.docs;
@@ -199,9 +210,9 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                         targetText = 'AICHI-TARGET-' + $scope.aichiTarget;
 
                     var queryParameters = {
-                        'q': 'NOT version_s:* AND realm_ss:chm-dev AND schema_s:nationalTarget AND nationalTarget_EN_t:"' + targetText + '" AND _latest_s:true AND _state_s:public',
+                        'q': 'schema_s:nationalTarget AND (aichiTargets_ss:"' + targetText+ '")',// OR otherAichiTargets_ss:'+ targetText+ '")',
                         'sort': 'createdDate_dt desc, title_t asc',
-                        'fl': 'title_t,reportType_s,documentID,identifier_s,id,title_t,description_t,url_ss,schema_EN_t,date_dt,government_EN_t,schema_s,number_d,aichiTarget_ss,reference_s,sender_s,meeting_ss,recipient_ss,symbol_s,eventCity_EN_t,eventCountry_EN_t,startDate_s,endDate_s,body_s,code_s,meeting_s,group_s,function_t,department_t,organization_t,summary_EN_t,reportType_EN_t,completion_EN_t,jurisdiction_EN_t,development_EN_t,_latest_s,nationalTarget_EN_t,progress_EN_t,year_i,text_EN_txt,nationalTarget_EN_t,government_s',
+                        'fl':'isAichiTarget_b,government_s,isAichiTarget_b,title_s,description_s',
                         'wt': 'json',
                         'start': 0,
                         'rows': 1000000,
@@ -209,10 +220,10 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
 
                     return $http.get('https://api.cbddev.xyz/api/v2013/index/select', {
                         params: queryParameters,
-
+                        cache:true
                     }).success(function(data) {
                         $scope.tcount = data.response.numFound;
-                        $scope.documents = data.response.docs;
+                        $scope.tdocuments = data.response.docs;
                     });
                 } // query
                 //=======================================================================
@@ -236,9 +247,12 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                 function aichiMap(country) {
 
 
-                  if(_.isEmpty(country.docs)) return;
-
-                  changeAreaColor(country.code, progressToColor(progressToNumber(country.docs[0].progress_EN_t)));
+                  if(!_.isEmpty(country.docs)){
+                      changeAreaColor(country.code, progressToColor(progressToNumber(country.docs[0].progress_EN_t)));
+                  }
+                  if(!_.isEmpty(country.targets)){
+                      buildTargetBaloon(country);
+                  }
                   // buildProgressBaloon(country, progressToNumber(country.docs[0].progress_EN_t), country.docs[0].nationalTarget_EN_t);
                   // legendTitle(country);
                   // restLegend($scope.leggends.aichiTarget);
@@ -272,6 +286,15 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                           return progressToNum(b.progress_EN_t) - progressToNum(a.progress_EN_t);
                       }); // sort sort by progress
                   });
+
+                  _.each($scope.tdocuments,function(doc){
+                      country=null;
+                      country = _.find($scope.countries,{code:doc.government_s.toUpperCase()});
+                      if(!country.targets)
+                        country.targets = []; // initializes the countries docs
+                      country.targets.push(doc);
+                  });
+
                 } //r
                 //=======================================================================
                 //
@@ -344,6 +367,13 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                   $scope.map = AmCharts.makeChart("mapdiv", $scope.mapData); //jshint ignore:line
                   $scope.map.write("mapdiv");
                   $scope.map.validateData();
+                  $scope.map.addListener("clickMapObject", function(event) {
+
+                     $scope.selectedCountry=_.find($scope.countries,{'code':event.mapObject.id});
+
+                     $timeout(function(){$scope.showMap= false;});
+
+                  });
                 } // writeMap
 
                 //=======================================================================
@@ -472,6 +502,32 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                       return '/app/images/ratings/884D8D8C-F2AE-4AAC-82E3-5B73CE627D45.png';
                   }
                 } //getProgressIcon(progress)
+
+                //=======================================================================
+                //
+                //=======================================================================
+                function buildTargetBaloon(country) {
+
+                    var area = getMapObject(country.code);
+                    $scope.country=country;
+                    $scope.rows = '';
+
+                    if(country.targets.length<=1) $scope.hideS='hide';
+
+                    _.each(country.targets,function(t){
+                          if(t.isAichiTarget_b) t.hideTarget='hide';
+                          else t.hideIcon='hide';
+                          t.aichiTarget=$scope.aichiTarget;
+
+                          $scope.rows = $scope.rows + $interpolate(row)(t);
+
+                    });
+                    area.balloonText = $interpolate(targetTemplate)($scope);
+                    $scope.rows = '';
+                    delete($scope.hideS);
+
+                } // buildTargetBaloon
+
                 //=======================================================================
                 //
                 //=======================================================================
