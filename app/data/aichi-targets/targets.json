@@ -28,15 +28,15 @@
             "activities":[
                 {
                     "country": "Azerbaijan",
-                    "text"   :"A decision of the Cabinet of Ministers adopted in 2003 established an inter-city commission to coordinate environmental education and awareness-raising in the country. Activities are ongoing."
+                    "title_s"   :"A decision of the Cabinet of Ministers adopted in 2003 established an inter-city commission to coordinate environmental education and awareness-raising in the country. Activities are ongoing."
                 },
                 {
                     "country": "Belgium",
-                    "text"   :"In 2010, the Royal Belgian Institute of Natural Sciences opened a new permanent exhibition hall on “Biodiversity in Cities”, and plans to dedicate more halls to biodiversity in the coming years."
+                    "title_s"   :"In 2010, the Royal Belgian Institute of Natural Sciences opened a new permanent exhibition hall on “Biodiversity in Cities”, and plans to dedicate more halls to biodiversity in the coming years."
                 },
                 {
                     "country": "Cameroon",
-                    "text"   :"Each year, “Traditional African Medicine Day” is held in Cameroon. In 2010, the theme was “conservation of medicinal plants”, with exhibits and a roundtable discussion organized to draw attention to biodiversity loss and the need for the sustainable management of plants and ecosystems."
+                    "title_s"   :"Each year, “Traditional African Medicine Day” is held in Cameroon. In 2010, the theme was “conservation of medicinal plants”, with exhibits and a roundtable discussion organized to draw attention to biodiversity loss and the need for the sustainable management of plants and ecosystems."
                 }
             ],
 			"links":{
@@ -86,11 +86,11 @@
             "activities":[
                 {
                     "country" : "Japan",
-                    "text"    : "Consideration of economic assessments for biodiversity and ecosystem services is increasing, including the development of mechanisms that encourage companies and others to support agricultural production that contributes to conservation carried out by farmers. This is also being done to promote environmental real estate as an initiative for creating real estate markets that encourage sustained investment."
+                    "title_s"    : "Consideration of economic assessments for biodiversity and ecosystem services is increasing, including the development of mechanisms that encourage companies and others to support agricultural production that contributes to conservation carried out by farmers. This is also being done to promote environmental real estate as an initiative for creating real estate markets that encourage sustained investment."
                 },
                 {
                      "country": "Niue",
-                     "text"   : "Hakupu’s Village Development and Action Plan 2009-2020 contains ecotourism strategies based on the Huvalu Conservation Area and Hakupu Heritage and Conservation Park, and for organic farming. Tuapa’s VDAP 2009-2020 contains strategies for food security, renewable energy and healthy living."
+                     "title_s"   : "Hakupu’s Village Development and Action Plan 2009-2020 contains ecotourism strategies based on the Huvalu Conservation Area and Hakupu Heritage and Conservation Park, and for organic farming. Tuapa’s VDAP 2009-2020 contains strategies for food security, renewable energy and healthy living."
                 }
             ],
 						"links":{
@@ -140,15 +140,15 @@
 			"activities":[
 			    {
 			        "country": "Ecuador",
-			        "text"   : "The National Program on Incentives for the Conservation and Sustainable Use of Natural Heritage (\"Socio Bosque\") was created in January 2014."
+			        "title_s"   : "The National Program on Incentives for the Conservation and Sustainable Use of Natural Heritage (\"Socio Bosque\") was created in January 2014."
 			    },
 				{
 					"country": "Pakistan",
-					"text"   : "The subsidy on electricity for farm tube wells, which was a major cause of ground water depletion, has been withdrawn."
+					"title_s"   : "The subsidy on electricity for farm tube wells, which was a major cause of ground water depletion, has been withdrawn."
 				},
 				{
 					"country": "Solomon Islands",
-					"text"   : "Renewable energy, such as solar energy, has been introduced to villages to reduce dependency on lowland forest for fuels under UNFCCC implementation."
+					"title_s"   : "Renewable energy, such as solar energy, has been introduced to villages to reduce dependency on lowland forest for fuels under UNFCCC implementation."
 				}
 			],
 			"links":{
@@ -198,11 +198,11 @@
 			"activities":[
 			    {
 			        "country": "Colombia",
-			        "text"   : "A National Program on Sustainable Biocommerce (2011-2021) is being implemented."
+			        "title_s"   : "A National Program on Sustainable Biocommerce (2011-2021) is being implemented."
 			    },
 				{
 					"country": "India",
-					"text"   : "The Government of India has enacted the Companies Act 2013 which makes Corporate social responsibility (CSR) spending mandatory for every company with a net worth of 500 crore rupees or more, a turnover of 1000 crore Rs or more, or a net profit of 5 crore Rs or more during any financial year. Two percent of the average net profits made by the company during every block of 3 years are to be used for CSR activities. Ensuring environmental sustainability has been identified as one of the nine activities to be covered under CSR activities."
+					"title_s"   : "The Government of India has enacted the Companies Act 2013 which makes Corporate social responsibility (CSR) spending mandatory for every company with a net worth of 500 crore rupees or more, a turnover of 1000 crore Rs or more, or a net profit of 5 crore Rs or more during any financial year. Two percent of the average net profits made by the company during every block of 3 years are to be used for CSR activities. Ensuring environmental sustainability has been identified as one of the nine activities to be covered under CSR activities."
 				}
 			],
 			"links":{
@@ -252,11 +252,11 @@
 			"activities":[
 			    {
 			        "country": "Netherlands",
-			        "text"   : "Construction of fauna passages and ecoducts has led to significant habitat defragmentation. The same is true for aquatic life. Fish species are increasingly able to migrate through seas, rivers, streams and ditches due to the existence of fish passages at barriers."
+			        "title_s"   : "Construction of fauna passages and ecoducts has led to significant habitat defragmentation. The same is true for aquatic life. Fish species are increasingly able to migrate through seas, rivers, streams and ditches due to the existence of fish passages at barriers."
 			    },
 				{
 			        "country": "South Africa",
-			        "text"   : "Threatened ecosystems have been published in regard to the Biodiversity Act. Biodiversity is increasingly routinely incorporated into EIAs. Norms and Standards for Biodiversity Management Plans for Ecosystems have been finalized. Grasslands Ecosystem Guidelines have also been published, and several biodiversity sector plans and bioregional plans developed to inform land use planning and environmental authorisations."
+			        "title_s"   : "Threatened ecosystems have been published in regard to the Biodiversity Act. Biodiversity is increasingly routinely incorporated into EIAs. Norms and Standards for Biodiversity Management Plans for Ecosystems have been finalized. Grasslands Ecosystem Guidelines have also been published, and several biodiversity sector plans and bioregional plans developed to inform land use planning and environmental authorisations."
 			    }
 			],
 			"links":{
@@ -306,11 +306,11 @@
 			"activities":[
 			    {
 			        "country": "Malaysia",
-			        "text"   : "The Ecosystem Approach for the Management of Fisheries and Other Marine Resources is being fully applied, with the target to have, by 2020, strong related legislative, policy and regulatory frameworks. The target also aims to improve income, livelihoods and food security in an increasingly significant number of coastal communities through new sustainable coastal fisheries and poverty reduction initiatives."
+			        "title_s"   : "The Ecosystem Approach for the Management of Fisheries and Other Marine Resources is being fully applied, with the target to have, by 2020, strong related legislative, policy and regulatory frameworks. The target also aims to improve income, livelihoods and food security in an increasingly significant number of coastal communities through new sustainable coastal fisheries and poverty reduction initiatives."
 			    },
 			    {
 			        "country": "Senegal",
-			        "text"   : "A national MPA network comprised of 16 MPAs covering an area of 244,750 hectares has been established. These MPAs are contributing to the reconstitution of fish stocks, protection of threatened marine and coastal species, and to the improvement of livelihood and food security."
+			        "title_s"   : "A national MPA network comprised of 16 MPAs covering an area of 244,750 hectares has been established. These MPAs are contributing to the reconstitution of fish stocks, protection of threatened marine and coastal species, and to the improvement of livelihood and food security."
 			    }
 			],
 			"links":{
@@ -360,11 +360,11 @@
 			"activities":[
 			    {
 			        "country": "India",
-			        "text"   : "A national project on organic farming is being promoted through various incentives disbursed to farmers. Between 2003 and 2010, the area under certified organic farming increased from 42,000 to 10,050,000 hectares. "
+			        "title_s"   : "A national project on organic farming is being promoted through various incentives disbursed to farmers. Between 2003 and 2010, the area under certified organic farming increased from 42,000 to 10,050,000 hectares. "
 			    },
 			    {
 			        "country": "Myanmar",
-			        "text"   : "The Myanmar Certification Committee is developing Sustainable Forest Management Certification and a Chain of Custody Certification. It is promoting the Timber Legality Assurance System, in collaboration with the European Forest Institute, NGOs and INGOs. "
+			        "title_s"   : "The Myanmar Certification Committee is developing Sustainable Forest Management Certification and a Chain of Custody Certification. It is promoting the Timber Legality Assurance System, in collaboration with the European Forest Institute, NGOs and INGOs. "
 			    }
 			],
 			"links":{
@@ -414,15 +414,15 @@
 			"activities":[
 			    {
 			        "country": "Ecuador",
-			        "text"   : "Adopted in 2010, the National Programme for Integrated Solid Waste Management (PNGIDS) has the primary objective of promoting solid waste management in municipalities throughout the country. A target of the programme is to eliminate open landfills in all municipalities by 2017."
+			        "title_s"   : "Adopted in 2010, the National Programme for Integrated Solid Waste Management (PNGIDS) has the primary objective of promoting solid waste management in municipalities throughout the country. A target of the programme is to eliminate open landfills in all municipalities by 2017."
 			    },
 			    {
 			        "country": "Niue",
-			        "text"   : "A National Integrated Waste Management Strategy (2010-2015) and accompanying Action Plan have been developed."
+			        "title_s"   : "A National Integrated Waste Management Strategy (2010-2015) and accompanying Action Plan have been developed."
 			    },
 			    {
 			        "country": "Senegal",
-			        "text"   : "An ambitious project to clean up the Bay of Hann is being implemented, with some manufacturers beginning to put in place systems for wastewater treatment. The State intends to impose heavy taxes on companies that are slow to subscribe to the objectives of this project."
+			        "title_s"   : "An ambitious project to clean up the Bay of Hann is being implemented, with some manufacturers beginning to put in place systems for wastewater treatment. The State intends to impose heavy taxes on companies that are slow to subscribe to the objectives of this project."
 			    }
 			],
 			"links":{
@@ -472,11 +472,11 @@
 			"activities":[
 			    {
 			        "country": "Canada",
-			        "text"   : "In April 2011, the Governments of Canada and Ontario collaborated to establish the Invasive Species Centre (ISC). The facility houses the Insect Production and Quarantine Laboratories, the only facility of its kind in Canada dedicated to combating insect pests, both alien and domestic, terrestrial and aquatic, that threaten Canada’s natural resources and ecosystems."
+			        "title_s"   : "In April 2011, the Governments of Canada and Ontario collaborated to establish the Invasive Species Centre (ISC). The facility houses the Insect Production and Quarantine Laboratories, the only facility of its kind in Canada dedicated to combating insect pests, both alien and domestic, terrestrial and aquatic, that threaten Canada’s natural resources and ecosystems."
 			    },
 			    {
 			        "country": "Iraq",
-			        "text"   : "Two national targets have been adopted to address this issue. The country aims to, by the end of 2016, enact legislation to control the introduction and diffusion of non-native species into the natural environment; and, by the end of 2020, publish the list of invasive species in Iraq and their impacts and invasion pathways."
+			        "title_s"   : "Two national targets have been adopted to address this issue. The country aims to, by the end of 2016, enact legislation to control the introduction and diffusion of non-native species into the natural environment; and, by the end of 2020, publish the list of invasive species in Iraq and their impacts and invasion pathways."
 			    }
 			],
 			"links":{
@@ -526,15 +526,15 @@
 			"activities":[
 			    {
 			        "country": "Colombia",
-			        "text"   : "In 2012, the “Blue Agenda” (“Agenda Azul”) was launched to strengthen institutions and organize actions, at public and private levels, and by civil groups, for managing marine, coastal and island resources."
+			        "title_s"   : "In 2012, the “Blue Agenda” (“Agenda Azul”) was launched to strengthen institutions and organize actions, at public and private levels, and by civil groups, for managing marine, coastal and island resources."
 			    },
 			    {
 			        "country": "Malaysia",
-			        "text"   : "A Coral Reef Bleaching Response Plan has been developed."
+			        "title_s"   : "A Coral Reef Bleaching Response Plan has been developed."
 			    },
 			    {
 			        "country": "Poland",
-			        "text"   : "In October 2013, the Council of Ministers passed the Strategic Adaptation Plan for Sectors and Areas Sensitive to Climate Change up to 2020 with a Perspective to 2030 (SAP 2020)."
+			        "title_s"   : "In October 2013, the Council of Ministers passed the Strategic Adaptation Plan for Sectors and Areas Sensitive to Climate Change up to 2020 with a Perspective to 2030 (SAP 2020)."
 			    }
 			],
 			"links":{
@@ -584,15 +584,15 @@
 			"activities":[
 			    {
 			        "country" : "Costa Rica",
-			        "text"    : "In 2011, by Decree of the Ministry of the Environment, Energy and Technology, the first “seamounts” marine management area was declared around Isla del Coco."
+			        "title_s"    : "In 2011, by Decree of the Ministry of the Environment, Energy and Technology, the first “seamounts” marine management area was declared around Isla del Coco."
 			    },
 			    {
 			        "country" : "Iraq",
-			        "text"    : "In 2014, the Law on the Protected Areas System entered into force."
+			        "title_s"    : "In 2014, the Law on the Protected Areas System entered into force."
 			    },
 			    {
 			        "country" : "Spain",
-			        "text"    : "At present, protected areas cover more than 27% of the terrestrial surface in the country. Spain has also declared 26 special marine conservation zones and adopted corresponding management plans and conservation measures for them."
+			        "title_s"    : "At present, protected areas cover more than 27% of the terrestrial surface in the country. Spain has also declared 26 special marine conservation zones and adopted corresponding management plans and conservation measures for them."
 			    }
 			],
 			"links":{
@@ -642,15 +642,15 @@
 			"activities" :[
 			    {
 			        "country": "Italy",
-			        "text"   : "The Transboundary Biosphere Reserve “Monviso” (Italy/France) was inscribed in the MAB Programme in 2013, following efforts to integrate the management of 2 PAs (Parco del Po Cuneese and Parc National Régional du Queyras) and conserve biodiversity in the alpine ecological corridor."
+			        "title_s"   : "The Transboundary Biosphere Reserve “Monviso” (Italy/France) was inscribed in the MAB Programme in 2013, following efforts to integrate the management of 2 PAs (Parco del Po Cuneese and Parc National Régional du Queyras) and conserve biodiversity in the alpine ecological corridor."
 			    },
 			    {
 			        "country": "Myanmar",
-			        "text"   : "Endangered sea turtles are being conserved in cooperation with international organizations.  Turtle hatching stations have been established in the Nga Pu Taw and Bogalay townships."
+			        "title_s"   : "Endangered sea turtles are being conserved in cooperation with international organizations.  Turtle hatching stations have been established in the Nga Pu Taw and Bogalay townships."
 			    },
 			    {
 			        "country": "Uganda",
-			        "text"   : "A Directive from the President has been instrumental in protecting the threatened shae tree and in stimulating the development of a National Strategy for its protection to be completed in 2014."
+			        "title_s"   : "A Directive from the President has been instrumental in protecting the threatened shae tree and in stimulating the development of a National Strategy for its protection to be completed in 2014."
 			    }
 			],
 			"links":{
@@ -700,11 +700,11 @@
 			"activities" :[
 			    {
 			        "country": "India",
-			        "text"   : "The Ministry of Agriculture has set up 6 national bureaus (plant genetic resources, animal genetic resources, fish genetic resources, agriculturally important insects, agriculturally important microorganisms and soil sciences) to conserve rich domesticated biodiversity and promote underutilized crops and animal breeds."
+			        "title_s"   : "The Ministry of Agriculture has set up 6 national bureaus (plant genetic resources, animal genetic resources, fish genetic resources, agriculturally important insects, agriculturally important microorganisms and soil sciences) to conserve rich domesticated biodiversity and promote underutilized crops and animal breeds."
 			    },
 			    {
 			        "country": "Nigeria",
-			        "text"   : "Efforts are now being made to domesticate some plants used in traditional medicine. Accordingly, the National Agency for Genetic Resources and Biotechnology is mandated to document and keep essential genetic biodiversity. The National Institute for Pharmaceutical Research and Development also has reliable data on the medicinal and patent value of plant resources in Nigeria."
+			        "title_s"   : "Efforts are now being made to domesticate some plants used in traditional medicine. Accordingly, the National Agency for Genetic Resources and Biotechnology is mandated to document and keep essential genetic biodiversity. The National Institute for Pharmaceutical Research and Development also has reliable data on the medicinal and patent value of plant resources in Nigeria."
 			    }
 			],
 			"links":{
@@ -754,7 +754,7 @@
 			"activities" :[
 			    {
 			        "country": "Canada",
-			        "text"   : "In July 2013, the province of Saskatchewan designated a new protected area in the provincial boreal forest, the Pink Lake Representative Area Ecological Reserve. At 3,660 km2, it is Saskatchewan’s largest protected area. With the Pink Lake designation, protected area coverage in the Churchill River Upland Ecoregion increases from 4.9% to 8.2%. As an ecological reserve, no new industrial development will be allowed in the area. Leases or permits in place at the time of the designation will be grandfathered to allow existing activities to continue. Traditional activities by First Nations and Métis people, as well as recreational hunting and angling, will continue."
+			        "title_s"   : "In July 2013, the province of Saskatchewan designated a new protected area in the provincial boreal forest, the Pink Lake Representative Area Ecological Reserve. At 3,660 km2, it is Saskatchewan’s largest protected area. With the Pink Lake designation, protected area coverage in the Churchill River Upland Ecoregion increases from 4.9% to 8.2%. As an ecological reserve, no new industrial development will be allowed in the area. Leases or permits in place at the time of the designation will be grandfathered to allow existing activities to continue. Traditional activities by First Nations and Métis people, as well as recreational hunting and angling, will continue."
 			    }
 			],
 			"links":{
@@ -804,15 +804,15 @@
 			"activities" :[
 			    {
 			        "country": "Azerbaijan",
-			        "text"   : "State programmes are being implemented to expand national forest coverage, green urban areas and rehabilitate ecological functioning in degraded forests. Wide-scale forest planting and greening initiatives have been undertaken over the last 5 years (10,131 ha of forest habitat are under active restoration)."
+			        "title_s"   : "State programmes are being implemented to expand national forest coverage, green urban areas and rehabilitate ecological functioning in degraded forests. Wide-scale forest planting and greening initiatives have been undertaken over the last 5 years (10,131 ha of forest habitat are under active restoration)."
 			    },
 			    {
 			        "country": "Costa Rica",
-			        "text"   : "The country aims to achieve carbon neutrality by 2021."
+			        "title_s"   : "The country aims to achieve carbon neutrality by 2021."
 			    },
 			    {
 			        "country": "Madagascar",
-			        "text"   : "Large mining companies are being encouraged to create conservation areas (e.g. cases of QIT Madagascar Minerals (QMM), Ambatovy)."
+			        "title_s"   : "Large mining companies are being encouraged to create conservation areas (e.g. cases of QIT Madagascar Minerals (QMM), Ambatovy)."
 			    }
 			],
 			"links":{
@@ -857,11 +857,11 @@
 			"activities" :[
 			    {
 			        "country": "India",
-			        "text"   : "Ratified in October 2012, the Nagoya Protocol will be implemented through domestic legislation on ABS (Biological Diversity Act) adopted in 2002."
+			        "title_s"   : "Ratified in October 2012, the Nagoya Protocol will be implemented through domestic legislation on ABS (Biological Diversity Act) adopted in 2002."
 			    },
 			    {
 			        "country": "Netherlands",
-			        "text"   : "The Government aims to support a Green Deal to apply the international ABS agreements. Through a pilot project, businesses from the Dutch breeding sector, knowledge institutions and Government will set up cooperation with similar parties from a developing country that could provide genetic resources. By the end of 2014, this should result in an agreement on access to genetic resources and the fair and equitable sharing of benefits arising from the use of relevant genetic material, and could serve as a model for future ABS agreements."
+			        "title_s"   : "The Government aims to support a Green Deal to apply the international ABS agreements. Through a pilot project, businesses from the Dutch breeding sector, knowledge institutions and Government will set up cooperation with similar parties from a developing country that could provide genetic resources. By the end of 2014, this should result in an agreement on access to genetic resources and the fair and equitable sharing of benefits arising from the use of relevant genetic material, and could serve as a model for future ABS agreements."
 			    }
 			],
 			"links":{
@@ -911,15 +911,15 @@
 			"activities" :[
 			    {
 			        "country": "Australia",
-			        "text"   : "The National Biodiversity Conservation Strategy 2010-2030 functions as a policy umbrella over other more specific national frameworks, and a guiding policy framework for the diverse Australian, state, territory and local government and private sector approaches to conservation."
+			        "title_s"   : "The National Biodiversity Conservation Strategy 2010-2030 functions as a policy umbrella over other more specific national frameworks, and a guiding policy framework for the diverse Australian, state, territory and local government and private sector approaches to conservation."
 			    },
 			    {
 			        "country": "France",
-			        "text"   : "The National Biodiversity Strategy 2011-2020 is prioritized in all public policy and at every territorial scale (e.g. water, soil, sea, climate, energy, agriculture, forestry, spatial planning, infrastructure, industry, trade, education, research, health)."
+			        "title_s"   : "The National Biodiversity Strategy 2011-2020 is prioritized in all public policy and at every territorial scale (e.g. water, soil, sea, climate, energy, agriculture, forestry, spatial planning, infrastructure, industry, trade, education, research, health)."
 			    },
 			    {
 			        "country": "Timor-Leste",
-			        "text"   : "The NBSAP 2011-2020 is a guiding policy framework for district and sub-district authorities, and for civil society groups and the private sector."
+			        "title_s"   : "The NBSAP 2011-2020 is a guiding policy framework for district and sub-district authorities, and for civil society groups and the private sector."
 			    }
 			],
 			"links":{
@@ -969,15 +969,15 @@
 			"activities" :[
 			    {
 			        "country": "Malawi",
-			        "text"   : "The Forestry Research Institute is implementing a project on “Useful Plants of Malawi” where Traditional Knowledge is used to identify plants that are useful for nutrition, cosmetics and pharmaceutical use."
+			        "title_s"   : "The Forestry Research Institute is implementing a project on “Useful Plants of Malawi” where Traditional Knowledge is used to identify plants that are useful for nutrition, cosmetics and pharmaceutical use."
 			    },
 			    {
 			        "country": "Malaysia",
-			        "text"   : "A new Strategic Plan of Action to 2020 exists for Sabah state.  The first Plan contributed to implementing the Heart of Borneo Initiative by empowering communities in the management of local natural resources, through the promotion of Indigenous Community and Conserved Areas using the Tagal traditional river management system."
+			        "title_s"   : "A new Strategic Plan of Action to 2020 exists for Sabah state.  The first Plan contributed to implementing the Heart of Borneo Initiative by empowering communities in the management of local natural resources, through the promotion of Indigenous Community and Conserved Areas using the Tagal traditional river management system."
 			    },
 			    {
 			        "country": "New Zealand",
-			        "text"   : "National legislation is in place that recognises tangata whenua (indigenous communities) and their Mātauranga Māori (Traditional Knowledge that underpins Māori culture and identity)."
+			        "title_s"   : "National legislation is in place that recognises tangata whenua (indigenous communities) and their Mātauranga Māori (Traditional Knowledge that underpins Māori culture and identity)."
 			    }
 			],
 			"links":{
@@ -1027,23 +1027,23 @@
 			"activities" :[
 			    {
 			        "country": "Belgium",
-			        "text"   : "The Belgium Ecosystem Services (BEES) network, a community of practice aiming to connect different societal actors involved in ecosystem services research, practice and policy-making was launched in April 2012."
+			        "title_s"   : "The Belgium Ecosystem Services (BEES) network, a community of practice aiming to connect different societal actors involved in ecosystem services research, practice and policy-making was launched in April 2012."
 			    },
 			    {
 			        "country": "Colombia",
-			        "text"   : "A national system for deforestation and carbon monitoring has been developed."
+			        "title_s"   : "A national system for deforestation and carbon monitoring has been developed."
 			    },
 			    {
 			        "country": "Germany",
-			        "text"   : "In 2012, the German Research Association (DFG) decided to support a research centre for integrative biodiversity research (€33 million over a five-year period, including eight new professorships)."
+			        "title_s"   : "In 2012, the German Research Association (DFG) decided to support a research centre for integrative biodiversity research (€33 million over a five-year period, including eight new professorships)."
 			    },
 			    {
 			        "country": "Mongolia",
-			        "text"   : "The National University of Mongolia has developed a curriculum on the assessment and monitoring of biodiversity for Ph.D. students."
+			        "title_s"   : "The National University of Mongolia has developed a curriculum on the assessment and monitoring of biodiversity for Ph.D. students."
 			    },
 			    {
 			        "country": "Rwanda",
-			        "text"   : "A Centre of Excellence on Biodiversity has been established (University of Rwanda/Ministry of Education)."
+			        "title_s"   : "A Centre of Excellence on Biodiversity has been established (University of Rwanda/Ministry of Education)."
 			    }
 			],
 			"links":{
@@ -1093,15 +1093,15 @@
 			"activities" :[
 			    {
 			        "country": "Denmark",
-			        "text"   : "Resource mobilization figures for nature preservation indicate an annual contribution of DKK 2.3 billion, equivalent to USD 390 million/year (average for 2006-2010), corresponding to approximately DKK 410 per person/year, or 0.13% of the GNP."
+			        "title_s"   : "Resource mobilization figures for nature preservation indicate an annual contribution of DKK 2.3 billion, equivalent to USD 390 million/year (average for 2006-2010), corresponding to approximately DKK 410 per person/year, or 0.13% of the GNP."
 			    },
 			    {
 			        "country": "Ecuador",
-			        "text"   : "The country is participating in the Biodiversity Finance Initiative (BIOFIN) launched by UNDP in 2012, to determine the costs of NBSAP implementation define financial gaps and design a strategy for mobilizing financial resources."
+			        "title_s"   : "The country is participating in the Biodiversity Finance Initiative (BIOFIN) launched by UNDP in 2012, to determine the costs of NBSAP implementation define financial gaps and design a strategy for mobilizing financial resources."
 			    },
 			    {
 			        "country": "Poland",
-			        "text"   : "An innovative objective of the draft programme of the National Fund for Environmental Protection and Water Management 2014-2020 is to pilot a financial support mechanism for biodiversity-friendly enterprises."
+			        "title_s"   : "An innovative objective of the draft programme of the National Fund for Environmental Protection and Water Management 2014-2020 is to pilot a financial support mechanism for biodiversity-friendly enterprises."
 			    }
 			],
 			"links":{
