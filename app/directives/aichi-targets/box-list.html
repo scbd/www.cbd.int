@@ -1,36 +1,62 @@
-<div class="table-responsive">
+<div class="table-responsive" style="width:515px">
   <!-- <i class="fa fa-search" ng-click="searchBox()"></i> -->
 
   <table class="table table table-striped">
     <thead>
      <tr>
+       <th width="5%" ng-if="schema==='measures'">
+
+       </th>
        <th width="95%">
-         <sorter label-name="Title" ng-model="sort" property="title_s"></sorter><br>
+         <sorter ng-show="schema!=='measures'" label-name="Title" ng-model="sort" property="title_s"></sorter>
+         <span ng-if="schema==='measures'">Title</span>
        </th>
 
-       <th width="5%">
+       <th width="5%" ng-show="schema==='resource'">
           <sorter label-name="Year" ng-model="sort" property="publicationYear_i"></sorter>
        </th>
      </tr>
    </thead>
    <tbody>
-     <tr ng-repeat="row in docs" ng-click="goTo(row.url_ss[0])" style="cursor:pointer;">
-       <td>{{row.title_s}}
+     <tr ng-repeat="row in docs"  >
+       <td ng-if="schema==='measures'">
+         <i class="flag-icon flag-icon-{{row.countryObj.code.toLowerCase()}}" ></i>
+       </td>
+       <td>
+         <span ng-if="schema==='measures'">{{row.country}} &#8212;</span>
+          <span ng-if="schema==='nationalTarget'">
+            <img ng-if="row.isAichiTarget_b" ng-src="/app/images/aichi-targets/abt-{{target}}-96.png" width="25" style="margin: 1px 1px 1px 1px;">
+            <i ng-if="!row.isAichiTarget_b" class="fa fa-dot-circle-o fa-2x"></i>
+           </span>
+           {{row.title_s}}
+           <span ng-if="schema==='nationalTarget'"><br>
+              <span ng-repeat="oat in row.otherAichiTargets_EN_ss">{{oat}}<span ng-if="!$last">, </span></span>
+           </span>
+
           <hr style="margin-bottom:0;">
-          <span class="pull-right"><span class="small" ng-repeat="type in row.resourceTypes_EN_ss">(<a href="{{row.url_ss[0]}}">{{type}}</a>)<span ng-if="!$last">, </span></span></span>
+          <span class="small pull-left" ng-if="schema==='nationalTarget'"><a ng-href="{{row.url_ss[0]}}">View Record</a></span>
+          <span class="small pull-right" ng-if="row.isAichiTarget_b">Target is Aichi Target</span>
+          <span class="small pull-right" ng-if="schema==='nationalTarget' && !row.isAichiTarget_b">Also related to:
+                  <img ng-repeat="at in row.aichiTargets_ss" ng-if="target!==at.substring(13)" ng-src="/app/images/aichi-targets/abt-{{at.substring(13)}}-96.png" width="25" style="margin: 1px 1px 1px 1px;">
+           </span>
+          <span class="small pull-right" ng-if="schema==='resource'"><span class="small" ng-repeat="type in row.resourceTypes_EN_ss">(<a href="{{row.url_ss[0]}}" style="cursor:pointer">{{type}}</a>)<span ng-if="!$last">, </span></span></span>
+          <span ng-if="schema==='measures'" class="small"><span class="pull-left">Source: {{row.source}}</span> <span class="pull-right"><a href="{{row.sourceUri}}">More National Measures <i class="fa fa-arrow-circle-right"></i></a></span></span>
        </td>
 
-       <td>{{row.publicationYear_i}}</td>
+       <td ng-if="schema==='resource'">{{row.publicationYear_i}}</td>
      </tr>
      <tr ng-if="!count">
        <td class="text-center"  colspan="2" >
-         <span ng-if="searchText" ><b>No records found</b></span>
+         <span  ><b>No records found</b></span>
        </td>
      </tr>
      <tr>
        <td  colspan="2" style="border-top-width:3px">
          <span class="small" ng-if="searchText" >Search for <span style="color:#009B48;">"{{searchText}}"</span></span>
-            <span class="small pull-right"><a ng-href="https://chm.cbd.int/database?schema_s={{schema}}&aichiTarget_ss=AICHI-TARGET-{{target2}}"><i class="fa fa-search"></i> Advansed Search </a></span>
+            <span class="small pull-right" ng-if="schema==='nationalTarget'"><a ng-href="https://chm.cbd.int/database?schema_s={{schema}}&governtment_s={{row.government_s}}"><i class="fa fa-search"></i> Advanced Search </a></span>
+            <span class="small pull-right" ng-if="schema==='resource'"><a ng-href="https://chm.cbd.int/database?schema_s={{schema}}&aichiTarget_ss=AICHI-TARGET-{{target2}}"><i class="fa fa-search"></i> Advanced Search </a></span>
+            <span class="small pull-right" ng-if="schema==='measures'"><a ng-href="https://chm.cbd.int/database?aichiTarget_ss=AICHI-TARGET-{{target2}}"><i class="fa fa-search"></i> Advanced Search </a></span>
+
        </td>
      </tr>
 

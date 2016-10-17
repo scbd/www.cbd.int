@@ -1,38 +1,52 @@
-define(['app', 'text!./box-list.html','directives/aichi-targets/sorter','directives/aichi-targets/pagination','providers/locale'], function(app, templateHtml) {
+define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','directives/aichi-targets/sorter','directives/aichi-targets/pagination','providers/locale'], function(app,_, templateHtml,targetsData) {
     'use strict';
 
     //============================================================
     //
     //============================================================
-    app.directive('boxList', ['$http','locale','$window', function($http,locale,$window) {
+    app.directive('boxList', ['$http','locale', function($http,locale) {
         return {
             restrict: 'E',
             scope: {
-                // schema:'=',
-                // target:'='
-                searchText:'='
+                searchText:'=',
+                country:'=?',
+
             },
             require:'boxList',
             template: templateHtml,
             link: function($scope, $elem,$attrs, ctrl) {
-                console.log('$attrs.schema',$attrs.schema);
+
                 $scope.currentPage=0;
                 $scope.itemsPerPage=3;
                 $scope.schema=$attrs.schema;
                 $scope.target=$attrs.target;
                 $scope.onPage=ctrl.search;
-                $scope.sort='title_s asc'
+
+                if(!$scope.country) $scope.country='*';
+
+                if($scope.schema==='resource')
+                  $scope.sort='publicationYear_i desc';
+                else
+                  $scope.sort='title_s asc';
 
                 $scope.$watch('searchText',function(){
+    console.log('search');
                     ctrl.search(0);
                 });
+
                 $scope.$watch('sort',function(){
                     if($scope.sort)
                       ctrl.search(0);
                 });
 
+                $scope.$watch('country',function(){
+                    if($scope.country)
+                      ctrl.search(0);
+                });
 
-
+                //=======================================================================
+                //
+                //=======================================================================
                 $scope.searchBox = function(open){
                   if(!open)
                       $elem.find('div.item-overlay.bottom').css('bottom',0);
@@ -43,6 +57,7 @@ define(['app', 'text!./box-list.html','directives/aichi-targets/sorter','directi
             },
 
             controller: function($scope) {
+              loadCountries();
               //=======================================================================
               //
               //=======================================================================
@@ -55,6 +70,21 @@ define(['app', 'text!./box-list.html','directives/aichi-targets/sorter','directi
 
               };
 
+              //=======================================================================
+              //
+              //=======================================================================
+              function loadCountries() {
+
+                  return $http.get('https://api.cbd.int/api/v2015/countries', {
+                      cache: true,
+                  }).then(function(res) {
+                      _.each(res.data, function(c) {
+                          c.name = c.name[locale];
+                      });
+                      $scope.countries = res.data;
+                  });
+              }
+
 
               //=======================================================================
               //
@@ -62,7 +92,6 @@ define(['app', 'text!./box-list.html','directives/aichi-targets/sorter','directi
               $scope.changePage = function(index) {
                   $scope.prevDate=false;
                   $scope.currentPage=index;
-
               };
 
               //=======================================================================
@@ -70,7 +99,6 @@ define(['app', 'text!./box-list.html','directives/aichi-targets/sorter','directi
               //=======================================================================
               $scope.goTo = function(url) {
                 window.location.replace(url);
-
               };
 
               //=======================================================================
@@ -78,8 +106,8 @@ define(['app', 'text!./box-list.html','directives/aichi-targets/sorter','directi
               //=======================================================================
               $scope.isActive = function(index) {
                   return ($scope.currentPage===(index));
-
               };
+
               //======================================================
               //
               //
@@ -113,27 +141,29 @@ define(['app', 'text!./box-list.html','directives/aichi-targets/sorter','directi
                   $scope.pageCount   = pageCount ;
               }
               this.refreshPager =refreshPager;
+
               //=======================================================================
               //
               //=======================================================================
               function search(pageIndex) {
+                $scope.targets=targetsData.targets;
+                var countryQ ='';
 
                 if($scope.target.length===1)$scope.target2='0'+$scope.target;
+                if($scope.schema==='nationalTarget' && $scope.country) countryQ = ' AND government_s:'+$scope.country.toLowerCase();
 
-                var q = 'schema_s:'+$scope.schema +' AND aichiTarget_ss:AICHI-TARGET-'+$scope.target2 +' AND _state_s:public';
+                var q = 'schema_s:'+$scope.schema + countryQ+' AND (aichiTargets_ss:"AICHI-TARGET-'+$scope.target2 +'" OR aichiTarget_ss:"AICHI-TARGET-'+$scope.target2 +'") AND _state_s:public';
+
                 $scope.loading=true;
 
                 if($scope.searchText)
                     q= q+' AND (resourceTypes_'+locale.toUpperCase()+'_txt:"' + $scope.searchText + '*" OR title_'+locale.toUpperCase()+'_t:"' + $scope.searchText + '*" OR description_t:"' + $scope.searchText + '*" )';
 
-                //createdBy_s_'+locale.toUpperCase()+'_t:"' + $scope.searchText + '*" OR resourceTypes_'+locale.toUpperCase()+'_t:"' + $scope.searchText + '*" OR authors_'+locale.toUpperCase()+'_t:"' + $scope.searchText + '*" OR
-
-
 
                 var queryParameters = {
                   'q': q,
                   'wt': 'json',
-                  'fl': 'url_ss,title_s,publicationYear_i,resourceTypes_'+locale.toUpperCase()+'_ss',
+//                  'fl': 'isAichiTarget_b,url_ss,title_s,publicationYear_i,resourceTypes_'+locale.toUpperCase()+'_ss',
                   'sort': $scope.sort,//'title_s asc',
                   'start': pageIndex * $scope.itemsPerPage,
   								'rows': $scope.itemsPerPage,
@@ -141,16 +171,35 @@ define(['app', 'text!./box-list.html','directives/aichi-targets/sorter','directi
 
                   $http.get('https://api.cbddev.xyz/api/v2013/index/select', {
                     params: queryParameters,
-                    cache: true
+                    // cache: true
                   }).success(function(data) {
+
+
                     $scope.count = data.response.numFound;
-                    $scope.docs = data.response.docs;
+                    $scope.docs  = data.response.docs;
+
+                    if($scope.schema ==='measures'){
+
+                          if($scope.targets[Number($scope.target)+1].activities){
+
+                            _.each($scope.targets[Number($scope.target)+1].activities,function(meas){
+
+                                meas.countryObj=_.find($scope.countries,{'name':meas.country});
+
+                                meas.source ="NBSAPS";
+                                meas.sourceUri ="https://www.cbd.int/nbsap/targets/default.shtml";
+                            });
+
+                            $scope.count =  $scope.count+$scope.targets[Number($scope.target)+1].activities.length;
+                            $scope.docs  =  $scope.docs.concat($scope.targets[Number($scope.target)+1].activities);
+                          }
+                    }
 
                     refreshPager(pageIndex);
                     $scope.loading = false;
 
                   });
-              }
+              }// search
               this.search = search;
 
             }
