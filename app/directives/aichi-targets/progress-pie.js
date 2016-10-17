@@ -98,7 +98,8 @@ define(['app', 'lodash','text!./progress-pie.html',
                             "type": "pie",
                             "legend": {
                               "divId": "legend-div",
-                              "spacing":10
+                              "spacing":10,
+                              "valueText":" ([[value]]/196)"
                             },
                             "pieX":'50%',
                             "innerRadius": "30%",
@@ -172,7 +173,7 @@ define(['app', 'lodash','text!./progress-pie.html',
                         'rows': 1000000,
                     };
 
-                    return $http.get('https://api.cbddev.xyz/api/v2013/index/select', {
+                    return $http.get('https://api.cbd.int/api/v2013/index/select', {
                         params: queryParameters,
 
                     }).success(function(data) {
@@ -202,12 +203,12 @@ define(['app', 'lodash','text!./progress-pie.html',
                     $scope.chartData = [];
                     $scope.nothingReported = true;
                     var total =0;
-                    $scope.chartData[0] = {
+                    $scope.chartData[4] = {
                         title: 'Moving Away',
                         count: 0,
                         color: progressToColor(0)
                     };
-                    $scope.chartData[1] = {
+                    $scope.chartData[3] = {
                         title: 'No Change',
                         count: 0,
                         color: progressToColor(1)
@@ -217,12 +218,12 @@ define(['app', 'lodash','text!./progress-pie.html',
                         count: 0,
                         color: progressToColor(2)
                     };
-                    $scope.chartData[3] = {
+                    $scope.chartData[1] = {
                         title: 'Meeting Target',
                         count: 0,
                         color: progressToColor(3)
                     };
-                    $scope.chartData[4] = {
+                    $scope.chartData[0] = {
                         title: 'Exceeding Target',
                         count: 0,
                         color: progressToColor(4)
@@ -237,7 +238,7 @@ define(['app', 'lodash','text!./progress-pie.html',
                       showAll = true;
                     if(showAll)
                     $scope.chartData[5] = {
-                        title: 'No Information',
+                        title: 'No Data',
                         count: 196-total,
                         color: '#bbbbbb'
                     };
