@@ -268,7 +268,9 @@ margin: 0 10px 10px 0px;
 </div>
 <div class="row">
   <div class="divider"></div>
+
   <legend42></legend42>
+
 </div>
 
 <div class="row" >
@@ -305,12 +307,14 @@ margin: 0 10px 10px 0px;
           <div class="col-xs-11" style="padding-left: 0;">
               <h4 class="sub-title-text">Implementation Measures</h4>
           </div>
-        </div>
-    		<div class="row" >
+
+
     		    <div class="col-xs-12">
-    		        {{indexIdCtrl.activity.country}} &#8212; {{indexIdCtrl.activity.text}}
+    		        <!-- {{indexIdCtrl.activity.country}} &#8212; {{indexIdCtrl.activity.text}} -->
+                <box-list schema="measures" target="{{indexIdCtrl.target.id}}" search-text="indexIdCtrl.searchMea"></box-list>
     		    </div>
-    		</div>
+            </div>
+
     </div>
 </div>
 
@@ -328,16 +332,16 @@ margin: 0 10px 10px 0px;
           <div class="col-xs-11" style="padding-left: 0;">
               <h4 class="sub-title-text">Links</h4>
               <div>
-                 <ul>
-                    <li><span>Technical Quick Guides (<span ng-repeat="guide in indexIdCtrl.target.links.techGuides"><a ng-href="{{guide.link}}" ng-if="guide.link">{{guide.lang}}</a><span ng-if="!$last && indexIdCtrl.target.links.techGuides[$index+1].link">, </span></span>)</span></li>
-                    <li><span>Related Programmes</span>
+<br>
+                  <span>Technical Quick Guides (<span ng-repeat="guide in indexIdCtrl.target.links.techGuides"><a ng-href="{{guide.link}}" ng-if="guide.link">{{guide.lang}}</a><span ng-if="!$last && indexIdCtrl.target.links.techGuides[$index+1].link">, </span></span>)</span>
+                  <span><br>Related Programmes</span>
                         <ul>
                             <li ><a ng-href="#">Prog 1<a/></li>
                             <li ><a ng-href="#">Prog 2<a/></li>
                             <li ><a ng-href="#">Prog 3<a/></li>
                         </ul>
-                    </li>
-                    <li><span><a ng-href="{{indexIdCtrl.target.links.nbsapForum}}">NBSAP Forum</a></span></li>
+
+                    <span><a ng-href="{{indexIdCtrl.target.links.nbsapForum}}">NBSAP Forum</a></span>
                  </ul>
 
 
@@ -361,17 +365,17 @@ margin: 0 10px 10px 0px;
           <img src="/app/images/aichi-targets/video-icon.png" style="margin: 1px 1px 1px 1px;">
         </div>
         <div class="col-xs-11" style="padding-left: 0;">
-            <h4 class="sub-title-text">20/20 talks on Target {{indexIdCtrl.target.id}}</h4>
+            <h4 class="sub-title-text">20/20 talks on Aichi Bidiversity Target {{indexIdCtrl.target.id}}</h4>
         </div>
       </div>
         <div class="row">
 			<div class="col-xs-10">
-				<div id="carousel-example-generic" class="carousel slide" data-ride="carousel" >
+				<div id="carousel-example-generic" class="carousel slide text-center" data-ride="carousel" >
 			      <!-- Wrapper for slides -->
-			      <div class="carousel-inner">
+			      <div class="carousel-inner" >
 					  	<div class="item" ng-class="{'active': $first}" ng-repeat="video in indexIdCtrl.target.videos" videos-loaded>
     							<a class="vimeo" ng-href="{{video.link}}">
-    		              <img ng-src="{{video.thumbnail}}" alt="{{video.caption}}" title="{{video.caption}}">
+    		              <img ng-src="{{video.thumbnail}}" alt="{{video.caption}}" title="{{video.caption}}" >
     		          </a>
 		          </div>
 			      </div>
