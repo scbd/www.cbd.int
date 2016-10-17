@@ -10,11 +10,16 @@ define(['app', 'text!./legend42.html','directives/aichi-targets/progress-pie','d
 
             template: templateHtml,
             link: function($scope, $elem,$attrs, ctrls) {
-
                 $scope.itemColor={color:false};
+                $scope.clearSearch = function(){
+                  $scope.searchNatTar='';
+                };
+
             },
 
             controller: function($scope) {
+              $scope.searchNatTar='';
+              $scope.showMap=true;
               $scope.leggends = {
                 aichiTarget: [{
                   id: 0,
