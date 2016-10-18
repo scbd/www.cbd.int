@@ -29,20 +29,22 @@ define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','dir
                 else
                   $scope.sort='title_s asc';
 
-                $scope.$watch('searchText',function(){
-    console.log('search');
-                    ctrl.search(0);
+                $scope.loadCountries().then(function(){
+                  $scope.$watch('searchText',function(){
+                      ctrl.search(0);
+                  });
+
+                  $scope.$watch('sort',function(){
+                      if($scope.sort)
+                        ctrl.search(0);
+                  });
+
+                  $scope.$watch('country',function(){
+                      if($scope.country)
+                        ctrl.search(0);
+                  });
                 });
 
-                $scope.$watch('sort',function(){
-                    if($scope.sort)
-                      ctrl.search(0);
-                });
-
-                $scope.$watch('country',function(){
-                    if($scope.country)
-                      ctrl.search(0);
-                });
 
                 //=======================================================================
                 //
@@ -57,7 +59,7 @@ define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','dir
             },
 
             controller: function($scope) {
-              loadCountries();
+
               //=======================================================================
               //
               //=======================================================================
@@ -84,6 +86,7 @@ define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','dir
                       $scope.countries = res.data;
                   });
               }
+              $scope.loadCountries = loadCountries;
 
 
               //=======================================================================
