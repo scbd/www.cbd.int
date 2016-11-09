@@ -1,27 +1,29 @@
-define(['app', 'lodash',
+define(['app', 'lodash','text!./progress-pie.html',
     'amchart',
     'shim!amchart/pie[amchart]',
     'shim!amchart/themes/light[amchart]'
-], function(app, _) {
+], function(app, _,template) {
     'use strict';
 
     //============================================================
     //
     //============================================================
-    app.directive('progressPie', function() {
+    app.directive('progressPie', ['$window',function($window) {
         return {
             restrict: 'E',
-            template: '<div id="chartdivpie" style="width:100%;height:350px; font-size	: 8px;"></div><div class="text-center" style="cursor:pointer;" ng-click="showAll()" ng-if="!nothingReported"><span ng-if="!showAllFlag"><a hraf="#" >Show Reported and Unreported</a></span><span ng-if="showAllFlag"><a hraf="#" >Show Reported Only</a></span></div>',
-            require: '^progressPie',
+            template: template,
+            require: ['^progressPie','^legend42'],
             scope: {
                 aichiTarget: '=aichiTarget',
+                itemColor:'='
             },
-            link: function($scope, $elem, $attrs, progressPieCtrl) {
+            link: function($scope, $elem, $attrs, ctrls) {
 
-                progressPieCtrl.init();
+                ctrls[0].init();
+
             },
             controller: ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
-                $scope.showAllFlag=false;
+                $scope.showAllFlag=true;
                 $scope.leggends = {
                     aichiTarget: [{
                         id: 0,
@@ -71,31 +73,74 @@ define(['app', 'lodash',
                 //============================================================
                 function buildPie() {
 
-                    //if ($scope.nothingReported) return;
+                    var radius = 100;
+                    var legend ={
+                      "position":"right",
+                      "marginRight":20,
+                      "autoMargins":false,
+                      "fontSize":12
+                    };
+
+                    if($window.screen.width<= 750){
+                        radius = 65;
+                        legend ={
+                          // "position":"bottom",
+                          "marginRight":20,
+                          "autoMargins":false,
+                          "fontSize":14
+                        };
+                    }
+
                     if (!$scope.chartData) throw "error no chart data loaded";
                     $timeout(function() {
                         $scope.chartPie = AmCharts.makeChart("chartdivpie", { //jshint ignore:line
-                            "showZeroSlices": true,
+                            "showZeroSlices": false,
                             "type": "pie",
+                            "legend": {
+                              "divId": "legend-div",
+                              "spacing":10,
+                              "valueText":" ([[value]]/196)"
+                            },
+                            "pieX":'50%',
+                            "innerRadius": "30%",
                             "theme": "light",
                             "dataProvider": $scope.chartData,
                             "valueField": "count",
                             "titleField": "title",
                             "outlineAlpha": 0.4,
-                            "depth3D": 15,
                             "colorField": "color",
-                            "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[count]]</b> ([[percents]]%)</span>",
-                            "angle": 20,
-                            "autoResize": true,
                             "fontSize": 10,
-                            "labelRadius": 10,
+                            "labelRadius": -30,
+                            "labelText" : '[[percents]]%',
+                            "radius":radius,
+                            'startDuration':0.01
+
                         });
+
                         _.each($scope.chartPie.dataProvider, function(slice, index) {
                             slice.color = $scope.chartData[index].color;
                         });
-                        $scope.chartPie.validateNow();
-                        $scope.chartPie.animateAgain();
 
+                        $scope.chartPie.legend.addListener('hideItem', function(e){
+                             $timeout(function(){  $scope.itemColor.color=false;});
+                             $timeout(function(){
+                               if(e.dataItem.color==='#bbbbbb')
+                                  $scope.itemColor.color='#aaaaaa';
+                               else{
+                                 $scope.itemColor.color=e.dataItem.color;
+                               }
+                             });
+                        });
+                        $scope.chartPie.legend.addListener('showItem', function(e){
+                            $timeout(function(){ $scope.itemColor.color=false; });
+                            $timeout(function(){
+                              if(e.dataItem.color==='#bbbbbb')
+                                 $scope.itemColor.color='#aaaaaa';
+                              else{
+                                $scope.itemColor.color=e.dataItem.color;
+                              }
+                            });
+                        });
                     });
                 }
 
@@ -128,14 +173,14 @@ define(['app', 'lodash',
                         'rows': 1000000,
                     };
 
-                    return $http.get('/api/v2013/index/select', {
+                    return $http.get('https://api.cbd.int/api/v2013/index/select', {
                         params: queryParameters,
-                        cache: true
+
                     }).success(function(data) {
 
                         $scope.count = data.response.numFound;
                         $scope.documents = data.response.docs;
-                        progressCounts($scope.documents);
+                        progressCounts($scope.documents,$scope.showAllFlag);
                     });
                 } // query
 
@@ -158,12 +203,12 @@ define(['app', 'lodash',
                     $scope.chartData = [];
                     $scope.nothingReported = true;
                     var total =0;
-                    $scope.chartData[0] = {
+                    $scope.chartData[4] = {
                         title: 'Moving Away',
                         count: 0,
                         color: progressToColor(0)
                     };
-                    $scope.chartData[1] = {
+                    $scope.chartData[3] = {
                         title: 'No Change',
                         count: 0,
                         color: progressToColor(1)
@@ -173,12 +218,12 @@ define(['app', 'lodash',
                         count: 0,
                         color: progressToColor(2)
                     };
-                    $scope.chartData[3] = {
+                    $scope.chartData[1] = {
                         title: 'Meeting Target',
                         count: 0,
                         color: progressToColor(3)
                     };
-                    $scope.chartData[4] = {
+                    $scope.chartData[0] = {
                         title: 'Exceeding Target',
                         count: 0,
                         color: progressToColor(4)
@@ -193,7 +238,7 @@ define(['app', 'lodash',
                       showAll = true;
                     if(showAll)
                     $scope.chartData[5] = {
-                        title: 'No Information',
+                        title: 'No Data',
                         count: 196-total,
                         color: '#bbbbbb'
                     };
@@ -243,6 +288,6 @@ define(['app', 'lodash',
 
             }]
         };
-    });
+    }]);
 
 });

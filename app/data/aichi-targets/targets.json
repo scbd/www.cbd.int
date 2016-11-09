@@ -4,7 +4,7 @@
 		{
 			"id": 1,
 			"title" : {
-				"en" : "Awareness of biodiversity values"
+				"en" : "Awareness increased"
 			},
 			"goal" : {
 				"en" : "A"
@@ -12,6 +12,7 @@
 			"action" : {
 				"en" : "By 2020, at the latest, people are aware of the values of biodiversity and the steps they can take to conserve and use it sustainably."
 			},
+			"banner":"https://www.cbd.int/images/banners/banner-0-3712.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87023906",
@@ -27,22 +28,41 @@
             "activities":[
                 {
                     "country": "Azerbaijan",
-                    "text"   :"A decision of the Cabinet of Ministers adopted in 2003 established an inter-city commission to coordinate environmental education and awareness-raising in the country. Activities are ongoing."
+                    "title_s"   :"A decision of the Cabinet of Ministers adopted in 2003 established an inter-city commission to coordinate environmental education and awareness-raising in the country. Activities are ongoing."
                 },
                 {
                     "country": "Belgium",
-                    "text"   :"In 2010, the Royal Belgian Institute of Natural Sciences opened a new permanent exhibition hall on “Biodiversity in Cities”, and plans to dedicate more halls to biodiversity in the coming years."
+                    "title_s"   :"In 2010, the Royal Belgian Institute of Natural Sciences opened a new permanent exhibition hall on “Biodiversity in Cities”, and plans to dedicate more halls to biodiversity in the coming years."
                 },
                 {
                     "country": "Cameroon",
-                    "text"   :"Each year, “Traditional African Medicine Day” is held in Cameroon. In 2010, the theme was “conservation of medicinal plants”, with exhibits and a roundtable discussion organized to draw attention to biodiversity loss and the need for the sustainable management of plants and ecosystems."
+                    "title_s"   :"Each year, “Traditional African Medicine Day” is held in Cameroon. In 2010, the theme was “conservation of medicinal plants”, with exhibits and a roundtable discussion organized to draw attention to biodiversity loss and the need for the sustainable management of plants and ecosystems."
                 }
-            ]
+            ],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T1-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T1-quick-guide-es.pdf"
+						},
+						{
+							"lang":"FR",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T1-quick-guide-fr.pdf"
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/270",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 2,
 			"title" : {
-				"en" : "Integration of biodiversity values"
+				"en" : "Biodiversity values integrated"
 			},
 			"goal" : {
 				"en" : "A"
@@ -50,6 +70,7 @@
 			"action" : {
 				"en" : "By 2020, at the latest, biodiversity values have been integrated into national and local development and poverty reduction strategies and planning processes and are being incorporated into national accounting, as appropriate, and reporting systems."
 			},
+			"banner":"https://www.cbd.int/images/banners/banner-0-5949.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2506743/video/73254975",
@@ -65,18 +86,37 @@
             "activities":[
                 {
                     "country" : "Japan",
-                    "text"    : "Consideration of economic assessments for biodiversity and ecosystem services is increasing, including the development of mechanisms that encourage companies and others to support agricultural production that contributes to conservation carried out by farmers. This is also being done to promote environmental real estate as an initiative for creating real estate markets that encourage sustained investment."
+                    "title_s"    : "Consideration of economic assessments for biodiversity and ecosystem services is increasing, including the development of mechanisms that encourage companies and others to support agricultural production that contributes to conservation carried out by farmers. This is also being done to promote environmental real estate as an initiative for creating real estate markets that encourage sustained investment."
                 },
                 {
                      "country": "Niue",
-                     "text"   : "Hakupu’s Village Development and Action Plan 2009-2020 contains ecotourism strategies based on the Huvalu Conservation Area and Hakupu Heritage and Conservation Park, and for organic farming. Tuapa’s VDAP 2009-2020 contains strategies for food security, renewable energy and healthy living."
+                     "title_s"   : "Hakupu’s Village Development and Action Plan 2009-2020 contains ecotourism strategies based on the Huvalu Conservation Area and Hakupu Heritage and Conservation Park, and for organic farming. Tuapa’s VDAP 2009-2020 contains strategies for food security, renewable energy and healthy living."
                 }
-            ]
+            ],
+						"links":{
+									"techGuides":[
+									{
+										"lang":"EN",
+										"link":"https://www.cbd.int/doc/strategic-plan/targets/T2-quick-guide-en.pdf"
+									},
+									{
+										"lang":"ES",
+										"link":"https://www.cbd.int/doc/strategic-plan/targets/T2-quick-guide-es.pdf"
+									},
+									{
+										"lang":"FR",
+										"link":""
+									}
+								],
+								"nbsapForum":"http://nbsapforum.net/#categories/271",
+								"programs":[],
+								"undb":"https://www.cbd.int/undb-new/"
+						}
 		},
 		{
 			"id": 3,
 			"title" : {
-				"en" : "Incentives"
+				"en" : "Incentives reformed"
 			},
 			"goal" : {
 				"en" : "A"
@@ -84,6 +124,7 @@
 			"action" : {
 				"en" : "By 2020, at the latest, incentives, including subsidies, harmful to biodiversity are eliminated, phased out or reformed in order to minimize or avoid negative impacts, and positive incentives for the conservation and sustainable use of biodiversity are developed and applied, consistent and in harmony with the Convention and other relevant international obligations, taking into account national socio economic conditions."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-3719.JPG",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2506743/video/73254976",
@@ -99,22 +140,41 @@
 			"activities":[
 			    {
 			        "country": "Ecuador",
-			        "text"   : "The National Program on Incentives for the Conservation and Sustainable Use of Natural Heritage (\"Socio Bosque\") was created in January 2014."
+			        "title_s"   : "The National Program on Incentives for the Conservation and Sustainable Use of Natural Heritage (\"Socio Bosque\") was created in January 2014."
 			    },
 				{
 					"country": "Pakistan",
-					"text"   : "The subsidy on electricity for farm tube wells, which was a major cause of ground water depletion, has been withdrawn."
+					"title_s"   : "The subsidy on electricity for farm tube wells, which was a major cause of ground water depletion, has been withdrawn."
 				},
 				{
 					"country": "Solomon Islands",
-					"text"   : "Renewable energy, such as solar energy, has been introduced to villages to reduce dependency on lowland forest for fuels under UNFCCC implementation."
+					"title_s"   : "Renewable energy, such as solar energy, has been introduced to villages to reduce dependency on lowland forest for fuels under UNFCCC implementation."
 				}
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T3-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T3-quick-guide-es.pdf"
+						},
+						{
+							"lang":"FR",
+							"link":""
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/272",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 	4,
 			"title" : {
-				"en" : "Use of natural resources"
+				"en" : "Sustainable production and consumption"
 			},
 			"goal" : {
 				"en" : "A"
@@ -122,6 +182,7 @@
 			"action" : {
 				"en" : "By 2020, at the latest, Governments, business and stakeholders at all levels have taken steps to achieve or have implemented plans for sustainable production and consumption and have kept the impacts of use of natural resources well within safe ecological limits."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-3948.JPG",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87020090",
@@ -137,18 +198,37 @@
 			"activities":[
 			    {
 			        "country": "Colombia",
-			        "text"   : "A National Program on Sustainable Biocommerce (2011-2021) is being implemented."
+			        "title_s"   : "A National Program on Sustainable Biocommerce (2011-2021) is being implemented."
 			    },
 				{
 					"country": "India",
-					"text"   : "The Government of India has enacted the Companies Act 2013 which makes Corporate social responsibility (CSR) spending mandatory for every company with a net worth of 500 crore rupees or more, a turnover of 1000 crore Rs or more, or a net profit of 5 crore Rs or more during any financial year. Two percent of the average net profits made by the company during every block of 3 years are to be used for CSR activities. Ensuring environmental sustainability has been identified as one of the nine activities to be covered under CSR activities."
+					"title_s"   : "The Government of India has enacted the Companies Act 2013 which makes Corporate social responsibility (CSR) spending mandatory for every company with a net worth of 500 crore rupees or more, a turnover of 1000 crore Rs or more, or a net profit of 5 crore Rs or more during any financial year. Two percent of the average net profits made by the company during every block of 3 years are to be used for CSR activities. Ensuring environmental sustainability has been identified as one of the nine activities to be covered under CSR activities."
 				}
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T4-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":""
+						},
+						{
+							"lang":"FR",
+							"link":""
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/273",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 	5,
 			"title" : {
-				"en" : "Loss of habitats"
+				"en" : "Habitat loss halved or reduced"
 			},
 			"goal" : {
 				"en" : "B"
@@ -156,6 +236,7 @@
 			"action" : {
 				"en" : "By 2020, the rate of loss of all natural habitats, including forests, is at least halved and where feasible brought close to zero, and degradation and fragmentation is significantly reduced."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-3503.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87023908",
@@ -171,18 +252,37 @@
 			"activities":[
 			    {
 			        "country": "Netherlands",
-			        "text"   : "Construction of fauna passages and ecoducts has led to significant habitat defragmentation. The same is true for aquatic life. Fish species are increasingly able to migrate through seas, rivers, streams and ditches due to the existence of fish passages at barriers."
+			        "title_s"   : "Construction of fauna passages and ecoducts has led to significant habitat defragmentation. The same is true for aquatic life. Fish species are increasingly able to migrate through seas, rivers, streams and ditches due to the existence of fish passages at barriers."
 			    },
 				{
 			        "country": "South Africa",
-			        "text"   : "Threatened ecosystems have been published in regard to the Biodiversity Act. Biodiversity is increasingly routinely incorporated into EIAs. Norms and Standards for Biodiversity Management Plans for Ecosystems have been finalized. Grasslands Ecosystem Guidelines have also been published, and several biodiversity sector plans and bioregional plans developed to inform land use planning and environmental authorisations."
+			        "title_s"   : "Threatened ecosystems have been published in regard to the Biodiversity Act. Biodiversity is increasingly routinely incorporated into EIAs. Norms and Standards for Biodiversity Management Plans for Ecosystems have been finalized. Grasslands Ecosystem Guidelines have also been published, and several biodiversity sector plans and bioregional plans developed to inform land use planning and environmental authorisations."
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T5-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T5-quick-guide-es.pdf"
+						},
+						{
+							"lang":"FR",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T5-quick-guide-fr.pdf"
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/274",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 	6,
 			"title" : {
-				"en" : "Sustainable fisheries"
+				"en" : "Sustainable management of marine living resources"
 			},
 			"goal" : {
 				"en" : "B"
@@ -190,6 +290,7 @@
 			"action" : {
 				"en" : "By 2020 all fish and invertebrate stocks and aquatic plants are managed and harvested sustainably, legally and applying ecosystem based approaches, so that overfishing is avoided, recovery plans and measures are in place for all depleted species, fisheries have no significant adverse impacts on threatened species and vulnerable ecosystems and the impacts of fisheries on stocks, species and ecosystems are within safe ecological limits."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-3489.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87027453",
@@ -205,18 +306,37 @@
 			"activities":[
 			    {
 			        "country": "Malaysia",
-			        "text"   : "The Ecosystem Approach for the Management of Fisheries and Other Marine Resources is being fully applied, with the target to have, by 2020, strong related legislative, policy and regulatory frameworks. The target also aims to improve income, livelihoods and food security in an increasingly significant number of coastal communities through new sustainable coastal fisheries and poverty reduction initiatives."
+			        "title_s"   : "The Ecosystem Approach for the Management of Fisheries and Other Marine Resources is being fully applied, with the target to have, by 2020, strong related legislative, policy and regulatory frameworks. The target also aims to improve income, livelihoods and food security in an increasingly significant number of coastal communities through new sustainable coastal fisheries and poverty reduction initiatives."
 			    },
 			    {
 			        "country": "Senegal",
-			        "text"   : "A national MPA network comprised of 16 MPAs covering an area of 244,750 hectares has been established. These MPAs are contributing to the reconstitution of fish stocks, protection of threatened marine and coastal species, and to the improvement of livelihood and food security."
+			        "title_s"   : "A national MPA network comprised of 16 MPAs covering an area of 244,750 hectares has been established. These MPAs are contributing to the reconstitution of fish stocks, protection of threatened marine and coastal species, and to the improvement of livelihood and food security."
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T6-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":""
+						},
+						{
+							"lang":"FR",
+							"link":""
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/275",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 7,
 			"title" : {
-				"en" : "Areas under sustainable management"
+				"en" : "Sustainable agriculture, aquaculture and forestry"
 			},
 			"goal" : {
 				"en" : "B"
@@ -224,6 +344,7 @@
 			"action" : {
 				"en" : "By 2020 areas under agriculture, aquaculture and forestry are managed sustainably, ensuring conservation of biodiversity."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-3481.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87020092",
@@ -239,18 +360,37 @@
 			"activities":[
 			    {
 			        "country": "India",
-			        "text"   : "A national project on organic farming is being promoted through various incentives disbursed to farmers. Between 2003 and 2010, the area under certified organic farming increased from 42,000 to 10,050,000 hectares. "
+			        "title_s"   : "A national project on organic farming is being promoted through various incentives disbursed to farmers. Between 2003 and 2010, the area under certified organic farming increased from 42,000 to 10,050,000 hectares. "
 			    },
 			    {
 			        "country": "Myanmar",
-			        "text"   : "The Myanmar Certification Committee is developing Sustainable Forest Management Certification and a Chain of Custody Certification. It is promoting the Timber Legality Assurance System, in collaboration with the European Forest Institute, NGOs and INGOs. "
+			        "title_s"   : "The Myanmar Certification Committee is developing Sustainable Forest Management Certification and a Chain of Custody Certification. It is promoting the Timber Legality Assurance System, in collaboration with the European Forest Institute, NGOs and INGOs. "
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T7-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":""
+						},
+						{
+							"lang":"FR",
+							"link":""
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/276",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 8,
 			"title" : {
-				"en" : "Pollution"
+				"en" : "Pollution reduced"
 			},
 			"goal" : {
 				"en" : "B"
@@ -258,6 +398,7 @@
 			"action" : {
 				"en" : "By 2020, pollution, including from excess nutrients, has been brought to levels that are not detrimental to ecosystem function and biodiversity."
 			},
+		  "banner":"https://www.cbd.int/subnational/app/img/banner.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87027455",
@@ -273,22 +414,41 @@
 			"activities":[
 			    {
 			        "country": "Ecuador",
-			        "text"   : "Adopted in 2010, the National Programme for Integrated Solid Waste Management (PNGIDS) has the primary objective of promoting solid waste management in municipalities throughout the country. A target of the programme is to eliminate open landfills in all municipalities by 2017."
+			        "title_s"   : "Adopted in 2010, the National Programme for Integrated Solid Waste Management (PNGIDS) has the primary objective of promoting solid waste management in municipalities throughout the country. A target of the programme is to eliminate open landfills in all municipalities by 2017."
 			    },
 			    {
 			        "country": "Niue",
-			        "text"   : "A National Integrated Waste Management Strategy (2010-2015) and accompanying Action Plan have been developed."
+			        "title_s"   : "A National Integrated Waste Management Strategy (2010-2015) and accompanying Action Plan have been developed."
 			    },
 			    {
 			        "country": "Senegal",
-			        "text"   : "An ambitious project to clean up the Bay of Hann is being implemented, with some manufacturers beginning to put in place systems for wastewater treatment. The State intends to impose heavy taxes on companies that are slow to subscribe to the objectives of this project."
+			        "title_s"   : "An ambitious project to clean up the Bay of Hann is being implemented, with some manufacturers beginning to put in place systems for wastewater treatment. The State intends to impose heavy taxes on companies that are slow to subscribe to the objectives of this project."
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T8-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":""
+						},
+						{
+							"lang":"FR",
+							"link":""
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/277",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 9,
 			"title" : {
-				"en" : "Invasive Alien Species"
+				"en" : "Invasive alien species prevented and controlled"
 			},
 			"goal" : {
 				"en" : "B"
@@ -296,6 +456,7 @@
 			"action" : {
 				"en" : "By 2020, invasive alien species and pathways are identified and prioritized, priority species are controlled or eradicated, and measures are in place to manage pathways to prevent their introduction and establishment."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-3946.JPG",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87023905",
@@ -311,18 +472,37 @@
 			"activities":[
 			    {
 			        "country": "Canada",
-			        "text"   : "In April 2011, the Governments of Canada and Ontario collaborated to establish the Invasive Species Centre (ISC). The facility houses the Insect Production and Quarantine Laboratories, the only facility of its kind in Canada dedicated to combating insect pests, both alien and domestic, terrestrial and aquatic, that threaten Canada’s natural resources and ecosystems."
+			        "title_s"   : "In April 2011, the Governments of Canada and Ontario collaborated to establish the Invasive Species Centre (ISC). The facility houses the Insect Production and Quarantine Laboratories, the only facility of its kind in Canada dedicated to combating insect pests, both alien and domestic, terrestrial and aquatic, that threaten Canada’s natural resources and ecosystems."
 			    },
 			    {
 			        "country": "Iraq",
-			        "text"   : "Two national targets have been adopted to address this issue. The country aims to, by the end of 2016, enact legislation to control the introduction and diffusion of non-native species into the natural environment; and, by the end of 2020, publish the list of invasive species in Iraq and their impacts and invasion pathways."
+			        "title_s"   : "Two national targets have been adopted to address this issue. The country aims to, by the end of 2016, enact legislation to control the introduction and diffusion of non-native species into the natural environment; and, by the end of 2020, publish the list of invasive species in Iraq and their impacts and invasion pathways."
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T9-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":""
+						},
+						{
+							"lang":"FR",
+							"link":""
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/278",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 10,
 			"title" : {
-				"en" : "Vulnerable ecosystems"
+				"en" : "Pressures on vulnerable ecosystems reduced"
 			},
 			"goal" : {
 				"en" : "B"
@@ -330,6 +510,7 @@
 			"action" : {
 				"en" : "By 2015, the multiple anthropogenic pressures on coral reefs, and other vulnerable ecosystems impacted by climate change or ocean acidification are minimized, so as to maintain their integrity and functioning."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-3940.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87026972",
@@ -345,22 +526,41 @@
 			"activities":[
 			    {
 			        "country": "Colombia",
-			        "text"   : "In 2012, the “Blue Agenda” (“Agenda Azul”) was launched to strengthen institutions and organize actions, at public and private levels, and by civil groups, for managing marine, coastal and island resources."
+			        "title_s"   : "In 2012, the “Blue Agenda” (“Agenda Azul”) was launched to strengthen institutions and organize actions, at public and private levels, and by civil groups, for managing marine, coastal and island resources."
 			    },
 			    {
 			        "country": "Malaysia",
-			        "text"   : "A Coral Reef Bleaching Response Plan has been developed."
+			        "title_s"   : "A Coral Reef Bleaching Response Plan has been developed."
 			    },
 			    {
 			        "country": "Poland",
-			        "text"   : "In October 2013, the Council of Ministers passed the Strategic Adaptation Plan for Sectors and Areas Sensitive to Climate Change up to 2020 with a Perspective to 2030 (SAP 2020)."
+			        "title_s"   : "In October 2013, the Council of Ministers passed the Strategic Adaptation Plan for Sectors and Areas Sensitive to Climate Change up to 2020 with a Perspective to 2030 (SAP 2020)."
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T10-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":""
+						},
+						{
+							"lang":"FR",
+							"link":""
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/279",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 11,
 			"title" : {
-				"en" : "Protected areas"
+				"en" : "Protected areas increased and improved"
 			},
 			"goal" : {
 				"en" : "C"
@@ -368,6 +568,7 @@
 			"action" : {
 				"en" : "By 2020, at least 17 per cent of terrestrial and inland water, and 10 per cent of coastal and marine areas, especially areas of particular importance for biodiversity and ecosystem services, are conserved through effectively and equitably managed, ecologically representative and well connected systems of protected areas and other effective area-based conservation measures, and integrated into the wider landscapes and seascapes."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-6572.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87027459",
@@ -383,22 +584,41 @@
 			"activities":[
 			    {
 			        "country" : "Costa Rica",
-			        "text"    : "In 2011, by Decree of the Ministry of the Environment, Energy and Technology, the first “seamounts” marine management area was declared around Isla del Coco."
+			        "title_s"    : "In 2011, by Decree of the Ministry of the Environment, Energy and Technology, the first “seamounts” marine management area was declared around Isla del Coco."
 			    },
 			    {
 			        "country" : "Iraq",
-			        "text"    : "In 2014, the Law on the Protected Areas System entered into force."
+			        "title_s"    : "In 2014, the Law on the Protected Areas System entered into force."
 			    },
 			    {
 			        "country" : "Spain",
-			        "text"    : "At present, protected areas cover more than 27% of the terrestrial surface in the country. Spain has also declared 26 special marine conservation zones and adopted corresponding management plans and conservation measures for them."
+			        "title_s"    : "At present, protected areas cover more than 27% of the terrestrial surface in the country. Spain has also declared 26 special marine conservation zones and adopted corresponding management plans and conservation measures for them."
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T11-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T11-quick-guide-es.pdf"
+						},
+						{
+							"lang":"FR",
+							"link":""
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/280",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 12,
 			"title" : {
-				"en" : "Preventing extinctions"
+				"en" : "Extinction prevented"
 			},
 			"goal" : {
 				"en" : "C"
@@ -406,6 +626,7 @@
 			"action" : {
 				"en" : "By 2020 the extinction of known threatened species has been prevented and their conservation status, particularly of those most in decline, has been improved and sustained."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-3945.JPG",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87027460",
@@ -421,22 +642,41 @@
 			"activities" :[
 			    {
 			        "country": "Italy",
-			        "text"   : "The Transboundary Biosphere Reserve “Monviso” (Italy/France) was inscribed in the MAB Programme in 2013, following efforts to integrate the management of 2 PAs (Parco del Po Cuneese and Parc National Régional du Queyras) and conserve biodiversity in the alpine ecological corridor."
+			        "title_s"   : "The Transboundary Biosphere Reserve “Monviso” (Italy/France) was inscribed in the MAB Programme in 2013, following efforts to integrate the management of 2 PAs (Parco del Po Cuneese and Parc National Régional du Queyras) and conserve biodiversity in the alpine ecological corridor."
 			    },
 			    {
 			        "country": "Myanmar",
-			        "text"   : "Endangered sea turtles are being conserved in cooperation with international organizations.  Turtle hatching stations have been established in the Nga Pu Taw and Bogalay townships."
+			        "title_s"   : "Endangered sea turtles are being conserved in cooperation with international organizations.  Turtle hatching stations have been established in the Nga Pu Taw and Bogalay townships."
 			    },
 			    {
 			        "country": "Uganda",
-			        "text"   : "A Directive from the President has been instrumental in protecting the threatened shae tree and in stimulating the development of a National Strategy for its protection to be completed in 2014."
+			        "title_s"   : "A Directive from the President has been instrumental in protecting the threatened shae tree and in stimulating the development of a National Strategy for its protection to be completed in 2014."
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T12-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T12-quick-guide-es.pdf"
+						},
+						{
+							"lang":"FR",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T12-quick-guide-fr.pdf"
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/282",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id" :13,
 			"title" : {
-				"en" : "Agricultural biodiversity"
+				"en" : "Genetic diversity maintained"
 			},
 			"goal" : {
 				"en" : "C"
@@ -444,6 +684,7 @@
 			"action" : {
 				"en" : "By 2020, the genetic diversity of cultivated plants and farmed and domesticated animals and of wild relatives, including other socio-economically as well as culturally valuable species, is maintained, and strategies have been developed and implemented for minimizing genetic erosion and safeguarding their genetic diversity."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-3942.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87028178",
@@ -459,18 +700,37 @@
 			"activities" :[
 			    {
 			        "country": "India",
-			        "text"   : "The Ministry of Agriculture has set up 6 national bureaus (plant genetic resources, animal genetic resources, fish genetic resources, agriculturally important insects, agriculturally important microorganisms and soil sciences) to conserve rich domesticated biodiversity and promote underutilized crops and animal breeds."
+			        "title_s"   : "The Ministry of Agriculture has set up 6 national bureaus (plant genetic resources, animal genetic resources, fish genetic resources, agriculturally important insects, agriculturally important microorganisms and soil sciences) to conserve rich domesticated biodiversity and promote underutilized crops and animal breeds."
 			    },
 			    {
 			        "country": "Nigeria",
-			        "text"   : "Efforts are now being made to domesticate some plants used in traditional medicine. Accordingly, the National Agency for Genetic Resources and Biotechnology is mandated to document and keep essential genetic biodiversity. The National Institute for Pharmaceutical Research and Development also has reliable data on the medicinal and patent value of plant resources in Nigeria."
+			        "title_s"   : "Efforts are now being made to domesticate some plants used in traditional medicine. Accordingly, the National Agency for Genetic Resources and Biotechnology is mandated to document and keep essential genetic biodiversity. The National Institute for Pharmaceutical Research and Development also has reliable data on the medicinal and patent value of plant resources in Nigeria."
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T13-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":""
+						},
+						{
+							"lang":"FR",
+							"link":""
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/282",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 14,
 			"title" : {
-				"en" : "Essential ecosystem services"
+				"en" : "Ecosystems and essential services safeguarded"
 			},
 			"goal" : {
 				"en" : "D"
@@ -478,6 +738,7 @@
 			"action" : {
 				"en" : "By 2020, ecosystems that provide essential services, including services related to water, and contribute to health, livelihoods and well-being, are restored and safeguarded, taking into account the needs of women, indigenous and local communities, and the poor and vulnerable."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87023903",
@@ -493,14 +754,33 @@
 			"activities" :[
 			    {
 			        "country": "Canada",
-			        "text"   : "In July 2013, the province of Saskatchewan designated a new protected area in the provincial boreal forest, the Pink Lake Representative Area Ecological Reserve. At 3,660 km2, it is Saskatchewan’s largest protected area. With the Pink Lake designation, protected area coverage in the Churchill River Upland Ecoregion increases from 4.9% to 8.2%. As an ecological reserve, no new industrial development will be allowed in the area. Leases or permits in place at the time of the designation will be grandfathered to allow existing activities to continue. Traditional activities by First Nations and Métis people, as well as recreational hunting and angling, will continue."
+			        "title_s"   : "In July 2013, the province of Saskatchewan designated a new protected area in the provincial boreal forest, the Pink Lake Representative Area Ecological Reserve. At 3,660 km2, it is Saskatchewan’s largest protected area. With the Pink Lake designation, protected area coverage in the Churchill River Upland Ecoregion increases from 4.9% to 8.2%. As an ecological reserve, no new industrial development will be allowed in the area. Leases or permits in place at the time of the designation will be grandfathered to allow existing activities to continue. Traditional activities by First Nations and Métis people, as well as recreational hunting and angling, will continue."
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T14-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":""
+						},
+						{
+							"lang":"FR",
+							"link":""
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/283",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 15,
 			"title" : {
-				"en" : "Ecosystem resilience"
+				"en" : "Ecosystems restored and resilience enhanced"
 			},
 			"goal" : {
 				"en" : "D"
@@ -508,6 +788,7 @@
 			"action" : {
 				"en" : "By 2020, ecosystem resilience and the contribution of biodiversity to carbon stocks has been enhanced, through conservation and restoration, including restoration of at least 15 per cent of degraded ecosystems, thereby contributing to climate change mitigation and adaptation and to combating desertification."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-3508.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87026973",
@@ -523,22 +804,41 @@
 			"activities" :[
 			    {
 			        "country": "Azerbaijan",
-			        "text"   : "State programmes are being implemented to expand national forest coverage, green urban areas and rehabilitate ecological functioning in degraded forests. Wide-scale forest planting and greening initiatives have been undertaken over the last 5 years (10,131 ha of forest habitat are under active restoration)."
+			        "title_s"   : "State programmes are being implemented to expand national forest coverage, green urban areas and rehabilitate ecological functioning in degraded forests. Wide-scale forest planting and greening initiatives have been undertaken over the last 5 years (10,131 ha of forest habitat are under active restoration)."
 			    },
 			    {
 			        "country": "Costa Rica",
-			        "text"   : "The country aims to achieve carbon neutrality by 2021."
+			        "title_s"   : "The country aims to achieve carbon neutrality by 2021."
 			    },
 			    {
 			        "country": "Madagascar",
-			        "text"   : "Large mining companies are being encouraged to create conservation areas (e.g. cases of QIT Madagascar Minerals (QMM), Ambatovy)."
+			        "title_s"   : "Large mining companies are being encouraged to create conservation areas (e.g. cases of QIT Madagascar Minerals (QMM), Ambatovy)."
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T15-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T15-quick-guide-es.pdf"
+						},
+						{
+							"lang":"FR",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T15-quick-guide-fr.pdf"
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/284",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 16,
 			"title" : {
-				"en" : "Nagoya Protocol on ABS"
+				"en" : "Nagoya Protocol in force and operational"
 			},
 			"goal" : {
 				"en" : "D"
@@ -546,6 +846,7 @@
 			"action" : {
 				"en" : "By 2015, the Nagoya Protocol on Access to Genetic Resources and the Fair and Equitable Sharing of Benefits Arising from their Utilization is in force and operational, consistent with national legislation."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-7260.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2506743/video/73327477",
@@ -556,18 +857,37 @@
 			"activities" :[
 			    {
 			        "country": "India",
-			        "text"   : "Ratified in October 2012, the Nagoya Protocol will be implemented through domestic legislation on ABS (Biological Diversity Act) adopted in 2002."
+			        "title_s"   : "Ratified in October 2012, the Nagoya Protocol will be implemented through domestic legislation on ABS (Biological Diversity Act) adopted in 2002."
 			    },
 			    {
 			        "country": "Netherlands",
-			        "text"   : "The Government aims to support a Green Deal to apply the international ABS agreements. Through a pilot project, businesses from the Dutch breeding sector, knowledge institutions and Government will set up cooperation with similar parties from a developing country that could provide genetic resources. By the end of 2014, this should result in an agreement on access to genetic resources and the fair and equitable sharing of benefits arising from the use of relevant genetic material, and could serve as a model for future ABS agreements."
+			        "title_s"   : "The Government aims to support a Green Deal to apply the international ABS agreements. Through a pilot project, businesses from the Dutch breeding sector, knowledge institutions and Government will set up cooperation with similar parties from a developing country that could provide genetic resources. By the end of 2014, this should result in an agreement on access to genetic resources and the fair and equitable sharing of benefits arising from the use of relevant genetic material, and could serve as a model for future ABS agreements."
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T16-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":""
+						},
+						{
+							"lang":"FR",
+							"link":""
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/285",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 17,
 			"title" : {
-				"en" : "NBSAPs"
+				"en" : "NBSAPs adopted as policy instrument"
 			},
 			"goal" : {
 				"en" : "E"
@@ -575,6 +895,7 @@
 			"action" : {
 				"en" : "By 2015 each Party has developed, adopted as a policy instrument, and has commenced implementing an effective, participatory and updated national biodiversity strategy and action plan."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-3923.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87026975",
@@ -590,22 +911,41 @@
 			"activities" :[
 			    {
 			        "country": "Australia",
-			        "text"   : "The National Biodiversity Conservation Strategy 2010-2030 functions as a policy umbrella over other more specific national frameworks, and a guiding policy framework for the diverse Australian, state, territory and local government and private sector approaches to conservation."
+			        "title_s"   : "The National Biodiversity Conservation Strategy 2010-2030 functions as a policy umbrella over other more specific national frameworks, and a guiding policy framework for the diverse Australian, state, territory and local government and private sector approaches to conservation."
 			    },
 			    {
 			        "country": "France",
-			        "text"   : "The National Biodiversity Strategy 2011-2020 is prioritized in all public policy and at every territorial scale (e.g. water, soil, sea, climate, energy, agriculture, forestry, spatial planning, infrastructure, industry, trade, education, research, health)."
+			        "title_s"   : "The National Biodiversity Strategy 2011-2020 is prioritized in all public policy and at every territorial scale (e.g. water, soil, sea, climate, energy, agriculture, forestry, spatial planning, infrastructure, industry, trade, education, research, health)."
 			    },
 			    {
 			        "country": "Timor-Leste",
-			        "text"   : "The NBSAP 2011-2020 is a guiding policy framework for district and sub-district authorities, and for civil society groups and the private sector."
+			        "title_s"   : "The NBSAP 2011-2020 is a guiding policy framework for district and sub-district authorities, and for civil society groups and the private sector."
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T17-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":""
+						},
+						{
+							"lang":"FR",
+							"link":""
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/286",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 18,
 			"title" : {
-				"en" : "Traditional knowledge"
+				"en" : "Traditional knowledge respected and integrated"
 			},
 			"goal" : {
 				"en" : "E"
@@ -613,6 +953,7 @@
 			"action" : {
 				"en" : "By 2020, the traditional knowledge, innovations and practices of indigenous and local communities relevant for the conservation and sustainable use of biodiversity, and their customary use of biological resources, are respected, subject to national legislation and relevant international obligations, and fully integrated and reflected in the implementation of the Convention with the full and effective participation of indigenous and local communities, at all relevant levels."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-3718.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87028179",
@@ -628,22 +969,41 @@
 			"activities" :[
 			    {
 			        "country": "Malawi",
-			        "text"   : "The Forestry Research Institute is implementing a project on “Useful Plants of Malawi” where Traditional Knowledge is used to identify plants that are useful for nutrition, cosmetics and pharmaceutical use."
+			        "title_s"   : "The Forestry Research Institute is implementing a project on “Useful Plants of Malawi” where Traditional Knowledge is used to identify plants that are useful for nutrition, cosmetics and pharmaceutical use."
 			    },
 			    {
 			        "country": "Malaysia",
-			        "text"   : "A new Strategic Plan of Action to 2020 exists for Sabah state.  The first Plan contributed to implementing the Heart of Borneo Initiative by empowering communities in the management of local natural resources, through the promotion of Indigenous Community and Conserved Areas using the Tagal traditional river management system."
+			        "title_s"   : "A new Strategic Plan of Action to 2020 exists for Sabah state.  The first Plan contributed to implementing the Heart of Borneo Initiative by empowering communities in the management of local natural resources, through the promotion of Indigenous Community and Conserved Areas using the Tagal traditional river management system."
 			    },
 			    {
 			        "country": "New Zealand",
-			        "text"   : "National legislation is in place that recognises tangata whenua (indigenous communities) and their Mātauranga Māori (Traditional Knowledge that underpins Māori culture and identity)."
+			        "title_s"   : "National legislation is in place that recognises tangata whenua (indigenous communities) and their Mātauranga Māori (Traditional Knowledge that underpins Māori culture and identity)."
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T18-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":""
+						},
+						{
+							"lang":"FR",
+							"link":""
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/287",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 19,
 			"title" : {
-				"en" : "Biodiversity knowledge"
+				"en" : "Knowledge improved, shared and applied"
 			},
 			"goal" : {
 				"en" : "E"
@@ -651,6 +1011,7 @@
 			"action" : {
 				"en" : "By 2020, knowledge, the science base and technologies relating to biodiversity, its values, functioning, status and trends, and the consequences of its loss, are improved, widely shared and transferred, and applied."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-3949.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87028180",
@@ -666,30 +1027,49 @@
 			"activities" :[
 			    {
 			        "country": "Belgium",
-			        "text"   : "The Belgium Ecosystem Services (BEES) network, a community of practice aiming to connect different societal actors involved in ecosystem services research, practice and policy-making was launched in April 2012."
+			        "title_s"   : "The Belgium Ecosystem Services (BEES) network, a community of practice aiming to connect different societal actors involved in ecosystem services research, practice and policy-making was launched in April 2012."
 			    },
 			    {
 			        "country": "Colombia",
-			        "text"   : "A national system for deforestation and carbon monitoring has been developed."
+			        "title_s"   : "A national system for deforestation and carbon monitoring has been developed."
 			    },
 			    {
 			        "country": "Germany",
-			        "text"   : "In 2012, the German Research Association (DFG) decided to support a research centre for integrative biodiversity research (€33 million over a five-year period, including eight new professorships)."
+			        "title_s"   : "In 2012, the German Research Association (DFG) decided to support a research centre for integrative biodiversity research (€33 million over a five-year period, including eight new professorships)."
 			    },
 			    {
 			        "country": "Mongolia",
-			        "text"   : "The National University of Mongolia has developed a curriculum on the assessment and monitoring of biodiversity for Ph.D. students."
+			        "title_s"   : "The National University of Mongolia has developed a curriculum on the assessment and monitoring of biodiversity for Ph.D. students."
 			    },
 			    {
 			        "country": "Rwanda",
-			        "text"   : "A Centre of Excellence on Biodiversity has been established (University of Rwanda/Ministry of Education)."
+			        "title_s"   : "A Centre of Excellence on Biodiversity has been established (University of Rwanda/Ministry of Education)."
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T19-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":""
+						},
+						{
+							"lang":"FR",
+							"link":""
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/288",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		},
 		{
 			"id": 20,
 			"title" : {
-				"en" : "Resource mobilization"
+				"en" : "Financial resources from all sources increased"
 			},
 			"goal" : {
 				"en" : "E"
@@ -697,6 +1077,7 @@
 			"action" : {
 				"en" : "By 2020, at the latest, the mobilization of financial resources for effectively implementing the Strategic Plan for Biodiversity 2011-2020 from all sources, and in accordance with the consolidated and agreed process in the Strategy for Resource Mobilization, should increase substantially from the current levels. This target will be subject to changes contingent to resource needs assessments to be developed and reported by Parties."
 			},
+		  "banner":"https://www.cbd.int/images/banners/banner-0-3051.jpg",
 			"videos" : [
 				{
 					"link"      : "https://vimeo.com/album/2738938/video/87020095",
@@ -712,17 +1093,36 @@
 			"activities" :[
 			    {
 			        "country": "Denmark",
-			        "text"   : "Resource mobilization figures for nature preservation indicate an annual contribution of DKK 2.3 billion, equivalent to USD 390 million/year (average for 2006-2010), corresponding to approximately DKK 410 per person/year, or 0.13% of the GNP."
+			        "title_s"   : "Resource mobilization figures for nature preservation indicate an annual contribution of DKK 2.3 billion, equivalent to USD 390 million/year (average for 2006-2010), corresponding to approximately DKK 410 per person/year, or 0.13% of the GNP."
 			    },
 			    {
 			        "country": "Ecuador",
-			        "text"   : "The country is participating in the Biodiversity Finance Initiative (BIOFIN) launched by UNDP in 2012, to determine the costs of NBSAP implementation define financial gaps and design a strategy for mobilizing financial resources."
+			        "title_s"   : "The country is participating in the Biodiversity Finance Initiative (BIOFIN) launched by UNDP in 2012, to determine the costs of NBSAP implementation define financial gaps and design a strategy for mobilizing financial resources."
 			    },
 			    {
 			        "country": "Poland",
-			        "text"   : "An innovative objective of the draft programme of the National Fund for Environmental Protection and Water Management 2014-2020 is to pilot a financial support mechanism for biodiversity-friendly enterprises."
+			        "title_s"   : "An innovative objective of the draft programme of the National Fund for Environmental Protection and Water Management 2014-2020 is to pilot a financial support mechanism for biodiversity-friendly enterprises."
 			    }
-			]
+			],
+			"links":{
+						"techGuides":[
+						{
+							"lang":"EN",
+							"link":"https://www.cbd.int/doc/strategic-plan/targets/T20-quick-guide-en.pdf"
+						},
+						{
+							"lang":"ES",
+							"link":""
+						},
+						{
+							"lang":"FR",
+							"link":""
+						}
+					],
+					"nbsapForum":"http://nbsapforum.net/#categories/289",
+					"programs":[],
+					"undb":"https://www.cbd.int/undb-new/"
+			}
 		}
 	]
 }

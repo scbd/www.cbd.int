@@ -1,4 +1,4 @@
-define(['app', 'lodash', 'data/aichi-targets/targets', 'data/aichi-targets/goals', 'directives/aichi-targets/fisheye', 'directives/aichi-targets/videos', 'directives/aichi-targets/progress-pie','directives/aichi-targets/national-targets-map'], function(app, _, targetsData, goalsData) { 'use strict';
+define(['app', 'lodash', 'data/aichi-targets/targets', 'data/aichi-targets/goals', 'directives/aichi-targets/fisheye', 'directives/aichi-targets/videos', 'directives/aichi-targets/legend42','directives/aichi-targets/box-list'], function(app, _, targetsData, goalsData) { 'use strict';
 
 	return ['$location', '$routeParams', function( $location, $routeParams) {
 
@@ -9,9 +9,10 @@ define(['app', 'lodash', 'data/aichi-targets/targets', 'data/aichi-targets/goals
 		if(!_.inRange(targetId,1, 21))
 			$location.path('/404');
 
+		_ctrl.searchRes = '';
 		_ctrl.target = _.findWhere(targetsData.targets, {'id' : targetId});
 		_ctrl.goal = _.findWhere(goalsData.goals, {'goal': _ctrl.target.goal.en});
-
+		// _ctrl.lh = '';
 		getTargetActivity(targetId);
 
 

@@ -1,28 +1,42 @@
-define(['app', 'lodash', 'text!./national-targets-map.html',
+define(['app', 'lodash',
+'text!./national-targets-map.html',
+'text!./target.html',
+'text!./target-row.html',
 'ammap',
 'shim!directives/reporting-display/worldEUHigh[ammap]',
 'shim!ammap/themes/light[ammap]',
 'providers/locale'
-], function(app,_,template) { 'use strict';
+], function(app,_,template,targetTemplate,row) { 'use strict';
 
     //============================================================
     //
     //============================================================
-    app.directive('nationalTargetsMap',['$http','$q','locale',  function($http,$q,locale) {
+    app.directive('nationalTargetsMap',['$http','$q','locale','$interpolate','$timeout',  function($http,$q,locale,$interpolate,$timeout) {
         return {
             restrict: 'E',
             require:'nationalTargetsMap',
             template : template,
             scope: {
                 aichiTarget: '=aichiTarget',
+                legendHide:'&',
+                itemColor: '=',
+                searchTarget:'=',
+                showMap:'='
             },
             link: function ($scope, $elem, $attrs,selfCtrl) {
+              $scope.$watch('itemColor',function(){
+                if($scope.itemColor && $scope.itemColor.color){
+
+                  $scope.legendHide($scope.itemColor);
+                }
+              },true);
+
               $scope.leggends = {
                 aichiTarget: [{
                   id: 0,
                   title: 'No Data',
                   visible: true,
-                  color: '#dddddd'
+                  color: '#aaaaaa'
                 }, {
                   id: 1,
                   title: 'Moving Away',
@@ -58,8 +72,10 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                 //
                 //============================================================
                 function init() {
+                    $scope.showMap = true;
+                    $scope.selectedCountry={};
 
-                    $q.all([loadCountries(), query()])
+                    $q.all([loadCountries(), query(),queryTargets()])
                       .then(function(){
                         groupByCountry();
                         initMap();
@@ -77,10 +93,14 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                   $scope.mapData = {
                     "type": "map",
                     "theme": "light",
+                    "zoomDuration":0.1,
                     "responsive": {
                       "enabled": true
                     },
-
+                    "balloon": {
+                      "adjustBorderColor": true,
+                      "maxWidth":500
+                    },
                     "dataProvider": {
                       "map": "worldEUHigh",
                       "getAreasFromMap": true,
@@ -91,18 +111,18 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                       }],
                     },
                     "areasSettings": {
+
                       "autoZoom": true,
                       "selectedColor": "#4eba7d",
                       "rollOverColor": "#423f3f",
                       "selectable": true,
-                      "color": "#007c35",
+                      "color": "#aaaaaa",
                     },
-                    "smallMap": {},
-                    "export": {
-                      "libs": { "autoLoad": false},
-                      "enabled": true,
-                      "position": "bottom-right"
-                    },
+                    "zoomControl": {
+                		"zoomControlEnabled": true,
+                    "right": 10
+                	  }
+
                   }; //
                 } //$scope.initMap
                 //=======================================================================
@@ -170,22 +190,48 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                         'rows': 1000000,
                     };
 
-                    return $http.get('/api/v2013/index/select', {
+                    return $http.get('https://api.cbddev.xyz/api/v2013/index/select', {
                         params: queryParameters,
-                        cache: true
+                        cache:true
                     }).success(function(data) {
                         $scope.count = data.response.numFound;
                         $scope.documents = data.response.docs;
                     });
                 } // query
 
+                //=======================================================================
+                //
+                //=======================================================================
+                function queryTargets() {
+                    var targetText = '';
+                    if ($scope.aichiTarget < 10)
+                        targetText = 'AICHI-TARGET-0' + $scope.aichiTarget;
+                    else
+                        targetText = 'AICHI-TARGET-' + $scope.aichiTarget;
 
+                    var queryParameters = {
+                        'q': 'schema_s:nationalTarget AND (aichiTargets_ss:"' + targetText+ '")',// OR otherAichiTargets_ss:'+ targetText+ '")',
+                        'sort': 'createdDate_dt desc, title_t asc',
+                        'fl':'isAichiTarget_b,government_s,isAichiTarget_b,title_s,description_s',
+                        'wt': 'json',
+                        'start': 0,
+                        'rows': 1000000,
+                    };
+
+                    return $http.get('https://api.cbddev.xyz/api/v2013/index/select', {
+                        params: queryParameters,
+                        cache:true
+                    }).success(function(data) {
+                        $scope.tcount = data.response.numFound;
+                        $scope.tdocuments = data.response.docs;
+                    });
+                } // query
                 //=======================================================================
                 //
                 //=======================================================================
                 function loadCountries() {
 
-                    return $http.get('/api/v2015/countries', {
+                    return $http.get('https://api.cbddev.xyz/api/v2015/countries', {
                         cache: true,
                     }).then(function(res) {
                         _.each(res.data, function(c) {
@@ -201,12 +247,15 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                 function aichiMap(country) {
 
 
-                  if(_.isEmpty(country.docs)) return;
-
-                  changeAreaColor(country.code, progressToColor(progressToNumber(country.docs[0].progress_EN_t)));
-                  buildProgressBaloon(country, progressToNumber(country.docs[0].progress_EN_t), country.docs[0].nationalTarget_EN_t);
-                  legendTitle(country);
-                  restLegend($scope.leggends.aichiTarget);
+                  if(!_.isEmpty(country.docs)){
+                      changeAreaColor(country.code, progressToColor(progressToNumber(country.docs[0].progress_EN_t)));
+                  }
+                  if(!_.isEmpty(country.targets)){
+                      buildTargetBaloon(country);
+                  }
+                  // buildProgressBaloon(country, progressToNumber(country.docs[0].progress_EN_t), country.docs[0].nationalTarget_EN_t);
+                  // legendTitle(country);
+                  // restLegend($scope.leggends.aichiTarget);
                 } // aichiMap
                 //=======================================================================
                 function legendTitle(country) {
@@ -237,6 +286,15 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                           return progressToNum(b.progress_EN_t) - progressToNum(a.progress_EN_t);
                       }); // sort sort by progress
                   });
+
+                  _.each($scope.tdocuments,function(doc){
+                      country=null;
+                      country = _.find($scope.countries,{code:doc.government_s.toUpperCase()});
+                      if(!country.targets)
+                        country.targets = []; // initializes the countries docs
+                      country.targets.push(doc);
+                  });
+
                 } //r
                 //=======================================================================
                 //
@@ -262,7 +320,7 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                 // //=======================================================================
                 function hideAreas(color) {
                   // Walkthrough areas
-                  if (!color) color = '#dddddd';
+                  if (!color) color = '#aaaaaa';
                   _.each($scope.map.dataProvider.areas, function(area) {
                     if (area.id !== 'divider1') {
                       area.colorReal = area.originalColor = color;
@@ -275,62 +333,19 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                 //
                 //=======================================================================
                 $scope.legendHide = function(legendItem) {
-                  var area2 = {};
 
 
                   _.each($scope.map.dataProvider.areas, function(area) {
+                      if (legendItem.color === area.originalColor && area.mouseEnabled === true) {
+                        area.colorReal = '#a3ccff';
+                        area.mouseEnabled = false;
 
-                    if (area.id.toUpperCase() === 'DK') {
-                      area2 = getMapObject('gl');
-                      //area2.originalColor = area.originalColor;
-                      area2.colorReal = area.colorReal;
-                      area2.mouseEnabled = area.mouseEnabled;
-
-
-                      if (area.id.toUpperCase() === 'FO') {
-                        area2 = getMapObject('gl');
-                        //area2.originalColor = area.originalColor;
-                        area2.colorReal = area.colorReal;
-                        area2.mouseEnabled = area.mouseEnabled;
-
+                      } else if (legendItem.color === area.originalColor && area.mouseEnabled === false) {
+                        area.colorReal = legendItem.color;
+                        area.mouseEnabled = true;
                       }
-                    }
-                    if (area.id.toUpperCase() === 'NO') {
-                      area2 = getMapObject('sj');
-                      //area2.originalColor = area.originalColor;
-                      area2.colorReal = area.colorReal;
-                      area2.mouseEnabled = area.mouseEnabled;
-                    }
-                    if (area.id.toUpperCase() === 'MA') {
-                      area2 = getMapObject('eh');
-                      //area2.originalColor = area.originalColor;
-                      area2.colorReal = area.colorReal;
-                      area2.mouseEnabled = area.mouseEnabled;
-                    }
-                    if (area.id.toUpperCase() === 'CN') {
-                      area2 = getMapObject('tw');
-                      //area2.originalColor = area.originalColor;
-                      area2.colorReal = area.colorReal;
-                      area2.mouseEnabled = area.mouseEnabled;
-                    }
-
-
-
-
-                    if (legendItem.color === area.originalColor && area.mouseEnabled === true) {
-                      area.colorReal = '#FFFFFF';
-                      area.mouseEnabled = false;
-
-                    } else if (legendItem.color === area.originalColor && area.mouseEnabled === false) {
-                      area.colorReal = legendItem.color;
-                      area.mouseEnabled = true;
-
-                    }
                   });
-                  if (legendItem.visible)
-                    legendItem.visible = false;
-                  else
-                    legendItem.visible = true;
+
                   $scope.map.validateData();
                 }; //$scope.legendHide
 
@@ -352,6 +367,13 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                   $scope.map = AmCharts.makeChart("mapdiv", $scope.mapData); //jshint ignore:line
                   $scope.map.write("mapdiv");
                   $scope.map.validateData();
+                  $scope.map.addListener("clickMapObject", function(event) {
+
+                     $scope.selectedCountry=_.find($scope.countries,{'code':event.mapObject.id});
+
+                     $timeout(function(){$scope.showMap= false;});
+
+                  });
                 } // writeMap
 
                 //=======================================================================
@@ -417,6 +439,7 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                       return 'On track to exceed ' + aichiTargetReadable(target) + ' (we expect to achieve the ' + aichiTargetReadable(target) + ' before its deadline).';
                   }
                 } //getProgressText(progress, target)
+
                 //=======================================================================
                 //
                 //=======================================================================
@@ -431,35 +454,33 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                 // //
                 // //=======================================================================
                 function changeAreaColor(id, color, area) {
-                  if (!area)
-                    area = getMapObject(id.toUpperCase());
+                    if (!area)
+                      area = getMapObject(id.toUpperCase());
 
-                  area.colorReal = area.originalColor = color;
-                  if (id.toUpperCase() === 'DK') {
-                    var areaA = getMapObject('GL');
-                    areaA.colorReal = area.colorReal;
-                    areaA.originalColor = area.originalColor;
-                    var areaB = getMapObject('FO');
-                    areaB.colorReal = area.colorReal;
-                    areaB.originalColor = area.originalColor;
-                  }
-                  if (area.id.toUpperCase() === 'NO') {
-                    var areaC = getMapObject('SJ');
-                    areaC.colorReal = area.colorReal;
-                    areaC.originalColor = area.originalColor;
-                  }
-                  if (area.id.toUpperCase() === 'MA') {
-                    var areaD = getMapObject('EH');
-                    areaD.colorReal = area.colorReal;
-                    areaD.originalColor= area.originalColor;
-                  }
-                  if(area.id.toUpperCase()==='CN'){
-                    var areaE = getMapObject('TW');
-                    areaE.colorReal = area.colorReal;
-                    areaE.originalColor = area.originalColor;
-                  }
-
-
+                    area.colorReal = area.originalColor = color;
+                    if (id.toUpperCase() === 'DK') {
+                      var areaA = getMapObject('GL');
+                      areaA.colorReal = area.colorReal;
+                      areaA.originalColor = area.originalColor;
+                      var areaB = getMapObject('FO');
+                      areaB.colorReal = area.colorReal;
+                      areaB.originalColor = area.originalColor;
+                    }
+                    if (area.id.toUpperCase() === 'NO') {
+                      var areaC = getMapObject('SJ');
+                      areaC.colorReal = area.colorReal;
+                      areaC.originalColor = area.originalColor;
+                    }
+                    if (area.id.toUpperCase() === 'MA') {
+                      var areaD = getMapObject('EH');
+                      areaD.colorReal = area.colorReal;
+                      areaD.originalColor= area.originalColor;
+                    }
+                    if(area.id.toUpperCase()==='CN'){
+                      var areaE = getMapObject('TW');
+                      areaE.colorReal = area.colorReal;
+                      areaE.originalColor = area.originalColor;
+                    }
                 } //getMapObject
 
 
@@ -481,18 +502,44 @@ define(['app', 'lodash', 'text!./national-targets-map.html',
                       return '/app/images/ratings/884D8D8C-F2AE-4AAC-82E3-5B73CE627D45.png';
                   }
                 } //getProgressIcon(progress)
+
+                //=======================================================================
+                //
+                //=======================================================================
+                function buildTargetBaloon(country) {
+
+                    var area = getMapObject(country.code);
+                    $scope.country=country;
+                    $scope.rows = '';
+
+                    if(country.targets.length<=1) $scope.hideS='hide';
+
+                    _.each(country.targets,function(t){
+                          if(t.isAichiTarget_b) t.hideTarget='hide';
+                          else t.hideIcon='hide';
+                          t.aichiTarget=$scope.aichiTarget;
+
+                          $scope.rows = $scope.rows + $interpolate(row)(t);
+
+                    });
+                    area.balloonText = $interpolate(targetTemplate)($scope);
+                    $scope.rows = '';
+                    delete($scope.hideS);
+
+                } // buildTargetBaloon
+
                 //=======================================================================
                 //
                 //=======================================================================
                 function buildProgressBaloon(country, progress, target) {
 
-                  var area = getMapObject(country.code);
-                  area.balloonText = "<div class='panel panel-default' ><div class='panel-heading' style='font-weight:bold; font-size:medium; white-space: nowrap;color:#009B48;'><i class='flag-icon flag-icon-" + country.code.toLowerCase() + " ng-if='country.isEUR'></i>&nbsp;";
-                  var euImg = "<img src='/app/images/flags/Flag_of_Europe.svg' style='width:25px;hight:21px;' ng-if='country.isEUR'></img>&nbsp;";
-                  var balloonText2 = area.title + "</div> <div class='panel-body' style='text-align:left;'><img style='float:right;width:60px;hight:60px;' src='" + getProgressIcon(progress) + "' >" + getProgressText(progress, target) + "</div> </div>";
-                  if (country.isEUR)
-                    area.balloonText += euImg;
-                  area.balloonText += balloonText2;
+                    var area = getMapObject(country.code);
+                    area.balloonText = "<div class='panel panel-default' ><div class='panel-heading' style='font-weight:bold; font-size:medium; white-space: nowrap;color:#009B48;'><i class='flag-icon flag-icon-" + country.code.toLowerCase() + " ng-if='country.isEUR'></i>&nbsp;";
+                    var euImg = "<img src='/app/images/flags/Flag_of_Europe.svg' style='width:25px;hight:21px;' ng-if='country.isEUR'></img>&nbsp;";
+                    var balloonText2 = area.title + "</div> <div class='panel-body' style='text-align:left;'><img style='float:right;width:60px;hight:60px;' src='" + getProgressIcon(progress) + "' >" + getProgressText(progress, target) + "</div> </div>";
+                    if (country.isEUR)
+                      area.balloonText += euImg;
+                    area.balloonText += balloonText2;
                 } //buildProgressBaloon
 
                 //============================================================
