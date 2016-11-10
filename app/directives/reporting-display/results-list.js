@@ -1,7 +1,7 @@
 define(['text!./results-list.html', 'app', 'underscore'], function(template, app, _) {
   'use strict';
 
-  app.directive('resultsList', [function() {
+  app.directive('resultsList', ['$location',function($location) {
     return {
       restrict: 'E',
       template: template,
@@ -35,6 +35,9 @@ define(['text!./results-list.html', 'app', 'underscore'], function(template, app
           //
           //=======================================================================
           function init() {
+            if(!$location.search().filter)
+                $location.search('filter','all');
+                
             $scope.numCountries = _.size($scope.items);
             if (!$scope.totalRecords) $scope.totalRecords = 0;
             $scope.numRecords = _.clone($scope.totalRecords);
