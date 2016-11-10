@@ -1,23 +1,28 @@
 /* jshint sub:true */
 
-define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
+define(['app', 'angular', 'jquery','ngCookies'], function (app, ng, $) { 'use strict';
 
-    var accountsBaseUrl = (function(){
-
+	app.factory('environment', ["$cookies", function($cookies) {
         var domain = window.location.hostname.replace(/[^\.]+\./, '');
+        var env = JSON.parse(atob($cookies.get('environment')));
 
         if(domain=='localhost')
-            domain = 'staging.cbd.int';
+            domain = env.base;
 
-        return 'https://accounts.'+domain;
+        return {
+            accountsUrl:'https://accounts.'+domain,
+            accountsBaseUrl:domain,
+            apiUrl:env.api
+        };
 
-    })();
 
-	app.factory('apiToken', ["$q", "$rootScope", "$window", "$document", "$timeout", function($q, $rootScope, $window, $document, $timeout) {
+  }]);
+
+	app.factory('apiToken', ["$q", "$rootScope", "$window", "$document", "$timeout","$cookies","environment", function($q, $rootScope, $window, $document, $timeout,$cookies,env) {
 
 		var authenticationFrameQ = $q(function(resolve, reject){
 
-			var frame = $('<iframe src="'+accountsBaseUrl+'/app/authorize.html'+'" style="display:none"></iframe>');
+			var frame = $('<iframe src="'+env.accountsUrl+'/app/authorize.html'+'" style="display:none"></iframe>');
 
 			$("body").prepend(frame);
 
@@ -60,7 +65,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 				{
 					$timeout.cancel(unauthorizedTimeout);
 
-					if(event.origin!=accountsBaseUrl)
+					if(event.origin!=env.accountsUrl)
 						return;
 
 					var message = JSON.parse(event.data);
@@ -90,7 +95,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 
 				});
 
-				authenticationFrame.contentWindow.postMessage(JSON.stringify({ type : 'getAuthenticationToken' }), accountsBaseUrl);
+				authenticationFrame.contentWindow.postMessage(JSON.stringify({ type : 'getAuthenticationToken' }), env.accountsUrl);
 
 				return pToken;
 
@@ -123,7 +128,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 						authenticationEmail : email
 					};
 
-					authenticationFrame.contentWindow.postMessage(JSON.stringify(msg), accountsBaseUrl);
+					authenticationFrame.contentWindow.postMessage(JSON.stringify(msg), env.accountsBaseUrl);
 				}
 
 				if(email) {
@@ -139,7 +144,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 	}]);
 
 
-	app.factory('authentication', ["$http", "$rootScope", "$q", "apiToken", function($http, $rootScope, $q, apiToken) {
+	app.factory('authentication', ["$http", "$rootScope", "$q", "apiToken","environment", function($http, $rootScope, $q, apiToken,env) {
 
 		var currentUser = null;
 
@@ -156,12 +161,10 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 	    //
 	    //============================================================
 		function getUser() {
-
 			if(currentUser)
 				return $q.when(currentUser);
 
 			return $q.when(apiToken.get()).then(function(token) {
-
 				if(!token) {
 					return anonymous();
 				}
@@ -263,7 +266,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 			signIn   : signIn,
 			signOut  : signOut,
 			user     : LEGACY_user,
-            accountsBaseUrl : function() { return accountsBaseUrl; }
+            accountsBaseUrl : function() { return env.accountsBaseUrl; }
 		};
 
 	}]);
