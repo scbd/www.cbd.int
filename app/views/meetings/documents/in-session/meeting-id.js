@@ -1,4 +1,4 @@
-define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meetings', 'directives/meetings/documents/in-session', 'bootstrap-notify', 'authentication'], function(_, nprogress, ng, $, meetings) {
+define(['underscore', 'angular', 'jquery', 'data/in-session/meetings', 'directives/meetings/documents/in-session', 'bootstrap-notify', 'authentication'], function(_, ng, $, meetings) {
 	return ["$scope", "$route", "$http", '$q', '$timeout', '$location', 'authentication', function ($scope, $route, $http, $q, $timeout, $location, authentication) {
 
 		var refreshTimeout = 2*60*1000; // 2 minutes
@@ -63,9 +63,6 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meeting
 			// 	return s.status==="RESTRICTED";
 			// });
 			//
-			// if(lockedSections.length)
-			// 	nprogress.start();
-			//
 			// var queries = _(lockedSections).map(function(s){
 			//
 			// 	return loadDocuments(s).then(function(d){
@@ -73,10 +70,6 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meeting
 			// 		if(d=="RESTRICTED")
 			// 			s.error =  "INVALID_BADGE_ID";
 			// 	});
-			// });
-			//
-			// $q.all(queries).finally(function() {
-			// 	nprogress.done();
 			// });
 		};
 
@@ -97,8 +90,6 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meeting
 		//
 		//=============================================
 		function load() {
-
-			nprogress.start();
 
 			var query = {
 				q : {
@@ -131,9 +122,6 @@ define(['underscore', 'nprogress', 'angular', 'jquery', 'data/in-session/meeting
 
 				$scope.error = "ERROR:"+(e||'').toString();
 
-			}).finally(function() {
-
-				nprogress.done();
 			});
 
 		}

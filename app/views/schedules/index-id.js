@@ -1,4 +1,4 @@
-define(['app', 'underscore', 'moment-timezone', 'nprogress', 'filters/moment', 'filters/html-sanitizer'], function(app, _, moment, nprogress) { "use strict";
+define(['app', 'underscore', 'moment-timezone', 'filters/moment', 'filters/html-sanitizer'], function(app, _, moment) { "use strict";
 
 	return ['$scope', '$http', '$route', '$q', '$interval', function($scope, $http, $route, $q, $interval) {
 
@@ -60,9 +60,6 @@ define(['app', 'underscore', 'moment-timezone', 'nprogress', 'filters/moment', '
 
                     _ctrl.now = moment(now).tz(_streamData.eventGroup.timezone);
                 });
-
-            }).finally(function(){
-                nprogress.done();
             });
 
             //========================================

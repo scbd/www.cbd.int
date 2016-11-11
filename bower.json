@@ -15,7 +15,6 @@
     "font-awesome": "4.6.3",
     "angular-flex": "git://github.com/scbd/angular-flex.git#1.0.1",
     "ng-dialog": "0.6.1",
-    "nprogress": "0.2.0",
     "moment-timezone": "0.5.4",
     "lodash": "3.10.1",
     "magnific-popup": "1.1.0",

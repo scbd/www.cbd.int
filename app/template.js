@@ -1,4 +1,4 @@
-define(['app', 'nprogress', 'bootstrap', 'authentication', ], function(app, nprogress) { 'use strict';
+define(['app', 'bootstrap', 'authentication', ], function(app) { 'use strict';
 
   app.controller('TemplateController', ['$scope', '$window', '$browser', '$document', '$location', 'authentication', '$q',
 	function($scope, $window, $browser, $document, $location, authentication, $q) {
@@ -7,18 +7,7 @@ define(['app', 'nprogress', 'bootstrap', 'authentication', ], function(app, npro
             $scope.user = u;
         });
 
-        $scope.$on("$routeChangeStart", function(e,r){
-
-            if(!r.$$route.progress || r.$$route.progress.start!==false)
-                nprogress.start();
-        });
-
-        $scope.$on("$routeChangeSuccess", function(e,r){
-            if(!r.$$route.progress || r.$$route.progress.stop!==false)
-                nprogress.done();
-        });
-
-        $scope.$on("signOut", function(e,r){
+        $scope.$on("signOut", function(){
             $window.location.href = '/';
         });
 
