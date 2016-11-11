@@ -17,7 +17,6 @@ require.config({
         'bootstrap'       : 'libs/bootstrap/dist/js/bootstrap.min',
         'lodash'          : 'libs/lodash/lodash.min',
         'bootstrap-notify': 'libs/remarkable-bootstrap-notify/bootstrap-notify.min',
-        'nprogress'       : 'libs/nprogress/nprogress',
         'moment'          : 'libs/moment/min/moment.min',
         'moment-timezone' : 'libs/moment-timezone/builds/moment-timezone-with-data.min',
         'rangy'           : 'libs/rangy-release/rangy-core.min',
@@ -70,7 +69,6 @@ define('dropbox-dropins', function(){
 });
 
 // BOOT
-require(['nprogress'], function(p) { p.start(); });
 require(['angular', 'app', 'bootstrap', 'routes', 'template'], function(ng, app) {
 
     ng.element(document).ready(function(){
