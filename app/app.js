@@ -1,10 +1,6 @@
 define(['angular', 'ngSanitize'], function(angular) { 'use strict';
 
-    var deps = ['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize'];
-
-    angular.defineModules(deps);
-
-    var app = angular.module('app', deps);
+    var app = angular.module('app', angular.defineModules(['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize']));
 
     app.config(['$httpProvider', function($httpProvider) {
 
