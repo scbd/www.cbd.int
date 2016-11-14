@@ -1,12 +1,9 @@
-<div class="modal fade" data-backdrop="static">
-	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" ng-click="close(success)" aria-hidden="true">×</button>
+				<button type="button" class="close" ng-click="close(success && 'clear')" aria-hidden="true">×</button>
 				<h4 class="modal-title">
 					<i class="fa fa-arrow-circle-down"></i>
 					Download copies - {{documents.length}} document(s)
-					<i class="fa fa-cog fa-spin" ng-show="loading"></i>
 				</h4>
 			</div>
 			<div class="modal-body">
@@ -17,11 +14,18 @@
 						<label for="preferedLanguage" class="col-sm-4 control-label">Prefered language(s)</label>
 						<div class="col-sm-6">
 							<div class="row">
-								<div ng-repeat="locale in documentLocales" class="col-sm-6 col-xs-6">
-									<a class="btn btn-link" ng-click="locales[locale] = !locales[locale]" style="color:black;text-decoration:none;text-align:left" ng-class="{ opacity55: !locales[locale] }" >
-										<i class="fa fa-square-o"       ng-hide="locales[locale]" style="font-size:20px;width:20px"></i>
-										<i class="fa fa-check-square-o" ng-show="locales[locale]" style="font-size:20px;width:20px"></i>
-										{{allLanguages[locale]||locale}}
+								<div ng-repeat="locale in locales" class="col-sm-6 col-xs-6">
+									<a class="btn btn-link" ng-click="selectedLocales[locale] = !selectedLocales[locale]" style="color:black;text-decoration:none;text-align:left" ng-style="{ opacity: (!selectedLocales[locale] ? 0.65 : 1) }" >
+                                        <checkbox ng-model="selectedLocales[locale]" style="font-size:20px"></checkbox>
+                                        <span ng-switch="locale">
+                                            <span ng-switch-when="ar">العربية</span>
+                                            <span ng-switch-when="en">English</span>
+                                            <span ng-switch-when="es">Español</span>
+                                            <span ng-switch-when="fr">Français</span>
+                                            <span ng-switch-when="ru">Русский</span>
+                                            <span ng-switch-when="zh">中文</span>
+                                            <span ng-switch-default>{{locale|uppercase}}</span>
+                                        </span>
 									</a>
 								</div>
 							</div>
@@ -33,11 +37,23 @@
 						<label for="format" class="col-sm-4 control-label">Prefered format(s)</label>
 						<div class="col-sm-6">
 							<div class="row">
-								<div ng-repeat="format in documentFormats" class="col-sm-6 col-xs-6">
-									<a class="btn btn-link" ng-click="formats[format] = !formats[format]" style="color:black;text-decoration:none;text-align:left" ng-class="{ opacity55: !formats[format] }" >
-										<i class="fa fa-square-o"       ng-hide="formats[format]" style="font-size:20px;width:20px"></i>
-										<i class="fa fa-check-square-o" ng-show="formats[format]" style="font-size:20px;width:20px"></i>
-										{{allFormats[format]||format}}
+								<div ng-repeat="format in formats" class="col-sm-12 col-xs-12">
+									<a class="btn btn-link" ng-click="selectedFormats[format] = !selectedFormats[format]" style="color:black;text-decoration:none;text-align:left" ng-style="{ opacity: (!selectedFormats[format] ? 0.65 : 1) }" >
+                                        <checkbox ng-model="selectedFormats[format]" style="font-size:20px"></checkbox>
+                                        <span ng-switch="format">
+                                            <span ng-switch-when="application/pdf">
+                                                <i class="fa fa-file-pdf-o" style="color:red"></i> PDF
+                                            </span>
+                                            <span ng-switch-when="application/msword">
+                                                <i class="fa fa-file-word-o"  style="color:blue"></i> Word 2003
+                                            </span>
+                                            <span ng-switch-when="application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                                                <i class="fa fa-file-word-o"  style="color:blue"></i> Word 2007+
+                                            </span>
+                                            <span ng-switch-default>
+                                                <i class="fa fa-file-o"></i> {{format}}
+                                            </span>
+                                        </span>
 									</a>
 								</div>
 							</div>
@@ -70,16 +86,12 @@
 
 			<div class="modal-footer" style="white-space:nowrap">
 
-				<i class="fa fa-cog fa-spin" ng-show="loading" style="margin:5px"></i>
-
-				<button type="button" ng-hide="success"  class="btn btn-default hidden-xs" ng-click="back()"  ng-disabled="loading"><i class="fa fa-arrow-left"></i> Back</button>
+				<button type="button" ng-hide="success"  class="btn btn-default hidden-xs" ng-click="close('checkout')"><i class="fa fa-arrow-left"></i> Back</button>
 
 				<a      target="_self" ng-show="!success" class="btn btn-success" ng-disabled="!downloadLink" ng-click="success='download'" href="{{downloadLink}}"><i class="fa fa-arrow-circle-down"></i> Download</a>
 				<button type="button"  ng-show="!success && canDropbox()" class="btn btn-primary" ng-disabled="!downloadLink" ng-click="sendToDropbox()"><i class="fa fa-dropbox"></i> Dropbox</button>
 
-				<button type="button" class="btn btn-default" ng-click="close(!!success)"><i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
+				<button type="button" class="btn btn-default" ng-click="close(success && 'clear')"><i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
 
 			</div>
 		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div>

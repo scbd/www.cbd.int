@@ -1,13 +1,4 @@
-<div class="modal fade" data-backdrop="static">
-	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" ng-click="close()" aria-hidden="true">×</button>
-				<h4 class="modal-title">Request copies - {{documents().length}} document(s)
-				</h4>
-			</div>
-			<div class="modal-body">
-
 				<style>
 
 				.btn-xxl        { width:     200px; }
@@ -21,6 +12,12 @@
 				}
 				</style>
 
+			<div class="modal-header">
+				<button type="button" class="close" ng-click="close()" aria-hidden="true">×</button>
+				<h4 class="modal-title">Request copies - {{documents.length}} document(s)
+				</h4>
+			</div>
+			<div class="modal-body">
 				<div ng-hide="target">
 					<table style="width:100%">
 						<tr>
@@ -30,8 +27,8 @@
 									<i class="fa fa-arrow-circle-down"></i>
 								</button>
 							</td>
-							<td class="text-center" ng-show="canPrint()" style="width:50%">
-								<button type="button" class="btn btn-primary btn-xxl" ng-click="print()">
+							<td class="text-center" ng-show="canPrint" style="width:50%">
+								<button type="button" class="btn btn-primary btn-xxl" ng-disabled="!printableDocuments.length" ng-click="print()">
 									<span>Print</span><br/><br/>
 									<i class="fa fa-print"></i>
 								</button>
@@ -39,6 +36,7 @@
 						</tr>
 					</table>
 				</div>
+			</div>
 
 			<div class="modal-footer">
 
@@ -46,5 +44,3 @@
 
 			</div>
 		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div>

@@ -1,136 +1,145 @@
-define(['app', 'text!./print-smart-checkout.html', './checkout-dialog', './print-dialog', './download-dialog'], function(app, templateHtml) {
+define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'ngDialog'], function(app, templateHtml, require, _) {
 
-	app.directive('printSmartCheckout', ["$timeout", function($timeout) {
+    var PDF = 'application/pdf';
+
+	app.directive('printSmartCheckout', ['$q', 'ngDialog', function($q, ngDialog) {
 		return {
-			restrict : "AEC",
-			require: '?^printSmart',
+			restrict : "E",
 			replace : true,
-			priority: 1000,
-			scope : {},
 			template : templateHtml,
-			link: function ($scope, element, attrs, psCtrl) {
+			scope : {
+                documents : "&documents"
+            },
+			link: function ($scope) {
 
-				$scope.disabled = !psCtrl;  //optional directive is disabled if no controller
+		        $scope.canPrint = function() { return true; };//psCtrl.canPrint();
+		        $scope.clear    = clear;
+		        $scope.remove   = remove;
+		        $scope.checkout = checkout;
+		        $scope.print    = print;
+		        $scope.download = download;
+		        $scope.printableDocuments = printableDocuments;
 
-				if(!psCtrl)	return;
-
-				///////////////////////////////////////////////
-
-				var popover = element.find('#checkout');
-
-				popover.popover({
-					delay : { show: 500, hide: 250 },
-					trigger : 'manual',
-					placement : function() {
-						return element.css('position') == 'fixed' ? 'bottom' : 'top';
-					}
-				});
-
-				if(element.hasClass('fixed-top-right')) {
-
-					element.removeClass("fixed-top-right");
-
-					var pos = element.position();
-
-					$(window).scroll(function() {
-
-				        var windowpos = $(window).scrollTop();
-
-				        if (windowpos >= pos.top) {
-				            element.addClass("fixed-top-right");
-				        } else {
-				            element.removeClass("fixed-top-right");
-				        }
-
-						if(!windowpos)
-							pos = element.position();
-				    });
+				//==============================================
+				//
+				//
+				//==============================================
+				function documents() {
+                    return $scope.documents();
 				}
 
+				//==============================================
+				//
+				//
+				//==============================================
+				function printableDocuments() {
+                    return _(documents).filter(function(d) {
+                        return d.type=='in-session' && _(d.files||[]).some({ mime: PDF }) ;
+                    }).value();
+                }
 
-				var autoKillHelp = null;
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.$watch( function() { return psCtrl.help(); }, function(visible){
-
-					if(autoKillHelp) {
-						$timeout.cancel(autoKillHelp);
-						autoKillHelp = null;
-					}
-
-
-					if(visible===false) popover.popover('hide');
-					if(visible===true) {
-
-						popover.popover('show');
-
-						autoKillHelp = $timeout(function() {
-							autoKillHelp = null;
-							psCtrl.help(false);
-						}, 3000);
-
-					}
-				});
+				function clear() {
+                    (documents()||[]).forEach(remove);
+				}
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.documents = function() {
-					return psCtrl.documents();
-				};
+				function remove(d) {
+					delete d.selected;
+				}
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.clear = function() {
-					return psCtrl.clear();
-				};
+				function checkout() {
+					openDialog('./checkout-dialog', { resolve : { documents: resolver(documents()) } }).then(function(dialog){
+                        dialog.closePromise.then(onCloseDialog);
+                    });
+				}
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.remove = function(symbol) {
-					return psCtrl.remove(symbol);
-				};
+				function print() {
+					openDialog('./print-dialog', { resolve : { documents: resolver(documents()) } }).then(function(dialog){
+                        dialog.closePromise.then(onCloseDialog);
+                    });
+				}
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.checkout = function() {
-					psCtrl.open('checkout');
-				};
+				function download() {
+					openDialog('./download-dialog', { resolve : { documents: resolver(documents()) } }).then(function(dialog){
+                        dialog.closePromise.then(onCloseDialog);
+                    });
+				}
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.print = function() {
-					psCtrl.open('print');
-				};
-
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.download = function() {
-					psCtrl.open('download');
-				};
-
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.canPrint = function() {
-					return psCtrl.canPrint();
-				};
-			}
+				function onCloseDialog(res) {
+                    if(res.value=='checkout') checkout();
+                    if(res.value=='download') download();
+                    if(res.value=='print')    print();
+                    if(res.value=='clear')    clear();
+                }
+	        }
 		};
+
+        //===========================
+        //
+        //===========================
+        function openDialog(dialog, options) {
+
+            options = options || {};
+
+            return $q(function(resolve, reject) {
+
+                require(['text!'+dialog+'.html', dialog], function(template, controller) {
+
+                    options.plain = true;
+                    options.template = template;
+                    options.controller = controller;
+
+                    if(options.showClose      ===undefined) options.showClose       = false;
+                    if(options.closeByDocument===undefined) options.closeByDocument = false;
+                    if(options.className      ===undefined) options.className       = 'ngdialog-theme-default printsmart';
+
+                    var dialog = ngDialog.open(options);
+
+                    dialog.closePromise.then(function(res){
+
+                        if(res.value=="$escape")      throw res; //cancel
+                        if(res.value=="$document")    throw res; //cancel
+                        if(res.value=="$closeButton") throw res; //cancel
+
+                        return res;
+                    });
+
+                    resolve(dialog);
+
+                }, reject);
+            });
+        }
+
+        //===========================
+        //
+        //===========================
+        function resolver(value) {
+            return function() { return value; };
+        }
+
 	}]);
 });

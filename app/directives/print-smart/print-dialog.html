@@ -1,31 +1,33 @@
-<div class="modal fade" data-backdrop="static">
-	<style> .opacity55 {opacity: 0.55} </style>
-
-	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" ng-click="close(success)" aria-hidden="true">×</button>
+				<button type="button" class="close" ng-click="printCtrl.close(success)" aria-hidden="true">×</button>
 				<h4 class="modal-title">
 					<i class="fa fa-print"></i>
 					Request hard copies - {{documents.length}} document(s)
-					<i class="fa fa-cog fa-spin" ng-show="loading"></i>
+					<i class="fa fa-cog fa-spin" ng-show="printCtrl.loading"></i>
 				</h4>
 			</div>
 			<div class="modal-body">
 
-				<form id="printForm" name="printForm" novalidate class="form-horizontal" ng-submit="print()" ng-hide="success">
+				<form id="printForm" name="printForm" novalidate class="form-horizontal" ng-submit="printCtrl.print()" ng-hide="success">
 
 					<div class="form-group" ng-class="{ 'has-warning' : (printForm.$submitted && printForm.locales.$error.required) }">
 						<label for="preferedLanguage" class="col-sm-4 control-label">Prefered language(s)</label>
 						<div class="col-sm-6">
 							<div class="row">
-								<div ng-repeat="locale in documentLocales" class="col-sm-6 col-xs-6">
-									<a class="btn btn-link" ng-click="locales[locale] = !locales[locale]; focus()" style="color:black;text-decoration:none;text-align:left" ng-class="{ opacity55: !locales[locale] }" >
-										<i class="fa fa-square-o"       ng-hide="locales[locale]" style="font-size:20px;width:20px"></i>
-										<i class="fa fa-check-square-o" ng-show="locales[locale]" style="font-size:20px;width:20px"></i>
-										{{allLanguages[locale]}}
+								<div ng-repeat="locale in printCtrl.locales" class="col-sm-6 col-xs-6">
+									<a class="btn btn-link" ng-click="printCtrl.selectedLocales[locale] = !printCtrl.selectedLocales[locale]" style="color:black;text-decoration:none;text-align:left" ng-style="{ opacity: (!printCtrl.selectedLocales[locale] ? 0.65 : 1) }" >
+                                        <checkbox ng-model="printCtrl.selectedLocales[locale]" style="font-size:20px"></checkbox>
+                                        <span ng-switch="locale">
+                                            <span ng-switch-when="ar">العربية</span>
+                                            <span ng-switch-when="en">English</span>
+                                            <span ng-switch-when="es">Español</span>
+                                            <span ng-switch-when="fr">Français</span>
+                                            <span ng-switch-when="ru">Русский</span>
+                                            <span ng-switch-when="zh">中文</span>
+                                            <span ng-switch-default>{{locale|uppercase}}</span>
+                                        </span>
 									</a>
-                                    <input name="locales" ng-show="false" type="checkbox" ng-required="!hasLocales()" ng-model="locales[locale]">
 								</div>
 							</div>
 
@@ -35,10 +37,10 @@
 
 					</div>
 
-					<div class="form-group" ng-class="{ 'has-warning' : error.error=='INVALID_BADGE_ID' || (printForm.$submitted && (printForm.badgeCode.$error.required || printForm.badgeCode.$error.pattern)) }">
+					<div class="form-group" ng-class="{ 'has-warning' : printCtrl.error.error=='INVALID_BADGE_ID' || (printForm.$submitted && (printForm.badgeCode.$error.required || printForm.badgeCode.$error.pattern)) }">
 						<label for="badgeCode" class="col-sm-4 control-label">Badge number</label>
 						<div class="col-sm-6">
-							<input type="text" required ng-change="clearError()" class="form-control" id="badgeCode" name="badgeCode" placeholder="1234-5678" maxlength="9" ng-model="badgeCode" pattern="[0-9\-]{8,9}">
+							<input type="text" required ng-change="printCtrl.error=null" class="form-control" id="badgeCode" name="badgeCode" placeholder="1234-5678" maxlength="9" ng-model="printCtrl.badgeCode" pattern="[0-9\-]{8,9}">
 							<span class="help-block"ng-show="printForm.$submitted && (printForm.badgeCode.$error.required||printForm.badgeCode.$error.pattern)">Enter badge number to request printed hard copies.</span>
 						</div>
 					</div>
@@ -46,7 +48,7 @@
 
 				</form>
 
-				<div class="alert alert-warning" ng-show="error" ng-switch="error.error">
+				<div class="alert alert-warning" ng-show="printCtrl.error" ng-switch="printCtrl.error.error">
 
 					<span ng-switch-when="INVALID_BADGE_ID">
 						<img style="margin:3px" class="pull-right" src="/app/images/sample-barcode.png">
@@ -75,7 +77,7 @@
 					</span>
 
 					<span ng-switch-default>
-						<b>Sorry!</b> {{error.message||'Unknown error.'}} <br>
+						<b>Sorry!</b> {{printCtrl.error.message||'Unknown error.'}} <br>
 						Please visit the registration desk or document distribution counter for assitance.
 					</span>
 
@@ -90,14 +92,12 @@
 
 			<div class="modal-footer" style="white-space:nowrap">
 
-				<i class="fa fa-cog fa-spin" ng-show="loading" style="margin:5px"></i>
+				<i class="fa fa-cog fa-spin" ng-show="printCtrl.loading" style="margin:5px"></i>
 
-				<button type="button" ng-hide="success"                    class="btn btn-default hidden-xs" ng-click="back()"  ng-disabled="loading">                   <i class="fa fa-arrow-left"></i> Back</button>
-				<button type="button" ng-show="!success && hasPrintShop()" class="btn btn-success" ng-click="printShop()"       ng-disabled="!canPrintShop() || loading"><i class="fa fa-print"></i> <i class="fa fa-print"></i> <i class="fa fa-print"></i> Print Shop</button>
-				<button type="submit" ng-show="!success"                   class="btn btn-primary" form="printForm"             ng-class="{ disabled : !canPrint() }" ng-disabled="loading"><i class="fa fa-print"></i> Print</button>
-				<button type="button"                                      class="btn btn-default" ng-click="close(success)"    ng-disabled="loading">                   <i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
+				<button type="button" ng-hide=" printCtrl.success"                           class="btn btn-default hidden-xs" ng-click="printCtrl.close('checkout')"           ng-disabled="printCtrl.loading">                          <i class="fa fa-arrow-left"></i> Back</button>
+				<button type="button" ng-show="!printCtrl.success && printCtrl.hasPrintShop" class="btn btn-success"           ng-click="printCtrl.printShop()"                 ng-disabled="printCtrl.loading || !printCtrl.canPrint()"> <i class="fa fa-print"></i> <i class="fa fa-print"></i> <i class="fa fa-print"></i> Print Shop</button>
+				<button type="submit" ng-show="!printCtrl.success"   form="printForm"        class="btn btn-primary"           ng-class="{ disabled : !printCtrl.canPrint() }"  ng-disabled="printCtrl.loading">                          <i class="fa fa-print"></i> Print</button>
+				<button type="button"                                                        class="btn btn-default"           ng-click="printCtrl.close(success && 'clear')"   ng-disabled="printCtrl.loading">                          <i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
 
 			</div>
 		</div><!-- /.modal-content -->
-	</div><!-- /.modal-dialog -->
-</div>
