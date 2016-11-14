@@ -1,0 +1,111 @@
+<div>
+    <print-smart-checkout ng-cloak documents="documentsCtrl.documents|filter:{selected:true}:true" class="pull-right"></print-smart-checkout>
+
+    <!-- Sort/Display -->
+    <div ng-cloak class="pull-right" style="margin-right:5px;margin-left:5px;">
+        <span class="hidden-xs hidden-sm">Sort By:</span>
+        <select class="form-control" ng-model="documentsCtrl.sort" style="width:auto;display:inline-block">
+            <option value="agenda">Agenda items</option>
+            <option value="document">Document symbols</option>
+        </select>
+    </div>
+
+    <div class="clearfix visible-sm"></div>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li ng-repeat="type in documentsCtrl.tabs" ng-class="::{ active: $first }" >
+            <a ng-href="#{{type.code}}" role="tab" data-toggle="tab">
+                <span ng-switch="type.code">
+                    <span ng-switch-when="outcome">Outcomes ({{type.documents.length}})</span>
+                    <span ng-switch-when="in-session">In-Session ({{type.documents.length}})</span>
+                    <span ng-switch-when="official">Official Documents ({{type.documents.length}})</span>
+                    <span ng-switch-when="informational">Information Documents ({{type.documents.length}})</span>
+                    <span ng-switch-when="other">Other ({{type.documents.length}})</span>
+                    <span ng-switch-when="notification">Notifications ({{type.notifications.length}})</span>
+                    <span ng-switch-default>type.code|uppercase</span>
+                </span>
+            </a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+
+        <div ng-repeat="type in documentsCtrl.tabs" ng-class="::{ active: $first }" role="tabpanel" class="tab-pane" id="{{type.code}}">
+
+            <!-- Document List view -->
+
+            <table ng-if="documentsCtrl.sort=='document' || !type.agenda.items.length" class="table table-striped table-hover no-border-first-row">
+                <tr ng-repeat="document in type.documents|orderBy:'sortKey'" ng-class="{ info : document.selected }" style="cursor:default">
+                    <td>
+                        <b>{{($index+1)}}.</b>
+                    </td>
+                    <td>
+                        <meeting-document document="document"></meeting-document>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Document Agenda view -->
+
+            <table ng-if="documentsCtrl.sort=='agenda' && type.agenda.items.length" class="table no-border-first-row">
+
+                <tr ng-repeat="item in type.agenda.items|orderBy:'item'">
+                    <td class="hidden-xs" style="width:1px">
+                        <span class="label agenda {{documentsCtrl.agenda.color}}">{{documentsCtrl.agenda.prefix}} {{item.item}}</span>
+                    </td>
+                    <td>
+                        <div>
+                            <div class="pull-right">
+                                <span class="label doc-status {{item.status}}" ng-switch="item.status">
+                                    <span ng-switch-when="pre-session" title="Pre-Session" style="cursor:help">Pre</span>
+                                    <span ng-switch-when="draft">Draft</span>
+                                    <span ng-switch-when="crp">CRP</span>
+                                    <span ng-switch-when="l">L</span>
+                                </span>
+                            </div>
+
+                            <span class="visible-xs-inline label agenda {{documentsCtrl.agenda.color}}">{{documentsCtrl.agenda.prefix}} {{item.item}}</span>
+
+                            <span class="title agenda">
+                                <span class="hidden-xs" >{{item.title}}</span>
+                                <span class="visible-xs">{{item.shortTitle||item.title}}</span>
+                            </span>
+                        </div>
+                        <table class="table table-striped table-hover" style="margin:10px 0px -5px 0px;">
+                            <tr ng-repeat="document in item.documents|filter:{ type: type.code }:true|orderBy:'sortKey'" ng-class="{ info : document.selected }" style="cursor:default">
+                                <td>
+                                    <meeting-document document="document"></meeting-document>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr ng-if="type.agenda.otherDocuments.length">
+                    <td class="hidden-xs" style="width:1px">
+                        <span class="label agenda">Other</span>
+                    </td>
+                    <td>
+                        <div>
+                            <span class="title agenda">
+                                <span class="visible-xs label agenda">Other</span> <i>Document(s) not associated to an agenda item</i>
+                            </span>
+                        </div>
+                        <table class="table table-striped table-hover" style="margin:10px 0px -5px 0px;">
+                            <tr ng-repeat="document in type.agenda.otherDocuments|orderBy:'symbol'" ng-class="{ info : document.selected }" style="cursor:default">
+                                <td>
+                                    <meeting-document document="document"></meeting-document>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+
+            </table>
+
+        </div>
+    </div>
+</div>

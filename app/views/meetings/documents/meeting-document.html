@@ -1,0 +1,56 @@
+<table style="width:100%">
+
+    <tr>
+        <td ng-click="document.selected=!document.selected;">
+            <div><strong>{{::document.symbol}}</strong></div>
+            <div>{{::document.title|lstring}}</div>
+        </td>
+        <td class="languages-bar">
+
+            <div class="hidden-xs" ng-repeat="mime in ::mimeTypes">
+                <i class="fa {{::(MIMES[mime]||MIMES.default).icon}}" ng-style="{ color: MIMES[mime].color}"></i>
+
+                <span ng-repeat="locale in ::locales">
+                    <a target="_blank" ng-href="{{::lookupUrl(mime, locale)}}" ng-if="::lookupUrl(mime, locale)" style="cursor:auto" ng-click="$event.stopPropagation();">
+
+                        <span class="visible-md-inline visible-lg-inline visible-xl-inline">
+                            {{::LANGUAGES[locale]||locale}}
+                        </span>
+
+                        <span class="visible-xs-inline visible-sm-inline" ng-switch="file.locale">{{::locale}}</span>
+                    </a>
+                </span>
+            </div>
+
+
+            <div class="visible-xs dropdown">
+
+                <button type="button" class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+                    <i class="fa fa-arrow-circle-down" style="font-size:1.25em"></i>
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+
+                    <li role="presentation" class="dropdown-header">Select a file to download</li>
+
+                    <li role="presentation" ng-repeat="locale in ::locales" style="font-size:16px;margin:4px 0px;white-space:nowrap;" class="ng-scope">
+
+                        <a role="menuitem" tabindex="-1" style="display:inline-block;width:120px;font-size:inherit;" class="ng-binding">
+                            {{::LANGUAGES[locale]||locale}}
+                        </a>
+
+                        <span>
+                            <a ng-repeat="mime in ::mimeTypes" class="btn btn-sm {{::MIMES[mime].btn || 'btn-default' }}" style="margin-right:5px;font-size:16px;" target="_blank" ng-style="{ visibility:(lookupUrl(mime, locale)?hidden:'') }" ng-href="{{::lookupUrl(mime, locale)}}">
+                                <i class="fa {{::(MIMES[mime]||MIMES.default).icon}}"></i>
+                            </a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+        </td>
+        <td style="width:20px" ng-click="document.selected=!document.selected;">
+            <checkbox ng-model="document.selected" style="font-size:2em" ng-class="{'text-info':document.type=='in-session', 'text-muted':document.type!='in-session' }"></checkbox>
+        </td>
+    </tr>
+</table>
