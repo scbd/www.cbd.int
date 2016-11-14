@@ -1,4 +1,4 @@
-define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'authentication'], function(app, $, _) { 'use strict';
+define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authentication'], function(app, $, _) { 'use strict';
 
     var locationPath = window.location.pathname.toLowerCase().split('?')[0];
 
@@ -18,6 +18,10 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
         // /insession/*
         if(/^\/insession($|\/.*)/.test(locationPath))
             registerRoutes_insession($routeProvider);
+
+        // /meetings/:code/*
+        if(/^\/meetings\/(.+)/.test(locationPath))
+            registerRoutes_meetings($routeProvider);
 
         // /schedule/*
         if(/^\/schedules($|\/.*)/.test(locationPath))
@@ -75,6 +79,19 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
       .when('/',           { templateUrl : 'views/meetings/documents/in-session/index.html',      resolveController : true})
       .when('/management', { templateUrl : 'views/meetings/documents/in-session/management.html', resolveController : true, resolve : { user : securize(["Administrator","EditorialService"]) } } )
       .when('/:meeting',   { templateUrl : 'views/meetings/documents/in-session/meeting-id.html', resolveController : true, progress : { stop : false } } );
+    }
+
+  //============================================================
+  //
+  //
+  //============================================================
+  function registerRoutes_meetings(routeProvider) {
+
+      $("base").attr('href', '/meetings/'); // allow full page reload outside of  /insession/*
+
+      routeProvider
+      .when('/:meeting/documents',   { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, controllerAs : "documentsCtrl"})
+      .when('/:meeting/agenda',      { templateUrl : 'views/meetings/documents/agenda.html',    resolveController : true, controllerAs : "agendaCtrl"});
     }
 
   //============================================================
