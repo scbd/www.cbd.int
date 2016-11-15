@@ -88,7 +88,7 @@
                                             {{r.sideEvent.title || r.title}}
                                             <div ng-if="r.agenda.visible && r.agenda.items.length">
                                                 <div ng-repeat="item in r.agenda.items">
-                                                    <span class="label agenda {{item.color}}" title="item.title">{{item.prefix}} {{item.item}}</span>
+                                                    <span class="label agenda {{item.prefix}}" title="item.title">{{item.prefix}} {{item.item}}</span>
                                                     {{item.text || item.title}}
                                                 </div>
                                             </div>

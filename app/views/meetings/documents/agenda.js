@@ -111,7 +111,6 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
                         var mItemDocuments = _(meetingDocuments).where({ meeting : rItem.meeting }).map('documents').flatten().where({ agendaItems: [rItem.item] }).value();
 
                         rItem.prefix    = (mAgenda||{}).prefix;
-                        rItem.color     = (mAgenda||{}).color;
                         rItem.title     = (mItem||{}).title;
                         rItem.shortitle = (mItem||{}).shortitle;
                         rItem.scopes    = (mItem||{}).scopes;

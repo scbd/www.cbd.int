@@ -16,12 +16,14 @@
 .label.doc-status.l           { border: solid  1px #5bc0de; color: #5bc0de; background: none}
 .label.doc-status.crp         { border: solid  1px #f0ad4e; color: #f0ad4e; background: none}
 
-.label.agenda         { background: #777; display: inline-block; min-width: 45px;    }
-.label.agenda.green   { background: #009B48; }
-.label.agenda.blue    { background: #337AB5; }
-.label.agenda.orange  { background: #f0ad4e; }
+.label.agenda      { background: #777; display: inline-block; min-width: 45px;    }
+.label.agenda.CBD  { background: #009B48; }
+.label.agenda.NP   { background: #337AB5; }
+.label.agenda.CP   { background: #f0ad4e; }
 
-.title.agenda         {     }
-.title.agenda.green   { color: #00803B; }
-.title.agenda.blue    { color: #245680; }
-.title.agenda.orange  { color: #805C29; }
+.title.agenda      {     }
+/*
+.title.agenda.CBD  { color: #00803B; }
+.title.agenda.NP   { color: #245680; }
+.title.agenda.CP   { color: #805C29; }
+*/

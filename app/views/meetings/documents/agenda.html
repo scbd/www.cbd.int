@@ -64,7 +64,7 @@
 
                                         <tr ng-repeat="agendaItem in res.agenda.items" style="cursor:default">
                                             <td class="hidden-xs" style="width:55px" ng-click="agendaItem.expanded=!agendaItem.expanded">
-                                                <span class="label agenda {{::agendaItem.color}}">{{::agendaItem.prefix}} {{::agendaItem.item}}</span>
+                                                <span class="label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::agendaItem.item}}</span>
                                             </td>
                                             <td>
                                                 <div ng-click="agendaItem.expanded=!agendaItem.expanded" >
@@ -92,7 +92,7 @@
                                                         </span>
                                                     </div>
 
-                                                    <span class="visible-xs-inline-block label agenda {{::agendaItem.color}}">{{::agendaItem.prefix}} {{::agendaItem.item}}</span>
+                                                    <span class="visible-xs-inline-block label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::agendaItem.item}}</span>
                                                     <span class="title agenda ">
                                                         <span class="hidden-xs" >{{::agendaItem.title}}</span>
                                                         <span class="visible-xs">{{::agendaItem.shortTitle||agendaItem.title}}</span>
