@@ -73,7 +73,7 @@
                                                         <span class="small">
 
                                                             <span class="text-muted" ng-if="::agendaItem.documents.length && !(agendaItem.documents|filter:{status:agendaItem.status}:true).length">
-                                                                document not yet available xx <i class="fa fa-fw fa-caret-down" style="visibility:hidden"></i>
+                                                                document not yet available<i class="fa fa-fw fa-caret-down" style="visibility:hidden"></i>
                                                             </span>
 
                                                             <a class="text-muted" ng-if="::(agendaItem.documents|filter:{status:agendaItem.status}:true).length" style="text-decoration:none" href="#">
@@ -84,7 +84,7 @@
 
                                                         </span>
 
-                                                        <span class="label doc-status {{::agendaItem.status}}" ng-switch="agendaItem.status">
+                                                        <span class="label doc-status" ng-class="{plain : agendaItem.status }" ng-switch="agendaItem.status">
                                                             <span ng-switch-when="pre-session" title="Pre-Session" style="cursor:help">Pre</span>
                                                             <span ng-switch-when="draft">Draft</span>
                                                             <span ng-switch-when="crp">CRP</span>

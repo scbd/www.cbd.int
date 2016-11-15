@@ -10,6 +10,7 @@
 }
 
 .label.doc-status             { display: inline-block; width:40px;}
+.label.doc-status.plain       { border: dotted 1px #777;    color: #777;    background: none}
 .label.doc-status.pre-session { border: dotted 1px #777;    color: #777;    background: none}
 .label.doc-status.draft       { border: solid  1px #777;    color: #777;    background: none}
 .label.doc-status.l           { border: solid  1px #5bc0de; color: #5bc0de; background: none}

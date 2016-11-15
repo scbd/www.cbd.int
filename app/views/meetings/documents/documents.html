@@ -58,7 +58,7 @@
                     <td>
                         <div>
                             <div class="pull-right">
-                                <span class="label doc-status {{item.status}}" ng-switch="item.status">
+                                <span class="label doc-statusdoc-status" ng-class="{plain : item.status }" ng-switch="item.status">
                                     <span ng-switch-when="pre-session" title="Pre-Session" style="cursor:help">Pre</span>
                                     <span ng-switch-when="draft">Draft</span>
                                     <span ng-switch-when="crp">CRP</span>
