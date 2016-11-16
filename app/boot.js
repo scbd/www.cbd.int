@@ -5,6 +5,8 @@ require.config({
     baseUrl : '/app/',
     paths: {
         'authentication'  : 'services/authentication',
+        'angular'         : 'libs/angular/angular.min',
+        'angular-flex'    : 'libs/angular-flex/angular-flex',
         'ngRoute'         : 'libs/angular-route/angular-route.min',
         'ngCookies'       : 'libs/angular-cookies/angular-cookies.min',
         'ngAnimate'       : 'libs/angular-animate/angular-animate.min',
@@ -16,11 +18,12 @@ require.config({
         'lodash'          : 'libs/lodash/lodash.min',
         'bootstrap-notify': 'libs/remarkable-bootstrap-notify/bootstrap-notify.min',
         'moment'          : 'libs/moment/min/moment.min',
-        'moment-timezone' : 'libs/moment-timezone/builds/moment-timezone-with-data.min',
+        'moment-timezone' : 'libs/moment-timezone/builds/moment-timezone-with-data-2010-2020.min',
         'rangy'           : 'libs/rangy-release/rangy-core.min',
         'shim'            : 'libs/require-shim/src/shim',
         'interface'       : 'js/interface',
         'magnific-popup'  : 'libs/magnific-popup/dist/jquery.magnific-popup.min',
+        'jquery'          : 'libs/jquery/dist/jquery.min',
         'jquery-migrate'  : 'libs/jquery-migrate/jquery-migrate.min',
         'ammap3WorldHigh' : 'directives/reporting-display/worldEUHigh',
         'alasql'          : 'libs/alasql/dist/alasql.min',
@@ -29,13 +32,16 @@ require.config({
         'ods'             : 'libs/js-xlsx/dist/ods'
     },
     shim: {
-        'ngRoute'              : { deps : ['angular'] },
-        'ngCookies'            : { deps : ['angular'] },
-        'ngAnimate'            : { deps : ['angular'] },
-        'ngSanitize'           : { deps : ['angular'] },
-        'ngDialog'             : { deps : ['angular' ]},// 'css!libs/ng-dialog/css/ngDialog.min', 'css!libs/ng-dialog/css/ngDialog-theme-default.css'] },
+        'angular'              : { deps : ['jquery'], exports: 'angular' },
+        'angular-flex'         : { deps : ['angular', 'jquery'] },
+        'ngRoute'              : { deps : ['angular-flex'] },
+        'ngCookies'            : { deps : ['angular-flex'] },
+        'ngAnimate'            : { deps : ['angular-flex'] },
+        'ngSanitize'           : { deps : ['angular-flex'] },
+        'ngDialog'             : { deps : ['angular-flex' ]},// 'css!libs/ng-dialog/css/ngDialog.min', 'css!libs/ng-dialog/css/ngDialog-theme-default.css'] },
         'bootstrap'            : { deps : ['jquery' ] },
         'bootstrap-notify'     : { deps : ['jquery', 'bootstrap'] },
+        'moment-timezone'      : { deps : ['moment'] },
         'jquery-migrate'       : { deps : ['jquery']},
         'interface'            : { deps : ['jquery-migrate']},
         'magnific-popup'       : { deps : ['jquery']},
@@ -48,9 +54,6 @@ require.config({
     { name: 'ammap'  , main: 'ammap'   , location : 'libs/ammap3/ammap' }
 ]
 });
-
-define('jquery',  function() { return window.$; });
-define('angular', function() { return window.angular; });
 
 define('xlsx', ['js-zip', 'ods'], function (jszip, ods) {
     window.JSZip = jszip;
