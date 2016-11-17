@@ -30,11 +30,24 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
                 });
             });
 
+            var notifications = $http.get('/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'symbol_s,reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
+                return _.map(res.data.response.docs, function(n) {
+                    return _.defaults(n, {
+                        symbol: n.reference_s || n.symbol_s,
+                        number: n.symbol_s,
+                        date:   n.date_dt,
+                        type:  'notification',
+                        title : { en : n.title_t },
+                        sortKey : n.symbol_s,
+                        files : urlToFiles(n.url_ss)
+                    });
+                });
+            });
 
-            $q.all([meeting, documents]).then(function(res) {
+            $q.all([meeting, documents, notifications]).then(function(res) {
 
                 meeting   = res[0];
-                documents = res[1];
+                documents = _(res[1]).union(res[2]).filter(function(d) { return d.files && d.files.length; }).value();
 
                 var agendaMap = _.reduce(meeting.agenda.items, function(r,v) { r[v.item] = v;  return r; }, {});
 
@@ -109,6 +122,35 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
             return d.symbol.replace(/\b(\d)\b/g, '0$1')
                            .replace(/(\/REV)/gi, '0$1')
                            .replace(/(\/ADD)/gi, '1$1');
+        }
+
+        //==============================
+        //
+        //==============================
+        function urlToFiles(url_ss) {
+
+            return _.map(url_ss||[], function(url){
+
+                var mime;
+                var locale;
+
+                if(/\.pdf$/ .test(url)) mime = 'application/pdf';
+                if(/\.doc$/ .test(url)) mime = 'application/msword';
+                if(/\.docx$/.test(url)) mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+                if(/-ar\.\w+$/ .test(url)) locale = 'ar';
+                if(/-en\.\w+$/ .test(url)) locale = 'en';
+                if(/-es\.\w+$/ .test(url)) locale = 'es';
+                if(/-fr\.\w+$/ .test(url)) locale = 'fr';
+                if(/-ru\.\w+$/ .test(url)) locale = 'ru';
+                if(/-zh\.\w+$/ .test(url)) locale = 'zh';
+
+                return {
+                    mime : mime,
+                    locale: locale,
+                    url : 'https://www.cbd.int'+url
+                };
+            });
         }
 	}];
 });
