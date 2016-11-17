@@ -1,7 +1,14 @@
-define(['app', 'bootstrap', 'authentication', ], function(app) { 'use strict';
+define(['app', 'angular', 'bootstrap', 'authentication', ], function(app, ng) { 'use strict';
 
-  app.controller('TemplateController', ['$scope', '$window', '$browser', '$document', '$location', 'authentication', '$q',
-	function($scope, $window, $browser, $document, $location, authentication, $q) {
+  app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$browser', '$document', '$location', 'authentication', '$q',
+	function($scope, $rootScope, $window, $browser, $document, $location, authentication, $q) {
+
+        var basePath = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
+
+        $rootScope.$on("$routeChangeSuccess", function(){
+            $window.ga('set',  'page', basePath+$location.path());
+            $window.ga('send', 'pageview');
+        });
 
         $q.when(authentication.getUser()).then(function(u){
             $scope.user = u;

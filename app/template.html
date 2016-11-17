@@ -2,6 +2,16 @@
 <html lang="en" ng-controller="TemplateController">
 <head>
     <base href="/">
+    <script> //Analytics
+        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+        ga('create', 'UA-1996573-1', 'auto');
+        ga('set',    'hostname', window.location.hostname);
+        ga('set',    'location', undefined);
+    </script>
+    <script src="/app/libs/requirejs/require.js"></script>
+    <script src="/app/boot.js"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+
     <title ng-bind="$root.page.title">In-Session documents - Convention on Biological Diversity</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -231,9 +241,6 @@
             <a href="http://unep.org/"   target="_blank"><img src="/app/images/unep-logo-white-en.gif" alt="UNEP logo" /></a>
         </div>
     </footer>
-
-    <script src="/app/libs/requirejs/require.js" data-main="/app/boot.js"></script>
-
 </body>
 </html>
 <!-- -->
