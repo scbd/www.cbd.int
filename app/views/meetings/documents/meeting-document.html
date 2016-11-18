@@ -54,7 +54,7 @@
 
         </td>
         <td style="width:20px" ng-click="document.selected=!document.selected;">
-            <checkbox ng-model="document.selected" style="font-size:2em" ng-class="{'text-info':document.type=='in-session', 'text-muted':document.type!='in-session' }"></checkbox>
+            <checkbox ng-if="document.files.length" ng-model="document.selected" style="font-size:2em" ng-class="{'text-info':document.type=='in-session', 'text-muted':document.type!='in-session' }"></checkbox>
         </td>
     </tr>
 </table>

@@ -27,6 +27,11 @@
                 </span>
             </a>
         </li>
+        <li ng-if="documentsCtrl.notifications.length">
+            <a ng-href="#notification" role="tab" data-toggle="tab">
+                Notifications ({{documentsCtrl.notifications.length}})
+            </a>
+        </li>
     </ul>
 
     <!-- Tab panes -->
@@ -106,6 +111,20 @@
 
             </table>
 
+        </div>
+
+        <div ng-if="documentsCtrl.notifications.length" role="tabpanel" class="tab-pane" id="notification">
+
+            <table class="table table-striped table-hover no-border-first-row">
+                <tr ng-repeat="document in documentsCtrl.notifications|orderBy:'sortKey':true" ng-class="{ info : document.selected }" style="cursor:default">
+                    <td>
+                        <b>{{($index+1)}}.</b>
+                    </td>
+                    <td>
+                        <meeting-document document="document"></meeting-document>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

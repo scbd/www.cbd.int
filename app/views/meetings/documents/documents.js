@@ -16,22 +16,47 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
         //==============================
         function load() {
 
-            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { params: { f : { EVT_TIT_EN:1, EVT_CD:1, print:1 , agenda:1 } } }).then(function(res){
-                res.data.code  = res.data.EVT_CD;
-                res.data.title = res.data.EVT_TIT_EN;
-                return res.data;
+            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { params: { f : { EVT_TIT_EN:1, EVT_CD:1, print:1 , agenda:1, documents:1 } } }).then(function(res){
+
+                meeting       = res.data;
+                meeting.code  = meeting.code  || meeting.EVT_CD;
+                meeting.title = meeting.title || meeting.EVT_TIT_EN;
+
+                return meeting;
             });
 
-            var documents = $http.get('/api/v2016/meetings/'+meetingCode+'/documents', { params: {  } }).then(function(res){
-                return _.map(res.data, function(d) {
+            var meetingDocs = $http.get('/api/v2016/meetings/'+meetingCode+'/documents', { params: {  } }).then(function(res){
+
+                meetingDocs = _(res.data).map(function(d) {
                     d.status  = detectDocumentStatus(d);
                     d.sortKey = buildSortKey(d);
                     return d;
-                });
+                }).filter(function(d){
+                    return d.files && d.files.length;
+                }).value();
+
+                return meetingDocs;
             });
 
-            var notifications = $http.get('/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'symbol_s,reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
-                return _.map(res.data.response.docs, function(n) {
+            meeting.then(function() {
+
+                var copy = _.cloneDeep(meeting);
+
+                merge(copy, copy.documents);
+
+                return meetingDocs;
+
+            }).then(function() {
+
+                merge(meeting, meetingDocs);
+
+            }).catch(console.error);
+
+
+
+            $http.get('https://api.cbd.int/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'symbol_s,reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
+
+                _ctrl.notifications = _.map(res.data.response.docs, function(n) {
                     return _.defaults(n, {
                         symbol: n.reference_s || n.symbol_s,
                         number: n.symbol_s,
@@ -42,52 +67,52 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
                         files : urlToFiles(n.url_ss)
                     });
                 });
+            }).catch(console.error);
+        }
+
+        //==============================
+        //
+        //==============================
+        function merge(meeting, documents) {
+
+            var agendaMap = _.reduce(meeting.agenda.items, function(r,v) { r[v.item] = v;  return r; }, {});
+
+            documents.forEach(function(d) {
+                (d.agendaItems||[]).forEach(function(item) {
+
+                    if(!agendaMap[item]) {
+                        meeting.agenda.items.push(agendaMap[item] = { item: item, title: d.title.en + " (AUTO) "}); // LAZY during dev
+                    }
+
+                    agendaMap[item].documents = agendaMap[item].documents||[];
+                    agendaMap[item].documents.push(d);
+                });
             });
 
-            $q.all([meeting, documents, notifications]).then(function(res) {
-
-                meeting   = res[0];
-                documents = _(res[1]).union(res[2]).filter(function(d) { return d.files && d.files.length; }).value();
-
-                var agendaMap = _.reduce(meeting.agenda.items, function(r,v) { r[v.item] = v;  return r; }, {});
-
-                documents.forEach(function(d) {
-                    (d.agendaItems||[]).forEach(function(item) {
-
-                        if(!agendaMap[item]) {
-                            meeting.agenda.items.push(agendaMap[item] = { item: item, title: d.title.en + " (AUTO) "}); // LAZY during dev
-                        }
-
-                        agendaMap[item].documents = agendaMap[item].documents||[];
-                        agendaMap[item].documents.push(d);
-                    });
-                });
-
-                meeting.agenda.items.forEach(function(item) {
-                    item.status = detectAgendaItemStatus(item);
-                });
-
-                _ctrl.meeting   = meeting;
-                _ctrl.agenda    = meeting.agenda;
-                _ctrl.documents = documents;
-                _ctrl.tabs     = _(tabs).map(function(t){
-
-                    var docs         = _(documents).where({ type : t }).value();
-                    var items        = _(meeting.agenda.items).filter(function(item){ return _.some(item.documents, { type : t }); }).value();
-                    var noAgendaDocs = _(docs).difference(_(items).map('documents').flatten().value()).value();
-
-                    return {
-                        code : t,
-                        documents : docs,
-                        agenda : {
-                            items : items,
-                            otherDocuments : noAgendaDocs
-                        }
-                    };
-                }).filter(function(t) { return t.documents.length;
-                }).sortBy(function(t) { return tabs.indexOf(t.code);
-                }).value();
+            meeting.agenda.items.forEach(function(item) {
+                item.status = detectAgendaItemStatus(item);
             });
+
+            _ctrl.meeting   = meeting;
+            _ctrl.agenda    = meeting.agenda;
+            _ctrl.documents = documents;
+            _ctrl.tabs     = _(tabs).map(function(t){
+
+                var docs         = _(documents).where({ type : t }).value();
+                var items        = _(meeting.agenda.items).filter(function(item){ return _.some(item.documents, { type : t }); }).value();
+                var noAgendaDocs = _(docs).difference(_(items).map('documents').flatten().value()).value();
+
+                return {
+                    code : t,
+                    documents : docs,
+                    agenda : {
+                        items : items,
+                        otherDocuments : noAgendaDocs
+                    }
+                };
+            }).filter(function(t) { return t.documents.length;
+            }).sortBy(function(t) { return tabs.indexOf(t.code);
+            }).value();
         }
 
         //==============================
