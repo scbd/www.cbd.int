@@ -18,8 +18,8 @@
 
 .label.agenda      { background: #777; display: inline-block; min-width: 45px;    }
 .label.agenda.CBD  { background: #009B48; }
-.label.agenda.NP   { background: #337AB5; }
-.label.agenda.CP   { background: #f0ad4e; }
+.label.agenda.CP   { background: #A05800; }
+.label.agenda.NP   { background: #0086B7; }
 
 .title.agenda      {     }
 /*
