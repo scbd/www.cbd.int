@@ -208,6 +208,13 @@
         .meetingnav td.selected {
             background-color: #009b48
         }
+        .meetingnav td.selected.CP {
+            background-color: #A05800
+        }
+        .meetingnav td.selected.NP {
+            background-color: #0086B7
+        }
+
         .meetingnav-buttongroup {
             position:relative;
             color:#fff;
@@ -221,24 +228,40 @@
             position:absolute;
             left:0px;
             right:0px;
-            /*bottom:-12px;
-            border-bottom:12px solid #009b48*/
+            bottom:-6px;
+            border-bottom:6px solid #009b48
+        }
+        .meetingnav .selected.CP .selection-mark {
+            border-color: #A05800
+        }
+        .meetingnav .selected.NP .selection-mark {
+            border-color: #0086B7
         }
     </style>
+
 
     <!-- NAVIGATION BAR -->
     <div ng-cloak ng-if="meetingNavCtrl.isSelected()" class="meetingnav">
         <div class="container">
-            <div class="row">
-                 <!-- style="background:url(https://static.vecteezy.com/system/resources/previews/000/113/807/original/realistic-green-leaf-texture-with-water-drops-vector.jpg);background-size:100%"> -->
+            <div class="row" style="background:url(/app/images/cop-back-blur.jpg);background-size:100%">
                 <table class="meetingnav-table">
                     <tr>
-                        <!-- <td class="notselected meetingnav-button">
+                        <td class="notselected meetingnav-button" ng-click="meetingNavCtrl.goto('COP-HOME')">
                             <div class="selection-mark"></div>
-                            <div style="font-size:16.8px;font-weight:bold">COP13<div>
-                            <div style="margin-top:-4px;font-size:13px;font-weight:normal">CANCUN</div>
-                        </td> -->
-                        <td class="meetingnav-buttongroup">
+                            <div class="hidden-xs">
+                                <div style="margin-top:-4px;width:260px;font-size:16.8px;font-weight:bold">UN Biodiversity Conference</div>
+                                <div style="margin-top:-3px;font-size:13px;font-weight:normal">CANCUN, MEXICO, 2016</div>
+                            </div>
+                            <div class="visible-xs" style="margin-left:5px;margin-rigth:5px;">
+                                <div style="margin-top:-4px;font-size:16.8px;font-weight:bold">COP13</div>
+                                <div style="margin-top:-3px;font-size:13px;font-weight:normal">CANCUN</div>
+                            </div>
+                        </td>
+                        <td class="meetingnav-button" ng-class="{selected:meetingNavCtrl.isSelected('session')}" ng-click="meetingNavCtrl.goto('session')">
+                            <div class="selection-mark"></div>
+                            <div style="background-color:rgba(255,255,255,0);font-size:12px;font-weight:bold;height:26px;padding-top:5px;color:#ddd">SCHEDULE</div>
+                        </td>
+                        <!-- <td class="meetingnav-buttongroup">
                             <table style="height:100%;width:100%;font-size:12px;font-weight:bold">
                                 <tr style="height:0px">
                                     <td colspan="3" style="vertical-align:top;padding-bottom:2px">
@@ -246,21 +269,21 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td ng-class="{selected:meetingNavCtrl.isSelected('session')}"  ng-click="meetingNavCtrl.goto('session')" style="position:relative;padding:0 6px;cursor:pointer" align="center">
+                                    <td class="selected" style="position:relative;padding:0 6px;cursor:pointer" align="center">
                                         <div class="selection-mark"></div>
                                         sessions
                                     </td>
-                                    <td ng-class="{selected:meetingNavCtrl.isSelected('side-events')}" ng-click="meetingNavCtrl.goto('side-events')" style="position:relative;padding:0 6px;cursor:pointer;border-left:1px solid #fff" align="center">
+                                    <td class="notselected" style="position:relative;padding:0 6px;cursor:pointer;border-left:1px solid #fff" align="center">
                                         <div class="selection-mark"></div>
                                         side events
                                     </td>
-                                    <td ng-class="{selected:meetingNavCtrl.isSelected('special')}" style="position:relative;padding:0 6px;cursor:pointer;border-left:1px solid #fff" align="center">
+                                    <td class="notselected" style="position:relative;padding:0 6px;cursor:pointer;border-left:1px solid #fff" align="center">
                                         <div class="selection-mark"></div>
                                         parallel meetings<br>special events
                                     </td>
                                 </tr>
                             </table>
-                        </td>
+                        </td> -->
                         <td class="meetingnav-buttongroup">
                             <table style="height:100%;width:100%;font-size:12px;font-weight:bold">
                                 <tr style="height:0px">
@@ -269,16 +292,16 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td ng-class="{selected:meetingNavCtrl.isSelected('COP-13')}" ng-click="meetingNavCtrl.goto('COP-13')" style="position:relative;padding:0 6px;cursor:pointer" align="center">
+                                    <td class="CBD" ng-class="{selected:meetingNavCtrl.isSelected('COP-13')}" ng-click="meetingNavCtrl.goto('COP-13')" style="position:relative;padding:0 6px;cursor:pointer" align="center">
                                         <div class="selection-mark"></div>
                                         COP13
                                     </td>
-                                    <td ng-class="{selected:meetingNavCtrl.isSelected('MOP-08')}" ng-click="meetingNavCtrl.goto('MOP-08')" style="position:relative;padding:0 6px;cursor:pointer;border-left:1px solid #fff" align="center">
+                                    <td class="CP" ng-class="{selected:meetingNavCtrl.isSelected('MOP-08')}" ng-click="meetingNavCtrl.goto('MOP-08')" style="position:relative;padding:0 6px;cursor:pointer;border-left:1px solid #fff" align="center">
                                         <div class="selection-mark"></div>
                                         <div style="font-size:11px;font-weight:bold">Cartagena Protocol</div>
                                         <div style="margin-top:2px">COPMOP8</div>
                                     </td>
-                                    <td ng-class="{selected:meetingNavCtrl.isSelected('NP-MOP-02')}" ng-click="meetingNavCtrl.goto('NP-MOP-02')" style="position:relative;padding:0 6px;cursor:pointer;border-left:1px solid #fff" align="center">
+                                    <td class="NP" ng-class="{selected:meetingNavCtrl.isSelected('NP-MOP-02')}" ng-click="meetingNavCtrl.goto('NP-MOP-02')" style="position:relative;padding:0 6px;cursor:pointer;border-left:1px solid #fff" align="center">
                                         <div class="selection-mark"></div>
                                         <div style="font-size:11px;font-weight:bold">Nagoya Protocol</div>
                                         <div style="margin-top:2px">COPMOP2</div>
@@ -286,24 +309,26 @@
                                 </tr>
                             </table>
                         </td>
-                        <!-- <td class="notselected meetingnav-button">
+                        <td class="notselected meetingnav-button">
                             <div class="selection-mark"></div>
-                            <div style="background-color:#ee4242;font-size:22px;font-weight:bold">LIVE</div>
+                            <div style="background-color:#ee4242;font-size:12px;font-weight:bold;padding-top:6px;padding-bottom:6px;">WEBCAST</div>
                         </td>
                         <td class="notselected meetingnav-button">
                             <div class="selection-mark"></div>
-                            <i class="fa fa-info" aria-hidden="true" style="font-size:36px"></i>
-                        </td>-->
+                            <div style="font-size:12px;font-weight:bold">PRESS</div>
+                        </td>
+                        <td class="notselected meetingnav-button">
+                            <div class="selection-mark"></div>
+                            <i class="fa fa-info" aria-hidden="true" style="font-size:24px"></i>
+                        </td>
                     </tr>
                 </table>
-        <div class="whitebg" style="height:5px">
             </div>
-        </div>
         </div>
     </div>
     <!-- CONTENT -->
     <a name="view"></a>
-    <div class="container whitebg view">
+    <div class="container whitebg view" ng-style="{ 'padding-top' : (meetingNavCtrl.isSelected() ? '15px' : '0px') }">
         <ng-view></ng-view>
     </div>
 
