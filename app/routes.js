@@ -90,7 +90,7 @@ define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authe
       $("base").attr('href', '/meetings/'); // allow full page reload outside of  /insession/*
 
       routeProvider
-      .when('/:meeting/documents',   { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, controllerAs : "documentsCtrl"})
+      .when('/:meeting/documents',   { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, controllerAs : "documentsCtrl", reloadOnSearch:false})
       .when('/:meeting/agenda',      { templateUrl : 'views/meetings/documents/agenda.html',    resolveController : true, controllerAs : "agendaCtrl"});
     }
 
