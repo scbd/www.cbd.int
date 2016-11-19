@@ -35,8 +35,8 @@ define(['app', 'underscore', 'moment-timezone', 'filters/moment', 'filters/html-
                 var venueId = _streamData.eventGroup.venueId;
 
                 return $q.all([
-                    $http.get('/api/v2016/types',       { cache : true, params: { q: { schema: 'reservations' } } }),
-                    $http.get('/api/v2016/venue-rooms', { cache : true, params: { q: { venue : venueId } } })
+                    $http.get('/api/v2016/types',       { cache : true, params: { q: { schema: 'reservations' }, f: { title: 1, priority: 1, closed: 1, style: 1 } } }),
+                    $http.get('/api/v2016/venue-rooms', { cache : true, params: { q: { venue : venueId },        f: { title: 1, location: 1 } } })
                 ]);
 
             }).then(function(res) {
