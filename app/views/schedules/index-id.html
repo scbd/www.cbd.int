@@ -45,18 +45,14 @@
 
     <div class="row">
 
-        <div class="pull-right hidden-xs" style="margin:15px;margin-top:24px">
-            <input type="text" class="form-control" ng-model="search" placeholder="Search...">
-        </div>
 
         <div ng-if="(indexIdCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } }).length">
 
-            <div class="col-sm-8 col-xs-12">
-                <h1>Daily Schedule</h1>
-            </div>
-
             <div class="col-xs-12 schedule" ng-repeat="frame in (indexIdCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } })">
-                <h2 class="pull-right"><small ng-if="indexIdCtrl.now"><em>Current time</em> <b>{{indexIdCtrl.now | moment:'tz':indexIdCtrl.event.timezone | moment:'format':'H:mm'}}</b></small></h2>
+                <!-- <div class="pull-right hidden-xs" style="margin:15px;margin-top:24px">
+                    <input type="text" class="form-control" ng-model="search" placeholder="Search...">
+                </div> -->
+                <h2 class="pull-right"><small ng-if="indexIdCtrl.now"><em>Current venue time</em> <b>{{indexIdCtrl.now | moment:'tz':indexIdCtrl.event.timezone | moment:'format':'H:mm'}}</b></small></h2>
                 <h2>{{frame.content.title}}</h2>
                 <p class="alert alert-info" ng-if="(frame.reservations | filter:{ type : { _id: '570fd0a52e3fa5cfa61d90ee' } }).length">
                     <a href='/side-events'  style="color:inherit">For a detailed and complete list of side-events, please click here to visit the CBD Side-Events page</a>.
