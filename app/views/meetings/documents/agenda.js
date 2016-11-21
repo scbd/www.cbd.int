@@ -69,9 +69,11 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
                         return {
                             meeting : meetingCode,
                             documents : _.map(res.data, function(d) {
-                                d.status = detectDocumentStatus(d);
-                                d.sortKey = buildSortKey(d);
-                                return d;
+                                return _.defaults(d, {
+                                    status:    detectDocumentStatus(d),
+                                    sortKey:   buildSortKey(d),
+                                    printable: d.type=='in-session'
+                                });
                             })
                         };
                     });

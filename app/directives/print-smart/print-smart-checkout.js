@@ -34,7 +34,7 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'ngDialo
 				//==============================================
 				function printableDocuments() {
                     return _(documents).filter(function(d) {
-                        return d.type=='in-session' && _(d.files||[]).some({ mime: PDF }) ;
+                        return d.printable && _(d.files||[]).some({ mime: PDF }) ;
                     }).value();
                 }
 

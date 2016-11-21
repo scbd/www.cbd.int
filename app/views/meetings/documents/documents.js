@@ -11,7 +11,7 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
 
         $scope.$watch('documentsCtrl.sort', function(s){
             $location.hash(s=='agenda' ? 'agenda' : null);
-        })
+        });
 
         load();
 
@@ -32,9 +32,11 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
             var meetingDocs = $http.get('/api/v2016/meetings/'+meetingCode+'/documents', { params: {  } }).then(function(res){
 
                 meetingDocs = _(res.data).map(function(d) {
-                    d.status  = detectDocumentStatus(d);
-                    d.sortKey = buildSortKey(d);
-                    return d;
+                    return _.defaults(d, {
+                        status  : detectDocumentStatus(d),
+                        sortKey : buildSortKey(d),
+                        printable : d.type=='in-session'
+                    });
                 }).filter(function(d){
                     return d.files && d.files.length;
                 }).value();
