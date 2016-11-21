@@ -36,17 +36,19 @@ define(['app', 'angular', 'bootstrap', 'authentication', ], function(app, ng) { 
                 return selected;
             },
 
-            goto : function(name) {
+            goto : function(target) {
 
-                $scope.meetingNavCtrl.currentSelection = name;
+                $scope.meetingNavCtrl.currentSelection = target;
 
-                if(name=='session')     return navigate("/meetings/COP-13/agenda?datetime=2016-12-04T00:00-05:00");
-                if(name=='COP-13')      return navigate("/meetings/COP-13/documents#"+$location.hash());
-                if(name=='MOP-08')      return navigate("/meetings/MOP-08/documents#"+$location.hash());
-                if(name=='NP-MOP-02')   return navigate("/meetings/NP-MOP-02/documents#"+$location.hash());
-                if(name=='schedules')   return navigate("/schedules/2677703125163603?datetime=2016-12-05T06:01:00");
-                if(name=='side-events') return navigate('https://www.cbd.int/side-events');
-                if(name=='COP-HOME')    return navigate('https://www.cbd.int/cop2016');
+                if(target=='session')     return navigate("/meetings/COP-13/agenda");
+                if(target=='COP-13')      return navigate("/meetings/COP-13/documents#"+$location.hash());
+                if(target=='MOP-08')      return navigate("/meetings/MOP-08/documents#"+$location.hash());
+                if(target=='NP-MOP-02')   return navigate("/meetings/NP-MOP-02/documents#"+$location.hash());
+                if(target=='schedules')   return navigate("/schedules/2677703125163603?datetime=2016-12-05T06:01:00");
+                if(target=='side-events') return navigate('https://www.cbd.int/side-events');
+                if(target=='COP-HOME')    return navigate('https://www.cbd.int/cop2016');
+
+                navigate(target);
             }
         };
 

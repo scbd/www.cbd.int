@@ -186,7 +186,8 @@
         .meetingnav {
             /*text-rendering:optimizeLegibility;*/
             -webkit-font-smoothing: antialiased;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            /*-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif*/
         }
         TABLE.meetingnav-table  {
             height:80px;
@@ -224,7 +225,7 @@
             border-left:4px solid #fff;
             vertical-align:top;
         }
-        .meetingnav .selected .selection-mark {
+        .meetingnav .selected .selection-mark-DISBALED {
             position:absolute;
             left:0px;
             right:0px;
@@ -243,7 +244,7 @@
     <!-- NAVIGATION BAR -->
     <div ng-cloak ng-if="meetingNavCtrl.isSelected()" class="meetingnav">
         <div class="container">
-            <div class="row" style="background:url(/app/images/cop-back-blur.jpg);background-size:100%">
+            <div class="row" style="background:url(/app/images/147950321110774-cw-300px-45pc.jpg);background-size:100%">
                 <table class="meetingnav-table">
                     <tr>
                         <td class="notselected meetingnav-button" ng-click="meetingNavCtrl.goto('COP-HOME')">
@@ -253,8 +254,7 @@
                                 <div style="margin-top:-3px;font-size:13px;font-weight:normal">CANCUN, MEXICO, 2016</div>
                             </div>
                             <div class="visible-xs" style="margin-left:5px;margin-rigth:5px;">
-                                <div style="margin-top:-4px;font-size:16.8px;font-weight:bold">COP13</div>
-                                <div style="margin-top:-3px;font-size:13px;font-weight:normal">CANCUN</div>
+                                <div style="margin-top:-4px;font-size:26px;"><i class="fa fa-home" aria-hidden="true"></i></div>
                             </div>
                         </td>
                         <td class="meetingnav-button" ng-class="{selected:meetingNavCtrl.isSelected('session')}" ng-click="meetingNavCtrl.goto('session')">
@@ -296,12 +296,12 @@
                                         <div class="selection-mark"></div>
                                         COP13
                                     </td>
-                                    <td class="CP" ng-class="{selected:meetingNavCtrl.isSelected('MOP-08')}" ng-click="meetingNavCtrl.goto('MOP-08')" style="position:relative;padding:0 6px;cursor:pointer;border-left:1px solid #fff" align="center">
+                                    <td class="CP" ng-class="{selected:meetingNavCtrl.isSelected('MOP-08')}" ng-click="meetingNavCtrl.goto('MOP-08')" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center">
                                         <div class="selection-mark"></div>
                                         <div style="font-size:11px;font-weight:bold">Cartagena Protocol</div>
                                         <div style="margin-top:2px">COPMOP8</div>
                                     </td>
-                                    <td class="NP" ng-class="{selected:meetingNavCtrl.isSelected('NP-MOP-02')}" ng-click="meetingNavCtrl.goto('NP-MOP-02')" style="position:relative;padding:0 6px;cursor:pointer;border-left:1px solid #fff" align="center">
+                                    <td class="NP" ng-class="{selected:meetingNavCtrl.isSelected('NP-MOP-02')}" ng-click="meetingNavCtrl.goto('NP-MOP-02')" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center">
                                         <div class="selection-mark"></div>
                                         <div style="font-size:11px;font-weight:bold">Nagoya Protocol</div>
                                         <div style="margin-top:2px">COPMOP2</div>
@@ -309,17 +309,27 @@
                                 </tr>
                             </table>
                         </td>
-                        <td class="notselected meetingnav-button hidden-xs">
+                        <td class="notselected meetingnav-button hidden-xs" style="cursor:inherit">
                             <div class="selection-mark"></div>
-                            <div style="background-color:#ee4242;font-size:12px;font-weight:bold;padding-top:6px;padding-bottom:6px;">WEBCAST</div>
+                            <a href="http://cop13.mx/" target="#wabcast" style="color:inherit"><div style="background-color:#ee4242;font-size:12px;font-weight:bold;padding-top:6px;padding-bottom:6px;">WEBCAST</div></a>
+                            <a href="http://cop13.mx/" target="#wabcast" style="position:absolute;top:0px;bottom:0px;right:0px;left:0px;display:block"></a>
+
                         </td>
-                        <td class="notselected meetingnav-button hidden-xs">
+                        <td class="notselected meetingnav-button hidden-xs" ng-click="meetingNavCtrl.goto('https://www.cbd.int/cop2016/media')">
                             <div class="selection-mark"></div>
-                            <div style="font-size:12px;font-weight:bold">PRESS</div>
+                            <div style="font-size:12px;font-weight:bold">MEDIA</div>
                         </td>
-                        <td class="notselected meetingnav-button hidden-xs">
+                        <td class="notselected meetingnav-button hidden-xs" style="position:relative">
                             <div class="selection-mark"></div>
+
                             <i class="fa fa-info" aria-hidden="true" style="font-size:24px"></i>
+                            <div data-toggle="dropdown" style="position:absolute;top:0px;bottom:0px;right:0px;left:0px;"></div>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="https://www.cbd.int/doc/meetings/cop/cop-13/other/cop-13-info-note-en.pdf" target="_blank">Information for Participants</a></li>
+                                <li><a href="https://www.cbd.int/cop2016/public/">Information for Public</a></li>
+                                <li><a href="http://cop13.mx/" target="_blank">Mexican COP13 Website <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
+                                <li><a href="https://www.cbd.int/cop2016/transport/">Transportation</a></li>
+                            </ul>
                         </td>
                     </tr>
                 </table>
