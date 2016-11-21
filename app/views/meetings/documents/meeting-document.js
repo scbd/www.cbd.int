@@ -29,6 +29,7 @@ define(['app', 'lodash', 'text!./meeting-document.html', 'directives/checkbox'],
                 $scope.LANGUAGES = LANGUAGES;
 
                 $scope.lookupUrl = lookupUrl;
+                $scope.isSymbolVisible= isSymbolVisible;
                 $scope.locales   = _($scope.document.files).map('locale').uniq().sortBy().value();
                 $scope.mimeTypes = _($scope.document.files).map('mime'  ).uniq().sort(function(a,b) {
 
@@ -50,6 +51,13 @@ define(['app', 'lodash', 'text!./meeting-document.html', 'directives/checkbox'],
                 //================================
                 function lookupUrl(mime, locale) {
                     return _($scope.document.files).where({ mime: mime, locale: locale }).map('url').first();
+                }
+
+                //==============================
+                //
+                //==============================
+                function isSymbolVisible(symbol) {
+                    return !/^[A-Z0-9]{24}$/i.test(symbol);
                 }
 			}
 		};
