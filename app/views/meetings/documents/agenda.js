@@ -29,31 +29,37 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
         //==============================
         function load() {
 
-            var reservations;
+
+            var reservations, now;
             var eventGroup = $http.get('/api/v2016/event-groups/'+eventGroupId, { params: { f : { timezone:1, MajorEventIDs:1, Title: 1, Description:1, venueId:1, schedule:1 } } }).then(function(res) {
 
                 _ctrl.eventGroup = eventGroup = res.data;
 
             }).then(function(){
 
-                var now = _ctrl.now = moment.tz($route.current.params.datetime || new Date(), eventGroup.timezone).toDate();
+                now = _ctrl.now = moment.tz($route.current.params.datetime || new Date(), eventGroup.timezone).toDate();
 
-                var start = moment(now).toDate(); // from now
-                var end   = moment(now).tz(eventGroup.timezone).startOf('day').add(2, 'days').toDate(); // to tomorrow
+                return loadReservations(now);
 
-                var fields = { start : 1, end : 1, agenda :1, type: 1, title: 1 };
-                var sort   = { start : 1, end : 1 };
-                var query  = {
-                    'agenda.items': { $exists: true, $ne: [] },
-                    start : { $lte: { $date: end   } },
-                    end   : { $gte: { $date: start } }
-                };
+            }).then(function(reservations){
 
-                return $http.get('/api/v2016/reservations', { params: { q : query, f : fields, s: sort } });
+                if(reservations.length)
+                    return reservations;
+
+                //Lookup for first reservation
+                var query  = { 'agenda.items': { $exists: true, $ne: [] } };
+
+                return $http.get('/api/v2016/reservations', { params: { q : query, f : { start : 1 }, s: { start : 1 }, fo:1 } }).then(function(res){
+
+                    if(res.data && res.data.start)
+                        return loadReservations(new Date(res.data.start));
+
+                    return reservations;
+                });
 
             }).then(function(res){
 
-                reservations = res.data;
+                reservations = res;
 
                 var meetingCodes = _(reservations).map('agenda.items').flatten().map('meeting').uniq().value();
 
@@ -135,6 +141,27 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
                 }).value();
 
             }).catch(console.error);
+        }
+
+        //==============================
+        //
+        //==============================
+        function loadReservations(now) {
+
+            var start = moment(now).toDate(); // from now
+            var end   = moment(now).tz(_ctrl.eventGroup.timezone).startOf('day').add(2, 'days').toDate(); // to tomorrow
+
+            var fields = { start : 1, end : 1, agenda :1, type: 1, title: 1 };
+            var sort   = { start : 1, end : 1 };
+            var query  = {
+                'agenda.items': { $exists: true, $ne: [] },
+                start : { $lte: { $date: end   } },
+                end   : { $gte: { $date: start } }
+            };
+
+            return $http.get('/api/v2016/reservations', { params: { q : query, f : fields, s: sort } }).then(function(res){
+                return res.data;
+            });
         }
 
         //==============================
