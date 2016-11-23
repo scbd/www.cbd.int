@@ -52,7 +52,7 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
 
                 return $http.get('/api/v2016/reservations', { params: { q : query, f : { start : 1 }, s: { start : 1 }, fo:1 } }).then(function(res){
 
-                    if(res.data && res.data.start)
+                    if(res.data && res.data.start && now.toISOString() < res.data.start)
                         return loadReservations(new Date(res.data.start));
 
                     return reservations;
