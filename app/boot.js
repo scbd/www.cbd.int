@@ -85,6 +85,7 @@ require([
     'filters/lstring',
     'filters/moment',
     'directives/checkbox', 'text!directives/checkbox.html',
+    'directives/view-injector',
     'directives/print-smart/print-smart-checkout', 'text!directives/print-smart/print-smart-checkout.html',
     'views/meetings/documents/agenda',
     'views/meetings/documents/documents',

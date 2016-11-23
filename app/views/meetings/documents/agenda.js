@@ -1,4 +1,4 @@
-define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'directives/print-smart/print-smart-checkout', './meeting-document'], function(_, moment) {
+define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'directives/view-injector', 'directives/print-smart/print-smart-checkout', './meeting-document'], function(_, moment) {
     //'css!./agenda.css' // moved to template
 
     var CALENDAR_SETTINGS = {
@@ -14,13 +14,14 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
         { code: 'evening',   end : '24:00'}
     ];
 
-	return ["$scope", "$route", "$http", '$q', function ($scope, $route, $http, $q) {
+	return ["$scope", "$route", "$http", '$q', 'eventId', 'streamId', function ($scope, $route, $http, $q, eventId, streamId) {
 
-        var eventGroupId = '56f14b1e49a977d560a27ede'; // from route;
-        var _ctrl = this;
+        var _ctrl = $scope.agendaCtrl = this;
 
         _ctrl.CALENDAR = CALENDAR_SETTINGS;
         _ctrl.expandAll = expandAll;
+        _ctrl.streamId = streamId;
+        _ctrl.resolveLiteral = function(value) { return function() { return value; }; };
 
         load();
 
@@ -31,13 +32,13 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
 
 
             var reservations, now;
-            var eventGroup = $http.get('/api/v2016/event-groups/'+eventGroupId, { params: { f : { timezone:1, MajorEventIDs:1, Title: 1, Description:1, venueId:1, schedule:1 } } }).then(function(res) {
+            var event = $http.get('/api/v2016/event-groups/'+eventId, { params: { f : { timezone:1, MajorEventIDs:1, Title: 1, Description:1, venueId:1, schedule:1 } } }).then(function(res) {
 
-                _ctrl.eventGroup = eventGroup = res.data;
+                _ctrl.event = event = res.data;
 
             }).then(function(){
 
-                now = _ctrl.now = moment.tz($route.current.params.datetime || new Date(), eventGroup.timezone).toDate();
+                now = _ctrl.now = moment.tz($route.current.params.datetime || new Date(), event.timezone).toDate();
 
                 return loadReservations(now);
 
@@ -106,8 +107,8 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
 
                 reservations.forEach(function(r) {
 
-                    var startOfDay = moment(r.start).tz(eventGroup.timezone).startOf('day').toISOString();
-                    var startTime  = moment(r.start).tz(eventGroup.timezone).format("HH:mm");
+                    var startOfDay = moment(r.start).tz(event.timezone).startOf('day').toISOString();
+                    var startTime  = moment(r.start).tz(event.timezone).format("HH:mm");
 
                     r.day     = startOfDay;
                     r.dayPart = _(DAY_PARTS).find(function(p) { return startTime < p.end; }).code;
@@ -149,7 +150,7 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
         function loadReservations(now) {
 
             var start = moment(now).toDate(); // from now
-            var end   = moment(now).tz(_ctrl.eventGroup.timezone).startOf('day').add(2, 'days').toDate(); // to tomorrow
+            var end   = moment(now).tz(_ctrl.event.timezone).startOf('day').add(2, 'days').toDate(); // to tomorrow
 
             var fields = { start : 1, end : 1, agenda :1, type: 1, title: 1 };
             var sort   = { start : 1, end : 1 };

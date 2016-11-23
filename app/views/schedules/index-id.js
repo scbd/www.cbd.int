@@ -1,10 +1,20 @@
-define(['app', 'underscore', 'moment-timezone', 'filters/moment', 'filters/html-sanitizer'], function(app, _, moment) { "use strict";
+define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sanitizer'], function(app, _, moment) { "use strict";
 
-	return ['$scope', '$http', '$route', '$q', '$interval', function($scope, $http, $route, $q, $interval) {
+    var CALENDAR_SETTINGS = {
+        lastDay: '[Yesterday] - dddd D',
+        sameDay: '[Today] - dddd D',
+        nextDay: '[Tomorrow] - dddd D',
+        sameElse: 'dddd D, MMMM YYYY'
+    };
+
+	return ['$scope', '$http', '$route', '$q', '$interval', 'streamId', function($scope, $http, $route, $q, $interval, defaultStreamId) {
 
         var _streamData;
 
-        var _ctrl = this;
+        var _ctrl = $scope.scheduleCtrl =  this;
+
+        _ctrl.CALENDAR = CALENDAR_SETTINGS;
+
         var timer = $interval(load, 60*1000);
 
         $scope.$on('$destroy', function(){
@@ -19,7 +29,7 @@ define(['app', 'underscore', 'moment-timezone', 'filters/moment', 'filters/html-
 		//========================================
         function load() {
 
-            var streamId = $route.current.params.streamId || '6632294138146144';
+            var streamId = defaultStreamId || $route.current.params.streamId;
             var options  = { params : { } };
             var now = new Date();
 

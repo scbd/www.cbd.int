@@ -1,11 +1,10 @@
 define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document'], function(_) {
     //'css!./agenda.css' // moved to template
-	return ["$scope", "$route", "$http", '$q', '$location', function ($scope, $route, $http, $q, $location) {
+	return ["$scope", "$route", "$http", '$q', '$location', 'meeting', function ($scope, $route, $http, $q, $location, meetingCode) {
 
         var tabs = [ 'outcome', 'in-session', 'official', 'informational', 'other', 'notification' ];
-        var meetingCode = $route.current.params.meeting;
 
-        var _ctrl = this;
+        var _ctrl = $scope.documentsCtrl = this;
 
         _ctrl.sort = $location.hash() == 'agenda' ? 'agenda' : 'document';
 
