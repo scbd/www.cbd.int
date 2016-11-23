@@ -42,22 +42,6 @@ define(['app', 'angular', 'bootstrap', 'authentication', ], function(app, ng) { 
         //
         //
         //============================================================
-        function navigate(url) {
-
-            if(url.indexOf(basePath+'/')!==0) {
-
-                $scope.$applyAsync(function() { $window.location.href = url; });
-
-                return;
-            }
-
-            $location.url(url.substr((basePath+'/').length));
-        }
-
-        //============================================================
-        //
-        //
-        //============================================================
         $scope.encodedReturnUrl = function () {
             return encodeURIComponent($location.absUrl());
         };
