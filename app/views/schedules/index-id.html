@@ -45,19 +45,19 @@
 
     <div class="row">
 
-        <div class="pull-right hidden-xs" style="margin:15px;margin-top:24px">
-            <input type="text" class="form-control" ng-model="search" placeholder="Search...">
+        <div class="col-xs-12" ng-if="!scheduleCtrl.frames.length">
+            <h3>{{::day|moment:'tz':scheduleCtrl.event.timezone|moment:'calendar':(undefined|moment):scheduleCtrl.CALENDAR}}</h3>
+            No activities scheduled for the day
         </div>
 
-        <div ng-if="(indexIdCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } }).length">
+        <div ng-if="(scheduleCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } }).length">
 
-            <div class="col-sm-8 col-xs-12">
-                <h1>Daily Schedule</h1>
-            </div>
-
-            <div class="col-xs-12 schedule" ng-repeat="frame in (indexIdCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } })">
-                <h2 class="pull-right"><small ng-if="indexIdCtrl.now"><em>Current time</em> <b>{{indexIdCtrl.now | moment:'tz':indexIdCtrl.event.timezone | moment:'format':'H:mm'}}</b></small></h2>
-                <h2>{{frame.content.title}}</h2>
+            <div class="col-xs-12 schedule" ng-repeat="frame in (scheduleCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } })">
+                <!-- <div class="pull-right hidden-xs" style="margin:15px;margin-top:24px">
+                    <input type="text" class="form-control" ng-model="search" placeholder="Search...">
+                </div> -->
+                <h2 class="pull-right"><small ng-if=":: false && scheduleCtrl.now"><em>Current venue time</em> <b>{{scheduleCtrl.now | moment:'tz':scheduleCtrl.event.timezone | moment:'format':'H:mm'}}</b></small></h2>
+                <h3>{{frame.content.title}}</h3>
                 <p class="alert alert-info" ng-if="(frame.reservations | filter:{ type : { _id: '570fd0a52e3fa5cfa61d90ee' } }).length">
                     <a href='/side-events'  style="color:inherit">For a detailed and complete list of side-events, please click here to visit the CBD Side-Events page</a>.
                 </p>
@@ -67,7 +67,7 @@
                             <table class="table">
                                 <tr>
                                     <td class="schedule-item-time text-right" class="text-nowrap" style="width:55px">
-                                        <div class="text-primary"><b>{{r.start | moment:'tz':indexIdCtrl.event.timezone | moment:'format':'H:mm'}}</b></div>
+                                        <div class="text-primary"><b>{{r.start | moment:'tz':scheduleCtrl.event.timezone | moment:'format':'H:mm'}}</b></div>
                                         <div class="small text-muted">
                                             <span ng-hide="r.type.closed">Open</span>
                                             <span ng-show="r.type.closed">Closed</span>
@@ -86,6 +86,12 @@
 
                                         <div class="schedule-item-title">
                                             {{r.sideEvent.title || r.title}}
+                                            <div ng-if="r.agenda.visible && r.agenda.items.length">
+                                                <div ng-repeat="item in r.agenda.items">
+                                                    <span class="label agenda {{item.prefix}}" title="item.title">{{item.prefix}} {{item.item}}</span>
+                                                    {{item.text || item.title}}
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -101,7 +107,7 @@
         </div>
 
 
-        <div ng-if="(indexIdCtrl.frames | filter: { 'content' : { 'type':'announcement', html : search } }).length">
+        <div ng-if="(scheduleCtrl.frames | filter: { 'content' : { 'type':'announcement', html : search } }).length">
 
             <div class="col-sm-8 col-xs-12">
                 <h1>Announcements</h1>
@@ -109,7 +115,7 @@
         </div>
 
         <div>
-            <div class="col-xs-12 announcement" ng-repeat="frame in (indexIdCtrl.frames | filter: { 'content' : { 'type':'announcement', html : search} })">
+            <div class="col-xs-12 announcement" ng-repeat="frame in (scheduleCtrl.frames | filter: { 'content' : { 'type':'announcement', html : search} })">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div ng-bind-html="frame.content.html | sanitizeHtml | safeHtml">

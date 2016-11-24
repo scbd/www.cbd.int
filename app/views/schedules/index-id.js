@@ -1,16 +1,19 @@
-define(['app', 'underscore', 'moment-timezone', 'filters/moment', 'filters/html-sanitizer'], function(app, _, moment) { "use strict";
+define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sanitizer'], function(app, _, moment) { "use strict";
 
-	return ['$scope', '$http', '$route', '$q', '$interval', function($scope, $http, $route, $q, $interval) {
+    var CALENDAR_SETTINGS = {
+        lastDay: '[Yesterday] - dddd D',
+        sameDay: '[Today] - dddd D',
+        nextDay: '[Tomorrow] - dddd D',
+        sameElse: 'dddd D, MMMM YYYY'
+    };
+
+	return ['$scope', '$http', '$route', '$q', 'streamId', function($scope, $http, $route, $q, defaultStreamId) {
 
         var _streamData;
 
-        var _ctrl = this;
-        var timer = $interval(load, 60*1000);
+        var _ctrl = $scope.scheduleCtrl =  this;
 
-        $scope.$on('$destroy', function(){
-            console.log('$destroy', timer);
-            $interval.cancel(timer);
-        });
+        _ctrl.CALENDAR = CALENDAR_SETTINGS;
 
         load();
 
@@ -19,7 +22,7 @@ define(['app', 'underscore', 'moment-timezone', 'filters/moment', 'filters/html-
 		//========================================
         function load() {
 
-            var streamId = $route.current.params.streamId || '6632294138146144';
+            var streamId = defaultStreamId || $route.current.params.streamId;
             var options  = { params : { } };
             var now = new Date();
 
@@ -35,8 +38,8 @@ define(['app', 'underscore', 'moment-timezone', 'filters/moment', 'filters/html-
                 var venueId = _streamData.eventGroup.venueId;
 
                 return $q.all([
-                    $http.get('/api/v2016/reservation-types', { cache : true }),
-                    $http.get('/api/v2016/venue-rooms',       { cache : true, params: { q: { venue : venueId } } })
+                    $http.get('/api/v2016/types',       { cache : true, params: { q: { schema: 'reservations' }, f: { title: 1, priority: 1, closed: 1, style: 1 } } }),
+                    $http.get('/api/v2016/venue-rooms', { cache : true, params: { q: { venue : venueId },        f: { title: 1, location: 1 } } })
                 ]);
 
             }).then(function(res) {

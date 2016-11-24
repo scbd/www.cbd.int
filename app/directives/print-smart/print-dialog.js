@@ -1,247 +1,132 @@
-/* global -close */
-define(['app', 'text!./print-dialog.html','angular', 'underscore', 'ngCookies'], function(app, templateHtml, angular, _) {
+define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbox'], function(angular, _, Dropbox) {'use strict';
 
-	app.directive('printSmartPrintDialog', ["$http", "$location", "$cookies", "$window", function($http, $location, $cookies, $window) {
-		return {
-			restrict : "AEC",
-			require: '?^printSmart',
-			replace : true,
-			scope :  {},
-			template : templateHtml,
-			link: function ($scope, element, attrs, psCtrl) {
+    var PDF = 'application/pdf';
 
-				$scope.disabled = !psCtrl;  //optional directive is disabled if no controller
+    return ['$scope', '$http', '$cookies', 'documents', function ($scope, $http, $cookies, documents) {
 
-				if(!psCtrl)	return;
+        var _ctrl = $scope.printCtrl = this;
 
-				///////////////////////////////////////////////
+        documents = _(documents).filter(function(d) { return _.some(d.files, { mime : PDF }); }).value();
 
-				var allLanguages = {
-					ar : "العربية",
-					en : "English",
-					es : "Español",
-					fr : "Français",
-					ru : "Русский",
-					zh : "中文"
-				};
+		_ctrl.locales = _(documents).map('files').flatten().where({ mime : PDF}).map('locale').uniq().sortBy().value();
+		_ctrl.selectedLocales  = {};
+        _ctrl.print = print;
+		_ctrl.close = close;
+        _ctrl.canPrint = canPrint;
+        _ctrl.printShop = printShop;
+        _ctrl.hasPrintShop = $cookies.get("printShop")=="true";
 
-				$scope.cleanBadge = cleanBadge;
-				$scope.clearError = clearError;
-				$scope.close      = close;
-				$scope.loading    = false;
-				$scope.allLanguages    = allLanguages;
-				$scope.documentLocales = [];
-				$scope.locales         = {};
-                $scope.focus           = focus;
+		//==============================================
+		//
+		//
+		//==============================================
+		function print() {
 
-				element.on("show.bs.modal", function() {
-                    $scope.badgeCode = "";
-					$scope.badgeCode = cleanBadge($scope.$root.badgeCode || "");
-					$scope.error     = null;
-					$scope.success   = null;
-					$scope.documents = psCtrl.documents();
-					$scope.documentLocales = getDocumentLocales();
-					$scope.locales   = {};
+            if($scope.printForm.$invalid)
+                return;
 
-					if($scope.documentLocales.length==1)
-						$scope.locales[$scope.documentLocales[0]] = true;
-				});
+			delete _ctrl.error;
+			delete _ctrl.success;
 
-				element.on("shown.bs.modal", focus);
+			var postData = {
+				badge     : cleanBadge(),
+				documents : documentsToPrint()
+			};
 
-				//==============================================
-				//
-				//
-				//==============================================
-				function cleanBadge(code) {
-					return (code||$scope.badgeCode||"").replace(/[^0-9]/g, "");
-				}
+			_ctrl.loading = true;
 
-				//==============================================
-				//
-				//
-				//==============================================
-				function clearError() {
-					$scope.error = null;
-				}
+			$http.post("/api/v2014/printsmart-requests/batch", postData).then(function() {
 
-				//==============================================
-				//
-				//
-				//==============================================
-                function focus() {
-                    element.find('#badgeCode:visible').focus();
-                }
+				_ctrl.success = true;
 
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.canPrint = function() {
-					return cleanBadge().length >= 8 && _.compact(_.values($scope.locales)).length>0;
-				};
+			}).catch(function(res){
 
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.canPrintShop = function() {
-					return $cookies.get("printShop")=="true" && _.compact(_.values($scope.locales)).length>0;
-				};
+				if(angular.isObject(res.data)) _ctrl.error = res.data;
+				else if(status==404)  _ctrl.error = { error: "NO_SERVICE" };
+				else if(status==500)  _ctrl.error = { error: "NO_SERVICE" };
+				else                  _ctrl.error = { error: "UNKNOWN",    message : "Unknown error" };
 
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.hasPrintShop = function() {
-					return $cookies.get("printShop")=="true" && (typeof(Storage) !== "undefined");
-				};
+			}).finally(function(){
+				delete _ctrl.loading;
+            });
+		}
 
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.hasLocales = function() {
-					return _.some(_.values($scope.locales||{}));
-				};
+		//==============================================
+		//
+		//
+		//==============================================
+		function documentsToPrint() {
 
-				//==============================================
-				//
-				//
-				//==============================================
-				function getDocumentLocales() {
+			return _(documents).map(function(doc) {
 
-					var locales = _($scope.documents).map(function(doc){
-						return _.keys(doc.urls.pdf);
-					});
+                var pdfs  = _.where (doc.files, { mime: PDF });
+                var files = _.filter(pdfs, function(f) { return _ctrl.selectedLocales[f.locale]; });
 
-					return _.chain(locales).flatten().uniq().sortBy(_.identity).value();
-				}
+                if(!files.length) files = _.where(pdfs, { locale: 'en' });
+                if(!files.length) files = _.take (pdfs, 1);
 
-				//==============================================
-				//
-				//
-				//==============================================
-				function documentsToPrint() {
+                return _.map(files, function(f) {
+                    return {
+						symbol  : doc.symbol,
+						tag     : doc.tag,
+						url     : f.url,
+						language: f.locale
+                    };
+                });
 
-					var documents = [];
+			}).flatten().value();
+		}
 
-					_.each($scope.documents, function(doc) {
+		//==============================================
+		//
+		//
+		//==============================================
+		function cleanBadge(code) {
+			return (code||_ctrl.badgeCode||"").replace(/[^0-9]/g, "");
+		}
 
-						_.each($scope.locales, function(active, locale) {
+		//==============================================
+		//
+		//
+		//==============================================
+		function canPrint() {
+			return cleanBadge().length >= 8 && _.some(_ctrl.selectedLocales);
+		}
 
-							if(!active) return;
+		//==============================================
+		//
+		//
+		//==============================================
+		function printShop() {
 
-							documents.push({
-								symbol  : doc.symbol,
-								tag     : doc.tag,
-								url     : doc.urls.pdf[locale] || doc.urls.pdf.en,
-								language: doc.urls.pdf[locale] ?  locale : 'en'
-							});
-						});
-					});
+			delete _ctrl.error;
+			delete _ctrl.success;
 
-					documents = _.uniq(documents, function(doc){
-						return doc.url;
-					});
+            localStorage.setItem("printShop", JSON.stringify({
+                badge     : cleanBadge(),
+                documents : documentsToPrint()
+            }));
 
-					return documents;
+			close().then(function(){
+                $window.location = '/printsmart/printshop';
+			});
+		}
 
-				}
+		//==============================================
+		//
+		//
+		//==============================================
+        function focus() {
+            angular.element('#badgeCode:visible').focus();
+        }
 
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.print = function() {
+		//==============================================
+		//
+		//
+		//==============================================
+		function close(target) {
+            $scope.closeThisDialog(target);
+		}
 
-                    if($scope.printForm.$invalid)
-                        return;
-
-					$scope.error = null;
-					$scope.success = null;
-
-					var postData = {
-						badge     : cleanBadge(),
-						documents : documentsToPrint()
-					};
-
-					$scope.loading = true;
-
-					$http.post("/api/v2014/printsmart-requests/batch", postData).success(function(data) {
-
-						$scope.loading = false;
-						$scope.success       = angular.isObject(data) ? data : {};
-
-					}).error(function(data, status){
-
-						$scope.loading = false;
-
-						if(angular.isObject(data)) $scope.error = data;
-						else if(status==404)       $scope.error = { error: "NO_SERVICE" };
-						else if(status==500)       $scope.error = { error: "NO_SERVICE" };
-						else                       $scope.error = { error: "UNKNOWN",    message : "Unknown error" };
-					});
-				};
-
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.printShop = function() {
-
-					$scope.error = null;
-					$scope.success = null;
-
-                    localStorage.setItem("printShop", JSON.stringify({
-                        badge     : cleanBadge(),
-                        documents : documentsToPrint()
-                    }));
-
-					close().then(function(){
-                        $window.location = '/printsmart/printshop';
-					});
-				};
-
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.back = function() {
-
-                    setUnsubmited();
-
-					$scope.error   = null;
-					$scope.success = null;
-
-					psCtrl.open('checkout');
-				};
-
-
-				//==============================================
-				//
-				//
-				//==============================================
-				function close(clear) {
-
-                    setUnsubmited();
-
-					if(!!clear)
-						psCtrl.clear();
-
-					return psCtrl.close();
-				}
-
-				//==============================================
-				//
-				//
-				//==============================================
-                function setUnsubmited() {
-
-                    element.find("form").removeClass('ng-submitted');
-                    $scope.printForm.$submitted = false;
-                }
-			}
-		};
-	}]);
+	}];
 });

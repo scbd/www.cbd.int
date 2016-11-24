@@ -1,136 +1,209 @@
-define(['app', 'text!./print-smart-checkout.html', './checkout-dialog', './print-dialog', './download-dialog'], function(app, templateHtml) {
+define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular', 'ngDialog', 'filters/lstring'], function(app, templateHtml, require, _, ng) {
 
-	app.directive('printSmartCheckout', ["$timeout", function($timeout) {
-		return {
-			restrict : "AEC",
-			require: '?^printSmart',
+    var PDF = 'application/pdf';
+
+	app.directive('printSmartCheckout', ['$q', '$timeout', 'ngDialog', '$filter', function($q, $timeout, ngDialog, $filter) {
+
+        var lstring = $filter('lstring');
+
+        return {
+			restrict : "E",
 			replace : true,
-			priority: 1000,
-			scope : {},
 			template : templateHtml,
-			link: function ($scope, element, attrs, psCtrl) {
+			scope : {
+                documents : "&documents"
+            },
+			link: function ($scope, element) {
 
-				$scope.disabled = !psCtrl;  //optional directive is disabled if no controller
+                initHelp();
 
-				if(!psCtrl)	return;
+		        $scope.canPrint = function() { return true; };//psCtrl.canPrint();
+		        $scope.clear    = clear;
+		        $scope.remove   = remove;
+		        $scope.checkout = checkout;
+		        $scope.print    = print;
+		        $scope.download = download;
+		        $scope.printableDocuments = printableDocuments;
+                $scope.displayText = displayText;
 
-				///////////////////////////////////////////////
-
-				var popover = element.find('#checkout');
-
-				popover.popover({
-					delay : { show: 500, hide: 250 },
-					trigger : 'manual',
-					placement : function() {
-						return element.css('position') == 'fixed' ? 'bottom' : 'top';
-					}
-				});
-
-				if(element.hasClass('fixed-top-right')) {
-
-					element.removeClass("fixed-top-right");
-
-					var pos = element.position();
-
-					$(window).scroll(function() {
-
-				        var windowpos = $(window).scrollTop();
-
-				        if (windowpos >= pos.top) {
-				            element.addClass("fixed-top-right");
-				        } else {
-				            element.removeClass("fixed-top-right");
-				        }
-
-						if(!windowpos)
-							pos = element.position();
-				    });
+				//==============================================
+				//
+				//
+				//==============================================
+				function documents() {
+                    return $scope.documents();
 				}
 
+				//==============================================
+				//
+				//
+				//==============================================
+				function printableDocuments() {
+                    return _(documents()).filter(function(d) {
+                        return d.printable && _(d.files||[]).some({ mime: PDF }) ;
+                    }).value();
+                }
 
-				var autoKillHelp = null;
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.$watch( function() { return psCtrl.help(); }, function(visible){
-
-					if(autoKillHelp) {
-						$timeout.cancel(autoKillHelp);
-						autoKillHelp = null;
-					}
-
-
-					if(visible===false) popover.popover('hide');
-					if(visible===true) {
-
-						popover.popover('show');
-
-						autoKillHelp = $timeout(function() {
-							autoKillHelp = null;
-							psCtrl.help(false);
-						}, 3000);
-
-					}
-				});
+				function clear() {
+                    (documents()||[]).forEach(remove);
+				}
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.documents = function() {
-					return psCtrl.documents();
-				};
+				function remove(d) {
+					delete d.selected;
+				}
+
+                //==============================================
+                //
+                //
+                //==============================================
+                function displayText(d) {
+
+                    return /^[A-Z0-9]{24}$/i.test(d.symbol)
+                         ? truncate(lstring(d.title, 'en'), 50)
+                         : d.symbol;
+                }
+
+                //==============================================
+                //
+                //
+                //==============================================
+                function truncate(t, length) {
+                    return t.length>length ? t.substr(0,length)+'...' : t;
+                }
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.clear = function() {
-					return psCtrl.clear();
-				};
+				function checkout() {
+
+                    if(!documents().length) return help(true);
+
+					openDialog('./checkout-dialog', { resolve : { documents: resolver(documents()) } }).then(function(dialog){
+                        dialog.closePromise.then(onCloseDialog);
+                    });
+				}
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.remove = function(symbol) {
-					return psCtrl.remove(symbol);
-				};
+				function print() {
+
+                    if(!documents().length) return help(true);
+
+					openDialog('./print-dialog', { resolve : { documents: resolver(documents()) } }).then(function(dialog){
+                        dialog.closePromise.then(onCloseDialog);
+                    });
+				}
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.checkout = function() {
-					psCtrl.open('checkout');
-				};
+				function download() {
+
+                    if(!documents().length) return help(true);
+
+					openDialog('./download-dialog', { resolve : { documents: resolver(documents()) } }).then(function(dialog){
+                        dialog.closePromise.then(onCloseDialog);
+                    });
+				}
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.print = function() {
-					psCtrl.open('print');
-				};
+				function onCloseDialog(res) {
+                    if(res.value=='checkout') checkout();
+                    if(res.value=='download') download();
+                    if(res.value=='print')    print();
+                    if(res.value=='clear')    clear();
+                }
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.download = function() {
-					psCtrl.open('download');
-				};
+                var helpTimer;
+                function help(visible) {
+
+                    $timeout.cancel(helpTimer);
+
+                    element.find('#checkout').popover(visible ? 'show' : 'hide');
+                    ng.element('body').toggleClass('printsmart-help', visible);
+
+                    if(visible) {
+                        helpTimer = $timeout(function() {
+                            help(false);
+                        }, 2000);
+                    }
+                }
 
 				//==============================================
 				//
 				//
 				//==============================================
-				$scope.canPrint = function() {
-					return psCtrl.canPrint();
-				};
-			}
+                function initHelp() {
+                    element.find('#checkout').popover({ placement: 'top', trigger : 'manual' });
+                    $scope.$on('$destroy', function(){
+                        help(false);
+                    });
+                }
+	        }
 		};
+
+        //===========================
+        //
+        //===========================
+        function openDialog(dialog, options) {
+
+            options = options || {};
+
+            return $q(function(resolve, reject) {
+
+                require(['text!'+dialog+'.html', dialog], function(template, controller) {
+
+                    options.plain = true;
+                    options.template = template;
+                    options.controller = controller;
+
+                    if(options.showClose      ===undefined) options.showClose       = false;
+                    if(options.closeByDocument===undefined) options.closeByDocument = false;
+                    if(options.className      ===undefined) options.className       = 'ngdialog-theme-default printsmart';
+
+                    var dialog = ngDialog.open(options);
+
+                    dialog.closePromise.then(function(res){
+
+                        if(res.value=="$escape")      throw res; //cancel
+                        if(res.value=="$document")    throw res; //cancel
+                        if(res.value=="$closeButton") throw res; //cancel
+
+                        return res;
+                    });
+
+                    resolve(dialog);
+
+                }, reject);
+            });
+        }
+
+        //===========================
+        //
+        //===========================
+        function resolver(value) {
+            return function() { return value; };
+        }
+
 	}]);
 });

@@ -18,6 +18,26 @@ define(['app', 'angular', 'bootstrap', 'authentication', ], function(app, ng) { 
             $window.location.href = '/';
         });
 
+        $scope.meetingNavCtrl = {
+            isSelected : function(name) {
+
+                if(name && $scope.meetingNavCtrl.currentSelection)
+                    return name==$scope.meetingNavCtrl.currentSelection;
+
+                var selected = false;
+                var path = basePath + $location.path();
+
+                if(name) selected = selected || path.indexOf(name)===0;
+                else     selected = selected || path.indexOf('/conferences/2016')===0;
+
+                return selected;
+            },
+
+            hash : function() {
+                return $location.hash();
+            }
+        };
+
         //============================================================
         //
         //

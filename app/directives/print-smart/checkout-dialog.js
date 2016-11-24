@@ -1,60 +1,18 @@
 /* global -close */
-define(['app', 'text!./checkout-dialog.html'], function(app, templateHtml) {
+define(['lodash'], function(_) {
 
-	app.directive('printSmartCheckoutDialog', [function() {
-		return {
-			restrict : "AEC",
-			require: '?^printSmart',
-			replace : true,
-			scope :  {},
-			template : templateHtml,
-			link: function ($scope, element, attrs, psCtrl) {
+    var PDF = 'application/pdf';
 
-				$scope.disabled = !psCtrl;  //optional directive is disabled if no controller
+	return ["$scope", "documents", function ($scope, documents) {
 
-				if(!psCtrl)	return;
+		$scope.documents = documents;
 
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.documents = function() {
-					return psCtrl.documents();
-				};
-
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.download = function() {
-					psCtrl.open('download');
-				};
-
-
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.print = function() {
-					psCtrl.open('print');
-				};
-
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.canPrint = function() {
-					return psCtrl.canPrint();
-				};
-
-				//==============================================
-				//
-				//
-				//==============================================
-				$scope.close = function() {
-					psCtrl.close();
-				};
-			}
-		};
-	}]);
+		$scope.download = function() { $scope.closeThisDialog('download'); };
+		$scope.print    = function() { $scope.closeThisDialog('print');    };
+		$scope.close    = function() { $scope.closeThisDialog();           };
+        $scope.canPrint = true;
+        $scope.printableDocuments = _(documents).filter(function(d) {
+            return d.printable && _(d.files||[]).some({ mime: PDF }) ;
+        }).value();
+	}];
 });

@@ -5,7 +5,8 @@ require.config({
     baseUrl : '/app/',
     paths: {
         'authentication'  : 'services/authentication',
-        'angular'         : 'libs/angular-flex/angular-flex',
+        'angular'         : 'libs/angular/angular.min',
+        'angular-flex'    : 'libs/angular-flex/angular-flex',
         'ngRoute'         : 'libs/angular-route/angular-route.min',
         'ngCookies'       : 'libs/angular-cookies/angular-cookies.min',
         'ngAnimate'       : 'libs/angular-animate/angular-animate.min',
@@ -13,16 +14,16 @@ require.config({
         'ngDialog'        : 'libs/ng-dialog/js/ngDialog.min',
         'text'            : 'libs/requirejs-text/text',
         'css'             : 'libs/require-css/css.min',
-        'jquery'          : 'libs/jquery/dist/jquery.min',
         'bootstrap'       : 'libs/bootstrap/dist/js/bootstrap.min',
         'lodash'          : 'libs/lodash/lodash.min',
         'bootstrap-notify': 'libs/remarkable-bootstrap-notify/bootstrap-notify.min',
         'moment'          : 'libs/moment/min/moment.min',
-        'moment-timezone' : 'libs/moment-timezone/builds/moment-timezone-with-data.min',
+        'moment-timezone' : 'libs/moment-timezone/builds/moment-timezone-with-data-2010-2020.min',
         'rangy'           : 'libs/rangy-release/rangy-core.min',
         'shim'            : 'libs/require-shim/src/shim',
         'interface'       : 'js/interface',
         'magnific-popup'  : 'libs/magnific-popup/dist/jquery.magnific-popup.min',
+        'jquery'          : 'libs/jquery/dist/jquery.min',
         'jquery-migrate'  : 'libs/jquery-migrate/jquery-migrate.min',
         'ammap3WorldHigh' : 'directives/reporting-display/worldEUHigh',
         'alasql'          : 'libs/alasql/dist/alasql.min',
@@ -31,15 +32,16 @@ require.config({
         'ods'             : 'libs/js-xlsx/dist/ods'
     },
     shim: {
-        'libs/angular/angular.min' : { deps : ['jquery'] },
-        'angular'              : { deps : ['libs/angular/angular.min'] },
-        'ngRoute'              : { deps : ['angular'] },
-        'ngCookies'            : { deps : ['angular'] },
-        'ngAnimate'            : { deps : ['angular'] },
-        'ngSanitize'           : { deps : ['angular'] },
-        'ngDialog'             : { deps : ['angular', 'css!libs/ng-dialog/css/ngDialog.min', 'css!libs/ng-dialog/css/ngDialog-theme-default.css'] },
+        'angular'              : { deps : ['jquery'], exports: 'angular' },
+        'angular-flex'         : { deps : ['angular', 'jquery'] },
+        'ngRoute'              : { deps : ['angular-flex'] },
+        'ngCookies'            : { deps : ['angular-flex'] },
+        'ngAnimate'            : { deps : ['angular-flex'] },
+        'ngSanitize'           : { deps : ['angular-flex'] },
+        'ngDialog'             : { deps : ['angular-flex' ]},// 'css!libs/ng-dialog/css/ngDialog.min', 'css!libs/ng-dialog/css/ngDialog-theme-default.css'] },
         'bootstrap'            : { deps : ['jquery' ] },
         'bootstrap-notify'     : { deps : ['jquery', 'bootstrap'] },
+        'moment-timezone'      : { deps : ['moment'] },
         'jquery-migrate'       : { deps : ['jquery']},
         'interface'            : { deps : ['jquery-migrate']},
         'magnific-popup'       : { deps : ['jquery']},
@@ -58,24 +60,38 @@ define('xlsx', ['js-zip', 'ods'], function (jszip, ods) {
     window.ODS   = ods;
 });
 
-define('underscore', ['lodash'], function(_) {
-    return _;
-});
+define('underscore', ['lodash'], function(_) { console.log('Deprecated: use lodash'); return _; });
 
-define('dropbox-dropins', function(){
+define('dropbox-dropins', ['https://www.dropbox.com/static/api/2/dropins.js'], function(){
     if(window.Dropbox)
         window.Dropbox.appKey = "uvo7kuhmckw68pl"; //registration@cbd.int
     return window.Dropbox;
 });
 
 // BOOT
-require(['angular', 'app', 'bootstrap', 'routes', 'template'], function(ng, app) {
-
+require(['angular', 'app', 'bootstrap', 'routes', 'template', 'ngSanitize', 'ngRoute', 'providers/extended-route'], function(ng, app) {
     ng.element(document).ready(function(){
         ng.bootstrap(document, [app.name]);
     });
-
 });
+
+//COP optimizer
+require([
+    'lodash',
+    'authentication',
+    'ngDialog',
+    'moment',
+    'moment-timezone',
+    'filters/lstring',
+    'filters/moment',
+    'directives/checkbox', 'text!directives/checkbox.html',
+    'directives/view-injector',
+    'directives/print-smart/print-smart-checkout', 'text!directives/print-smart/print-smart-checkout.html',
+    'views/meetings/documents/agenda',
+    'views/meetings/documents/documents',
+    'views/meetings/documents/meeting-document',
+]);
+
 })(document);
 
 // MISC

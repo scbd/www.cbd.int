@@ -1,4 +1,4 @@
-define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'authentication'], function(app, $, _) { 'use strict';
+define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authentication'], function(app, $, _) { 'use strict';
 
     var locationPath = window.location.pathname.toLowerCase().split('?')[0];
 
@@ -19,9 +19,9 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
         if(/^\/insession($|\/.*)/.test(locationPath))
             registerRoutes_insession($routeProvider);
 
-        // /schedule/*
-        if(/^\/schedules($|\/.*)/.test(locationPath))
-            registerRoutes_schedules($routeProvider);
+        // /conferences/**
+        if(/^\/conferences\/(.+)/.test(locationPath))
+            registerRoutes_conferences($routeProvider);
 
         // /aichi-targets/*
         if(/^\/aichi-targets($|\/.*)/.test(locationPath))
@@ -81,13 +81,17 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
   //
   //
   //============================================================
-  function registerRoutes_schedules(routeProvider) {
+  function registerRoutes_conferences(routeProvider) {
 
-      $("base").attr('href', '/schedules/'); // allow full page reload outside of  /insession/*
+      $("base").attr('href', '/conferences/'); // allow full page reload outside of  /insession/*
 
       routeProvider
-          .when('/:streamId?',       { templateUrl: 'views/schedules/index-id.html', controllerAs: 'indexIdCtrl', resolveController: true, progress : { stop : false } });
-  }
+      .when('/2016/cop-13-hls/documents',{templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { meeting: resolveLiteral('COP13-HLS') }, reloadOnSearch:false })
+      .when('/2016/cop-13/documents',   { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { meeting: resolveLiteral('COP-13')    }, reloadOnSearch:false })
+      .when('/2016/cp-mop-8/documents', { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { meeting: resolveLiteral('MOP-08')    }, reloadOnSearch:false })
+      .when('/2016/np-mop-2/documents', { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { meeting: resolveLiteral('NP-MOP-02') }, reloadOnSearch:false })
+      .when('/2016/schedules',          { templateUrl : 'views/meetings/documents/agenda.html',    resolveController : true, resolve: { eventId: resolveLiteral('56f14b1e49a977d560a27ede'), streamId:resolveLiteral('2677703125163603') } });
+    }
 
   //============================================================
   //
@@ -114,6 +118,13 @@ define(['app', 'jquery', 'underscore', 'providers/extended-route', 'ngRoute', 'a
         .when('/',                  { templateUrl: 'views/meetings/participants/index.html',    controllerAs: 'indexCtrl',   resolveController: true, resolve: { user : securize(["Administrator","KronosAdministrator", "ScbdStaff"]) }  });
   }
 
+    //============================================================
+    //
+    //
+    //============================================================
+    function resolveLiteral(value) {
+        return function() { return value; };
+    }
     //============================================================
     //
     //

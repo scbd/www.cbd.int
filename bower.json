@@ -13,7 +13,7 @@
     "angular-animate": "1.5.6",
     "angular-sanitize": "1.5.6",
     "font-awesome": "4.6.3",
-    "angular-flex": "git://github.com/scbd/angular-flex.git#1.0.1",
+    "angular-flex": "git://github.com/scbd/angular-flex.git#1.0.4",
     "ng-dialog": "0.6.1",
     "moment-timezone": "0.5.4",
     "lodash": "3.10.1",

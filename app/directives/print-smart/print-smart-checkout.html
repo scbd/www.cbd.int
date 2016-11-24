@@ -1,32 +1,52 @@
 <div>
-    <div class="btn-group" ng-show="documents().length">
-        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-            <ng-pluralize count="documents().length" when="{'one': '1 document', 'other': '{{documents().length}} documents'}"></ng-pluralize>
-            <span class="caret"></span>
+    <style>
+        .ngdialog.printsmart .ngdialog-content {
+            background-color: transparent;
+            padding: 0px;
+        }
+
+        .ngdialog.printsmart .ngdialog-content {
+          width: 650px;
+        }
+
+    </style>
+    <div class="btn-group">
+
+        <button id="checkout" ng-hide="disabled" type="button" class="btn btn-primary" ng-click="checkout()" data-toggle="popover" title="Document selection" data-content="Please select document(s) using the checkbox!">
+            <ng-pluralize class="hidden-xs"         count="documents().length||0" when="{'0' : 'No document selected', '1': 'Get the document »', 'other': 'Get the {{documents().length}} documents »'}"></ng-pluralize>
+            <ng-pluralize class="visible-xs-inline" count="documents().length||0" when="{'0' : 'No document',          '1': 'Get document',       'other': 'Get {{documents().length}} documents »'}"></ng-pluralize>
         </button>
 
-        <ul class="dropdown-menu text-left" role="menu">
-            <li style="font-size:inherit">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right text-left" role="menu">
+
+            <li style="font-size:inherit" ng-class="{ disabled : !documents().length }">
                 <a style="cursor:pointer;font-size:14px" ng-click="download()">
                     <i class="fa fa-arrow-circle-down"></i> Download
                 </a>
+            </li>
+
+            <li style="font-size:inherit" ng-class="{ disabled : !printableDocuments().length }">
                 <a style="cursor:pointer;font-size:14px" ng-show="canPrint()" ng-click="print()">
                     <i class="fa fa-print"></i> Print
                 </a>
             </li>
+
             <li class="divider"></li>
-            <li style="font-size:inherit">
+
+            <li style="font-size:inherit" ng-class="{ disabled : !documents().length }">
                 <a style="cursor:pointer;font-size:14px" ng-click="clear()"><i class="fa fa-times-circle"></i> Clear selection</a>
             </li>
-            <li class="divider"></li>
-            <li ng-repeat="d in documents()|orderBy:'symbol'">
-                <a style="cursor:pointer;font-size:14px" ng-click="remove(d.symbol)" style="font-size:14px"><i class="fa fa-times"></i> {{d.symbol}}</a>
+
+            <li ng-if="documents().length" class="divider"></li>
+
+            <li ng-repeat="d in documents()|orderBy:'sortKey'" title="{{d.title|lstring}}">
+                <a style="cursor:pointer;font-size:14px" ng-click="remove(d); documents().length && $event.stopPropagation();" style="font-size:14px"><i class="fa fa-times"></i> {{displayText(d)}}</a>
             </li>
         </ul>
     </div>
 
-    <button id="checkout" ng-hide="disabled" type="button" class="btn btn-primary" ng-click="checkout()" data-content="Please select document(s) using the checkbox!">
-        <ng-pluralize count="documents().length" when="{'0': 'Request copy »', 'one': 'Request copy »', 'other': 'Request copies »'}">
-    </button>
 
 </div>
