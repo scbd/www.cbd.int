@@ -1,9 +1,12 @@
-define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular', 'ngDialog'], function(app, templateHtml, require, _, ng) {
+define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular', 'ngDialog', 'filters/lstring'], function(app, templateHtml, require, _, ng) {
 
     var PDF = 'application/pdf';
 
-	app.directive('printSmartCheckout', ['$q', '$timeout', 'ngDialog', function($q, $timeout, ngDialog) {
-		return {
+	app.directive('printSmartCheckout', ['$q', '$timeout', 'ngDialog', '$filter', function($q, $timeout, ngDialog, $filter) {
+
+        var lstring = $filter('lstring');
+
+        return {
 			restrict : "E",
 			replace : true,
 			template : templateHtml,
@@ -21,6 +24,7 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
 		        $scope.print    = print;
 		        $scope.download = download;
 		        $scope.printableDocuments = printableDocuments;
+                $scope.displayText = displayText;
 
 				//==============================================
 				//
@@ -35,7 +39,7 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
 				//
 				//==============================================
 				function printableDocuments() {
-                    return _(documents).filter(function(d) {
+                    return _(documents()).filter(function(d) {
                         return d.printable && _(d.files||[]).some({ mime: PDF }) ;
                     }).value();
                 }
@@ -56,6 +60,25 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
 				function remove(d) {
 					delete d.selected;
 				}
+
+                //==============================================
+                //
+                //
+                //==============================================
+                function displayText(d) {
+
+                    return /^[A-Z0-9]{24}$/i.test(d.symbol)
+                         ? truncate(lstring(d.title, 'en'), 50)
+                         : d.symbol;
+                }
+
+                //==============================================
+                //
+                //
+                //==============================================
+                function truncate(t, length) {
+                    return t.length>length ? t.substr(0,length)+'...' : t;
+                }
 
 				//==============================================
 				//

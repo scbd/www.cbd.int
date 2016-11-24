@@ -12,7 +12,7 @@ define(['lodash'], function(_) {
 		$scope.close    = function() { $scope.closeThisDialog();           };
         $scope.canPrint = true;
         $scope.printableDocuments = _(documents).filter(function(d) {
-            return d.type=='in-session' && _(d.files||[]).some({ mime: PDF }) ;
+            return d.printable && _(d.files||[]).some({ mime: PDF }) ;
         }).value();
 	}];
 });
