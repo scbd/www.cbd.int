@@ -2,7 +2,7 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
     //'css!./agenda.css' // moved to template
 	return ["$scope", "$route", "$http", '$q', '$location', 'meeting', function ($scope, $route, $http, $q, $location, meetingCode) {
 
-        var tabs = [ 'outcome', 'in-session', 'official', 'informational', 'other', 'notification' ];
+        var tabs = [ 'outcome', 'in-session', 'official', 'informational', 'other', 'notification', 'statement' ];
 
         var _ctrl = $scope.documentsCtrl = this;
 
@@ -21,9 +21,11 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
 
             var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { params: { f : { EVT_TIT_EN:1, EVT_CD:1, print:1 , agenda:1, documents:1 } } }).then(function(res){
 
-                meeting       = res.data;
-                meeting.code  = meeting.code  || meeting.EVT_CD;
-                meeting.title = meeting.title || meeting.EVT_TIT_EN;
+                meeting = _.defaults(res.data, {
+                    code: res.data.EVT_CD,
+                    title: res.data.EVT_TIT_EN,
+                    agenda: { items: [] }
+                });
 
                 return meeting;
             });
