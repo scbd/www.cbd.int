@@ -7,20 +7,13 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
         sameElse: 'dddd D, MMMM YYYY'
     };
 
-	return ['$scope', '$http', '$route', '$q', '$interval', 'streamId', function($scope, $http, $route, $q, $interval, defaultStreamId) {
+	return ['$scope', '$http', '$route', '$q', 'streamId', function($scope, $http, $route, $q, defaultStreamId) {
 
         var _streamData;
 
         var _ctrl = $scope.scheduleCtrl =  this;
 
         _ctrl.CALENDAR = CALENDAR_SETTINGS;
-
-        var timer = $interval(load, 60*1000);
-
-        $scope.$on('$destroy', function(){
-            console.log('$destroy', timer);
-            $interval.cancel(timer);
-        });
 
         load();
 
