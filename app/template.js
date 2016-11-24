@@ -19,6 +19,10 @@ define(['app', 'angular', 'bootstrap', 'authentication', ], function(app, ng) { 
         });
 
         $scope.meetingNavCtrl = {
+            fullPath : function(name) {
+                return basePath + $location.path();
+            },
+
             isSelected : function(name) {
 
                 if(name && $scope.meetingNavCtrl.currentSelection)

@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="/app/libs/ng-dialog/css/ngDialog-theme-default.min.css">
     <link rel="stylesheet" href="/app/views/meetings/documents/agenda.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    
+
     <style>
 
     [ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }
@@ -263,7 +263,7 @@
                         <td class="notselected meetingnav-button">
                             <img src="/app/images/cop13-logo-white.png" style="position:absolute;top:13px;left:13px;width:56px;height:56px;z-index:1;filter: blur(0px);">
                             <img src="/app/images/cop13-logo.png" style="position:absolute;top:13px;left:13px;width:56px;height:56px;z-index:2">
-                            <a href="/cop2016" class="link"></a>
+                            <a href="/conferences/2016" class="link" style="z-index:30;"></a>
                         </td>
                         <td class="meetingnav-button" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/schedules')}">
                             <div class="selection-mark"></div>
@@ -352,7 +352,8 @@
                         </td>
                     </tr>
                 </table>
-                <div ng-if="false" style="background-color:rgba(0,0,0,0.2);position:relative;font-family:Open Sans;pp-sans-big-light,Helvetica Neue,Arial,sans-serif;">
+
+                <div ng-if="meetingNavCtrl.fullPath() == '/conferences/2016'" style="background-color:rgba(0,0,0,0.2);position:relative;font-family:Open Sans;pp-sans-big-light,Helvetica Neue,Arial,sans-serif;">
 
                     <div class="container" style="border-top:8px solid #fff;border-left:4px solid #fff;border-right:4px solid #fff;color:#fff;padding-top:60px;padding-bottom:80px">
                         <div class="col-md-5" style="padding-left:50px;transform: scale(1.4);background-color:rgba(0,0,0,0.0);text-align:center;color:#fff;text-shadow: 1px 1px 10px rgba(0, 0, 0, 1);">
