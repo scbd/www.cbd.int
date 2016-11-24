@@ -12,7 +12,7 @@
     </style>
     <div class="btn-group">
 
-        <button id="checkout" ng-hide="disabled" type="button" class="btn btn-primary" ng-click="checkout()" data-content="Please select document(s) using the checkbox!">
+        <button id="checkout" ng-hide="disabled" type="button" class="btn btn-primary" ng-click="checkout()" data-toggle="popover" title="Document selection" data-content="Please select document(s) using the checkbox!">
             <ng-pluralize class="hidden-xs"         count="documents().length||0" when="{'0' : 'No document selected', '1': 'Get the document »', 'other': 'Get the {{documents().length}} documents »'}"></ng-pluralize>
             <ng-pluralize class="visible-xs-inline" count="documents().length||0" when="{'0' : 'No document',          '1': 'Get document',       'other': 'Get {{documents().length}} documents »'}"></ng-pluralize>
         </button>
@@ -40,7 +40,7 @@
                 <a style="cursor:pointer;font-size:14px" ng-click="clear()"><i class="fa fa-times-circle"></i> Clear selection</a>
             </li>
 
-            <li class="divider"></li>
+            <li ng-if="documents().length" class="divider"></li>
 
             <li ng-repeat="d in documents()|orderBy:'symbol'">
                 <a style="cursor:pointer;font-size:14px" ng-click="remove(d); documents().length && $event.stopPropagation();" style="font-size:14px"><i class="fa fa-times"></i> {{d.symbol}}</a>

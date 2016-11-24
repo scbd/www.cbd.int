@@ -1,6 +1,6 @@
 
 <print-smart-checkout ng-cloak documents="agendaCtrl.documents|filter:{selected:true}:true" class="pull-right"></print-smart-checkout>
-<div class="btn btn-link pull-right" style="color:inherit" ng-if="agendaCtrl.now"><em>Venue time</em> <b>{{agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'H:mm'}}</b></div>
+<div class="btn btn-link pull-right" style="color:inherit;cursor:inherit;text-decoration:none" ng-if="agendaCtrl.now"><em>Venue time</em> <b>{{agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'H:mm'}}</b></div>
 <div>
 
     <!-- Nav tabs -->

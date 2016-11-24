@@ -27,3 +27,10 @@
 .title.agenda.NP   { color: #245680; }
 .title.agenda.CP   { color: #805C29; }
 */
+.printsmart-help-document-selector{
+    display: none;
+}
+
+.printsmart-help .printsmart-help-document-selector {
+    display: inline-block;
+}

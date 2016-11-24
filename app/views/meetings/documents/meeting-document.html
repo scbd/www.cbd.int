@@ -56,8 +56,14 @@
             </div>
 
         </td>
-        <td style="width:20px" ng-click="document.selected=!document.selected;">
-            <checkbox ng-if="document.files.length" ng-model="document.selected" style="font-size:2em" ng-class="{'text-info':document.type=='in-session', 'text-muted':document.type!='in-session' }"></checkbox>
+        <td ng-click="document.selected=!document.selected;" style="width:20px; position:relative;">
+            <div class="hidden-xs animated rubberBand  printsmart-help-document-selector" style="position:absolute;left:-30px;margin-top:5px">
+                <i class="fa fa-arrow-right text-info" style="font-size:2em"></i>
+            </div>
+            <div class="hidden-sm hidden-md hidden-lg animated rubberBand printsmart-help-document-selector" style="position:absolute;right:-3px;margin-top:10px">
+                <i class="fa fa-arrow-left text-info" style="font-size:1.2em"></i>
+            </div>
+            <checkbox  ng-if="document.files.length" ng-model="document.selected" style="font-size:2em" ng-class="{'text-info':document.printable, 'text-muted':!document.printable }"></checkbox>
         </td>
     </tr>
 </table>
