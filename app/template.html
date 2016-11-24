@@ -301,12 +301,17 @@
                         <td class="meetingnav-buttongroup">
                             <table style="height:100%;width:100%;font-size:12px;font-weight:bold">
                                 <tr style="height:0px">
-                                    <td colspan="3" style="vertical-align:top;padding-bottom:2px">
+                                    <td colspan="4" style="vertical-align:top;padding-bottom:2px">
                                         <div style="background-color:rgba(255,255,255,0.14);font-size:12px;font-weight:bold;height:26px;padding-top:5px;color:#ddd">DOCUMENTS</div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="CBD" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')}" style="position:relative;padding:0 6px;cursor:pointer" align="center">
+                                    <td class="HLS" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}" style="position:relative;padding:0 6px;cursor:pointer" align="center">
+                                        <div class="selection-mark"></div>
+                                        High Level Segment
+                                        <a href="/conferences/2016/cop-13-hls/documents" class="link"></a>
+                                    </td>
+                                    <td class="CBD" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')}" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center">
                                         <div class="selection-mark"></div>
                                         COP13
                                         <a href="/conferences/2016/cop-13/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
