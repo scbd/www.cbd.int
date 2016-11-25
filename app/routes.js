@@ -20,7 +20,7 @@ define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authe
             registerRoutes_insession($routeProvider);
 
         // /conferences/**
-        if(/^\/conferences\/(.+)/.test(locationPath))
+        if(/^\/conferences($|\/.*)/.test(locationPath))
             registerRoutes_conferences($routeProvider);
 
         // /aichi-targets/*
@@ -72,7 +72,7 @@ define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authe
       $("base").attr('href', '/insession/'); // allow full page reload outside of  /insession/*
 
       routeProvider
-      .when('/',           { templateUrl : 'views/meetings/documents/in-session/index.html',      resolveController : true})
+      .when('/',           { template : '<div></div>', resolve: { r: function() { window.location='/conferences/2016'; } } })
       .when('/management', { templateUrl : 'views/meetings/documents/in-session/management.html', resolveController : true, resolve : { user : securize(["Administrator","EditorialService"]) } } )
       .when('/:meeting',   { templateUrl : 'views/meetings/documents/in-session/meeting-id.html', resolveController : true, progress : { stop : false } } );
     }
@@ -86,6 +86,7 @@ define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authe
       $("base").attr('href', '/conferences/'); // allow full page reload outside of  /insession/*
 
       routeProvider
+      .when('/',                        { redirectTo: '/2016' })
       .when('/2016',                    { template : '<div></div>' })
       .when('/2016/cop-13-hls/documents',{templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { meeting: resolveLiteral('COP13-HLS') }, reloadOnSearch:false })
       .when('/2016/cop-13/documents',   { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { meeting: resolveLiteral('COP-13')    }, reloadOnSearch:false })
