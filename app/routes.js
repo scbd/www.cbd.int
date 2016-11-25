@@ -87,7 +87,7 @@ define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authe
 
       routeProvider
       .when('/',                        { redirectTo: '/2016' })
-      .when('/2016',                    { template : '<div></div>' })
+      .when('/2016',                    { templateUrl : 'views/meetings/cop13/index.html' })
       .when('/2016/cop-13-hls/documents',{templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { meeting: resolveLiteral('COP13-HLS') }, reloadOnSearch:false })
       .when('/2016/cop-13/documents',   { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { meeting: resolveLiteral('COP-13')    }, reloadOnSearch:false })
       .when('/2016/cp-mop-8/documents', { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { meeting: resolveLiteral('MOP-08')    }, reloadOnSearch:false })
