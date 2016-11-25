@@ -21,6 +21,8 @@ app.use(function(req, res, next) {  if(req.url.indexOf(".geojson")>0) res.conten
 
 // Configure static files to serve
 
+app.use('/app/images/p03qv92p.jpg', express.static(__dirname + '/app/images/p03qv92p.jpg',{ maxAge: 365*24*60*60*1000 }));
+
 app.use('/favicon.png',   express.static(__dirname + '/app/images/favicon.png', { maxAge: 24*60*60*1000 }));
 app.use('/app',           express.static(__dirname + '/app'/*,                    { maxAge: 5*60*1000 }*/));
 app.all('/app/*',         function(req, res) { res.status(404).send(); } );
