@@ -2,12 +2,21 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
     //'css!./agenda.css' // moved to template
 	return ["$scope", "$route", "$http", '$q', '$location', 'meeting', function ($scope, $route, $http, $q, $location, meetingCode) {
 
-        var tabs = [ 'outcome', 'in-session', 'official', 'informational', 'other', 'notification', 'statement' ];
+        var TABS_NAMES = {
+            'outcome'      : 'Outcomes',
+            'in-session'   : 'In Session',
+            'official'     : 'Official',
+            'informational': 'Information',
+            'other'        : 'Others',
+            'notification' : 'Notifications',
+            'statement'    : 'Statements'
+        };
 
         var _ctrl = $scope.documentsCtrl = this;
 
         _ctrl.sort = $location.hash() == 'agenda' ? 'agenda' : 'document';
         _ctrl.switchTab = switchTab;
+        _ctrl.TABS_NAMES = TABS_NAMES;
 
         $scope.$watch('documentsCtrl.sort', function(s){
             $location.hash(s=='agenda' ? 'agenda' : null);
@@ -62,10 +71,11 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
 
 
 
-            $http.get('https://api.cbd.int/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'symbol_s,reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
+            $http.get('https://api.cbd.int/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'id,symbol_s,reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
 
                 _ctrl.notifications = _.map(res.data.response.docs, function(n) {
                     return _.defaults(n, {
+                        _id: n.id,
                         symbol: n.reference_s || n.symbol_s,
                         number: n.symbol_s,
                         date:   n.date_dt,
@@ -77,8 +87,8 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
                 });
             }).then(function(){
 
-                if(_ctrl.notifications.length && (!_ctrl.tabs || !_ctrl.tabs.length))
-                    switchTab({code:'notification'});
+                injectNotifications();
+                switchTab();
 
             }).catch(console.error);
         }
@@ -106,6 +116,8 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
                 item.status = detectAgendaItemStatus(item);
             });
 
+            var tabs = _.keys(TABS_NAMES);
+
             _ctrl.meeting   = meeting;
             _ctrl.agenda    = meeting.agenda;
             _ctrl.documents = documents;
@@ -127,13 +139,35 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
             }).sortBy(function(t) { return tabs.indexOf(t.code);
             }).value();
 
-            switchTab(_ctrl.tabs[0]);
+            injectNotifications();
+            switchTab();
+        }
+
+        //==============================
+        //
+        //==============================
+        function injectNotifications(){
+
+            if(!_ctrl.notifications || !_ctrl.notifications.length)
+                return;
+
+            _ctrl.tabs.push({
+                code : 'notification',
+                documents : _ctrl.notifications
+            });
         }
 
         //==============================
         //
         //==============================
         function switchTab(tab) {
+
+            if(!tab && !_ctrl.currentTab)
+                tab = _ctrl.tabs[0]
+
+            if(!tab)
+                return;
+
             tab.loaded=true;
             _ctrl.currentTab = tab.code;
         }
