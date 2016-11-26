@@ -10,6 +10,17 @@ define(['app', 'angular', 'bootstrap', 'authentication', ], function(app, ng) { 
             $window.ga('send', 'pageview');
         });
 
+
+        updateSize();
+
+        ng.element($window).on('resize', updateSize);
+
+        function updateSize() {
+            $rootScope.$applyAsync(function(){
+                $rootScope.deviceSize = $('.device-size:visible').attr('size');
+            });
+        }
+
         $q.when(authentication.getUser()).then(function(u){
             $scope.user = u;
         });
