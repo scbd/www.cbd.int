@@ -7,6 +7,7 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
         var _ctrl = $scope.documentsCtrl = this;
 
         _ctrl.sort = $location.hash() == 'agenda' ? 'agenda' : 'document';
+        _ctrl.switchTab = switchTab;
 
         $scope.$watch('documentsCtrl.sort', function(s){
             $location.hash(s=='agenda' ? 'agenda' : null);
@@ -74,6 +75,11 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
                         files : urlToFiles(n.url_ss)
                     });
                 });
+            }).then(function(){
+
+                if(_ctrl.notifications.length && (!_ctrl.tabs || !_ctrl.tabs.length))
+                    switchTab({code:'notification'});
+
             }).catch(console.error);
         }
 
@@ -120,6 +126,16 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
             }).filter(function(t) { return t.documents.length;
             }).sortBy(function(t) { return tabs.indexOf(t.code);
             }).value();
+
+            switchTab(_ctrl.tabs[0]);
+        }
+
+        //==============================
+        //
+        //==============================
+        function switchTab(tab) {
+            tab.loaded=true;
+            _ctrl.currentTab = tab.code;
         }
 
         //==============================

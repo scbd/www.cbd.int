@@ -14,50 +14,95 @@ define(['app', 'lodash', 'text!./meeting-document.html', 'directives/checkbox'],
         'default':                                                                    { priority:999,  color: 'orange', btn: 'btn-default', icon: 'fa-file-o' }
     };
 
-
-	return app.directive('meetingDocument', [function() {
+	 return app.directive('meetingDocument', [function() {
 		return {
 			restrict : "E",
 			template : html,
             replace: true,
 			scope: {
-                document:"="
+                document:"<"
             },
 			link: function ($scope) {
 
                 $scope.MIMES     = MIMES;
                 $scope.LANGUAGES = LANGUAGES;
 
-                $scope.lookupUrl = lookupUrl;
-                $scope.isSymbolVisible= isSymbolVisible;
-                $scope.locales   = _($scope.document.files).map('locale').uniq().sortBy().value();
-                $scope.mimeTypes = _($scope.document.files).map('mime'  ).uniq().sort(function(a,b) {
+                $scope.isSymbolVisible= !/^[A-Z0-9]{24}$/i.test($scope.document.symbol);
+                $scope.initByLocales  = initByLocales;
+                $scope.initByMimes    = initByMimes;
 
-                    if(MIMES[a] || MIMES[b]) {
-                        a = (MIMES[a]||MIMES.default).priority;
-                        b = (MIMES[b]||MIMES.default).priority;
-                    }
+                var destroyWatch = $scope.$watch('$root.deviceSize', function(size){
+                    if(size=='xs') return; // for performance only load files byMimes  if sreeen > xs
+                    initByMimes();         // it prevent unless ng-repeat
+                    destroyWatch();
+                });
 
-                    if(a==b) return  0;
-                    if(a <b) return -1;
-
-                    return 1;
-
-                }).value();
-
-
-                //================================
+                //==============================
                 //
-                //================================
-                function lookupUrl(mime, locale) {
-                    return _($scope.document.files).where({ mime: mime, locale: locale }).map('url').first();
+                //==============================
+                function initByLocales() {
+
+                    if($scope.byLocales)
+                        return;
+
+                    $scope.byLocales = {};
+
+                    _($scope.document.files||[]).sort(function(a,b) {
+
+                        return sortByLocale(a,b) || sortByMime(a,b);
+
+                    }).forEach(function(f){
+
+                        $scope.byLocales[f.locale] = $scope.byLocales[f.locale]   || {};
+                        $scope.byLocales[f.locale][f.mime] = f;
+
+                    }).value();
+                }
+
+                function initByMimes() {
+
+                    if($scope.byMimes)
+                        return;
+
+                    $scope.byMimes = {};
+
+                    _($scope.document.files||[]).sort(function(a,b) {
+
+                        return sortByMime(a,b) || sortByLocale(a,b);
+
+                    }).forEach(function(f){
+
+                        $scope.byMimes[f.mime] = $scope.byMimes  [f.mime]   || {};
+                        $scope.byMimes[f.mime][f.locale] = f;
+
+                    }).value();
                 }
 
                 //==============================
                 //
                 //==============================
-                function isSymbolVisible(symbol) {
-                    return !/^[A-Z0-9]{24}$/i.test(symbol);
+                function sortByMime(a,b) {
+
+                    if(MIMES[a.mime] || MIMES[b.mime]) {
+                        a = (MIMES[a.mime]||MIMES.default).priority;
+                        b = (MIMES[b.mime]||MIMES.default).priority;
+                    }
+
+                    if(a<b) return -1;
+                    if(a>b) return  1;
+
+                    return 0;
+                }
+
+                //==============================
+                //
+                //==============================
+                function sortByLocale(a,b) {
+
+                    if(a.locale<b.locale) return -1;
+                    if(a.locale>b.locale) return  1;
+
+                    return 0;
                 }
 			}
 		};
