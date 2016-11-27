@@ -3,11 +3,22 @@
 <div class="btn btn-link pull-right" style="color:inherit;cursor:inherit;text-decoration:none" ng-if="agendaCtrl.now"><em>Venue time</em> <b>{{agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'H:mm'}}</b></div>
 <div>
 
+    <div class="clearfix visible-sm visible-xs"></div>
     <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
+    <ul class="nav nav-tabs" role="tablist" style="margin-top:5px">
         <li><a href="#cctv" role="tab" data-toggle="tab">All</a></li>
         <li ng-repeat="type in agendaCtrl.types" ng-class="::{ active: $first }" >
-            <a ng-href="#{{::type._id}}" role="tab" data-toggle="tab">{{::type.title}}</a>
+            <a ng-href="#{{::type._id}}" role="tab" data-toggle="tab">
+                <span class="hidden-xs">{{::type.title}}</span>
+                <span class="visible-xs-inline">
+                    <span ng-switch="type._id">
+                        <span ng-switch-when="570fd1ac2e3fa5cfa61d90f5">Plenary</span>
+                        <span ng-switch-when="5824f173d2fadf000182a0b9">WG.1</span>
+                        <span ng-switch-when="5824f198d2fadf000182a0ba">WG.2</span>
+                        <span ng-switch-default>{{::type.title}}</span>
+                    </span>
+                </span>
+            </a>
         </li>
         <!-- <li><a href="#cctv" data-toggle="tab" role="tab">Daily Schedule</a></li> -->
         <li><a href="https://www.cbd.int/side-events" target="_self" role="tab">Side-Events</a></li>

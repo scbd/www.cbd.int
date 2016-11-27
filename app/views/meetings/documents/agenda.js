@@ -121,7 +121,7 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
 
                         rItem.prefix    = (mAgenda||{}).prefix;
                         rItem.title     = (mItem||{}).title;
-                        rItem.shortitle = (mItem||{}).shortitle;
+                        rItem.shortTitle= (mItem||{}).shortTitle;
                         rItem.scopes    = (mItem||{}).scopes;
                         rItem.documents = mItemDocuments; //todo
                         rItem.status    = rItem.status || detectAgendaItemStatus(rItem);
