@@ -71,7 +71,7 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
 
 
 
-            $http.get('https://api.cbd.int/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'id,symbol_s,reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
+            $http.get('/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'id,symbol_s,reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
 
                 _ctrl.notifications = _.map(res.data.response.docs, function(n) {
                     return _.defaults(n, {
@@ -150,6 +150,8 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
 
             if(!_ctrl.notifications || !_ctrl.notifications.length)
                 return;
+
+            _ctrl.tabs = _ctrl.tabs || [];
 
             _ctrl.tabs.push({
                 code : 'notification',
