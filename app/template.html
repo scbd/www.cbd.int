@@ -201,7 +201,6 @@
             position:relative;
             width:84px;
             color:#fff;
-            cursor:pointer;
             text-align:center;
             background-color:rgba(0,0,0,0.40);
             border-left:4px solid #fff;
@@ -220,7 +219,6 @@
         .meetingnav-buttongroup {
             position:relative;
             color:#fff;
-            cursor:pointer;
             text-align:center;
             background-color:rgba(0,0,0,0.40);
             border-left:4px solid #fff;
@@ -235,6 +233,7 @@
             bottom:0px;
             right:0px;
             left:0px;
+            height: 80px;
         }
 
         .meetingnav .selected .selection-mark-DISBALED {
@@ -262,7 +261,7 @@
                         <td class="notselected meetingnav-button">
                             <img src="/app/images/cop13-logo-white.png" style="position:absolute;top:13px;left:13px;width:56px;height:56px;z-index:1;filter: blur(0px);">
                             <img src="/app/images/cop13-logo.png" style="position:absolute;top:13px;left:13px;width:56px;height:56px;z-index:2">
-                            <a href="/conferences/2016" class="link" style="z-index:30;"></a>
+                            <a href="/conferences/2016" class="link" style="height:80px;z-index:30;"></a>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </td>
                         <td class="meetingnav-button" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/schedules')}">
@@ -298,7 +297,7 @@
                                 <tr style="height:0px">
                                     <td colspan="4" style="vertical-align:top;padding-bottom:2px;position:relative">
 
-                                        <a class="pull-right visible-xs-block" style="border-left:solid 2px white;padding-right:10px;padding-top:2px;padding-left:10px;color:inherit;position:absolute;top:0px;right:0px;bottom:2px" data-toggle="dropdown"><i class="fa fa-info" aria-hidden="true" style="font-size:22px"></i></a>
+                                        <a class="pull-right visible-xs-block" style="border-left:solid 2px white;padding-right:10px;padding-top:3px;padding-left:10px;color:inherit;position:absolute;top:0px;right:0px;bottom:2px" data-toggle="dropdown"><i class="fa fa-info" aria-hidden="true" style="font-size:22px"></i></a>
 
                                         <div style="background-color:rgba(255,255,255,0.14);font-size:12px;font-weight:bold;height:26px;padding-top:5px;color:#ddd">DOCUMENTS</div>
 
@@ -317,12 +316,12 @@
                                     <td width="25%" class="HLS" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}" style="position:relative;padding:0 6px;cursor:pointer" align="center">
                                         <div class="selection-mark"></div>
                                         High Level <br> Segment
-                                        <a href="/conferences/2016/cop-13-hls/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
+                                        <a href="/conferences/2016/cop-13-hls/documents#{{meetingNavCtrl.hash()}}" class="link" style="height:52px;"></a>
                                     </td>
                                     <td width="25%" class="CBD" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')}" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center">
                                         <div class="selection-mark"></div>
                                         COP13
-                                        <a href="/conferences/2016/cop-13/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
+                                        <a href="/conferences/2016/cop-13/documents#{{meetingNavCtrl.hash()}}" class="link" style="height:52px;"></a>
                                     </td>
                                     <td width="25%" class="CP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')}" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center">
                                         <div class="selection-mark"></div>
@@ -331,7 +330,7 @@
                                             <span class="hidden-xs">COPMOP8</span>
                                             <span class="visible-xs-inline">MOP8</span>
                                         </div>
-                                        <a href="/conferences/2016/cp-mop-8/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
+                                        <a href="/conferences/2016/cp-mop-8/documents#{{meetingNavCtrl.hash()}}" class="link" style="height:52px;"></a>
                                     </td>
                                     <td width="25%" class="NP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')}" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center">
                                         <div class="selection-mark"></div>
@@ -340,7 +339,7 @@
                                             <span class="hidden-xs">COPMOP2</span>
                                             <span class="visible-xs-inline">MOP2</span>
                                         </div>
-                                        <a href="/conferences/2016/np-mop-2/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
+                                        <a href="/conferences/2016/np-mop-2/documents#{{meetingNavCtrl.hash()}}" class="link" style="height:52px;"></a>
                                     </td>
                                 </tr>
                             </table>
