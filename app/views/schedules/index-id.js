@@ -4,7 +4,9 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
         lastDay: '[Yesterday] - dddd D',
         sameDay: '[Today] - dddd D',
         nextDay: '[Tomorrow] - dddd D',
-        sameElse: 'dddd D, MMMM YYYY'
+        nextWeek: 'dddd, D MMMM YYYY',
+        lastWeek: 'dddd, D MMMM YYYY',
+        sameElse: 'dddd, D MMMM YYYY'
     };
 
 	return ['$scope', '$http', '$route', '$q', 'streamId', function($scope, $http, $route, $q, defaultStreamId) {
