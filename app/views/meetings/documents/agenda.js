@@ -5,8 +5,11 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
         lastDay: '[Yesterday] - dddd D',
         sameDay: '[Today] - dddd D',
         nextDay: '[Tomorrow] - dddd D',
-        sameElse: 'dddd D, MMMM YYYY'
+        nextWeek: 'dddd, D MMMM YYYY',
+        lastWeek: 'dddd, D MMMM YYYY',
+        sameElse: 'dddd, D MMMM YYYY'
     };
+
 
     var DAY_PARTS = [
         { code: 'morning',   end : '13:00'},
