@@ -296,8 +296,21 @@
                         <td class="meetingnav-buttongroup">
                             <table style="height:100%;width:100%;font-size:12px;font-weight:bold">
                                 <tr style="height:0px">
-                                    <td colspan="4" style="vertical-align:top;padding-bottom:2px">
+                                    <td colspan="4" style="vertical-align:top;padding-bottom:2px;position:relative">
+
+                                        <a class="pull-right visible-xs-block" style="border-left:solid 2px white;padding-right:10px;padding-top:2px;padding-left:10px;color:inherit;position:absolute;top:0px;right:0px;bottom:2px" data-toggle="dropdown"><i class="fa fa-info" aria-hidden="true" style="font-size:22px"></i></a>
+
                                         <div style="background-color:rgba(255,255,255,0.14);font-size:12px;font-weight:bold;height:26px;padding-top:5px;color:#ddd">DOCUMENTS</div>
+
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li><a href="http://cop13.mx/">Webcast</a></li>
+                                            <li><a href="/cop2016/media">Media</a></li>
+                                            <li><a href="https://www.cbd.int/doc/meetings/cop/cop-13/other/cop-13-info-note-en.pdf" target="_blank">Information for Participants</a></li>
+                                            <li><a href="https://www.cbd.int/cop2016/public/">Information for Public</a></li>
+                                            <li><a href="http://cop13.mx/" target="_blank">Mexican COP13 Website <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
+                                            <li><a href="https://www.cbd.int/cop2016/transport/">Transportation</a></li>
+                                        </ul>
+
                                     </td>
                                 </tr>
                                 <tr>
@@ -314,13 +327,19 @@
                                     <td width="25%" class="CP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')}" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center">
                                         <div class="selection-mark"></div>
                                         <div style="font-size:11px;font-weight:bold">Cartagena Protocol</div>
-                                        <div style="margin-top:2px">COPMOP8</div>
+                                        <div style="margin-top:2px">
+                                            <span class="hidden-xs">COPMOP8</span>
+                                            <span class="visible-xs-inline">MOP8</span>
+                                        </div>
                                         <a href="/conferences/2016/cp-mop-8/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
                                     </td>
                                     <td width="25%" class="NP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')}" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center">
                                         <div class="selection-mark"></div>
                                         <div style="font-size:11px;font-weight:bold">Nagoya Protocol</div>
-                                        <div style="margin-top:2px">COPMOP2</div>
+                                        <div style="margin-top:2px">
+                                            <span class="hidden-xs">COPMOP2</span>
+                                            <span class="visible-xs-inline">MOP2</span>
+                                        </div>
                                         <a href="/conferences/2016/np-mop-2/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
                                     </td>
                                 </tr>
