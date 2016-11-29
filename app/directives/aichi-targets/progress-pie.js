@@ -101,7 +101,7 @@ define(['app', 'lodash','text!./progress-pie.html',
                               "spacing":10,
                               "valueText":" ([[value]]/196)"
                             },
-                            "pieX":'75%',
+                            "pieX":'50%',
                             "innerRadius": "30%",
                             "theme": "light",
                             "dataProvider": $scope.chartData,
@@ -155,6 +155,7 @@ define(['app', 'lodash','text!./progress-pie.html',
                     _.each($scope.chartData,function(r){
                       r.percent=Math.floor((r.count/total)*100);
                     });
+
                     return total;
                 }
                 $scope.total=total;

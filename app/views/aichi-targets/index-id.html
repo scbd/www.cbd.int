@@ -333,7 +333,7 @@ margin: 0 10px 10px 0px;
                   <span>Key Resources</span>
                   <ul>
 
-                  <li ng-repeat="key in indexIdCtrl.target.links.keyResources"><a ng-href="{{pro.link}}" class="pointer">{{key.title}}<a/></li>
+                  <li ng-repeat="key in indexIdCtrl.target.links.keyResources"><a ng-href="{{key.link}}" class="pointer">{{key.title}}<a/></li>
                   </ul>
                 </div>
                   <span>Technical Quick Guides (<span ng-repeat="guide in indexIdCtrl.target.links.techGuides"><a ng-href="{{guide.link}}" ng-if="guide.link">{{guide.lang}}</a><span ng-if="!$last && indexIdCtrl.target.links.techGuides[$index+1].link">, </span></span>)</span>

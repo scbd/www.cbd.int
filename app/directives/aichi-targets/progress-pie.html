@@ -1,5 +1,5 @@
 <div>
-  <div style="position:absolute;top:35px;left:55px;">
+  <div style="position:absolute;top:35px;left:50px;">
 <style>
 .square {
 	width: 16px;
@@ -18,9 +18,7 @@
             &nbsp;
          </th>
 
-         <th width="5%" >
-            &nbsp;
-         </th>
+
        </tr>
      </thead>
      <tbody>
@@ -28,8 +26,8 @@
         <td>
           <div class="square" style="background-color:{{row.color}};"></div>
         </td>
-        <td class="small text-nowrap">{{row.title}}</td>
-        <td class="small text-nowrap text-right"><span ><strong>{{row.percent}}%</strong> <span class="small">({{row.count}}/{{total()}})</span></span></td>
+        <!-- <td class="small text-nowrap">{{row.title}}</td> -->
+        <td class="small text-nowrap text-right" ng-show="total()"><span ><strong>{{row.percent}}%</strong> </span></td>
       </tr>
     </tbody>
     </table>
