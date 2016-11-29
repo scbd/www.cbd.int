@@ -16,7 +16,7 @@ test:
 
 deployment:
   master:
-    branch: /^master|dev$/
+    branch: /^master|dev|aichi$/
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker tag output scbd/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH

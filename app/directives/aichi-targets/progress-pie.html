@@ -1,5 +1,40 @@
+<div>
+  <div style="position:absolute;top:35px;left:50px;">
+<style>
+.square {
+	width: 16px;
+	height: 16px;
+	background: red;
+}
+
+</style>
+    <table class="table table table-striped" style="width:100px; height:100px;">
+      <thead>
+       <tr>
+         <th >
+            &nbsp;
+         </th>
+         <th>
+            &nbsp;
+         </th>
+
+
+       </tr>
+     </thead>
+     <tbody>
+      <tr ng-repeat="row in chartData">
+        <td>
+          <div class="square" style="background-color:{{row.color}};"></div>
+        </td>
+        <!-- <td class="small text-nowrap">{{row.title}}</td> -->
+        <td class="small text-nowrap text-right" ng-show="total()"><span ><strong>{{row.percent}}%</strong> </span></td>
+      </tr>
+    </tbody>
+    </table>
+  </div>
 <div id="chartdivpie" style="width:100%;height:250px; "></div>
 <div class="text-center" style="cursor:pointer;" ng-click="showAll()" ng-if="!nothingReported">
     <span ng-if="!showAllFlag"><a hraf="#" >Show Reported and Unreported</a></span>
     <span ng-if="showAllFlag"><a hraf="#" >Show Reported Only</a></span>
+</div>
 </div>

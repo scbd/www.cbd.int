@@ -82,7 +82,7 @@ define(['app', 'lodash','text!./progress-pie.html',
                     };
 
                     if($window.screen.width<= 750){
-                        radius = 65;
+                        radius = 75;
                         legend ={
                           // "position":"bottom",
                           "marginRight":20,
@@ -111,7 +111,7 @@ define(['app', 'lodash','text!./progress-pie.html',
                             "colorField": "color",
                             "fontSize": 10,
                             "labelRadius": -30,
-                            "labelText" : '[[percents]]%',
+                            "labelText" : '',
                             "radius":radius,
                             'startDuration':0.01
 
@@ -142,8 +142,23 @@ define(['app', 'lodash','text!./progress-pie.html',
                             });
                         });
                     });
-                }
 
+                }
+                //============================================================
+                //
+                //============================================================
+                function total() {
+                    var total =0;
+                    _.each($scope.chartData,function(r){
+                      total+=r.count;
+                    });
+                    _.each($scope.chartData,function(r){
+                      r.percent=Math.floor((r.count/total)*100);
+                    });
+
+                    return total;
+                }
+                $scope.total=total;
                 //============================================================
                 //
                 //============================================================
