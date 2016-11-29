@@ -25,21 +25,43 @@
 					"thumbnail" : "/app/images/aichi-targets/videos/1_73254974.jpg"
 				}
 			],
-            "activities":[
-                {
-                    "country": "Azerbaijan",
-                    "title_s"   :"A decision of the Cabinet of Ministers adopted in 2003 established an inter-city commission to coordinate environmental education and awareness-raising in the country. Activities are ongoing."
-                },
-                {
-                    "country": "Belgium",
-                    "title_s"   :"In 2010, the Royal Belgian Institute of Natural Sciences opened a new permanent exhibition hall on “Biodiversity in Cities”, and plans to dedicate more halls to biodiversity in the coming years."
-                },
-                {
-                    "country": "Cameroon",
-                    "title_s"   :"Each year, “Traditional African Medicine Day” is held in Cameroon. In 2010, the theme was “conservation of medicinal plants”, with exhibits and a roundtable discussion organized to draw attention to biodiversity loss and the need for the sustainable management of plants and ecosystems."
-                }
-            ],
+						"activities":[
+								{
+										"country": "Azerbaijan",
+										"title_s"   :"A decision of the Cabinet of Ministers adopted in 2003 established an inter-city commission to coordinate environmental education and awareness-raising in the country. Activities are ongoing."
+								},
+								{
+										"country": "Belgium",
+										"title_s"   :"In 2010, the Royal Belgian Institute of Natural Sciences opened a new permanent exhibition hall on “Biodiversity in Cities”, and plans to dedicate more halls to biodiversity in the coming years."
+								},
+								{
+										"country": "Cameroon",
+										"title_s"   :"Each year, “Traditional African Medicine Day” is held in Cameroon. In 2010, the theme was “conservation of medicinal plants”, with exhibits and a roundtable discussion organized to draw attention to biodiversity loss and the need for the sustainable management of plants and ecosystems."
+								}
+						],
 			"links":{
+				"keyResources":[
+									{
+										"title":"Quick Guides to the Aichi Biodiversity Targets",
+										"link":"https://chm.cbd.int/database/record/200765"
+									},
+									{
+										"title":"E-learning Module 12: Education and awareness",
+										"link":"https://chm.cbd.int/database/record/200748"
+									},
+									{
+										"title":"Communication, Education and Public Awareness (CEPA): A Toolkit for National Focal Points and NBSAP Coordinators",
+										"link":"https://chm.cbd.int/database/record/200690"
+									},
+									{
+										"title":"“Rare Pride” – methodology and tools for social marketing and community development in support of conservation",
+										"link":"https://chm.cbd.int/database/record/200696"
+									},
+									{
+										"title":"'Love not Loss' - guidance on marketing and campaigns for social marketing – multimedia products and campaign",
+										"link":"https://chm.cbd.int/database/record/200695"
+									}
+								],
 						"techGuides":[
 						{
 							"lang":"EN",
@@ -54,231 +76,353 @@
 							"link":"https://www.cbd.int/doc/strategic-plan/targets/T1-quick-guide-fr.pdf"
 						}
 					],
-					"nbsapForum":"http://nbsapforum.net/#categories/270",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
+					"nbsapForum":{"title":"NBSAP Forum","url":"http://nbsapforum.net/#categories/270"},
+					"programs":[{"title":"Programme of work on CEPA","url":"https://www.cbd.int/cepa/"}],
+					"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+			},
+			"featuredResources":[200765,200748,200690,200696,200695],
+			"partners":[
+				{"name":"CEPA Partners","websites":[{"name":"website","url":"https://www.cbd.int/cepa/partners.shtml"}]}
+				]
 		},
-		{
-			"id": 2,
-			"title" : {
-				"en" : "Biodiversity values integrated"
-			},
-			"goal" : {
-				"en" : "A"
-			},
-			"action" : {
-				"en" : "By 2020, at the latest, biodiversity values have been integrated into national and local development and poverty reduction strategies and planning processes and are being incorporated into national accounting, as appropriate, and reporting systems."
-			},
-			"banner":"https://www.cbd.int/images/banners/banner-0-5949.jpg",
-			"videos" : [
+
 				{
-					"link"      : "https://vimeo.com/album/2506743/video/73254975",
-					"caption"   : "20/20 Talks: Aichi Biodiversity Target 2 by Pavan Sukhdev",
-					"thumbnail" : "/app/images/aichi-targets/videos/2_73254975.jpg"
+					"id": 2,
+					"title" : {
+						"en" : "Biodiversity values integrated"
+					},
+					"goal" : {
+						"en" : "A"
+					},
+					"action" : {
+						"en" : "By 2020, at the latest, biodiversity values have been integrated into national and local development and poverty reduction strategies and planning processes and are being incorporated into national accounting, as appropriate, and reporting systems."
+					},
+					"banner":"https://www.cbd.int/images/banners/banner-0-5949.jpg",
+					"videos" : [
+						{
+							"link"      : "https://vimeo.com/album/2506743/video/73254975",
+							"caption"   : "20/20 Talks: Aichi Biodiversity Target 2 by Pavan Sukhdev",
+							"thumbnail" : "/app/images/aichi-targets/videos/2_73254975.jpg"
+						},
+						{
+							"link"      : "https://vimeo.com/album/2738938/video/87027454",
+							"caption"   : "20/20 Talks: Aichi Biodiversity Target 2 by Gladman Chibememe",
+							"thumbnail" : "/app/images/aichi-targets/videos/2_87027454.jpg"
+						}
+					],
+		            "activities":[
+		                {
+		                    "country" : "Japan",
+		                    "title_s"    : "Consideration of economic assessments for biodiversity and ecosystem services is increasing, including the development of mechanisms that encourage companies and others to support agricultural production that contributes to conservation carried out by farmers. This is also being done to promote environmental real estate as an initiative for creating real estate markets that encourage sustained investment."
+		                },
+		                {
+		                     "country": "Niue",
+		                     "title_s"   : "Hakupu’s Village Development and Action Plan 2009-2020 contains ecotourism strategies based on the Huvalu Conservation Area and Hakupu Heritage and Conservation Park, and for organic farming. Tuapa’s VDAP 2009-2020 contains strategies for food security, renewable energy and healthy living."
+		                }
+		            ],
+								"links":{
+											"keyResources":[
+														{
+															"title":"Quick Guides to the Aichi Biodiversity Targets",
+															"link":"https://chm.cbd.int/database/record/200765"
+														},
+														{
+															"title":"Biodiversity Mainstreaming. Integrating Biodiversity, development and poverty eradication : a rapid diagnostic",
+															"link":"https://chm.cbd.int/database/record/200710"
+														},
+														{
+															"title":"Toolbox on Biodiversity for Development",
+															"link":"https://chm.cbd.int/database/record/200697"
+														},
+														{
+															"title":"Revision to the System of Environmental-Economic Accounting (SEEA)",
+															"link":"https://chm.cbd.int/database/record/207883"
+														},
+														{
+															"title":"TEEB  - Ecological and Economic Foundationshttp",
+															"link":"http://www.teebweb.org/our-publications/teeb-study-reports/ecological-and-economic-foundations/"
+														}
+											],
+											"techGuides":[
+											{
+												"lang":"EN",
+												"link":"https://www.cbd.int/doc/strategic-plan/targets/T2-quick-guide-en.pdf"
+											},
+											{
+												"lang":"ES",
+												"link":"https://www.cbd.int/doc/strategic-plan/targets/T2-quick-guide-es.pdf"
+											},
+											{
+												"lang":"FR",
+												"link":""
+											}
+										],
+										"nbsapForum":"http://nbsapforum.net/#categories/271",
+										"programs":[{"title":"Mainstreaming biodiversity into national sectoral and cross-sectoral strategies, polices, plans and programs ","url":"https://chm.cbd.int/database/record/200765"},
+																{"title":"Programme of work on Economics, Trade and Incentive Measures","url":"https://www.cbd.int/incentives/valuation.shtml"}
+										],
+										"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+								},
+								"featuredResources":[200765,200710,200697,207883 ],
+								"partners":[
+									{"name":"UNDP-UNEP Poverty -Environment Initiative","websites":[{"name":"website","url":"http://www.unpei.org"}]},
+									{"name":"TEEB Office of the United Nations Environment Programme","websites":[{"name":"website","url":"http://www.teebweb.org/"}]},
+									{"name":"Partnership on Wealth Accounting and Valuation of Ecosystem Services (WAVES)","websites":[{"name":"website","url":"https://www.wavespartnership.org"}]},
+									{"name":"United Nations Statistics Division (UNSD)","websites":[{"name":"website","url":"http://unstats.un.org/unsd/default.htm"}]}
+								]
 				},
 				{
-					"link"      : "https://vimeo.com/album/2738938/video/87027454",
-					"caption"   : "20/20 Talks: Aichi Biodiversity Target 2 by Gladman Chibememe",
-					"thumbnail" : "/app/images/aichi-targets/videos/2_87027454.jpg"
-				}
-			],
-            "activities":[
-                {
-                    "country" : "Japan",
-                    "title_s"    : "Consideration of economic assessments for biodiversity and ecosystem services is increasing, including the development of mechanisms that encourage companies and others to support agricultural production that contributes to conservation carried out by farmers. This is also being done to promote environmental real estate as an initiative for creating real estate markets that encourage sustained investment."
-                },
-                {
-                     "country": "Niue",
-                     "title_s"   : "Hakupu’s Village Development and Action Plan 2009-2020 contains ecotourism strategies based on the Huvalu Conservation Area and Hakupu Heritage and Conservation Park, and for organic farming. Tuapa’s VDAP 2009-2020 contains strategies for food security, renewable energy and healthy living."
-                }
-            ],
-						"links":{
-									"techGuides":[
-									{
-										"lang":"EN",
-										"link":"https://www.cbd.int/doc/strategic-plan/targets/T2-quick-guide-en.pdf"
-									},
-									{
-										"lang":"ES",
-										"link":"https://www.cbd.int/doc/strategic-plan/targets/T2-quick-guide-es.pdf"
-									},
-									{
-										"lang":"FR",
-										"link":""
-									}
+					"id": 3,
+					"title" : {
+						"en" : "Incentives reformed"
+					},
+					"goal" : {
+						"en" : "A"
+					},
+					"action" : {
+						"en" : "By 2020, at the latest, incentives, including subsidies, harmful to biodiversity are eliminated, phased out or reformed in order to minimize or avoid negative impacts, and positive incentives for the conservation and sustainable use of biodiversity are developed and applied, consistent and in harmony with the Convention and other relevant international obligations, taking into account national socio economic conditions."
+					},
+				  "banner":"https://www.cbd.int/images/banners/banner-0-3719.JPG",
+					"videos" : [
+						{
+							"link"      : "https://vimeo.com/album/2506743/video/73254976",
+							"caption"   : "20/20 Talks: Aichi Biodiversity Target 3 by Katia Karousakis",
+							"thumbnail" : "/app/images/aichi-targets/videos/3_73254976.jpg"
+						},
+						{
+							"link"      : "https://vimeo.com/album/2738938/video/87020089",
+							"caption"   : "20/20 Talks: Aichi Biodiversity Target 3 by Dr. Paul Shrivastava",
+							"thumbnail" : "/app/images/aichi-targets/videos/3_87020089.jpg"
+						}
+					],
+					"activities":[
+					    {
+					        "country": "Ecuador",
+					        "title_s"   : "The National Program on Incentives for the Conservation and Sustainable Use of Natural Heritage (\"Socio Bosque\") was created in January 2014."
+					    },
+						{
+							"country": "Pakistan",
+							"title_s"   : "The subsidy on electricity for farm tube wells, which was a major cause of ground water depletion, has been withdrawn."
+						},
+						{
+							"country": "Solomon Islands",
+							"title_s"   : "Renewable energy, such as solar energy, has been introduced to villages to reduce dependency on lowland forest for fuels under UNFCCC implementation."
+						}
+					],
+					"links":{
+								"keyResources":[
+											{
+												"title":"Quick Guides to the Aichi Biodiversity Targets",
+												"link":"https://chm.cbd.int/database/record/200765"
+											},
+											{
+												"title":"CBD Technical Series 56",
+												"link":"https://www.cbd.int/doc/publications/cbd-ts-56-en.pdf"
+											},
+											{
+												"title":"Milestones for the full implementation of Aichi Biodiversity Target 3 (annex I)",
+												"link":"https://www.cbd.int/doc/decisions/cop-12/cop-12-dec-03-en.pdf"
+											},
+											{
+												"title":"TEEB for Policy Makers",
+												"link":"http://www.cbd.int/doc/meetings/wgri/wgri-03/information/wgri-03-inf-11-en.pdf"
+											}
 								],
-								"nbsapForum":"http://nbsapforum.net/#categories/271",
-								"programs":[],
-								"undb":"https://www.cbd.int/undb-new/"
-						}
-		},
-		{
-			"id": 3,
-			"title" : {
-				"en" : "Incentives reformed"
-			},
-			"goal" : {
-				"en" : "A"
-			},
-			"action" : {
-				"en" : "By 2020, at the latest, incentives, including subsidies, harmful to biodiversity are eliminated, phased out or reformed in order to minimize or avoid negative impacts, and positive incentives for the conservation and sustainable use of biodiversity are developed and applied, consistent and in harmony with the Convention and other relevant international obligations, taking into account national socio economic conditions."
-			},
-		  "banner":"https://www.cbd.int/images/banners/banner-0-3719.JPG",
-			"videos" : [
-				{
-					"link"      : "https://vimeo.com/album/2506743/video/73254976",
-					"caption"   : "20/20 Talks: Aichi Biodiversity Target 3 by Katia Karousakis",
-					"thumbnail" : "/app/images/aichi-targets/videos/3_73254976.jpg"
+								"techGuides":[
+								{
+									"lang":"EN",
+									"link":"https://www.cbd.int/doc/strategic-plan/targets/T3-quick-guide-en.pdf"
+								},
+								{
+									"lang":"ES",
+									"link":"https://www.cbd.int/doc/strategic-plan/targets/T3-quick-guide-es.pdf"
+								},
+								{
+									"lang":"FR",
+									"link":""
+								}
+							],
+							"nbsapForum":"http://nbsapforum.net/#categories/272",
+							"programs":[{"title":"Programme of work on Economics, Trade and Incentive Measures","url":"https://chm.cbd.int/database/record/200765"},
+													{"title":"Incentive measures database, Trade and Incentive Measures","url":" https://www.cbd.int/programmes/socio-eco/incentives/case-studies.aspx"},
+													{"title":"Tools and guidance on Economics, Trade and Incentive Measures","url":"https://www.cbd.int/incentives/tools.shtml"}
+							],
+							"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+					},
+					"featuredResources":[200765,200712,200711],
+					"partners":[
+						{"name":"OECD WTO","websites":[{"name":"website","url":"https://www.cbd.int/incentives/coop-wto.shtml"}]}
+					]
 				},
 				{
-					"link"      : "https://vimeo.com/album/2738938/video/87020089",
-					"caption"   : "20/20 Talks: Aichi Biodiversity Target 3 by Dr. Paul Shrivastava",
-					"thumbnail" : "/app/images/aichi-targets/videos/3_87020089.jpg"
-				}
-			],
-			"activities":[
-			    {
-			        "country": "Ecuador",
-			        "title_s"   : "The National Program on Incentives for the Conservation and Sustainable Use of Natural Heritage (\"Socio Bosque\") was created in January 2014."
-			    },
-				{
-					"country": "Pakistan",
-					"title_s"   : "The subsidy on electricity for farm tube wells, which was a major cause of ground water depletion, has been withdrawn."
-				},
-				{
-					"country": "Solomon Islands",
-					"title_s"   : "Renewable energy, such as solar energy, has been introduced to villages to reduce dependency on lowland forest for fuels under UNFCCC implementation."
-				}
-			],
-			"links":{
-						"techGuides":[
+					"id": 	4,
+					"title" : {
+						"en" : "Sustainable production and consumption"
+					},
+					"goal" : {
+						"en" : "A"
+					},
+					"action" : {
+						"en" : "By 2020, at the latest, Governments, business and stakeholders at all levels have taken steps to achieve or have implemented plans for sustainable production and consumption and have kept the impacts of use of natural resources well within safe ecological limits."
+					},
+				  "banner":"https://www.cbd.int/images/banners/banner-0-3948.JPG",
+					"videos" : [
 						{
-							"lang":"EN",
-							"link":"https://www.cbd.int/doc/strategic-plan/targets/T3-quick-guide-en.pdf"
+							"link"      : "https://vimeo.com/album/2738938/video/87020090",
+							"caption"   : "20/20 Talks: Aichi Biodiversity Target 4 by Rajendra Dobriyal",
+							"thumbnail" : "/app/images/aichi-targets/videos/4_87020090.jpg"
 						},
 						{
-							"lang":"ES",
-							"link":"https://www.cbd.int/doc/strategic-plan/targets/T3-quick-guide-es.pdf"
-						},
-						{
-							"lang":"FR",
-							"link":""
+							"link"      : "https://vimeo.com/album/2506743/video/73254977",
+							"caption"   : "20/20 Talks: Aichi Biodiversity Target 4 by Ibrahim Thiaw",
+							"thumbnail" : "/app/images/aichi-targets/videos/4_73254977.jpg"
 						}
 					],
-					"nbsapForum":"http://nbsapforum.net/#categories/272",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
-		},
-		{
-			"id": 	4,
-			"title" : {
-				"en" : "Sustainable production and consumption"
-			},
-			"goal" : {
-				"en" : "A"
-			},
-			"action" : {
-				"en" : "By 2020, at the latest, Governments, business and stakeholders at all levels have taken steps to achieve or have implemented plans for sustainable production and consumption and have kept the impacts of use of natural resources well within safe ecological limits."
-			},
-		  "banner":"https://www.cbd.int/images/banners/banner-0-3948.JPG",
-			"videos" : [
-				{
-					"link"      : "https://vimeo.com/album/2738938/video/87020090",
-					"caption"   : "20/20 Talks: Aichi Biodiversity Target 4 by Rajendra Dobriyal",
-					"thumbnail" : "/app/images/aichi-targets/videos/4_87020090.jpg"
-				},
-				{
-					"link"      : "https://vimeo.com/album/2506743/video/73254977",
-					"caption"   : "20/20 Talks: Aichi Biodiversity Target 4 by Ibrahim Thiaw",
-					"thumbnail" : "/app/images/aichi-targets/videos/4_73254977.jpg"
-				}
-			],
-			"activities":[
-			    {
-			        "country": "Colombia",
-			        "title_s"   : "A National Program on Sustainable Biocommerce (2011-2021) is being implemented."
-			    },
-				{
-					"country": "India",
-					"title_s"   : "The Government of India has enacted the Companies Act 2013 which makes Corporate social responsibility (CSR) spending mandatory for every company with a net worth of 500 crore rupees or more, a turnover of 1000 crore Rs or more, or a net profit of 5 crore Rs or more during any financial year. Two percent of the average net profits made by the company during every block of 3 years are to be used for CSR activities. Ensuring environmental sustainability has been identified as one of the nine activities to be covered under CSR activities."
-				}
-			],
-			"links":{
-						"techGuides":[
+					"activities":[
+					    {
+					        "country": "Colombia",
+					        "title_s"   : "A National Program on Sustainable Biocommerce (2011-2021) is being implemented."
+					    },
 						{
-							"lang":"EN",
-							"link":"https://www.cbd.int/doc/strategic-plan/targets/T4-quick-guide-en.pdf"
-						},
-						{
-							"lang":"ES",
-							"link":""
-						},
-						{
-							"lang":"FR",
-							"link":""
+							"country": "India",
+							"title_s"   : "The Government of India has enacted the Companies Act 2013 which makes Corporate social responsibility (CSR) spending mandatory for every company with a net worth of 500 crore rupees or more, a turnover of 1000 crore Rs or more, or a net profit of 5 crore Rs or more during any financial year. Two percent of the average net profits made by the company during every block of 3 years are to be used for CSR activities. Ensuring environmental sustainability has been identified as one of the nine activities to be covered under CSR activities."
 						}
 					],
-					"nbsapForum":"http://nbsapforum.net/#categories/273",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
-		},
-		{
-			"id": 	5,
-			"title" : {
-				"en" : "Habitat loss halved or reduced"
-			},
-			"goal" : {
-				"en" : "B"
-			},
-			"action" : {
-				"en" : "By 2020, the rate of loss of all natural habitats, including forests, is at least halved and where feasible brought close to zero, and degradation and fragmentation is significantly reduced."
-			},
-		  "banner":"https://www.cbd.int/images/banners/banner-0-3503.jpg",
-			"videos" : [
-				{
-					"link"      : "https://vimeo.com/album/2738938/video/87023908",
-					"caption"   : "20/20 Talks: Aichi Biodiversity Target 5 by Paul Leadley",
-					"thumbnail" : "/app/images/aichi-targets/videos/5_87023908.jpg"
+					"links":{
+								"keyResources":[
+											{
+												"title":"Quick Guides to the Aichi Biodiversity Targets",
+												"link":"https://chm.cbd.int/database/record/200765"
+											},
+											{
+												"title":"The Addis Ababa Principles ",
+												"link":"https://www.cbd.int/doc/publications/addis-gdl-en.pdf"
+											},
+											{
+												"title":"CBD Technical Series 52",
+												"link":"https://www.cbd.int/doc/publications/cbd-ts-52-en.pdf"
+											},
+											{
+												"title":"CBD Technical Series 39",
+												"link":"https://www.cbd.int/doc/publications/cbd-ts-39-en.pdf"
+											},
+											{
+												"title":"CBD Technical Series 9",
+												"link":"https://www.cbd.int/doc/publications/cbd-ts-9-en.pdf"
+											}
+								],
+								"techGuides":[
+								{
+									"lang":"EN",
+									"link":"https://www.cbd.int/doc/strategic-plan/targets/T4-quick-guide-en.pdf"
+								},
+								{
+									"lang":"ES",
+									"link":""
+								},
+								{
+									"lang":"FR",
+									"link":""
+								}
+							],
+							"nbsapForum":"http://nbsapforum.net/#categories/273",
+							"programs":[{"title":"Cross cutting thematic issue on Sustainable Use of Biodiversity","url":"https://www.cbd.int/sustainable/"},
+													{"title":"Global Partnership for Business and Biodiversity","url":" https://www.cbd.int/business"},
+													{"title":"Sustainable Use of Biodiversity best practices","url":"https://www.cbd.int/sustainable/bestpractices/default.shtml"}
+							],
+							"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+					},
+						"featuredResources":[200765,200716],
+						"partners":[
+							{"name":"Collaborative Partnership on Sustainable Wildlife Management","websites":[{"name":"website","url":"https://www.cbd.int/sustainable/CPW.shtml"}]},
+							{"name":"International Union for Conservation of Nature","websites":[{"name":"website","url":"https://www.iucn.org"}]},
+							{"name":"Center for International Forestry Research","websites":[{"name":"website","url":"http://www.cifor.org"}]},
+							{"name":"CITES","websites":[{"name":"website","url":"https://cites.org"}]}
+						]
+
 				},
 				{
-					"link"      : "https://vimeo.com/album/2506743/video/73304208",
-					"caption"   : "20/20 Talks: Aichi Biodiversity Target 5 by Tim Christophersen",
-					"thumbnail" : "/app/images/aichi-targets/videos/5_73304208.jpg"
-				}
-			],
-			"activities":[
-			    {
-			        "country": "Netherlands",
-			        "title_s"   : "Construction of fauna passages and ecoducts has led to significant habitat defragmentation. The same is true for aquatic life. Fish species are increasingly able to migrate through seas, rivers, streams and ditches due to the existence of fish passages at barriers."
-			    },
-				{
-			        "country": "South Africa",
-			        "title_s"   : "Threatened ecosystems have been published in regard to the Biodiversity Act. Biodiversity is increasingly routinely incorporated into EIAs. Norms and Standards for Biodiversity Management Plans for Ecosystems have been finalized. Grasslands Ecosystem Guidelines have also been published, and several biodiversity sector plans and bioregional plans developed to inform land use planning and environmental authorisations."
-			    }
-			],
-			"links":{
-						"techGuides":[
+					"id": 	5,
+					"title" : {
+						"en" : "Habitat loss halved or reduced"
+					},
+					"goal" : {
+						"en" : "B"
+					},
+					"action" : {
+						"en" : "By 2020, the rate of loss of all natural habitats, including forests, is at least halved and where feasible brought close to zero, and degradation and fragmentation is significantly reduced."
+					},
+				  "banner":"https://www.cbd.int/images/banners/banner-0-3503.jpg",
+					"videos" : [
 						{
-							"lang":"EN",
-							"link":"https://www.cbd.int/doc/strategic-plan/targets/T5-quick-guide-en.pdf"
+							"link"      : "https://vimeo.com/album/2738938/video/87023908",
+							"caption"   : "20/20 Talks: Aichi Biodiversity Target 5 by Paul Leadley",
+							"thumbnail" : "/app/images/aichi-targets/videos/5_87023908.jpg"
 						},
 						{
-							"lang":"ES",
-							"link":"https://www.cbd.int/doc/strategic-plan/targets/T5-quick-guide-es.pdf"
-						},
-						{
-							"lang":"FR",
-							"link":"https://www.cbd.int/doc/strategic-plan/targets/T5-quick-guide-fr.pdf"
+							"link"      : "https://vimeo.com/album/2506743/video/73304208",
+							"caption"   : "20/20 Talks: Aichi Biodiversity Target 5 by Tim Christophersen",
+							"thumbnail" : "/app/images/aichi-targets/videos/5_73304208.jpg"
 						}
 					],
-					"nbsapForum":"http://nbsapforum.net/#categories/274",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
-		},
+					"activities":[
+					    {
+					        "country": "Netherlands",
+					        "title_s"   : "Construction of fauna passages and ecoducts has led to significant habitat defragmentation. The same is true for aquatic life. Fish species are increasingly able to migrate through seas, rivers, streams and ditches due to the existence of fish passages at barriers."
+					    },
+						{
+					        "country": "South Africa",
+					        "title_s"   : "Threatened ecosystems have been published in regard to the Biodiversity Act. Biodiversity is increasingly routinely incorporated into EIAs. Norms and Standards for Biodiversity Management Plans for Ecosystems have been finalized. Grasslands Ecosystem Guidelines have also been published, and several biodiversity sector plans and bioregional plans developed to inform land use planning and environmental authorisations."
+					    }
+					],
+					"links":{
+									"keyResources":[
+												{
+													"title":"Quick Guides to the Aichi Biodiversity Targets",
+													"link":"https://chm.cbd.int/database/record/200765"
+												},
+												{
+													"title":"Forest Ecosystem Restoration Initiative",
+													"link":"https://www.cbd.int/restoration/feri/"
+												},
+												{
+													"title":"Sustainable Forest Management, Biodiversity and Livelihoods - A Good Practice Guide",
+													"link":"https://www.cbd.int/development/training/guides/"
+												},
+												{
+													"title":"Technical Series No. 60. - Livelihood Alternatives for the Unsustainable Use of Bushmeat ",
+													"link":"https://www.cbd.int/doc/publications/cbd-ts-60-en.pdf"
+												},
+												{
+													"title":"Technical Series No. 59.- REDD-plus and Biodiversity ",
+													"link":"https://www.cbd.int/doc/publications/cbd-ts-59-en.pdf"
+												}
+									],
+								"techGuides":[
+								{
+									"lang":"EN",
+									"link":"https://www.cbd.int/doc/strategic-plan/targets/T5-quick-guide-en.pdf"
+								},
+								{
+									"lang":"ES",
+									"link":"https://www.cbd.int/doc/strategic-plan/targets/T5-quick-guide-es.pdf"
+								},
+								{
+									"lang":"FR",
+									"link":"https://www.cbd.int/doc/strategic-plan/targets/T5-quick-guide-fr.pdf"
+								}
+							],
+							"nbsapForum":"http://nbsapforum.net/#categories/274",
+							"programs":[{"title":"Programme of work on Forests","url":"https://www.cbd.int/forest/"}],
+							"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+					},
+					"featuredResources":[200765],
+					"partners":[
+						{"name":"Partners of the Global Partnership on Forest Landscape Restoration (GPFLR)","websites":[{"name":"website","url":" http://www.forestlandscaperestoration.org/our-partners"}]}
+					]
+				},
+
+
 		{
 			"id": 	6,
 			"title" : {
@@ -314,6 +458,24 @@
 			    }
 			],
 			"links":{
+				"keyResources":[
+							{
+								"title":"Quick Guides to the Aichi Biodiversity Targets",
+								"link":"https://chm.cbd.int/database/record/200765"
+							},
+							{
+								"title":"CBD Technical Series 27 ",
+								"link":"https://www.cbd.int/doc/publications/cbd-ts-14.pdf "
+							},
+							{
+								"title":"CBD Technical series 75",
+								"link":"https://www.cbd.int/doc/publications/cbd-ts-75-executive-summary-en.pdf"
+							},
+							{
+								"title":"FAO Technical Guidelines for Responsible Fisheries",
+								"link":"https://chm.cbd.int/database/record/200725"
+							}
+				],
 						"techGuides":[
 						{
 							"lang":"EN",
@@ -329,9 +491,16 @@
 						}
 					],
 					"nbsapForum":"http://nbsapforum.net/#categories/275",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
+					"programs":[{"title":"Programme of work on Forests","url":"https://www.cbd.int/forest/"},
+						{"title":"Ecologically or Biologically Significant Marine Areas","url":"https://www.cbd.int/ebsa/"},
+						{"title":"Sustainable Ocean Iniciative","url":"https://www.cbd.int/soi/"}
+					],
+					"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+			},
+			"featuredResources":[200765,200725],
+			"partners":[
+				{"name":"Marine and Coastal Biodiversity Partners ","websites":[{"name":"website","url":"https://www.cbd.int/marine/partners.shtml"}]}
+			]
 		},
 		{
 			"id": 7,
@@ -368,6 +537,28 @@
 			    }
 			],
 			"links":{
+				"keyResources":[
+							{
+								"title":"Quick Guides to the Aichi Biodiversity Targets",
+								"link":"https://chm.cbd.int/database/record/200765"
+							},
+							{
+								"title":"Sustainable Forest Management (SFM) Toolbox",
+								"link":"http://www.fao.org/sustainable-forest-management/toolbox/sfm-home/en/"
+							},
+							{
+								"title":"CBD Technical Series No. 60 ",
+								"link":"https://www.cbd.int/doc/publications/cbd-ts-60-en.pdf "
+							},
+							{
+								"title":"CBD Technical Series No. 52",
+								"link":"https://www.cbd.int/doc/publications/cbd-ts-52-en.pdf"
+							},
+							{
+								"title":"CBD Technical Series No. 39",
+								"link":"https://www.cbd.int/doc/publications/cbd-ts-39-en.pdf"
+							}
+				],
 						"techGuides":[
 						{
 							"lang":"EN",
@@ -383,9 +574,21 @@
 						}
 					],
 					"nbsapForum":"http://nbsapforum.net/#categories/276",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
+					"programs":[
+						{"title":"Programme of work on Inland Waters","url":"https://www.cbd.int/waters/"},
+						{"title":"Programme of work on Forests","url":"https://www.cbd.int/forest/"},
+						{"title":"Programme of work on Agricultural Biodiversity","url":"https://www.cbd.int/agro/"},
+						{"title":"Global Forest Resources Assessments Website","url":"http://www.fao.org/forest-resources-assessment/en/"},
+            {"title":"Global Forest Watch","url":" https://www.google.ca/search?q=FRA+forest&oq=FRA+forest&aqs=chrome..69i57j0l5.2351j0j4&sourceid=chrome&ie=UTF-8#q=GFW+forest"}
+					],
+					"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+			},
+			"featuredResources":[200765,200725],
+			"partners":[
+				{"name":"Members of the Collaborative Partnerships on Forests","websites":[{"name":"website","url":"https://www.cbd.int/marine/partners.shtml"}]},
+				{"name":"World Resource Institute","websites":[{"name":"website","url":"http://www.wri.org/our-work/topics/forests"}]},
+				{"name":"Inland Waters Biodiversity partners","websites":[{"name":"website","url":" https://www.cbd.int/waters/partners.shtml"}]}
+			]
 		},
 		{
 			"id": 8,
@@ -426,6 +629,16 @@
 			    }
 			],
 			"links":{
+				"keyResources":[
+							{
+								"title":"Quick Guides to the Aichi Biodiversity Targets",
+								"link":"https://chm.cbd.int/database/record/200765"
+							},
+							{
+								"title":"Voluntary Guidelines on Biodiversity-Inclusive Impact Assessment",
+								"link":"https://chm.cbd.int/database/record/200732"
+							}
+				],
 						"techGuides":[
 						{
 							"lang":"EN",
@@ -441,9 +654,19 @@
 						}
 					],
 					"nbsapForum":"http://nbsapforum.net/#categories/277",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
+					"programs":[
+						{"title":"Programme of work on Inland Waters","url":"https://www.cbd.int/waters/"},
+						{"title":"Programme of work on Agricultural Biodiversity","url":"https://www.cbd.int/agro/"},
+						{"title":"Programme of work on Marine and Coastal Biodiversity","url":"https://www.cbd.int/marine/"},
+						{"title":"International Nitrogen Initiative","url":"http://initrogen.org/ "}
+					],
+					"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+			},
+			"featuredResources":[200765,200725],
+			"partners":[
+				{"name":"Inland Waters Biodiversity Partners","websites":[{"name":"website","url":"https://www.cbd.int/waters/partners.shtml"}]},
+				{"name":"Marine and Coastal Biodiversity Partners","websites":[{"name":"website","url":" https://www.cbd.int/marine/partners.shtml"}]}
+			]
 		},
 		{
 			"id": 9,
@@ -480,6 +703,16 @@
 			    }
 			],
 			"links":{
+				"keyResources":[
+							{
+								"title":"Quick Guides to the Aichi Biodiversity Targets",
+								"link":"https://chm.cbd.int/database/record/200765"
+							},
+							{
+								"title":"Toolkit to facilitate Parties to achieve Aichi Biodiversity Target 9 on invasive alien species",
+								"link":"https://www.cbd.int/invasive/cbdtoolkit/"
+							}
+				],
 						"techGuides":[
 						{
 							"lang":"EN",
@@ -495,9 +728,18 @@
 						}
 					],
 					"nbsapForum":"http://nbsapforum.net/#categories/278",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
+					"programs":[
+						{"title":"Programme of work on Invasive Alien Species","url":"https://www.cbd.int/invasive/"},
+						{"title":"Global Invasive Species Database","url":"http://www.issg.org/database/welcome/ "},
+						{"title":"IUCN’s Invasive Species Specialist Group","url":"http://www.issg.org"}
+					],
+					"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+			},
+			"featuredResources":[200765,200725],
+			"partners":[
+				{"name":"Global Invasive Alien Species Information Partnership","websites":[{"name":"website","url":"https://www.cbd.int/invasive/collaboration.shtml"}]},
+				{"name":"Invasive Alien Species Partners","websites":[{"name":"website","url":"https://www.cbd.int/invasive/giasipartnership/"}]}
+			]
 		},
 		{
 			"id": 10,
@@ -538,6 +780,28 @@
 			    }
 			],
 			"links":{
+				"keyResources":[
+							{
+								"title":"Quick Guides to the Aichi Biodiversity Targets",
+								"link":"https://chm.cbd.int/database/record/200765"
+							},
+							{
+								"title":"CBD Technical Series No. 46",
+								"link":"https://www.cbd.int/doc/publications/cbd-ts-46-en.pdf"
+							},
+							{
+								"title":"CBD Technical Series No. 43",
+								"link":"https://www.cbd.int/doc/publications/cbd-ts-43-en.pdf"
+							},
+							{
+								"title":"CBD Technical Series No. 42",
+								"link":"https://www.cbd.int/doc/publications/cbd-ts-42-en.pdf"
+							},
+							{
+								"title":"CBD Technical Series No. 25",
+								"link":"https://www.cbd.int/doc/publications/cbd-ts-25-en.pdf"
+							}
+						],
 						"techGuides":[
 						{
 							"lang":"EN",
@@ -553,9 +817,15 @@
 						}
 					],
 					"nbsapForum":"http://nbsapforum.net/#categories/279",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
+					"programs":[
+						{"title":"Programme of work on Marine and Coastal iodiversity","url":"https://www.cbd.int/marine/s"}
+					],
+					"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+			},
+			"featuredResources":[200765,200725],
+			"partners":[
+				{"name":"Marine and Coastal Biodiversity Partnership","websites":[{"name":"website","url":"https://www.cbd.int/marine/partners.shtml"}]}
+			]
 		},
 		{
 			"id": 11,
@@ -596,6 +866,28 @@
 			    }
 			],
 			"links":{
+				"keyResources":[
+							{
+								"title":"Quick Guides to the Aichi Biodiversity Targets",
+								"link":"https://chm.cbd.int/database/record/200765"
+							},
+							{
+								"title":"E-learning Module 1 - Protected area network design",
+								"link":"https://chm.cbd.int/database/record/200739"
+							},
+							{
+								"title":"E-learning Module 2: Protected area integration",
+								"link":"https://chm.cbd.int/database/record/200740"
+							},
+							{
+								"title":"E-learning Module 3: Transboundary protected areas and regional networks",
+								"link":"https://chm.cbd.int/database/record/200741"
+							},
+							{
+								"title":"E-learning Module 4: Management planning",
+								"link":"https://chm.cbd.int/database/record/200742"
+							}
+						],
 						"techGuides":[
 						{
 							"lang":"EN",
@@ -611,9 +903,15 @@
 						}
 					],
 					"nbsapForum":"http://nbsapforum.net/#categories/280",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
+					"programs":[
+						{"title":"Programme of work on Protected Areas","url":"https://www.cbd.int/protected"}
+					],
+					"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+			},
+			"featuredResources":[200765,200725],
+			"partners":[
+				{"name":"Friends of PoWPA","websites":[{"name":"website","url":"https://www.cbd.int/protected/friends/default.shtml"}]}
+			]
 		},
 		{
 			"id": 12,
@@ -654,6 +952,20 @@
 			    }
 			],
 			"links":{
+				"keyResources":[
+							{
+								"title":"Quick Guides to the Aichi Biodiversity Targets",
+								"link":"https://chm.cbd.int/database/record/200765"
+							},
+							{
+								"title":"Addis Ababa Principles and Guidelines ",
+								"link":"https://www.cbd.int/doc/publications/addis-gdl-en.pdf"
+							},
+							{
+								"title":"Global Strategy for Plant Conservation",
+								"link":"https://www.fao.org/docrep/010/a1404e/a1404e00.htm"
+							}
+						],
 						"techGuides":[
 						{
 							"lang":"EN",
@@ -669,9 +981,21 @@
 						}
 					],
 					"nbsapForum":"http://nbsapforum.net/#categories/282",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
+					"programs":[
+						{"title":"Global Strategy for Plant Conservation","url":"https://www.cbd.int/gspc/"},
+						{"title":"Global Taxonomy Initiative","url":"https://www.cbd.int/gti/ "},
+						{"title":"Programme of work on Protected Areas","url":"https://www.cbd.int/protected"},
+						{"title":"Convention on International Trade in Endangered Species of Wild Fauna and Flora","url":"http://www.cites.org/"},
+						{"title":"IUCN Red List","url":"https://www.iucnredlist.org/"}
+						],
+						"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+				},
+				"featuredResources":[200765,200725],
+				"partners":[
+					{"name":"Alliance for Zero Extinction","websites":[{"name":"website","url":"https://www.zeroextinction.org/"}]},
+					{"name":"BirdLife International","websites":[{"name":"website","url":"https://www.birdlife.org/action/science/sites/index.html"}]},
+					{"name":"Conservation International","websites":[{"name":"website","url":"https://www.biodiversityhotspots.org/Pages/default.aspx"}]}
+				]
 		},
 		{
 			"id" :13,
@@ -708,6 +1032,20 @@
 			    }
 			],
 			"links":{
+					"keyResources":[
+							{
+								"title":"Quick Guides to the Aichi Biodiversity Targets",
+								"link":"https://chm.cbd.int/database/record/200765"
+							},
+							{
+								"title":"The Global Plan of Action for the Conservation and Sustainable Utilization of Plant Genetic Resources for Food and Agriculture ",
+								"link":"http://www.fao.org/agriculture/crops/core-themes/theme/seeds-pgr/gpa/en/ "
+							},
+							{
+								"title":"Global Plan of Action for Animal Genetic Resources and the Interlaken Declaration",
+								"link":"https://www.fao.org/docrep/010/a1404e/a1404e00.htm"
+							}
+						],
 						"techGuides":[
 						{
 							"lang":"EN",
@@ -723,9 +1061,16 @@
 						}
 					],
 					"nbsapForum":"http://nbsapforum.net/#categories/282",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
+					"programs":[
+						{"title":" Programme of Work on Agricultural Biodiversity ","url":"https://www.cbd.int/agro/"},
+						{"title":"Global Strategy for Plan Conservation","url":"www.cbd.int/gspc/"}
+						],
+						"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+				},
+				"featuredResources":[200765,200725],
+				"partners":[
+					{"name":"Global Partnership for Plant Conservation","websites":[{"name":"website","url":"http://www.plants2020.net/"}]}
+				]
 		},
 		{
 			"id": 14,
@@ -758,6 +1103,20 @@
 			    }
 			],
 			"links":{
+						"keyResources":[
+								{
+									"title":"Quick Guides to the Aichi Biodiversity Targets",
+									"link":"https://chm.cbd.int/database/record/200765"
+								},
+								{
+									"title":"Addis Ababa Principles",
+									"link":"https://www.cbd.int/doc/publications/addis-gdl-en.pdf"
+								},
+								{
+									"title":"CBD Technical Series No. 44",
+									"link":"https://www.cbd.int/doc/publications/cbd-ts-44-en.pdf"
+								}
+							],
 						"techGuides":[
 						{
 							"lang":"EN",
@@ -773,9 +1132,18 @@
 						}
 					],
 					"nbsapForum":"http://nbsapforum.net/#categories/283",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
+					"programs":[
+						{"title":"Programme of work on Protected Areas","url":"https://www.cbd.int/protected"},
+						{"title":"Programme of work on Gender","url":"https://www.cbd.int/gender/"},
+						{"title":"Programme of work on Biodiversity for Development","url":"https://www.cbd.int/development/"},
+						{"title":"Society for Ecological Restoration","url":"https://www.ser.org"}
+						],
+						"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+				},
+				"featuredResources":[200765,200725],
+				"partners":[
+					{"name":"Friends of PoWPA","websites":[{"name":"website","url":"https://www.cbd.int/protected/friends/default.shtml"}]}
+				]
 		},
 		{
 			"id": 15,
@@ -816,6 +1184,24 @@
 			    }
 			],
 			"links":{
+				"keyResources":[
+						{
+							"title":"Quick Guides to the Aichi Biodiversity Targets",
+							"link":"https://chm.cbd.int/database/record/200765"
+						},
+						{
+							"title":"CBD Technical Series No. 10",
+							"link":"https://www.cbd.int/doc/publications/cbd-ts-10-en.pdf"
+						},
+						{
+							"title":"CBD Technical Series No. 25",
+							"link":"https://www.cbd.int/doc/publications/cbd-ts-25-en.pdf"
+						},
+						{
+							"title":"CBD Technical Series No. 42",
+							"link":"https://www.cbd.int/doc/publications/cbd-ts-42-en.pdf"
+						}
+					],
 						"techGuides":[
 						{
 							"lang":"EN",
@@ -831,9 +1217,18 @@
 						}
 					],
 					"nbsapForum":"http://nbsapforum.net/#categories/284",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
+					"programs":[
+						{"title":"Programme of work on Climate Change and Biodiversity","url":"https://www.cbd.int/climate/"},
+						{"title":"Society for Ecological Restoration","url":"https://www.ser.org/"},
+						{"title":"The Global Partnership on Forest Landscape Restoration","url":"http://ideastransformlandscapes.org/"}
+						],
+						"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+				},
+				"featuredResources":[200765,200725],
+				"partners":[
+					{"name":"Climate Change Partners","websites":[{"name":"website","url":" https://www.cbd.int/climate/partners.shtml"}]},
+					{"name":"The Global Partnership on Forest Landscape","websites":[{"name":"website","url":"http://ideastransformlandscapes.org/"}]}
+				]
 		},
 		{
 			"id": 16,
@@ -865,6 +1260,24 @@
 			    }
 			],
 			"links":{
+				"keyResources":[
+						{
+							"title":"Quick Guides to the Aichi Biodiversity Targets",
+							"link":"https://chm.cbd.int/database/record/200765"
+						},
+						{
+							"title":"ABS Simply Explained (Video)",
+							"link":"https://absch.cbd.int/database/VLR/ABSCH-VLR-SCBD-200798"
+						},
+						{
+							"title":"The Nagoya Protocol on Access and Benefit-Sharing: Towards Early Ratification (Factsheet)",
+							"link":"https://absch.cbd.int/database/VLR/ABSCH-VLR-SCBD-200679"
+						},
+						{
+							"title":"An Explanatory Guide to the Nagoya Protocol on Access and Benefit-sharing",
+							"link":"https://absch.cbd.int/database/VLR/ABSCH-VLR-SCBD-200641"
+						}
+					],
 						"techGuides":[
 						{
 							"lang":"EN",
@@ -880,9 +1293,19 @@
 						}
 					],
 					"nbsapForum":"http://nbsapforum.net/#categories/285",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
+					"programs":[
+						{"title":"The Nagoya Protocol","url":"https://www.cbd.int/abs/"},
+						{"title":"The Nagoya Protocol Text","url":"https://www.cbd.int/abs/doc/protocol/nagoya-protocol-en.pdf"},
+						{"title":"Virtual Library of the ABS Clearing-House","url":"https://www.cbd.int/abs/key-library.shtml"},
+						{"title":"Awareness-raising material on ABS","url":"https://www.cbd.int/abs/awareness-raising/default.shtml"}
+						],
+						"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+				},
+				"featuredResources":[200765,200725],
+				"partners":[
+					{"name":"The ABS Capacity Development Initiative","websites":[{"name":"website","url":"http://www.abs-initiative.info/about-us/"}]},
+					{"name":"IUCN","websites":[{"name":"website","url":"https://www.iucn.org/theme/environmental-law/our-work/access-and-benefit-sharing"}]}
+				]
 		},
 		{
 			"id": 17,
@@ -923,6 +1346,28 @@
 			    }
 			],
 			"links":{
+				"keyResources":[
+						{
+							"title":"Quick Guides to the Aichi Biodiversity Targets",
+							"link":"https://chm.cbd.int/database/record/200765"
+						},
+						{
+							"title":"NBSAP Guidelines",
+							"link":"https://www.cbd.int/nbsap/guidance-tools/guidelines.shtml"
+						},
+						{
+							"title":"CBD Capacity Building Modules",
+							"link":"https://www.cbd.int/nbsap/training/"
+						},
+						{
+							"title":"COP Guidance",
+							"link":"https://www.cbd.int/nbsap/guidance.shtml"
+						},
+						{
+							"title":"Biodiversity Planning: an assessment of national biodiversity strategies and action plans",
+							"link":"http://www.ias.unu.edu/resource_centre/UNU-IAS_Biodiversity_Planning_NBSAPs_Assessment_final_web_Oct_2010.pdf "
+						}
+					],
 						"techGuides":[
 						{
 							"lang":"EN",
@@ -938,9 +1383,19 @@
 						}
 					],
 					"nbsapForum":"http://nbsapforum.net/#categories/286",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
+					"programs":[
+						{"title":"NBSAP webpage","url":"https://www.cbd.int/nbsap/"}
+					],
+						"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+				},
+				"featuredResources":[200765,200725],
+				"partners":[
+					{"name":"NBSAP Forum","websites":[{"name":"website","url":"http://nbsapforum.net/"}]},
+					{"name":"UNDP","websites":[{"name":"website","url":"http://www.undp.org"}]},
+					{"name":"UNEP-WCMC","websites":[{"name":"website","url":"https://www.unep-wcmc.org/"}]},
+					{"name":"IUCN","websites":[{"name":"website","url":"http://www.iucn.org"}]},
+					{"name":"BirdLife","websites":[{"name":"website","url":"http://www.birdlife.org"}]}
+				]
 		},
 		{
 			"id": 18,
@@ -981,6 +1436,24 @@
 			    }
 			],
 			"links":{
+				"keyResources":[
+						{
+							"title":"Quick Guides to the Aichi Biodiversity Targets",
+							"link":"https://chm.cbd.int/database/record/200765"
+						},
+						{
+							"title":"The Tkarihwaié:ri Code of Ethical Conduct to Ensure Respect for the Cultural and Intellectual Heritage of India",
+							"link":"https://chm.cbd.int/database/record/200754"
+						},
+						{
+							"title":"Akwé: Kon Voluntary Guidelines for the Conduct of Cultural, Environmental and Social Impact Assessment",
+							"link":"https://chm.cbd.int/database/record/200753"
+						},
+						{
+							"title":"Application of Akwé: Kon Guidelines in the Management and Land Use Plan for the Hammastunturi. Final Report",
+							"link":"https://chm.cbd.int/database/record/200540"
+						}
+					],
 						"techGuides":[
 						{
 							"lang":"EN",
@@ -996,9 +1469,19 @@
 						}
 					],
 					"nbsapForum":"http://nbsapforum.net/#categories/287",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
+					"programs":[
+						{"title":"Programme of wors on Traditional Knowledge, Innovations and Practices","url":"https://www.cbd.int/traditional/"}
+					],
+						"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+				},
+				"featuredResources":[200765,200725],
+				"partners":[
+					{"name":"International Indigenous Forum on Biodiversity (IIFB)","websites":[{"name":"website","url":"http://iifb.indigenousportal.com/"}]},
+					{"name":"Indigenous Women Network on Biodiversity (IWNB)","websites":[{"name":"website","url":"http://reddemujeresindgenas.blogspot.ca"}]},
+					{"name":"Indigenous Information Network","websites":[{"name":"website","url":"http://indigenous-info-kenya.net"}]},
+					{"name":"Asian Indigenous Peoples Pact","websites":[{"name":"website","url":"http://aippnet.org/"}]},
+					{"name":"Fundación para la promoción del conocimiento indígena","websites":[{"name":"website","url":"http://www.forestpeoples.org/partners/fundacion-para-la-promocion-del-conocimiento-indigena-fpci"}]}
+				]
 		},
 		{
 			"id": 19,
@@ -1047,24 +1530,45 @@
 			    }
 			],
 			"links":{
+				"keyResources":[
+						{
+							"title":"Quick Guides to the Aichi Biodiversity Targets",
+							"link":"https://chm.cbd.int/database/record/200765"
+						},
+						{
+							"title":"BIOLAND Tool",
+							"link":"https://www.cbd.int/doc/meetings/chm/chmws-2016-02/other/chmws-2016-02-item-06-training-bioland-en.pdf"
+						},
+						{
+							"title":"Introduction to the CHM and links to the CBD planning and reporting processes",
+							"link":"https://www.cbd.int/chm/doc/chm-intro-links-en.pdf"
+						},
+						{
+							"title":"Introduction to knowledge management in the context of the CBD ",
+							"link":"https://www.cbd.int/chm/doc/chm-intro-km-en.pdf"
+						},
+						{
+							"title":"Guidance for developing national CHM",
+							"link":"https://www.cbd.int/chm/doc/chm-guidance-en.pdf"
+						}
+					],
 						"techGuides":[
 						{
 							"lang":"EN",
 							"link":"https://www.cbd.int/doc/strategic-plan/targets/T19-quick-guide-en.pdf"
-						},
-						{
-							"lang":"ES",
-							"link":""
-						},
-						{
-							"lang":"FR",
-							"link":""
 						}
 					],
 					"nbsapForum":"http://nbsapforum.net/#categories/288",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
-			}
+					"programs":[
+						{"title":"Clearing-House Mechanism","url":"https://www.cbd.int/chm/"},
+						{"title":"2020 Talks- Aichi Target #19","url":"https://chm.cbd.int/database/record/200805"}
+					],
+						"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+				},
+				"featuredResources":[200765,200725],
+				"partners":[
+					{"name":"UNEP - InforMEA","websites":[{"name":"website","url":"https://www.informea.org/en"}]}
+				]
 		},
 		{
 			"id": 20,
@@ -1105,6 +1609,28 @@
 			    }
 			],
 			"links":{
+				"keyResources":[
+						{
+							"title":"Quick Guides to the Aichi Biodiversity Targets",
+							"link":"https://chm.cbd.int/database/record/200765"
+						},
+						{
+							"title":"The Biodiversity Finance Initiative (BIOFIN) of UNDP",
+							"link":"http://www.biodiversityfinance.net"
+						},
+						{
+							"title":"The work programme of the OECD Joint ENVIRONET and WP-STAT Task Team to Improve Rio Markers, Environment and Development Finance Statistics",
+							"link":"http://www.oecd.org/dac/environment-development/statistics.htm#taskteam"
+						},
+						{
+							"title":"CBD Technical Series 56",
+							"link":"https://www.cbd.int/doc/publications/cbd-ts-56-en.pdf"
+						},
+						{
+							"title":"CBD Technical Series 28",
+							"link":"https://www.cbd.int/doc/publications/cbd-ts-28.pdf"
+						}
+					],
 						"techGuides":[
 						{
 							"lang":"EN",
@@ -1120,9 +1646,19 @@
 						}
 					],
 					"nbsapForum":"http://nbsapforum.net/#categories/289",
-					"programs":[],
-					"undb":"https://www.cbd.int/undb-new/"
+					"programs":[
+						{"title":"Programme of work on Economics, Trade and Incentive Measures","url":"https://www.cbd.int/incentives/"},
+					  {"title":"Phase three of the Economics of Ecosystems and Biodiversity initiative (TEEB) ","url":"http://www.teebweb.org/"},
+						{"title":"System of Environmental-Economic Accounting (SEEA)","url":"http://unstats.un.org/unsd/envaccounting/seea.asp"}
+					],
+						"undb":{"title":"United Nations Decade on Biodiversity","url":"https://www.cbd.int/undb-new/"}
+				},
+				"featuredResources":[200765,200725],
+				"partners":[
+					{"name":"UNDP Biofin","websites":[{"name":"website","url":"http://www.biodiversityfinance.net"}]},
+					{"name":"OECD DAC","websites":[{"name":"website","url":"http://www.oecd.org/dac/"}]},
+					{"name":"10-Year Framework of Programmes","websites":[{"name":"website","url":"http://www.unep.org/10yfp/"}]},
+					{"name":"Inter-agency Task Force on Financing for Development","websites":[{"name":"website","url":"http://www.un.org/esa/ffd/ffd-follow-up/inter-agency-task-force.html"}]}
+				]
 			}
-		}
-	]
-}
+]}

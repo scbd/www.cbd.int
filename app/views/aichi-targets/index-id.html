@@ -38,16 +38,6 @@
 		}
 
 
-	/*.title-calendar {
-	    background: url("/app/images/aichi-targets/calendar-icon.png") no-repeat;
-	    background-size: contain;
-	    padding-left: 2em;
-      height:25px;
-	}*/
-
-
-	/* Makes images fully responsive */
-
 	.img-responsive,
 	.thumbnail > img,
 	.thumbnail a > img,
@@ -57,8 +47,6 @@
 	  	width: 100%;
 	  	height: auto;
 	}
-
-	/* ------------------- Carousel Styling ------------------- */
 
 	.carousel-inner {
 		-moz-border-radius:15px;
@@ -83,7 +71,9 @@
 	display: inline;
 	margin-bottom: 20px;
 }
-
+.pointer{
+  cursor:pointer;
+}
 .divider{
   height: 1px;
   background: #cdcdcd;
@@ -190,7 +180,7 @@ margin: 0 10px 10px 0px;
             margin-left: 0px;
         }
 
-.btn {
+.bbtn {
     height: 25px;
     position: absolute;
     right: 0;
@@ -199,17 +189,14 @@ margin: 0 10px 10px 0px;
 }
 
     </style>
-<div style="position:absolute;top:15px;left:40%;">
-<h1>Aichi Target Pages </h1>
-</div>
+
 <div class="row">
     <div class="col-xs-12" >
 		<div class="row new-title "  >
-			<div class="col-xs-4 overlay" style="height:100%;">
+			<div class="col-xs-3 overlay" style="height:100%;">
 				<!-- <h5>Aichi Target</h5> -->
         <div  style="height:100%;">
-					<div class="col-xs-4 " style="padding-left:0;"><img style="margin-top:2px;" ng-src="/app/images/aichi-targets/abt-{{indexIdCtrl.target.id}}-96.png" width="120px" alt="Aichi target"></div>
-          <div class="col-xs-8 " style="position:relative;color:#eeeeee;font-size:18px;height:100%;" ><div ng-class="{'vertical-center-large':indexIdCtrl.target.title.en.length>30}" class="vertical-center text-center">{{indexIdCtrl.target.title.en}}</div></div>
+          <div class="col-xs-12 text-nowrap" style="position:relative;color:#eeeeee;font-size:28px;height:100%;" ><div  class="vertical-center text-center">Aichi Target Pages</div></div>
         </div>
 				<!-- <h4 style="color: {{indexIdCtrl.goal.colors.text}}">{{indexIdCtrl.goal.title.en}}</h4> -->
 			</div>
@@ -230,12 +217,14 @@ margin: 0 10px 10px 0px;
      <div class="col-sm-12 col-md-12 hidden-xs hidden-sm" style="z-index:99;">
         <div fish-eye class="fisheye" max-width='58'></div>
     </div>
+    <a type="button" class="btn btn-xs btn-default pull-right" style="margin-top:20px;margin-right:5px;" href="https://chm.cbd.int/submit/online-reporting">Submit Information</a>
+
 </div>
 <div class="row">
-  <div class="divider"></div>
+  <!-- <div class="divider"></div> -->
 
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-      <div class="sub-title" >
+  <div class="col-xs-12 ">
+      <!-- <div class="sub-title" >
         <div class="col-xs-1" style="padding: 0 10px 0 10px;width:50px;">
           <img src="/app/images/aichi-targets/abt-{{indexIdCtrl.target.id}}-96.png" width="25" style="margin: 1px 1px 1px 1px;">
         </div>
@@ -245,13 +234,20 @@ margin: 0 10px 10px 0px;
         <div class="col-xs-1" style="padding-left: 0;">
           <a type="button" class="btn btn-xs btn-default" href="https://chm.cbd.int/submit/online-reporting">Submit Information</a>
         </div>
-      </div>
+      </div> -->
 
-          <div class="col-xs-12" style="margin-top:10px;">
+<div class="col-xs-12 text-center" >
+    <h2 class="sub-title-text" >Aichi Target {{indexIdCtrl.target.id}}</h2>
+
+  </div>
+
+
+          <div class="col-xs-12"  style="margin-top:15px;margin-bottom:25px;">
             <h5 class="hidden-md hidden-lg hidden-xl">{{indexIdCtrl.target.title.en}}</h5>
             <p >{{indexIdCtrl.target.action.en}}</p>
+
           </div>
-  </div>
+
   <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 
 
@@ -266,8 +262,9 @@ margin: 0 10px 10px 0px;
   </div> -->
 
 </div>
+</div>
 <div class="row">
-  <div class="divider"></div>
+
 
   <legend42></legend42>
 
@@ -282,12 +279,12 @@ margin: 0 10px 10px 0px;
           <img src="/app/images/aichi-targets/resources-icon.png" style="margin: 1px 1px 1px 1px;">
         </div>
         <div class="col-xs-5" style="padding-left: 0;">
-            <h4 class="sub-title-text">Key Resources</h4>
+            <h4 class="sub-title-text">Resources</h4>
         </div>
         <div class="col-xs-6">
           <div class="search">
             <input type="text" class="form-control input-xs" maxlength="64" placeholder="Search" ng-model="indexIdCtrl.searchRes" />
-            <button type="submit" class="btn  btn-xs" style="background-color:#eeeeee;"><i class="fa fa-close" ng-if="indexIdCtrl.searchRes" ng-click="indexIdCtrl.searchRes='';"></i><i class="fa fa-search" ng-if="!indexIdCtrl.searchRes"></i></button>
+            <button type="submit" class="bbtn btn  btn-xs" style="background-color:#eeeeee;"><i class="fa fa-close" ng-if="indexIdCtrl.searchRes" ng-click="indexIdCtrl.searchRes='';"></i><i class="fa fa-search" ng-if="!indexIdCtrl.searchRes"></i></button>
           </div>
         </div>
         <div class="col-xs-12" >
@@ -331,9 +328,23 @@ margin: 0 10px 10px 0px;
           </div>
           <div class="col-xs-11" style="padding-left: 0;">
               <h4 class="sub-title-text">Links</h4>
-              <div>
-<br>
+              <div><br>
+                <div>
+                  <span>Key Resources</span>
+                  <ul>
+
+                  <li ng-repeat="key in indexIdCtrl.target.links.keyResources"><a ng-href="{{pro.link}}" class="pointer">{{key.title}}<a/></li>
+                  </ul>
+                </div>
                   <span>Technical Quick Guides (<span ng-repeat="guide in indexIdCtrl.target.links.techGuides"><a ng-href="{{guide.link}}" ng-if="guide.link">{{guide.lang}}</a><span ng-if="!$last && indexIdCtrl.target.links.techGuides[$index+1].link">, </span></span>)</span>
+                  <div>
+                    <span>Programmes</span>
+                    <ul>
+
+                    <li ng-repeat="pro in indexIdCtrl.target.links.programs"><a ng-href="{{pro.url}}">{{pro.title}}<a/></li>
+                    </ul>
+                  </div>
+
                   <!-- <span><br>Related Programmes</span>
                         <ul>
                             <li ><a ng-href="#">Prog 1<a/></li>
@@ -341,7 +352,7 @@ margin: 0 10px 10px 0px;
                             <li ><a ng-href="#">Prog 3<a/></li>
                         </ul> -->
 
-                    <span><a ng-href="{{indexIdCtrl.target.links.nbsapForum}}">NBSAP Forum</a></span>
+                    <div><a ng-href="{{indexIdCtrl.target.links.nbsapForum}}">NBSAP Forum</a></div>
                  </ul>
 
 
@@ -404,7 +415,28 @@ margin: 0 10px 10px 0px;
               <h4 class="sub-title-text">Partners</h4>
           </div>
         </div>
-        <div class="text-center" style="margin: 0 auto;"><img style=" margin:0 auto;"src="/app/images/aichi-targets/coming-soon.jpg"> </img></div>
+        <div  style="margin: 0 auto;">
+
+          <table class="table table table-striped">
+            <thead>
+             <tr>
+
+               <th >
+                 <span >Name</span>
+               </th>
+
+             </tr>
+           </thead>
+           <tbody>
+             <tr ng-repeat="row in indexIdCtrl.target.partners"  >
+
+               <td>
+                   <a ng-href="{{row.websites[0].url}}">{{row.name}}</a>
+               </td>
+             </tr>
+           </tbody>
+          </table>
+        </div>
     </div>
 
 
