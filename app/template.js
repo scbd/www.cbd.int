@@ -52,7 +52,16 @@ define(['app', 'angular', 'bootstrap', 'authentication', ], function(app, ng) { 
                 return $location.hash();
             }
         };
-
+        //============================================================
+        //
+        //
+        //============================================================
+        $scope.isTarget = function () {
+            if($location.path().indexOf('/target/') >=0)
+              return true;
+            else
+              return false;
+        };
         //============================================================
         //
         //
