@@ -172,7 +172,7 @@ define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','dir
   								'rows': $scope.itemsPerPage,
                 };
 
-                  $http.get('https://api.cbddev.xyz/api/v2013/index/select', {
+                  $http.get('/api/v2013/index/select', {
                     params: queryParameters,
                     // cache: true
                   }).success(function(data) {
