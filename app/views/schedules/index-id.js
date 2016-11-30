@@ -24,7 +24,7 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
 		//========================================
         function load() {
 
-            var streamId = defaultStreamId || $route.current.params.streamId;
+            var streamId = $route.current.params.streamId || defaultStreamId;
             var options  = { params : { } };
             var now = new Date();
 

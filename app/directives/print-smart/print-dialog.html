@@ -1,6 +1,6 @@
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" ng-click="printCtrl.close(success)" aria-hidden="true">×</button>
+				<button type="button" class="close" ng-click="printCtrl.close(printCtrl.success)" aria-hidden="true">×</button>
 				<h4 class="modal-title">
 					<i class="fa fa-print"></i>
 					Request hard copies - {{documents.length}} document(s)
@@ -9,7 +9,7 @@
 			</div>
 			<div class="modal-body">
 
-				<form id="printForm" name="printForm" novalidate class="form-horizontal" ng-submit="printCtrl.print()" ng-hide="success">
+				<form id="printForm" name="printForm" novalidate class="form-horizontal" ng-submit="printCtrl.print()" ng-hide="printCtrl.success">
 
 					<div class="form-group" ng-class="{ 'has-warning' : (printForm.$submitted && printForm.locales.$error.required) }">
 						<label for="preferedLanguage" class="col-sm-4 control-label">Prefered language(s)</label>
@@ -83,7 +83,7 @@
 
 				</div>
 
-				<div class="alert alert alert-success" ng-show="success">
+				<div class="alert alert alert-success" ng-show="printCtrl.success">
 					<b>Your hard copies are on their way...</b> <br/>
 					The document(s) you requested are getting printed. You are invited to claim them at the document distribution counter.
 				</div>
@@ -97,7 +97,7 @@
 				<button type="button" ng-hide=" printCtrl.success"                           class="btn btn-default hidden-xs" ng-click="printCtrl.close('checkout')"           ng-disabled="printCtrl.loading">                          <i class="fa fa-arrow-left"></i> Back</button>
 				<button type="button" ng-show="!printCtrl.success && printCtrl.hasPrintShop" class="btn btn-success"           ng-click="printCtrl.printShop()"                 ng-disabled="printCtrl.loading || !printCtrl.canPrint()"> <i class="fa fa-print"></i> <i class="fa fa-print"></i> <i class="fa fa-print"></i> Print Shop</button>
 				<button type="submit" ng-show="!printCtrl.success"   form="printForm"        class="btn btn-primary"           ng-class="{ disabled : !printCtrl.canPrint() }"  ng-disabled="printCtrl.loading">                          <i class="fa fa-print"></i> Print</button>
-				<button type="button"                                                        class="btn btn-default"           ng-click="printCtrl.close(success && 'clear')"   ng-disabled="printCtrl.loading">                          <i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
+				<button type="button"                                                        class="btn btn-default"           ng-click="printCtrl.close(printCtrl.success && 'clear')"   ng-disabled="printCtrl.loading">                          <i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
 
 			</div>
 		</div><!-- /.modal-content -->
