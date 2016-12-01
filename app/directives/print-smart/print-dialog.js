@@ -1,8 +1,8 @@
-define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbox'], function(angular, _, Dropbox) {'use strict';
+define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbox', 'filters/lstring'], function(angular, _, Dropbox) {'use strict';
 
     var PDF = 'application/pdf';
 
-    return ['$scope', '$http', '$cookies', 'documents', function ($scope, $http, $cookies, documents) {
+    return ['$scope', '$http', '$cookies', 'documents', '$filter', function ($scope, $http, $cookies, documents, $filter) {
 
         var _ctrl = $scope.printCtrl = this;
 
@@ -65,9 +65,12 @@ define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbo
                 if(!files.length) files = _.where(pdfs, { locale: 'en' });
                 if(!files.length) files = _.take (pdfs, 1);
 
+                var lstring = $filter('lstring');
+
                 return _.map(files, function(f) {
                     return {
 						symbol  : doc.symbol,
+                        title   : lstring(doc.title||{}, 'en'),
 						tag     : doc.tag,
 						url     : f.url,
 						language: f.locale
