@@ -171,7 +171,7 @@ define(['app', 'lodash',
                     else
                         targetText = 'AICHI-TARGET-' + $scope.aichiTarget;
 
-                    var query = 'NOT version_s:* AND realm_ss:chm-dev AND schema_s:nationalAssessment AND nationalTarget_EN_t:"' + targetText + '" AND _latest_s:true AND _state_s:public';
+                    var query = 'NOT version_s:* AND realm_ss:chm AND schema_s:nationalAssessment AND nationalTarget_EN_t:"' + targetText + '" AND _latest_s:true AND _state_s:public';
                     return query;
                 }
 
