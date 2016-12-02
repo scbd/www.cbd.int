@@ -28,7 +28,7 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
         _ctrl.resolveLiteral = function(value) { return function() { return value; }; };
 
         var timeTimer    = $interval(updateTime, 30*1000);
-        var refreshTimer = $interval(load,    10*30*1000);
+        var refreshTimer = $interval(refresh, 10*60*1000);
 
         $scope.$on("$destroy", function() {
             $interval.cancel(timeTimer);
@@ -36,6 +36,14 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
         });
 
         load();
+
+        //==============================
+        //
+        //==============================
+        function refresh() {
+            $scope.$broadcast("refresh");
+            load();
+        }
 
         //==============================
         //
@@ -164,7 +172,7 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
 
                 _ctrl.types = [{_id:'cctv', title:"All"}].concat(_ctrl.types);
 
-                selectTab();
+                selectTab(_.findWhere(_ctrl.types, { _id: _ctrl.currentTab}));
 
             }).catch(console.error);
         }

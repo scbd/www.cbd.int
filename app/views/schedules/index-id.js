@@ -17,6 +17,8 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
 
         _ctrl.CALENDAR = CALENDAR_SETTINGS;
 
+        $scope.$on("refresh",  load);
+
         load();
 
 		//========================================
