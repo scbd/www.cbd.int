@@ -1,14 +1,13 @@
 
-<print-smart-checkout ng-cloak documents="agendaCtrl.documents|filter:{selected:true}:true" class="pull-right"></print-smart-checkout>
+<print-smart-checkout ng-cloak ng-show="agendaCtrl.currentTab!='cctv'" documents="agendaCtrl.documents|filter:{selected:true}:true" class="pull-right"></print-smart-checkout>
 <div class="btn btn-link pull-right" style="color:inherit;cursor:inherit;text-decoration:none" ng-if="agendaCtrl.now"><em>Time at venue:</em> <b>{{agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'H:mm'}}</b></div>
 <div>
 
     <div class="clearfix visible-sm visible-xs"></div>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist" style="margin-top:5px">
-        <li><a href="#cctv" role="tab" data-toggle="tab">All</a></li>
-        <li ng-repeat="type in agendaCtrl.types" ng-class="::{ active: $first }" >
-            <a ng-href="#{{::type._id}}" role="tab" data-toggle="tab">
+        <li ng-repeat="type in agendaCtrl.types" ng-class="{ active: agendaCtrl.currentTab==type._id }" >
+            <a ng-href="#{{::type._id}}" role="tab" ng-click="agendaCtrl.selectTab(type)" data-toggle="tab">
                 <span class="hidden-xs">{{::type.title}}</span>
                 <span class="visible-xs-inline">
                     <span ng-switch="type._id">
@@ -36,9 +35,11 @@
     <!-- Tab panes -->
     <div class="tab-content">
 
-        <div ng-repeat="type in agendaCtrl.types" ng-class="::{ active: $first }" role="tabpanel" class="tab-pane" id="{{::type._id}}">
+        <div ng-repeat="type in agendaCtrl.types|limitTo:99:1" ng-class="{ active: agendaCtrl.currentTab==type._id }" role="tabpanel" class="tab-pane" id="{{::type._id}}">
 
             <div ng-repeat="(day, dayParts) in type.days">
+
+                <div ng-if="type.loaded || agendaCtrl.currentTab==type._id">
 
                 <h3>{{::day|moment:'tz':agendaCtrl.event.timezone|moment:'calendar':(undefined|moment):agendaCtrl.CALENDAR}}</h3>
 
@@ -141,10 +142,11 @@
                     </div>
 
                 </div>
+                </div>
             </div>
         </div>
 
-        <div role="tabpanel" class="tab-pane" id="cctv">
+        <div role="tabpanel" class="tab-pane" id="cctv" ng-if="agendaCtrl.types[0].loaded || agendaCtrl.currentTab=='cctv'" ng-class="{ active: agendaCtrl.currentTab=='cctv' }" >
             <div view-injector="{ module : 'views/schedules/index-id', resolve: { streamId: agendaCtrl.resolveLiteral(agendaCtrl.streamId) } }"></div>
         </div>
 

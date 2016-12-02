@@ -24,6 +24,7 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
         _ctrl.CALENDAR = CALENDAR_SETTINGS;
         _ctrl.expandAll = expandAll;
         _ctrl.streamId = streamId;
+        _ctrl.selectTab = selectTab;
         _ctrl.resolveLiteral = function(value) { return function() { return value; }; };
 
         var timeTimer    = $interval(updateTime, 30*1000);
@@ -161,7 +162,24 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
                     }, {});
                 }).value();
 
+                _ctrl.types = [{_id:'cctv', title:"All"}].concat(_ctrl.types);
+
+                selectTab();
+
             }).catch(console.error);
+        }
+
+        //==============================
+        //
+        //==============================
+        function selectTab(type) {
+
+            if(!type)
+                type = _ctrl.types[1] || _ctrl.types[0];
+
+            _ctrl.currentTab = type._id;
+
+            type.loaded = true;
         }
 
         //==============================
