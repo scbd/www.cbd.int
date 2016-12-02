@@ -17,7 +17,7 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
         { code: 'evening',   end : '24:00'}
     ];
 
-	return ["$scope", "$route", "$http", '$q', 'eventId', 'streamId', function ($scope, $route, $http, $q, eventId, streamId) {
+	return ["$scope", "$route", "$http", '$q', 'eventId', 'streamId', '$interval', function ($scope, $route, $http, $q, eventId, streamId, $interval) {
 
         var _ctrl = $scope.agendaCtrl = this;
 
@@ -26,13 +26,30 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
         _ctrl.streamId = streamId;
         _ctrl.resolveLiteral = function(value) { return function() { return value; }; };
 
+        var timeTimer    = $interval(updateTime, 30*1000);
+        var refreshTimer = $interval(load,    10*30*1000);
+
+        $scope.$on("$destroy", function() {
+            $interval.cancel(timeTimer);
+            $interval.cancel(refreshTimer);
+        });
+
         load();
 
         //==============================
         //
         //==============================
-        function load() {
+        function updateTime() {
+            if(_ctrl.event)
+                _ctrl.now = moment.tz($route.current.params.datetime || new Date(), _ctrl.event.timezone).toDate();
 
+            return _ctrl.now;
+        }
+
+        //==============================
+        //
+        //==============================
+        function load() {
 
             var reservations, now;
             var event = $http.get('/api/v2016/event-groups/'+eventId, { params: { f : { timezone:1, MajorEventIDs:1, Title: 1, Description:1, venueId:1, schedule:1 } } }).then(function(res) {
@@ -41,7 +58,7 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
 
             }).then(function(){
 
-                now = _ctrl.now = moment.tz($route.current.params.datetime || new Date(), event.timezone).toDate();
+                now = updateTime();
 
                 return loadReservations(now);
 
