@@ -47,7 +47,7 @@
 
         <div class="col-xs-12" ng-if="!scheduleCtrl.frames.length">
             <h3>{{::day|moment:'tz':scheduleCtrl.event.timezone|moment:'calendar':(undefined|moment):scheduleCtrl.CALENDAR}}</h3>
-            No activities scheduled for the day
+            No more activities scheduled for the day
         </div>
 
         <div ng-if="(scheduleCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } }).length">
