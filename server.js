@@ -36,6 +36,9 @@ app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiUrl, sec
 // Configure template(s)
 
 app.get('/reports/map*', function(req, res) { res.cookie('VERSION', process.env.COMMIT||''); res.sendFile(__dirname + '/app/views/reports/template.html', { maxAge : 5*60*1000 }); });
+
+app.get('/insession',    function(req, res) { res.redirect('/conferences/2016'); });
+app.get('/insession/*',  function(req, res) { res.redirect('/conferences/2016'); });
 app.get('/*',            function(req, res) { res.cookie('VERSION', process.env.COMMIT||''); res.sendFile(__dirname + '/app/template.html',               { maxAge : 5*60*1000 }); });
 app.all('/*',            function(req, res) { res.status(404).send(); } );
 
