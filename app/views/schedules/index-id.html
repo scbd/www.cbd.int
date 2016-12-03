@@ -45,7 +45,7 @@
 
     <div class="row">
 
-        <div class="col-xs-12" ng-if="!scheduleCtrl.frames.length">
+        <div class="col-xs-12" ng-if="scheduleCtrl.frames.length==0">
             <h3>{{::day|moment:'tz':scheduleCtrl.event.timezone|moment:'calendar':(undefined|moment):scheduleCtrl.CALENDAR}}</h3>
             No more activities scheduled for the day
         </div>

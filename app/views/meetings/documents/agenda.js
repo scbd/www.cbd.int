@@ -67,6 +67,11 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
 
             }).then(function(){
 
+                if(!_ctrl.types) {
+                    _ctrl.types = [{_id:'cctv', title:"All"}];
+                    selectTab(_ctrl.types[0]);
+                }
+
                 now = updateTime();
 
                 return loadReservations(now);
@@ -158,7 +163,10 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
                 });
 
                 _ctrl.documents = _(meetingDocuments).map('documents').flatten().map(function(d) { d.status = detectDocumentStatus(d); return d; }).value();
-                _ctrl.types     = _(reservationTypes).forEach(function(type) {
+
+                _ctrl.types.length=1;
+
+                _ctrl.types = _ctrl.types.concat(_(reservationTypes).forEach(function(type) {
 
                     type.days = _(reservations).where({ type: type._id }).reduce(function(days, res) {
 
@@ -168,9 +176,7 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
 
                         return days;
                     }, {});
-                }).value();
-
-                _ctrl.types = [{_id:'cctv', title:"All"}].concat(_ctrl.types);
+                }).value());
 
                 selectTab(_.findWhere(_ctrl.types, { _id: _ctrl.currentTab}));
 
@@ -183,7 +189,7 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
         function selectTab(type) {
 
             if(!type)
-                type = _ctrl.types[1] || _ctrl.types[0];
+                type = _ctrl.types[0];
 
             _ctrl.currentTab = type._id;
 
