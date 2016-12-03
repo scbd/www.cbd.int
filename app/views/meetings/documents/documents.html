@@ -1,5 +1,8 @@
 <div>
-    <print-smart-checkout ng-cloak documents="documentsCtrl.documents|filter:{selected:true}:true" class="pull-right"></print-smart-checkout>
+    <div id="print-smart-checkout">
+        <print-smart-checkout ng-if="documentsCtrl.documents.length"  ng-cloak documents="documentsCtrl.documents|filter:{selected:true}:true" class="pull-right"></print-smart-checkout>
+    </div>
+
     <style>
         .nav.nowrap {
             white-space: nowrap;

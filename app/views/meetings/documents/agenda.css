@@ -34,3 +34,12 @@
 .printsmart-help .printsmart-help-document-selector {
     display: inline-block;
 }
+
+#print-smart-checkout  {
+    display: inline;
+}
+#print-smart-checkout.affix  {
+    top:5px;
+    right:20px;
+    z-index: 999;
+}

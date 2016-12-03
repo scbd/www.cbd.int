@@ -1,4 +1,4 @@
-define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document'], function(_) {
+define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document'], function(_, ng) {
     //'css!./agenda.css' // moved to template
 	return ["$scope", "$route", "$http", '$q', '$location', 'meeting', function ($scope, $route, $http, $q, $location, meetingCode) {
 
@@ -22,6 +22,7 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
             $location.hash(s=='agenda' ? 'agenda' : null);
         });
 
+        initAffix();
         load();
 
         //==============================
@@ -235,6 +236,22 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
                     locale: locale,
                     url : 'https://www.cbd.int'+url
                 };
+            });
+        }
+
+        //==============================
+        //
+        //==============================
+        function initAffix() {
+
+            var affixReady = $scope.$watch(function() {
+
+                var psc = ng.element('#print-smart-checkout');
+
+                if(psc.size()) {
+                    psc.affix({ offset: { top:psc.offset().top - 10 } });
+                    affixReady();
+                }
             });
         }
 	}];

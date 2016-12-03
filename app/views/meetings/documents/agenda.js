@@ -1,4 +1,4 @@
-define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'directives/view-injector', 'directives/print-smart/print-smart-checkout', './meeting-document'], function(_, moment) {
+define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/moment', 'directives/view-injector', 'directives/print-smart/print-smart-checkout', './meeting-document'], function(_, moment, ng) {
     //'css!./agenda.css' // moved to template
 
     var CALENDAR_SETTINGS = {
@@ -35,6 +35,7 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
             $interval.cancel(refreshTimer);
         });
 
+        initAffix();
         load();
 
         //==============================
@@ -260,6 +261,22 @@ define(['lodash', 'moment-timezone', 'filters/lstring', 'filters/moment', 'direc
             _(reservations).map('agenda').map('items').flatten().forEach(function(agendaItem) {
                 agendaItem.expanded = true;
             }).value();
+        }
+
+        //==============================
+        //
+        //==============================
+        function initAffix() {
+
+            var affixReady = $scope.$watch(function() {
+
+                var psc = ng.element('#print-smart-checkout');
+
+                if(psc.size()) {
+                    psc.affix({ offset: { top:psc.offset().top - 10 } });
+                    affixReady();
+                }
+            });
         }
 	}];
 });
