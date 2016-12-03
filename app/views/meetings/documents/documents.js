@@ -203,7 +203,8 @@ define(['lodash', 'filters/lstring', 'directives/print-smart/print-smart-checkou
         //
         //==============================
         function buildSortKey(d) {
-            return d.symbol.replace(/\b(\d)\b/g, '0$1')
+            return ("000000000" + (d.priority||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
+                   d.symbol.replace(/\b(\d)\b/g, '0$1')
                            .replace(/(\/REV)/gi, '0$1')
                            .replace(/(\/ADD)/gi, '1$1');
         }
