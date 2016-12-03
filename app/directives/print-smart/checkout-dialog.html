@@ -1,13 +1,13 @@
 		<div class="modal-content">
 				<style>
 
-				.btn-xxl        { width:     200px; }
-				.btn-xxl > span { font-size:   2em; }
-				.btn-xxl > i.fa { font-size:   7em; }
+				.btn-xxl        { width:     225px; }
+				.btn-xxl > span:first-child { font-size:   2em; }
+				.btn-xxl > i.fa { font-size:   6em; }
 
 				@media (max-width: 767px) {
-					.btn-xxl        { width:     125px; }
-					.btn-xxl > span { font-size:   1em; }
+					.btn-xxl        { width:     135px; }
+					.btn-xxl > span:first-child { font-size:   1em; }
 					.btn-xxl > i.fa { font-size:   5em; }
 				}
 				</style>
@@ -29,7 +29,8 @@
 							</td>
 							<td class="text-center" ng-show="canPrint" style="width:50%">
 								<button type="button" class="btn btn-primary btn-xxl" ng-disabled="!printableDocuments.length" ng-click="print()">
-									<span>Print</span><br/><br/>
+									<span>Request Prints</span><br/>
+									<span style="font-weight:lighter !important">(at the venue)</span><br/>
 									<i class="fa fa-print"></i>
 								</button>
 							</td>

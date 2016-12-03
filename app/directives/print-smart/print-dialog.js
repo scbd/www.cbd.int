@@ -8,6 +8,7 @@ define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbo
 
         documents = _(documents).filter(function(d) { return _.some(d.files, { mime : PDF }); }).value();
 
+        _ctrl.documents = documents;
 		_ctrl.locales = _(documents).map('files').flatten().where({ mime : PDF}).map('locale').uniq().sortBy().value();
 		_ctrl.selectedLocales  = {};
         _ctrl.print = print;
