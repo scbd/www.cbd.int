@@ -1,6 +1,7 @@
 define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular', 'ngDialog', 'filters/lstring'], function(app, templateHtml, require, _, ng) {
 
-    var PDF = 'application/pdf';
+    var PDF    = 'application/pdf';
+    var ONLINE = 'text/html';
 
 	app.directive('printSmartCheckout', ['$q', '$timeout', 'ngDialog', '$filter', function($q, $timeout, ngDialog, $filter) {
 
@@ -17,40 +18,48 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
 
                 initHelp();
 
-		        $scope.canPrint = function() { return true; };//psCtrl.canPrint();
+		        $scope.canPrint = true;
 		        $scope.clear    = clear;
 		        $scope.remove   = remove;
 		        $scope.checkout = checkout;
 		        $scope.print    = print;
 		        $scope.download = download;
 		        $scope.printableDocuments = printableDocuments;
+		        $scope.downloadableDocuments = downloadableDocuments;
                 $scope.displayText = displayText;
 
 				//==============================================
 				//
 				//
 				//==============================================
-				function documents() {
-                    return $scope.documents();
-				}
-
-				//==============================================
-				//
-				//
-				//==============================================
 				function printableDocuments() {
-                    return _(documents()).filter(function(d) {
+                    return _($scope.documents()).filter(function(d) {
                         return d.printable && _(d.files||[]).some({ mime: PDF }) ;
                     }).value();
                 }
 
+				//==============================================
+				//
+				//
+				//==============================================
+				function downloadableDocuments() {
+                    return _($scope.documents()).filter(function(d) {
+                        return !_(d.files||[]).all({ mime: ONLINE }) ;
+                    }).value();
+                }
 
 				//==============================================
 				//
 				//
 				//==============================================
-				function clear() {
-                    (documents()||[]).forEach(remove);
+				function clear(source) {
+
+                    var docs = $scope.documents();
+
+                    if(source=='print')
+                        docs = printableDocuments();
+
+                    (docs||[]).forEach(remove);
 				}
 
 				//==============================================
@@ -86,10 +95,17 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
 				//==============================================
 				function checkout() {
 
-                    if(!documents().length) return help(true);
+                    if(!$scope.documents().length) return help(true);
 
-					openDialog('./checkout-dialog', { resolve : { documents: resolver(documents()) } }).then(function(dialog){
-                        dialog.closePromise.then(onCloseDialog);
+					openDialog('./checkout-dialog', { resolve : {
+                        documents: resolver({
+                            printable : printableDocuments(),
+                            downloadable: downloadableDocuments()
+                        })
+                    }}).then(function(dialog){
+                        dialog.closePromise.then(function(res) {
+                            onCloseDialog(res.value, 'checkout');
+                        });
                     });
 				}
 
@@ -99,10 +115,13 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
 				//==============================================
 				function print() {
 
-                    if(!documents().length) return help(true);
+                    if(!$scope.documents()  .length) return help(true);
+                    if(!printableDocuments().length) return;
 
-					openDialog('./print-dialog', { resolve : { documents: resolver(documents()) } }).then(function(dialog){
-                        dialog.closePromise.then(onCloseDialog);
+					openDialog('./print-dialog', { resolve : { documents: resolver(printableDocuments()) } }).then(function(dialog){
+                        dialog.closePromise.then(function(res) {
+                            onCloseDialog(res.value, 'print');
+                        });
                     });
 				}
 
@@ -112,10 +131,13 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
 				//==============================================
 				function download() {
 
-                    if(!documents().length) return help(true);
+                    if(!$scope.documents()     .length) return help(true);
+                    if(!downloadableDocuments().length) return;
 
-					openDialog('./download-dialog', { resolve : { documents: resolver(documents()) } }).then(function(dialog){
-                        dialog.closePromise.then(onCloseDialog);
+					openDialog('./download-dialog', { resolve : { documents: resolver(downloadableDocuments()) } }).then(function(dialog){
+                        dialog.closePromise.then(function(res) {
+                            onCloseDialog(res.value, 'download');
+                        });
                     });
 				}
 
@@ -123,11 +145,11 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
 				//
 				//
 				//==============================================
-				function onCloseDialog(res) {
-                    if(res.value=='checkout') checkout();
-                    if(res.value=='download') download();
-                    if(res.value=='print')    print();
-                    if(res.value=='clear')    clear();
+				function onCloseDialog(action, source) {
+                    if(action=='checkout') checkout();
+                    if(action=='download') download();
+                    if(action=='print')    print();
+                    if(action=='clear')    clear(source);
                 }
 
 				//==============================================

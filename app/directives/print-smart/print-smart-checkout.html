@@ -24,13 +24,13 @@
 
             <li style="font-size:inherit" ng-class="{ disabled : !documents().length }">
                 <a style="cursor:pointer;font-size:14px" ng-click="download()">
-                    <i class="fa fa-arrow-circle-down"></i> Download
+                    <i class="fa fa-arrow-circle-down"></i> Download <span ng-if="downloadableDocuments().length">({{downloadableDocuments().length}})</span>
                 </a>
             </li>
 
             <li style="font-size:inherit" ng-class="{ disabled : !printableDocuments().length }">
-                <a style="cursor:pointer;font-size:14px" ng-show="canPrint()" ng-click="print()">
-                    <i class="fa fa-print"></i> Request Prints (at the venue)
+                <a style="cursor:pointer;font-size:14px" ng-show="canPrint" ng-click="print()">
+                    <i class="fa fa-print"></i> Request Prints <span ng-if="printableDocuments().length">({{printableDocuments().length}})</span>
                 </a>
             </li>
 
