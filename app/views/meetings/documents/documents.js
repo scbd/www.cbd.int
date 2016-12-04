@@ -154,10 +154,15 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
             _ctrl.tabs = _ctrl.tabs || [];
 
-            _ctrl.tabs.push({
-                code : 'notification',
-                documents : _ctrl.notifications
-            });
+            if(!_.some(_ctrl.tabs, { code: 'notification'})) {
+
+                _ctrl.documents = (_ctrl.documents).concat(_ctrl.notifications);
+
+                _ctrl.tabs.push({
+                    code : 'notification',
+                    documents : _ctrl.notifications
+                });
+            }
         }
 
         //==============================
@@ -166,7 +171,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         function switchTab(tab) {
 
             if(!tab && !_ctrl.currentTab)
-                tab = _ctrl.tabs[0]
+                tab = _ctrl.tabs[0];
 
             if(!tab)
                 return;
