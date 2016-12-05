@@ -197,6 +197,8 @@
             border-right:4px solid #fff;
             /*border-top:4px solid black*/
         }
+        @media (max-width: 767px) { TABLE.meetingnav-table { height: 72px; border-left: none; border-right: none } }
+
         .meetingnav-button {
             position:relative;
             width:84px;
@@ -205,6 +207,8 @@
             background-color:rgba(0,0,0,0.40);
             border-left:4px solid #fff;
         }
+        @media (max-width: 767px) { .meetingnav-button { border-left: 1px solid #fff; width: 20% } }
+        @media (max-width: 767px) { .meetingnav-button:first-child { border-left: none; } }
 
         .meetingnav td.selected {
             background-color: #009b48
@@ -224,6 +228,7 @@
             border-left:4px solid #fff;
             vertical-align:top;
         }
+        @media (max-width: 767px) { .meetingnav-buttongroup { border-left: 1px solid #fff; } }
 
         .meetingnav table.meetings {
             background-color: rgba(64,64,64,0.9);
