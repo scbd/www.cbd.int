@@ -61,17 +61,17 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         //==============================
         function load() {
 
+            if(!_ctrl.types) {
+                _ctrl.types = [{_id:'cctv', title:"All"}];
+                selectTab(_ctrl.types[0]);
+            }
+
             var reservations, now;
             var event = $http.get('/api/v2016/event-groups/'+eventId, { params: { f : { timezone:1, MajorEventIDs:1, Title: 1, Description:1, venueId:1, schedule:1 } } }).then(function(res) {
 
                 _ctrl.event = event = res.data;
 
             }).then(function(){
-
-                if(!_ctrl.types) {
-                    _ctrl.types = [{_id:'cctv', title:"Overview"}];
-                    selectTab(_ctrl.types[0]);
-                }
 
                 now = updateTime();
 
@@ -96,6 +96,8 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             }).then(function(res){
 
                 reservations = res;
+
+                prepopulateTabs(reservations);
 
                 var meetingCodes = _(reservations).map('agenda.items').flatten().map('meeting').uniq().value();
 
@@ -182,6 +184,16 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                 selectTab(_.findWhere(_ctrl.types, { _id: _ctrl.currentTab}));
 
             }).catch(console.error);
+        }
+
+        //==============================
+        //
+        //==============================
+        function prepopulateTabs(res) {
+            _ctrl.types.length=1;
+            if(_(res).some({type:'570fd1ac2e3fa5cfa61d90f5'})) _ctrl.types.push({_id:'570fd1ac2e3fa5cfa61d90f5', title:"Plenary" });
+            if(_(res).some({type:'58379a233456cf0001550cac'})) _ctrl.types.push({_id:'58379a233456cf0001550cac', title:"Working Group I"  });
+            if(_(res).some({type:'58379a293456cf0001550cad'})) _ctrl.types.push({_id:'58379a293456cf0001550cad', title:"Working Group II" });
         }
 
         //==============================
