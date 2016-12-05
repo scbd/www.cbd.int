@@ -20,7 +20,7 @@
             </a>
         </li>
         <!-- <li><a href="#cctv" data-toggle="tab" role="tab">Daily Schedule</a></li> -->
-        <li class="dropdown-toggle">
+        <li class="dropdown-toggle hidden-xs">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
                 Side Events <span class="caret">
             </a>
@@ -34,9 +34,16 @@
         </li>
         <li class="dropdown-toggle">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-                Parallel Meetings <span class="caret">
+                <div class="hidden-xs">Parallel Meetings <span class="caret"></span></div>
+                <div class="visible-xs">Others <span class="caret"></span></div>
             </a>
-            <ul class="dropdown-menu dropdown-menu-right">
+            <ul class="dropdown-menu">
+                <li class="visible-xs"><a href="https://www.cbd.int/side-events" target="_self" role="tab">Side-Events Schedule</a></li>
+                <li class="visible-xs divider" role="separator"></li>
+                <li class="visible-xs"><a href="https://www.cbd.int/cepa/fair/2016/" target="_self" role="tab">CEPA Fair</a></li>
+                <li class="visible-xs"><a href="http://www.riopavilion.org/" target="_self" role="tab">Rio Conventions Pavilion</a></li>
+                <li class="visible-xs"><a href="http://cop13.mx/en/expo/" target="_self" role="tab">Mainstreaming Biodiversity Expo</a></li>
+                <li class="visible-xs divider" role="separator"></li>
                 <li><a href="http://cop13.mx/en/civil-society-forum/" target="_self" role="tab">Civil Society and Youth Alliances (28-30 Nov)</a></li>
                 <li><a href="https://www.cbd.int/business/meetings-events/2016.shtml" target="_self" role="tab">3rd Science for Biodiversity Forum (1-2 Dec)</a></li>
                 <li><a href="http://cop13.mx/en/science-for-biodiversity-forum/" target="_self" role="tab">Business and Biodiversity Forum (2-3 Dec)</a></li>
@@ -55,7 +62,7 @@
             <print-smart-checkout ng-cloak ng-show="agendaCtrl.types.length && agendaCtrl.currentTab!='cctv'" documents="agendaCtrl.documents|filter:{selected:true}:true"></print-smart-checkout>
         </div>
     </div>
-    
+
     <!-- Tab panes -->
     <div class="tab-content">
 
