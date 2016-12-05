@@ -300,11 +300,14 @@
             <div class="row" style="background:url(/app/images/p03qv92p.jpg);background-size:100%;background-repeat:no-repeat">
                 <table class="meetingnav-table">
                     <tr>
-                        <td class="notselected meetingnav-button">
-                            <img src="/app/images/cop13-logo-white.png" style="position:absolute;top:13px;left:13px;width:56px;height:56px;z-index:1;filter: blur(0px);">
-                            <img src="/app/images/cop13-logo.png" style="position:absolute;top:13px;left:13px;width:56px;height:56px;z-index:2">
+                        <td class="notselected meetingnav-button" style="position:relative">
+                            <div class="hidden-xs">
+                                <img src="/app/images/cop13-logo-white.png" style="position:absolute;top:13px;left:13px;width:56px;height:56px;z-index:1;filter: blur(0px);">
+                                <img src="/app/images/cop13-logo.png" style="position:absolute;top:13px;left:13px;width:56px;height:56px;z-index:2">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </div>
+                            <img src="/app/images/cop13-logo.png" style="width:44px;height:44px">
                             <a href="/conferences/2016" class="link" style="height:80px;z-index:30;"></a>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </td>
                         <td class="meetingnav-button" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/schedules')}">
                             <div class="selection-mark"></div>
