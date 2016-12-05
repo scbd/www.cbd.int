@@ -225,6 +225,32 @@
             vertical-align:top;
         }
 
+        .meetingnav table.meetings {
+            background-color: rgba(64,64,64,0.9);
+        }
+
+        .meetingnav table.meetings td.meeting {
+            position: relative;
+            color: #fff;
+            font-weight: bold;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            width: 25%;
+        }
+        .meetingnav table.meetings td.meeting:not(:first-child) {
+            border-left: 1px solid #888;
+        }
+
+        .meetingnav table.meetings td.meeting a {
+            position: absolute;
+            display: block;
+            top: 0px;
+            bottom: 0px;
+            right: 0px;
+            left: 0px;
+        }
+
         .meetingnav-button > a.link,
         .meetingnav-buttongroup  a.link {
             display:block;
@@ -376,6 +402,15 @@
                                 <li><a href="https://www.cbd.int/cop2016/transport/">Transportation</a></li>
                             </ul>
                         </td>
+                    </tr>
+                </table>
+
+                <table class="meetings visible-xs" style="width:100%" ng-if="meetingNavCtrl.isSelected('/conferences/2016/cop-13/')||meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')||meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')||meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')">
+                    <tr>
+                        <td class="notselected meeting" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')}">COP13<a href="/conferences/2016/cop-13/documents#{{meetingNavCtrl.hash()}}"></a></td>
+                        <td class="notselected meeting CP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')}">MOP8<a href="/conferences/2016/cp-mop-8/documents#{{meetingNavCtrl.hash()}}"></a></td>
+                        <td class="notselected meeting NP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')}">MOP2<a href="/conferences/2016/np-mop-2/documents#{{meetingNavCtrl.hash()}}"></a></td>
+                        <td class="notselected meeting" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}">HLS<a href="/conferences/2016/cop-13-hls/documents#{{meetingNavCtrl.hash()}}"></a></td>
                     </tr>
                 </table>
 
