@@ -4,7 +4,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
         var TABS_NAMES = {
             'outcome'      : 'Outcomes',
-            'in-session'   : 'In Session',
+            'in-session'   : 'In-session',
             'official'     : 'Official',
             'informational': 'Information',
             'other'        : 'Others',
@@ -142,6 +142,10 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
             injectNotifications();
             switchTab();
+
+            if(!_(_ctrl.tabs).some({ code : 'in-session' })) {
+                _ctrl.tabs = [{ code : 'in-session', documents:[] }].concat(_ctrl.tabs);
+            }
         }
 
         //==============================
