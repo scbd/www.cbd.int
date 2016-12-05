@@ -69,7 +69,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             }).then(function(){
 
                 if(!_ctrl.types) {
-                    _ctrl.types = [{_id:'cctv', title:"All"}];
+                    _ctrl.types = [{_id:'cctv', title:"Overview"}];
                     selectTab(_ctrl.types[0]);
                 }
 
