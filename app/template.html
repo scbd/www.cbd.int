@@ -119,7 +119,7 @@
                </div> <!--  end sign in-->
 
                 <a href="/" target="_self">
-                    <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg"/></a>
+                    <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg" style="padding-top:4px;padding-left:2px"/></a>
                 </a>
 
             </div>
@@ -195,8 +195,11 @@
             background-color:rgba(128,128,128,0.25);
             border-left:4px solid #fff;
             border-right:4px solid #fff;
+            border-bottom:1px solid #fff;
             /*border-top:4px solid black*/
         }
+        @media (max-width: 767px) { TABLE.meetingnav-table { height: 72px; border-left: none; border-right: none } }
+
         .meetingnav-button {
             position:relative;
             width:84px;
@@ -205,9 +208,14 @@
             background-color:rgba(0,0,0,0.40);
             border-left:4px solid #fff;
         }
+        @media (max-width: 767px) { .meetingnav-button { border-left: 1px solid #fff; width: 20% } }
+        @media (max-width: 767px) { .meetingnav-button:first-child { border-left: none; } }
 
         .meetingnav td.selected {
             background-color: #009b48
+        }
+        .meetingnav td.selected.docs {
+            background-color:rgba(255,255,255,0.14);
         }
         .meetingnav td.selected.CP {
             background-color: #A05800
@@ -223,6 +231,33 @@
             background-color:rgba(0,0,0,0.40);
             border-left:4px solid #fff;
             vertical-align:top;
+        }
+        @media (max-width: 767px) { .meetingnav-buttongroup { border-left: 1px solid #fff; } }
+
+        .meetingnav table.meetings {
+            background-color: rgba(64,64,64,0.9);
+        }
+
+        .meetingnav table.meetings td.meeting {
+            position: relative;
+            color: #fff;
+            font-weight: bold;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            width: 25%;
+        }
+        .meetingnav table.meetings td.meeting:not(:first-child) {
+            border-left: 1px solid #888;
+        }
+
+        .meetingnav table.meetings td.meeting a {
+            position: absolute;
+            display: block;
+            top: 0px;
+            bottom: 0px;
+            right: 0px;
+            left: 0px;
         }
 
         .meetingnav-button > a.link,
@@ -249,8 +284,19 @@
         .meetingnav .selected.NP .selection-mark {
             border-color: #0086B7
         }
-    </style>
 
+        .splash {
+            color: #fff;
+            border-top: 3px solid #fff;
+            border-left: 4px solid #fff;
+            border-right: 4px solid #fff;
+        }
+        @media (max-width: 767px) { .splash { border-left: none; border-right: none } }
+
+        @media (max-width: 374px) { .hidden-xxs  { display: none !important; } }
+        @media (min-width: 375px) { .visible-xxs { display: none !important; } }
+
+    </style>
 
     <!-- NAVIGATION BAR -->
     <div ng-cloak ng-if="meetingNavCtrl.isSelected()" class="meetingnav">
@@ -258,15 +304,32 @@
             <div class="row" style="background:url(/app/images/p03qv92p.jpg);background-size:100%;background-repeat:no-repeat">
                 <table class="meetingnav-table">
                     <tr>
-                        <td class="notselected meetingnav-button">
-                            <img src="/app/images/cop13-logo-white.png" style="position:absolute;top:13px;left:13px;width:56px;height:56px;z-index:1;filter: blur(0px);">
-                            <img src="/app/images/cop13-logo.png" style="position:absolute;top:13px;left:13px;width:56px;height:56px;z-index:2">
+                        <td class="notselected meetingnav-button" style="position:relative">
+                            <div class="hidden-xs">
+                                <img src="/app/images/cop13-logo-white.png" style="position:absolute;top:13px;left:13px;width:56px;height:56px;z-index:1;filter: blur(0px);">
+                                <img src="/app/images/cop13-logo.png" style="position:absolute;top:13px;left:13px;width:56px;height:56px;z-index:2">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </div>
+                            <img src="/app/images/cop13-logo.png" style="width:44px;height:44px">
                             <a href="/conferences/2016" class="link" style="height:80px;z-index:30;"></a>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </td>
                         <td class="meetingnav-button" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/schedules')}">
                             <div class="selection-mark"></div>
-                            <div style="background-color:rgba(255,255,255,0);font-size:12px;font-weight:bold;height:26px;padding-top:5px;color:#ddd">SCHEDULE</div>
+                            <div class="hidden-xs" style="font-size:12px;font-weight:bold">SCHEDULE</div>
+                            <i class="fa fa-clock-o visible-xs" aria-hidden="true" style="font-size:24px"></i>
+                            <a href="/conferences/2016/schedules" class="link"></a>
+                        </td>
+                        <td class="meetingnav-button visible-xs docs" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')||meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')||meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')||meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}">
+                            <div class="selection-mark"></div>
+                            <i class="fa fa-file-text-o" aria-hidden="true" style="font-size:24px"></i>
+                            <a href="/conferences/2016/cop-13/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
+                        </td>
+                        <td class="meetingnav-button visible-xs">
+                            <div class="selection-mark"></div>
+                            <div style="background-color:#ee4242;font-size:12px;font-weight:bold;padding-top:6px;padding-bottom:6px;">
+                                <div class="hidden-xxs">WEBCAST</div>
+                                <div class="visible-xxs">LIVE</div>
+                            </div>
                             <a href="/conferences/2016/schedules" class="link"></a>
                         </td>
                         <!-- <td class="meetingnav-buttongroup">
@@ -292,7 +355,7 @@
                                 </tr>
                             </table>
                         </td> -->
-                        <td class="meetingnav-buttongroup">
+                        <td class="meetingnav-buttongroup hidden-xs">
                             <table style="height:100%;width:100%;font-size:12px;font-weight:bold">
                                 <tr style="height:0px">
                                     <td colspan="4" style="vertical-align:top;padding-bottom:2px;position:relative">
@@ -313,12 +376,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="25%" class="HLS" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}" style="position:relative;padding:0 6px;cursor:pointer" align="center">
-                                        <div class="selection-mark"></div>
-                                        High Level <br> Segment
-                                        <a href="/conferences/2016/cop-13-hls/documents#{{meetingNavCtrl.hash()}}" class="link" style="height:52px;"></a>
-                                    </td>
-                                    <td width="25%" class="CBD" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')}" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center">
+                                    <td width="25%" class="CBD" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')}" style="position:relative;padding:0 6px;cursor:pointer" align="center">
                                         <div class="selection-mark"></div>
                                         COP13
                                         <a href="/conferences/2016/cop-13/documents#{{meetingNavCtrl.hash()}}" class="link" style="height:52px;"></a>
@@ -341,6 +399,11 @@
                                         </div>
                                         <a href="/conferences/2016/np-mop-2/documents#{{meetingNavCtrl.hash()}}" class="link" style="height:52px;"></a>
                                     </td>
+                                    <td width="25%" class="HLS" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center">
+                                        <div class="selection-mark"></div>
+                                        High Level <br> Segment
+                                        <a href="/conferences/2016/cop-13-hls/documents#{{meetingNavCtrl.hash()}}" class="link" style="height:52px;"></a>
+                                    </td>
                                 </tr>
                             </table>
                         </td>
@@ -350,13 +413,13 @@
                             <a href="http://cop13.mx/" target="#wabcast" class="link"></a>
 
                         </td>
-                        <td class="notselected meetingnav-button hidden-xs" ng-class="{selected:meetingNavCtrl.isSelected('/cop2016/media')}">
+                        <td class="notselected meetingnav-button hidden-xs">
                             <div class="selection-mark"></div>
                             <div style="font-size:12px;font-weight:bold">MEDIA</div>
                             <a href="/cop2016/media" class="link"></a>
 
                         </td>
-                        <td class="notselected meetingnav-button hidden-xs" ng-class="{selected:meetingNavCtrl.isSelected('/cop2016/media')}">
+                        <td class="notselected meetingnav-button">
                             <div class="selection-mark"></div>
 
                             <i class="fa fa-info" aria-hidden="true" style="font-size:24px"></i>
@@ -371,8 +434,17 @@
                     </tr>
                 </table>
 
+                <table class="meetings visible-xs" style="width:100%" ng-if="meetingNavCtrl.isSelected('/conferences/2016/cop-13/')||meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')||meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')||meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')">
+                    <tr>
+                        <td class="notselected meeting" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')}">COP13<a href="/conferences/2016/cop-13/documents#{{meetingNavCtrl.hash()}}"></a></td>
+                        <td class="notselected meeting CP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')}">MOP8<a href="/conferences/2016/cp-mop-8/documents#{{meetingNavCtrl.hash()}}"></a></td>
+                        <td class="notselected meeting NP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')}">MOP2<a href="/conferences/2016/np-mop-2/documents#{{meetingNavCtrl.hash()}}"></a></td>
+                        <td class="notselected meeting" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}">HLS<a href="/conferences/2016/cop-13-hls/documents#{{meetingNavCtrl.hash()}}"></a></td>
+                    </tr>
+                </table>
+
                 <div ng-if="meetingNavCtrl.fullPath() == '/conferences/2016'" style="background-color:rgba(0,0,0,0.2);position:relative">
-                    <div class="container" style="border-top:8px solid #fff;border-left:4px solid #fff;border-right:4px solid #fff;color:#fff">
+                    <div class="container splash">
                         <div class="col-sm-7 col-md-6 col-md-5">
                             <img src="/app/images/cop13-logo-text-min.svg" style="margin-top:20px;margin-bottom:60px;width:100%">
                             <div class="visible-xs" style="margin-top:-30px;margin-bottom:40px;text-align:center">
