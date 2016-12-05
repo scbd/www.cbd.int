@@ -50,17 +50,9 @@ define(['app', 'angular', 'bootstrap', 'authentication', ], function(app, ng) { 
 
             hash : function() {
                 return $location.hash();
-            },
-
-            navigate : function(url) {
-                $location.url(url);
-            },
-
-            info : function(target) {
-                setTimeout(function() { $(target).addClass("open"); }, 0);
             }
         };
-		
+
         //============================================================
         //
         //
@@ -68,7 +60,7 @@ define(['app', 'angular', 'bootstrap', 'authentication', ], function(app, ng) { 
         $scope.isTarget = function () {
             return $location.path().indexOf('/target/') >= 0;
         };
-		
+
         //============================================================
         //
         //

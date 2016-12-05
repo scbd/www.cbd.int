@@ -201,7 +201,8 @@
         @media (max-width: 767px) { TABLE.meetingnav-table { height: 72px; border-left: none; border-right: none } }
 
         .meetingnav-button {
-            cursor:pointer;
+            position:relative;
+            background-clip:padding-box;
             width:84px;
             color:#fff;
             text-align:center;
@@ -225,7 +226,8 @@
         }
 
         .meetingnav-buttongroup {
-            cursor:pointer;
+            position:relative;
+            background-clip:padding-box;
             color:#fff;
             text-align:center;
             background-color:rgba(0,0,0,0.40);
@@ -239,7 +241,8 @@
         }
 
         .meetingnav table.meetings td.meeting {
-            position: relative;
+            position:relative;
+            background-clip:padding-box;
             color: #fff;
             font-weight: bold;
             padding-top: 12px;
@@ -251,8 +254,13 @@
             border-left: 1px solid #888;
         }
 
-        .meetingnav table.meetings td.meeting {
-            cursor: pointer;
+        .meetingnav table.meetings td.meeting a {
+            display:block;
+            position:absolute;
+            top:0px;
+            bottom:0px;
+            right:0px;
+            left:0px;
         }
 
         .meetingnav-button > a.link,
@@ -263,7 +271,7 @@
             bottom:0px;
             right:0px;
             left:0px;
-            height: 80px;
+            height: 70px;
         }
 
         .meetingnav .selected .selection-mark-DISBALED {
@@ -299,14 +307,17 @@
             <div class="row" style="background:url(/app/images/p03qv92p.jpg);background-size:100%;background-repeat:no-repeat">
                 <table class="meetingnav-table">
                     <tr>
-                        <td class="notselected meetingnav-button" ng-click="meetingNavCtrl.navigate('/2016')">
+                        <td class="notselected meetingnav-button">
+                            <a href="/conferences/2016" class="link"></a>
                             <img src="/app/images/cop13-logo.png" style="width:44px;height:44px">
                         </td>
-                        <td class="meetingnav-button" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/schedules')}" ng-click="meetingNavCtrl.navigate('/2016/schedules')">
+                        <td class="meetingnav-button" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/schedules')}">
+                            <a href="/conferences/2016/schedules" class="link"></a>
                             <div class="hidden-xs" style="font-size:12px;font-weight:bold">SCHEDULE</div>
                             <i class="fa fa-clock-o visible-xs" aria-hidden="true" style="font-size:24px"></i>
                         </td>
-                        <td class="meetingnav-button visible-xs docs" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')||meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')||meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')||meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}" ng-click="meetingNavCtrl.navigate('/2016/cop-13/documents#'+meetingNavCtrl.hash())">
+                        <td class="meetingnav-button visible-xs docs" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')||meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')||meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')||meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}">
+                            <a href="/conferences/2016/cop-13/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
                             <i class="fa fa-file-text-o" aria-hidden="true" style="font-size:24px"></i>
                         </td>
                         <td class="meetingnav-buttongroup hidden-xs">
@@ -317,44 +328,52 @@
                                     </td>
                                 </tr>
                                 <tr style="height:90%">
-                                    <td width="25%" class="CBD" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')}" style="position:relative;padding:0 6px;cursor:pointer" align="center" ng-click="meetingNavCtrl.navigate('/2016/cop-13/documents#'+meetingNavCtrl.hash())">
+                                    <td width="25%" class="CBD" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')}" style="position:relative;padding:0 6px;cursor:pointer" align="center">
+                                        <a href="/conferences/2016/cop-13/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
                                         COP13
                                     </td>
-                                    <td width="25%" class="CP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')}" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center" ng-click="meetingNavCtrl.navigate('/2016/cp-mop-8/documents#'+meetingNavCtrl.hash())">
+                                    <td width="25%" class="CP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')}" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center">
+                                        <a href="/conferences/2016/cp-mop-8/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
                                         <div class="visible-md" style="font-size:11px;font-weight:bold">Cartagena Protocol</div>
                                         <div style="margin-top:2px">
                                             <span class="hidden-xs">COPMOP8</span>
                                             <span class="visible-xs-inline">MOP8</span>
                                         </div>
                                     </td>
-                                    <td width="25%" class="NP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')}" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center" ng-click="meetingNavCtrl.navigate('/2016/np-mop-2/documents#'+meetingNavCtrl.hash())">
+                                    <td width="25%" class="NP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')}" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center">
+                                        <a href="/conferences/2016/np-mop-2/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
                                         <div class="visible-md" style="font-size:11px;font-weight:bold">Nagoya Protocol</div>
                                         <div style="margin-top:2px">
                                             <span class="hidden-xs">COPMOP2</span>
                                             <span class="visible-xs-inline">MOP2</span>
                                         </div>
                                     </td>
-                                    <td width="25%" class="HLS" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center" ng-click="meetingNavCtrl.navigate('/2016/cop-13-hls/documents#'+meetingNavCtrl.hash())">
+                                    <td width="25%" class="HLS" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}" style="position:relative;padding:0 6px;cursor:pointer;border-left:2px solid #fff" align="center">
+                                        <a href="/conferences/2016/cop-13-hls/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
                                         <div class="hidden-md hidden-lg">HLS</div>
                                         <div class="visible-md visible-lg">High Level <br> Segment</div>
                                     </td>
                                 </tr>
                             </table>
                         </td>
-                        <td class="notselected meetingnav-button" onclick="document.location.href='http://flux.live/cop/coplive/'">
+                        <td class="notselected meetingnav-button">
                             <div style="background-color:#ee4242;font-size:12px;font-weight:bold;padding-top:6px;padding-bottom:6px;">
+                                <a href="http://flux.live/cop/coplive/" class="link"></a>
                                 <div class="hidden-xxs">WEBCAST</div>
                                 <div class="visible-xxs">LIVE</div>
                             </div>
                         </td>
-                        <td class="notselected meetingnav-button hidden-xs" onclick="document.location.href='/cop2016/media'">
+                        <td class="notselected meetingnav-button hidden-xs">
+                            <a href="/cop2016/media" class="link"></a>
                             <div style="font-size:12px;font-weight:bold">MEDIA</div>
                         </td>
-                        <td class="notselected meetingnav-button dropdown" id="toggleInfo" ng-click="meetingNavCtrl.info('#toggleInfo')">
-                            <i  class="fa fa-info" data-toggle="dropdown" aria-hidden="true" style="font-size:24px"></i>
+                        <td class="notselected meetingnav-button">
+                            <a data-toggle="dropdown" class="link"></a>
+                            <i class="fa fa-info" data-toggle="dropdown" aria-hidden="true" style="font-size:24px"></i>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li><a href="https://www.cbd.int/doc/meetings/cop/cop-13/other/cop-13-info-note-en.pdf" target="_blank">Information for Participants</a></li>
                                 <li><a href="https://www.cbd.int/cop2016/public/">Information for Public</a></li>
+                                <li class="visible-xs"><a href="https://www.cbd.int/cop2016/media/">Information for Media</a></li>
                                 <li><a href="http://cop13.mx/" target="_blank">Mexican COP13 Website <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
                                 <li><a href="https://www.cbd.int/cop2016/transport/">Transportation</a></li>
                             </ul>
@@ -364,10 +383,10 @@
 
                 <table class="meetings visible-xs" style="width:100%" ng-if="meetingNavCtrl.isSelected('/conferences/2016/cop-13/')||meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')||meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')||meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')">
                     <tr>
-                        <td class="notselected meeting" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')}" ng-click="meetingNavCtrl.navigate('/2016/cop-13/documents#'+meetingNavCtrl.hash())">COP13</td>
-                        <td class="notselected meeting CP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')}" ng-click="meetingNavCtrl.navigate('/2016/cp-mop-8/documents#'+meetingNavCtrl.hash())">MOP8</td>
-                        <td class="notselected meeting NP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')}" ng-click="meetingNavCtrl.navigate('/2016/np-mop-2/documents#'+meetingNavCtrl.hash())">MOP2</td>
-                        <td class="notselected meeting" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}" ng-click="meetingNavCtrl.navigate('/2016/cop-13-hls/documents#'+meetingNavCtrl.hash())">HLS</td>
+                        <td class="notselected meeting" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')}"><a href="/conferences/2016/cop-13/documents#{{meetingNavCtrl.hash()}}"></a>COP13</td>
+                        <td class="notselected meeting CP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')}"><a href="/conferences/2016/cp-mop-8/documents#{{meetingNavCtrl.hash()}}"></a>MOP8</td>
+                        <td class="notselected meeting NP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')}"><a href="/conferences/2016/np-mop-2/documents#{{meetingNavCtrl.hash()}}"></a>MOP2</td>
+                        <td class="notselected meeting" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}"><a href="/conferences/2016/cop-13-hls/documents#{{meetingNavCtrl.hash()}}"></a>HLS</td>
                     </tr>
                 </table>
 
