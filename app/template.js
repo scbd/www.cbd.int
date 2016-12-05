@@ -50,6 +50,10 @@ define(['app', 'angular', 'bootstrap', 'authentication', ], function(app, ng) { 
 
             hash : function() {
                 return $location.hash();
+            },
+
+            navigate : function(url) {
+                $location.url(url);
             }
         };
 		
