@@ -3,7 +3,7 @@
     <tr>
         <td ng-click="document.selected=!document.selected;">
             <div ng-if="::isSymbolVisible">
-                <strong>{{::document.symbol}}</strong>
+                <strong ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></strong>
                 <span ng-if="document.number">({{::document.number}})</span>
                 <div>{{::document.title|lstring}}</div>
             </div>

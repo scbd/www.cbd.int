@@ -118,4 +118,9 @@ define(['app', 'jquery', 'lodash'], function(app, $, _) { 'use strict';
         };
     }]);
 
+    app.filter('encodeHtml', [function() {
+        return function(html) {
+            return $('<div/>').text(html).html();
+        };
+    }]);
 });

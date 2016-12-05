@@ -1,4 +1,4 @@
-define(['app', 'lodash', 'text!./meeting-document.html', 'directives/checkbox'], function(app, _, html) { 'use strict';
+define(['app', 'lodash', 'text!./meeting-document.html', 'directives/checkbox', 'filters/html-sanitizer'], function(app, _, html) { 'use strict';
 
 	var LANGUAGES = { ar : "العربية", en : "English", es : "Español", fr : "Français", ru : "Русский", zh : "中文" };
     var MIMES = {
@@ -30,6 +30,7 @@ define(['app', 'lodash', 'text!./meeting-document.html', 'directives/checkbox'],
                 $scope.isSymbolVisible= !/^[A-Z0-9]{24}$/i.test($scope.document.symbol);
                 $scope.initByLocales  = initByLocales;
                 $scope.initByMimes    = initByMimes;
+                $scope.breakSymbol    = breakSymbol;
 
                 var destroyWatch = $scope.$watch('$root.deviceSize', function(size){
                     if(size=='xs') return; // for performance only load files byMimes  if sreeen > xs
@@ -103,6 +104,14 @@ define(['app', 'lodash', 'text!./meeting-document.html', 'directives/checkbox'],
                     if(a.locale>b.locale) return  1;
 
                     return 0;
+                }
+
+
+                //==============================
+                //
+                //==============================
+                function breakSymbol(symbol) {
+                    return symbol.replace(/\//g, '/<wbr>');
                 }
 			}
 		};

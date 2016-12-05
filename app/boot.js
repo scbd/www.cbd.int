@@ -84,6 +84,7 @@ require([
     'moment-timezone',
     'filters/lstring',
     'filters/moment',
+    'filters/html-sanitizer',
     'directives/checkbox', 'text!directives/checkbox.html',
     'directives/view-injector',
     'directives/print-smart/print-smart-checkout', 'text!directives/print-smart/print-smart-checkout.html',
