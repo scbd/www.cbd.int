@@ -54,6 +54,10 @@ define(['app', 'angular', 'bootstrap', 'authentication', ], function(app, ng) { 
 
             navigate : function(url) {
                 $location.url(url);
+            },
+
+            info : function(target) {
+                setTimeout(function() { $(target).addClass("open"); }, 0);
             }
         };
 		

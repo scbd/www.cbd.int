@@ -350,8 +350,8 @@
                         <td class="notselected meetingnav-button hidden-xs" onclick="document.location.href='/cop2016/media'">
                             <div style="font-size:12px;font-weight:bold">MEDIA</div>
                         </td>
-                        <td class="notselected meetingnav-button" ng-click="meetingNavCtrl.info($event)">
-                            <i class="fa fa-info" aria-hidden="true" style="font-size:24px"></i>
+                        <td class="notselected meetingnav-button dropdown" id="toggleInfo" ng-click="meetingNavCtrl.info('#toggleInfo')">
+                            <i  class="fa fa-info" data-toggle="dropdown" aria-hidden="true" style="font-size:24px"></i>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li><a href="https://www.cbd.int/doc/meetings/cop/cop-13/other/cop-13-info-note-en.pdf" target="_blank">Information for Participants</a></li>
                                 <li><a href="https://www.cbd.int/cop2016/public/">Information for Public</a></li>
