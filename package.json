@@ -1,16 +1,17 @@
 {
-    "name": "www-cbd-int",
-    "description": "Website of the Convention on Biological Diversity",
-    "dependencies": {
-        "bower": "1.7.9",
-        "express": "4.13.4",
-        "http-proxy": "1.13.3",
-        "morgan": "1.7.0"
-    },
-    "license": "MIT",
-    "private": true,
-    "repository": "scbd/www.cbd.int",
-    "scripts": {
-        "postinstall": "./node_modules/.bin/bower install --allow-root -q"
-    }
+  "name": "www-cbd-int",
+  "description": "Website of the Convention on Biological Diversity",
+  "dependencies": {
+    "bower": "1.7.9",
+    "ejs": "2.5.5",
+    "express": "4.13.4",
+    "http-proxy": "1.13.3",
+    "morgan": "1.7.0"
+  },
+  "license": "MIT",
+  "private": true,
+  "repository": "scbd/www.cbd.int",
+  "scripts": {
+    "postinstall": "./node_modules/.bin/bower install --allow-root -q"
+  }
 }

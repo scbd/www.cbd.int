@@ -16,6 +16,8 @@ console.log("API url: ", apiUrl);
 
 // Configure options
 
+app.set('views', `${__dirname}/app`);
+app.set('view engine', 'ejs');
 app.use(require('morgan')('dev'));
 app.use(function(req, res, next) {  if(req.url.indexOf(".geojson")>0) res.contentType('application/json'); next(); } ); // override contentType for geojson files
 
