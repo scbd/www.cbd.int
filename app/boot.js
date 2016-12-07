@@ -1,5 +1,7 @@
 (function(document) { 'use strict';
 
+var gitVersion = document.documentElement.attributes['git-version'].value;
+
 require.config({
     waitSeconds: 30,
     baseUrl : '/app/',
@@ -50,9 +52,10 @@ require.config({
 
     },
     packages: [
-    { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },
-    { name: 'ammap'  , main: 'ammap'   , location : 'libs/ammap3/ammap' }
-]
+        { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },
+        { name: 'ammap'  , main: 'ammap'   , location : 'libs/ammap3/ammap' }
+    ],
+    urlArgs: 'v=' + gitVersion
 });
 
 define('xlsx', ['js-zip', 'ods'], function (jszip, ods) {

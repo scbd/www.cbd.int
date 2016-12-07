@@ -29,7 +29,7 @@ app.use(function(req, res, next) {  if(req.url.indexOf(".geojson")>0) res.conten
 app.use('/app/images/p03qv92p.jpg', express.static(__dirname + '/app/images/p03qv92p.jpg',{ maxAge: 365*24*60*60*1000 }));
 
 app.use('/favicon.png',   express.static(__dirname + '/app/images/favicon.png', { maxAge: 24*60*60*1000 }));
-app.use('/app',           express.static(__dirname + '/app'/*,                    { maxAge: 5*60*1000 }*/));
+app.use('/app',           express.static(__dirname + '/app',                    { setHeaders: setCustomCacheControl }));
 app.all('/app/*',         function(req, res) { res.status(404).send(); } );
 
 app.get('/doc/*', function(req, res) { proxy.web(req, res, { target: "https://www.cbd.int:443", secure: false } ); } );
@@ -44,7 +44,7 @@ app.get('/reports/map*', function(req, res) { res.cookie('VERSION', process.env.
 
 app.get('/insession',    function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
 app.get('/insession/*',  function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
-app.get('/*',            function(req, res) { res.cookie('VERSION', process.env.COMMIT||''); res.sendFile(__dirname + '/app/template.html',               { maxAge : 5*60*1000 }); });
+app.get('/*',            function(req, res) { res.render('template', { gitVersion: gitVersion }); });
 app.all('/*',            function(req, res) { res.status(404).send(); } );
 
 // START HTTP SERVER
@@ -61,3 +61,15 @@ proxy.on('error', function (e,req, res) {
 });
 
 process.on('SIGTERM', ()=>process.exit());
+
+//============================================================
+//
+//
+//============================================================
+function setCustomCacheControl(res, path) {
+
+	if(res.req.query && res.req.query.v && res.req.query.v==gitVersion && gitVersion!='UNKNOWN')
+        return res.setHeader('Cache-Control', 'public, max-age=86400000'); // one day
+
+    res.setHeader('Cache-Control', 'public, max-age=0');
+}

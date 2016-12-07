@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-controller="TemplateController">
+<html lang="en" ng-controller="TemplateController" git-version="<%=gitVersion%>">
 <head>
     <base href="/">
     <script> //Analytics
@@ -8,23 +8,23 @@
         ga('set',    'hostname', window.location.hostname);
         ga('set',    'location', undefined);
     </script>
-    <script src="/app/libs/requirejs/require.js"></script>
-    <script src="/app/boot.js"></script>
+    <script src="/app/libs/requirejs/require.js?v=<%=gitVersion%>"></script>
+    <script src="/app/boot.js?v=<%=gitVersion%>"></script>
     <script async src='https://www.google-analytics.com/analytics.js'></script>
 
     <title ng-bind="$root.page.title">Convention on Biological Diversity</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/app/libs/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/app/libs/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/app/libs/animate.css/animate.min.css">
-    <link rel="stylesheet" href="/app/libs/magnific-popup/dist/magnific-popup.css">
-    <link href="/app/libs/flag-icon-css/css/flag-icon.css" rel="stylesheet">
+    <link rel="stylesheet" href="/app/libs/bootstrap/dist/css/bootstrap.min.css?v=<%=gitVersion%>">
+    <link rel="stylesheet" href="/app/libs/font-awesome/css/font-awesome.min.css?v=<%=gitVersion%>">
+    <link rel="stylesheet" href="/app/libs/animate.css/animate.min.css?v=<%=gitVersion%>">
+    <link rel="stylesheet" href="/app/libs/magnific-popup/dist/magnific-popup.css?v=<%=gitVersion%>">
+    <link href="/app/libs/flag-icon-css/css/flag-icon.css?v=<%=gitVersion%>" rel="stylesheet">
 
-    <link rel="stylesheet" href="/app/libs/ng-dialog/css/ngDialog.min.css">
-    <link rel="stylesheet" href="/app/libs/ng-dialog/css/ngDialog-theme-default.min.css">
-    <link rel="stylesheet" href="/app/views/meetings/documents/agenda.css">
+    <link rel="stylesheet" href="/app/libs/ng-dialog/css/ngDialog.min.css?v=<%=gitVersion%>">
+    <link rel="stylesheet" href="/app/libs/ng-dialog/css/ngDialog-theme-default.min.css?v=<%=gitVersion%>">
+    <link rel="stylesheet" href="/app/views/meetings/documents/agenda.css?v=<%=gitVersion%>">
 
     <style>
 
