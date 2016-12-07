@@ -83,7 +83,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                     return reservations;
 
                 //Lookup for first reservation
-                var query  = { 'agenda.items': { $exists: true, $ne: [] } };
+                var query  = { 'agenda.items': { $exists: true, $ne: [] }, 'meta.status': { $ne : 'deleted' } };
 
                 return $http.get('/api/v2016/reservations', { params: { q : query, f : { start : 1 }, s: { start : 1 }, fo:1 } }).then(function(res){
 
@@ -221,6 +221,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             var sort   = { start : 1, end : 1 };
             var query  = {
                 'agenda.items': { $exists: true, $ne: [] },
+                'meta.status': { $ne : 'deleted' },
                 start : { $lte: { $date: end   } },
                 end   : { $gte: { $date: start } }
             };
