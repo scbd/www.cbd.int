@@ -1,7 +1,7 @@
 define(['require', 'app', 'angular', 'ngRoute'], function(require, app, angular) { 'use strict';
 
     var baseUrl = require.toUrl('').replace(/\?.*/,'');
-    var gitVersion = document.documentElement.attributes['git-version'].value;
+    var gitVersion = document.documentElement.attributes['git-version'] ? document.documentElement.attributes['git-version'].value : 'UNKNOWN';
 
     app.provider('extendedRoute', ["$routeProvider", function($routeProvider) {
 
