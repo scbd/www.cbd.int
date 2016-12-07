@@ -7,12 +7,15 @@ var app    = express();
 var proxy  = httpProxy.createProxyServer({});
 
 if(!process.env.API_URL) {
-    console.error("WARNING: evironment API_URL not set. USING default (https://api.cbd.int:443) ");
+    console.warn('warning: evironment API_URL not set. USING default (https://api.cbd.int:443)');
 }
 
 var apiUrl = process.env.API_URL || 'https://api.cbd.int:443';
+var gitVersion = (process.env.COMMIT || 'UNKNOWN').substr(0, 7);
 
-console.log("API url: ", apiUrl);
+console.info(`info: www.cbd.int`);
+console.info(`info: Git version: ${gitVersion}`);
+console.info(`info: API address: ${apiUrl}`);
 
 // Configure options
 
@@ -47,7 +50,7 @@ app.all('/*',            function(req, res) { res.status(404).send(); } );
 // START HTTP SERVER
 
 app.listen(process.env.PORT || 2000, '0.0.0.0', function(){
-    console.log('Server listening on %j', this.address());
+    console.info('info: Listening on %j', this.address());
 });
 
 // Handle proxy errors ignore
