@@ -119,7 +119,7 @@
                </div> <!--  end sign in-->
 
                 <a href="/" target="_self">
-                    <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg" style="padding-top:4px;padding-left:2px"/></a>
+                    <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>" style="padding-top:4px;padding-left:2px"/></a>
                 </a>
 
             </div>
@@ -143,7 +143,7 @@
             <div>
 
                 <div class="pull-left" style="margin:5px 0px">
-                    <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg"/></a>
+                    <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>"/></a>
                 </div>
 
                 <div  class="pull-right">
@@ -309,12 +309,12 @@
     <!-- NAVIGATION BAR -->
     <div ng-cloak ng-if="meetingNavCtrl.isSelected()" class="meetingnav">
         <div class="container" style="background-color:#000;">
-            <div class="row" style="background:url(/app/images/p03qv92p.jpg);background-size:100%;background-repeat:no-repeat">
+            <div class="row" style="background:url(/app/images/p03qv92p.jpg?v=<%=gitVersion%>);background-size:100%;background-repeat:no-repeat">
                 <table class="meetingnav-table">
                     <tr>
                         <td class="notselected meetingnav-button">
                             <a href="/conferences/2016" class="link"></a>
-                            <img src="/app/images/cop13-logo.png" style="width:44px;height:44px">
+                            <img src="/app/images/cop13-logo.png?v=<%=gitVersion%>" style="width:44px;height:44px">
                         </td>
                         <td class="meetingnav-button" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/schedules')}">
                             <a href="/conferences/2016/schedules" class="link"></a>
@@ -398,7 +398,7 @@
                 <div ng-if="meetingNavCtrl.fullPath() == '/conferences/2016'" style="background-color:rgba(0,0,0,0.2);position:relative">
                     <div class="container splash">
                         <div class="col-sm-7 col-md-6 col-md-5">
-                            <img src="/app/images/cop13-logo-text-min.svg" style="margin-top:20px;margin-bottom:60px;width:100%">
+                            <img src="/app/images/cop13-logo-text-min.svg?v=<%=gitVersion%>" style="margin-top:20px;margin-bottom:60px;width:100%">
                             <div class="visible-xs" style="margin-top:-30px;margin-bottom:40px;text-align:center">
                                 <span class="visible-xs" style="cursor:pointer;font-size:24px;background-color:#fff;padding:12px 40px;font-weight:bold;color:#000;border-radius:20px;font-size:12px" onclick="document.location.href='http://cop13.mx'">cop13.mx</span>
                             </div>
@@ -473,8 +473,8 @@
             </ul>
         </div>
         <div class="col-md-3 pull-right">
-            <a href="http://www.un.org/" target="_blank"><img src="/app/images/un-logo-white.gif" alt="UN logo" /></a>
-            <a href="http://unep.org/"   target="_blank"><img src="/app/images/unep-logo-white-en.gif" alt="UNEP logo" /></a>
+            <a href="http://www.un.org/" target="_blank"><img src="/app/images/un-logo-white.gif?v=<%=gitVersion%>" alt="UN logo" /></a>
+            <a href="http://unep.org/"   target="_blank"><img src="/app/images/unep-logo-white-en.gif?v=<%=gitVersion%>" alt="UNEP logo" /></a>
         </div>
     </footer>
     <div class="device-size visible-xs" size="xs"></div>
