@@ -31,6 +31,15 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 		});
 
 		var pToken;
+        var pCookieToken;
+
+        //============================================================
+        //
+        //
+        //============================================================
+        function getCookieToken() {
+            return pCookieToken;
+        }
 
 		//============================================================
 		//
@@ -80,7 +89,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 
 				pToken = defer.promise.then(function(t){
 
-					pToken = t;
+					pCookieToken = pToken = t;
 
 					return t;
 
@@ -134,6 +143,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 
 		return {
 			get : getToken,
+            getCookieToken : getCookieToken,
 			set : setToken
 		};
 	}]);
@@ -284,7 +294,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 
 				//Add token to http headers
 
-				return $q.when(apiToken.get()).then(function(token) {
+				return $q.when(apiToken.getCookieToken()).then(function(token) {
 
 					if(token) {
 						config.headers = ng.extend(config.headers||{}, {
