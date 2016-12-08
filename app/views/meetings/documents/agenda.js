@@ -161,11 +161,13 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                         rItem.shortTitle= (mItem||{}).shortTitle;
                         rItem.scopes    = (mItem||{}).scopes;
                         rItem.documents = mItemDocuments; //todo
-                        rItem.status    = rItem.status || detectAgendaItemStatus(rItem);
+                        rItem.status    = rItem.status||undefined;
                     });
+
+                    r.agenda.showStatus = !!_(r.agenda.items).map('status').compact().uniq().size();
                 });
 
-                _ctrl.documents = _(meetingDocuments).map('documents').flatten().map(function(d) { d.status = detectDocumentStatus(d); return d; }).value();
+                _ctrl.documents = _(meetingDocuments).map('documents').flatten().value();
 
                 _ctrl.types.length=1;
 
@@ -234,24 +236,25 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         //==============================
         //
         //==============================
-        function detectAgendaItemStatus(item) {
-
-            var statusPriority = { 'pre-session' : 10, 'draft' : 20, 'crp' : 30, 'l' : 40 };
-
-            return _(item.documents||[]).map('status').sortBy(function(s) { return statusPriority[s]||0; }).last();
-        }
+        // function detectAgendaItemStatus(item) {
+        //
+        //     var statusPriority = { 'pre-session' : 10, 'draft' : 20, 'crp' : 30, 'l' : 40 };
+        //
+        //     return _(item.documents||[]).map('status').sortBy(function(s) { return statusPriority[s]||0; }).last();
+        // }
 
         //==============================
         //
         //==============================
         function detectDocumentStatus(d) {
 
-            if(d.type=='in-session' && /\/CRP\//.test(d.symbol)) return 'crp';
-            if(d.type=='in-session' && /\/L\//  .test(d.symbol)) return 'l';
-            if(d.type=='in-session' && /\/L\//  .test(d.symbol)) return 'draft';
-            if(d.type=='other')                                  return 'pre-session';
-            if(d.type=='informational')                          return 'pre-session';
-            if(d.type=='official')                               return 'pre-session';
+            if(d.documentType) return d.documentType;
+
+            if(d.type=='in-session' && /\/CRP\d+/.test(d.symbol)) return 'crp';
+            if(d.type=='in-session' && /\/L\d+/  .test(d.symbol)) return 'l';
+            if(d.type=='other')                                   return 'pre-session';
+            if(d.type=='informational')                           return 'pre-session';
+            if(d.type=='official')                                return 'pre-session';
 
             return 'UNKNOWN';
         }
