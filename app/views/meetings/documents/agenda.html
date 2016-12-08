@@ -153,12 +153,14 @@
 
                                                     <span class="visible-xs-inline-block label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::agendaItem.item}}</span>
                                                     <span class="title agenda">
-                                                        <div class="hidden-xs" ng-if="::type._id=='570fd1552e3fa5cfa61d90f0'" style="font-weight:bold">
-                                                            {{::res.title}}
-                                                        </div>
-                                                        <span class="hidden-xs" >{{::agendaItem.title}}</span>
-                                                        <span class="visible-xs">{{::agendaItem.shortTitle||agendaItem.title}}</span>
-                                                        <em ng-if="::agendaItem.text"> - {{::agendaItem.text}}</em>
+                                                        <span ng-if="::!agendaItem.text">
+                                                            <span class="hidden-xs" >{{::agendaItem.title}}</span>
+                                                            <span class="visible-xs">{{::agendaItem.shortTitle||agendaItem.title}}</span>
+                                                        </span>
+                                                        <span ng-if="::agendaItem.text">
+                                                            <span>{{::agendaItem.shortTitle||agendaItem.title}}</span>
+                                                            - <b>{{::agendaItem.text}}</b>
+                                                        </span>
                                                     </span>
                                                 </div>
                                                 <table ng-if="agendaItem.expanded && (agendaItem.documents|filter:{status:agendaItem.status}).length" class="table table-striped table-hover" style="margin:10px 0px -5px 0px;">
