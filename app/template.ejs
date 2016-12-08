@@ -84,6 +84,12 @@
         span.visible-xs   { display: inline !important; }
     }
 
+    @media print {
+      a[href]:after {
+        content: none !important;
+      }
+    }
+
     </style>
 </head>
 <body class="ltr">
@@ -93,11 +99,11 @@
         <div class="container">
 
             <div class="navbar-header">
-                <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                <button class="navbar-toggle collapsed hidden-print" type="button" data-toggle="collapse" data-target=".navbar-collapse">
                     <i class="fa fa-bars" style="font-size:1.66em;"></i>
                 </button>
 
-                <div ng-cloak ng-show="user" class="pull-right">
+                <div ng-cloak ng-show="user" class="pull-right hidden-print">
 
                     <a ng-hide="user.isAuthenticated"  ng-click="signIn()" href="#" class="navbar-toggle collapsed" style="text-decoration:none;color:#009B48" style="color: black">
                         <i  class="fa fa-power-off" style="font-size:1.66em;"></i>
@@ -124,7 +130,7 @@
 
             </div>
 
-            <nav class="collapse navbar-collapse" role="navigation">
+            <nav class="collapse navbar-collapse hidden-print" role="navigation">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="/convention">The Convention</a></li>
                     <li class="active"><a href="/biosafety">Cartagena Protocol</a></li>
@@ -146,7 +152,7 @@
                     <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>"/></a>
                 </div>
 
-                <div  class="pull-right">
+                <div  class="pull-right hidden-print">
 
                     <a class="btn btn-link" ng-click="signIn()"  href="#"  style="text-decoration:none;color:#009B48" ng-hide="user.isAuthenticated" style="color: black">
                         <i  class="fa fa-power-off"></i> <span ng-cloak ng-show="user && !user.isAuthenticated">Sign in</span>
@@ -165,7 +171,7 @@
                     <div ng-cloak ng-if="isTarget();"><a type="button" class="btn btn-xs btn-default"  href="https://chm.cbd.int/submit/online-reporting">Submit Information</a></div>
                </div> <!--  end sign in-->
 
-                <div style="clear:right;" class="pull-right">
+                <div style="clear:right;" class="pull-right hidden-print">
                     <ul class="nav navbar-nav">
                         <li class="active"><a href="/convention">The Convention</a></li>
                         <li class="active"><a href="/biosafety">Cartagena Protocol</a></li>
@@ -307,7 +313,7 @@
     </style>
 
     <!-- NAVIGATION BAR -->
-    <div ng-cloak ng-if="meetingNavCtrl.isSelected()" class="meetingnav">
+    <div ng-cloak ng-if="meetingNavCtrl.isSelected()" class="meetingnav hidden-print">
         <div class="container" style="background-color:#000;">
             <div class="row" style="background:url(/app/images/p03qv92p.jpg?v=<%=gitVersion%>);background-size:100%;background-repeat:no-repeat">
                 <table class="meetingnav-table">
@@ -419,7 +425,7 @@
     </div>
 
     <!--  FOOTER   -->
-    <footer class="container whitebg">
+    <footer class="container whitebg hidden-print">
         <div class="greybg">
             <div class="col-sm-4 fleft">
                 <h4>Quick Links</h4>
@@ -461,7 +467,7 @@
     </footer>
 
     <footer class="container standard whitebg">
-        <div class="col-md-9">
+        <div class="col-md-9 hidden-print">
             <ul class="list-inline">
                 <li><a href="/feedback">Feedback</a></li>
                 <li><a href="/map">Site Map</a></li>

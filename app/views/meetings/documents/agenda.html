@@ -1,11 +1,11 @@
 
 
-<div class="btn btn-link pull-right" style="color:inherit;cursor:inherit;text-decoration:none" ng-if="agendaCtrl.now"><em>Time at venue:</em> <b>{{agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'H:mm'}}</b></div>
+<div class="btn btn-link pull-right hidden-print" style="color:inherit;cursor:inherit;text-decoration:none" ng-if="agendaCtrl.now"><em>Time at venue:</em> <b>{{agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'H:mm'}}</b></div>
 <div>
 
     <div class="clearfix visible-sm visible-xs"></div>
     <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist" style="margin-top:5px">
+    <ul class="nav nav-tabs hidden-print" role="tablist" style="margin-top:5px">
         <li ng-repeat="type in agendaCtrl.types" ng-class="{ active: agendaCtrl.currentTab==type._id }" >
             <a ng-href="#{{::type._id}}" role="tab" ng-click="agendaCtrl.selectTab(type)" data-toggle="tab">
                 <span class="hidden-xs" ng-switch="type._id">
@@ -59,7 +59,7 @@
         </li>
     </ul>
 
-    <div  class="pull-right" style="padding-top:8px">
+    <div  class="pull-right hidden-print" style="padding-top:8px">
         <div id="print-smart-checkout">
             <print-smart-checkout ng-cloak ng-show="agendaCtrl.types.length && agendaCtrl.currentTab!='cctv'" documents="agendaCtrl.documents|filter:{selected:true}:true"></print-smart-checkout>
         </div>
@@ -69,6 +69,8 @@
     <div class="tab-content">
 
         <div ng-repeat="type in agendaCtrl.types|limitTo:99:1" ng-class="{ active: agendaCtrl.currentTab==type._id }" role="tabpanel" class="tab-pane" id="{{::type._id}}">
+
+            <h1 class="visible-print" style="position:absolute;top:0px;right:0px">{{::type.title}} <small>{{agendaCtrl.now|date}}</small></h1>
 
             <div ng-repeat="(day, dayParts) in type.days">
 
@@ -99,8 +101,6 @@
 
                             <span class="visible-xs small" style="color:#777">
                                 {{::(reservations|limitTo:1: 0)[0].start|moment:'tz':agendaCtrl.event.timezone|moment:'format':'HH:mm'}}
-                                <i>to</i>
-                                {{::(reservations|limitTo:1:-1)[0].end  |moment:'tz':agendaCtrl.event.timezone|moment:'format':'HH:mm'}}
                             </span>
                         </h3>
                     </div>
@@ -185,7 +185,8 @@
         </div>
 
         <div role="tabpanel" class="tab-pane" id="cctv" ng-if="agendaCtrl.types[0].loaded || agendaCtrl.currentTab=='cctv'" ng-class="{ active: agendaCtrl.currentTab=='cctv' }" >
-            <div view-injector="{ module : 'views/schedules/index-id', resolve: { streamId: agendaCtrl.resolveLiteral(agendaCtrl.streamId) } }"></div>
+            <h1 class="visible-print" style="position:absolute;top:0px;right:0px">Schedule <small>{{agendaCtrl.now|date}}</small></h1>
+                        <div view-injector="{ module : 'views/schedules/index-id', resolve: { streamId: agendaCtrl.resolveLiteral(agendaCtrl.streamId) } }"></div>
         </div>
 
     </div>

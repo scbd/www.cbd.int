@@ -1,7 +1,9 @@
 <div>
-    <div id="print-smart-checkout">
+    <div id="print-smart-checkout" class="hidden-print">
         <print-smart-checkout ng-if="documentsCtrl.documents.length"  ng-cloak documents="documentsCtrl.documents|filter:{selected:true}:true" class="pull-right"></print-smart-checkout>
     </div>
+
+    <h1 class="visible-print" style="color:black;position:absolute;top:0px;right:0px"> {{::documentsCtrl.meeting.code}} <small>{{documentsCtrl.TABS_NAMES[documentsCtrl.currentTab]}}</small></h1>
 
     <style>
         .nav.nowrap {
@@ -14,7 +16,7 @@
         }
     </style>
     <!-- Sort/Display -->
-    <div ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length" class="pull-right" style="margin-right:5px;margin-left:5px;">
+    <div ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length" class="pull-right hidden-print" style="margin-right:5px;margin-left:5px;">
         <select class="form-control" ng-model="documentsCtrl.sort" style="width:auto;display:inline-block">
             <option value="agenda">By Items</option>
             <option value="document">By symbols</option>
@@ -24,7 +26,7 @@
     <div class="clearfix visible-sm visible-xs"></div>
 
     <!-- Nav tabs -->
-    <ul class="hidden-xs nav nav-tabs" style="margin-top:5px" role="tablist">
+    <ul class="hidden-xs nav nav-tabs hidden-print" style="margin-top:5px" role="tablist">
         <li ng-repeat="type in documentsCtrl.tabs" ng-class="{ active: documentsCtrl.currentTab==type.code }" >
             <a href="#" ng-click="documentsCtrl.switchTab(type)" role="tab" data-toggle="tab">
                 {{::documentsCtrl.TABS_NAMES[type.code]||(type.code|uppercase)}} ({{::type.documents.length}})
@@ -33,7 +35,7 @@
     </ul>
 
     <!-- Nav tabs -->
-    <ul class="visible-xs nav nav-tabs nowrap" style="margin-top:5px" role="tablist">
+    <ul class="visible-xs nav nav-tabs nowrap hidden-print" style="margin-top:5px" role="tablist">
         <li ng-repeat="type in documentsCtrl.tabs|limitTo:(documentsCtrl.tabs.length>3?2:999)" ng-class="{ active: documentsCtrl.currentTab==type.code }" >
             <a href="#" ng-click="documentsCtrl.switchTab(type)" role="tab" data-toggle="tab">
                 {{::documentsCtrl.TABS_NAMES[type.code]||(type.code|uppercase)}} ({{::type.documents.length}})
@@ -89,15 +91,6 @@
                     </td>
                     <td>
                         <div>
-                            <div class="pull-right">
-                                <span class="label doc-statusdoc-status" ng-class="{plain : item.status }" ng-switch="::item.status">
-                                    <span ng-switch-when="pre-session" title="Pre-Session" style="cursor:help">Pre</span>
-                                    <span ng-switch-when="draft">Draft</span>
-                                    <span ng-switch-when="crp">CRP</span>
-                                    <span ng-switch-when="l">L</span>
-                                </span>
-                            </div>
-
                             <span class="visible-xs-inline label agenda {{::documentsCtrl.agenda.prefix}}">{{::documentsCtrl.agenda.prefix}} {{::item.item}}</span>
 
                             <span class="title agenda">

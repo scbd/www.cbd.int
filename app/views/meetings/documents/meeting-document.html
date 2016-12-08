@@ -16,7 +16,7 @@
             <div ng-if="::document.subject_ss.length">Subjects to: {{::document.subject_ss}}</div>
             <div ng-if="::document.actionDate_dt" class="text-danger">Action required by {{::document.actionDate_dt|date:'yyyy-MM-dd'}}</div>
         </td>
-        <td class="languages-bar">
+        <td class="languages-bar hidden-print">
 
             <div class="hidden-xs" ng-repeat="(mime,locales) in ::byMimes ">
                 <i class="fa {{::(MIMES[mime]||MIMES.default).icon}}" ng-style="::{ color: MIMES[mime].color}"></i>
@@ -58,7 +58,7 @@
             </div>
 
         </td>
-        <td ng-click="document.selected=!document.selected;" style="width:20px; position:relative;">
+        <td class="hidden-print" ng-click="document.selected=!document.selected;" style="width:20px; position:relative;">
             <div class="hidden-xs animated rubberBand  printsmart-help-document-selector" style="position:absolute;left:-30px;margin-top:5px">
                 <i class="fa fa-arrow-right text-info" style="font-size:2em"></i>
             </div>
