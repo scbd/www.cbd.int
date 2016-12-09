@@ -35,6 +35,8 @@
     display: inline-block;
 }
 
+.superseded { text-decoration: line-through; color:#888; }
+
 #print-smart-checkout  {
     display: inline;
 }

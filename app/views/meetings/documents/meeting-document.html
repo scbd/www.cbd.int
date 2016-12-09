@@ -2,14 +2,20 @@
 
     <tr>
         <td ng-click="document.selected=!document.selected;">
-            <div ng-if="::isSymbolVisible">
-                <strong ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></strong>
-                <span ng-if="document.number">({{::document.number}})</span>
-                <div>{{::document.title|lstring}}</div>
+            <div ng-class="::{ superseded : document.metadata.superseded }">
+                <div ng-if="::isSymbolVisible">
+                    <strong ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></strong>
+                    <span ng-if="document.number">({{::document.number}})</span>
+                    <div>{{::document.title|lstring}}</div>
+                </div>
+                <div ng-if="::!isSymbolVisible">
+                    <strong>{{::document.title|lstring}}</strong>
+                    <div>{{::(document.description||document.title)|lstring}}</div>
+                </div>
             </div>
-            <div ng-if="::!isSymbolVisible">
-                <strong>{{::document.title|lstring}}</strong>
-                <div>{{::(document.description||document.title)|lstring}}</div>
+
+            <div ng-if="::document.metadata.superseded">
+				<div><em>Superseded by {{document.metadata.superseded}}</em></div>
             </div>
 
             <div ng-if="::document.recipient_ss.length">Notification to: <span ng-repeat="recipient in ::document.recipient_ss"> {{::recipient}}</div>
