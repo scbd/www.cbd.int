@@ -1,0 +1,66 @@
+<div class="table-responsive" style="width:515px">
+  <!-- <i class="fa fa-search" ng-click="searchBox()"></i> -->
+
+  <table class="table table table-striped">
+    <thead>
+     <tr>
+       <th width="5%" >
+        
+          <sorter-mongo  label-name="ID" ng-model="sort" property="sideEvent.id"></sorter-mongo>
+       </th>
+       <th width="95%">
+         <sorter-mongo  label-name="Title" ng-model="sort" property="sideEvent.title"></sorter-mongo>
+
+       </th>
+
+       <th width="5%" >
+          <sorter-mongo label-name="Year" ng-model="sort" property="start"></sorter-mongo>
+       </th>
+     </tr>
+   </thead>
+   <tbody>
+     <tr ng-repeat-start="row in docs"  >
+       <td >
+         <!-- <i class="flag-icon flag-icon-{{row.countryObj.code.toLowerCase()}}" ></i> -->
+         #{{row.sideEvent.id}}
+       </td>
+       <td>
+
+
+            {{row.title}}
+
+
+
+       </td>
+
+       <td class="text-nowrap">{{row.start | moment:'format':'YYYY-MM-DD'}}</td>
+     </tr>
+     <tr  ng-repeat-end>
+       <td>&nbsp;</td>
+       <td colspan="2">
+          <span>Source: <span class="small">{{conferenceName(row)}}<span> </span>
+         <span class="pull-right"><a ng-href="https://www.cbd.int/side-events/{{row.sideEvent.id}}">View Record <i class="fa fa-arrow-circle-right"></i></a></span>
+       </td>
+     </tr>
+     <tr ng-if="!count">
+       <td class="text-center"  colspan="2" >
+         <span  ><b>No records found</b></span>
+       </td>
+     </tr>
+     <tr>
+       <td  colspan="3" style="border-top-width:3px">
+         <span class="small" ng-if="searchText" >Search for <span style="color:#009B48;">"{{searchText}}"</span></span>
+            <span class="small pull-right" style="cursor:pointer;"><a ng-href="https://www.cbd.int/side-events/past/"><i class="fa fa-search"></i> Advanced Search </a></span>
+
+       </td>
+     </tr>
+
+     <tr>
+       <td class="text-center" colspan="3" >
+            <pagination pages="pages" current-page="currentPage" items-per-page="itemsPerPage" filtered="docs" search="search"  on-page="onPage(pageIndex)" count="count"> </pagination>
+       </td>
+
+     </tr>
+   </tbody>
+  </table>
+</div>
