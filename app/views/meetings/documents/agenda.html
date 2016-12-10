@@ -153,6 +153,9 @@
 
                                                     <span class="visible-xs-inline-block label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::agendaItem.item}}</span>
                                                     <span class="title agenda">
+                                                        <div class="hidden-xs" ng-if="::type._id=='570fd1552e3fa5cfa61d90f0'" style="font-weight:bold">
+                                                            {{::res.title}}
+                                                        </div>
                                                         <span ng-if="::!agendaItem.text">
                                                             <span class="hidden-xs" >{{::agendaItem.title}}</span>
                                                             <span class="visible-xs">{{::agendaItem.shortTitle||agendaItem.title}}</span>
