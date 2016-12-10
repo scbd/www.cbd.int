@@ -38,6 +38,16 @@ app.all('/doc/*', function(req, res) { res.status(404).send(); } );
 // Configure routes
 app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiUrl, secure: false, changeOrigin:true } ); } );
 
+// Configure robots.txt
+
+app.get('/robots.txt', function (req, res) {
+
+    var text = req.get('Host')=='www.cbd.int' ? '' : '/';
+
+    res.contentType('text/plain');
+    res.end('User-agent: *\nDisallow: ' + text);
+});
+
 // Configure template(s)
 
 app.get('/reports/map*', function(req, res) { res.cookie('VERSION', process.env.COMMIT||''); res.sendFile(__dirname + '/app/views/reports/template.html', { maxAge : 5*60*1000 }); });
