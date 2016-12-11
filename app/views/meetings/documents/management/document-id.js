@@ -311,6 +311,7 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
                 $location.search({ tabFor: _ctrl.document._id});
             }
 
+            if(meetingId=="COP13-HLS") return $location.path('/2016/cop-13-hls/documents');
             if(meetingId=="COP-13")    return $location.path('/2016/cop-13/documents');
             if(meetingId=="MOP-08")    return $location.path('/2016/cp-mop-8/documents');
             if(meetingId=="NP-MOP-02") return $location.path('/2016/np-mop-2/documents');
