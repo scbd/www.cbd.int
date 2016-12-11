@@ -43,7 +43,7 @@ define(['app', 'angular', 'bootstrap', 'authentication', ], function(app, ng) { 
                 var path = basePath + $location.path();
 
                 if(name) selected = selected || path.indexOf(name)===0;
-                else     selected = selected || path.indexOf('/conferences/2016')===0;
+                else     selected = selected || path.indexOf('/conferences/')===0;
 
                 return selected;
             },

@@ -18,6 +18,7 @@ require.config({
         'css'             : 'libs/require-css/css.min',
         'bootstrap'       : 'libs/bootstrap/dist/js/bootstrap.min',
         'lodash'          : 'libs/lodash/lodash.min',
+        'dragula'         : 'libs/dragula.js/dist/dragula',
         'bootstrap-notify': 'libs/remarkable-bootstrap-notify/bootstrap-notify.min',
         'moment'          : 'libs/moment/min/moment.min',
         'moment-timezone' : 'libs/moment-timezone/builds/moment-timezone-with-data-2010-2020.min',
@@ -47,6 +48,7 @@ require.config({
         'jquery-migrate'       : { deps : ['jquery']},
         'interface'            : { deps : ['jquery-migrate']},
         'magnific-popup'       : { deps : ['jquery']},
+        'dragula'              : { deps : ['css!libs/dragula.js/dist/dragula.css']},
         'alasql'               : { deps : ['js-xlsx']},
         'js-xlsx'              : { deps : ['js-zip', 'ods']}
 

@@ -112,13 +112,14 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                     return $http.get('/api/v2016/meetings/'+meetingCode+'/documents', { params: {  } }).then(function(res){
                         return {
                             meeting : meetingCode,
-                            documents : _.map(res.data, function(d) {
-                                return _.defaults(d, {
-                                    status:    detectDocumentStatus(d),
-                                    sortKey:   buildSortKey(d),
-                                    printable: d.type=='in-session'
+                            documents : _(res.data).map(function(d) {
+                                d.metadata = d.metadata || {};
+                                _.defaults(d.metadata, {
+                                    printable: ['crp', 'limited', 'non-paper'].indexOf(d.type)>=0
                                 });
-                            })
+
+                                return d;
+                            }).sortBy(buildSortKey).value()
                         };
                     });
                 }));
@@ -152,9 +153,18 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
 
                     r.agenda.items.forEach(function(rItem) {
 
+                        var types;
+
+                        if(rItem.status=='pre-session') types = ['official', 'information'];
+                        if(rItem.status=='draft')       types = ['non-paper'];
+                        if(rItem.status=='crp')         types = ['crp'];
+                        if(rItem.status=='l')           types = ['limited'];
+
                         var mAgenda        = _(meetings)        .where({ code:     rItem.meeting }).map('agenda').flatten().first();
-                        var mItem          = _(mAgenda.items)   .where({ item:     rItem.item   }).first();
-                        var mItemDocuments = _(meetingDocuments).where({ meeting : rItem.meeting }).map('documents').flatten().where({ agendaItems: [rItem.item] }).value();
+                        var mItem          = _(mAgenda.items)   .where({ item:     rItem.item    }).first();
+                        var mItemDocuments = _(meetingDocuments).where({ meeting : rItem.meeting }).map('documents').flatten().filter(function(d) {
+                            return ~(d.agendaItems||[]).indexOf(rItem.item) && (!types || ~types.indexOf(d.type));
+                        }).value();
 
                         rItem.prefix    = (mAgenda||{}).prefix;
                         rItem.title     = (mItem||{}).title;
@@ -236,37 +246,11 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         //==============================
         //
         //==============================
-        // function detectAgendaItemStatus(item) {
-        //
-        //     var statusPriority = { 'pre-session' : 10, 'draft' : 20, 'crp' : 30, 'l' : 40 };
-        //
-        //     return _(item.documents||[]).map('status').sortBy(function(s) { return statusPriority[s]||0; }).last();
-        // }
-
-        //==============================
-        //
-        //==============================
-        function detectDocumentStatus(d) {
-
-            if(d.documentType) return d.documentType;
-
-            if(d.type=='in-session' && /\/CRP\d+/.test(d.symbol)) return 'crp';
-            if(d.type=='in-session' && /\/L\d+/  .test(d.symbol)) return 'l';
-            if(d.type=='other')                                   return 'pre-session';
-            if(d.type=='informational')                           return 'pre-session';
-            if(d.type=='official')                                return 'pre-session';
-
-            return 'UNKNOWN';
-        }
-
-        //==============================
-        //
-        //==============================
         function buildSortKey(d) {
-            return ("000000000" + (d.priority||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
-                   d.symbol.replace(/\b(\d)\b/g, '0$1')
-                           .replace(/(\/REV)/gi, '0$1')
-                           .replace(/(\/ADD)/gi, '1$1');
+            return ("000000000" + (d.position||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
+                   (d.symbol||"").replace(/\b(\d)\b/g, '0$1')
+                                 .replace(/(\/REV)/gi, '0$1')
+                                 .replace(/(\/ADD)/gi, '1$1');
         }
 
         //==============================

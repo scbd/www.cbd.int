@@ -14,17 +14,17 @@
 						<label for="preferedLanguage" class="col-sm-4 control-label">Prefered language(s)</label>
 						<div class="col-sm-6">
 							<div class="row">
-								<div ng-repeat="locale in locales" class="col-sm-6 col-xs-6">
-									<a class="btn btn-link" ng-click="selectedLocales[locale] = !selectedLocales[locale]" style="color:black;text-decoration:none;text-align:left" ng-style="{ opacity: (!selectedLocales[locale] ? 0.65 : 1) }" >
-                                        <checkbox ng-model="selectedLocales[locale]" style="font-size:20px"></checkbox>
-                                        <span ng-switch="locale">
+								<div ng-repeat="language in languages" class="col-sm-6 col-xs-6">
+									<a class="btn btn-link" ng-click="selectedLanguages[language] = !selectedLanguages[language]" style="color:black;text-decoration:none;text-align:left" ng-style="{ opacity: (!selectedLanguages[language] ? 0.65 : 1) }" >
+                                        <checkbox ng-model="selectedLanguages[language]" style="font-size:20px"></checkbox>
+                                        <span ng-switch="language">
                                             <span ng-switch-when="ar">العربية</span>
                                             <span ng-switch-when="en">English</span>
                                             <span ng-switch-when="es">Español</span>
                                             <span ng-switch-when="fr">Français</span>
                                             <span ng-switch-when="ru">Русский</span>
                                             <span ng-switch-when="zh">中文</span>
-                                            <span ng-switch-default>{{locale|uppercase}}</span>
+                                            <span ng-switch-default>{{language|uppercase}}</span>
                                         </span>
 									</a>
 								</div>

@@ -1,0 +1,334 @@
+<div>
+
+    <div class="pull-right" role="group" aria-label="...">
+      <button ng-disabled="uploading" type="button" class="btn btn-primary" ng-click="editCtrl.save()">Save</button>
+      <button ng-disabled="uploading" type="button" class="btn btn-default" ng-click="editCtrl.close()">Close</button>
+    </div>
+
+
+    <h1>{{editCtrl.meeting.EVT_CD}} - {{editCtrl.document.symbol||'new'}}</h1>
+
+    <!-- ERROR -->
+    <pre ng-if="editCtrl.error" class="alert alert-danger">{{editCtrl.error|json}}</pre>
+
+    <form novalidate>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <!-- Symbols -->
+                <div class="form-group">
+                    <label for="symbol">Symbol</label>
+                    <!-- <div class="input-group"> -->
+                        <input ng-disabled="uploading" type="text" class="form-control" id="symbol" ng-model="editCtrl.document.symbol" placeholder="UNEP/CBD/...">
+                        <!-- <span class="input-group-btn">
+                            <button ng-disabled="true" class="btn btn-default" ng-click="validateSymbol()" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                        </span> -->
+                    <!-- </div> -->
+                </div>
+
+            </div>
+
+            <div class="col-xs-4 col-md-2">
+                <!-- Type -->
+                <div class="form-group">
+                    <label for="symbol">Type</label>
+                    <select ng-disabled="uploading" class="form-control"ng-model="editCtrl.document.type">
+                        <option value="official">Official</option>
+                        <option value="information">Information</option>
+                        <option value="other">Other</option>
+                        <option value="statement">Statement</option>
+                        <option value="non-paper">Non Paper</option>
+                        <option value="crp">CRP</option>
+                        <option value="limited">L</option>
+                        <option value="report">Report</option>
+                        <option value="outcome">Outcomes</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-xs-4 col-md-2">
+                <!-- Group -->
+                <div class="form-group">
+                    <label for="group">Group</label>
+                    <select ng-disabled="uploading" class="form-control" ng-model="editCtrl.document.group">
+                        <option value=""></option>
+                        <option value="WG.1">WG.1</option>
+                        <option value="WG.2">WG.2</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-xs-4 col-md-2">
+                <!-- print-smart -->
+                <div class="form-group">
+                    <label for="symbol">Print-Smart</label>
+                    <select ng-disabled="uploading" class="form-control" ng-options="item.value as item.caption for item in [{value: undefined, caption:'automatic' }, { value: true, caption:'Yes'}, { value: false, caption:'No'}]" ng-model="editCtrl.document.metadata.printable"></select>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Title -->
+        <div class="form-group">
+            <label for="title_en">Title</label>
+
+            <div class="input-group">
+                <span class="input-group-addon" style="min-width:45px">EN</span>
+                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr" id="title_en" ng-model="editCtrl.document.title.en" placeholder="English">
+                <span class="input-group-btn">
+                    <button ng-disabled="uploading" class="btn btn-default" ng-click="showTitleLang=!showTitleLang" type="button"><i class="fa fa-caret-{{showTitleLang?'up':'down'}}" aria-hidden="true"></i></button>
+                </span>
+            </div>
+
+            <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
+                <span class="input-group-addon" style="min-width:45px">ES</span>
+                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="title_es" ng-model="editCtrl.document.title.es"  placeholder="Spanish">
+            </div>
+
+            <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
+                <span class="input-group-addon" style="min-width:45px">FR</span>
+                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="title_fr" ng-model="editCtrl.document.title.fr"  placeholder="French">
+            </div>
+
+            <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
+                <span class="input-group-addon" style="min-width:45px">AR</span>
+                <input ng-disabled="uploading" type="text" class="form-control" style="direction:rtl"  id="title_ar" ng-model="editCtrl.document.title.ar"  placeholder="Arabic">
+            </div>
+
+            <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
+                <span class="input-group-addon" style="min-width:45px">RU</span>
+                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="title_ru" ng-model="editCtrl.document.title.ru"  placeholder="Russian">
+            </div>
+
+            <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
+                <span class="input-group-addon" style="min-width:45px">ZH</span>
+                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="title_zh" ng-model="editCtrl.document.title.zh"  placeholder="Chinese">
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+            <label for="description_en">Description</label>
+
+            <div class="input-group">
+                <span class="input-group-addon" style="min-width:45px">EN</span>
+                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr" id="description_en" ng-model="editCtrl.document.description.en" placeholder="English">
+                <span class="input-group-btn">
+                    <button ng-disabled="uploading" class="btn btn-default" ng-click="showDescriptionLang=!showDescriptionLang" type="button"><i class="fa fa-caret-{{showDescriptionLang?'up':'down'}}" aria-hidden="true"></i></button>
+                </span>
+            </div>
+
+            <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
+                <span class="input-group-addon" style="min-width:45px">ES</span>
+                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="description_es" ng-model="editCtrl.document.description.es"  placeholder="Spanish">
+            </div>
+
+            <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
+                <span class="input-group-addon" style="min-width:45px">FR</span>
+                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="description_fr" ng-model="editCtrl.document.description.fr"  placeholder="French">
+            </div>
+
+            <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
+                <span class="input-group-addon" style="min-width:45px">AR</span>
+                <input ng-disabled="uploading" type="text" class="form-control" style="direction:rtl"  id="description_ar" ng-model="editCtrl.document.description.ar"  placeholder="Arabic">
+            </div>
+
+            <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
+                <span class="input-group-addon" style="min-width:45px">RU</span>
+                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="description_ru" ng-model="editCtrl.document.description.ru"  placeholder="Russian">
+            </div>
+
+            <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
+                <span class="input-group-addon" style="min-width:45px">ZH</span>
+                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="description_zh" ng-model="editCtrl.document.description.zh"  placeholder="Chinese">
+            </div>
+        </div>
+
+        <!-- Superseded -->
+
+        <div class="form-group">
+            <label class="control-label text-muted" style="text-decoration:line-through" for="superseded">Superseded By</label>
+            <input ng-disabled="uploading" type="text" class="form-control" id="symbol" ng-model="editCtrl.document.metadata.superseded" placeholder="Type symbol..."/>
+        </div>
+
+        <!-- Message -->
+        <div class="row">
+            <style>
+                .level-1 { color: #468847; }
+                .level-2 { color: #428bca; }
+                .level-3 { color: #c09853; }
+                .level-4 { color: #b94a48; }
+            </style>
+
+            <div class="col-xs-8 col-sm-10">
+                <!-- Symbols -->
+                <div class="form-group {{editCtrl.document.metadata.message.level}}">
+                    <label class="control-label" for="symbol">Message</label>
+                    <!-- <div class="input-group"> -->
+                        <input ng-disabled="uploading" type="text" class="form-control {{editCtrl.document.metadata.message.level}}" id="symbol" ng-model="editCtrl.document.metadata.message.text" placeholder=""/>
+                        <!-- <span class="input-group-btn">
+                            <button ng-disabled="true" class="btn btn-default" ng-click="validateSymbol()" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                        </span> -->
+                    <!-- </div> -->
+                </div>
+
+            </div>
+
+            <div class="col-xs-4 col-sm-2">
+                <!-- Type -->
+                <div class="form-group {{editCtrl.document.metadata.message.level}}">
+                    <label for="symbol">Level</label>
+                    <select ng-disabled="uploading" class="form-control {{editCtrl.document.metadata.message.level}}" ng-model="editCtrl.document.metadata.message.level">
+                        <option value="">None</option>
+                        <option value="level-1">Green</option>
+                        <option value="level-2">Bleu</option>
+                        <option value="level-3">Orange</option>
+                        <option value="level-4">Red</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Agenda Items -->
+        <div class="form-group">
+            <label for="agendaItems">Agenda Item(s)</label>
+
+            <select ng-disabled="uploading" class="form-control" ng-options="item.item as (item.item + ' ' + item.title) for item in editCtrl.meeting.agenda.items|orderBy:item.item" ng-model="editCtrl.selectedItem" ng-change="editCtrl.addItem(editCtrl.selectedItem); editCtrl.selectedItem='';">
+                <option value="">Select an item to add......</option>
+            </select>
+
+
+            <div class="input-group" ng-repeat="item in editCtrl.document.agendaItems|orderBy:item" style="margin-top:5px">
+                <span class="input-group-addon" style="min-width:75px">
+                    <span class="label agenda {{::editCtrl.meeting.agenda.prefix}}">{{::editCtrl.meeting.agenda.prefix}} {{::item}}</span>
+                </span>
+                <span class="form-control" style="overflow:auto;background-color:#eeeeee" >{{(editCtrl.meeting.agenda.items|filter:{item:item}:true)[0].title}}</span>
+                <span class="input-group-btn">
+                    <button ng-disabled="uploading" class="btn btn-default" ng-click="editCtrl.removeItem(item)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                </span>
+            </div>
+
+        </div>
+
+    </form>
+
+    <input ng-disabled="uploading" type="file" auto-reset="true" id="fileUpload" ng-model="editCtrl.fileToUpload" ng-change="editCtrl.upload(editCtrl.fileToUpload);" style="display:none">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <label class="btn btn-default pull-right" for="fileUpload">
+                <span ng-hide="uploading">
+                    <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                    Upload
+                </span>
+                <span ng-show="uploading">
+                    <i class="fa fa-cog fa-spin" aria-hidden="true"></i>
+                    Uploading {{uploadProgress}}%
+                </span>
+            </label>
+            <h4 style="color:inherit">Files</h4>
+
+        </div>
+        <div class="panel-body">
+
+            <div class="alert alert-info" role="alert" ng-if="!editCtrl.document.files.length">
+                <label class="btn btn-default" for="fileUpload" style="width:100%">
+                    <span ng-hide="uploading">
+                        <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                        Please upload your first file
+                    </span>
+                    <span ng-show="uploading">
+                        <i class="fa fa-cog fa-spin" aria-hidden="true"></i>
+                        Uploading {{uploadProgress}}%
+                    </span>
+                </label>
+
+
+
+            </div>
+
+            <!-- ERROR EXISTS -->
+            <div class="alert alert-warning" role="alert" ng-if="editCtrl.fileError.code == 'EXISTS'">
+                <button type="button" class="close" data-dismiss="alert" ng-click="editCtrl.clearErrors();editCtrl.fileToUpload=null;" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                <b>File with same language and format already exists.</b><br/><br/>
+
+                <span style="display:inline-block;width:35px;">Old:</span>
+                <i style="color:{{(FILETYPES[editCtrl.fileError.old.type]||FILETYPES.default).color}}" class="fa {{(FILETYPES[editCtrl.fileError.old.type]||FILETYPES.default).icon}}"></i>
+                {{LANGUAGES[editCtrl.fileError.old.language]||(editCtrl.fileError.old.language|uppercase)}} - {{editCtrl.fileError.old.name}} <em>{{FILETYPES[editCtrl.fileError.old.type].title||editCtrl.fileError.old.type}}</em><br/>
+
+                <span style="display:inline-block;width:35px;">New:</span>
+                <i style="color:{{(FILETYPES[editCtrl.fileError.new.type]||FILETYPES.default).color}}" class="fa {{(FILETYPES[editCtrl.fileError.new.type]||FILETYPES.default).icon}}"></i>
+                {{LANGUAGES[editCtrl.fileError.new.language]||(editCtrl.fileError.new.language|uppercase)}} - {{editCtrl.fileError.new.name}} <em>{{FILETYPES[editCtrl.fileError.new.type].title||editCtrl.fileError.new.type}}</em><br/><br/>
+
+                Do you want to replace the existing file?
+                <button class="btn btn-default" type="button" ng-click="editCtrl.clearErrors(); editCtrl.upload(editCtrl.fileToUpload, true);">Yes</button>
+                <button class="btn btn-default" type="button" ng-click="editCtrl.clearErrors(); editCtrl.fileToUpload=null;">No</button>
+            </div>
+
+            <!-- ERROR LANGUAGE -->
+            <div class="alert alert-warning" role="alert" ng-if="editCtrl.fileError.code == 'LANGUAGE'">
+                <button type="button" class="close" data-dismiss="alert" ng-click="editCtrl.clearErrors();" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                <b>File language cannot be detected.</b><br/><br/>
+
+                <i style="color:{{(FILETYPES[editCtrl.fileError.new.type]||FILETYPES.default).color}}" class="fa {{(FILETYPES[editCtrl.fileError.new.type]||FILETYPES.default).icon}}"></i>
+                {{editCtrl.fileError.new.name}} <em>{{(LANGUAGES[editCtrl.fileError.new.language]||editCtrl.fileError.new.language)|uppercase}}</em> <em>{{FILETYPES[editCtrl.fileError.new.type].title||editCtrl.fileError.new.type}}</em><br/><br/>
+
+                Please uploade a new file with language at the end. eg: "cop-xx-crp-yy<b>-en</b>.pdf, cop-xx-crp-yy<b>-ar</b>.doc .., "
+            </div>
+
+            <!-- ERROR FILENAME -->
+            <div class="alert alert-warning" role="alert" ng-if="editCtrl.fileError.code == 'FILENAME'">
+                <button type="button" class="close" data-dismiss="alert" ng-click="editCtrl.clearErrors();" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                <b>Filename is invalid.</b><br/><br/>
+
+                {{editCtrl.fileError.new.name}}<br/><br/>
+
+                Filename can only contains letters, '-' and '.'
+            </div>
+
+            <!-- FILES -->
+
+            <div ng-repeat="type in editCtrl.fileCache.types track by type" >
+                <div class="btn-group" style="margin:5px" ng-repeat="language in editCtrl.fileCache.languages track by language" ng-style="{visibility:(editCtrl.fileCache[type][language] ? 'visible' : 'hidden')}">
+
+                  <a ng-disabled="uploading" href="{{editCtrl.fileCache[type][language].url}}" target="_blank" type="button" title="{{editCtrl.fileCache[type][language].name}} ({{FILETYPES[type].title||type}})" class="btn btn-default">
+                    <i style="color:{{(FILETYPES[type]||FILETYPES.default).color}}" class="fa {{(FILETYPES[type]||FILETYPES.default).icon}}"></i>
+                    {{LANGUAGES[language]||(language|uppercase)}}
+                  </a>
+
+                  <button ng-disabled="uploading" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-fw fa-times" aria-hidden="true"></i>
+                  </button>
+
+                  <ul class="dropdown-menu">
+                    <!-- <li><a href="{{editCtrl.fileCache[type][language].url}}" target="_blank" ><i class="fa fa-fw fa-cloud-download" aria-hidden="true"></i> Download</a></li>
+                    <li role="separator" class="divider"></li> -->
+                    <li><a href="#" ng-click="editCtrl.removeFile(editCtrl.fileCache[type][language])"><i class="fa fa-fw fa-times" aria-hidden="true"></i> Delete</a></li>
+                  </ul>
+                </div>
+                  <span class="btn" style="cursor:default">
+                      {{FILETYPES[type].title||type}}
+                  </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="pull-right" role="group" aria-label="...">
+      <button ng-disabled="uploading" type="button" class="btn btn-primary" ng-click="editCtrl.save()">Save</button>
+      <button ng-disabled="uploading" type="button" class="btn btn-default" ng-click="editCtrl.close()">Close</button>
+    </div>
+
+
+    <!-- ERROR -->
+    <pre ng-if="editCtrl.error" class="alert alert-danger">{{editCtrl.error|json}}</pre>
+
+
+    <pre style="clear:both">{{editCtrl.fileCache.prefixes|json}}</pre>
+    <pre>{{editCtrl.fileCache.names|json}}</pre>
+
+    <pre>{{editCtrl.document|json}}</pre>
+</div>

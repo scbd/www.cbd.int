@@ -11,27 +11,27 @@
 
 				<form id="printForm" name="printForm" novalidate class="form-horizontal" ng-submit="printCtrl.print()" ng-hide="printCtrl.success">
 
-					<div class="form-group" ng-class="{ 'has-warning' : (printForm.$submitted && printForm.locales.$error.required) }">
+					<div class="form-group" ng-class="{ 'has-warning' : (printForm.$submitted && printForm.languages.$error.required) }">
 						<label for="preferedLanguage" class="col-sm-4 control-label">Prefered language(s)</label>
 						<div class="col-sm-6">
 							<div class="row">
-								<div ng-repeat="locale in printCtrl.locales" class="col-sm-6 col-xs-6">
-									<a class="btn btn-link" ng-click="printCtrl.selectedLocales[locale] = !printCtrl.selectedLocales[locale]" style="color:black;text-decoration:none;text-align:left" ng-style="{ opacity: (!printCtrl.selectedLocales[locale] ? 0.65 : 1) }" >
-                                        <checkbox ng-model="printCtrl.selectedLocales[locale]" style="font-size:20px"></checkbox>
-                                        <span ng-switch="locale">
+								<div ng-repeat="language in printCtrl.languages" class="col-sm-6 col-xs-6">
+									<a class="btn btn-link" ng-click="printCtrl.selectedLanguages[language] = !printCtrl.selectedLanguages[language]" style="color:black;text-decoration:none;text-align:left" ng-style="{ opacity: (!printCtrl.selectedLanguages[language] ? 0.65 : 1) }" >
+                                        <checkbox ng-model="printCtrl.selectedLanguages[language]" style="font-size:20px"></checkbox>
+                                        <span ng-switch="language">
                                             <span ng-switch-when="ar">العربية</span>
                                             <span ng-switch-when="en">English</span>
                                             <span ng-switch-when="es">Español</span>
                                             <span ng-switch-when="fr">Français</span>
                                             <span ng-switch-when="ru">Русский</span>
                                             <span ng-switch-when="zh">中文</span>
-                                            <span ng-switch-default>{{locale|uppercase}}</span>
+                                            <span ng-switch-default>{{language|uppercase}}</span>
                                         </span>
 									</a>
 								</div>
 							</div>
 
-							<span class="help-block" ng-show="printForm.$submitted && printForm.locales.$error.required">Select at least one language.</span>
+							<span class="help-block" ng-show="printForm.$submitted && printForm.languages.$error.required">Select at least one language.</span>
 
 						</div>
 

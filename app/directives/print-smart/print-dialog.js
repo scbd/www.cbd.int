@@ -6,11 +6,11 @@ define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbo
 
         var _ctrl = $scope.printCtrl = this;
 
-        documents = _(documents).filter(function(d) { return _.some(d.files, { mime : PDF }); }).value();
+        documents = _(documents).filter(function(d) { return _.some(d.files, { type : PDF }); }).value();
 
         _ctrl.documents = documents;
-		_ctrl.locales = _(documents).map('files').flatten().where({ mime : PDF}).map('locale').uniq().sortBy().value();
-		_ctrl.selectedLocales  = {};
+		_ctrl.languages = _(documents).map('files').flatten().where({ type : PDF}).map('language').uniq().sortBy().value();
+		_ctrl.selectedLanguages  = {};
         _ctrl.print = print;
 		_ctrl.close = close;
         _ctrl.canPrint = canPrint;
@@ -60,10 +60,10 @@ define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbo
 
 			return _(documents).map(function(doc) {
 
-                var pdfs  = _.where (doc.files, { mime: PDF });
-                var files = _.filter(pdfs, function(f) { return _ctrl.selectedLocales[f.locale]; });
+                var pdfs  = _.where (doc.files, { type: PDF });
+                var files = _.filter(pdfs, function(f) { return _ctrl.selectedLanguages[f.language]; });
 
-                if(!files.length) files = _.where(pdfs, { locale: 'en' });
+                if(!files.length) files = _.where(pdfs, { language: 'en' });
                 if(!files.length) files = _.take (pdfs, 1);
 
                 var lstring = $filter('lstring');
@@ -72,9 +72,9 @@ define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbo
                     return {
 						symbol  : doc.symbol,
                         title   : lstring(doc.title||{}, 'en'),
-						tag     : doc.tag,
-						url     : f.url,
-						language: f.locale
+						tag     : doc.group,
+						language: f.language,
+						url     : f.url
                     };
                 });
 
@@ -94,7 +94,7 @@ define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbo
 		//
 		//==============================================
 		function canPrint() {
-			return cleanBadge().length >= 8 && _.some(_ctrl.selectedLocales);
+			return cleanBadge().length >= 8 && _.some(_ctrl.selectedLanguages);
 		}
 
 		//==============================================

@@ -34,7 +34,7 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
 				//==============================================
 				function printableDocuments() {
                     return _($scope.documents()).filter(function(d) {
-                        return d.printable && _(d.files||[]).some({ mime: PDF }) ;
+                        return d.metadata && d.metadata.printable && _(d.files||[]).some({ type: PDF }) ;
                     }).value();
                 }
 
@@ -44,7 +44,7 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
 				//==============================================
 				function downloadableDocuments() {
                     return _($scope.documents()).filter(function(d) {
-                        return !_(d.files||[]).all({ mime: ONLINE }) ;
+                        return !_(d.files||[]).all({ type: ONLINE }) ;
                     }).value();
                 }
 
@@ -75,10 +75,7 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
                 //
                 //==============================================
                 function displayText(d) {
-
-                    return /^[A-Z0-9]{24}$/i.test(d.symbol)
-                         ? truncate(lstring(d.title, 'en'), 50)
-                         : d.symbol;
+                    return d.symbol || truncate(lstring(d.title, 'en'), 50);
                 }
 
                 //==============================================

@@ -1,14 +1,14 @@
 <table style="width:100%">
 
     <tr>
-        <td ng-click="document.selected=!document.selected;">
+        <td ng-click="enableSelection && (document.selected=!document.selected);">
             <div ng-class="::{ superseded : document.metadata.superseded }">
-                <div ng-if="::isSymbolVisible">
+                <div ng-if="::document.symbol">
                     <strong ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></strong>
                     <span ng-if="document.number">({{::document.number}})</span>
                     <div>{{::document.title|lstring}}</div>
                 </div>
-                <div ng-if="::!isSymbolVisible">
+                <div ng-if="::!document.symbol">
                     <strong>{{::document.title|lstring}}</strong>
                     <div>{{::(document.description||document.title)|lstring}}</div>
                 </div>
@@ -24,23 +24,23 @@
         </td>
         <td class="languages-bar hidden-print">
 
-            <div class="hidden-xs" ng-repeat="(mime,locales) in ::byMimes ">
-                <i class="fa {{::(MIMES[mime]||MIMES.default).icon}}" ng-style="::{ color: MIMES[mime].color}"></i>
-                <span ng-repeat="(locale,file) in ::locales track by locale">
+            <div class="hidden-xs" ng-repeat="(type,languages) in ::byTypes ">
+                <i class="fa {{::(MIMES[type]||MIMES.default).icon}}" ng-style="::{ color: MIMES[type].color}"></i>
+                <span ng-repeat="(language,file) in ::languages track by language">
                     <a target="_blank" href="{{::file.url}}"  style="cursor:auto" ng-click="$event.stopPropagation();">
 
                         <span class="visible-md-inline visible-lg-inline visible-xl-inline">
-                            {{::LANGUAGES[locale]||locale}}
+                            {{::LANGUAGES[language]||language}}
                         </span>
 
-                        <span class="visible-xs-inline visible-sm-inline">{{::locale}}</span>
+                        <span class="visible-xs-inline visible-sm-inline">{{::language}}</span>
                     </a>
                 </span>
             </div>
 
             <div class="visible-xs dropdown">
 
-                <button type="button"  class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-click="initByLocales()">
+                <button type="button"  class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-click="initByLanguages()">
                     <i class="fa fa-arrow-circle-down" style="font-size:1.25em"></i>
                 </button>
 
@@ -48,15 +48,15 @@
 
                     <li role="presentation" class="dropdown-header">Select a file to download</li>
 
-                    <li role="presentation" ng-repeat="(locale,mimes) in byLocales track by locale" style="font-size:16px;margin:4px 0px;white-space:nowrap;" class="ng-scope">
+                    <li role="presentation" ng-repeat="(language,types) in byLanguages track by language" style="font-size:16px;margin:4px 0px;white-space:nowrap;" class="ng-scope">
 
                         <a role="menuitem" tabindex="-1" style="display:inline-block;width:120px;font-size:inherit;" class="ng-binding">
-                            {{::LANGUAGES[locale]||locale}}
+                            {{::LANGUAGES[language]||language}}
                         </a>
 
                         <span>
-                            <a ng-repeat="(mime, file) in ::mimes track by mime" class="btn btn-sm {{::MIMES[mime].btn || 'btn-default' }}" style="margin-right:5px;font-size:16px;" target="_blank"  href="{{::file.url}}">
-                                <i class="fa {{::(MIMES[mime]||MIMES.default).icon}}"></i>
+                            <a ng-repeat="(type, file) in ::types track by type" class="btn btn-sm {{::MIMES[type].btn || 'btn-default' }}" style="margin-right:5px;font-size:16px;" target="_blank"  href="{{::file.url}}">
+                                <i class="fa {{::(MIMES[type]||MIMES.default).icon}}"></i>
                             </a>
                         </span>
                     </li>
@@ -64,14 +64,15 @@
             </div>
 
         </td>
-        <td class="hidden-print" ng-click="document.selected=!document.selected;" style="width:20px; position:relative;">
+
+        <td ng-if="enableSelection" class="hidden-print" ng-click="document.selected=!document.selected;" style="width:20px; position:relative;">
             <div class="hidden-xs animated rubberBand  printsmart-help-document-selector" style="position:absolute;left:-30px;margin-top:5px">
                 <i class="fa fa-arrow-right text-info" style="font-size:2em"></i>
             </div>
             <div class="hidden-sm hidden-md hidden-lg animated rubberBand printsmart-help-document-selector" style="position:absolute;right:-3px;margin-top:10px">
                 <i class="fa fa-arrow-left text-info" style="font-size:1.2em"></i>
             </div>
-            <checkbox  ng-if="document.files.length" ng-model="document.selected" style="font-size:2em" ng-class="{'text-info':document.printable, 'text-muted':!document.printable }"></checkbox>
+            <checkbox  ng-if="document.files.length" ng-model="document.selected" style="font-size:2em" ng-class="{'text-info':document.metadata.printable, 'text-muted':!document.metadata.printable }"></checkbox>
         </td>
     </tr>
 </table>

@@ -1,36 +1,31 @@
-define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document'], function(_, ng) {
+define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication'], function(_, ng) {
     //'css!./agenda.css' // moved to template
-	return ["$scope", "$route", "$http", '$q', '$location', 'meeting', function ($scope, $route, $http, $q, $location, meetingCode) {
+    var currentUser;
 
-        var TABS_NAMES = {
-            'outcome'      : 'Outcomes',
-            'in-session'   : 'In-session',
-            'official'     : 'Official',
-            'informational': 'Information',
-            'other'        : 'Others',
-            'notification' : 'Notifications',
-            'statement'    : 'Statements'
-        };
+	return ["$scope", "$route", "$http", '$q', '$location', 'meeting', 'authentication', function ($scope, $route, $http, $q, $location, meetingCode, authentication) {
 
         var _ctrl = $scope.documentsCtrl = this;
+        var meeting;
+        var documents;
 
         _ctrl.sort = $location.hash() == 'agenda' ? 'agenda' : 'document';
-        _ctrl.switchTab = switchTab;
-        _ctrl.TABS_NAMES = TABS_NAMES;
+        _ctrl.switchTab  = switchTab;
 
         $scope.$watch('documentsCtrl.sort', function(s){
             $location.hash(s=='agenda' ? 'agenda' : null);
         });
 
         initAffix();
+        initEditor();
         load();
+        loadNotifications();
 
         //==============================
         //
         //==============================
         function load() {
 
-            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { params: { f : { EVT_TIT_EN:1, EVT_CD:1, print:1 , agenda:1, documents:1 } } }).then(function(res){
+            meeting = $http.get('/api/v2016/meetings/'+meetingCode, { params: { f : { EVT_TIT_EN:1, EVT_CD:1, print:1 , agenda:1 } } }).then(function(res){
 
                 meeting = _.defaults(res.data, {
                     code: res.data.EVT_CD,
@@ -38,39 +33,103 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                     agenda: { items: [] }
                 });
 
+                _ctrl.meeting = meeting;
+                _ctrl.agenda  = meeting.agenda;
+
+
                 return meeting;
             });
 
-            var meetingDocs = $http.get('/api/v2016/meetings/'+meetingCode+'/documents', { params: {  } }).then(function(res){
+            documents = $http.get('/api/v2016/meetings/'+meetingCode+'/documents', { params: {  } }).then(function(res){
 
-                meetingDocs = _(res.data).map(function(d) {
-                    return _.defaults(d, {
-                        status  : detectDocumentStatus(d),
-                        sortKey : buildSortKey(d),
-                        printable : d.type=='in-session'
+                documents = _(res.data).map(function(d){
+                    d.metadata = d.metadata || {};
+                    _.defaults(d.metadata, {
+                        printable: ['crp', 'limited', 'non-paper'].indexOf(d.type)>=0
                     });
+
+                    return d;
+
                 }).filter(function(d){
-                    return d.files && d.files.length;
-                }).value();
 
-                return meetingDocs;
-            });
+                    return _ctrl.editMode || (d.files && d.files.length);
 
-            meeting.then(function() {
+                }).sortBy(sortKey).value();
 
-                var copy = _.cloneDeep(meeting);
+                _ctrl.documents = documents;
 
-                merge(copy, copy.documents);
-
-                return meetingDocs;
+                return meeting;
 
             }).then(function() {
 
-                merge(meeting, meetingDocs);
+                var agendaMap = _.reduce(meeting.agenda.items, function(r,v) { r[v.item] = v;  return r; }, {});
+
+                documents.forEach(function(d) {
+                    (d.agendaItems||[]).forEach(function(item) {
+
+                        if(!agendaMap[item]) {
+                            meeting.agenda.items.push(agendaMap[item] = { item: item, title: d.title.en + " (AUTO) "}); // LAZY during dev
+                        }
+
+                        agendaMap[item].documents = agendaMap[item].documents||[];
+                        agendaMap[item].documents.push(d);
+                    });
+                });
+
+                var tabs = [
+                    { code: 'outcome'    , title: 'Outcomes',    documents: _.filter(documents, byTypes(['report',    'outcome'])) },
+                    { code: 'in-session' , title: 'In-session',  documents: _.filter(documents, byTypes(['non-paper', 'crp', 'limited'])) },
+                    { code: 'official'   , title: 'Official',    documents: _.filter(documents, byTypes(['official'   ])) },
+                    { code: 'information', title: 'Information', documents: _.filter(documents, byTypes(['information'])) },
+                    { code: 'other'      , title: 'Others',      documents: _.filter(documents, byTypes(['other'      ],  ['report', 'outcome', 'non-paper', 'crp', 'limited', 'official', 'information', 'statement'])) },
+                    { code: 'statement'  , title: 'Statements',  documents: _.filter(documents, byTypes(['statement'  ])) },
+                ];
+
+                _ctrl.tabs = _(tabs).forEach(function(tab){
+
+                    var itemIds = _(tab.documents).map('agendaItems').flatten().uniq().value();
+                    var items   = _(meeting.agenda.items).filter(function(item) {
+
+                        return ~itemIds.indexOf(item.item);
+
+                    }).map(function(item){
+
+                        return _.extend({}, item, {
+                            documents : _.intersection(item.documents, tab.documents)
+                        });
+                    }).value();
+
+                    var noAgendaDocs = _(tab.documents).difference(_(items).map('documents').flatten().value()).value();
+
+                    tab.agenda = {
+                        items : items,
+                        otherDocuments : noAgendaDocs
+                    };
+
+                }).filter(function(t) {
+                    return t.documents.length || t.code == 'in-session';
+                }).value();
+
+                injectNotifications();
+                switchTab();
 
             }).catch(console.error);
+        }
 
+        //==============================
+        //
+        //==============================
+        function byTypes(inTypes, outTypes) {
+            return function(doc) {
+                return (inTypes  &&  ~inTypes .indexOf(doc.type)) ||
+                       (outTypes && !~outTypes.indexOf(doc.type));
+            };
+        }
 
+        //==============================
+        //
+        //==============================
+        function loadNotifications() {
 
             $http.get('/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'id,symbol_s,reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
 
@@ -92,60 +151,6 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 switchTab();
 
             }).catch(console.error);
-        }
-
-        //==============================
-        //
-        //==============================
-        function merge(meeting, documents) {
-
-            var agendaMap = _.reduce(meeting.agenda.items, function(r,v) { r[v.item] = v;  return r; }, {});
-
-            documents.forEach(function(d) {
-                (d.agendaItems||[]).forEach(function(item) {
-
-                    if(!agendaMap[item]) {
-                        meeting.agenda.items.push(agendaMap[item] = { item: item, title: d.title.en + " (AUTO) "}); // LAZY during dev
-                    }
-
-                    agendaMap[item].documents = agendaMap[item].documents||[];
-                    agendaMap[item].documents.push(d);
-                });
-            });
-
-            meeting.agenda.items.forEach(function(item) {
-                item.status = detectAgendaItemStatus(item);
-            });
-
-            var tabs = _.keys(TABS_NAMES);
-
-            _ctrl.meeting   = meeting;
-            _ctrl.agenda    = meeting.agenda;
-            _ctrl.documents = documents;
-            _ctrl.tabs     = _(tabs).map(function(t){
-
-                var docs         = _(documents).where({ type : t }).value();
-                var items        = _(meeting.agenda.items).filter(function(item){ return _.some(item.documents, { type : t }); }).value();
-                var noAgendaDocs = _(docs).difference(_(items).map('documents').flatten().value()).value();
-
-                return {
-                    code : t,
-                    documents : docs,
-                    agenda : {
-                        items : items,
-                        otherDocuments : noAgendaDocs
-                    }
-                };
-            }).filter(function(t) { return t.documents.length;
-            }).sortBy(function(t) { return tabs.indexOf(t.code);
-            }).value();
-
-            injectNotifications();
-            switchTab();
-
-            if(!_(_ctrl.tabs).some({ code : 'in-session' })) {
-                _ctrl.tabs = [{ code : 'in-session', documents:[] }].concat(_ctrl.tabs);
-            }
         }
 
         //==============================
@@ -174,11 +179,27 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function switchTab(tab) {
 
+            if(!tab && $location.search().tabFor) {
+                tab = _(_ctrl.tabs).find(function(t) {
+                    return _(t.documents).some({_id:$location.search().tabFor});
+                });
+            }
+
+            if(tab && $location.search().tabFor)
+                $location.search({tabFor:null});
+
             if(!tab && !_ctrl.currentTab)
                 tab = _ctrl.tabs[0];
 
+            if(!tab && _ctrl.currentTab)
+                tab = _(_ctrl.tabs).findWhere({ code :_ctrl.currentTab });
+
             if(!tab)
                 return;
+
+            if(!tab.loaded && _ctrl.editMode) {
+                initDragdrop();
+            }
 
             tab.loaded=true;
             _ctrl.currentTab = tab.code;
@@ -187,36 +208,47 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         //
         //==============================
-        function detectAgendaItemStatus(item) {
+        function initDragdrop() {
 
-            var statusPriority = { 'pre-session' : 10, 'draft' : 20, 'crp' : 30, 'l' : 40 };
+            setTimeout(function() {
+            require(['dragula'], function(dragula) {
 
-            return _(item.documents||[]).map('status').sortBy(function(s) { return statusPriority[s]||0; }).last();
+                ng.element("tbody.documents:not(.drag-ready)").each(function(i,element){
+
+                    ng.element(element).addClass("drag-ready"); //prevent double initialization
+
+                    dragula([element], {
+                        moves: function (el, source, handle) {
+                            return handle.classList.contains('handle');
+                        },
+
+                    }).on('drop', function(el) {
+
+                        var curr = ng.element(el)       .attr('document-id');
+                        var prev = ng.element(el).prev().attr('document-id') || "000000000000000000000000";
+                        var next = ng.element(el).next().attr('document-id') || "ffffffffffffffffffffffff";
+
+                        var data = { between : [prev, next] };
+
+                        $http.put('/api/v2016/meetings/'+meetingCode+'/documents/'+curr+'/position', data).then(function(){
+                            load();
+                        }).catch(console.error);
+
+                    });
+                });
+
+            });
+        }, 100);
         }
 
         //==============================
         //
         //==============================
-        function detectDocumentStatus(d) {
-
-            if(d.type=='in-session' && /\/CRP\//.test(d.symbol)) return 'crp';
-            if(d.type=='in-session' && /\/L\//  .test(d.symbol)) return 'l';
-            if(d.type=='in-session' && /\/L\//  .test(d.symbol)) return 'draft';
-            if(d.type=='other')                                  return 'pre-session';
-            if(d.type=='informational')                          return 'pre-session';
-            if(d.type=='official')                               return 'pre-session';
-
-            return 'UNKNOWN';
-        }
-
-        //==============================
-        //
-        //==============================
-        function buildSortKey(d) {
-            return ("000000000" + (d.priority||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
-                   d.symbol.replace(/\b(\d)\b/g, '0$1')
-                           .replace(/(\/REV)/gi, '0$1')
-                           .replace(/(\/ADD)/gi, '1$1');
+        function sortKey(d) {
+            return ("000000000" + (d.position||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
+                   (d.symbol||"").replace(/\b(\d)\b/g, '0$1')
+                                 .replace(/(\/REV)/gi, '0$1')
+                                 .replace(/(\/ADD)/gi, '1$1');
         }
 
         //==============================
@@ -262,6 +294,44 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                     affixReady();
                 }
             });
+        }
+
+        // EDIT
+
+
+        //==============================
+        //
+        //==============================
+        function initEditor() {
+
+            $q.when(currentUser || authentication.getUser()).then(function(user){
+                currentUser = user;
+
+                if(!user.isAuthenticated)
+                    return;
+
+                if(!_.intersection(user.roles||[], ["Administrator","EditorialService"]).length)
+                    return;
+
+                _ctrl.edit       = edit;
+                _ctrl.editMode   = $scope.$root.documentEditMode;
+
+                $scope.$watch('documentsCtrl.editMode', function(n,o){
+                    $scope.$root.documentEditMode = n;
+                    if(n!=o) load();
+                });
+            });
+        }
+
+
+        //==============================
+        //
+        //==============================
+        function edit(doc) {
+
+            var id = doc ? doc._id : 'new';
+
+            $location.url('/management/'+meeting.code+ '/documents/'+id);
         }
 	}];
 });

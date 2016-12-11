@@ -7,18 +7,18 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
 
 		$scope.close            = close;
 		$scope.documents        = documents;
-		$scope.locales          = _(documents).map('files').flatten().map('locale').uniq().sortBy().value();
-		$scope.formats          = _(documents).map('files').flatten().map('mime'  ).uniq().sortBy().value();
-		$scope.selectedLocales  = {};
+		$scope.languages        = _(documents).map('files').flatten().map('language').uniq().sortBy().value();
+		$scope.formats          = _(documents).map('files').flatten().map('type'  ).uniq().sortBy().value();
+		$scope.selectedLanguages= {};
 		$scope.selectedFormats  = {};
         $scope.canDropbox       = canDropbox;
         $scope.sendToDropbox    = sendToDropbox;
 
-		if($scope.locales.length==1) $scope.selectedLocales[$scope.locales[0]] = true;
-		if($scope.formats.length==1) $scope.selectedFormats[$scope.formats[0]] = true;
+		if($scope.languages.length==1) $scope.selectedLanguages[$scope.languages[0]] = true;
+		if($scope.formats  .length==1) $scope.selectedFormats[$scope.formats[0]] = true;
 
 		$scope.$watch('selectedFormats', initDownloadLink, true);
-		$scope.$watch('selectedLocales', initDownloadLink, true);
+		$scope.$watch('selectedLanguages', initDownloadLink, true);
 
 		if(canDropbox && publicComputer)
 			signoutDropbox();
@@ -63,7 +63,7 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
 
             return _(documents).map(function(doc){
                 return _(doc.files||[])
-                    .filter(function(f){ return $scope.selectedLocales[f.locale] && $scope.selectedFormats[f.mime]; })
+                    .filter(function(f){ return $scope.selectedLanguages[f.language] && $scope.selectedFormats[f.type]; })
                     .pluck('url')
                     .value();
 

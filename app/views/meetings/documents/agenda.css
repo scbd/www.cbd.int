@@ -22,6 +22,7 @@
 .label.agenda.NP   { background: #0086B7; }
 
 .title.agenda      {     }
+.handle  { cursor: all-scroll }
 /*
 .title.agenda.CBD  { color: #00803B; }
 .title.agenda.NP   { color: #245680; }

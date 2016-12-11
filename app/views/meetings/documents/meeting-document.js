@@ -20,61 +20,61 @@ define(['app', 'lodash', 'text!./meeting-document.html', 'directives/checkbox', 
 			template : html,
             replace: true,
 			scope: {
-                document:"<"
+                document:"<",
+                enableSelection:"<"
             },
 			link: function ($scope) {
 
                 $scope.MIMES     = MIMES;
                 $scope.LANGUAGES = LANGUAGES;
 
-                $scope.isSymbolVisible= !/^[A-Z0-9]{24}$/i.test($scope.document.symbol);
-                $scope.initByLocales  = initByLocales;
-                $scope.initByMimes    = initByMimes;
+                $scope.initByLanguages  = initByLanguages;
+                $scope.initByTypes    = initByTypes;
                 $scope.breakSymbol    = breakSymbol;
 
                 var destroyWatch = $scope.$watch('$root.deviceSize', function(size){
-                    if(size=='xs') return; // for performance only load files byMimes  if sreeen > xs
-                    initByMimes();         // it prevent unless ng-repeat
+                    if(size=='xs') return; // for performance only load files byTypes  if sreeen > xs
+                    initByTypes();         // it prevent unless ng-repeat
                     destroyWatch();
                 });
 
                 //==============================
                 //
                 //==============================
-                function initByLocales() {
+                function initByLanguages() {
 
-                    if($scope.byLocales)
+                    if($scope.byLanguages)
                         return;
 
-                    $scope.byLocales = {};
+                    $scope.byLanguages = {};
 
                     _($scope.document.files||[]).sort(function(a,b) {
 
-                        return sortByLocale(a,b) || sortByMime(a,b);
+                        return sortByLanguage(a,b) || sortByType(a,b);
 
                     }).forEach(function(f){
 
-                        $scope.byLocales[f.locale] = $scope.byLocales[f.locale]   || {};
-                        $scope.byLocales[f.locale][f.mime] = f;
+                        $scope.byLanguages[f.language] = $scope.byLanguages[f.language]   || {};
+                        $scope.byLanguages[f.language][f.type] = f;
 
                     }).value();
                 }
 
-                function initByMimes() {
+                function initByTypes() {
 
-                    if($scope.byMimes)
+                    if($scope.byTypes)
                         return;
 
-                    $scope.byMimes = {};
+                    $scope.byTypes = {};
 
                     _($scope.document.files||[]).sort(function(a,b) {
 
-                        return sortByMime(a,b) || sortByLocale(a,b);
+                        return sortByType(a,b) || sortByLanguage(a,b);
 
                     }).forEach(function(f){
 
-                        $scope.byMimes[f.mime] = $scope.byMimes  [f.mime]   || {};
-                        $scope.byMimes[f.mime][f.locale] = f;
+                        $scope.byTypes[f.type] = $scope.byTypes  [f.type]   || {};
+                        $scope.byTypes[f.type][f.language] = f;
 
                     }).value();
                 }
@@ -82,11 +82,11 @@ define(['app', 'lodash', 'text!./meeting-document.html', 'directives/checkbox', 
                 //==============================
                 //
                 //==============================
-                function sortByMime(a,b) {
+                function sortByType(a,b) {
 
-                    if(MIMES[a.mime] || MIMES[b.mime]) {
-                        a = (MIMES[a.mime]||MIMES.default).priority;
-                        b = (MIMES[b.mime]||MIMES.default).priority;
+                    if(MIMES[a.type] || MIMES[b.type]) {
+                        a = (MIMES[a.type]||MIMES.default).priority;
+                        b = (MIMES[b.type]||MIMES.default).priority;
                     }
 
                     if(a<b) return -1;
@@ -98,10 +98,10 @@ define(['app', 'lodash', 'text!./meeting-document.html', 'directives/checkbox', 
                 //==============================
                 //
                 //==============================
-                function sortByLocale(a,b) {
+                function sortByLanguage(a,b) {
 
-                    if(a.locale<b.locale) return -1;
-                    if(a.locale>b.locale) return  1;
+                    if(a.language<b.language) return -1;
+                    if(a.language>b.language) return  1;
 
                     return 0;
                 }

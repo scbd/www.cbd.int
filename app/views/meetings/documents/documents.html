@@ -23,13 +23,19 @@
         </select>
     </div>
 
+    <div ng-if="documentsCtrl.edit" class="pull-right">
+        <button type="button" class="btn btn-default" ng-if="documentsCtrl.editMode"             ng-click="documentsCtrl.edit(null)"><i class="fa fa-plus"></i></button>
+        <button type="button" class="btn btn-default" ng-class="{active:documentsCtrl.editMode, 'btn-info': documentsCtrl.editMode }" ng-click="documentsCtrl.editMode=!documentsCtrl.editMode"><i class="fa fa-edit"></i></button>
+    </div>
+
+
     <div class="clearfix visible-sm visible-xs"></div>
 
     <!-- Nav tabs -->
     <ul class="hidden-xs nav nav-tabs hidden-print" style="margin-top:5px" role="tablist">
-        <li ng-repeat="type in documentsCtrl.tabs" ng-class="{ active: documentsCtrl.currentTab==type.code }" >
-            <a href="#" ng-click="documentsCtrl.switchTab(type)" role="tab" data-toggle="tab">
-                {{::documentsCtrl.TABS_NAMES[type.code]||(type.code|uppercase)}} ({{::type.documents.length}})
+        <li ng-repeat="tab in documentsCtrl.tabs" ng-class="{ active: documentsCtrl.currentTab==tab.code }" >
+            <a href="#" ng-click="documentsCtrl.switchTab(tab)" role="tab" data-toggle="tab">
+                {{::tab.title}} ({{::tab.documents.length}})
             </a>
         </li>
     </ul>
@@ -71,14 +77,28 @@
             <!-- Document List view -->
 
             <table ng-if="documentsCtrl.sort=='document' || !type.agenda.items.length" class="table table-striped table-hover no-border-first-row">
-                <tr ng-repeat="document in type.documents|orderBy:'sortKey':(type.code=='notification') track by document.symbol+document._id" ng-class="{ info : document.selected }" style="cursor:default;">
-                    <td style="width:1px">
+                <tbody class="documents">
+                <tr document-id="{{document._id}}" ng-repeat="document in type.documents track by document._id" ng-class="{ info : document.selected }" style="cursor:default;">
+                    <td class="handle" ng-if="documentsCtrl.editMode" style="width:10px">
+                        <i class="fa fa-bars handle" aria-hidden="true"></i>
+                    </td>
+                    <td ng-if="!documentsCtrl.editMode" style="width:1px">
                         <strong class="text-nowrap">{{::($index+1)}}.</strong>
                     </td>
                     <td>
-                        <meeting-document document="document"></meeting-document>
+                        <meeting-document document="document" enable-selection="!documentsCtrl.editMode"></meeting-document>
+                    </td>
+                    <td ng-if="documentsCtrl.editMode" style="width:1px">
+                        <div class="btn-group text-nowrap" role="group" aria-label="...">
+                          <button type="button" class="btn btn-default" style="float:none" ng-click="documentsCtrl.edit(document)">
+                              <i class="fa fa-edit"></i>
+                          </button><button type="button" class="btn btn-default" style="float:none" disabled>
+                              <i class="fa fa-trash"></i>
+                          </button>
+                        </div>
                     </td>
                 </tr>
+                </tbody>
             </table>
 
             <!-- Document Agenda view -->
@@ -99,9 +119,18 @@
                             </span>
                         </div>
                         <table class="table table-striped table-hover" style="margin:10px 0px -5px 0px;">
-                            <tr ng-repeat="document in item.documents|filter:{ type: type.code }:true|orderBy:'sortKey'" ng-class="{ info : document.selected }" style="cursor:default">
+                            <tr ng-repeat="document in item.documents" ng-class="{ info : document.selected }" style="cursor:default">
                                 <td>
-                                    <meeting-document document="document"></meeting-document>
+                                    <meeting-document document="document" enable-selection="!documentsCtrl.editMode"></meeting-document>
+                                </td>
+                                <td ng-if="documentsCtrl.editMode" style="width:1px">
+                                    <div class="btn-group text-nowrap" role="group" aria-label="...">
+                                      <button type="button" class="btn btn-default" style="float:none" ng-click="documentsCtrl.edit(document)">
+                                          <i class="fa fa-edit"></i>
+                                      </button><button type="button" class="btn btn-default" style="float:none" disabled>
+                                          <i class="fa fa-trash"></i>
+                                      </button>
+                                    </div>
                                 </td>
                             </tr>
                         </table>
@@ -119,9 +148,18 @@
                             </span>
                         </div>
                         <table class="table table-striped table-hover" style="margin:10px 0px -5px 0px;">
-                            <tr ng-repeat="document in type.agenda.otherDocuments|orderBy:'symbol'" ng-class="{ info : document.selected }" style="cursor:default">
+                            <tr ng-repeat="document in type.agenda.otherDocuments" ng-class="{ info : document.selected }" style="cursor:default">
                                 <td>
-                                    <meeting-document document="document"></meeting-document>
+                                    <meeting-document document="document" enable-selection="!documentsCtrl.editMode"></meeting-document>
+                                </td>
+                                <td ng-if="documentsCtrl.editMode" style="width:1px">
+                                    <div class="btn-group text-nowrap" role="group" aria-label="...">
+                                      <button type="button" class="btn btn-default" style="float:none" ng-click="documentsCtrl.edit(document)">
+                                          <i class="fa fa-edit"></i>
+                                      </button><button type="button" class="btn btn-default" style="float:none" disabled>
+                                          <i class="fa fa-trash"></i>
+                                      </button>
+                                    </div>
                                 </td>
                             </tr>
                         </table>
