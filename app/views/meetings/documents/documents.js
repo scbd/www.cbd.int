@@ -81,7 +81,7 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
                     { code: 'in-session' , title: 'In-session',  documents: _.filter(documents, byTypes(['non-paper', 'crp', 'limited'])) },
                     { code: 'official'   , title: 'Official',    documents: _.filter(documents, byTypes(['official'   ])) },
                     { code: 'information', title: 'Information', documents: _.filter(documents, byTypes(['information'])) },
-                    { code: 'other'      , title: 'Others',      documents: _.filter(documents, byTypes(['other'      ],  ['report', 'outcome', 'non-paper', 'crp', 'limited', 'official', 'information', 'statement'])) },
+                    { code: 'other'      , title: 'Other',      documents: _.filter(documents, byTypes(['other'      ],  ['report', 'outcome', 'non-paper', 'crp', 'limited', 'official', 'information', 'statement'])) },
                     { code: 'statement'  , title: 'Statements',  documents: _.filter(documents, byTypes(['statement'  ])) },
                 ];
 
@@ -163,7 +163,7 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
 
             _ctrl.tabs = _ctrl.tabs || [];
 
-            if(!_.some(_ctrl.tabs, { code: 'notification'})) {
+            if(!_.some(_ctrl.tabs, { code: 'notification', title: 'Notifications' })) {
 
                 _ctrl.documents = (_ctrl.documents).concat(_ctrl.notifications);
 
