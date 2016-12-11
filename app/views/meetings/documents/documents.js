@@ -133,7 +133,7 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
 
             $http.get('/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'id,symbol_s,reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
 
-                _ctrl.notifications = _.map(res.data.response.docs, function(n) {
+                _ctrl.notifications = _(res.data.response.docs).map(function(n) {
                     return _.defaults(n, {
                         _id: n.id,
                         symbol: n.reference_s || n.symbol_s,
@@ -141,10 +141,9 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
                         date:   n.date_dt,
                         type:  'notification',
                         title : { en : n.title_t },
-                        sortKey : n.symbol_s,
                         files : urlToFiles(n.url_ss)
                     });
-                });
+                }).sortByOrder(['number', 'symbol'], ['desc', 'asc']).value();
             }).then(function(){
 
                 injectNotifications();
@@ -163,12 +162,13 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
 
             _ctrl.tabs = _ctrl.tabs || [];
 
-            if(!_.some(_ctrl.tabs, { code: 'notification', title: 'Notifications' })) {
+            if(!_.some(_ctrl.tabs, { code: 'notification' })) {
 
                 _ctrl.documents = (_ctrl.documents).concat(_ctrl.notifications);
 
                 _ctrl.tabs.push({
                     code : 'notification',
+                    title: 'Notifications',
                     documents : _ctrl.notifications
                 });
             }
@@ -273,8 +273,8 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
                 if(/-zh\.\w+$/ .test(url)) locale = 'zh';
 
                 return {
-                    mime : mime,
-                    locale: locale,
+                    type : mime,
+                    language: locale,
                     url : 'https://www.cbd.int'+url
                 };
             });

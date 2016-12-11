@@ -44,13 +44,13 @@
     <ul class="visible-xs nav nav-tabs nowrap hidden-print" style="margin-top:5px" role="tablist">
         <li ng-repeat="type in documentsCtrl.tabs|limitTo:(documentsCtrl.tabs.length>3?2:999)" ng-class="{ active: documentsCtrl.currentTab==type.code }" >
             <a href="#" ng-click="documentsCtrl.switchTab(type)" role="tab" data-toggle="tab">
-                {{::documentsCtrl.TABS_NAMES[type.code]||(type.code|uppercase)}} ({{::type.documents.length}})
+                {{::type.title}} ({{::type.documents.length}})
             </a>
         </li>
 
         <li ng-if='documentsCtrl.tabs.length>3' class="dropdown-toggle" ng-class="{ active: (documentsCtrl.tabs|limitTo:999:2|filter:{code:documentsCtrl.currentTab}:true).length }" >
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-                <span ng-if=" (documentsCtrl.tabs|limitTo:999:2|filter:{code:documentsCtrl.currentTab}:true).length">{{documentsCtrl.TABS_NAMES[documentsCtrl.currentTab]||documentsCtrl.currentTab}} ({{(documentsCtrl.tabs|limitTo:999:2|filter:{code:documentsCtrl.currentTab}:true)[0].documents.length}})</span>
+                <span ng-if=" (documentsCtrl.tabs|limitTo:999:2|filter:{code:documentsCtrl.currentTab}:true).length">{{documentsCtrl.currentTabX.title}} ({{(documentsCtrl.tabs|limitTo:999:2|filter:{code:documentsCtrl.currentTab}:true)[0].documents.length}})</span>
                 <span ng-if="!(documentsCtrl.tabs|limitTo:999:2|filter:{code:documentsCtrl.currentTab}:true).length">More</span>
                 <span class="caret">
             </a>
@@ -58,7 +58,7 @@
              <ul class="dropdown-menu">
                  <li ng-repeat="type in documentsCtrl.tabs|limitTo:999:2">
                      <a href="#" ng-click="documentsCtrl.switchTab(type)">
-                         {{::documentsCtrl.TABS_NAMES[type.code]||(type.code|uppercase)}} ({{::type.documents.length}})
+                         {{::type.title}} ({{::type.documents.length}})
                      </a>
                 </li>
             </ul>
