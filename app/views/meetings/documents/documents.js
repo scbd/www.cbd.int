@@ -77,12 +77,14 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
                 });
 
                 var tabs = [
-                    { code: 'outcome'    , title: 'Outcomes',    documents: _.filter(documents, byTypes(['report',    'outcome'])) },
-                    { code: 'in-session' , title: 'In-session',  documents: _.filter(documents, byTypes(['non-paper', 'crp', 'limited'])) },
-                    { code: 'official'   , title: 'Official',    documents: _.filter(documents, byTypes(['official'   ])) },
-                    { code: 'information', title: 'Information', documents: _.filter(documents, byTypes(['information'])) },
-                    { code: 'other'      , title: 'Other',      documents: _.filter(documents, byTypes(['other'      ],  ['report', 'outcome', 'non-paper', 'crp', 'limited', 'official', 'information', 'statement'])) },
-                    { code: 'statement'  , title: 'Statements',  documents: _.filter(documents, byTypes(['statement'  ])) },
+                    { code: 'outcome'       , title: 'Outcomes',    documents: _.filter(documents, byPositionGroup('outcome')) },
+                    { code: 'in-session'    , title: 'Plenary',     documents: _.filter(documents, byPositionGroup('in-session')) },
+                    { code: 'in-session/wg1', title: 'WG I',        documents: _.filter(documents, byPositionGroup('in-session/wg1')) },
+                    { code: 'in-session/wg2', title: 'WG II',       documents: _.filter(documents, byPositionGroup('in-session/wg2')) },
+                    { code: 'official'      , title: 'Official',    documents: _.filter(documents, byPositionGroup('official')) },
+                    { code: 'information'   , title: 'Information', documents: _.filter(documents, byPositionGroup('information')) },
+                    { code: 'other'         , title: 'Other',       documents: _.filter(documents, byPositionGroup('other')) },
+                    { code: 'statement'     , title: 'Statements',  documents: _.filter(documents, byPositionGroup('statement')) },
                 ];
 
                 _ctrl.tabs = _(tabs).forEach(function(tab){
@@ -119,11 +121,8 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
         //==============================
         //
         //==============================
-        function byTypes(inTypes, outTypes) {
-            return function(doc) {
-                return (inTypes  &&  ~inTypes .indexOf(doc.type)) ||
-                       (outTypes && !~outTypes.indexOf(doc.type));
-            };
+        function byPositionGroup(code) {
+            return function(doc) { return doc.positionGroup==code; };
         }
 
         //==============================
@@ -177,7 +176,7 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
         //==============================
         //
         //==============================
-        function switchTab(tab) {
+        function switchTab(tab, extra) {
 
             if(!tab && $location.search().tabFor) {
                 tab = _(_ctrl.tabs).find(function(t) {
@@ -204,6 +203,8 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
             tab.loaded=true;
             _ctrl.currentTabX = tab;
             _ctrl.currentTab  = tab.code;
+
+            _ctrl.currentExtraTab = extra ? tab.title : null;
         }
 
         //==============================

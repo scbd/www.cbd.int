@@ -33,33 +33,49 @@
     <div class="clearfix visible-sm visible-xs"></div>
 
     <!-- Nav tabs -->
-    <ul class="hidden-xs nav nav-tabs hidden-print" style="margin-top:5px" role="tablist">
-        <li ng-repeat="tab in documentsCtrl.tabs" ng-class="{ active: documentsCtrl.currentTab==tab.code }" >
-            <a href="#" ng-click="documentsCtrl.switchTab(tab)" role="tab" data-toggle="tab">
-                {{::tab.title}} ({{::tab.documents.length}})
-            </a>
-        </li>
-    </ul>
+    
+    <style>
+        .nav-tabs>li[code='in-session']>a           { margin-left: 4px; }
+        .nav-tabs>li[code='in-session/wg2']>a       { margin-right: 4px; }
+        .nav-tabs>li[code='official']>a             { margin-left: 4px; }
+        .nav-tabs>li[code='in-session']>div.bg      { position:absolute;top:-18px;left:0px;right:0px;height:59px;background-color:#eee;border-radius: 4px 0 0 0;border-top:1px solid #ddd;border-left:1px solid #ddd;}
+        .nav-tabs>li[code='in-session/wg1']>div.bg  { position:absolute;top:-18px;left:0px;right:0px;height:59px;background-color:#eee;border-radius: 0 0 0 0  ;border-top:1px solid #ddd;}
+        .nav-tabs>li[code='in-session/wg2']>div.bg  { position:absolute;top:-18px;left:-1px;right:0px;height:59px;background-color:#eee;border-radius: 0 4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
 
-    <!-- Nav tabs -->
-    <ul class="visible-xs nav nav-tabs nowrap hidden-print" style="margin-top:5px" role="tablist">
-        <li ng-repeat="type in documentsCtrl.tabs|limitTo:(documentsCtrl.tabs.length>3?2:999)" ng-class="{ active: documentsCtrl.currentTab==type.code }" >
+        .nav-tabs>li[code='other'] { display: none; }
+        .nav-tabs>li[code='statement'] { display: none; }
+        .nav-tabs>li[code='notification'] { display: none; }
+        .nav-tabs>li>ul>li[code='in-session'] { display: none; }
+        .nav-tabs>li>ul>li[code='in-session/wg1'] { display: none; }
+        .nav-tabs>li>ul>li[code='in-session/wg2'] { display: none; }
+
+        @media (max-width: 767px) {
+            .nav-tabs>li[code='official'] { display: none; }
+            .nav-tabs>li[code='information'] { display: none; }
+        }
+        @media (min-width: 768px) {
+            .nav-tabs>li>ul>li[code='official'] { display: none; }
+            .nav-tabs>li>ul>li[code='information'] { display: none; }
+        }
+    </style>
+
+    <ul class="nav nav-tabs nowrap hidden-print" style="margin-top:20px" role="tablist">
+        <li ng-repeat="type in documentsCtrl.tabs" ng-class="{active:documentsCtrl.currentTab==type.code}" code="{{type.code}}">
+            <div class="bg" ng-if="::type.code.startsWith('in-session')"></div>
+            <div ng-if="::type.code.startsWith('in-session/wg1')" style="position:absolute;top:-15px;left:0px;right:2px;height:15px;font-size:10px;font-weight:bold;color:#444;text-align:center">IN-SESSION</div>
             <a href="#" ng-click="documentsCtrl.switchTab(type)" role="tab" data-toggle="tab">
                 {{::type.title}} ({{::type.documents.length}})
             </a>
         </li>
-
-        <li ng-if='documentsCtrl.tabs.length>3' class="dropdown-toggle" ng-class="{ active: (documentsCtrl.tabs|limitTo:999:2|filter:{code:documentsCtrl.currentTab}:true).length }" >
+        <li class="dropdown-toggle" ng-class="{active:!!documentsCtrl.currentExtraTab}">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-                <span ng-if=" (documentsCtrl.tabs|limitTo:999:2|filter:{code:documentsCtrl.currentTab}:true).length">{{documentsCtrl.currentTabX.title}} ({{(documentsCtrl.tabs|limitTo:999:2|filter:{code:documentsCtrl.currentTab}:true)[0].documents.length}})</span>
-                <span ng-if="!(documentsCtrl.tabs|limitTo:999:2|filter:{code:documentsCtrl.currentTab}:true).length">More</span>
+                <span>{{documentsCtrl.currentExtraTab||'More'}}</span>
                 <span class="caret">
             </a>
-
-             <ul class="dropdown-menu">
-                 <li ng-repeat="type in documentsCtrl.tabs|limitTo:999:2">
-                     <a href="#" ng-click="documentsCtrl.switchTab(type)">
-                         {{::type.title}} ({{::type.documents.length}})
+            <ul class="dropdown-menu">
+                <li ng-repeat="type in documentsCtrl.tabs" code="{{type.code}}">
+                    <a href="#" ng-click="documentsCtrl.switchTab(type, true)">
+                        {{::type.title}} ({{::type.documents.length}})
                      </a>
                 </li>
             </ul>
