@@ -202,7 +202,8 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
             }
 
             tab.loaded=true;
-            _ctrl.currentTab = tab.code;
+            _ctrl.currentTabX = tab;
+            _ctrl.currentTab  = tab.code;
         }
 
         //==============================

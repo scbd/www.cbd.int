@@ -1,6 +1,20 @@
 <div>
-    <div id="print-smart-checkout" class="hidden-print">
-        <print-smart-checkout ng-if="documentsCtrl.documents.length"  ng-cloak documents="documentsCtrl.documents|filter:{selected:true}:true" class="pull-right"></print-smart-checkout>
+    <div id="print-smart-checkout" ng-cloak  class="pull-right hidden-print">
+
+        <span ng-if="documentsCtrl.edit" class="edit">
+            <button type="button" class="btn btn-default" ng-if="documentsCtrl.editMode"             ng-click="documentsCtrl.edit(null)"><i class="fa fa-plus"></i></button>
+            <button type="button" class="btn btn-default" ng-class="{active:documentsCtrl.editMode, 'btn-info': documentsCtrl.editMode }" ng-click="documentsCtrl.editMode=!documentsCtrl.editMode"><i class="fa fa-edit"></i></button>
+        </span>
+
+        <!-- Sort/Display -->
+        <span ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length" class="hidden-print" style="margin-right:5px;margin-left:5px;">
+            <select class="form-control" ng-model="documentsCtrl.sort" style="width:auto;display:inline-block">
+                <option value="agenda">By Items</option>
+                <option value="document">By symbols</option>
+            </select>
+        </span>
+
+        <print-smart-checkout ng-if="documentsCtrl.documents.length" style="display:inline-block" documents="documentsCtrl.documents|filter:{selected:true}:true"></print-smart-checkout>
     </div>
 
     <h1 class="visible-print" style="color:black;position:absolute;top:0px;right:0px"> {{::documentsCtrl.meeting.code}} <small>{{documentsCtrl.TABS_NAMES[documentsCtrl.currentTab]}}</small></h1>
@@ -15,19 +29,6 @@
             float:none;
         }
     </style>
-    <!-- Sort/Display -->
-    <div ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length" class="pull-right hidden-print" style="margin-right:5px;margin-left:5px;">
-        <select class="form-control" ng-model="documentsCtrl.sort" style="width:auto;display:inline-block">
-            <option value="agenda">By Items</option>
-            <option value="document">By symbols</option>
-        </select>
-    </div>
-
-    <div ng-if="documentsCtrl.edit" class="pull-right">
-        <button type="button" class="btn btn-default" ng-if="documentsCtrl.editMode"             ng-click="documentsCtrl.edit(null)"><i class="fa fa-plus"></i></button>
-        <button type="button" class="btn btn-default" ng-class="{active:documentsCtrl.editMode, 'btn-info': documentsCtrl.editMode }" ng-click="documentsCtrl.editMode=!documentsCtrl.editMode"><i class="fa fa-edit"></i></button>
-    </div>
-
 
     <div class="clearfix visible-sm visible-xs"></div>
 
