@@ -33,14 +33,13 @@
     <div class="clearfix visible-sm visible-xs"></div>
 
     <!-- Nav tabs -->
-    
+
     <style>
         .nav-tabs>li[code='in-session']>a           { margin-left: 4px; }
-        .nav-tabs>li[code='in-session/wg2']>a       { margin-right: 4px; }
-        .nav-tabs>li[code='official']>a             { margin-left: 4px; }
-        .nav-tabs>li[code='in-session']>div.bg      { position:absolute;top:-18px;left:0px;right:0px;height:59px;background-color:#eee;border-radius: 4px 0 0 0;border-top:1px solid #ddd;border-left:1px solid #ddd;}
-        .nav-tabs>li[code='in-session/wg1']>div.bg  { position:absolute;top:-18px;left:0px;right:0px;height:59px;background-color:#eee;border-radius: 0 0 0 0  ;border-top:1px solid #ddd;}
-        .nav-tabs>li[code='in-session/wg2']>div.bg  { position:absolute;top:-18px;left:-1px;right:0px;height:59px;background-color:#eee;border-radius: 0 4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
+        .nav-tabs>li[code='official']>a             { margin-left: 6px; }
+        .nav-tabs>li[code='in-session']>div.bg      { position:absolute;top:-21px;left:0px;right:-2px;height:62px;background-color:#eee;border-radius: 4px 4px 0 0;border-top:1px solid #ddd;border-left:1px solid #ddd;border-right:1px solid #ddd;}
+        .nav-tabs>li[code='in-session/wg1']>div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0 4px 0 0  ;border-top:1px solid #ddd;border-right:1px solid #ddd;}
+        .nav-tabs>li[code='in-session/wg2']>div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0 4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
 
         .nav-tabs>li[code='other'] { display: none; }
         .nav-tabs>li[code='statement'] { display: none; }
@@ -62,7 +61,7 @@
     <ul class="nav nav-tabs nowrap hidden-print" style="margin-top:20px" role="tablist">
         <li ng-repeat="type in documentsCtrl.tabs" ng-class="{active:documentsCtrl.currentTab==type.code}" code="{{type.code}}">
             <div class="bg" ng-if="::type.code.startsWith('in-session')"></div>
-            <div ng-if="::type.code.startsWith('in-session/wg1')" style="position:absolute;top:-15px;left:0px;right:2px;height:15px;font-size:10px;font-weight:bold;color:#444;text-align:center">IN-SESSION</div>
+            <div ng-if="::type.code=='in-session'" style="position:absolute;top:-18px;left:0px;right:2px;height:15px;font-size:10px;font-weight:bold;color:#444">&nbsp;&nbsp;&nbsp;IN-SESSION</div>
             <a href="#" ng-click="documentsCtrl.switchTab(type)" role="tab" data-toggle="tab">
                 {{::type.title}} ({{::type.documents.length}})
             </a>
