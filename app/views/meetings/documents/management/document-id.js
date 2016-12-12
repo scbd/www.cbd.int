@@ -65,6 +65,9 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
 
             }).then(function(document) {
 
+                if(document.metadata && document.metadata.message)
+                    document.metadata.message.level = document.metadata.message.level || "";
+
                 document.files = document.files || [];
                 document_bak   = _.clone(document, true); //fullclone
                 _ctrl.document = document;
@@ -92,8 +95,12 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
                 agendaItems: _ctrl.document.agendaItems,
                 title:       _ctrl.document.title,
                 description: _ctrl.document.description,
-                metadata:    _ctrl.document.metadata,
+                metadata:    _.clone(_ctrl.document.metadata||{}, true),
             };
+
+                if(doc.metadata && doc.metadata.message)
+                    doc.metadata.message.level = doc.metadata.message.level || null;
+
 
             var fileIds       = _(_ctrl.document.files).map('_id').compact().uniq().value();
 
