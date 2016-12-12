@@ -1,4 +1,4 @@
-define(['app', 'lodash', 'data/aichi-targets/targets', 'data/aichi-targets/goals', 'directives/aichi-targets/fisheye', 'directives/aichi-targets/videos', 'directives/aichi-targets/legend42','directives/aichi-targets/box-list'], function(app, _, targetsData, goalsData) { 'use strict';
+define(['app', 'lodash', 'data/aichi-targets/targets', 'data/aichi-targets/goals', 'directives/aichi-targets/fisheye', 'directives/aichi-targets/videos', 'directives/aichi-targets/legend42','directives/aichi-targets/box-list','directives/aichi-targets/side-events'], function(app, _, targetsData, goalsData) { 'use strict';
 
 	return ['$location', '$routeParams', function( $location, $routeParams) {
 
