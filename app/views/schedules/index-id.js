@@ -51,6 +51,7 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
                 var types = _.reduce(res[0].data, function(ret, r){ ret[r._id] = r; return ret; }, {});
                 var rooms = _.reduce(res[1].data, function(ret, r){ ret[r._id] = r; return ret; }, {});
 
+                _ctrl.now    = moment(now).tz(_streamData.eventGroup.timezone);
                 _ctrl.event  = _streamData.eventGroup;
                 _ctrl.frames = _streamData.frames;
                 _ctrl.frames.forEach(function(f){
@@ -58,14 +59,14 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
                     if(!f.reservations)
                         return;
 
-                    f.reservations.forEach(function(r){
+                    f.reservations = _(f.reservations).map(function(r){
+
                         r.type = types[r.type];
                         r.room = rooms[(r.location||{}).room];
-                    });
 
-                    f.reservations = _.sortBy(f.reservations, sortKey);
+                        return _.defaults(r, { open : !(types[r.type]||{}).closed });
 
-                    _ctrl.now = moment(now).tz(_streamData.eventGroup.timezone);
+                    }).sortBy(sortKey).value();
                 });
             });
 
