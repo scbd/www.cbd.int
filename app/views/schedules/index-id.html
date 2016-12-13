@@ -83,10 +83,10 @@
                                             </div>
                                         </div>
 
-
                                         <div class="schedule-item-title" style="font-weight:bold">
                                             {{r.sideEvent.title || r.title}}
                                         </div>
+
                                         <div class="schedule-item-location">
                                             <em>{{r.room.title}}</em>
                                             <em ng-if="r.room.location">- {{r.room.location}}</em>
@@ -94,9 +94,9 @@
 
                                         <div ng-if="r.agenda.visible && r.agenda.items.length">
                                             <span ng-repeat="item in r.agenda.items">
-                                                <span class="label agenda {{item.prefix}}" title="item.title">{{item.prefix}} {{item.item}}</span>
+                                                <span class="label agenda {{item.prefix}}" title="item.title" style="width:51px">{{item.prefix}} {{item.item}}</span>
                                                 <span ng-if="(item.title+item.text) != (r.agenda.items[$index+1].title+r.agenda.items[$index+1].text)">
-                                                    {{item.title}} <span ng-if="::item.text"> - <b>{{item.text}}</b> <br>
+                                                    {{item.title}} <span ng-if="::item.text"> - <b>{{item.text}}</b></span> <br>
                                                 </span>
 
                                             </div>
