@@ -119,7 +119,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                                 });
 
                                 return d;
-                            }).sortBy(buildSortKey).value()
+                            }).value()
                         };
                     });
                 }));
@@ -164,6 +164,8 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                         var mItem          = _(mAgenda.items)   .where({ item:     rItem.item    }).first();
                         var mItemDocuments = _(meetingDocuments).where({ meeting : rItem.meeting }).map('documents').flatten().filter(function(d) {
                             return ~(d.agendaItems||[]).indexOf(rItem.item) && (!types || ~types.indexOf(d.type));
+                        }).sortBy(function(d){
+                            return buildSortKey(d, types);
                         }).value();
 
                         rItem.prefix    = (mAgenda||{}).prefix;
@@ -250,8 +252,25 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         //==============================
         //
         //==============================
-        function buildSortKey(d) {
-            return ("000000000" + (d.position||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
+        function buildSortKey(d, types) {
+
+            var typePos;
+
+            if(types && ~types.indexOf(d.type)) {
+                typePos = types.indexOf(d.type);
+            }
+            else if(d.type=="report")      typePos = 10;
+            else if(d.type=="outcome")     typePos = 20;
+            else if(d.type=="limited")     typePos = 30;
+            else if(d.type=="crp")         typePos = 40;
+            else if(d.type=="non-paper")   typePos = 50;
+            else if(d.type=="official")    typePos = 60;
+            else if(d.type=="information") typePos = 70;
+            else if(d.type=="other")       typePos = 80;
+            else if(d.type=="statement")   typePos = 90;
+
+            return ("000000000" + (typePos   ||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
+                   ("000000000" + (d.position||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
                    (d.symbol||"").replace(/\b(\d)\b/g, '0$1')
                                  .replace(/(\/REV)/gi, '0$1')
                                  .replace(/(\/ADD)/gi, '1$1');
