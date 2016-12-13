@@ -274,7 +274,7 @@
                 <i style="color:{{(FILETYPES[editCtrl.fileError.new.type]||FILETYPES.default).color}}" class="fa {{(FILETYPES[editCtrl.fileError.new.type]||FILETYPES.default).icon}}"></i>
                 {{editCtrl.fileError.new.name}} <em>{{(LANGUAGES[editCtrl.fileError.new.language]||editCtrl.fileError.new.language)|uppercase}}</em> <em>{{FILETYPES[editCtrl.fileError.new.type].title||editCtrl.fileError.new.type}}</em><br/><br/>
 
-                Please uploade a new file with language at the end. eg: "cop-xx-crp-yy<b>-en</b>.pdf, cop-xx-crp-yy<b>-ar</b>.doc .., "
+                Please uploade a new file with language at the end. eg: "cop-xx-crp-yy<b>-en</b>.pdf, cop-xx-crp-yy<b>-ar</b>.doc ... "
             </div>
 
             <!-- ERROR FILENAME -->
@@ -285,7 +285,15 @@
 
                 {{editCtrl.fileError.new.name}}<br/><br/>
 
-                Filename can only contains letters, '-' and '.'
+                Filename can only contains 'letters', '-' and '.'
+            </div>
+
+            <!-- ERROR FILENAME -->
+            <div class="alert alert-warning" role="alert" ng-if="editCtrl.fileCache.prefixes.length>1">
+                <b>Mutiples filenames</b> Maybe you have an error...<br/>
+                <ul>
+                    <li ng-repeat="name in editCtrl.fileCache.names|orderBy">{{name}}</li>
+                </ul>
             </div>
 
             <!-- FILES -->

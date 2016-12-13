@@ -69,7 +69,7 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
                     document.metadata.message.level = document.metadata.message.level || "";
 
                 document.files = document.files || [];
-                document_bak   = _.clone(document, true); //fullclone
+                document_bak   = _.cloneDeep(document); //fullclone
                 _ctrl.document = document;
 
                 initFiles();
@@ -86,45 +86,33 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
         //==============================
         function save() {
 
-            var doc = {
-                _id:         _ctrl.document._id,
-                symbol:      _ctrl.document.symbol || undefined,
-                type:        _ctrl.document.type,
-                group:       _ctrl.document.group  || undefined,
-                date:        _ctrl.document.date   || new Date(),
-                agendaItems: _ctrl.document.agendaItems,
-                title:       _ctrl.document.title,
-                description: _ctrl.document.description,
-                metadata:    _.clone(_ctrl.document.metadata||{}, true),
-            };
-
-                if(doc.metadata && doc.metadata.message)
-                    doc.metadata.message.level = doc.metadata.message.level || null;
-
+            var oldDoc = prepareData(document_bak);
+            var newDoc = prepareData(_ctrl.document);
 
             var fileIds       = _(_ctrl.document.files).map('_id').compact().uniq().value();
 
             var filesToCreate = _(_ctrl.document.files||[]).filter(function(f) { return !f._id;                   }).value();
             var filesToDelete = _(document_bak  .files||[]).filter(function(f) { return !~fileIds.indexOf(f._id); }).value();
 
-            var httpReq = {
-                method : 'POST',
-                url    : '/api/v2016/meetings/'+meetingId+'/documents',
-                data   : doc
-            };
+            var req = $q.resolve(newDoc._id);
 
-            if(doc._id) {
-                httpReq.method = 'PUT';
-                httpReq.url   += '/'+doc._id;
+            var hasChange = !newDoc._id || JSON.stringify(newDoc) != JSON.stringify(oldDoc);
+
+            if(hasChange) { // update only if any chnages;
+
+                req = $http({
+                    data   : newDoc,
+                    method : newDoc._id ? 'PUT' : 'POST',
+                    url    : newDoc._id ? '/api/v2016/meetings/'+meetingId+'/documents/'+newDoc._id :
+                                          '/api/v2016/meetings/'+meetingId+'/documents'
+                }).then(function(res) {
+
+                    return (_ctrl.document._id = _ctrl.document._id || res.data._id);
+
+                });
             }
 
-            $http(httpReq).then(function(res) {
-
-                _ctrl.document._id = _ctrl.document._id || res.data._id;
-
-                return _ctrl.document._id;
-
-            }).then(function(docId){
+            req.then(function(docId){
 
                 var delQ = _.map(filesToDelete, function(f){
                     return $http.delete('/api/v2016/documents/'+docId+'/files/'+f._id);
@@ -144,6 +132,29 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
                 _ctrl.error = err.data || err;
                 console.error(err);
             });
+        }
+
+        //==============================
+        //
+        //==============================
+        function prepareData(document) {
+
+            var doc = {
+                _id:         document._id,
+                symbol:      document.symbol || undefined,
+                type:        document.type,
+                group:       document.group  || undefined,
+                date:        document.date   || new Date(),
+                agendaItems: document.agendaItems,
+                title:       document.title,
+                description: document.description,
+                metadata:    _.clone(document.metadata||{}, true),
+            };
+
+            if(doc.metadata && doc.metadata.message)
+                doc.metadata.message.level = doc.metadata.message.level || null;
+
+            return doc;
         }
 
         //==============================
@@ -253,6 +264,8 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
         //
         //==============================
         function parseFilename(filename) {
+
+            filename = filename.toLowerCase();
 
             var matches = filename.match(/-([a-z]{2})\.[a-z]+$/i);
 
