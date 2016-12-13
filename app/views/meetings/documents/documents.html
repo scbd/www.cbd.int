@@ -104,6 +104,13 @@
                     <td>
                         <meeting-document document="document" enable-selection="!documentsCtrl.editMode"></meeting-document>
                     </td>
+
+                    <td ng-if="documentsCtrl.editMode" style="width:10px">
+                        <div ng-repeat="item in document.agendaItems|orderBy">
+                            <span class="label agenda {{::documentsCtrl.meeting.agenda.prefix}}">{{::documentsCtrl.meeting.agenda.prefix}} {{::item}}</span>
+                        </div>
+                    </td>
+
                     <td ng-if="documentsCtrl.editMode" style="width:1px">
                         <div class="btn-group text-nowrap" role="group" aria-label="...">
                           <button type="button" class="btn btn-default" style="float:none" ng-click="documentsCtrl.edit(document)">
