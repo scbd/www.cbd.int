@@ -235,7 +235,11 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                 'agenda.items': { $exists: true, $ne: [] },
                 'meta.status': { $ne : 'deleted' },
                 start : { $lte: { $date: end   } },
-                end   : { $gte: { $date: start } }
+                end   : { $gte: { $date: start } },
+                $or : [
+                    { confirmed : { $exists: false } },
+                    { confirmed : true }
+                ]
             };
 
             return $http.get('/api/v2016/reservations', { params: { q : query, f : fields, s: sort } }).then(function(res){
