@@ -154,6 +154,7 @@
         <!-- Message -->
         <div class="row">
             <style>
+                .level-success { color: #5cb85c; }
                 .level-info    { color: #428bca; }
                 .level-warning { color: #c09853; }
                 .level-danger  { color: #b94a48; }
@@ -179,6 +180,7 @@
                     <label for="symbol">Level</label>
                     <select ng-disabled="uploading" class="form-control message-{{editCtrl.document.metadata.message.level}}" ng-model="editCtrl.document.metadata.message.level">
                         <option value="">Default</option>
+                        <option value="success">Success</option>
                         <option value="info">Info</option>
                         <option value="warning">Warning</option>
                         <option value="danger">Alert</option>
