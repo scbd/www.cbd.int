@@ -270,6 +270,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             else if(d.type=="statement")   typePos = 90;
 
             return ("000000000" + (typePos   ||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
+                   ((d.metadata||{}).superseded ? '1' : '0') + '_' +
                    ("000000000" + (d.position||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
                    (d.symbol||"").replace(/\b(\d)\b/g, '0$1')
                                  .replace(/(\/REV)/gi, '0$1')
