@@ -148,7 +148,7 @@ define(['lodash', 'filters/lstring', 'directives/file'], function(_) {
 
                 target = res.data;
 
-                return $http.put(target.url, file, {
+                return $http.put(target.url, file.upload.htmlFile, {
                     headers : { 'Content-Type' : target.contentType },
                     uploadEventHandlers: { progress: function(e) {
                         $scope.$applyAsync(function() {
