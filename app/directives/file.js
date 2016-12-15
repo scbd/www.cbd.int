@@ -13,14 +13,16 @@ define(['app'], function(app) { 'use strict';
                 if(!ctrl) return;
 
 	            element.bind('change', function() {
-	                $scope.$apply(function() {
 
+	                $scope.$apply(function() {
 	                    if(attr.multiple) ctrl.$setViewValue(element[0].files);
 	                    else              ctrl.$setViewValue(element[0].files[0]);
-
-                        if($scope.$eval(attr.autoReset))
-                            element.val('');
 	                });
+
+                    if($scope.$eval(attr.autoReset)) {
+                        $scope.$applyAsync(function() { element.val(''); });
+                    }
+
 	            });
 	        }
 	    };

@@ -94,7 +94,8 @@ define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authe
       .when('/2016/np-mop-2/documents', { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meetingId: 'NP-MOP-02' }), meeting: resolveLiteral('NP-MOP-02') }, reloadOnSearch:false })
       .when('/2016/schedules',          { templateUrl : 'views/meetings/documents/agenda.html',    resolveController : true, resolve: { routePrams: injectRouteParams({ streamId:  '2677703125163603' }), streamId:resolveLiteral('2677703125163603'), eventId: resolveLiteral('56f14b1e49a977d560a27ede') } })
 
-      .when('/management/:meeting/documents/:id',  { templateUrl : 'views/meetings/documents/management/document-id.html', resolveController : true, resolve : { user : securize(["Administrator","EditorialService"]) }, reloadOnSearch:false })
+      .when('/management/import-translations',     { templateUrl : 'views/meetings/documents/management/translations.html', resolveController : true, resolve : { user : securize(["Administrator","EditorialService"]) } })
+      .when('/management/:meeting/documents/:id',  { templateUrl : 'views/meetings/documents/management/document-id.html',  resolveController : true, resolve : { user : securize(["Administrator","EditorialService"]) }, reloadOnSearch:false });
     }
 
   //============================================================
