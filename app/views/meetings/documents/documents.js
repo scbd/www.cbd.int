@@ -163,7 +163,7 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
 
             if(!_.some(_ctrl.tabs, { code: 'notification' })) {
 
-                _ctrl.documents = (_ctrl.documents).concat(_ctrl.notifications);
+                _ctrl.documents = (_ctrl.documents||[]).concat(_ctrl.notifications);
 
                 _ctrl.tabs.push({
                     code : 'notification',
