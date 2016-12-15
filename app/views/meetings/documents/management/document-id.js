@@ -32,6 +32,7 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
 
         var _ctrl = $scope.editCtrl = this;
         var document_bak;
+        var forceUpdate;
 
         _ctrl.addItem     = addItem;
         _ctrl.removeItem  = removeItem;
@@ -68,11 +69,12 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
                 if(document.metadata && document.metadata.message)
                     document.metadata.message.level = document.metadata.message.level || "";
 
-                document_bak          = _.cloneDeep(document); //fullclone
-                document_bak.metadata = document_bak.metadata || { force:1 };
+                document_bak = _.cloneDeep(document); //fullclone
 
                 _ctrl.document       = document;
                 _ctrl.document.files = document.files || [];
+
+                forceUpdate = document.files.length && !((document.metadata||{}).patterns||[]).length;
 
                 initFiles();
 
@@ -98,7 +100,7 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
 
             var req = $q.resolve(newDoc._id);
 
-            var hasChange = !newDoc._id || JSON.stringify(newDoc) != JSON.stringify(oldDoc);
+            var hasChange = forceUpdate || !newDoc._id || JSON.stringify(newDoc) != JSON.stringify(oldDoc);
 
             if(hasChange) { // update only if any chnages;
 
