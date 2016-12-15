@@ -68,9 +68,11 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
                 if(document.metadata && document.metadata.message)
                     document.metadata.message.level = document.metadata.message.level || "";
 
-                document.files = document.files || [];
-                document_bak   = _.cloneDeep(document); //fullclone
-                _ctrl.document = document;
+                document_bak          = _.cloneDeep(document); //fullclone
+                document_bak.metadata = document_bak.metadata || { force:1 };
+
+                _ctrl.document       = document;
+                _ctrl.document.files = document.files || [];
 
                 initFiles();
 
@@ -148,10 +150,12 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
                 agendaItems: document.agendaItems,
                 title:       document.title,
                 description: document.description,
-                metadata:    _.clone(document.metadata||{}, true),
+                metadata:    _.cloneDeep(document.metadata||{}),
             };
 
-            if(doc.metadata && doc.metadata.message)
+            doc.metadata.patterns = _(document.files).map('name').map(parseFilename).map('prefix').uniq().sort().value();
+
+            if(doc.metadata.message)
                 doc.metadata.message.level = doc.metadata.message.level || null;
 
             return doc;
@@ -287,7 +291,7 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
                 languages : _(files).map('language').uniq().sort().value(),
                 types     : _(files).map('type'    ).uniq().sort().value(),
                 names     : _(files).map('name'    ).uniq().sort().value(),
-                prefixes  : _(files).map(function(f){ return parseFilename(f.name).prefix; }).uniq().sort().value()
+                prefixes  : _(files).map('name'    ).map(parseFilename).map('prefix').uniq().sort().value()
             };
 
             _.forEach(files, function(f){
