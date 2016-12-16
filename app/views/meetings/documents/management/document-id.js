@@ -32,6 +32,8 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
 
         var _ctrl = $scope.editCtrl = this;
         var document_bak;
+        var supersede_bak;
+
         var forceUpdate;
 
         _ctrl.addItem     = addItem;
@@ -78,6 +80,8 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
 
                 initFiles();
 
+                return loadSupersede();
+
             }).catch(function(err) {
                 _ctrl.error = err.data || err;
                 console.error(err);
@@ -116,7 +120,7 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
                 });
             }
 
-            req.then(function(docId){
+            req.then(function(docId) {
 
                 var delQ = _.map(filesToDelete, function(f){
                     return $http.delete('/api/v2016/documents/'+docId+'/files/'+f._id);
@@ -130,6 +134,10 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
 
             }).then(function(){
 
+                return saveSupersede();
+
+            }).then(function(){
+
                 close();
 
             }).catch(function(err) {
@@ -137,6 +145,97 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
                 console.error(err);
             });
         }
+
+        //==============================
+        //
+        //==============================
+        function loadSupersede() {
+
+            return $http.get('/api/v2016/meetings/'+meetingId+'/documents').then(function(res) {
+
+                _ctrl.meetingDocuments  = _(res.data).forEach(function(d){
+                    d.display = (d.symbol || d.title.en) + ((d.metadata && d.metadata.superseded && ' - (Superseded by '+d.metadata.superseded+')')||'') ;
+                    d.sortKey = sortKey(d);
+                }).sortBy(sortKey).value();
+
+                _ctrl.meetingDocuments.unshift({ _id : undefined, display : ""});
+
+                if(_ctrl.document._id) {
+                    _ctrl.supersede = _(_ctrl.meetingDocuments).filter(function(d) { return d.metadata && d.metadata.superseded===_ctrl.document.symbol; }).map('_id').first();
+                    supersede_bak   = _ctrl.supersede;
+                }
+
+            }).catch(function(err) {
+                _ctrl.error = err.data || err;
+                console.error(err);
+            });
+        }
+
+        //==============================
+        //
+        //==============================
+        function saveSupersede() {
+
+            if(!_ctrl.document._id)             return;
+            if( _ctrl.supersede==supersede_bak) return;
+
+            var old = null;
+
+            if(supersede_bak) {
+
+                old = $q.when(null).then(function(){
+
+                    return $http.get('/api/v2016/meetings/'+meetingId+'/documents/'+supersede_bak).then(resData);
+
+                }).then(function(doc) {
+
+                    if(!doc.metadata || !doc.metadata.superseded)
+                        return;
+
+                    delete doc.metadata.superseded;
+
+                    return $http.put('/api/v2016/meetings/'+meetingId+'/documents/'+doc._id, doc);
+
+                }).then(function(){
+
+                    supersede_bak = undefined;
+
+                }).catch(function(err) {
+                    _ctrl.error = err.data || err;
+                    console.error(err);
+                    throw err;
+                });
+            }
+
+            if(_ctrl.supersede) {
+
+                $q.when(old).then(function(){
+
+                    return $http.get('/api/v2016/meetings/'+meetingId+'/documents/'+_ctrl.supersede).then(resData);
+
+                }).then(function(doc) {
+
+                    doc.metadata = doc.metadata || {};
+                    doc.metadata.superseded = _ctrl.document.symbol || _ctrl.document.title.en;
+
+                    return $http.put('/api/v2016/meetings/'+meetingId+'/documents/'+doc._id, doc);
+
+                }).then(function(){
+
+                    supersede_bak = _ctrl.supersede;
+
+                }).catch(function(err) {
+                    _ctrl.error = err.data || err;
+                    console.error(err);
+                    throw err;
+                });
+
+                _ctrl.supersede
+            }
+
+
+        }
+
 
         //==============================
         //
@@ -352,5 +451,36 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
             delete _ctrl.error;
             delete _ctrl.fileError;
         }
+
+        //==============================
+        //
+        //==============================
+        function sortKey(d) {
+
+            var typePos;
+
+                 if(d.type=="report")      typePos = 10;
+            else if(d.type=="outcome")     typePos = 20;
+            else if(d.type=="limited")     typePos = 30;
+            else if(d.type=="crp")         typePos = 40;
+            else if(d.type=="non-paper")   typePos = 50;
+            else if(d.type=="official")    typePos = 60;
+            else if(d.type=="information") typePos = 70;
+            else if(d.type=="other")       typePos = 80;
+            else if(d.type=="statement")   typePos = 90;
+
+            return ("000000000" + (typePos   ||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
+                   (d.group||'') + '_' +
+                 //  ((d.metadata||{}).superseded ? '1' : '0') + '_' +
+                   ("000000000" + (d.position||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
+                   (d.symbol||"").replace(/\b(\d)\b/g, '0$1')
+                                 .replace(/(\/REV)/gi, '0$1')
+                                 .replace(/(\/ADD)/gi, '1$1');
+        }
+
+        //====================================
+        //
+        //====================================
+        function resData(res) { return res.data; }
 	}];
 });

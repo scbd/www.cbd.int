@@ -145,10 +145,22 @@
         </div>
 
         <!-- Superseded -->
+        <div class="row">
 
-        <div class="form-group">
-            <label class="control-label text-muted" style="text-decoration:line-through" for="superseded">Superseded By</label>
-            <input ng-disabled="uploading" type="text" class="form-control" id="symbol" ng-model="editCtrl.document.metadata.superseded" placeholder="Type symbol..."/>
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label class="control-label" for="supersede">Supersede</label>
+                    <select ng-disabled="uploading" class="form-control" id="supersede" ng-options="item._id as item.display disable when item.metadata.superseded for item in editCtrl.meetingDocuments" ng-model="editCtrl.supersede"></select>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label class="control-label text-muted" style="text-decoration:line-through" for="superseded">Superseded By</label>
+                    <input ng-disabled="uploading" type="text" class="form-control" id="superseded" ng-model="editCtrl.document.metadata.superseded" placeholder="Type symbol..."/>
+                </div>
+            </div>
+
         </div>
 
         <!-- Message -->
