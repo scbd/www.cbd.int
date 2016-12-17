@@ -41,6 +41,7 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
         _ctrl.removeFile  = removeFile;
         _ctrl.upload      = upload;
         _ctrl.fileCache   = {};
+        _ctrl.normalizeSymbol=normalizeSymbol;
 
         _ctrl.clearErrors = clearErrors;
         _ctrl.save   = save;
@@ -450,6 +451,14 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
         function clearErrors() {
             delete _ctrl.error;
             delete _ctrl.fileError;
+        }
+
+
+        //==============================
+        //
+        //==============================
+        function normalizeSymbol(symbol) {
+            return symbol.toUpperCase().replace(/[^A-Z0-9\/\-]/gi, '');
         }
 
         //==============================
