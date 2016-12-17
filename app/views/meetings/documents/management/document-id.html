@@ -6,7 +6,7 @@
     </div>
 
 
-    <h1>{{editCtrl.meeting.EVT_CD}} - {{editCtrl.document.symbol||'new'}}</h1>
+    <h1>{{editCtrl.meeting.EVT_CD}} - {{editCtrl.document.symbol}} <small ng-if="!editCtrl.document._id">(NEW)</small></h1>
 
     <!-- ERROR -->
     <pre ng-if="editCtrl.error" class="alert alert-danger">{{editCtrl.error|json}}</pre>
