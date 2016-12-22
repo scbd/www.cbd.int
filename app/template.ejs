@@ -318,11 +318,11 @@
             <div class="row">
                 <table class="meetingnav-table">
                     <tr>
-                        <td class="notselected meetingnav-button">
+                        <td ng-if="false" class="notselected meetingnav-button">
                             <a href="/conferences/2016" class="link"></a>
                             <img src="/app/images/cop13-logo.png?v=<%=gitVersion%>" style="width:44px;height:44px">
                         </td>
-                        <td class="meetingnav-button" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/schedules')}">
+                        <td ng-if="false" class="meetingnav-button" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/schedules')}">
                             <a href="/conferences/2016/schedules" class="link"></a>
                             <div class="hidden-xs" style="font-size:12px;font-weight:bold">SCHEDULE</div>
                             <i class="fa fa-clock-o visible-xs" aria-hidden="true" style="font-size:24px"></i>
