@@ -86,13 +86,13 @@ define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authe
       $("base").attr('href', '/conferences/'); // allow full page reload outside of  /insession/*
 
       routeProvider
-      .when('/',                        { redirectTo: '/2016' })
-      .when('/2016',                    { templateUrl : 'views/meetings/cop13/index.html' })
+      .when('/',                        { redirectTo: '/2016/cop-13/documents' })
+      .when('/2016',                    { redirectTo: '/2016/cop-13/documents' })
       .when('/2016/cop-13-hls/documents',{templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meetingId: 'COP13-HLS' }), meeting: resolveLiteral('COP13-HLS') }, reloadOnSearch:false })
       .when('/2016/cop-13/documents',   { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meetingId: 'COP-13'    }), meeting: resolveLiteral('COP-13')    }, reloadOnSearch:false })
       .when('/2016/cp-mop-8/documents', { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meetingId: 'MOP-08'    }), meeting: resolveLiteral('MOP-08')    }, reloadOnSearch:false })
       .when('/2016/np-mop-2/documents', { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meetingId: 'NP-MOP-02' }), meeting: resolveLiteral('NP-MOP-02') }, reloadOnSearch:false })
-      .when('/2016/schedules',          { templateUrl : 'views/meetings/documents/agenda.html',    resolveController : true, resolve: { routePrams: injectRouteParams({ streamId:  '2677703125163603' }), streamId:resolveLiteral('2677703125163603'), eventId: resolveLiteral('56f14b1e49a977d560a27ede') } })
+      .when('/2016/schedules',          { redirectTo: '/2016/cop-13/documents' })
 
       .when('/management/import-translations',     { templateUrl : 'views/meetings/documents/management/translations.html', resolveController : true, resolve : { user : securize(["Administrator","EditorialService"]) } })
       .when('/management/:meeting/documents/:id',  { templateUrl : 'views/meetings/documents/management/document-id.html',  resolveController : true, resolve : { user : securize(["Administrator","EditorialService"]) }, reloadOnSearch:false });
