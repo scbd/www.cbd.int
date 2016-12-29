@@ -86,8 +86,8 @@ define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authe
       $("base").attr('href', '/conferences/'); // allow full page reload outside of  /insession/*
 
       routeProvider
-      .when('/',                        { redirectTo: '/2016/cop-13/documents' })
-      .when('/2016',                    { redirectTo: '/2016/cop-13/documents' })
+      .when('/',                        { redirectTo: '/2016' })
+      .when('/2016',                    { templateUrl : 'views/meetings/cop13/index.html'})
       .when('/2016/cop-13-hls/documents',{templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meetingId: 'COP13-HLS' }), meeting: resolveLiteral('COP13-HLS') }, reloadOnSearch:false })
       .when('/2016/cop-13/documents',   { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meetingId: 'COP-13'    }), meeting: resolveLiteral('COP-13')    }, reloadOnSearch:false })
       .when('/2016/cp-mop-8/documents', { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meetingId: 'MOP-08'    }), meeting: resolveLiteral('MOP-08')    }, reloadOnSearch:false })
