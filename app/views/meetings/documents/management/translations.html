@@ -1,0 +1,69 @@
+<div>
+
+    <style>
+        #uploadForm.drop.dragover {
+            background-color: white;
+            border: 2px dashed black;
+        }
+        #uploadForm.drop.dragover fa {
+            color:blue;
+        }
+    </style>
+
+    <form id="uploadForm" class="alert"  ng-class="{ 'alert-info': !dragOver, 'alert-success': dragOver }" name="uploadForm" method="post" action="" enctype="multipart/form-data" style="">
+        <label for="files" class="text-center" style="cursor:pointer;display:block;">
+            <i class="fa fa-cloud-upload" style="font-size:96px" aria-hidden="true"></i><br>
+            <strong>Choose files</strong><span ng-if="allowDragDrop"> or drag them here</span>
+        </label>
+        <input class="hidden" ng-disabled="uploading" type="file" auto-reset="true" id="files" name="files" ng-model="filesToUpload" data-multiple-caption="{count} files selected" multiple  />
+    </form>
+
+    <table class="table table-striped">
+        <tr>
+            <th style="width:10px"></th>
+            <th style="width:10px">Type</th>
+            <th>File</th>
+            <th style="width:10px">Language</th>
+            <th>Document</th>
+            <th></th>
+        </tr>
+        <tr ng-repeat="f in files" ng-class="{ danger : f.status=='error', success: f.status=='completed', warning : f.status=='canceled' }">
+            <td style="width:10px">{{$index+1}}.</td>
+            <td class="text-nowrap">
+                <i style="color:{{(FILETYPES[f.type]||FILETYPES.default).color}}" class="fa {{(FILETYPES[f.type]||FILETYPES.default).icon}}"></i>
+                {{(FILETYPES[f.type]||FILETYPES.default).title}}
+            </td>
+            <td>{{f.name}}</td>
+            <td class="text-nowrap">{{LANGUAGES[f.language] || f.language}}</td>
+            <td>
+                <div title="{{f.document.meeting}}">
+                    {{f.document.symbol || (f.document.title | lstring)}}
+                </div>
+            </td>
+            <td class="text-right">
+
+                {{f.error}}
+
+                <span ng-if="f.ask" class="text-nowrap">
+                    {{f.ask.message}}
+                    <button type="button" class="btn btn-default btn-xs" ng-click="f.ask.yes()">Yes</button>
+                    <button type="button" class="btn btn-default btn-xs" ng-click="f.ask.no()">No</button>
+                </span>
+
+                <span ng-if="f.status=='uploading'">{{f.upload.progress}}%</span>
+
+                <span>
+                    <i ng-if="f.status=='uploading' || f.status=='lookupDocuments'" class="fa fa-cog   fa-fw" ng-class="{ 'fa-spin': !f.ask } "></i>
+                    <i ng-if="f.status=='completed'" class="fa fa-check fa-fw" ng-click="remove(f)" style="cursor:pointer"></i>
+                    <i ng-if="f.status=='canceled'"  class="fa fa-ban fa-fw"   ng-click="remove(f)" style="cursor:pointer"></i>
+                    <i ng-if="f.status=='error'"     class="fa fa-times fa-fw" ng-click="remove(f)" style="cursor:pointer"></i>
+                </span>
+            </td>
+        </tr>
+
+        <tr ng-if="files.length==0">
+            <td colspan="7">No files uploaded</td>
+        </tr>
+
+    </table>
+</div>

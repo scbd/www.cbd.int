@@ -19,7 +19,7 @@
             </div>
 
             <div ng-if="::document.metadata.message" style="opacity:0.40">
-                <span class="label label-{{::document.metadata.message.level||'default'}}">{{::document.metadata.message.text}}</span>
+                <span class="label label-{{::document.metadata.message.level||'default'}}" style="display:inline-block;white-space:normal;text-align:left">{{::document.metadata.message.text}}</span>
             </div>
 
             <div ng-if="::document.recipient_ss.length">Notification to: <span ng-repeat="recipient in ::document.recipient_ss"> {{::recipient}}</div>

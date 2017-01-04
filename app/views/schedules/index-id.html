@@ -69,8 +69,8 @@
                                     <td class="schedule-item-time text-right" class="text-nowrap" style="width:55px">
                                         <div class="text-primary"><b>{{r.start | moment:'tz':scheduleCtrl.event.timezone | moment:'format':'H:mm'}}</b></div>
                                         <div class="small text-muted">
-                                            <span ng-hide="r.type.closed">Open</span>
-                                            <span ng-show="r.type.closed">Closed</span>
+                                            <span ng-show="r.open">Open</span>
+                                            <span ng-hide="r.open">Closed</span>
                                         </div>
                                     </td>
                                     <td>
@@ -83,22 +83,25 @@
                                             </div>
                                         </div>
 
-                                        <div class="schedule-item-location">
-                                            <b class="room">{{r.room.title}}</b>
-                                            <em class="small text-muted">{{r.room.location}}</em>
+                                        <div class="schedule-item-title" style="font-weight:bold">
+                                            {{r.sideEvent.title || r.title}}
                                         </div>
 
-                                        <div class="schedule-item-title">
-                                            {{r.sideEvent.title || r.title}}
-                                            <div ng-if="r.agenda.visible && r.agenda.items.length">
-                                                <span ng-repeat="item in r.agenda.items">
-                                                    <span class="label agenda {{item.prefix}}" title="item.title">{{item.prefix}} {{item.item}}</span>
-                                                    <span ng-if="(item.text || item.title) != (r.agenda.items[$index+1].text || r.agenda.items[$index+1].title)">
-                                                        {{item.text || item.title}} <br>
-                                                    </span>
-                                                </div>
+                                        <div class="schedule-item-location">
+                                            <em>{{r.room.title}}</em>
+                                            <em ng-if="r.room.location">- {{r.room.location}}</em>
+                                        </div>
+
+                                        <div ng-if="r.agenda.visible && r.agenda.items.length">
+                                            <span ng-repeat="item in r.agenda.items">
+                                                <span class="label agenda {{item.prefix}}" title="item.title" style="width:51px">{{item.prefix}} {{item.item}}</span>
+                                                <span ng-if="(item.title+item.text) != (r.agenda.items[$index+1].title+r.agenda.items[$index+1].text)">
+                                                    {{item.title}} <span ng-if="::item.text"> - <b>{{item.text}}</b></span> <br>
+                                                </span>
+
                                             </div>
                                         </div>
+
                                     </td>
                                 </tr>
                             </table>

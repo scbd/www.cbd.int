@@ -43,16 +43,16 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
             documents = $http.get('/api/v2016/meetings/'+meetingCode+'/documents', { params: {  } }).then(function(res){
 
                 documents = _(res.data).map(function(d){
-                    d.metadata = d.metadata || {};
-                    _.defaults(d.metadata, {
-                        printable: ['crp', 'limited', 'non-paper'].indexOf(d.type)>=0
+                    d.metadata = _.defaults(d.metadata||{}, {
+                        printable: ['crp', 'limited', 'non-paper'].indexOf(d.type)>=0,
+                        visible : !!(d.files||[]).length
                     });
 
                     return d;
 
                 }).filter(function(d){
 
-                    return _ctrl.editMode || (d.files && d.files.length);
+                    return _ctrl.editMode || d.metadata.visible;
 
                 }).sortBy(sortKey).value();
 
@@ -163,7 +163,7 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
 
             if(!_.some(_ctrl.tabs, { code: 'notification' })) {
 
-                _ctrl.documents = (_ctrl.documents).concat(_ctrl.notifications);
+                _ctrl.documents = (_ctrl.documents||[]).concat(_ctrl.notifications);
 
                 _ctrl.tabs.push({
                     code : 'notification',

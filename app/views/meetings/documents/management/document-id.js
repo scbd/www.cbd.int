@@ -32,12 +32,16 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
 
         var _ctrl = $scope.editCtrl = this;
         var document_bak;
+        var supersede_bak;
+
+        var forceUpdate;
 
         _ctrl.addItem     = addItem;
         _ctrl.removeItem  = removeItem;
         _ctrl.removeFile  = removeFile;
         _ctrl.upload      = upload;
         _ctrl.fileCache   = {};
+        _ctrl.normalizeSymbol=normalizeSymbol;
 
         _ctrl.clearErrors = clearErrors;
         _ctrl.save   = save;
@@ -68,11 +72,16 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
                 if(document.metadata && document.metadata.message)
                     document.metadata.message.level = document.metadata.message.level || "";
 
-                document.files = document.files || [];
-                document_bak   = _.clone(document, true); //fullclone
-                _ctrl.document = document;
+                document_bak = _.cloneDeep(document); //fullclone
+
+                _ctrl.document       = document;
+                _ctrl.document.files = document.files || [];
+
+                forceUpdate = document.files.length && !((document.metadata||{}).patterns||[]).length;
 
                 initFiles();
+
+                return loadSupersede();
 
             }).catch(function(err) {
                 _ctrl.error = err.data || err;
@@ -86,45 +95,33 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
         //==============================
         function save() {
 
-            var doc = {
-                _id:         _ctrl.document._id,
-                symbol:      _ctrl.document.symbol || undefined,
-                type:        _ctrl.document.type,
-                group:       _ctrl.document.group  || undefined,
-                date:        _ctrl.document.date   || new Date(),
-                agendaItems: _ctrl.document.agendaItems,
-                title:       _ctrl.document.title,
-                description: _ctrl.document.description,
-                metadata:    _.clone(_ctrl.document.metadata||{}, true),
-            };
-
-                if(doc.metadata && doc.metadata.message)
-                    doc.metadata.message.level = doc.metadata.message.level || null;
-
+            var oldDoc = prepareData(document_bak);
+            var newDoc = prepareData(_ctrl.document);
 
             var fileIds       = _(_ctrl.document.files).map('_id').compact().uniq().value();
 
             var filesToCreate = _(_ctrl.document.files||[]).filter(function(f) { return !f._id;                   }).value();
             var filesToDelete = _(document_bak  .files||[]).filter(function(f) { return !~fileIds.indexOf(f._id); }).value();
 
-            var httpReq = {
-                method : 'POST',
-                url    : '/api/v2016/meetings/'+meetingId+'/documents',
-                data   : doc
-            };
+            var req = $q.resolve(newDoc._id);
 
-            if(doc._id) {
-                httpReq.method = 'PUT';
-                httpReq.url   += '/'+doc._id;
+            var hasChange = forceUpdate || !newDoc._id || JSON.stringify(newDoc) != JSON.stringify(oldDoc);
+
+            if(hasChange) { // update only if any chnages;
+
+                req = $http({
+                    data   : newDoc,
+                    method : newDoc._id ? 'PUT' : 'POST',
+                    url    : newDoc._id ? '/api/v2016/meetings/'+meetingId+'/documents/'+newDoc._id :
+                                          '/api/v2016/meetings/'+meetingId+'/documents'
+                }).then(function(res) {
+
+                    return (_ctrl.document._id = _ctrl.document._id || res.data._id);
+
+                });
             }
 
-            $http(httpReq).then(function(res) {
-
-                _ctrl.document._id = _ctrl.document._id || res.data._id;
-
-                return _ctrl.document._id;
-
-            }).then(function(docId){
+            req.then(function(docId) {
 
                 var delQ = _.map(filesToDelete, function(f){
                     return $http.delete('/api/v2016/documents/'+docId+'/files/'+f._id);
@@ -138,12 +135,132 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
 
             }).then(function(){
 
+                return saveSupersede();
+
+            }).then(function(){
+
                 close();
 
             }).catch(function(err) {
                 _ctrl.error = err.data || err;
                 console.error(err);
             });
+        }
+
+        //==============================
+        //
+        //==============================
+        function loadSupersede() {
+
+            return $http.get('/api/v2016/meetings/'+meetingId+'/documents').then(function(res) {
+
+                _ctrl.meetingDocuments  = _(res.data).forEach(function(d){
+                    d.display = (d.symbol || d.title.en) + ((d.metadata && d.metadata.superseded && ' - (Superseded by '+d.metadata.superseded+')')||'') ;
+                    d.sortKey = sortKey(d);
+                }).sortBy(sortKey).value();
+
+                _ctrl.meetingDocuments.unshift({ _id : undefined, display : ""});
+
+                if(_ctrl.document._id) {
+                    _ctrl.supersede = _(_ctrl.meetingDocuments).filter(function(d) { return d.metadata && d.metadata.superseded===_ctrl.document.symbol; }).map('_id').first();
+                    supersede_bak   = _ctrl.supersede;
+                }
+
+            }).catch(function(err) {
+                _ctrl.error = err.data || err;
+                console.error(err);
+            });
+        }
+
+        //==============================
+        //
+        //==============================
+        function saveSupersede() {
+
+            if(!_ctrl.document._id)             return;
+            if( _ctrl.supersede==supersede_bak) return;
+
+            var old = null;
+
+            if(supersede_bak) {
+
+                old = $q.when(null).then(function(){
+
+                    return $http.get('/api/v2016/meetings/'+meetingId+'/documents/'+supersede_bak).then(resData);
+
+                }).then(function(doc) {
+
+                    if(!doc.metadata || !doc.metadata.superseded)
+                        return;
+
+                    delete doc.metadata.superseded;
+
+                    return $http.put('/api/v2016/meetings/'+meetingId+'/documents/'+doc._id, doc);
+
+                }).then(function(){
+
+                    supersede_bak = undefined;
+
+                }).catch(function(err) {
+                    _ctrl.error = err.data || err;
+                    console.error(err);
+                    throw err;
+                });
+            }
+
+            if(_ctrl.supersede) {
+
+                $q.when(old).then(function(){
+
+                    return $http.get('/api/v2016/meetings/'+meetingId+'/documents/'+_ctrl.supersede).then(resData);
+
+                }).then(function(doc) {
+
+                    doc.metadata = doc.metadata || {};
+                    doc.metadata.superseded = _ctrl.document.symbol || _ctrl.document.title.en;
+
+                    return $http.put('/api/v2016/meetings/'+meetingId+'/documents/'+doc._id, doc);
+
+                }).then(function(){
+
+                    supersede_bak = _ctrl.supersede;
+
+                }).catch(function(err) {
+                    _ctrl.error = err.data || err;
+                    console.error(err);
+                    throw err;
+                });
+
+                _ctrl.supersede
+            }
+
+
+        }
+
+
+        //==============================
+        //
+        //==============================
+        function prepareData(document) {
+
+            var doc = {
+                _id:         document._id,
+                symbol:      document.symbol || undefined,
+                type:        document.type,
+                group:       document.group  || undefined,
+                date:        document.date   || new Date(),
+                agendaItems: document.agendaItems,
+                title:       document.title,
+                description: document.description,
+                metadata:    _.cloneDeep(document.metadata||{}),
+            };
+
+            doc.metadata.patterns = _(document.files).map('name').map(parseFilename).map('prefix').uniq().sort().value();
+
+            if(doc.metadata.message)
+                doc.metadata.message.level = doc.metadata.message.level || null;
+
+            return doc;
         }
 
         //==============================
@@ -254,6 +371,8 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
         //==============================
         function parseFilename(filename) {
 
+            filename = filename.toLowerCase();
+
             var matches = filename.match(/-([a-z]{2})\.[a-z]+$/i);
 
             return {
@@ -274,7 +393,7 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
                 languages : _(files).map('language').uniq().sort().value(),
                 types     : _(files).map('type'    ).uniq().sort().value(),
                 names     : _(files).map('name'    ).uniq().sort().value(),
-                prefixes  : _(files).map(function(f){ return parseFilename(f.name).prefix; }).uniq().sort().value()
+                prefixes  : _(files).map('name'    ).map(parseFilename).map('prefix').uniq().sort().value()
             };
 
             _.forEach(files, function(f){
@@ -333,5 +452,44 @@ define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], f
             delete _ctrl.error;
             delete _ctrl.fileError;
         }
+
+
+        //==============================
+        //
+        //==============================
+        function normalizeSymbol(symbol) {
+            return symbol.toUpperCase().replace(/[^A-Z0-9\/\-]/gi, '');
+        }
+
+        //==============================
+        //
+        //==============================
+        function sortKey(d) {
+
+            var typePos;
+
+                 if(d.type=="report")      typePos = 10;
+            else if(d.type=="outcome")     typePos = 20;
+            else if(d.type=="limited")     typePos = 30;
+            else if(d.type=="crp")         typePos = 40;
+            else if(d.type=="non-paper")   typePos = 50;
+            else if(d.type=="official")    typePos = 60;
+            else if(d.type=="information") typePos = 70;
+            else if(d.type=="other")       typePos = 80;
+            else if(d.type=="statement")   typePos = 90;
+
+            return ("000000000" + (typePos   ||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
+                   (d.group||'') + '_' +
+                 //  ((d.metadata||{}).superseded ? '1' : '0') + '_' +
+                   ("000000000" + (d.position||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
+                   (d.symbol||"").replace(/\b(\d)\b/g, '0$1')
+                                 .replace(/(\/REV)/gi, '0$1')
+                                 .replace(/(\/ADD)/gi, '1$1');
+        }
+
+        //====================================
+        //
+        //====================================
+        function resData(res) { return res.data; }
 	}];
 });

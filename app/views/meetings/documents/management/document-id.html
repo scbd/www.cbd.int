@@ -6,7 +6,7 @@
     </div>
 
 
-    <h1>{{editCtrl.meeting.EVT_CD}} - {{editCtrl.document.symbol||'new'}}</h1>
+    <h1>{{editCtrl.meeting.EVT_CD}} - {{editCtrl.document.symbol}} <small ng-if="!editCtrl.document._id">(NEW)</small></h1>
 
     <!-- ERROR -->
     <pre ng-if="editCtrl.error" class="alert alert-danger">{{editCtrl.error|json}}</pre>
@@ -18,12 +18,14 @@
                 <!-- Symbols -->
                 <div class="form-group">
                     <label for="symbol">Symbol</label>
-                    <!-- <div class="input-group"> -->
+                    <div class="input-group">
                         <input ng-disabled="uploading" type="text" class="form-control" id="symbol" ng-model="editCtrl.document.symbol" placeholder="UNEP/CBD/...">
-                        <!-- <span class="input-group-btn">
-                            <button ng-disabled="true" class="btn btn-default" ng-click="validateSymbol()" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
-                        </span> -->
-                    <!-- </div> -->
+                        <span class="input-group-btn">
+                            <button  class="btn btn-default" ng-click="editCtrl.document.symbol=editCtrl.normalizeSymbol(editCtrl.document.symbol||'')" type="button"
+                                    ng-class="{ 'btn-warning' : editCtrl.document.symbol && editCtrl.document.symbol != editCtrl.normalizeSymbol(editCtrl.document.symbol||'') }"
+                            ><i class="fa fa-check" aria-hidden="true"></i></button>
+                        </span>
+                    </div>
                 </div>
 
             </div>
@@ -145,15 +147,28 @@
         </div>
 
         <!-- Superseded -->
+        <div class="row">
 
-        <div class="form-group">
-            <label class="control-label text-muted" style="text-decoration:line-through" for="superseded">Superseded By</label>
-            <input ng-disabled="uploading" type="text" class="form-control" id="symbol" ng-model="editCtrl.document.metadata.superseded" placeholder="Type symbol..."/>
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label class="control-label" for="supersede">Supersede</label>
+                    <select ng-disabled="uploading" class="form-control" id="supersede" ng-options="item._id as item.display disable when item.metadata.superseded for item in editCtrl.meetingDocuments" ng-model="editCtrl.supersede"></select>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="form-group">
+                    <label class="control-label text-muted" style="text-decoration:line-through" for="superseded">Superseded By</label>
+                    <input ng-disabled="uploading" type="text" class="form-control" id="superseded" ng-model="editCtrl.document.metadata.superseded" placeholder="Type symbol..."/>
+                </div>
+            </div>
+
         </div>
 
         <!-- Message -->
         <div class="row">
             <style>
+                .level-success { color: #5cb85c; }
                 .level-info    { color: #428bca; }
                 .level-warning { color: #c09853; }
                 .level-danger  { color: #b94a48; }
@@ -179,6 +194,7 @@
                     <label for="symbol">Level</label>
                     <select ng-disabled="uploading" class="form-control message-{{editCtrl.document.metadata.message.level}}" ng-model="editCtrl.document.metadata.message.level">
                         <option value="">Default</option>
+                        <option value="success">Success</option>
                         <option value="info">Info</option>
                         <option value="warning">Warning</option>
                         <option value="danger">Alert</option>
@@ -274,7 +290,7 @@
                 <i style="color:{{(FILETYPES[editCtrl.fileError.new.type]||FILETYPES.default).color}}" class="fa {{(FILETYPES[editCtrl.fileError.new.type]||FILETYPES.default).icon}}"></i>
                 {{editCtrl.fileError.new.name}} <em>{{(LANGUAGES[editCtrl.fileError.new.language]||editCtrl.fileError.new.language)|uppercase}}</em> <em>{{FILETYPES[editCtrl.fileError.new.type].title||editCtrl.fileError.new.type}}</em><br/><br/>
 
-                Please uploade a new file with language at the end. eg: "cop-xx-crp-yy<b>-en</b>.pdf, cop-xx-crp-yy<b>-ar</b>.doc .., "
+                Please uploade a new file with language at the end. eg: "cop-xx-crp-yy<b>-en</b>.pdf, cop-xx-crp-yy<b>-ar</b>.doc ... "
             </div>
 
             <!-- ERROR FILENAME -->
@@ -285,7 +301,15 @@
 
                 {{editCtrl.fileError.new.name}}<br/><br/>
 
-                Filename can only contains letters, '-' and '.'
+                Filename can only contains 'letters', '-' and '.'
+            </div>
+
+            <!-- ERROR FILENAME -->
+            <div class="alert alert-warning" role="alert" ng-if="editCtrl.fileCache.prefixes.length>1">
+                <b>Mutiples filenames</b> Maybe you have an error...<br/>
+                <ul>
+                    <li ng-repeat="name in editCtrl.fileCache.names|orderBy">{{name}}</li>
+                </ul>
             </div>
 
             <!-- FILES -->
