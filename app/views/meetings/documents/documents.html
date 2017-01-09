@@ -40,41 +40,25 @@
         .nav-tabs>li[code='in-session']>div.bg      { position:absolute;top:-21px;left:0px;right:-2px;height:62px;background-color:#eee;border-radius: 4px 4px 0 0;border-top:1px solid #ddd;border-left:1px solid #ddd;border-right:1px solid #ddd;}
         .nav-tabs>li[code='in-session/wg1']>div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0 4px 0 0  ;border-top:1px solid #ddd;border-right:1px solid #ddd;}
         .nav-tabs>li[code='in-session/wg2']>div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0 4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
-
-        .nav-tabs>li[code='other'] { display: none; }
-        .nav-tabs>li[code='statement'] { display: none; }
-        .nav-tabs>li[code='notification'] { display: none; }
-        .nav-tabs>li>ul>li[code='in-session'] { display: none; }
-        .nav-tabs>li>ul>li[code='in-session/wg1'] { display: none; }
-        .nav-tabs>li>ul>li[code='in-session/wg2'] { display: none; }
-
-        @media (max-width: 767px) {
-            .nav-tabs>li[code='official'] { display: none; }
-            .nav-tabs>li[code='information'] { display: none; }
-        }
-        @media (min-width: 768px) {
-            .nav-tabs>li>ul>li[code='official'] { display: none; }
-            .nav-tabs>li>ul>li[code='information'] { display: none; }
-        }
     </style>
 
     <ul class="nav nav-tabs nowrap hidden-print" style="margin-top:20px" role="tablist">
-        <li ng-repeat="type in documentsCtrl.tabs" ng-class="{active:documentsCtrl.currentTab==type.code}" code="{{type.code}}">
+        <li ng-repeat="type in documentsCtrl.tabs|limitTo:documentsCtrl.maxTabCount" ng-class="{active:documentsCtrl.currentTab==type.code}" code="{{type.code}}">
             <div class="bg" ng-if="::type.code.startsWith('in-session')"></div>
             <div ng-if="::type.code=='in-session'" style="position:absolute;top:-18px;left:0px;right:2px;height:15px;font-size:10px;font-weight:bold;color:#444">&nbsp;&nbsp;&nbsp;IN-SESSION</div>
             <a href="#" ng-click="documentsCtrl.switchTab(type)" role="tab" data-toggle="tab">
                 {{::type.title}} ({{::type.documents.length}})
             </a>
         </li>
-        <li class="dropdown-toggle" ng-class="{active:!!documentsCtrl.currentExtraTab}">
+        <li class="dropdown-toggle" ng-class="{active:!!documentsCtrl.currentExtraTab}" ng-if="(documentsCtrl.tabs|limitTo:999:documentsCtrl.maxTabCount).length">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
                 <span>{{documentsCtrl.currentExtraTab||'More'}}</span>
                 <span class="caret">
             </a>
             <ul class="dropdown-menu">
-                <li ng-repeat="type in documentsCtrl.tabs" code="{{type.code}}">
+                <li ng-repeat="type in documentsCtrl.tabs|limitTo:999:documentsCtrl.maxTabCount" code="{{type.code}}">
                     <a href="#" ng-click="documentsCtrl.switchTab(type, true)">
-                        {{::type.title}} ({{::type.documents.length}})
+                        {{type.title}} ({{::type.documents.length}})
                      </a>
                 </li>
             </ul>
