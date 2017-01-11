@@ -79,17 +79,24 @@
                 <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr" id="title_en" ng-model="editCtrl.document.title.en" placeholder="English">
                 <span class="input-group-btn">
                     <button ng-disabled="uploading" class="btn btn-default" ng-click="showTitleLang=!showTitleLang" type="button"><i class="fa fa-caret-{{showTitleLang?'up':'down'}}" aria-hidden="true"></i></button>
+                    <change-case-button ng-model="editCtrl.document.title.en"></change-case-button>
                 </span>
             </div>
 
             <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
                 <span class="input-group-addon" style="min-width:45px">ES</span>
                 <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="title_es" ng-model="editCtrl.document.title.es"  placeholder="Spanish">
+                <span class="input-group-btn">
+                    <change-case-button ng-model="editCtrl.document.title.es"></change-case-button>
+                </span>
             </div>
 
             <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
                 <span class="input-group-addon" style="min-width:45px">FR</span>
                 <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="title_fr" ng-model="editCtrl.document.title.fr"  placeholder="French">
+                <span class="input-group-btn">
+                    <change-case-button ng-model="editCtrl.document.title.fr"></change-case-button>
+                </span>
             </div>
 
             <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
@@ -117,17 +124,24 @@
                 <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr" id="description_en" ng-model="editCtrl.document.description.en" placeholder="English">
                 <span class="input-group-btn">
                     <button ng-disabled="uploading" class="btn btn-default" ng-click="showDescriptionLang=!showDescriptionLang" type="button"><i class="fa fa-caret-{{showDescriptionLang?'up':'down'}}" aria-hidden="true"></i></button>
+                    <change-case-button ng-model="editCtrl.document.description.en"></change-case-button>
                 </span>
             </div>
 
             <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
                 <span class="input-group-addon" style="min-width:45px">ES</span>
                 <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="description_es" ng-model="editCtrl.document.description.es"  placeholder="Spanish">
+                <span class="input-group-btn">
+                    <change-case-button ng-model="editCtrl.document.description.es"></change-case-button>
+                </span>
             </div>
 
             <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
                 <span class="input-group-addon" style="min-width:45px">FR</span>
                 <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="description_fr" ng-model="editCtrl.document.description.fr"  placeholder="French">
+                <span class="input-group-btn">
+                    <change-case-button ng-model="editCtrl.document.description.fr"></change-case-button>
+                </span>
             </div>
 
             <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">

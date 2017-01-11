@@ -1,4 +1,4 @@
-define(['lodash', 'filters/lstring', 'directives/file','../meeting-document'], function(_) {
+define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', '../meeting-document'], function(_) {
 
     var MIMES = {
         'application/pdf':                                                            { title: 'PDF',               color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
