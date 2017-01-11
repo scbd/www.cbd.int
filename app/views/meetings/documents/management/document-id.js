@@ -230,11 +230,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                     console.error(err);
                     throw err;
                 });
-
-                _ctrl.supersede
             }
-
-
         }
 
 
