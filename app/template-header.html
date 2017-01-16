@@ -1,0 +1,327 @@
+<div>
+    <!-- HEADER (MOBILE) -->
+    <header class="mobile navbar visible-xs" role="banner">
+        <div class="container">
+
+            <div class="navbar-header">
+                <button class="navbar-toggle collapsed hidden-print" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                    <i class="fa fa-bars" style="font-size:1.66em;"></i>
+                </button>
+
+                <div ng-cloak ng-show="user" class="pull-right hidden-print">
+
+                    <a ng-hide="user.isAuthenticated"  ng-click="signIn()" href="#" class="navbar-toggle collapsed" style="text-decoration:none;color:#009B48" style="color: black">
+                        <i  class="fa fa-power-off" style="font-size:1.66em;"></i>
+                    </a>
+
+                    <div ng-show="user.isAuthenticated" class="dropdown">
+
+                        <button class="navbar-toggle collapsed" title="{{user.name}}" style="text-decoration:none;color:#009B48" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                          <i class="fa fa-user" style="font-size:1.66em;"></i>
+                        </button>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
+                            <li><a ng-click="profile()"  href="#" ><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
+                            <li><a ng-click="password()" href="#"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
+                            <li><a ng-click="signOut()"  href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
+                        </ul>
+                    </div>
+
+               </div> <!--  end sign in-->
+
+                <a href="/" target="_self">
+                    <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>" style="padding-top:4px;padding-left:2px"/></a>
+                </a>
+
+            </div>
+
+            <nav class="collapse navbar-collapse hidden-print" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/convention">The Convention</a></li>
+                    <li class="active"><a href="/biosafety">Cartagena Protocol</a></li>
+                    <li class="active"><a href="/abs">Nagoya Protocol</a></li>
+                    <li class="active"><a href="/programmes">Programmes</a></li>
+                    <li class="active"><a href="/information">Information</a></li>
+                    <li class="active"><a href="/secretariat">Secretariat</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER (LARGE) -->
+    <header class="large hidden-xs">
+        <div class="container whitebg">
+            <div>
+
+                <div class="pull-left" style="margin:5px 0px">
+                    <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>"/></a>
+                </div>
+
+                <div  class="pull-right hidden-print">
+
+                    <a class="btn btn-link" ng-click="signIn()"  href="#"  style="text-decoration:none;color:#009B48" ng-hide="user.isAuthenticated" style="color: black">
+                        <i  class="fa fa-power-off"></i> <span ng-cloak ng-show="user && !user.isAuthenticated">Sign in</span>
+                    </a>
+
+                    <div ng-cloak ng-show="user.isAuthenticated" class="dropdown">
+                        <button class="btn btn-link dropdown-toggle" style="text-decoration:none;color:#009B48" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                          <span class="caret"></span> {{user.name}}
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
+                            <li><a ng-click="profile()"  href="#"><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
+                            <li><a ng-click="password()" href="#"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
+                            <li><a ng-click="signOut()"  href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
+                        </ul>
+                    </div>
+                    <div ng-cloak ng-if="isTarget();"><a type="button" class="btn btn-xs btn-default"  href="https://chm.cbd.int/submit/online-reporting">Submit Information</a></div>
+               </div> <!--  end sign in-->
+
+                <div style="clear:right;" class="pull-right hidden-print">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="/convention">The Convention</a></li>
+                        <li class="active"><a href="/biosafety">Cartagena Protocol</a></li>
+                        <li class="active"><a href="/abs">Nagoya Protocol</a></li>
+                        <li class="active"><a href="/programmes">Programmes</a></li>
+                        <li class="active"><a href="/information">Information</a></li>
+                        <li class="active hidden-sm"><a href="/secretariat">Secretariat</a></li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MEETING HEADER --->
+
+    <style>
+        .meetingnav {
+            /*text-rendering:optimizeLegibility;*/
+            -webkit-font-smoothing: antialiased;
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            /*-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif*/
+        }
+        TABLE.meetingnav-table  {
+            height:80px;
+            width:100%;
+            background-color:rgba(128,128,128,0.25);
+            border-left:4px solid #fff;
+            border-right:4px solid #fff;
+            border-bottom:1px solid #fff;
+            /*border-top:4px solid black*/
+        }
+        @media (max-width: 767px) { TABLE.meetingnav-table { height: 72px; border-left: none; border-right: none } }
+
+        .meetingnav-button {
+            position:relative;
+            background-clip:padding-box;
+            width:84px;
+            color:#fff;
+            text-align:center;
+            background-color:rgba(0,0,0,0.40);
+            border-left:4px solid #fff;
+        }
+        @media (max-width: 767px) { .meetingnav-button { border-left: 1px solid #fff; width: 20% } }
+        @media (max-width: 767px) { .meetingnav-button:first-child { border-left: none; } }
+
+        .meetingnav td.selected {
+            background-color: #009b48
+        }
+        .meetingnav td.selected.docs {
+            background-color:rgba(255,255,255,0.14);
+        }
+        .meetingnav td.selected.CP {
+            background-color: #A05800
+        }
+        .meetingnav td.selected.NP {
+            background-color: #0086B7
+        }
+
+        .meetingnav-buttongroup {
+            position:relative;
+            background-clip:padding-box;
+            color:#fff;
+            text-align:center;
+            background-color:rgba(0,0,0,0.40);
+            border-left:4px solid #fff;
+            vertical-align:top;
+        }
+        @media (max-width: 767px) { .meetingnav-buttongroup { border-left: 1px solid #fff; } }
+
+        .meetingnav table.meetings {
+            background-color: rgba(64,64,64,0.9);
+        }
+
+        .meetingnav table.meetings td.meeting {
+            position:relative;
+            background-clip:padding-box;
+            color: #fff;
+            font-weight: bold;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            width: 25%;
+        }
+        .meetingnav table.meetings td.meeting:not(:first-child) {
+            border-left: 1px solid #888;
+        }
+
+        .meetingnav table.meetings td.meeting a {
+            display:block;
+            position:absolute;
+            top:0px;
+            bottom:0px;
+            right:0px;
+            left:0px;
+            height:78px;
+        }
+
+        .meetingnav-button > a.link,
+        .meetingnav-buttongroup  a.link {
+            display:block;
+            position:absolute;
+            top:0px;
+            bottom:0px;
+            right:0px;
+            left:0px;
+            height:78px;
+        }
+
+        .meetingnav-buttongroup  a.link {
+            height:48px;
+        }
+
+        .meetingnav .selected .selection-mark-DISBALED {
+            position:absolute;
+            left:0px;
+            right:0px;
+            bottom:-6px;
+            border-bottom:6px solid #009b48
+        }
+        .meetingnav .selected.CP .selection-mark {
+            border-color: #A05800
+        }
+        .meetingnav .selected.NP .selection-mark {
+            border-color: #0086B7
+        }
+
+        .splash {
+            color: #fff;
+            border-top: 3px solid #fff;
+            border-left: 4px solid #fff;
+            border-right: 4px solid #fff;
+        }
+        @media (max-width: 767px) { .splash { border-left: none; border-right: none } }
+
+        @media (max-width: 374px) { .hidden-xxs  { display: none !important; } }
+        @media (min-width: 375px) { .visible-xxs { display: none !important; } }
+
+    </style>
+
+    <!-- NAVIGATION BAR -->
+    <div ng-cloak ng-if="meetingNavCtrl.isSelected()" class="meetingnav hidden-print">
+        <div class="container" style="background-color:#063339;">
+            <div class="row" style="background:url(/app/images/podium.jpg?v=<%=gitVersion%>);background-size:100%;background-repeat:no-repeat">
+                <table class="meetingnav-table">
+                    <tr>
+                        <td  class="notselected meetingnav-button">
+                            <a href="/conferences/2016" class="link"></a>
+                            <img src="/app/images/cop13-logo.png?v=<%=gitVersion%>" style="width:44px;height:44px">
+                        </td>
+                        <td ng-if="false" class="meetingnav-button" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/schedules')}">
+                            <a href="/conferences/2016/schedules" class="link"></a>
+                            <div class="hidden-xs" style="font-size:12px;font-weight:bold">SCHEDULE</div>
+                            <i class="fa fa-clock-o visible-xs" aria-hidden="true" style="font-size:24px"></i>
+                        </td>
+                        <td class="meetingnav-button visible-xs docs" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')||meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')||meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')||meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}">
+                            <a href="/conferences/2016/cop-13/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
+                            <i class="fa fa-file-text-o" aria-hidden="true" style="font-size:24px"></i>
+                        </td>
+                        <td class="meetingnav-buttongroup hidden-xs">
+                            <table style="height:100%;width:100%;font-size:12px;font-weight:bold">
+                                <tr style="height:0px">
+                                    <td colspan="4" style="vertical-align:top">
+                                        <div style="background-color:rgba(255,255,255,0.2);font-size:12px;font-weight:normal;height:30px;padding-top:5px;color:#ddd"><b>DOCUMENTS</b>&nbsp; (incl. in-session)</div>
+                                    </td>
+                                </tr>
+                                <tr style="height:90%">
+                                    <td width="25%" class="CBD" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')}" style="position:relative;padding:0 6px" align="center">
+                                        <a href="/conferences/2016/cop-13/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
+                                        COP13
+                                    </td>
+                                    <td width="25%" class="CP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')}" style="position:relative;padding:0 6px;border-left:2px solid #fff" align="center">
+                                        <a href="/conferences/2016/cp-mop-8/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
+                                        <div class="visible-md visible-lg" style="font-size:11px;font-weight:bold">Cartagena Protocol</div>
+                                        <div style="margin-top:2px">
+                                            <span class="hidden-xs">COPMOP8</span>
+                                            <span class="visible-xs-inline">MOP8</span>
+                                        </div>
+                                    </td>
+                                    <td width="25%" class="NP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')}" style="position:relative;padding:0 6px;border-left:2px solid #fff" align="center">
+                                        <a href="/conferences/2016/np-mop-2/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
+                                        <div class="visible-md visible-lg" style="font-size:11px;font-weight:bold">Nagoya Protocol</div>
+                                        <div style="margin-top:2px">
+                                            <span class="hidden-xs">COPMOP2</span>
+                                            <span class="visible-xs-inline">MOP2</span>
+                                        </div>
+                                    </td>
+                                    <td width="25%" class="HLS" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}" style="position:relative;padding:0 6px;border-left:2px solid #fff" align="center">
+                                        <a href="/conferences/2016/cop-13-hls/documents#{{meetingNavCtrl.hash()}}" class="link"></a>
+                                        <div class="hidden-md hidden-lg">HLS</div>
+                                        <div class="visible-md visible-lg">High Level <br> Segment</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="notselected meetingnav-button">
+                            <a href="http://flux.live/cop/coplive/" target="webcast" class="link"></a>
+                            <div style="background-color:#ee4242;font-size:12px;font-weight:bold;padding-top:6px;padding-bottom:6px;">
+                                <div class="hidden-xxs">WEBCAST</div>
+                                <div class="visible-xxs">LIVE</div>
+                            </div>
+                        </td>
+                        <td class="notselected meetingnav-button hidden-xs">
+                            <a href="/cop2016/media" class="link"></a>
+                            <div style="font-size:12px;font-weight:bold">MEDIA</div>
+                        </td>
+                        <td class="notselected meetingnav-button">
+                            <a data-toggle="dropdown" class="link"></a>
+                            <i class="fa fa-info" data-toggle="dropdown" aria-hidden="true" style="font-size:24px"></i>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="https://www.cbd.int/doc/meetings/cop/cop-13/other/cop-13-info-note-en.pdf" target="_blank">Information for Participants</a></li>
+                                <li><a href="https://www.cbd.int/cop2016/public/">Information for Public</a></li>
+                                <li class="visible-xs"><a href="https://www.cbd.int/cop2016/media/">Information for Media</a></li>
+                                <li><a href="https://www.cbd.int/cop/cop-13/un-biodiv-conf-2016-floorplan.pdf">Floor Plans</a></li>
+                                <li><a href="http://cop13.mx/" target="_blank">Mexican COP13 Website <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
+                                <li><a href="https://www.cbd.int/cop2016/transport/">Transportation</a></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+
+                <table class="meetings visible-xs" style="width:100%" ng-if="meetingNavCtrl.isSelected('/conferences/2016/cop-13/')||meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')||meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')||meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')">
+                    <tr>
+                        <td class="notselected meeting" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13/')}"><a href="/conferences/2016/cop-13/documents#{{meetingNavCtrl.hash()}}"></a>COP13</td>
+                        <td class="notselected meeting CP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cp-mop-8/')}"><a href="/conferences/2016/cp-mop-8/documents#{{meetingNavCtrl.hash()}}"></a>MOP8</td>
+                        <td class="notselected meeting NP" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/np-mop-2/')}"><a href="/conferences/2016/np-mop-2/documents#{{meetingNavCtrl.hash()}}"></a>MOP2</td>
+                        <td class="notselected meeting" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/2016/cop-13-hls/')}"><a href="/conferences/2016/cop-13-hls/documents#{{meetingNavCtrl.hash()}}"></a>HLS</td>
+                    </tr>
+                </table>
+
+                <div ng-if="meetingNavCtrl.fullPath() == '/conferences/2016'" style="background-color:rgba(0,0,0,0.2);position:relative">
+                    <div class="container splash">
+                        <div class="col-sm-7 col-md-6 col-md-5">
+                            <img src="/app/images/cop13-logo-text-min.svg?v=<%=gitVersion%>" style="margin-top:20px;margin-bottom:60px;width:100%">
+                            <div class="visible-xs" style="margin-top:-30px;margin-bottom:40px;text-align:center">
+                                <span class="visible-xs" style="cursor:pointer;font-size:24px;background-color:#fff;padding:12px 40px;font-weight:bold;color:#000;border-radius:20px;font-size:12px" onclick="document.location.href='http://cop13.mx'">cop13.mx</span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="hidden-xs col-sm-push-7 col-sm-7" style="text-align:center;margin-top:-100px;">
+                            <span style="cursor:pointer;font-size:24px;background-color:#fff;padding:12px 40px;font-weight:bold;color:#000;border-radius:20px;font-size:12px" onclick="document.location.href='http://cop13.mx'">cop13.mx</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
