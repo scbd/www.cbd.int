@@ -1,114 +1,129 @@
-define(['app', 'angular', 'bootstrap', 'authentication', ], function(app, ng) { 'use strict';
+define(['app', 'angular', 'text!./template-header.html', 'text!./template-footer.html', 'angular'], function(app, ng, headerHtml, footerHtml) { 'use strict';
 
-  app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$browser', '$document', '$location', 'authentication', '$q',
-	function($scope, $rootScope, $window, $browser, $document, $location, authentication, $q) {
+    app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q',
+                             function($rootScope,   $window,   $browser,   $document,   authentication,   $q) {
+        return {
+            restrict: 'E',
+            template: headerHtml,
+            link: function(scope, elem) {},
+            controller: function($scope, $location) {
 
-        var basePath = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
+                var basePath = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
 
-        $rootScope.$on("$routeChangeSuccess", function(){
-            $window.ga('set',  'page', basePath+$location.path());
-            $window.ga('send', 'pageview');
-        });
+                $rootScope.$on('$routeChangeSuccess', function(){
+                    $window.ga('set',  'page', basePath+$location.path());
+                    $window.ga('send', 'pageview');
+                });
 
+                updateSize();
 
-        updateSize();
+                ng.element($window).on('resize', updateSize);
 
-        ng.element($window).on('resize', updateSize);
+                function updateSize() {
+                    $rootScope.$applyAsync(function(){
+                        $rootScope.deviceSize = $('.device-size:visible').attr('size');
+                    });
+                }
 
-        function updateSize() {
-            $rootScope.$applyAsync(function(){
-                $rootScope.deviceSize = $('.device-size:visible').attr('size');
-            });
-        }
+                $q.when(authentication.getUser()).then(function(u){
+                    $scope.user = u;
+                });
 
-        $q.when(authentication.getUser()).then(function(u){
-            $scope.user = u;
-        });
+                $scope.$on('signOut', function(){
+                    $window.location.href = '/';
+                });
 
-        $scope.$on("signOut", function(){
-            $window.location.href = '/';
-        });
+                $scope.meetingNavCtrl = {
+                    fullPath : function(name) {
+                        return basePath + $location.path();
+                    },
 
-        $scope.meetingNavCtrl = {
-            fullPath : function(name) {
-                return basePath + $location.path();
-            },
+                    isSelected : function(name) {
 
-            isSelected : function(name) {
+                        if(name && $scope.meetingNavCtrl.currentSelection)
+                            return name==$scope.meetingNavCtrl.currentSelection;
 
-                if(name && $scope.meetingNavCtrl.currentSelection)
-                    return name==$scope.meetingNavCtrl.currentSelection;
+                        var selected = false;
+                        var path = basePath + $location.path();
 
-                var selected = false;
-                var path = basePath + $location.path();
+                        if(name) selected = selected || path.indexOf(name)===0;
+                        else     selected = selected || path.indexOf('/conferences/')===0;
 
-                if(name) selected = selected || path.indexOf(name)===0;
-                else     selected = selected || path.indexOf('/conferences/')===0;
+                        return selected;
+                    },
 
-                return selected;
-            },
+                    hash : function() {
+                        return $location.hash();
+                    }
+                };
 
-            hash : function() {
-                return $location.hash();
+                //============================================================
+                //
+                //
+                //============================================================
+                $scope.isTarget = function () {
+                    return $location.path().indexOf('/target/') >= 0;
+                };
+
+                //============================================================
+                //
+                //
+                //============================================================
+                $scope.encodedReturnUrl = function () {
+                    return encodeURIComponent($location.absUrl());
+                };
+
+                //============================================================
+                //
+                //
+                //============================================================
+                $scope.signIn = function () {
+                    $window.location.href = authentication.accountsBaseUrl() + '/signin?returnUrl=' + $scope.encodedReturnUrl();
+                };
+
+                //============================================================
+                //
+                //
+                //============================================================
+                $scope.signOut = function () {
+                    authentication.signOut();
+                };
+
+                //============================================================
+                //
+                //
+                //============================================================
+                $scope.actionSignup = function () {
+                    var redirect_uri = $window.encodeURIComponent($location.protocol()+'://'+$location.host()+':'+$location.port()+'/');
+                    $window.location.href = 'https://accounts.cbd.int/signup?redirect_uri='+redirect_uri;
+                };
+
+                //============================================================
+                //
+                //
+                //============================================================
+                $scope.password = function () {
+                    $window.location.href = authentication.accountsBaseUrl() + '/password?returnurl=' + $scope.encodedReturnUrl();
+                };
+
+                //============================================================
+                //
+                //
+                //============================================================
+                $scope.profile = function () {
+                    $window.location.href = authentication.accountsBaseUrl() + '/profile?returnurl=' + $scope.encodedReturnUrl();
+                };
             }
         };
+    }]);
 
-        //============================================================
-        //
-        //
-        //============================================================
-        $scope.isTarget = function () {
-            return $location.path().indexOf('/target/') >= 0;
+    app.directive('templateFooter', [function() {
+        return {
+            restrict: 'E',
+            template: footerHtml,
+            link: function(scope, elem) {},
+            controller: function($scope, $location) {}
         };
+    }]);
 
-        //============================================================
-        //
-        //
-        //============================================================
-        $scope.encodedReturnUrl = function () {
-            return encodeURIComponent($location.absUrl());
-        };
-
-        //============================================================
-        //
-        //
-        //============================================================
-        $scope.signIn = function () {
-            $window.location.href = authentication.accountsBaseUrl() + '/signin?returnUrl=' + $scope.encodedReturnUrl();
-        };
-
-        //============================================================
-        //
-        //
-        //============================================================
-        $scope.signOut = function () {
-            authentication.signOut();
-        };
-
-        //============================================================
-        //
-        //
-        //============================================================
-        $scope.actionSignup = function () {
-            var redirect_uri = $window.encodeURIComponent($location.protocol()+'://'+$location.host()+':'+$location.port()+'/');
-            $window.location.href = 'https://accounts.cbd.int/signup?redirect_uri='+redirect_uri;
-        };
-
-        //============================================================
-        //
-        //
-        //============================================================
-        $scope.password = function () {
-            $window.location.href = authentication.accountsBaseUrl() + '/password?returnurl=' + $scope.encodedReturnUrl();
-        };
-
-        //============================================================
-        //
-        //
-        //============================================================
-        $scope.profile = function () {
-            $window.location.href = authentication.accountsBaseUrl() + '/profile?returnurl=' + $scope.encodedReturnUrl();
-        };
-
-  }]);
 });
