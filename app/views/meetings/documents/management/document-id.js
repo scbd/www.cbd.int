@@ -271,6 +271,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                 agendaItems: document.agendaItems,
                 title:       document.title,
                 description: document.description,
+                positionGroup: getPositionGroup(document),
                 metadata:    _.cloneDeep(document.metadata||{}),
             };
 
@@ -280,6 +281,31 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                 doc.metadata.message.level = doc.metadata.message.level || null;
 
             return doc;
+        }
+
+        //==============================
+        //
+        //==============================
+        function getPositionGroup(doc) {
+
+            var positionGroup = 'other';
+
+            if(doc.type=='outcome')        positionGroup = 'outcome';
+            if(doc.type=='report')         positionGroup = 'outcome';
+            if(doc.type=='decision')       positionGroup = 'outcome';
+            if(doc.type=='recommandation') positionGroup = 'outcome';
+            if(doc.type=='official')       positionGroup = 'official';
+            if(doc.type=='information')    positionGroup = 'information';
+            if(doc.type=='other')          positionGroup = 'other';
+            if(doc.type=='notification')   positionGroup = 'notification';
+            if(doc.type=='statement')      positionGroup = 'statement';
+            if(doc.type=='crp')            positionGroup = 'in-session';
+            if(doc.type=='limited')        positionGroup = 'in-session';
+            if(doc.type=='non-paper')      positionGroup = 'in-session';
+            if(doc.group=='WG.1' && positionGroup == 'in-session')  positionGroup = 'in-session/wg1';
+            if(doc.group=='WG.2' && positionGroup == 'in-session')  positionGroup = 'in-session/wg2';
+
+            return positionGroup;
         }
 
         //==============================
