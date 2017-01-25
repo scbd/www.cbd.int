@@ -1,6 +1,8 @@
 <div>
 
     <div class="pull-right" role="group" aria-label="...">
+      <button ng-disabled="uploading || !editCtrl.document._id" type="button" class="btn btn-danger"  ng-click="editCtrl.del()">Delete</button>
+      &nbsp;&nbsp;
       <button ng-disabled="uploading" type="button" class="btn btn-primary" ng-click="editCtrl.save()">Save</button>
       <button ng-disabled="uploading" type="button" class="btn btn-default" ng-click="editCtrl.close()">Close</button>
     </div>
@@ -354,6 +356,8 @@
     </div>
 
     <div class="pull-right" role="group" aria-label="...">
+      <button ng-disabled="uploading || !editCtrl.document._id" type="button" class="btn btn-danger"  ng-click="editCtrl.del()">Delete</button>
+      &nbsp;&nbsp;
       <button ng-disabled="uploading" type="button" class="btn btn-primary" ng-click="editCtrl.save()">Save</button>
       <button ng-disabled="uploading" type="button" class="btn btn-default" ng-click="editCtrl.close()">Close</button>
     </div>

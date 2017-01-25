@@ -22,7 +22,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
          zh : "Chinese"
      };
 
-	return ["$scope", "$route", "$http", '$location', '$q', function ($scope, $route, $http, $location, $q) {
+	return ["$scope", "$route", "$http", '$location', '$q', '$window', function ($scope, $route, $http, $location, $q, $window) {
 
         $scope.FILETYPES  = MIMES;
         $scope.LANGUAGES  = LANGUAGES;
@@ -44,6 +44,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
         _ctrl.normalizeSymbol=normalizeSymbol;
 
         _ctrl.clearErrors = clearErrors;
+        _ctrl.del    = del;
         _ctrl.save   = save;
         _ctrl.close  = close;
 
@@ -138,6 +139,28 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                 return saveSupersede();
 
             }).then(function(){
+
+                close();
+
+            }).catch(function(err) {
+                _ctrl.error = err.data || err;
+                console.error(err);
+            });
+        }
+
+
+        //==============================
+        //
+        //==============================
+        function del() {
+
+            if(!_ctrl.document._id)
+                return;
+
+            if(!confirm("Delete this document?\n"+(document_bak.symbol||document_bak.title.en)))
+                return;
+
+            return $http.delete('/api/v2016/meetings/'+meetingId+'/documents/'+_ctrl.document._id).then(function() {
 
                 close();
 
@@ -438,7 +461,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
             if(meetingId=="MOP-08")    return $location.path('/2016/cp-mop-8/documents');
             if(meetingId=="NP-MOP-02") return $location.path('/2016/np-mop-2/documents');
 
-            $location.path('/');
+            $window.location = '/doc/?meeting='+meetingId;
         }
 
         //==============================
