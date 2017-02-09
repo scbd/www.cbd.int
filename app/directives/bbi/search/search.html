@@ -1,0 +1,205 @@
+<div class="row css-search">
+	<style>
+	.truncate {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.boldHeader{
+		font-weight: bold;
+	}
+	.label-selected-facet {
+		position: relative;
+		display: block;
+		background-color: #12496B;
+		margin: 4px 0;
+		padding-right: 20px;
+		text-align: left;
+		height: 23px;
+		padding-top: 6px;
+		border-radius: 3px;
+	}
+	.label-letter-search {
+		background-color: #12496B;
+	}
+	.animate-enter,
+	.animate-leave {
+	    -webkit-transition: 400ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+	    -moz-transition: 400ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+	    -ms-transition: 400ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+	    -o-transition: 400ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+	    transition: 400ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+	    position: relative;
+	    display: block;
+	}
+
+	.animate-leave.animate-leave-active,
+	.animate-enter {
+	    -webkit-transform: scaleY(0);
+	    -moz-transform: scaleY(0);
+	    -ms-transform: scaleY(0);
+	    -o-transform: scaleY(0);
+	    transform: scaleY(0);
+	    height: 0px;
+	    opacity: 0;
+	}
+
+	.animate-enter.animate-enter-active,
+	.animate-leave {
+	    -webkit-transform: scaleY(1);
+	    -moz-transform: scaleY(1);
+	    -ms-transform: scaleY(1);
+	    -o-transform: scaleY(1);
+	    transform: scaleY(1);
+	    height: 30px;
+	    opacity: 1;
+	}
+  /* navbar */
+  #search-tabs {margin: 10px 0 -5px; 0;
+  padding:0 0 0 0;}
+#search-tabs  li{
+   display: inline;
+   padding: 15px 10px 15px 10px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    font-weight: bold;
+    color: #555;
+}
+#search-tabs  li a{
+
+    font-weight: bold;
+    color: #555;
+}
+#search-tabs  li> a:hover{
+  background-color: #DDD;
+  border: 1px solid #e3e3e3;
+}
+#search-tabs  li> a:focus, a:active,{
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border: 1px solid #e3e3e3 !important;
+  border-bottom: 0 !important;
+  padding-bottom: 10px !important;
+  background-color: #DDD !important;
+  box-shadow: none!important;
+}
+#search-tabs   .btn:active:focus,  .btn.active{
+border-bottom-left-radius: 0 !important;
+border-bottom-right-radius: 0 !important;
+border: 1px solid #e3e3e3 !important;
+border-bottom: 0 !important;
+padding-bottom: 10px !important;
+background-color: #DDD !important;
+box-shadow: none!important;
+}
+#search-tabs .btn:focus{}
+.filter-row{
+  background-color:#DDD;
+  padding-top:10px;
+}
+.pointer{cursor:pointer;}
+.pointer a:hover{color:#aaa !important;}
+.pointer span:hover{color:#555 !important;}
+.pointer:hover{color:#555 !important;}
+.card-1 {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.1s ease-in-out;
+}
+.card {
+    background-color: #eee;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+}
+.card-1:hover {
+    background-color: #EEE!important;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+.records {
+    margin: 0;
+    padding: 5px;
+    border-left: 3px #001470 solid;
+    cursor: pointer;
+}
+.records a{
+color:#001470;
+}
+.search-filters div.alpha{
+	background-color: rgba(255,255,255,.8);
+}
+	</style>
+  <section class="search-filters" hl-sticky="">
+  <div class="col-xs-12 alpha" style="padding-top:5px;" >
+    <div style="margin-bottom:5px;">
+      <span ng-repeat="filter in filters" style="margin-bottom:10px;">
+            <button class="btn btn-sm btn-info bold" style="margin-top:5px;" ng-click="deleteSubQuery(filter.name,filter)">
+
+                {{filter.title |lstring}} <span class="badge">{{filter.count}}</span><span aria-hidden="true"> × </span>
+            </button>
+    </span>
+		<span ng-if="loading && showFilters"><i class="fa fa-spinner fa-pulse fa-fw"></i> Loading...</span>
+    </div>
+    <search-filter-keywords 						ng-model='keywords' 			query='queryKeywords'											 ></search-filter-keywords>
+    <ul id="search-tabs" class="">
+        <li class="pointer" style="text-transform:uppercase;padding:20px 3px 10px 5px;color:#bbb;" ng-click="showFilters=null"><span ng-if="showFilters"><i class="fa fa-times-circle" aria-hidden="true"></i> close</span> <span ng-if="!showFilters">search</span> filters</li>
+        <li> <a href="" ng-class="{'active':showFilters=='type'}" ng-click="showFilters=(showFilters=='type' ? false : 'type')" class="btn color-grey" ng-show="isFilterEmpty(schemas)"><i class="fa fa-caret-down"></i>&nbsp;Type <span class="badge">{{isFilterEmpty(schemas)}}</span></a> </li>
+        <li> <a href="" ng-class="{'active':showFilters=='country'}" ng-click="showFilters=(showFilters=='country' ? false : 'country')" class="btn color-grey" ng-show="isFilterEmpty(governments)"><i class="fa fa-caret-down"></i>&nbsp;Country <span class="badge">{{isFilterEmpty(governments)}}</span></a> </li>
+        <li> <a href="" ng-class="{'active':showFilters=='subject'}" ng-click="showFilters=(showFilters=='subject' ? false : 'subject')" class="btn color-grey" ng-show="isFilterEmpty(thematicAreas)"><i class="fa fa-caret-down"></i>&nbsp;Subject <span class="badge">{{isFilterEmpty(thematicAreas)}}</span></a> </li>
+        <li> <a href="" ng-class="{'active':showFilters=='aichi'}" ng-click="showFilters=(showFilters=='aichi' ? false : 'aichi')" class="btn color-grey" ng-show="isFilterEmpty(aichiTargets)"><i class="fa fa-caret-down"></i>&nbsp;Aichi <span class="badge">{{isFilterEmpty(aichiTargets)}}</span></a> </li>
+        <li> <a href="" ng-class="{'active':showFilters=='region'}" ng-click="showFilters=(showFilters=='region' ? false : 'region')"class="btn color-grey" ng-show="isFilterEmpty(regions)"><i class="fa fa-caret-down"></i>&nbsp;Region <span class="badge">{{isFilterEmpty(regions)}}</span></a ></li>
+        <li> <a href="" ng-class="{'active':showFilters=='dateFilter'}" ng-click="showFilters=(showFilters=='dateFilter' ? false : 'dateFilter')"class="btn color-grey"><i class="fa fa-caret-down"></i>&nbsp;Date</a> </li>
+    </ul>
+
+</div>
+	<div class="col-xs-12 alpha" >
+            <div class="pointer" ng-click="showFilters=null" ng-show="showFilters" style="position:absolute;top:10px;right:10px;cursor:pointer;z-index:100;"><a href="#" style="color:#555;"><i class="fa fa-times-circle" aria-hidden="true"></i></a></div>
+            <search-filter-schemas 	  ng-show="showFilters==='type'"	 	ng-model='schemas' 				facet='schema_s' 					  count='count'   ></search-filter-schemas>
+            <search-filter-countries 	ng-show="showFilters==='country'" ng-model='governments' 		facet='government_s' 			  count='count'   ></search-filter-countries>
+            <search-filter-regions 		ng-show="showFilters==='region'"    ng-model='regions' 				facet='government_REL_ss'		count='count'   ></search-filter-regions>
+            <search-filter-aichi 			ng-show="showFilters==='aichi'" 		ng-model='aichiTargets' 	facet='aichiTarget_ss' 			count='count'   ></search-filter-aichi>
+            <search-filter-themes 		ng-show="showFilters==='subject'" ng-model='thematicAreas'	facet='thematicArea_REL_ss' count='count'   ></search-filter-themes>
+
+            <search-filter-dates 			ng-show="showFilters==='dateFilter'"  	query='queryDate'  ></search-filter-dates>
+            <!-- ng-hide="isFilterEmpty(schemas);"
+            ng-hide="isFilterEmpty(governments);"
+            ng-hide="isFilterEmpty(regions);"
+            ng-hide="isFilterEmpty(aichiTargets);"
+            ng-hide="isFilterEmpty(thematicAreas);" -->
+
+	</div>
+	<!-- <h4 ng-pluralize count="count" when="{'0': 'No record found', '1': '1 record found', 'other': '{{start+1}} to {{stop+1}} of {} records found'}"></h4> -->
+
+	<div class="col-xs-12 alpha hidden-xs" ng-if="count===0 || count ">
+		<hr/>
+		<div class="text-center" >
+			<span class="pull-left" >
+					<span ng-if="count >1" ><span class="badge">{{count}}</span> Records Found</span>
+					<span ng-if="count===1" ><span class="badge">{{count}}</span> Record Found</span>
+					<span ng-if="count===0" ><span class="badge">{{count}}</span> Records Found</span>
+			</span>
+			<span class="pull-right">
+
+						<span ng-if="count>1"> Displaying Records: <span class="badge">1</span> to <span class="badge">{{stop}}</span></span>
+
+			</span>
+		<span ng-if="loading"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+		<span >Loading...</span>
+		 </span>
+	 </div>
+<br>
+				<hr/>
+	</div>
+</section>
+<!-- infinite-scroll-disabled='loading' -->
+	<div class="col-xs-12" style="padding:0px 10px 0px 10px;" infinite-scroll='loadExisting()' infinite-scroll-immediate-check='true'
+      infinite-scroll-distance='10'  >
+
+		<div class="document-item" style="margin:12px" ng-repeat="document in documents">
+				<div class="search-result" ></div>
+		</div>
+
+
+
+	</div>
+
+</div>

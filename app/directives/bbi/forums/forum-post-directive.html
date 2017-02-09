@@ -1,0 +1,104 @@
+<div>
+
+  <div class="row" ng-show="type=='post'">
+    <div class="col-sm-10 col-ldm-10 col-md-10">
+      <!-- <div class="well1" style="padding-top: 5px;min-height: 50px;"> -->
+      <div class="pull-left1" style="font-weight:bold">posted by {{post.createdBy}} on {{post.createdOn| date:'medium'}}
+      </div>
+      <span ng-show="post.parentId!=post.postId">
+          in response to: <span ng-click="scrollToPost(post.parentId)" style="cursor:pointer;text-decoration: underline;color: #428bca;">#{{post.parentId}}</span>
+      </span>
+    </div>
+    <div class="col-sm-2 col-ldm-2 col-md-2 pull-right">
+
+      <button type="button" class="btn btn-default pull-right" ng-click="dialogType='Approve';askApprove()" data-toggle="modal" ng-show="post.security.canApprove"><i class="fa fa-check"></i>
+      </button>
+      <button type="button" class="btn btn-default pull-right" data-toggle="modal" ng-click="dialogType='Delete';askApprove();" ng-show="post.security.canDelete"><i class="fa fa-trash-o"></i>
+      </button>
+      <button type="button" class="btn btn-default pull-right" data-toggle="modal" ng-click="editPost();" ng-show="post.security.canEdit"><i class="fa fa-edit"></i>
+      </button>
+      <button type="button" class="btn btn-default pull-right" data-toggle="modal" ng-click="newPost();" ng-show="post.security.canPost && !forum.closedOn"><i class="fa fa-reply"></i>
+      </button>
+    </div>
+  </div>
+  <button type="button" ng-show="type=='thread'" class="btn btn-primary" data-toggle="modal" ng-click="newThread();">Create a new thread
+  </button>
+
+  <form name="editForm" id="editForm" class="modal fade" data-backdrop="static" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel"> {{title}}</h4>
+        </div>
+        <div class="modal-body">
+          <div class="editForm">
+            <div class="row" ng-show="errorMsg">
+              <div class="col-xs-12">
+                <div class="alert alert-danger" role="alert">{{errorMsg}}</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="control-group">
+                  <div class="km-control-group" name="subject" required caption="Subject">
+                    <input ng-model="unsafePost.subject" rows="1" placeholder="" type="text" class="form-control"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="control-group">
+                  <div class="km-control-group" name="Message" required caption="Message">
+                    <textarea ng-model="unsafePost.message" rows="3" placeholder="" class="form-control" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" ng-show="type=='post'">
+            <div class="col-lg-12">
+              <div km-upload ng-model="unsafePost.attachments" />
+              <br/>
+
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button ng-disabled="loading" ng-click="createPost()" class="btn localBtn btn-primary" ng-show="operation=='new'">Save</button>
+          <button ng-disabled="loading" ng-click="updatePost()" class="btn localBtn btn-primary" ng-show="operation=='edit'">Update</button>
+          <button type="button" class="btn localBtn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div id="approveDialog" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4>{{dialogType}} Post<i ng-show="loading" class="fa fa-spinner fa-spin"></i></h4>
+        </div>
+        <div class="modal-body">
+          <div class="row" ng-show="errorMsg">
+            <div class="col-xs-12">
+              <div class="alert alert-danger" role="alert">{{errorMsg}}</div>
+            </div>
+          </div>
+
+          <p>Are you sure you want to {{dialogType|lowercase}} this post? {{postId}}</p>
+        </div>
+        <div class="modal-footer" style="margin-top:0">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button ng-disabled="loading" type="button" ng-show="dialogType=='Approve'" ng-click="approvePost()" class="btn btn-primary">Yes</button>
+
+          <button ng-disabled="loading" type="button" ng-show="dialogType=='Delete'" ng-click="deletePost()" class="btn btn-primary">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

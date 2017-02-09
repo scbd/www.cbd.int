@@ -1,0 +1,145 @@
+<section>
+    <style>
+        header.large .a2 .navbar-nav a {
+            color: #001470;
+            border-right: none;
+        }
+
+        header.large .a2 .navbar-nav a:hover {
+            color: white;
+            background-color: #001470;
+        }
+        /*header.mobile .a3 .navbar-nav a {
+            color: #001470;
+        }*/
+
+        header.mobile .a3 .navbar-nav a:hover {
+            color: white;
+            background-color: #001470;
+        }
+
+        header.mobile .navbar-nav a:hover {
+            color: white !important;
+            background-color: #009B48;
+        }
+
+        .border-r {
+            border-right-style: solid;
+            border-right-color: #001470;
+        }
+        /*.border-r:last-child{
+  border-right:none;
+}*/
+
+        .search {
+            padding: 0px 0;
+            /*width: 230px;
+    height: 25px;*/
+            position: relative;
+            left: 10px;
+            float: left;
+            line-height: 22px;
+        }
+
+        .search input {
+            position: absolute;
+            width: 0px;
+            float: Left;
+            right: 25px;
+            top: 5px;
+            -webkit-transition: all 0.7s ease-in-out;
+            -moz-transition: all 0.7s ease-in-out;
+            -o-transition: all 0.7s ease-in-out;
+            transition: all 0.7s ease-in-out;
+            height: 25px;
+            line-height: 18px;
+            padding: 0 2px 0 2px;
+            border-radius: 1px;
+            border: none;
+        }
+
+        .search:hover input,
+        .search input:focus {
+            width: 200px;
+            margin-left: 0px;
+            border: 1px solid #001470;
+        }
+
+        .center-buttons {
+            margin: 0 auto;
+        }
+    </style>
+    <header class="large hidden-xs">
+        <div class="container a2 whitebg">
+            <div ng-class="{'pull-right':pull==='right'}" style="clear:right;">
+                <ul class="nav navbar-nav">
+                    <!-- <li class="active"><img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/ic-cbdhome.gif"></img></li> -->
+                    <li ng-repeat="link in links " class="active">
+                        <div ng-cloak class="dropdown" ng-class="{'border-r':!$last}">
+                            <a class="btn btn-link dropdown-toggle" style="text-decoration:none;" ng-href="/biobridge{{link.source}}" ng-click="goTo(link.source,$event);" type="button" id="dropdownMenuL{{$index}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <span ng-if="link.title.en!=='Home'">{{link.title.en}}</span>
+                                <span ng-if="link.title.en==='Home'">  <i class="fa fa-home " style="font-size:1.3em;"></i></span>
+                            </a>
+                            <ul ng-if="link.children.length>0" class="dropdown-menu" aria-labelledby="dropdownMenuL{{$index}}">
+                                <li ng-repeat="child in link.children"> <a ng-href="/biobridge{{child.source}}" ng-click="goTo(child.source,$event);">&nbsp; {{child.title.en}}</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="active">
+                        <div class="dropdown" style="line-height:35px;">
+                            <div ng-if="search" class="search" style="position:relative;">
+                                <input type="text" class="form-control input-xs" maxlength="64" placeholder="Search" ng-model="searchRes" ng-change="textSearch(searchRes)" ng-model-options="{ debounce: { 'default': 1000, 'blur': 0 } }" />
+                                <a class="btn btn-link dropdown-toggle" type="button" ng-click="searchRes='';"> <i ng-if="searchRes" class="fa fa-times fa-1x" aria-hidden="true"></i> <i ng-if="!searchRes" class="fa fa-search fa-1x" aria-hidden="true"></i></a>
+                            </div>
+
+                        </div>
+                    </li>
+
+
+                </ul>
+                <!-- <ul ng-if="!search" class="nav navbar-nav dropdown-toggle navbar-right">
+                    <li><div style="line-height:35px;">
+                      <a class="btn btn-link " style="text-decoration:none;" nhref="/biobridge" ng-click="goTo('/',$event)">BBI <i class="fa fa-home " style="font-size:1.3em;"></i></a>
+                    </div></li>
+
+                 </ul> -->
+
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+    </header>
+    <!-- HEADER (MOBILE) -->
+    <header class="mobile navbar visible-xs" role="banner">
+        <div class="container a3 whitebg">
+
+            <div class="navbar-header " style="color:#003f66;b">
+
+                <button class="navbar-toggle collapsed pull-left" type="button" data-toggle="collapse" data-target=".navbar-collapsee" style="margin-left:5px;">
+                    <i class="fa fa-bars" style="font-size:1.66em;"></i>
+
+            </div>
+
+            <nav class="collapse navbar-collapsee" role="navigation">
+
+                <ul class="nav navbar-nav">
+                    <li ng-repeat="link in links " class="active">
+                        <div ng-cloak class="dropdown" ng-class="{'border-r':!$last}">
+                            <a class="btn btn-link dropdown-toggle" style="text-decoration:none;color: #001470;" ng-href="/biobridge{{link.source}}" ng-click="goTo(link.source,$event);" type="button" id="dropdownMenuL{{$index}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                       {{link.title.en}}
+                  </a>
+                            <ul ng-if="link.children.length>0" class="dropdown-menu" aria-labelledby="dropdownMenuL{{$index}}">
+                                <li ng-repeat="child in link.children"> <a ng-href="/biobridge{{child.source}}" ng-click="goTo(child.source,$event);" style="text-decoration:none;color: #001470;">&nbsp; {{child.title.en}}</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="active">
+                        <div class="dropdown" style="line-height:35px;">
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </header>
+</section>

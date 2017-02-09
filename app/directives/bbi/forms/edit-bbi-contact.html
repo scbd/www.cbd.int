@@ -1,0 +1,276 @@
+<div class="bg-litegrey">
+
+    <div class="alert alert-danger" ng-show="hasError()">
+        <strong>An error has occurred...</strong>
+        <div>{{error}}</div>
+    </div>
+    <div id="view-header" class="panel-heading bg-blue">
+  		<div class="row">
+  		<div class="col-xs-10">
+  			<h4>
+  		Contact
+  		 <span class="text-small" style="font-size:.75em;color:#ddd;"> (CON) </span>
+  		 </h4>
+  	 </div>
+  	</div>
+  	</div>
+    <div class="row" ng-show="!isLoading() && status!='hidden'">
+
+        <div class="col-md-12" style="position: relative">
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="pull-right" style="margin-top:10px;">
+                        <span km-form-languages xs ng-model="document.header.languages"></span>
+                        <span km-form-std-buttons document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()"
+                            on-pre-publish="onPrePublish()"></span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12">
+                    <ul class="pagination">
+                        <li ng-class="{ disabled: tab=='general' }"><a href="" ng-click="prevTab()">&laquo;</a></li>
+
+                        <li ng-class="{ active  : tab=='general' }"><a href="" ng-click="tab='general'">Name</a></li>
+                        <li ng-class="{ active  : tab=='org'  }"><a href="" ng-click="tab='org'">Organization</a></li>
+                        <li ng-class="{ active  : tab=='contact'  }"><a href="" ng-click="tab='contact'">Contact</a></li>
+                        <li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate()">Review</a></li>
+                        <li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()">&raquo;</a></li>
+                    </ul>
+                </div>
+
+            </div>
+            <div>
+
+                <div km-document-validation ng-model="validationReport"></div>
+                <form name="editForm" style="margin-top:10px" novalidate>
+
+                    <div km-tab="general">
+
+                        <legend>Personal Information</legend>
+
+
+
+                        <div class="row">
+                          <div class="col-xs-12">
+                              <div class="km-control-group" name="prefix" >
+                                   <label>Pre fill the personal information below from your SCBD account?</label>
+                                   <input type="checkbox" ng-model="preFill" ng-change="initFromProfile(preFill);">
+                              </div>
+                          </div>
+                            <div class=" col-md-6 col-xs-12">
+                                <div class="km-control-group" name="prefix" caption="Prefix">
+                                    <div km-textbox-ml name="pre" ng-model="document.prefix" placeholder="text entry" locales="document.header.languages"></div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="km-control-group" name="firstName" caption="First name">
+                                    <input type="text" class="form-control" type="text" name="firstName" ng-model="document.firstName" locales="document.header.languages" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="km-control-group" name="middleName" caption="Middle name">
+                                    <input type="text" class="form-control" type="text" name="middleName" ng-model="document.middleName" locales="document.header.languages" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <div class="km-control-group" name="lastName" caption="Last name">
+                                    <input type="text" class="form-control" type="text" name="lastName" ng-model="document.lastName" locales="document.header.languages" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 col-xs-12">
+                              <div class="control-group" name="acronym" required caption="Acronym">
+                                  <label class="control-label">Department / Division / Unit</label>
+                                  <div km-textbox-ml name="contact_department" ng-model="document.department" locales="document.header.languages"></div>
+                              </div>
+                          </div>
+                          <div class="col-md-6 col-xs-12">
+                              <div class="control-group" name="acronym" required caption="Acronym">
+                                  <label class="control-label">Job title</label>
+                                  <div km-textbox-ml name="contact_designation" ng-model="document.designation" locales="document.header.languages"></div>
+                              </div>
+                          </div>
+                        </div>
+                    </div>
+
+                    <div km-tab="org">
+                        <legend style="margin-top:0;">Organization</legend>
+                        <!-- <div class="row">
+                            <div class="col-md-8 col-xs-12">
+                                <div class="control-group" name="name" required caption="Name of the organization">
+                                    <label class="control-label">Name of the organization</label>
+                                    <div km-textbox-ml name="name" ng-model="document.organization" placeholder="text entry" locales="document.header.languages"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-xs-12">
+                                <div class="control-group" name="acronym" required caption="Acronym">
+                                    <label class="control-label">Acronym</label>
+                                    <div km-textbox-ml name="acronym" ng-model="document.organizationAcronym" placeholder="text entry" locales="document.header.languages"></div>
+                                </div>
+                            </div>
+                        </div> -->
+
+
+                        <div class="row">
+                            <div class="col-md-8 col-xs-12">
+                                <div class="km-control-group" name="org" required caption="Organization">
+                                    <select-contact name="org" required schema="organization" ng-model="document.contactOrganization" caption="Select an Organization >>>"></select-contact>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <section ng-show="!isNewOrg">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="panel panel-default" style="padding:10ppx 10px 10px 10px;">
+                                        <div class="form-group" style="padding:10px 10px 10px 10px;">
+
+                                            <label for="placesSearch" class="control-label">Search google maps to prefill your address details</label>
+                                            <div class="input-group">
+                                                <input id="pac-input" name="placesSearch" class="form-control" ng-model="placeSearch" type="text" placeholder="413 Saint Jacques Street, Montreal, QC, Canada" ng-change="addressSearch()">
+                                                <span class="input-group-addon pointer" ng-click="clearAddressSearch();"><i class="fa fa-search" ng-if="!selectedAddress && (!placeSearch || placeSearch.length===0)"></i><i class="fa fa-close" ng-if="selectedAddress|| placeSearch.length" ></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section>
+                            <div class="row" >
+                                <div class="col-md-12">
+                                    <div class="control-group" name="address" caption="Address">
+                                        <label class="control-label">Address</label>
+                                        <div km-textbox-ml ng-model="document.address" rows="2" placeholder="example: 413 St-Jacques Ouest, Suite 800" locales="document.header.languages"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 col-xs-12">
+                                    <div class="control-group" name="city" required caption="City">
+                                        <label class="control-label">City</label>
+                                        <div km-textbox-ml required name="city" ng-model="document.city" locales="document.header.languages" placeholder="example: Montreal"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-xs-12">
+                                    <div class="control-group" name="state" caption="State or Province">
+                                        <label class="control-label">State or Province</label>
+                                        <div km-textbox-ml name="state" ng-model="document.state" locales="document.header.languages" placeholder="example: Quebec"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-md-6 col-xs-12">
+                                    <div class="control-group" name="postalCode" caption="Postal Code or Zip">
+                                        <label class="control-label">Postal Code or Zip</label>
+                                        <div km-textbox-ml name="postalCode" ng-model="document.postalCode" locales="document.header.languages" placeholder="example: H2Y 1N9"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-xs-12">
+                                    <div class="control-group" name="country" required caption="Country">
+                                        <label class="control-label">Country</label><br>
+                                        <div km-select required name="country" ng-model="document.country" items="options.countries()"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section> -->
+                    </div>
+                    <div km-tab="contact">
+                        <legend>Contact Information</legend>
+                        <section>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-12">
+                                    <div class="km-control-group" name="phones" required caption="Phone numbers">
+
+                                        <div km-inputtext-list required name="phones" ng-model="document.phones" placeholder="example: +1 514.288.2220"></div>
+                                        <div class="help-info small">Please use the following format: +[country code] [city code] [telephone number] [extension, if necessary].</div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-xs-12">
+                                    <div class="km-control-group" name="faxes" caption="Fax numbers">
+
+                                        <div km-inputtext-list name="faxes" ng-model="document.faxes" placeholder="example: +1 514.288.6588"></div>
+                                        <div class="help-info small">Please use the following format: +[country code] [city code] [telephone number] [extension, if necessary].</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 col-xs-12">
+                                    <div class="km-control-group" name="emails" required caption="Emails">
+                                        <div km-inputtext-list required name="emails" ng-model="document.emails" placeholder="example: secretariat@cbd.int"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-xs-12">
+                                    <!-- <div class="form-group" ng-class="{ 'has-warning': !loading && form.website.$invalid, 'has-error' : form.$submitted && form.website.$invalid }">
+                                        <label for="webite" class="control-label">Website(s) or Social Media Link(s)</label>
+                                        <input ng-change="updateWebsites('website',website)" type="url" class="form-control" name="website" id="website" ng-model="website" placeholder="Org. website" ng-disabled="disabled()" on-focus-helper start="http://">
+                                        <p class="help-block error" ng-show="!loading && form.website.$error.url">This is not a valid web address</p>
+                                    </div> -->
+
+                                      <div class="km-control-group" name="websites" caption="Website(s) or Social Media Link(s)">
+
+                                        <div km-link name="websites" ng-model="document.websites" allow-link="true" allow-file="false"></div>
+                                      </div>
+
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </form>
+                <div km-tab="review">
+                    <div class="btn-group" ng-show="document.header.languages.length>1">
+                        <input type="button" class="btn" ng-class="{'active' : review.locale==locale, 'btn-info' : review.locale==locale}" ng-repeat="locale in document.header.languages" ng-click="$parent.review.locale = locale" value="{{locale | uppercase}}" />
+                    </div>
+                    <view-bbi-contact ng-model="document" locale="review.locale"></view-bbi-contact>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-xs-12">
+                        <ul class="pagination">
+                            <li ng-class="{ disabled: tab=='general' }"><a href="" ng-click="prevTab()">&laquo;</a></li>
+                            <li ng-class="{ active  : tab=='general' }"><a href="" ng-click="tab='general'">Name</a></li>
+                            <li ng-class="{ active  : tab=='org'  }"><a href="" ng-click="tab='org'">Organization</a></li>
+                            <li ng-class="{ active  : tab=='contact'  }"><a href="" ng-click="tab='contact'">Contact</a></li>
+                            <li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate();">Review</a></li>
+                            <li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()">&raquo;</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-sm-12 hidden-xs" style="text-align:right">
+                        <div class="pagination">
+                            <span km-form-std-buttons document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()"
+                                on-pre-publish="onPrePublish()"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 visible-xs ">
+                        <div class="">
+                            <span km-form-std-buttons document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()"
+                                on-pre-publish="onPrePublish()"></span>
+                        </div>
+                    </div>
+<!-- <div>
+  <pre>{{document |json}}</pre>
+</div> -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
