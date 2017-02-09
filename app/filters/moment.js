@@ -8,4 +8,19 @@ define(['app', 'moment-timezone'], function(app, moment) { 'use strict';
                           : moment(datetime);
         };
     }]);
+    //============================================================
+    //
+    //============================================================
+    app.filter('fromNow', function () {
+        return function (date, unitOfTime) {
+
+            if(!date)
+                return "";
+
+            if(unitOfTime)
+                return moment(date).startOf(unitOfTime).fromNow();
+
+            return moment(date).fromNow();
+        };
+    });
 });
