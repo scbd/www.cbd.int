@@ -255,7 +255,7 @@ app.directive('editBbiProfile', ['$http',"$rootScope", "Enumerable", "$filter", 
 			//
 			//==================================
 			function gotoManager() {
-				$location.url("/submit/bbi-profile");
+				$location.url("platform/submit/bbi-profile");
 			}
 
 						//==================================

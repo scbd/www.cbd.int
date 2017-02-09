@@ -1,4 +1,4 @@
-define(['text!./search-result.html', 'app', 'lodash', 'moment', 'lodash', 'authentication'], function(template, app, _, moment, authentication) {
+define(['text!./search-result.html', 'app', 'lodash', 'moment', 'lodash', 'authentication','providers/realm'], function(template, app, _, moment, authentication) {
     'use strict';
 
     app.directive('searchResult', ['$location', function($location) {

@@ -533,7 +533,7 @@ app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter"
 			//
 			//==================================
 			function gotoManager() {
-				$location.url("/submit/organization");
+				$location.path("platform/submit/organization");
 			}
 
 			//==================================

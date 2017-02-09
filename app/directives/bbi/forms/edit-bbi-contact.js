@@ -292,7 +292,7 @@ define(['text!./edit-bbi-contact.html', 'app', 'angular', 'lodash', 'authenticat
 				//==================================
 				function gotoManager() {
 					$scope.$emit('showInfo', 'Contact successfully updated.');
-					$location.url("/submit/bbi-contact");
+					$location.path("/platform/submit/bbi-contact");
 				}
 
 				//==================================
@@ -417,7 +417,8 @@ define(['text!./edit-bbi-contact.html', 'app', 'angular', 'lodash', 'authenticat
 								}else{
 									if(frontEndValidationReport)
 									_.each(frontEndValidationReport.errors,function(err){
-													$scope.validationReport.errors.push(err);
+											if($scope.validationReport.errors)
+														$scope.validationReport.errors.push(err);
 									});
 								}
 								return cleanUpError || !!(success.data && success.data.errors && success.data.errors.length);
