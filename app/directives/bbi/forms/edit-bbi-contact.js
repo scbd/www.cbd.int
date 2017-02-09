@@ -338,10 +338,10 @@ define(['text!./edit-bbi-contact.html', 'app', 'angular', 'lodash', 'authenticat
 
 
 										$scope.document.emails = [response.data.Email];
-										$scope.document.address = response.data.Address;
-										$scope.document.city = response.data.City;
-										if(response.data.Country)
-											$scope.document.country = {identifier:response.data.Country};
+										// $scope.document.address = response.data.Address;
+										// $scope.document.city = response.data.City;
+										// if(response.data.Country)
+										// 	$scope.document.country = {identifier:response.data.Country};
 										if(response.data.Department){
 										  $scope.document.department={};
 											$scope.document.department[locale]= response.data.Department;
@@ -352,11 +352,11 @@ define(['text!./edit-bbi-contact.html', 'app', 'angular', 'lodash', 'authenticat
 											$scope.document.designation[locale]= response.data.Designation;
 										}
 										$scope.document.prefix = {en:response.data.Title};
-										$scope.document.state = response.data.State;
-										if(response.data.Zip){
-											$scope.document.postalCode={};
-											$scope.document.postalCode[locale] = response.data.Zip;
-										}
+										// $scope.document.state = response.data.State;
+										// if(response.data.Zip){
+										// 	$scope.document.postalCode={};
+										// 	$scope.document.postalCode[locale] = response.data.Zip;
+										// }
 										$scope.document.phones = [response.data.Phone];
 										$scope.document.firstName = response.data.FirstName;
 										$scope.document.lastName = response.data.LastName;
