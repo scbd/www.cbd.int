@@ -48,6 +48,8 @@ define(['text!./view-bbi-contact.html', 'app', 'angular', 'lodash', 'authenticat
 												 delete(data[0].operationalLanguages);
 												 delete(data[0].thematicAreas);
 												 delete(data[0].coordinates);
+												 delete(data[0].establishmentGooglePlaceId);
+												 delete(data[0].zip);
 												Object.assign($scope.document,data[0]);
 												killWatchConOrg();
 								});
