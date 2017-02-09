@@ -129,7 +129,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                 });
 
                 var newQ = _.map(filesToCreate, function(f){
-                    return $http.post('/api/v2016/documents/'+docId+'/files', { url : f.url });
+                    return $http.post('/api/v2016/documents/'+docId+'/files', { url : f.url, generatePdf: true });
                 });
 
                 return $q.all(delQ.concat(newQ));
@@ -383,7 +383,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                 var fileInfo = {
                     name: res.data.filename,
                     type: res.data.contentType,
-                    size: res.data.contentLength,
+                    size: res.data.size,
                     url: 'upload://'+target.uid,
                     language: language
                 };
