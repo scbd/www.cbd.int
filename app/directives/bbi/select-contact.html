@@ -83,7 +83,7 @@
                   </div>
                     <div class="col-xs-12">
                         <div ng-if="!loading && existingContacts && existingContacts.length==0" style="padding:0 10px;">
-                            <h3 class="color-litegrey">No {{schemaMap()}}(s) found matching that search. Please add your {{schemaMap()}} <a ng-href="submit/{{schema}}/new" target="_blank">here <i class="fa fa-external-link" aria-hidden="true"></i></a> if you are sure it does not exist in our database.</h3>
+                            <h3 class="color-litegrey">No {{schemaMap()}}(s) found matching that search. Please add your {{schemaMap()}} <a ng-href="platform/submit/{{schema}}/new" target="_blank">here <i class="fa fa-external-link" aria-hidden="true"></i></a> if you are sure it does not exist in our database.</h3>
                         </div>
                         <input type="textbox" ng-model="search.keyword" placeholder="keyword search"
                             class="form-control" style="margin-bottom:20px;" >
