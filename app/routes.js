@@ -1,4 +1,4 @@
-define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authentication'], function(app, $, _) { 'use strict';
+define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/extended-route', 'ngRoute', 'authentication', 'ngDialog'], function(app, $, _,redirectDialog) { 'use strict';
 
     var locationPath = window.location.pathname.toLowerCase().split('?')[0];
 
@@ -144,7 +144,7 @@ define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authe
             return _.defaults($route.current.params, params);
         }];
     }
-    
+
     //============================================================
     //
     //
@@ -206,15 +206,26 @@ define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authe
     //
     //============================================================
     function securize(requiredRoles) {
-        return ['$q', '$rootScope', 'authentication', '$location', '$window', function($q, $rootScope, authentication, $location, $window) {
+        return ['$q', '$rootScope', 'authentication', '$location', '$window','ngDialog', function($q, $rootScope, authentication, $location, $window,ngDialog) {
 
             return $q.when(authentication.getUser()).then(function (user) {
 
                 var hasRole = !!_.intersection(user.roles, requiredRoles).length;
 
                 if (!user.isAuthenticated) {
-                    $window.location.href = authentication.accountsBaseUrl()+'/signin?returnurl='+encodeURIComponent($location.absUrl());
-                    throw user; // stop route change!
+
+                ngDialog.open({
+                      template: redirectDialog,
+                      className: 'ngdialog-theme-default',
+                      closeByDocument: false,
+                      plain: true
+                  }).closePromise.then(function(retVal){
+                        if(retVal.value)
+                          $window.location.href = authentication.accountsBaseUrl()+'/signin?returnurl='+encodeURIComponent($location.absUrl());
+                        else
+                          $window.history.back();
+                  });
+                  throw user; // stop route change!
                 }
                 else if (!hasRole)
                     $location.url('/403?returnurl='+encodeURIComponent($location.url()));
