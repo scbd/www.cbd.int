@@ -31,6 +31,10 @@ define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authe
         if(/^\/kronos\/list-of-participants($|\/.*)/.test(locationPath))
             registerRoutes_kronos($routeProvider);
 
+        //bbi/*
+        if(/^\/biobridge($|\/.*)/.test(locationPath))
+            registerRoutes_bbi($routeProvider);
+
         $routeProvider.when('/403', { templateUrl: '/app/views/403.html' });
         $routeProvider.when('/404', { templateUrl: '/app/views/404.html' }).otherwise({redirectTo: '/404'});
     }
@@ -139,6 +143,62 @@ define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authe
         return ['$route', function($route) {
             return _.defaults($route.current.params, params);
         }];
+    }
+    
+    //============================================================
+    //
+    //
+    //============================================================
+    function registerRoutes_bbi(routeProvider) {
+
+        $("base").attr('href', '/biobridge/'); // allow full page reload outside of  /insession/*
+
+        routeProvider
+          .when('/',                       { templateUrl: 'views/bbi/index.html',        controllerAs: 'indexCtrl',   resolveController: true })
+          .when('/platform/submit/:schema',         { templateUrl: 'views/bbi/management/record-list.html',  controllerAs: 'submitCtrl',  resolveController: true,resolve : { user : securize(['User']) } })
+          .when('/platform/submit/:schema/:id',     { templateUrl: 'views/bbi/management/edit.html',         controllerAs: 'editCtrl',    resolveController: true ,resolve : { user : securize(['User']) }})
+          .when('/platform/submit/:schema/:id/view',{ templateUrl: 'views/bbi/management/view.html',    controllerAs: 'viewCtrl',    resolveController: true,resolve : { user : securize(['Everyone']) } })
+          .when('/platform/dashboard'              ,{ templateUrl: 'views/bbi/management/index.html',    controllerAs: 'dashCtrl',    resolveController: true ,resolve : { user : securize(['User']) }})
+          .when('/platform/search',                { templateUrl: 'views/bbi/management/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
+          .when('/platform/tools',                  { templateUrl: 'views/bbi/management/tools.html',  controllerAs: 'toolsCtrl',  resolveController: true})
+          .when('/platform/about',                  { templateUrl: 'views/bbi/management/about.html',  controllerAs: 'pAboutCtrl',  resolveController: true})
+          .when('/platform/:schema',                       { templateUrl: 'views/bbi/management/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
+
+          .when('/about',                  { templateUrl: 'views/bbi/about/index.html',  controllerAs: 'initCtrl',  resolveController: true})
+          .when('/about/framework',        { templateUrl: 'views/bbi/about/framework.html',  controllerAs: 'frameworkCtrl',  resolveController: true})
+          .when('/about/plan',             { templateUrl: 'views/bbi/about/plan.html',  controllerAs: 'planCtrl',  resolveController: true})
+          .when('/about/partners',         { templateUrl: 'views/bbi/about/partners.html',  controllerAs: 'partnersCtrl',  resolveController: true})
+
+          .when('/participation',                { templateUrl: 'views/bbi/participation/index.html',  controllerAs: 'participationCtrl',  resolveController: true})
+          .when('/participation/request',        { templateUrl: 'views/bbi/participation/request.html',  controllerAs: 'requestCtrl',  resolveController: true})
+          .when('/participation/provide',        { templateUrl: 'views/bbi/participation/provide.html',  controllerAs: 'provideCtrl',  resolveController: true})
+          .when('/participation/opportunity',    { templateUrl: 'views/bbi/participation/opportunity.html',  controllerAs: 'opportunityCtrl',  resolveController: true})
+
+          .when('/projects',                { templateUrl: 'views/bbi/pilot-projects/index.html',  controllerAs: 'pilotCtrl',  resolveController: true})
+          .when('/projects/selected',       { templateUrl: 'views/bbi/pilot-projects/selected.html',  controllerAs: 'selectedCtrl',  resolveController: true})
+
+
+          // .when('/proposals',                     { templateUrl: 'views/bbi/search.html',  controllerAs: 'searchCtrl',  resolveController: true})
+
+          .when('/resources',                     { templateUrl: 'views/bbi/resources.html',  controllerAs: 'resoCtrl',  resolveController: true})
+          .when('/faq',                           { templateUrl: 'views/bbi/faq.html',  controllerAs: 'faqCtrl',  resolveController: true})
+          .when('/contact',                       { templateUrl: 'views/bbi/contact.html',  controllerAs: 'contCtrl',  resolveController: true})
+
+          .when('/comms',                         { templateUrl: 'views/bbi/comms/index.html'    ,  controllerAs: 'commsCtrl',  resolveController: true})
+          .when('/comms/panel',                   { templateUrl: 'views/bbi/comms/panel.html',  controllerAs: 'panelCtrl',   resolveController: true})
+          .when('/search',                        { templateUrl: 'views/bbi/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
+          .when('/platform',                        { templateUrl: 'views/bbi/platform.html',  controllerAs: 'pltfCtrl',   resolveController: true, reloadOnSearch : false})
+
+          .when('/forums/iac',                    { templateUrl: 'views/bbi/forums/thread-list-view.html',    resolveController: true,resolve : { user : securize(['User'])}, forumId:17433, postUrl:'/forums/iac', text:'IAC' } )
+        //  .when('/forums/iac:threadId',           { templateUrl: '/views/bbi/forums/post-list-view.html',  controllerAs: 'forumCtrl',  resolveController: true,resolve : { user : securize(['User'])},forumId:17433, forumListUrl:'/forums/iac/', text:'IAC' })
+
+          // .when('/forums/joint-iac',                    { templateUrl: '/views/bbi/forums/thread-list-view.html',  controllerAs: 'forumCtrl',  resolveController: true,resolve : { user : securize(['User']) } })
+          // .when('/forums/joint-iac:threadId',           { templateUrl: '/views/bbi/forums/post-list-view.html',  controllerAs: 'forumCtrl',  resolveController: true,resolve : { user : securize(['User']) } })
+          //
+          .when('/tools/forums/art10_groups',                    { templateUrl: 'views/bbi/forums/thread-list-view.html',  controllerAs: '1forumCtrl', forumId:17316, postUrl:'tools/forums/art10_groups', text:'Forum on Article 10',  resolveController: true,resolve : { user : securize(['User']) } })
+          .when('/tools/forums/art10_groups/:threadId',           { templateUrl: 'views/bbi/forums/post-list-view.html',  controllerAs: '1forumCtrl', forumId:17316, forumListUrl:'tools/forums/art10_groups/', text:'Forum on Article 10' ,  resolveController: true,resolve : { user : securize(['User']) } });
+
+
     }
 
     //============================================================

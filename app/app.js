@@ -1,9 +1,24 @@
-define(['angular', 'ngSanitize'], function(angular) { 'use strict';
+define(['angular', 'ngSanitize','toastr','hl.sticky'], function(angular) { 'use strict';
 
-    var app = angular.module('app', angular.defineModules(['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize']));
+    var app = angular.module('app', angular.defineModules(['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','hl.sticky']));
 
-    app.config(['$httpProvider', function($httpProvider) {
-
+    app.config(['$httpProvider','toastrConfig', function($httpProvider,toastrConfig) {
+        angular.extend(toastrConfig, {
+          autoDismiss: true,
+          containerId: 'toast-container',
+          newestOnTop: true,
+          closeButton: true,
+          positionClass: 'toast-top-right',
+          iconClasses: {
+            error: 'alert-danger',
+            info: 't-info',
+            success: 'alert-success',
+            warning: 'alert-warning'
+          },
+          target: 'body',
+          timeOut: 5000,
+          progressBar: true,
+        });
         $httpProvider.useApplyAsync(true);
         $httpProvider.interceptors.push('authenticationHttpIntercepter');
         $httpProvider.interceptors.push('apiRebase');
