@@ -1,0 +1,29 @@
+{
+	"links": [{
+		"title": {
+			"en": "Home"
+		},
+		"source": "/platform",
+		"children": []
+	},
+{
+	 "title": {
+		 "en": "About Platform"
+	 },
+	 "source": "/platform/about",
+	 "children": []
+ },
+	 {
+		"title": {
+			"en": "Search"
+		},
+		"source": "/platform/search",
+		"children": []
+	}, {
+		"title": {
+			"en": "Dashboard"
+		},
+		"source": "/platform/dashboard",
+		"children": []
+	}]
+}

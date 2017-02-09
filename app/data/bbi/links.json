@@ -1,0 +1,126 @@
+{
+	"links": [{
+		"title": {
+			"en": "Home"
+		},
+		"source": "/",
+		"children": []
+	},
+	{
+		"title": {
+			"en": "About"
+		},
+
+		"children": [
+			{
+				"title": {
+					"en": "The Initiative"
+				},
+				"source": "/about"
+			},{
+			"title": {
+				"en": "Operational Framework"
+			},
+			"source": "/about/framework"
+		}, {
+			"title": {
+				"en": "Action Plan"
+			},
+			"source": "/about/plan"
+		}, {
+			"title": {
+				"en": "Partners"
+			},
+			"source": "/about/partners"
+		}]
+	}, {
+		"title": {
+			"en": "Participation"
+		},
+		"children": [
+
+				{"title": {
+					"en": "Participation"
+				},
+				"source": "/participation"
+			},
+				{"title": {
+					"en": "Requesting Assistance"
+				},
+				"source": "/participation/request"
+			},{
+			"title": {
+				"en": "Providing Assistance"
+			},
+			"source": "/participation/provide"
+		}, {
+			"title": {
+				"en": "Provide an Opportunity"
+			},
+			"source": "/participation/opportunity"
+		}]
+	}, {
+		"title": {
+			"en": "Projects"
+		},
+
+		"children": [{
+			"title": {
+				"en": "Projects"
+			},
+			"source": "/projects"
+		},{
+			"title": {
+				"en": "Selected Projects"
+			},
+			"source": "/projects/selected"
+		}
+	]
+	}, 
+	{
+		"title": {
+			"en": "Outreach"
+		},
+		"children": [
+			{
+			 "title": {
+				 "en": "Communication and Outreach"
+			 },
+			 "source": "/comms"
+		 },
+		 {
+			"title": {
+				"en": "Panel Discussions"
+			},
+			"source": "/comms/panel"
+		}
+
+
+		]
+	},{
+	 "title": {
+		 "en": "Platform"
+	 },
+	 "source": "/platform",
+	 "children": []
+ },
+	 {
+		"title": {
+			"en": "Resources"
+		},
+		"source": "/resources",
+		"children": []
+	}, {
+		"title": {
+			"en": "FAQ"
+		},
+		"source": "/faq",
+		"children": []
+	}, {
+		"title": {
+			"en": "Contact"
+		},
+		"source": "/contact",
+		"children": []
+	}]
+}
