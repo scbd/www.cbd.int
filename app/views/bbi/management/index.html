@@ -1,0 +1,137 @@
+<ng-include src="'/app/views/bbi/platform-header.html'"></ng-include>
+<style>
+    legend {
+        margin-top: 30px;
+        padding: 5px;
+        background-color: #ddd;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        display: block;
+        width: 100%;
+        padding: 5px 5px 5px 5px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: inherit;
+        color: #333;
+        border: 0;
+        border-bottom: 1px solid #e5e5e5;
+    }
+</style>
+<div class="row">
+    <menu links="dashCtrl.links" style="padding:0;margin:0;"></menu>
+</div>
+
+<div class="row">
+
+
+      <div class="col-xs-12">
+        <div class="pull-right" style="margin-top:15px;">
+          <span class="badge bg-published text-uppercase" style="width:130px;padding:5px;">Published</span>
+          <span class="badge bg-draft text-uppercase" style="width:130px;padding:5px;">Drafts</span>
+            <span class="badge bg-request text-uppercase" style="width:130px;padding:5px;">Requests</span>
+        </div>
+        <h1><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</h1>
+        <p>The BBI Platform's dashboard handles the submission, editing and listing of your BBI related records.  All BBI records are <a href="http://chm.cbd.int" target="_blank">CHM</a> <span class="small lead">(The Clearing-House Mechanism)</span> records</p>
+        <legend>Your BBI Records</legend>
+      </div>
+    <div class="col-xs-5 col-xs-offset-2">
+        Requests for Assistance
+    </div>
+    <div class="col-xs-2">
+      <div class="status-badge pull-right">
+          <span class="badge bg-published">{{dashCtrl.getFacet('bbiRequest').public}}</span>
+          <span class="badge bg-draft">{{dashCtrl.getFacet('bbiRequest').draft}}</span>
+          <span class="badge bg-request">{{dashCtrl.getFacet('bbiRequest').workflow}}</span>
+      </div>
+    </div>
+    <div class="col-xs-1">
+      <div class="btn-group-xs pull-right">
+          <a class="btn btn-info" href="#" ng-click="dashCtrl.goTo('/platform/submit/bbi-request')" data-toggle="tooltip" title="Record List" data-toggle="tooltip" title="Record List"><i class="fa fa-list"></i></a>
+          <a class="btn btn-primary" href="#" ng-click="dashCtrl.goTo('/platform/submit/bbi-request/new')" data-toggle="tooltip" title="Add New Record"><i class="fa fa-plus-square"></i></a>
+      </div>
+    </div>
+    <div class="col-xs-8 col-xs-offset-2">
+      <hr>
+    </div>
+
+  <div class="col-xs-5 col-xs-offset-2">
+      Providers
+  </div>
+  <div class="col-xs-2">
+    <div class="status-badge pull-right">
+        <span class="badge bg-published">{{dashCtrl.getFacet('bbiProfile').public}}</span>
+        <span class="badge bg-draft">{{dashCtrl.getFacet('bbiProfile').draft}}</span>
+        <span class="badge bg-request">{{dashCtrl.getFacet('bbiProfile').workflow}}</span>
+    </div>
+  </div>
+  <div class="col-xs-1">
+    <div class="btn-group-xs pull-right">
+        <a class="btn btn-info" href="#" ng-click="dashCtrl.goTo('/platform/submit/bbi-profile')" data-toggle="tooltip" title="Record List" data-toggle="tooltip" title="Record List"><i class="fa fa-list"></i></a>
+        <a class="btn btn-primary" href="#" ng-click="dashCtrl.goTo('/platform/submit/bbi-profile/new')" data-toggle="tooltip" title="Add New Record"><i class="fa fa-plus-square"></i></a>
+    </div>
+  </div>
+
+  <div class="col-xs-8 col-xs-offset-2">
+    <hr>
+  </div>
+  <div class="col-xs-5 col-xs-offset-2">
+      Opportunities
+  </div>
+  <div class="col-xs-2">
+    <div class="status-badge pull-right">
+        <span class="badge bg-published">{{dashCtrl.getFacet('bbiOpportunity').public}}</span>
+        <span class="badge bg-draft">{{dashCtrl.getFacet('bbiOpportunity').draft}}</span>
+        <span class="badge bg-request">{{dashCtrl.getFacet('bbiOpportunity').workflow}}</span>
+    </div>
+  </div>
+  <div class="col-xs-1">
+    <div class="btn-group-xs pull-right">
+        <a class="btn btn-info" href="#" ng-click="dashCtrl.goTo('/platform/submit/bbi-opportunity')" data-toggle="tooltip" title="Record List" data-toggle="tooltip" title="Record List"><i class="fa fa-list"></i></a>
+        <a class="btn btn-primary" href="#" ng-click="dashCtrl.goTo('/platform/submit/bbi-opportunity/new')" data-toggle="tooltip" title="Add New Record"><i class="fa fa-plus-square"></i></a>
+    </div>
+  </div>
+  <div class="col-xs-8 col-xs-offset-2">
+    <hr>
+  </div>
+  <div class="col-xs-5 col-xs-offset-2">
+      Organizations
+  </div>
+  <div class="col-xs-2">
+    <div class="status-badge pull-right">
+        <span class="badge bg-published">{{dashCtrl.getFacet('organization').public}}</span>
+        <span class="badge bg-draft">{{dashCtrl.getFacet('organization').draft}}</span>
+        <span class="badge bg-request">{{dashCtrl.getFacet('organization').workflow}}</span>
+    </div>
+  </div>
+
+  <div class="col-xs-1">
+    <div class="btn-group-xs pull-right">
+        <a class="btn btn-info" href="#" ng-click="dashCtrl.goTo('/platform/submit/organization')" data-toggle="tooltip" title="Record List" data-toggle="tooltip" title="Record List"><i class="fa fa-list"></i></a>
+        <a class="btn btn-primary" href="#" ng-click="dashCtrl.goTo('/platform/submit/organization/new')" data-toggle="tooltip" title="Add New Record"><i class="fa fa-plus-square"></i></a>
+    </div>
+  </div>
+  <div class="col-xs-8 col-xs-offset-2">
+    <hr>
+  </div>
+  <div class="col-xs-5 col-xs-offset-2">
+      Contacts
+  </div>
+
+  <div class="col-xs-2">
+    <div class="status-badge pull-right">
+        <span class="badge bg-published">{{dashCtrl.getFacet('bbiContact').public}}</span>
+        <span class="badge bg-draft">{{dashCtrl.getFacet('bbiContact').draft}}</span>
+        <span class="badge bg-request">{{dashCtrl.getFacet('bbiContact').workflow}}</span>
+    </div>
+  </div>
+
+  <div class="col-xs-1">
+    <div class="btn-group-xs pull-right">
+        <a class="btn btn-info" href="#" ng-click="dashCtrl.goTo('/platform/submit/bbi-contact')" data-toggle="tooltip" title="Record List" data-toggle="tooltip" title="Record List"><i class="fa fa-list"></i></a>
+        <a class="btn btn-primary" href="#" ng-click="dashCtrl.goTo('/platform/submit/bbi-contact/new')" data-toggle="tooltip" title="Add New Record"><i class="fa fa-plus-square"></i></a>
+    </div>
+  </div>
+
+</div>

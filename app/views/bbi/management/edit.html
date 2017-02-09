@@ -1,0 +1,13 @@
+<ng-include src="'/app/views/bbi/platform-header.html'"></ng-include>
+<div class="row">
+
+    <menu links="editCtrl.links" style="padding:0;margin:0;"></menu>
+
+  <div class="col-xs-12">
+    <edit-bbi-assistance user="user" ng-if="editCtrl.schema==='bbiRequest'"></edit-bbi-assistance>
+    <edit-bbi-opportunity user="user" ng-if="editCtrl.schema==='bbiOpportunity'"></edit-bbi-opportunity>
+    <edit-bbi-profile user="user" ng-if="editCtrl.schema==='bbiProfile'"></edit-bbi-profile>
+    <edit-organization user="user" ng-if="editCtrl.schema==='organization'"></edit-organization>
+    <edit-bbi-contact user="user" ng-if="editCtrl.schema==='bbiContact'"></edit-bbi-contact>
+  </div>
+</div>
