@@ -1,4 +1,4 @@
-define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/extended-route', 'ngRoute', 'authentication', 'ngDialog'], function(app, $, _,redirectDialog) { 'use strict';
+define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/extended-route', 'ngRoute', 'authentication', 'ngDialog','ngCookies'], function(app, $, _,redirectDialog) { 'use strict';
 
     var locationPath = window.location.pathname.toLowerCase().split('?')[0];
 
@@ -206,32 +206,61 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
     //
     //============================================================
     function securize(requiredRoles) {
-        return ['$q', '$rootScope', 'authentication', '$location', '$window','ngDialog', function($q, $rootScope, authentication, $location, $window,ngDialog) {
+        return ['$q', '$rootScope', 'authentication', '$location', '$window','ngDialog','$cookies', function($q, $rootScope, authentication, $location, $window,ngDialog,$cookies) {
 
             return $q.when(authentication.getUser()).then(function (user) {
 
                 var hasRole = !!_.intersection(user.roles, requiredRoles).length;
 
                 if (!user.isAuthenticated) {
+                    $rootScope.authRediectChange=authRediectChange;
 
-                ngDialog.open({
-                      template: redirectDialog,
-                      className: 'ngdialog-theme-default',
-                      closeByDocument: false,
-                      plain: true
-                  }).closePromise.then(function(retVal){
-                        if(retVal.value)
-                          $window.location.href = authentication.accountsBaseUrl()+'/signin?returnurl='+encodeURIComponent($location.absUrl());
-                        else
-                          $window.history.back();
-                  });
-                  throw user; // stop route change!
+                    if(typeof $cookies.get('redirectOnAuthMsg') ==='undefined'){
+
+
+                        openDialog();
+                    } else if ($cookies.get('redirectOnAuthMsg') === 'false')
+                        openDialog();
+                    else
+                        $window.location.href = authentication.accountsBaseUrl()+'/signin?returnurl='+encodeURIComponent($location.absUrl());
+
+                    throw user; // stop route change!
                 }
                 else if (!hasRole)
                     $location.url('/403?returnurl='+encodeURIComponent($location.url()));
 
                 return user;
             });
-        }];
-    }
+
+            //============================================================
+            //
+            //
+            //============================================================
+            function openDialog() {
+                $rootScope.redirectOnAuthMsg=true;
+                $cookies.put('redirectOnAuthMsg',true);
+                ngDialog.open({
+                      template: redirectDialog,
+                      className: 'ngdialog-theme-default',
+                      closeByDocument: false,
+                      plain: true,
+                      scope:$rootScope
+                  }).closePromise.then(function(retVal){
+                        if(retVal.value)
+                          $window.location.href = authentication.accountsBaseUrl()+'/signin?returnurl='+encodeURIComponent($location.absUrl());
+                        else
+                          $window.history.back();
+                  });
+            }
+            //============================================================
+            //
+            //
+            //============================================================
+            function authRediectChange(value) {
+                $cookies.put('redirectOnAuthMsg',value);
+            }//authRediectChange
+
+        }];//return array
+    }//securize
+
 });
