@@ -22,7 +22,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
          zh : "Chinese"
      };
 
-	return ["$scope", "$route", "$http", '$location', '$q', function ($scope, $route, $http, $location, $q) {
+	return ["$scope", "$route", "$http", '$location', '$q', '$window', function ($scope, $route, $http, $location, $q, $window) {
 
         $scope.FILETYPES  = MIMES;
         $scope.LANGUAGES  = LANGUAGES;
@@ -44,6 +44,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
         _ctrl.normalizeSymbol=normalizeSymbol;
 
         _ctrl.clearErrors = clearErrors;
+        _ctrl.del    = del;
         _ctrl.save   = save;
         _ctrl.close  = close;
 
@@ -128,7 +129,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                 });
 
                 var newQ = _.map(filesToCreate, function(f){
-                    return $http.post('/api/v2016/documents/'+docId+'/files', { url : f.url });
+                    return $http.post('/api/v2016/documents/'+docId+'/files', { url : f.url, generatePdf: true });
                 });
 
                 return $q.all(delQ.concat(newQ));
@@ -138,6 +139,28 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                 return saveSupersede();
 
             }).then(function(){
+
+                close();
+
+            }).catch(function(err) {
+                _ctrl.error = err.data || err;
+                console.error(err);
+            });
+        }
+
+
+        //==============================
+        //
+        //==============================
+        function del() {
+
+            if(!_ctrl.document._id)
+                return;
+
+            if(!confirm("Delete this document?\n"+(document_bak.symbol||document_bak.title.en)))
+                return;
+
+            return $http.delete('/api/v2016/meetings/'+meetingId+'/documents/'+_ctrl.document._id).then(function() {
 
                 close();
 
@@ -248,6 +271,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                 agendaItems: document.agendaItems,
                 title:       document.title,
                 description: document.description,
+                positionGroup: getPositionGroup(document),
                 metadata:    _.cloneDeep(document.metadata||{}),
             };
 
@@ -257,6 +281,31 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                 doc.metadata.message.level = doc.metadata.message.level || null;
 
             return doc;
+        }
+
+        //==============================
+        //
+        //==============================
+        function getPositionGroup(doc) {
+
+            var positionGroup = 'other';
+
+            if(doc.type=='outcome')        positionGroup = 'outcome';
+            if(doc.type=='report')         positionGroup = 'outcome';
+            if(doc.type=='decision')       positionGroup = 'outcome';
+            if(doc.type=='recommandation') positionGroup = 'outcome';
+            if(doc.type=='official')       positionGroup = 'official';
+            if(doc.type=='information')    positionGroup = 'information';
+            if(doc.type=='other')          positionGroup = 'other';
+            if(doc.type=='notification')   positionGroup = 'notification';
+            if(doc.type=='statement')      positionGroup = 'statement';
+            if(doc.type=='crp')            positionGroup = 'in-session';
+            if(doc.type=='limited')        positionGroup = 'in-session';
+            if(doc.type=='non-paper')      positionGroup = 'in-session';
+            if(doc.group=='WG.1' && positionGroup == 'in-session')  positionGroup = 'in-session/wg1';
+            if(doc.group=='WG.2' && positionGroup == 'in-session')  positionGroup = 'in-session/wg2';
+
+            return positionGroup;
         }
 
         //==============================
@@ -334,7 +383,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                 var fileInfo = {
                     name: res.data.filename,
                     type: res.data.contentType,
-                    size: res.data.contentLength,
+                    size: res.data.size,
                     url: 'upload://'+target.uid,
                     language: language
                 };
@@ -438,7 +487,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
             if(meetingId=="MOP-08")    return $location.path('/2016/cp-mop-8/documents');
             if(meetingId=="NP-MOP-02") return $location.path('/2016/np-mop-2/documents');
 
-            $location.path('/');
+            $window.location = '/doc/?meeting='+meetingId;
         }
 
         //==============================
