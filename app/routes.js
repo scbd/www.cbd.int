@@ -215,11 +215,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
                 if (!user.isAuthenticated) {
                     $rootScope.authRediectChange=authRediectChange;
 
-                    if(typeof $cookies.get('redirectOnAuthMsg') ==='undefined'){
-
-
-                        openDialog();
-                    } else if ($cookies.get('redirectOnAuthMsg') === 'false')
+                    if(!$cookies.get('redirectOnAuthMsg') || $cookies.get('redirectOnAuthMsg')==='false')
                         openDialog();
                     else
                         $window.location.href = authentication.accountsBaseUrl()+'/signin?returnurl='+encodeURIComponent($location.absUrl());

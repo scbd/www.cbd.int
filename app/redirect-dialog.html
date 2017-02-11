@@ -1,36 +1,32 @@
-<div >
-  <div class="text-center">
-      <img class="logo" width="45%" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>"></img>
-
+<div>
+    <div class="text-center">
+        <img class="logo" width="45%" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>"></img>
         <h3>Authentication Required</h3>
-  </div>
-<style>
-   .mhr{height: 12px;
-    border: 0;
-    box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
-  }
-</style>
-<hr class="mhr" style="color:#111;">
-    <p class="small">  You are entering an area that requires authentication.  You are being redirected to accounts.cbd.int in order to:
+    </div>
+    <style>
+        .mhr {
+            height: 12px;
+            border: 0;
+            box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    <hr class="mhr" style="color:#111;">
+    <p class="small"> You are entering an area that requires authentication. You are being redirected to accounts.cbd.int in order to:
 
-      <ol class="small">
-        <li> Sign in; or</li>
-        <li> Create an account</li>
-      </ol>
-       <p class="small">Once authorized you will be redirected back to your intended destination. </p>
-       <div class="col-xs-12 checkbox text-nowrap"  style="margin: 0 0 0 0;line-height:1em;">
- 					<label style="font-size: .8em;">
+        <ol class="small">
+            <li> Sign in; or</li>
+            <li> Create an account</li>
+        </ol>
+        <p class="small">Once authorized you will be redirected back to your intended destination. </p>
+        <div class="col-xs-12 checkbox text-nowrap" style="margin: 0 0 0 0;line-height:1em;">
+            <label style="font-size: .8em;">
             <span class="text-danger">Do not show this warning again.</span>
  							<input  ng-false-value="false" ng-true-value="true" type="checkbox" ng-model="redirectOnAuthMsg" bind-indeterminate="item.indeterminate" ng-change="authRediectChange(redirectOnAuthMsg)" checked>
  							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
-
-
  					</label>
-<br>
- 			</div>
-
+            <br>
+        </div>
     </p>
-
     <div class="text-xs-center text-right">
         <button class="btn btn-default" ng-click="closeThisDialog(true);">
                   Proceed to accounts.cbd.int
