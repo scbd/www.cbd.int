@@ -115,7 +115,6 @@ define(['app'], function(app) {
         //
         //============================================================
         function settingsNotFound() {
-            console.log('settings not found');
             commit();
         }
         //============================================================
@@ -128,7 +127,6 @@ define(['app'], function(app) {
             if (settings){
               deferred.resolve(settings);
               $interval.cancel(intervallObj);
-console.log('settings has value',settings);
             }
           }, 100,30);
           $timeout(function(){if(!settings){deferred.reject('no setting found');throw 'No settings found';}},3300);
