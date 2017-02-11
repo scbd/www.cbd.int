@@ -53,7 +53,10 @@
                   </div>
                 </div> -->
                     <div class="row" >
-
+                      <div class="col-xs-12 ">
+                        <div ng-if="updatedRecord && !updatedRecordError" class="alert alert-info"> Waiting for updated record to be reindexed and appear below ... <i class="fa fa-spinner fa-spin"></i></div>
+                        <div ng-if="updatedRecordError" class="alert alert-danger">Error: updated record was not indexed as <strong>{{status}}</strong>. Please contact the helpdesk and report that record <strong>{{updatedRecord}}</strong> was not indexed as <strong>{{status}}</strong> after it was updated.</div>
+                      </div>
 <section ng-if="records.length">
                         <div class="col-xs-3 text-no-wrap" style="color:#333;font-size:14px;padding-left:0px;">
                             <div style="margin-top:25px;">
@@ -101,6 +104,7 @@
                                 </select>
                             </div>
                         </div>
+
 </section>
                         <table class="table table-striped">
                             <thead>

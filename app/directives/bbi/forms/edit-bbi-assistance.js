@@ -305,7 +305,10 @@ app.directive('editBbiAssistance', ['$http',"$rootScope", "Enumerable", "$filter
 									$scope.$emit('showSuccess', 'Assitance Request ' + msg + ' Saved as '+status);
 
 									if($scope.document.meta.status!=='draft')
-										$timeout(function(){$location.path('platform/submit/'+$scope.schema.slice(0, -1));},1500);
+										$timeout(function(){$location.path('platform/submit/'+$scope.schema.slice(0, -1));
+										$location.search('index-update',$scope.document._id);
+										$location.search('index-view',status);
+									},1500);
 							}).catch(	$scope.onError);
 			};
 			//=======================================================================

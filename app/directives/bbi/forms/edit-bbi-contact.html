@@ -101,22 +101,6 @@
 
                     <div km-tab="org">
                         <legend style="margin-top:0;">Organization</legend>
-                        <!-- <div class="row">
-                            <div class="col-md-8 col-xs-12">
-                                <div class="control-group" name="name" required caption="Name of the organization">
-                                    <label class="control-label">Name of the organization</label>
-                                    <div km-textbox-ml name="name" ng-model="document.organization" placeholder="text entry" locales="document.header.languages"></div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 col-xs-12">
-                                <div class="control-group" name="acronym" required caption="Acronym">
-                                    <label class="control-label">Acronym</label>
-                                    <div km-textbox-ml name="acronym" ng-model="document.organizationAcronym" placeholder="text entry" locales="document.header.languages"></div>
-                                </div>
-                            </div>
-                        </div> -->
-
 
                         <div class="row">
                             <div class="col-md-8 col-xs-12">
@@ -125,67 +109,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- <section ng-show="!isNewOrg">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="panel panel-default" style="padding:10ppx 10px 10px 10px;">
-                                        <div class="form-group" style="padding:10px 10px 10px 10px;">
-
-                                            <label for="placesSearch" class="control-label">Search google maps to prefill your address details</label>
-                                            <div class="input-group">
-                                                <input id="pac-input" name="placesSearch" class="form-control" ng-model="placeSearch" type="text" placeholder="413 Saint Jacques Street, Montreal, QC, Canada" ng-change="addressSearch()">
-                                                <span class="input-group-addon pointer" ng-click="clearAddressSearch();"><i class="fa fa-search" ng-if="!selectedAddress && (!placeSearch || placeSearch.length===0)"></i><i class="fa fa-close" ng-if="selectedAddress|| placeSearch.length" ></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <section>
-                            <div class="row" >
-                                <div class="col-md-12">
-                                    <div class="control-group" name="address" caption="Address">
-                                        <label class="control-label">Address</label>
-                                        <div km-textbox-ml ng-model="document.address" rows="2" placeholder="example: 413 St-Jacques Ouest, Suite 800" locales="document.header.languages"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6 col-xs-12">
-                                    <div class="control-group" name="city" required caption="City">
-                                        <label class="control-label">City</label>
-                                        <div km-textbox-ml required name="city" ng-model="document.city" locales="document.header.languages" placeholder="example: Montreal"></div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6 col-xs-12">
-                                    <div class="control-group" name="state" caption="State or Province">
-                                        <label class="control-label">State or Province</label>
-                                        <div km-textbox-ml name="state" ng-model="document.state" locales="document.header.languages" placeholder="example: Quebec"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-md-6 col-xs-12">
-                                    <div class="control-group" name="postalCode" caption="Postal Code or Zip">
-                                        <label class="control-label">Postal Code or Zip</label>
-                                        <div km-textbox-ml name="postalCode" ng-model="document.postalCode" locales="document.header.languages" placeholder="example: H2Y 1N9"></div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6 col-xs-12">
-                                    <div class="control-group" name="country" required caption="Country">
-                                        <label class="control-label">Country</label><br>
-                                        <div km-select required name="country" ng-model="document.country" items="options.countries()"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </section> -->
                     </div>
                     <div km-tab="contact">
                         <legend>Contact Information</legend>
@@ -216,11 +139,6 @@
                                 </div>
 
                                 <div class="col-md-6 col-xs-12">
-                                    <!-- <div class="form-group" ng-class="{ 'has-warning': !loading && form.website.$invalid, 'has-error' : form.$submitted && form.website.$invalid }">
-                                        <label for="webite" class="control-label">Website(s) or Social Media Link(s)</label>
-                                        <input ng-change="updateWebsites('website',website)" type="url" class="form-control" name="website" id="website" ng-model="website" placeholder="Org. website" ng-disabled="disabled()" on-focus-helper start="http://">
-                                        <p class="help-block error" ng-show="!loading && form.website.$error.url">This is not a valid web address</p>
-                                    </div> -->
 
                                       <div class="km-control-group" name="websites" caption="Website(s) or Social Media Link(s)">
 
@@ -265,9 +183,9 @@
                                 on-pre-publish="onPrePublish()"></span>
                         </div>
                     </div>
-<div>
+<!-- <div>
   <pre>{{document |json}}</pre>
-</div>
+</div> -->
                 </div>
 
             </div>

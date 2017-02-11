@@ -534,6 +534,7 @@ app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter"
 			$scope.onPostWorkflow = function() {
 				$rootScope.$broadcast("onPostWorkflow", "Publishing request sent successfully.");
 				gotoManager();
+				$location.search('index-view','workflow');
 			};
 
 			//==================================
@@ -542,6 +543,7 @@ app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter"
 			$scope.onPostPublish = function() {
 				$rootScope.$broadcast("onPostPublish", "Record is being published, please note the publishing process could take up to 1 minute before your record appears.");
 				gotoManager();
+				$location.search('index-view','public');
 			};
 
 			//==================================
@@ -563,7 +565,10 @@ app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter"
 			//
 			//==================================
 			function gotoManager() {
-				$location.path("platform/submit/organization");
+				$scope.$emit('showInfo', 'Contact successfully updated.');
+				$location.path("/platform/submit/"+$scope.schema);
+				$location.search('index-update',$scope.document.header.identifier);
+
 			}
 
 			//==================================

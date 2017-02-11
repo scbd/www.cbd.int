@@ -14,8 +14,8 @@ define(['lodash',
     'services/mongo-storage',
 ], function(_, delDial, links) {
     'use strict';
-    return ['$scope', '$route', '$http', '$location', '$q', 'user', 'IStorage', 'ngDialog', 'realm','$timeout','mongoStorage',
-        function($scope, $route, $http, $location, $q, user, storage, ngDialog, realm,$timeout,mongoStorage) {
+    return ['$scope', '$route', '$http', '$location', '$q', 'user', 'IStorage', 'ngDialog', 'realm','$timeout','mongoStorage','$interval',
+        function($scope, $route, $http, $location, $q, user, storage, ngDialog, realm,$timeout,mongoStorage,$interval) {
 
             $scope.pageSize = 15;
 			      $scope.isAdmin = !!_.intersection(user.roles, ["Administrator","BBiAdministrator"]).length;
@@ -60,11 +60,10 @@ define(['lodash',
             $scope.formatWID = function(workflowID) {
                 return workflowID ? workflowID.replace(/(?:.*)(.{3})(.{4})$/g, "W$1-$2").toUpperCase() : "";
             };
+console.log($location.search()['index-view']);
+           locationView();
 
-            reloadList();
-            $timeout(function(){reloadList();},2500);
-            $timeout(function(){reloadList();},5000);
-            $timeout(function(){reloadList();},30000);
+
             $scope.$on("RefreshList", function() {
                 reloadList();
             });
@@ -74,7 +73,38 @@ define(['lodash',
                 loadPage(0);
                 refreshFacetCounts();
             }
+            //======================================================
+            //
+            //
+            //======================================================
+            function locationView() {
+              if($location.search()['index-view']){
+                $scope.status = $location.search()['index-view'];
+                loadPage(0).then(indexUpdate);
+              }else
+                reloadList();
+            }
+            //======================================================
+            //
+            //
+            //======================================================
+            function indexUpdate() {
+              var identifier = $location.search()['index-update'];
 
+              if(identifier){
+                $scope.updatedRecord=identifier;
+                var intervallObj = $interval(function() {
+
+                  if (_.find($scope.records,{identifier_s:identifier})){
+
+                     $interval.cancel(intervallObj);
+                     delete($scope.updatedRecord);
+                  }else   loadPage(0);
+                }, 5000,30);
+                $timeout(function(){if(!_.find($scope.records,{identifier_s:identifier})){$scope.updatedRecordError=true;$interval.cancel(intervallObj);throw 'Index not updadted with: '+identifier;}},150000);
+
+              }
+            }
             //======================================================
             //
             //

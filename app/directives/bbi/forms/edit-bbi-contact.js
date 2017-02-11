@@ -307,6 +307,7 @@ define(['text!./edit-bbi-contact.html','text!./bbi-records-dialog.html','text!./
 				$scope.onPostWorkflow = function() {
 					$rootScope.$broadcast("onPostWorkflow", "Publishing request sent successfully.");
 					gotoManager();
+				  $location.search('index-view','workflow');
 				};
 
 				//==================================
@@ -315,6 +316,7 @@ define(['text!./edit-bbi-contact.html','text!./bbi-records-dialog.html','text!./
 				$scope.onPostPublish = function() {
 					$rootScope.$broadcast("onPostPublish", "Record is being published, please note the publishing process could take up to 1 minute before your record appears.");
 					gotoManager();
+					$location.search('index-view','public');
 				};
 
 				//==================================
@@ -337,6 +339,8 @@ define(['text!./edit-bbi-contact.html','text!./bbi-records-dialog.html','text!./
 				function gotoManager() {
 					$scope.$emit('showInfo', 'Contact successfully updated.');
 					$location.path("/platform/submit/bbi-contact");
+					$location.search('index-update',$scope.document.header.identifier);
+
 				}
 
 				//==================================

@@ -74,12 +74,12 @@ BBI Assistance Request
                                     <div class="help-info small">Describe the biodiversity issue/challenge and the specific technical and scientific barriers (need(s) and gap(s)) to be addressed through the assistance requested(Provide only information directly relevant to this request)*
                                         <span class="pull-right small red" style="color:red;" ng-if="document.problem.length">Word Count: {{wordCount(document.problem)}}</span></div>
                                     <div km-textbox-ml rows="4" required   name="problem" ng-model="document.problem" locales="document.meta.languages"></div>
-                                    <p ng-show="editForm.problem.$invalid && (editForm.assistanceTypes.$touched || editForm.$submitted)" class="help-block error red-status">Problem statement is required.</p>
+                                    <p ng-show="editForm.problem.$invalid && (editForm.problem.$touched || editForm.$submitted)" class="help-block error red-status">Problem statement is required.</p>
                                 </div>
                             </div>
 
                             <div class="col-xs-8">
-                                <div class="control-group" name="assistanceTypes" required ng-class="{'has-error': (editForm.assistanceTypes.$invalid && editForm.$submitted) }" caption="Assistance Types">
+                                <div class="km-control-group" name="assistanceTypes" required  caption="Assistance Types">
                                     <div class="help-info small">Identify the type(s) of assistance you would need to address the stated problem (need, gap or barrier) and describe how such assistance would lead to TSC among the participating Parties and institutions.</div>
 
                                     <div km-select maximum="maxTypes()" multiple="true" required name="assistanceTypes" ng-model="document.assistanceTypes" ng-class="{'has-error': (editForm.assistanceTypes.$invalid && editForm.$submitted) }" items="options.assistanceTypes()"></div>
