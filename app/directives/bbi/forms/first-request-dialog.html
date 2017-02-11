@@ -1,0 +1,41 @@
+<div>
+    <div class="text-center">
+        <img class="logo" width="45%" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>"></img>
+        <h3>First Assistance Request</h3>
+    </div>
+    <style>
+        .mhr {
+            height: 12px;
+            border: 0;
+            box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    <hr class="mhr" style="color:#111;">
+    <p class="small">
+      Assitance requests records you create reference 2 other BBI records, a Contact and an Organization.  While creating your assistance request, you will be asked to select an organization and contact.  If they do not exist you will have to leave the Request for Assistance form and create them.
+<br>
+      <strong>Procedure for creating a request for assistance:</strong>
+      <ol class="bbilist-o small">
+        <li class="small">Create the requesting Organization (if it does not exist)</li>
+        <li class="small">Create the contact person (if it does not exist)</li>
+        <li class="small">Lastly, complete your assistance request.</li>
+     </ol>
+    </p>
+
+
+        <div class="col-xs-12 checkbox text-nowrap" style="margin: 0 0 0 0;line-height:1em;">
+            <label style="font-size: .8em;">
+            <span class="text-danger">Do not show this notice again.</span>
+ 							<input  ng-false-value="false" ng-true-value="true" type="checkbox" ng-model="bbiFirstRequest" bind-indeterminate="item.indeterminate" ng-change="settingsChange('bbi.firstRequestNotice',bbiFirstRequest)" checked>
+ 							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+ 					</label>
+            <br>
+        </div>
+    </p>
+    <div class="text-xs-center text-right">
+        <button class="btn btn-success" ng-click="closeThisDialog(true);">
+                  Proceed
+        </button>
+
+    </div>
+</div>

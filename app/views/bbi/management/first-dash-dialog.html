@@ -1,0 +1,40 @@
+<div>
+    <div class="text-center">
+        <img class="logo" width="45%" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>"></img>
+        <h3>Your Dashboard</h3>
+    </div>
+    <style>
+        .mhr {
+            height: 12px;
+            border: 0;
+            box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    <hr class="mhr" style="color:#111;">
+    <p>The BBI Platform's dashboard handles the submission, editing and listing of your BBI related records.  All BBI records are <a href="http://chm.cbd.int" target="_blank">CHM</a> <span class="small lead">(The Clearing-House Mechanism)</span> records.</p>
+    <p class="small">
+      There are 3 main functions of your dashboard.
+      <ol class="bbilist-o small">
+        <li><img src="/app/images/bbi/record-list.png" style="width:22px;"></img> List all records of that type.</li>
+        <li><img src="/app/images/bbi/record-add.png" style="width:22px;"></img> Create a new record of that type.</li>
+        <li><img src="/app/images/bbi/record-facets.png" style="height:15px;"></img> See how many records you have of that type.</li>
+     </ol>
+   </p>
+
+
+        <div class="col-xs-12 checkbox text-nowrap" style="margin: 0 0 0 0;line-height:1em;">
+            <label style="font-size: .8em;">
+            <span class="text-danger">Do not show this notice again.</span>
+ 							<input  ng-false-value="false" ng-true-value="true" type="checkbox" ng-model="dashNotice" bind-indeterminate="item.indeterminate" ng-change="settingsChange('bbi.firstDashNotice',dashNotice)" checked>
+ 							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+ 					</label>
+            <br>
+        </div>
+    </p>
+    <div class="text-xs-center text-right">
+        <button class="btn btn-success" ng-click="closeThisDialog(true);">
+                  Proceed
+        </button>
+
+    </div>
+</div>

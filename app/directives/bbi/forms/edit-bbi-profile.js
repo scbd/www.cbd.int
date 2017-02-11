@@ -1,4 +1,4 @@
-define(['text!./edit-bbi-profile.html', 'app', 'angular', 'lodash', 'authentication',
+define(['text!./edit-bbi-profile.html', 'text!./bbi-records-dialog.html','text!./first-provider-dialog.html','app', 'angular', 'lodash', 'authentication',
 'services/editFormUtility',
 'services/storage',
 'services/workflows',
@@ -12,9 +12,9 @@ define(['text!./edit-bbi-profile.html', 'app', 'angular', 'lodash', 'authenticat
 'directives/bbi/controls/km-form-std-buttons',
 'providers/locale',
 'directives/bbi/views/view-bbi-profile',
-], function(template, app, angular, _) { 'use strict';
+], function(template,bbiRecordsDialog,firstProviderDialog, app, angular, _) { 'use strict';
 
-app.directive('editBbiProfile', ['$http',"$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility',  'IStorage', '$route','$timeout','locale', function ($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route,$timeout,locale) {
+app.directive('editBbiProfile', ['$http',"$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility',  'IStorage', '$route','$timeout','locale','userSettings','ngDialog',  function ($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route,$timeout,locale,userSettings,ngDialog) {
 	return {
 		restrict   : 'E',
 		template   : template,
@@ -44,7 +44,50 @@ app.directive('editBbiProfile', ['$http',"$rootScope", "Enumerable", "$filter", 
 			//==================================
 
 
+			userSettings.ready.then(bbiRecords).then(function(){$timeout(firstProvider,1000);});
+			//============================================================
+			//
+			//
+			//============================================================
+			function bbiRecords() {
+					if(typeof userSettings.setting('bbi.recordsNotice') ==='undefined' || !userSettings.setting('bbi.recordsNotice')){
+							$scope.bbiRecordsNotice=true;
+							return ngDialog.open({
+										template: bbiRecordsDialog,
+										className: 'ngdialog-theme-default',
+										closeByDocument: false,
+										plain: true,
+										scope:$scope
+							}).closePromise;
+					}
+			}
 
+			//============================================================
+			//
+			//
+			//============================================================
+			function firstProvider() {
+				  if(typeof userSettings.setting('bbi.firstProviderNotice') ==='undefined' || !userSettings.setting('bbi.firstProviderNotice')){
+							$scope.bbiFirstProvider=true;
+							userSettings.setting('bbi.firstProviderNotice',true);
+							return ngDialog.open({
+										template: firstProviderDialog,
+										className: 'ngdialog-theme-default',
+										closeByDocument: false,
+										plain: true,
+										scope:$scope
+							}).closePromise;
+					}
+			}
+
+			//============================================================
+			//
+			//
+			//============================================================
+			function settingsChange(key,value) {
+					userSettings.setting(key,value);
+			}//bbiRecordsNoticeChange
+ 			$scope.settingsChange=settingsChange;
 			//============================================================
 			//
 			//============================================================

@@ -1,4 +1,4 @@
-define(['text!./edit-bbi-contact.html', 'app', 'angular', 'lodash', 'authentication',
+define(['text!./edit-bbi-contact.html','text!./bbi-records-dialog.html','text!./first-contact-dialog.html', 'app', 'angular', 'lodash', 'authentication',
 	'services/editFormUtility',
 	'services/storage',
 	'services/workflows',
@@ -12,10 +12,10 @@ define(['text!./edit-bbi-contact.html', 'app', 'angular', 'lodash', 'authenticat
 	'directives/bbi/controls/km-form-std-buttons',
 	'providers/locale',
 	'../views/view-bbi-contact'
-], function(template, app, angular, _) {
+], function(template, bbiRecordsDialog,bbiFirstContactDialog,app, angular, _) {
 	'use strict';
 
-	app.directive('editBbiContact', ['$http', "$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility', 'IStorage', '$route', 'locale', function($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route,locale) {
+	app.directive('editBbiContact', ['$http', "$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility', 'IStorage', '$route', 'locale','userSettings','ngDialog','$timeout', function($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route,locale,userSettings,ngDialog,$timeout) {
 		return {
 			restrict: 'E',
 			template: template,
@@ -59,6 +59,50 @@ define(['text!./edit-bbi-contact.html', 'app', 'angular', 'lodash', 'authenticat
 				};
 
 
+			userSettings.ready.then(bbiRecords).then(function(){$timeout(firstContact,1000);});
+				//============================================================
+				//
+				//
+				//============================================================
+				function bbiRecords() {
+					  if(typeof userSettings.setting('bbi.recordsNotice') ==='undefined' || !userSettings.setting('bbi.recordsNotice')){
+								$scope.bbiRecordsNotice=true;
+								return ngDialog.open({
+											template: bbiRecordsDialog,
+											className: 'ngdialog-theme-default',
+											closeByDocument: false,
+											plain: true,
+											scope:$scope
+								}).closePromise;
+						}
+				}
+
+				//============================================================
+				//
+				//
+				//============================================================
+				function firstContact() {
+					  if(typeof userSettings.setting('bbi.firstContactNotice') ==='undefined' || !userSettings.setting('bbi.firstContactNotice')){
+								$scope.bbiFirstContact=true;
+								userSettings.setting('bbi.firstContactNotice',true);
+								return ngDialog.open({
+											template: bbiFirstContactDialog,
+											className: 'ngdialog-theme-default',
+											closeByDocument: false,
+											plain: true,
+											scope:$scope
+								}).closePromise;
+						}
+				}
+
+				//============================================================
+				//
+				//
+				//============================================================
+				function settingsChange(key,value) {
+						userSettings.setting(key,value);
+				}//bbiRecordsNoticeChange
+	 			$scope.settingsChange=settingsChange;
 
 				function allLanguages() {
 					return $q.all([

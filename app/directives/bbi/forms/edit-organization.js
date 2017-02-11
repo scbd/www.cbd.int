@@ -1,4 +1,4 @@
-define(['text!./edit-organization.html', 'app', 'angular', 'lodash', 'authentication',
+define(['text!./edit-organization.html', 'text!./bbi-records-dialog.html','app', 'angular', 'lodash', 'authentication',
 'services/editFormUtility',
 'services/storage',
 'services/workflows',
@@ -15,9 +15,9 @@ define(['text!./edit-organization.html', 'app', 'angular', 'lodash', 'authentica
 'directives/bbi/controls/km-terms-check',
 'providers/locale',
 'directives/bbi/views/view-organization'
-], function(template, app, angular, _) { 'use strict';
+], function(template,bbiRecordsDialog, app, angular, _) { 'use strict';
 
-app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility',  'IStorage', '$route','$timeout','locale', function ($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route,$timeout,locale) {
+app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility',  'IStorage', '$route','$timeout','locale','userSettings','ngDialog',  function ($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route,$timeout,locale,userSettings,ngDialog) {
 	return {
 		restrict   : 'E',
 		template   : template,
@@ -71,7 +71,37 @@ app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter"
 					youtube  : /^http[s]?:\/\/(www.)?youtube.com\/\w+\/.+/i,
 			};
 
+			userSettings.ready.then(bbiRecords);
+			//============================================================
+			//
+			//
+			//============================================================
+			function bbiRecords() {
+					if(typeof userSettings.setting('bbi.recordsNotice') ==='undefined' || !userSettings.setting('bbi.recordsNotice')){
+							$scope.bbiRecordsNotice=true;
+							ngDialog.open({
+										template: bbiRecordsDialog,
+										className: 'ngdialog-theme-default',
+										closeByDocument: false,
+										plain: true,
+										scope:$scope
+							});
+					}
+			}
 
+			//============================================================
+			//
+			//
+			//============================================================
+			function bbiRecordsNoticeChange(value) {
+					userSettings.setting('bbi.recordsNotice',value);
+			}//bbiRecordsNoticeChange
+			$scope.bbiRecordsNoticeChange=bbiRecordsNoticeChange;
+
+			//============================================================
+			//
+			//
+			//============================================================
 			function  allLanguages() {
 				return $q.all([
 				$http.get("/api/v2013/thesaurus/domains/ISO639-2/terms",   { cache: true })

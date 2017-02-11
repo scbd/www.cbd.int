@@ -1,4 +1,4 @@
-define(['text!./edit-bbi-opportunity.html', 'app', 'angular', 'lodash', 'moment','authentication',
+define(['text!./edit-bbi-opportunity.html','text!./bbi-records-dialog.html','text!./first-opportunity-dialog.html', 'app', 'angular', 'lodash', 'moment','authentication',
 'services/editFormUtility',
 'services/storage',
 'services/workflows',
@@ -15,9 +15,9 @@ define(['text!./edit-bbi-opportunity.html', 'app', 'angular', 'lodash', 'moment'
 'directives/bbi/controls/km-form-std-buttons',
 'directives/bbi/controls/km-control-group',
 
-], function(template, app, angular, _,moment) { 'use strict';
+], function(template,bbiRecordsDialog,firstOpportunityDialog, app, angular, _,moment) { 'use strict';
 
-app.directive('editBbiOpportunity', ['$http',"$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility',  'IStorage', '$route','$timeout', function ($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route,$timeout) {
+app.directive('editBbiOpportunity', ['$http',"$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility',  'IStorage', '$route','$timeout','userSettings','ngDialog',  function ($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route,$timeout,userSettings,ngDialog) {
 	return {
 		restrict   : 'E',
 		template   : template,
@@ -62,7 +62,50 @@ app.directive('editBbiOpportunity', ['$http',"$rootScope", "Enumerable", "$filte
 														   	});
 														   }
 			};
+			userSettings.ready.then(bbiRecords).then(function(){$timeout(firstOpportunity,1000);});
+			//============================================================
+			//
+			//
+			//============================================================
+			function bbiRecords() {
+					if(typeof userSettings.setting('bbi.recordsNotice') ==='undefined' || !userSettings.setting('bbi.recordsNotice')){
+							$scope.bbiRecordsNotice=true;
+							return ngDialog.open({
+										template: bbiRecordsDialog,
+										className: 'ngdialog-theme-default',
+										closeByDocument: false,
+										plain: true,
+										scope:$scope
+							}).closePromise;
+					}
+			}
 
+			//============================================================
+			//
+			//
+			//============================================================
+			function firstOpportunity() {
+				  if(typeof userSettings.setting('bbi.firstOpportunityNotice') ==='undefined' || !userSettings.setting('bbi.firstOpportunityNotice')){
+							$scope.bbiFirstOpportunity=true;
+							userSettings.setting('bbi.firstOpportunityNotice',true);
+							return ngDialog.open({
+										template: firstOpportunityDialog,
+										className: 'ngdialog-theme-default',
+										closeByDocument: false,
+										plain: true,
+										scope:$scope
+							}).closePromise;
+					}
+			}
+
+			//============================================================
+			//
+			//
+			//============================================================
+			function settingsChange(key,value) {
+					userSettings.setting(key,value);
+			}//bbiRecordsNoticeChange
+ 			$scope.settingsChange=settingsChange;
 			//============================================================
 			//
 			//============================================================

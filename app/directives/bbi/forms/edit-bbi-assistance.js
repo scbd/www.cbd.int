@@ -1,9 +1,9 @@
-define(['text!./edit-bbi-assistance.html', 'app', 'angular', 'lodash', 'authentication','ngSmoothScroll',
+define(['text!./edit-bbi-assistance.html','text!./bbi-records-dialog.html','text!./first-request-dialog.html', 'app', 'angular', 'lodash', 'authentication','ngSmoothScroll',
 'services/editFormUtility',
 'services/mongo-storage',
 'services/storage',
 'services/workflows',
-
+'services/user-settings',
 'directives/bbi/controls/km-form-languages',
 'directives/bbi/controls/km-form-std-buttons',
 'directives/bbi/controls/km-control-group',
@@ -17,9 +17,9 @@ define(['text!./edit-bbi-assistance.html', 'app', 'angular', 'lodash', 'authenti
 'directives/bbi/controls/km-document-validation',
 'providers/locale',
 '../views/view-bbi-request'
-], function(template, app, angular, _) { 'use strict';
+], function(template,bbiRecordsDialog,bbiFirstRequestDialog, app, angular, _) { 'use strict';
 
-app.directive('editBbiAssistance', ['$http',"$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', '$route','$timeout','locale','mongoStorage','smoothScroll','IStorage', function ($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, $route,$timeout,locale,mongoStorage,smoothScroll,storage) {
+app.directive('editBbiAssistance', ['$http',"$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', '$route','$timeout','locale','mongoStorage','smoothScroll','IStorage','ngDialog','userSettings', function ($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, $route,$timeout,locale,mongoStorage,smoothScroll,storage,ngDialog,userSettings) {
 	return {
 		restrict   : 'E',
 		template   : template,
@@ -72,7 +72,52 @@ app.directive('editBbiAssistance', ['$http',"$rootScope", "Enumerable", "$filter
 			   }
 			};
 
+			userSettings.ready.then(bbiRecords).then(function(){$timeout(firstRequest,1000);});
+			//============================================================
+			//
+			//
+			//============================================================
+			function bbiRecords() {
 
+				  if(typeof userSettings.setting('bbi.recordsNotice') ==='undefined' || !userSettings.setting('bbi.recordsNotice')){
+							$scope.bbiRecordsNotice=true;
+							userSettings.setting('bbi.recordsNotice',true);
+							return ngDialog.open({
+										template: bbiRecordsDialog,
+										className: 'ngdialog-theme-default',
+										closeByDocument: false,
+										plain: true,
+										scope:$scope
+							}).closePromise;
+					}
+			}
+
+			//============================================================
+			//
+			//
+			//============================================================
+			function firstRequest() {
+				  if(typeof userSettings.setting('bbi.firstRequestNotice') ==='undefined' || !userSettings.setting('bbi.firstRequestNotice')){
+							$scope.bbiFirstRequest=true;
+							userSettings.setting('bbi.firstRequestNotice',true);
+							return ngDialog.open({
+										template: bbiFirstRequestDialog,
+										className: 'ngdialog-theme-default',
+										closeByDocument: false,
+										plain: true,
+										scope:$scope
+							}).closePromise;
+					}
+			}
+
+			//============================================================
+			//
+			//
+			//============================================================
+			function settingsChange(key,value) {
+					userSettings.setting(key,value);
+			}//bbiRecordsNoticeChange
+ 			$scope.settingsChange=settingsChange;
 
 			//==================================
 			//

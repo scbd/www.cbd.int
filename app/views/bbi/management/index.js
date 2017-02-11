@@ -1,14 +1,60 @@
-define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu',"util/solr", 'providers/realm','directives/bbi/auto-linker',], function(app, _,links) { 'use strict';
+define(['app', 'lodash','data/bbi/links-platform','text!directives/bbi/forms/bbi-records-dialog.html','text!./first-dash-dialog.html','services/user-settings', 'directives/bbi/menu',"util/solr", 'providers/realm','directives/bbi/auto-linker','ngDialog'], function(app, _,links,recordsDialog,dashDialog) { 'use strict';
 
-	return ['$location','user','solr','realm','$http','$q', function ($location,user,solr,realm,$http,$q) {
+	return ['$scope','$location','user','solr','realm','$http','$q','userSettings','$timeout','ngDialog', function ($scope,$location,user,solr,realm,$http,$q,userSettings,$timeout,ngDialog) {
 
         var _ctrl = this;
 				_ctrl.links=links.links;
 				_ctrl.goTo = goTo;
 				_ctrl.getFacet=getFacet;
+				_ctrl.settingsChange=settingsChange;
 
+				init ();
+				userSettings.ready.then(bbiRecords).then(function(){$timeout(firstDash,1000);});
+				//============================================================
+				//
+				//
+				//============================================================
+				function bbiRecords() {
+// console.log(recordsDialog);
+						if(typeof userSettings.setting('bbi.recordsNotice') ==='undefined' || !userSettings.setting('bbi.recordsNotice')){
+								$scope.bbiRecordsNotice=true;
+								userSettings.setting('bbi.recordsNotice',true);
+								return ngDialog.open({
+											template: recordsDialog,
+											className: 'ngdialog-theme-default',
+											closeByDocument: false,
+											plain: true,
+											scope:$scope
+								}).closePromise;
+						}
+				}
 
-init ();
+				//============================================================
+				//
+				//
+				//============================================================
+				function firstDash() {
+						if(typeof userSettings.setting('bbi.firstDashNotice') ==='undefined' || !userSettings.setting('bbi.firstDashNotice')){
+								$scope.dashNotice=true;
+								userSettings.setting('bbi.dashNotice',true);
+								return ngDialog.open({
+											template: dashDialog,
+											className: 'ngdialog-theme-default',
+											closeByDocument: false,
+											plain: true,
+											scope:$scope
+								}).closePromise;
+						}
+				}
+
+				//============================================================
+				//
+				//
+				//============================================================
+				function settingsChange(key,value) {
+						userSettings.setting(key,value);
+				}//bbiRecordsNoticeChange
+				$scope.settingsChange=settingsChange;
 
 					//============================================================
 					//

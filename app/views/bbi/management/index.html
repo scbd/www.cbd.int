@@ -33,7 +33,27 @@
             <span class="badge bg-request text-uppercase" style="width:130px;padding:5px;">Requests</span>
         </div>
         <h1><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</h1>
-        <p>The BBI Platform's dashboard handles the submission, editing and listing of your BBI related records.  All BBI records are <a href="http://chm.cbd.int" target="_blank">CHM</a> <span class="small lead">(The Clearing-House Mechanism)</span> records</p>
+        <p>The BBI Platform's dashboard handles the submission, editing and listing of your BBI related records.  All BBI records are <a href="http://chm.cbd.int" target="_blank">CHM</a> <span class="small lead">(The Clearing-House Mechanism)</span> records.</p>
+        <div ng-if="false" ><p class="small">
+          There are 3 main functions of your dashboard.
+          <ol class="bbilist-o small">
+            <li><img src="/app/images/bbi/record-list.png" style="width:22px;"></img> List all records of that type.</li>
+            <li><img src="/app/images/bbi/record-add.png" style="width:22px;"></img> Create a new record of that type.</li>
+            <li><img src="/app/images/bbi/record-facets.png" style="height:15px;"></img> See how many records you have of that type.</li>
+         </ol>
+       </p>
+     </div>
+     <div ng-if="false" >
+        <p class="small" ng-if="false">
+          All BBI records are CHM Reference records and are public to the world.
+          All BBI/CHM Reference records have 3 states.
+          <ol class="bbilist-o small">
+            <li><img src="/app/images/bbi/record-published.png" style="height:15px;"></img> Everyone can see the record.  It is owned by the CBD, yet appears under 'my records' becasue you created it.</li>
+            <li><img src="/app/images/bbi/record-draft.png" style="height:15px;"></img> Only you can see and is owned by you.; and</li>
+            <li><img src="/app/images/bbi/record-request.png" style="height:15px;"></img> <span >CBD is approving for Publication.</span></li>
+         </ol>
+       </p>
+       </div>
         <legend>Your BBI Records</legend>
       </div>
     <div class="col-xs-5 col-xs-offset-2">
