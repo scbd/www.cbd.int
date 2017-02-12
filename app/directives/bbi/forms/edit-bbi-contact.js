@@ -463,9 +463,10 @@ define(['text!./edit-bbi-contact.html','text!./bbi-records-dialog.html','text!./
 													$scope.validationReport.errors.push(err);
 									});
 								}else{
+
 									if(frontEndValidationReport)
 									_.each(frontEndValidationReport.errors,function(err){
-											if($scope.validationReport.errors)
+											if(!$scope.validationReport.errors)$scope.validationReport.errors=[];
 														$scope.validationReport.errors.push(err);
 									});
 								}
