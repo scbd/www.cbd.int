@@ -1,5 +1,5 @@
 <div>
-    <div class="row" id="msg" style="display:none">
+    <div   id="msg" style="display:none">
         <div class="col-lg-12">
             <div class="alert" ng-class="{'alert-success':success, 'alert-danger':error}">
                 <button type="button" class="close" ng-click="clearMessage()">
@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div  >
         <div class="col-sm-12">
             <span ng-show="isLoading">
                 loading <i class="fa fa-spinner fa-spin" />
@@ -26,7 +26,7 @@
         </div>
     </div>
     <hr style="border:solid 1px brown" />
-    <div class="row">
+    <div  >
         <div class="col-sm-12">
             <span ng-show="forumWatch.watching || threadWatch.watching">
                 You are currently watching this {{type}}. All posts will be sent to your registered email address at:
@@ -38,7 +38,7 @@
         </div>
     </div>
     <br>
-    <div class="row">
+    <div  >
         <div class="col-sm-12 col-md-12 col-lg-12 pull-right">
             <div forum-post ng-show="forum.security.canPost && type=='forum' && !forum.closedOn" forum-id="forum.forumId" type="thread" title="Add new thread" />
         <!-- </div>

@@ -10,9 +10,8 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','direct
 				_ctrl.textQuery=textQuery;
 				_ctrl.clearText =clearText ;
 
-				var iac = $http.get('/api/v2014/discussions/forums/17415/threads');
-				var jointIac = $http.get('/api/v2014/discussions/forums/17446/threads');
-				var art13 = $http.get('/api/v2014/discussions/forums/17316/threads');
+				var bbi = $http.get('/api/v2014/discussions/forums/17490/threads');
+
 				init();
 
 
@@ -24,6 +23,9 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','direct
 						getResources();
 						getInitiatives ();
 						loadTreads();
+						$q.when(bbi ).then(function(val){
+							console.log(val.data);
+						});
 				}
 
 				//============================================================
@@ -116,24 +118,10 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','direct
 				//
 				//=======================================================================
 				function loadTreads() {
-							$q.when(iac).then(function(response) {
-									_ctrl.iacThreads = response.data.length;
+							$q.when(bbi).then(function(response) {
+									_ctrl.bbiThreads = response.data;
 							})
 							.catch(function(error){
-								 console.log(error);
-						 });
-
-						 $q.when(jointIac).then(function(response) {
-									_ctrl.jointIacThreads = response.data.length;
-							})
-							.catch(function(error){
-								 console.log(error);
-						 });
-
-						 $q.when(art13).then(function(response) {
-								 _ctrl.art10Threads = response.data.length;
-						 })
-						 .catch(function(error){
 								 console.log(error);
 						 });
 				}

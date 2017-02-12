@@ -189,8 +189,9 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
           .when('/search',                        { templateUrl: 'views/bbi/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
           .when('/platform',                        { templateUrl: 'views/bbi/platform.html',  controllerAs: 'pltfCtrl',   resolveController: true, reloadOnSearch : false})
 
-          .when('/forums/iac',                    { templateUrl: 'views/bbi/forums/thread-list-view.html',    resolveController: true,resolve : { user : securize(['User'])}, forumId:17433, postUrl:'/forums/iac', text:'IAC' } )
-        //  .when('/forums/iac:threadId',           { templateUrl: '/views/bbi/forums/post-list-view.html',  controllerAs: 'forumCtrl',  resolveController: true,resolve : { user : securize(['User'])},forumId:17433, forumListUrl:'/forums/iac/', text:'IAC' })
+          .when('/forums/bbi/:threadId',           { templateUrl: 'views/bbi/forums/post-list-view.html',  resolveController: true,resolve : { user : securize(['User'])},forumId:17490,forumListUrl:'/biobridge/forums/bbi', text:'BBI'} ) //, 
+          .when('/forums/bbi',                    { templateUrl: 'views/bbi/forums/thread-list-view.html',    resolveController: true,resolve : { user : securize(['User'])}, forumId:17490, postUrl:'/biobridge/forums/bbi', text:'BBI' } )
+
 
           // .when('/forums/joint-iac',                    { templateUrl: '/views/bbi/forums/thread-list-view.html',  controllerAs: 'forumCtrl',  resolveController: true,resolve : { user : securize(['User']) } })
           // .when('/forums/joint-iac:threadId',           { templateUrl: '/views/bbi/forums/post-list-view.html',  controllerAs: 'forumCtrl',  resolveController: true,resolve : { user : securize(['User']) } })

@@ -1,8 +1,8 @@
 define(['app', 'text!./forum-details-directive.html',
-    'text!./forum-post-directive.html', 'text!./file-upload-directive.html', 
+    'text!./forum-post-directive.html', 'text!./file-upload-directive.html',
     'text!./thread-list-directive.html', 'text!./post-list-directive.html',
     'lodash',
-], 
+],
 function(app, details, forumPostTemplate, kmUploadTemplate, forumThreadsTemplate, postsTemplate, _) { 'use strict';
 
 app.factory('forumUtil', ['$rootScope', '$browser', function($rootScope, $browser) {
@@ -720,8 +720,8 @@ app.directive("posts", [function() {
         link: function($scope, $element, $attrs) {
 
         },
-        controller: ["$scope", "$http", "$q", "$filter", "$timeout", "$location", "$routeParams", "forumUtil",  "$rootScope",
-            function($scope, $http,  $q, $filter, $timeout, $location, $routeParams, forumUtil,  $rootScope) {
+        controller: ["$scope", "$http", "$q", "$filter", "$timeout", "$location", "$routeParams", "forumUtil",  "$rootScope","$element",
+            function($scope, $http,  $q, $filter, $timeout, $location, $routeParams, forumUtil,  $rootScope,$element) {
 
 
                 if ($routeParams.threadId) {

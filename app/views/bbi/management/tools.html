@@ -169,31 +169,32 @@
     </div>
     <div class="col-xs-5" ><br><br>
           <div class="box-title text-nowrap">
-                <span>Join BBI TSC Technical Discussions</span>
+                <a  ng-href="forums/bbi"><span>Join BBI TSC Technical Discussions</span></a>
           </div>
     </div>
     <div class="col-xs-12" >
           <div class="search-container">
             <div class="row">
-         <div class="col-lg-4">
+         <div class="col-xs-12" ng-repeat="thread in toolsCtrl.bbiThreads">
              <div class="list-group">
                  <div class="list-group-item activeHeader">
                      <h4 class="list-group-item-heading" >
-                         <a translation-url style="color:#fff;" ng-href="forums/bbi">
-                           <i class="fa fa-comments"></i>  ABS-CH IAC Forum
+                         <a translation-url style="color:#fff;" ng-href="forums/bbi/{{thread.threadId}}">
+                           <i class="fa fa-comments"></i> {{thread.subject}}
                          </a>
                      </h4>
                  </div>
                  <div class="list-group-item list-group-item-default">
-                     <p>You must be an ABSCH IAC member to participate in this forum. </p>
-                      <a translation-url  ng-href="forums/iac"><strong>Total threads: {{toolsCtrl.iacThreads}}</strong></a>
+                     <p>{{thread.message}} </p>
+                      <a translation-url  ng-href="forums/bbi/{{thread.threadId}}"><strong>Total posts: {{thread.replies}}</strong></a>
+                      <span class="pull-right"><a href="#"><strong>Posted by:</strong></a> {{thread.createdBy}}  </span>
                  </div>
              </div>
          </div>
 
 
 
-        
+
      </div>
  </div>
 </div>

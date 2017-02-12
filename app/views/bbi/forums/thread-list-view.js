@@ -1,10 +1,10 @@
-define(['app','lodash', 'directives/bbi/forums/cbd-forums'], function(app,_) {
+define(['app','lodash','data/bbi/links-platform', 'directives/bbi/forums/cbd-forums','services/user-settings', 'directives/bbi/menu'], function(app,_,links) {
 
 
     return ["$scope", "$http", "$q", "$filter", "$timeout", "$location", "$route","user","$rootScope",
         function($scope, $http, $q, $filter, $timeout, $location, $route,user,$rootScope) {
-            var _ctrl = this;
-            //$scope.forumId = 17384;
+$scope.links=links.links;
+
             $scope.user=$rootScope.user=user;
 
             $scope.isAdmin = !!_.intersection(user.roles, ["Administrator","BbiAdministrator"]).length;

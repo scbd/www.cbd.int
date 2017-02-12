@@ -1,9 +1,8 @@
-define(['app', 'underscore', 'directives/bbi/forums/cbd-forums',//'ng-breadcrumbs',
-        ], function(app, _) {
+define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/forums/cbd-forums','services/user-settings', 'directives/bbi/menu','directives/bbi/forums/cbd-forums'], function(app, _,links) {
 
-    return ["$scope", "$http", "$q", "$route", "$routeParams","$rootScope",'$route',//'breadcrumbs',
-     function($scope, $http, $q, $route, $routeParams, $rootScope, $route) {//, breadcrumbs
-
+    return ["$scope", "$http", "$q", "$route", "$routeParams",
+     function($scope, $http, $q, $route, $routeParams) {
+$scope.links=links.links;
         if (!$route.current.$$route.forumListUrl) {
             throw 'Forum list URL not specified in route, please forumListUrl attribute in routes'
         } else
@@ -19,9 +18,6 @@ define(['app', 'underscore', 'directives/bbi/forums/cbd-forums',//'ng-breadcrumb
 
             $scope.threadSubject = response.data.subject;
 
-            // console.log(breadcrumbs);
-
-            // breadcrumbs.options = {'Thread-Subject': response.data.subject};
 
         });
 

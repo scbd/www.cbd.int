@@ -1,4 +1,4 @@
-define(['app', 'lodash','data/bbi/links', 'directives/bbi/crumbs', 'directives/bbi/menu','directives/bbi/auto-linker'], function(app, _,links) { 'use strict';
+define(['app', 'lodash','data/bbi/links', 'directives/bbi/slider', 'directives/bbi/menu','directives/bbi/auto-linker'], function(app, _,links) { 'use strict';
 
 	return ['$location', function ($location) {
 
