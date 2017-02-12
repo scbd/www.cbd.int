@@ -14,8 +14,17 @@ define(['app', 'lodash','data/bbi/links-platform','text!directives/bbi/forms/bbi
 				//
 				//
 				//============================================================
+				function settingsChange(key,value) {
+						userSettings.setting(key,value);
+				}//bbiRecordsNoticeChange
+				$scope.settingsChange=settingsChange;
+
+				//============================================================
+				//
+				//
+				//============================================================
 				function bbiRecords() {
-// console.log(recordsDialog);
+
 						if(typeof userSettings.setting('bbi.recordsNotice') ==='undefined' || !userSettings.setting('bbi.recordsNotice')){
 								$scope.bbiRecordsNotice=true;
 								userSettings.setting('bbi.recordsNotice',true);
@@ -36,7 +45,7 @@ define(['app', 'lodash','data/bbi/links-platform','text!directives/bbi/forms/bbi
 				function firstDash() {
 						if(typeof userSettings.setting('bbi.firstDashNotice') ==='undefined' || !userSettings.setting('bbi.firstDashNotice')){
 								$scope.dashNotice=true;
-								userSettings.setting('bbi.dashNotice',true);
+								userSettings.setting('bbi.firstDashNotice',true);
 								return ngDialog.open({
 											template: dashDialog,
 											className: 'ngdialog-theme-default',
@@ -47,14 +56,7 @@ define(['app', 'lodash','data/bbi/links-platform','text!directives/bbi/forms/bbi
 						}
 				}
 
-				//============================================================
-				//
-				//
-				//============================================================
-				function settingsChange(key,value) {
-						userSettings.setting(key,value);
-				}//bbiRecordsNoticeChange
-				$scope.settingsChange=settingsChange;
+
 
 					//============================================================
 					//
