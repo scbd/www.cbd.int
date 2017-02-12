@@ -576,7 +576,8 @@ define(['lodash',
             //
             //=======================================================================
             $scope.goTo = function(code) {
-                    $location.url('/submit/' + $route.current.params.schema + '/' + code + '/view');
+
+                    $location.path('platform/submit/' + $route.current.params.schema + '/' + code + '/view');
             };
             //======================================================
             //
