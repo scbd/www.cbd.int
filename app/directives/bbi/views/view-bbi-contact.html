@@ -3,12 +3,16 @@
         <div class="row">
             <div class="col-xs-10">
                 <h4>
-      BBI Contact
+      <span ng-if="!loading" > BBI Contact
        <span class="text-small" style="font-size:.75em;color:#ddd;"> (CON) </span>
+       </span>
+       <span ng-if="loading" style="margin:auto">
+           <i class="fa fa-spin fa-spinner " /> Loading...
+       </span>
        </h4>
             </div>
             <div class="col-xs-2">
-                <button ng-show="canEdit()" ng-click="goTo()" class="btn btn-default btn-sm pull-right" style="margin-top:5px;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>Edit</button>
+              <h4 ng-if="isReview()"><span class="pull-right"><a class="btn btn-xs btn-default" href="platform/submit/bbi-contact/{{document.header.identifier}}" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i>  <span ng-if="!isAdmin()">Suggest an</span> Edit</a></span></h4>
             </div>
         </div>
     </div>

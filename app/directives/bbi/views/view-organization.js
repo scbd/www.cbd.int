@@ -12,7 +12,8 @@ app.directive('viewOrganization', ["IStorage","$location","locale","$sce", funct
 			locale  : "=",
 			target  : "@linkTarget",
 			allowDrafts : "@",
-			user:"=?"
+			user:"=?",
+			loading:"=?"
 		},
 		link : function ($scope)
 		{
@@ -31,7 +32,12 @@ app.directive('viewOrganization', ["IStorage","$location","locale","$sce", funct
 					$scope.loadReferences($scope.contacts);
 			});
 
-
+			//====================
+			//
+			//====================
+			$scope.isReview = function() {
+					 return !!($location.url().indexOf('/view')>-1);
+			};
 			//====================
 			//
 			//====================

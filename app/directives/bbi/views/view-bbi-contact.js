@@ -15,7 +15,9 @@ define(['text!./view-bbi-contact.html', 'app', 'angular', 'lodash', 'authenticat
 			transclude: false,
 			scope: {
 				document: '=ngModel',
-				locale	: '='
+				locale	: '=',
+							loading:"=?",
+					user:"=?"
 			},
 			link: function($scope) {
 
@@ -54,6 +56,18 @@ define(['text!./view-bbi-contact.html', 'app', 'angular', 'lodash', 'authenticat
 												killWatchConOrg();
 								});
 				});
+				//====================
+				//
+				//====================
+				$scope.isReview = function() {
+						 return !!($location.url().indexOf('/view')>-1);
+				};
+				//====================
+				//
+				//====================
+				$scope.isAdmin = function() {
+						 return !!_.intersection($scope.user.roles, ["Administrator","BBiAdministrator"]).length;
+				};
 				//====================
 				//
 				//====================

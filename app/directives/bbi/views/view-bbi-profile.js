@@ -2,7 +2,7 @@ define(['text!./view-bbi-profile.html', 'app', 'angular', 'lodash', 'services/st
 ], function(template, app, angular, _) {
 	'use strict';
 
-	app.directive('viewBbiProfile', ["IStorage", function (storage) {
+	app.directive('viewBbiProfile', ["IStorage","$location", function (storage,$location) {
 		return {
 			restrict: 'E',
 			template: template,
@@ -10,7 +10,9 @@ define(['text!./view-bbi-profile.html', 'app', 'angular', 'lodash', 'services/st
 			transclude: false,
 			scope: {
 				document: '=ngModel',
-				locale	: '='
+				locale	: '=',
+					user:"=?",
+				loading:"=?"
 			},
 			link: function($scope) {
 
@@ -28,8 +30,18 @@ define(['text!./view-bbi-profile.html', 'app', 'angular', 'lodash', 'services/st
 																});
                         });
                 });
-
-
+								//====================
+								//
+								//====================
+								$scope.isAdmin = function() {
+										 return !!_.intersection($scope.user.roles, ["Administrator","BBiAdministrator"]).length;
+								};
+								//====================
+								//
+								//====================
+								$scope.isReview = function() {
+										 return !!($location.url().indexOf('/view')>-1);
+								};
                 //====================
                 //
                 //====================

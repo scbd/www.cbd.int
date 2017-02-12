@@ -2,7 +2,7 @@ define(['text!./view-bbi-request.html', 'app', 'lodash',  'services/storage','se
 ], function(template, app, _) {
 	'use strict';
 
-	app.directive('viewBbiRequest', ["IStorage", function (storage) {
+	app.directive('viewBbiRequest', ["IStorage","$location", function (storage,$location) {
 		return {
 			restrict: 'E',
 			template: template,
@@ -10,7 +10,9 @@ define(['text!./view-bbi-request.html', 'app', 'lodash',  'services/storage','se
 			transclude: false,
 			scope: {
 				document: '=ngModel',
-				locale	: '='
+				locale	: '=',
+				loading:"=?",
+				user:"=?"
 			},
 			link: function($scope) {
 
@@ -26,7 +28,16 @@ define(['text!./view-bbi-request.html', 'app', 'lodash',  'services/storage','se
                         });
                 });
 
+								//====================
+								//
+								//====================
+									$scope.isOwnerOrAdmin= function() {
+											 var isAdmin = !!_.intersection($scope.user.roles, ["Administrator","BBiAdministrator"]).length;
+											 var isNotReview = !!($location.url().indexOf('/view')>-1);
+											 var isOwner = ($scope.document && $scope.document.meta && $scope.user.userID===$scope.document.meta.createdBy);
 
+										 return ((isOwner || isAdmin) && isNotReview);
+								};
                 // //====================
                 // //
                 // //====================

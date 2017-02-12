@@ -2,7 +2,7 @@ define(['text!./view-bbi-opportunity.html', 'app', 'lodash',  'services/storage'
 ], function(template, app, _) {
 	'use strict';
 
-	app.directive('viewBbiOpportunity', ["IStorage", function (storage) {
+	app.directive('viewBbiOpportunity', ["IStorage","$location", function (storage,$location) {
 		return {
 			restrict: 'E',
 			template: template,
@@ -10,7 +10,8 @@ define(['text!./view-bbi-opportunity.html', 'app', 'lodash',  'services/storage'
 			transclude: false,
 			scope: {
 				document: '=ngModel',
-				locale	: '='
+				locale	: '=',
+				loading:"=?"
 			},
 			link: function($scope) {
 								//
@@ -36,7 +37,12 @@ define(['text!./view-bbi-opportunity.html', 'app', 'lodash',  'services/storage'
 		                        });
                 });
 
-
+								//====================
+								//
+								//====================
+								$scope.isReview = function() {
+										 return !!($location.url().indexOf('/view')>-1);
+								};
                 //====================
                 //
                 //====================
