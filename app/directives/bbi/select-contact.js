@@ -23,7 +23,7 @@ function(template,app,_) {
             },
             link: function($scope, $element, $attrs) {
 
-                  $scope.schemaMap=function(){ 
+                  $scope.schemaMap=function(){
                     if($scope.schema==='bbiContact') return 'Contact Person';
                     if($scope.schema==='organization') return 'Organization';
                   }
@@ -75,6 +75,7 @@ function(template,app,_) {
                         $scope.loadExisting();
                         $scope.showExisting=true;
                         $scope.errorMessage = undefined;
+                        $scope.search.keyword='';
                         ngDialog.open({
                             template: 'organizationModal',
                             closeByDocument: false,
@@ -157,7 +158,7 @@ function(template,app,_) {
                     $scope.searchOrganizations = function(clear) {
 
                         if (queryCanceler) {
-                            console.log('trying to abort pending request...');
+                            // console.log('trying to abort pending request...');
                             queryCanceler.resolve(true);
                         }
                         var fields = 'identifier_s, _state_s,revision:_revision_i, name:title_s, acronym:acronym_s, organizationType_s,' +
