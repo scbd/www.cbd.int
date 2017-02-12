@@ -44,7 +44,7 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','direct
 				//
 				//============================================================
 				function getInitiatives () {
-								var q = 'schema_s:capacityBuildingInitiative';
+								var q = 'schema_s:capacityBuildingInitiative AND categories_ss:9D6E1BC7-4656-46A7-B1BC-F733017B5F9B';
 								query('capacityBuildingInitiative',q);
 				}
 
@@ -53,8 +53,9 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','direct
 				//============================================================
 				function clearText (schema, text) {
 								text='';
-								var q = 'schema_s:'+schema;
-								query('resource',q);
+
+								if(schema==="capacityBuildingInitiative")getInitiatives ();
+								else getResources ();
 				}
 				//============================================================
 				//

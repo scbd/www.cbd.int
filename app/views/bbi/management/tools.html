@@ -105,7 +105,7 @@
                   </span>
                   <span class="pull-right">
 
-                        <span ><a href="#" ng-click="toolsCtrl.goTo('/resource');">Advanced Search <i class="fa fa-search" aria-hidden="true"></i></a></span>
+                        <span ><a href="#" ng-click="toolsCtrl.goTo('platform/resource');">Advanced Search <i class="fa fa-search" aria-hidden="true"></i></a></span>
 
                   </span>
                 <span ng-if="loading"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
@@ -135,8 +135,8 @@
               <div class="input-group">
                   <input type="text" ng-change="toolsCtrl.textQuery('capacityBuildingInitiative',valueCBI);"  ng-model="valueCBI" class="form-control" placeholder="Search TSC Initiatives" ng-model-options="{ debounce: { 'default': 300, 'blur': 0 } }" style="font-weight:bold;">
                   <span type="button" class="input-group-addon pointer" id="basic-addon2" ng-click="toolsCtrl.clearText('capacityBuildingInitiative');valueCBI='';">
-                    <i ng-if="value" class="fa fa-times"></i>
-                    <i ng-if="!value"  class="fa fa-search"></i>
+                    <i ng-if="valueCBI" class="fa fa-times"></i>
+                    <i ng-if="!valueCBI"  class="fa fa-search"></i>
                   </span>
               </div>
               <div ng-if="toolsCtrl.capacityBuildingInitiative.count===0 || toolsCtrl.capacityBuildingInitiative.count ">
@@ -149,7 +149,7 @@
                   </span>
                   <span class="pull-right">
 
-                        <span ><a href="#" ng-click="toolsCtrl.goTo('/capacity-building-initiative');">Advanced Search <i class="fa fa-search" aria-hidden="true"></i></a></span>
+                        <span ><a href="#" ng-click="toolsCtrl.goTo('platform/capacity-building-initiative');">Advanced Search <i class="fa fa-search" aria-hidden="true"></i></a></span>
 
                   </span>
                 <span ng-if="loading"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
@@ -179,7 +179,7 @@
              <div class="list-group">
                  <div class="list-group-item activeHeader">
                      <h4 class="list-group-item-heading" >
-                         <a translation-url style="color:#fff;" ng-href="forums/iac">
+                         <a translation-url style="color:#fff;" ng-href="forums/bbi">
                            <i class="fa fa-comments"></i>  ABS-CH IAC Forum
                          </a>
                      </h4>
@@ -191,37 +191,9 @@
              </div>
          </div>
 
-          <div class="col-lg-4">
-             <div class="list-group">
-                 <div class="list-group-item activeHeader">
-                     <h4 class="list-group-item-heading" >
-                         <a translation-url style="color:#fff;"  ng-href="forums/joint-iac">
-                            <i class="fa fa-comments"></i> ABS-CH/CHM Joint IAC Forum
-                         </a>
-                     </h4>
-                 </div>
-                 <div class="list-group-item list-group-item-default">
-                     <p>You must be an ABSCH or CHM  IAC member to participate in this forum. </p>
-                      <a translation-url  ng-href="tools/forums/joint-iac"><strong>Total threads: {{toolsCtrl.jointIacThreads}}</strong></a>
-                 </div>
-             </div>
-         </div>
 
-         <div class="col-lg-4">
-             <div class="list-group">
-                 <div class="list-group-item activeHeader">
-                     <h4 class="list-group-item-heading">
-                         <a translation-url style="color:#fff;"  ng-href="tools/forums/art10_groups">
-                              <i class="fa fa-comments"></i> Article 10 Group Forum
-                         </a>
-                     </h4>
-                 </div>
-                 <div class="list-group-item list-group-item-default">
-                      <p>This forum is closed for comments.                          </p>
-                     <a translation-url  ng-href="tools/forums/art10_groups"><strong>Total threads: {{toolsCtrl.art10Threads}}</strong></a>
-                 </div>
-             </div>
-         </div>
+
+        
      </div>
  </div>
 </div>
