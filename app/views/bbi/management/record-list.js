@@ -60,7 +60,7 @@ define(['lodash',
             $scope.formatWID = function(workflowID) {
                 return workflowID ? workflowID.replace(/(?:.*)(.{3})(.{4})$/g, "W$1-$2").toUpperCase() : "";
             };
-console.log($location.search()['index-view']);
+
            locationView();
 
 

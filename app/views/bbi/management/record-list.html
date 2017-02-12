@@ -160,7 +160,7 @@
                                         <span ng-show="record._state_s=='public' || record._state_s=='published' ||record._revision_i>1" class="label label-default bg-published">PUBLISHED</span>
                                         <span ng-show="record._state_s=='draft' || record.publishedDraft" class="label label-default bg-draft">DRAFT</span>
                                         <span ng-show="record._state_s=='workflow'" class="label label-default bg-request">REQUEST PENDING APPROVAL</span>
-                                        <div ng-show="record._state_s=='workflow' && record.schema_s!=='bbiRequest'" style="margin-top:5px"><a class="small" href="#" ng-click="onWorkflow(record)" target="_blank">Detailed Request Status</a></div>
+                                        <div ng-show="record._state_s=='workflow' && record.schema_s!=='bbiRequest'" style="margin-top:5px"><a class="small" href="#" ng-click="onWorkflow(record,$event)" >Detailed Request Status</a></div>
                                     </td>
                                 </tr>
 
