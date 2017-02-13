@@ -160,8 +160,9 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
           .when('/platform/submit/:schema/:id/view',{ templateUrl: 'views/bbi/management/view.html',    controllerAs: 'viewCtrl',    resolveController: true,resolve : { user : securize(['Everyone']) } })
           .when('/platform/dashboard'              ,{ templateUrl: 'views/bbi/management/index.html',    controllerAs: 'dashCtrl',    resolveController: true ,resolve : { user : securize(['User']) }})
           .when('/platform/search',                { templateUrl: 'views/bbi/management/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
-          .when('/platform/tools',                  { templateUrl: 'views/bbi/management/tools.html',  controllerAs: 'toolsCtrl',  resolveController: true})
-          .when('/platform/about',                  { templateUrl: 'views/bbi/management/about.html',  controllerAs: 'pAboutCtrl',  resolveController: true})
+          .when('/platform/tools',                  { templateUrl: 'views/bbi/management/tools.html',  controllerAs: 'toolsCtrl',  resolveController: true, resolve : { user : securize(['User']) }})
+          .when('/platform/about',                  { templateUrl: 'views/bbi/management/about/index.html',  controllerAs: 'pAboutCtrl',  resolveController: true, resolve : { user : securize(['User']) }})
+          .when('/platform/dashboard'              ,{ templateUrl: 'views/bbi/management/index.html',    controllerAs: 'dashCtrl',    resolveController: true ,resolve : { user : securize(['User']) }})
           .when('/platform/:schema',                       { templateUrl: 'views/bbi/management/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
 
           .when('/about',                  { templateUrl: 'views/bbi/about/index.html',  controllerAs: 'initCtrl',  resolveController: true})
@@ -189,16 +190,8 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
           .when('/search',                        { templateUrl: 'views/bbi/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
           .when('/platform',                        { templateUrl: 'views/bbi/platform.html',  controllerAs: 'pltfCtrl',   resolveController: true, reloadOnSearch : false})
 
-          .when('/forums/bbi/:threadId',           { templateUrl: 'views/bbi/forums/post-list-view.html',  resolveController: true,resolve : { user : securize(['User'])},forumId:17490,forumListUrl:'/biobridge/forums/bbi', text:'BBI'} ) //, 
+          .when('/forums/bbi/:threadId',           { templateUrl: 'views/bbi/forums/post-list-view.html',  resolveController: true,resolve : { user : securize(['User'])},forumId:17490,forumListUrl:'/biobridge/forums/bbi', text:'BBI'} ) //,
           .when('/forums/bbi',                    { templateUrl: 'views/bbi/forums/thread-list-view.html',    resolveController: true,resolve : { user : securize(['User'])}, forumId:17490, postUrl:'/biobridge/forums/bbi', text:'BBI' } )
-
-
-          // .when('/forums/joint-iac',                    { templateUrl: '/views/bbi/forums/thread-list-view.html',  controllerAs: 'forumCtrl',  resolveController: true,resolve : { user : securize(['User']) } })
-          // .when('/forums/joint-iac:threadId',           { templateUrl: '/views/bbi/forums/post-list-view.html',  controllerAs: 'forumCtrl',  resolveController: true,resolve : { user : securize(['User']) } })
-          //
-          .when('/tools/forums/art10_groups',                    { templateUrl: 'views/bbi/forums/thread-list-view.html',  controllerAs: '1forumCtrl', forumId:17316, postUrl:'tools/forums/art10_groups', text:'Forum on Article 10',  resolveController: true,resolve : { user : securize(['User']) } })
-          .when('/tools/forums/art10_groups/:threadId',           { templateUrl: 'views/bbi/forums/post-list-view.html',  controllerAs: '1forumCtrl', forumId:17316, forumListUrl:'tools/forums/art10_groups/', text:'Forum on Article 10' ,  resolveController: true,resolve : { user : securize(['User']) } });
-
 
     }
 
@@ -215,6 +208,8 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
                 if (!user.isAuthenticated) {
                     $rootScope.authRediectChange=authRediectChange;
+                    if(!!_.intersection(requiredRoles, ['Everyone']).length)
+                      return user;
 
                     if(!$cookies.get('redirectOnAuthMsg') || $cookies.get('redirectOnAuthMsg')==='false')
                         openDialog();
