@@ -60,7 +60,7 @@ require.config({
         'toastr'               : { deps : ['angular-flex'] },
         'hl.sticky'            : { deps : ['angular-flex'] },
         'ngSmoothScroll'       : { deps : ['angular-flex'] },
-        'ngInfiniteScroll'     : { deps : ['angular-flex'] }      
+        'ngInfiniteScroll'     : { deps : ['angular-flex'] }
     },
     packages: [
         { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },
@@ -75,6 +75,9 @@ define('xlsx', ['js-zip', 'ods'], function (jszip, ods) {
 });
 
 define('underscore', ['lodash'], function(_) { console.log('Deprecated: use lodash'); return _; });
+
+if (!require.defined('_slaask'))
+    define("_slaask", window._slaask);
 
 define('dropbox-dropins', ['https://www.dropbox.com/static/api/2/dropins.js'], function(){
     if(window.Dropbox)

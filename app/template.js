@@ -1,4 +1,4 @@
-define(['app', 'angular', 'text!./template-header.html', 'text!./template-footer.html', 'providers/realm'], function(app, ng, headerHtml, footerHtml) { 'use strict';
+define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'text!./template-footer.html','lodash', 'providers/realm'], function(app, ng, toastTemplate, footerHtml,_) { 'use strict';
 
     app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q',
                              function($rootScope,   $window,   $browser,   $document,   authentication,   $q) {
@@ -14,7 +14,32 @@ define(['app', 'angular', 'text!./template-header.html', 'text!./template-footer
                     $window.ga('set',  'page', basePath+$location.path());
                     $window.ga('send', 'pageview');
                 });
+                var killWatch = $scope.$watch('user', _.debounce(function(user) {
 
+                    if (!user)
+                        return;
+
+                    require(["_slaask"], function(_slaask) {
+
+                        if (user.isAuthenticated) {
+                            _slaask.identify(user.name, {
+                                'user-id' : user.userID,
+                                'name' : user.name,
+                                'email' : user.email,
+                            });
+
+                            if(_slaask.initialized) {
+                                _slaask.slaaskSendUserInfos();
+                            }
+                        }
+
+                        if(!_slaask.initialized) {
+                            _slaask.init('ae83e21f01860758210a799872e12ac4');
+                            _slaask.initialized = true;
+                            killWatch();
+                        }
+                    });
+                }, 1000));
                 updateSize();
 
                 ng.element($window).on('resize', updateSize);
@@ -113,7 +138,8 @@ define(['app', 'angular', 'text!./template-header.html', 'text!./template-footer
                 $scope.profile = function () {
                     $window.location.href = authentication.accountsBaseUrl() + '/profile?returnurl=' + $scope.encodedReturnUrl();
                 };
-            }
+
+              }
         };
     }]);
 
