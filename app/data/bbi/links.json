@@ -76,7 +76,7 @@
 			"source": "/projects/selected"
 		}
 	]
-	}, 
+	},
 	{
 		"title": {
 			"en": "Outreach"
@@ -105,12 +105,6 @@
 	 "children": []
  },
 	 {
-		"title": {
-			"en": "Resources"
-		},
-		"source": "/resources",
-		"children": []
-	}, {
 		"title": {
 			"en": "FAQ"
 		},
