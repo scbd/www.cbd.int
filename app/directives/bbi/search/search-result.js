@@ -95,7 +95,7 @@ define(['text!./search-result.html', 'app', 'lodash', 'moment', 'lodash', 'authe
                 $scope.goToUrl = function() {
 
                     if ($scope.document.schema_s.indexOf('bbi') > -1 || $scope.document.schema_s.indexOf('organization') > -1)
-                        return 'submit/' + camelToDash($scope.document.schema_s) + '/' + $scope.document.identifier_s + '/view';
+                        return 'platform/submit/' + camelToDash($scope.document.schema_s) + '/' + $scope.document.identifier_s + '/view';
                     else
                         return $scope.document.url_ss[0];
 
