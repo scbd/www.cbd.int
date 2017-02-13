@@ -1,6 +1,6 @@
 define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','directives/bbi/search/search-result','directives/bbi/forums/cbd-forums'], function(app, _,links) { 'use strict';
 
-	return ['$location','$route','$q','$http',function ($location,$route,$q,$http) {
+	return ['$location','$route','$q','$http','$scope',function ($location,$route,$q,$http,$scope) {
 
         var _ctrl = this;
 				var canceler = null;
@@ -14,7 +14,8 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','direct
 
 				init();
 
-
+				$scope.$root.page={};
+        $scope.$root.page.title = "Resources: BBI Web Platform";
 
 				//============================================================
 				//

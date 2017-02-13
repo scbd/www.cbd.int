@@ -49,7 +49,8 @@ define(['lodash',
             };
             getDrafts();
             getWorkflows();
-
+            $scope.$root.page={};
+            $scope.$root.page.title = $scope.schemaMap($scope.schema)+" List: BBI Web Platform";
             $scope.onAdd = function() {
                 edit({
                     schema_s: $route.current.params.schema

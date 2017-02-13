@@ -2,7 +2,9 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/forums/cbd-fo
 
     return ["$scope", "$http", "$q", "$route", "$routeParams",
      function($scope, $http, $q, $route, $routeParams) {
-$scope.links=links.links;
+        $scope.links=links.links;
+        $scope.$root.page={};
+        $scope.$root.page.title = "Forum Posts: Bio Bridge Initiative";	
         if (!$route.current.$$route.forumListUrl) {
             throw 'Forum list URL not specified in route, please forumListUrl attribute in routes'
         } else

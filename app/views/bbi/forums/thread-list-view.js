@@ -3,8 +3,9 @@ define(['app','lodash','data/bbi/links-platform', 'directives/bbi/forums/cbd-for
 
     return ["$scope", "$http", "$q", "$filter", "$timeout", "$location", "$route","user","$rootScope",
         function($scope, $http, $q, $filter, $timeout, $location, $route,user,$rootScope) {
-$scope.links=links.links;
-
+            $scope.links=links.links;
+            $scope.$root.page={};
+            $scope.$root.page.title = "Forum Threads: Bio Bridge Initiative";
             $scope.user=$rootScope.user=user;
 
             $scope.isAdmin = !!_.intersection(user.roles, ["Administrator","BbiAdministrator"]).length;

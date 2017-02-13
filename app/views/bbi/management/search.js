@@ -1,13 +1,14 @@
 define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','directives/bbi/search/search'], function(app, _,links) { 'use strict';
 
-	return ['$location','$route', function ($location,$route) {
+	return ['$location','$route','$scope', function ($location,$route,$scope) {
 
         var _ctrl = this;
 				_ctrl.links=links.links;
 				_ctrl.goTo = goTo;
 				_ctrl.schema = _.camelCase($route.current.params.schema);
 				init();
-
+				$scope.$root.page={};
+        $scope.$root.page.title = "Search: BBI Web Platform";
 				//============================================================
 				//
 				//============================================================

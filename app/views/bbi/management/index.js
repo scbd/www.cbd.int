@@ -8,6 +8,8 @@ define(['app', 'lodash','data/bbi/links-platform','text!directives/bbi/forms/bbi
 				_ctrl.getFacet=getFacet;
 				_ctrl.settingsChange=settingsChange;
 
+				$scope.$root.page={};
+				$scope.$root.page.title = "Dashboard: BBI Web Platform";
 				init ();
 				userSettings.ready.then(bbiRecords).then(function(){$timeout(firstDash,1000);});
 				//============================================================

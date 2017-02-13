@@ -1,16 +1,18 @@
 define(['app', 'lodash','data/bbi/links', 'directives/bbi/slider', 'directives/bbi/menu','directives/bbi/auto-linker'], function(app, _,links) { 'use strict';
 
-	return ['$location','$http','$q', function ($location,$http,$q) {
+	return ['$location','$http','$q','$scope', function ($location,$http,$q,$scope) {
 
         var _ctrl = this;
 				_ctrl.links=links.links;
 				_ctrl.outReachRecords={};
 				_ctrl.goTo = goTo;
 				getNew();
-getNews ();
-getMeeting();
-getNotifications();
-				// loadOutReach();
+				getNews ();
+				getMeeting();
+				getNotifications();
+				$scope.$root.page={};
+				$scope.$root.page.title = "Bio Bridge Initiative";
+
 				//============================================================
 				//
 				//============================================================
@@ -18,17 +20,6 @@ getNotifications();
 								$location.path(url);
 				}
 
-				//=======================================================================
-				//
-				//=======================================================================
-				// function loadOutReach() {
-				// 			$q.when(whatsNew).then(function(response) {
-				// 					_ctrl.outReachRecords.new = response.data;
-				// 			})
-				// 			.catch(function(error){
-				// 				 console.log(error);
-				// 		 });
-				// }
 				//============================================================
 				//
 				//============================================================
@@ -101,7 +92,7 @@ getNotifications();
 								_ctrl.outReachRecords[schema].stop  = _ctrl.outReachRecords[schema].length;
 								_ctrl.outReachRecords[schema].rows  = data.response.docs.length;
 
-console.log(_ctrl.outReachRecords);
+
 						}).catch(function(error) {
 								console.log('ERROR: ' + error);
 						})
