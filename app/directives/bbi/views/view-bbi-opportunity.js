@@ -11,7 +11,8 @@ define(['text!./view-bbi-opportunity.html', 'app', 'lodash',  'services/storage'
 			scope: {
 				document: '=ngModel',
 				locale	: '=',
-				loading:"=?"
+				loading:"=?",
+									user:"=?",
 			},
 			link: function($scope) {
 								//
@@ -36,7 +37,13 @@ define(['text!./view-bbi-opportunity.html', 'app', 'lodash',  'services/storage'
 																else killWatchContact();
 		                        });
                 });
-
+								//====================
+								//
+								//====================
+								$scope.isAdmin = function() {
+									if($scope.user)
+										 return !!_.intersection($scope.user.roles, ["Administrator","BBiAdministrator"]).length;
+								};
 								//====================
 								//
 								//====================

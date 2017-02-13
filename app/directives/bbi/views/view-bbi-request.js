@@ -27,12 +27,20 @@ define(['text!./view-bbi-request.html', 'app', 'lodash',  'services/storage','se
 														killWatchContact();
                         });
                 });
-
+								//====================
+								//
+								//====================
+								$scope.isAdmin = function() {
+									if($scope.user)
+										 return !!_.intersection($scope.user.roles, ["Administrator","BBiAdministrator"]).length;
+								};
 								//====================
 								//
 								//====================
 									$scope.isOwnerOrAdmin= function() {
-											 var isAdmin = !!_.intersection($scope.user.roles, ["Administrator","BBiAdministrator"]).length;
+																					 var isAdmin;
+										if($scope.user)
+											 isAdmin = !!_.intersection($scope.user.roles, ["Administrator","BBiAdministrator"]).length;
 											 var isNotReview = !!($location.url().indexOf('/view')>-1);
 											 var isOwner = ($scope.document && $scope.document.meta && $scope.user.userID===$scope.document.meta.createdBy);
 

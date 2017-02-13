@@ -35,6 +35,14 @@ app.directive('viewOrganization', ["IStorage","$location","locale","$sce", funct
 			//====================
 			//
 			//====================
+			$scope.isAdmin = function() {
+				if($scope.user)
+					 return !!_.intersection($scope.user.roles, ["Administrator","BBiAdministrator"]).length;
+			};
+			
+			//====================
+			//
+			//====================
 			$scope.isReview = function() {
 					 return !!($location.url().indexOf('/view')>-1);
 			};
