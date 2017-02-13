@@ -1,0 +1,21 @@
+{
+    "links": [{
+        "title": {
+            "en": "Introduction to the Platform"
+        },
+
+        "children": [{
+                "title": {
+                    "en": "Introduction"
+                },
+                "source": "intro"
+            },
+            {
+                "title": {
+                    "en": "What is the Platform"
+                },
+                "source": "what-is"
+            }
+        ]
+    }]
+}
