@@ -8,6 +8,11 @@ define(['app', 'text!./crumbs.html'], function(app, templateHtml) { 'use strict'
             restrict: 'E',
             template : templateHtml,
             link: function ($scope, elem, attrs) {
+              $(document).ready(function() {
+                       $('.carousel').carousel({
+                           interval: 4000
+                       });
+            });
               $scope.carouselData=  {
                     items :[
                       {

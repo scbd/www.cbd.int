@@ -3,40 +3,45 @@ define(['app', 'text!./slider.html'], function(app, templateHtml) { 'use strict'
     //============================================================
     //
     //============================================================
-    app.directive('slider',  function() {
+    app.directive('slider', function() {
         return {
             restrict: 'E',
             template : templateHtml,
-            link: function ($scope, elem, attrs) {
-
+            link: function ($scope, $elem, attrs) {
+              $(document).ready(function() {
+                       $('.carousel').carousel({
+                           interval: 4000
+                       });
+            });
                   $scope.carouselData=  {
                         items :[
                           {
-                                  //  title: "View Latest TSC Requests:",
-                                        //description: "Browse TSC requests from the Bio-Bridge Initiative community.",
+                                        title: "BBI Web Platform Launched",
+                                        description: "Browse, request or provide TSC services.",
                                         imageUrl: "/app/images/bbi/slider-bee.jpg",
-                                        targetUrl: "/platform/bbi-request"
+                                        targetUrl: "/platform"
                                     }, {
-                                    //    title: "Our TSC Providers:",
-                                      //  description: "See our TSC providers in the regions.",
+                                        title: "Join the Discussion",
+                                        description: "Come discuss the role of BBI in promoting TSC.",
                                         imageUrl: "/app/images/bbi/slider-crab.jpg",
-                                        targetUrl: "/platform/bbi-profile"
+                                        targetUrl: "/forums/bbi"
                                     }, {
-                                    //    title: "View Latest TSC Opportunites:",
-                                      //  description: "View our list of TSC opportunities to see which one is right for you.",
+                                        title: "Search TSC Information :",
+                                        description: "Search TSC records on the Platform.",
                                         imageUrl: "/app/images/bbi/slider-flamingo.jpg",
-                                        targetUrl: "/platform/bbi-opportunity"
-                                    }, {
-                                    //    title: "Proposals Awaiting Funding:",
-                                    //    description: "Explore our vetted Bio-Bridge Initiative proposals.",
-                                        imageUrl: "/app/images/bbi/slider-flower.jpg",
-                                        targetUrl: "/platform/bbi-proposals"
-                                    }, {
-                                    //    title: "Search for Tools:",
-                                    //    description: "Browse a wide range of TSC tools from the resource library.",
-                                        imageUrl: "/app/images/bbi/slider-hands.jpg",
-                                        targetUrl: "/platform/tools"
+                                        targetUrl: "/platform/search"
                                     }
+                                    // , {
+                                    // //    title: "Proposals Awaiting Funding:",
+                                    // //    description: "Explore our vetted Bio-Bridge Initiative proposals.",
+                                    //     imageUrl: "/app/images/bbi/slider-flower.jpg",
+                                    //     targetUrl: "/platform/bbi-proposals"
+                                    // }, {
+                                    // //    title: "Search for Tools:",
+                                    // //    description: "Browse a wide range of TSC tools from the resource library.",
+                                    //     imageUrl: "/app/images/bbi/slider-hands.jpg",
+                                    //     targetUrl: "/platform/tools"
+                                    // }
                               ]
                       };
             },
