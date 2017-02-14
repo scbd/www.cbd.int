@@ -26,7 +26,7 @@ define(['app', 'text!./slider.html'], function(app, templateHtml) { 'use strict'
                                         imageUrl: "/app/images/bbi/slider-crab.jpg",
                                         targetUrl: "/forums/bbi"
                                     }, {
-                                        title: "Search TSC Information :",
+                                        title: "Search TSC Information",
                                         description: "Search TSC records on the Platform.",
                                         imageUrl: "/app/images/bbi/slider-flamingo.jpg",
                                         targetUrl: "/platform/search"
