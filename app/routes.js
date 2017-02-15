@@ -154,7 +154,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         $("base").attr('href', '/biobridge/'); // allow full page reload outside of  /insession/*
 
         routeProvider
-          .when('/',                       { templateUrl: 'views/bbi/index.html',        controllerAs: 'indexCtrl',   resolveController: true })
+          .when('/',                       { templateUrl: 'views/bbi/index-bbi.html',        controllerAs: 'indexCtrl',   resolveController: true })
           .when('/platform/submit/:schema',         { templateUrl: 'views/bbi/management/record-list.html',  controllerAs: 'submitCtrl',  resolveController: true,resolve : { user : securize(['User']) } })
           .when('/platform/submit/:schema/:id',     { templateUrl: 'views/bbi/management/edit.html',         controllerAs: 'editCtrl',    resolveController: true ,resolve : { user : securize(['User']) }})
           .when('/platform/submit/:schema/:id/view',{ templateUrl: 'views/bbi/management/view.html',    controllerAs: 'viewCtrl',    resolveController: true,resolve : { user : securize(['Everyone']) } })
