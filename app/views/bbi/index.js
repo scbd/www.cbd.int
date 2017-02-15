@@ -1,6 +1,6 @@
 define(['app', 'lodash','data/bbi/links', 'directives/bbi/slider', 'directives/bbi/menu','directives/bbi/auto-linker'], function(app, _,links) { 'use strict';
 
-	return ['$location','$http','$q','$scope', function ($location,$http,$q,$scope) {
+	return ['$location','$http','$q','$scope','locale', function ($location,$http,$q,$scope,locale) {
 
         var _ctrl = this;
 				_ctrl.links=links.links;
@@ -19,12 +19,12 @@ define(['app', 'lodash','data/bbi/links', 'directives/bbi/slider', 'directives/b
 				function goTo (url) {
 								$location.path(url);
 				}
-
+console.log(locale);
 				//============================================================
 				//
 				//============================================================
 				function getNew () {
-								var q = 'schema_s:(new)'; //meeting notification pressRelease statement news
+								var q = 'schema_s:(new) AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")'; //meeting notification pressRelease statement news
 								return query('new',q);
 				}
 
@@ -32,7 +32,7 @@ define(['app', 'lodash','data/bbi/links', 'directives/bbi/slider', 'directives/b
 				//
 				//============================================================
 				function getNews () {
-								var q = 'schema_s:(news pressRelease)'; //meeting notification pressRelease statement news
+								var q = 'schema_s:(news pressRelease) AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")'; //meeting notification pressRelease statement news
 								return query('news',q);
 				}
 
@@ -40,7 +40,7 @@ define(['app', 'lodash','data/bbi/links', 'directives/bbi/slider', 'directives/b
 				//
 				//============================================================
 				function getMeeting() {
-								var q = 'schema_s:(meeting)'; //meeting notification pressRelease statement news
+								var q = 'schema_s:(meeting) AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR symbol_s:"COP-13")'; //meeting notification pressRelease statement news
 								return query('meeting',q);
 				}
 
@@ -48,7 +48,7 @@ define(['app', 'lodash','data/bbi/links', 'directives/bbi/slider', 'directives/b
 				//
 				//============================================================
 				function getNotifications() {
-								var q = 'schema_s:(notification statement)'; //meeting notification pressRelease statement news
+								var q = 'schema_s:(notification statement) AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")'; //meeting notification pressRelease statement news
 								return query('notification',q);
 				}
 
@@ -64,7 +64,7 @@ define(['app', 'lodash','data/bbi/links', 'directives/bbi/slider', 'directives/b
 						var queryParameters = {
 								'q': query,
 								'sort': 'createdDate_dt desc',
-								'fl': 'identifier_s,id,title_t,description_t,url_ss,schema_EN_t,date_dt,government_EN_t,schema_s,number_d,aichiTarget_ss,reference_s,sender_s,meeting_ss,recipient_ss,symbol_s,eventCity_EN_t,eventCountry_EN_t,startDate_s,endDate_s,body_s,code_s,meeting_s,group_s,function_t,department_t,organization_t,summary_EN_t,reportType_EN_t,completion_EN_t,jurisdiction_EN_t,development_EN_t',
+								'fl': 'startDate_dt,enddate_dt,identifier_s,id,title_t,description_t,url_ss,schema_EN_t,date_dt,government_EN_t,schema_s,number_d,aichiTarget_ss,reference_s,sender_s,meeting_ss,recipient_ss,symbol_s,eventCity_EN_t,eventCountry_EN_t,startDate_s,endDate_s,body_s,code_s,meeting_s,group_s,function_t,department_t,organization_t,summary_EN_t,reportType_EN_t,completion_EN_t,jurisdiction_EN_t,development_EN_t',
 								'wt': 'json',
 								'start': 0,
 								'rows': 5,

@@ -126,7 +126,7 @@ left: 0;
         <div class="out-reach-row "  class="link1" >
             <!-- <div id="communityProtocol" ng-include="home-list.html"> -->
 
-                <span class="color-darkgrey" style="text-transform:uppercase;font-weight:bold;font-size:10px;"> {{doc.updatedDate_dt | moment:'format':'DD MMM YYYY'}}</span>
+                <span class="color-darkgrey" style="text-transform:uppercase;font-weight:bold;font-size:10px;"> {{doc.date_dt | moment:'format':'DD MMM YYYY'}}</span>
                 <span class="color-grey" style="display:block;font-size:12px;">{{doc.title_t.length > 120 ? (doc.title_t | limitTo : 120) + "..." : doc.title_t }}</span>
 
 
@@ -143,8 +143,8 @@ left: 0;
                     <a translation-url  ng-repeat-start="doc in indexCtrl.outReachRecords.notification.data" href="{{doc.url_ss[0]}}" target="_blank"   style="padding-bottom:5px;text-decoration: none;color:#333;" >
         <div class="out-reach-row"  ng-show="doc.title_t && $index < 5" class="link1">
             <!-- <div id="communityProtocol" ng-include="home-list.html"> -->
-
-                <span class="color-darkgrey" style="text-transform:uppercase;font-weight:bold;font-size:10px;"> {{doc.updatedDate_dt | moment:'format':'DD MMM YYYY'}}</span>
+{{doc.updatedDate_dt}}
+                <span class="color-darkgrey" style="text-transform:uppercase;font-weight:bold;font-size:10px;"> {{doc.date_dt | moment:'format':'DD MMM YYYY'}}</span>
                 <span class="color-grey" style="display:block;font-size:12px;">{{doc.title_t.length > 120 ? (doc.title_t | limitTo : 120) + "..." : doc.title_t }}</span>
 
         </div>    </a>
@@ -160,6 +160,7 @@ left: 0;
 
         <div class="out-reach-row"  ng-show="doc.title_t && $index < 5" class="link1">
             <!-- <div id="communityProtocol" ng-include="home-list.html"> -->
+
                 <span class="color-darkgrey" style="text-transform:uppercase;font-weight:bold;font-size:10px;">
                     {{doc.startDate_dt | moment:'utc' | moment:'format':'DD MMM YYYY'}} - {{doc.endDate_dt | moment:'utc' | moment:'format':'DD MMM YYYY'}}
                     ({{doc.eventCity_s}}, {{doc.eventCountry_EN_t}})
@@ -179,7 +180,7 @@ left: 0;
 
         <div class="out-reach-row"  ng-show="doc.title_t && $index < 5" class="link1">
             <!-- <div id="communityProtocol" ng-include="home-list.html"> -->
-                <span class="color-darkgrey" style="text-transform:uppercase;font-weight:bold;font-size:10px;"> {{doc.updatedDate_dt | moment:'format':'DD MMM YYYY'}}</span>
+                <span class="color-darkgrey" style="text-transform:uppercase;font-weight:bold;font-size:10px;"> {{doc.date_dt | moment:'format':'DD MMM YYYY'}}</span>
                 <span class="color-grey" style="display:block;font-size:12px;">{{doc.title_t.length > 120 ? (doc.title_t | limitTo : 120) + "..." : doc.title_t }}</span>
 
         </div>  </a>
