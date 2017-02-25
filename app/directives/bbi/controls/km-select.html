@@ -3,7 +3,7 @@
 		<a ng-click="clicked(item)" href="">
 		{{item.title||item.name | lstring:currentLocale | truncate:120:'...'}}
 		</a>
-		<div class="km-select-description" ng-if="showDescription=='true' && item.description" 
+		<div class="km-select-description" ng-if="showDescription=='true' && item.description"
 			style="padding: 3px 25px;">
 			{{item.description}}
 		</div>
@@ -39,7 +39,7 @@
 					<button class="btn btn-xs btn-default" ng-show="hasSelectedItems()"type ="button" ng-click="clearSelection()" ng-disabled="!hasSelectedItems()">Clear selection</button>
 					<button class="btn btn-xs btn-default" ng-show="allowOther == 'true'" type="button" ng-click="chooseOther()"    ng-show="allowOther">Specify another value</button>
 				</li>
-				<li ng:repeat="item in rootItems | filter:filterText" ng-class="{disabled:!itemEnabled(item)}" ng-include="'select-tree-renderer.html'" style="position:relative">
+				<li ng:repeat="item in rootItems | filter:searchFil" ng-class="{disabled:!itemEnabled(item)}" ng-include="'select-tree-renderer.html'" style="position:relative">
 				</li>
 			</ul>
 		</div>

@@ -1,5 +1,5 @@
 define(['app', 'angular', 'jquery', 'lodash', 'text!./km-select.html',
-       'providers/locale','filters/truncate','filters/lstring'], 
+       'providers/locale','filters/truncate','filters/lstring'],
 function(app, angular, $, _, template) {
   //============================================================
   //
@@ -78,7 +78,12 @@ function(app, angular, $, _, template) {
           //   }
           // });
 
+$scope.searchFil = function(item){
 
+  if(!$scope.currentLocale || !item || !$scope.filterText) return true;
+
+  return item.title[$scope.currentLocale].toLowerCase().indexOf($scope.filterText.toLowerCase()) >-1;
+};
         $scope.$on('clearSelectSelection', function(info) {
           $scope.clearSelection(info && info.data ? info.data.identifier : undefined);
         });
