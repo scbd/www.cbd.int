@@ -80,7 +80,7 @@ function(template,app,_) {
                             template: 'organizationModal',
                             closeByDocument: false,
                             scope: $scope,
-                            width: '60%'
+                            // width: '60%'
                         });
                     }
 

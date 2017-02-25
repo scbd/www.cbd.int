@@ -1,5 +1,22 @@
 <div>
     <style>
+
+
+
+@media only screen and (min-width :  992px) {
+  .ngdialog.ngdialog-theme-default .ngdialog-content{
+      width: 700px;
+
+  }
+
+}
+
+
+
+
+
+
+
     .organization-modal-maxheight {
         max-height: 400px;
         overflow-y: scroll;
@@ -79,6 +96,10 @@
                             <span> </span>
                             <span> </span>
                         </span>
+<div class="pull-right">
+                      <a translation-url  type="button" class=" btn btn-xs btn-primary " ng-href="platform/submit/{{schema}}/new" target="_blank" ng-click="closeContact()"> <i class="fa fa-plus" aria-hidden="true"></i> New</a>
+                    <a translation-url  type="button" class=" btn btn-xs btn-warning " ng-click="closeContact()" >Close</a>
+</div>
                     </h3>
                   </div>
                     <div class="col-xs-12">
@@ -87,11 +108,11 @@
                         </div>
                         <input type="textbox" ng-model="search.keyword" placeholder="keyword search"
                             class="form-control" style="margin-bottom:20px;" >
-                        <span class="pull-right col-xs-3 label label-info">{{recordCount}} {{schemaMap()}}(s) found</span>
+                        <span class="pull-right col-xs-3 label label-info">{{recordCount}} <span class="hidden-xs"> {{schemaMap()}}(s) found<span></span>
                     </div>
                   </div>
                 </div>
-                <div class="modal-body " ng-class="{'organization-modal-maxheight':showExisting}" id="scrollableContent" >
+                <div class="modal-body model-dem" ng-class="{'organization-modal-maxheight':showExisting}" id="scrollableContent" >
                     <!---->
 
                     <!--<div ng-show="!showExisting">
@@ -163,12 +184,15 @@
                 </div>
                 <div class="modal-footer bg-litegrey">
                     <div class="clearfix"></div>
-                    <div>
+                    <div class="pull-right">
+                                          <a translation-url  type="button" class=" btn btn-xs btn-primary" ng-href="platform/submit/{{schema}}/new" target="_blank" ng-click="closeContact()"> <i class="fa fa-plus" aria-hidden="true"></i> New</a>
+                                        <a translation-url  type="button" class=" btn btn-xs btn-warning" ng-click="closeContact()" >Close</a>
+                    </div>
+                    <!-- <div>
                         <a translation-url  class="btn btn-default pull-left" ng-click="showExisting=true" ng-show="!showExisting" ng-href="#"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Select from exisiting organizations</a>
-                        <!--<a translation-url  class="btn btn-primary color-white" ng-click="editContact(-1);showExisting=false" ng-show="showExisting" ng-href="#">Add new organization</a>-->
                         <a translation-url  type="button" class="pull-right btn btn-warning" ng-click="closeContact()">Close</a>
                         <a translation-url  type="button" class="pull-right btn btn-primary" ng-click="saveContact()" ng-show="!showExisting">Save changes</a> &nbsp;
-                    </div>
+                    </div> -->
                 </div>
     </div>
     </script>
