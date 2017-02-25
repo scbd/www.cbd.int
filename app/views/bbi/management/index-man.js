@@ -28,8 +28,8 @@ define(['app', 'lodash','data/bbi/links-platform','text!directives/bbi/forms/bbi
 				function bbiRecords() {
 
 						if(typeof userSettings.setting('bbi.recordsNotice') ==='undefined' || !userSettings.setting('bbi.recordsNotice')){
-								$scope.bbiRecordsNotice=true;
-								userSettings.setting('bbi.recordsNotice',true);
+								$scope.bbiRecordsNotice=false;
+								userSettings.setting('bbi.recordsNotice',false);
 								return ngDialog.open({
 											template: recordsDialog,
 											className: 'ngdialog-theme-default',

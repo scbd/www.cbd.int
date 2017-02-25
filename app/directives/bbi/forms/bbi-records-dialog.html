@@ -12,12 +12,14 @@
     </style>
     <hr class="mhr" style="color:#111;">
     <p class="small">
-      All BBI records are CHM Reference records.  Reference records are public to the world.
-      All BBI/CHM Reference records have 3 states.
+      <p class="small">All BBI records have 3 states. BBI records are approved for publishing by the CBD.  Anyone can suggest an edit to a published record. </p>
+
+      <p class="small">Some BBI records may reference other BBI records.
+      If a record you are creating needs to reference a record not already avalable in the search.  You will have to save your current record and create the reference record.  Once the reference record is created you can edit you saved draft and select you new reference record.</p>
       <ol class="bbilist-o small">
-        <li class="small"><img src="/app/images/bbi/record-published.png" style="height:15px;"></img> <br>Everyone can see the record.  It is owned by the CBD, yet appears under 'my records' becasue you created it.</li>
-        <li class="small"><img src="/app/images/bbi/record-draft.png" style="height:15px;"></img> <br>Only you can see the record and is owned by you.</li>
-        <li class="small"><img src="/app/images/bbi/record-request.png" style="height:15px;"></img> <br><span >CBD is approving the record for Publication.</span></li>
+        <li class="small"><img src="/app/images/bbi/record-published.png" style="height:15px;"></img> <br>Everyone can see the record. </li>
+        <li class="small"><img src="/app/images/bbi/record-draft.png" style="height:15px;"></img> <br>Only you can see the record.</li>
+        <li class="small"><img src="/app/images/bbi/record-request.png" style="height:15px;"></img> <br><span >CBD is reviewing the record for Publication and is not editable.</span></li>
      </ol>
     </p>
 
@@ -25,15 +27,15 @@
         <div class="col-xs-12 checkbox text-nowrap" style="margin: 0 0 0 0;line-height:1em;">
             <label style="font-size: .8em;">
             <span class="text-danger">Do not show this notice again.</span>
- 							<input  ng-false-value="false" ng-true-value="true" type="checkbox" ng-model="bbiRecordsNotice" bind-indeterminate="item.indeterminate" ng-change="settingsChange('bbi.recordsNotice',bbiRecordsNotice)" checked>
+ 							<input  ng-false-value="false" ng-true-value="true" type="checkbox" ng-model="bbiRecordsNotice" bind-indeterminate="item.indeterminate" ng-change="settingsChange('bbi.recordsNotice',bbiRecordsNotice)" >
  							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
  					</label>
             <br>
         </div>
     </p>
     <div class="text-xs-center text-right">
-        <button class="btn btn-success" ng-click="closeThisDialog(true);">
-                  Proceed
+        <button class="btn btn-warning" ng-click="closeThisDialog(true);">
+                  Close
         </button>
 
     </div>
