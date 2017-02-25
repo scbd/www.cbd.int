@@ -299,7 +299,10 @@ app.directive('editBbiOpportunity', ['$http',"$rootScope", "Enumerable", "$filte
 				if (!document)
 				return $q.when(true);
 
-
+				_.each(document,function(property,name){
+						if(_.isEmpty(document[name])) delete(document[name]);
+				});
+				
 				if (/^\s*$/g.test(document.notes))
 					document.notes = undefined;
 

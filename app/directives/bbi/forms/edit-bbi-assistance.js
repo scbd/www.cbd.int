@@ -465,6 +465,9 @@ app.directive('editBbiAssistance', ['$http',"$rootScope", "Enumerable", "$filter
 			function cleanDoc(doc) {
 					var cDoc = _.cloneDeep(doc);
 					delete(cDoc.history);
+					_.each(cDoc ,function(property,name){
+							if(_.isEmpty(document[name])) delete(document[name]);
+					});
 					return cDoc;
 			} //toggleListView
 

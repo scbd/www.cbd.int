@@ -580,6 +580,9 @@ app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter"
 				if (!document)
 				return $q.when(true);
 
+				_.each(document,function(property,name){
+						if(_.isEmpty(document[name])) delete(document[name]);
+				});
 				if(!$scope.IsCapacityBuilding()){
 					document.targetGroups    = undefined;
 					document.expertiseLevels = undefined;

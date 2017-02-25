@@ -349,6 +349,9 @@ define(['text!./edit-bbi-contact.html','text!./bbi-records-dialog.html','text!./
 				$scope.cleanUp = function(document) {
 					document = document || $scope.document;
 
+					_.each(document,function(property,name){
+							if(_.isEmpty(document[name])) delete(document[name]);
+					});
 					if (!document)
 						return $q.when(true);
 
