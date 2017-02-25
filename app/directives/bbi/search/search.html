@@ -1,4 +1,4 @@
-<div class="row css-search">
+<div class="css-search">
 	<style>
 	.truncate {
 		white-space: nowrap;
@@ -99,7 +99,7 @@ box-shadow: none!important;
 }
 .pointer{cursor:pointer;}
 .pointer a:hover{color:#aaa !important;}
-.pointer span:hover{color:#555 !important;}
+.pointer span:hover{color:#ccc!important;}
 .pointer:hover{color:#555 !important;}
 .card-1 {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -125,7 +125,7 @@ box-shadow: none!important;
 color:#001470;
 }
 .search-filters div.alpha{
-	background-color: rgba(255,255,255,.8);
+	background-color: rgba(238,238,238,.9);
 }
 	</style>
   <section class="search-filters" hl-sticky="">
@@ -141,7 +141,7 @@ color:#001470;
     </div>
     <search-filter-keywords 						ng-model='keywords' 			query='queryKeywords'											 ></search-filter-keywords>
     <ul id="search-tabs" class="">
-        <li class="pointer" style="text-transform:uppercase;padding:20px 3px 10px 5px;color:#bbb;" ng-click="showFilters=null"><span ng-if="showFilters"><i class="fa fa-times-circle" aria-hidden="true"></i> close</span> <span ng-if="!showFilters">search</span> filters</li>
+        <li class="pointer small" style="text-transform:uppercase;padding:20px 3px 10px 5px;color:#555;" ng-click="showFilters=null"><span><span ng-if="showFilters"><i class="fa fa-times-circle" aria-hidden="true"></i> close</span> <span ng-if="!showFilters">search</span> filters</span></li>
         <li> <a href="" ng-class="{'active':showFilters=='type'}" ng-click="showFilters=(showFilters=='type' ? false : 'type')" class="btn color-grey" ng-show="isFilterEmpty(schemas)"><i class="fa fa-caret-down"></i>&nbsp;Type <span class="badge">{{isFilterEmpty(schemas)}}</span></a> </li>
         <li> <a href="" ng-class="{'active':showFilters=='country'}" ng-click="showFilters=(showFilters=='country' ? false : 'country')" class="btn color-grey" ng-show="isFilterEmpty(governments)"><i class="fa fa-caret-down"></i>&nbsp;Country <span class="badge">{{isFilterEmpty(governments)}}</span></a> </li>
         <li> <a href="" ng-class="{'active':showFilters=='subject'}" ng-click="showFilters=(showFilters=='subject' ? false : 'subject')" class="btn color-grey" ng-show="isFilterEmpty(thematicAreas)"><i class="fa fa-caret-down"></i>&nbsp;Subject <span class="badge">{{isFilterEmpty(thematicAreas)}}</span></a> </li>
