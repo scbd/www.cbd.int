@@ -104,8 +104,6 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','direct
 								_ctrl[schema].start = data.response.start;
 								_ctrl[schema].stop  = _ctrl.documents[schema].length;
 								_ctrl[schema].rows  = data.response.docs.length;
-
-
 						}).catch(function(error) {
 								console.log('ERROR: ' + error);
 						})

@@ -1,203 +1,224 @@
-<ng-include src="'/app/views/bbi/platform-header.html'" ></ng-include>
+<ng-include src="'/app/views/bbi/platform-header.html'"></ng-include>
 <div class="row">
-  <style>
-  .search-container{
-      height:350px;
-      border-style: solid;
-      border-width: 2px;
-      border-color: #009B48;
-      overflow-x: none;
-      padding:10px 10px 10px 10px;
-  }
-  .activeHeader {
-    background-color: #428bca;
-}
-  .results-container{
-      height:250px;
-      /*border-style: solid;
-      border-width: 1px;
-      border-color: #003f66;*/
-      overflow-x: scroll;
-      padding:10px 10px 10px 10px;
-  }
-  .pointer{cursor:pointer;}
-  .pointer a:hover{color:#aaa !important;}
-  .pointer span:hover{color:#555 !important;}
-  .pointer:hover{color:#555 !important;}
-  .card-1 {
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-      transition: all 0.1s ease-in-out;
-  }
-  .card {
-      background-color: #eee;
-      border-radius: 0;
-      padding: 0;
-      margin: 0;
-  }
-  .card-1:hover {
-      background-color: #EEE!important;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-  }
-  .records {
-      margin: 0;
-      padding: 5px;
-      border-left: 3px #001470 solid;
-      cursor: pointer;
-  }
-  .records a{
-  color:#001470;
-  }
-  .search-filters div.alpha{
-  	background-color: rgba(255,255,255,.8);
-  }
-  .box-title{
-    background-color: #003f66;
-          padding:10px 10px 10px 10px;
-  }
-  .box-title span{
-    color: #fff;
+    <style>
+        .search-container {
+            height: 350px;
+            border-style: solid;
+            border-width: 2px;
+            border-color: #009B48;
+            overflow-x: none;
+            padding: 10px 10px 0px 10px;
+        }
 
-  }
-  </style>
+        .thread-container{
+          border-style: solid;
+          border-width: 2px;
+          border-color: #009B48;
+          overflow-x: none;
+          padding: 10px 10px 0px 10px;
+        }
+
+        .activeHeader {
+            background-color: #428bca;
+        }
+
+        .results-container {
+            height: 250px;
+            overflow-x: scroll;
+            padding: 10px 10px 0px 10px;
+        }
+
+        .pointer {
+            cursor: pointer;
+        }
+
+        .pointer a:hover {
+            color: #aaa !important;
+        }
+
+        .pointer span:hover {
+            color: #555 !important;
+        }
+
+        .pointer:hover {
+            color: #555 !important;
+        }
+
+        .card-1 {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            transition: all 0.1s ease-in-out;
+        }
+
+        .card {
+            background-color: #eee;
+            border-radius: 0;
+            padding: 0;
+            margin: 0;
+        }
+
+        .card-1:hover {
+            background-color: #EEE!important;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+        }
+
+        .records {
+            margin: 0;
+            padding: 5px;
+            border-left: 3px #001470 solid;
+            cursor: pointer;
+        }
+
+        .records a {
+            color: #001470;
+        }
+
+        .search-filters div.alpha {
+            background-color: rgba(255, 255, 255, .8);
+        }
+
+        .box-title {
+            background-color: #003f66;
+            padding: 10px 10px 10px 10px;
+        }
+
+        .box-title span {
+            color: #fff;
+        }
+    </style>
     <menu links="toolsCtrl.links" style="padding:0;margin:0;"></menu>
     <div class="col-xs-12">
-      <h2 >CBD MANAGED TOOLS, RESOURCES AND INITIATIVES:</h2>
-      <br>
+        <h2>TOOLS, RESOURCES AND INITIATIVES:</h2>
+        <br>
     </div>
 
-    <div class="col-xs-12 col-md-3" >
-      <div class="box-title text-nowrap">
-        <span>Search Virtual Library</span>
-      </div>
+    <div class="col-xs-12 col-md-3">
+        <div class="box-title text-nowrap">
+            <span>Search Virtual Library</span>
+        </div>
     </div>
 
-    <div class="col-md-3 hidden-xs" >
-      &nbsp;
+    <div class="col-md-3 hidden-xs">
+        &nbsp;
     </div>
 
-    <div class="col-md-3 hidden-xs" >
-          <div class="box-title text-nowrap">
-                <span>Search TSC Initiatives</span>
-          </div>
+    <div class="col-md-3 hidden-xs">
+        <div class="box-title text-nowrap">
+            <span>Search TSC Initiatives</span>
+        </div>
     </div>
 
-    <div class="col-md-3 hidden-xs" >
-      &nbsp;
+    <div class="col-md-3 hidden-xs">
+        &nbsp;
     </div>
 
     <div class="col-xs-12 col-md-6">
-            <div class="container-fluid search-container">
-          <div >
-              <div class="input-group">
-                  <input type="text" ng-change="toolsCtrl.textQuery('resource',value);"  ng-model="value" class="form-control" placeholder="Search Virtual Libray" ng-model-options="{ debounce: { 'default': 300, 'blur': 0 } }" style="font-weight:bold;">
-                  <span type="button" class="input-group-addon pointer" id="basic-addon2" ng-click="toolsCtrl.clearText('resource');value='';">
+        <div class="container-fluid search-container">
+            <div>
+                <div class="input-group">
+                    <input type="text" ng-change="toolsCtrl.textQuery('resource',value);" ng-model="value" class="form-control" placeholder="Search Virtual Libray" ng-model-options="{ debounce: { 'default': 300, 'blur': 0 } }" style="font-weight:bold;">
+                    <span type="button" class="input-group-addon pointer" id="basic-addon2" ng-click="toolsCtrl.clearText('resource');value='';">
                     <i ng-if="value" class="fa fa-times"></i>
                     <i ng-if="!value"  class="fa fa-search"></i>
                   </span>
-              </div>
-              <div ng-if="toolsCtrl.resource.count===0 || toolsCtrl.resource.count ">
+                </div>
+                <div ng-if="toolsCtrl.resource.count===0 || toolsCtrl.resource.count ">
 
-                <div class="text-center" >
-                  <span class="pull-left" >
+                    <div class="text-center">
+                        <span class="pull-left">
                       <span ng-if="toolsCtrl.resource.count >1" ><span class="badge">{{toolsCtrl.resource.count}}</span> Records Found</span>
-                      <span ng-if="toolsCtrl.resource.count===1" ><span class="badge">{{toolsCtrl.resource.count}}</span> Record Found</span>
-                      <span ng-if="toolsCtrl.resource.count===0" ><span class="badge">{{toolsCtrl.resource.count}}</span> Records Found</span>
-                  </span>
-                  <span class="pull-right">
+                        <span ng-if="toolsCtrl.resource.count===1"><span class="badge">{{toolsCtrl.resource.count}}</span> Record Found</span>
+                        <span ng-if="toolsCtrl.resource.count===0"><span class="badge">{{toolsCtrl.resource.count}}</span> Records Found</span>
+                        </span>
+                        <span class="pull-right">
 
                         <span ><a href="#" ng-click="toolsCtrl.goTo('platform/resource');">Advanced Search <i class="fa fa-search" aria-hidden="true"></i></a></span>
 
-                  </span>
-                <span ng-if="loading"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                        </span>
+                        <span ng-if="loading"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                 <span >Loading...</span>
-                 </span>
-               </div><br>
+                        </span>
+                    </div><br>
 
-                    <hr style="margin: 5px 0 5px 0;"/>
-              </div>
+                    <hr style="margin: 5px 0 5px 0;" />
+                </div>
             </div>
-          <div class="results-container">
-              <div  ng-repeat="document in toolsCtrl.documents.resource">
-                <search-result> </search-result>
-                <br>
-              </div>
+            <div class="results-container">
+                <div ng-repeat="document in toolsCtrl.documents.resource">
+                    <search-result> </search-result>
+                    <br>
+                </div>
 
             </div>
-          </div>
+        </div>
     </div>
-    <div class="col-12-xs hidden-md hidden-lg hidden-xlg" >
-          <div class="box-title">
-                <span>Search TSC Initiatives in Catalogue</span>
-          </div>
+    <div class="col-12-xs hidden-md hidden-lg hidden-xlg">
+        <div class="box-title">
+            <span>Search TSC Initiatives in Catalogue</span>
+        </div>
     </div>
     <div class="col-xs-12 col-md-6">
-            <div class="container-fluid search-container">
-              <div class="input-group">
-                  <input type="text" ng-change="toolsCtrl.textQuery('capacityBuildingInitiative',valueCBI);"  ng-model="valueCBI" class="form-control" placeholder="Search TSC Initiatives" ng-model-options="{ debounce: { 'default': 300, 'blur': 0 } }" style="font-weight:bold;">
-                  <span type="button" class="input-group-addon pointer" id="basic-addon2" ng-click="toolsCtrl.clearText('capacityBuildingInitiative');valueCBI='';">
+        <div class="container-fluid search-container">
+            <div class="input-group">
+                <input type="text" ng-change="toolsCtrl.textQuery('capacityBuildingInitiative',valueCBI);" ng-model="valueCBI" class="form-control" placeholder="Search TSC Initiatives" ng-model-options="{ debounce: { 'default': 300, 'blur': 0 } }" style="font-weight:bold;">
+                <span type="button" class="input-group-addon pointer" id="basic-addon2" ng-click="toolsCtrl.clearText('capacityBuildingInitiative');valueCBI='';">
                     <i ng-if="valueCBI" class="fa fa-times"></i>
                     <i ng-if="!valueCBI"  class="fa fa-search"></i>
                   </span>
-              </div>
-              <div ng-if="toolsCtrl.capacityBuildingInitiative.count===0 || toolsCtrl.capacityBuildingInitiative.count ">
+            </div>
+            <div ng-if="toolsCtrl.capacityBuildingInitiative.count===0 || toolsCtrl.capacityBuildingInitiative.count ">
 
-                <div class="text-center" >
-                  <span class="pull-left" >
+                <div class="text-center">
+                    <span class="pull-left">
                       <span ng-if="toolsCtrl.capacityBuildingInitiative.count >1" ><span class="badge">{{toolsCtrl.capacityBuildingInitiative.count}}</span> Records Found</span>
-                      <span ng-if="toolsCtrl.capacityBuildingInitiative.count===1" ><span class="badge">{{toolsCtrl.capacityBuildingInitiative.count}}</span> Record Found</span>
-                      <span ng-if="toolsCtrl.capacityBuildingInitiative.count===0" ><span class="badge">{{toolsCtrl.capacityBuildingInitiative.count}}</span> Records Found</span>
-                  </span>
-                  <span class="pull-right">
+                    <span ng-if="toolsCtrl.capacityBuildingInitiative.count===1"><span class="badge">{{toolsCtrl.capacityBuildingInitiative.count}}</span> Record Found</span>
+                    <span ng-if="toolsCtrl.capacityBuildingInitiative.count===0"><span class="badge">{{toolsCtrl.capacityBuildingInitiative.count}}</span> Records Found</span>
+                    </span>
+                    <span class="pull-right">
 
                         <span ><a href="#" ng-click="toolsCtrl.goTo('platform/capacity-building-initiative');">Advanced Search <i class="fa fa-search" aria-hidden="true"></i></a></span>
 
-                  </span>
-                <span ng-if="loading"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+                    </span>
+                    <span ng-if="loading"><i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
                 <span >Loading...</span>
-                 </span>
-               </div><br>
+                    </span>
+                </div><br>
 
-                    <hr style="margin: 5px 0 5px 0;"/>
-              </div>
-              <div class="results-container">
-              <div  ng-repeat="document in toolsCtrl.documents.capacityBuildingInitiative">
-                <search-result> </search-result>
-                <br>
-              </div>
+                <hr style="margin: 5px 0 5px 0;" />
             </div>
+            <div class="results-container">
+                <div ng-repeat="document in toolsCtrl.documents.capacityBuildingInitiative">
+                    <search-result> </search-result>
+                    <br>
+                </div>
             </div>
+        </div>
     </div>
-    <div class="col-xs-5" ><br><br>
-          <div class="box-title text-nowrap">
-                <a  ng-href="forums/bbi"><span>Join BBI TSC Technical Discussions</span></a>
-          </div>
+    <div class="col-xs-5"><br><br>
+        <div class="box-title text-nowrap">
+            <a ng-href="forums/bbi"><span>Join BBI TSC Technical Discussions</span></a>
+        </div>
     </div>
-    <div class="col-xs-12" >
-          <div class="search-container">
+    <div class="col-xs-12">
+        <div class="thread-container">
             <div class="row">
-         <div class="col-xs-12" ng-repeat="thread in toolsCtrl.bbiThreads">
-             <div class="list-group">
-                 <div class="list-group-item activeHeader">
-                     <h4 class="list-group-item-heading" >
+                <div class="col-xs-12" ng-repeat="thread in toolsCtrl.bbiThreads">
+                    <div class="list-group">
+                        <div class="list-group-item activeHeader">
+                            <h4 class="list-group-item-heading">
                          <a translation-url style="color:#fff;" ng-href="forums/bbi/{{thread.threadId}}">
                            <i class="fa fa-comments"></i> {{thread.subject}}
                          </a>
                      </h4>
-                 </div>
-                 <div class="list-group-item list-group-item-default">
-                     <p>{{thread.message}} </p>
-                      <a translation-url  ng-href="forums/bbi/{{thread.threadId}}"><strong>Total posts: {{thread.replies}}</strong></a>
-                      <span class="pull-right"><a href="#"><strong>Posted by:</strong></a> {{thread.createdBy}}  </span>
-                 </div>
-             </div>
-         </div>
+                        </div>
+                        <div class="list-group-item list-group-item-default">
+                            <p>{{thread.message}} </p>
+                            <a translation-url ng-href="forums/bbi/{{thread.threadId}}"><strong>Total posts: {{thread.replies}}</strong></a>
+                            <span class="pull-right"><a href="#"><strong>Posted by:</strong></a> {{thread.createdBy}}  </span>
+                        </div>
+                    </div>
+                </div>
 
-
-
-
-     </div>
- </div>
-</div>
-          </div>
+            </div>
+        </div>
     </div>
 </div>
