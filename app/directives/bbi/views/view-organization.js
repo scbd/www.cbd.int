@@ -13,13 +13,14 @@ app.directive('viewOrganization', ["IStorage","$location","locale","$sce", funct
 			target  : "@linkTarget",
 			allowDrafts : "@",
 			user:"=?",
-			loading:"=?"
+			loading:"=?",
+			header:"=?"
 		},
 		link : function ($scope)
 		{
 			$scope.contacts      = undefined;
 			$scope.organizations = undefined;
-
+  		if(typeof $scope.header==='undefined') $scope.header=true;
 			//====================
 			//
 			//====================
@@ -39,7 +40,12 @@ app.directive('viewOrganization', ["IStorage","$location","locale","$sce", funct
 				if($scope.user)
 					 return !!_.intersection($scope.user.roles, ["Administrator","BBiAdministrator"]).length;
 			};
-			
+			//====================
+			//
+			//====================
+			$scope.getAichiNumber= function(term) {
+					 return term.identifier.slice(-2);
+			};
 			//====================
 			//
 			//====================

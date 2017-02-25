@@ -12,11 +12,21 @@
 </div>
 <div id="view-header" class="panel-heading bg-blue">
     <div class="row">
-        <div class="col-xs-10">
+        <div class="col-xs-12 col-sm-4">
             <h4>
-BBI Assistance Request
- <span class="text-small" style="font-size:.75em;color:#ddd;"> (BBIAR)</span>
- </h4>
+   Assistance Request
+   <!-- <span class="text-small" style="font-size:.75em;color:#ddd;"> (BBIPRO) </span> -->
+   </h4>
+        </div>
+        <div class="col-xs-12 col-sm-8 text-right hidden-xs" >
+            <span km-form-languages  ng-model="document.header.languages"></span>
+            <span km-form-std-buttons document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()"
+                on-pre-publish="onPrePublish()"></span>
+        </div>
+        <div class="col-xs-12 col-sm-8 small visible-xs" >
+            <span km-form-languages xs ng-model="document.header.languages"></span>
+            <span km-form-std-buttons xs  document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()"
+                on-pre-publish="onPrePublish()"></span>
         </div>
     </div>
 </div>
@@ -24,16 +34,25 @@ BBI Assistance Request
         <div class="col-md-12" style="position: relative">
 
             <div class="row">
-                <div class="col-xs-12">
+                <!-- <div class="col-xs-12">
 
                     <div class="pull-right" style="margin-top:10px;">
                       <span km-form-languages xs ng-model="document.meta.languages"></span>
                         <span mongo-form-std-buttons user="user" document="document" save-draft="saveDraft()" save-request="saveRequest()" save-completed="saveCompleted()" on-error="onError(error, errorCode)" ></span>
                     </div>
-                </div>
+                </div> -->
 
-                <div class="col-xs-12">
-                    <ul class="pagination">
+                <div class="col-xs-12 ">
+                    <ul class="pagination hidden-xs">
+                        <li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()">&laquo;</a></li>
+                        <li ng-class="{ active  : tab=='org'  }" id="org"><a href="" ng-click="tab='org'">Requested By</a></li>
+                        <li ng-class="{ active  : tab=='general' }"><a href="" ng-click="tab='general'">General</a></li>
+                        <li ng-class="{ active  : tab=='linkages'  }"><a href="" ng-click="tab='linkages'">Linkages</a></li>
+                        <li ng-class="{ active  : tab=='details'  }"><a href="" ng-click="tab='details'">Details</a></li>
+                        <li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate();">Review</a></li>
+                        <li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()">&raquo;</a></li>
+                    </ul>
+                    <ul class="pagination small visible-xs">
                         <li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()">&laquo;</a></li>
                         <li ng-class="{ active  : tab=='org'  }" id="org"><a href="" ng-click="tab='org'">Requested By</a></li>
                         <li ng-class="{ active  : tab=='general' }"><a href="" ng-click="tab='general'">General</a></li>
@@ -50,7 +69,7 @@ BBI Assistance Request
                 <form  name="editForm"  novalidate>
 
                     <div km-tab="general">
-                        <legend>General Information</legend>
+
                         <div class="row">
 
                           <div class="col-xs-12">
@@ -106,7 +125,7 @@ BBI Assistance Request
 
 
                     <div km-tab="linkages">
-                        <legend>Linkages to CBD Inititives</legend>
+
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="km-control-group" name="cbdSubjects" caption="Related CBD thematic area(s)">
@@ -127,25 +146,25 @@ BBI Assistance Request
                     </div>
 
                     <div km-tab="org">
-                        <legend>Requested By</legend>
+
                         <div class="row">
-
-                          <div class="col-xs-12">
-                              <div class="km-control-group" name="contact" caption="Request contact person" required >
-
-                                  <select-contact schema="bbiContact" id="editForm.contact" name="contact" required ng-model="document.contact" caption="Select a contact person >>>"></select-contact>
-                                  <p ng-show="editForm.contact.$invalid && (editForm.contact.$touched || editForm.$submitted)" class="help-block error red-status">Contact person is required.</p>
-                              </div>
-                          </div>
                           <div class="col-xs-12">
 
                               <span ng-show="loading.org"><i class="fa fa-spinner fa-pulse  fa-fw"></i> Loading...</span>
                               <div ng-show="!loading.org" class="km-control-group" name="organization" required caption="Requesting organization">
 
-                                  <select-contact schema="organization" id="editForm.organization" name="organization" required ng-model="document.organization" caption="Select an organization >>>"></select-contact>
+                                  <select-contact schema="organization" id="editForm.organization" name="organization" required ng-model="document.organization" caption="Select >>"></select-contact>
                                   <p ng-show="editForm.organization.$invalid && (editForm.organization.$touched || editForm.$submitted)" class="help-block error red-status">Requesting organization is required.</p>
                               </div>
                           </div>
+                          <div class="col-xs-12">
+                              <div class="km-control-group" name="contact" caption="Request contact person" required >
+
+                                  <select-contact schema="bbiContact" id="editForm.contact" name="contact" required ng-model="document.contact" caption="Select >>"></select-contact>
+                                  <p ng-show="editForm.contact.$invalid && (editForm.contact.$touched || editForm.$submitted)" class="help-block error red-status">Contact person is required.</p>
+                              </div>
+                          </div>
+
                           <div class="col-md-6 col-xs-12">
                               <div class="km-control-group" name="country" required caption="Related government">
                                   <div km-select required name="country" ng-model="document.country" items="options.countries()"></div>
@@ -161,7 +180,7 @@ BBI Assistance Request
 
                     <div km-tab="details">
 
-                          <legend>Request Details</legend>
+
                         <div class="row">
                           <div class="col-md-4">
                             <div class="control-group" name="jurisdiction" ng-class="{'has-error': (editForm.jurisdiction.$invalid && editForm.$submitted) }" caption="Level of Application" required >
@@ -274,7 +293,7 @@ BBI Assistance Request
                     </div>
 
                     <div km-tab="review">
-                        <view-bbi-request ng-model="document" locale="review.locale" link-target="_blank"></view-bbi-request>
+                        <view-bbi-request header="false" ng-model="document" locale="review.locale" link-target="_blank"></view-bbi-request>
                         <div km-document-validation ng-model="validationReport"></div>
 
                         <div class="btn-group" ng-show="document.header.languages.length>1">
@@ -284,8 +303,17 @@ BBI Assistance Request
 
                     <div class="row">
 
-                      <div class="col-xs-12">
-                          <ul class="pagination">
+                      <div class="col-xs-12 ">
+                          <ul class="pagination hidden-xs">
+                              <li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()">&laquo;</a></li>
+                              <li ng-class="{ active  : tab=='org'  }" id="org"><a href="" ng-click="tab='org'">Requested By</a></li>
+                              <li ng-class="{ active  : tab=='general' }"><a href="" ng-click="tab='general'">General</a></li>
+                              <li ng-class="{ active  : tab=='linkages'  }"><a href="" ng-click="tab='linkages'">Linkages</a></li>
+                              <li ng-class="{ active  : tab=='details'  }"><a href="" ng-click="tab='details'">Details</a></li>
+                              <li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate();">Review</a></li>
+                              <li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()">&raquo;</a></li>
+                          </ul>
+                          <ul class="pagination small visible-xs">
                               <li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()">&laquo;</a></li>
                               <li ng-class="{ active  : tab=='org'  }" id="org"><a href="" ng-click="tab='org'">Requested By</a></li>
                               <li ng-class="{ active  : tab=='general' }"><a href="" ng-click="tab='general'">General</a></li>
@@ -295,21 +323,28 @@ BBI Assistance Request
                               <li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()">&raquo;</a></li>
                           </ul>
                       </div>
-                        <div class="col-sm-12 hidden-xs" style="text-align:right">
-                            <div class="pagination">
-                              <span mongo-form-std-buttons user="user" document="document" save-draft="saveDraft()" save-request="saveRequest()" save-completed="saveCompleted()" on-error="onError(error, errorCode)" ></span>
 
+                    </div>
+                    <div id="view-header" class="panel-heading bg-blue">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4">
+                                <h4>
+                       Assistance Request
+                       <!-- <span class="text-small" style="font-size:.75em;color:#ddd;"> (BBIPRO) </span> -->
+                       </h4>
                             </div>
-                        </div>
-
-                        <div class="col-xs-12 visible-xs ">
-                            <div class="">
-                              <span mongo-form-std-buttons user="user" document="document" save-draft="saveDraft()" save-request="saveRequest()" save-completed="saveCompleted()" on-error="onError(error, errorCode)" ></span>
-
+                            <div class="col-xs-12 col-sm-8 text-right hidden-xs" >
+                                <span km-form-languages  ng-model="document.header.languages"></span>
+                                <span km-form-std-buttons document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()"
+                                    on-pre-publish="onPrePublish()"></span>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 small visible-xs" >
+                                <span km-form-languages xs ng-model="document.header.languages"></span>
+                                <span km-form-std-buttons xs  document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()"
+                                    on-pre-publish="onPrePublish()"></span>
                             </div>
                         </div>
                     </div>
-
             </div>
         </div>
     </div>

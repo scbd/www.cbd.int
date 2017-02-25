@@ -1,11 +1,11 @@
 
 <div id="Record" class="record panel panel-default">
-    <div id="view-header" class="panel-heading bg-blue">
+    <div id="view-header" class="panel-heading bg-blue" ng-if="header">
         <div class="row">
             <div class="col-xs-10">
                 <h4>
 			 <span ng-if="!loading" >Organization
-       <span class="text-small" style="font-size:.75em;color:#ddd;"> (ORG) </span>
+       <!-- <span class="text-small" style="font-size:.75em;color:#ddd;"> (ORG) </span> -->
        </span>
        <span ng-if="loading" style="margin:auto">
            <i class="fa fa-spin fa-spinner " /> Loading...
@@ -179,33 +179,36 @@
                 </div>
             </div>
         </div>
-        <div ng-show="document.organizationType || document.libraries || document.thematicAreas ||
+        <legend class="view" ng-if="document.organizationType || document.libraries || document.thematicAreas ||
+				document.profileLink || linkedOrganizations">Detailed information</legend>
+        <div class="row" ng-if="document.organizationType || document.libraries || document.thematicAreas ||
 				document.profileLink || linkedOrganizations">
 
-            <legend class="view">Detailed information</legend>
 
-            <div ng-if="document.libraries">
+<div class="col-xs-12">
+            <div class="col-xs-12 col-md-6" ng-if="document.libraries">
                 <label class="view">Relevant libraries</label>
                 <div class="km-value">
                     <div ng-repeat="term in document.libraries">{{term | term:locale}}</div>
                 </div>
             </div>
 
-            <div ng-if="document.operationalLanguages">
+            <div class="col-xs-12 col-md-6" ng-if="document.operationalLanguages">
                 <label class="view">Operational languages</label>
                 <div class="km-value">
                     <div ng-repeat="lang in document.operationalLanguages">{{ lang | term:locale}}</div>
                 </div>
             </div>
-
-            <div ng-if="document.organizationType">
+</div>
+<div class="col-xs-12">
+            <div class="col-xs-12 col-md-6" ng-if="document.organizationType">
                 <label class="view">Type of organization</label>
                 <div class="km-value">
                     {{document.organizationType | term:locale}}
                 </div>
             </div>
 
-            <div ng-show="document.profileLink">
+            <div class="col-xs-12 col-md-6" ng-show="document.profileLink">
                 <label class="view">Organization’s profile</label>
                 <div class="km-value">
                     <div ng-repeat="item in document.profileLink">
@@ -215,43 +218,49 @@
                 </div>
             </div>
     </div>
+</div>
 
-    <legend class="view">Linkages to CBD & Protocols</legend>
-    <div ng-if="document.thematicAreas">
+    <legend class="view" ng-if="document.thematicAreas || document.aichiTargets || document.absThematicAreas ||document.bchSubjects">Linkages to CBD & Protocols</legend>
+    <div class="row" ng-if="document.thematicAreas || document.aichiTargets || document.absThematicAreas ||document.bchSubjects">
+      <div class="col-xs-12">
+    <div class="col-xs-12 col-md-6" ng-if="document.thematicAreas">
         <label class="view">Related CBD subject area(s)</label>
         <div class="km-value">
             <div ng-repeat="term in document.thematicAreas">{{term | term:locale}}</div>
         </div>
     </div>
-    <div ng-if="document.aichiTargets">
+    <div class="col-xs-12 col-md-6" ng-if="document.aichiTargets">
         <label class="view">Related Aichi Biodiversity Target(s)</label>
         <div class="km-value">
             <div ng-repeat="term in document.aichiTargets">
-                <!-- <img style="height: 20px;  width: 20px; margin-bottom:5px; " ng-src="https://www.cbd.int/images/aichi/48/abt-04-48.png" src="https://www.cbd.int/images/aichi/48/abt-04-48.png"> -->
-                {{term | term:locale}}
+                <img style="height: 20px;  width: 20px; margin-bottom:5px; " ng-src="https://www.cbd.int/images/aichi/48/abt-{{getAichiNumber(term)}}-48.png" >
+                <a ng-href="https://www.cbd.int/aichi-targets/target/{{getAichiNumber(term)}}">{{term | term:locale}}</a>
             </div>
         </div>
     </div>
-    <div ng-if="document.absThematicAreas">
+  </div>
+        <div class="col-xs-12">
+    <div class="col-xs-12 col-md-6" ng-if="document.absThematicAreas">
         <label class="view">Related ABS subject area(s)</label>
         <div class="km-value">
             <div ng-repeat="term in document.absThematicAreas">{{term | term:locale}}</div>
         </div>
     </div>
-    <div ng-if="document.bchSubjects">
+    <div class="col-xs-12 col-md-6" ng-if="document.bchSubjects">
         <label class="view">Related BCH subject area(s)</label>
         <div class="km-value">
             <div ng-repeat="term in document.bchSubjects">{{term | term:locale}}</div>
         </div>
     </div>
+  </div>
+</div>
 
 
+    <legend class="view" ng-if="document.relevantInformation || document.relevantDocuments || linkedOrganizations ||contacts" >Additional Information and Documents</legend>
 
-    <legend class="view">Additional Information and Documents</legend>
-
-    <div>
+    <div  ng-show="document.relevantInformation">
         <label class="view"> Additional information</label>
-        <div ng-show="document.relevantInformation" class="km-value">
+        <div class="km-value">
             {{document.relevantInformation | lstring}}
         </div>
     </div>

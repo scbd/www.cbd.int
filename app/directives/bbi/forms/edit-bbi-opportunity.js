@@ -23,9 +23,12 @@ app.directive('editBbiOpportunity', ['$http',"$rootScope", "Enumerable", "$filte
 		template   : template,
 		replace    : true,
 		transclude : false,
-		scope: {user:'='},
+		scope: {user:'=',header:'=?'},
+
 		link : function($scope)
 		{
+			if(typeof $scope.header==='undefined') $scope.header=true;
+
 			$scope.schema = 'bbi-opportunity';
 			$scope.status   = "";
 			$scope.error    = null;

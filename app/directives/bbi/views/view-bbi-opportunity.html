@@ -1,10 +1,10 @@
 <div id="Record" class="record panel panel-default">
-    <div id="view-header" class="panel-heading bg-blue">
+    <div id="view-header" class="panel-heading bg-blue" ng-if="header">
         <div class="row">
             <div class="col-xs-10">
                 <h4>
-                <span ng-if="!loading"> BBI Opportunity
-                 <span class="text-small" style="font-size:.75em;color:#ddd;"> (BBIOPP) </span>
+                <span ng-if="!loading"> Opportunity
+                 <!-- <span class="text-small" style="font-size:.75em;color:#ddd;"> (BBIOPP) </span> -->
                 </span>
                 <span ng-if="loading" style="margin:auto">
                     <i class="fa fa-spin fa-spinner " /> Loading...
@@ -40,7 +40,7 @@
         </div>
 
         <!-- Opportunity Information -->
-        <div>
+        <div ng-if="document.areasBenifited || document.assistanceTypes || document.otherAssistanceType || document.relevantInfo || document.relevantDocuments">
             <legend class="view">Opportunity Information</legend>
             <div class="row">
                 <div class="col-xs-12 col-md-6" ng-show="document.areasBenifited">
@@ -92,7 +92,7 @@
         </div>
 
 <!-- Detailed Opportunity Information -->
-      <div>
+      <div ng-if="document.primaryBeneficiary ||  document.primaryBeneficiaries || document.potentialOutcomes || document.eligibility || document.applicationProcess || document.startDate || document.endDate || document.applicationDeadline || document.applicationDocuments || document.active" >
           <legend class="view">Detailed Opportunity Information</legend>
 
           <div class="row">
@@ -136,7 +136,7 @@
                   </div>
               </div>
 
-              <div class="col-xs-12 col-md-3" ng-show="document.startDate">
+              <div class="col-xs-12 col-md-3" ng-show="document.endDate">
                   <label class="view">End Date</label>
                   <div class="km-value">
                       <span>{{document.endDate}}<br/></span>

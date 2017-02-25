@@ -1,5 +1,5 @@
 <div id="Record" class="record panel panel-default">
-  <div id="view-header" class="panel-heading bg-blue">
+  <div id="view-header" class="panel-heading bg-blue" ng-if="header">
       <div class="row">
           <div class="col-xs-10">
               <h4>
@@ -180,7 +180,7 @@
         </div>
 
         <!-- details -->
-        <div >
+        <div ng-if="document.addressedPriorities || document.assistanceTypes || document.problem || document.title ||document.coverage">
             <legend class="view">General Information</legend>
 
             <div ng-show="document.coverage">
@@ -252,7 +252,10 @@
 
 
 <!-- Detailed Information -->
-          <div>
+          <div ng-if="            document.addressedPrioritiesOther || document.coFinancing || document.potentialOOI ||
+                      document.objectives || document.sameRequests || document.existingInitiatives  ||
+                      document.websites || document.other || document.endDate || document.startDate ||
+                      contact.beneficiaryTypes  ||  document.jurisdiction || document.jurisdiction || document.otherGovernments">
             <legend class="view">Detailed Information</legend>
             <div ng-show="document.otherGovernments">
                 <label class="view">Other Govermental Involvment</label>
@@ -262,6 +265,8 @@
                     </span>
                 </div>
             </div>
+
+
             <div ng-show="document.jurisdiction">
                 <label class="view">Level of application</label>
                 <div class="km-value">
@@ -270,6 +275,8 @@
                     </span>
                 </div>
             </div>
+
+
             <div ng-show="contact.beneficiaryTypes">
               <label class="view">Beneficiary types</label>
               <div class="km-value">
@@ -295,6 +302,7 @@
                 </div>
             </div>
 
+
             <div ng-show="document.other">
                 <label class="view">Other relevant information</label>
                 <div class="km-value">
@@ -303,6 +311,9 @@
                     </span>
                 </div>
             </div>
+
+
+
             <div ng-show="document.websites">
               <label class="view">Relevant links and files</label>
               <ul class="km-value">
@@ -314,6 +325,7 @@
             </div>
 
 
+
             <div ng-show="document.existingInitiatives">
                 <label class="view">Existing initiatives</label>
                 <div class="km-value">
@@ -322,6 +334,9 @@
                     </span>
                 </div>
             </div>
+
+
+
             <div ng-show="document.sameRequests">
                 <label class="view">Same request to other programes</label>
                 <div class="km-value">
@@ -330,6 +345,8 @@
                     </span>
                 </div>
             </div>
+
+
             <div ng-show="document.objectives">
                 <label class="view">Objectives</label>
                 <div class="km-value">
@@ -338,6 +355,8 @@
                     </span>
                 </div>
             </div>
+
+
             <div ng-show="document.potentialOOI">
                 <label class="view">Potential outputs, outcomes and indicators</label>
                 <div class="km-value">
@@ -346,6 +365,7 @@
                     </span>
                 </div>
             </div>
+
             <div ng-show="document.coFinancing">
                 <label class="view">Available co-finacing and/or other support</label>
                 <div class="km-value">
@@ -354,10 +374,6 @@
                     </span>
                 </div>
             </div>
-
-
-
-
 
             <div ng-show="document.addressedPrioritiesOther">
         			<label class="view">Other governmental priorities</label>

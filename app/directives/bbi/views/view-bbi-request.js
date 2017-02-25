@@ -12,10 +12,11 @@ define(['text!./view-bbi-request.html', 'app', 'lodash',  'services/storage','se
 				document: '=ngModel',
 				locale	: '=',
 				loading:"=?",
-				user:"=?"
+				user:"=?",
+				header:"=?"
 			},
 			link: function($scope) {
-
+  							if(typeof $scope.header==='undefined') $scope.header=true;
                 var killWatchContact = $scope.$watch("document.contact", function()
                 {
                     if($scope.document )
@@ -42,7 +43,7 @@ define(['text!./view-bbi-request.html', 'app', 'lodash',  'services/storage','se
 										if($scope.user)
 											 isAdmin = !!_.intersection($scope.user.roles, ["Administrator","BBiAdministrator"]).length;
 											 var isNotReview = !!($location.url().indexOf('/view')>-1);
-											 var isOwner = ($scope.document && $scope.document.meta && $scope.user.userID===$scope.document.meta.createdBy);
+											 var isOwner = ($scope.document && $scope.document.meta && $scope.user && $scope.user.userID===$scope.document.meta.createdBy);
 
 										 return ((isOwner || isAdmin) && isNotReview);
 								};

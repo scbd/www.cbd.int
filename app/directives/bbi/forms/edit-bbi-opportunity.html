@@ -5,47 +5,57 @@
 		<div>{{error}}</div>
 	</div>
 	<div id="view-header" class="panel-heading bg-blue">
-    <div class="row">
-    <div class="col-xs-10">
-      <h4>
-    BBI Opportunity
-     <span class="text-small" style="font-size:.75em;color:#ddd;"> (BBIOPP) </span>
-     </h4>
-   </div>
-  </div>
-  </div>
+			<div class="row">
+					<div class="col-xs-12 col-sm-2">
+							<h4>
+		 Opportunity
+		 <!-- <span class="text-small" style="font-size:.75em;color:#ddd;"> (BBIPRO) </span> -->
+		 </h4>
+					</div>
+					<div class="col-xs-12 col-sm-10 text-right hidden-xs" >
+							<span km-form-languages  ng-model="document.header.languages"></span>
+							<span km-form-std-buttons document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()"
+									on-pre-publish="onPrePublish()"></span>
+					</div>
+					<div class="col-xs-12 col-sm-10 small visible-xs" >
+							<span km-form-languages xs ng-model="document.header.languages"></span>
+							<span km-form-std-buttons xs  document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()"
+									on-pre-publish="onPrePublish()"></span>
+					</div>
+			</div>
+	</div>
+
 	<div class="row" ng-show="!isLoading() && status!='hidden'">
 
 		<div class="col-md-12" style="position: relative">
 
 			<div class="row">
-				<div class="col-xs-12" style="margin-top:10px;">
-					<div class="pull-right">
-						<span km-form-languages xs ng-model="document.header.languages"></span>
-						<span km-form-std-buttons document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()" on-pre-publish="onPrePublish()"></span>
-					</div>
-				</div>
 
-				<div class="col-xs-12">
-					<ul class="pagination">
+				<div class="col-xs-12 ">
+					<ul class="pagination hidden-xs">
 						<li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()"		>&laquo;</a></li>
-            <li ng-class="{ active  : tab=='org'  }"><a href="" ng-click="tab='org'"	>Contributers</a></li>
-            <li ng-class="{ active  : tab=='oppor' }"><a href="" ng-click="tab='oppor'"	>Opportunity</a></li>
+						<li ng-class="{ active  : tab=='org'  }"><a href="" ng-click="tab='org'"	>Contributers</a></li>
+						<li ng-class="{ active  : tab=='oppor' }"><a href="" ng-click="tab='oppor'"	>Opportunity</a></li>
 						<li ng-class="{ active  : tab=='detail'  }"><a href="" ng-click="tab='detail'">Details</a></li>
-            <li ng-class="{ active  : tab=='linkages'  }"><a href="" ng-click="tab='linkages'"	>Linkages</a></li>
-            <li ng-class="{ active  : tab=='social'  }"><a href="" ng-click="tab='social'"	>Social</a></li>
+						<li ng-class="{ active  : tab=='linkages'  }"><a href="" ng-click="tab='linkages'"	>Linkages</a></li>
+						<li ng-class="{ active  : tab=='social'  }"><a href="" ng-click="tab='social'"	>Social</a></li>
+
+						<li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate();"	>Review</a></li>
+						<li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()"		  >&raquo;</a></li>
+					</ul>
+					<ul class="pagination small visible-xs">
+						<li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()"		>&laquo;</a></li>
+						<li ng-class="{ active  : tab=='org'  }"><a href="" ng-click="tab='org'"	>Contributers</a></li>
+						<li ng-class="{ active  : tab=='oppor' }"><a href="" ng-click="tab='oppor'"	>Opportunity</a></li>
+						<li ng-class="{ active  : tab=='detail'  }"><a href="" ng-click="tab='detail'">Details</a></li>
+						<li ng-class="{ active  : tab=='linkages'  }"><a href="" ng-click="tab='linkages'"	>Linkages</a></li>
+						<li ng-class="{ active  : tab=='social'  }"><a href="" ng-click="tab='social'"	>Social</a></li>
 
 						<li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate();"	>Review</a></li>
 						<li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()"		  >&raquo;</a></li>
 					</ul>
 				</div>
 
-				<!-- <div class="col-sm-4 hidden-xs" style="text-align:right">
-					<div class="pagination">
-						<span km-form-languages xs ng-model="document.header.languages"></span>
-						<span km-form-std-buttons document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()" on-pre-publish="onPrePublish()"></span>
-					</div>
-				</div> -->
 
 			</div>
 			<div>
@@ -53,28 +63,26 @@
 				<form name="editForm" style="margin-top:10px" novalidate>
 
           <div km-tab="org">
-                <legend>Contributers</legend>
+
                 <section>
                       <div class="row">
-                          <div class="col-md-8 col-xs-12">
-                              <div class="km-control-group" name="contact" required caption="Contact person for the opportunity">
-                                <select-contact required name="contact" schema="bbiContact" ng-model="document.contact" caption="Select a primary contact >>" ></select-contact>
-                              </div>
-                          </div>
-                      </div>
 
-                      <div class="row">
                         <div class="col-md-8 col-xs-12">
                             <div class="km-control-group" name=" primaryOrganization" required caption="Primary contributing organization">
-                                <select-contact ng-show="!loadingOrg" required name="primaryOrganization"  schema="organization" ng-model="document.primaryOrganization" caption="Select a primary organization >>"></select-contact>
+                                <select-contact ng-show="!loadingOrg" required name="primaryOrganization"  schema="organization" ng-model="document.primaryOrganization" caption="Select >>"></select-contact>
 
-<span ng-show="loadingOrg" ><i class="fa fa-spinner fa-pulse  fa-fw"></i> Loading...</span>
+																<span ng-show="loadingOrg" ><i class="fa fa-spinner fa-pulse  fa-fw"></i> Loading...</span>
                             </div>
                         </div>
+												<div class="col-md-8 col-xs-12">
+														<div class="km-control-group" name="contact" required caption="Contact person for the opportunity">
+															<select-contact required name="contact" schema="bbiContact" ng-model="document.contact" caption="Select  >>" ></select-contact>
+														</div>
+												</div>
 
                           <div class="col-md-8 col-xs-12">
                               <div class="km-control-group" name="otherOrgs" required caption="Select all other organizations contributing to the opportunity">
-                                <select-contact name="otherOrgs"  schema="organization" multiple="true" ng-model="document.organizations" caption="Select all contributing organizations >>"></select-contact>
+                                <select-contact name="otherOrgs"  schema="organization" multiple="true" ng-model="document.organizations" caption="Select >>"></select-contact>
                               </div>
                           </div>
 
@@ -84,9 +92,6 @@
           </div>
 
 					<div km-tab="oppor">
-
-            <legend>Opportunity Information</legend>
-
 
             <div  class="row">
 
@@ -136,7 +141,6 @@
 
 <div km-tab="detail">
 
-  <legend>Opportunity Details</legend>
   <div class="col-xs-12">
       <div class="control-group" name="primaryBeneficiary" required caption="Primary Beneficiary">
          <label class="control-label">Primary beneficiary</label><br>
@@ -204,7 +208,7 @@
 </div>
 
 <div km-tab="linkages">
-  <legend>Linkages to CBD Inititives</legend>
+
   <div class="row">
       <div class="col-md-10">
           <div class="km-control-group" name="cbdSubjects" caption="Related CBD thematic areas(s)">
@@ -224,7 +228,7 @@
 </div>
 
 <div km-tab="social">
-    <legend style="margin-top:0;">Opportunity Related Social Media </legend>
+
     <div class="row">
 
         <div class="col-md-6 col-xs-12">
@@ -282,13 +286,13 @@
 					<div class="btn-group" ng-show="document.header.languages.length>1">
 						<input type="button" class="btn" ng-class="{'active' : review.locale==locale, 'btn-info' : review.locale==locale}" ng-repeat="locale in document.header.languages" ng-click="$parent.review.locale = locale" value="{{locale | uppercase}}" />
 					</div>
-					<view-bbi-opportunity ng-model="document" locale="review.locale" link-target="_blank"></view-bbi-opportunity>
+					<view-bbi-opportunity header="false" ng-model="document" locale="review.locale" link-target="_blank"></view-bbi-opportunity>
 				</div>
 
 				<div class="row">
 
-          <div class="col-xs-12">
-  					<ul class="pagination">
+          <div class="col-xs-12 ">
+  					<ul class="pagination hidden-xs">
   						<li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()"		>&laquo;</a></li>
               <li ng-class="{ active  : tab=='org'  }"><a href="" ng-click="tab='org'"	>Contributers</a></li>
               <li ng-class="{ active  : tab=='oppor' }"><a href="" ng-click="tab='oppor'"	>Opportunity</a></li>
@@ -299,22 +303,41 @@
   						<li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate();"	>Review</a></li>
   						<li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()"		  >&raquo;</a></li>
   					</ul>
+						<ul class="pagination small visible-xs">
+							<li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()"		>&laquo;</a></li>
+							<li ng-class="{ active  : tab=='org'  }"><a href="" ng-click="tab='org'"	>Contributers</a></li>
+							<li ng-class="{ active  : tab=='oppor' }"><a href="" ng-click="tab='oppor'"	>Opportunity</a></li>
+							<li ng-class="{ active  : tab=='detail'  }"><a href="" ng-click="tab='detail'">Details</a></li>
+							<li ng-class="{ active  : tab=='linkages'  }"><a href="" ng-click="tab='linkages'"	>Linkages</a></li>
+							<li ng-class="{ active  : tab=='social'  }"><a href="" ng-click="tab='social'"	>Social</a></li>
+
+							<li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate();"	>Review</a></li>
+							<li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()"		  >&raquo;</a></li>
+						</ul>
   				</div>
 
-					<div class="col-sm-12 hidden-xs" style="text-align:right">
-						<div class="pagination">
-							<span km-form-std-buttons document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()" on-pre-publish="onPrePublish()"></span>
-						</div>
-					</div>
-
-					<div class="col-xs-12 visible-xs ">
-						<div class="">
-							<span km-form-std-buttons document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()" on-pre-publish="onPrePublish()"></span>
-						</div>
-					</div>
 
 				</div>
-
+				<div id="view-header" class="panel-heading bg-blue">
+						<div class="row">
+								<div class="col-xs-12 col-sm-2">
+										<h4>
+					 Opportunity
+					 <!-- <span class="text-small" style="font-size:.75em;color:#ddd;"> (BBIPRO) </span> -->
+					 </h4>
+								</div>
+								<div class="col-xs-12 col-sm-10 text-right hidden-xs" >
+										<span km-form-languages  ng-model="document.header.languages"></span>
+										<span km-form-std-buttons document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()"
+												on-pre-publish="onPrePublish()"></span>
+								</div>
+								<div class="col-xs-12 col-sm-10 small visible-xs" >
+										<span km-form-languages xs ng-model="document.header.languages"></span>
+										<span km-form-std-buttons xs  document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()"
+												on-pre-publish="onPrePublish()"></span>
+								</div>
+						</div>
+				</div>
 			</div>
 		</div>
 	</div>

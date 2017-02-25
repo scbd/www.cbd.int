@@ -13,9 +13,12 @@ define(['text!./view-bbi-opportunity.html', 'app', 'lodash',  'services/storage'
 				locale	: '=',
 				loading:"=?",
 									user:"=?",
+				header:"=?"
 			},
 			link: function($scope) {
 								//
+								if(typeof $scope.header==='undefined') $scope.header=true;
+								
                 var killWatchContact = $scope.$watch("document.contact", function()
                 {
                     if($scope.document )

@@ -17,7 +17,8 @@ define(['text!./view-bbi-contact.html', 'app', 'angular', 'lodash', 'authenticat
 				document: '=ngModel',
 				locale	: '=',
 							loading:"=?",
-					user:"=?"
+					user:"=?",
+					header:"=?"
 			},
 			link: function($scope) {
 

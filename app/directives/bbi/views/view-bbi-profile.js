@@ -12,10 +12,11 @@ define(['text!./view-bbi-profile.html', 'app', 'angular', 'lodash', 'services/st
 				document: '=ngModel',
 				locale	: '=',
 					user:"=?",
-				loading:"=?"
+				loading:"=?",
+				header:"=?"
 			},
 			link: function($scope) {
-
+								if(typeof $scope.header==='undefined') $scope.header=true;
                 $scope.$watch("document.contact", function()
                 {
                     if($scope.document)
@@ -36,7 +37,7 @@ define(['text!./view-bbi-profile.html', 'app', 'angular', 'lodash', 'services/st
 								//
 								//====================
 								$scope.isAdmin = function() {
-									if($scope.user)									
+									if($scope.user)
 										 return !!_.intersection($scope.user.roles, ["Administrator","BBiAdministrator"]).length;
 								};
 								//====================

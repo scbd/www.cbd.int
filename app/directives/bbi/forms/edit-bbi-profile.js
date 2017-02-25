@@ -27,7 +27,7 @@ app.directive('editBbiProfile', ['$http',"$rootScope", "Enumerable", "$filter", 
 			$scope.status   = "";
 			$scope.error    = null;
 			$scope.document = null;
-			$scope.tab      = 'contact';
+			$scope.tab      = 'org';
 			$scope.review   = { locale: "en" };
 			$scope.options  = {//5FF88869-FD8C-438F-9F77-66AB1CFB3BD4
 				languages     : function() { return $http.get("/api/v2013/thesaurus/domains/52AFC0EE-7A02-4EFA-9277-8B6C327CE21F/terms", { cache: true }).then(function(o){ return $filter('orderBy')(o.data, 'name'); }); },
@@ -94,8 +94,7 @@ app.directive('editBbiProfile', ['$http',"$rootScope", "Enumerable", "$filter", 
 			$scope.nextTab = function() {
 				var next = 'review';
 
-				if($scope.tab=='org') 			{ next = 'contact';}
-				if($scope.tab=='contact') 	{ next = 'profile';   }
+				if($scope.tab=='org') 			{ next = 'profile';}
 				if($scope.tab=='profile' 	) { next = 'social'; }
 				if($scope.tab=='social') 		{ next = 'review';  $scope.validate();}
 
@@ -118,8 +117,8 @@ app.directive('editBbiProfile', ['$http',"$rootScope", "Enumerable", "$filter", 
 
 				if($scope.tab=='review' ) { prev = 'social'; 	 }
 				if($scope.tab=='social'	) { prev = 'profile';  }
-				if($scope.tab=='profile'	) { prev = 'contact';}
-				if($scope.tab=='contact'	) { prev = 'org';}
+				if($scope.tab=='profile'	) { prev = 'org';}
+
 
 				$scope.tab = prev;
 			};
