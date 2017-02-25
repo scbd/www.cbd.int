@@ -158,24 +158,23 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
           .when('/platform/submit/:schema',         { templateUrl: 'views/bbi/management/record-list.html',  controllerAs: 'submitCtrl',  resolveController: true,resolve : { user : securize(['User']) } })
           .when('/platform/submit/:schema/:id',     { templateUrl: 'views/bbi/management/edit.html',         controllerAs: 'editCtrl',    resolveController: true ,resolve : { user : securize(['User']) }})
           .when('/platform/submit/:schema/:id/view',{ templateUrl: 'views/bbi/management/view.html',    controllerAs: 'viewCtrl',    resolveController: true,resolve : { user : securize(['Everyone']) } })
-          .when('/platform/dashboard'              ,{ templateUrl: 'views/bbi/management/index.html',    controllerAs: 'dashCtrl',    resolveController: true ,resolve : { user : securize(['User']) }})
+          .when('/platform/dashboard'              ,{ templateUrl: 'views/bbi/management/index-man.html',    controllerAs: 'dashCtrl',    resolveController: true ,resolve : { user : securize(['User']) }})
           .when('/platform/search',                { templateUrl: 'views/bbi/management/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
-          .when('/platform/tools',                  { templateUrl: 'views/bbi/management/tools.html',  controllerAs: 'toolsCtrl',  resolveController: true, resolve : { user : securize(['User']) }})
-          .when('/platform/about',                  { templateUrl: 'views/bbi/management/about/index.html',  controllerAs: 'pAboutCtrl',  resolveController: true, resolve : { user : securize(['User']) }})
-          .when('/platform/dashboard'              ,{ templateUrl: 'views/bbi/management/index.html',    controllerAs: 'dashCtrl',    resolveController: true ,resolve : { user : securize(['User']) }})
+          .when('/platform/tools',                  { templateUrl: 'views/bbi/management/tools.html',  controllerAs: 'toolsCtrl',  resolveController: true})
+          .when('/platform/about',                  { templateUrl: 'views/bbi/management/about/index.html',  controllerAs: 'pAboutCtrl',  resolveController: true})
           .when('/platform/:schema',                       { templateUrl: 'views/bbi/management/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
 
-          .when('/about',                  { templateUrl: 'views/bbi/about/index.html',  controllerAs: 'initCtrl',  resolveController: true})
+          .when('/about',                  { templateUrl: 'views/bbi/about/index-about.html',  controllerAs: 'initCtrl',  resolveController: true})
           .when('/about/framework',        { templateUrl: 'views/bbi/about/framework.html',  controllerAs: 'frameworkCtrl',  resolveController: true})
           .when('/about/plan',             { templateUrl: 'views/bbi/about/plan.html',  controllerAs: 'planCtrl',  resolveController: true})
           .when('/about/partners',         { templateUrl: 'views/bbi/about/partners.html',  controllerAs: 'partnersCtrl',  resolveController: true})
 
-          .when('/participation',                { templateUrl: 'views/bbi/participation/index.html',  controllerAs: 'participationCtrl',  resolveController: true})
+          .when('/participation',                { templateUrl: 'views/bbi/participation/index-part.html',  controllerAs: 'participationCtrl',  resolveController: true})
           .when('/participation/request',        { templateUrl: 'views/bbi/participation/request.html',  controllerAs: 'requestCtrl',  resolveController: true})
           .when('/participation/provide',        { templateUrl: 'views/bbi/participation/provide.html',  controllerAs: 'provideCtrl',  resolveController: true})
           .when('/participation/opportunity',    { templateUrl: 'views/bbi/participation/opportunity.html',  controllerAs: 'opportunityCtrl',  resolveController: true})
 
-          .when('/projects',                { templateUrl: 'views/bbi/pilot-projects/index.html',  controllerAs: 'pilotCtrl',  resolveController: true})
+          .when('/projects',                { templateUrl: 'views/bbi/pilot-projects/index-proj.html',  controllerAs: 'pilotCtrl',  resolveController: true})
           .when('/projects/selected',       { templateUrl: 'views/bbi/pilot-projects/selected.html',  controllerAs: 'selectedCtrl',  resolveController: true})
 
 
@@ -185,12 +184,12 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
           .when('/faq',                           { templateUrl: 'views/bbi/faq.html',  controllerAs: 'faqCtrl',  resolveController: true})
           .when('/contact',                       { templateUrl: 'views/bbi/contact.html',  controllerAs: 'contCtrl',  resolveController: true})
 
-          .when('/comms',                         { templateUrl: 'views/bbi/comms/index.html'    ,  controllerAs: 'commsCtrl',  resolveController: true})
+          .when('/comms',                         { templateUrl: 'views/bbi/comms/index-comm.html'    ,  controllerAs: 'commsCtrl',  resolveController: true})
           .when('/comms/panel',                   { templateUrl: 'views/bbi/comms/panel.html',  controllerAs: 'panelCtrl',   resolveController: true})
           .when('/search',                        { templateUrl: 'views/bbi/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
-          .when('/platform',                        { templateUrl: 'views/bbi/platform.html',  controllerAs: 'pltfCtrl',   resolveController: true, reloadOnSearch : false})
+          .when('/platform',                      { templateUrl: 'views/bbi/platform.html',  controllerAs: 'pltfCtrl',   resolveController: true, reloadOnSearch : false})
 
-          .when('/forums/bbi/:threadId',           { templateUrl: 'views/bbi/forums/post-list-view.html',  resolveController: true,resolve : { user : securize(['User'])},forumId:17490,forumListUrl:'/biobridge/forums/bbi', text:'BBI'} ) //,
+          .when('/forums/bbi/:threadId',          { templateUrl: 'views/bbi/forums/post-list-view.html',  resolveController: true,resolve : { user : securize(['User'])},forumId:17490,forumListUrl:'/biobridge/forums/bbi', text:'BBI'} ) //,
           .when('/forums/bbi',                    { templateUrl: 'views/bbi/forums/thread-list-view.html',    resolveController: true,resolve : { user : securize(['User'])}, forumId:17490, postUrl:'/biobridge/forums/bbi', text:'BBI' } )
 
     }
