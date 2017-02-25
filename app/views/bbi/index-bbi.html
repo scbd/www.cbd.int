@@ -1,4 +1,4 @@
-<ng-include src="'/app/views/bbi/header.html'" ></ng-include>
+<!-- <ng-include src="'/app/views/bbi/header.html'" ></ng-include> -->
 <style>
 
         .top-button-container{
@@ -90,12 +90,13 @@ left: 0;
   }
   </style>
 <div class="row">
-    <menu pull="right" search="true" links="indexCtrl.links" style="padding:0;margin:0;"></menu>
-    <slider links="indexCtrl.links" style="padding:0;margin:0;"></slider>
 
+    <slider links="indexCtrl.links" style="padding:0;margin:0;"></slider>
+<menu pull="right" search="true" links="indexCtrl.links" style="padding:0;margin:0;"></menu>
 
     <div class="col-xs-12" auto-linker>
-    <h1>The Bio-Bridge Initiative</h1>
+    <!-- <h1>The Bio-Bridge Initiative</h1> -->
+    <br>
     <p><strong>The Bio-Bridge Initiative (BBI)</strong> is a new overarching programme focused on catalyzing and facilitating technical and scientific cooperation (TSC) among Parties to the Convention on Biological Diversity (CBD) and to its Protocols
         on biosafety (Cartagena Protocol) and on access and benefit-sharing (Nagoya Protocol).</p>
     <p style="text-indent: 20px;"><span >BBI facilitates TSC among Parties by:</span>
@@ -132,7 +133,8 @@ left: 0;
 
         </div>
         </a>
-        <hr ng-show="doc.title_t && $index < 5" style="margin: 5px 5px 5px 5px;" ng-repeat-end>
+        <hr ng-show="doc.title_t && $index<indexCtrl.outReachRecords.new.data.length-1" style="margin: 5px 5px 5px 5px;" ng-repeat-end>
+        <div class="small pull-right" ng-if="indexCtrl.outReachRecords.new.data.length ===3"><a ng-href="platform/new">See more ...</a></div>
     </div>
 
     <div class="col-md-3">
@@ -148,7 +150,8 @@ left: 0;
                 <span class="color-grey" style="display:block;font-size:12px;">{{doc.title_t.length > 120 ? (doc.title_t | limitTo : 120) + "..." : doc.title_t }}</span>
 
         </div>    </a>
-                <hr ng-show="doc.title_t && $index < 5" style="margin: 5px 5px 5px 5px;" ng-repeat-end>
+                <hr ng-show="doc.title_t && $index<indexCtrl.outReachRecords.notification.data.length-1 " style="margin: 5px 5px 5px 5px;" ng-repeat-end>
+                        <div class="small pull-right" ng-if="indexCtrl.outReachRecords.notification.data.length ===3"><a ng-href="platform/notification">See more ...</a></div>
     </div>
 
     <div class="col-md-3">
@@ -170,7 +173,8 @@ left: 0;
                 <span class="color-grey" style="display:block;font-size:12px;">{{doc.title_t.length > 120 ? (doc.title_t | limitTo : 120) + "..." : doc.title_t }}</span>
 
         </div>  </a>
-                <hr ng-show="doc.title_t && $index < 5" style="margin: 5px 5px 5px 5px;" ng-repeat-end>
+                <hr ng-show="doc.title_t && $index<indexCtrl.outReachRecords.meeting.data.length-1 " style="margin: 5px 5px 5px 5px;" ng-repeat-end>
+      <div class="small pull-right" ng-if="indexCtrl.outReachRecords.meeting.data.length ===3"><a ng-href="platform/meeting">See more ...</a></div>
     </div>
 
      <div class="col-md-3">
@@ -185,8 +189,11 @@ left: 0;
                 <span class="color-darkgrey" style="text-transform:uppercase;font-weight:bold;font-size:10px;"> {{doc.date_dt | moment:'format':'DD MMM YYYY'}}</span>
                 <span class="color-grey" style="display:block;font-size:12px;">{{doc.title_t.length > 120 ? (doc.title_t | limitTo : 120) + "..." : doc.title_t }}</span>
 
-        </div>  </a>
-          <hr ng-show="doc.title_t && $index < 5" style="margin: 5px 5px 5px 5px;" ng-repeat-end>
+        </div>
+      </a>
+
+          <hr ng-show="doc.title_t && $index<indexCtrl.outReachRecords.news.data.length-1 " style="margin: 5px 5px 5px 5px;" ng-repeat-end>
+      <div class="small pull-right" ng-if="indexCtrl.outReachRecords.news.data.length ===3"><a ng-href="platform/news">See more ...</a></div>
     </div>
 
 </div>
