@@ -46,8 +46,8 @@ define(['app', 'lodash','data/bbi/links-platform','text!directives/bbi/forms/bbi
 				//============================================================
 				function firstDash() {
 						if(typeof userSettings.setting('bbi.firstDashNotice') ==='undefined' || !userSettings.setting('bbi.firstDashNotice')){
-								$scope.dashNotice=true;
-								userSettings.setting('bbi.firstDashNotice',true);
+								$scope.dashNotice=false;
+								userSettings.setting('bbi.firstDashNotice',false);
 								return ngDialog.open({
 											template: dashDialog,
 											className: 'ngdialog-theme-default',
