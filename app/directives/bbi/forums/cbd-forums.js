@@ -373,7 +373,7 @@ app.directive("forumDetails", [function() {
 
 
                 $scope.$watch('forumId', function(newValue, oldValue) {
-      console.log(newValue,oldValue);
+  
                     if (newValue)
                         loadForum();
                 })

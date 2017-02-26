@@ -22,13 +22,14 @@ define(['text!./search-filter-schemas.html', 'app', 'lodash'], function(template
                 { name:'schema_s',identifier: 'statement'   , title: 'Statements'     , count: 0 },
                 { name:'schema_s',identifier: 'announcement', title: 'Announcements'  , count: 0 },
                 { name:'schema_s',identifier: 'event'       , title: 'Events'         , count: 0 },
+                { name:'schema_s',identifier: 'sideEvent'       , title: 'Side-events'         , count: 0 },                
             ];
 
             $scope.referenceRecords = [
                 { name:'schema_s',identifier: 'bbiProfile'                 , title: 'Providers'                   , count: 0 },
                 { name:'schema_s',identifier: 'bbiOpportunity'             , title: 'Opportunities'               , count: 0 },
                 { name:'schema_s',identifier: 'bbiRequest'                 , title: 'Assistance Requests'       , count: 0 },
-                { name:'schema_s',identifier: 'bbiProposal'                , title: 'Proposals'       , count: 0 },                
+                { name:'schema_s',identifier: 'bbiProposal'                , title: 'Proposals'       , count: 0 },
                 { name:'schema_s',identifier: 'bbiContact'                 , title: 'Contacts'                   , count: 0 },
                 { name:'schema_s',identifier: 'organization'               , title: 'Organizations'                 , count: 0 },
                 { name:'schema_s',identifier: 'resource'                   , title: 'VL Resources'     , count: 0 },
