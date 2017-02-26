@@ -78,7 +78,7 @@ app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter"
 			//============================================================
 			function bbiRecords() {
 					if(typeof userSettings.setting('bbi.recordsNotice') ==='undefined' || !userSettings.setting('bbi.recordsNotice')){
-							$scope.bbiRecordsNotice=true;
+							$scope.bbiRecordsNotice=false;
 							ngDialog.open({
 										template: bbiRecordsDialog,
 										className: 'ngdialog-theme-default',

@@ -72,7 +72,7 @@ app.directive('editBbiOpportunity', ['$http',"$rootScope", "Enumerable", "$filte
 			//============================================================
 			function bbiRecords() {
 					if(typeof userSettings.setting('bbi.recordsNotice') ==='undefined' || !userSettings.setting('bbi.recordsNotice')){
-							$scope.bbiRecordsNotice=true;
+							$scope.bbiRecordsNotice=false;
 							return ngDialog.open({
 										template: bbiRecordsDialog,
 										className: 'ngdialog-theme-default',
@@ -89,8 +89,8 @@ app.directive('editBbiOpportunity', ['$http',"$rootScope", "Enumerable", "$filte
 			//============================================================
 			function firstOpportunity() {
 				  if(typeof userSettings.setting('bbi.firstOpportunityNotice') ==='undefined' || !userSettings.setting('bbi.firstOpportunityNotice')){
-							$scope.bbiFirstOpportunity=true;
-							userSettings.setting('bbi.firstOpportunityNotice',true);
+							$scope.bbiFirstOpportunity=false;
+							userSettings.setting('bbi.firstOpportunityNotice',false);
 							return ngDialog.open({
 										template: firstOpportunityDialog,
 										className: 'ngdialog-theme-default',
@@ -305,7 +305,7 @@ app.directive('editBbiOpportunity', ['$http',"$rootScope", "Enumerable", "$filte
 				_.each(document,function(property,name){
 						if(_.isEmpty(document[name])) delete(document[name]);
 				});
-				
+
 				if (/^\s*$/g.test(document.notes))
 					document.notes = undefined;
 

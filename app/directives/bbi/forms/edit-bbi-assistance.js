@@ -80,8 +80,8 @@ app.directive('editBbiAssistance', ['$http',"$rootScope", "Enumerable", "$filter
 			function bbiRecords() {
 
 				  if(typeof userSettings.setting('bbi.recordsNotice') ==='undefined' || !userSettings.setting('bbi.recordsNotice')){
-							$scope.bbiRecordsNotice=true;
-							userSettings.setting('bbi.recordsNotice',true);
+							$scope.bbiRecordsNotice=false;
+							userSettings.setting('bbi.recordsNotice',false);
 							return ngDialog.open({
 										template: bbiRecordsDialog,
 										className: 'ngdialog-theme-default',
@@ -98,8 +98,8 @@ app.directive('editBbiAssistance', ['$http',"$rootScope", "Enumerable", "$filter
 			//============================================================
 			function firstRequest() {
 				  if(typeof userSettings.setting('bbi.firstRequestNotice') ==='undefined' || !userSettings.setting('bbi.firstRequestNotice')){
-							$scope.bbiFirstRequest=true;
-							userSettings.setting('bbi.firstRequestNotice',true);
+							$scope.bbiFirstRequest=false;
+							userSettings.setting('bbi.firstRequestNotice',false);
 							return ngDialog.open({
 										template: bbiFirstRequestDialog,
 										className: 'ngdialog-theme-default',

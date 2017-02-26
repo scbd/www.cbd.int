@@ -1,7 +1,7 @@
 <div>
     <div class="text-center">
         <img class="logo" width="45%" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>"></img>
-        <h3>First Provider Profile</h3>
+        <h3>First Provider Record</h3>
     </div>
     <style>
         .mhr {
@@ -26,15 +26,15 @@
         <div class="col-xs-12 checkbox text-nowrap" style="margin: 0 0 0 0;line-height:1em;">
             <label style="font-size: .8em;">
             <span class="text-danger">Do not show this notice again.</span>
- 							<input  ng-false-value="false" ng-true-value="true" type="checkbox" ng-model="bbiFirstProvider" bind-indeterminate="item.indeterminate" ng-change="settingsChange('bbi.firstProviderNotice',bbiFirstProvider)" checked>
+ 							<input  ng-false-value="false" ng-true-value="true" type="checkbox" ng-model="bbiFirstProvider" bind-indeterminate="item.indeterminate" ng-change="settingsChange('bbi.firstProviderNotice',bbiFirstProvider)" >
  							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
  					</label>
             <br>
         </div>
     </p>
     <div class="text-xs-center text-right">
-        <button class="btn btn-success" ng-click="closeThisDialog(true);">
-                  Proceed
+        <button class="btn btn-warning" ng-click="closeThisDialog(true);">
+                  Close
         </button>
 
     </div>

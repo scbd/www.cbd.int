@@ -51,7 +51,7 @@ app.directive('editBbiProfile', ['$http',"$rootScope", "Enumerable", "$filter", 
 			//============================================================
 			function bbiRecords() {
 					if(typeof userSettings.setting('bbi.recordsNotice') ==='undefined' || !userSettings.setting('bbi.recordsNotice')){
-							$scope.bbiRecordsNotice=true;
+							$scope.bbiRecordsNotice=false;
 							return ngDialog.open({
 										template: bbiRecordsDialog,
 										className: 'ngdialog-theme-default',
@@ -68,8 +68,8 @@ app.directive('editBbiProfile', ['$http',"$rootScope", "Enumerable", "$filter", 
 			//============================================================
 			function firstProvider() {
 				  if(typeof userSettings.setting('bbi.firstProviderNotice') ==='undefined' || !userSettings.setting('bbi.firstProviderNotice')){
-							$scope.bbiFirstProvider=true;
-							userSettings.setting('bbi.firstProviderNotice',true);
+							$scope.bbiFirstProvider=false;
+							userSettings.setting('bbi.firstProviderNotice',false);
 							return ngDialog.open({
 										template: firstProviderDialog,
 										className: 'ngdialog-theme-default',

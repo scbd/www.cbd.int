@@ -1,7 +1,7 @@
 <div>
     <div class="text-center">
         <img class="logo" width="45%" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>"></img>
-        <h3>First Contact</h3>
+        <h3>First Contact Record</h3>
     </div>
     <style>
         .mhr {
@@ -12,12 +12,15 @@
     </style>
     <hr class="mhr" style="color:#111;">
     <p class="small">
-     Contact records you create reference an other BBI record, Organization.  While creating your contact, you will be asked to select an organization.  If the organization does not exist you will have to leave the contact form and create the organization.
+     Contact records reference an other BBI record, Organization.  While creating your contact record, you will be asked to select an organization to make that reference.  If the organization does not exist you will have to leave the contact form.  Create the organization, then return to your saved draft contact record.
 <br>
       <strong>Procedure for creating a contact:</strong>
       <ol class="bbilist-o small">
-        <li class="small">Create the requesting Organization (if it does not exist)</li>
-        <li class="small">Complete your contact.</li>
+        <li class="small">Complete the name portion of the record</li>
+        <li class="small">Select the requesting Organization or create it (if it does not exist)</li>
+        <li class="small">Complete the contact portion of the record</li>
+        <li class="small">Revier the record</li>
+        <li class="small">Save as draft or request publishing</li>
      </ol>
     </p>
 
@@ -25,15 +28,15 @@
         <div class="col-xs-12 checkbox text-nowrap" style="margin: 0 0 0 0;line-height:1em;">
             <label style="font-size: .8em;">
             <span class="text-danger">Do not show this notice again.</span>
- 							<input  ng-false-value="false" ng-true-value="true" type="checkbox" ng-model="bbiFirstContact" bind-indeterminate="item.indeterminate" ng-change="settingsChange('bbi.firstContactNotice',bbiFirstContact)" checked>
+ 							<input  ng-false-value="false" ng-true-value="true" type="checkbox" ng-model="bbiFirstContact" bind-indeterminate="item.indeterminate" ng-change="settingsChange('bbi.firstContactNotice',bbiFirstContact)">
  							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
  					</label>
             <br>
         </div>
     </p>
     <div class="text-xs-center text-right">
-        <button class="btn btn-success" ng-click="closeThisDialog(true);">
-                  Proceed
+        <button class="btn btn-warning" ng-click="closeThisDialog(true);">
+                Close
         </button>
 
     </div>

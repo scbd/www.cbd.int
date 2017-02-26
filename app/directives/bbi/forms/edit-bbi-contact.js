@@ -66,7 +66,7 @@ define(['text!./edit-bbi-contact.html','text!./bbi-records-dialog.html','text!./
 				//============================================================
 				function bbiRecords() {
 					  if(typeof userSettings.setting('bbi.recordsNotice') ==='undefined' || !userSettings.setting('bbi.recordsNotice')){
-								$scope.bbiRecordsNotice=true;
+								$scope.bbiRecordsNotice=false;
 								return ngDialog.open({
 											template: bbiRecordsDialog,
 											className: 'ngdialog-theme-default',
@@ -83,8 +83,8 @@ define(['text!./edit-bbi-contact.html','text!./bbi-records-dialog.html','text!./
 				//============================================================
 				function firstContact() {
 					  if(typeof userSettings.setting('bbi.firstContactNotice') ==='undefined' || !userSettings.setting('bbi.firstContactNotice')){
-								$scope.bbiFirstContact=true;
-								userSettings.setting('bbi.firstContactNotice',true);
+								$scope.bbiFirstContact=false;
+								userSettings.setting('bbi.firstContactNotice',false);
 								return ngDialog.open({
 											template: bbiFirstContactDialog,
 											className: 'ngdialog-theme-default',
