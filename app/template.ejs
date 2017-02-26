@@ -9,14 +9,7 @@
         ga('set',    'location', undefined);
     </script>
     <script src="https://cdn.slaask.com/chat.js"></script>
-    <script>
-        //patch slaask to works with requireJS
-        window._slaask.createScriptTag = function (url) {
-            var t = {};
-            require([url], function() { t.onload(); });
-            return t;
-        };
-    </script>
+
     <script src="/app/libs/requirejs/require.js?v=<%=gitVersion%>"></script>
     <script src="/app/boot.js?v=<%=gitVersion%>"></script>
     <script async src='https://www.google-analytics.com/analytics.js'></script>

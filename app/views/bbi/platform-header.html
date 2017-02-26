@@ -1,3 +1,11 @@
+<script>
+    //patch slaask to works with requireJS
+    window._slaask.createScriptTag = function (url) {
+        var t = {};
+        require([url], function() { t.onload(); });
+        return t;
+    };
+</script>
  <style>
  .km-pre
    {
