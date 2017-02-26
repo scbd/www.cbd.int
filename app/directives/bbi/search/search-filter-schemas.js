@@ -21,8 +21,8 @@ define(['text!./search-filter-schemas.html', 'app', 'lodash'], function(template
                 { name:'schema_s',identifier: 'pressRelease', title: 'Press Releases' , count: 0 },
                 { name:'schema_s',identifier: 'statement'   , title: 'Statements'     , count: 0 },
                 { name:'schema_s',identifier: 'announcement', title: 'Announcements'  , count: 0 },
-                { name:'schema_s',identifier: 'event'       , title: 'Events'         , count: 0 },
-                { name:'schema_s',identifier: 'sideEvent'       , title: 'Side-events'         , count: 0 },                
+                { name:'schema_s',identifier: 'meetings'       , title: 'Events'         , count: 0 },
+                { name:'schema_s',identifier: 'sideEvent'       , title: 'Side-events'         , count: 0 },
             ];
 
             $scope.referenceRecords = [

@@ -21,7 +21,7 @@ define(['text!./view-bbi-contact.html', 'app', 'angular', 'lodash', 'authenticat
 					header:"=?"
 			},
 			link: function($scope) {
-
+								if(typeof $scope.header==='undefined') $scope.header=true;
 				//====================
 				//
 				//====================

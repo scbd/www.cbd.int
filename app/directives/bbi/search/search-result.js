@@ -1,11 +1,11 @@
-define(['text!./search-result.html', 'app', 'lodash', 'moment', 'lodash', 'authentication','providers/realm'], function(template, app, _, moment, authentication) {
+define(['text!./search-result.html', 'app', 'lodash', 'moment', 'lodash', 'authentication','providers/realm','filters/term'], function(template, app, _, moment, authentication) {
     'use strict';
 
     app.directive('searchResult', ['$location', function($location) {
         return {
             restrict: 'EAC',
             template: template,
-
+scope:{document:"="},
             link: function($scope, $el, $attr) {
 
                 $scope.index = Number($attr.index) + 1;
@@ -93,7 +93,7 @@ define(['text!./search-result.html', 'app', 'lodash', 'moment', 'lodash', 'authe
 
                 };
                 $scope.goToUrl = function() {
-// console.log($scope.document.schema_s);
+
                     if ($scope.document.schema_s.indexOf('bbi') > -1 || $scope.document.schema_s.indexOf('organization') > -1)
                         return 'platform/submit/' + camelToDash($scope.document.schema_s) + '/' + $scope.document.identifier_s + '/view';
                     else if($scope.document.url_ss)
