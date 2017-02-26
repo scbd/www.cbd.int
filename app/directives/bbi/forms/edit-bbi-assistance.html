@@ -99,7 +99,7 @@
 
                             <div class="col-xs-8">
                                 <div class="km-control-group" name="assistanceTypes" required  caption="Assistance Types">
-                                    <div class="help-info small">Identify the type(s) of assistance you would need to address the stated problem (need, gap or barrier) and describe how such assistance would lead to TSC among the participating Parties and institutions.</div>
+                                    <div class="help-info small">Identify the type(s) of assistance you would need to address the stated problem (need, gap or barrier).</div>
 
                                     <div km-select maximum="maxTypes()" multiple="true" required name="assistanceTypes" ng-model="document.assistanceTypes" ng-class="{'has-error': (editForm.assistanceTypes.$invalid && editForm.$submitted) }" items="options.assistanceTypes()"></div>
                                     <p ng-show="editForm.assistanceTypes.$invalid && (editForm.assistanceTypes.$touched || editForm.$submitted)" class="help-block error red-status">Type of assistance requested is required.</p>
@@ -108,7 +108,7 @@
                             </div>
                             <div class="col-xs-12" ng-repeat="type in document.assistanceTypes">
                                 <div class="km-control-group"  caption="{{type | term:locale}}">
-                                    <div class="help-info small">Describe how {{type | term:locale}} will facilitate TSC while addressing your problem.<span class="pull-right small red" style="color:red;" ng-if="document.addressedPriorities.length">Word Count: {{wordCount(document.addressedPriorities)}}</span></div>
+                                    <div class="help-info small">Describe how {{type | term:locale}} will facilitate TSC among the participating Parties and institutions while addressing your problem. <span class="pull-right small red" style="color:red;" ng-if="document.addressedPriorities.length">Word Count: {{wordCount(document.addressedPriorities)}}</span></div>
                                     <div km-textbox-ml rows="4"    ng-model="document.typesDetails[type.identifier]" locales="document.meta.languages"></div>
                                 </div>
                             </div>
@@ -218,14 +218,14 @@
                           <div class="col-md-6 col-xs-12">
 
                               <div class="control-group" name="otherGovernments" caption="Country">
-                                  <label for="otherGovernments" class="control-label">Other govermental involvment</label>
+                                  <label for="otherGovernments" class="control-label">Other governmental involvment</label>
                                   <div class="help-info small">List, if any, other country(ies) involved or may potentially be involved in this request.</div>
                                   <div km-select multiple  name="otherGovernments" ng-model="document.otherGovernments" items="options.countries()"></div>
                               </div>
                           </div>
                             <div class="col-md-8 col-xs-12">
                                 <div class="km-control-group" name="otherGovernmentsDetails">
-                                    <label for="otherGovernmentsDetails" class="control-label">Other govermental involvment details</label>
+                                    <label for="otherGovernmentsDetails" class="control-label">Other governmental involvment details</label>
                                     <div class="help-info small">Provide details, including the nature and extent of involvement of the other countries listed above.<span class="pull-right small red" style="color:red;" ng-if="document.otherGovernmentsDetails.length">Word Count: {{wordCount(document.otherGovernmentsDetails[locale])}}</span></div>
                                     <div km-textbox-ml name="otherGovernmentsDetails" ng-model="document.otherGovernmentsDetails" rows="4" placeholder="" locales="document.meta.languages"></div>
                                 </div>
@@ -253,7 +253,7 @@
 
                             <div class="col-xs-12">
                                 <div class="km-control-group">
-                                    <label class="control-label">Same request to other programes</label>
+                                    <label class="control-label">Same request to other programmes</label>
                                     <div class="help-info small">Describe, if applicable, other assistance programmes to which the same request has been submitted and indicate the status (e.g. it is being processed, has already been delivered or has been turned down).<span class="pull-right small red"
                                             style="color:red;" ng-if="document.sameRequests.length">Word Count: {{wordCount(document.sameRequests)}}</span></div>
                                     <div km-textbox-ml rows="4"   name="sameRequests" ng-model="document.sameRequests" locales="document.meta.languages"></div>
@@ -277,7 +277,7 @@
                             </div>
                             <div class="col-xs-12">
                                 <div class="km-control-group">
-                                    <label class="control-label">Available co-finacing and/or other support</label>
+                                    <label class="control-label">Available co-financing and/or other support</label>
                                     <div class="help-info small">Indicate available co-financing and/or other support.<span class="pull-right small red" style="color:red;" ng-if="document.coFinancing.length">Word Count: {{wordCount(document.coFinancing)}}</span></div>
                                     <div km-textbox-ml rows="4"   name="coFinancing" ng-model="document.coFinancing" locales="document.meta.languages"></div>
                                 </div>
