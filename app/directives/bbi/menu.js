@@ -1,4 +1,4 @@
-define(['app', 'text!./menu.html','providers/locale'], function(app, templateHtml) { 'use strict';
+define(['app', 'text!./menu.html','lodash','providers/locale'], function(app, templateHtml,_) { 'use strict';
 
     //============================================================
     //
@@ -11,9 +11,21 @@ define(['app', 'text!./menu.html','providers/locale'], function(app, templateHtm
                 links: '=links',
                 pull: '@?',
                 search: '@?',
+                user:'='
             },
             link: function ($scope) {
               $scope.locale=locale;
+
+                  require(["_slaask"], function(_slaask) {
+
+                      if(!_slaask.initialized) {
+                          _slaask.init('d611635fe9b46e439afb79833e255443');
+                          _slaask.initialized = true;
+
+                      }
+                  });
+
+
             },
             controller: function ($scope, $location) {
                 // ============================================================
