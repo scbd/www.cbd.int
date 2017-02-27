@@ -159,8 +159,8 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
           .when('/platform/submit/:schema/:id',     { templateUrl: 'views/bbi/management/edit.html',         controllerAs: 'editCtrl',    resolveController: true ,resolve : { user : securize(['User']) }})
           .when('/platform/submit/:schema/:id/view',{ templateUrl: 'views/bbi/management/view.html',    controllerAs: 'viewCtrl',    resolveController: true,resolve : { user : securize(['Everyone']) } })
           .when('/platform/dashboard'              ,{ templateUrl: 'views/bbi/management/index-man.html',    controllerAs: 'dashCtrl',    resolveController: true ,resolve : { user : securize(['User']) }})
-          .when('/platform/search',                { templateUrl: 'views/bbi/management/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
-          .when('/platform/tools',                  { templateUrl: 'views/bbi/management/tools.html',  controllerAs: 'toolsCtrl',  resolveController: true})
+          .when('/platform/search',                 { templateUrl: 'views/bbi/management/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
+          .when('/platform/tools',                  { templateUrl: 'views/bbi/management/tools.html',  controllerAs: 'toolsCtrl',  resolveController: true,resolve : { user : securize(['Everyone']) }})
           .when('/platform/about',                  { templateUrl: 'views/bbi/management/about/index.html',  controllerAs: 'pAboutCtrl',  resolveController: true})
           .when('/platform/:schema',                       { templateUrl: 'views/bbi/management/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
 
@@ -187,7 +187,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
           .when('/comms',                         { templateUrl: 'views/bbi/comms/index-comm.html'    ,  controllerAs: 'commsCtrl',  resolveController: true})
           .when('/comms/panel',                   { templateUrl: 'views/bbi/comms/panel.html',  controllerAs: 'panelCtrl',   resolveController: true})
           .when('/search',                        { templateUrl: 'views/bbi/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
-          .when('/platform',                      { templateUrl: 'views/bbi/platform.html',  controllerAs: 'pltfCtrl',   resolveController: true, reloadOnSearch : false})
+          .when('/platform',                      { templateUrl: 'views/bbi/platform.html',  controllerAs: 'pltfCtrl',   resolveController: true, resolve : { user : securize(['Everyone']) } })
 
           .when('/forums/bbi/:threadId',          { templateUrl: 'views/bbi/forums/post-list-view.html',  resolveController: true,resolve : { user : securize(['User'])},forumId:17490,forumListUrl:'/biobridge/forums/bbi', text:'BBI'} ) //,
           .when('/forums/bbi',                    { templateUrl: 'views/bbi/forums/thread-list-view.html',    resolveController: true,resolve : { user : securize(['User'])}, forumId:17490, postUrl:'/biobridge/forums/bbi', text:'BBI' } )
