@@ -1,6 +1,6 @@
 define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','directives/bbi/search/search-result','directives/bbi/forums/cbd-forums'], function(app, _,links) { 'use strict';
 
-	return ['$location','$route','$q','$http','$scope',function ($location,$route,$q,$http,$scope) {
+	return ['$location','$route','$q','$http','$scope','user',function ($location,$route,$q,$http,$scope,user) {
 
         var _ctrl = this;
 				var canceler = null;
@@ -10,7 +10,7 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','direct
 				_ctrl.textQuery=textQuery;
 				_ctrl.clearText =clearText ;
 
-				var bbi = $http.get('/api/v2014/discussions/forums/17490/threads');
+				var bbi = $http.get('/api/v2014/discussions/forums/17490');
 
 				init();
 
@@ -24,9 +24,9 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','direct
 						getResources();
 						getInitiatives ();
 						loadTreads();
-						$q.when(bbi ).then(function(val){
-							console.log(val.data);
-						});
+						// $q.when(bbi ).then(function(val){
+						// 	console.log(val.data);
+						// });
 				}
 
 				//============================================================
