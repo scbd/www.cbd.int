@@ -25,32 +25,31 @@ define(['app', 'text!./slider.html','lodash','directives/bbi/ani-scroll'], funct
                   $scope.carouselData=  {
                         items :[
                           {
-                                        title: "BBI Web Platform Launched",
-                                        description: "Browse, request or provide TSC services.",
+                                        title: "About the BBI",
+                                        description: "Learn more about the purpose and characteristics of the Bio-Bridge Initiative",
                                         imageUrl: "/app/images/bbi/slider-bee.jpg",
+                                        targetUrl: "/about"
+                                    }, {
+                                        title: "BBI Operational Framework",
+                                        description: "Learn about how BBI operates, including the key steps involved and the selection criteria and process",
+                                        imageUrl: "/app/images/bbi/slider-crab.jpg",
+                                        targetUrl: "/about/framework"
+                                    }, {
+                                        title: "BBI tools and services",
+                                        description: "Search TSC records on the Platform",
+                                        imageUrl: "/app/images/bbi/slider-flamingo.jpg",
                                         targetUrl: "/platform"
                                     }, {
-                                        title: "Join the Discussion",
-                                        description: "Come discuss the role of BBI in promoting TSC.",
-                                        imageUrl: "/app/images/bbi/slider-crab.jpg",
-                                        targetUrl: "/forums/bbi"
+                                        title: "Participation with BBI",
+                                        description: "Learn more about ways in which one can participate in BBI",
+                                        imageUrl: "/app/images/bbi/slider-4.jpg",
+                                        targetUrl: "/participation"
                                     }, {
-                                        title: "Search TSC Information",
-                                        description: "Search TSC records on the Platform.",
-                                        imageUrl: "/app/images/bbi/slider-flamingo.jpg",
-                                        targetUrl: "/platform/search"
+                                        title: "BBI projects",
+                                        description: "Learn more about TSC projects facilitated through BBI",
+                                        imageUrl: "/app/images/bbi/slider-5.jpg",
+                                        targetUrl: "/projects"
                                     }
-                                    // , {
-                                    // //    title: "Proposals Awaiting Funding:",
-                                    // //    description: "Explore our vetted Bio-Bridge Initiative proposals.",
-                                    //     imageUrl: "/app/images/bbi/slider-flower.jpg",
-                                    //     targetUrl: "/platform/bbi-proposals"
-                                    // }, {
-                                    // //    title: "Search for Tools:",
-                                    // //    description: "Browse a wide range of TSC tools from the resource library.",
-                                    //     imageUrl: "/app/images/bbi/slider-hands.jpg",
-                                    //     targetUrl: "/platform/tools"
-                                    // }
                               ]
                       };
             //           angular.element($window).bind('scroll', function() {

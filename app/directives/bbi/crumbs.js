@@ -16,28 +16,28 @@ define(['app', 'text!./crumbs.html'], function(app, templateHtml) { 'use strict'
               $scope.carouselData=  {
                     items :[
                       {
-                                title: "View Latest TSC Requests",
-                                    description: "Browse TSC requests from the Bio-Bridge Initiative community.",
+                                title: "Latest Requests for Assistance",
+                                    description: "Browse the latest requests for assistance submitted by Parties and relevant stakeholders",
                                     imageUrl: "/app/images/bbi/slider-sea-turtle.jpg",
                                     targetUrl: "/platform/bbi-request"
                                 }, {
-                                    title: "Our TSC Providers",
-                                    description: "See our TSC providers in the regions.",
+                                    title: "Technical Assistance Providers",
+                                    description: "Browse the profiles of technical assistance providers that are registered with BBI",
                                     imageUrl: "/app/images/bbi/slider-insect.png",
                                     targetUrl: "/platform/bbi-profile"
                                 }, {
-                                    title: "View Latest TSC Opportunites",
-                                    description: "View our list of TSC opportunities to see which one is right for you.",
+                                    title: "Latest TSC Opportunities",
+                                    description: "View the list of new TSC opportunities currently available",
                                     imageUrl: "/app/images/bbi/slider-red-eye-tree-frog.jpg",
                                     targetUrl: "/platform/bbi-opportunity"
                                 }, {
-                                    title: "Proposals Awaiting Funding",
-                                    description: "Explore our vetted Bio-Bridge Initiative proposals.",
+                                    title: "TSC proposals awaiting funding",
+                                    description: "Explore TSC proposals vetted by the BBI Project Review Committee and are awaiting funding support",
                                     imageUrl: "/app/images/bbi/slider-hands.jpg",
                                     targetUrl: "/platform/bbi-proposals"
                                 }, {
-                                    title: "Search for Tools",
-                                    description: "Browse a wide range of TSC tools from the resource library.",
+                                    title: "TSC tools, resources and initiatives",
+                                    description: "Browse a wide range of TSC tools and resources available through our virtual library as well as completed and ongoing TSC initiatives",
                                     imageUrl: "/app/images/bbi/slider-flower.jpg",
                                     targetUrl: "/platform/tools"
                                 }
