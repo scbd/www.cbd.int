@@ -27,38 +27,18 @@
 				"en": "Action Plan"
 			},
 			"source": "/about/plan"
-		}, {
-			"title": {
-				"en": "Partners"
-			},
-			"source": "/about/partners"
-		}]
+		}, 				{"title": {
+							"en": "Participation"
+						},
+						"source": "/participation"
+					}]
 	}, {
-		"title": {
-			"en": "Participation"
-		},
-		"children": [
 
-				{"title": {
-					"en": "Participation"
-				},
-				"source": "/participation"
-			},
-				{"title": {
-					"en": "Requesting Assistance"
-				},
-				"source": "/participation/request"
-			},{
-			"title": {
-				"en": "Providing Assistance"
-			},
-			"source": "/participation/provide"
-		}, {
-			"title": {
-				"en": "Provide an Opportunity"
-			},
-			"source": "/participation/opportunity"
-		}]
+	"title": {
+	"en": "Partners"
+	},
+	"source": "/about/partners"
+
 	}, {
 		"title": {
 			"en": "Projects"
