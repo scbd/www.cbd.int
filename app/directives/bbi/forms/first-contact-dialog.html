@@ -1,0 +1,42 @@
+<div>
+    <div class="text-center">
+        <img class="logo" width="45%" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>"></img>
+        <h3>First Contact Record</h3>
+    </div>
+    <style>
+        .mhr {
+            height: 12px;
+            border: 0;
+            box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    <hr class="mhr" style="color:#111;">
+    <p class=" ">
+Contact records can reference another BBI record, the Organization record. While creating your contact record, you will be asked to select an organization to make that reference. If the organization does not exist you will have to create it first and then return to your saved draft contact record. <br>
+      <strong>Procedure for creating a contact:</strong>
+      <ol class="bbilist-o  ">
+        <li class=" ">Complete the name portion of the record</li>
+        <li class=" ">Select the requesting Organization or create it (if it does not exist)</li>
+        <li class=" ">Complete the contact portion of the record</li>
+        <li class=" ">Revier the record</li>
+        <li class=" ">Save as draft or request publishing</li>
+     </ol>
+    </p>
+
+
+        <div class="col-xs-12 checkbox text-nowrap" style="margin: 0 0 0 0;line-height:1em;">
+            <label style="font-size: .8em;">
+            <span class="text-danger">Do not show this notice again.</span>
+ 							<input  ng-false-value="false" ng-true-value="true" type="checkbox" ng-model="bbiFirstContact" bind-indeterminate="item.indeterminate" ng-change="settingsChange('bbi.firstContactNotice',bbiFirstContact)">
+ 							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+ 					</label>
+            <br>
+        </div>
+    </p>
+    <div class="text-xs-center text-right">
+        <button class="btn btn-warning" ng-click="closeThisDialog(true);">
+                Close
+        </button>
+
+    </div>
+</div>

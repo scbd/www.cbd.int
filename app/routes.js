@@ -1,4 +1,4 @@
-define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authentication'], function(app, $, _) { 'use strict';
+define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/extended-route', 'ngRoute', 'authentication', 'ngDialog','ngCookies'], function(app, $, _,redirectDialog) { 'use strict';
 
     var locationPath = window.location.pathname.toLowerCase().split('?')[0];
 
@@ -30,6 +30,10 @@ define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authe
         // /kronos/*
         if(/^\/kronos\/list-of-participants($|\/.*)/.test(locationPath))
             registerRoutes_kronos($routeProvider);
+
+        //bbi/*
+        if(/^\/biobridge($|\/.*)/.test(locationPath))
+            registerRoutes_bbi($routeProvider);
 
         $routeProvider.when('/403', { templateUrl: '/app/views/403.html' });
         $routeProvider.when('/404', { templateUrl: '/app/views/404.html' }).otherwise({redirectTo: '/404'});
@@ -145,15 +149,72 @@ define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authe
     //
     //
     //============================================================
+    function registerRoutes_bbi(routeProvider) {
+
+        $("base").attr('href', '/biobridge/'); // allow full page reload outside of  /insession/*
+
+        routeProvider
+          .when('/',                       { templateUrl: 'views/bbi/index-bbi.html',        controllerAs: 'indexCtrl',   resolveController: true })
+          .when('/platform/submit/:schema',         { templateUrl: 'views/bbi/management/record-list.html',  controllerAs: 'submitCtrl',  resolveController: true,resolve : { user : securize(['User']) } })
+          .when('/platform/submit/:schema/:id',     { templateUrl: 'views/bbi/management/edit.html',         controllerAs: 'editCtrl',    resolveController: true ,resolve : { user : securize(['User']) }})
+          .when('/platform/submit/:schema/:id/view',{ templateUrl: 'views/bbi/management/view.html',    controllerAs: 'viewCtrl',    resolveController: true,resolve : { user : securize(['Everyone']) } })
+          .when('/platform/dashboard'              ,{ templateUrl: 'views/bbi/management/index-man.html',    controllerAs: 'dashCtrl',    resolveController: true ,resolve : { user : securize(['User']) }})
+          .when('/platform/search',                 { templateUrl: 'views/bbi/management/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
+          .when('/platform/tools',                  { templateUrl: 'views/bbi/management/tools.html',  controllerAs: 'toolsCtrl',  resolveController: true,resolve : { user : securize(['Everyone']) }})
+          .when('/platform/about',                  { templateUrl: 'views/bbi/management/about/index.html',  controllerAs: 'pAboutCtrl',  resolveController: true})
+          .when('/platform/:schema',                       { templateUrl: 'views/bbi/management/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
+
+          .when('/about',                  { templateUrl: 'views/bbi/about/index-about.html',  controllerAs: 'initCtrl',  resolveController: true})
+          .when('/about/framework',        { templateUrl: 'views/bbi/about/framework.html',  controllerAs: 'frameworkCtrl',  resolveController: true})
+          .when('/about/plan',             { templateUrl: 'views/bbi/about/plan.html',  controllerAs: 'planCtrl',  resolveController: true})
+          .when('/about/partners',         { templateUrl: 'views/bbi/about/partners.html',  controllerAs: 'partnersCtrl',  resolveController: true})
+
+          .when('/participation',                { templateUrl: 'views/bbi/participation/index-part.html',  controllerAs: 'participationCtrl',  resolveController: true})
+          .when('/participation/request',        { templateUrl: 'views/bbi/participation/request.html',  controllerAs: 'requestCtrl',  resolveController: true})
+          .when('/participation/provide',        { templateUrl: 'views/bbi/participation/provide.html',  controllerAs: 'provideCtrl',  resolveController: true})
+          .when('/participation/opportunity',    { templateUrl: 'views/bbi/participation/opportunity.html',  controllerAs: 'opportunityCtrl',  resolveController: true})
+
+          .when('/projects',                { templateUrl: 'views/bbi/pilot-projects/index-proj.html',  controllerAs: 'pilotCtrl',  resolveController: true})
+          .when('/projects/selected',       { templateUrl: 'views/bbi/pilot-projects/selected.html',  controllerAs: 'selectedCtrl',  resolveController: true})
+
+
+          // .when('/proposals',                     { templateUrl: 'views/bbi/search.html',  controllerAs: 'searchCtrl',  resolveController: true})
+
+          .when('/resources',                     { templateUrl: 'views/bbi/resources.html',  controllerAs: 'resoCtrl',  resolveController: true})
+          .when('/faq',                           { templateUrl: 'views/bbi/faq.html',  controllerAs: 'faqCtrl',  resolveController: true})
+          .when('/contact',                       { templateUrl: 'views/bbi/contact.html',  controllerAs: 'contCtrl',  resolveController: true})
+
+          .when('/comms',                         { templateUrl: 'views/bbi/comms/index-comm.html'    ,  controllerAs: 'commsCtrl',  resolveController: true})
+          .when('/comms/panel',                   { templateUrl: 'views/bbi/comms/panel.html',  controllerAs: 'panelCtrl',   resolveController: true})
+          .when('/search',                        { templateUrl: 'views/bbi/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
+          .when('/platform',                      { templateUrl: 'views/bbi/platform.html',  controllerAs: 'pltfCtrl',   resolveController: true, resolve : { user : securize(['Everyone']) } })
+
+          .when('/forums/bbi/:threadId',          { templateUrl: 'views/bbi/forums/post-list-view.html',  resolveController: true,resolve : { user : securize(['User'])},forumId:17490,forumListUrl:'/biobridge/forums/bbi', text:'BBI'} ) //,
+          .when('/forums/bbi',                    { templateUrl: 'views/bbi/forums/thread-list-view.html',    resolveController: true,resolve : { user : securize(['User'])}, forumId:17490, postUrl:'/biobridge/forums/bbi', text:'BBI' } )
+
+    }
+
+    //============================================================
+    //
+    //
+    //============================================================
     function securize(requiredRoles) {
-        return ['$q', '$rootScope', 'authentication', '$location', '$window', function($q, $rootScope, authentication, $location, $window) {
+        return ['$q', '$rootScope', 'authentication', '$location', '$window','ngDialog','$cookies', function($q, $rootScope, authentication, $location, $window,ngDialog,$cookies) {
 
             return $q.when(authentication.getUser()).then(function (user) {
 
                 var hasRole = !!_.intersection(user.roles, requiredRoles).length;
 
                 if (!user.isAuthenticated) {
-                    $window.location.href = authentication.accountsBaseUrl()+'/signin?returnurl='+encodeURIComponent($location.absUrl());
+                    $rootScope.authRediectChange=authRediectChange;
+                    if(!!_.intersection(requiredRoles, ['Everyone']).length)
+                      return user;
+
+                    if(!$cookies.get('redirectOnAuthMsg') || $cookies.get('redirectOnAuthMsg')==='false')
+                        openDialog();
+                    else
+                        $window.location.href = authentication.accountsBaseUrl()+'/signin?returnurl='+encodeURIComponent($location.absUrl());
+
                     throw user; // stop route change!
                 }
                 else if (!hasRole)
@@ -161,6 +222,36 @@ define(['app', 'jquery', 'lodash', 'providers/extended-route', 'ngRoute', 'authe
 
                 return user;
             });
-        }];
-    }
+
+            //============================================================
+            //
+            //
+            //============================================================
+            function openDialog() {
+                $rootScope.redirectOnAuthMsg=true;
+                $cookies.put('redirectOnAuthMsg',true);
+                ngDialog.open({
+                      template: redirectDialog,
+                      className: 'ngdialog-theme-default',
+                      closeByDocument: false,
+                      plain: true,
+                      scope:$rootScope
+                  }).closePromise.then(function(retVal){
+                        if(retVal.value)
+                          $window.location.href = authentication.accountsBaseUrl()+'/signin?returnurl='+encodeURIComponent($location.absUrl());
+                        else
+                          $window.history.back();
+                  });
+            }
+            //============================================================
+            //
+            //
+            //============================================================
+            function authRediectChange(value) {
+                $cookies.put('redirectOnAuthMsg',value);
+            }//authRediectChange
+
+        }];//return array
+    }//securize
+
 });

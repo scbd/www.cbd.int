@@ -1,0 +1,351 @@
+<div class="bg-litegrey">
+
+    <div class="alert alert-danger" ng-show="hasError()">
+        <strong>An error has occurred...</strong>
+        <div>{{error}}</div>
+    </div>
+
+<div ng-show="isLoading()" class="text-center">
+
+  <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+  <span class="sr-only">Loading...</span>
+</div>
+<div id="view-header" class="panel-heading bg-blue">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <h4>
+  Request for Assistance
+   <!-- <span class="text-small" style="font-size:.75em;color:#ddd;"> (BBIPRO) </span> -->
+   </h4>
+        </div>
+        <div class="col-xs-12 col-sm-8 text-right hidden-xs" >
+            <span km-form-languages xs ng-model="document.meta.languages"></span>
+            <span mongo-form-std-buttons user="user" document="document" save-draft="saveDraft()" save-request="saveRequest()" save-completed="saveCompleted()" on-error="onError(error, errorCode)" ></span>
+
+        </div>
+        <div class="col-xs-12 col-sm-8 small visible-xs" >
+            <span km-form-languages xs ng-model="document.meta.languages"></span>
+            <span mongo-form-std-buttons user="user" document="document" save-draft="saveDraft()" save-request="saveRequest()" save-completed="saveCompleted()" on-error="onError(error, errorCode)" ></span>
+
+        </div>
+    </div>
+</div>
+    <div class="row" ng-show="!isLoading() && status!='hidden'" >
+        <div class="col-md-12" style="position: relative">
+
+            <div class="row">
+                <!-- <div class="col-xs-12">
+
+                    <div class="pull-right" style="margin-top:10px;">
+                      <span km-form-languages xs ng-model="document.meta.languages"></span>
+                        <span mongo-form-std-buttons user="user" document="document" save-draft="saveDraft()" save-request="saveRequest()" save-completed="saveCompleted()" on-error="onError(error, errorCode)" ></span>
+                    </div>
+                </div> -->
+
+                <div class="col-xs-12 ">
+                    <ul class="pagination hidden-xs">
+                        <li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()">&laquo;</a></li>
+                        <li ng-class="{ active  : tab=='org'  }" id="org"><a href="" ng-click="tab='org'">Requested By</a></li>
+                        <li ng-class="{ active  : tab=='general' }"><a href="" ng-click="tab='general'">General</a></li>
+                        <li ng-class="{ active  : tab=='linkages'  }"><a href="" ng-click="tab='linkages'">Linkages</a></li>
+                        <li ng-class="{ active  : tab=='details'  }"><a href="" ng-click="tab='details'">Details</a></li>
+                        <li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate();">Review</a></li>
+                        <li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()">&raquo;</a></li>
+                    </ul>
+                    <ul class="pagination small visible-xs">
+                        <li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()">&laquo;</a></li>
+                        <li ng-class="{ active  : tab=='org'  }" id="org"><a href="" ng-click="tab='org'">Requested By</a></li>
+                        <li ng-class="{ active  : tab=='general' }"><a href="" ng-click="tab='general'">General</a></li>
+                        <li ng-class="{ active  : tab=='linkages'  }"><a href="" ng-click="tab='linkages'">Linkages</a></li>
+                        <li ng-class="{ active  : tab=='details'  }"><a href="" ng-click="tab='details'">Details</a></li>
+                        <li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate();">Review</a></li>
+                        <li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()">&raquo;</a></li>
+                    </ul>
+                </div>
+
+            </div>
+            <div>
+                <div km-document-validation ng-model="validationReport"></div>
+                <form  name="editForm"  novalidate>
+
+                    <div km-tab="general">
+
+                        <div class="row">
+
+                          <div class="col-xs-12">
+                              <div class="control-group" name="coverage"  ng-class="{'has-error': (editForm.coverage.$invalid && editForm.$submitted) }" required >
+                                  <label for="coverage" class="control-label">Geographic target(s)</label>
+                                  <br>
+                                  <div km-select multiple="true" required name="coverage" ng-model="document.coverage" items="options.regions()"></div>
+                                  <p ng-show="editForm.coverage.$invalid && (editForm.coverage.$touched || editForm.$submitted)" class="help-block error red-status">Geographic target(s) is required.</p>
+                              </div>
+                          </div>
+                            <div class="col-xs-12">
+                                <div class="km-control-group" name="title"  caption="Title of request" required>
+                                    <div km-textbox-ml  id="editForm.title" required type="text"   name="title" ng-model="document.title" locales="document.meta.languages"></div>
+                                    <p ng-show="editForm.title.$invalid && (editForm.title.$touched || editForm.$submitted)" class="help-block error red-status">Title is required.</p>
+
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12">
+                                <div class="km-control-group" name="problem" required caption="Problem statement">
+                                    <div class="help-info small">Describe the biodiversity issue/challenge and the specific technical and scientific barriers (need(s) and gap(s)) to be addressed through the assistance requested(Provide only information directly relevant to this request)*
+                                        <span class="pull-right small red" style="color:red;" ng-if="document.problem.length">Word Count: {{wordCount(document.problem)}}</span></div>
+                                    <div km-textbox-ml rows="4" required   name="problem" ng-model="document.problem" locales="document.meta.languages"></div>
+                                    <p ng-show="editForm.problem.$invalid && (editForm.problem.$touched || editForm.$submitted)" class="help-block error red-status">Problem statement is required.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-8">
+                                <div class="km-control-group" name="assistanceTypes" required  caption="Assistance Types">
+                                    <div class="help-info small">Identify the type(s) of assistance you would need to address the stated problem (need, gap or barrier).</div>
+
+                                    <div km-select maximum="maxTypes()" multiple="true" required name="assistanceTypes" ng-model="document.assistanceTypes" ng-class="{'has-error': (editForm.assistanceTypes.$invalid && editForm.$submitted) }" items="options.assistanceTypes()"></div>
+                                    <p ng-show="editForm.assistanceTypes.$invalid && (editForm.assistanceTypes.$touched || editForm.$submitted)" class="help-block error red-status">Type of assistance requested is required.</p>
+
+                                </div>
+                            </div>
+                            <div class="col-xs-12" ng-repeat="type in document.assistanceTypes">
+                                <div class="km-control-group"  caption="{{type | term:locale}}">
+                                    <div class="help-info small">Describe how {{type | term:locale}} will facilitate TSC among the participating Parties and institutions while addressing your problem. <span class="pull-right small red" style="color:red;" ng-if="document.addressedPriorities.length">Word Count: {{wordCount(document.addressedPriorities)}}</span></div>
+                                    <div km-textbox-ml rows="4"    ng-model="document.typesDetails[type.identifier]" locales="document.meta.languages"></div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="km-control-group" name="addressedPriorities" caption="Addressed governmental priorities">
+                                    <div class="help-info small">Describe how the assistance requested is linked to or aligned with documented national priorities. The assistance requested will address national priorities <a ng-href="https://chm.cbd.int/database?schema_s=nationalReport&schema_s=nationalTarget&government_s={{document.country.identifier}}" target="_blank">documented in NBSAP, national sustainable development plan, etc. <i class="fa fa-external-link" aria-hidden="true"></i></a> <span class="pull-right small red" style="color:red;" ng-if="document.addressedPriorities.length">Word Count: {{wordCount(document.addressedPriorities)}}</span></div>
+                                    <div km-textbox-ml rows="4"  required  name="addressedPriorities" ng-model="document.addressedPriorities" locales="document.meta.languages"></div>
+                                    <p ng-show="editForm.addressedPriorities.$invalid && (editForm.addressedPriorities.$touched || editForm.$submitted)" class="help-block error red-status">Addressed governmental priorities is required.</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div km-tab="linkages">
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="km-control-group" name="cbdSubjects" caption="Related CBD thematic area(s)">
+                                    <div required km-term-check name="cbdSubjects" ng-model="document.cbdSubjects" terms="options.cbdSubjects()" binding-type="term[]"></div>
+                                    <p ng-show="editForm.cbdSubjects.$invalid && (editForm.cbdSubjects.$touched || editForm.$submitted)" class="help-block error red-status">Related CBD thematic area(s) is required.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="km-control-group" required name="aichiTargets" caption="Related Aichi Biodiversity Target(s)">
+                                    <div km-term-check name="aichiTargets" required ng-model="document.aichiTargets" terms="options.aichiTargets()" binding-type="term[]"></div>
+                                    <p ng-show="editForm.aichiTargets.$invalid && (editForm.aichiTargets.$touched || editForm.$submitted)" class="help-block error red-status">Related Aichi Biodiversity Target(s)is required.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div km-tab="org">
+
+                        <div class="row">
+                          <div class="col-xs-12">
+
+                              <span ng-show="loading.org"><i class="fa fa-spinner fa-pulse  fa-fw"></i> Loading...</span>
+                              <div ng-show="!loading.org" class="km-control-group" name="organization" required caption="Requesting organization">
+
+                                  <select-contact schema="organization" id="editForm.organization" name="organization" required ng-model="document.organization" caption="Select >>"></select-contact>
+                                  <p ng-show="editForm.organization.$invalid && (editForm.organization.$touched || editForm.$submitted)" class="help-block error red-status">Requesting organization is required.</p>
+                              </div>
+                          </div>
+                          <div class="col-xs-12">
+                              <div class="km-control-group" name="contact" caption="Request contact person" required >
+
+                                  <select-contact schema="bbiContact" id="editForm.contact" name="contact" required ng-model="document.contact" caption="Select >>"></select-contact>
+                                  <p ng-show="editForm.contact.$invalid && (editForm.contact.$touched || editForm.$submitted)" class="help-block error red-status">Contact person is required.</p>
+                              </div>
+                          </div>
+
+                          <div class="col-md-6 col-xs-12">
+                              <div class="km-control-group" name="country" required caption="Related government">
+                                  <div km-select required name="country" ng-model="document.country" items="options.countries()"></div>
+                                  <p ng-show="editForm.country.$invalid && (editForm.country.$touched || editForm.$submitted)" class="help-block error has-error">Related government is required.</p>
+                              </div>
+
+                          </div>
+
+                        </div>
+                    </div>
+
+
+
+                    <div km-tab="details">
+
+
+                        <div class="row">
+                          <div class="col-md-4">
+                            <div class="control-group" name="jurisdiction" ng-class="{'has-error': (editForm.jurisdiction.$invalid && editForm.$submitted) }" caption="Level of Application" required >
+                                  <label for="jurisdiction" class="control-label">Level of application</label><br>
+                                  <!-- <div class="help-info small">At which level is the request for assistance needed?</div> -->
+                                  <div km-select name="jurisdiction" ng-model="document.jurisdiction" placeholder="Please select one option" items="options.jurisdictions()"></div>
+                                  <p ng-show="editForm.jurisdiction.$invalid && (editForm.jurisdiction.$touched || editForm.$submitted)" class="help-block error red-status">Level of application is required.</p>
+
+                              </div>
+                          </div>
+                          <div class="col-xs-12">
+                              <div class="control-group" name="beneficiaryTypes" caption="Type of organization">
+                                  <label class="control-label">Beneficiary type(s)</label>
+                                  <br>
+                                  <div km-select multiple="true" name="beneficiaryTypes" ng-model="document.beneficiaryTypes" items="options.organizationTypes()"></div>
+                              </div>
+                          </div>
+                          <div class="col-md-4">
+                              <div class="control-group" name="startDate" caption="Start Date">
+                                  <label class="control-label">Start date</label>
+                                  <br>
+                                  <div class="help-info small">Anticipated start date if applicable</div>
+                                  <div km-date name="startDate" ng-model="document.startDate"></div>
+                              </div>
+                          </div>
+                          <div class="col-md-4">
+                              <div class="control-group" name="endDate" caption="End Date">
+                                  <label class="control-label">End date</label>
+                                  <br>
+                                  <div class="help-info small">Anticipated end time if applicable</div>
+
+                                  <div km-date name="endDate" ng-model="document.endDate"></div>
+                              </div>
+                          </div>
+                          <div class="col-md-6 col-xs-12">
+
+                              <div class="control-group" name="otherGovernments" caption="Country">
+                                  <label for="otherGovernments" class="control-label">Other governmental involvment</label>
+                                  <div class="help-info small">List, if any, other country(ies) involved or may potentially be involved in this request.</div>
+                                  <div km-select multiple  name="otherGovernments" ng-model="document.otherGovernments" items="options.countries()"></div>
+                              </div>
+                          </div>
+                            <div class="col-md-8 col-xs-12">
+                                <div class="km-control-group" name="otherGovernmentsDetails">
+                                    <label for="otherGovernmentsDetails" class="control-label">Other governmental involvment details</label>
+                                    <div class="help-info small">Provide details, including the nature and extent of involvement of the other countries listed above.<span class="pull-right small red" style="color:red;" ng-if="document.otherGovernmentsDetails.length">Word Count: {{wordCount(document.otherGovernmentsDetails[locale])}}</span></div>
+                                    <div km-textbox-ml name="otherGovernmentsDetails" ng-model="document.otherGovernmentsDetails" rows="4" placeholder="" locales="document.meta.languages"></div>
+                                </div>
+                            </div>
+                          <div class="col-xs-12">
+                              <div class="km-control-group" name="other">
+                                  <label class="control-label">Other relevant information</label>
+                                  <div km-textbox-ml rows="4"   name="other" ng-model="document.other" locales="document.meta.languages"></div>
+                              </div>
+                          </div>
+                          <div class="col-md-6 col-xs-12">
+                              <div class="control-group" name="websites" caption="Web Sites">
+                                  <label for="websites" class="control-label">Relevant links and files</label>
+                                  <div km-link name="websites" ng-model="document.websites" allow-link="true" allow-file="true"></div>
+                              </div>
+                          </div>
+                            <div class="col-xs-12">
+                                <div class="km-control-group">
+                                    <label class="control-label">Existing initiatives </label>
+                                    <div class="help-info small">Describe, if any, past or on-going initiatives (including GEF and other donor projects) implemented to address the issues/gaps identified above and explain how the assistance requested would complement or build on those
+                                        efforts.<span class="pull-right small red" style="color:red;" ng-if="document.otherGovernments.length">Word Count: {{wordCount(document.otherGovernments)}}</span></div>
+                                    <div km-textbox-ml rows="4"   name="existingInitiatives" ng-model="document.existingInitiatives" locales="document.meta.languages"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12">
+                                <div class="km-control-group">
+                                    <label class="control-label">Same request to other programmes</label>
+                                    <div class="help-info small">Describe, if applicable, other assistance programmes to which the same request has been submitted and indicate the status (e.g. it is being processed, has already been delivered or has been turned down).<span class="pull-right small red"
+                                            style="color:red;" ng-if="document.sameRequests.length">Word Count: {{wordCount(document.sameRequests)}}</span></div>
+                                    <div km-textbox-ml rows="4"   name="sameRequests" ng-model="document.sameRequests" locales="document.meta.languages"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12">
+                                <div class="km-control-group">
+                                    <label class="control-label">Objectives</label>
+                                    <div class="help-info small">Describe the main objective(s)of the potential assistance requested, and the activities needed to achieve them .<span class="pull-right small red" style="color:red;" ng-if="document.objectives.length">Word Count: {{wordCount(document.objectives)}}</span></div>
+                                    <div km-textbox-ml rows="4"   name="objectives" ng-model="document.objectives" locales="document.meta.languages"></div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="km-control-group">
+                                    <label class="control-label">Potential outputs, outcomes and indicators </label>
+                                    <div class="help-info small">Describe potential outputs, outcomes and indicators of success from the assistance requested and explain how these would contribute to addressing the problem/ gap(s) stated above .<span class="pull-right small red"
+                                            style="color:red;" ng-if="document.potentialOOI.length">Word Count: {{wordCount(document.potentialOOI)}}</span></div>
+                                    <div km-textbox-ml rows="4"   name="objectives" ng-model="document.potentialOOI" locales="document.meta.languages"></div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="km-control-group">
+                                    <label class="control-label">Available co-financing and/or other support</label>
+                                    <div class="help-info small">Indicate available co-financing and/or other support.<span class="pull-right small red" style="color:red;" ng-if="document.coFinancing.length">Word Count: {{wordCount(document.coFinancing)}}</span></div>
+                                    <div km-textbox-ml rows="4"   name="coFinancing" ng-model="document.coFinancing" locales="document.meta.languages"></div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="km-control-group" name="addressedPrioritiesOther">
+                                    <label class="control-label">Other governmental priorities</label>
+                                    <div class="help-info small"> The assistance requested is in line with other national policies.<span class="pull-right small red" style="color:red;" ng-if="document.addressedPrioritiesOther.length">Word Count: {{wordCount(document.addressedPrioritiesOther)}}</span></div>
+                                    <div km-textbox-ml rows="4"   name="addressedPrioritiesOther" ng-model="document.addressedPrioritiesOther" locales="document.meta.languages"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div km-tab="review">
+                        <view-bbi-request header="false" ng-model="document" locale="review.locale" link-target="_blank"></view-bbi-request>
+                        <div km-document-validation ng-model="validationReport"></div>
+
+                        <div class="btn-group" ng-show="document.header.languages.length>1">
+                            <input type="button" class="btn" ng-class="{'active' : review.locale==locale, 'btn-info' : review.locale==locale}" ng-repeat="locale in document.header.languages" ng-click="$parent.review.locale = locale" value="{{locale | uppercase}}" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                      <div class="col-xs-12 ">
+                          <ul class="pagination hidden-xs">
+                              <li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()">&laquo;</a></li>
+                              <li ng-class="{ active  : tab=='org'  }" id="org"><a href="" ng-click="tab='org'">Requested By</a></li>
+                              <li ng-class="{ active  : tab=='general' }"><a href="" ng-click="tab='general'">General</a></li>
+                              <li ng-class="{ active  : tab=='linkages'  }"><a href="" ng-click="tab='linkages'">Linkages</a></li>
+                              <li ng-class="{ active  : tab=='details'  }"><a href="" ng-click="tab='details'">Details</a></li>
+                              <li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate();">Review</a></li>
+                              <li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()">&raquo;</a></li>
+                          </ul>
+                          <ul class="pagination small visible-xs">
+                              <li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()">&laquo;</a></li>
+                              <li ng-class="{ active  : tab=='org'  }" id="org"><a href="" ng-click="tab='org'">Requested By</a></li>
+                              <li ng-class="{ active  : tab=='general' }"><a href="" ng-click="tab='general'">General</a></li>
+                              <li ng-class="{ active  : tab=='linkages'  }"><a href="" ng-click="tab='linkages'">Linkages</a></li>
+                              <li ng-class="{ active  : tab=='details'  }"><a href="" ng-click="tab='details'">Details</a></li>
+                              <li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate();">Review</a></li>
+                              <li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()">&raquo;</a></li>
+                          </ul>
+                      </div>
+
+                    </div>
+                    <div id="view-header" class="panel-heading bg-blue">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4">
+                                <h4>
+                         Request for Assistance
+                       <!-- <span class="text-small" style="font-size:.75em;color:#ddd;"> (BBIPRO) </span> -->
+                       </h4>
+                            </div>
+                            <div class="col-xs-12 col-sm-8 text-right hidden-xs" >
+                              <span km-form-languages xs ng-model="document.meta.languages"></span>
+                              <span mongo-form-std-buttons user="user" document="document" save-draft="saveDraft()" save-request="saveRequest()" save-completed="saveCompleted()" on-error="onError(error, errorCode)" ></span>
+
+                            </div>
+                            <div class="col-xs-12 col-sm-8 small visible-xs" >
+                              <span km-form-languages xs ng-model="document.meta.languages"></span>
+                              <span mongo-form-std-buttons user="user" document="document" save-draft="saveDraft()" save-request="saveRequest()" save-completed="saveCompleted()" on-error="onError(error, errorCode)" ></span>
+
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+<div class="row filter-row" >
+	<div class="col-xs-12">
+		<span><strong>Regions<span class="bg-blue badge">{{total}}</span></strong>
+		<p class="helpinfo"><i class="fa fa-info-circle helpicon"></i> Country Groupings
+		</p>
+		</span>
+
+		</span>
+		<hr/ style="    border-color: #bbb!important;margin: 5px 0 10px 0;padding: 0;">
+	</div>
+	<div class="col-xs-12 col-md-4" style="padding-bottom:10px">
+		<div class="input-group">
+				<input type="text" ng-model="search" class="form-control" placeholder="Search subject by key word" ng-model-options="{ debounce: { 'default': 300, 'blur': 0 } }" style="font-weight:bold;">
+				<span type="button" class="input-group-addon pointer" id="basic-addon2" ng-click="search='';">
+					<i ng-if="search" class="fa fa-times"></i>
+					<i ng-if="!search"  class="fa fa-search"></i>
+				</span>
+		</div>
+	</div>
+	<div class="col-xs-12" style="height:200px;overflow-y:auto" ng-if="search">
+		<div ng-repeat="item in allTerms | filter:{title:{en:search}} " class="checkbox" ng-show="item.count" >
+			<div class="col-xs-12 checkbox text-nowrap"  style="margin: 0 0 0 0;">
+					<label style="font-size: 1em;">
+							<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
+							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+							 {{item.title | lstring}}
+							<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;">{{item.count}}</span>
+					</label>
+			</div>
+	</div>
+	</div>
+
+
+	<div class="col-xs-12" ng-if="!search" style="height:160px;overflow-y:auto" >
+
+					<div class="panel-group" id="accordion">
+						<div class="panel panel-default" ng-repeat="class in terms" ng-init="classIndex = $index" ng-show="class.count">
+							<!-- <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" ng-href="#{{class.identifier}}" > -->
+									<div class="panel-heading pointer" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" ng-href="#{{class.identifier}}" ng-click="upD()">
+										<div class="row">
+										<div class="col-xs-1" >
+											<i ng-show="isOpen(class.identifier)" class="fa fa-compress " aria-hidden="true"></i>
+											<i ng-show="!isOpen(class.identifier)"class="fa fa-expand " aria-hidden="true"></i>
+										</div>
+										<div class="col-xs-1 ">
+												<span class="bg-blue badge"> {{class.count}}</span>
+										</div>
+										<div class="col-xs-10 text-nowrap">
+											<span class="panel-title" style="margin:0">
+												{{class.title | lstring}}
+											</span>
+										</div>
+
+										</div>
+
+								  </div>
+							<!-- </a> -->
+							<div id="{{class.identifier}}" class="panel-collapse" ng-class="{ true:'in', false:'collapse' }[$index==0]" >
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-xs-12 col-md-6 " ng-repeat="region in class.narrowerTerms" style="margin-top:0;margin-bottom:0" ng-init="regionIndex = $index" ng-show="region.count">
+
+												<div class="checkbox">
+													<label><input type="checkbox" ng-model="region.selected" ng-click="refresh(region)" ><span class="cr"><i class="cr-icon fa fa-check"></i></span> {{region.title | lstring}} <span class="bg-blue badge">{{region.count}}</span></label>
+												</div>
+
+											<div  style="margin-top:0;margin-bottom:0;margin-left:20px" ng-repeat="region2 in region.narrowerTerms" ng-show="region2.count">
+												 <div class="checkbox"><label><input type="checkbox" ng-model="region2.selected" ng-change="refresh(region2)" ><span class="cr"><i class="cr-icon fa fa-check"></i></span> {{region2.title | lstring}} <span class="bg-blue badge">{{region2.count}}</span></label></div>
+											</div>
+										</div>
+									</div>
+								</div>
+					    	</div>
+						</div>
+					</div>
+	</div>
+
+
+	</div>

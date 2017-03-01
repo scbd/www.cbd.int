@@ -1,0 +1,96 @@
+{
+	"autoLinks": [
+	{
+		"texts": ["Strategic Plan for Biodiversity 2011-2020",
+							"Strategic Plan for Biodiversity",
+							"Strategic Plan"
+		],
+		"uri": "https://www.cbd.int/sp/"
+	},
+	{
+		"texts": ["Aichi Biodiversity Targets",
+							"Aichi Targets",
+							"ABTs"
+		],
+		"uri": "https://www.cbd.int/aichi-targets/"
+	},
+	{
+		"texts": ["decision XII/2/B2",
+							"decision XII"
+		],
+		"uri": "https://www.cbd.int/decisions/cop/?m=cop-12"
+	},
+	{
+		"texts": ["Gangwon Declaration on Biodiversity for Sustainable Development",
+							"Gangwon Declaration"
+		],
+		"uri": "https://www.cbd.int/hls-cop/gangwon-declaration-hls-cop12-en.pdf"
+	},
+	{
+		"texts": ["Gangwon Declaration on Biodiversity for Sustainable Development",
+							"Gangwon Declaration"
+		],
+		"uri": "https://www.cbd.int/hls-cop/gangwon-declaration-hls-cop12-en.pdf"
+	},
+	{
+		"texts": ["BBI Action Plan 2017-2020",
+							"BBI Action Plan"
+		],
+		"inApp":true,
+		"uri": "/about/plan"
+	},
+	{
+		"texts": ["Action Plan 2017-2020"
+		],
+		"uri": "https://www.cbd.int/bbi/doc/BBI-Action-Plan-2017-2020.pdf"
+	},
+	{
+		"texts": ["pilot TSC projects",
+							"pilot projects"
+		],
+		"inApp":true,
+		"uri": "/plan"
+	},
+	{
+		"texts": ["Article 18"],
+		"uri": "https://www.cbd.int/convention/articles/default.shtml?a=cbd-18"
+	}
+	,{
+		"texts": ["Parties to the Convention","Parties"],
+		"uri": "https://www.cbd.int/information/parties.shtml"
+	}
+	,{
+		"texts": ["Climate Technology Center & Network",
+		"CTCN"],
+		"uri": "https://www.cbd.int/information/parties.shtml"
+	}
+	,{
+		"texts": ["biobridge@cbd.int"],
+		"isEmail":true,
+		"uri": "biobridge@cbd.int"
+	}
+	,{
+		"texts": ["Quebec Centre for Biodiversity Science"],
+		"uri": "http://qcbs.ca/"
+	}
+	,{
+		"texts": ["UNEP World Conservation Monitoring Centre"],
+		"uri": "https://www.unep-wcmc.org/"
+	}
+	,{
+		"texts": ["Consortium of Scientific Partners on Biodiversity","CSP"],
+		"uri": "https://www.cbd.int/cooperation/csp/"
+	},
+	{
+		"texts": ["Interim-BBI Request for Assistance Form"],
+		"uri": "https://www.cbd.int/bbi/doc/BBI-Request-for-Assistance-Form.docx"
+	}	,{
+			"texts": ["secretariat@cbd.int"],
+			"isEmail":true,
+			"uri": "secretariat@cbd.int"
+		}
+
+
+
+]
+}

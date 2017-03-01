@@ -1,0 +1,185 @@
+<ng-include src="'/app/views/bbi/platform-header.html'" ></ng-include>
+<style> .top-button-requests{
+  background: url("/app/images/bbi/box-requests.svg") no-repeat;
+background-size: 100% 95%;
+          background-position: center;
+          margin-top:10px;
+          width:212px;
+          height:187px;
+          margin-left:auto;
+  margin-right:auto;
+  display:block;
+          color:white;
+            padding: 15px 15px 15px 15px;
+                      font-size: 16px;
+        }
+
+        .top-button-providers{
+                  background: url("/app/images/bbi/box-provider.svg") no-repeat;
+background-size: 100% 95%;
+
+                  background-position: center;
+                  margin-top:10px;
+                  width:212px;
+                  height:187px;
+                  margin-left:auto;
+          margin-right:auto;
+          display:block;
+          color:white;
+          padding: 15px 15px 15px 15px;
+                    font-size: 16px;
+        }
+        .top-button-opportunities{
+                  background: url("/app/images/bbi/box-opportunity.svg") no-repeat;
+background-size: 100% 95%;
+                  background-position: center;
+                  margin-top:10px;
+                  width:212px;
+                  height:187px;
+                  margin-left:auto;
+          margin-right:auto;
+          display:block;
+          color:white;
+          padding: 15px 15px 15px 15px;
+          font-size: 16px;
+        }
+        .top-button-container{
+
+          color:white
+        }
+        .top-button-container img{
+          position:absolute;
+          top:85px;
+          right:52px;
+        }
+        .top-button-container div{
+          position:absolute;
+          top:10px;
+          width:100%;
+        }
+        .bottom-buttons{
+          color:#001470;
+          font-weight: bold;
+        }
+
+        .hvr-reveal {
+    /*display: inline-block;
+    vertical-align: middle;*/
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px transparent;
+    position: relative;
+    overflow: hidden;
+}
+.hvr-reveal:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-color: #003f66;
+    border-style: solid;
+    border-width: 0;
+    -webkit-transition-property: border-width;
+    transition-property: border-width;
+    -webkit-transition-duration: 0.1s;
+    transition-duration: 0.1s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+.hvr-reveal:hover:before, .hvr-reveal:focus:before, .hvr-reveal:active:before {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    border-width: 4px;
+}
+.hvr-underline-from-center {
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px transparent;
+    position: relative;
+    overflow: hidden;
+}
+.hvr-underline-from-center:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    right: 50%;
+    bottom: 0;
+    background: #003f66;
+    height: 4px;
+    -webkit-transition-property: left, right;
+    transition-property: left, right;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+.hvr-underline-from-center:hover:before, .hvr-underline-from-center:focus:before, .hvr-underline-from-center:active:before{
+left: 0;
+    right: 0;
+  }
+  </style>
+<div class="row">
+    <menu  links="pltfCtrl.links" style="padding:0;margin:0;"></menu>
+    <crumbs style="padding:0;margin:0;"></crumbs>
+    <div class="col-xs-12 text-center">
+      <h1 style="color:#003f66;">SUBMIT INFORMATION</h1>
+    </div>
+    <div class="col-md-4 col-xs-12 ">
+      <div class="top-button-requests pointer text-center hvr-underline-from-center " ng-click="pltfCtrl.goTo('/platform/submit/bbi-request/new')">
+          Request <br>Assistance
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12 ">
+      <div class="top-button-providers pointer text-center hvr-underline-from-center" ng-click="pltfCtrl.goTo('/platform/submit/bbi-profile/new')">
+          Register as a Provider<br> of <br>Assistance
+      </div>
+    </div>
+    <div class="col-md-4 col-xs-12 ">
+      <div class="top-button-opportunities pointer text-center hvr-underline-from-center " ng-click="pltfCtrl.goTo('/platform/submit/bbi-opportunity/new')">
+        Offer an <br>Opportunity for <br>Assistance
+      </div>
+    </div>
+</div>
+
+  <div class="row">
+      <div class="col-xs-12 text-center">
+          <h1>SEARCH INFORMATION</h1>
+      </div>
+      <div class="col-xs-12 col-md-12 col-md-offset-1 col-lg-12 col-lg-offset-1 col-xl-12 col-xl-offset-1">
+          <div class="col-md-2 col-xs-12">
+              <div class='text-center pointer hvr-reveal' style="padding:5px 4px 5px 4px;" ng-click="pltfCtrl.goTo('/platform/bbi-request')">
+                  <img src="/app/images/bbi/icon-org-chart.svg" width="100px;"></img>
+                  <div><span class="bottom-buttons">Requests for Assistance</span></div>
+              </div>
+          </div>
+          <div class="col-md-2 col-xs-12">
+              <div class='text-center pointer hvr-reveal' style="padding:5px 4px 5px 4px;" ng-click="pltfCtrl.goTo('/platform/bbi-profile')">
+                  <img src="/app/images/bbi/icon-page.svg" width="100px;"></img>
+                  <div><span class="bottom-buttons">Providers of Assistance</span></div>
+              </div>
+          </div>
+          <div class="col-md-2 col-xs-12">
+              <div class='text-center pointer hvr-reveal' style="padding:5px 4px 5px 4px;" ng-click="pltfCtrl.goTo('/platform/bbi-opportunity')">
+                  <img src="/app/images/bbi/icon-book.svg" width="100px;"></img>
+                  <div><span class="bottom-buttons">Opportunities for Assistance</span></div>
+              </div>
+          </div>
+          <div class="col-md-2 col-xs-12">
+              <div class='text-center pointer hvr-reveal' style="padding:5px 4px 5px 4px;" ng-click="pltfCtrl.goTo('/platform/bbi-proposal')">
+                  <img src="/app/images/bbi/icon-gear.svg" width="100px;"></img>
+                  <div><span class="bottom-buttons">BBI <br>Proposals</span></div>
+              </div>
+          </div>
+          <div class="col-md-2 col-xs-12">
+              <div class='text-center pointer hvr-reveal' style="padding:5px 4px 5px 4px;" ng-click="pltfCtrl.goTo('/platform/tools')">
+                  <img src="/app/images/bbi/icon-magnify.svg" width="100px;"></img>
+                  <div><span class="bottom-buttons"><span class="text-nowrap">Resources</span> and Initiatives</span></div>
+              </div>
+          </div>
+      </div>
+  </div>
+<ng-include src="'/app/views/bbi/footer.html'" ></ng-include>

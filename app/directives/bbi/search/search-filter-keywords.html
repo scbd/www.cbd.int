@@ -1,0 +1,7 @@
+	<div class="input-group">
+			<input type="text" ng-change="change();" ng-focus="textOn=true;" ng-model="value" class="form-control" placeholder="Search BBI Records" ng-model-options="{ debounce: { 'default': 1000, 'blur': 0 } }" style="font-weight:bold;">
+			<span type="button" class="input-group-addon pointer" id="basic-addon2" ng-click="clearSearch()">
+				<i ng-if="textOn" class="fa fa-times"></i>
+				<i ng-if="!textOn"  class="fa fa-search"></i>
+			</span>
+	</div>

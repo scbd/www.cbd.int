@@ -1,0 +1,40 @@
+<div>
+    <div class="text-center">
+        <img class="logo" width="45%" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>"></img>
+        <h3>First Provider of Assistance Record</h3>
+    </div>
+    <style>
+        .mhr {
+            height: 12px;
+            border: 0;
+            box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    <hr class="mhr" style="color:#111;">
+    <p  >
+Provider of Assistance records can reference two other types of records – a Contact and an Organization record. While creating the Provider of Assistance profile, you will be asked to select an organization and contact. If they do not exist already you will have to create them first before proceeding to complete the Provider for Assistance form. <br>
+      <strong>Procedure for creating a provider profile:</strong>
+      <ol class="bbilist-o  ">
+        <li  >Create the requesting Organization (if it does not exist)</li>
+        <li  >Create the contact person (if it does not exist)</li>
+        <li  >Lastly, complete your provider profile.</li>
+     </ol>
+    </p>
+
+
+        <div class="col-xs-12 checkbox text-nowrap" style="margin: 0 0 0 0;line-height:1em;">
+            <label >
+            <span class="text-danger">Do not show this notice again.</span>
+ 							<input  ng-false-value="false" ng-true-value="true" type="checkbox" ng-model="bbiFirstProvider" bind-indeterminate="item.indeterminate" ng-change="settingsChange('bbi.firstProviderNotice',bbiFirstProvider)" >
+ 							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+ 					</label>
+            <br>
+        </div>
+    </p>
+    <div class="text-xs-center text-right">
+        <button class="btn btn-warning" ng-click="closeThisDialog(true);">
+                  Close
+        </button>
+
+    </div>
+</div>

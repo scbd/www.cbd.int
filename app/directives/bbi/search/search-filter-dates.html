@@ -1,0 +1,50 @@
+<div class="row filter-row" >
+
+			<div class="col-xs-12"  >
+					<span  ><strong>Published Date <span class="bg-blue badge">{{total}}</span></strong>
+					<p class="helpinfo" ><i class="fa fa-info-circle helpicon" ></i>
+							Filter records published within a date range or time period.
+					</p>
+				</span>
+
+					<hr/ style="    border-color: #bbb!important;margin: 5px 0 10px 0;padding: 0;">
+		  </div>
+
+	<div class="row" style="margin-top:6px">
+		<div class="col-xs-12 col-md-6 col-md-offset-3">
+			<div style="font-size:10px;font-weight:bold">WITH IN TIME PERIOD</div>
+			<select class="form-control" ng-model="selectedDate" ng-change-"onSelectedDate()" ng-options="date.text for date in dates"></select>
+		</div>
+  </div>
+	<div class="row" >
+		<div class="col-xs-12 text-center" style="font-size:20px;">
+			<srtong>OR</strong>
+		</div>
+	</div>
+	<div class="row" style="margin-top:6px">
+		<div class="col-xs-12  col-md-3 col-md-offset-3">
+			<div style="font-size:10px;font-weight:bold">SINCE</div>
+			<div class="km-date" ng-model="since"></div>
+		</div>
+		<div class="col-xs-12  col-md-3">
+			<div style="font-size:10px;font-weight:bold">UNTIL</div>
+			<div class="km-date" ng-model="until"></div>
+		</div>
+	</div>
+	<style>
+		.km-date input {
+			padding-left: 4px;
+			padding-right: 4px;
+			font-size: 10px;
+			height:30px;
+			text-align: center;
+		}
+		.km-date button {
+			margin-left:-1px;
+			padding-left: 8px;
+			padding-right: 8px;
+			height:30px;
+			font-size: 10px;
+		}
+	</style>
+</div>

@@ -1,0 +1,40 @@
+<div>
+    <div class="text-center">
+        <img class="logo" width="45%" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>"></img>
+        <h3>First Opportunity Record</h3>
+    </div>
+    <style>
+        .mhr {
+            height: 12px;
+            border: 0;
+            box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    <hr class="mhr" style="color:#111;">
+    <p class=" ">
+Opportunity records can reference two other types of records, a Contact and an Organization record. While creating your opportunity record, you will be asked to select an organization and contact. If they do not exist already you will have to create them first before proceeding to complete the opportunity record form. <br>
+      <strong>Procedure for creating an opportunity:</strong>
+      <ol class="bbilist-o  ">
+        <li class=" ">Create the requesting Organization (if it does not exist)</li>
+        <li class=" ">Create the contact person (if it does not exist)</li>
+        <li class=" ">Lastly, complete the rest of your opportunity.</li>
+     </ol>
+    </p>
+
+
+        <div class="col-xs-12 checkbox text-nowrap" style="margin: 0 0 0 0;line-height:1em;">
+            <label style="font-size: .8em;">
+            <span class="text-danger">Do not show this notice again.</span>
+ 							<input  ng-false-value="false" ng-true-value="true" type="checkbox" ng-model="bbiFirstOpportunity" bind-indeterminate="item.indeterminate" ng-change="settingsChange('bbi.firstOpportunityNotice',bbiFirstOpportunity)" >
+ 							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+ 					</label>
+            <br>
+        </div>
+    </p>
+    <div class="text-xs-center text-right">
+        <button class="btn btn-warning" ng-click="closeThisDialog(true);">
+                  Close
+        </button>
+
+    </div>
+</div>

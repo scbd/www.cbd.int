@@ -32,7 +32,13 @@ require.config({
         'alasql'          : 'libs/alasql/dist/alasql.min',
         'js-xlsx'         : 'libs/js-xlsx/dist/xlsx.min',
         'js-zip'          : 'libs/js-xlsx/dist/jszip',
-        'ods'             : 'libs/js-xlsx/dist/ods'
+        'ods'             : 'libs/js-xlsx/dist/ods',
+        'linqjs'          : 'libs/linqjs/linq',
+        'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll',
+        'ngSmoothScroll'  : 'libs/ngSmoothScroll/lib/angular-smooth-scroll',
+        'bootstrap-datepicker': 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
+        'toastr'          : 'libs/angular-toastr/dist/angular-toastr.tpls.min',
+        'hl.sticky'       : 'libs/angular-sticky/dist/angular-sticky'
     },
     shim: {
         'angular'              : { deps : ['jquery'], exports: 'angular' },
@@ -50,8 +56,11 @@ require.config({
         'magnific-popup'       : { deps : ['jquery']},
         'dragula'              : { deps : ['css!libs/dragula.js/dist/dragula.css']},
         'alasql'               : { deps : ['js-xlsx']},
-        'js-xlsx'              : { deps : ['js-zip', 'ods']}
-
+        'js-xlsx'              : { deps : ['js-zip', 'ods']},
+        'toastr'               : { deps : ['angular-flex'] },
+        'hl.sticky'            : { deps : ['angular-flex'] },
+        'ngSmoothScroll'       : { deps : ['angular-flex'] },
+        'ngInfiniteScroll'     : { deps : ['angular-flex'] }
     },
     packages: [
         { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },
@@ -66,6 +75,9 @@ define('xlsx', ['js-zip', 'ods'], function (jszip, ods) {
 });
 
 define('underscore', ['lodash'], function(_) { console.log('Deprecated: use lodash'); return _; });
+
+if (!require.defined('_slaask'))
+    define("_slaask", window._slaask);
 
 define('dropbox-dropins', ['https://www.dropbox.com/static/api/2/dropins.js'], function(){
     if(window.Dropbox)

@@ -1,0 +1,459 @@
+
+ <style>
+ .km-pre
+   {
+   	word-break: break-all; word-wrap: break-word; white-space: pre-wrap;
+   }
+ a.nostyle{
+ color: #444; /* blue colors for links too */
+text-decoration: none; /* no underline */
+}
+a.nostyle:hover{
+color: #444; /* blue colors for links too */
+text-decoration: none; /* no underline */
+}
+ .checkbox label:after {
+    content: '';
+    display: table;
+    clear: both;
+   padding-left: 0px !important;
+}
+.checkbox label {
+ padding-left: 0px !important;
+}
+.checkbox .cr,
+.radio .cr {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #333;
+   background-color: #333;
+    border-radius: .25em;
+    width: 1.3em;
+    height: 1.3em;
+    float: left;
+    margin-right: .5em;
+}
+
+.radio .cr {
+    border-radius: 50%;
+}
+
+.checkbox .cr .cr-icon,
+.radio .cr .cr-icon {
+    position: absolute;
+    font-size: .8em;
+    line-height: 0;
+    top: 50%;
+    left: 20%;
+}
+
+.radio .cr .cr-icon {
+    margin-left: 0.04em;
+}
+
+.checkbox label input[type="checkbox"],
+.radio label input[type="radio"] {
+    display: none;
+}
+
+.checkbox label input[type="checkbox"] + .cr > .cr-icon,
+.radio label input[type="radio"] + .cr > .cr-icon {
+    transform: scale(3) rotateZ(-20deg);
+    opacity: 0;
+    transition: all .3s ease-in;
+   color: #dddddd;
+}
+
+.checkbox label input[type="checkbox"]:checked + .cr > .cr-icon,
+.radio label input[type="radio"]:checked + .cr > .cr-icon {
+    transform: scale(1) rotateZ(0deg);
+    opacity: 1;
+}
+
+.checkbox label input[type="checkbox"]:disabled + .cr,
+.radio label input[type="radio"]:disabled + .cr {
+    opacity: .5;
+}
+ .status-badge > span {
+    min-width:40px;
+ }
+ .bg-grey1 {
+    background-color: #DDD!important;
+    color: #555;
+}
+
+ .bottom-box{
+   background:#003f66;
+   color:white;
+   text-align: center;
+   font-weight: bold;
+   padding: 40px 10px 40px 10px;
+ }
+ .custom-width .ngdialog-content {
+     width: 150px;
+ }
+ .card {
+    background-color: #eee;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+}
+
+
+ .card {
+     width: 100%;
+     height: 100%;
+     -webkit-transform-style: preserve-3d;
+     -webkit-transition: 0.5s;
+     -moz-transform-style: preserve-3d;
+     -moz-transition: 0.5s;
+     -ms-transform-style: preserve-3d;
+     -ms-transition: 0.5s;
+     -o-transform-style: preserve-3d;
+     -o-transition: 0.5s;
+     transform-style: preserve-3d;
+     transition: 0.5s;
+ }
+ .card-1 {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.1s ease-in-out;
+}
+div.recordDefault:hover {
+    background-color: #e1e1e1!important;
+}
+.recordDefault .schema,
+#national-records-country .schema,
+#result-grouped-national-record .type {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline!important;
+    padding-right: 6px;
+}
+.recordDefault .date {
+    color: #333;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+.recordDefault .title {
+    color: #333;
+    font-size: 14px;
+    padding: 0 10px 0 0;
+    display: inline!important;
+}
+.recordDefault .description {
+    color: #444;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80vw;
+    overflow: hidden;
+}
+.recordDefault .metadata {
+    margin: 0;
+    padding: 0;
+    color: #111;
+}
+.recordDefault ul {
+    margin: 0;
+    padding: 0;
+}
+.recordDefault .metadata li {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+.recordDefault .metadata span {
+    color: #333;
+    text-transform: uppercase;
+    font-size: 10px;
+    margin: 0;
+}
+.recordDefault .metadata span:last-of-type {
+    border-right: solid 1px #999;
+    padding-right: 5px;
+}
+.recordDefault .metadata> li> .last-span {
+    border-right: 0!important;
+}
+ .bg-published{
+    background-color:#1FA65D!important;
+    color:white!important;
+    }
+    .bg-draft{
+        background-color:#bbb!important;
+        color:white!important;
+    }
+    .bg-request{
+        background-color:#C7532C!important;
+        color:white!important;
+    }
+    .bg-litegrey{background-color:#EEEEEE!important;padding: 10px 10px 10px 10px;}
+	.p-banner{
+    		background: url("/app/images/bbi/bbi-banner.png");
+		height: 120px;
+
+
+
+
+		text-align: left;
+    margin-bottom:1px;
+	}
+
+	.p-banner .main-title{
+		/*background-color: rgba(0,0,0,0.4);*/
+		/*height: 100%;*/
+		/*margin-left: 20px;*/
+		/*text-align: center;*/
+    /*border-left: 3px solid #009b48;*/
+
+    /*margin: auto;*/
+	}
+
+		.p-banner .main-title-text{
+			/*margin: 10px 0 0;*/
+			font-size: 5em;
+/*line-height:1.2em;*/
+			color: #fff;
+			/*font-weight: bold;*/
+      /*width: 220px;*/
+      /*padding-top: 10px;*/
+		}
+#view-header {background-color: #001470; color:white;}
+#view-header h4{ color:white;}
+.color-black{color:222222;}
+	.banner .main-title:hover{
+		background-color: #009b48;
+    cursor:pointer;
+	}
+
+    .title-national-status {
+        background: url("/app/images/aichi-targets/target-icon.png") no-repeat;
+        padding-left: 2em;
+    }
+
+.debug-border-thin{
+  border-width: thin;
+  border-style: dashed;
+  border-color: red;
+}
+
+ul.km-value {
+  padding-left: 0;
+  list-style: none;
+}
+legend {
+    margin-top: 30px;
+    padding: 5px;
+    background-color: #ddd;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    margin-top: 0;
+}
+
+label {
+    margin-top: 10px;
+}
+
+.control-group {
+    margin-bottom: 15px;
+}
+
+.control-label {
+    padding-top: 15px;
+}
+
+.bs-callout {
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+    background-color: #ffffff;
+}
+
+.bs-callout h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.bs-callout p:last-child {
+    margin-bottom: 0;
+}
+
+.bs-callout code {
+    border-radius: 3px;
+}
+
+.bs-callout+.bs-callout {
+    margin-top: -5px;
+}
+
+.bs-callout-default {
+    border-left-color: #777;
+}
+
+.bs-callout-default h4 {
+    color: #777;
+}
+
+.bs-callout-primary {
+    border-left-color: #428bca;
+}
+
+.bs-callout-primary h4 {
+    color: #428bca;
+}
+
+.bs-callout-success {
+    border-left-color: #5cb85c;
+}
+
+.bs-callout-success h4 {
+    color: #5cb85c;
+}
+
+.bs-callout-danger {
+    border-left-color: #d9534f;
+}
+
+.bs-callout-danger h4 {
+    color: #d9534f;
+}
+
+.bs-callout-warning {
+    border-left-color: #f0ad4e;
+}
+
+.bs-callout-warning h4 {
+    color: #f0ad4e;
+}
+
+.bs-callout-info {
+    border-left-color: #5bc0de;
+}
+
+.bs-callout-info h4 {
+    color: #5bc0de;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.img-container {
+    width: 100px;
+    /* whatever set width */
+    height: 100px;
+    /* whatever set width */
+    display: inline-block;
+    /* or you could float them */
+    overflow: hidden;
+}
+legend.view{
+  background: none;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 15px -5px 20px -5px;
+}
+label.view{
+  color: #666;
+  margin-top: 0px;
+  padding-left: 5px;
+}
+
+.img-container img {
+    max-width: 100%;
+    max-height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+address.km-value,
+div.km-value,
+ul.km-value > li {
+background-color:  #f5f5f5;;
+border: 1px solid #c0c0c0;
+border-radius: 3px;
+padding: 5px 8px 5px 8px;
+margin-top: 1px;
+margin-bottom: 5px;
+display: block;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+-ms-border-radius: 5px;
+-o-border-radius: 5px;
+}
+    @media (min-width: 1200px) {
+        .container {width:970px; !important;}
+    }
+    .bbilist  {
+      margin-bottom:20px;
+    }
+   .bbilist li  {
+      margin-top:10px;
+      margin-left: 50px;
+      list-style-type: disc;
+      list-style-position: inside;
+      text-indent: -2em;
+      /*padding-left: 1.5em;*/
+    }
+    .bbilist-2 li  {
+       margin-left: 100px;
+       list-style-type: disc;
+       list-style-position: inside;
+       text-indent: -2em;
+       margin-bottom:10px;
+       /*padding-left: 1.5em;*/
+     }
+     .bbilist-3 li  {
+        margin-left: 150px;
+        list-style-type: disc;
+        list-style-position: inside;
+        text-indent: -2em;
+        margin-bottom:10px;
+        /*padding-left: 1.5em;*/
+      }
+    .bbilist-o  {
+      margin-bottom:20px;
+    }
+    .bbilist-o li  {
+
+       /*list-style-type: upper-roman;*/
+       margin-top:10px;
+       margin-left: 50px;
+
+       list-style-position: inside;
+       text-indent: -2em;
+     }
+  @media (max-width: 768px) {
+    h2{font-size: 20px;}
+  }
+  .platform-logo {
+      margin-right:50px;
+  }
+ </style>
+
+
+
+<div class="row">
+    <div class="col-xs-12" >
+        <div class="p-banner" >
+
+            <div class="main-title">
+              <div class="col-xs-12 col-md-3 ">
+                <img src="/app/images/bbi/logo_white.svg" width="200px;" style="margin-top:5px;"></img><br class="hidden-md">
+                <span style="color:#fff;font-size:1.7em;letter-spacing: 5px;">Web Platform</span>
+              </div>
+        <div class="hidden-xs col-md-9">
+    </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

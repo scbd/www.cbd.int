@@ -1,0 +1,13 @@
+<ng-include src="'/app/views/bbi/platform-header.html'"></ng-include>
+<div class="row">
+    <menu links="viewCtrl.links" style="padding:0;margin:0;"></menu>
+  </br>
+  <div class="col-xs-12">
+
+    <view-bbi-request loading="loading" user="viewCtrl.user" ng-model="viewCtrl.document" locale="viewCtrl.locale" ng-if="viewCtrl.schema==='bbiRequest'"></view-bbi-request>
+    <view-bbi-opportunity loading="loading"  user="viewCtrl.user" ng-model="viewCtrl.document" locale="viewCtrl.locale" ng-if="viewCtrl.schema==='bbiOpportunity'"></view-bbi-opportunity>
+    <view-bbi-profile loading="loading"  user="viewCtrl.user" ng-model="viewCtrl.document" locale="viewCtrl.locale" ng-if="viewCtrl.schema==='bbiProfile'"></view-bbi-profile>
+    <view-organization loading="loading"  user="viewCtrl.user" ng-model="viewCtrl.document" locale="viewCtrl.locale" ng-if="viewCtrl.schema==='organization'"></view-organization>
+    <view-bbi-contact loading="loading"  user="viewCtrl.user" ng-model="viewCtrl.document" locale="viewCtrl.locale" ng-if="viewCtrl.schema==='bbiContact'"></view-bbi-contact>
+  </div>
+</div>

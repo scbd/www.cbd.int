@@ -1,0 +1,94 @@
+<ng-include src="'/app/views/bbi/header.html'" ></ng-include>
+<style>
+.top-button-requests{
+  background: url("/app/images/bbi/box-requests.svg") no-repeat;
+background-size: 100% 95%;
+          background-position: center;
+          margin-top:10px;
+          width:212px;
+          height:187px;
+          margin-left:auto;
+  margin-right:auto;
+  display:block;
+          color:white;
+            padding: 15px 15px 15px 15px;
+                      font-size: 16px;
+        }
+
+        .top-button-providers{
+                  background: url("/app/images/bbi/box-provider.svg") no-repeat;
+background-size: 100% 95%;
+
+                  background-position: center;
+                  margin-top:10px;
+                  width:212px;
+                  height:187px;
+                  margin-left:auto;
+          margin-right:auto;
+          display:block;
+          color:white;
+          padding: 15px 15px 15px 15px;
+                    font-size: 16px;
+        }
+        .top-button-opportunities{
+                  background: url("/app/images/bbi/box-opportunity.svg") no-repeat;
+background-size: 100% 95%;
+                  background-position: center;
+                  margin-top:10px;
+                  width:212px;
+                  height:187px;
+                  margin-left:auto;
+          margin-right:auto;
+          display:block;
+          color:white;
+          padding: 15px 15px 15px 15px;
+          font-size: 16px;
+        }
+        .hvr-underline-from-center {
+            -webkit-transform: perspective(1px) translateZ(0);
+            transform: perspective(1px) translateZ(0);
+            box-shadow: 0 0 1px transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .hvr-underline-from-center:before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            left: 50%;
+            right: 50%;
+            bottom: 0;
+            background: #003f66;
+            height: 4px;
+            -webkit-transition-property: left, right;
+            transition-property: left, right;
+            -webkit-transition-duration: 0.3s;
+            transition-duration: 0.3s;
+            -webkit-transition-timing-function: ease-out;
+            transition-timing-function: ease-out;
+        }
+        .hvr-underline-from-center:hover:before, .hvr-underline-from-center:focus:before, .hvr-underline-from-center:active:before{
+        left: 0;
+            right: 0;
+          }
+          </style>
+<div class="row">
+    <menu pull="right" search="true"  links="opportunityCtrl.links" style="padding:0;margin:0;"></menu>
+</div>
+
+  <div class="row" auto-linker>
+      <div class="col-xs-12">
+          <h1>Providing an Opportunity</h1>
+          <p>Additional information on the process to participate in BBI as a provider of an opportunity will be made available soon.  In the interim register below.</p>
+
+          <div class="col-md-4 col-md-offset-4 col-xs-12 ">
+            <div class="top-button-opportunities pointer text-center hvr-underline-from-center " ng-click="indexCtrl.goTo('/submit/bbi-opportunity/new')">
+              Offer an <br>Opportunity for <br>Technical Assistance
+            </div>
+          </div>
+
+
+      </div>
+  </div>
+<ng-include src="'/app/views/bbi/footer.html'" ></ng-include>
+

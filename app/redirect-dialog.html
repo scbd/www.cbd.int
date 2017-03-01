@@ -1,0 +1,102 @@
+<div>
+<style>
+.checkbox label:after {
+   content: '';
+   display: table;
+   clear: both;
+  padding-left: 0px !important;
+}
+.checkbox label {
+padding-left: 0px !important;
+}
+.checkbox .cr,
+.radio .cr {
+   position: relative;
+   display: inline-block;
+   border: 1px solid #333;
+  background-color: #333;
+   border-radius: .25em;
+   width: 1.3em;
+   height: 1.3em;
+   float: left;
+   margin-right: .5em;
+}
+
+.radio .cr {
+   border-radius: 50%;
+}
+
+.checkbox .cr .cr-icon,
+.radio .cr .cr-icon {
+   position: absolute;
+   font-size: .8em;
+   line-height: 0;
+   top: 50%;
+   left: 20%;
+}
+
+.radio .cr .cr-icon {
+   margin-left: 0.04em;
+}
+
+.checkbox label input[type="checkbox"],
+.radio label input[type="radio"] {
+   display: none;
+}
+
+.checkbox label input[type="checkbox"] + .cr > .cr-icon,
+.radio label input[type="radio"] + .cr > .cr-icon {
+   transform: scale(3) rotateZ(-20deg);
+   opacity: 0;
+   transition: all .3s ease-in;
+  color: #dddddd;
+}
+
+.checkbox label input[type="checkbox"]:checked + .cr > .cr-icon,
+.radio label input[type="radio"]:checked + .cr > .cr-icon {
+   transform: scale(1) rotateZ(0deg);
+   opacity: 1;
+}
+
+.checkbox label input[type="checkbox"]:disabled + .cr,
+.radio label input[type="radio"]:disabled + .cr {
+   opacity: .5;
+}
+</style>
+    <div class="text-center">
+        <img class="logo" width="45%" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>"></img>
+        <h3>Authentication Required</h3>
+    </div>
+    <style>
+        .mhr {
+            height: 12px;
+            border: 0;
+            box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    <hr class="mhr" style="color:#111;">
+    <p class="small"> You are entering an area that requires authentication. You are being redirected to accounts.cbd.int in order to:
+
+        <ol class="small">
+            <li> Sign in; or</li>
+            <li> Create an account</li>
+        </ol>
+        <p class="small">Once authorized you will be redirected back to your intended destination. </p>
+        <div class="col-xs-12 checkbox text-nowrap" style="margin: 0 0 0 0;line-height:1em;">
+            <label style="font-size: .8em;">
+            <span class="text-danger">Do not show this warning again.</span>
+ 							<input  ng-false-value="false" ng-true-value="true" type="checkbox" ng-model="redirectOnAuthMsg" bind-indeterminate="item.indeterminate" ng-change="authRediectChange(redirectOnAuthMsg)" checked>
+ 							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+ 					</label>
+            <br>
+        </div>
+    </p>
+    <div class="text-xs-center text-right">
+        <button class="btn btn-default" ng-click="closeThisDialog(true);">
+                  Proceed to accounts.cbd.int
+        </button>
+        <button class="btn btn-primary" ng-click="closeThisDialog(false);">
+                  Cancel
+        </button>
+    </div>
+</div>

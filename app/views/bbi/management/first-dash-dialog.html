@@ -1,0 +1,40 @@
+<div>
+    <div class="text-center">
+        <img class="logo" width="45%" src="/app/images/cbd-logo-green-en.svg?v=<%=gitVersion%>"></img>
+        <h3>Dashboard</h3>
+    </div>
+    <style>
+        .mhr {
+            height: 12px;
+            border: 0;
+            box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    <hr class="mhr" style="color:#111;">
+    <p>The dashboard allows you to create, edit and list BBI records.</p>
+    <p class=" ">
+      There are 3 main functions of your dashboard are:
+      <ol class="bbilist-o  ">
+        <li><img src="/app/images/bbi/record-list.png" style="width:22px;"></img> List all records.</li>
+        <li><img src="/app/images/bbi/record-add.png" style="width:22px;"></img> Create a new record.</li>
+        <li><img src="/app/images/bbi/record-facets.png" style="height:15px;"></img> Show how many records are published, drafts or pending approval.</li>
+     </ol>
+   </p>
+
+
+        <div class="col-xs-12 checkbox text-nowrap" style="margin: 0 0 0 0;line-height:1em;">
+            <label style="font-size: .8em;">
+            <span class="text-danger">Do not show this notice again.</span>
+ 							<input  ng-false-value="false" ng-true-value="true" type="checkbox" ng-model="dashNotice" bind-indeterminate="item.indeterminate" ng-change="settingsChange('bbi.firstDashNotice',dashNotice)" >
+ 							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+ 					</label>
+            <br>
+        </div>
+    </p>
+    <div class="text-xs-center text-right">
+        <button class="btn btn-warning" ng-click="closeThisDialog(true);">
+                  Close
+        </button>
+
+    </div>
+</div>

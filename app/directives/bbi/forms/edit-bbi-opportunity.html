@@ -1,0 +1,344 @@
+<div class="bg-litegrey">
+
+	<div class="alert alert-danger" ng-show="hasError()">
+		<strong>An error has occurred...</strong>
+		<div>{{error}}</div>
+	</div>
+	<div id="view-header" class="panel-heading bg-blue">
+			<div class="row">
+					<div class="col-xs-12 col-sm-2">
+							<h4>
+		 Opportunity
+		 <!-- <span class="text-small" style="font-size:.75em;color:#ddd;"> (BBIPRO) </span> -->
+		 </h4>
+					</div>
+					<div class="col-xs-12 col-sm-10 text-right hidden-xs" >
+							<span km-form-languages  ng-model="document.header.languages"></span>
+							<span km-form-std-buttons document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()"
+									on-pre-publish="onPrePublish()"></span>
+					</div>
+					<div class="col-xs-12 col-sm-10 small visible-xs" >
+							<span km-form-languages xs ng-model="document.header.languages"></span>
+							<span km-form-std-buttons xs  document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()"
+									on-pre-publish="onPrePublish()"></span>
+					</div>
+			</div>
+	</div>
+
+	<div class="row" ng-show="!isLoading() && status!='hidden'">
+
+		<div class="col-md-12" style="position: relative">
+
+			<div class="row">
+
+				<div class="col-xs-12 ">
+					<ul class="pagination hidden-xs">
+						<li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()"		>&laquo;</a></li>
+						<li ng-class="{ active  : tab=='org'  }"><a href="" ng-click="tab='org'"	>Contributers</a></li>
+						<li ng-class="{ active  : tab=='oppor' }"><a href="" ng-click="tab='oppor'"	>Opportunity</a></li>
+						<li ng-class="{ active  : tab=='detail'  }"><a href="" ng-click="tab='detail'">Details</a></li>
+						<li ng-class="{ active  : tab=='linkages'  }"><a href="" ng-click="tab='linkages'"	>Linkages</a></li>
+						<li ng-class="{ active  : tab=='social'  }"><a href="" ng-click="tab='social'"	>Social</a></li>
+
+						<li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate();"	>Review</a></li>
+						<li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()"		  >&raquo;</a></li>
+					</ul>
+					<ul class="pagination small visible-xs">
+						<li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()"		>&laquo;</a></li>
+						<li ng-class="{ active  : tab=='org'  }"><a href="" ng-click="tab='org'"	>Contributers</a></li>
+						<li ng-class="{ active  : tab=='oppor' }"><a href="" ng-click="tab='oppor'"	>Opportunity</a></li>
+						<li ng-class="{ active  : tab=='detail'  }"><a href="" ng-click="tab='detail'">Details</a></li>
+						<li ng-class="{ active  : tab=='linkages'  }"><a href="" ng-click="tab='linkages'"	>Linkages</a></li>
+						<li ng-class="{ active  : tab=='social'  }"><a href="" ng-click="tab='social'"	>Social</a></li>
+
+						<li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate();"	>Review</a></li>
+						<li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()"		  >&raquo;</a></li>
+					</ul>
+				</div>
+
+
+			</div>
+			<div>
+
+				<form name="editForm" style="margin-top:10px" novalidate>
+
+          <div km-tab="org">
+
+                <section>
+                      <div class="row">
+
+                        <div class="col-md-8 col-xs-12">
+                            <div class="km-control-group" name=" primaryOrganization" required caption="Primary contributing organization">
+                                <select-contact ng-show="!loadingOrg" required name="primaryOrganization"  schema="organization" ng-model="document.primaryOrganization" caption="Select >>"></select-contact>
+
+																<span ng-show="loadingOrg" ><i class="fa fa-spinner fa-pulse  fa-fw"></i> Loading...</span>
+                            </div>
+                        </div>
+												<div class="col-md-8 col-xs-12">
+														<div class="km-control-group" name="contact" required caption="Contact person for the opportunity">
+															<select-contact required name="contact" schema="bbiContact" ng-model="document.contact" caption="Select  >>" ></select-contact>
+														</div>
+												</div>
+
+                          <div class="col-md-8 col-xs-12">
+                              <div class="km-control-group" name="otherOrgs" required caption="Select all other organizations contributing to the opportunity">
+                                <select-contact name="otherOrgs"  schema="organization" multiple="true" ng-model="document.organizations" caption="Select >>"></select-contact>
+                              </div>
+                          </div>
+
+
+                      </div>
+								</section>
+          </div>
+
+					<div km-tab="oppor">
+
+            <div  class="row">
+
+              <div class="col-xs-12">
+                  <div class="km-control-group" name="title" required caption="Title">
+                     <div km-textbox-ml required name="title" ng-model="document.title" placeholder="e.g. Research Grant for Invasive Alien Species Strategies" locales="document.header.languages"></div>
+                  </div>
+              </div>
+
+              <div class="col-xs-12">
+                  <div class="km-control-group" name="description" required caption="Description">
+
+                     <div km-textbox-ml name="description"  required  ng-model="document.description" rows="4" placeholder="" locales="document.header.languages"></div>
+                  </div>
+              </div>
+
+              <div class="col-xs-12">
+                  <div class="km-control-group" name="coverage" required caption="Geographic coverage of the opportunity">
+
+                      <div km-select multiple="true" required name="coverage" ng-model="document.areasBenifited" items="options.regions()"></div>
+                  </div>
+              </div>
+
+              <div class="col-xs-12">
+                  <div class="km-control-group" name="assistanceTypes" required caption="Type(s) of opportunity">
+											<div class="help-block">Maximum of three selections.</div>
+                      <div km-select required name="assistanceTypes" maximum="maxTypes()" multiple="true" required name="assistanceTypes" ng-model="document.assistanceTypes" items="options.assistanceTypes()"></div>
+                  </div>
+              </div>
+
+              <div class="col-md-8">
+								<div class="control-group" name="relevantInfo" caption="Any other relevant information">
+                   <label class="control-label">Other information describing the opportunity</label><br>
+									<div class="help-block">Please use this field to provide any other relevant information describing the opportunity</div>
+									<div km-textbox-ml ng-model="document.relevantInfo" rows="4" placeholder="" locales="document.header.languages"></div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="km-control-group" name="relevantDocuments" caption="Any other relevant documents">
+									<div km-link name="relevantDocuments" ng-model="document.relevantDocuments" allow-link="true" allow-file="true" identifier="document.header.identifier"></div>
+								</div>
+							</div>
+
+            </div>
+
+					</div>
+
+<div km-tab="detail">
+
+  <div class="col-xs-12">
+      <div class="control-group" name="primaryBeneficiary" required caption="Primary Beneficiary">
+         <label class="control-label">Primary beneficiary</label><br>
+         <div km-textbox-ml ng-model="document.primaryBeneficiary" rows="4" placeholder="" locales="document.header.languages"></div>
+      </div>
+  </div>
+
+  <div class="col-xs-12">
+      <div class="control-group" name="otherBeneficiaries" required caption="Other Beneficiaries">
+         <label class="control-label">Other beneficiaries</label><br>
+         <div km-textbox-ml ng-model="document.primaryBeneficiaries" rows="4" placeholder="" locales="document.header.languages"></div>
+      </div>
+  </div>
+
+  <div class="col-xs-12">
+      <div class="control-group" name="potentialOutcomes" required caption="Potential Outcomes">
+         <label class="control-label">Potential outcomes</label><br>
+         <div km-textbox-ml ng-model="document.potentialOutcomes" rows="4" placeholder="" locales="document.header.languages"></div>
+      </div>
+  </div>
+
+  <div class="col-xs-12">
+      <div class="km-control-group" name="eligibility" required caption="Eligibility criteria/requirements">
+         <div km-textbox-ml required name="eligibility"  ng-model="document.eligibility" rows="4" placeholder="" locales="document.header.languages"></div>
+      </div>
+  </div>
+	<div class="col-md-4">
+	      <div class="control-group" name="applicationDeadline" caption="Application Deadline">
+	          <label class="control-label">Application deadline</label>
+
+	          <div km-date name="applicationDeadline" ng-model="document.applicationDeadline" ></div>
+	      </div>
+	  </div>
+  <div class="col-md-4">
+      <div class="control-group" name="startDate" caption="Start Date">
+          <label class="control-label">Start date</label>
+          <br>
+          <div class="help-info small">Anticipated start date if applicable</div>
+          <div km-date name="startDate" ng-model="document.startDate"  start-date="startdateStart(document.applicationDeadline)"></div>
+					<p ng-show="editForm.startDate.$invalid && (editForm.startDate.$touched || editForm.$submitted) " class="help-block error red-status">Start date must be after application deadline.</p>
+      </div>
+  </div>
+  <div class="col-md-4">
+      <div class="control-group" name="endDate" caption="End Date">
+          <label class="control-label">End date</label>
+          <br>
+          <div class="help-info small">Anticipated end time if applicable</div>
+
+          <div km-date name="endDate" ng-model="document.endDate" ng-disabled="!document.startDate" start-date="startdateStart(document.startDate)"></div>
+					<p class="help-block" ng-show="!document.startDate">A start date must be entered in order to register an end date.</p>
+      </div>
+  </div>
+
+  <div class="col-xs-8">
+      <div class="km-control-group" name="applicationProcess" required caption="Application process" >
+         <div km-textbox-ml required name="applicationProcess" ng-model="document.applicationProcess" rows="4" placeholder="" locales="document.header.languages"></div>
+      </div>
+  </div>
+  <div class="col-md-4">
+    <div class="km-control-group" name="applicationDocuments" caption="Application Documents">
+      <div km-link name="applicationDocuments " ng-model="document.applicationDocuments" allow-link="true" allow-file="true" identifier="document.header.identifier"></div>
+    </div>
+  </div>
+
+</div>
+
+<div km-tab="linkages">
+
+  <div class="row">
+      <div class="col-md-10">
+          <div class="km-control-group" name="cbdSubjects" caption="Related CBD thematic areas(s)">
+              <div km-term-check required name="cbdSubjects" ng-model="document.cbdSubjects" terms="options.cbdSubjects()" binding-type="term[]"></div>
+          </div>
+      </div>
+  </div>
+
+  <div class="row">
+      <div class="col-md-10">
+          <div class="km-control-group" required name="aichiTargets" caption="Related Aichi Biodiversity Target(s)">
+
+              <div km-term-check required name="aichiTargets" required ng-model="document.aichiTargets" terms="options.aichiTargets()" binding-type="term[]"></div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div km-tab="social">
+
+    <div class="row">
+
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group" ng-class="{ 'has-warning': !loading && form.website.$invalid, 'has-error' : form.$submitted && form.website.$invalid }">
+                <label for="webite" class="control-label">Website</label>
+                <input ng-change="updateWebsites('website',website)" type="url" class="form-control" name="website" id="website" ng-model="website" placeholder="Org. website" ng-disabled="disabled()" on-focus-helper start="http://">
+                <p class="help-block error" ng-show="!loading && form.website.$error.url">This is not a valid web address</p>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group" ng-class="{ 'has-warning': !loading && form.facebook.$invalid, 'has-error' : form.$submitted && form.facebook.$invalid }">
+                <label for="facebook" class="control-label"><i class="fa fa-facebook-square" aria-hidden="true"></i> Facebook</label>
+
+                <input ng-change="updateWebsites('facebook',facebook)" ng-disabled="disabled()" type="url" class="form-control" name="facebook" id="facebook" ng-model="facebook" ng-pattern="patterns.facebook" placeholder="https://www.facebook.com/organisation" on-focus-helper
+                    start="https://www.facebook.com/">
+                <p class="help-block error" ng-show="!loading && form.facebook.$error.url">This is not a valid web address</p>
+                <p class="help-block error" ng-show="!loading && form.facebook.$error.pattern">Facebook address is invalid. It should look like: <em>https://www.facebook.com/your-facebook-page</em></p>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group" ng-class="{ 'has-warning': !loading && form.twitter.$invalid, 'has-error' : form.$submitted && form.twitter.$invalid }">
+                <label for="twitter" class="control-label"><i class="fa fa-twitter-square" aria-hidden="true"></i> Twitter</label>
+                <input ng-change="updateWebsites('twitter',twitter)" ng-disabled="disabled()" type="url" class="form-control" name="twitter" id="twitter" ng-model="twitter" ng-pattern="patterns.twitter" placeholder="https://twitter.com/organisation" on-focus-helper start="https://twitter.com/">
+                <p class="help-block error" ng-show="!loading && form.twitter.$error.url">This is not a valid web address</p>
+                <p class="help-block error" ng-show="!loading && form.twitter.$error.pattern">Twitter address is invalid. It should look like: <em>https://twitter.com/your-twitter-account</em></p>
+
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xs-12">
+            <div class="form-group" ng-class="{ 'has-warning': !loading && form.youtube.$invalid, 'has-error' : form.$submitted && form.youtube.$invalid }">
+                <label for="twitter" class="control-label"><i class="fa fa-youtube-square" aria-hidden="true"></i> Youtube</label>
+                <input ng-change="updateWebsites('youtube',youtube)" ng-disabled="disabled()" type="url" class="form-control" name="youtube" id="youtube" ng-model="youtube" ng-pattern="patterns.youtube" placeholder="https://www.youtube.com/channel/" on-focus-helper start="https://www.youtube.com/channel/">
+                <p class="help-block error" ng-show="!loading && form.youtube.$error.url">This is not a valid web address</p>
+                <p class="help-block error" ng-show="!loading && form.youtube.$error.pattern">Youtube address is invalid. It should look like: <em>https://www.youtube.com/channel/</em></p>
+            </div>
+        </div>
+
+        <div class="col-xs-12">
+            <div class="control-group" name="relevantDocuments" caption="Web Sites">
+                <label for="twitter" class="control-label">Additional Links</label>
+                <div km-link name="relevantDocuments" ng-model="document.relevantDocuments" allow-link="true" allow-file="false"></div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+				<div km-tab="review">
+					<div km-document-validation ng-model="validationReport"></div>
+
+					<div class="btn-group" ng-show="document.header.languages.length>1">
+						<input type="button" class="btn" ng-class="{'active' : review.locale==locale, 'btn-info' : review.locale==locale}" ng-repeat="locale in document.header.languages" ng-click="$parent.review.locale = locale" value="{{locale | uppercase}}" />
+					</div>
+					<view-bbi-opportunity header="false" ng-model="document" locale="review.locale" link-target="_blank"></view-bbi-opportunity>
+				</div>
+
+				<div class="row">
+
+          <div class="col-xs-12 ">
+  					<ul class="pagination hidden-xs">
+  						<li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()"		>&laquo;</a></li>
+              <li ng-class="{ active  : tab=='org'  }"><a href="" ng-click="tab='org'"	>Contributers</a></li>
+              <li ng-class="{ active  : tab=='oppor' }"><a href="" ng-click="tab='oppor'"	>Opportunity</a></li>
+  						<li ng-class="{ active  : tab=='detail'  }"><a href="" ng-click="tab='detail'">Details</a></li>
+              <li ng-class="{ active  : tab=='linkages'  }"><a href="" ng-click="tab='linkages'"	>Linkages</a></li>
+              <li ng-class="{ active  : tab=='social'  }"><a href="" ng-click="tab='social'"	>Social</a></li>
+
+  						<li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate();"	>Review</a></li>
+  						<li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()"		  >&raquo;</a></li>
+  					</ul>
+						<ul class="pagination small visible-xs">
+							<li ng-class="{ disabled: tab=='org' }"><a href="" ng-click="prevTab()"		>&laquo;</a></li>
+							<li ng-class="{ active  : tab=='org'  }"><a href="" ng-click="tab='org'"	>Contributers</a></li>
+							<li ng-class="{ active  : tab=='oppor' }"><a href="" ng-click="tab='oppor'"	>Opportunity</a></li>
+							<li ng-class="{ active  : tab=='detail'  }"><a href="" ng-click="tab='detail'">Details</a></li>
+							<li ng-class="{ active  : tab=='linkages'  }"><a href="" ng-click="tab='linkages'"	>Linkages</a></li>
+							<li ng-class="{ active  : tab=='social'  }"><a href="" ng-click="tab='social'"	>Social</a></li>
+
+							<li ng-class="{ active  : tab=='review'  }"><a href="" ng-click="tab='review';validate();"	>Review</a></li>
+							<li ng-class="{ disabled: tab=='review'  }"><a href="" ng-click="nextTab()"		  >&raquo;</a></li>
+						</ul>
+  				</div>
+
+
+				</div>
+				<div id="view-header" class="panel-heading bg-blue">
+						<div class="row">
+								<div class="col-xs-12 col-sm-2">
+										<h4>
+					 Opportunity
+					 <!-- <span class="text-small" style="font-size:.75em;color:#ddd;"> (BBIPRO) </span> -->
+					 </h4>
+								</div>
+								<div class="col-xs-12 col-sm-10 text-right hidden-xs" >
+										<span km-form-languages  ng-model="document.header.languages"></span>
+										<span km-form-std-buttons document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()"
+												on-pre-publish="onPrePublish()"></span>
+								</div>
+								<div class="col-xs-12 col-sm-10 small visible-xs" >
+										<span km-form-languages xs ng-model="document.header.languages"></span>
+										<span km-form-std-buttons xs  document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()"
+												on-pre-publish="onPrePublish()"></span>
+								</div>
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

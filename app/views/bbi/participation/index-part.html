@@ -1,0 +1,115 @@
+<ng-include src="'/app/views/bbi/header.html'"></ng-include>
+<style>
+.top-button-requests{
+  background: url("/app/images/bbi/box-requests.svg") no-repeat;
+background-size: 100% 95%;
+          background-position: center;
+          margin-top:10px;
+          width:212px;
+          height:187px;
+          margin-left:auto;
+  margin-right:auto;
+  display:block;
+          color:white;
+            padding: 15px 15px 15px 15px;
+                      font-size: 16px;
+        }
+
+        .top-button-providers{
+                  background: url("/app/images/bbi/box-provider.svg") no-repeat;
+background-size: 100% 95%;
+
+                  background-position: center;
+                  margin-top:10px;
+                  width:212px;
+                  height:187px;
+                  margin-left:auto;
+          margin-right:auto;
+          display:block;
+          color:white;
+          padding: 15px 15px 15px 15px;
+                    font-size: 16px;
+        }
+        .top-button-opportunities{
+                  background: url("/app/images/bbi/box-opportunity.svg") no-repeat;
+background-size: 100% 95%;
+                  background-position: center;
+                  margin-top:10px;
+                  width:212px;
+                  height:187px;
+                  margin-left:auto;
+          margin-right:auto;
+          display:block;
+          color:white;
+          padding: 15px 15px 15px 15px;
+          font-size: 16px;
+        }
+        .hvr-underline-from-center {
+            -webkit-transform: perspective(1px) translateZ(0);
+            transform: perspective(1px) translateZ(0);
+            box-shadow: 0 0 1px transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .hvr-underline-from-center:before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            left: 50%;
+            right: 50%;
+            bottom: 0;
+            background: #003f66;
+            height: 4px;
+            -webkit-transition-property: left, right;
+            transition-property: left, right;
+            -webkit-transition-duration: 0.3s;
+            transition-duration: 0.3s;
+            -webkit-transition-timing-function: ease-out;
+            transition-timing-function: ease-out;
+        }
+        .hvr-underline-from-center:hover:before, .hvr-underline-from-center:focus:before, .hvr-underline-from-center:active:before{
+        left: 0;
+            right: 0;
+          }
+</style>
+<div class="row">
+    <menu pull="right" search="true"  links="participationCtrl.links" style="padding:0;margin:0;"></menu>
+</div>
+
+<div class="row">
+    <div class="col-xs-12" auto-linker>
+        <h1>Participation in BBI</h1>
+
+        <h3>Who can participate in BBI?</h3>
+
+        <p>All Parties to the Convention and its Protocols, relevant organizations, policymakers and scientists are welcome to participate in the Bio-Bridge Initiative. There are two ways in which one can participate in BBI: by requesting for assistance and by providing assistance.</p>
+        <h3>Recipients of Assistance</h3>
+        <p>The main BBI beneficiaries are Parties to the Convention and its Protocols. Importantly, activities under BBI promote involvement and engagement of all relevant stakeholders. Priority for assistance is given to developing country Parties, in particular the least developed and small island developing States among them, Parties with economies in transition, as well as indigenous peoples and local communities.</p>
+        <div class="col-md-4 col-md-offset-4 col-xs-12 ">
+          <div class="top-button-requests pointer text-center hvr-underline-from-center " ng-click="indexCtrl.goTo('/submit/bbi-request/new')">
+              Request <br>Technical Assistance
+          </div>
+        </div>
+<div class="col-xs-12">
+        <h3>Providers of Assistance</h3>
+      <p>  Any governments and relevant organizations, including non-governmental and intergovernmental organizations, regional organizations, indigenous peoples and local communities, academic institutions, other mechanisms for biodiversity-related TSC and capacity development, development assistance agencies, foundations and funding agencies as well as private sector partners can provide technical assistance including funding for TSC projects and specific BBI activities.</p>
+      <div class="col-md-4 col-md-offset-4  col-xs-12 ">
+        <div class="top-button-providers pointer text-center hvr-underline-from-center" ng-click="indexCtrl.goTo('/submit/bbi-profile/new')">
+            Register as a Provider<br> of Technical <br>Assistance
+        </div>
+      </div>
+</div>
+
+<div class="col-xs-12">
+  <h3>Providers of Opportunities</h3>
+<p>  </p>
+      <div class="col-md-4 col-md-offset-4 col-xs-12 ">
+        <div class="top-button-opportunities pointer text-center hvr-underline-from-center " ng-click="indexCtrl.goTo('/submit/bbi-opportunity/new')">
+          Offer an <br>Opportunity for <br>Technical Assistance
+        </div>
+      </div>
+    </div>
+    </div>
+</div>
+
+<ng-include src="'/app/views/bbi/footer.html'"></ng-include>

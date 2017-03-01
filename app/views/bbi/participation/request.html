@@ -1,0 +1,105 @@
+<ng-include src="'/app/views/bbi/header.html'" ></ng-include>
+<style>
+.top-button-requests{
+  background: url("/app/images/bbi/box-requests.svg") no-repeat;
+background-size: 100% 95%;
+          background-position: center;
+          margin-top:10px;
+          width:212px;
+          height:187px;
+          margin-left:auto;
+  margin-right:auto;
+  display:block;
+          color:white;
+            padding: 15px 15px 15px 15px;
+                      font-size: 16px;
+        }
+
+        .top-button-providers{
+                  background: url("/app/images/bbi/box-provider.svg") no-repeat;
+background-size: 100% 95%;
+
+                  background-position: center;
+                  margin-top:10px;
+                  width:212px;
+                  height:187px;
+                  margin-left:auto;
+          margin-right:auto;
+          display:block;
+          color:white;
+          padding: 15px 15px 15px 15px;
+                    font-size: 16px;
+        }
+        .top-button-opportunities{
+                  background: url("/app/images/bbi/box-opportunity.svg") no-repeat;
+background-size: 100% 95%;
+                  background-position: center;
+                  margin-top:10px;
+                  width:212px;
+                  height:187px;
+                  margin-left:auto;
+          margin-right:auto;
+          display:block;
+          color:white;
+          padding: 15px 15px 15px 15px;
+          font-size: 16px;
+        }
+        .hvr-underline-from-center {
+            -webkit-transform: perspective(1px) translateZ(0);
+            transform: perspective(1px) translateZ(0);
+            box-shadow: 0 0 1px transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .hvr-underline-from-center:before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            left: 50%;
+            right: 50%;
+            bottom: 0;
+            background: #003f66;
+            height: 4px;
+            -webkit-transition-property: left, right;
+            transition-property: left, right;
+            -webkit-transition-duration: 0.3s;
+            transition-duration: 0.3s;
+            -webkit-transition-timing-function: ease-out;
+            transition-timing-function: ease-out;
+        }
+        .hvr-underline-from-center:hover:before, .hvr-underline-from-center:focus:before, .hvr-underline-from-center:active:before{
+        left: 0;
+            right: 0;
+          }
+</style>
+<div class="row">
+    <menu pull="right" search="true"  links="requestCtrl.links" style="padding:0;margin:0;"></menu>
+</div>
+
+  <div class="row">
+      <div class="col-xs-12" auto-linker>
+        <h1>  Requesting Assistance</h1>
+
+        <h3>The Process</h3>
+<ol class="bbilist-o">
+      <li>  A Party requiring support completes and submits a request for assistance form to the BBI help desk. If necessary, the help desk assists the Party in articulating its needs and/or elaborating the request for assistance.</li>
+        <li>The help desk determines what type of response is most appropriate. This may include direct response to the Party for simple requests such as providing relevant information or case studies, or facilitating the development of a proposal for a TSC initiative to meet the need.</li>
+      <li>  The help desk identifies an appropriate partner (e.g. expertise provider) from a network of relevant organizations to develop a proposal for the new TSC initiative to address the Party's needs for submission to potential donors.</li>
+
+</ol>
+<h3>How to Apply</h3>
+        <p>The BBI Web portal through which all requests for assistance are to be submitted can be accessed from the button below. Alternatively,  requests for assistance through BBI can be submitted to the Secretariat at secretariat@cbd.int using the this form:
+          Interim-BBI Request for Assistance Form</p>
+
+        <div class="col-md-4 col-md-offset-4  col-xs-12 ">
+          <div class="top-button-providers pointer text-center hvr-underline-from-center" ng-click="indexCtrl.goTo('/submit/bbi-profile/new')">
+              Register as a Provider<br> of Technical <br>Assistance
+          </div>
+        </div>
+
+      </div>
+
+
+  </div>
+<ng-include src="'/app/views/bbi/footer.html'" ></ng-include>
+

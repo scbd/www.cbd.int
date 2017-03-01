@@ -1,20 +1,45 @@
-define(['app', 'angular', 'text!./template-header.html', 'text!./template-footer.html', 'angular'], function(app, ng, headerHtml, footerHtml) { 'use strict';
+define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'text!./template-footer.html','lodash', 'providers/realm'], function(app, ng, toastTemplate,headerHtml, footerHtml,_) { 'use strict';
 
-    app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q',
-                             function($rootScope,   $window,   $browser,   $document,   authentication,   $q) {
+    app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache',
+                             function($rootScope,   $window,   $browser,   $document,   authentication,   $q,toastr,$templateCache) {
         return {
             restrict: 'E',
             template: headerHtml,
             link: function(scope, elem) {},
             controller: function($scope, $location) {
-
+                $templateCache.put("directives/toast/toast.html", toastTemplate);
                 var basePath = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
 
                 $rootScope.$on('$routeChangeSuccess', function(){
                     $window.ga('set',  'page', basePath+$location.path());
                     $window.ga('send', 'pageview');
                 });
+                var killWatch = $scope.$watch('user', _.debounce(function(user) {
 
+                    if (!user)
+                        return;
+
+                    require(["_slaask"], function(_slaask) {
+
+                        if (user.isAuthenticated) {
+                            _slaask.identify(user.name, {
+                                'user-id' : user.userID,
+                                'name' : user.name,
+                                'email' : user.email,
+                            });
+
+                            if(_slaask.initialized) {
+                                _slaask.slaaskSendUserInfos();
+                            }
+                        }
+
+                        if(!_slaask.initialized) {
+                            _slaask.init('ae83e21f01860758210a799872e12ac4');
+                            _slaask.initialized = true;
+                            killWatch();
+                        }
+                    });
+                }, 1000));
                 updateSize();
 
                 ng.element($window).on('resize', updateSize);
@@ -113,7 +138,36 @@ define(['app', 'angular', 'text!./template-header.html', 'text!./template-footer
                 $scope.profile = function () {
                     $window.location.href = authentication.accountsBaseUrl() + '/profile?returnurl=' + $scope.encodedReturnUrl();
                 };
-            }
+
+                //==============================
+      //
+      //==============================
+      $rootScope.$on("showInfo", function(evt, msg) {
+          toastr.info(msg);
+      });
+
+      //==============================
+      //
+      //==============================
+      $rootScope.$on("showWarning", function(evt, msg) {
+          toastr.warning(msg);
+      });
+
+      //==============================
+      //
+      //==============================
+      $rootScope.$on("showSuccess", function(evt, msg) {
+          toastr.success(msg);
+      });
+
+      //==============================
+      //
+      //==============================
+      $rootScope.$on("showError", function(evt, msg) {
+          toastr.error(msg);
+      });
+
+              }
         };
     }]);
 

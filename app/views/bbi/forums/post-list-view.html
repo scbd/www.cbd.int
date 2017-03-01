@@ -1,0 +1,33 @@
+<ng-include src="'/app/views/bbi/platform-header.html'"></ng-include>
+<div class="row">
+    <menu links="links" style="padding:0;margin:0;"></menu>
+</div>
+
+    <div ng-show="user.isAuthenticated">
+
+            <div class="col-lg-12">
+                <div forum-id="forumId" thread-id="threadId" show-details="true" type="thread" forum-details forum-list-url="forumListUrl" show-forum-properties="isAdmin()"></div>
+<br><br><br>
+            </div>
+
+
+            <div class="col-lg-12">
+                <div id="successMsg" style="display:none" class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    Post updated successfully.</div>
+            </div>
+
+            <div class="col-lg-12">
+                <div posts forum-id="forumId" thread-id="threadId" hide-thread="false"/>
+            </div>
+
+    </div>
+
+    <div ng-show="!user.isAuthenticated" class="bg-green">
+        <div login></div>
+    </div>
+
+</div>
