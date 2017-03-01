@@ -1,13 +1,13 @@
-define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'text!./template-footer.html','lodash', 'providers/realm'], function(app, ng, toastTemplate, footerHtml,_) { 'use strict';
+define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'text!./template-footer.html','lodash', 'providers/realm'], function(app, ng, toastTemplate,headerHtml, footerHtml,_) { 'use strict';
 
-    app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q',
-                             function($rootScope,   $window,   $browser,   $document,   authentication,   $q) {
+    app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache',
+                             function($rootScope,   $window,   $browser,   $document,   authentication,   $q,toastr,$templateCache) {
         return {
             restrict: 'E',
             template: headerHtml,
             link: function(scope, elem) {},
             controller: function($scope, $location) {
-
+                $templateCache.put("directives/toast/toast.html", toastTemplate);
                 var basePath = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
 
                 $rootScope.$on('$routeChangeSuccess', function(){
@@ -138,6 +138,34 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
                 $scope.profile = function () {
                     $window.location.href = authentication.accountsBaseUrl() + '/profile?returnurl=' + $scope.encodedReturnUrl();
                 };
+
+                //==============================
+      //
+      //==============================
+      $rootScope.$on("showInfo", function(evt, msg) {
+          toastr.info(msg);
+      });
+
+      //==============================
+      //
+      //==============================
+      $rootScope.$on("showWarning", function(evt, msg) {
+          toastr.warning(msg);
+      });
+
+      //==============================
+      //
+      //==============================
+      $rootScope.$on("showSuccess", function(evt, msg) {
+          toastr.success(msg);
+      });
+
+      //==============================
+      //
+      //==============================
+      $rootScope.$on("showError", function(evt, msg) {
+          toastr.error(msg);
+      });
 
               }
         };
