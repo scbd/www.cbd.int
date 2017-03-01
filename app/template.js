@@ -1,4 +1,4 @@
-define(['app', 'angular', 'text!./template-header.html', 'text!./template-footer.html', 'angular'], function(app, ng, headerHtml, footerHtml) { 'use strict';
+define(['app', 'angular', 'text!./template-header.html', 'text!./template-footer.html', 'providers/realm'], function(app, ng, headerHtml, footerHtml) { 'use strict';
 
     app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q',
                              function($rootScope,   $window,   $browser,   $document,   authentication,   $q) {
