@@ -28,7 +28,7 @@ define(['app', 'text!./crumbs.html'], function(app, templateHtml) { 'use strict'
                                 }, {
                                     title: "Latest TSC Opportunities",
                                     description: "View the list of new TSC opportunities currently available",
-                                    imageUrl: "/app/images/bbi/pic_1_opt.jpg",
+                                    imageUrl: "/app/images/bbi/slider-turtle.jpg",
                                     targetUrl: "/platform/bbi-opportunity"
                                 }, {
                                     title: "TSC project proposals",
