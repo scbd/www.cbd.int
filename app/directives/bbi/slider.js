@@ -31,7 +31,7 @@ define(['app', 'text!./slider.html','lodash','directives/bbi/ani-scroll'], funct
                                         targetUrl: "/about"
                                     }, {
                                         title: "BBI Operational Framework",
-                                        description: "Learn about how BBI works",
+                                        description: "Learn about BBI operational procedures, criteria and guidelines",
                                         imageUrl: "/app/images/bbi/slider-crab.jpg",
                                         targetUrl: "/about/framework"
                                     }, {
