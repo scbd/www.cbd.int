@@ -26,12 +26,12 @@ define(['app', 'text!./slider.html','lodash','directives/bbi/ani-scroll'], funct
                         items :[
                           {
                                         title: "About the BBI",
-                                        description: "Learn more about the purpose and characteristics of the Bio-Bridge Initiative",
+                                        description: "Learn more about the purpose and characteristics of BBI",
                                         imageUrl: "/app/images/bbi/slider-bee.jpg",
                                         targetUrl: "/about"
                                     }, {
                                         title: "BBI Operational Framework",
-                                        description: "Learn about how BBI operates, including the key steps involved and the selection criteria and process",
+                                        description: "Learn about how BBI works",
                                         imageUrl: "/app/images/bbi/slider-crab.jpg",
                                         targetUrl: "/about/framework"
                                     }, {
@@ -42,12 +42,12 @@ define(['app', 'text!./slider.html','lodash','directives/bbi/ani-scroll'], funct
                                     }, {
                                         title: "Participation with BBI",
                                         description: "Learn more about ways in which one can participate in BBI",
-                                        imageUrl: "/app/images/bbi/slider-4.jpg",
+                                        imageUrl: "/app/images/bbi/pic_3_opt.jpg",
                                         targetUrl: "/participation"
                                     }, {
                                         title: "BBI projects",
                                         description: "Learn more about TSC projects facilitated through BBI",
-                                        imageUrl: "/app/images/bbi/slider-5.jpg",
+                                        imageUrl: "/app/images/bbi/pic_2_opt.jpg",
                                         targetUrl: "/projects"
                                     }
                               ]

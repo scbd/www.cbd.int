@@ -1,100 +1,99 @@
 {
-	"links": [{
-		"title": {
-			"en": "Home"
-		},
-		"source": "/",
-		"children": []
-	},
-	{
-		"title": {
-			"en": "About"
-		},
+    "links": [{
+            "title": {
+                "en": "Home"
+            },
+            "source": "/",
+            "children": []
+        },
+        {
+            "title": {
+                "en": "About"
+            },
 
-		"children": [
-			{
-				"title": {
-					"en": "The Initiative"
-				},
-				"source": "/about"
-			},{
-			"title": {
-				"en": "Operational Framework"
-			},
-			"source": "/about/framework"
-		}, {
-			"title": {
-				"en": "Action Plan"
-			},
-			"source": "/about/plan"
-		}, 				{"title": {
-							"en": "Participation"
-						},
-						"source": "/participation"
-					}]
-	}, {
+            "children": [{
+                "title": {
+                    "en": "The Initiative"
+                },
+                "source": "/about"
+            }, {
+                "title": {
+                    "en": "Operational Framework"
+                },
+                "source": "/about/framework"
+            }, {
+                "title": {
+                    "en": "Action Plan"
+                },
+                "source": "/about/plan"
+            }, {
+                "title": {
+                    "en": "Participation"
+                },
+                "source": "/participation"
+            }, {
+                "title": {
+                    "en": "Contact"
+                },
+                "source": "/contact",
+                "children": []
+            }]
+        }, {
+            "title": {
+                "en": "Platform"
+            },
+            "source": "/platform",
+            "children": []
+        },
+        {
 
-	"title": {
-	"en": "Partners"
-	},
-	"source": "/about/partners"
+            "title": {
+                "en": "Partners"
+            },
+            "source": "/about/partners"
 
-	}, {
-		"title": {
-			"en": "Projects"
-		},
+        }, {
+            "title": {
+                "en": "Projects"
+            },
 
-		"children": [{
-			"title": {
-				"en": "Projects"
-			},
-			"source": "/projects"
-		},{
-			"title": {
-				"en": "Selected Projects"
-			},
-			"source": "/projects/selected"
-		}
-	]
-	},
-	{
-		"title": {
-			"en": "Outreach"
-		},
-		"children": [
-			{
-			 "title": {
-				 "en": "Communication and Outreach"
-			 },
-			 "source": "/comms"
-		 },
-		 {
-			"title": {
-				"en": "Panel Discussions"
-			},
-			"source": "/comms/panel"
-		}
+            "children": [{
+                "title": {
+                    "en": "Projects"
+                },
+                "source": "/projects"
+            }, {
+                "title": {
+                    "en": "Selected Projects"
+                },
+                "source": "/projects/selected"
+            }]
+        },
+        {
+            "title": {
+                "en": "Outreach"
+            },
+            "children": [{
+                    "title": {
+                        "en": "Communication and Outreach"
+                    },
+                    "source": "/comms"
+                },
+                {
+                    "title": {
+                        "en": "Panel Discussions"
+                    },
+                    "source": "/comms/panel"
+                }
 
 
-		]
-	},{
-	 "title": {
-		 "en": "Platform"
-	 },
-	 "source": "/platform",
-	 "children": []
- },
-	 {
-		"title": {
-			"en": "FAQ"
-		},
-		"source": "/faq",
-		"children": []
-	}, {
-		"title": {
-			"en": "Contact"
-		},
-		"source": "/contact",
-		"children": []
-	}]
+            ]
+        }, {
+            "title": {
+                "en": "FAQ"
+            },
+            "source": "/faq",
+            "children": []
+        }
+    ]
 }

@@ -26,9 +26,9 @@ define(['text!./search-filter-schemas.html', 'app', 'lodash'], function(template
             ];
 
             $scope.referenceRecords = [
-                { name:'schema_s',identifier: 'bbiProfile'                 , title: 'Providers'                   , count: 0 },
+                { name:'schema_s',identifier: 'bbiProfile'                 , title: 'Providers of Assistance'                   , count: 0 },
                 { name:'schema_s',identifier: 'bbiOpportunity'             , title: 'Opportunities'               , count: 0 },
-                { name:'schema_s',identifier: 'bbiRequest'                 , title: 'Assistance Requests'       , count: 0 },
+                { name:'schema_s',identifier: 'bbiRequest'                 , title: 'Request for Assistances'       , count: 0 },
                 { name:'schema_s',identifier: 'bbiProposal'                , title: 'Proposals'       , count: 0 },
                 { name:'schema_s',identifier: 'bbiContact'                 , title: 'Contacts'                   , count: 0 },
                 { name:'schema_s',identifier: 'organization'               , title: 'Organizations'                 , count: 0 },

@@ -4,12 +4,7 @@
             "en": "Introduction to the Platform"
         },
 
-        "children": [{
-                "title": {
-                    "en": "Introduction"
-                },
-                "source": "intro"
-            },
+        "children": [
             {
                 "title": {
                     "en": "What is the Platform"

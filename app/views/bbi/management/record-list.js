@@ -39,9 +39,9 @@ define(['lodash',
             $scope.delLoader={};
             $scope.schemaMap = function(schema) {
                 var map = {
-                    'bbiProfile'   : 'BBI Provider Profiles' ,
-                    'bbiRequest' : 'Assistance Request(s)',
-                    'bbiOpportunity': 'Opportunity Offer(s)',
+                    'bbiProfile'   : 'Providers of  Assistance' ,
+                    'bbiRequest' : 'Requests for Assistance',
+                    'bbiOpportunity': 'Opportunities',
                     'organization'  : 'Organization(s)',
                     'bbiContact'    : 'Contact(s)'
                 };
