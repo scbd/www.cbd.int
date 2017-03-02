@@ -1,4 +1,4 @@
-define(['app','linqjs'], function(app,Enumerable) {
+define(['app','linqjs', 'providers/realm'], function(app,Enumerable) {
   'use strict';
   app.factory('guid', function() {
   	function S4() {
@@ -67,8 +67,8 @@ define(['app','linqjs'], function(app,Enumerable) {
   app.factory('underscore', [function() {
   return _;
 }]);
-  app.factory('editFormUtility', ["IStorage", "IWorkflows", "$q", "$route", function(storage, workflows, $q,  $route) {
-    var realm ='CHM-DEV';
+  app.factory('editFormUtility', ["IStorage", "IWorkflows", "$q", "$route", "realm", function(storage, workflows, $q, $route, realm) {
+    
     
     var schemasWorkflowTypes = {
       "aichiTarget"               : { name: "publishReferenceRecord", version: undefined },
