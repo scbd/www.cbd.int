@@ -4,7 +4,7 @@ define(['app', 'angular'], function (app, angular) { 'use strict';
 
         $get : ["$location", function($location) {
 
-            if($location.$$host!= "chm.cbd.int"){
+            if($location.$$host!= "www.cbd.int"){
                 return 'CHM-DEV';
             }
             return 'CHM';
