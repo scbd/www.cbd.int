@@ -22,22 +22,22 @@ define(['app', 'text!./crumbs.html'], function(app, templateHtml) { 'use strict'
                                     targetUrl: "/platform/bbi-request"
                                 }, {
                                     title: "Technical Assistance Providers",
-                                    description: "Browse the profiles of technical assistance providers registered with BBI",
+                                    description: "Browse the profiles of technical assistance providers registered with the Bio-Bridge Initiative",
                                     imageUrl: "/app/images/bbi/slider-insect.png",
                                     targetUrl: "/platform/bbi-profile"
                                 }, {
-                                    title: "Latest TSC Opportunities",
-                                    description: "View the list of new TSC opportunities currently available",
+                                    title: "Latest technical and scientific cooperation Opportunities",
+                                    description: "View the list of new technical and scientific cooperation opportunities currently available",
                                     imageUrl: "/app/images/bbi/slider-turtle.jpg",
                                     targetUrl: "/platform/bbi-opportunity"
                                 }, {
-                                    title: "TSC project proposals",
-                                    description: "Browse vetted TSC proposals awaiting funding support",
+                                    title: "Technical and scientific cooperation project proposals",
+                                    description: "Browse vetted technical and scientific cooperation proposals awaiting funding support",
                                     imageUrl: "/app/images/bbi/slider-hands.jpg",
                                     targetUrl: "/platform/bbi-proposals"
                                 }, {
-                                    title: "TSC Resources",
-                                    description: "Browse TSC tools, resources and initiatives",
+                                    title: "Technical and scientific cooperation Resources",
+                                    description: "Browse technical and scientific cooperation tools, resources and initiatives",
                                     imageUrl: "/app/images/bbi/slider-flower.jpg",
                                     targetUrl: "/platform/tools"
                                 }
