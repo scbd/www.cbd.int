@@ -2,9 +2,9 @@
 	<div class="col-xs-12"  style="height:315px;overflow-y:auto">
 <section ng-show="totalRecords('referenceRecords')">
 			<div class="col-xs-12"  >
-					<span ><strong>BBI Records <span class="bg-blue badge">{{totalRecords('referenceRecords')}}</span></strong>
+					<span ><strong>Bio-Bridge Records <span class="bg-blue badge">{{totalRecords('referenceRecords')}}</span></strong>
 					<p class="helpinfo hidden-xs" ><i class="fa fa-info-circle helpicon" ></i>
-							Include a number of relevant resources and information. They can be submitted by any registered user of the BBI Web Service or  CHM Clearing-House-Mechanisim (Parties, Non-Parties, governments, international organizations, indigenous and local communities, and relevant stakeholders).
+						Records related to the Bio-Bridge Initiative submitted by registered users (Parties, Non-Parties, governments, international organizations, indigenous and local communities, and relevant stakeholders).
 					</p>
 				</span>
 					<hr/ style="    border-color: #bbb!important;margin: 5px 0 10px 0;padding: 0;">
@@ -15,7 +15,7 @@
 				<div class="col-xs-12 col-md-3" ng-repeat="item in referenceRecords" ng-show="item.count">
 					<div class="checkbox text-nowrap">
 						<span  ng-switch on="item.identifier" >
-								<span ng-switch-when="bbiProfile" href="#" class="fa fa-info-circle color-white pointer" data-toggle="tooltip" data-html="true"  data-title="Providers are Organizations registered and approved by the BBI to offer technical assistance." data-container="body"></span>
+								<span ng-switch-when="bbiProfile" href="#" class="fa fa-info-circle color-white pointer" data-toggle="tooltip" data-html="true"  data-title="Providers are Organizations registered and approved by the Bio-Bridge Initiative to offer technical assistance." data-container="body"></span>
 								<span ng-switch-when="bbiRequest" href="#" class="fa fa-info-circle color-white pointer" data-toggle="tooltip" data-html="true"  data-title="" data-container="body"></span>
 								<span ng-switch-when="bbiContact" href="#" class="fa fa-info-circle color-white pointer" data-toggle="tooltip" data-html="true"  data-title="" data-container="body"></span>
 								<span ng-switch-when="bbiOpportunity" href="#" class="fa fa-info-circle color-white pointer" data-toggle="tooltip" data-html="true"  data-title="" data-container="body"></span>
@@ -38,7 +38,7 @@
 				<hr/ style="    border-color: #bbb!important;margin: 5px 0 10px 0;padding: 0;"><br>
 				<span ><strong>Outreach Records <span class="bg-blue badge">{{totalRecords('outreachRecords')}}</span></strong>
 				<p class="helpinfo hidden-xs" ><i class="fa fa-info-circle helpicon" ></i>
-						BBI related information from the SCBD related to communications and outreach.
+						Bio-Bridge related information from the SCBD related to communications and outreach.
 				</p>
 			</span>
 					<hr/ style="    border-color: #bbb!important;margin: 5px 0 10px 0;padding: 0;">

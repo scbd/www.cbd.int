@@ -25,28 +25,28 @@ define(['app', 'text!./slider.html','lodash','directives/bbi/ani-scroll'], funct
                   $scope.carouselData=  {
                         items :[
                           {
-                                        title: "About the BBI",
-                                        description: "Learn more about the purpose and characteristics of BBI",
+                                        title: "About the Bio-Bridge Initiative",
+                                        description: "Learn more about the purpose and main features of the Bio-Bridge Initiative",
                                         imageUrl: "/app/images/bbi/slider-bee.jpg",
                                         targetUrl: "/about"
                                     }, {
-                                        title: "BBI Operational Framework",
-                                        description: "Learn about BBI operational procedures, criteria and guidelines",
+                                        title: "The Bio-Bridge Operational Framework",
+                                        description: "Learn about the Bio-Bridge operational procedures, criteria and guidelines",
                                         imageUrl: "/app/images/bbi/slider-crab.jpg",
                                         targetUrl: "/about/framework"
                                     }, {
-                                        title: "BBI tools and services",
-                                        description: "Search TSC records on the Platform",
+                                        title: "The Bio-Bridge tools and services",
+                                        description: "Search technical and scientific cooperation records on the Platform",
                                         imageUrl: "/app/images/bbi/slider-flamingo.jpg",
                                         targetUrl: "/platform"
                                     }, {
-                                        title: "Participation with BBI",
-                                        description: "Learn more about ways in which one can participate in BBI",
+                                        title: "Participation in the Bio-Bridge Initiative",
+                                        description: "Learn more about ways in which one can participate in the Initiative",
                                         imageUrl: "/app/images/bbi/pic_3_opt.jpg",
                                         targetUrl: "/participation"
                                     }, {
-                                        title: "BBI projects",
-                                        description: "Learn more about TSC projects facilitated through BBI",
+                                        title: "The Bio-Bridge projects",
+                                        description: "Learn more about technical and scientific cooperation projects facilitated through the Initiative",
                                         imageUrl: "/app/images/bbi/pic_2_opt.jpg",
                                         targetUrl: "/projects"
                                     }
