@@ -491,8 +491,8 @@ app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter"
 							identifier: guid(),
 							schema   : "organization",
 							languages: ["en"]
-
-						}
+						},
+						libraries : [{"identifier":"cbdLibrary:chm"}]
 					});
 
 
