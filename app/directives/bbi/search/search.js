@@ -169,8 +169,9 @@ define(['text!./search.html',
 								$scope.buildQuery = function()
 								{
 										// NOT version_s:* remove non-public records from resultset
-										var q = 'NOT version_s:* AND realm_ss:' + realm.toLowerCase() + ' AND schema_s:* ';
+										var q = 'NOT version_s:* AND realm_ss:' + realm.toLowerCase() + ' AND (schema_s:pressRelease OR schema_s:notification OR schema_s:statement OR schema_s:announcement OR schema_s:meetings OR schema_s:sideEvent OR schema_s:bbiProfile OR schema_s:bbiOpportunity OR schema_s:bbiRequest OR schema_s:bbiProposal OR schema_s:bbiContact OR schema_s:organization OR schema_s:resource OR schema_s:capacityBuildingInitiative ) ';
 
+// console.log(getFormatedSubQuery('schema_s'));
 										var subQueries = _.compact([getFormatedSubQuery('schema_s'),
 																								getFormatedSubQuery('government_s'),
 																								getFormatedSubQuery('government_REL_ss'),
