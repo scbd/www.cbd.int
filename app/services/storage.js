@@ -614,7 +614,7 @@
         function getConfig(config, params, useCache){
             config = angular.copy(config) || {};
 
-            config.params = angular.extend(config.params||{}, params||{});
+            config.params = angular.extend(config.params||{}, params||{},{skipRealmHeader : true});
             config.cache  = useCache;
             return config;
         }
