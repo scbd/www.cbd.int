@@ -23,7 +23,7 @@
 					</div>
 					<!-- ng-if="termsModal[item.identifier].count" -->
 					<div class="col-xs-12" style="height:200px;overflow-y:auto" >
-						<div class="col-md-4" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis" ng-repeat="item in (filtered =(terms  | toArray|  filterByLetter:sLetter | filter:search | orderBy:'title.en'))" ng-show="item.count">
+						<div class="col-md-4" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis" ng-repeat="item in (filtered =(terms  | toArray|  filterByLetter:sLetter | filter:search | orderBy:'title.en'))" ng-show="item.init">
 							<!-- <div class="checkbox" style="margin-top:2px;margin-bottom:2px" >
 								<div ><label ng-disabled="!item.count"><input type="checkbox" ng-model="item.selected" ng-change="refresh(item)" ng-disabled="!termsModal[item.identifier].count"> {{item.title.en}} <span class="bg-blue badge">{{termsModal[item.identifier].count}}</span></label></div>
 							</div> -->
@@ -32,7 +32,7 @@
 
 											<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
 											<span class="cr"><i class="cr-icon fa fa-check"></i></span>
-												{{item.title | lstring }} <span class="bg-blue badge">{{item.count}}</span>
+												{{item.title | lstring }} <span class="bg-blue badge">{{item.init}}</span>
 									</label>
 							</div>
 						</div>

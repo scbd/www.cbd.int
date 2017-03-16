@@ -12,7 +12,7 @@ define(['text!./search.html',
 		"./search-filter-aichi",
 		"./search-filter-themes",
 		"./search-filter-dates",
-'ngInfiniteScroll'
+		'ngInfiniteScroll'
 	], function(template, app, $, _) { 'use strict';
 
 	app.directive('search', ['$http', 'realm', '$q', '$timeout', '$location', function ($http, realm, $q, $timeout, $location) {
@@ -23,8 +23,6 @@ define(['text!./search.html',
 	        scope: {optionsParam:'=options'},
 					require: '^search',
 			link : function($scope, $element, $attr, searchCtrl) {  // jshint ignore:line
-
-
 
 								$scope.options={
 										tabs:{
@@ -100,11 +98,8 @@ define(['text!./search.html',
 											if($scope.currentPage<$scope.pageCount){
 
 												if($scope.pages[$scope.currentPage] && !$scope.pages[$scope.currentPage+1]){
-
 														$scope.currentPage++;
 			  										searchCtrl.query($scope);
-
-
 												}
 												// else if($scope.pages[$scope.currentPage+1]){
 												// 	$scope.pages[$scope.currentPage+1].pagePromise.then(function(){
@@ -169,7 +164,11 @@ define(['text!./search.html',
 								$scope.buildQuery = function()
 								{
 										// NOT version_s:* remove non-public records from resultset
-										var q = 'NOT version_s:* AND realm_ss:' + realm.toLowerCase() + ' AND schema_s:* ';
+										var realmQ = '(realm_ss:chm OR realm_ss:abs)';
+										if(realm.toLowerCase() !=='chm')
+											realmQ = '(realm_ss:chm-dev OR realm_ss:abs-dev)';
+
+										var q = 'NOT version_s:* AND '+realmQ +' AND (schema_s:pressRelease OR schema_s:notification OR schema_s:statement OR schema_s:announcement OR schema_s:meetings OR schema_s:sideEvent OR schema_s:bbiProfile OR schema_s:bbiOpportunity OR schema_s:bbiRequest OR schema_s:bbiProposal OR schema_s:bbiContact OR schema_s:organization OR schema_s:resource OR schema_s:capacityBuildingInitiative ) ';
 
 										var subQueries = _.compact([getFormatedSubQuery('schema_s'),
 																								getFormatedSubQuery('government_s'),
@@ -184,18 +183,18 @@ define(['text!./search.html',
 										return q;
 								};//$scope.buildQuery
 
-								//======================================================================
-							  //hides filter if parent search result in no hits for this filter
-								//======================================================================
+
 								//======================================================================
 							  //hides filter if parent search result in no hits for this filter
 								//======================================================================
 								$scope.isFilterEmpty = function (filter) {
 											var total=0;
+
 										  _.each(filter,function (filterElement){
 
-															if (filterElement.count ) total+=filterElement.count;
+															if (filterElement.count) total+=filterElement.count;
 											});
+
 			              	if(total)
 												return total;
 											else
@@ -361,15 +360,12 @@ define(['text!./search.html',
 							$location.replace();
 						_.each($scope.subQueries,function(itemIdArr,schemaKey){
 
-
 											if(schemaKey!=='createdDate_s' && schemaKey!=='keywords')
 													$location.search(schemaKey, itemIdArr);
 
 											if(schemaKey==='keywords')
 													$location.search(schemaKey, keywords);
-
 						});
-
 				}//getFormatedSubQuery
 
 				//=======================================================================
@@ -407,8 +403,6 @@ define(['text!./search.html',
 							$scope.subQueries[item.name]=[];
 					  if($scope.subQueries[item.name].indexOf(item.identifier)<0) // if not already there add
 									$scope.subQueries[item.name].push(item.identifier);
-
-
 				}//addSubQuery
 
 				//=======================================================================
@@ -424,6 +418,7 @@ define(['text!./search.html',
 						 		filter=item;
 
 				}
+
 				//=======================================================================
 				//
 				//=======================================================================
@@ -436,7 +431,6 @@ define(['text!./search.html',
 										}
 
 						});
-
 				}
 				$scope.removeFilter=removeFilter;
 
@@ -503,14 +497,25 @@ define(['text!./search.html',
 				//
 				//=======================================================================
 				function insertCounts(items,termsx) {
+	// console.log('items',items);
 						if(termsx)
 								_.each(termsx,function (item) {
 										item.count = 0;
+
 								});//  _.each
 						if(items)
 								items.forEach(function (item) {
-										if(_.has(termsx, item.symbol))
+
+										if(_.has(termsx, item.symbol)){
 												termsx[item.symbol].count = item.count;
+												if(!termsx[item.symbol].init){
+														termsx[item.symbol].init = item.count;
+														item.init=item.count;
+												}
+												// else item.init = termsx[item.symbol].init;
+
+										}
+
 								});//items.forEach
 				}//insertCounts
 
