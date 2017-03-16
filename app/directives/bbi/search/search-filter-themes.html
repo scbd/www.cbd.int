@@ -17,31 +17,31 @@
 				</span>
 		</div>
 	</div>
-	<div class="col-xs-12" style="height:200px;overflow-y:auto" ng-if="search">
-		<div ng-repeat="item in termsArray | filter:{title:{en:search}} " class="checkbox"  ng-if="item.count">
+	<div class="col-xs-12" style="height:200px;overflow-y:auto" ng-if="search" >
+		<div ng-repeat="item in termsArray | filter:{title:{en:search}} " class="checkbox"   ng-if="item.init">
 			<div class="col-xs-12 checkbox text-nowrap"  style="margin: 0 0 0 0;">
 					<label style="font-size: 1em;">
 							<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
 							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
 							 {{item.title | lstring}}
-							<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;">{{item.count}}</span>
+							<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;"> {{item.init}}</span>
 					</label>
 			</div>
 	</div>
 	</div>
 
 	<div class="col-xs-12" style="height:200px;overflow-y:auto" ng-if="!search">
-		<div ng-repeat="item in terms "  ng-init="index1 = $index" ng-if="item.count">
+		<div ng-repeat="item in terms "  ng-init="index1 = $index"  ng-if="item.init">
 			<!-- <label><input type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)" > {{item.title | lstring}} <span class="bg-blue badge">{{termsModal[index1].count}}</span></label> -->
 			<div class="col-xs-12 checkbox text-nowrap"  style="margin: 0 0 0 0;">
 					<label style="font-size: 1em;">
 							<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
 							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
 							 {{item.title | lstring}}
-							<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;">{{item.count}}</span>
+							<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;"> {{item.init}}</span>
 					</label>
 			</div>
-			<div ng-repeat="item in (item.narrowerTerms )"   ng-init="index2 = $index" >
+			<div ng-repeat="item in (item.narrowerTerms )"   ng-init="index2 = $index" ng-if="item.init">
 				<div class="col-xs-12 checkbox text-nowrap"  style="margin: 0 0 0 0;">
 					  <i class="fa fa-arrow-down" aria-hidden="true"></i>
 					  <i class="fa fa-arrow-right" aria-hidden="true"></i>
@@ -49,10 +49,10 @@
 								<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
 								<span class="cr"><i class="cr-icon fa fa-check"></i></span>
 								 {{item.title | lstring}}
-								<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;">{{item.count}}</span>
+								<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;"> {{item.init}}</span>
 						</label>
 				</div>
-				<div  ng-repeat="item in item.narrowerTerms"   ng-init="index3 = $index" >
+				<div  ng-repeat="item in item.narrowerTerms"   ng-init="index3 = $index" ng-if="item.init">
 					<div class="col-xs-12 checkbox text-nowrap"  >
 						<i class="fa fa-arrow-down" aria-hidden="true"></i>
 						<i class="fa fa-arrow-right" aria-hidden="true"></i>
@@ -61,10 +61,10 @@
 									<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
 									<span class="cr"><i class="cr-icon fa fa-check"></i></span>
 									 {{item.title | lstring}}
-									<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;">{{item.count}}</span>
+									<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;"> {{item.init}}</span>
 							</label>
 					</div>
-					<div  ng-repeat="item in item.narrowerTerms"   ng-init="index4 = $index" >
+					<div  ng-repeat="item in item.narrowerTerms"   ng-init="index4 = $index" ng-if="item.init">
 						<div class="col-xs-12 checkbox text-nowrap"  >
 							<i class="fa fa-arrow-down" aria-hidden="true"></i>
 							<i class="fa fa-arrow-right" aria-hidden="true"></i>
@@ -74,10 +74,10 @@
 										<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
 										<span class="cr"><i class="cr-icon fa fa-check"></i></span>
 										 {{item.title | lstring}}
-										<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;">{{item.count}}</span>
+										<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;"> {{item.init}}</span>
 								</label>
 						</div>
-						<div  ng-repeat="item in item.narrowerTerms"   ng-init="index5 = $index" >
+						<div  ng-repeat="item in item.narrowerTerms"   ng-init="index5 = $index" ng-if="item.init">
 							<div class="col-xs-12 checkbox text-nowrap"  >
 								<i class="fa fa-arrow-down" aria-hidden="true"></i>
 								<i class="fa fa-arrow-right" aria-hidden="true"></i>
@@ -88,7 +88,7 @@
 											<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
 											<span class="cr"><i class="cr-icon fa fa-check"></i></span>
 											 {{item.title | lstring}}
-											<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;">{{item.count}}</span>
+											<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;"> {{item.init}}</span>
 									</label>
 							</div>
 							<div  ng-repeat="item in item.narrowerTerms" style="background-color:red;padding-left:20px" ng-init="index6 = $index" >
@@ -103,7 +103,7 @@
 												<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
 												<span class="cr"><i class="cr-icon fa fa-check"></i></span>
 												 {{item.title | lstring}}
-												<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;">{{item.count}}</span>
+												<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;"> {{item.init}}</span>
 										</label>
 								</div>
 							</div>

@@ -155,10 +155,9 @@ color:#001470;
             <div class="pointer" ng-click="showFilters=null" ng-show="showFilters" style="position:absolute;top:10px;right:10px;cursor:pointer;z-index:100;"><a href="#" style="color:#555;"><i class="fa fa-times-circle" aria-hidden="true"></i></a></div>
             <search-filter-schemas 	  ng-show="showFilters==='type'"	 	ng-model='schemas' 				facet='schema_s' 					  count='count'   ></search-filter-schemas>
             <search-filter-countries 	ng-show="showFilters==='country'" ng-model='governments' 		facet='government_s' 			  count='count'   ></search-filter-countries>
-            <search-filter-regions 		ng-show="showFilters==='region'"    ng-model='regions' 				facet='government_REL_ss'		count='count'   ></search-filter-regions>
-            <search-filter-aichi 			ng-show="showFilters==='aichi'" 		ng-model='aichiTargets' 	facet='aichiTarget_ss' 			count='count'   ></search-filter-aichi>
+            <search-filter-regions 		ng-show="showFilters==='region'"  ng-model='regions' 				facet='government_REL_ss'		count='count'   ></search-filter-regions>
+            <search-filter-aichi 			ng-show="showFilters==='aichi'"   ng-model='aichiTargets' 	facet='aichiTarget_ss' 			count='count'   ></search-filter-aichi>
             <search-filter-themes 		ng-show="showFilters==='subject'" ng-model='thematicAreas'	facet='thematicArea_REL_ss' count='count'   ></search-filter-themes>
-
             <search-filter-dates 			ng-show="showFilters==='dateFilter'"  	query='queryDate'  ></search-filter-dates>
             <!-- ng-hide="isFilterEmpty(schemas);"
             ng-hide="isFilterEmpty(governments);"

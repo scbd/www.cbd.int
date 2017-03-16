@@ -192,21 +192,6 @@
                 </div>
             </div>
 
-            <div ng-show="document.title">
-                <label class="view">Title</label>
-                <div class="km-value">
-                    <span >
-                        {{document.title |lstring}}<br/>
-                    </span>
-                </div>
-            </div>
-            <div ng-show="document.problem">
-              <label class="view">Problem</label>
-              <div class="km-value">
-                {{document.problem |lstring}}
-              </div>
-            </div>
-
             <div ng-show="document.assistanceTypes">
                 <label class="view">Type of assistance requested </label>
                 <div class="km-value">
@@ -219,7 +204,7 @@
               <label class="view">{{type |term:locale}}</label>
               <span>Describe how {{type |term:locale}} will facilitate TSC while addressing your problem.</span>
               <div class="km-value">
-                      {{document.addressedPriorities| lstring:locale}}
+                      {{document.typesDetails[type.identifier]| lstring:locale}}
               </div>
             </div>
             <div ng-show="document.addressedPriorities">

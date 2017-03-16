@@ -85,14 +85,18 @@ define(['text!./search-filter-themes.html', 'app', 'lodash','angular'], function
 														$scope.termsArray = _.values(termsMap);
 														_.each($scope.termsArray,function(term){
                                 term.name=$scope.facet;
+
                             });
 														termsMap=searchCtrl.updateTerms(termsMap,$scope.items,$scope.facet);
                             searchCtrl.buildChildQuery(termsMap,$scope.items,$scope.facet);
+
+
 												});
 
                     }else{
 														termsMap = searchCtrl.updateTerms(termsMap,$scope.items,$scope.facet);
 														searchCtrl.buildChildQuery(termsMap,$scope.items,$scope.facet);
+
                     }
 
             }//buildTermsAndQuery()
@@ -121,6 +125,7 @@ define(['text!./search-filter-themes.html', 'app', 'lodash','angular'], function
                     term.indeterminate = !term.selected && (term.indeterminateCounterA + term.indeterminateCounterB) > 0;
                     setBroaders(term.broaderTerms, selected);
                 });
+
             }//setBroaders(broaderTerms, selected)
 
 						//=======================================================================
@@ -146,7 +151,10 @@ define(['text!./search-filter-themes.html', 'app', 'lodash','angular'], function
                     item.selected = false;
                     item.indeterminateCounterA = 0;
                     item.indeterminateCounterB = 0;
+
                     collection[item.identifier] = item;
+
+
                     if(item.narrowerTerms)
                         flatten(item.narrowerTerms, collection);
                 });
