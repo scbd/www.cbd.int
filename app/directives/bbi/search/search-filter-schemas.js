@@ -16,12 +16,16 @@ define(['text!./search-filter-schemas.html', 'app', 'lodash'], function(template
             $scope.total=0;
             $scope.terms = [];
             $scope.filters=searchCtrl.filters;
+
             $scope.outreachRecords = [
+                { name:'schema_s', identifier: 'new', title: 'New'  , count: 0  },              
                 { name:'schema_s', identifier: 'notification', title: 'Notifications'  , count: 0  },
+                { name:'schema_s',identifier: 'news', title: 'News' , count: 0  },
                 { name:'schema_s',identifier: 'pressRelease', title: 'Press Releases' , count: 0  },
                 { name:'schema_s',identifier: 'statement'   , title: 'Statements'     , count: 0  },
                 { name:'schema_s',identifier: 'announcement', title: 'Announcements'  , count: 0  },
-                { name:'schema_s',identifier: 'meetings'       , title: 'Events'         , count: 0  },
+                { name:'schema_s',identifier: 'meetings'       , title: 'Meetings'         , count: 0  },
+                { name:'schema_s',identifier: 'event'       , title: 'Events'         , count: 0  },
                 { name:'schema_s',identifier: 'sideEvent'       , title: 'Side-events'         , count: 0  },
             ];
 
