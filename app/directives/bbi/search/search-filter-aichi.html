@@ -17,7 +17,7 @@
 				</strong>
 					<hr/ style="    border-color: #bbb!important;margin: 5px 0 0px 0;padding: 0;">
 				</span>
-				<div ng-repeat="item in itemGoal.narrowerTerms" ng-show="item.count">
+				<div ng-repeat="item in itemGoal.narrowerTerms" ng-show="item.init">
 					<div class="col-xs-12 col-md-2 ">
 						<div class="checkbox text-nowrap"  >
 								<span href="#" class="fa fa-info-circle color-white pointer" data-toggle="tooltip" data-html="true"  data-title="{{item.title | lstring }}" data-container="body"></span>
@@ -25,7 +25,7 @@
 										<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
 										<span class="cr"><i class="cr-icon fa fa-check"></i></span>
 										 <img style="height: 20px;  width: 20px; margin-bottom:5px; " ng-src="https://www.cbd.int/images/aichi/48/abt-{{item.identifier.substring(13)}}-48.png" >
-										<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;">{{item.count}}</span>
+										<span class="bg-blue badge" style="line-height:14px;margin-bottom:5px;">{{item.init}}</span>
 								</label>
 						</div>
 

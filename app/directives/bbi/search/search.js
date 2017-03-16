@@ -12,10 +12,10 @@ define(['text!./search.html',
 		"./search-filter-aichi",
 		"./search-filter-themes",
 		"./search-filter-dates",
-'ngInfiniteScroll'
+		'ngInfiniteScroll'
 	], function(template, app, $, _) { 'use strict';
 
-	app.directive('search', ['$http', 'realm', '$q', '$timeout', '$location', function ($http, realm, $q, $timeout, $location) {
+	app.directive('search', ['$http', 'realm', '$q', '$timeout', '$location','locale', function ($http, realm, $q, $timeout, $location,locale) {
 	    return {
 	        restrict: 'E',
 	        template: template,
@@ -23,8 +23,6 @@ define(['text!./search.html',
 	        scope: {optionsParam:'=options'},
 					require: '^search',
 			link : function($scope, $element, $attr, searchCtrl) {  // jshint ignore:line
-
-
 
 								$scope.options={
 										tabs:{
@@ -38,7 +36,7 @@ define(['text!./search.html',
 										filtersLabels:true,
 										queryString:true,
 										xs:false,
-								}
+								};
 
 								if($scope.optionsParam)
 									_.each($scope.optionsParam,function(value,property){
@@ -100,11 +98,8 @@ define(['text!./search.html',
 											if($scope.currentPage<$scope.pageCount){
 
 												if($scope.pages[$scope.currentPage] && !$scope.pages[$scope.currentPage+1]){
-
 														$scope.currentPage++;
 			  										searchCtrl.query($scope);
-
-
 												}
 												// else if($scope.pages[$scope.currentPage+1]){
 												// 	$scope.pages[$scope.currentPage+1].pagePromise.then(function(){
@@ -169,7 +164,11 @@ define(['text!./search.html',
 								$scope.buildQuery = function()
 								{
 										// NOT version_s:* remove non-public records from resultset
-										var q = 'NOT version_s:* AND realm_ss:' + realm.toLowerCase() + ' AND schema_s:* ';
+										var realmQ = '(realm_ss:chm OR realm_ss:abs)';
+										if(realm.toLowerCase() !=='chm')
+											realmQ = '(realm_ss:chm-dev OR realm_ss:abs-dev)';
+
+										var q = 'NOT version_s:* AND '+realmQ +' ';
 
 										var subQueries = _.compact([getFormatedSubQuery('schema_s'),
 																								getFormatedSubQuery('government_s'),
@@ -181,21 +180,23 @@ define(['text!./search.html',
 
 										if(subQueries.length)
 											q += " AND " + subQueries.join(" AND ");
+
+										if(!$scope.subQueries['schema_s'] || !$scope.subQueries['schema_s'].length)q += " AND " +  emptySchema();
 										return q;
 								};//$scope.buildQuery
 
-								//======================================================================
-							  //hides filter if parent search result in no hits for this filter
-								//======================================================================
+
 								//======================================================================
 							  //hides filter if parent search result in no hits for this filter
 								//======================================================================
 								$scope.isFilterEmpty = function (filter) {
 											var total=0;
+
 										  _.each(filter,function (filterElement){
 
-															if (filterElement.count ) total+=filterElement.count;
+															if (filterElement.count) total++;
 											});
+
 			              	if(total)
 												return total;
 											else
@@ -240,6 +241,8 @@ define(['text!./search.html',
 										if($scope.subQueries[name] && _.isArray($scope.subQueries[name]) && $scope.subQueries[name].length){
 												if(name==='keywords' && $scope.subQueries[name][0])
 															subQ +=  $scope.subQueries[name].join(" OR ");
+												else if(name==='schema_s' )
+														  subQ += buildSchemaQuery($scope.subQueries[name]);
 												else
 															subQ +=  name+':'+$scope.subQueries[name].join(" OR "+name+":");
 												subQ = '('+subQ+')';
@@ -248,6 +251,73 @@ define(['text!./search.html',
 										return subQ;
 								}//function getFormatedSubQuery (name)
 
+								//=======================================================================
+								//
+								//=======================================================================
+								function emptySchema() {
+
+										var emptySchemaString = '(schema_s:pressRelease  AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
+										emptySchemaString += '(schema_s:news AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
+										emptySchemaString += '(schema_s:announcement AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
+										emptySchemaString += '(schema_s:event  AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
+										//
+										emptySchemaString += '(schema_s:notification  AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
+										emptySchemaString += '(schema_s:statement  AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
+										emptySchemaString += '(schema_s:announcement  AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
+										emptySchemaString += '(schema_s:meetings AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
+  									emptySchemaString += '(schema_s:sideEvent  AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
+
+										emptySchemaString += 'schema_s:bbiProfile OR ';
+										emptySchemaString += 'schema_s:bbiOpportunity OR ';
+										emptySchemaString += 'schema_s:bbiRequest OR ';
+										emptySchemaString += 'schema_s:bbiProposal OR ';
+										emptySchemaString += 'schema_s:bbiContact OR ';
+										emptySchemaString += 'schema_s:organization OR ';
+										emptySchemaString += '(schema_s:resource  AND absSubjects_ss:16CEAEC3B006443A903284CA65C73C29) OR ';
+										emptySchemaString += '(schema_s:capacityBuildingInitiative  AND categories_ss:9D6E1BC7-4656-46A7-B1BC-F733017B5F9B) OR ';
+										emptySchemaString =emptySchemaString .slice(0,-4);
+										emptySchemaString = '('+emptySchemaString+')';
+										return emptySchemaString ;
+								}
+								//=======================================================================
+								//
+								//=======================================================================
+								function buildSchemaQuery (subQueriesArr) {
+
+											var returnSubQ='';
+											var textSearch = ' AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")';
+											for(var i = 0; i<subQueriesArr.length;i++ ){
+
+											   if(subQueriesArr[i]==='new')
+												 {
+													 	returnSubQ+= '(schema_s:'+subQueriesArr[i]+textSearch+') OR ';
+												 } else if(subQueriesArr[i]==='notification'){
+													 	returnSubQ+= '(schema_s:(notification)'+textSearch+') OR ';
+												 }else if(subQueriesArr[i]==='statement'){
+													 	returnSubQ+= '(schema_s:(statement)'+textSearch+') OR ';
+												 }  else if(subQueriesArr[i]==='news'){
+													 	returnSubQ+= '(schema_s:(news pressRelease announcement)'+textSearch+') OR ';
+												 }	else if(subQueriesArr[i]==='event' ){
+												 		 	returnSubQ+= '(schema_s:(event)'+textSearch+') OR ';
+												 }else if(subQueriesArr[i]==='sideEvent' ){
+												 		 	returnSubQ+= '(schema_s:(sideEvent)'+textSearch+') OR ';
+												 }else if(subQueriesArr[i]==='meeting' ){
+												 		 	returnSubQ+= '(schema_s:(meeting)'+textSearch+') OR ';
+												 }else if(subQueriesArr[i]==='pressRelease' ){
+												 		 	returnSubQ+= '(schema_s:(pressRelease)'+textSearch+') OR ';
+												 }else if(subQueriesArr[i]==='announcement' ){
+												 		 	returnSubQ+= '(schema_s:(announcement)'+textSearch+') OR ';
+												 }else if(subQueriesArr[i]==='resourse' ){
+												 		 	returnSubQ+= '(schema_s:(resourse) AND absSubjects_ss:16CEAEC3B006443A903284CA65C73C29) OR ';
+												 }else if(subQueriesArr[i]==='capacityBuildingInitiative' ){
+												 		 	returnSubQ+= '(schema_s:(capacityBuildingInitiative) AND (absSubjects_ss:16CEAEC3B006443A903284CA65C73C29 OR categories_ss:9D6E1BC7-4656-46A7-B1BC-F733017B5F9B)) OR ';
+												 }
+												 else returnSubQ+= '(schema_s:'+subQueriesArr[i]+') OR ';
+											}
+											returnSubQ=returnSubQ.slice(0,-4);
+											return returnSubQ;
+
+								}//function getFormatedSubQuery (name)
 	    }, //link
 
 			//=======================================================================
@@ -304,16 +374,11 @@ define(['text!./search.html',
 									$scope.rows  = data.response.docs.length;
 									$scope.pageCount = Math.ceil(data.response.numFound / $scope.itemsPerPage);
 
-
 									$scope.schemas       = $scope.readFacets2(data.facet_counts.facet_fields.schema_s);
 									$scope.governments   = $scope.readFacets2(data.facet_counts.facet_fields.government_s);
 									$scope.regions       = $scope.readFacets2(data.facet_counts.facet_fields.government_REL_ss);
 									$scope.aichiTargets  = $scope.readFacets2(data.facet_counts.facet_fields.aichiTarget_ss);
 									$scope.thematicAreas = $scope.readFacets2(data.facet_counts.facet_fields.thematicArea_REL_ss);
-
-
-
-
 
 						}).catch(function(error) {
 								console.log('ERROR: ' + error);
@@ -361,15 +426,12 @@ define(['text!./search.html',
 							$location.replace();
 						_.each($scope.subQueries,function(itemIdArr,schemaKey){
 
-
 											if(schemaKey!=='createdDate_s' && schemaKey!=='keywords')
 													$location.search(schemaKey, itemIdArr);
 
 											if(schemaKey==='keywords')
 													$location.search(schemaKey, keywords);
-
 						});
-
 				}//getFormatedSubQuery
 
 				//=======================================================================
@@ -407,8 +469,6 @@ define(['text!./search.html',
 							$scope.subQueries[item.name]=[];
 					  if($scope.subQueries[item.name].indexOf(item.identifier)<0) // if not already there add
 									$scope.subQueries[item.name].push(item.identifier);
-
-
 				}//addSubQuery
 
 				//=======================================================================
@@ -424,6 +484,7 @@ define(['text!./search.html',
 						 		filter=item;
 
 				}
+
 				//=======================================================================
 				//
 				//=======================================================================
@@ -436,7 +497,6 @@ define(['text!./search.html',
 										}
 
 						});
-
 				}
 				$scope.removeFilter=removeFilter;
 
@@ -503,14 +563,25 @@ define(['text!./search.html',
 				//
 				//=======================================================================
 				function insertCounts(items,termsx) {
+	// console.log('items',items);
 						if(termsx)
 								_.each(termsx,function (item) {
 										item.count = 0;
+
 								});//  _.each
 						if(items)
 								items.forEach(function (item) {
-										if(_.has(termsx, item.symbol))
+
+										if(_.has(termsx, item.symbol)){
 												termsx[item.symbol].count = item.count;
+												if(!termsx[item.symbol].init){
+														termsx[item.symbol].init = item.count;
+														item.init=item.count;
+												}
+												// else item.init = termsx[item.symbol].init;
+
+										}
+
 								});//items.forEach
 				}//insertCounts
 

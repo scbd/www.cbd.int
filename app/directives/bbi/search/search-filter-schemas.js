@@ -16,13 +16,17 @@ define(['text!./search-filter-schemas.html', 'app', 'lodash'], function(template
             $scope.total=0;
             $scope.terms = [];
             $scope.filters=searchCtrl.filters;
+
             $scope.outreachRecords = [
-                { name:'schema_s', identifier: 'notification', title: 'Notifications'  , count: 0 },
-                { name:'schema_s',identifier: 'pressRelease', title: 'Press Releases' , count: 0 },
-                { name:'schema_s',identifier: 'statement'   , title: 'Statements'     , count: 0 },
-                { name:'schema_s',identifier: 'announcement', title: 'Announcements'  , count: 0 },
-                { name:'schema_s',identifier: 'meetings'       , title: 'Events'         , count: 0 },
-                { name:'schema_s',identifier: 'sideEvent'       , title: 'Side-events'         , count: 0 },
+                { name:'schema_s', identifier: 'new', title: 'New'  , count: 0  },              
+                { name:'schema_s', identifier: 'notification', title: 'Notifications'  , count: 0  },
+                { name:'schema_s',identifier: 'news', title: 'News' , count: 0  },
+                { name:'schema_s',identifier: 'pressRelease', title: 'Press Releases' , count: 0  },
+                { name:'schema_s',identifier: 'statement'   , title: 'Statements'     , count: 0  },
+                { name:'schema_s',identifier: 'announcement', title: 'Announcements'  , count: 0  },
+                { name:'schema_s',identifier: 'meetings'       , title: 'Meetings'         , count: 0  },
+                { name:'schema_s',identifier: 'event'       , title: 'Events'         , count: 0  },
+                { name:'schema_s',identifier: 'sideEvent'       , title: 'Side-events'         , count: 0  },
             ];
 
             $scope.referenceRecords = [
@@ -111,7 +115,9 @@ define(['text!./search-filter-schemas.html', 'app', 'lodash'], function(template
 
               var total=0;
               _.each($scope[type],function (filterElement){
-                      if (filterElement.count)  total+=filterElement.count;
+
+                      if(!filterElement.init)  filterElement.init=filterElement.count;
+                      if (filterElement.init)  total+=filterElement.init;
               });
               if(total)
                 return total;
@@ -124,7 +130,9 @@ define(['text!./search-filter-schemas.html', 'app', 'lodash'], function(template
             function buildTermsAndQuery() {
 
                   $scope.terms = _.union($scope.outreachRecords, $scope.referenceRecords, $scope.copRecords, $scope.meetingRecords, $scope.nationalRecords,$scope.cbdManagedRecords );
+
                   $scope.terms = searchCtrl.updateTerms($scope.terms,$scope.items,$scope.facet);
+
                   searchCtrl.buildChildQuery($scope.terms,$scope.items,$scope.facet);
             }//buildTermsAndQuery()
 

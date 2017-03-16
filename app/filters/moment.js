@@ -8,6 +8,14 @@ define(['app', 'moment-timezone'], function(app, moment) { 'use strict';
                           : moment(datetime);
         };
     }]);
+    app.filter('momentUtc', [function() {
+
+        return function(datetime, method, arg1, arg2, arg3) {
+
+            return method ? moment.utc(datetime)[method](arg1, arg2, arg3)
+                          : moment.utc(datetime);
+        };
+    }]);
     //============================================================
     //
     //============================================================
