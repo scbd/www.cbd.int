@@ -39,7 +39,7 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','direct
 				//
 				//============================================================
 				function getResources () {
-								var q = 'schema_s:resource';
+								var q = 'schema_s:resource AND absSubjects_ss:16CEAEC3B006443A903284CA65C73C29';
 								query('resource',q);
 				}
 
