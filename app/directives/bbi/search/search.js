@@ -256,17 +256,8 @@ define(['text!./search.html',
 								//=======================================================================
 								function emptySchema() {
 
-										var emptySchemaString = '(schema_s:pressRelease  AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
-										emptySchemaString += '(schema_s:news AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
-										emptySchemaString += '(schema_s:announcement AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
-										emptySchemaString += '(schema_s:event  AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
-										//
-										emptySchemaString += '(schema_s:notification  AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
-										emptySchemaString += '(schema_s:statement  AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
-										emptySchemaString += '(schema_s:announcement  AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
-										emptySchemaString += '(schema_s:meetings AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
-  									emptySchemaString += '(schema_s:sideEvent  AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
-
+										var emptySchemaString = '';
+  									emptySchemaString += '(schema_s:(sideEvent meetings announcement statement notification event announcement news pressRelease)  AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
 										emptySchemaString += 'schema_s:bbiProfile OR ';
 										emptySchemaString += 'schema_s:bbiOpportunity OR ';
 										emptySchemaString += 'schema_s:bbiRequest OR ';
