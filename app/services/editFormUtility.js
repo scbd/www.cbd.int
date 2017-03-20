@@ -106,7 +106,7 @@ define(['app','linqjs', 'providers/realm'], function(app,Enumerable) {
         var config ={};
 
         if(expectedSchema==="organization")
-            config.params = {skipRealmHeader : true};
+            config.headers = {realm : undefined};
         return storage.drafts.get(identifier, {
           info: ""
         },config).then(

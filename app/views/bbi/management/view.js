@@ -34,7 +34,7 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/crumbs', 'dir
             var identifier = $route.current.params.id;
             var promise = null;
             var config ={};
-            config.params = {skipRealmHeader : true};
+            config.headers = {realm : undefined};
 
             if (identifier && _ctrl.schema!=='bbiRequest'){
                 promise = storage.documents.get(identifier,{ cache : false},config);
