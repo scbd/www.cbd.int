@@ -258,12 +258,7 @@ define(['text!./search.html',
 
 										var emptySchemaString = '';
   									emptySchemaString += '(schema_s:(sideEvent meetings announcement statement notification event announcement news pressRelease)  AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")) OR ';
-										emptySchemaString += 'schema_s:bbiProfile OR ';
-										emptySchemaString += 'schema_s:bbiOpportunity OR ';
-										emptySchemaString += 'schema_s:bbiRequest OR ';
-										emptySchemaString += 'schema_s:bbiProposal OR ';
-										emptySchemaString += 'schema_s:bbiContact OR ';
-										emptySchemaString += 'schema_s:organization OR ';
+										emptySchemaString += 'schema_s:(organization bbiContact bbiProposal bbiRequest bbiOpportunity bbiProfile)  OR ';
 										emptySchemaString += '(schema_s:resource  AND absSubjects_ss:16CEAEC3B006443A903284CA65C73C29) OR ';
 										emptySchemaString += '(schema_s:capacityBuildingInitiative  AND categories_ss:9D6E1BC7-4656-46A7-B1BC-F733017B5F9B) OR ';
 										emptySchemaString =emptySchemaString .slice(0,-4);
