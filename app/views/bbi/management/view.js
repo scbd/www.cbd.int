@@ -32,10 +32,12 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/crumbs', 'dir
             $scope.loading = true;
             _ctrl.locale=locale;
             var identifier = $route.current.params.id;
-
             var promise = null;
+            var config ={};
+            config.params = {skipRealmHeader : true};
+
             if (identifier && _ctrl.schema!=='bbiRequest'){
-                promise = storage.documents.get(identifier);
+                promise = storage.documents.get(identifier,{ cache : false},config);
                 promise.then(
                     function(doc) {
                         _ctrl.document = doc.data;
