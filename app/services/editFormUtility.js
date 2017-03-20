@@ -68,8 +68,8 @@ define(['app','linqjs', 'providers/realm'], function(app,Enumerable) {
   return _;
 }]);
   app.factory('editFormUtility', ["IStorage", "IWorkflows", "$q", "$route", "realm", function(storage, workflows, $q, $route, realm) {
-    
-    
+
+
     var schemasWorkflowTypes = {
       "aichiTarget"               : { name: "publishReferenceRecord", version: undefined },
       "contact"                   : { name: "publishReferenceRecord", version: undefined },
@@ -103,10 +103,13 @@ define(['app','linqjs', 'providers/realm'], function(app,Enumerable) {
       //
       //==================================
       load: function(identifier, expectedSchema) {
+        var config ={};
 
+        if(expectedSchema==="organization")
+            config.params = {skipRealmHeader : true};
         return storage.drafts.get(identifier, {
           info: ""
-        }).then(
+        },config).then(
           function(success) {
             return success;
           },
@@ -114,7 +117,7 @@ define(['app','linqjs', 'providers/realm'], function(app,Enumerable) {
             if (error.status == 404)
               return storage.documents.get(identifier, {
                 info: ""
-              });
+              },config);
             throw error;
           }).then(
           function(success) {
@@ -144,8 +147,8 @@ define(['app','linqjs', 'providers/realm'], function(app,Enumerable) {
                   };
 
                 var documentPromise = hasDraft ?
-                  storage.drafts.get(identifier) :
-                  storage.documents.get(identifier);
+                  storage.drafts.get(identifier,{cache:false},config) :
+                  storage.documents.get(identifier,{cache:false},config);
 
                 return documentPromise.then(
                   function(success) {
