@@ -298,8 +298,8 @@ define(['text!./search.html',
 												 		 	returnSubQ+= '(schema_s:(pressRelease)'+textSearch+') OR ';
 												 }else if(subQueriesArr[i]==='announcement' ){
 												 		 	returnSubQ+= '(schema_s:(announcement)'+textSearch+') OR ';
-												 }else if(subQueriesArr[i]==='resourse' ){
-												 		 	returnSubQ+= '(schema_s:(resourse) AND absSubjects_ss:16CEAEC3B006443A903284CA65C73C29) OR ';
+												 }else if(subQueriesArr[i]==='resource' ){
+												 		 	returnSubQ+= '(schema_s:(resource) AND absSubjects_ss:16CEAEC3B006443A903284CA65C73C29) OR ';
 												 }else if(subQueriesArr[i]==='capacityBuildingInitiative' ){
 												 		 	returnSubQ+= '(schema_s:(capacityBuildingInitiative) AND (absSubjects_ss:16CEAEC3B006443A903284CA65C73C29 OR categories_ss:9D6E1BC7-4656-46A7-B1BC-F733017B5F9B)) OR ';
 												 }
