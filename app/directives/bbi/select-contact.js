@@ -174,7 +174,7 @@ function(template,app,_) {
                             // console.log('trying to abort pending request...');
                             queryCanceler.resolve(true);
                         }
-                        var fields = 'schema_s,thematicArea_ss,logo_s,identifier_s,aichiTarget_ss,relevantDocuments_ss, _state_s,revision:_revision_i, name:title_s, acronym:acronym_s, organizationType_s,' +
+                        var fields = 'realm_ss,schema_s,thematicArea_ss,logo_s,identifier_s,aichiTarget_ss,relevantDocuments_ss, _state_s,revision:_revision_i, name:title_s, acronym:acronym_s, organizationType_s,' +
                                          'address_EN_t, city_EN_t, state_EN_t, postalCode_EN_t, country_s, phones:phones_ss, faxes:faxes_ss, emails:emails_ss, websites:websites_ss' +
                                          ',designation:designation_t,organization:organization_t,organizationAcronym:organizationAcronym_t,department:department_t'
 

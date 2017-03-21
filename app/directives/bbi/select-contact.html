@@ -124,20 +124,17 @@
                           <edit-organization></edit-organization>
                     </div>-->
                     <div ng-show="showExisting"  class="row clearfix" >
-
-
                         <div class="col-xs-12 " infinite-scroll='loadExisting()' infinite-scroll-immediate-check='true'
                             infinite-scroll-distance='1' infinite-scroll-disabled='loadingDocuments'
                             infinite-scroll-container='"#scrollableContent"' >
 
                             <div class="well" ng-repeat="contact in existingContacts | filter:isSelected | orderBy:'name.en' track by $index">
 
-
                                 <div class="col-xs-1">
                                     <a ng-if="contact.schema_s==='organization'  "  ng-disabled="!contact.aichiTarget_ss || !contact.thematicArea_ss" ng-class="{'btn-danger':(!contact.aichiTarget_ss || !contact.thematicArea_ss)}" translation-url  class="btn btn-xs btn-default" href="#" ng-click="(!contact.aichiTarget_ss || !contact.thematicArea_ss) || selectContact(contact)"><i class="fa fa-thumbs-o-up"></i></a>
                                     <a ng-if="contact.schema_s==='bbiContact'  " translation-url  class="btn btn-xs btn-default" href="#" ng-click="selectContact(contact)"><i class="fa fa-thumbs-o-up"></i></a>
                                     <a  translation-url  class="btn btn-xs btn-default pull-right" ng-href="platform/submit/{{contact.schema_s}}/{{contact.identifier_s}}/view" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
-                                    <a  translation-url  class="btn btn-xs btn-default pull-right" ng-href="platform/submit/{{contact.schema_s}}/{{contact.identifier_s}}/" target="_blank"><i class="fa fa-edit"></i></a>
+                                    <a  translation-url  class="btn btn-xs btn-default pull-right" ng-href="platform/submit/{{contact.schema_s}}/{{contact.identifier_s}}/" target="_blank" ng-if="contact.realm_ss.indexOf('CHM')>-1 || contact.realm_ss.indexOf('CHM-DEV')>-1"><i class="fa fa-edit"></i></a>
                                 </div>
                                 <div class="col-xs-10">
 
