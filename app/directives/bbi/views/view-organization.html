@@ -13,7 +13,7 @@
        </h4>
             </div>
             <div class="col-xs-2">
-              <h4 ng-if="isReview()"><span class="pull-right"><a class="btn btn-xs btn-default" href="platform/submit/organization/{{document.header.identifier}}" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <span ng-if="!isAdmin()">Suggest an</span> Edit</a></span></h4>
+              <h4 ng-if="isReview()"><span class="pull-right"><a class="btn btn-xs btn-default" href="platform/submit/organization/{{document.header.identifier}}" ng-if="(header.Realm!=='abs' && header.Realm!=='abs-dev')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <span ng-if="!isAdmin() && (header.Realm!=='abs' || header.Realm!=='abs-dev')">Suggest an</span> Edit {{header.Realm}}</a></span></h4>
             </div>
         </div>
     </div>

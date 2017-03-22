@@ -32,13 +32,20 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/crumbs', 'dir
             $scope.loading = true;
             _ctrl.locale=locale;
             var identifier = $route.current.params.id;
-
             var promise = null;
+            var config ={};
+            var header={};
+            config.headers = {realm : undefined};
+
             if (identifier && _ctrl.schema!=='bbiRequest'){
-                promise = storage.documents.get(identifier);
+                promise = storage.documents.get(identifier,{ cache : false},config);
                 promise.then(
                     function(doc) {
                         _ctrl.document = doc.data;
+                        var header = storage.documents.get(identifier,{ info:'',cache : false},config);
+                        header.then(function(h){
+                          _ctrl.header = h.data;
+                        });
                         $scope.loading = false;
                     }).then(null,
                     function(err) {
