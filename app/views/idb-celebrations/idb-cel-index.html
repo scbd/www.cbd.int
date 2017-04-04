@@ -1,0 +1,131 @@
+<style>
+    .banner {
+        height: 120px;
+        background: #ab42a6;
+        background: -moz-linear-gradient(top, #ab42a6 0%, #730094 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ab42a6), color-stop(100%, #730094));
+        background: -webkit-linear-gradient(top, #ab42a6 0%, #730094 100%);
+        background: -o-linear-gradient(top, #ab42a6 0%, #730094 100%);
+        background: -ms-linear-gradient(top, #ab42a6 0%, #730094 100%);
+        background: linear-gradient(to bottom, #ab42a6 0%, #730094 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ab42a6', endColorstr='#730094', GradientType=0);
+        background: url("/app/images/idb-celebrations/banner-0.jpg");
+        text-align: left;
+    }
+
+    .banner .main-title {
+        background-color: rgba(0, 0, 0, 0.4);
+        height: 100%;
+        margin-right: 25px;
+        text-align: center;
+    }
+
+    .banner .main-title {
+        margin: 10px 0 0;
+        font-size: 25px;
+        color: #fff;
+        font-weight: normal;
+        width: 220px;
+        padding-top: 1.8em;
+    }
+
+    .banner .main-title:hover {
+        background-color: #009b48;
+        cursor: pointer;
+    }
+
+    .title-national-status {
+        background: url("/app/images/aichi-targets/target-icon.png") no-repeat;
+        padding-left: 2em;
+    }
+
+    @media (min-width: 1200px) {
+        .container {
+            width: 970px;
+            !important;
+        }
+    }
+
+    .simple-border {
+        border: solid 1px #A9A9A9;
+        padding: 10px;
+    }
+
+    .simple a {
+        color: #333;
+        text-decoration: none;
+    }
+
+    .cms-list {
+        margin-top: 0;
+        margin-bottom: 3px;
+        padding-left: 15px;
+        list-style-image: url("/app/images/bullet.gif");
+    }
+</style>
+
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="banner">
+            <h5 class="main-title">Year {{idbCelIndexCtrl.year}}</h5>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-xs-3">
+        <menu-vertical links="idbCelIndexCtrl.links" style="padding:0;margin:0;"></menu-vertical>
+    </div>
+    <div class="col-xs-9">
+        <hr style="margin-bottom:0px;" />
+        <div class="row">
+            <div class="col-xs-8">
+
+                <h3>Celebrations around the world</h3>
+                <p>The CBD Secretariat encourages all Parties to the Convention and all organizations that deal in some way with the issue to organize activities and events to celebrate the IDB and to take advantage of it to raise public awareness and to
+                    showcase their work on Biodiversity and Sustainable Tourism.</p>
+                <p>If you are an individual you can also organize an activity yourself in your community, <a href="https://www.cbd.int/idb/2012/celebrations/participate/" target="_blank">here are some ideas</a>. Every person can make a difference!</p>
+                <p>Please help us share your IDB celebrations by <a href="https://www.cbd.int/2011-2020/dashboard/submit/event/new" target="_blank">registering your activities on the website of the United Nations Decade on Biodiversity</a>. You will be asked
+                    to create a <a href="https://accounts.cbd.int/signup" target="_blank">CBD account</a>. The advantage of creating an account is that you will be able to register and showcase all your biodiversity-related work. Your information will
+                    also appear on the IDB website. Please <a href="mailto:secretariat@cbd.int">contact us</a> if you have any questions.</p>
+                <p>For maximum visibility, this year we also invite you to register your activities on the <a href="http://www.tourism4development2017.org/join-the-celebration/" target="_blank">website of the International Year of Sustainable Tourism for Development, {{idbCelIndexCtrl.year}}</a>.
+                    Celebrate the year in a world of celebrations!</p>
+                <p>Thank you!</p>
+                <h3>{{idbCelIndexCtrl.year}} International Day for Biological Diversity Celebrations around the world</h3>
+                <p>Your flag will appear here when we receive information about your country's celebrations. Events coordinated by International Organisations are listed at the bottom of the page.</p>
+
+
+
+
+            </div>
+            <div class="col-xs-4">
+                <div class="col-xs-11 simple-border simple" style="margin-top:50px;">
+                    <a href="http://greenwave.cbd.int/en/home">
+                        <p>For schools, children and youth:</p>
+                        <div class="text-center"><img src="https://www.cbd.int/images/logo-greenwave-106.gif"></img>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-xs-11 simple-border" style="margin-top:10px;">
+                    <p>See also:</p>
+                    <ul class="cms-list">
+                        <li><a href="http://www.tourism4development2017.org/" target="_blank">International Year of Sustainable Tourism for Development</a></li>
+                        <li><a href="http://web.unep.org/wed/" target="_blank">World Environment Day 5 June</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                  <div class="col-xs-12" ng-repeat="gov in idbCelIndexCtrl.governmentsFound track by $index " style="margin-bottom:10px;">
+                      {{$index + 1}}.  <img ng-src="https://www.cbd.int/images/flags/48/flag-{{gov}}-48.png"></img> <a ng-href="/idb/celebrations/{{idbCelIndexCtrl.year}}/{{gov}}">{{idbCelIndexCtrl.getCountry(gov).title | lstring}}</a> <span class="badge">{{idbCelIndexCtrl.numGovernments[gov]}}</span>
+
+                  </div>
+                  <pre>{{idbCelIndexCtrl.countries |json}}</pre>
+            </div>
+        </div>
+    </div>
+</div>
