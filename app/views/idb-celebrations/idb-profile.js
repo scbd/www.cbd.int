@@ -1,16 +1,20 @@
-define(['app','data/idb-celebrations/links','lodash','directives/idb-celebrations/menu-vertical','filters/lstring','filters/truncate','services/storage','directives/idb-celebrations/zoom-map'], function(app,links,_) { 'use strict';
+define(['app','data/idb-celebrations/links','lodash','directives/idb-celebrations/menu-vertical','filters/lstring','filters/truncate','services/storage','directives/idb-celebrations/zoom-map','filters/term',,'filters/trust-as-resource-url'], function(app,links,_) { 'use strict';
 
-	return ['$location', '$routeParams','$http','$filter','$q','IStorage', function( $location, $routeParams,$http,$filter,$q,storage) {
+	return ['$location', '$routeParams','$http','$filter','$q','IStorage','locale','$timeout', function( $location, $routeParams,$http,$filter,$q,storage,locale,$timeout) {
 
 		var _ctrl 		= this;
 		var canceler = null;
 
-		_ctrl.gov 				= $routeParams.gov;
-		_ctrl.year 				= parseInt($routeParams.year);
-	  _ctrl.links 			= links.links;
-		_ctrl.getCountry  = getCountry;
-		_ctrl.documents		= {};
-		_ctrl.getOrgLogo =getOrgLogo;
+		_ctrl.gov 						= $routeParams.gov;
+		_ctrl.year 						= parseInt($routeParams.year);
+	  _ctrl.links 					= links.links;
+		_ctrl.getCountry  		= getCountry;
+		_ctrl.documents				= {};
+		_ctrl.getOrgLogo  		= getOrgLogo;
+		_ctrl.getWebsite  		= getWebsite;
+		_ctrl.getCountry  		= getCountry;
+		_ctrl.locale      		= locale;
+		_ctrl.getEmbedMapUrl  = getEmbedMapUrl;
 			getCountries();
 			getEvents ();
 
@@ -22,6 +26,13 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 					function(o){
 						_ctrl.governments	=$filter('orderBy')(o.data, 'name');
 				});
+			}
+			//============================================================
+			//
+			//============================================================
+			function getEmbedMapUrl(id) {
+				if(!id) return false;
+				return 'https://www.google.com/maps/embed/v1/place?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&q=place_id:'+id;
 			}
 
 			//============================================================
@@ -38,7 +49,7 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 			//
 			//============================================================
 			function getEvents () {
-							var q = 'schema_s:event AND  (startDate_s:['+_ctrl.year+'-01-01T00:00:00.000Z TO '+_ctrl.year+'-12-31T00:00:00.000Z])';//_state_s:public AND
+							var q = 'schema_s:event AND _state_s:public AND (startDate_s:['+_ctrl.year+'-01-01T00:00:00.000Z TO '+_ctrl.year+'-12-31T00:00:00.000Z])';//_state_s:public AND
 							return query('event',q);
 			}
 			//============================================================
@@ -57,6 +68,9 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 									if(events[i].documents_C_ss)
 										for(var j=0; j<events[i].documents_C_ss.length;j++)//jshint ignore:line
 												events[i].documents_C_ss[j] = JSON.parse(events[i].documents_C_ss[j]);
+									if(events[i].thematicArea_ss)
+										for(var j=0; j<events[i].thematicArea_ss.length;j++)//jshint ignore:lin
+											$filter('term')(events[i].thematicArea_ss[j],locale)
 
 									if(events[i].contactOrganization_s)
 									{
@@ -78,6 +92,15 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 
 					if(event && event.org)
 					return _.find(event.org.relevantDocuments,{name:'logo'});
+
+			}
+			//============================================================
+			//
+			//============================================================
+			function getWebsite(event) {
+
+					if(event && event.websites_C_ss)
+					return _.find(event.websites_C_ss,{name:'website'});
 
 			}
 			//============================================================
@@ -110,6 +133,25 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 						});
 
 			}
+			//============================================================
+			//
+			//============================================================
+			function getCountries() {
+				return $http.get("/api/v2013/thesaurus/domains/countries/terms",{ cache: true }).then(
+					function(o){
+						_ctrl.governments	=$filter('orderBy')(o.data, 'name');
+				});
+			}
+			//============================================================
+			//
+			//============================================================
+			function getCountry (code) {
+							if(_ctrl.governments && _ctrl.governments.length)
+								for(var i=0; i<_ctrl.governments.length;i++){
+										if(_ctrl.governments[i].identifier===code)
+											return _ctrl.governments[i];
+								}
+			}
 			//=======================================================================
 			//
 			//=======================================================================
@@ -121,7 +163,7 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 					var queryParameters = {
 							'q': query,
 							'sort': 'createdDate_dt desc',
-				//			'fl': 'identifier_s,id,title_t,description_t,url_ss,schema_EN_t,date_dt,government_EN_t,schema_s,number_d,aichiTarget_ss,reference_s,sender_s,meeting_ss,recipient_ss,symbol_s,eventCity_EN_t,eventCountry_EN_t,startDate_s,endDate_s,body_s,code_s,meeting_s,group_s,function_t,department_t,organization_t,summary_EN_t,reportType_EN_t,completion_EN_t,jurisdiction_EN_t,development_EN_t',
+				      'fl': 'governments_ss,country_s,postalCode_s,state_s,city_s,address_s,lat_d,lng_d,googlePlaceId_s,onlineEvent_b,thematicArea_ss,descriptionNative_s,logo_s,websites_C_ss,images_C_ss,documents_C_ss,startDate_s,endDate_sidentifier_s,id,title_s,description_s,url_ss,schema_EN_t,government_EN_t,schema_s,aichiTarget_ss,symbol_s,',
 							'wt': 'json',
 							'start': 0,
 							'rows': 25,
@@ -141,17 +183,22 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 								data=data.data;
 								canceler = null;
 								if(schema==='event') mapOrgs(data.response.docs);
-							_ctrl.documents[schema]=data.response.docs;
+							$timeout(function(){
+								_ctrl.documents[schema]=data.response.docs;
+								_ctrl[schema].stop  = _ctrl.documents[schema].length;
+								_ctrl.loading = false;
+							},300);
+
 							_ctrl[schema]={};
 							_ctrl[schema].count = data.response.numFound;
 							_ctrl[schema].start = data.response.start;
-							_ctrl[schema].stop  = _ctrl.documents[schema].length;
+
 							_ctrl[schema].rows  = data.response.docs.length;
 					}).catch(function(error) {
 							console.log('ERROR: ' + error);
 					})
 					.finally(function(){
-						_ctrl.loading = false;
+						_ctrl.loading = true;
 					});
 					return pagePromise;
 			}// query

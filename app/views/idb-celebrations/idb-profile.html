@@ -121,13 +121,13 @@
             </div>
             <div class="col-md-7 col-xs-12">
                 <div><img class="pull-right" ng-src="https://www.cbd.int/images/flags/96/flag-{{idbProfileCtrl.gov}}-96.png" />
-                <h1 style="display:inline;">{{idbProfileCtrl.getCountry(idbProfileCtrl.gov).title | lstring}} </h1>
+                <h2 style="display:inline;">{{idbProfileCtrl.getCountry(idbProfileCtrl.gov).title | lstring}} </h2>
 
               </div>
               <div class="text-center">
                 <br><br>
                 <hr>
-                <h2>{{idbProfileCtrl.documents.event.length}} {{idbProfileCtrl.year}}  IDB Celebration<span ng-if="idbProfileCtrl.documents.event.length!==1">s</span> </h2>
+                <h2>{{idbProfileCtrl.year}}  IDB Celebration<span ng-if="idbProfileCtrl.documents.event.length!==1">s</span> </h2>
                 <hr>
               </div>
 
@@ -137,18 +137,25 @@
 
         </div>
         <div class="row">
-            <div class="col-xs-12" ng-if="idbProfileCtrl.loading">
-                <div class="col-xs-8 text-center">
-
+            <div class="col-xs-12 text-center" ng-if="idbProfileCtrl.loading">
                     <h1><i class="fa fa-spin fa-spinner " /> Loading...</h1>
-                </div>
-
             </div>
-<hr class="style18">
+            <div class="col-md-12 col-xs-12">
+                <hr class="style18">
+            </div>
             <div class="col-md-4 col-xs-12" ng-repeat-start="event in idbProfileCtrl.documents.event track by $index ">
 
-                <img class="pull-right" style="max-width:100%;padding-bottom:10px;" ng-src="{{event.logo }}" />
-                <img class="pull-right" style="max-width:100%;padding-bottom:10px;" ng-src="{{idbProfileCtrl.getOrgLogo(event).url}}" />
+                <img class="pull-right" style="max-width:100%;padding-bottom:10px;" ng-src="{{event.logo_s}}" />
+                <img class="pull-right" style="max-width:100%;padding-bottom:10px;" ng-src="{{idbProfileCtrl.getOrgLogo(event).url}}" ng-if="!event.logo_s" />
+                <div   ng-show="event.startDate_s">
+                    <h6>Date</h6>
+                    <div class="row" >
+                          <div class="col-xs-3"><label>From:</label></div><div class="col-xs-7"> {{event.startDate_s |moment:'format':'YYYY.MM.DD HH:mm'}}</div>
+                    </div>
+                    <div class="row" >
+                        <div class="col-xs-3"><label>To:</label></div><div class="col-xs-7">{{event.endDate_s |moment:'format':'YYYY.MM.DD HH:mm'}}</div>
+                    </div>
+                </div>
                 <div ng-if="event.websites_C_ss">
 
                     <h6>Links</h6>
@@ -162,7 +169,19 @@
                         </a>
                       </div>
                     </div>
+                    <div   ng-show="event.thematicArea_ss">
+                        <h6>Thematic Area(s)</h6>
+                        <div  ng-repeat="theme in event.thematicArea_ss">
 
+                          		<span class="label label-default">{{theme | term:idbProfileCtrl.locale}}</span>
+                        </div>
+                    </div>
+                    <div   ng-if="event.aichiTarget_ss">
+                        <h6>Aichi Biodiversity Targets</h6>
+                        <div  >
+                          <a ng-href="https://www.cbd.int/aichi-targets/target/{{term.slice(-2)}}" ng-repeat="term in event.aichiTarget_ss">						<img   style="height: 20px;  width: 20px; margin-bottom:5px; " ng-src="https://www.cbd.int/images/aichi/48/abt-{{term.slice(-2)}}-48.png" ></a>
+                        </div>
+                    </div>
                     <div   ng-if="event.documents_C_ss">
                         <h6>Documents</h6>
                         <div  ng-repeat="doc in event.documents_C_ss">
@@ -172,9 +191,23 @@
                         </div>
                     </div>
 
+                    <div   ng-if="event.governments_ss">
+                        <h6>Related Parties & Governments</h6>
+                        <div  ng-repeat="doc in event.governments_ss" ng-show="doc !== idbProfileCtrl.gov">
+                            <a ng-href="/idb/celebrations/{{doc}}/{{idbProfileCtrl.year}}" >
+                              <img  width="25px" ng-src="https://www.cbd.int/images/flags/96/flag-{{doc}}-96.png" /> {{idbProfileCtrl.getCountry(doc).title|lstring}}
+                            </a>
+                        </div>
+                    </div>
+
             </div>
             <div class="col-md-8 col-xs-12">
                 <label>{{event.title_s}}</label>
+
+                <span ng-if="event.onlineEvent_b"><label>Online Event:</label> <a ng-href="idbProfileCtrl.getWebsite(event).url"><i class="fa fa-home" aria-hidden="true" ></i> {{idbProfileCtrl.getWebsite(event).url}}</a></span>
+                <div class="well" ng-if="!event.onlineEvent_b"><span><label>Address:</label> <span class="small">{{event.address_s}},<span ng-if="event.city_s">{{event.city_s}}, <span ng-if="event.city_s">{{event.state_s}},</span>  <span ng-if="event.postalCode_s">{{event.postalCode_s}},</span> {{idbProfileCtrl.getCountry(event.country_s).title|lstring}} </span></span>
+                        <iframe ng-if="idbProfileCtrl.getEmbedMapUrl(event.googlePlaceId_s)" ng-src="{{idbProfileCtrl.getEmbedMapUrl(event.googlePlaceId_s)| trustAsResourceUrl}} " width="100%" height="200" frameborder="0" style="border:0" allowfullscreen></iframe>
+                </div>
                 <p>{{event.description_s}}</p>
                 <p ng-if="event.descriptionNative_s">
                     <hr class="style5">
@@ -188,11 +221,13 @@
                         </a>
                     </div>
                 </div>
+
             </div>
             <div class="col-md-12 col-xs-12" ng-repeat-end>
+<!-- <pre>{{event |json}}</pre> -->
                 <hr class="style18">
             </div>
-
+<!-- <pre>{{idbProfileCtrl.documents.event | json}}</pre> -->
         </div>
     </div>
 </div>
