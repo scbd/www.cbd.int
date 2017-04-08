@@ -1,4 +1,4 @@
-define(['app'],
+define(['app','filters/lstring'],
 function (app) {
 
   //============================================================
