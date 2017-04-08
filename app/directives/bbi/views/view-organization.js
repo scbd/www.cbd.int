@@ -1,5 +1,5 @@
 define(['app', 'angular', 'lodash', 'text!./view-organization.html',
-	'filters/mark-down', 'services/storage'], function(app, angular, _, template){
+	'filters/mark-down', 'services/storage','filters/trust-as-resource-url'], function(app, angular, _, template){
 
 app.directive('viewOrganization', ["IStorage","$location","locale","$sce", function (storage,$location,locale,$sce) {
 	return {
@@ -160,9 +160,5 @@ app.directive('viewOrganization', ["IStorage","$location","locale","$sce", funct
 		}
 	};
 }]);
-app.filter('trustAsResourceUrl', ['$sce', function($sce) {
-    return function(val) {
-        return $sce.trustAsResourceUrl(val);
-    };
-}])
+
 });
