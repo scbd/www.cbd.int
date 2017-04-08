@@ -1,20 +1,28 @@
 define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-vertical','filters/lstring'], function(app,links) { 'use strict';
 
-	return ['$scope','$routeParams','$q','$http','$filter', function ($scope,$routeParams,$q,$http,$filter) {
+	return ['$scope','$routeParams','$q','$http','$filter','$location', function ($scope,$routeParams,$q,$http,$filter,$location) {
 
         var _ctrl   = this;
 				var canceler = null;
+				var currentDate= new Date();
 
 	      _ctrl.links 		= links.links;
-		    _ctrl.year  		= parseInt($routeParams.year) || new Date.getYear();
+
+				if(parseInt($routeParams.year) ===404 || !parseInt($routeParams.year))
+		    	$location.path(currentDate.getFullYear());
+				else
+					_ctrl.year  	= parseInt($routeParams.year);
+
 				_ctrl.documents	= {};
 				_ctrl.getCountry= getCountry;
-getCountries().then(getEvents().then(function(){
-	 mapGovernment();
-}));
 
+				getCountries().then(getEvents().then(function(){
+					 mapGovernment();
+				}));
 
-
+				//============================================================
+				//
+				//============================================================
 				function getCountries() {
 					return $http.get("/api/v2013/thesaurus/domains/countries/terms",{ cache: true }).then(
 						function(o){
