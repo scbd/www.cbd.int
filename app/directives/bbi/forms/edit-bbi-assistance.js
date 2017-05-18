@@ -85,7 +85,7 @@ define(['text!./edit-bbi-assistance.html', 'text!./bbi-records-dialog.html', 'te
 							cache: true
 						}).then(function(o) {
 							var data = _.filter(o.data, function(term){
-									return term.identifier !="2DB66EA6-F4D1-4103-8BA1-55626DD42290" 
+									return term.identifier !="2DB66EA6-F4D1-4103-8BA1-55626DD42290"
 									&& !_.contains(term.broaderTerms, "2DB66EA6-F4D1-4103-8BA1-55626DD42290")
 								});
 							return thesaurus.buildTree(data);
@@ -376,7 +376,7 @@ define(['text!./edit-bbi-assistance.html', 'text!./bbi-records-dialog.html', 'te
 					if (!$scope.document.id && !$scope.document._id)
 						return mongoStorage.save($scope.schema, cleanDoc($scope.document)).catch($scope.onError).then(function(res) {
 
-							$scope.$emit('showSuccess', 'Assitance Request Created');
+							$scope.$emit('showSuccess', 'Request for Assistance Created');
 							return res;
 						}).catch($scope.onError);
 					else
@@ -385,7 +385,7 @@ define(['text!./edit-bbi-assistance.html', 'text!./bbi-records-dialog.html', 'te
 							if ($scope.document.title)
 								msg = $scope.document.title[locale];
 
-							$scope.$emit('showSuccess', 'Assitance Request ' + msg + ' Saved as ' + status);
+							$scope.$emit('showSuccess', 'Requests for Assistance ' + msg + ' Saved as ' + status);
 
 							if ($scope.document.meta.status !== 'draft')
 								$timeout(function() {
