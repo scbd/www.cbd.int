@@ -38,7 +38,8 @@ require.config({
         'ngSmoothScroll'  : 'libs/ngSmoothScroll/lib/angular-smooth-scroll',
         'bootstrap-datepicker': 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
         'toastr'          : 'libs/angular-toastr/dist/angular-toastr.tpls.min',
-        'hl.sticky'       : 'libs/angular-sticky/dist/angular-sticky'
+        'ammap3'              : 'libs/ammap3/ammap/ammap',
+        'ammap-theme'         : 'libs/ammap3/ammap/themes/light'
     },
     shim: {
         'angular'              : { deps : ['jquery'], exports: 'angular' },
@@ -58,7 +59,6 @@ require.config({
         'alasql'               : { deps : ['js-xlsx']},
         'js-xlsx'              : { deps : ['js-zip', 'ods']},
         'toastr'               : { deps : ['angular-flex'] },
-        'hl.sticky'            : { deps : ['angular-flex'] },
         'ngSmoothScroll'       : { deps : ['angular-flex'] },
         'ngInfiniteScroll'     : { deps : ['angular-flex'] }
     },

@@ -1,6 +1,6 @@
-define(['angular', 'ngSanitize','toastr','hl.sticky'], function(angular) { 'use strict';
+define(['angular', 'ngSanitize','toastr'], function(angular) { 'use strict';
 
-    var app = angular.module('app', angular.defineModules(['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','hl.sticky']));
+    var app = angular.module('app', angular.defineModules(['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr']));
 
     app.config(['$httpProvider','toastrConfig', function($httpProvider,toastrConfig) {
         angular.extend(toastrConfig, {
@@ -22,7 +22,7 @@ define(['angular', 'ngSanitize','toastr','hl.sticky'], function(angular) { 'use 
         $httpProvider.useApplyAsync(true);
         $httpProvider.interceptors.push('authenticationHttpIntercepter');
         $httpProvider.interceptors.push('realmHttpIntercepter');
-        $httpProvider.interceptors.push('apiRebase'); //should be last interceptor        
+        $httpProvider.interceptors.push('apiRebase'); //should be last interceptor
     }]);
 
 	app.factory('apiRebase', ["$location", function($location) {

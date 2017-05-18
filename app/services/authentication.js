@@ -54,7 +54,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 				}
 
 				if(pToken!==undefined) {
-					return $q.when(pToken || null);
+					return $q.when(pToken || null).then(checkTokenExpiration);
 				}
 
 				pToken = null;
@@ -140,7 +140,17 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 				}
 			});
 		}
+    function checkTokenExpiration(authenticationToken){
 
+        if(authenticationToken && authenticationToken.expiration){
+            if(new Date(authenticationToken.expiration).getTime() < new Date().getTime()){
+                pToken = null;
+                $rootScope.$broadcast('event:auth-sessionExpired');
+            }
+        }
+
+        return authenticationToken;
+    }
 		return {
 			get : getToken,
             getCookieToken : getCookieToken,
@@ -263,17 +273,43 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 	    //
 	    //============================================================
 		function setUser(user) {
-
+      if (user && user.isAuthenticated && !user.isEmailVerified) {
+          $rootScope.$broadcast('event:auth-emailVerification', {
+              message: 'Email verification pending. Please verify you email before submitting any data.'
+          });
+      }
 			currentUser     = user || undefined;
 			$rootScope.user = user || anonymous();
 		}
+    //============================================================
+    //
+    //
+    //============================================================
+    function isEmailVerified() {
 
+        return $q.when(getUser()).then(function(user) {
+           return (user && user.isAuthenticated && user.isEmailVerified) ;
+        });
+
+    }
+
+    var sessionExpiredAlert = false;
+    $rootScope.$on('event:auth-sessionExpired', function(){
+
+        if(!sessionExpiredAlert){
+            sessionExpiredAlert = true;
+            alert('your session has expired');
+        }
+        signOut();
+    });
+    
 		return {
 			getUser  : getUser,
 			signIn   : signIn,
 			signOut  : signOut,
 			user     : LEGACY_user,
-            accountsBaseUrl : function() { return accountsBaseUrl; }
+      isEmailVerified:isEmailVerified,
+      accountsBaseUrl : function() { return accountsBaseUrl; }
 		};
 
 	}]);

@@ -1,0 +1,236 @@
+<style>
+    .banner {
+        height: 120px;
+        background: #ab42a6;
+        background: -moz-linear-gradient(top, #ab42a6 0%, #730094 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ab42a6), color-stop(100%, #730094));
+        background: -webkit-linear-gradient(top, #ab42a6 0%, #730094 100%);
+        background: -o-linear-gradient(top, #ab42a6 0%, #730094 100%);
+        background: -ms-linear-gradient(top, #ab42a6 0%, #730094 100%);
+        background: linear-gradient(to bottom, #ab42a6 0%, #730094 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ab42a6', endColorstr='#730094', GradientType=0);
+        background: url("/app/images/idb-celebrations/banner-0.jpg");
+        text-align: left;
+    }
+
+    .banner .main-title {
+        background-color: rgba(0, 0, 0, 0.4);
+        height: 100%;
+        margin-right: 25px;
+        text-align: center;
+    }
+
+    .banner .main-title {
+        margin: 10px 0 0;
+        font-size: 25px;
+        color: #fff;
+        font-weight: normal;
+        width: 220px;
+        padding-top: 1.8em;
+    }
+
+    .banner .main-title:hover {
+        background-color: #009b48;
+        cursor: pointer;
+    }
+
+    .title-national-status {
+        background: url("/app/images/aichi-targets/target-icon.png") no-repeat;
+        padding-left: 2em;
+    }
+
+    @media (min-width: 1200px) {
+        .container {
+            width: 970px;
+            !important;
+        }
+    }
+
+    .simple-border {
+        border: solid 1px #A9A9A9;
+        padding: 10px;
+    }
+
+    .simple a {
+        color: #333;
+        text-decoration: none;
+    }
+
+    .cms-list {
+        margin-top: 0;
+        margin-bottom: 3px;
+        padding-left: 15px;
+        list-style-image: url("/app/images/bullet.gif");
+    }
+
+    hr.style5 {
+        background-color: #fff;
+        border-top: 2px dashed #8c8b8b;
+        margin: 5px 0 5px 0;
+    }
+
+    hr.style18 {
+        height: 30px;
+        border-style: solid;
+        border-color: #8c8b8b;
+        border-width: 1px 0 0 0;
+        border-radius: 20px;
+    }
+
+    hr.style18:before {
+        display: block;
+        content: "";
+        height: 30px;
+        margin-top: -31px;
+        border-style: solid;
+        border-color: #8c8b8b;
+        border-width: 0 0 1px 0;
+        border-radius: 20px;
+    }
+</style>
+
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="banner">
+            <h5 class="main-title">Year {{idbProfileCtrl.year}}</h5>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-3 hidden-xs">
+        <menu-vertical links="idbProfileCtrl.links" style="padding:0;margin:0;"></menu-vertical>
+    </div>
+    <div class="col-md-9 col-xs-12">
+      <div class="small" style="padding: 10px 0 10px 0;">
+        <a href="https://www.cbd.int/"><img src="/app/images/ic-cbdhome.gif" alt="Home"></a> >
+        <a href="https://www.cbd.int/programmes/default.shtml">Programmes </a> >
+        <a href="https://www.cbd.int/cepa/default.shtml">CEPA </a> >
+        <a href="https://www.cbd.int/idb/">IDB </a> >
+        <a href="/idb/celebrations/">Celebrations</a> >
+        <a ng-href="/idb/celebrations/{{idbProfileCtrl.gov}}/{{idbProfileCtrl.year}}">{{idbProfileCtrl.getCountry(idbProfileCtrl.gov).title | lstring}}</a> >
+        <span>{{idbProfileCtrl.year}}</span>
+      </div>
+        <hr style="margin:0px;" />
+        <div class="row" style="padding-bottom:20px;">
+            <div class="col-md-5 col-xs-12">
+                <zoom-map zoom-to="idbProfileCtrl.gov"></zoom-map>
+            </div>
+            <div class="col-md-7 col-xs-12">
+                <div><img class="pull-right" ng-src="https://www.cbd.int/images/flags/96/flag-{{idbProfileCtrl.gov}}-96.png" />
+                <h2 style="display:inline;">{{idbProfileCtrl.getCountry(idbProfileCtrl.gov).title | lstring}} </h2>
+              </div>
+              <div class="text-center">
+                <br><br>
+                <hr>
+                <h2>{{idbProfileCtrl.year}}  IDB Celebration<span ng-if="idbProfileCtrl.documents.event.length!==1">s</span> </h2>
+                <hr>
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 text-center" ng-if="idbProfileCtrl.loading">
+                    <h1><i class="fa fa-spin fa-spinner " /> Loading...</h1>
+            </div>
+            <div class="col-md-12 col-xs-12">
+                <hr class="style18">
+            </div>
+            <div class="col-md-4 col-xs-12" ng-repeat-start="event in idbProfileCtrl.documents.event track by $index ">
+
+                <img style="max-width:100%;padding-bottom:10px;" ng-src="{{event.logo_s}}" />
+                <img  style="max-width:100%;padding-bottom:10px;" ng-src="{{idbProfileCtrl.getOrgLogo(event).url}}" ng-if="!event.logo_s" />
+                <div   ng-show="event.startDate_s">
+
+                    <div class="row" >
+                          <div class="col-xs-3"><label>From:</label></div><div class="col-xs-7"> {{event.startDate_s |moment:'format':'YYYY.MM.DD HH:mm'}}</div>
+                    </div>
+                    <div class="row" >
+                        <div class="col-xs-3"><label>To:</label></div><div class="col-xs-7">{{event.endDate_s |moment:'format':'YYYY.MM.DD HH:mm'}}</div>
+                    </div>
+                </div>
+      <div  ng-if="!event.onlineEvent_b">
+      <h6>Place</h6>
+     <span class="small">{{event.address_s}},<span ng-if="event.city_s">{{event.city_s}}, <span ng-if="event.city_s">{{event.state_s}},</span>  <span ng-if="event.postalCode_s">{{event.postalCode_s}},</span> {{idbProfileCtrl.getCountry(event.country_s).title|lstring}} </span></span>
+     <p><a ng-href="{{idbProfileCtrl.getEmbedMapUrl(event.googlePlaceId_s)}}" target="_blank" >
+         <i class="fa fa-map" aria-hidden="true" ></i> Goole Map
+     </a></p>
+</div>
+                <div ng-if="event.websites_C_ss">
+
+
+                    <div ng-repeat="site in event.websites_C_ss">
+                        <a ng-href="{{site.url}}" target="_blank" ng-switch="site.name">
+                            <i class="fa fa-home" aria-hidden="true" ng-switch-when="website"></i>
+                            <i class="fa fa-facebook-square" aria-hidden="true" ng-switch-when="facebook"></i>
+                            <i class="fa fa-twitter-square" aria-hidden="true" ng-switch-when="twitter"></i>
+                            <i class="fa fa-youtube-square" aria-hidden="true" ng-switch-when="youtube"></i>
+                            <i class="fa fa-external-link-square" aria-hidden="true" ng-switch-default></i> {{site.name |truncate:50}}
+                        </a>
+                      </div>
+                    </div>
+                    <div   ng-show="event.thematicArea_ss" style="overflow:hidden;">
+
+                        <h6>Thematic Area(s)</h6>
+                        <div  ng-repeat="theme in event.thematicArea_ss" style="overflow:hidden;">
+
+                          		<span class="label label-default">{{theme | term:idbProfileCtrl.locale}}</span>
+                        </div>
+                    </div>
+                    <div   ng-if="event.aichiTarget_ss">
+                        <h6>Aichi Biodiversity Targets</h6>
+                        <div  >
+                          <a ng-href="https://www.cbd.int/aichi-targets/target/{{term.slice(-2)}}" ng-repeat="term in event.aichiTarget_ss">						<img   style="height: 20px;  width: 20px; margin-bottom:5px; " ng-src="https://www.cbd.int/images/aichi/48/abt-{{term.slice(-2)}}-48.png" ></a>
+                        </div>
+                    </div>
+                    <div   ng-if="event.documents_C_ss">
+                        <h6>Documents</h6>
+                        <div  ng-repeat="doc in event.documents_C_ss">
+                            <a ng-href="{{doc.url}}" target="_blank"><i class="fa fa-file" aria-hidden="true"></i>
+                              {{doc.name}}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div   ng-if="event.governments_ss && event.governments_ss.length>1">
+                        <h6>Related:</h6>
+                        <div  ng-repeat="doc in event.governments_ss" ng-show="doc !== idbProfileCtrl.gov">
+                            <a ng-href="/idb/celebrations/{{doc}}/{{idbProfileCtrl.year}}" >
+                              <img  width="25px" ng-src="https://www.cbd.int/images/flags/96/flag-{{doc}}-96.png" /> {{idbProfileCtrl.getCountry(doc).title|lstring}}
+                            </a>
+                        </div>
+                    </div>
+
+            </div>
+            <div class="col-md-8 col-xs-12">
+                <h3 style="margin-top:0;">{{event.title_s}}</h3>
+
+                <span ng-if="event.onlineEvent_b"><label>Online Event:</label> <a ng-href="idbProfileCtrl.getWebsite(event).url"><i class="fa fa-home" aria-hidden="true" ></i> {{idbProfileCtrl.getWebsite(event).url}}</a></span>
+                <!-- <div class="well" ng-if="!event.onlineEvent_b"><span><label>Address:</label> <span class="small">{{event.address_s}},<span ng-if="event.city_s">{{event.city_s}}, <span ng-if="event.city_s">{{event.state_s}},</span>  <span ng-if="event.postalCode_s">{{event.postalCode_s}},</span> {{idbProfileCtrl.getCountry(event.country_s).title|lstring}} </span></span>
+                        <iframe ng-if="idbProfileCtrl.getEmbedMapUrl(event.googlePlaceId_s)" ng-src="{{idbProfileCtrl.getEmbedMapUrl(event.googlePlaceId_s)| trustAsResourceUrl}} " width="100%" height="200" frameborder="0" style="border:0" allowfullscreen></iframe>
+                </div> -->
+                <p>{{event.description_s}}</p>
+                <p ng-if="event.descriptionNative_s">
+                    <hr class="style5">
+                </p>
+                <p ng-if="event.descriptionNative_s">{{event.descriptionNative_s}}</p>
+                <div  ng-if="event.images_C_ss">
+                    <div class="col-xs-3 text-center" ng-repeat="image in event.images_C_ss">
+                        <a ng-href="{{image.url}}" target="_blank"><img ng-src="{{image.url}}" style="max-width:100%;"></img>
+                          {{image.name}}
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-12 col-xs-12" ng-repeat-end>
+<!-- <pre>{{event |json}}</pre> -->
+                <hr class="style18">
+            </div>
+<!-- <pre>{{idbProfileCtrl.documents.event | json}}</pre> -->
+        </div>
+    </div>
+</div>

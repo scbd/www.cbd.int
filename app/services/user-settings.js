@@ -60,12 +60,13 @@ define(['app'], function(app) {
         }
 
 
-
         //============================================================
         //
         //============================================================
         function put(key,value) {
             var url = '/api/v2016/settings/'+user.userID;
+
+            if(settings.undb)delete(settings.undb); // hack until schema is fixed
             return $http.put(url, settings, {id:user.userID.toString()}).catch(onError);
         }
 
