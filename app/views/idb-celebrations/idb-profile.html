@@ -123,7 +123,6 @@
             <div class="col-md-7 col-xs-12">
                 <div><img class="pull-right" ng-src="https://www.cbd.int/images/flags/96/flag-{{idbProfileCtrl.gov}}-96.png" />
                 <h2 style="display:inline;">{{idbProfileCtrl.getCountry(idbProfileCtrl.gov).title | lstring}} </h2>
-
               </div>
               <div class="text-center">
                 <br><br>
@@ -131,11 +130,7 @@
                 <h2>{{idbProfileCtrl.year}}  IDB Celebration<span ng-if="idbProfileCtrl.documents.event.length!==1">s</span> </h2>
                 <hr>
               </div>
-
-
-
             </div>
-
         </div>
         <div class="row">
             <div class="col-xs-12 text-center" ng-if="idbProfileCtrl.loading">
@@ -146,10 +141,10 @@
             </div>
             <div class="col-md-4 col-xs-12" ng-repeat-start="event in idbProfileCtrl.documents.event track by $index ">
 
-                <img class="pull-right" style="max-width:100%;padding-bottom:10px;" ng-src="{{event.logo_s}}" />
-                <img class="pull-right" style="max-width:100%;padding-bottom:10px;" ng-src="{{idbProfileCtrl.getOrgLogo(event).url}}" ng-if="!event.logo_s" />
+                <img style="max-width:100%;padding-bottom:10px;" ng-src="{{event.logo_s}}" />
+                <img  style="max-width:100%;padding-bottom:10px;" ng-src="{{idbProfileCtrl.getOrgLogo(event).url}}" ng-if="!event.logo_s" />
                 <div   ng-show="event.startDate_s">
-                    <h6>Date</h6>
+
                     <div class="row" >
                           <div class="col-xs-3"><label>From:</label></div><div class="col-xs-7"> {{event.startDate_s |moment:'format':'YYYY.MM.DD HH:mm'}}</div>
                     </div>
@@ -157,9 +152,16 @@
                         <div class="col-xs-3"><label>To:</label></div><div class="col-xs-7">{{event.endDate_s |moment:'format':'YYYY.MM.DD HH:mm'}}</div>
                     </div>
                 </div>
+      <div  ng-if="!event.onlineEvent_b">
+      <h6>Place</h6>
+     <span class="small">{{event.address_s}},<span ng-if="event.city_s">{{event.city_s}}, <span ng-if="event.city_s">{{event.state_s}},</span>  <span ng-if="event.postalCode_s">{{event.postalCode_s}},</span> {{idbProfileCtrl.getCountry(event.country_s).title|lstring}} </span></span>
+     <p><a ng-href="{{idbProfileCtrl.getEmbedMapUrl(event.googlePlaceId_s)}}" target="_blank" >
+         <i class="fa fa-map" aria-hidden="true" ></i> Goole Map
+     </a></p>
+</div>
                 <div ng-if="event.websites_C_ss">
 
-                    <h6>Links</h6>
+
                     <div ng-repeat="site in event.websites_C_ss">
                         <a ng-href="{{site.url}}" target="_blank" ng-switch="site.name">
                             <i class="fa fa-home" aria-hidden="true" ng-switch-when="website"></i>
@@ -170,9 +172,10 @@
                         </a>
                       </div>
                     </div>
-                    <div   ng-show="event.thematicArea_ss">
+                    <div   ng-show="event.thematicArea_ss" style="overflow:hidden;">
+
                         <h6>Thematic Area(s)</h6>
-                        <div  ng-repeat="theme in event.thematicArea_ss">
+                        <div  ng-repeat="theme in event.thematicArea_ss" style="overflow:hidden;">
 
                           		<span class="label label-default">{{theme | term:idbProfileCtrl.locale}}</span>
                         </div>
@@ -192,8 +195,8 @@
                         </div>
                     </div>
 
-                    <div   ng-if="event.governments_ss">
-                        <h6>Related Parties & Governments</h6>
+                    <div   ng-if="event.governments_ss && event.governments_ss.length>1">
+                        <h6>Related:</h6>
                         <div  ng-repeat="doc in event.governments_ss" ng-show="doc !== idbProfileCtrl.gov">
                             <a ng-href="/idb/celebrations/{{doc}}/{{idbProfileCtrl.year}}" >
                               <img  width="25px" ng-src="https://www.cbd.int/images/flags/96/flag-{{doc}}-96.png" /> {{idbProfileCtrl.getCountry(doc).title|lstring}}
@@ -203,19 +206,18 @@
 
             </div>
             <div class="col-md-8 col-xs-12">
-                <label>{{event.title_s}}</label>
+                <h3 style="margin-top:0;">{{event.title_s}}</h3>
 
                 <span ng-if="event.onlineEvent_b"><label>Online Event:</label> <a ng-href="idbProfileCtrl.getWebsite(event).url"><i class="fa fa-home" aria-hidden="true" ></i> {{idbProfileCtrl.getWebsite(event).url}}</a></span>
-                <div class="well" ng-if="!event.onlineEvent_b"><span><label>Address:</label> <span class="small">{{event.address_s}},<span ng-if="event.city_s">{{event.city_s}}, <span ng-if="event.city_s">{{event.state_s}},</span>  <span ng-if="event.postalCode_s">{{event.postalCode_s}},</span> {{idbProfileCtrl.getCountry(event.country_s).title|lstring}} </span></span>
+                <!-- <div class="well" ng-if="!event.onlineEvent_b"><span><label>Address:</label> <span class="small">{{event.address_s}},<span ng-if="event.city_s">{{event.city_s}}, <span ng-if="event.city_s">{{event.state_s}},</span>  <span ng-if="event.postalCode_s">{{event.postalCode_s}},</span> {{idbProfileCtrl.getCountry(event.country_s).title|lstring}} </span></span>
                         <iframe ng-if="idbProfileCtrl.getEmbedMapUrl(event.googlePlaceId_s)" ng-src="{{idbProfileCtrl.getEmbedMapUrl(event.googlePlaceId_s)| trustAsResourceUrl}} " width="100%" height="200" frameborder="0" style="border:0" allowfullscreen></iframe>
-                </div>
+                </div> -->
                 <p>{{event.description_s}}</p>
                 <p ng-if="event.descriptionNative_s">
                     <hr class="style5">
                 </p>
                 <p ng-if="event.descriptionNative_s">{{event.descriptionNative_s}}</p>
                 <div  ng-if="event.images_C_ss">
-                    <h6>Images</h6>
                     <div class="col-xs-3 text-center" ng-repeat="image in event.images_C_ss">
                         <a ng-href="{{image.url}}" target="_blank"><img ng-src="{{image.url}}" style="max-width:100%;"></img>
                           {{image.name}}
