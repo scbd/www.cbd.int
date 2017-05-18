@@ -34,6 +34,9 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         //bbi/*
         if(/^\/biobridge($|\/.*)/.test(locationPath))
             registerRoutes_bbi($routeProvider);
+        //idb/celebrations/*
+        if(/^\/idb\/celebrations($|\/.*)/.test(locationPath))
+            registerRoutes_idbCelebrations($routeProvider);
 
         $routeProvider.when('/403', { templateUrl: '/app/views/403.html' });
         $routeProvider.when('/404', { templateUrl: '/app/views/404.html' }).otherwise({redirectTo: '/404'});
@@ -113,6 +116,20 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       routeProvider
         .when('/',                  { templateUrl: 'views/aichi-targets/index.html',    controllerAs: 'indexCtrl',   resolveController: true })
         .when('/target/:targetId',  { templateUrl: 'views/aichi-targets/index-id.html', controllerAs: 'indexIdCtrl', resolveController: true });
+  }
+
+  //============================================================
+  //
+  //
+  //============================================================
+  function registerRoutes_idbCelebrations(routeProvider) {
+
+      $("base").attr('href', '/idb/celebrations/'); // allow full page reload outside of  /insession/*
+
+      routeProvider
+
+        .when('/:gov/:year',  { templateUrl: 'views/idb-celebrations/idb-profile.html', controllerAs: 'idbProfileCtrl', resolveController: true })
+        .when('/:year',       { templateUrl: 'views/idb-celebrations/idb-cel-index.html',    controllerAs: 'idbCelIndexCtrl',   resolveController: true });
   }
 
   //============================================================
