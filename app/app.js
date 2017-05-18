@@ -21,8 +21,8 @@ define(['angular', 'ngSanitize','toastr','hl.sticky'], function(angular) { 'use 
         });
         $httpProvider.useApplyAsync(true);
         $httpProvider.interceptors.push('authenticationHttpIntercepter');
-        $httpProvider.interceptors.push('apiRebase');
         $httpProvider.interceptors.push('realmHttpIntercepter');
+        $httpProvider.interceptors.push('apiRebase'); //should be last interceptor        
     }]);
 
 	app.factory('apiRebase', ["$location", function($location) {
