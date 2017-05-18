@@ -86,14 +86,6 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
                 //
                 //
                 //============================================================
-                $scope.isTarget = function () {
-                    return $location.path().indexOf('/target/') >= 0;
-                };
-
-                //============================================================
-                //
-                //
-                //============================================================
                 $scope.encodedReturnUrl = function () {
                     return encodeURIComponent($location.absUrl());
                 };
