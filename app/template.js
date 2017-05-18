@@ -131,6 +131,28 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
                     $window.location.href = authentication.accountsBaseUrl() + '/profile?returnurl=' + $scope.encodedReturnUrl();
                 };
 
+                //============================================================
+                //
+                //============================================================
+                $rootScope.$on('event:auth-emailVerification', function(evt, data){
+                  $scope.showEmailVerificationMessage = data.message;
+                });
+                //============================================================
+                //
+                //============================================================
+                $scope.showMessage = function (){
+                  if($scope.showEmailVerificationMessage)
+                    return true;
+                  else
+                    return false;
+                };
+                //============================================================
+                //
+                //============================================================
+                $scope.showMessageToggle = function (){
+                  $scope.showEmailVerificationMessage=!$scope.showEmailVerificationMessage;
+                };
+
                 //==============================
       //
       //==============================
@@ -158,6 +180,8 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
       $rootScope.$on("showError", function(evt, msg) {
           toastr.error(msg);
       });
+
+
 
               }
         };
