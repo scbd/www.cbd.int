@@ -127,7 +127,7 @@
                   <h1><i class="fa fa-spin fa-spinner " /> Loading...</h1>
               </div>
                   <div class="col-xs-12" ng-repeat="gov in idbCelIndexCtrl.governmentsFound track by $index " style="margin-bottom:10px;">
-                      {{$index + 1}}.  <img ng-src="https://www.cbd.int/images/flags/48/flag-{{gov}}-48.png"></img> <a ng-href="/idb/celebrations/{{gov}}/{{idbCelIndexCtrl.year}}">{{idbCelIndexCtrl.getCountry(gov).title | lstring}}</a> <span class="badge">{{idbCelIndexCtrl.numGovernments[gov]}}</span>
+                      {{$index + 1}}.  <img ng-src="https://www.cbd.int/images/flags/48/flag-{{gov}}-48.png"></img> <a ng-href="/idb/celebrations/{{idbCelIndexCtrl.year}}/{{gov}}">{{idbCelIndexCtrl.getCountry(gov).title | lstring}}</a> <span class="badge">{{idbCelIndexCtrl.numGovernments[gov]}}</span>
                   </div>
             </div>
         </div>
