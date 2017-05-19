@@ -128,8 +128,9 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
       routeProvider
         .when('/',  { templateUrl: 'views/idb-celebrations/idb-cel-index.html', controllerAs: 'idbProfileCtrl', resolveController: true })
-        .when('/:gov',  { templateUrl: 'views/idb-celebrations/idb-profile.html', controllerAs: 'idbProfileCtrl', resolveController: true,resolve: { routeParams: injectRouteParams({ year: '2017'    })   } })
 
+        .when('/:year',       { templateUrl: 'views/idb-celebrations/idb-cel-index.html',    controllerAs: 'idbCelIndexCtrl',   resolveController: true,resolve: { routeParams: injectRouteParams({ year: '2017'    })   } })
+        .when('/:gov/:year',  { templateUrl: 'views/idb-celebrations/idb-profile.html', controllerAs: 'idbProfileCtrl', resolveController: true, resolveController: true,resolve: { routeParams: injectRouteParams({ year: '2017'    })   } });
   }
 
   //============================================================
