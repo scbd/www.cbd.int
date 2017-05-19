@@ -127,9 +127,9 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       $("base").attr('href', '/idb/celebrations/'); // allow full page reload outside of  /insession/*
 
       routeProvider
-
+        .when('/',  { templateUrl: 'views/idb-celebrations/idb-cel-index.html', controllerAs: 'idbProfileCtrl', resolveController: true })
         .when('/:gov/:year',  { templateUrl: 'views/idb-celebrations/idb-profile.html', controllerAs: 'idbProfileCtrl', resolveController: true })
-        .when('/:year',       { templateUrl: 'views/idb-celebrations/idb-cel-index.html',    controllerAs: 'idbCelIndexCtrl',   resolveController: true });
+        .when('/2017',       { templateUrl: 'views/idb-celebrations/idb-cel-index.html',    controllerAs: 'idbCelIndexCtrl',   resolveController: true,resolve: { routeParams: injectRouteParams({ year: '2017'    })   } });
   }
 
   //============================================================
