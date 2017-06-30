@@ -248,7 +248,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
             //============================================================
             function openDialog() {
                 $rootScope.redirectOnAuthMsg=false;
-                $cookies.put('redirectOnAuthMsg',false,{expires:new Date(new Date().setFullYear(new Date().getFullYear() + 1))});
+                $cookies.put('redirectOnAuthMsg',false,{path:'/',expires:new Date(new Date().setFullYear(new Date().getFullYear() + 1))});
                 ngDialog.open({
                       template: redirectDialog,
                       className: 'ngdialog-theme-default',
@@ -267,7 +267,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
             //
             //============================================================
             function authRediectChange(value) {
-                $cookies.put('redirectOnAuthMsg',value,{expires:new Date(new Date().setFullYear(new Date().getFullYear() + 1))});
+                $cookies.put('redirectOnAuthMsg',value,{path:'/',expires:new Date(new Date().setFullYear(new Date().getFullYear() + 1))});
             }//authRediectChange
 
         }];//return array
