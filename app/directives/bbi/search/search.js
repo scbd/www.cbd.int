@@ -171,7 +171,7 @@ define(['text!./search.html',
 										var q = 'NOT version_s:* AND '+realmQ +' ';
 
 										var subQueries = _.compact([getFormatedSubQuery('schema_s'),
-																								getFormatedSubQuery('government_s'),
+																								getFormatedSubQuery('hostGovernments_ss'),
 																								getFormatedSubQuery('government_REL_ss'),
 																								getFormatedSubQuery('thematicArea_REL_ss'),
 																								getFormatedSubQuery('aichiTarget_ss'),
@@ -271,7 +271,7 @@ define(['text!./search.html',
 								function buildSchemaQuery (subQueriesArr) {
 
 											var returnSubQ='';
-											var textSearch = ' AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")';
+											var textSearch = ' AND (realm_ss:chm-dev OR realm_ss:chm AND NOT realm_ss:abs) AND (themes_ss:CBD-SUBJECT-BBI OR text_'+locale.toUpperCase()+'_txt:"bio-bridge*" OR text_'+locale.toUpperCase()+'_txt:"bbi*" OR text_'+locale.toUpperCase()+'_txt:"TSC*" OR text_'+locale.toUpperCase()+'_txt:"technical and scientific cooperation*")';
 											for(var i = 0; i<subQueriesArr.length;i++ ){
 
 											   if(subQueriesArr[i]==='new')
@@ -333,7 +333,7 @@ define(['text!./search.html',
 								'start': $scope.currentPage * $scope.itemsPerPage,
 								'rows': $scope.itemsPerPage,
 								'facet': true,
-								'facet.field': ['schema_s', 'government_s', 'government_REL_ss', 'aichiTarget_ss', 'thematicArea_REL_ss'],
+								'facet.field': ['schema_s', 'hostGovernments_ss', 'government_REL_ss', 'aichiTarget_ss', 'thematicArea_REL_ss'],
 								'facet.limit': 999999,
 								'facet.mincount' : 1
 						};
@@ -361,7 +361,7 @@ define(['text!./search.html',
 									$scope.pageCount = Math.ceil(data.response.numFound / $scope.itemsPerPage);
 
 									$scope.schemas       = $scope.readFacets2(data.facet_counts.facet_fields.schema_s);
-									$scope.governments   = $scope.readFacets2(data.facet_counts.facet_fields.government_s);
+									$scope.governments   = $scope.readFacets2(data.facet_counts.facet_fields.hostGovernments_ss);
 									$scope.regions       = $scope.readFacets2(data.facet_counts.facet_fields.government_REL_ss);
 									$scope.aichiTargets  = $scope.readFacets2(data.facet_counts.facet_fields.aichiTarget_ss);
 									$scope.thematicAreas = $scope.readFacets2(data.facet_counts.facet_fields.thematicArea_REL_ss);
@@ -388,13 +388,13 @@ define(['text!./search.html',
 				function readQueryString () {
 
 						var qsSchema = _([$location.search().schema_s]).flatten().compact().value(); // takes query string into array
-						var qsCountry = _([$location.search().government_s]).flatten().compact().value(); // takes query string into array
+						var qsCountry = _([$location.search().hostGovernments_ss]).flatten().compact().value(); // takes query string into array
 						var qsAichi = _([$location.search().aichiTarget_ss]).flatten().compact().value(); // takes query string into array
 						var qsThematic = _([$location.search().thematicArea_REL_ss]).flatten().compact().value(); // takes query string into array
 						var qsGovRel = _([$location.search().government_REL_ss]).flatten().compact().value(); // takes query string into array
 
 
-						var qsArrByField = {'schema_s':qsSchema,'government_s':qsCountry,'aichiTarget_ss':qsAichi,'thematicArea_REL_ss':qsThematic,'government_REL_ss':qsGovRel};
+						var qsArrByField = {'schema_s':qsSchema,'hostGovernments_ss':qsCountry,'aichiTarget_ss':qsAichi,'thematicArea_REL_ss':qsThematic,'government_REL_ss':qsGovRel};
 						_.each(qsArrByField,function (idArr,schemaKey){
 								_.each(idArr,function(id){
 
