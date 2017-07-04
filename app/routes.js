@@ -1,4 +1,4 @@
-define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/extended-route', 'ngRoute', 'authentication', 'ngDialog','ngCookies'], function(app, $, _,redirectDialog) { 'use strict';
+define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/extended-route', 'ngRoute', 'authentication', 'ngDialog','ngCookies'], function(app, $, _,redirectDialog) {
 
     var locationPath = window.location.pathname.toLowerCase().split('?')[0];
 
@@ -128,8 +128,10 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
       routeProvider
 
-        .when('/:gov/:year',  { templateUrl: 'views/idb-celebrations/idb-profile.html', controllerAs: 'idbProfileCtrl', resolveController: true })
-        .when('/:year',       { templateUrl: 'views/idb-celebrations/idb-cel-index.html',    controllerAs: 'idbCelIndexCtrl',   resolveController: true });
+        .when('/',  { templateUrl: 'views/idb-celebrations/idb-cel-index.html', controllerAs: 'idbProfileCtrl', resolveController: true })
+        .when('/:year',       { templateUrl: 'views/idb-celebrations/idb-cel-index.html',    controllerAs: 'idbCelIndexCtrl',   resolveController: true,resolve: { routeParams: injectRouteParams({ year: '2017'    })   } })
+        .when('/:year/:gov',  { templateUrl: 'views/idb-celebrations/idb-profile.html', controllerAs: 'idbProfileCtrl', resolveController: true, resolveController: true,resolve: { routeParams: injectRouteParams({ year: '2017'    })   } });
+
   }
 
   //============================================================
@@ -245,8 +247,8 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
             //
             //============================================================
             function openDialog() {
-                $rootScope.redirectOnAuthMsg=true;
-                $cookies.put('redirectOnAuthMsg',true);
+                $rootScope.redirectOnAuthMsg=false;
+                $cookies.put('redirectOnAuthMsg',false,{path:'/',expires:new Date(new Date().setFullYear(new Date().getFullYear() + 1))});
                 ngDialog.open({
                       template: redirectDialog,
                       className: 'ngdialog-theme-default',
@@ -265,7 +267,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
             //
             //============================================================
             function authRediectChange(value) {
-                $cookies.put('redirectOnAuthMsg',value);
+                $cookies.put('redirectOnAuthMsg',value,{path:'/',expires:new Date(new Date().setFullYear(new Date().getFullYear() + 1))});
             }//authRediectChange
 
         }];//return array
