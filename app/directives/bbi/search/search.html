@@ -147,18 +147,18 @@ color:#001470;
         <li> <a href="" ng-class="{'active':showFilters=='subject'}" ng-click="showFilters=(showFilters=='subject' ? false : 'subject')" class="btn color-grey" ng-show="isFilterEmpty(thematicAreas)"><i class="fa fa-caret-down"></i>&nbsp;Subject <span class="badge">{{isFilterEmpty(thematicAreas)}}</span></a> </li>
         <li> <a href="" ng-class="{'active':showFilters=='aichi'}" ng-click="showFilters=(showFilters=='aichi' ? false : 'aichi')" class="btn color-grey" ng-show="isFilterEmpty(aichiTargets)"><i class="fa fa-caret-down"></i>&nbsp;Aichi <span class="badge">{{isFilterEmpty(aichiTargets)}}</span></a> </li>
         <li> <a href="" ng-class="{'active':showFilters=='region'}" ng-click="showFilters=(showFilters=='region' ? false : 'region')"class="btn color-grey" ng-show="isFilterEmpty(regions)"><i class="fa fa-caret-down"></i>&nbsp;Region <span class="badge">{{isFilterEmpty(regions)}}</span></a ></li>
-        <li> <a href="" ng-class="{'active':showFilters=='dateFilter'}" ng-click="showFilters=(showFilters=='dateFilter' ? false : 'dateFilter')"class="btn color-grey"><i class="fa fa-caret-down"></i>&nbsp;Date</a> </li>
+        <li ng-show="false" > <a href="" ng-class="{'active':showFilters=='dateFilter'}" ng-click="showFilters=(showFilters=='dateFilter' ? false : 'dateFilter')"class="btn color-grey"><i class="fa fa-caret-down"></i>&nbsp;Date</a> </li>
     </ul>
 
 </div>
 	<div class="col-xs-12 alpha" >
             <div class="pointer" ng-click="showFilters=null" ng-show="showFilters" style="position:absolute;top:10px;right:10px;cursor:pointer;z-index:100;"><a href="#" style="color:#555;"><i class="fa fa-times-circle" aria-hidden="true"></i></a></div>
             <search-filter-schemas 	  ng-show="showFilters==='type'"	 	ng-model='schemas' 				facet='schema_s' 					  count='count'   ></search-filter-schemas>
-            <search-filter-countries 	ng-show="showFilters==='country'" ng-model='governments' 		facet='government_s' 			  count='count'   ></search-filter-countries>
+            <search-filter-countries 	ng-show="showFilters==='country'" ng-model='governments' 		facet='hostGovernments_ss' 			  count='count'   ></search-filter-countries>
             <search-filter-regions 		ng-show="showFilters==='region'"  ng-model='regions' 				facet='government_REL_ss'		count='count'   ></search-filter-regions>
             <search-filter-aichi 			ng-show="showFilters==='aichi'"   ng-model='aichiTargets' 	facet='aichiTarget_ss' 			count='count'   ></search-filter-aichi>
             <search-filter-themes 		ng-show="showFilters==='subject'" ng-model='thematicAreas'	facet='thematicArea_REL_ss' count='count'   ></search-filter-themes>
-            <search-filter-dates 			ng-show="showFilters==='dateFilter'"  	query='queryDate'  ></search-filter-dates>
+            <search-filter-dates 			ng-show="false"  	query='queryDate'  ></search-filter-dates>
             <!-- ng-hide="isFilterEmpty(schemas);"
             ng-hide="isFilterEmpty(governments);"
             ng-hide="isFilterEmpty(regions);"

@@ -69,7 +69,7 @@ define(['app', 'lodash','data/bbi/links', 'directives/bbi/slider', 'directives/b
 								'start': 0,
 								'rows': 3,
 								'facet': true,
-								'facet.field': ['schema_s', 'government_s', 'government_REL_ss', 'aichiTarget_ss', 'thematicArea_REL_ss'],
+								'facet.field': ['schema_s', 'hostGovernments_ss', 'government_REL_ss', 'aichiTarget_ss', 'thematicArea_REL_ss'],
 								'facet.limit': 999999,
 								'facet.mincount' : 1
 						};
