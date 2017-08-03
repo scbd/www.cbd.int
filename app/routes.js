@@ -34,9 +34,14 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         //bbi/*
         if(/^\/biobridge($|\/.*)/.test(locationPath))
             registerRoutes_bbi($routeProvider);
+
         //idb/celebrations/*
         if(/^\/idb\/celebrations($|\/.*)/.test(locationPath))
             registerRoutes_idbCelebrations($routeProvider);
+
+        //es/*
+        if(/^\/es($|\/.*)/.test(locationPath))
+            registerRoutes_esPages($routeProvider);
 
         $routeProvider.when('/403', { templateUrl: '/app/views/403.html' });
         $routeProvider.when('/404', { templateUrl: '/app/views/404.html' }).otherwise({redirectTo: '/404'});
@@ -131,6 +136,23 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         .when('/',  { templateUrl: 'views/idb-celebrations/idb-cel-index.html', controllerAs: 'idbProfileCtrl', resolveController: true })
         .when('/:year',       { templateUrl: 'views/idb-celebrations/idb-cel-index.html',    controllerAs: 'idbCelIndexCtrl',   resolveController: true,resolve: { routeParams: injectRouteParams({ year: '2017'    })   } })
         .when('/:year/:gov',  { templateUrl: 'views/idb-celebrations/idb-profile.html', controllerAs: 'idbProfileCtrl', resolveController: true, resolveController: true,resolve: { routeParams: injectRouteParams({ year: '2017'    })   } });
+
+  }
+
+  //============================================================
+  //
+  //
+  //============================================================
+  function registerRoutes_esPages(routeProvider) {
+
+      $("base").attr('href', '/es/'); 
+
+      routeProvider
+        .when('/',  { templateUrl: 'views/es-pages/home.html',  resolveController: false })
+        .when('/bio',  { templateUrl: 'views/es-pages/bio.html',  resolveController: false })
+        .when('/work',  { templateUrl: 'views/es-pages/work.html',  resolveController: false })
+        .when('/media',  { templateUrl: 'views/es-pages/media.html',  resolveController: false })
+        .when('/contact',  { templateUrl: 'views/es-pages/contact.html',  resolveController: false });
 
   }
 
