@@ -110,8 +110,10 @@
             <div class="col-xs-12 km-value">
                 <div ng-class="{'col-xs-10':getLogo(),'col-xs-12':!getLogo()}">
                     <div>
-                        <strong>{{contactOrganization.name | lstring:locale}} </strong><i ng-show="contactOrganization.acronym">({{contactOrganization.acronym | lstring:locale}})</i>
-                        <address>
+                        <a target="_blank"  ng-href="platform/submit/organization/{{contactOrganization.header.identifier}}/view?schema_s=organization">
+                            <strong>{{contactOrganization.name | lstring:locale}} </strong><i ng-show="contactOrganization.acronym">({{contactOrganization.acronym | lstring:locale}})</i>
+                        </a>
+                            <address>
                 <div class="km-pre">{{contactOrganization.address | lstring:locale}}</div>
                 {{contactOrganization.city | lstring:locale}}<span ng-show="contactOrganization.city">, </span>
                 {{contactOrganization.state | lstring:locale}}<br ng-show="contactOrganization.city || document.state" />

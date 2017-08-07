@@ -275,14 +275,18 @@
     <div ng-if="linkedOrganizations">
         <label class="view">Linked organizations</label>
         <div class="km-value" ng-repeat="organization in linkedOrganizations">
-            <b>{{organization.document.name|lstring:locale}} ({{organization.document.acronym|lstring:locale}})</b>
+            <a target="_blank"  ng-href="platform/submit/organization/{{organization.header.identifier}}/view">                           
+                <b>{{organization.document.name|lstring:locale}} ({{organization.document.acronym|lstring:locale}})</b>
+            </a>
         </div>
     </div>
 
     <div ng-if="contacts">
         <label class="view">Contact person in the organization</label>
         <div class="km-value" ng-repeat="contact in contacts">
-            <b>{{contact.document.firstName|lstring:locale}} {{contact.document.middleName|lstring:locale}} {{contact.document.lastName|lstring:locale}}</b>
+             <a target="_blank" ng-href="/biobridge/submit/bbi-contact/{{contact.header.identifier}}/view">                   
+                <b>{{contact.document.firstName|lstring:locale}} {{contact.document.middleName|lstring:locale}} {{contact.document.lastName|lstring:locale}}</b>
+            </a>
         </div>
     </div>
 </div>

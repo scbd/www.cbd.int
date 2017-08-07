@@ -196,11 +196,12 @@
 
               <div class="col-xs-12">
                   <div class="label label-warning pull-right" ng-show="contact.header.state==='draft'">Pending Approval</div>
-
-                  <strong><b>{{contact.prefix| lstring:locale}}
+                   <a target="_blank"  target="_blank" ng-href="platform/submit/bbi-contact/{{contact.header.identifier}}/view"> 
+                        <strong><b>{{contact.prefix| lstring:locale}}
                               {{contact.firstName | lstring:locale}}
                               {{contact.middleName | lstring:locale}}
-                              {{contact.lastName | lstring:locale}} </b></strong> <a target="_blank" ng-href="/biobridge/submit/bbi-contact/{{contact.header.identifier}}/view"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                              {{contact.lastName | lstring:locale}} </b></strong>
+                  </a> <a target="_blank" ng-href="platform/submit/bbi-contact/{{contact.header.identifier}}/view"><i class="fa fa-external-link" aria-hidden="true"></i></a>
                   <span class="small" ng-show="contact.designation || contact.department">
                                 <br>
                               <span ng-show="contact.designation">{{contact.designation | lstring:locale}}</span><span ng-show="contact.designation && contact.department">,</span>
@@ -260,8 +261,10 @@
               <div class="label label-warning pull-right" ng-show="primaryOrganization.header.state==='draft'">Pending Approval</div>
               <div ng-class="{'col-xs-10':getLogo(),'col-xs-12':!getLogo()}">
                   <div>
-                      <strong>{{primaryOrganization.name | lstring:locale}} </strong><i ng-show="primaryOrganization.acronym">({{primaryOrganization.acronym | lstring:locale}})</i>
-                      <address>
+                      <a target="_blank"  ng-href="platform/submit/organization/{{primaryOrganization.header.identifier}}/view?schema_s=organization">
+                        <strong>{{primaryOrganization.name | lstring:locale}} </strong><i ng-show="primaryOrganization.acronym">({{primaryOrganization.acronym | lstring:locale}})</i>
+                      </a>
+                        <address>
                     <div class="km-pre">{{primaryOrganization.address | lstring:locale}}</div>
                     {{primaryOrganization.city | lstring:locale}}<span ng-show="primaryOrganization.city">, </span>
                     {{primaryOrganization.state | lstring:locale}}<br ng-show="primaryOrganization.city || document.state" />
