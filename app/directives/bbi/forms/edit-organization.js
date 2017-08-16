@@ -17,7 +17,7 @@ define(['text!./edit-organization.html', 'text!./bbi-records-dialog.html','app',
 'directives/bbi/views/view-organization'
 ], function(template,bbiRecordsDialog, app, angular, _) { 'use strict';
 
-app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility',  'IStorage', '$route','$timeout','locale','userSettings','ngDialog','$document',  function ($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route,$timeout,locale,userSettings,ngDialog,$document) {
+app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility',  'IStorage', '$route','$timeout','locale','userSettings','ngDialog',  function ($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route,$timeout,locale,userSettings,ngDialog) {
 	return {
 		restrict   : 'E',
 		template   : template,
@@ -26,7 +26,6 @@ app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter"
 		scope: {user:'='},
 		link : function($scope,$element)
 		{
-
 			$scope.schema = 'organization';
 			$scope.status   = "";
 			$scope.error    = null;
