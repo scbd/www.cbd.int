@@ -414,7 +414,7 @@ define(['lodash',
                 // Add Schema
 
                 query.push("schema_s:" + escape(options.schema));
-                // query.push(["realm_ss:" + 'chm-dev', "(*:* NOT realm_ss:*)"]);
+
 
                 // Apply ownership/contributor
 
