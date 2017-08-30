@@ -1,4 +1,4 @@
-define(['app','data/es-pages/media','directives/es-pages/header-nav'], function(app,media) { 'use strict';
+define(['app','data/es-pages/media','directives/es-pages/header-nav','filters/title-case'], function(app,media) { 'use strict';
 
 return ['$routeParams','$scope','$sce','$location', function ($routeParams,$scope,$sce,$location) {
 
