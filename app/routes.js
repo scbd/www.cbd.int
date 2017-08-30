@@ -145,14 +145,14 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
   //============================================================
   function registerRoutes_esPages(routeProvider) {
 
-      $("base").attr('href', '/es/'); 
+      $("base").attr('href', '/es/');
 
       routeProvider
-        .when('/',  { templateUrl: 'views/es-pages/home.html',  resolveController: false })
-        .when('/bio',  { templateUrl: 'views/es-pages/bio.html',  resolveController: false })
-        .when('/work',  { templateUrl: 'views/es-pages/work.html',  resolveController: false })
-        .when('/media',  { templateUrl: 'views/es-pages/media.html',  resolveController: false })
-        .when('/contact',  { templateUrl: 'views/es-pages/contact.html',  resolveController: false });
+        .when('/',          { templateUrl: 'views/es-pages/home.html',      resolveController: true, controllerAs: 'esHomeCtrl' })
+        .when('/bio',       { templateUrl: 'views/es-pages/bio.html',       resolveController: true, controllerAs: 'esBioCtrl'  })
+        .when('/work',      { templateUrl: 'views/es-pages/work.html',      resolveController: true, controllerAs: 'esWorkCtrl'  })
+        .when('/media',     { templateUrl: 'views/es-pages/media.html',     resolveController: true, controllerAs: 'esMediaCtrl' })
+        .when('/contact',   { templateUrl: 'views/es-pages/contact.html',   resolveController: true, controllerAs: 'esContactCtrl'  });
 
   }
 
