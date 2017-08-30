@@ -1,4 +1,4 @@
-define(['app','directives/es-pages/header-nav'], function(app,) { 'use strict';
+define(['app','data/es-pages/media','directives/es-pages/header-nav','filters/embed-video'], function(app,media) { 'use strict';
 
 return ['$location','$scope', function ($location,$scope) {
 
@@ -6,12 +6,13 @@ return ['$location','$scope', function ($location,$scope) {
 			_ctrl.goTo = goTo;
 			$scope.$root.page={};
 			$scope.$root.page.title = "Media: Cristiana Pașca Palmer";
-			
+			_ctrl.media = media;
+
 			//============================================================
 			//
 			//============================================================
 			function goTo (url) {
-					$location.path(url);
+				$location.path(url);
 			}
     }];
 });

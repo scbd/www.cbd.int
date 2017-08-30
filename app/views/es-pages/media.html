@@ -17,92 +17,30 @@
 
     <div class="row-fluid">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-12" ng-repeat="mediaObject in esMediaCtrl.media">
                 <div class="media">
                     <div class="media-left">
-                        <a href="https://youtu.be/yUX_TRq4EQM">
-                        <img src="/app/images/es-media/11-05-2016.jpg" width="349px"></img>
+                        <a ng-href="{{mediaObject.url | embedVideo}}">
+                        <img ng-src="{{mediaObject.img}}" width="349px"></img>
                         </a>
                     </div>
                     <div class="media-body hidden-xs media-middle">
-                        <h4 class="media-heading"><a href="https://youtu.be/yUX_TRq4EQM">Romania Green Building Council, Dr Cristiana Paşca Palme. Ministru - Mediului, Apelor si Pădurilor.</a></h4>
-                        <div class="media-date">Published on 11 May 2016</div>
+                        <h4 class="media-heading"><a ng-href="{{mediaObject.url}}">{{mediaObject.title}}</a></h4>
+                        <div class="media-date">Published on {{mediaObject.published}}</div>
                     </div>
 
                 </div>
                 <div class="media-body hidden-md hidden-lg hidden-xl" style="margin-top:10px;">
-                    <h4 class="media-heading"><a href="https://youtu.be/yUX_TRq4EQM">Romania Green Building Council, Dr Cristiana Paşca Palme. Ministru - Mediului, Apelor si Pădurilor.</a></h4>
-                    <div class="media-date">Published on 11 May 2016</div>
+                    <h4 class="media-heading"><a ng-href="{{mediaObject.url}}">{{mediaObject.title}}</a></h4>
+                    <div class="media-date">Published on {{mediaObject.published}}</div>
                 </div>
+                <hr ng-if="!$last"/>
             </div>
+
         </div>
 
-    <hr/>
 
 
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="media">
-                    <div class="media-left">
-                        <a href="http://webtv.un.org/meetings-events/security-council/watch/cristiana-pasca-palmer-romania-high-level-signature-ceremony-for-the-paris-agreement-national-statements/4858089751001">
-                        <img src="/app/images/es-media/22-04-2016.jpg" width="349px"></img>
-                        </a>
-                    </div>
-                    <div class="media-body hidden-xs media-middle">
-                        <h4 class="media-heading"><a href="http://webtv.un.org/meetings-events/security-council/watch/cristiana-pasca-palmer-romania-high-level-signature-ceremony-for-the-paris-agreement-national-statements/4858089751001">Remarks by Her Excellency Cristiana Pasca Palmer Minister of Environment, Water and Forests of Romania at the national statements of the High-level Signature Ceremony for the Paris Agreement. </a></h4>
-                        <div class="media-date">Published on 22 Apr 2016</div>
-                    </div>
 
-                </div>
-                <div class="media-body hidden-md hidden-lg hidden-xl" style="margin-top:10px;">
-                    <h4 class="media-heading"><a href="http://webtv.un.org/meetings-events/security-council/watch/cristiana-pasca-palmer-romania-high-level-signature-ceremony-for-the-paris-agreement-national-statements/4858089751001">Remarks by Her Excellency Cristiana Pasca Palmer Minister of Environment, Water and Forests of Romania at the national statements of the High-level Signature Ceremony for the Paris Agreement.</a></h4>
-                    <div class="media-date">Published on 22 Apr 2016</div>
-                </div>
-            </div>
-        </div>
-
-    <hr/>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="media">
-                    <div class="media-left">
-                        <a href="https://youtu.be/6_NnWMC2JlU">
-                        <img src="/app/images/es-media/10-03-2016v1.jpg" width="349px"></img>
-                        </a>
-                    </div>
-                    <div class="media-body hidden-xs media-middle">
-                        <h4 class="media-heading"><a href="https://youtu.be/6_NnWMC2JlU">Interviu cu Ministrul Mediului, Cristiana Pasca-Palmer - partea 1 </a></h4>
-                        <div class="media-date">Published on 10 Mar 2016</div>
-                    </div>
-
-                </div>
-                <div class="media-body hidden-md hidden-lg hidden-xl" style="margin-top:10px;">
-                    <h4 class="media-heading"><a href="https://youtu.be/6_NnWMC2JlU">Interviu cu Ministrul Mediului, Cristiana Pasca-Palmer - partea 1 </a></h4>
-                    <div class="media-date">Published on 10 Mar 2016</div>
-                </div>
-            </div>
-        </div>
-            <hr/>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="media">
-                    <div class="media-left">
-                        <a href="https://youtu.be/g465KRZZqnc">
-                        <img src="/app/images/es-media/10-03-2016v2.jpg" width="349px"></img>
-                        </a>
-                    </div>
-                    <div class="media-body hidden-xs media-middle">
-                        <h4 class="media-heading"><a href="https://youtu.be/g465KRZZqnc">Interviu cu Ministrul Mediului, Cristiana Pasca-Palmer - partea a II-a </a></h4>
-                        <div class="media-date">Published on 10 Mar 2016</div>
-                    </div>
-
-                </div>
-                <div class="media-body hidden-md hidden-lg hidden-xl" style="margin-top:10px;">
-                    <h4 class="media-heading"><a href="https://youtu.be/g465KRZZqncU">Interviu cu Ministrul Mediului, Cristiana Pasca-Palmer - partea a II-a</a></h4>
-                    <div class="media-date">Published on 10 Mar 2016</div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </div>
