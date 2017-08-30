@@ -8,8 +8,13 @@ define(['app', 'text!./header-nav.html'], function(app, html) { 'use strict';
             replace: true,
 			scope: {},
 			link: function ($scope,$elm) {
-				 console.log($location.path());
-				//  $elm.find()
+				 $elm.find('a').each(function(){
+
+					 if(~this.href.indexOf($location.path()) && $location.path().length>1)
+					 	angular.element(this).addClass('active');
+
+				 })
+
 			}
 		};
 	}]);
