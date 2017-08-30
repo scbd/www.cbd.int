@@ -17,11 +17,14 @@
 
     <!-- page content -->
     <div class="row-fluid">
-        <div class="hidden-xs hidden-sm">
-            <iframe width="1110" height="720" ng-src="{{esVideoCtrl.url}}" frameborder="0" allowfullscreen></iframe>
+        <div class="hidden-xs hidden-sm text-center">
+            <blockquote ng-if="esVideoCtrl.media.twitter" class="twitter-tweet  tw-align-center" data-lang="en"><p lang="en" dir="ltr">{{esVideoCtrl.media.title}}</p>&mdash; Cristiana Pasca P. (@CristianaPascaP) <a href="{{esVideoCtrl.media.url}}"></a></blockquote>
+            <script ng-if="esVideoCtrl.media.twitter" async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+            <iframe ng-if="!esVideoCtrl.media.twitter" width="1110" height="720" ng-src="{{esVideoCtrl.url}}" frameborder="0" allowfullscreen></iframe>
         </div>
         <div class="hidden-md hidden-lg hidden-xl">
-            <iframe width="260" height="146" ng-src="{{esVideoCtrl.url}}" frameborder="0" allowfullscreen></iframe>
+            <iframe ng-if="!esVideoCtrl.media.twitter" width="260" height="146" ng-src="{{esVideoCtrl.url}}" frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
 </div>

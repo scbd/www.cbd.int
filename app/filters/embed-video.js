@@ -22,7 +22,7 @@ define(['app'], function (app) { 'use strict';
               }
             if(matches)
                 return '/es/video/'+matches[0];
-            else return url;
+            else return '/es/video/'+encodeURIComponent(url);
 
 
           };

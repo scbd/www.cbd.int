@@ -20,7 +20,7 @@
             <div class="col-sm-12" ng-repeat="mediaObject in esMediaCtrl.media">
                 <div class="media">
                     <div class="media-left">
-                        <a ng-href="{{mediaObject.url | embedVideo}}">
+                        <a ng-href="/es/video/{{mediaObject._id}}">
                         <img ng-src="{{mediaObject.img}}" width="349px"></img>
                         </a>
                     </div>
