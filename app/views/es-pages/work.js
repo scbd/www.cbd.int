@@ -57,13 +57,12 @@ console.log("_ctrl.work ",_ctrl.work );
 								data=data.data;
 								canceler = null;
 
-							// _ctrl.documents[schema]=
 							_ctrl.work = 	_ctrl.work.concat(data.response.docs);
-							// _ctrl[schema]={};
-							// _ctrl[schema].count = data.response.numFound;
-							// _ctrl[schema].start = data.response.start;
-							// _ctrl[schema].stop  = _ctrl.documents[schema].length;
-							// _ctrl[schema].rows  = data.response.docs.length;
+							_ctrl.work=_ctrl.work.sort(function(a, b) {
+							    a = new Date(a.startDate_dt);
+							    b = new Date(b.startDate_dt);
+							    return a>b ? -1 : a<b ? 1 : 0;
+							});
 					}).catch(function(error) {
 							console.log('ERROR: ' + error);
 					})
@@ -85,7 +84,6 @@ console.log("_ctrl.work ",_ctrl.work );
 	            arrayToReturn.push(items[i]);
 	        }
 	    }
-
 	    return arrayToReturn;
 	 };
 	});

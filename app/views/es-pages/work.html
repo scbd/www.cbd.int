@@ -42,7 +42,9 @@
         </div> -->
 
 <div class="col-sm-12 col-md-9">
-            <div class="col-sm-12 work-item" ng-repeat="line in esWorkCtrl.work | filter:{ schema_s: esWorkCtrl.type}">
+
+            <div class="col-sm-12 work-item" ng-repeat="line in esWorkCtrl.work | filter:{ schema_s: esWorkCtrl.type} ">
+
                 <!-- <pre>{{line |JSON}}</pre> -->
                 <div class="col-sm-12 col-md-3">
                     <a class="work-title" ng-href="{{line.url}}" ng-if="line.img"><img ng-src="{{line.img || line.logo_s}}" width="150px"/></a>
