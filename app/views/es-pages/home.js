@@ -40,7 +40,19 @@ return ['$location','$scope', function ($location,$scope) {
 				}
 
             $scope.carousel = [{
-                title    : 'International Day of the World’s Indigenous Peoples',
+                title    : 'Title 1',
+                abstract : '9 August 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
+                url      : '/todo/1',
+                imageUrl : '/app/images/es-pages/es5.jpg'
+            },
+			{
+                title    : 'Title 2',
+                abstract : '9 August 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
+                url      : '/todo/1',
+                imageUrl : '/app/images/es-pages/es3.jpg'
+            },
+			{
+                title    : 'Title 3',
                 abstract : '9 August 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
                 url      : '/todo/1',
                 imageUrl : '/app/images/es-pages/es1.jpg'
@@ -49,7 +61,14 @@ return ['$location','$scope', function ($location,$scope) {
                 title    : 'International Day 2 of the World’s Indigenous Peoples',
                 abstract : '12 September 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
                 url      : '/todo/2',
-                imageUrl : '/app/images/es-pages/es2.jpg'
-            }];
+                imageUrl : '/app/images/es-pages/es6.jpg'
+            },
+			{
+				title    : 'International Day 2 of the World’s Indigenous Peoples',
+				abstract : '12 September 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
+				url      : '/todo/2',
+				imageUrl : '/app/images/es-pages/es7.jpg'
+			}
+		];
     }];
 });

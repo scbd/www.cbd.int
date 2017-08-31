@@ -72,5 +72,21 @@ console.log("_ctrl.work ",_ctrl.work );
 					});
 					return pagePromise;
 			}// query
+
+
+
     }];
+	app.filter("byDate", function() {
+	  return function(items,d) {
+	    var arrayToReturn = [];
+	    for (var i=0; i<items.length; i++){
+	        var date = items[i].startDate;
+	        if (date > new Date(d))  {
+	            arrayToReturn.push(items[i]);
+	        }
+	    }
+
+	    return arrayToReturn;
+	 };
+	});
 });

@@ -42,7 +42,7 @@
         </div> -->
 
 <div class="col-sm-12 col-md-9">
-            <div class="col-sm-12 work-item" ng-repeat="line in esWorkCtrl.work">
+            <div class="col-sm-12 work-item" ng-repeat="line in esWorkCtrl.work | filter:{ schema_s: esWorkCtrl.type}">
                 <!-- <pre>{{line |JSON}}</pre> -->
                 <div class="col-sm-12 col-md-3">
                     <a class="work-title" ng-href="{{line.url}}" ng-if="line.img"><img ng-src="{{line.img || line.logo_s}}" width="150px"/></a>
@@ -51,7 +51,7 @@
                 <div class="col-sm-12 col-md-9">
                     <span class="work-type">{{line.schema_s}}: </span>
                     <a class="work-title" ng-href="{{line.url}}">{{line.title_s}}</a><br>
-                    <span class="work-date">{{line.published || line.tartDate_dt | momentUtc:'format':'DD MMM YYYY'}}</span>
+                    <span class="work-date">{{line.startDate_dt | momentUtc:'format':'DD MMM YYYY'}}</span>
                 </div>
             </div>
 
@@ -68,14 +68,14 @@
             </div> -->
             <div>
                 <h4  class="color-blue" style="border-bottom:1px solid #eee;">Filter by type</h4>
-                    <input type="checkbox"> event<br>
-                    <input type="checkbox"> statement<br>
+                    <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'event'" ng-false-value=""> event<br>
+                    <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'statement'" ng-false-value=""> statement<br>
                     <!-- <input type="checkbox"> news article<br> -->
             </div>
             <div>
                 <h4 class="color-blue" style="border-bottom:1px solid #eee;">Filter by date</h4>
-                    <input type="checkbox"> 2017<br>
-                    <input type="checkbox"> 2016<br>
+                    <input type="checkbox" ng-model="esWorkCtrl.date" ng-true-value="'2017-01-01T00:00:02.987Z'" ng-false-value=""> 2017<br>
+                    <input type="checkbox" ng-model="esWorkCtrl.date" ng-true-value="'2016-01-01T00:00:02.987Z'"> 2016<br>
             </div>
         </div>
     </div>
