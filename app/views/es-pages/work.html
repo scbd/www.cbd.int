@@ -17,7 +17,7 @@
 
     <div class="row-fluid">
 
-        <div class="col-sm-12 hidden-md hidden-lg" style="margin-bottom:20px;">
+        <!-- <div class="col-sm-12 hidden-md hidden-lg" style="margin-bottom:20px;">
             <div style="padding:10px;border-bottom:1px solid #efefef;">
                 <strong>Filters:</strong>
                     <select>
@@ -39,48 +39,25 @@
                         <option value="xxx">xxx</option>
                     </select>
             </div>
-        </div>
+        </div> -->
 
-        <div class="col-sm-12 col-md-8">
-            <div class="work-item" >
-                <span class="work-type">[type]:</span>
-                <a class="work-title">[title]</a><br>
-                <span class="work-date">[date]</span>
-            </div>
-            <div class="work-item" >
-                <span class="work-type">[type]:</span>
-                <a class="work-title">[title]</a><br>
-                <span class="work-date">[date]</span>
-            </div>
-            <div class="work-item" >
-                <span class="work-type">[type]:</span>
-                <a class="work-title">[title]</a><br>
-                <span class="work-date">[date]</span>
-            </div>
-            <div class="work-item" >
-                <span class="work-type">[type]:</span>
-                <a class="work-title">[title]</a><br>
-                <span class="work-date">[date]</span>
-            </div>
-            <div class="work-item" >
-                <span class="work-type">[type]:</span>
-                <a class="work-title">[title]</a><br>
-                <span class="work-date">[date]</span>
-            </div>
-            <div class="work-item" >
-                <span class="work-type">[type]:</span>
-                <a class="work-title">[title]</a><br>
-                <span class="work-date">[date]</span>
-            </div>
-            <div class="work-item" >
-                <span class="work-type">[type]:</span>
-                <a class="work-title">[title]</a><br>
-                <span class="work-date">[date]</span>
+<div class="col-sm-12 col-md-9">
+            <div class="col-sm-12 work-item" ng-repeat="line in esWorkCtrl.work">
+                <!-- <pre>{{line |JSON}}</pre> -->
+                <div class="col-sm-12 col-md-3">
+                    <a class="work-title" ng-href="{{line.url}}" ng-if="line.img"><img ng-src="{{line.img || line.logo_s}}" width="150px"/></a>
+                    <a class="work-title" ng-href="{{line.url}}" ng-if="line.logo_s"><img ng-src="https://www.cbd.int/{{line.logo_s}}" width="150px"/></a>
+                </div>
+                <div class="col-sm-12 col-md-9">
+                    <span class="work-type">{{line.schema_s}}: </span>
+                    <a class="work-title" ng-href="{{line.url}}">{{line.title_s}}</a><br>
+                    <span class="work-date">{{line.published || line.tartDate_dt | momentUtc:'format':'DD MMM YYYY'}}</span>
+                </div>
             </div>
 
-        </div>
-        <div class="col-md-4 hidden-sm hidden-xs">
-            <div>
+</div>
+        <div class="col-sm-12 col-md-3 hidden-sm hidden-xs">
+            <!-- <div>
                 <h4 class="color-blue" style="border-bottom:1px solid #eee;">Filter by subject</h4>
                     <select>
                         <option value="xxx">xxx</option>
@@ -88,12 +65,12 @@
                         <option value="xxx">xxx</option>
                         <option value="xxx">xxx</option>
                     </select>
-            </div>
+            </div> -->
             <div>
                 <h4  class="color-blue" style="border-bottom:1px solid #eee;">Filter by type</h4>
+                    <input type="checkbox"> event<br>
                     <input type="checkbox"> statement<br>
-                    <input type="checkbox"> press release<br>
-                    <input type="checkbox"> news article<br>
+                    <!-- <input type="checkbox"> news article<br> -->
             </div>
             <div>
                 <h4 class="color-blue" style="border-bottom:1px solid #eee;">Filter by date</h4>
