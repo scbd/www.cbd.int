@@ -1,4 +1,4 @@
-define(['app','directives/es-pages/header-nav','directives/es-pages/fb-timeline'], function(app,) { 'use strict';
+define(['app','directives/carousel', 'directives/es-pages/header-nav','directives/es-pages/fb-timeline'], function() { 'use strict';
 
 return ['$location','$scope', function ($location,$scope) {
 
@@ -38,5 +38,18 @@ return ['$location','$scope', function ($location,$scope) {
 				function goTo (url) {
 								$location.path(url);
 				}
+
+            $scope.carousel = [{
+                title    : 'International Day of the World’s Indigenous Peoples',
+                abstract : '9 August 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
+                url      : '/todo/1',
+                imageUrl : '/app/images/es-pages/es1.jpg'
+            },
+            {
+                title    : 'International Day 2 of the World’s Indigenous Peoples',
+                abstract : '12 September 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
+                url      : '/todo/2',
+                imageUrl : '/app/images/es-pages/es2.jpg'
+            }];
     }];
 });
