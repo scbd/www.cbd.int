@@ -61,8 +61,20 @@ return ['$location','$scope', function ($location,$scope) {
                 title    : 'International Day 2 of the World’s Indigenous Peoples',
                 abstract : '12 September 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
                 url      : '/todo/2',
-                imageUrl : '/app/images/es-pages/es6.jpg'
+                imageUrl : '/app/images/es-pages/es2.jpg'
             },
+			{
+				title    : 'International Day 2 of the World’s Indigenous Peoples',
+				abstract : '12 September 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
+				url      : '/todo/2',
+				imageUrl : '/app/images/es-pages/es4.jpg'
+			},
+			{
+				title    : 'International Day 2 of the World’s Indigenous Peoples',
+				abstract : '12 September 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
+				url      : '/todo/2',
+				imageUrl : '/app/images/es-pages/es6.jpg'
+			},
 			{
 				title    : 'International Day 2 of the World’s Indigenous Peoples',
 				abstract : '12 September 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
