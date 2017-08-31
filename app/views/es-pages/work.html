@@ -2,7 +2,38 @@
 
   <!-- page header -->
     <header-nav></header-nav>
+<style>
+/*.search {
+    padding: 0px 0;
+    width: 230px;
+    height: 25px;
+    position: relative;
+    left: 10px;
+    float: left;
+    line-height: 22px;
+}*/
 
+    /*.search input {
+        position: absolute;
+        width: 0px;
+        float: Left;
+        margin-left: 210px;
+        -webkit-transition: all 0.7s ease-in-out;
+        -moz-transition: all 0.7s ease-in-out;
+        -o-transition: all 0.7s ease-in-out;
+        transition: all 0.7s ease-in-out;
+        height: 25px;
+        line-height: 18px;
+        padding: 0 2px 0 2px;
+        border-radius:1px;
+    }*/
+
+        /*.search:hover input, .search input:focus {
+            width: 200px;
+            margin-left: 0px;
+        }*/
+
+</style>
   <!-- page content -->
     <div class="row">
         <div class="col-md-12">
@@ -43,7 +74,7 @@
 
 <div class="col-sm-12 col-md-9">
 
-            <div class="col-sm-12 work-item" ng-repeat="line in esWorkCtrl.work | filter:{ schema_s: esWorkCtrl.type} ">
+            <div class="col-sm-12 work-item" ng-repeat="line in esWorkCtrl.work | filter:{ schema_s: esWorkCtrl.type} | filter:{ title_s: esWorkCtrl.search} | byDate:esWorkCtrl.date">
 
                 <!-- <pre>{{line |JSON}}</pre> -->
                 <div class="col-sm-12 col-md-3">
@@ -69,16 +100,31 @@
                     </select>
             </div> -->
             <div>
+                <h4  class="color-blue" style="border-bottom:1px solid #eee;">Filter by key word</h4>
+                    <!-- <input type="text" ng-model="esWorkCtrl.search" > -->
+
+                <div class="input-group">
+     <input type="text" class="form-control" ng-model="esWorkCtrl.search" placeholder="key word">
+     <span class="input-group-btn">
+       <button class="btn btn-default" type="button">
+           <i class="fa fa-close" ng-if="esWorkCtrl.search" ng-click="esWorkCtrl.search='';"></i>
+           <i class="fa fa-search" ng-if="!esWorkCtrl.search"></i>
+       </button>
+     </span>
+   </div>
+                    <!-- <input type="checkbox"> news article<br> -->
+            </div>
+            <div>
                 <h4  class="color-blue" style="border-bottom:1px solid #eee;">Filter by type</h4>
                     <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'event'" ng-false-value=""> event<br>
                     <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'statement'" ng-false-value=""> statement<br>
                     <!-- <input type="checkbox"> news article<br> -->
             </div>
-            <div>
+            <!-- <div>
                 <h4 class="color-blue" style="border-bottom:1px solid #eee;">Filter by date</h4>
-                    <input type="checkbox" ng-model="esWorkCtrl.date" ng-true-value="'2017-01-01T00:00:02.987Z'" ng-false-value=""> 2017<br>
-                    <input type="checkbox" ng-model="esWorkCtrl.date" ng-true-value="'2016-01-01T00:00:02.987Z'"> 2016<br>
-            </div>
+                    <input type="checkbox" ng-model="esWorkCtrl.date" ng-true-value="'2017-02-01T00:00:02.987Z'" ng-false-value=""> 2017<br>
+                    <input type="checkbox" ng-model="esWorkCtrl.date" ng-true-value="'2016-02-01T00:00:02.987Z'"> 2016<br>
+            </div> -->
         </div>
     </div>
 

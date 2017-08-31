@@ -1,4 +1,20 @@
-define(['app','data/es-pages/statements','directives/es-pages/header-nav','filters/moment'], function(app,statements) { 'use strict';
+define(['app','data/es-pages/statements','moment','directives/es-pages/header-nav','filters/moment'], function(app,statements,moment) { 'use strict';
+
+app.filter("byDate", function() {
+  return function(items,d) {
+
+	if(!d) return items;
+	var arrayToReturn = [];
+	for (var i=0; i<items.length; i++){
+		var date = moment(items[i].startDate_dt);
+
+		if (moment(date).isSame(d, 'year'))  {
+			arrayToReturn.push(items[i]);
+		}
+	}
+	return arrayToReturn;
+ };
+});
 
 return ['$location','$scope','$q','$http', function ($location,$scope,$q,$http) {
 
@@ -9,7 +25,7 @@ return ['$location','$scope','$q','$http', function ($location,$scope,$q,$http) 
 			$scope.$root.page={};
 			$scope.$root.page.title = "At Work: Cristiana Pașca Palmer";
 			_ctrl.work = statements;
-console.log("_ctrl.work ",_ctrl.work );
+
 			getEvents();
 			//============================================================
 			//
@@ -75,16 +91,5 @@ console.log("_ctrl.work ",_ctrl.work );
 
 
     }];
-	app.filter("byDate", function() {
-	  return function(items,d) {
-	    var arrayToReturn = [];
-	    for (var i=0; i<items.length; i++){
-	        var date = items[i].startDate;
-	        if (date > new Date(d))  {
-	            arrayToReturn.push(items[i]);
-	        }
-	    }
-	    return arrayToReturn;
-	 };
-	});
+
 });
