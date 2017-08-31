@@ -2,13 +2,18 @@
 
     <style>
         .carousel-container { background-size: cover; background-position:center top;background-repeat: no-repeat;}
-        .carousel-container > .img-overlay { position:relative; height:100%; background-color: rgba(0, 155, 72, 0.85); color:white; }
+        .carousel-container > .img-overlay { position:relative; height:100%; }
+
+        @media (max-width: 991px) {
+          .carousel-container .arrows { font-size: 2.5em; }
+          .carousel-container > .img-overlay { margin-top: 0px; padding-top:10px; background-color: rgba(0, 155, 72, 0.65); }
+        }
     </style>
 
     <div class="carousel-container animated" ng-repeat="item in items" style="height:100%;width:100%;position:absolute" ng-show="item.visible"
          ng-class="{fadeIn: $index==index, fadeOut: $index!=index&&item.visible }"
          ng-style="{ 'background-image': 'url('+item.imageUrl+')', 'z-index' : ($index == index ? '50' : 'auto') }">
-        <div class="col-md-4  img-overlay">
+        <div class="col-md-4 img-overlay">
             <h2>{{item.title}} {{opacity($index)}}</h2>
             <p> {{item.abstract}}</p>
             <h3><a ng-href="{{item.url}}" class="label label-default read-more pointer">Read More</a></h3>
