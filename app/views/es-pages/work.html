@@ -68,13 +68,13 @@
                     <!-- <pre>{{line |JSON}}</pre> -->
                     <div class="col-sm-12 col-md-3 text-center">
 
-                        <a class="work-title" ng-href="{{line.schema_s}}/{{line._id}}" ng-if="line.img"><img ng-src="{{line.img || line.logo_s}}" width="150px"/></a>
-                        <a class="work-title" ng-href="{{line.schema_s}}/{{line._id}}" ng-if="line.logo_s"><img ng-src="https://www.cbd.int/{{line.logo_s}}" width="150px"/></a>
+                        <a class="work-title" ng-href="{{line.schema_s}}/{{line._id || line.identifier_s}}" ng-if="line.img"><img ng-src="{{line.img || line.logo_s}}" width="150px"/></a>
+                        <a class="work-title" ng-href="{{line.schema_s}}/{{line._id || line.identifier_s}}" ng-if="line.logo_s"><img ng-src="https://www.cbd.int/{{line.logo_s}}" width="150px"/></a>
                     </div>
                     <div class="col-sm-12 col-md-9 ">
                         <div style="width:100%;">
                             <!-- <span class="work-type">{{line.schema_s}}: </span> -->
-                            <a class="work-title" ng-href="{{line.url}}">{{line.title_s}}</a><br>
+                            <a class="work-title" ng-href="{{line.schema_s}}/{{line._id || line.identifier_s}">{{line.title_s}}</a><br>
                             <span class="work-date">{{line.startDate_dt | momentUtc:'format':'DD MMM YYYY'}}</span>
                         </div>
                     </div>
@@ -83,13 +83,13 @@
                     <!-- <pre>{{line |JSON}}</pre> -->
                     <div class="col-sm-12 col-md-3 text-center">
 
-                        <a class="work-title" ng-href="{{line.schema_s}}/{{line._id}}" ng-if="line.img"><img ng-src="{{line.img || line.logo_s}}" width="150px"/></a>
-                        <a class="work-title" ng-href="{{line.schema_s}}/{{line._id}}" ng-if="line.logo_s"><img ng-src="https://www.cbd.int/{{line.logo_s}}" width="150px"/></a>
+                        <a class="work-title" ng-href="{{line.schema_s}}/{{line._id || line.identifier_s}" ng-if="line.img"><img ng-src="{{line.img || line.logo_s}}" width="150px"/></a>
+                        <a class="work-title" ng-href="{{line.schema_s}}/{{line._id || line.identifier_s}}" ng-if="line.logo_s"><img ng-src="https://www.cbd.int/{{line.logo_s}}" width="150px"/></a>
                     </div>
                     <div class="col-sm-12 col-md-9 ">
                         <div style="width:100%;">
                             <!-- <span class="work-type">{{line.schema_s}}: </span> -->
-                            <a class="work-title" ng-href="{{line.url}}">{{line.title_s}}</a><br>
+                            <a class="work-title" ng-href="{{line.schema_s}}/{{line._id || line.identifier_s}}">{{line.title_s}}</a><br>
                             <span class="work-date">{{line.startDate_dt | momentUtc:'format':'DD MMM YYYY'}}</span>
                         </div>
                     </div>
