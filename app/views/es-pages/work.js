@@ -23,6 +23,7 @@ return ['$location','$scope','$q','$http', function ($location,$scope,$q,$http) 
 			var canceler = null;
 			_ctrl.goTo = goTo;
             _ctrl.getTypeCount = getTypeCount;
+            _ctrl.getYearCount = getYearCount;
 			$scope.$root.page={};
 			$scope.$root.page.title = "At Work: Cristiana Pașca Palmer";
 			_ctrl.work = statements;
@@ -41,9 +42,7 @@ return ['$location','$scope','$q','$http', function ($location,$scope,$q,$http) 
 			//============================================================
 			function getEvents () {
 							var q = 'schema_s:event AND thematicArea_ss:BD8F75CA-32D4-427B-A9CE-55079989A0CC';//_state_s:public AND
-							return query('event',q).then(function(){
-								console.log(_ctrl.documents);
-							});
+							return query('event',q);
 			}
 			//=======================================================================
 			//
@@ -112,7 +111,19 @@ return ['$location','$scope','$q','$http', function ($location,$scope,$q,$http) 
                 return count;
 
             }//itemSelected
+            //============================================================
+            //
+            //============================================================
+            function getYearCount(year){
+              var count=0;
+              for(var i=0; i<_ctrl.work.length ;i++){
 
+                if(moment(_ctrl.work[i].startDate_dt).startOf('year').isSame(moment(year).startOf('year')))
+                    count++;
+}
+                return count;
+
+            }//itemSelected
     }];
 
 });
