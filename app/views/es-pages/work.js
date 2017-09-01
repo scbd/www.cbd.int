@@ -25,7 +25,7 @@ return ['$location','$scope','$q','$http', function ($location,$scope,$q,$http) 
 			$scope.$root.page={};
 			$scope.$root.page.title = "At Work: Cristiana Pașca Palmer";
 			_ctrl.work = statements;
-
+      _ctrl.hasMonthChange = hasMonthChange;
 
 
 			getEvents();
@@ -90,7 +90,15 @@ return ['$location','$scope','$q','$http', function ($location,$scope,$q,$http) 
 					return pagePromise;
 			}// query
 
+            //============================================================
+            //
+            //============================================================
+            function hasMonthChange(dayOne, dayTwo){
+              if(!dayTwo || !dayOne) return false;
 
+              if(!moment(dayOne).startOf('month').isSame(moment(dayTwo).startOf('month')))
+                return true;
+            }//itemSelected
 
     }];
 

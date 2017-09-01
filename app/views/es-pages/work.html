@@ -23,7 +23,7 @@
         <div class="col-md-12">
             <div class="hero-cont-two">
                 <div class="page-title">
-                    <h3>At Work<h3>
+                    <h4>At Work<h4>
 
                 </div>
            </div>
@@ -32,36 +32,43 @@
 
     <div class="row-fluid">
 
-        <!-- <div class="col-sm-12 hidden-md hidden-lg" style="margin-bottom:20px;">
+        <div class="col-sm-12 hidden-md hidden-lg" style="margin-bottom:20px;">
             <div style="padding:10px;border-bottom:1px solid #efefef;">
                 <strong>Filters:</strong>
-                    <select>
-                        <option value="xxx">subject</option>
-                        <option value="xxx">xxx</option>
-                        <option value="xxx">xxx</option>
-                        <option value="xxx">xxx</option>
-                    </select>
-                     <select>
-                        <option value="xxx">type</option>
-                        <option value="xxx">xxx</option>
-                        <option value="xxx">xxx</option>
-                        <option value="xxx">xxx</option>
-                    </select>
-                     <select>
-                        <option value="xxx">date</option>
-                        <option value="xxx">xxx</option>
-                        <option value="xxx">xxx</option>
-                        <option value="xxx">xxx</option>
-                    </select>
+                <div class="input-group">
+            <input type="text" class="form-control" ng-model="esWorkCtrl.search" placeholder="key word">
+            <span class="input-group-btn">
+            <button class="btn btn-default" type="button">
+            <i class="fa fa-close" ng-if="esWorkCtrl.search" ng-click="esWorkCtrl.search='';"></i>
+            <i class="fa fa-search" ng-if="!esWorkCtrl.search"></i>
+            </button>
+            </span>
             </div>
-        </div> -->
+                    <!-- <input type="checkbox"> news article<br> -->
+            </div>
+            <div>
+                <h4  class="color-blue" style="border-bottom:1px solid #eee;">Filter by type</h4>
+                    <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'event'" ng-false-value=""> event<br>
+                    <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'statement'" ng-false-value=""> statement<br>
+                    <!-- <input type="checkbox"> news article<br> -->
+            </div>
+            </div>
+        </div>
 
         <div class="col-sm-12 col-md-9">
-            <div class="col-sm-12 work-item" ng-repeat="line in esWorkCtrl.work | filter:{ schema_s: esWorkCtrl.type} | filter:{ title_s: esWorkCtrl.search} | byDate:esWorkCtrl.date">
-                <div class="row vertical-align">
+            <div ng-repeat-start="line in esWorkCtrl.work | filter:{ schema_s: esWorkCtrl.type} | filter:{ title_s: esWorkCtrl.search} | byDate:esWorkCtrl.date"  ng-if="$first || esWorkCtrl.hasMonthChange(line.startDate_dt,esWorkCtrl.work[$index-1].startDate_dt)">
+              <h2  ng-if="$first">{{line.startDate_dt |moment:'format':'YYYY'}}</h2>
+              <hr/>
+              <h5  >{{line.startDate_dt |moment:'format':'MMMM'}}</h5>
+              <hr/>
+            </div>
+            <div class="col-sm-12 work-item" ng-repeat-end>
+
+                <div class="row hidden-md hidden-lg hidden-xl">
                     <!-- <pre>{{line |JSON}}</pre> -->
                     <div class="col-sm-12 col-md-3 text-center">
-                        <a class="work-title" ng-href="{{line.url || line.url_ss[]}" ng-if="line.img"><img ng-src="{{line.img || line.logo_s}}" width="150px"/></a>
+
+                        <a class="work-title" ng-href="{{line.url || line.url_ss[0]}" ng-if="line.img"><img ng-src="{{line.img || line.logo_s}}" width="150px"/></a>
                         <a class="work-title" ng-href="{{line.url}}" ng-if="line.logo_s"><img ng-src="https://www.cbd.int/{{line.logo_s}}" width="150px"/></a>
                     </div>
                     <div class="col-sm-12 col-md-9 ">
@@ -72,6 +79,22 @@
                         </div>
                     </div>
                 </div>
+                <div class="row vertical-align hidden-xs hidden-sm">
+                    <!-- <pre>{{line |JSON}}</pre> -->
+                    <div class="col-sm-12 col-md-3 text-center">
+
+                        <a class="work-title" ng-href="{{line.url || line.url_ss[0]}" ng-if="line.img"><img ng-src="{{line.img || line.logo_s}}" width="150px"/></a>
+                        <a class="work-title" ng-href="{{line.url}}" ng-if="line.logo_s"><img ng-src="https://www.cbd.int/{{line.logo_s}}" width="150px"/></a>
+                    </div>
+                    <div class="col-sm-12 col-md-9 ">
+                        <div style="width:100%;">
+                            <!-- <span class="work-type">{{line.schema_s}}: </span> -->
+                            <a class="work-title" ng-href="{{line.url}}">{{line.title_s}}</a><br>
+                            <span class="work-date">{{line.startDate_dt | momentUtc:'format':'DD MMM YYYY'}}</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
