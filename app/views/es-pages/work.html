@@ -125,8 +125,8 @@
             </div>
             <div>
                 <h4  class="color-blue" style="border-bottom:1px solid #eee;">Filter by type</h4>
-                    <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'event'" ng-false-value=""> event<br>
-                    <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'statement'" ng-false-value=""> statement<br>
+                    <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'event'" ng-false-value=""> event ({{esWorkCtrl.getTypeCount('event')}})<br>
+                    <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'statement'" ng-false-value=""> statement ({{esWorkCtrl.getTypeCount('statement')}})<br>
                     <!-- <input type="checkbox"> news article<br> -->
             </div>
             <!-- <div>

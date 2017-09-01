@@ -22,6 +22,7 @@ return ['$location','$scope','$q','$http', function ($location,$scope,$q,$http) 
 			_ctrl.documents ={}
 			var canceler = null;
 			_ctrl.goTo = goTo;
+            _ctrl.getTypeCount = getTypeCount;
 			$scope.$root.page={};
 			$scope.$root.page.title = "At Work: Cristiana Pașca Palmer";
 			_ctrl.work = statements;
@@ -98,6 +99,18 @@ return ['$location','$scope','$q','$http', function ($location,$scope,$q,$http) 
 
               if(!moment(dayOne).startOf('month').isSame(moment(dayTwo).startOf('month')))
                 return true;
+            }//itemSelected
+            //============================================================
+            //
+            //============================================================
+            function getTypeCount(type){
+              var count=0;
+              for(var i=0; i<_ctrl.work.length ;i++)
+                if(_ctrl.work[i].schema_s===type)
+                    count++;
+
+                return count;
+
             }//itemSelected
 
     }];
