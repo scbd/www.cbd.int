@@ -40,32 +40,32 @@ return ['$location','$scope', function ($location,$scope) {
 				}
 
             $scope.carousel = [{
-                title    : 'Title 1',
-                abstract : '9 August 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
+                title    : 'CMS COP12',
+                abstract : '22-28 October 2017: 12th Session of the Conference of the Parties to the Convention on the Conservation of Migratory Species of Wild Animals, Bonn, Germany.',
                 url      : '/todo/1',
                 imageUrl : '/app/images/es-pages/es5.jpg'
             },
 			{
-                title    : 'Title 2',
-                abstract : '9 August 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
+                title    : 'Bucharest Forum',
+                abstract : '5-7 October 2017: Focusing on the needs of economic and strategic decision makers in the region between the Adriatic, Black Sea and the Caspian Sea.',
                 url      : '/todo/1',
                 imageUrl : '/app/images/es-pages/es3.jpg'
             },
 			{
-                title    : 'Title 3',
-                abstract : '9 August 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
+                title    : 'UN General Assembly',
+                abstract : '14 September 2017: Focusing on People: Striving for Peace and a Decent Life for All on a Sustainable Planet',
                 url      : '/todo/1',
                 imageUrl : '/app/images/es-pages/es1.jpg'
             },
             {
-                title    : 'International Day 2 of the World’s Indigenous Peoples',
-                abstract : '12 September 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
+                title    : 'UNWTO General Assembly',
+                abstract : '13 September 2017: 22nd Session of the General Assembly of the World Tourism Organization, Chengdu, China.',
                 url      : '/todo/2',
                 imageUrl : '/app/images/es-pages/es2.jpg'
             },
 			{
-				title    : 'International Day 2 of the World’s Indigenous Peoples',
-				abstract : '12 September 2017: "Ten years of the United Nations Declaration on the Rights of Indigenous Peoples"',
+				title    : 'UNCCD COP13',
+				abstract : '11 September 2017: 13th session of the Conference of the Parties to the United Nations Convention to Combat Desertification, Ordos, China.',
 				url      : '/todo/2',
 				imageUrl : '/app/images/es-pages/es4.jpg'
 			},
