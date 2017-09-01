@@ -21,7 +21,7 @@
     <!-- page content -->
     <div class="row">
         <div class="col-md-12">
-            <div class="hero-cont-two">
+            <div class="hero-cont-two" style="background-image: url(/app/images/es-pages/es6.jpg);">
                 <div class="page-title">
                     <h4>At Work<h4>
 
@@ -57,10 +57,10 @@
 
         <div class="col-sm-12 col-md-9">
             <div ng-repeat-start="line in esWorkCtrl.work | filter:{ schema_s: esWorkCtrl.type} | filter:{ title_s: esWorkCtrl.search} | byDate:esWorkCtrl.date"  ng-if="$first || esWorkCtrl.hasMonthChange(line.startDate_dt,esWorkCtrl.work[$index-1].startDate_dt)">
-              <h2  ng-if="$first">{{line.startDate_dt |moment:'format':'YYYY'}}</h2>
-              <hr/>
-              <h5  >{{line.startDate_dt |moment:'format':'MMMM'}}</h5>
-              <hr/>
+              <h2 style="margin-bottom: 0px;" ng-if="$first">{{line.startDate_dt |moment:'format':'YYYY'}}</h2>
+              <hr style="margin-top: 0px;"/>
+              <h5  style="margin-bottom: 0px;">{{line.startDate_dt |moment:'format':'MMMM'}}</h5>
+              <hr style="margin-top: 0px;"/>
             </div>
             <div class="col-sm-12 work-item" ng-repeat-end>
 
