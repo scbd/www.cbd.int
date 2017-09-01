@@ -26,6 +26,8 @@ return ['$location','$scope','$q','$http', function ($location,$scope,$q,$http) 
 			$scope.$root.page.title = "At Work: Cristiana Pașca Palmer";
 			_ctrl.work = statements;
 
+
+
 			getEvents();
 			//============================================================
 			//
