@@ -16,7 +16,7 @@ var gitVersion = (process.env.COMMIT || 'UNKNOWN').substr(0, 7);
 console.info(`info: www.cbd.int`);
 console.info(`info: Git version: ${gitVersion}`);
 console.info(`info: API address: ${apiUrl}`);
-
+console.info(`info: IS DEV: ${process.env.IS_DEV}`);
 // Configure options
 
 app.set('views', `${__dirname}/app`);
