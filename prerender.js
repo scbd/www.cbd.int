@@ -260,6 +260,7 @@ prerender.buildApiUrl = function(req) {
   if (this.protocol) {
     protocol = this.protocol;
   }
+  console.log('process.env.IS_DEV ',process.env.IS_DEV );
   if(~req.get('Host').indexOf('localhost'))
     this.host='localhost:2000';
   else if(process.env.IS_DEV )
