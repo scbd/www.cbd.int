@@ -70,7 +70,7 @@ return ['$location','$scope','fb','$document','ngMeta', function ($location,$sco
 
 				$scope.$root.page.title = "Cristiana Pașca Palmer, Executive Secretary of the UN Biodiversity Convention. UN Assistant Secretary-General.";
 				$scope.$root.page.description = 'The latest news, statements and events from Cristiana Pașca Palmer work on UN Biodiversity Convention.'
-				fb.setTitle($scope.$root.page.title,'The latest news, statements and events from Cristiana Pașca Palmer work on UN Biodiversity Convention.');
+				fb.setTitle($scope.$root.page.title,' ');
 				fb.set('og:description', $scope.$root.page.description);
 				fb.set('og:url',window.location.href);
 
