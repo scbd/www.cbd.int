@@ -68,10 +68,10 @@ return ['$location','$scope','fb','$document', function ($location,$scope,fb,$do
 
 			angular.element($document).ready(function() {
 
-				$scope.$root.page.title = "Cristiana Pașca Palmer, Executive Secretary of the UN Biodiversity Convention. UN Assistant Secretary-General";
+				$scope.$root.page.title = "Cristiana Pașca Palmer, Executive Secretary of the UN Biodiversity Convention. UN Assistant Secretary-General.";
 
 				fb.setTitle($scope.$root.page.title,' ');
-				fb.set('og:description', 'The latest news, statements and events from Cristiana Pașca Palmer.');
+				fb.set('og:description', 'The latest news, statements and events from Cristiana Pașca Palmer work on UN Biodiversity Convention.');
 				fb.set('og:url',window.location.href);
 
 				fb.setImage('app/images/es-pages/profile-pic.jpg');
@@ -81,10 +81,10 @@ return ['$location','$scope','fb','$document', function ($location,$scope,fb,$do
 				fb.set('og:profile:gender','female');
 				fb.set('fb:profile_id','CristianaPascaPalmer');
 				fb.set('og:see_also',['https://www.cbd.int/executive-secretary/bio','https://www.cbd.int/executive-secretary/work','https://www.cbd.int/executive-secretary/media','https://www.cbd.int/executive-secretary/contact']);
-					if(false){
-						var jsonLd = angular.element(document.getElementById('structuredContent'))[0];
-						jsonLd.innerHTML = angular.toJson(_ctrl.post.googleMarkUp);
-					}
+				if(false){
+					var jsonLd = angular.element(document.getElementById('structuredContent'))[0];
+					jsonLd.innerHTML = angular.toJson(_ctrl.post.googleMarkUp);
+				}
 
 			});
 

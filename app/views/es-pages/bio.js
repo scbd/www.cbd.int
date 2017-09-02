@@ -1,17 +1,31 @@
-define(['app','directives/es-pages/header-nav'], function(app,) { 'use strict';
+define(['app','services/fb','directives/es-pages/header-nav'], function(app) { 'use strict';
 
-return ['$location','$scope', function ($location,$scope) {
+return ['$location','$scope','fb','$document', function ($location,$scope,fb,$document) {
 
 			var _ctrl = this;
-			_ctrl.goTo = goTo;
-			$scope.$root.page={};
-			$scope.$root.page.title = "Bio: Cristiana Pașca Palmer";
 
-			//============================================================
-			//
-			//============================================================
-			function goTo (url) {
-					$location.path(url);
-			}
+			$scope.$root.page={};
+
+
+			angular.element($document).ready(function() {
+				$scope.$root.page.title = "Cristiana Pașca Palmer's Biography";
+
+				fb.setTitle($scope.$root.page.title,' ');
+				fb.set('og:description', 'Biography for Cristiana Pașca Palmer, Executive Secretary of the UN Biodiversity Convention. UN Assistant Secretary-General.');
+				fb.set('og:url',window.location.href);
+
+				fb.setImage('/app/images/es-pages/es5.jpg');
+				fb.setOgType('profile');
+				fb.set('og:profile:first_name','Cristiana');
+				fb.set('og:profile:last_name','Pașca Palmer');
+				fb.set('og:profile:gender','female');
+				fb.set('fb:profile_id','CristianaPascaPalmer');
+				fb.set('og:see_also',['https://www.cbd.int/executive-secretary/work','https://www.cbd.int/executive-secretary/media','https://www.cbd.int/executive-secretary/contact']);
+				if(false){
+					var jsonLd = angular.element(document.getElementById('structuredContent'))[0];
+					jsonLd.innerHTML = angular.toJson(_ctrl.post.googleMarkUp);
+				}
+
+			});
     }];
 });
