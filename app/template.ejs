@@ -22,6 +22,24 @@
     <script async src='https://www.google-analytics.com/analytics.js'></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places"></script>
     <title ng-bind="$root.page.title">Convention on Biological Diversity</title>
+    <title ng-bind="$root.page.title">Circus Living </title>
+    <meta name="description" content="{{$root.page.description || ngMeta['og:description']}}" ng-if="$root.page.description || ngMeta['og:description']">
+    <meta property="og:title" content="{{ngMeta['og:title']}}" />
+    <meta property="og:type" content="{{ngMeta['og:type']}}" ng-if="ngMeta['og:type']"/>
+    <meta property="og:locale" content="{{ngMeta['og:locale']}}" ng-if="ngMeta['og:locale']"/>
+    <meta property="og:description" content="{{ngMeta['og:description']}}" />
+    <meta property="fb:app_id"   content="{{ngMeta['fb:app_id']}}" ng-if="ngMeta['fb:app_id']">
+    <meta property="og:url" content="{{ngMeta['og:url']}}" ng-if="ngMeta['og:url']">
+    <meta property="og:image" content="{{ngMeta['og:image']}}" ng-if="ngMeta['og:image']">
+    <meta property="og:image:height" content="{{ngMeta['og:image:height']}}" ng-if="ngMeta['og:image:height']">
+    <meta property="og:image:width" content="{{ngMeta['og:image:width']}}" ng-if="ngMeta['og:image:width']">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@cathoulahan">
+    <meta name="twitter:creator" content="{{ngMeta['twitter:creator'] || '@CBDNews'}}"  >
+    <meta name="twitter:title" content="{{ngMeta['twitter:title']}}" ng-if="ngMeta['twitter:title']">
+    <meta name="twitter:description" content="{{ngMeta['twitter:description']}}" ng-if="ngMeta['twitter:description']">
+    <meta name="twitter:image" content="{{ngMeta['twitter:image']}}" ng-if="ngMeta['twitter:image']">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
