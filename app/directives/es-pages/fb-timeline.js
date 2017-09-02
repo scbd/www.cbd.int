@@ -1,4 +1,4 @@
-define(['app', 'text!./fb-timeline.html'], function(app, html) { 'use strict';
+define(['app', 'text!./fb-timeline.html','services/fb'], function(app, html) { 'use strict';
 var _savedHtml;
 
 	return app.directive('fbTimeline',['$timeout','$compile',function($timeout,$compile) {
@@ -16,6 +16,7 @@ var _savedHtml;
                   js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10&appId=1483448981677752";
                   fjs.parentNode.insertBefore(js, fjs);
                 }(document, 'script', 'facebook-jssdk'));
+
                     if(_savedHtml)
                         window.FB.XFBML.parse();
 

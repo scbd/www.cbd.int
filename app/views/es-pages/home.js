@@ -39,8 +39,13 @@ return ['$location','$scope','fb', function ($location,$scope,fb) {
 					fb.set('og:description', 'The latest news, statements and events from Cristiana Pașca Palmer.');
 					fb.set('og:url',window.location.href);
 
-					fb.setImage('/app/images/es-pages/es5.jpg');
-					// fb.setOgType('article');
+					fb.setImage('app/images/es-pages/profile-pic.jpg');
+					fb.setOgType('profile');
+					fb.set('og:profile:first_name','Cristiana');
+					fb.set('og:profile:last_name','Pașca Palmer');
+					fb.set('og:profile:gender','female');
+					fb.set('fb:profile_id','CristianaPascaPalmer');
+					fb.set('og:see_also',['https://www.cbd.int/executive-secretary/bio','https://www.cbd.int/executive-secretary/work','https://www.cbd.int/executive-secretary/media','https://www.cbd.int/executive-secretary/contact']);
 					if(false){
 						var jsonLd = angular.element(document.getElementById('structuredContent'))[0];
 						jsonLd.innerHTML = angular.toJson(_ctrl.post.googleMarkUp);
