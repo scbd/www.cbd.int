@@ -1,24 +1,25 @@
 define(['app','services/fb','directives/carousel', 'directives/es-pages/header-nav','directives/es-pages/fb-timeline'], function() { 'use strict';
+window.twttr = (function(d, s, id) {
+var js, fjs = d.getElementsByTagName(s)[0],
+t = window.twttr || {};
+if (d.getElementById(id)) return t;
+js = d.createElement(s);
+js.id = id;
+js.src = "https://platform.twitter.com/widgets.js";
+fjs.parentNode.insertBefore(js, fjs);
 
-return ['$location','$scope','fb', function ($location,$scope,fb) {
+t._e = [];
+t.ready = function(f) {
+t._e.push(f);
+};
 
-
-	window.twttr = (function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0],
-    t = window.twttr || {};
-  if (d.getElementById(id)) return t;
-  js = d.createElement(s);
-  js.id = id;
-  js.src = "https://platform.twitter.com/widgets.js";
-  fjs.parentNode.insertBefore(js, fjs);
-
-  t._e = [];
-  t.ready = function(f) {
-    t._e.push(f);
-  };
-
-  return t;
+return t;
 }(document, "script", "twitter-wjs"));
+
+return ['$location','$scope','fb','$document', function ($location,$scope,fb,$document) {
+
+
+
 
 
 // twttr.widgets.createTweet(
@@ -31,22 +32,22 @@ return ['$location','$scope','fb', function ($location,$scope,fb) {
 			var _ctrl = this;
 			_ctrl.goTo = goTo;
 			$scope.$root.page={};
-			$scope.$root.page.title = "Cristiana Pașca Palmer, Executive Secretary UN Biodiversity Convention. UN Assistant Secretary-General";
-			fb.setTitle($scope.$root.page.title);
-			fb.set('og:description', 'The latest news, statements and events from Cristiana Pașca Palmer.');
-			fb.set('og:url',window.location.href);
 
-			fb.setImage('app/images/es-pages/profile-pic.jpg');
-			fb.setOgType('profile');
-			fb.set('og:profile:first_name','Cristiana');
-			fb.set('og:profile:last_name','Pașca Palmer');
-			fb.set('og:profile:gender','female');
-			fb.set('fb:profile_id','CristianaPascaPalmer');
-			fb.set('og:see_also',['https://www.cbd.int/executive-secretary/bio','https://www.cbd.int/executive-secretary/work','https://www.cbd.int/executive-secretary/media','https://www.cbd.int/executive-secretary/contact']);
-			angular.element(document).ready(function() {
+			angular.element($document).ready(function() {
 
+				$scope.$root.page.title = "Cristiana Pașca Palmer, Executive Secretary UN Biodiversity Convention. UN Assistant Secretary-General";
 
+				fb.setTitle($scope.$root.page.title);
+				fb.set('og:description', 'The latest news, statements and events from Cristiana Pașca Palmer.');
+				fb.set('og:url',window.location.href);
 
+				fb.setImage('app/images/es-pages/profile-pic.jpg');
+				fb.setOgType('profile');
+				fb.set('og:profile:first_name','Cristiana');
+				fb.set('og:profile:last_name','Pașca Palmer');
+				fb.set('og:profile:gender','female');
+				fb.set('fb:profile_id','CristianaPascaPalmer');
+				fb.set('og:see_also',['https://www.cbd.int/executive-secretary/bio','https://www.cbd.int/executive-secretary/work','https://www.cbd.int/executive-secretary/media','https://www.cbd.int/executive-secretary/contact']);
 					if(false){
 						var jsonLd = angular.element(document.getElementById('structuredContent'))[0];
 						jsonLd.innerHTML = angular.toJson(_ctrl.post.googleMarkUp);

@@ -246,7 +246,7 @@ prerender.plainResponse = function(response, callback) {
 
 
 prerender.buildApiUrl = function(req) {
-  var prerenderUrl = prerender.getPrerenderServiceUrl();
+  var prerenderUrl = prerender.getPrerenderServiceUrl(req);
   var forwardSlash = prerenderUrl.indexOf('/', prerenderUrl.length - 1) !== -1 ? '' : '/';
 
   var protocol = req.connection.encrypted ? "https" : "http";
@@ -260,19 +260,25 @@ prerender.buildApiUrl = function(req) {
   if (this.protocol) {
     protocol = this.protocol;
   }
-
-  if(process.env.IS_DEV)
+  if(~req.get('Host').indexOf('localhost'))
+    this.host='localhost:2000';
+  else if(process.env.IS_DEV )
     this.host='www.cbddev.xyz';
   else
     this.host='www.cbd.int';
 
   var fullUrl = protocol + "://" + (this.host || req.headers['x-forwarded-host'] || req.headers['host']) + req.originalUrl;
+
   return prerenderUrl + forwardSlash + fullUrl;
 };
 
-prerender.getPrerenderServiceUrl = function() {
-//  console.log('--------------------------------',process.env.PRERENDER_SERVICE_URL);
-  return this.prerenderServiceUrl ||  'https://prerender.cbddev.xyz';
+prerender.getPrerenderServiceUrl = function(req) {
+console.log('--------------------------------',process.env.PRERENDER_SERVICE_URL);
+if(~req.get('Host').indexOf('localhost'))
+    return this.prerenderServiceUrl ||  'http://localhost:3000';
+else
+    return this.prerenderServiceUrl ||  'https://prerender.cbddev.xyz';
+
 };
 
 prerender.beforeRenderFn = function(req, done) {
