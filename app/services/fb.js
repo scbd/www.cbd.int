@@ -9,7 +9,7 @@ define(['app','ngMeta'], function(app) {'use strict';
         // FB.XFBML.parse();
 
         app.factory('fb', ['ngMeta',function(ngMeta) {
-          var domain = 'circusliving.ca';
+          var domain = 'www.cbd.int';
           ngMeta.init();
           if(window.location.hostname==='localhost' || window.location.hostname==='staging.circusliving.ca') domain = 'staging.circusliving.ca';
 
@@ -89,7 +89,7 @@ define(['app','ngMeta'], function(app) {'use strict';
             if(titleSuffix)
               title = title + titleSuffix;
             else
-              title = title + ' | Circus Living';
+              title = title + ' | Convention on Biological Diversity';
             ngMeta.setTag('og:title',title );
           }
           //============================================================
