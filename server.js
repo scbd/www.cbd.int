@@ -1,7 +1,7 @@
 'use strict'; // jshint node: true, browser: false, esnext: true
 var express     = require('express');
 var httpProxy   = require('http-proxy');
-
+var prerender   = require('./prerender');
 // Create server & proxy
 var app    = express();
 var proxy  = httpProxy.createProxyServer({});
@@ -47,7 +47,8 @@ app.get('/robots.txt', function (req, res) {
     res.contentType('text/plain');
     res.end('User-agent: *\nDisallow: ' + text);
 });
-
+// Configure template(s)
+app.use('/*',prerender);
 // Configure template(s)
 
 app.get('/reports/map*', function(req, res) { res.cookie('VERSION', process.env.COMMIT||''); res.sendFile(__dirname + '/app/views/reports/template.html', { maxAge : 5*60*1000 }); });

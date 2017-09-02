@@ -34,9 +34,14 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         //bbi/*
         if(/^\/biobridge($|\/.*)/.test(locationPath))
             registerRoutes_bbi($routeProvider);
+
         //idb/celebrations/*
         if(/^\/idb\/celebrations($|\/.*)/.test(locationPath))
             registerRoutes_idbCelebrations($routeProvider);
+
+        //es/*
+        if(/^\/es($|\/.*)/.test(locationPath))
+            registerRoutes_esPages($routeProvider);
 
         $routeProvider.when('/403', { templateUrl: '/app/views/403.html' });
         $routeProvider.when('/404', { templateUrl: '/app/views/404.html' }).otherwise({redirectTo: '/404'});
@@ -132,6 +137,25 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         .when('/:year',       { templateUrl: 'views/idb-celebrations/idb-cel-index.html',    controllerAs: 'idbCelIndexCtrl',   resolveController: true,resolve: { routeParams: injectRouteParams({ year: '2017'    })   } })
         .when('/:year/:gov',  { templateUrl: 'views/idb-celebrations/idb-profile.html', controllerAs: 'idbProfileCtrl', resolveController: true, resolveController: true,resolve: { routeParams: injectRouteParams({ year: '2017'    })   } });
 
+  }
+
+  //============================================================
+  //
+  //
+  //============================================================
+  function registerRoutes_esPages(routeProvider) {
+
+      $("base").attr('href', '/es/');
+
+      routeProvider
+        .when('/',          { templateUrl: 'views/es-pages/home.html',      resolveController: true, controllerAs: 'esHomeCtrl' })
+        .when('/bio',       { templateUrl: 'views/es-pages/bio.html',       resolveController: true, controllerAs: 'esBioCtrl'  })
+        .when('/work',      { templateUrl: 'views/es-pages/work.html',      resolveController: true, controllerAs: 'esWorkCtrl'  })
+        .when('/media',     { templateUrl: 'views/es-pages/media.html',     resolveController: true, controllerAs: 'esMediaCtrl' })
+        .when('/contact',   { templateUrl: 'views/es-pages/contact.html',   resolveController: true, controllerAs: 'esContactCtrl'  })
+        .when('/video/:id',   { templateUrl: 'views/es-pages/youtube-video.html',resolveController: true, controllerAs: 'esVideoCtrl'  })
+        .when('/event/:id',   { templateUrl: 'views/es-pages/event.html',resolveController: true, controllerAs: 'esEventCtrl'  })
+        .when('/statement/:id',   { templateUrl: 'views/es-pages/statement.html',resolveController: true, controllerAs: 'esStatementCtrl'  });
   }
 
   //============================================================

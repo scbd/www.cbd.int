@@ -45,11 +45,12 @@
 
                 <div class="col-xs-12 km-value">
 
-
+                    <a target="_blank" ng-href="/biobridge/submit/bbi-contact/{{contact.header.identifier}}/view">
                     <strong><b>{{contact.prefix| lstring:locale}}
                               {{contact.firstName | lstring:locale}}
                               {{contact.middleName | lstring:locale}}
                               {{contact.lastName | lstring:locale}} </b></strong>
+                    </a>
                     <span class="small" ng-show="contact.designation || contact.department">
                                 <br>
                               <span ng-show="contact.designation">{{contact.designation | lstring:locale}}</span><span ng-show="contact.designation && contact.department">,</span>
@@ -102,8 +103,10 @@
               <div class="col-xs-12 km-value">
                   <div ng-class="{'col-xs-10':getLogo(),'col-xs-12':!getLogo()}">
                       <div>
-                          <strong>{{organization.name | lstring:locale}} </strong><i ng-show="organization.acronym">({{organization.acronym | lstring:locale}})</i>
-                          <address>
+                           <a target="_blank"  ng-href="platform/submit/organization/{{organization.header.identifier}}/view?schema_s=organization">
+                              <strong>{{organization.name | lstring:locale}} </strong><i ng-show="organization.acronym">({{organization.acronym | lstring:locale}})</i>
+                            </a>
+                              <address>
                                 <div class="km-pre">{{organization.address | lstring:locale}}</div>
                                 {{organization.city | lstring:locale}}<span ng-show="organization.city">, </span>
                                 {{organization.state | lstring:locale}}<br ng-show="organization.city || document.state" />

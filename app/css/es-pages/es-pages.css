@@ -1,0 +1,19 @@
+.fa-2 {font-size: 1.5em;}
+.fa-3 {font-size: 2.5em;}
+.color-green{color: #009B48!important;}
+.color-blue{color: #428bca!important;}
+.color-grey{color:#777!important;}
+.nav-links li{display:inline;}
+.nav-links > li { margin-right:20px;}
+.nav-links > li:last-child {margin-right:0;}
+.nav-links > li > a{text-decoration: none; color:#777; font-weight:500; font-size:12px;}
+.nav-links > li > a:hover{color:#000;}
+.job-title {color:#777}
+.media-title {text-transform:uppercase;font-size:12px; font-weight:400;}
+.active{color:#000!important;}
+#es-content *>a {text-decoration: none;}
+#es-content *>a:hover {text-decoration: none;color:#000;}
+.work-item{background-color:#f9f9f9;margin-bottom:10px;padding:10px;}
+.work-title{color: #428bca!important;font-size:16px;}
+.work-type{font-size:16px;font-weight:500}
+.work-date{text-transform:uppercase;font-size:12px; font-weight:400;}
