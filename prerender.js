@@ -5,6 +5,7 @@ var request = require('request')
 var prerender = module.exports = function(req, res, next) {
   if(!prerender.shouldShowPrerenderedPage(req)) return next();
   console.log('Crawl by: '+req.headers['user-agent']);
+console.log('X-Forwarded-Host',req.get('X-Forwarded-Host'));
   console.log(req.get('Host')+':----> Prerendering: '+req.originalUrl);
   prerender.beforeRenderFn(req, function(err, cachedRender) {
 
