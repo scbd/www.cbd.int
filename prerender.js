@@ -260,6 +260,12 @@ prerender.buildApiUrl = function(req) {
   if (this.protocol) {
     protocol = this.protocol;
   }
+
+  if(process.env.IS_DEV)
+    this.host='www.cbddev.xyz';
+  else
+    this.host='www.cbd.int';
+
   var fullUrl = protocol + "://" + (this.host || req.headers['x-forwarded-host'] || req.headers['host']) + req.originalUrl;
   return prerenderUrl + forwardSlash + fullUrl;
 };
