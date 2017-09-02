@@ -11,7 +11,7 @@ define(['app','ngMeta'], function(app) {'use strict';
         app.factory('fb', ['ngMeta',function(ngMeta) {
           var domain = 'www.cbd.int';
           ngMeta.init();
-          if(window.location.hostname==='localhost' || window.location.hostname==='staging.circusliving.ca') domain = 'staging.circusliving.ca';
+          if(window.location.hostname==='localhost' || window.location.hostname==='www.cbddev.xyz') domain = 'www.cbddev.xyz';
 
           ngMeta.setTag('fb:app_id','168158870409056');
 
