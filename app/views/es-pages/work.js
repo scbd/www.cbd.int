@@ -17,7 +17,7 @@ app.filter("byDate", function() {
  };
 });
 
-return ['$location','$scope','$q','$http','fb','$document', function ($location,$scope,$q,$http,fb,$document) {
+return ['$location','$scope','$q','$http','fb','$document','ngMeta', function ($location,$scope,$q,$http,fb,$document,ngMeta) {
 
 			var _ctrl = this;
 			_ctrl.documents ={}
@@ -32,9 +32,9 @@ return ['$location','$scope','$q','$http','fb','$document', function ($location,
             angular.element($document).ready(function() {
 
 				$scope.$root.page.title = "Cristiana Pașca Palmer at Work.";
-
+                $scope.$root.page.description = 'A database of statements,news and events of Cristiana Pașca Palmer work on UN Biodiversity Convention.';
 				fb.setTitle($scope.$root.page.title,' ');
-				fb.set('og:description', 'A database of statements,news and events of Cristiana Pașca Palmer work on UN Biodiversity Convention.');
+				fb.set('og:description', $scope.$root.page.description);
 				fb.set('og:url',window.location.href);
 
 				fb.setImage('/app/images/es-pages/es6.jpg');
@@ -45,6 +45,10 @@ return ['$location','$scope','$q','$http','fb','$document', function ($location,
 				fb.set('fb:profile_id','CristianaPascaPalmer');
 				fb.set('og:see_also',['https://www.cbd.int/executive-secretary/bio','https://www.cbd.int/executive-secretary','https://www.cbd.int/executive-secretary/media','https://www.cbd.int/executive-secretary/contact']);
 
+                ngMeta.setTag('twitter:creator','@CristianaPascaP');
+				ngMeta.setTag('twitter:title',$scope.$root.page.title);
+				ngMeta.setTag('twitter:description',$scope.$root.page.description);
+				ngMeta.setTag('twitter:image','/app/images/es-pages/es6.jpg');
 			});
 			getEvents();
 			//============================================================

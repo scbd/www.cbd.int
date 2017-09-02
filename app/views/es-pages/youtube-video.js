@@ -1,6 +1,6 @@
 define(['app','data/es-pages/media','directives/es-pages/header-nav','filters/title-case','services/fb'], function(app,media) { 'use strict';
 
-return ['$routeParams','$scope','$sce','$location','fb','$document','$filter', function ($routeParams,$scope,$sce,$location,fb,$document,$filter) {
+return ['$routeParams','$scope','$sce','$location','fb','$document','$filter','ngMeta', function ($routeParams,$scope,$sce,$location,fb,$document,$filter,ngMeta) {
 
 			var _ctrl = this;
 
@@ -16,14 +16,16 @@ return ['$routeParams','$scope','$sce','$location','fb','$document','$filter', f
 				_ctrl.url= $sce.trustAsResourceUrl('https://www.youtube.com/embed/'+getyoutubeId(_ctrl.media.url)+'?rel=0');
 
 			angular.element($document).ready(function() {
-
-				$scope.$root.page.title = $filter('titleCase',_ctrl.media.title);
+				$scope.$root.page ={};
+				$scope.$root.page.title = $filter('titleCase')(_ctrl.media.title);
 
 				fb.setTitle($scope.$root.page.title,' ');
 				fb.set('og:url',window.location.href);
 
 				fb.setImage(_ctrl.media.img);
-
+				ngMeta.setTag('twitter:creator','@CristianaPascaP');
+				ngMeta.setTag('twitter:title',$scope.$root.page.title);
+				ngMeta.setTag('twitter:image',_ctrl.media.img);
 			});
 
 			function getyoutubeId(url){

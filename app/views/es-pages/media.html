@@ -20,18 +20,18 @@
             <div class="col-sm-12" ng-repeat="mediaObject in esMediaCtrl.media">
                 <div class="media">
                     <div class="media-left">
-                        <a ng-href="/es/video/{{mediaObject._id}}">
+                        <a ng-href="/executive-secretary/video/{{mediaObject._id}}">
                         <img ng-src="{{mediaObject.img}}" width="349px"></img>
                         </a>
                     </div>
                     <div class="media-body hidden-xs media-middle">
-                        <h4 class="media-heading"><a ng-href="/es/video/{{mediaObject._id}}">{{mediaObject.title}}</a></h4>
+                        <h4 class="media-heading"><a ng-href="/executive-secretary/video/{{mediaObject._id}}">{{mediaObject.title}}</a></h4>
                         <div class="media-date">Published on {{mediaObject.published}}</div>
                     </div>
 
                 </div>
                 <div class="media-body hidden-md hidden-lg hidden-xl" style="margin-top:10px;">
-                    <h4 class="media-heading"><a ng-href="/es/video/{{mediaObject._id}}">{{mediaObject.title}}</a></h4>
+                    <h4 class="media-heading"><a ng-href="/executive-secretary/video/{{mediaObject._id}}">{{mediaObject.title}}</a></h4>
                     <div class="media-date">Published on {{mediaObject.published}}</div>
                 </div>
                 <hr ng-if="!$last"/>

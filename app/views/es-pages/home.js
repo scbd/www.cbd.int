@@ -16,7 +16,7 @@ define(['app','services/fb','directives/carousel', 'directives/es-pages/header-n
 		return t;
 		}(document, "script", "twitter-wjs"));
 
-return ['$location','$scope','fb','$document', function ($location,$scope,fb,$document) {
+return ['$location','$scope','fb','$document','ngMeta', function ($location,$scope,fb,$document,ngMeta) {
 
 	$scope.carousel = [{
 		title    : 'CMS COP12',
@@ -69,22 +69,23 @@ return ['$location','$scope','fb','$document', function ($location,$scope,fb,$do
 			angular.element($document).ready(function() {
 
 				$scope.$root.page.title = "Cristiana Pașca Palmer, Executive Secretary of the UN Biodiversity Convention. UN Assistant Secretary-General.";
-
-				fb.setTitle($scope.$root.page.title,' ');
-				fb.set('og:description', 'The latest news, statements and events from Cristiana Pașca Palmer work on UN Biodiversity Convention.');
+				$scope.$root.page.description = 'The latest news, statements and events from Cristiana Pașca Palmer work on UN Biodiversity Convention.'
+				fb.setTitle($scope.$root.page.title,'The latest news, statements and events from Cristiana Pașca Palmer work on UN Biodiversity Convention.');
+				fb.set('og:description', $scope.$root.page.description);
 				fb.set('og:url',window.location.href);
 
-				fb.setImage('app/images/es-pages/profile-pic.jpg');
+				fb.setImage('/app/images/es-pages/profile-pic.jpg');
 				fb.setOgType('profile');
 				fb.set('og:profile:first_name','Cristiana');
 				fb.set('og:profile:last_name','Pașca Palmer');
 				fb.set('og:profile:gender','female');
 				fb.set('fb:profile_id','CristianaPascaPalmer');
 				fb.set('og:see_also',['https://www.cbd.int/executive-secretary/bio','https://www.cbd.int/executive-secretary/work','https://www.cbd.int/executive-secretary/media','https://www.cbd.int/executive-secretary/contact']);
-				if(false){
-					var jsonLd = angular.element(document.getElementById('structuredContent'))[0];
-					jsonLd.innerHTML = angular.toJson(_ctrl.post.googleMarkUp);
-				}
+
+				ngMeta.setTag('twitter:creator','@CristianaPascaP');
+				ngMeta.setTag('twitter:title',$scope.$root.page.title);
+				ngMeta.setTag('twitter:description',$scope.$root.page.description);
+				ngMeta.setTag('twitter:image','/app/images/es-pages/profile-pic.jpg');
 
 			});
 

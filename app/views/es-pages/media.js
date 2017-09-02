@@ -1,6 +1,6 @@
-define(['app','services/fb','data/es-pages/media','directives/es-pages/header-nav','filters/title-case'], function(app,media) { 'use strict';
+define(['app','data/es-pages/media','services/fb','directives/es-pages/header-nav','filters/title-case'], function(app,media) { 'use strict';
 
-return ['$location','$scope','fb','$document', function ($location,$scope,fb,$document) {
+return ['$location','$scope','fb','$document','ngMeta', function ($location,$scope,fb,$document,ngMeta) {
 
 			var _ctrl = this;
 			$scope.$root.page={};
@@ -9,9 +9,10 @@ return ['$location','$scope','fb','$document', function ($location,$scope,fb,$do
 			angular.element($document).ready(function() {
 
 				$scope.$root.page.title = "Mulitmedia collection of Cristiana Pașca Palmer.";
+				$scope.$root.page.description = "The multimedia of Cristiana Pașca Palmer's work on UN Biodiversity Convention.";
 
 				fb.setTitle($scope.$root.page.title,' ');
-				fb.set('og:description', "The multimedia of Cristiana Pașca Palmer's work on UN Biodiversity Convention.");
+				fb.set('og:description', $scope.$root.page.description);
 				fb.set('og:url',window.location.href);
 
 				fb.setImage('/app/images/es-pages/es3.jpg');
@@ -21,11 +22,11 @@ return ['$location','$scope','fb','$document', function ($location,$scope,fb,$do
 				fb.set('og:profile:gender','female');
 				fb.set('fb:profile_id','CristianaPascaPalmer');
 				fb.set('og:see_also',['https://www.cbd.int/executive-secretary/bio','https://www.cbd.int/executive-secretary/work','https://www.cbd.int/executive-secretary','https://www.cbd.int/executive-secretary/contact']);
-				if(false){
-					var jsonLd = angular.element(document.getElementById('structuredContent'))[0];
-					jsonLd.innerHTML = angular.toJson(_ctrl.post.googleMarkUp);
-				}
 
+				ngMeta.setTag('twitter:creator','@CristianaPascaP');
+				ngMeta.setTag('twitter:title',$scope.$root.page.title);
+				ngMeta.setTag('twitter:description',$scope.$root.page.description);
+				ngMeta.setTag('twitter:image','/app/images/es-pages/es3.jpg');
 			});
     }];
 });
