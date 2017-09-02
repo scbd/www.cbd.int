@@ -40,7 +40,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
             registerRoutes_idbCelebrations($routeProvider);
 
         //es/*
-        if(/^\/es($|\/.*)/.test(locationPath))
+        if(/^\/executive-secretary($|\/.*)/.test(locationPath))
             registerRoutes_esPages($routeProvider);
 
         $routeProvider.when('/403', { templateUrl: '/app/views/403.html' });
