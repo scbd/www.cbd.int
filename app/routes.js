@@ -145,7 +145,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
   //============================================================
   function registerRoutes_esPages(routeProvider) {
 
-      $("base").attr('href', '/es/');
+      $("base").attr('href', '/executive-secretary/');
 
       routeProvider
         .when('/',          { templateUrl: 'views/es-pages/home.html',      resolveController: true, controllerAs: 'esHomeCtrl' })
