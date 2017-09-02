@@ -268,17 +268,17 @@ prerender.buildApiUrl = function(req) {
     this.host='www.cbd.int';
 
   var fullUrl = protocol + "://" + (this.host || req.headers['x-forwarded-host'] || req.headers['host']) + req.originalUrl;
-
+console.log('--------------------------------fullUrl',fullUrl);
   return prerenderUrl + forwardSlash + fullUrl;
 };
 
 prerender.getPrerenderServiceUrl = function(req) {
-console.log('--------------------------------',process.env.PRERENDER_SERVICE_URL);
+
 if(~req.get('Host').indexOf('localhost'))
     return this.prerenderServiceUrl ||  'http://localhost:3000';
 else
     return this.prerenderServiceUrl ||  'https://prerender.cbddev.xyz';
-
+console.log('--------------------------------',process.env.PRERENDER_SERVICE_URL);
 };
 
 prerender.beforeRenderFn = function(req, done) {
