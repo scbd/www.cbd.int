@@ -1,6 +1,6 @@
 define(['app','directives/es-pages/header-nav','filters/title-case'], function(app) { 'use strict';
 
-return ['$routeParams','$scope','$sce','$location','$window', function ($routeParams,$scope,$sce,$location,$window) {
+return ['$routeParams','$scope','$sce','$location','$window','$document', function ($routeParams,$scope,$sce,$location,$window,$document) {
 
 			var _ctrl = this;
 			// if(~$routeParams.id.indexOf('twiiter')){
@@ -11,8 +11,8 @@ return ['$routeParams','$scope','$sce','$location','$window', function ($routePa
 			//
 			// $scope.$root.page={};
 			// $scope.$root.page.title = "Media: Cristiana Pașca Palmer";
-			
-$window.open("https://www.cbd.int/2011-2020/dashboard/submit/event/"+$routeParams.id+"/view", "_self")
+
+window.location.replace("https://www.cbd.int/2011-2020/dashboard/submit/event/"+$routeParams.id+"/view", "_self")
 
 
 
