@@ -97,7 +97,7 @@ define(['app','ngMeta'], function(app) {'use strict';
           //============================================================
           function setImage(uri){
             if(uri.indexOf('http')==-1)
-              uri='https://'+domain+'/'+uri;
+              uri='https://'+domain+uri;
 
             setDemensions(uri);
             ngMeta.setTag('og:image',uri);
