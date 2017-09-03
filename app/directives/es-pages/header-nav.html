@@ -36,7 +36,14 @@
 .page-title > h3 {color:white; white-space: nowrap;}
 .page-title > h2 {color:white; white-space: nowrap;}
 
-
+.vertical-align {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+}
 
 .es-carousel { height: 350px; }
 .thumb-container { background-size: cover; background-position:center top;background-repeat: no-repeat;}
@@ -69,9 +76,11 @@
       </div>
       <div class="col-md-6" class="pull-right">
           <div class="pull-right">
-              <div class="text-right">
-                  <a href="https://www.facebook.com/CristianaPascaPalmer/" target="_blank"><i class="fa fa-facebook-official fa-2" style="color:#3b5998;" aria-hidden="true"></i></a>
-                  <a href="https://twitter.com/CristianaPascaP" target="_blank"><i class="fa fa-twitter-square fa-2"  style="color:#0084b4;"  aria-hidden="true"></i></a>
+              <div class="vertical-align  text-right" >
+                  <a class="fb-like" data-href="https://www.facebook.com/CristianaPascaPalmer/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="false" data-share="false"></a>
+                  <span>&nbsp;</span>
+                  <a style="margin-top:20px" class="twitter-follow-button" href="https://twitter.com/CristianaPascaP" data-size="small" data-show-count="false" data-show-screen-name="false">Follow @CristianaPascaP</a>
+
                   <!-- <a href="" target="_blank"><i class="fa fa-youtube fa-2"  style="color:#c4302b;"  aria-hidden="true"></i></a> -->
               </div>
               <div>

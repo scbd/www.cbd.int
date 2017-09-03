@@ -42,10 +42,10 @@ app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiUrl, sec
 
 app.get('/robots.txt', function (req, res) {
 
-    //var text = req.get('Host')=='www.cbd.int' ? '' : '/';
+    var text = req.get('Host')=='www.cbd.int' ? '' : '/';
 
     res.contentType('text/plain');
-    res.end('User-agent: *\nDisallow: ');
+    res.end('User-agent: *\nDisallow: ' + text);
 });
 // Configure template(s)
 app.use('/*',prerender);
