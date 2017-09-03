@@ -1,4 +1,21 @@
-define(['app', 'text!./header-nav.html'], function(app, html) { 'use strict';
+define(['app', 'text!./header-nav.html','directives/es-pages/fb-like'], function(app, html) { 'use strict';
+	window.twttr = (function(d, s, id) {
+	var js, fjs = d.getElementsByTagName(s)[0],
+	t = window.twttr || {};
+	if (d.getElementById(id)) return t;
+	js = d.createElement(s);
+	js.id = id;
+	js.src = "https://platform.twitter.com/widgets.js";
+	fjs.parentNode.insertBefore(js, fjs);
+
+	t._e = [];
+	t.ready = function(f) {
+	t._e.push(f);
+	};
+
+return t;
+}(document, "script", "twitter-wjs"));
+
 
 	return app.directive('headerNav',['$location',function($location) {
 		return {
@@ -8,13 +25,20 @@ define(['app', 'text!./header-nav.html'], function(app, html) { 'use strict';
             replace: true,
 			scope: {},
 			link: function ($scope,$elm) {
-				 $elm.find('a').each(function(){
+				 $elm.find('li').each(function(){
 
-					 if(~this.href.indexOf($location.path()) && $location.path().length>1)
-					 	angular.element(this).addClass('active');
+					 if(~this.id.indexOf($location.path()) && this.id!=='cpphome' && $location.path().length>1)
+					 	angular.element(this).addClass('hide');
+					 else if($location.path().length===1 && this.id==='cpphome')
+					 	angular.element(this).addClass('hide');
 
 				 })
+				 var $ = function (id) { return document.getElementById(id); };
+				 function loadTwitter() {!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");}
 
+				 var twitter = $('twitter-wjs');
+				 twitter.remove();
+				 loadTwitter(); 
 			}
 		};
 	}]);
