@@ -1,12 +1,12 @@
-define(['app','ngMeta'], function(app) {'use strict';
-        // FB.init({
-        //   appId: '168158870409056',
-        //   fbml: true,
-        //   version: 'v2.10',
-        //   cookie: true
-        // });
-        // FB.AppEvents.logPageView();
-        // FB.XFBML.parse();
+define(['app','facebook','ngMeta'], function(app) {'use strict';
+        FB.init({
+          appId: '168158870409056',
+          fbml: true,
+          version: 'v2.10',
+          cookie: true
+        });
+        FB.AppEvents.logPageView();
+        FB.XFBML.parse();
 
         app.factory('fb', ['ngMeta',function(ngMeta) {
           var domain = 'www.cbd.int';

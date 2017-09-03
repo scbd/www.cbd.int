@@ -9,20 +9,7 @@ var _savedHtml;
             replace: true,
 			scope: {},
 			compile: function ($elm) {
-                (function(d, s, id) {
-                  var js, fjs = d.getElementsByTagName(s)[0];
-                  if (d.getElementById(id)) return;
-                  js = d.createElement(s); js.id = id;
-                  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10&appId=1483448981677752";
-                  fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));
-
-                    if(_savedHtml)
-                        window.FB.XFBML.parse();
-
-                    if(!_savedHtml)
-                      _savedHtml = $elm.html();
-
+                window.FB.XFBML.parse();
 			}
 		};
 	}]);
