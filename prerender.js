@@ -4,9 +4,7 @@ var request = require('request')
 
 var prerender = module.exports = function(req, res, next) {
   if(!prerender.shouldShowPrerenderedPage(req)) return next();
-  console.log('Crawl by: '+req.headers['user-agent']);
-console.log('X-Forwarded-Host',req.get('X-Forwarded-Host'));
-  console.log(req.get('Host')+':----> Prerendering: '+req.originalUrl);
+
   prerender.beforeRenderFn(req, function(err, cachedRender) {
 
     if (!err && cachedRender) {
@@ -260,16 +258,16 @@ prerender.buildApiUrl = function(req) {
   if (this.protocol) {
     protocol = this.protocol;
   }
-  console.log('process.env.IS_DEV ',process.env.IS_DEV );
+
   if(~req.get('Host').indexOf('localhost'))
     this.host='localhost:2000';
   else if(process.env.IS_DEV )
-    this.host='www.cbddev.xyz';
+    this.host='https://www.cbddev.xyz';
   else
-    this.host='www.cbd.int';
+    this.host='https://www.cbd.int';
 
-  var fullUrl = protocol + "://" + (this.host || req.headers['x-forwarded-host'] || req.headers['host']) + req.originalUrl;
-console.log('--------------------------------fullUrl',fullUrl);
+  var fullUrl =  (this.host || req.headers['x-forwarded-host'] || req.headers['host']) + req.originalUrl;
+
   return prerenderUrl + forwardSlash + fullUrl;
 };
 
@@ -279,7 +277,7 @@ if(~req.get('Host').indexOf('localhost'))
     return this.prerenderServiceUrl ||  'http://localhost:3000';
 else
     return this.prerenderServiceUrl ||  'https://prerender.cbddev.xyz';
-console.log('--------------------------------',process.env.PRERENDER_SERVICE_URL);
+
 };
 
 prerender.beforeRenderFn = function(req, done) {
