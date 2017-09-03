@@ -1,24 +1,33 @@
-define(['app','data/es-pages/statements','directives/es-pages/header-nav','filters/title-case'], function(app,statements) { 'use strict';
+define(['app','data/es-pages/statements','directives/es-pages/header-nav','filters/title-case','services/fb'], function(app,statements) { 'use strict';
 
-return ['$routeParams','$scope','$sce','$location', function ($routeParams,$scope,$sce,$location) {
+return ['$routeParams','$scope','$sce','$location','fb','$document','$filter','ngMeta', function ($routeParams,$scope,$sce,$location,fb,$document,$filter,ngMeta) {
 
 			var _ctrl = this;
-			// if(~$routeParams.id.indexOf('twiiter')){
-			// 	_ctrl.twitter=true;
-			//     _ctrl.url=decodeURIComponent($routeParams.id);
-			// }else
-			// 	_ctrl.url= $sce.trustAsResourceUrl('https://www.youtube.com/embed/'+$routeParams.id+'?rel=0');
-			//
-			// $scope.$root.page={};
-			// $scope.$root.page.title = "Media: Cristiana Pașca Palmer";
 
 			for(var i=0; i<statements.length;i++)
 				if(statements[i]._id===$routeParams.id)
 					_ctrl.statement=statements[i];
 
 			if(!_ctrl.statement)$location.path('/404');
+			angular.element($document).ready(function() {
+				$scope.$root.page = {};
+				$scope.$root.page.title = "Statement from Cristiana Pașca Palmer: "+$filter('titleCase')(_ctrl.statement.title_s);
 
+				fb.setTitle($scope.$root.page.title,' ');
+				fb.setOgType('article');
+				fb.set('article:author',['https://www.facebook.com/CristianaPascaPalmer/']);
+				fb.set('article:published_time',_ctrl.statement.startDate_dt);
+				fb.set('article:publisher',['https://www.facebook.com/UN.CBD/']);
+				fb.set('article:section','statements');
 
+				fb.set('og:url',window.location.href);
 
+				fb.setImage(_ctrl.statement.img);
+
+				ngMeta.setTag('twitter:creator','@CristianaPascaP');
+				ngMeta.setTag('twitter:title',$scope.$root.page.title);
+				ngMeta.setTag('twitter:image',_ctrl.statement.img);
+
+			});
     }];
 });

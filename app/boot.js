@@ -38,8 +38,11 @@ require.config({
         'ngSmoothScroll'  : 'libs/ngSmoothScroll/lib/angular-smooth-scroll',
         'bootstrap-datepicker': 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
         'toastr'          : 'libs/angular-toastr/dist/angular-toastr.tpls.min',
-        'ammap3'              : 'libs/ammap3/ammap/ammap',
-        'ammap-theme'         : 'libs/ammap3/ammap/themes/light'
+        'ammap3'          : 'libs/ammap3/ammap/ammap',
+        'ammap-theme'     : 'libs/ammap3/ammap/themes/light',
+        'ngMeta'          : 'libs/ngMeta/dist/ngMeta.min',
+        'facebook'        : '//connect.facebook.net/en_US/sdk',
+
     },
     shim: {
         'angular'              : { deps : ['jquery'], exports: 'angular' },
@@ -60,7 +63,8 @@ require.config({
         'js-xlsx'              : { deps : ['js-zip', 'ods']},
         'toastr'               : { deps : ['angular-flex'] },
         'ngSmoothScroll'       : { deps : ['angular-flex'] },
-        'ngInfiniteScroll'     : { deps : ['angular-flex'] }
+        'ngInfiniteScroll'     : { deps : ['angular-flex'] },
+        'facebook'             : { exports: 'FB'}
     },
     packages: [
         { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },

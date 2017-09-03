@@ -1,4 +1,5 @@
-define(['app','data/es-pages/statements','moment','directives/es-pages/header-nav','filters/moment'], function(app,statements,moment) { 'use strict';
+define(['app','data/es-pages/statements','moment','directives/es-pages/header-nav','filters/moment','services/fb'], function(app,statements,moment) { 'use strict';
+
 
 app.filter("byDate", function() {
   return function(items,d) {
@@ -16,7 +17,7 @@ app.filter("byDate", function() {
  };
 });
 
-return ['$location','$scope','$q','$http', function ($location,$scope,$q,$http) {
+return ['$location','$scope','$q','$http','fb','$document','ngMeta', function ($location,$scope,$q,$http,fb,$document,ngMeta) {
 
 			var _ctrl = this;
 			_ctrl.documents ={}
@@ -25,11 +26,30 @@ return ['$location','$scope','$q','$http', function ($location,$scope,$q,$http) 
             _ctrl.getTypeCount = getTypeCount;
             _ctrl.getYearCount = getYearCount;
 			$scope.$root.page={};
-			$scope.$root.page.title = "At Work: Cristiana Pașca Palmer";
 			_ctrl.work = statements;
-      _ctrl.hasMonthChange = hasMonthChange;
+            _ctrl.hasMonthChange = hasMonthChange;
 
+            angular.element($document).ready(function() {
 
+				$scope.$root.page.title = "Cristiana Pașca Palmer at Work.";
+                $scope.$root.page.description = 'A database of statements,news and events of Cristiana Pașca Palmer work on UN Biodiversity Convention.';
+				fb.setTitle($scope.$root.page.title,' ');
+				fb.set('og:description', $scope.$root.page.description);
+				fb.set('og:url',window.location.href);
+
+				fb.setImage('/app/images/es-pages/es6.jpg');
+				fb.setOgType('profile');
+				fb.set('og:profile:first_name','Cristiana');
+				fb.set('og:profile:last_name','Pașca Palmer');
+				fb.set('og:profile:gender','female');
+				fb.set('fb:profile_id','CristianaPascaPalmer');
+				fb.set('og:see_also',['https://www.cbd.int/executive-secretary/bio','https://www.cbd.int/executive-secretary','https://www.cbd.int/executive-secretary/media','https://www.cbd.int/executive-secretary/contact']);
+
+                ngMeta.setTag('twitter:creator','@CristianaPascaP');
+				ngMeta.setTag('twitter:title',$scope.$root.page.title);
+				ngMeta.setTag('twitter:description',$scope.$root.page.description);
+				ngMeta.setTag('twitter:image','/app/images/es-pages/es6.jpg');
+			});
 			getEvents();
 			//============================================================
 			//

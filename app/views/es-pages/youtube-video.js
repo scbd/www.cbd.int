@@ -1,16 +1,8 @@
-define(['app','data/es-pages/media','directives/es-pages/header-nav','filters/title-case'], function(app,media) { 'use strict';
+define(['app','data/es-pages/media','directives/es-pages/header-nav','filters/title-case','services/fb'], function(app,media) { 'use strict';
 
-return ['$routeParams','$scope','$sce','$location', function ($routeParams,$scope,$sce,$location) {
+return ['$routeParams','$scope','$sce','$location','fb','$document','$filter','ngMeta', function ($routeParams,$scope,$sce,$location,fb,$document,$filter,ngMeta) {
 
 			var _ctrl = this;
-			// if(~$routeParams.id.indexOf('twiiter')){
-			// 	_ctrl.twitter=true;
-			//     _ctrl.url=decodeURIComponent($routeParams.id);
-			// }else
-			// 	_ctrl.url= $sce.trustAsResourceUrl('https://www.youtube.com/embed/'+$routeParams.id+'?rel=0');
-			//
-			// $scope.$root.page={};
-			// $scope.$root.page.title = "Media: Cristiana Pașca Palmer";
 
 			for(var i=0; i<media.length;i++)
 				if(media[i]._id===$routeParams.id)
@@ -23,6 +15,18 @@ return ['$routeParams','$scope','$sce','$location', function ($routeParams,$scop
 			else
 				_ctrl.url= $sce.trustAsResourceUrl('https://www.youtube.com/embed/'+getyoutubeId(_ctrl.media.url)+'?rel=0');
 
+			angular.element($document).ready(function() {
+				$scope.$root.page ={};
+				$scope.$root.page.title = $filter('titleCase')(_ctrl.media.title);
+
+				fb.setTitle($scope.$root.page.title,' ');
+				fb.set('og:url',window.location.href);
+
+				fb.setImage(_ctrl.media.img);
+				ngMeta.setTag('twitter:creator','@CristianaPascaP');
+				ngMeta.setTag('twitter:title',$scope.$root.page.title);
+				ngMeta.setTag('twitter:image',_ctrl.media.img);
+			});
 
 			function getyoutubeId(url){
 

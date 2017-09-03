@@ -1,6 +1,6 @@
-define(['angular', 'ngSanitize','toastr'], function(angular) { 'use strict';
+define(['angular', 'ngSanitize','toastr','ngMeta'], function(angular) { 'use strict';
 
-    var app = angular.module('app', angular.defineModules(['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr']));
+    var app = angular.module('app', angular.defineModules(['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','ngMeta']));
 
     app.config(['$httpProvider','toastrConfig', function($httpProvider,toastrConfig) {
         angular.extend(toastrConfig, {
