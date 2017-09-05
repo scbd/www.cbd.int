@@ -1,5 +1,5 @@
 define(['app','services/fb','directives/carousel', 'directives/es-pages/header-nav','directives/es-pages/fb-timeline'], function() { 'use strict';
-	
+
 
 return ['$location','$scope','fb','$document','ngMeta', function ($location,$scope,fb,$document,ngMeta) {
 
@@ -13,13 +13,13 @@ return ['$location','$scope','fb','$document','ngMeta', function ($location,$sco
 		title    : 'Bucharest Forum',
 		abstract : '5-7 October 2017: Focusing on the needs of economic and strategic decision makers in the region between the Adriatic, Black Sea and the Caspian Sea.',
 		url      : 'https://www.cbd.int/2011-2020/dashboard/submit/event/A0988E99-A1E5-72FA-BD83-1E7214CB3AD1/view',
-		imageUrl : '/app/images/es-pages/es3.jpg'
+		imageUrl : '/app/images/es-pages/es1.jpg'
 	},
 	{
 		title    : 'UN General Assembly',
 		abstract : '14 September 2017: Focusing on People: Striving for Peace and a Decent Life for All on a Sustainable Planet',
 		url      : 'https://www.cbd.int/2011-2020/dashboard/submit/event/6A17F3CB-AD7F-2220-4A8F-34012AA21690/view',
-		imageUrl : '/app/images/es-pages/es1.jpg'
+		imageUrl : '/app/images/es-pages/es8.jpg'
 	},
 	{
 		title    : 'UNWTO General Assembly',
