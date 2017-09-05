@@ -16,7 +16,8 @@ define(['text!./edit-bbi-assistance.html', 'text!./bbi-records-dialog.html', 'te
 	'directives/bbi/controls/mongo-form-std-buttons',
 	'directives/bbi/controls/km-document-validation',
 	'providers/locale',
-	'../views/view-bbi-request'
+	'../views/view-bbi-request',
+	'services/user-settings'
 ], function(template, bbiRecordsDialog, bbiFirstRequestDialog, app, angular, _) {
 	'use strict';
 

@@ -140,6 +140,7 @@ app.directive('kmLink', function() {
 												if (!val)
 														oNewLink[key] = undefined;
 										});
+										if(!oNewLink.type) oNewLink.type= 'link';
 										oNewBinding.push(oNewLink);
 								});
 

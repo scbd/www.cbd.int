@@ -1,4 +1,4 @@
-define(['app','services/fb','directives/carousel', 'directives/es-pages/header-nav','directives/es-pages/fb-timeline'], function() { 'use strict';
+define(['app','services/fb','directives/carousel', 'directives/es-pages/header-nav'], function() { 'use strict';
 
 
 return ['$location','$scope','fb','$document','ngMeta', function ($location,$scope,fb,$document,ngMeta) {
