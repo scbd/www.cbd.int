@@ -1,4 +1,4 @@
-define(['text!./search-result.html', 'app', 'lodash', 'moment', 'lodash', 'authentication','providers/realm','filters/term'], function(template, app, _, moment, authentication) {
+define(['text!./search-result.html', 'app', 'lodash', 'moment', 'lodash', 'authentication','providers/realm','filters/term',    'filters/moment'], function(template, app, _, moment, authentication) {
     'use strict';
 
     app.directive('searchResult', ['$location', function($location) {
@@ -7,7 +7,8 @@ define(['text!./search-result.html', 'app', 'lodash', 'moment', 'lodash', 'authe
             template: template,
 scope:{document:"="},
             link: function($scope, $el, $attr) {
-
+                if($scope.document.applicationDeadline_dt)
+console.log($scope.document);
                 $scope.index = Number($attr.index) + 1;
                 var killWatch = $scope.$watch('document.id', function() {
                     if (!$scope.document.id) return;
@@ -110,7 +111,16 @@ scope:{document:"="},
                 $scope.userGovernment = function() {
                     return authentication.user.government;
                 };
-
+                //==================================
+                //
+                //==================================
+                $scope.oppIsExpired = function() {
+                
+                    if(($scope.document.schema_s==='bbiOpportunity' && $scope.document.applicationDeadline_dt &&   moment($scope.document.applicationDeadline_dt).isBefore(moment())))
+                        return true;
+                    else
+                        return false;
+                };
 
             }
         };
