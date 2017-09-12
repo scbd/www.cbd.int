@@ -68,8 +68,8 @@ define(['app','linqjs', 'providers/realm'], function(app,Enumerable) {
   return _;
 }]);
   app.factory('editFormUtility', ["IStorage", "IWorkflows", "$q", "$route", "realm", function(storage, workflows, $q, $route, realm) {
-    
-    
+
+
     var schemasWorkflowTypes = {
       "aichiTarget"               : { name: "publishReferenceRecord", version: undefined },
       "contact"                   : { name: "publishReferenceRecord", version: undefined },
@@ -98,7 +98,36 @@ define(['app','linqjs', 'providers/realm'], function(app,Enumerable) {
     };
 
     var _self = {
+        //==================================
+        //
+        //==================================
+        getRealm: function(identifier) {
 
+          return storage.drafts.get(identifier, {
+            info: ""
+          }).then(
+            function(success) {
+              return success;
+            },
+            function(error) {
+              if (error.status == 404)
+                return storage.documents.get(identifier, {
+                  info: ""
+                });
+              throw error;
+            }).then(
+            function(success) {
+              var info = success.data;
+              if(!info.Realm) return false;
+              return info.Realm;
+
+          },
+          function(error) {
+              if (error.status == 404)
+                return false;
+              throw error;
+          });
+        },
       //==================================
       //
       //==================================
@@ -356,7 +385,7 @@ define(['app','linqjs', 'providers/realm'], function(app,Enumerable) {
         throw "No workflow type defined for this record type: " + draftInfo.type;
 
       var workflowData = {
-        "realm": realm,
+        "realm": draftInfo.realm || realm,
         "documentID": draftInfo.documentID,
         "identifier": draftInfo.identifier,
         "title": draftInfo.workingDocumentTitle,

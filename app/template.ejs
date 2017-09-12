@@ -4,9 +4,19 @@
     <base href="/">
     <script> //Analytics
         window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-        ga('create', 'UA-1996573-1', 'auto');
-        ga('set',    'hostname', window.location.hostname);
-        ga('set',    'location', undefined);
+
+        if(~document.location.hostname.indexOf('cbd.int')){
+            ga('create', 'UA-1996573-1', 'auto');
+            ga('set',    'hostname', window.location.hostname);
+            ga('set',    'location', undefined);
+
+            //tag manager
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-NL82D37');
+        }
     </script>
     <script src="https://cdn.slaask.com/chat.js"></script>
     <script>
@@ -20,7 +30,7 @@
     <script src="/app/libs/requirejs/require.js?v=<%=gitVersion%>"></script>
     <script src="/app/boot.js?v=<%=gitVersion%>"></script>
     <script async src='https://www.google-analytics.com/analytics.js'></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places"></script>
     <title ng-bind="$root.page.title">Convention on Biological Diversity</title>
     <meta name="description" content="{{$root.page.description || ngMeta['og:description']}}" ng-if="$root.page.description || ngMeta['og:description']">
     <meta property="og:title" content="{{ngMeta['og:title']}}" />
