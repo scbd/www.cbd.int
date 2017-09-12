@@ -8,7 +8,7 @@ define(['text!./search-result.html', 'app', 'lodash', 'moment', 'lodash', 'authe
 scope:{document:"="},
             link: function($scope, $el, $attr) {
                 if($scope.document.applicationDeadline_dt)
-console.log($scope.document);
+
                 $scope.index = Number($attr.index) + 1;
                 var killWatch = $scope.$watch('document.id', function() {
                     if (!$scope.document.id) return;
@@ -115,11 +115,10 @@ console.log($scope.document);
                 //
                 //==================================
                 $scope.oppIsExpired = function() {
-                
-                    if(($scope.document.schema_s==='bbiOpportunity' && $scope.document.applicationDeadline_dt &&   moment($scope.document.applicationDeadline_dt).isBefore(moment())))
-                        return true;
-                    else
-                        return false;
+
+                    if($scope.document.schema_s==='bbiOpportunity' && $scope.document.applicationDeadline_dt)
+                        return moment($scope.document.applicationDeadline_dt).isBefore(moment());
+
                 };
 
             }
