@@ -5,8 +5,14 @@
 
 <div class="col-xs-11">
 		<div style=" font-weight:bold;color:#001470;" ng-show="type">{{type}}</div>
+		<div class="pull-right" ng-if="document.applicationDeadline_dt">
+			<span style="color:red;" ng-if="!oppIsExpired() && document.applicationDeadline_dt"><strong>{{oppIsExpired()}} Application Deadline: {{document.applicationDeadline_dt | moment:'format':'YYYY-MM-DD'}}</strong></span>
+			<span style="color:red;" ng-if="oppIsExpired() && document.applicationDeadline_dt"><strong>No Longer Available</strong></span>
+
+		</div>
 		<div class="truncatex" style="font-size:15px;font-weight:bold;color:#444;">
 				<strong>{{title | limitTo:160}}</strong>
+
 		</div>
 		<!-- <div style="font-size:13px;">
 			<a style="color:#025714; size=.5;">{{document.url_ss[0]}}</a>
@@ -25,13 +31,13 @@
 			<i style="color:#ccc" class="fa fa-microphone"></i>
 			<span style="font-size:12px;color:#444">Mr. Braulio Ferreira de Souza Dias, CBD Executive Secretary</span>
 		</div> -->
-		<div ng-if="dates">
+		<!-- <div ng-if="dates">
 			<i style="color:#ccc" class="fa fa-calendar-o"></i>
 			<span style="font-size:12px;color:#444">{{dates}}</span>
 			&nbsp; &nbsp;
 			<i style="color:#ccc" class="fa fa-map-marker"></i>
 			<span style="font-size:12px;color:#444">{{venue}}</span>
-		</div>
+		</div> -->
 
 
 			<div style="font-size:10px;color:#001470"><strong style="font-size:10px;color:#001470">{{schema}}</strong>
@@ -41,6 +47,7 @@
 					<strong>{{source}}</strong>
 				</a>
 				<div class="pull-right">
+
 					<span ng-repeat="term in document.aichiTarget_ss" ng-if="document.aichiTarget_ss">
 						<img  style="height: 20px;  width: 20px; margin-bottom:5px; " ng-src="https://www.cbd.int/images/aichi/48/abt-{{term.slice(-2)}}-48.png" >
 					</span>
