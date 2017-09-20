@@ -8,7 +8,7 @@
 		<div class="pull-right" ng-if="document.applicationDeadline_dt">
 			<span class="text-warning" ng-if="!oppIsExpired() && document.applicationDeadline_dt"><strong>Application Deadline: {{document.applicationDeadline_dt | moment:'format':'YYYY-MM-DD'}}</strong></span>
 			<span class="text-warning"  ng-if="oppIsExpired() && document.applicationDeadline_dt"><strong>No Longer Available</strong></span>
-
+			<span class="text-warning"  ng-if="!document.applicationDeadline_dt"><strong>Open-Ended</strong></span>
 		</div>
 		<div class="truncatex" style="font-size:15px;font-weight:bold;color:#444;">
 				<strong>{{title | limitTo:160}}</strong>
