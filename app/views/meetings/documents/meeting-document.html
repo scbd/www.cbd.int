@@ -3,14 +3,16 @@
     <tr>
         <td ng-click="enableSelection && downloadble && (document.selected=!document.selected);" style="vertical-align:top;">
             <div ng-class="::{ superseded : document.metadata.superseded }">
-                <div ng-if="::document.symbol">
-                    <strong ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></strong>
-                    <span ng-if="document.number">({{::document.number}})</span>
-                    <div>{{::document.title|lstring}}</div>
-                </div>
-                <div ng-if="::!document.symbol">
-                    <strong>{{::document.title|lstring}}</strong>
-                    <div>{{::(document.description||document.title)|lstring}}</div>
+                <div>
+                    <div ng-if="::document.symbol">
+                        <a ng-href="{{::document.url}}" style="color:inherit">
+                            <strong ng-if="::document.type=='decision'">Decision</strong>
+                            <strong ng-if="::document.type=='recommendation'">Recommendation</strong>
+                            <strong ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></strong>
+                        </a>
+                    </div>
+                    <div ng-style="::{ 'font-weight' : (document.symbol?'normal':'bold')  }">{{::document.title|lstring}}</div>
+                    <div>{{::document.description|lstring}}</div>
                 </div>
             </div>
 
