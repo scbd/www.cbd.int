@@ -8,9 +8,29 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         var meetingCode = $route.current.params.meeting.toUpperCase();
         var meeting;
         var documents;
+        var hardTab = false;
+
+        var groups = {
+            'outcome'        : { position: 100 , title : 'Outcomes'      },
+            'official'       : { position: 200 , title : 'Official'      },
+            'information'    : { position: 300 , title : 'Information'   },
+            'statement'      : { position: 400 , title : 'Statements'    },
+            'notification'   : { position: 500 , title : 'Notifications' },
+            'other'          : { position: 600 , title : 'Other'         },
+            'in-session'     : { position: 700 , title : 'Plenary'       },
+            'in-session/wg1' : { position: 800 , title : 'WG I'          },
+            'in-session/wg2' : { position: 900 , title : 'WG II'         }
+        };
+
+        var sections = {
+            'outcome/report':         { position: 100 , title : 'Final Report'    },
+            'outcome/decision':       { position: 200 , title : 'Decisions'       },
+            'outcome/recommendation': { position: 200 , title : 'Recommendations' },
+        };
 
         _ctrl.showMeeting = showMeeting===undefined ? true : !!showMeeting;
         _ctrl.sort = $location.hash() == 'agenda' ? 'agenda' : 'document';
+        _ctrl.tabs = [];
         _ctrl.switchTab  = switchTab;
 
         $scope.$watch('documentsCtrl.sort', function(s){
@@ -59,7 +79,6 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
                 }).sortBy(sortKey).value();
 
-                _ctrl.documents = documents;
 
                 return meeting;
 
@@ -79,43 +98,36 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                     });
                 });
 
-                var tabs = [
-                    { code: 'outcome'       , title: 'Outcomes',    documents: _.filter(documents, byPositionGroup('outcome')) },
-                    { code: 'official'      , title: 'Official',    documents: _.filter(documents, byPositionGroup('official')) },
-                    { code: 'information'   , title: 'Information', documents: _.filter(documents, byPositionGroup('information')) },
-                    { code: 'statement'     , title: 'Statements',  documents: _.filter(documents, byPositionGroup('statement')) },
-                    { code: 'other'         , title: 'Other',       documents: _.filter(documents, byPositionGroup('other')) },
-                    { code: 'in-session'    , title: 'Plenary',     documents: _.filter(documents, byPositionGroup('in-session')) },
-                    { code: 'in-session/wg1', title: 'WG I',        documents: _.filter(documents, byPositionGroup('in-session/wg1')) },
-                    { code: 'in-session/wg2', title: 'WG II',       documents: _.filter(documents, byPositionGroup('in-session/wg2')) },
-                ];
 
-                _ctrl.tabs = _(tabs).forEach(function(tab){
+                for(var group in groups) {
 
-                    var itemIds = _(tab.documents).map('agendaItems').flatten().uniq().value();
+                    var docs =  _.where(documents, { displayGroup : group });
+
+                    if(!docs.length)
+                        continue;
+
+                    var itemIds = _(docs).map('agendaItems').flatten().uniq().value();
                     var items   = _(meeting.agenda.items).filter(function(item) {
-
                         return ~itemIds.indexOf(item.item);
-
                     }).map(function(item){
-
-                        return _.extend({}, item, {
-                            documents : _.intersection(item.documents, tab.documents)
-                        });
+                        return _.extend({}, item, { documents : _.intersection(item.documents, docs) });
                     }).value();
 
-                    var noAgendaDocs = _(tab.documents).difference(_(items).map('documents').flatten().value()).value();
+                    var noAgendaDocs = _(docs).difference(_(items).map('documents').flatten().value()).value();
 
-                    tab.agenda = {
-                        items : items,
-                        otherDocuments : noAgendaDocs
-                    };
+                    var tab = injectTab(group, docs);
 
-                }).filter(function(t) {
-                    return t.documents.length;
-                }).value();
+                    if(items.length) {
+                        tab.agenda = {
+                            items : items,
+                            otherDocuments : noAgendaDocs
+                        };
+                    }
+                }
 
                 updateMaxTabCount();
+                loadReport();
+                loadDecisions();
                 loadNotifications();
                 switchTab();
 
@@ -135,8 +147,9 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
             else if(size=='lg') _ctrl.maxTabCount = 5;
             else                _ctrl.maxTabCount = 6;
 
-            if(_ctrl.tabs && _ctrl.tabs.length)
+            if(_ctrl.tabs && _ctrl.tabs.length && _.findIndex(_ctrl.tabs, isInSessionTab)>0) {
                 _ctrl.maxTabCount = Math.min(_ctrl.maxTabCount, _.findIndex(_ctrl.tabs, isInSessionTab));
+            }
         }
 
         //==============================
@@ -149,18 +162,11 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         //
         //==============================
-        function byPositionGroup(code) {
-            return function(doc) { return doc.positionGroup==code; };
-        }
-
-        //==============================
-        //
-        //==============================
         function loadNotifications() {
 
             $http.get('/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'id,symbol_s,reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
 
-                _ctrl.notifications = _(res.data.response.docs).map(function(n) {
+                return _(res.data.response.docs).map(function(n) {
                     return _.defaults(n, {
                         _id: n.id,
                         symbol: n.reference_s || n.symbol_s,
@@ -171,9 +177,10 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                         files : urlToFiles(n.url_ss)
                     });
                 }).sortByOrder(['number', 'symbol'], ['desc', 'asc']).value();
-            }).then(function(){
 
-                injectNotifications();
+            }).then(function(docs){
+
+                injectTab('notification', docs);
                 switchTab();
 
             }).catch(console.error);
@@ -182,30 +189,126 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         //
         //==============================
-        function injectNotifications(){
+        function loadDecisions() {
 
-            if(!_ctrl.notifications || !_ctrl.notifications.length)
-                return;
+            $http.get('/api/v2013/index', { params: { q : 'schema_s:(x-decision x-recommendation) AND meeting_ss:'+meetingCode, fl: 'id,symbol_s,schema_s,position_i,meeting_ss,title_*, description_*,file_ss,url_ss', rows:999 } }).then(function(res){
 
-            _ctrl.tabs = _ctrl.tabs || [];
+                return _(res.data.response.docs).map(function(n) {
+                    var doc = _.defaults(n, {
+                        _id: n.id,
+                        symbol: n.symbol_s,
+                        type:   n.schema_s.replace(/^x-/, ''),
+                        title : { en : n.title_t },
+                        files : _.map(n.file_ss, function(f){ return JSON.parse(f); }),
+                        url :  n.url_ss[0]
+                    });
 
-            if(!_.some(_ctrl.tabs, { code: 'notification' })) {
+                    if(!doc.files || !doc.files.length)
+                        doc.files = [{ language:'en', url:doc.url,  type:'text/html' }];
 
-                _ctrl.documents = (_ctrl.documents||[]).concat(_ctrl.notifications);
+                    return doc;
 
-                var index = _.findIndex(_ctrl.tabs, function(t) { return /^(in-session|other)/.test(t.code); });
+                }).sortByOrder(['position_i', 'symbol_s'], ['asc', 'asc']).value();
 
-                if(index<0)
-                    index = _ctrl.tabs.length;
+            }).then(function(docs){
 
-                _ctrl.tabs.splice(index, 0 ,{
-                    code : 'notification',
-                    title: 'Notifications',
-                    documents : _ctrl.notifications
+               injectTab('outcome',  _.where(docs, { type : 'decision'}),       { section: 'decision' });
+               injectTab('outcome',  _.where(docs, { type : 'recommendation'}), { section: 'recommendation' });
+
+                switchTab(!hardTab ? findTab('outcome') : null);
+
+            }).catch(console.error);
+        }
+
+        //==============================
+        //
+        //==============================
+        function loadReport() {
+
+            var report = _.find(_ctrl.documents||[], function(d){
+                return d._id==meeting.reportDocument;
+            });
+
+            if(!report) {
+                report = $http.get('/api/v2016/documents', { params: { q : { _id : { $oid : meeting.reportDocument } } } }).then(function(res){
+                    return res.data[0];
+                }).catch(function(e){
+                    console.error(e);
                 });
             }
 
+            $q.when(report).then(function(report){
+
+                if(!report) return;
+
+                injectTab('outcome', [report], { section: 'report' });
+                switchTab(!hardTab ? findTab('outcome') : null);
+            });
+        }
+
+        //==============================
+        //
+        //==============================
+        function injectTab(code, documents, options){
+
+            if(!documents || !documents.length)
+                return;
+
+            options = _.defaults(options||{}, {
+                section: null
+            });
+
+            var tab = findTab(code);
+
+            if(!tab) {
+
+                tab = {
+                    code : code,
+                    title: (groups[code]||{}).title||code.toUpperCase(),
+                    sections : []
+                };
+
+                _ctrl.tabs.push(tab);
+                _ctrl.tabs = _.sortBy(_ctrl.tabs, function(t){
+                    return (groups[t.code]||{}).position || 9999;
+                });
+            }
+
+            var section = _.find(tab.sections, function(s) { return s.code==options.section; });
+
+            if(!section) {
+
+
+                section = {
+                    code : options.section,
+                    title: (sections[tab.code+'/'+options.section]||{}).title,
+                };
+
+                tab.sections.push(section);
+                tab.sections = _.sortBy(tab.sections, function(s){
+                    return (sections[tab.code+'/'+s.code]||{}).position || 9999;
+                });
+            }
+
+            section.documents = documents;
+            tab    .length    = _.sum(tab.sections, function(s) { return s.documents.length; });
+            _ctrl.documents   = _(_ctrl.tabs).map('sections').flatten().map('documents').flatten().uniq().compact().value();
+
             updateMaxTabCount();
+
+            return tab;
+        }
+
+        //==============================
+        //
+        //==============================
+        function findTab(code) {
+
+            _ctrl.tabs = _ctrl.tabs || [];
+
+            return _(_ctrl.tabs).find(function(t) {
+                return t.code==code;
+            });
         }
 
         //==============================
@@ -215,9 +318,11 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
             if(!tab && $location.search().tabFor) {
                 tab = _(_ctrl.tabs).find(function(t) {
-                    return _(t.documents).some({_id:$location.search().tabFor});
+                    return _(t.sections).map('documents').flatten().some({_id:$location.search().tabFor});
                 });
             }
+
+            hardTab = hardTab || !!tab;
 
             if(tab && $location.search().tabFor)
                 $location.search({tabFor:null});
@@ -237,6 +342,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
             }
 
             tab.loaded=true;
+
             _ctrl.currentTabX = tab;
             _ctrl.currentTab  = tab.code;
 
@@ -283,7 +389,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //
         //==============================
         function sortKey(d) {
-            return ("000000000" + (d.position||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
+            return ("000000000" + (d.displayPosition||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
                    (d.symbol||"").replace(/\b(\d)\b/g, '0$1')
                                  .replace(/(\/REV)/gi, '0$1')
                                  .replace(/(\/ADD)/gi, '1$1');

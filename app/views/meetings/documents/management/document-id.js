@@ -1,4 +1,4 @@
-define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', '../meeting-document'], function(_) {
+define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', './change-case-button', '../meeting-document'], function(_) {
 
     var MIMES = {
         'application/pdf':                                                            { title: 'PDF',               color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
@@ -22,13 +22,16 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
          zh : "Chinese"
      };
 
-	return ["$scope", "$route", "$http", '$location', '$q', '$window', function ($scope, $route, $http, $location, $q, $window) {
+	return ["$scope", "$route", "$http", '$location', '$q', '$window', 'user', function ($scope, $route, $http, $location, $q, $window, user) {
 
         $scope.FILETYPES  = MIMES;
         $scope.LANGUAGES  = LANGUAGES;
 
         var documentId = $route.current.params.id;
-        var meetingId  = $route.current.params.meeting;
+        var meetingId  = $route.current.params.meeting.toUpperCase();
+
+        console.log($location.path());
+
 
         var _ctrl = $scope.editCtrl = this;
         var document_bak;
@@ -42,13 +45,85 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
         _ctrl.upload      = upload;
         _ctrl.fileCache   = {};
         _ctrl.normalizeSymbol=normalizeSymbol;
+        _ctrl.user        = user;
 
         _ctrl.clearErrors = clearErrors;
         _ctrl.del    = del;
         _ctrl.save   = save;
         _ctrl.close  = close;
+        _ctrl.saveLogEntry = saveLogEntry;
+        _ctrl.autoGenerateNextSymbol = autoGenerateNextSymbol;
+        _ctrl.initials=function(t) { return _.startCase(t).replace(/[^A-Z]/g, ''); };
+
+        $scope.$watch('editCtrl.document.type_nature', applyTypeNature);
+        $scope.$watch('editCtrl.document.symbol',      function(symbol){
+
+            if(!symbol) return;
+            if(!_ctrl.meetingDocuments) return;
+
+            symbol = normalizeSymbol(symbol);
+
+            $scope.duplicate = _.some(_ctrl.meetingDocuments, function(d){
+                return d._id!=_ctrl.document._id && normalizeSymbol(d.symbol||'') == symbol;
+            });
+        });
 
         load();
+
+        //==============================
+        //
+        //==============================
+        function autoGenerateNextSymbol(source) {
+
+            if(!_ctrl.document)         return;
+            if( _ctrl.document._id)      return;
+            if(!_ctrl.meetingDocuments) return;
+
+            var symbol    = _ctrl.document.symbol;
+            var documents = _ctrl.meetingDocuments;
+
+            if(source == 'type' && (!symbol || /\/$/.test(symbol))) {
+
+                var type_nature = _ctrl.document.type_nature;
+                var group       = _ctrl.document.group;
+                var parts;
+
+                if(type_nature=='official')             parts = [_ctrl.meeting.EVT_UN_CD, '*'];
+                if(type_nature=='information')          parts = [_ctrl.meeting.EVT_UN_CD, 'INF', '*'];
+                if(type_nature=='in-session/crp')       parts = [_ctrl.meeting.EVT_UN_CD, group, 'CRP*'];
+                if(type_nature=='in-session/limited')   parts = [_ctrl.meeting.EVT_UN_CD, group, 'L*'];
+                if(type_nature=='in-session/non-paper') parts = [];
+                if(type_nature=='in-session/statement') parts = [];
+                if(type_nature=='other')                parts = [];
+
+                if(parts) {
+                    symbol = _.compact(parts).join('/');
+                    source = 'symbol';
+                }
+            }
+
+            var starRE = /\d*\*/;
+
+            if(source == 'symbol' && starRE.test(symbol)) {
+
+                var nextSymbol;
+
+                for(var i=200;i>0;--i) {
+
+                    var testSymbol = normalizeSymbol(symbol).replace(starRE, i.toString());
+
+                    if(_.some(documents, function(d){ return (d.symbol||'').indexOf(testSymbol)===0; }))
+                        break;
+
+                    nextSymbol = testSymbol + '/';
+                }
+
+                if(nextSymbol)
+                    symbol = nextSymbol;
+            }
+
+            _ctrl.document.symbol = symbol;
+        }
 
         //==============================
         //
@@ -74,6 +149,8 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
 
                 if(document.metadata && document.metadata.message)
                     document.metadata.message.level = document.metadata.message.level || "";
+
+                document.type_nature = _.compact([document.type, document.nature]).join('/');
 
                 document_bak = _.cloneDeep(document); //fullclone
 
@@ -119,8 +196,21 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                                           '/api/v2016/meetings/'+meetingId+'/documents'
                 }).then(function(res) {
 
-                    return (_ctrl.document._id = _ctrl.document._id || res.data._id);
+                    _ctrl.document._id  = _ctrl.document._id  || res.data._id;
+                    _ctrl.document.logs = res.data.logs || _ctrl.document.logs;
 
+                    return _ctrl.document._id;
+
+                }).then(function(docId){
+
+                    var newDocPath = /\/new$/;
+
+                    if(newDocPath.test($location.path())) {
+                        $location.replace();
+                        $location.path($location.path().replace(newDocPath, '/'+docId));
+                    }
+
+                    return docId;
                 });
             }
 
@@ -138,7 +228,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
 
             }).then(function(){
 
-                return saveSupersede();
+                return $q.all([saveSupersede(), saveLogEntry()]);
 
             }).then(function(){
 
@@ -149,7 +239,6 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                 console.error(err);
             });
         }
-
 
         //==============================
         //
@@ -180,7 +269,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
             return $http.get('/api/v2016/meetings/'+meetingId+'/documents').then(function(res) {
 
                 _ctrl.meetingDocuments  = _(res.data).forEach(function(d){
-                    d.display = (d.symbol || d.title.en) + ((d.metadata && d.metadata.superseded && ' - (Superseded by '+d.metadata.superseded+')')||'') ;
+                    d.display = (d.symbol || (d.title||{}).en) + ((d.metadata && d.metadata.superseded && ' - (Superseded by '+d.metadata.superseded+')')||'') ;
                     d.sortKey = sortKey(d);
                 }).sortBy(sortKey).value();
 
@@ -194,6 +283,28 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
             }).catch(function(err) {
                 _ctrl.error = err.data || err;
                 console.error(err);
+            });
+        }
+
+        //==============================
+        //
+        //==============================
+        function saveLogEntry() {
+
+            if(!_ctrl.document._id) return;
+            if(!_ctrl.log)          return;
+
+            var data = { text: _ctrl.log };
+
+            return $http.post('/api/v2016/meetings/'+meetingId+'/documents/'+_ctrl.document._id+'/logs', data).then(resData).then(function(log) {
+
+                _ctrl.log = null;
+                _ctrl.document.logs.push(log);
+
+            }).catch(function(err) {
+                _ctrl.error = err.data || err;
+                console.error(err);
+                throw err;
             });
         }
 
@@ -268,13 +379,14 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                 _id:         document._id,
                 symbol:      document.symbol || undefined,
                 type:        document.type,
+                nature:      document.nature,
                 group:       document.group  || undefined,
                 date:        document.date   || new Date(),
                 agendaItems: document.agendaItems,
                 title:       document.title,
                 description: document.description,
-                positionGroup: getPositionGroup(document),
                 status:      document.status,
+                displayGroup: getDisplayGroup(document),
                 metadata:    _.cloneDeep(document.metadata||{}),
             };
 
@@ -289,26 +401,20 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
         //==============================
         //
         //==============================
-        function getPositionGroup(doc) {
+        function getDisplayGroup(doc) {
 
-            var positionGroup = 'other';
+            if(doc.type=='official')       return 'official';
+            if(doc.type=='information')    return 'information';
+            if(doc.type=='other')          return 'other';
+            if(doc.type=='in-session') {
 
-            if(doc.type=='outcome')        positionGroup = 'outcome';
-            if(doc.type=='report')         positionGroup = 'outcome';
-            if(doc.type=='decision')       positionGroup = 'outcome';
-            if(doc.type=='recommandation') positionGroup = 'outcome';
-            if(doc.type=='official')       positionGroup = 'official';
-            if(doc.type=='information')    positionGroup = 'information';
-            if(doc.type=='other')          positionGroup = 'other';
-            if(doc.type=='notification')   positionGroup = 'notification';
-            if(doc.type=='statement')      positionGroup = 'statement';
-            if(doc.type=='crp')            positionGroup = 'in-session';
-            if(doc.type=='limited')        positionGroup = 'in-session';
-            if(doc.type=='non-paper')      positionGroup = 'in-session';
-            if(doc.group=='WG.1' && positionGroup == 'in-session')  positionGroup = 'in-session/wg1';
-            if(doc.group=='WG.2' && positionGroup == 'in-session')  positionGroup = 'in-session/wg2';
+                if( doc.nature=='statement') return 'statement';
+                if(!doc.group)               return 'in-session';
+                if( doc.group =='WG.1')      return 'in-session/wg1';
+                if( doc.group =='WG.2')      return 'in-session/wg2';
+            }
 
-            return positionGroup;
+            return 'other';
         }
 
         //==============================
@@ -485,12 +591,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                 $location.search({ tabFor: _ctrl.document._id});
             }
 
-            if(meetingId=="COP13-HLS") return $location.path('/2016/cop-13-hls/documents');
-            if(meetingId=="COP-13")    return $location.path('/2016/cop-13/documents');
-            if(meetingId=="MOP-08")    return $location.path('/2016/cp-mop-8/documents');
-            if(meetingId=="NP-MOP-02") return $location.path('/2016/np-mop-2/documents');
-
-            $window.location = '/doc/?meeting='+meetingId;
+            return $location.path('/'+meetingId);
         }
 
         //==============================
@@ -501,12 +602,11 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
             delete _ctrl.fileError;
         }
 
-
         //==============================
         //
         //==============================
         function normalizeSymbol(symbol) {
-            return symbol.toUpperCase().replace(/[^A-Z0-9\/\-]/gi, '');
+            return symbol.toUpperCase().replace(/[^A-Z0-9\/\-\*]/gi, '').replace(/\/$/g, '');
         }
 
         //==============================
@@ -516,23 +616,33 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
 
             var typePos;
 
-                 if(d.type=="report")      typePos = 10;
-            else if(d.type=="outcome")     typePos = 20;
-            else if(d.type=="limited")     typePos = 30;
-            else if(d.type=="crp")         typePos = 40;
-            else if(d.type=="non-paper")   typePos = 50;
-            else if(d.type=="official")    typePos = 60;
-            else if(d.type=="information") typePos = 70;
-            else if(d.type=="other")       typePos = 80;
-            else if(d.type=="statement")   typePos = 90;
+                 if(d.type=='in-session' && d.nature=="limited")     typePos = 10;
+            else if(d.type=='in-session' && d.nature=="crp")         typePos = 20;
+            else if(d.type=='in-session' && d.nature=="non-paper")   typePos = 30;
+            else if(d.type=="official")                              typePos = 40;
+            else if(d.type=="information")                           typePos = 50;
+            else if(d.type=="other")                                 typePos = 60;
+            else if(d.type=='in-session' && d.nature=="statement")   typePos = 70;
 
             return ("000000000" + (typePos   ||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
                    (d.group||'') + '_' +
                  //  ((d.metadata||{}).superseded ? '1' : '0') + '_' +
-                   ("000000000" + (d.position||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
+                   ("000000000" + (d.displayPosition||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
                    (d.symbol||"").replace(/\b(\d)\b/g, '0$1')
                                  .replace(/(\/REV)/gi, '0$1')
                                  .replace(/(\/ADD)/gi, '1$1');
+        }
+
+        //====================================
+        //
+        //====================================
+        function applyTypeNature(type_nature) {
+
+            if(!_ctrl.document)
+                return;
+
+            _ctrl.document.type   = (type_nature||'').split('/')[0] || undefined;
+            _ctrl.document.nature = (type_nature||'').split('/')[1] || undefined;
         }
 
         //====================================
