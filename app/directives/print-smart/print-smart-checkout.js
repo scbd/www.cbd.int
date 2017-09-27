@@ -12,13 +12,13 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
 			replace : true,
 			template : templateHtml,
 			scope : {
-                documents : "&documents"
+                documents : "&documents",
+                allowPrint : "<allowPrint"
             },
 			link: function ($scope, element) {
 
                 initHelp();
 
-		        $scope.canPrint = true;
 		        $scope.clear    = clear;
 		        $scope.remove   = remove;
 		        $scope.checkout = checkout;
@@ -95,6 +95,7 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
                     if(!$scope.documents().length) return help(true);
 
 					openDialog('./checkout-dialog', { resolve : {
+                        allowPrint : resolver($scope.allowPrint),
                         documents: resolver({
                             printable : printableDocuments(),
                             downloadable: downloadableDocuments()
