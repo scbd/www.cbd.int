@@ -62,7 +62,9 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                 _ctrl.meeting = res.data;
 
                 if(documentId=='new')
-                    return { };
+                    return {
+                        status:'public'
+                    };
 
                 return $http.get('/api/v2016/meetings/'+meetingId+'/documents/'+documentId).then(function(res) {
                     return res.data;
@@ -272,6 +274,7 @@ define(['lodash', 'filters/lstring', 'directives/file', './change-case-button', 
                 title:       document.title,
                 description: document.description,
                 positionGroup: getPositionGroup(document),
+                status:      document.status,
                 metadata:    _.cloneDeep(document.metadata||{}),
             };
 

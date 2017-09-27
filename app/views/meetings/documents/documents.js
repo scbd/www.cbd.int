@@ -46,7 +46,7 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
                 documents = _(res.data).map(function(d){
                     d.metadata = _.defaults(d.metadata||{}, {
                         printable: ['crp', 'limited', 'non-paper'].indexOf(d.type)>=0,
-                        visible : !!(d.files||[]).length
+                        visible : !!(d.files||[]).length && (d.status||'public')=='public'
                     });
 
                     return d;

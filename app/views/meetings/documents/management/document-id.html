@@ -63,10 +63,16 @@
             </div>
 
             <div class="col-xs-4 col-md-2">
-                <!-- print-smart -->
-                <div class="form-group">
-                    <label for="symbol">Print-Smart</label>
-                    <select ng-disabled="uploading" class="form-control" ng-options="item.value as item.caption for item in [{value: undefined, caption:'automatic' }, { value: true, caption:'Yes'}, { value: false, caption:'No'}]" ng-model="editCtrl.document.metadata.printable"></select>
+                <!-- Status -->
+                <div class="form-group" ng-class="{ 'has-success' : editCtrl.document.status=='public', 'has-error' : editCtrl.document.status!='public', }">
+                    <label class="control-label" for="symbol">Status</label>
+                    <select ng-disabled="uploading" class="form-control" ng-model="editCtrl.document.status">
+                        <option value="received">Received</option>
+                        <option value="reviewed">Reviewed</option>
+                        <option value="edited">Edited</option>
+                        <option value="public">Posted/Public</option>
+                        <option value="held">On Hold ✋</option>
+                    </select>
                 </div>
 
             </div>
@@ -165,18 +171,27 @@
         <!-- Superseded -->
         <div class="row">
 
-            <div class="col-xs-12 col-sm-6">
+            <div class="col-xs-12 col-sm-5">
                 <div class="form-group">
                     <label class="control-label" for="supersede">Supersede</label>
                     <select ng-disabled="uploading" class="form-control" id="supersede" ng-options="item._id as item.display disable when item.metadata.superseded for item in editCtrl.meetingDocuments" ng-model="editCtrl.supersede"></select>
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-6">
+            <div class="col-xs-12 col-sm-5">
                 <div class="form-group">
                     <label class="control-label text-muted" style="text-decoration:line-through" for="superseded">Superseded By</label>
                     <input ng-disabled="uploading" type="text" class="form-control" id="superseded" ng-model="editCtrl.document.metadata.superseded" placeholder="Type symbol..."/>
                 </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-2">
+                <!-- print-smart -->
+                <div class="form-group">
+                    <label class="control-label" for="symbol">Print-Smart</label>
+                    <select ng-disabled="uploading" class="form-control" ng-options="item.value as item.caption for item in [{value: undefined, caption:'automatic' }, { value: true, caption:'Yes'}, { value: false, caption:'No'}]" ng-model="editCtrl.document.metadata.printable"></select>
+                </div>
+
             </div>
 
         </div>
