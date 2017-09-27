@@ -1,9 +1,44 @@
 <div>
-    <div id="print-smart-checkout" ng-cloak  class="pull-right hidden-print">
+    <style>
+        .nav.nowrap {
+            white-space: nowrap;
+        }
+
+        .nav.nowrap > li {
+            display:inline-block;
+            float:none;
+        }
+    </style>
+
+    <h1 class="visible-print" style="color:black;position:absolute;top:0px;right:0px"> {{::documentsCtrl.meeting.code}} <em><small>{{documentsCtrl.currentTabX.title}}</small></em></h1>
+
+    <h1 ng-if="::documentsCtrl.showMeeting" class="hidden-print hidden-xs">Meeting Documents</h1>
+    <h3 ng-if="::documentsCtrl.showMeeting" class="hidden-print visible-xs pull-left">{{::documentsCtrl.meeting.code|lstring}}</h3>
+    <h3 ng-if="::documentsCtrl.showMeeting" class="hidden-print hidden-xs">{{::documentsCtrl.meeting.title|lstring}}</h3>
+    <h5 ng-if="::documentsCtrl.showMeeting" class="hidden-print hidden-xs">
+        {{::documentsCtrl.meeting.dateText|lstring}}
+        <span ng-if="::(documentsCtrl.meeting.dateText|lstring) && (documentsCtrl.meeting.venueText|lstring)"> - </span>
+        {{::documentsCtrl.meeting.venueText|lstring}}
+    </h5>
+
+    <div id="print-smart-checkout" ng-cloak  class="pull-right hidden-print" style="margin-top:5px">
 
         <span ng-if="documentsCtrl.edit" class="edit">
-            <button type="button" class="btn btn-default" ng-if="documentsCtrl.editMode"             ng-click="documentsCtrl.edit(null)"><i class="fa fa-plus"></i></button>
+            <button type="button" class="btn btn-default" ng-click="documentsCtrl.edit(null)"><i class="fa fa-plus"></i></button>
             <button type="button" class="btn btn-default" ng-class="{active:documentsCtrl.editMode, 'btn-info': documentsCtrl.editMode }" ng-click="documentsCtrl.editMode=!documentsCtrl.editMode"><i class="fa fa-edit"></i></button>
+        </span>
+
+        <span ng-if="::documentsCtrl.meeting.links.length || documentsCtrl.meeting.EVT_WEB || documentsCtrl.meeting.EVT_INFO_PART_URL || documentsCtrl.meeting.isMontreal || documentsCtrl.meeting.EVT_REG_NOW_YN" class="btn-group">
+          <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Info links <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li ng-if="::documentsCtrl.meeting.EVT_WEB"><a ng-href="{{::documentsCtrl.meeting.EVT_WEB}}" target="_blank">Official Web Site</a></li>
+            <li ng-if="::documentsCtrl.meeting.EVT_INFO_PART_URL"><a ng-href="{{::documentsCtrl.meeting.EVT_INFO_PART_URL}}" target="_blank">Information for participants</a></li>
+            <li ng-if="::documentsCtrl.meeting.isMontreal"><a ng-href="/meetings/montreal.shtml" target="_blank">Montreal information for visitors</a></li>
+            <li ng-if="::documentsCtrl.meeting.EVT_REG_NOW_YN"><a ng-href="/side-events" target="_blank">Register side-events</a></li>
+            <li ng-repeat="link in ::documentsCtrl.meeting.links"><a ng-href="{{::link.url}}" target="_blank">{{::link.title|lstring}}</a></li>
+          </ul>
         </span>
 
         <!-- Sort/Display -->
@@ -17,19 +52,8 @@
         <print-smart-checkout ng-if="documentsCtrl.documents.length" style="display:inline-block" documents="documentsCtrl.documents|filter:{selected:true}:true" allow-print="documentsCtrl.meeting.printSmart"></print-smart-checkout>
     </div>
 
-    <h1 class="visible-print" style="color:black;position:absolute;top:0px;right:0px"> {{::documentsCtrl.meeting.code}} <small>{{documentsCtrl.TABS_NAMES[documentsCtrl.currentTab]}}</small></h1>
 
-    <style>
-        .nav.nowrap {
-            white-space: nowrap;
-        }
-
-        .nav.nowrap > li {
-            display:inline-block;
-            float:none;
-        }
-    </style>
-
+    <div class="clearfix" ng-if="documentsCtrl.edit"></div>
     <div class="clearfix visible-sm visible-xs"></div>
 
     <!-- Nav tabs -->

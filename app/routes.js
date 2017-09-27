@@ -23,6 +23,9 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         if(/^\/conferences($|\/.*)/.test(locationPath))
             registerRoutes_conferences($routeProvider);
 
+        if(/^\/meetings($|\/.*)/.test(locationPath))
+            registerRoutes_meetings($routeProvider);
+
         // /aichi-targets/*
         if(/^\/aichi-targets($|\/.*)/.test(locationPath))
             registerRoutes_aichiTargets($routeProvider);
@@ -89,6 +92,21 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       .when('/:meeting',   { templateUrl : 'views/meetings/documents/in-session/meeting-id.html', resolveController : true, progress : { stop : false } } );
     }
 
+    //============================================================
+    //
+    //
+    //============================================================
+    function registerRoutes_meetings(routeProvider) {
+
+        $("base").attr('href', '/meetings/'); // allow full page reload outside of  /insession/*
+
+        routeProvider
+        .when('/import-translations',    { templateUrl : 'views/meetings/documents/management/translations.html', resolveController : true,                       resolve : { user : securize(["Administrator","EditorialService"]) } })
+        .when('/:meeting/documents/:id', { templateUrl : 'views/meetings/documents/management/document-id.html',  resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService"]) } })
+        .when('/:meeting',               { templateUrl : 'views/meetings/documents/documents.html',               resolveController : true, reloadOnSearch:false, resolve : { showMeeting : resolveLiteral(true) } } );
+
+    }
+
   //============================================================
   //
   //
@@ -100,14 +118,12 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       routeProvider
       .when('/',                        { redirectTo: '/2016' })
       .when('/2016',                    { templateUrl : 'views/meetings/cop13/index.html'})
-      .when('/2016/cop-13-hls/documents',{templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meetingId: 'COP13-HLS' }), meeting: resolveLiteral('COP13-HLS') }, reloadOnSearch:false })
-      .when('/2016/cop-13/documents',   { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meetingId: 'COP-13'    }), meeting: resolveLiteral('COP-13')    }, reloadOnSearch:false })
-      .when('/2016/cp-mop-8/documents', { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meetingId: 'MOP-08'    }), meeting: resolveLiteral('MOP-08')    }, reloadOnSearch:false })
-      .when('/2016/np-mop-2/documents', { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meetingId: 'NP-MOP-02' }), meeting: resolveLiteral('NP-MOP-02') }, reloadOnSearch:false })
-      .when('/2016/schedules',          { redirectTo: '/2016/cop-13/documents' })
+      .when('/2016/cop-13-hls/documents',{templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meeting: 'COP13-HLS' }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/2016/cop-13/documents',   { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meeting: 'COP-13'    }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/2016/cp-mop-8/documents', { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meeting: 'MOP-08'    }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/2016/np-mop-2/documents', { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meeting: 'NP-MOP-02' }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/2016/schedules',          { redirectTo: '/2016/cop-13/documents' });
 
-      .when('/management/import-translations',     { templateUrl : 'views/meetings/documents/management/translations.html', resolveController : true, resolve : { user : securize(["Administrator","EditorialService"]) } })
-      .when('/management/:meeting/documents/:id',  { templateUrl : 'views/meetings/documents/management/document-id.html',  resolveController : true, resolve : { user : securize(["Administrator","EditorialService"]) }, reloadOnSearch:false });
     }
 
   //============================================================

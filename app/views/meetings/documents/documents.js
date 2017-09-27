@@ -1,13 +1,15 @@
-define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication'], function(_, ng) {
+define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication'], function(_, ng) {
     //'css!./agenda.css' // moved to template
     var currentUser;
 
-	return ["$scope", "$route", "$http", '$q', '$location', 'meeting', 'authentication', function ($scope, $route, $http, $q, $location, meetingCode, authentication) {
+	return ["$scope", "$route", "$http", '$q', '$location', 'authentication', 'showMeeting', function ($scope, $route, $http, $q, $location, authentication, showMeeting) {
 
         var _ctrl = $scope.documentsCtrl = this;
+        var meetingCode = $route.current.params.meeting.toUpperCase();
         var meeting;
         var documents;
 
+        _ctrl.showMeeting = showMeeting===undefined ? true : !!showMeeting;
         _ctrl.sort = $location.hash() == 'agenda' ? 'agenda' : 'document';
         _ctrl.switchTab  = switchTab;
 
@@ -26,17 +28,17 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
         //==============================
         function load() {
 
-            meeting = $http.get('/api/v2016/meetings/'+meetingCode, { params: { f : { EVT_TIT_EN:1, EVT_CD:1, print:1 , agenda:1 } } }).then(function(res){
+            meeting = $http.get('/api/v2016/meetings/'+meetingCode, { params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1 , agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1 } } }).then(function(res){
 
                 meeting = _.defaults(res.data, {
                     code: res.data.EVT_CD,
-                    title: res.data.EVT_TIT_EN,
-                    agenda: { items: [] }
+                    agenda: { items: [] },
+                    printSmart : false,
+                    isMontreal : /montr.al.*canada/i.test((res.data.venueText||{}).en||'')
                 });
 
                 _ctrl.meeting = meeting;
                 _ctrl.agenda  = meeting.agenda;
-
 
                 return meeting;
             });
@@ -129,8 +131,8 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
 
                  if(size=='xs') _ctrl.maxTabCount = 2;
             else if(size=='sm') _ctrl.maxTabCount = 4;
-            else if(size=='md') _ctrl.maxTabCount = 4;
-            else if(size=='lg') _ctrl.maxTabCount = 6;
+            else if(size=='md') _ctrl.maxTabCount = 3;
+            else if(size=='lg') _ctrl.maxTabCount = 5;
             else                _ctrl.maxTabCount = 6;
 
             if(_ctrl.tabs && _ctrl.tabs.length)
@@ -229,7 +231,8 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
             if(!tab)
                 return;
 
-            if(!tab.loaded && _ctrl.editMode) {
+            if(!tab.dragdropInit && _ctrl.editMode) {
+                tab.dragdropInit = true;
                 initDragdrop();
             }
 
@@ -366,7 +369,7 @@ define(['lodash', 'angular', 'dragula', 'filters/lstring', 'directives/print-sma
 
             var id = doc ? doc._id : 'new';
 
-            $location.url('/management/'+meeting.code+ '/documents/'+id);
+            $location.url('/'+meeting.code+ '/documents/'+id);
         }
 	}];
 });
