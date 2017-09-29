@@ -503,7 +503,7 @@
             <a href="/executive-secretary">Executive Secretary </a> >
             <a href="/executive-secretary/work">At Work</a> >
             <span>Event </span>
-            <span class="pull-right"><a href="#">Share <i class="fa fa-share-alt" aria-hidden="true"></i></a></span>
+            <!-- <span class="pull-right"><a href="#">Share <i class="fa fa-share-alt" aria-hidden="true"></i></a></span> -->
             <hr class="crumb-hr" />
 
         </div>
@@ -631,13 +631,13 @@
       </div>
 
       <div class="col-xs-12 hidden-xs hidden-sm" >
-          <hr/>
+          <hr ng-if="image.name !=='cover' && $index>2" />
             <div  style="margin:5px 5px 5px 5px;display:inline-block;" class="thum" ng-repeat="image in esEventCtrl.document.images" ng-style="{'background-image': 'url('+image.url+')'}" ng-if="image.name !=='cover' && $index>2" ng-click="esEventCtrl.pop('img-'+$index)">
 
             </div>
       </div>
       <div class="col-xs-12 hidden-md hidden-lg hidden-xl" >
-          <hr/>
+          <hr ng-if="image.name !=='cover'"/>
             <div  style="margin:5px 5px 5px 5px;display:inline-block;" class="thum" ng-repeat="image in esEventCtrl.document.images" ng-style="{'background-image': 'url('+image.url+')'}" ng-if="image.name !=='cover'" ng-click="esEventCtrl.pop('img-'+$index)">
 
             </div>
