@@ -43,6 +43,8 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 				function extractFirstParagraph (txt) {
 				  var rx = /(^).*?(?=\n|$)/g;
 				  var arr = rx.exec(txt);
+
+				  if(arr[0].length>380)arr[0] = arr[0].subString(0,380);
 				  return arr[0] || txt;
 				}
 				//=======================================================================
@@ -53,7 +55,7 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 						var queryParameters = {
 								'q': 'schema_s:event AND thematicArea_ss:3FEF79FF-9EA2-4E3A-BEC9-2991CCDD7F3A',
 								'sort': 'startDate_dt asc',
-								'fl': 'title_t,description_t,url_ss,endDate_dt,startDate_dt,cover_s',
+								'fl': 'title_t,description_t,identifier_s,startDate_dt,cover_s',
 								'wt': 'json',
 								'start': 0,
 								'rows': 5,
@@ -64,8 +66,10 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 						var pagePromise = $q.when($http.get('https://api.cbd.int/api/v2013/index/select', {  params: queryParameters}))
 							.then(function (data) {
 									data=data.data;
-								for(var i in data.response.docs)
+								for(var i in data.response.docs){
 									data.response.docs[i].description_t=extractFirstParagraph(data.response.docs[i].description_t);
+									data.response.docs[i].url_ss ='/event/'+data.response.docs[i].identifier_s
+								}
 
 								$scope.carousel=data.response.docs;
 						}).catch(function(error) {
