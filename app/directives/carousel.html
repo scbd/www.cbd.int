@@ -7,14 +7,16 @@
     <div class="carousel-container animated" ng-repeat="item in items" ng-show="item.cover_s" style="height:100%;width:100%;position:absolute" ng-show="item.visible"
          ng-class="{fadeIn: $index==index, fadeOut: $index!=index&&item.visible }"
          ng-style="{ 'background-image': 'url('+item.cover_s+')', 'z-index' : ($index == index ? '50' : 'auto') }">
-        <div class="col-sm-5 col-lg-4 img-overlay">
+
+        <div class="col-sm-5 col-lg-4 img-overlay" style="cursor:pointer;" ng-click="goTo(item.url_ss)">
             <h2>{{item.title_t}} {{opacity($index)}}</h2>
-            <p><span>{{item.startDate_dt |moment:'format':'DD MMMM YYYY'}}<span ng-if="diff(item.startDate_dt,item.endDate_dt)"> ({{diff(item.startDate_dt,item.endDate_dt)}} Days)</span>:</span><p> {{item.description_t}}</p></p>
-            <h3 class="text-center"><a ng-href="{{item.url_ss[1]}}" class="label label-default read-more pointer">Read More</a></h3>
+            <p><span>{{item.startDate_dt |moment:'format':'DD MMMM YYYY'}}<p> {{item.description_t}} <a style="color:white;text-decoration: underline;" ng-href="{{item.url_ss}}"> Read More ... </a></p></p>
+            <!-- <h3 class="text-center"><a ng-href="{{item.url_ss[1]}}" class="label label-default read-more pointer">Read More</a></h3> -->
             <div class="arrows">
-                <i class="fa fa-arrow-circle-left pull-left pointer"   aria-hidden="true" ng-click="next(-1)"></i>
-                <i class="fa fa-arrow-circle-right pull-right pointer" aria-hidden="true" ng-click="next( 1)"></i>
+                <i  class="fa fa-arrow-circle-left pull-left pointer"   aria-hidden="true" ng-click="next(-1); $event.stopPropagation();"></i>
+                <i class="fa fa-arrow-circle-right pull-right pointer" aria-hidden="true" ng-click="next( 1); $event.stopPropagation();"></i>
             </div>
         </div>
+
     </div>
 </div>

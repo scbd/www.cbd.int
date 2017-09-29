@@ -1,6 +1,6 @@
 define(['app', 'text!./carousel.html','moment','filters/moment'], function(app, html,moment) { 'use strict';
 
-	return app.directive('carousel', ['$timeout', function($timeout) {
+	return app.directive('carousel', ['$timeout','$location', function($timeout,$location) {
 		return {
             //require: 'ngModel',
 			restrict : "E",
@@ -29,6 +29,14 @@ define(['app', 'text!./carousel.html','moment','filters/moment'], function(app, 
                 if(!delay || delay<0 || isNaN(delay))
                     delay = 10;
 
+				//============================================================
+				//
+				//============================================================
+				function goTo (url) {
+		
+								$location.path(url);
+				}
+				$scope.goTo=goTo;
                 //================
                 //
                 //================
