@@ -3,7 +3,7 @@ define(['app','services/fb','directives/carousel', 'directives/es-pages/header-n
 
 return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($location,$scope,fb,$document,ngMeta,$q,$http) {
 
-			$scope.carousel=[];
+			$scope.carousel=undefined;
 			query();
 
 			var _ctrl = this;
@@ -63,7 +63,7 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 								'facet.limit': 999999,
 								'facet.mincount' : 1
 						};
-						var pagePromise = $q.when($http.get('https://api.cbd.int/api/v2013/index/select', {  params: queryParameters}))
+						var pagePromise = $q.when($http.get('/api/v2013/index/select', {  params: queryParameters}))
 							.then(function (data) {
 									data=data.data;
 								for(var i in data.response.docs){

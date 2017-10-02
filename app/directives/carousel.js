@@ -14,7 +14,7 @@ define(['app', 'text!./carousel.html','moment','filters/moment'], function(app, 
 
 
                 var killWatch = $scope.$watch('items', function() {
-					if($scope.items.length){
+					if($scope.items && $scope.items.length){
 						 next(0);
 						 killWatch();
 					 }
@@ -33,7 +33,7 @@ define(['app', 'text!./carousel.html','moment','filters/moment'], function(app, 
 				//
 				//============================================================
 				function goTo (url) {
-		
+
 								$location.path(url);
 				}
 				$scope.goTo=goTo;
