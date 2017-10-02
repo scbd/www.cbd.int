@@ -69,6 +69,7 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 								for(var i in data.response.docs){
 									data.response.docs[i].description_t=extractFirstParagraph(data.response.docs[i].description_t);
 									data.response.docs[i].url_ss ='/event/'+data.response.docs[i].identifier_s
+										data.response.docs[i].visible = true;
 								}
 
 								$scope.carousel=data.response.docs;
