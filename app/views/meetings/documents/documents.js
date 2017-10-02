@@ -191,7 +191,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function loadDecisions() {
 
-            $http.get('/api/v2013/index', { params: { q : 'schema_s:(x-decision x-recommendation) AND meeting_ss:'+meetingCode, fl: 'id,symbol_s,schema_s,position_i,meeting_ss,title_*, description_*,file_ss,url_ss', rows:999 } }).then(function(res){
+            $http.get('/api/v2013/index', { params: { q : 'schema_s:(decision recommendation) AND meeting_ss:'+meetingCode, fl: 'id,symbol_s,schema_s,position_i,meeting_ss,title_*, description_*,file_ss,url_ss', rows:999 } }).then(function(res){
 
                 return _(res.data.response.docs).map(function(n) {
                     var doc = _.defaults(n, {
