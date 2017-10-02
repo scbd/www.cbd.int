@@ -114,7 +114,7 @@ left: 0;
 <div class="clearfix"></div>
 
 <div class="row-fluid">
-    <div class="col-md-3">
+    <div class="col-xs-12 col-md-8 col-md-offset-2 ">
         <a translation-url  href="platform/new" class="color-white">
             <h5 style="padding:5px;border-radius:3px;margin-bottom:0;" class="bg-darkgrey color-white linkDark" >
             <span class="badge bg-white">{{indexCtrl.outReachRecords.new.count}}</span> What's New</h5>
@@ -124,7 +124,7 @@ left: 0;
             <!-- <div id="communityProtocol" ng-include="home-list.html"> -->
 
                 <span class="color-darkgrey" style="text-transform:uppercase;font-weight:bold;font-size:10px;"> {{doc.date_dt | momentUtc:'format':'DD MMM YYYY'}}</span>
-                <span class="color-grey" style="display:block;font-size:12px;">{{doc.title_t.length > 120 ? (doc.title_t | limitTo : 120) + "..." : doc.title_t }}</span>
+                <span class="color-grey" style="display:block;font-size:12px;">{{doc.title_t }}</span>
 
 
         </div>
@@ -133,12 +133,12 @@ left: 0;
         <div class="small pull-right" ng-if="indexCtrl.outReachRecords.new.data.length ===3"><a ng-href="platform/new">See more ...</a></div>
     </div>
 
-    <div class="col-md-3">
+    <div class="col-xs-12 col-md-4">
          <a translation-url  href="platform/notification" class="color-white">
             <h5 style="padding:5px;border-radius:3px;margin-bottom:0;" class="bg-darkgrey color-white linkDark" >
             <span class="badge bg-white">{{indexCtrl.outReachRecords.notification.count}}</span> Notifications</h5>
         </a>
-                    <a translation-url  ng-repeat-start="doc in indexCtrl.outReachRecords.notification.data" href="{{doc.url_ss[0]}}" target="_blank"   style="padding-bottom:5px;text-decoration: none;color:#333;" >
+                    <a translation-url  ng-repeat-start="doc in indexCtrl.outReachRecords.notification.data" ng-if="doc.title_t && $index < 3" href="{{doc.url_ss[0]}}" target="_blank"   style="padding-bottom:5px;text-decoration: none;color:#333;" >
         <div class="out-reach-row"  ng-show="doc.title_t && $index < 5" class="link1">
             <!-- <div id="communityProtocol" ng-include="home-list.html"> -->
 
@@ -150,12 +150,12 @@ left: 0;
                         <div class="small pull-right" ng-if="indexCtrl.outReachRecords.notification.data.length ===3"><a ng-href="platform/notification">See more ...</a></div>
     </div>
 
-    <div class="col-md-3">
+    <div class=" col-xs-12 col-md-4">
           <a translation-url  href="platform/meeting" class="color-white">
             <h5 style="padding:5px;border-radius:3px;margin-bottom:0;" class="bg-darkgrey color-white linkDark" >
             <span class="badge bg-white">{{indexCtrl.outReachRecords.meeting.count}}</span> Events</h5>
         </a>
-        <a translation-url  ng-repeat-start="doc in indexCtrl.outReachRecords.meeting.data" href="{{doc.url_ss[0]}}" target="_blank"   style="padding-bottom:5px;text-decoration: none;color:#333;" >
+        <a translation-url  ng-repeat-start="doc in indexCtrl.outReachRecords.meeting.data" ng-if="doc.title_t && $index <3" href="{{doc.url_ss[0]}}" target="_blank"   style="padding-bottom:5px;text-decoration: none;color:#333;" >
 
         <div class="out-reach-row"  ng-show="doc.title_t && $index < 5" class="link1">
             <!-- <div id="communityProtocol" ng-include="home-list.html"> -->
@@ -173,12 +173,12 @@ left: 0;
       <div class="small pull-right" ng-if="indexCtrl.outReachRecords.meeting.data.length ===3"><a ng-href="platform/meeting">See more ...</a></div>
     </div>
 
-     <div class="col-md-3">
+     <div class="col-xs-12 col-md-4">
         <a translation-url    <a translation-url  href="platform/news" class="color-white">
             <h5 style="padding:5px;border-radius:3px;margin-bottom:0;" class="bg-darkgrey color-white linkDark" >
             <span class="badge bg-white">{{indexCtrl.outReachRecords.news.count}}</span> News</h5>
         </a>
-        <a translation-url  ng-repeat-start="doc in indexCtrl.outReachRecords.news.data"  href="{{doc.url_ss[0]}}" target="_blank"  style="padding-bottom:5px;text-decoration: none;color:#333;" >
+        <a translation-url  ng-repeat-start="doc in indexCtrl.outReachRecords.news.data"  ng-if="doc.title_t && $index <3" href="{{doc.url_ss[0]}}" target="_blank"  style="padding-bottom:5px;text-decoration: none;color:#333;" >
 
         <div class="out-reach-row"  ng-show="doc.title_t && $index < 5" class="link1">
             <!-- <div id="communityProtocol" ng-include="home-list.html"> -->

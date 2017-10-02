@@ -1,39 +1,10 @@
 define(['app','services/fb','directives/carousel', 'directives/es-pages/header-nav'], function() { 'use strict';
 
 
-return ['$location','$scope','fb','$document','ngMeta', function ($location,$scope,fb,$document,ngMeta) {
+return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($location,$scope,fb,$document,ngMeta,$q,$http) {
 
-	$scope.carousel = [{
-		title    : 'CMS COP12',
-		abstract : '22-28 October 2017: 12th Session of the Conference of the Parties to the Convention on the Conservation of Migratory Species of Wild Animals, Bonn, Germany.',
-		url      : 'https://www.cbd.int/2011-2020/dashboard/submit/event/FDF9A151-FC8B-E4CE-FE41-9B0AC2E8ED22/view',
-		imageUrl : '/app/images/es-pages/es5.jpg'
-	},
-	{
-		title    : 'Bucharest Forum',
-		abstract : '5-7 October 2017: Focusing on the needs of economic and strategic decision makers in the region between the Adriatic, Black Sea and the Caspian Sea.',
-		url      : 'https://www.cbd.int/2011-2020/dashboard/submit/event/A0988E99-A1E5-72FA-BD83-1E7214CB3AD1/view',
-		imageUrl : '/app/images/es-pages/es1.jpg'
-	},
-	{
-		title    : 'UN General Assembly',
-		abstract : '14 September 2017: Focusing on People: Striving for Peace and a Decent Life for All on a Sustainable Planet',
-		url      : 'https://www.cbd.int/2011-2020/dashboard/submit/event/6A17F3CB-AD7F-2220-4A8F-34012AA21690/view',
-		imageUrl : '/app/images/es-pages/es8.jpg'
-	},
-	{
-		title    : 'UNWTO General Assembly',
-		abstract : '13 September 2017: 22nd Session of the General Assembly of the World Tourism Organization, Chengdu, China.',
-		url      : 'https://www.cbd.int/2011-2020/dashboard/submit/event/118BF43B-9A22-B5DF-FA10-C1B86CF60916/view',
-		imageUrl : '/app/images/es-pages/es2.jpg'
-	},
-	{
-		title    : 'UNCCD COP13',
-		abstract : '11 September 2017: 13th session of the Conference of the Parties to the United Nations Convention to Combat Desertification, Ordos, China.',
-		url      : 'https://www.cbd.int/2011-2020/dashboard/submit/event/0F60F9EA-2127-E0C7-26C6-E509068B3F67/view',
-		imageUrl : '/app/images/es-pages/es3.jpg'
-	}//ABE81109-C9D1-16BD-808A-28782F045AA3
-];
+			$scope.carousel=undefined;
+			query();
 
 			var _ctrl = this;
 			_ctrl.goTo = goTo;
@@ -69,6 +40,45 @@ return ['$location','$scope','fb','$document','ngMeta', function ($location,$sco
 								$location.path(url);
 				}
 
+				function extractFirstParagraph (txt) {
+				  var rx = /(^).*?(?=\n|$)/g;
+				  var arr = rx.exec(txt);
+
+				  if(arr[0].length>380)arr[0] = arr[0].subString(0,380);
+				  return arr[0] || txt;
+				}
+				//=======================================================================
+				//
+				//=======================================================================
+				function query() {
+
+						var queryParameters = {
+								'q': 'schema_s:event AND thematicArea_ss:3FEF79FF-9EA2-4E3A-BEC9-2991CCDD7F3A',
+								'sort': 'startDate_dt asc',
+								'fl': 'title_t,description_t,identifier_s,startDate_dt,cover_s',
+								'wt': 'json',
+								'start': 0,
+								'rows': 5,
+								'facet': true,
+								'facet.limit': 999999,
+								'facet.mincount' : 1
+						};
+						var pagePromise = $q.when($http.get('/api/v2013/index/select', {  params: queryParameters}))
+							.then(function (data) {
+									data=data.data;
+								for(var i in data.response.docs){
+									data.response.docs[i].description_t=extractFirstParagraph(data.response.docs[i].description_t);
+									data.response.docs[i].url_ss ='/event/'+data.response.docs[i].identifier_s
+										data.response.docs[i].visible = true;
+								}
+
+								$scope.carousel=data.response.docs;
+						}).catch(function(error) {
+								console.log('ERROR: ' + error);
+						});
+
+						return pagePromise;
+				}// query
 
     }];
 });

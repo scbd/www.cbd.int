@@ -3,7 +3,7 @@ define(['app'], function (app) { 'use strict';
     //##################################################################
       app.filter('titleCase',[function () {
           return function (url) {
-
+                if(!url) return;
                 var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
 
                 return url.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function(match, index, title){

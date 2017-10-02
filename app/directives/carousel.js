@@ -1,6 +1,6 @@
-define(['app', 'text!./carousel.html'], function(app, html) { 'use strict';
+define(['app', 'text!./carousel.html','moment','filters/moment'], function(app, html,moment) { 'use strict';
 
-	return app.directive('carousel', ['$timeout', function($timeout) {
+	return app.directive('carousel', ['$timeout','$location', function($timeout,$location) {
 		return {
             //require: 'ngModel',
 			restrict : "E",
@@ -13,7 +13,12 @@ define(['app', 'text!./carousel.html'], function(app, html) { 'use strict';
 			link: function ($scope, el) {
 
 
-                $scope.$watch('::items', function() { next(0); });
+                var killWatch = $scope.$watch('items', function() {
+					if($scope.items && $scope.items.length){
+						 next(0);
+						 killWatch();
+					 }
+				});
                 $scope.$on   ('$destroy', clearTimer);
                 $scope.next  = next;
                 $scope.index = 0;
@@ -24,6 +29,14 @@ define(['app', 'text!./carousel.html'], function(app, html) { 'use strict';
                 if(!delay || delay<0 || isNaN(delay))
                     delay = 10;
 
+				//============================================================
+				//
+				//============================================================
+				function goTo (url) {
+
+								$location.path(url);
+				}
+				$scope.goTo=goTo;
                 //================
                 //
                 //================
@@ -48,7 +61,16 @@ define(['app', 'text!./carousel.html'], function(app, html) { 'use strict';
 
                     timer = $timeout(function() { next(1); }, delay*1000);
                 }
+				//================
+                //
+                //================
+                function diff(s,e) {
 
+                    var d = Number(moment(e).diff(moment(s),'days'));
+					if(d>0)d=d+1
+					return d;
+                }
+				$scope.diff=diff;
                 //================
                 //
                 //================

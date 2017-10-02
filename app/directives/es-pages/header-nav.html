@@ -12,16 +12,19 @@
 .nav-links > li > a:hover{color:#000;}
 .job-title {color:#777}
 .media-title {text-transform:uppercase;font-size:12px; font-weight:400;}
-.active{color:#000!important;}
+#es-content *>.active{color:#000!important;}
 #es-content *>a {text-decoration: none;}
 #es-content *>a:hover {text-decoration: none;color:#000;}
-#es-content .active {text-decoration: none;color:#000;}
+#es-content *>a:active {text-decoration: none;color:#000;}
+.crumb-hr {margin-top:0px;}
 .work-item{background-color:#f9f9f9;margin-bottom:10px;padding:10px;}
 .work-title{color: #428bca!important;font-size:16px;}
 .work-type{font-size:16px;font-weight:500}
 .work-date{text-transform:uppercase;font-size:12px; font-weight:400;}
+.hc{height:350px;}
 .hero-cont{background-image: url("/app/images/es-pages/es1.jpg"); height:350px;}
 .hero-cont-two{background-image: url("/app/images/es-pages/es2.jpg"); background-size: cover; background-position:center top;background-repeat: no-repeat; height:350px; margin-bottom:20px;}
+.hero-cont-three{background-image: url("/app/images/es-pages/es8.jpg"); background-size: cover; background-position:center top;background-repeat: no-repeat; height:350px; margin-bottom:20px;}
 .smedia-title{font-size: 1.5em; text-transform: uppercase; line-height: 2em;}
 .img-overlay {position:relative; height:100%; background-color: rgba(0, 155, 72, 0.85); color:white;}
 .img-overlay > h2 {color:white; text-transform: uppercase;margin-bottom: 20px;}
@@ -31,11 +34,15 @@
 .arrows{font-size: 1.5em;position:absolute;bottom:5px;width:92%;}
 .pointer{cursor:pointer;}
 .pointer:hover{cursor:pointer;text-decoration: none;color:#000;}
-.page-title{position:absolute; bottom:20px; background-color: rgba(0,128,0,.8); color:white;left: 15px;padding: 10px 10px 10px 10px;}
+.page-title{position:absolute; max-width:1110px; bottom:20px; background-color: rgba(0,128,0,.8); color:white;left: 15px;padding: 10px 10px 10px 10px;}
 .page-title > h4 {color:white;  padding: 0 20px 0 20px; letter-spacing: 2px; margin:0;}
 .page-title > h3 {color:white; white-space: nowrap;}
 .page-title > h2 {color:white; white-space: nowrap;}
-
+.fb-no-jump {
+    display:block;
+    max-height:50px /*change as per requirement*/
+    overflow:hidden;
+}
 .vertical-align {
     display: -webkit-flex;
     display: flex;
@@ -86,7 +93,10 @@
   /*.page-title{            display: flex; align-items: center; justify-content: center; width:100%; margin-left:-15px;height:100%; background-color: rgba(0,128,0,.6); color:white;padding: 10px 10px 10px 10px;}
   .page-title > h4 {color:white;  text-align: center;  padding: 0 0 0 0; line-height: 1.8em;  letter-spacing: 2px; }*/
 }
-
+.active-l{
+    text-decoration: none;
+    color: #000 !important;
+}
 .hide{display:none;}
 </style>
       <div class="col-md-6">
@@ -95,21 +105,31 @@
       </div>
       <div class="col-md-6" class="pull-right">
           <div class="pull-right">
-              <div class="vertical-align  text-right" >
+              <div class="vertical-align  text-right fb-no-jump" >
                   <fb-like></fb-like>
                   <span>&nbsp;</span>
-                  <a style="margin-top:20px" class="twitter-follow-button" href="https://twitter.com/CristianaPascaP" data-size="small" data-show-count="false" data-show-screen-name="false">Follow @CristianaPascaP</a>
+                  <a style="" class="twitter-follow-button" href="https://twitter.com/CristianaPascaP" data-size="small" data-show-count="false" data-show-screen-name="false"></a>
 
                   <!-- <a href="" target="_blank"><i class="fa fa-youtube fa-2"  style="color:#c4302b;"  aria-hidden="true"></i></a> -->
               </div>
               <div>
-               <ul class="nav-links" style="margin-top:20px;white-space:nowrap;">
-                  <li id="cpphome" ><a href="/executive-secretary">FEATURED</a></li>
-                  <li id="/bio" ><a href="/executive-secretary/bio">BIOGRAPHY</a></li>
-                  <li id="/work" ><a href="/executive-secretary/work">AT WORK</a></li>
-                  <li id="/media" ><a href="/executive-secretary/media">MULTIMEDIA</a></li>
-                  <li id="/contact" ><a href="/executive-secretary/contact">CONTACT</a></li>
+
+              <ul class="nav-links hidden-xs hidden-sm" style="margin-top:20px;white-space:nowrap;">
+                 <li id="cpphomeL"><a ng-href="/executive-secretary">FEATURED</a></li>
+                 <li id="/bioL" ><a ng-href="/executive-secretary/bio">BIOGRAPHY</a></li>
+                 <li id="/workL" ><a ng-href="/executive-secretary/work">AT WORK</a></li>
+                 <li id="/mediaL" ><a ng-href="/executive-secretary/media">MULTIMEDIA</a></li>
+                 <li id="/contactL" ><a ng-href="/executive-secretary/contact">CONTACT</a></li>
+               </ul>
+
+               <ul class="nav-links hidden-md hidden-lg hidden-xl" style="margin-top:20px;white-space:nowrap;">
+
+                  <li id="/bio" ><a ng-href="/executive-secretary/bio">BIOGRAPHY</a></li>
+                  <li id="/work" ><a ng-href="/executive-secretary/work">AT WORK</a></li>
+                  <li id="/media" ><a ng-href="/executive-secretary/media">MULTIMEDIA</a></li>
+                  <li id="/contact" ><a ng-href="/executive-secretary/contact">CONTACT</a></li>
                 </ul>
+
               </div>
           </div>
       </div>
