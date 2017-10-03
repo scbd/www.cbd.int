@@ -34,7 +34,7 @@ define(['app', 'text!./carousel.html','moment','filters/moment'], function(app, 
 				//============================================================
 				function goTo (url) {
 
-								$location.path(url);
+					$location.url(url);
 				}
 				$scope.goTo=goTo;
                 //================

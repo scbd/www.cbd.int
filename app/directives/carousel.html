@@ -10,7 +10,7 @@
 
         <div class="col-sm-5 col-lg-4 img-overlay" style="cursor:pointer;" ng-click="goTo(item.url_ss)">
             <h2>{{item.title_t}} {{opacity($index)}}</h2>
-            <p><span>{{item.startDate_dt |moment:'format':'DD MMMM YYYY'}}<p> {{item.description_t}} <a style="color:white;text-decoration: underline;" ng-href="{{item.url_ss}}"> Read More ... </a></p></p>
+            <p><span>{{item.startDate_dt |moment:'format':'DD MMMM YYYY'}}<p> {{item.description_t}} <a style="color:white;text-decoration: underline;" ng-href="/executive-secretary{{item.url_ss}}"> Read More ... </a></p></p>
             <!-- <h3 class="text-center"><a ng-href="{{item.url_ss[1]}}" class="label label-default read-more pointer">Read More</a></h3> -->
             <div class="arrows">
                 <i  class="fa fa-arrow-circle-left pull-left pointer"   aria-hidden="true" ng-click="next(-1); $event.stopPropagation();"></i>
