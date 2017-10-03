@@ -28,8 +28,8 @@
                 </a>
             </li>
 
-            <li style="font-size:inherit" ng-class="{ disabled : !printableDocuments().length }">
-                <a style="cursor:pointer;font-size:14px" ng-show="canPrint" ng-click="print()">
+            <li style="font-size:inherit" ng-if="allowPrint" ng-class="{ disabled : !printableDocuments().length }">
+                <a style="cursor:pointer;font-size:14px" ng-show="allowPrint" ng-click="print()">
                     <i class="fa fa-print"></i> Request Prints <span ng-if="printableDocuments().length">({{printableDocuments().length}})</span>
                 </a>
             </li>

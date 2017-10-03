@@ -1,24 +1,4 @@
 <div>
-    <div id="print-smart-checkout" ng-cloak  class="pull-right hidden-print">
-
-        <span ng-if="documentsCtrl.edit" class="edit">
-            <button type="button" class="btn btn-default" ng-if="documentsCtrl.editMode"             ng-click="documentsCtrl.edit(null)"><i class="fa fa-plus"></i></button>
-            <button type="button" class="btn btn-default" ng-class="{active:documentsCtrl.editMode, 'btn-info': documentsCtrl.editMode }" ng-click="documentsCtrl.editMode=!documentsCtrl.editMode"><i class="fa fa-edit"></i></button>
-        </span>
-
-        <!-- Sort/Display -->
-        <span ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length" class="hidden-print" style="margin-right:5px;margin-left:5px;">
-            <select class="form-control" ng-model="documentsCtrl.sort" style="width:auto;display:inline-block">
-                <option value="agenda">By Items</option>
-                <option value="document">By symbols</option>
-            </select>
-        </span>
-
-        <print-smart-checkout ng-if="documentsCtrl.documents.length" style="display:inline-block" documents="documentsCtrl.documents|filter:{selected:true}:true"></print-smart-checkout>
-    </div>
-
-    <h1 class="visible-print" style="color:black;position:absolute;top:0px;right:0px"> {{::documentsCtrl.meeting.code}} <small>{{documentsCtrl.TABS_NAMES[documentsCtrl.currentTab]}}</small></h1>
-
     <style>
         .nav.nowrap {
             white-space: nowrap;
@@ -30,6 +10,50 @@
         }
     </style>
 
+    <h1 class="visible-print" style="color:black;position:absolute;top:0px;right:0px"> {{::documentsCtrl.meeting.code}} <em><small>{{documentsCtrl.currentTabX.title}}</small></em></h1>
+
+    <h1 ng-if="::documentsCtrl.showMeeting" class="hidden-print hidden-xs">Meeting Documents</h1>
+    <h3 ng-if="::documentsCtrl.showMeeting" class="hidden-print visible-xs pull-left">{{::documentsCtrl.meeting.code|lstring}}</h3>
+    <h3 ng-if="::documentsCtrl.showMeeting" class="hidden-print hidden-xs">{{::documentsCtrl.meeting.title|lstring}}</h3>
+    <h5 ng-if="::documentsCtrl.showMeeting" class="hidden-print hidden-xs">
+        {{::documentsCtrl.meeting.dateText|lstring}}
+        <span ng-if="::(documentsCtrl.meeting.dateText|lstring) && (documentsCtrl.meeting.venueText|lstring)"> - </span>
+        {{::documentsCtrl.meeting.venueText|lstring}}
+    </h5>
+
+    <div id="print-smart-checkout" ng-cloak  class="pull-right hidden-print" style="margin-top:5px">
+
+        <span ng-if="documentsCtrl.edit" class="edit">
+            <button type="button" class="btn btn-default" ng-click="documentsCtrl.edit(null)"><i class="fa fa-plus"></i></button>
+            <button type="button" class="btn btn-default" ng-class="{active:documentsCtrl.editMode, 'btn-info': documentsCtrl.editMode }" ng-click="documentsCtrl.editMode=!documentsCtrl.editMode"><i class="fa fa-edit"></i></button>
+        </span>
+
+        <span ng-if="::documentsCtrl.meeting.links.length || documentsCtrl.meeting.EVT_WEB || documentsCtrl.meeting.EVT_INFO_PART_URL || documentsCtrl.meeting.isMontreal || documentsCtrl.meeting.EVT_REG_NOW_YN" class="btn-group">
+          <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Info links <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li ng-if="::documentsCtrl.meeting.EVT_WEB"><a ng-href="{{::documentsCtrl.meeting.EVT_WEB}}" target="_blank">Official Web Site</a></li>
+            <li ng-if="::documentsCtrl.meeting.EVT_INFO_PART_URL"><a ng-href="{{::documentsCtrl.meeting.EVT_INFO_PART_URL}}" target="_blank">Information for participants</a></li>
+            <li ng-if="::documentsCtrl.meeting.isMontreal"><a ng-href="/meetings/montreal.shtml" target="_blank">Montreal information for visitors</a></li>
+            <li ng-if="::documentsCtrl.meeting.EVT_REG_NOW_YN"><a ng-href="/side-events" target="_blank">Register side-events</a></li>
+            <li ng-repeat="link in ::documentsCtrl.meeting.links"><a ng-href="{{::link.url}}" target="_blank">{{::link.title|lstring}}</a></li>
+          </ul>
+        </span>
+
+        <!-- Sort/Display -->
+        <span ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length" class="hidden-print" style="margin-right:5px;margin-left:5px;">
+            <select class="form-control" ng-model="documentsCtrl.sort" style="width:auto;display:inline-block">
+                <option value="agenda">By Items</option>
+                <option value="document">By symbols</option>
+            </select>
+        </span>
+
+        <print-smart-checkout ng-if="documentsCtrl.documents.length" style="display:inline-block" documents="documentsCtrl.documents|filter:{selected:true}:true" allow-print="documentsCtrl.meeting.printSmart"></print-smart-checkout>
+    </div>
+
+
+    <div class="clearfix" ng-if="documentsCtrl.edit"></div>
     <div class="clearfix visible-sm visible-xs"></div>
 
     <!-- Nav tabs -->
@@ -47,7 +71,7 @@
             <div class="bg" ng-if="::type.code.startsWith('in-session')"></div>
             <div ng-if="::type.code=='in-session'" style="position:absolute;top:-18px;left:0px;right:2px;height:15px;font-size:10px;font-weight:bold;color:#444">&nbsp;&nbsp;&nbsp;IN-SESSION</div>
             <a href="#" ng-click="documentsCtrl.switchTab(type)" role="tab" data-toggle="tab">
-                {{::type.title}} ({{::type.documents.length}})
+                {{::type.title}} ({{type.length}})
             </a>
         </li>
         <li class="dropdown-toggle" ng-class="{active:!!documentsCtrl.currentExtraTab}" ng-if="(documentsCtrl.tabs|limitTo:999:documentsCtrl.maxTabCount).length">
@@ -58,7 +82,7 @@
             <ul class="dropdown-menu">
                 <li ng-repeat="type in documentsCtrl.tabs|limitTo:999:documentsCtrl.maxTabCount" code="{{type.code}}">
                     <a href="#" ng-click="documentsCtrl.switchTab(type, true)">
-                        {{type.title}} ({{::type.documents.length}})
+                        {{::type.title}} ({{type.length}})
                      </a>
                 </li>
             </ul>
@@ -72,103 +96,108 @@
 
             <div ng-if="type.loaded || documentsCtrl.currentTab==type.code">
 
-                <div style="padding:10px;" ng-if="!type.documents.length">No in-session documents have yet been posted.</div>
+                <div style="padding:10px;" ng-if="!type.length">No in-session documents have yet been posted.</div>
 
-            <!-- Document List view -->
+                <div ng-repeat="section in type.sections">
 
-            <table ng-if="documentsCtrl.sort=='document' || !type.agenda.items.length" class="table table-striped table-hover no-border-first-row">
-                <tbody class="documents">
-                <tr document-id="{{document._id}}" ng-repeat="document in type.documents track by document._id" ng-class="{ info : document.selected, warning: document.metadata.visible===false }" style="cursor:default;">
-                    <td ng-class="{ handle : documentsCtrl.editMode} " style="width:10px">
-                        <strong class="text-nowrap">{{::($index+1)}}.</strong>
-                        <div ng-if="documentsCtrl.editMode"><i class="fa fa-bars handle" aria-hidden="true"></i></div>
-                    </td>
-                    <td>
-                        <meeting-document document="document" enable-selection="!documentsCtrl.editMode"></meeting-document>
-                    </td>
+                    <h4 ng-if="section.title" style="margin-left:5px">{{::section.title}}</h4>
 
-                    <td ng-if="documentsCtrl.editMode" style="width:10px">
-                        <div ng-repeat="item in document.agendaItems|orderBy">
-                            <span class="label agenda {{::documentsCtrl.meeting.agenda.prefix}}">{{::documentsCtrl.meeting.agenda.prefix}} {{::item}}</span>
-                        </div>
-                    </td>
+                    <!-- Document List view -->
 
-                    <td ng-if="documentsCtrl.editMode" style="width:1px">
-                        <div class="btn-group text-nowrap" role="group" aria-label="...">
-                          <button type="button" class="btn btn-default" style="float:none" ng-click="documentsCtrl.edit(document)">
-                              <i class="fa fa-edit"></i>
-                          </button>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                    <table ng-if="documentsCtrl.sort=='document' || !type.agenda.items.length" class="table table-striped table-hover no-border-first-row">
+                        <tbody class="documents">
+                        <tr document-id="{{document._id}}" ng-repeat="document in section.documents track by document._id" ng-class="{ info : document.selected, warning: document.metadata.visible===false }" style="cursor:default;">
+                            <td ng-class="{ handle : documentsCtrl.editMode} " style="width:10px">
+                                <strong ng-if="section.code!='report'" class="text-nowrap">{{($index+1)}}.</strong>
+                                <div ng-if="documentsCtrl.editMode && (type.code!='outcome')"><i class="fa fa-bars handle" aria-hidden="true"></i></div>
+                            </td>
+                            <td>
+                                <meeting-document document="document" enable-selection="!documentsCtrl.editMode"></meeting-document>
+                            </td>
 
-            <!-- Document Agenda view -->
+                            <td ng-if="documentsCtrl.editMode" style="width:10px">
+                                <div ng-repeat="item in document.agendaItems|orderBy">
+                                    <span class="label agenda {{::documentsCtrl.meeting.agenda.prefix}}">{{::documentsCtrl.meeting.agenda.prefix}} {{::item}}</span>
+                                </div>
+                            </td>
 
-            <table ng-if="documentsCtrl.sort=='agenda' && type.agenda.items.length" class="table no-border-first-row">
+                            <td ng-if="documentsCtrl.editMode && (type.code!='outcome')" style="width:1px">
+                                <div class="btn-group text-nowrap" role="group" aria-label="...">
+                                  <button type="button" class="btn btn-default" style="float:none" ng-click="documentsCtrl.edit(document)">
+                                      <i class="fa fa-edit"></i>
+                                  </button>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
 
-                <tr ng-repeat="item in type.agenda.items|orderBy:'item' track by item.item">
-                    <td class="hidden-xs" style="width:1px">
-                        <span class="label agenda {{::documentsCtrl.agenda.prefix}}">{{::documentsCtrl.agenda.prefix}} {{::item.item}}</span>
-                    </td>
-                    <td>
-                        <div>
-                            <span class="visible-xs-inline label agenda {{::documentsCtrl.agenda.prefix}}">{{::documentsCtrl.agenda.prefix}} {{::item.item}}</span>
+                    <!-- Document Agenda view -->
 
-                            <span class="title agenda">
-                                <span class="hidden-xs" >{{::item.title}}</span>
-                                <span class="visible-xs">{{::item.shortTitle||item.title}}</span>
-                            </span>
-                        </div>
-                        <table class="table table-striped table-hover" style="margin:10px 0px -5px 0px;">
-                            <tr ng-repeat="document in item.documents" ng-class="{ info : document.selected, warning: document.metadata.visible===false }" style="cursor:default">
-                                <td>
-                                    <meeting-document document="document" enable-selection="!documentsCtrl.editMode"></meeting-document>
-                                </td>
-                                <td ng-if="documentsCtrl.editMode" style="width:1px">
-                                    <div class="btn-group text-nowrap" role="group" aria-label="...">
-                                      <button type="button" class="btn btn-default" style="float:none" ng-click="documentsCtrl.edit(document)">
-                                          <i class="fa fa-edit"></i>
-                                      </button><button type="button" class="btn btn-default" style="float:none" disabled>
-                                          <i class="fa fa-trash"></i>
-                                      </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
+                    <table ng-if="documentsCtrl.sort=='agenda' && type.agenda.items.length" class="table no-border-first-row">
 
-                <tr ng-if="type.agenda.otherDocuments.length">
-                    <td class="hidden-xs" style="width:1px">
-                        <span class="label agenda">Other</span>
-                    </td>
-                    <td>
-                        <div>
-                            <span class="title agenda">
-                                <span class="visible-xs label agenda">Other</span> <i>Document(s) not associated to an agenda item</i>
-                            </span>
-                        </div>
-                        <table class="table table-striped table-hover" style="margin:10px 0px -5px 0px;">
-                            <tr ng-repeat="document in type.agenda.otherDocuments" ng-class="{ info : document.selected, warning: document.metadata.visible===false }" style="cursor:default">
-                                <td>
-                                    <meeting-document document="document" enable-selection="!documentsCtrl.editMode"></meeting-document>
-                                </td>
-                                <td ng-if="documentsCtrl.editMode" style="width:1px">
-                                    <div class="btn-group text-nowrap" role="group" aria-label="...">
-                                      <button type="button" class="btn btn-default" style="float:none" ng-click="documentsCtrl.edit(document)">
-                                          <i class="fa fa-edit"></i>
-                                      </button><button type="button" class="btn btn-default" style="float:none" disabled>
-                                          <i class="fa fa-trash"></i>
-                                      </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
+                        <tr ng-repeat="item in type.agenda.items|orderBy:'item' track by item.item">
+                            <td class="hidden-xs" style="width:1px">
+                                <span class="label agenda {{::documentsCtrl.agenda.prefix}}">{{::documentsCtrl.agenda.prefix}} {{::item.item}}</span>
+                            </td>
+                            <td>
+                                <div>
+                                    <span class="visible-xs-inline label agenda {{::documentsCtrl.agenda.prefix}}">{{::documentsCtrl.agenda.prefix}} {{::item.item}}</span>
+
+                                    <span class="title agenda">
+                                        <span class="hidden-xs" >{{::item.title}}</span>
+                                        <span class="visible-xs">{{::item.shortTitle||item.title}}</span>
+                                    </span>
+                                </div>
+                                <table class="table table-striped table-hover" style="margin:10px 0px -5px 0px;">
+                                    <tr ng-repeat="document in item.documents" ng-class="{ info : document.selected, warning: document.metadata.visible===false }" style="cursor:default">
+                                        <td>
+                                            <meeting-document document="document" enable-selection="!documentsCtrl.editMode"></meeting-document>
+                                        </td>
+                                        <td ng-if="documentsCtrl.editMode" style="width:1px">
+                                            <div class="btn-group text-nowrap" role="group" aria-label="...">
+                                              <button type="button" class="btn btn-default" style="float:none" ng-click="documentsCtrl.edit(document)">
+                                                  <i class="fa fa-edit"></i>
+                                              </button><button type="button" class="btn btn-default" style="float:none" disabled>
+                                                  <i class="fa fa-trash"></i>
+                                              </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr ng-if="type.agenda.otherDocuments.length">
+                            <td class="hidden-xs" style="width:1px">
+                                <span class="label agenda">Other</span>
+                            </td>
+                            <td>
+                                <div>
+                                    <span class="title agenda">
+                                        <span class="visible-xs label agenda">Other</span> <i>Document(s) not associated to an agenda item</i>
+                                    </span>
+                                </div>
+                                <table class="table table-striped table-hover" style="margin:10px 0px -5px 0px;">
+                                    <tr ng-repeat="document in type.agenda.otherDocuments" ng-class="{ info : document.selected, warning: document.metadata.visible===false }" style="cursor:default">
+                                        <td>
+                                            <meeting-document document="document" enable-selection="!documentsCtrl.editMode"></meeting-document>
+                                        </td>
+                                        <td ng-if="documentsCtrl.editMode" style="width:1px">
+                                            <div class="btn-group text-nowrap" role="group" aria-label="...">
+                                              <button type="button" class="btn btn-default" style="float:none" ng-click="documentsCtrl.edit(document)">
+                                                  <i class="fa fa-edit"></i>
+                                              </button><button type="button" class="btn btn-default" style="float:none" disabled>
+                                                  <i class="fa fa-trash"></i>
+                                              </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

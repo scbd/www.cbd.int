@@ -46,3 +46,6 @@
     right:15px;
     z-index: 999;
 }
+
+.documents a:hover       { text-decoration:none; }
+.documents a[href]:hover { text-decoration:underline; }

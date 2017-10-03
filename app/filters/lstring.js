@@ -4,7 +4,7 @@ app.filter("lstring", function() {
 	return function(ltext, locale) {
 
 		if(!ltext)
-			return "";
+			return ltext;
 
 		if(typeof ltext === 'string')
 			return ltext;
@@ -25,7 +25,7 @@ app.filter("lstring", function() {
 			}
 		}
 
-		return sText||"";
+		return sText;
 	};
 });
 });

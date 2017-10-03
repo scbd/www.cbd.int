@@ -1,16 +1,18 @@
 <table style="width:100%">
 
     <tr>
-        <td ng-click="enableSelection && (document.selected=!document.selected);">
+        <td ng-click="enableSelection && downloadble && (document.selected=!document.selected);" style="vertical-align:top;">
             <div ng-class="::{ superseded : document.metadata.superseded }">
-                <div ng-if="::document.symbol">
-                    <strong ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></strong>
-                    <span ng-if="document.number">({{::document.number}})</span>
-                    <div>{{::document.title|lstring}}</div>
-                </div>
-                <div ng-if="::!document.symbol">
-                    <strong>{{::document.title|lstring}}</strong>
-                    <div>{{::(document.description||document.title)|lstring}}</div>
+                <div>
+                    <div ng-if="::document.symbol">
+                        <a ng-href="{{::document.url}}" style="color:inherit">
+                            <strong ng-if="::document.type=='decision'">Decision</strong>
+                            <strong ng-if="::document.type=='recommendation'">Recommendation</strong>
+                            <strong ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></strong>
+                        </a>
+                    </div>
+                    <div ng-style="::{ 'font-weight' : (document.symbol?'normal':'bold')  }">{{::document.title|lstring}}</div>
+                    <div>{{::document.description|lstring}}</div>
                 </div>
             </div>
 
@@ -18,8 +20,18 @@
 				<div><em>Superseded by {{::document.metadata.superseded}}</em></div>
             </div>
 
-            <div ng-if="::document.metadata.message" style="opacity:0.40">
-                <span class="label label-{{::document.metadata.message.level||'default'}}" style="display:inline-block;white-space:normal;text-align:left">{{::document.metadata.message.text}}</span>
+            <div>
+                <span ng-if="::document.status && document.status!='public'"  ng-class="{ 'label-error' : document.status=='held', 'label-error' : document.status=='held' }" >
+                    <span ng-switch="::document.status">
+                        <span class="label label-default" style="display:inline-block;" ng-switch-when="received">Received</span>
+                        <span class="label label-info"    style="display:inline-block;" ng-switch-when="reviewed">Reviewed</span>
+                        <span class="label label-primary" style="display:inline-block;" ng-switch-when="edited">Edited</span>
+                        <span class="label label-warning" style="display:inline-block;" ng-switch-when="held">On Hold ✋</span>
+                        <span class="label label-danger"  style="display:inline-block;" ng-switch-default>{{::document.status|uppercase}}</span>
+                    </span>
+                </span>
+
+                <span ng-if="::document.metadata.message" style="opacity:0.40" class="label label-{{::document.metadata.message.level||'default'}}" style="display:inline-block;white-space:normal;text-align:left">{{::document.metadata.message.text}}</span>
             </div>
 
             <div ng-if="::document.recipient_ss.length">Notification to: <span ng-repeat="recipient in ::document.recipient_ss"> {{::recipient}}</div>
@@ -69,14 +81,14 @@
 
         </td>
 
-        <td ng-if="enableSelection" class="hidden-print" ng-click="document.selected=!document.selected;" style="width:20px; position:relative;">
+        <td ng-if="enableSelection && downloadble" class="hidden-print" ng-click="document.selected=!document.selected;" style="width:20px; position:relative;">
             <div class="hidden-xs animated rubberBand  printsmart-help-document-selector" style="position:absolute;left:-30px;margin-top:5px">
                 <i class="fa fa-arrow-right text-info" style="font-size:2em"></i>
             </div>
             <div class="hidden-sm hidden-md hidden-lg animated rubberBand printsmart-help-document-selector" style="position:absolute;right:-3px;margin-top:10px">
                 <i class="fa fa-arrow-left text-info" style="font-size:1.2em"></i>
             </div>
-            <checkbox  ng-if="document.files.length" ng-model="document.selected" style="font-size:2em" ng-class="{'text-info':document.metadata.printable, 'text-muted':!document.metadata.printable }"></checkbox>
+            <checkbox  ng-if="downloadble" ng-model="document.selected" style="font-size:2em" ng-class="{'text-info':document.metadata.printable, 'text-muted':!document.metadata.printable }"></checkbox>
         </td>
     </tr>
 </table>

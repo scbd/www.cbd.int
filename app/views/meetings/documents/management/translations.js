@@ -205,30 +205,10 @@ define(['lodash', 'filters/lstring', 'directives/file'], function(_) {
 
             var query = { 'metadata.patterns' : file.prefix };
 
-            var q = [
-                $http.get('/api/v2016/meetings/COP-13/documents',    { params : { q : query } }).then(resData).then(setMeeting('COP-13')),
-                $http.get('/api/v2016/meetings/MOP-08/documents',    { params : { q : query } }).then(resData).then(setMeeting('MOP-08')),
-                $http.get('/api/v2016/meetings/NP-MOP-02/documents', { params : { q : query } }).then(resData).then(setMeeting('NP-MOP-02')),
-            ];
-
-            return $q.all(q).then(function(res) {
-
-                return res[0].concat(res[1]).concat(res[2]);
-
-            }).catch(function(err) {
-
-                file.error        = "LOOKUP_DOCUMENTS";
+            return $http.get('/api/v2016/documents', { params : { q : query } }).then(resData).catch(function(err) {
+                file.error = "LOOKUP_DOCUMENTS";
                 throw err;
             });
-        }
-
-        //====================================
-        //
-        //====================================
-        function setMeeting(meeting) {
-            return function(docs) {
-                return _.map(docs, function(d) { return _.extend(d, { meeting : meeting }); });
-            };
         }
 
         //==============================

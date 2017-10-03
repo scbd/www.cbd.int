@@ -1,6 +1,7 @@
 define(['app', 'lodash', 'text!./meeting-document.html', 'directives/checkbox', 'filters/html-sanitizer'], function(app, _, html) { 'use strict';
 
 	var LANGUAGES = { ar : "العربية", en : "English", es : "Español", fr : "Français", ru : "Русский", zh : "中文" };
+    var ONLINE = 'text/html';
     var MIMES = {
         'application/pdf':                                                            { priority: 10,  color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document' :   { priority: 20,  color: 'blue',   btn: 'btn-primary', icon: 'fa-file-word-o'  },
@@ -31,6 +32,7 @@ define(['app', 'lodash', 'text!./meeting-document.html', 'directives/checkbox', 
                 $scope.initByLanguages  = initByLanguages;
                 $scope.initByTypes    = initByTypes;
                 $scope.breakSymbol    = breakSymbol;
+                $scope.downloadble    = canDownload();
 
                 var destroyWatch = $scope.$watch('$root.deviceSize', function(size){
                     if(size=='xs') return; // for performance only load files byTypes  if sreeen > xs
@@ -112,6 +114,13 @@ define(['app', 'lodash', 'text!./meeting-document.html', 'directives/checkbox', 
                 //==============================
                 function breakSymbol(symbol) {
                     return symbol.replace(/\//g, '/<wbr>');
+                }
+
+                //==============================
+                //
+                //==============================
+                function canDownload() {
+                    return $scope.document.files && $scope.document.files.length && _.some($scope.document.files, function(f) { return f.type!=ONLINE; });
                 }
 			}
 		};
