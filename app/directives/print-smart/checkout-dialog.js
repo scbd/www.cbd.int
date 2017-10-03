@@ -1,11 +1,9 @@
 /* global -close */
 define(['lodash'], function(_) {
 
-    var PDF = 'application/pdf';
+	return ["$scope", "documents", "allowPrint", function ($scope, documents, allowPrint) {
 
-	return ["$scope", "documents", function ($scope, documents) {
-
-		$scope.canPrint = true;
+		$scope.allowPrint            = allowPrint;
 		$scope.printableDocuments    = documents.printable;
 		$scope.downloadableDocuments = documents.downloadable;
         $scope.documents             = _.union(documents.downloadable, documents.printable);

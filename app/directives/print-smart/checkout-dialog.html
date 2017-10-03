@@ -21,13 +21,13 @@
 				<div ng-hide="target">
 					<table style="width:100%">
 						<tr>
-							<td class="text-center" style="width:50%" >
+							<td class="text-center" ng-style="{ width: (allowPrint ? '50%' : '100%') }" >
 								<button type="button" class="btn btn-success btn-xxl" ng-click="download()">
 									<span >Download</span><br/><br/>
 									<i class="fa fa-arrow-circle-down"></i>
 								</button>
 							</td>
-							<td class="text-center" ng-show="canPrint" style="width:50%">
+							<td class="text-center" ng-show="allowPrint" ng-style="{ width: (allowPrint ? '50%' : '100%') }">
 								<button type="button" class="btn btn-primary btn-xxl" ng-disabled="!printableDocuments.length" ng-click="print()">
 									<span>Request Prints</span><br/><br/>
 									<i class="fa fa-print"></i>
