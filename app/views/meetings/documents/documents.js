@@ -6,8 +6,6 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
         var _ctrl = $scope.documentsCtrl = this;
         var meetingCode = $route.current.params.meeting.toUpperCase();
-        var meeting;
-        var documents;
         var hardTab = false;
 
         var groups = {
@@ -48,7 +46,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function load() {
 
-            meeting = $http.get('/api/v2016/meetings/'+meetingCode, { params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1 , agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1 } } }).then(function(res){
+            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1 , agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1 } } }).then(function(res){
 
                 meeting = _.defaults(res.data, {
                     code: res.data.EVT_CD,
@@ -69,26 +67,16 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 _ctrl.error = "meetingNotFound";
             });
 
-            documents = $http.get('/api/v2016/meetings/'+meetingCode+'/documents', { params: {  } }).then(function(res){
+            var documents = $http.get('/api/v2016/meetings/'+meetingCode+'/documents', { params: {  } }).then(function(res){
 
-                documents = _(res.data).map(function(d){
-                    d.metadata = _.defaults(d.metadata||{}, {
-                        printable: ['crp', 'limited', 'non-paper'].indexOf(d.type)>=0,
-                        visible : !!(d.files||[]).length && (d.status||'public')=='public'
-                    });
+                documents = _(res.data).map(normalizeDocument).filter(isDocumentVisible).sortBy(sortKey).value();
 
-                    return d;
+                return meeting; // force resolve
 
-                }).filter(function(d){
+            }).then(function(meeting) {
 
-                    return _ctrl.editMode || d.metadata.visible;
-
-                }).sortBy(sortKey).value();
-
-
-                return meeting;
-
-            }).then(function() {
+                if(!meeting)
+                    return;
 
                 var agendaMap = _.reduce(meeting.agenda.items, function(r,v) { r[v.item] = v;  return r; }, {});
 
@@ -143,6 +131,25 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         //
         //==============================
+        function normalizeDocument(d){
+
+            d.metadata = _.defaults(d.metadata||{}, { printable: ['crp', 'limited', 'non-paper'].indexOf(d.type)>=0 });
+            d.metadata.visible = !!(d.files||[]).length && (d.status||'public')=='public';
+
+            return d;
+        }
+
+        //==============================
+        //
+        //==============================
+        function isDocumentVisible(d){
+
+            return d && (_ctrl.editMode || d.metadata.visible);
+        }
+
+        //==============================
+        //
+        //==============================
         function updateMaxTabCount(){
 
             var size = $scope.$root.deviceSize;
@@ -173,15 +180,16 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
             $http.get('/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'id,symbol_s,reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
 
                 return _(res.data.response.docs).map(function(n) {
-                    return _.defaults(n, {
+                    return normalizeDocument(_.defaults(n, {
                         _id: n.id,
                         symbol: n.reference_s || n.symbol_s,
                         number: n.symbol_s,
                         date:   n.date_dt,
                         type:  'notification',
+                        status : 'public',
                         title : { en : n.title_t },
                         files : urlToFiles(n.url_ss)
-                    });
+                    }));
                 }).sortByOrder(['number', 'symbol'], ['desc', 'asc']).value();
 
             }).then(function(docs){
@@ -204,6 +212,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                         _id: n.id,
                         symbol: n.symbol_s,
                         type:   n.schema_s.replace(/^x-/, ''),
+                        status : 'public',
                         title : { en : n.title_t },
                         files : _.map(n.file_ss, function(f){ return JSON.parse(f); }),
                         url :  n.url_ss[0]
@@ -212,7 +221,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                     if(!doc.files || !doc.files.length)
                         doc.files = [{ language:'en', url:doc.url,  type:'text/html' }];
 
-                    return doc;
+                    return normalizeDocument(doc);
 
                 }).sortByOrder(['position_i', 'symbol_s'], ['asc', 'asc']).value();
 
@@ -232,12 +241,12 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         function loadReport() {
 
             var report = _.find(_ctrl.documents||[], function(d){
-                return d._id==meeting.reportDocument;
+                return d._id==_ctrl.meeting.reportDocument;
             });
 
             if(!report) {
-                report = $http.get('/api/v2016/documents', { params: { q : { _id : { $oid : meeting.reportDocument } } } }).then(function(res){
-                    return res.data[0];
+                report = $http.get('/api/v2016/documents', { params: { q : { _id : { $oid : _ctrl.meeting.reportDocument } } } }).then(function(res){
+                    return res.data.length ? res.data[0] : undefined;
                 }).catch(function(e){
                     console.error(e);
                 });
@@ -247,6 +256,11 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
                 if(!report) return;
 
+                report = normalizeDocument(normalizeDocument);
+
+                if(!isDocumentVisible(report))
+                    return;
+
                 injectTab('outcome', [report], { section: 'report' });
                 switchTab(!hardTab ? findTab('outcome') : null);
             });
@@ -255,9 +269,9 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         //
         //==============================
-        function injectTab(code, documents, options){
+        function injectTab(code, docs, options){
 
-            if(!documents || !documents.length)
+            if(!docs || !docs.length)
                 return;
 
             options = _.defaults(options||{}, {
@@ -296,7 +310,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 });
             }
 
-            section.documents = documents;
+            section.documents = docs;
             tab    .length    = _.sum(tab.sections, function(s) { return s.documents.length; });
             _ctrl.documents   = _(_ctrl.tabs).map('sections').flatten().map('documents').flatten().uniq().compact().value();
 
@@ -481,7 +495,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
             var id = doc ? doc._id : 'new';
 
-            $location.url('/'+meeting.code+ '/documents/'+id);
+            $location.url('/'+_ctrl.meeting.code+ '/documents/'+id);
         }
 	}];
 });
