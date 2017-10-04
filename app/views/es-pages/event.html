@@ -530,10 +530,10 @@
 
 
         <div class="col-xs-12" >
-                {{esEventCtrl.document.description.en}}
+                <div style='word-wrap: break-word; white-space: pre-wrap;'>{{esEventCtrl.document.description.en}}</div>
                 <span ng-if="esEventCtrl.document.descriptionNative">
                   <hr class="hidden-md hidden-sm hidden-xs" style="margin:0;"/><hr/>
-                  {{esEventCtrl.document.descriptionNative}}
+                 <div style='word-wrap: break-word; white-space: pre-wrap;'> {{esEventCtrl.document.descriptionNative}}</div>
               </span>
               <br><br>
         </div>
