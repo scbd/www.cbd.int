@@ -23,6 +23,7 @@
             <div>
                 <span ng-if="::document.status && document.status!='public'"  ng-class="{ 'label-error' : document.status=='held', 'label-error' : document.status=='held' }" >
                     <span ng-switch="::document.status">
+                        <span class="label label-default" style="display:inline-block;" ng-switch-when="awaited">Awaited</span>
                         <span class="label label-default" style="display:inline-block;" ng-switch-when="received">Received</span>
                         <span class="label label-info"    style="display:inline-block;" ng-switch-when="reviewed">Reviewed</span>
                         <span class="label label-primary" style="display:inline-block;" ng-switch-when="edited">Edited</span>

@@ -67,6 +67,7 @@
                 <div class="form-group" ng-class="{ 'has-success' : editCtrl.document.status=='public', 'has-error' : editCtrl.document.status!='public', }">
                     <label class="control-label" for="symbol">Status</label>
                     <select ng-disabled="uploading" class="form-control" ng-model="editCtrl.document.status">
+                        <option value="awaited">Awaited</option>
                         <option value="received">Received</option>
                         <option value="reviewed">Reviewed</option>
                         <option value="edited">Edited</option>
