@@ -61,6 +61,12 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 _ctrl.agenda  = meeting.agenda;
 
                 return meeting;
+            }).catch(function(err) {
+
+                if(err.status!=404)
+                    throw err;
+
+                _ctrl.error = "meetingNotFound";
             });
 
             documents = $http.get('/api/v2016/meetings/'+meetingCode+'/documents', { params: {  } }).then(function(res){

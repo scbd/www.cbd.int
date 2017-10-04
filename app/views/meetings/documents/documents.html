@@ -21,7 +21,18 @@
         {{::documentsCtrl.meeting.venueText|lstring}}
     </h5>
 
-    <div id="print-smart-checkout" ng-cloak  class="pull-right hidden-print" style="margin-top:5px">
+    <div ng-if="documentsCtrl.error" class="alert alert-warning" role="alert">
+        <span ng-switch="documentsCtrl.error">
+            <span ng-switch-when="meetingNotFound">
+                <b>The selected meeting does not exist.</b><br>Please consult the <a href="/meetings" target="_self">calendar of events</a>.
+            </span>
+            <span ng-switch-default="">
+                <b>Unknown error as occured.</b><br><br>{{documentsCtrl.error}}
+            </span>
+        </span>
+    </div>
+
+    <div ng-if="!documentsCtrl.error" id="print-smart-checkout" ng-cloak  class="pull-right hidden-print" style="margin-top:5px">
 
         <span ng-if="documentsCtrl.edit" class="edit">
             <button type="button" class="btn btn-default" ng-click="documentsCtrl.edit(null)"><i class="fa fa-plus"></i></button>
@@ -44,7 +55,7 @@
         <!-- Sort/Display -->
         <span ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length" class="hidden-print" style="margin-right:5px;margin-left:5px;">
             <select class="form-control" ng-model="documentsCtrl.sort" style="width:auto;display:inline-block">
-                <option value="agenda">By Items</option>
+                <option value="agenda">By items</option>
                 <option value="document">By symbols</option>
             </select>
         </span>
