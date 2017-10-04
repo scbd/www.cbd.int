@@ -77,6 +77,10 @@
         .nav-tabs>li[code='in-session/wg2']>div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0 4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
     </style>
 
+    <p ng-if="!documentsCtrl.error && documentsCtrl.loaded && !documentsCtrl.tabs.length">
+        No documents have yet been posted.
+    </p>
+
     <ul class="nav nav-tabs nowrap hidden-print" style="margin-top:20px" role="tablist">
         <li ng-repeat="type in documentsCtrl.tabs|limitTo:documentsCtrl.maxTabCount" ng-class="{active:documentsCtrl.currentTab==type.code}" code="{{type.code}}">
             <div class="bg" ng-if="::type.code.startsWith('in-session')"></div>
