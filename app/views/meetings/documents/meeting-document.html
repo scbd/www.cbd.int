@@ -37,7 +37,7 @@
 
             <div ng-if="::document.recipient_ss.length">Notification to: <span ng-repeat="recipient in ::document.recipient_ss"> {{::recipient}}</div>
             <div ng-if="::document.subject_ss.length">Subjects to: {{::document.subject_ss}}</div>
-            <div ng-if="::document.actionDate_dt" class="text-danger">Action required by {{::document.actionDate_dt|date:'yyyy-MM-dd'}}</div>
+            <div ng-if="::document.actionDate_dt" class="text-danger">Action required by {{::document.actionDate_dt|moment:'add':23.9:'hours'|moment:'toDate'|date:'yyyy-MM-dd'}}</div>
         </td>
         <td class="languages-bar hidden-print">
 
