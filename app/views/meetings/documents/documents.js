@@ -256,7 +256,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
                 if(!report) return;
 
-                report = normalizeDocument(normalizeDocument);
+                report = normalizeDocument(report);
 
                 if(!isDocumentVisible(report))
                     return;
