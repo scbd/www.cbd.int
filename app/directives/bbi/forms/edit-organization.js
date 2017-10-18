@@ -1,4 +1,4 @@
-define(['text!./edit-organization.html', 'text!./bbi-records-dialog.html','app', 'angular', 'lodash', 'authentication',
+define(['text!./edit-organization.html', 'text!./bbi-records-dialog.html','app', 'angular', 'lodash', 'gmapsapi', 'authentication',
 'services/editFormUtility',
 'services/storage',
 'services/workflows',
@@ -15,7 +15,7 @@ define(['text!./edit-organization.html', 'text!./bbi-records-dialog.html','app',
 'directives/bbi/controls/km-terms-check',
 'providers/locale',
 'directives/bbi/views/view-organization'
-], function(template,bbiRecordsDialog, app, angular, _) { 'use strict';
+], function(template,bbiRecordsDialog, app, angular, _, google) { 'use strict';
 
 app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility',  'IStorage', '$route','$timeout','locale','userSettings','ngDialog',  function ($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route,$timeout,locale,userSettings,ngDialog) {
 	return {
