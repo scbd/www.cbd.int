@@ -98,24 +98,6 @@ require(['angular', 'app', 'bootstrap', 'routes', 'template', 'ngSanitize', 'ngR
     });
 });
 
-//COP optimizer
-require([
-    'lodash',
-    'authentication',
-    'ngDialog',
-    'moment',
-    'moment-timezone',
-    'filters/lstring',
-    'filters/moment',
-    'filters/html-sanitizer',
-    'directives/checkbox', 'text!directives/checkbox.html',
-    'directives/view-injector',
-    'directives/print-smart/print-smart-checkout', 'text!directives/print-smart/print-smart-checkout.html',
-    'views/meetings/documents/agenda',
-    'views/meetings/documents/documents',
-    'views/meetings/documents/meeting-document',
-]);
-
 })(document);
 
 // MISC
