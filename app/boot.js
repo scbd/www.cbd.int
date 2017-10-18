@@ -42,6 +42,7 @@ require.config({
         'ammap-theme'     : 'libs/ammap3/ammap/themes/light',
         'ngMeta'          : 'libs/ngMeta/dist/ngMeta.min',
         'facebook'        : '//connect.facebook.net/en_US/sdk',
+        'gmapsapi'        : 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places',
 
     },
     shim: {
@@ -64,6 +65,7 @@ require.config({
         'toastr'               : { deps : ['angular-flex'] },
         'ngSmoothScroll'       : { deps : ['angular-flex'] },
         'ngInfiniteScroll'     : { deps : ['angular-flex'] },
+        'gmapsapi'             : { exports: 'google'},
         'facebook'             : { exports: 'FB'}
     },
     packages: [
@@ -95,24 +97,6 @@ require(['angular', 'app', 'bootstrap', 'routes', 'template', 'ngSanitize', 'ngR
         ng.bootstrap(document, [app.name]);
     });
 });
-
-//COP optimizer
-require([
-    'lodash',
-    'authentication',
-    'ngDialog',
-    'moment',
-    'moment-timezone',
-    'filters/lstring',
-    'filters/moment',
-    'filters/html-sanitizer',
-    'directives/checkbox', 'text!directives/checkbox.html',
-    'directives/view-injector',
-    'directives/print-smart/print-smart-checkout', 'text!directives/print-smart/print-smart-checkout.html',
-    'views/meetings/documents/agenda',
-    'views/meetings/documents/documents',
-    'views/meetings/documents/meeting-document',
-]);
 
 })(document);
 
