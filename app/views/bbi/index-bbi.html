@@ -178,7 +178,7 @@ left: 0;
             <h5 style="padding:5px;border-radius:3px;margin-bottom:0;" class="bg-darkgrey color-white linkDark" >
             <span class="badge bg-white">{{indexCtrl.outReachRecords.news.count}}</span> Press Releases</h5>
         </a>
-        <a translation-url  ng-repeat-start="doc in indexCtrl.outReachRecords.news.data"  ng-if="doc.title_t && $index <3" href="{{doc.url_ss[0]}}" target="_blank"  style="padding-bottom:5px;text-decoration: none;color:#333;" >
+        <a translation-url  ng-repeat-start="doc in indexCtrl.outReachRecords.news.data"  ng-if="doc.title_t && $index <3" ng-href="https://www.cbd.int/doc/press/{{doc.url_ss[0].substring(3,7)}}/{{doc.url_ss[0]}}" target="_blank"  style="padding-bottom:5px;text-decoration: none;color:#333;" >
 
         <div class="out-reach-row"  ng-show="doc.title_t && $index < 5" class="link1">
             <!-- <div id="communityProtocol" ng-include="home-list.html"> -->
