@@ -40,46 +40,7 @@
             <div ng-if="::document.actionDate_dt" class="text-danger">Action required by {{::document.actionDate_dt|moment:'add':23.9:'hours'|moment:'toDate'|date:'yyyy-MM-dd'}}</div>
         </td>
         <td class="languages-bar hidden-print">
-
-            <div class="hidden-xs" ng-repeat="(type,languages) in ::byTypes ">
-                <i class="fa {{::(MIMES[type]||MIMES.default).icon}}" ng-style="::{ color: MIMES[type].color}"></i>
-                <span ng-repeat="(language,file) in ::languages track by language">
-                    <a target="_blank" href="{{::file.url}}"  style="cursor:auto" ng-click="$event.stopPropagation();">
-
-                        <span class="visible-md-inline visible-lg-inline visible-xl-inline">
-                            {{::LANGUAGES[language]||language}}
-                        </span>
-
-                        <span class="visible-xs-inline visible-sm-inline">{{::language}}</span>
-                    </a>
-                </span>
-            </div>
-
-            <div class="visible-xs dropdown">
-
-                <button type="button"  class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" ng-click="initByLanguages()">
-                    <i class="fa fa-arrow-circle-down" style="font-size:1.25em"></i>
-                </button>
-
-                <ul class="dropdown-menu dropdown-menu-right" role="menu">
-
-                    <li role="presentation" class="dropdown-header">Select a file to download</li>
-
-                    <li role="presentation" ng-repeat="(language,types) in byLanguages track by language" style="font-size:16px;margin:4px 0px;white-space:nowrap;" class="ng-scope">
-
-                        <a role="menuitem" tabindex="-1" style="display:inline-block;width:120px;font-size:inherit;" class="ng-binding">
-                            {{::LANGUAGES[language]||language}}
-                        </a>
-
-                        <span>
-                            <a ng-repeat="(type, file) in ::types track by type" class="btn btn-sm {{::MIMES[type].btn || 'btn-default' }}" style="margin-right:5px;font-size:16px;" target="_blank"  href="{{::file.url}}">
-                                <i class="fa {{::(MIMES[type]||MIMES.default).icon}}"></i>
-                            </a>
-                        </span>
-                    </li>
-                </ul>
-            </div>
-
+            <document-files files="document.files"></document-files>
         </td>
 
         <td ng-if="enableSelection && downloadble" class="hidden-print" ng-click="document.selected=!document.selected;" style="width:20px; position:relative;">
