@@ -57,12 +57,13 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
   //============================================================
   function registerRoutes_CopDecisions(routeProvider) {
 
-      $('base').attr('href', '/decisions/cop/'); // allow full page reload outside of  /decisions/*
+      $('base').attr('href', '/decisions/'); // allow full page reload outside of  /decisions/*
 
       //routeProvider.when('/cop', { templateUrl: 'views/decisions/search.html', resolveController: true });
-      routeProvider.when('/:session',                      { templateUrl: 'views/decisions/list.html', resolveController: true });
-      routeProvider.when('/:session/:decision',            { templateUrl: 'views/decisions/view.html', resolveController: true });
-      routeProvider.when('/:session/:decision/:paragraph', { templateUrl: 'views/decisions/paragraph.html', resolveController: true });
+      routeProvider.when('/:body/:session',                      { templateUrl: 'views/decisions/list.html',      resolveController: true });
+      routeProvider.when('/:body/:session/:decision',            { templateUrl: 'views/decisions/view.html',      resolveController: true, resolve : { user : currentUser() } } );
+      routeProvider.when('/:body/:session/:decision/edit',       { templateUrl: 'views/decisions/edit.html',      resolveController: true, resolve : { user : securize(["Administrator","DecisionTrackingTool"]) } } );
+      routeProvider.when('/:body/:session/:decision/:paragraph', { templateUrl: 'views/decisions/paragraph.html', resolveController: true });
       //routeProvider.when('/', { templateUrl: 'views/decisions/search.html', resolveController: true });
   }
 
@@ -74,8 +75,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
       $("base").attr('href', '/management/decisions/'); // allow full page reload outside of  /decisions/*
 
-      routeProvider.when('/',                 { templateUrl: 'views/decisions/index.html', resolveController: true, resolve : { user : securize(["Administrator","DecisionTrackingTool"]) } } );
-      routeProvider.when('/:meeting/:number', { templateUrl: 'views/decisions/edit.html',  resolveController: true, resolve : { user : securize(["Administrator","DecisionTrackingTool"]) } } );
+      routeProvider.when('/',                         { templateUrl: 'views/decisions/index.html', resolveController: true, resolve : { user : securize(["Administrator","DecisionTrackingTool"]) } } );
   }
 
   //============================================================
@@ -251,6 +251,16 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
           .when('/forums/bbi/:threadId',          { templateUrl: 'views/bbi/forums/post-list-view.html',  resolveController: true,resolve : { user : securize(['User'])},forumId:17490,forumListUrl:'/biobridge/forums/bbi', text:'BBI'} ) //,
           .when('/forums/bbi',                    { templateUrl: 'views/bbi/forums/thread-list-view.html',    resolveController: true,resolve : { user : securize(['User'])}, forumId:17490, postUrl:'/biobridge/forums/bbi', text:'BBI' } )
 
+    }
+
+    //============================================================
+    //
+    //
+    //============================================================
+    function currentUser() {
+        return ['$q', 'authentication', function($q, authentication) {
+            return $q.when(authentication.getUser());
+        }];
     }
 
     //============================================================

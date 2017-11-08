@@ -21,12 +21,12 @@ BODY {
 					<th>Symbol</th>
 		            <th>Title</th>
 				</tr>
-				<tr ng-repeat="decision in decisions">
+				<tr ng-repeat="d in decisions">
 					<td nowrap>
-		                <div><a href="/decisions/cop/{{session}}/{{decision.number}}"><strong>{{decision.symbol}}</strong></a></div>
+		                <div><a ng-href="/decisions/{{d.body.toLowerCase()}}/{{d.session}}/{{d.decision}}"><strong>{{d.symbol}}</strong></a></div>
 					</td>
 		            <td>
-		                <div>{{decision.title}}</div>
+		                <div>{{d.title}}</div>
 					</td>
 				</tr>
 			</table>
@@ -34,24 +34,17 @@ BODY {
   		<div class="col-md-5">
 			<dl>
 			  <dt>Treaty</dt>
-			  <dd>Convention on Biological Diversity (CBD)</dd><br>
+			  <dd>{{treaty.name}} ({{treaty.acronym}})</dd><br>
 
 			  <dt>Body</dt>
-			  <dd>Conference of the Parties (COP)</dd><br>
+			  <dd ng-if="body=='COP'">Conference of the Parties (COP)</dd>
+			  <dd ng-if="body!='COP'">TODO</dd><br>
 
-			  <dt>Meeting</dt>
-			  <dd ng-if="session==8">Eight meeting of the Conference of the Parties to the Convention on Biological Diversity</dd><br>
-			  <dd ng-if="session==9">Ninth meeting of the Conference of the Parties to the Convention on Biological Diversity</dd><br>
+			  <dt ng-if="::decisions[0].meeting">Meeting</dt>
+              <dd ng-if="::decisions[0].meeting">
+                  <decision-meeting symbol="decisions[0].meeting"></decision-meeting>
+              </dd><br>
 
-			  <dt>Dates and Venue</dt>
-			  <dd ng-if="session==8"><i class="fa fa-calendar-o" aria-hidden="true"></i> 20 - 31 March 2006</dd>
-			  <dd ng-if="session==8"><i class="fa fa-map-marker" aria-hidden="true"></i> Curitiba, Brazil</dd>
-			  <dd ng-if="session==9"><i class="fa fa-calendar-o" aria-hidden="true"></i> 19 - 30 May 2008</dd>
-			  <dd ng-if="session==9"><i class="fa fa-map-marker" aria-hidden="true"></i> Bonn, Germany</dd>
-			  <br>
-
-			  <dt>Documents</dt>
-			  <dd><a href="https://www.cbd.int/doc/?meeting=COP-0{{session}}">Go to meeting documents...</a></dd>
 			</dl>
 	  </div>
   </div>

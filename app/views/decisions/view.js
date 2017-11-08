@@ -1,12 +1,26 @@
-define(['app', 'underscore', 'angular', 'css!./view.css', './view-element'], function(app, _, ng) { 'use strict';
+define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', './view-element', 'directives/meetings/documents/document-files', './directives/meeting'], function(app, _, ng) { 'use strict';
 
-    return ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', function($scope, $http, $route, $location, $compile, $anchorScroll) {
+    return ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', 'user', function($scope, $http, $route, $location, $compile, $anchorScroll, user) {
 
-        var session   = parseInt($route.current.params.session .replace(/^0+/, ''));
-        var decision  = parseInt($route.current.params.decision.replace(/^0+/, ''));
+        var treaty    = null ;
+        var body      = $route.current.params.body.toUpperCase();
+        var session   = parseInt($route.current.params.session);
+        var number    = parseInt($route.current.params.decision);
+        var decision;
 
-        $scope.session       = session;
-        $scope.decision      = decision;
+             if(body=='COP') treaty = { code : "XXVII8" } ;
+    //  else if(body=='CP')  treaty = "XXVII8a";
+    //  else if(body=='NP')  treaty = "XXVII8b";
+
+        if(!treaty) {
+            alert('ONLY "COP" DECISIONS ARE SUPPORTED');
+            throw 'ONLY "COP" DECISIONS ARE SUPPORTED';
+        }
+
+        $scope.canEdit       = canEdit;
+        $scope.edit          = edit;
+        $scope.decision      = undefined;
+        $scope.documents     = undefined;
         $scope.romanize      = romanize;
         $scope.pad0          = pad;
         $scope.sumValues     = sumValues;
@@ -16,23 +30,26 @@ define(['app', 'underscore', 'angular', 'css!./view.css', './view-element'], fun
         $scope.statusCounts  = { implemented: 0, superseded: 0, elapsed: 0, active: 0 };
         $scope.actorCounts   = { };
         $scope.actors        = [];
-        $scope.$root.page    = { title: 'Decision '+romanize(session)+'/'+decision };
 
         ng.element("#decision-meta").affix({ offset: { top: 295, bottom:350 } });
 
         //==============================
         //
         //==============================
-        $http.get('/api/v2016/decision-texts', { params : { q: { decision : romanize(session)+'/'+decision }, fo: 1 }, cache:true }).then(function(res) {
+        $http.get('/api/v2015/treaties/'+treaty.code, { cache: true } ).then(function(res) {
 
-            var link    = $compile(res.data.content);
+            treaty = res.data;
+
+            return $http.get('/api/v2016/decision-texts', { params : { q: { treaty:treaty.code, body: body, session: session, decision: number }, fo: 1 }, cache:true });
+
+        }).then(function(res) {
+
+            $scope.decision = decision = res.data;
+
+            var link    = $compile(decision.content);
             var content = link($scope);
 
             ng.element("#content").html(content);
-
-            content.find('element[data-type~="paragraph"]').each(function(i,e) {
-                $scope.actors = _.union($scope.actors, ng.element(e).data('info').data.actors);
-            });
 
         }).then(function(){
 
@@ -41,6 +58,34 @@ define(['app', 'underscore', 'angular', 'css!./view.css', './view-element'], fun
             delete $scope.$root.hiddenHash;
 
             updateSums();
+
+
+
+            return $http.get('/api/v2013/index', { params: { q : 'schema_s:(decision recommendation) AND treaty_s:'+decision.treaty + ' AND body_s:'+decision.body + ' AND session_i:'+decision.session + ' AND decision_i:'+decision.decision, fl: 'id,symbol_s,schema_s,position_i,meeting_ss,title_*, description_*,file_ss,url_ss', rows:999 } });
+
+        }).then(function(res){
+
+            $scope.documents = _(res.data.response.docs).map(function(n) {
+                var doc = _.defaults(n, {
+                    _id: n.id,
+                    symbol: n.symbol_s,
+                    type:   n.schema_s.replace(/^x-/, ''),
+                    status : 'public',
+                    title : { en : n.title_t },
+                    files : _.map(n.file_ss, function(f){ return JSON.parse(f); }),
+                    url :  n.url_ss[0]
+                });
+
+                if(!doc.files || !doc.files.length)
+                    doc.files = [{ language:'en', url:doc.url,  type:'text/html' }];
+
+                return doc;
+
+            }).sortByOrder(['position_i', 'symbol_s'], ['asc', 'asc']).value();
+
+
+
+
 
         }).catch(function(err){
             $scope.error = (err||{}).data || err;
@@ -138,7 +183,7 @@ define(['app', 'underscore', 'angular', 'css!./view.css', './view-element'], fun
                 return ng.element(e).data('info');
             });
 
-            $scope.actors.forEach(function(a) {
+            decision.actors.forEach(function(a) {
                 $scope.actorCounts[a] = $scope.actorCounts[a] || 0;
             });
 
@@ -230,6 +275,24 @@ define(['app', 'underscore', 'angular', 'css!./view.css', './view-element'], fun
                 output = '0' + output;
 
             return output;
+        }
+
+        //==============================
+        //
+        //==============================
+        function edit() {
+
+            if(!$scope.canEdit)
+                return;
+
+            $location.url('/'+decision.body+'/'+decision.session+'/'+decision.decision+'/edit');
+        }
+
+        //==============================
+        //
+        //==============================
+        function canEdit() {
+            return _.intersection(user.roles, ["Administrator","DecisionTrackingTool"]).length>0
         }
     }];
 });

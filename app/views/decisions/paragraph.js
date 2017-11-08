@@ -1,27 +1,38 @@
-define(['angular', 'lodash', 'app', 'css!./view.css', './view-element', 'filters/moment', 'filters/lodash'], function(ng, _) { 'use strict';
+define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view-element', 'filters/moment', 'filters/lodash', './directives/notification', './directives/meeting-document', './directives/meeting'], function(ng, _) { 'use strict';
 
     return ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', function($scope, $http, $route, $location, $compile, $anchorScroll) {
 
+        var treaty    = null ;
+        var body      = $route.current.params.body.toUpperCase();
+        var session   = parseInt($route.current.params.session);
+        var number    = parseInt($route.current.params.decision);
         var parts     = $route.current.params.paragraph.toUpperCase().match(/^([A-Z]*)(\d+)(?:\.(\w+))?(?:\.(\w+))?$/);
-        var session   = parseInt($route.current.params.session .replace(/^0+/, ''));
-        var decision  = parseInt($route.current.params.decision.replace(/^0+/, ''));
         var section   = parts[1]||'';
         var paragraph = parseInt (parts[2]);
         var item      = parsePart(parts[3]);
         var subItem   = parsePart(parts[4]);
+        var decision;
 
-        var code = 'CBD/COP/'+pad(session) + '/' + pad(decision) + '.' + (section + pad(paragraph)) + ((item && '.'+pad(item))||'') + ((subItem && '.'+pad(subItem))||'');
+             if(body=='COP') treaty = { code : "XXVII8" } ;
+    //  else if(body=='CP')  treaty = "XXVII8a";
+    //  else if(body=='NP')  treaty = "XXVII8b";
 
+        if(!treaty) {
+            alert('ONLY "COP" DECISIONS ARE SUPPORTED');
+            throw 'ONLY "COP" DECISIONS ARE SUPPORTED';
+        }
+
+        var code = 'CBD/COP/'+pad(session) + '/' + pad(number) + '.' + (section + pad(paragraph)) + ((item && '.'+pad(item))||'') + ((subItem && '.'+pad(subItem))||'');
+
+        $scope.code      = code;
         $scope.romanize      = romanize;
         $scope.pad0          = pad;
-        $scope.session       = session;
-        $scope.decision      = parseInt(decision);
+        $scope.decision      = undefined;
+        $scope.meeting       = undefined;
         $scope.section       = section;
         $scope.paragraph     = paragraph;
         $scope.item          = item ? String.fromCharCode(96+item) : '';
         $scope.$root.page    = { title: 'Decision '+romanize(session)+'/'+decision };
-        $scope.lookupNotification = lookupNotification;
-        $scope.lookupMeetingDocument = lookupMeetingDocument;
         $scope.isPublicMeetingDocument = isPublicMeetingDocument;
 
         if(section)   $scope.$root.page.title += ' section ' + section;
@@ -31,9 +42,20 @@ define(['angular', 'lodash', 'app', 'css!./view.css', './view-element', 'filters
         //==============================
         //
         //==============================
-        $http.get('/api/v2016/decision-texts', { params : { q: { decision : romanize(session)+'/'+decision }, fo: 1 }, cache:true }).then(function(res) {
+        //==============================
+        //
+        //==============================
+        $http.get('/api/v2015/treaties/'+treaty.code, { cache: true } ).then(function(res) {
 
-            var link     = $compile(res.data.content);
+            treaty = res.data;
+
+            return $http.get('/api/v2016/decision-texts', { params : { q: { treaty:treaty.code, body: body, session: session, decision: number }, fo: 1 }, cache:true });
+
+        }).then(function(res){
+
+            $scope.decision = decision = res.data;
+
+            var link     = $compile(decision.content);
             var content  = link($scope);
             var elements = content.find('element');
 
@@ -61,9 +83,6 @@ define(['angular', 'lodash', 'app', 'css!./view.css', './view-element', 'filters
             content.find('element.xshow element[data-type~="sectionTitle"]').addClass('xshow');
             content.find('element.xshow').removeClass('xhide');
 
-            content.find('.xshow').show();
-            content.find('.xhide').hide();
-
             ng.element("#content").html(content);
 
         }).then(function(){
@@ -83,98 +102,8 @@ define(['angular', 'lodash', 'app', 'css!./view.css', './view-element', 'filters
         //===========================
         //
         //===========================
-        var __notifications;
-        function lookupNotification(code) {
-
-            __notifications = __notifications||{};
-
-            if(__notifications[code]===undefined) {
-
-                __notifications[code] = code;
-
-                var options = {
-                    cache : true,
-                    params : {
-                        q : "schema_s:notification AND symbol_s:"+code,
-                        fl : "symbol_?,reference_?,title_?,date_*,url_*",
-                        rows: 1
-                    }
-                 };
-
-                $http.get("/api/v2013/index", options).then(function(res){
-
-                    var results = res.data.response;
-                    __notifications[code] = results.numFound ? results.docs[0] : null;
-
-                    return __notifications[code];
-                });
-            }
-
-            return __notifications[code];
-        }
-
-        //===========================
-        //
-        //===========================
         function isPublicMeetingDocument(code) {
             return !/^SCBD\/LOG/.test(code||'');
-        }
-
-        //===========================
-        //
-        //===========================
-        var __meetingDocument;
-        function lookupMeetingDocument(code) {
-
-            __meetingDocument = __meetingDocument||{};
-
-            if(__meetingDocument[code]===undefined) {
-
-                var isLink = /http[s]?:\/\//.test(code);
-
-                __meetingDocument[code] = {
-                    symbol_s : code,
-                    url      : isLink ?  code  : undefined,
-                    url_ss   : isLink ? [code] : []
-                };
-
-                if(!isLink) {
-
-                    var options = {
-                        cache : true,
-                        params : {
-                            q : "schema_s:meetingDocument AND symbol_s:"+solrEscape(code),
-                            fl : "symbol_?,reference_?,title_?,date_*,url_*",
-                            rows: 1
-                        }
-                     };
-
-                    $http.get("/api/v2013/index", options).then(function(res){
-
-                        var results = res.data.response;
-
-                        if(results.numFound) {
-                            __meetingDocument[code] = results.docs[0];
-
-                            var url;
-                            var urls = __meetingDocument[code].url_ss;
-
-                            if(!url) url = _(urls).filter(function(u) { return /-en\.pdf$/.test(u); }).first();
-                            if(!url) url = _(urls).filter(function(u) { return /-en\.doc$/.test(u); }).first();
-                            if(!url) url = _(urls).filter(function(u) { return    /\.pdf$/.test(u); }).first();
-                            if(!url) url = _(urls).filter(function(u) { return    /\.doc$/.test(u); }).first();
-                            if(!url) url = _(urls).first();
-
-                            __meetingDocument[code].url = url;
-                        }
-
-                        return __meetingDocument[code];
-                    });
-                }
-
-            }
-
-            return __meetingDocument[code];
         }
 
         //==============================
