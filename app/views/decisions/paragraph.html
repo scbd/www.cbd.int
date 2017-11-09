@@ -5,11 +5,11 @@
 		<li><a href="#">Home</a></li>
 		<li><a href="/decisions/tracking">Decision Tracking Tool</a></li>
 		<li><a href="/decisions/cop/{{session}}">COP-{{session}}</a></li>
-		<li><a href="/decisions/cop/{{session}}/{{decision}}">Decision {{romanize(session)}}/{{decision}}</a></li>
+		<li><a href="/decisions/cop/{{session}}/{{decision}}">Decision {{romanize(decision.session)}}/{{decision.decision}}</a></li>
 		<li class="active">Paragraph {{paragraph}}</li>
 	</ol>
 
-	<h1>Decision {{romanize(session)}}/{{decision}}
+	<h1>Decision {{romanize(decision.session)}}/{{decision.decision}}
         <span ng-if="section"> section {{section}}</span>
         <span ng-if="paragraph"> paragraph {{paragraph}}</span>
         <span ng-if="item"> item ({{item}})</span>
@@ -17,31 +17,32 @@
 
 	<div class="row">
 		<div class="col-md-7">
-            <div class="document panel panel-primary">
+            <div class="view-decision document panel panel-primary">
     			<div class="panel-heading">
-    				UNEP/CBD/COP/DEC/{{romanize(session)}}/{{decision}}
-    				<a href="/decisions/cop/{{session}}/{{decision}}" ng-click="$root.hiddenHash=current.data.code.split('/').join('-');" class="pull-right label label-info" style="margin-top:2px">
+    				UNEP/CBD/COP/DEC/{{romanize(decision.session)}}/{{decision.decision}}
+    				<a href="/decisions/cop/{{decision.session}}/{{decision.decision}}" ng-click="$root.hiddenHash=current.data.code.split('/').join('-');" class="pull-right label label-info" style="margin-top:2px">
     					up <i class="fa fa-level-up" aria-hidden="true"></i></i>
     				</a>
     			</div>
-    			<div class="panel-body">
+    			<div class=" panel-body">
     				<div id='content' class='decision'></div>
     			</div>
             </div>
 		</div>
 		<div class="col-md-5" style="padding-top:16px">
 			<dl>
-				<dt>Body</dt>
-  			  	<dd>Conference of the Parties (COP)</dd>
-			  	<br>
+			  	<dt ng-if="::decision.body">Body</dt>
+  			  	<dd ng-if="::decision.body" ng-switch="::decision.body">
+                    <span ng-switch-when="COP">Conference of the Parties (COP)</span>
+                    <span ng-switch-default>{{::decision.body|uppercase}}</span>
+                </dd>
+			  	<br ng-if="::decision.body">
 
-				<dt>Meeting</dt>
-				<dd>COP-{{session}}</dd>
-				<dd ng-if="session==8"><i class="fa fa-calendar-o" aria-hidden="true"></i> 20 - 31 March 2006</dd>
-				<dd ng-if="session==8"><i class="fa fa-map-marker" aria-hidden="true"></i> Curitiba, Brazil</dd>
-				<dd ng-if="session==9"><i class="fa fa-calendar-o" aria-hidden="true"></i> 19 - 30 May 2008</dd>
-				<dd ng-if="session==9"><i class="fa fa-map-marker" aria-hidden="true"></i> Bonn, Germany</dd>
-				<br>
+				<dt ng-if="::decision.meeting">Meeting</dt>
+				<dd ng-if="::decision.meeting">
+                    <decision-meeting symbol="decision.meeting"></decision-meeting>
+                </dd>
+				<br ng-if="::decision.meeting">
 
 				<dt>Type</dt>
 				<dd><span class="label label-default" ng-class="{ 'label-info' : current.data.type=='operational'}">{{current.data.type}}</span></dd>
@@ -67,13 +68,10 @@
 
                 <span ng-if="current.data.notifications.length">
     				<dt>Notifications</dt>
-                    <dd ng-repeat="item in current.data.notifications|orderBy|_:'map':lookupNotification">
+                    <dd ng-repeat="item in current.data.notifications|orderBy">
                         <div class="panel panel-default" style="margin-bottom:4px">
                             <div class="panel-body" style="padding:12px;font-size:0.9em">
-                                <a ng-href="{{item.url_ss[0]}}" target="notifications"><b>{{item.reference_s||item.reference_t}}</b> <i>({{item.symbol_s||item.symbol_t||item}})</i></a>
-                                <div style="max-height:50px;overflow:hidden" title="{{item.title_t}}" ng-bind-html="item.title_t">
-                                </div>
-                                <i class="fa fa-calendar fa-fw"></i> {{item.date_dt|moment:'utc'|moment:'format':'LL'}}
+                                <decision-notification symbol="item"></decision-notification>
                             </div>
                         </div>
                     </dd>
@@ -82,15 +80,26 @@
 
                 <span ng-if="(current.data.documents|filter:isPublicMeetingDocument).length">
     				<dt>Documents</dt>
-                    <dd ng-repeat="item in current.data.documents|filter:isPublicMeetingDocument|orderBy|_:'map':lookupMeetingDocument">
+                    <dd ng-repeat="item in current.data.documents|filter:isPublicMeetingDocument|orderBy">
                         <div class="panel panel-default" style="margin-bottom:4px">
                             <div class="panel-body" style="padding:12px;font-size:0.9em">
-                                <a ng-href="{{item.url}}" target="meetingDocument"><b>{{item.symbol_s||item.symbol_t||item}}</b></a>
-                                <div style="max-height:50px;overflow:hidden" title="{{item.title_t}}" ng-bind-html="item.title_t">
-                                </div>
+                                <decision-meeting-document symbol="item"></decision-meeting-document>
                             </div>
                         </div>
                     </dd>
+    				<br>
+                </span>
+
+                <span ng-if="current.data.meetings.length">
+    				<dt>Activities / outcomes</dt>
+                    <dd ng-repeat="item in current.data.meetings|orderBy">
+                        <div class="panel panel-default" style="margin-bottom:4px">
+                            <div class="panel-body" style="padding:12px;font-size:0.9em">
+                                <decision-meeting symbol="item"></decision-meeting>
+                            </div>
+                        </div>
+                    </dd>
+    				<br>
                 </span>
 			</dl>
 

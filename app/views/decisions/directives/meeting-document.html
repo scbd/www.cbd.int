@@ -1,0 +1,10 @@
+<div>
+    <document-files ng-if="document.files.length" class="visible-xs pull-right" style="margin-top:10px;" files="::document.files"></document-files>
+
+	<b>{{document.symbol||symbol}}</b>
+	<div ng-show="::document.title|lstring" style="max-height:50px;overflow:hidden">
+		{{::document.title|lstring}}
+	</div>
+
+    <document-files class="hidden-xs" style="margin-top:10px;" files="::document.files"></document-files>
+</div>

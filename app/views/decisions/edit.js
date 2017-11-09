@@ -1,20 +1,30 @@
-define(['underscore', 'angular', 'require', 'rangy', 'jquery', './data/romans', './data/sections', './data/paragraphes', './data/items', './data/sub-items', './data/actors', './data/statuses', 'ngDialog', 'authentication', 'filters/moment', 'filters/lodash'],
+define(['lodash', 'angular', 'require', 'rangy', 'jquery', './data/romans', './data/sections', './data/paragraphes', './data/items', './data/sub-items', './data/actors', './data/statuses', 'ngDialog', 'authentication', 'filters/moment', 'filters/lodash', 'filters/lstring', './directives/notification', './directives/meeting-document', './directives/meeting'],
 function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, subItemList, actorList, statusesList) { 'use strict';
 
     return ['$scope', '$http', '$route', '$location', '$filter', '$q', 'ngDialog', function($scope, $http, $route, $location, $filter, $q, ngDialog) {
 
-        var treaty = "CBD";
-        var body   = "COP";
-        var session  = parseInt($route.current.params.meeting);
-        var decision = parseInt($route.current.params.number);
+        var treaty        = null;
+        var body          = $route.current.params.body.toUpperCase();
+        var session       = parseInt($route.current.params.session);
+        var decision      = parseInt($route.current.params.decision);
         var selectedElement = null;
+
+             if(body=='COP') treaty = { code : "XXVII8" } ;
+    //  else if(body=='CP')  treaty = "XXVII8a";
+    //  else if(body=='NP')  treaty = "XXVII8b";
+
+        if(!treaty) {
+            alert('ONLY "COP" DECISIONS ARE SUPPORTED');
+            throw 'ONLY "COP" DECISIONS ARE SUPPORTED';
+        }
 
         if(!_.isFinite(session)  || session <1) { $scope.paramError = "session_invalid";  return this; }
         if(!_.isFinite(decision) || decision<1) { $scope.paramError = "decision_invalid"; return this; }
 
-        var data = { title: 'agenda', content: 'loading...' };
+        var data = { content: 'loading...' };
 
-        $scope.symbol = roman[session] + '/' + decision;
+        $scope.symbol =
+        $scope.close  = close;
         $scope.save   = save;
         $scope.upload = upload;
         $scope.buildFileUrl = buildFileUrl;
@@ -27,13 +37,10 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         $scope.deleteDecision = deleteDecision;
         $scope.selectMeeting  = selectMeeting;
         $scope.deleteMeeting  = deleteMeeting;
-        $scope.lookupMeeting  = lookupMeeting;
         $scope.selectMeetingDocument = selectMeetingDocument;
         $scope.deleteMeetingDocument = deleteMeetingDocument;
-        $scope.lookupMeetingDocument = lookupMeetingDocument;
         $scope.selectNotification = selectNotification;
         $scope.deleteNotification = deleteNotification;
-        $scope.lookupNotification = lookupNotification;
         $scope.actionEdit  = edit;
         $scope.isEditable  = isEditable;
         $scope.tag         = tag;
@@ -49,6 +56,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             statusesMap : _(statusesList).reduce(function(r,v){ r[v.code] = v; return r; }, {})
         };
 
+        $scope.selectedActor = '';
+        $scope.selectedStatus = '';
+
         load();
 
         return this;
@@ -58,14 +68,45 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //************************************************************
         //************************************************************
 
+        //==============================
+        //
+        //==============================
+        function close() {
+            $location.url('/'+body+'/'+session+'/'+decision);
+        }
+
+
         //===========================
         //
         //===========================
         function load() {
 
-            $http.get('/api/v2016/decision-texts', { params : { q : { decision: $scope.symbol }, fo: 1 }}).then(function(res){
+            $http.get('/api/v2015/treaties/'+treaty.code, { cache: true } ).then(function(res) {
 
-                data = res.data || { decision: $scope.symbol, content: 'paste here' };
+                treaty = res.data;
+
+                return $http.get('/api/v2016/decision-texts', { params : { q : { $or: [{ decision: roman[session] + '/' + decision}, { treaty:treaty.code,  body: body, session: session, decision: decision }]}, fo: 1 }});
+
+            }).then(function(res){
+
+                data = res.data || {
+                    treaty  : treaty.code,
+                    body    : body,
+                    session : session,
+                    decision: decision,
+                    meeting : body+'-'+ pad(session),
+                    content: 'paste here'
+                };
+
+                data = _.defaults(data, {
+                    symbol : data.decision,
+                    body   : body,
+                    treaty : treaty.code
+                });
+
+                if(typeof(data.decision)=='string') {
+                    data.decision = parseInt(data.symbol.replace(/.*\/(\d+)$/, '$1'));
+                }
 
                 $('#content').html(data.content);
 
@@ -74,6 +115,10 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                 clean($('#content')[0]);
 
                 $('#content,element').mousedown(mousedown_selectNode);
+
+            }).then(function(){
+
+                lazyRetag();
 
             }).catch(function(err){
 
@@ -87,6 +132,22 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                 alert(err.message||err);
             });
         }
+
+        function lazyRetag(paragraphes) {
+            if(paragraphes && paragraphes.length==0) {
+                selectNode(null);
+                return;
+            }
+
+            paragraphes = paragraphes || $('#content element').toArray();
+
+            var el = paragraphes.shift();
+
+            $scope.$applyAsync(function(){ selectNode(el);         });
+            $scope.$applyAsync(function(){ tag();                  });
+            $scope.$applyAsync(function(){ lazyRetag(paragraphes); });
+        }
+
 
         //===========================
         //
@@ -110,18 +171,18 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             // Save
 
-            data.title = "agenda";
             data.content = $('#content').html();
 
             var req = {
                 method : data._id ? 'PUT' : 'POST',
                 url    : '/api/v2016/decision-texts' + (data._id ? '/'+data._id : ''),
-                data   : data
+                data   : _.pick(data, "_id","treaty","body","session","decision","meeting","content")
             };
+
 
             $http(req).then(function(res){
 
-                data._id = data._id || res.data.id;
+                data._id = data._id || res.data._id;
 
                 selectNode(selectedNode);
 
@@ -133,7 +194,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
                 console.error(err);
 
-                alert(err.message||err);
+                alert(err.message||JSON.stringify(err, null, ' '));
             });
         }
 
@@ -159,6 +220,19 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             return $('#content').prop('contenteditable') == 'true';
         }
 
+        //==============================
+        //
+        //==============================
+        function pad(input) {
+
+            var output = (input || '').toString();
+
+            while(output.length<2)
+                output = '0' + output;
+
+            return output;
+        }
+
         //===========================
         //
         //===========================
@@ -169,33 +243,19 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             var element = $scope.element;
 
-            element.section   = element.section  ||undefined;
-            element.paragraph = element.paragraph||undefined;
-            element.item      = element.item     ||undefined;
-            element.subitem   = element.subitem  ||undefined;
+            element.section   = element.type=='paragraph' ? (element.section  || undefined) : undefined;
+            element.paragraph = element.type=='paragraph' ? (element.paragraph|| undefined) : undefined;
+            element.item      = element.type=='paragraph' ? (element.item     || undefined) : undefined;
+            element.subitem   = element.type=='paragraph' ? (element.subitem  || undefined) : undefined;
 
-            element.data = element.data || {
-                treaty: treaty,
-                body: body,
-                session : session,
-                decision : decision
-            };
-
-            var data = element.data;
+            var data = element.data = element.data || { };
 
             data.section   = element.section   && element.section.toUpperCase();
             data.paragraph = element.paragraph && parseInt(element.paragraph);
             data.item      = element.item      && element.item.charCodeAt(0) - 'a'.charCodeAt(0) + 1;
             data.subitem   = element.subitem   && roman.indexOf(element.subitem.toUpperCase());
 
-            data.code  = data.treaty + '/' + data.body + '/' + pad(data.session) + '/' + pad(data.decision);
-            data.code += '.'+(data.section||'') + pad(element.paragraph);
-
-            if(data.item)                 data.code += '.'+pad(data.item);
-            if(data.item && data.subitem) data.code += '.'+pad(data.subitem);
-
             // tag
-
             var tag = element.type || '';
 
             if(element.section)   tag += ' ' + element.section;
@@ -203,7 +263,8 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             if(element.item)      tag += ''  + element.item;
             if(element.subitem)   tag += ' (' + element.subitem + ')';
 
-            $(selectedElement).attr('data-type', tag);
+            if(tag) $(selectedElement).attr('data-type', tag);
+            else    $(selectedElement).removeAttr('data-type');
 
         }
 
@@ -295,19 +356,6 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             });
         }
 
-        //==============================
-        //
-        //==============================
-        function pad(input) {
-
-            var output = (input || '').toString();
-
-            while(output.length<2)
-                output = '0' + output;
-
-            return output;
-        }
-
         //===========================
         //
         //===========================
@@ -388,6 +436,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             }).then(function(meta) {
 
+                // fileInfo.url         = 'upload://'+meta.uid;  // TODO: Use upload://{uid} instead of hash
                 fileInfo.filename    = meta.filename;
                 fileInfo.contentType = meta.contentType;
                 fileInfo.size        = meta.size;
@@ -474,63 +523,6 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             $scope.element.data.documents = items.length ? items : undefined;
         }
 
-        //===========================
-        //
-        //===========================
-        var __meetingDocument;
-        function lookupMeetingDocument(code) {
-
-            __meetingDocument = __meetingDocument||{};
-
-            if(__meetingDocument[code]===undefined) {
-
-                var isLink = /http[s]?:\/\//.test(code);
-
-                __meetingDocument[code] = {
-                    symbol_s : code,
-                    url      : isLink ?  code  : undefined,
-                    url_ss   : isLink ? [code] : []
-                };
-
-                if(!isLink) {
-
-                    var options = {
-                        cache : true,
-                        params : {
-                            q : "schema_s:meetingDocument AND symbol_s:"+solrEscape(code),
-                            fl : "symbol_?,reference_?,title_?,date_*,url_*",
-                            rows: 1
-                        }
-                     };
-
-                    $http.get("/api/v2013/index", options).then(function(res){
-
-                        var results = res.data.response;
-
-                        if(results.numFound) {
-                            __meetingDocument[code] = results.docs[0];
-
-                            var url;
-                            var urls = __meetingDocument[code].url_ss;
-
-                            if(!url) url = _(urls).filter(function(u) { return /-en\.pdf$/.test(u); }).first();
-                            if(!url) url = _(urls).filter(function(u) { return /-en\.doc$/.test(u); }).first();
-                            if(!url) url = _(urls).filter(function(u) { return    /\.pdf$/.test(u); }).first();
-                            if(!url) url = _(urls).filter(function(u) { return    /\.doc$/.test(u); }).first();
-                            if(!url) url = _(urls).first();
-
-                            __meetingDocument[code].url = url;
-                        }
-
-                        return __meetingDocument[code];
-                    });
-                }
-
-            }
-
-            return __meetingDocument[code];
-        }
-
         ////////////////////
         // DIALOGS
         ////////////////////
@@ -540,21 +532,11 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function selectActors() {
 
-            openDialog('./select-actors-dialog', { showClose: false, resolve : { actors: function() { return $scope.element.data.actors; } } }).then(function(dialog){
+            if($scope.selectedActor && !~($scope.element.data.actors||[]).indexOf($scope.selectedActor)) {
+                $scope.element.data.actors.push($scope.selectedActor);
+            }
 
-                dialog.closePromise.then(function(res){
-
-                    if(!res.value)
-                        return;
-
-                    var actors = res.value.actors;
-
-                    if(actors && !actors.length)
-                        actors = undefined;
-
-                    $scope.element.data.actors = actors;
-                });
-            });
+            $scope.selectedActor = '';
         }
 
         //===========================
@@ -581,21 +563,11 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function selectStatuses() {
 
-            openDialog('./select-statuses-dialog', { showClose: false, resolve : { statuses: function() { return $scope.element.data.statuses; } } }).then(function(dialog){
+            if($scope.selectedStatus && !~($scope.element.data.statuses||[]).indexOf($scope.selectedStatus)) {
+                $scope.element.data.statuses.push($scope.selectedStatus);
+            }
 
-                dialog.closePromise.then(function(res){
-
-                    if(!res.value)
-                        return;
-
-                    var statuses = res.value.statuses;
-
-                    if(statuses && !statuses.length)
-                        statuses = undefined;
-
-                    $scope.element.data.statuses = statuses;
-                });
-            });
+            $scope.selectedStatus = '';
         }
 
         //===========================
@@ -690,39 +662,6 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         //
         //===========================
-        var __notifications;
-        function lookupNotification(code) {
-
-            __notifications = __notifications||{};
-
-            if(__notifications[code]===undefined) {
-
-                __notifications[code] = code;
-
-                var options = {
-                    cache : true,
-                    params : {
-                        q : "schema_s:notification AND symbol_s:"+code,
-                        fl : "symbol_?,reference_?,title_?,date_*,url_*",
-                        rows: 1
-                    }
-                 };
-
-                $http.get("/api/v2013/index", options).then(function(res){
-
-                    var results = res.data.response;
-                    __notifications[code] = results.numFound ? results.docs[0] : null;
-
-                    return __notifications[code];
-                });
-            }
-
-            return __notifications[code];
-        }
-
-        //===========================
-        //
-        //===========================
         function selectMeeting() {
 
             openDialog('./select-meeting-dialog', { showClose: false }).then(function(dialog){
@@ -753,39 +692,6 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             if(!items.length)
                 $scope.element.data.meetings = undefined;
-        }
-
-        //===========================
-        //
-        //===========================
-        var __meetings;
-        function lookupMeeting(code) {
-
-            __meetings = __meetings||{};
-
-            if(__meetings[code]===undefined) {
-
-                __meetings[code] = code;
-
-                var options = {
-                    cache : true,
-                    params : {
-                        q : "schema_s:meeting AND symbol_s:"+code,
-                        fl : "symbol_?,title_EN_t,eventCountry_EN_t,eventCity_EN_t,startDate_dt,endDate_dt,url_*",
-                        rows: 1
-                    }
-                 };
-
-                $http.get("/api/v2013/index", options).then(function(res){
-
-                    var results = res.data.response;
-                    __meetings[code] = results.numFound ? results.docs[0] : null;
-
-                    return __meetings[code];
-                });
-            }
-
-            return __meetings[code];
         }
 
         //===========================

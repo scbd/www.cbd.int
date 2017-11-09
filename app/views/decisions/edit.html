@@ -5,7 +5,7 @@
     H1 {
         font-size: 18px;
     }
-    #content var {
+    .edit-decision #content var {
         border: 1px solid #c7254e;
         background-color: #f9f2f4;
         padding: 0 1px 0 2px;
@@ -13,17 +13,17 @@
         margin-right: 4px;
         font-style: normal;
     }
-    #content i {
+    .edit-decision #content i {
         border-right: 2px solid #c7254e;
         border-left: 2px solid #c7254e;
         background-color: #f9f2f4;
         color: #337ab7;
     }
-    #content b {
+    .edit-decision #content b {
         background-color: #f4f2f9;
         color: #5e15d7;
     }
-    #content em {
+    .edit-decision #content em {
         background-color: #f4f2f9;
         color: #4e25c7;
     }
@@ -33,7 +33,7 @@
         -ms-user-select: none;
         user-select: none;
     }*/
-    element[data-type]::before {
+    .edit-decision element[data-type]::before {
         content: attr(data-type);
         border-right: 1px solid #888;
         border-bottom: 1px solid #888;
@@ -50,7 +50,7 @@
         width: 140px;
         ;z-index:1;
     }
-    element {
+    .edit-decision element {
         display: block;
         border: 1px solid #888;
         border-radius: 4px;
@@ -64,7 +64,7 @@
         user-select: none;*/
         cursor: pointer;
     }
-    element.selected {
+    .edit-decision element.selected {
         border: 4px solid blue;
         border-radius: 4px;
         padding:5px;
@@ -75,7 +75,7 @@
         user-select: all;*/
         cursor: text;
     }
-    element[data-type=title] {
+    .edit-decision element[data-type=title] {
         font-size: 20px;
     }
     /*element.selected div {
@@ -92,7 +92,7 @@
         user-select: all;
     }*/
 
-    .bg-orange{
+    .edit-decision .bg-orange{
         background-color:#6F5495!important;
         xbackground-color:#fa6938!important;
         color:white!important;
@@ -112,7 +112,7 @@
         border-top-right-radius: 3px;
     }
 
-    .document {
+    .edit-decision .document {
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     }
 </style>
@@ -134,6 +134,7 @@
     <div class="container" style="margin-left:0;margin-right:0;width:100%;height:100%">
 
         <div style="position:fixed;top:0px;left:0px;right:0px;background-color:#ddd;z-index:1000;padding:6px">&nbsp;
+            <button class="btn btn-default pull-right" ng-click="close()">Close</button>
             <button class="btn btn-success" ng-click="save()">Save</button> &nbsp; &nbsp;
             <button class="btn btn-primary" ng-click="actionBox('element')">Box</button>
             <button class="btn btn-primary" ng-click="actionUnbox()">Unbox</button>
@@ -142,7 +143,7 @@
         </div>
 
         <div class="row" style="margin-top:60px;height:100%">
-            <div class="col-sm-6" style="height:86%">
+            <div class="col-sm-6 edit-decision" style="height:86%">
                 <div class="bg-orange">Decision {{symbol}}</div>
                 <div class="document" style="height:100%;overflow-y:scroll;padding:5px">
                     <div id='content' class='decision' style="min-height:100%"></div>
@@ -158,8 +159,7 @@
                         <div class="form-group">
                             <label for="elementType">Level</label>
                             <select class="form-control" id="elementType" ng-model="element.type" ng-change="tag()" ng-disabled="formattingLocked || !element">
-                                <option></option>
-                                <option>Decision</option>
+                                <option value=""></option>
                                 <option value="title">Decision Title</option>
                                 <option value="body">Decision Body</option>
                                 <option value="annex">Decision Annex</option>
@@ -225,8 +225,9 @@
                          {{collections.statusesMap[item].title||item}}</i>
                      </div>
 
-                    <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectStatuses()"><i class="fa fa-plus-circle"></i> Select status(es)</button>
-
+    		    	<select class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedStatus" ng-options="status.code as status.title for status in collections.statusesMap" ng-change="selectStatuses()" ng-disabled="element.type!='paragraph'">
+                        <option value="">add a status</option>
+    				</select>
     		  	</div>
 
                 <div class="form-group" ng-show="element.data.statuses.indexOf('superseded')>=0 || element.data.statuses.indexOf('retired')>=0 || element.elementStatusDetails">
@@ -259,7 +260,10 @@
                          {{collections.actorsMap[item].title||item}} <i ng-if="collections.actorsMap[item].group">({{collections.actorsMap[item].group}})</i>
                      </div>
 
-                    <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectActors()"><i class="fa fa-plus-circle"></i> Select actor(s)</button>
+    		    	<select class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedActor" ng-options="actor.code as actor.title group by actor.group for actor in collections.actorsMap" ng-change="selectActors()"  ng-disabled="element.type!='paragraph'">
+                        <option value="">add an actor</option>
+    				</select>
+
 
     		  	</div>
 
@@ -287,66 +291,43 @@
     						</div>
     					</div>
     				</div>
-    				<button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectDecision()"><i class="fa fa-plus-circle"></i> add a decision</button>
+    				<button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectDecision()">add a decision</button>
     			</div>
 
                 <div class="form-group">
     				<label for="exampleInputEmail1">Related documents</label><br>
-    				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.documents|orderBy|_:'map':lookupMeetingDocument">
+
+    				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.documents|orderBy">
     					<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button class="btn btn-danger btn-xs pull-right" ng-click="deleteMeetingDocument(item.symbol_s||item)"><i class="fa fa-minus-circle"></i></button>
-    						<a href="{{item.url}}" target="meetingDocument"><b>{{item.symbol_s}}</b></a>
-                    		<div ng-show="item.title_t" style="max-height:50px;overflow:hidden">
-    							{{item.title_t}}
-    						</div>
-    						<div ng-hide="true"  style="margin-top:4px">
-    							<i class="fa fa-file-pdf-o"></i>
-    							<a href="#">arabic</a> |
-    							<a href="#">chinese</a> |
-    							<a href="#">english</a> |
-    							<a href="#">french</a> |
-    							<a href="#">spanish</a> |
-    							<a href="#">russian</a>
-    						</div>
+    						<button class="btn btn-danger btn-xs pull-right" ng-click="deleteMeetingDocument(item)"><i class="fa fa-minus-circle"></i></button>
+                            <decision-meeting-document symbol="item"></decision-meeting-document>
     					</div>
     				</div>
-    				<button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectMeetingDocument()"><i class="fa fa-plus-circle"></i> add a document</button>
+    				<button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectMeetingDocument()">add a document</button>
     			</div>
 
     		</div>
     		<div class="col-sm-6">
     			<div class="form-group">
     				<label for="exampleInputEmail1">Notifications issued</label><br>
-    				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.notifications|orderBy|_:'map':lookupNotification">
+    				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.notifications|orderBy">
     		  			<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button class="btn btn-danger btn-xs pull-right" ng-click="deleteNotification(item.symbol_s||item.symbol_t||item)"><i class="fa fa-minus-circle"></i></button>
-                            <a ng-href="{{item.url_ss[0]}}" target="notifications"><b>{{item.reference_t||item.reference_s}}</b> <i>({{item.symbol_s||item.symbol_t||item}})</i></a>
-    						<div style="max-height:50px;overflow:hidden" title="{{item.title_t}}" ng-bind-html="item.title_t">
-    						</div>
-    						<i class="fa fa-calendar fa-fw"></i> {{item.date_dt|moment:'utc'|moment:'format':'LL'}}
+    						<button class="btn btn-danger btn-xs pull-right" ng-click="deleteNotification(item)"><i class="fa fa-minus-circle"></i></button>
+                            <decision-notification symbol="item"></decision-notification>
     					</div>
     				</div>
-    				<button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectNotification()"><i class="fa fa-plus-circle"></i> add a notification</button>
+    				<button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectNotification()">add a notification</button>
     			</div>
 
                 <div class="form-group">
                     <label for="exampleInputEmail1">Related activities / outcomes</label><br>
-                    <div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.meetings|orderBy|_:'map':lookupMeeting">
+                    <div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.meetings|orderBy">
                           <div class="panel-body" style="padding:12px;font-size:0.9em">
                             <button class="btn btn-danger btn-xs pull-right" ng-click="deleteMeeting(item.symbol_s||item)"><i class="fa fa-minus-circle"></i></button>
-                            <a href="#"><b>{{::item.symbol_s}}</b></a>
-                            <div style="max-height:50px;overflow:hidden">
-                                {{::item.title_EN_t}}
-                            </div>
-
-                            <i class="fa fa-calendar fa-fw"></i>
-                            <span ng-if="(item.startDate_dt|moment:'month')==(item.endDate_dt|moment:'month')">{{item.startDate_dt|moment:'format':'D'}} - {{item.endDate_dt|moment:'format':'D MMMM YYYY'}}</span>
-                            <span ng-if="(item.startDate_dt|moment:'month')!=(item.endDate_dt|moment:'month')">{{item.startDate_dt|moment:'format':'D MMM'}} - {{item.endDate_dt|moment:'format':'D MMM YYYY'}}</span>
-                            <br>
-                            <i class="fa fa-map-marker fa-fw"></i> {{::item.eventCity_EN_t}}, {{::item.eventCountry_EN_t}}
+                            <decision-meeting symbol="item"></decision-meeting>
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectMeeting()"><i class="fa fa-plus-circle"></i> add an event</button>
+                    <button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectMeeting()">add an event</button>
                 </div>
 
     		</div>
