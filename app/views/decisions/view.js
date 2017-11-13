@@ -285,7 +285,7 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', './view
             if(!$scope.canEdit)
                 return;
 
-            $location.url('/'+decision.body+'/'+decision.session+'/'+decision.decision+'/edit');
+            $location.url(('/'+decision.body+'/'+decision.session+'/'+decision.decision+'/edit').toLowerCase());
         }
 
         //==============================
