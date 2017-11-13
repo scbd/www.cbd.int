@@ -72,7 +72,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //
         //==============================
         function close() {
-            $location.url('/'+body+'/'+session+'/'+decision);
+            $location.url(('/'+body+'/'+session+'/'+decision).toLowerCase());
         }
 
 
