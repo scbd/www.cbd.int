@@ -1,4 +1,4 @@
-define(['app', 'lodash','data/bbi/links', 'directives/bbi/slider', 'directives/bbi/menu','directives/bbi/auto-linker'], function(app, _,links) { 'use strict';
+define(['app', 'lodash','data/bbi/links', 'directives/bbi/slider', 'directives/bbi/menu','directives/bbi/auto-linker','filters/moment'], function(app, _,links) { 'use strict';
 
 	return ['$location','$http','$q','$scope','locale', function ($location,$http,$q,$scope,locale) {
 
@@ -79,7 +79,7 @@ define(['app', 'lodash','data/bbi/links', 'directives/bbi/slider', 'directives/b
 						}
 
 						canceler = $q.defer();
-						var pagePromise = $q.when($http.get('/api/v2013/index/select', {  params: queryParameters, timeout: canceler}))
+						var pagePromise = $q.when($http.get('https://api.cbd.int/api/v2013/index/select', {  params: queryParameters, timeout: canceler}))
 							.then(function (data) {
 									data=data.data;
 									canceler = null;
