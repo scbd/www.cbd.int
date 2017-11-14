@@ -44,14 +44,14 @@
             <document-files files="document.files"></document-files>
         </td>
 
-        <td ng-if="enableSelection && downloadble" class="hidden-print" ng-click="document.selected=!document.selected;" style="width:20px; position:relative;">
+        <td ng-style="::{ visibility: (enableSelection && downloadble ? 'visible' : 'hidden') }" class="hidden-print" ng-click="document.selected=!document.selected;" style="width:20px; position:relative;">
             <div class="hidden-xs animated rubberBand  printsmart-help-document-selector" style="position:absolute;left:-30px;margin-top:5px">
                 <i class="fa fa-arrow-right text-info" style="font-size:2em"></i>
             </div>
             <div class="hidden-sm hidden-md hidden-lg animated rubberBand printsmart-help-document-selector" style="position:absolute;right:-3px;margin-top:10px">
                 <i class="fa fa-arrow-left text-info" style="font-size:1.2em"></i>
             </div>
-            <checkbox  ng-if="downloadble" ng-model="document.selected" style="font-size:2em" ng-class="{'text-info':document.metadata.printable, 'text-muted':!document.metadata.printable }"></checkbox>
+            <checkbox ng-style="::{ visibility: (downloadble ? 'visible' : 'hidden') }" ng-model="document.selected" style="font-size:2em" ng-class="::{'text-info':document.metadata.printable, 'text-muted':!document.metadata.printable }"></checkbox>
         </td>
     </tr>
 </table>
