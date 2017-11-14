@@ -6,6 +6,8 @@ define(['jquery'], function($) {
 
         $scope.search = search;
         $scope.save = save;
+        $scope.canSave = canSave;
+        $scope.isUrl= isUrl;
 
 		//==========================
 		//
@@ -40,13 +42,42 @@ define(['jquery'], function($) {
 		//==========================
         function save() {
 
-            if(!$scope.meeting)
+            if(!canSave())
                 return;
 
-            $scope.closeThisDialog({
-                symbol : $scope.meeting.symbol_s,
-                title : $scope.meeting.title_EN_t
-            });
+            var result;
+
+            if(isUrl($scope.symbol)) {
+                result = {
+                    symbol : $scope.symbol,
+                    url: $scope.symbol,
+                    title: $scope.symbol
+                };
+            }
+
+            if($scope.meeting) {
+                result = {
+                    symbol : $scope.meeting.symbol_s,
+                    title : $scope.meeting.title_EN_t
+                }
+            }
+
+            if(result)
+                $scope.closeThisDialog(result);
+        }
+
+        //====================================
+        //
+        //====================================
+        function canSave() {
+            return $scope.meeting || isUrl($scope.symbol);
+        }
+
+        //====================================
+        //
+        //====================================
+        function isUrl(text) {
+            return /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/i.test(text||'');
         }
 
 		//==========================
