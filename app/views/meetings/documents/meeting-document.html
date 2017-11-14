@@ -11,7 +11,7 @@
                             <strong ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></strong>
                         </a>
                     </div>
-                    <div ng-style="::{ 'font-weight' : (document.symbol?'normal':'bold')  }">{{::document.title|lstring}}</div>
+                    <div>{{::document.title|lstring}}</div>
                     <div>{{::document.description|lstring}}</div>
                 </div>
             </div>
