@@ -255,12 +255,12 @@
                 <div class="form-group">
     		    	<label for="elementDirectedTo">Directed to</label><br>
 
-                    <div ng-repeat="item in element.data.actors" class="form-control" style="margin-bottom:2px" ng-disabled="element.type!='paragraph'">
+                    <div ng-repeat="item in element.data.actors" class="form-control" style="margin-bottom:2px;" title="{{collections.actorsMap[item].title||item}}" ng-disabled="element.type!='paragraph'">
                         <button class="btn btn-danger btn-xs pull-right" ng-click="deleteActor(item)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
-                         {{collections.actorsMap[item].title||item}} <i ng-if="collections.actorsMap[item].group">({{collections.actorsMap[item].group}})</i>
+                         {{collections.actorsMap[item].code||item}}
                      </div>
 
-    		    	<select class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedActor" ng-options="actor.code as actor.title group by actor.group for actor in collections.actorsMap" ng-change="selectActors()"  ng-disabled="element.type!='paragraph'">
+    		    	<select class="btn btn-primary btn-xs" style="width:100px" id="elementDirectedTo" ng-model="selectedActor" ng-options="actor.code as actor.title group by actor.group for actor in collections.actorsMap" ng-change="selectActors()"  ng-disabled="element.type!='paragraph'">
                         <option value="">add an actor</option>
     				</select>
 
