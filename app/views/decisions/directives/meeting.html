@@ -1,13 +1,17 @@
 <div>
-	<b><a ng-href="/meetings/{{meeting.symbol||meeting.EVT_CD||symbol}}" target="_blank">{{meeting.symbol||meeting.EVT_CD||symbol}} <i class="fa fa-external-link" aria-hidden="true"></i></a></b>
-	<div style="max-height:50px;overflow:hidden">
-		{{meeting.title|lstring}}
-	</div>
-	<div>
-        <i class="fa fa-fw fa-calendar" aria-hidden="true"></i>
-        <span ng-if="(item.startDate|moment:'month')==(item.endDatet|moment:'month') && (item.startDate|moment:'day')==(item.endDatet|moment:'day')">{{item.endDate|moment:'format':'D MMMM, YYYY'}}</span>
-        <span ng-if="(item.startDate|moment:'month')==(item.endDatet|moment:'month') && (item.startDate|moment:'day')!=(item.endDatet|moment:'day')">{{item.startDate|moment:'format':'D'}} - {{item.endDate|moment:'format':'D MMMM, YYYY'}}</span>
-        <span ng-if="(item.startDate|moment:'month')!=(item.endDatet|moment:'month')">{{item.startDate|moment:'format':'D MMM'}} - {{item.endDate|moment:'format':'D MMM, YYYY'}}</span>
-    </<div>
-	<div><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i>{{::meeting.venueText|lstring}}</<div>
+
+    <b><a ng-href="{{url}}" target="_blank">{{meeting.symbol||meeting.EVT_CD||symbol}} <i class="fa fa-external-link" aria-hidden="true"></i></a></b>
+
+    <div ng-if="::meeting">
+    	<div style="max-height:50px;overflow:hidden">
+    		{{meeting.title|lstring}}
+    	</div>
+    	<div>
+            <i class="fa fa-fw fa-calendar" aria-hidden="true"></i>
+            <span ng-if="(meeting.startDate|moment:'month')==(meeting.endDate|moment:'month') && (meeting.startDate|moment:'day')==(meeting.endDatet|moment:'day')">{{meeting.endDate|moment:'format':'D MMMM, YYYY'}}</span>
+            <span ng-if="(meeting.startDate|moment:'month')==(meeting.endDate|moment:'month') && (meeting.startDate|moment:'day')!=(meeting.endDatet|moment:'day')">{{meeting.startDate|moment:'format':'D'}} - {{meeting.endDate|moment:'format':'D MMMM, YYYY'}}</span>
+            <span ng-if="(meeting.startDate|moment:'month')!=(meeting.endDate|moment:'month')">{{meeting.startDate|moment:'format':'D MMM'}} - {{meeting.endDate|moment:'format':'D MMM, YYYY'}}</span>
+        </<div>
+    	<div><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i>{{::meeting.venueText|lstring}}</<div>
+    </div>
 </div>

@@ -20,7 +20,17 @@ define(['app', 'text!./meeting.html', 'lodash', 'filters/lstring', 'filters/mome
                     if(!code)
                         return;
 
+                    if(isUrl(code||'')) {
+                        $scope.url = code;
+                        return;
+                    }
+
+                    $scope.url  = '/meetings/'+encodeURIComponent(symbol);
+
                     $http.get("/api/v2016/meetings/"+code.toUpperCase(), { cache: true, params: { f: { symbol:1, EVT_CD:1, EVT_FROM_DT:1, EVT_TO_DT:1, title:1, dateText:1, venueText:1 } } }).then(function(res){
+
+                        $scope.url  = '/meetings/'+encodeURIComponent(res.data.symbol||res.data.EVT_CD||symbol);
+
                         $scope.meeting = _.defaults({}, res.data, {
                             symbol:    res.data.EVT_CD,
                             startDate: res.data.EVT_FROM_DT,
@@ -29,6 +39,13 @@ define(['app', 'text!./meeting.html', 'lodash', 'filters/lstring', 'filters/mome
 
                         console.log($scope.meeting);
                     });
+                }
+
+                //====================================
+                //
+                //====================================
+                function isUrl(text) {
+                    return /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/i.test(text||'');
                 }
             }
         };
