@@ -81,7 +81,7 @@
         No documents have yet been posted.
     </p>
 
-    <ul class="nav nav-tabs nowrap hidden-print" style="margin-top:20px" role="tablist">
+    <ul ng-if="!documentsCtrl.noTabs" class="nav nav-tabs nowrap hidden-print" style="margin-top:20px" role="tablist">
         <li ng-repeat="type in documentsCtrl.tabs|limitTo:documentsCtrl.maxTabCount" ng-class="{active:documentsCtrl.currentTab==type.code}" code="{{type.code}}">
             <div class="bg" ng-if="::type.code.startsWith('in-session')"></div>
             <div ng-if="::type.code=='in-session'" style="position:absolute;top:-18px;left:0px;right:2px;height:15px;font-size:10px;font-weight:bold;color:#444">&nbsp;&nbsp;&nbsp;IN-SESSION</div>
@@ -107,9 +107,11 @@
     <!-- Tab panes -->
     <div class="tab-content">
 
-        <div ng-repeat="type in documentsCtrl.tabs" ng-class="{ active: documentsCtrl.currentTab==type.code }" role="tabpanel" class="tab-pane" id="{{::type.code}}">
+        <div ng-repeat="type in documentsCtrl.tabs" ng-class="{ active: (documentsCtrl.currentTab==type.code || documentsCtrl.noTabs) }" role="tabpanel" class="tab-pane" id="{{::type.code}}">
 
-            <div ng-if="type.loaded || documentsCtrl.currentTab==type.code">
+            <div ng-if="type.loaded || documentsCtrl.currentTab==type.code || documentsCtrl.noTabs">
+
+                <h3 ng-if="documentsCtrl.noTabs">{{::type.title}}</h3>
 
                 <div style="padding:10px;" ng-if="!type.length">No in-session documents have yet been posted.</div>
 
