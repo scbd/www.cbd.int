@@ -23,11 +23,12 @@
             <div>
                 <span ng-if="::document.status && document.status!='public'"  ng-class="{ 'label-error' : document.status=='held', 'label-error' : document.status=='held' }" >
                     <span ng-switch="::document.status">
-                        <span class="label label-default" style="display:inline-block;" ng-switch-when="awaited">Awaited</span>
-                        <span class="label label-default" style="display:inline-block;" ng-switch-when="received">Received</span>
-                        <span class="label label-info"    style="display:inline-block;" ng-switch-when="reviewed">Reviewed</span>
-                        <span class="label label-primary" style="display:inline-block;" ng-switch-when="edited">Edited</span>
-                        <span class="label label-warning" style="display:inline-block;" ng-switch-when="held">On Hold ✋</span>
+                        <span class="label label-default" style="display:inline-block;" ng-switch-when="awaited" ><i class="fa fa-hourglass-o" aria-hidden="true"></i> Awaited</span>
+                        <span class="label label-default" style="display:inline-block;" ng-switch-when="received"><i class="fa fa-arrow-down" aria-hidden="true"></i> Received</span>
+                        <span class="label label-info"    style="display:inline-block;" ng-switch-when="reviewed"><i class="fa fa-eye" aria-hidden="true"></i> Reviewed</span>
+                        <span class="label label-primary" style="display:inline-block;" ng-switch-when="edited"  ><i class="fa fa-file-text-o" aria-hidden="true"></i> Edited </span>
+                        <span class="label label-warning" style="display:inline-block;" ng-switch-when="held"    ><i class="fa fa-hand-paper-o" aria-hidden="true"></i> On Hold </span>
+                        <span class="label label-success" style="display:inline-block;" ng-switch-when="archived"><i class="fa fa-archive" aria-hidden="true"></i> Archived </span>
                         <span class="label label-danger"  style="display:inline-block;" ng-switch-default>{{::document.status|uppercase}}</span>
                     </span>
                 </span>
