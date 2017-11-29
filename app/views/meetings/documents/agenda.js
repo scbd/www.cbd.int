@@ -17,7 +17,10 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         { code: 'evening',   end : '24:00'}
     ];
 
-	return ["$scope", "$route", "$http", '$q', 'eventId', 'streamId', '$interval', function ($scope, $route, $http, $q, eventId, streamId, $interval) {
+	return ["$scope", "$route", "$http", '$q', '$interval', function ($scope, $route, $http, $q, $interval) {
+
+        var eventId     = $scope.$parent.meeting._id;
+        var streamId    = $scope.$parent.meeting.conference.streamId;
 
         var _ctrl = $scope.agendaCtrl = this;
 

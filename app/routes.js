@@ -116,14 +116,16 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       $("base").attr('href', '/conferences/'); // allow full page reload outside of  /insession/*
 
       routeProvider
-      .when('/',                        { redirectTo: '/2016' })
-      .when('/2016',                    { templateUrl : 'views/meetings/cop13/index.html'})
-      .when('/2016/cop-13-hls/documents',{templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meeting: 'COP13-HLS' }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
-      .when('/2016/cop-13/documents',   { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meeting: 'COP-13'    }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
-      .when('/2016/cp-mop-8/documents', { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meeting: 'MOP-08'    }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
-      .when('/2016/np-mop-2/documents', { templateUrl : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ meeting: 'NP-MOP-02' }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
-      .when('/2016/schedules',          { redirectTo: '/2016/cop-13/documents' });
+      //legacy redirect
+      .when('/2016/cop-13-hls/documents',   { redirectTo    : '/2016/cop13-hls/documents'})
+      .when('/2016/cp-mop-8/documents',     { redirectTo    : '/2016/mop-08/documents'})
 
+      .when('/',                            { redirectTo    : '/sbstta-w8j'})
+      .when('/:code?',                      { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })    
+      .when('/:code/schedules',             { templateUrl   : 'views/meetings/documents/agenda.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/:code/:meeting',              { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/:code/:meeting/documents',    { templateUrl   : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      
     }
 
   //============================================================
