@@ -26,7 +26,7 @@ define(['app','./directives/meeting'], function() { 'use strict';
         //=================================
         function load() {
 
-            return $http.get('/api/v2016/decision-texts', { params : { q : { treaty:treaty.code,  body: body, session: session }, s: { decision:1 }, f: { session: 1, decision: 1 , symbol: 1, title: 1, meeting: 1 } } }).then(function(res){
+            return $http.get('/api/v2016/decision-texts', { params : { q : { treaty:treaty.code,  body: body, session: session }, s: { decision:1 }, f: { session: 1, decision: 1 , symbol: 1, title: 1, meeting: 1, body: 1 } } }).then(function(res){
 
                 $scope.decisions = res.data;
 
