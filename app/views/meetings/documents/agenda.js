@@ -1,4 +1,6 @@
-define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/moment', 'directives/view-injector', 'directives/print-smart/print-smart-checkout', './meeting-document'], function(_, moment, ng) {
+define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/moment', 'directives/view-injector', 
+'directives/print-smart/print-smart-checkout', './meeting-document', 'services/meeting-service'],
+ function(_, moment, ng) {
     //'css!./agenda.css' // moved to template
 
     var CALENDAR_SETTINGS = {
@@ -17,21 +19,29 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         { code: 'evening',   end : '24:00'}
     ];
 
-	return ["$scope", "$route", "$http", '$q', '$interval', function ($scope, $route, $http, $q, $interval) {
+	return ["$scope", "$route", "$http", '$q', '$interval', 'meetingService', function ($scope, $route, $http, $q, $interval, meetingService) {
 
-        var eventId     = $scope.$parent.meeting._id;
-        var streamId    = $scope.$parent.meeting.conference.streamId;
+        var eventId; 
+        var streamId;
+        var timeTimer;
+        var refreshTimer;
 
         var _ctrl = $scope.agendaCtrl = this;
 
         _ctrl.CALENDAR = CALENDAR_SETTINGS;
         _ctrl.expandAll = expandAll;
-        _ctrl.streamId = streamId;
         _ctrl.selectTab = selectTab;
         _ctrl.resolveLiteral = function(value) { return function() { return value; }; };
-
-        var timeTimer    = $interval(updateTime, 30*1000);
-        var refreshTimer = $interval(refresh, 10*60*1000);
+        
+        $q.when(meetingService.getActiveMeeting())
+        .then(function(meeting){
+            eventId     = meeting._id;
+            streamId    = meeting.conference.streamId;
+            _ctrl.streamId = streamId;
+            load();
+            timeTimer    = $interval(updateTime, 30*1000);
+            refreshTimer = $interval(refresh, 10*60*1000);
+        })
 
         $scope.$on("$destroy", function() {
             $interval.cancel(timeTimer);
@@ -39,7 +49,6 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         });
 
         initAffix();
-        load();
 
         //==============================
         //
@@ -63,6 +72,9 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         //
         //==============================
         function load() {
+
+            if(!eventId)
+                return;
 
             if(!_ctrl.types) {
                 _ctrl.types = [{ _id: 'cctv', title: 'Overview' }];
