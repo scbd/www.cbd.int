@@ -237,7 +237,7 @@
                         <td  class="notselected meetingnav-button"  ng-class="{selected:meetingNavCtrl.isSelected('/conferences/'+meeting.code, true)}">
                             <a href="/conferences/{{meeting.code}}" class="link"></a>
                             <i class="fa fa-home fa-2x" ng-if="!meeting.conference.logo"></i>
-                            <img ng-if="meeting.conference.logo" src="/app/images/{{meeting.conference.logo}}" style="width:44px;height:44px">
+                            <img ng-if="meeting.conference.logo" ng-src="/app/images/{{meeting.conference.logo}}" style="width:44px;height:44px">
                         </td>
                         <td ng-if="meeting.conference.showSchedule" class="meetingnav-button" 
                             ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{meeting.code}}/schedules')}">

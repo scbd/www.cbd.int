@@ -2,13 +2,13 @@
 
     app.factory("meetingService", ['$http', '$rootScope', '$q', '$timeout', '$filter', '$route', 
     function ($http, $rootScope, $q, $timeout, $filter, $route) {
-            var meeting;
+        var meeting
             function getActiveMeeting(){
 
                 if(meeting){
-                    var deferred = $q.defer();
-                    $q.resolve(meeting);
-                    return deferred.promise;
+                    var defer = $q.defer();
+                    defer.resolve(meeting);
+                    return defer.promise;
                 }
                 var query = {};
                 if($route.current && $route.current.params && $route.current.params.code){
