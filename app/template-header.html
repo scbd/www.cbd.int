@@ -220,11 +220,18 @@
         .meetingnav-button{
             cursor: pointer;
         }
+        .menu-gradient {
+            background: #bdc3c7; /* For browsers that do not support gradients */    
+            background: -webkit-linear-gradient(left top, #bdc3c7, #2c3e50); /* For Safari 5.1 to 6.0 */
+            background: -o-linear-gradient(bottom right, #bdc3c7, #2c3e50); /* For Opera 11.1 to 12.0 */
+            background: -moz-linear-gradient(bottom right, #bdc3c7, #2c3e50); /* For Firefox 3.6 to 15 */
+            background: linear-gradient(to bottom right, #bdc3c7, #2c3e50); /* Standard syntax (must be last) */
+        }
     </style>
     <!-- NAVIGATION BAR -->
     <div ng-cloak ng-if="meetingNavCtrl.isSelected()" class="meetingnav hidden-print">
-        <div class="container" style="background-color:#063339;">
-            <div class="row" style="background:#4c4c4a">
+        <div class="container">
+            <div class="row menu-gradient">
                 <table class="meetingnav-table">
                     <tr>
                         <td  class="notselected meetingnav-button"  ng-class="{selected:meetingNavCtrl.isSelected('/conferences/'+meeting.code, true)}">
@@ -247,7 +254,7 @@
                             <table style="height:100%;width:100%;font-size:12px;font-weight:bold">
                                 <tr style="height:0px">
                                     <td colspan="4" style="vertical-align:top">
-                                        <div style="background-color:rgba(255,255,255,0.2);font-size:12px;font-weight:normal;height:30px;padding-top:5px;color:#ddd"><b>DOCUMENTS</b>&nbsp; (incl. in-session)</div>
+                                        <div style="border-bottom:1px solid #ffff;ont-size:12px;font-weight:normal;height:30px;padding-top:5px;color:#ddd"><b>DOCUMENTS</b>&nbsp; (incl. in-session)</div>
                                     </td>
                                 </tr>
                                 <tr style="height:90%">
