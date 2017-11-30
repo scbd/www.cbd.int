@@ -120,7 +120,6 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       .when('/2016/cop-13-hls/documents',   { redirectTo    : '/2016/cop13-hls/documents'})
       .when('/2016/cp-mop-8/documents',     { redirectTo    : '/2016/mop-08/documents'})
 
-      .when('/',                            { redirectTo    : '/sbstta-w8j'})
       .when('/:code?',                      { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })    
       .when('/:code/schedules',             { templateUrl   : 'views/meetings/documents/agenda.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting',              { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })

@@ -84,8 +84,7 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
                         //handle legacy redirect for /2016/mop-08/documents
                         if(/^\/conferences\/2016\/mop-08/.test(path) && /^\/conferences\/2016\/cp-mop-08/.test(name))
                             selected = true;
-                            if(exact)
-                            console.log(name, path)
+                                                        
                         if(exact) selected = selected || path === name;
                         else if(name) selected = selected || path.indexOf(name)===0;
                         else     selected = selected || path.indexOf('/conferences/')===0;
