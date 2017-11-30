@@ -1,5 +1,5 @@
 define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/moment', 'directives/view-injector', 
-'directives/print-smart/print-smart-checkout', './meeting-document', 'services/meeting-service'],
+'directives/print-smart/print-smart-checkout', './meeting-document', 'services/conference-service'],
  function(_, moment, ng) {
     //'css!./agenda.css' // moved to template
 
@@ -19,7 +19,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         { code: 'evening',   end : '24:00'}
     ];
 
-	return ["$scope", "$route", "$http", '$q', '$interval', 'meetingService', function ($scope, $route, $http, $q, $interval, meetingService) {
+	return ["$scope", "$route", "$http", '$q', '$interval', 'conferenceService', function ($scope, $route, $http, $q, $interval, conferenceService) {
 
         var eventId; 
         var streamId;
@@ -33,7 +33,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         _ctrl.selectTab = selectTab;
         _ctrl.resolveLiteral = function(value) { return function() { return value; }; };
         
-        $q.when(meetingService.getActiveMeeting())
+        $q.when(conferenceService.getActiveConference())
         .then(function(meeting){
             eventId     = meeting._id;
             streamId    = meeting.conference.streamId;
