@@ -1,8 +1,9 @@
 define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'text!./template-footer.html',
-'lodash', 'services/meeting-service', 'providers/realm'], function(app, ng, toastTemplate,headerHtml, footerHtml,_, meetingYearMapping) { 'use strict';
+'lodash', 'services/conference-service', 'providers/realm'], function(app, ng, toastTemplate,headerHtml, footerHtml,_) {
+    'use strict';
 
-    app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$http', 'meetingService', '$route',
-                             function($rootScope,   $window,   $browser,   $document,   authentication,   $q,toastr,$templateCache, $http, meetingService, $route) {
+    app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$http', 'conferenceService', '$route',
+                             function($rootScope,   $window,   $browser,   $document,   authentication,   $q,toastr,$templateCache, $http, conferenceService, $route) {
         return {
             restrict: 'E',
             template: headerHtml,
@@ -11,7 +12,7 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
 
                 angular.element(document).ready(function () {
 
-                    $q.when(meetingService.getActiveMeeting())
+                    $q.when(conferenceService.getActiveConference())
                     .then(function(meeting){
                         $scope.meeting = meeting;
                     });   
