@@ -53,7 +53,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function load() {
 
-            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1 , agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1 } } }).then(function(res){
+            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache:true, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1 , agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1 } } }).then(function(res){
 
                 meeting = _.defaults(res.data, {
                     code: res.data.EVT_CD,
@@ -62,6 +62,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                     isMontreal : /montr.al.*canada/i.test((res.data.venueText||{}).en||'')
                 });
 
+                _ctrl.noTabs  = meeting.EVT_STY_CD=='BAR';
                 _ctrl.meeting = meeting;
                 _ctrl.agenda  = meeting.agenda;
 

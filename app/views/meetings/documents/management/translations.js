@@ -181,7 +181,7 @@ define(['lodash', 'filters/lstring', 'directives/file'], function(_) {
         //==============================
         function addFile(docId, url) {
 
-            return $http.post('/api/v2016/documents/'+docId+'/files', { url : url }).then(resData).catch(function(err) {
+            return $http.post('/api/v2016/documents/'+docId+'/files', { url : url, generatePdf: true }).then(resData).catch(function(err) {
                 file.error = "ADD_FILE";
                 throw err;
             });
