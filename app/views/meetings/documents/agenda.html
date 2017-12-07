@@ -2,7 +2,6 @@
 
 <div class="btn btn-link pull-right hidden-print" style="color:inherit;cursor:inherit;text-decoration:none" ng-if="agendaCtrl.now"><em>Time at venue:</em> <b>{{agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'H:mm'}}</b></div>
 <div>
-
     <div class="clearfix visible-sm visible-xs"></div>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs hidden-print" role="tablist" style="margin-top:5px">
@@ -22,39 +21,33 @@
             </a>
         </li>
         <!-- <li><a href="#cctv" data-toggle="tab" role="tab">Daily Schedule</a></li> -->
-        <li class="dropdown-toggle hidden-xs">
+        <li class="dropdown-toggle hidden-xs" ng-if="agendaCtrl.meeting.conference.sideEventLinks.length > 0">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
                 Side Events <span class="caret">
             </a>
             <ul class="dropdown-menu">
-                <li><a href="https://www.cbd.int/side-events" target="_self" role="tab">Schedule</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="https://www.cbd.int/cepa/fair/2016/" target="_self" role="tab">CEPA Fair</a></li>
-                <li><a href="http://www.riopavilion.org/" target="_self" role="tab">Rio Conventions Pavilion</a></li>
-                <li><a href="http://cop13.mx/en/expo/" target="_self" role="tab">Mainstreaming Biodiversity Expo</a></li>
+                <li ng-repeat="link in agendaCtrl.meeting.conference.sideEventLinks">
+                    <a href="{{link.url}}" target="_self" role="tab">{{link.title}}</a>
+                </li>
             </ul>
         </li>
-        <li class="dropdown-toggle">
+        <li class="dropdown-toggle"  ng-if="agendaCtrl.meeting.conference.parallelMeetingLinks.length > 0 || ($parent.deviceSize =='xs' && agendaCtrl.meeting.conference.sideEventLinks.length > 0)">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-                <div class="hidden-xs">Parallel Meetings <span class="caret"></span></div>
+                <div class="hidden-xs">Parallel Meetings<span class="caret"></span></div>
                 <div class="visible-xs">Others <span class="caret"></span></div>
             </a>
             <ul class="dropdown-menu">
-                <li class="visible-xs"><a href="https://www.cbd.int/side-events" target="_self" role="tab">Side-Events Schedule</a></li>
-                <li class="visible-xs divider" role="separator"></li>
-                <li class="visible-xs"><a href="https://www.cbd.int/cepa/fair/2016/" target="_self" role="tab">CEPA Fair</a></li>
-                <li class="visible-xs"><a href="http://www.riopavilion.org/" target="_self" role="tab">Rio Conventions Pavilion</a></li>
-                <li class="visible-xs"><a href="http://cop13.mx/en/expo/" target="_self" role="tab">Mainstreaming Biodiversity Expo</a></li>
-                <li class="visible-xs divider" role="separator"></li>
-                <li><a href="http://cop13.mx/en/civil-society-forum/" target="_self" role="tab">Civil Society and Youth Alliances (28-30 Nov)</a></li>
-                <li><a href="https://www.cbd.int/business/meetings-events/2016.shtml" target="_self" role="tab">3rd Science for Biodiversity Forum (1-2 Dec)</a></li>
-                <li><a href="http://cop13.mx/en/science-for-biodiversity-forum/" target="_self" role="tab">Business and Biodiversity Forum (2-3 Dec)</a></li>
-                <!-- <li><a href="https://www.cbd.int/cop2016/parallel-events/" target="_self" role="tab">International Parliamentary Forum (7 Dec, t.b.c.)</a></li> -->
-                <li><a href="https://www.cbd.int/tk/summit.shtml" target="_self" role="tab">Summit Múuch'tambal on Indigenous Experiences (9-11 Dec)</a></li>
-                <li><a href="http://cop13.mx/en/global-biodiversity-summit-cities-subnational-governments/" target="_self" role="tab">5th Global Biodiversity Summit of Cities and Subnational Governments (10-11 Dec)</a></li>
-                <!-- <li><a href="https://www.cbd.int/development/" target="_self" role="tab">Mainstreaming Biodiversity in Development and the SDGs (11 Dec)</a></li> -->
-                <li role="separator" class="divider"></li>
-                <li><a href="https://www.cbd.int/cop2016/parallel-events/" target="_self" role="tab">More...</a></li>
+                <li ng-if="agendaCtrl.meeting.conference.sideEventLinks.length > 0" class="visible-xs" style="padding:10px;">Side-Events</li>
+                <li ng-if="agendaCtrl.meeting.conference.sideEventLinks.length > 0" class="visible-xs divider" role="separator"></li>
+                <li ng-repeat="link in agendaCtrl.meeting.conference.sideEventLinks" class="visible-xs" >
+                    <a href="{{link.url}}" target="_self" role="tab">{{link.title}}</a>
+                </li>
+                <li class="visible-xs divider" role="separator" ng-if="agendaCtrl.meeting.conference.parallelMeetingLinks.length > 0"></li>
+                <li ng-if="agendaCtrl.meeting.conference.parallelMeetingLinks.length > 0" class="visible-xs"  style="padding:10px;">Parallel Meetings </li>
+                <li ng-if="agendaCtrl.meeting.conference.parallelMeetingLinks.length > 0" class="visible-xs divider" role="separator"></li>
+                <li ng-repeat="link in agendaCtrl.meeting.conference.parallelMeetingLinks">
+                    <a href="{{link.url}}" target="_self" role="tab">{{link.title}}</a>
+                </li>                
             </ul>
         </li>
     </ul>

@@ -38,6 +38,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             eventId     = meeting._id;
             streamId    = meeting.conference.streamId;
             _ctrl.streamId = streamId;
+            _ctrl.meeting = meeting;
             load();
             timeTimer    = $interval(updateTime, 30*1000);
             refreshTimer = $interval(refresh, 10*60*1000);
