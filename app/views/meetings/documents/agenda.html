@@ -40,13 +40,13 @@
                 <li ng-if="agendaCtrl.meeting.conference.sideEventLinks.length > 0" class="visible-xs" style="padding:10px;">Side-Events</li>
                 <li ng-if="agendaCtrl.meeting.conference.sideEventLinks.length > 0" class="visible-xs divider" role="separator"></li>
                 <li ng-repeat="link in agendaCtrl.meeting.conference.sideEventLinks" class="visible-xs" >
-                    <a href="{{link.url}}" target="_self" role="tab">{{link.title}}</a>
+                    <a ng-href="{{link.url}}" target="_self" role="tab">{{link.title}}</a>
                 </li>
                 <li class="visible-xs divider" role="separator" ng-if="agendaCtrl.meeting.conference.parallelMeetingLinks.length > 0"></li>
                 <li ng-if="agendaCtrl.meeting.conference.parallelMeetingLinks.length > 0" class="visible-xs"  style="padding:10px;">Parallel Meetings </li>
                 <li ng-if="agendaCtrl.meeting.conference.parallelMeetingLinks.length > 0" class="visible-xs divider" role="separator"></li>
                 <li ng-repeat="link in agendaCtrl.meeting.conference.parallelMeetingLinks">
-                    <a href="{{link.url}}" target="_self" role="tab">{{link.title}}</a>
+                    <a ng-href="{{link.url}}" target="_self" role="tab">{{link.title}}</a>
                 </li>                
             </ul>
         </li>
