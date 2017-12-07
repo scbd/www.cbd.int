@@ -126,9 +126,10 @@ define(['app', 'directives/es-pages/header-nav', 'filters/term', 'filters/moment
 
             if (_ctrl.document.websites) {
                 var sites = _ctrl.document.websites
-                return sites.find(function(element) {
+                var s =sites.find(function(element) {
                     if (element.name === 'website') return true
-                }).url;
+                });
+                if(s)return s.url
             }
             return false;
         }
