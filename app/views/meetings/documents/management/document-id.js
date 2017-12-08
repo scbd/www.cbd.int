@@ -137,9 +137,7 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', './cha
                 _ctrl.meeting = res.data;
 
                 if(documentId=='new')
-                    return {
-                        status:'public'
-                    };
+                    return { };
 
                 return $http.get('/api/v2016/meetings/'+meetingId+'/documents/'+documentId).then(function(res) {
                     return res.data;
