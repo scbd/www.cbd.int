@@ -554,10 +554,10 @@
 
       <div class="col-xs-12 col-md-9">
         <div class="col-xs-12" >
-                <div style='word-wrap: break-word; white-space: pre-wrap;'>{{esEventCtrl.document.description.en}}</div>
+                <div style='word-wrap: break-word; white-space: pre-wrap;' ng-bind-html="esEventCtrl.document.description.en | linky"></div>
                 <span ng-if="esEventCtrl.document.descriptionNative">
                   <hr class="hidden-md hidden-sm hidden-xs" style="margin:0;"/><hr/>
-                 <div style='word-wrap: break-word; white-space: pre-wrap;'> {{esEventCtrl.document.descriptionNative}}</div>
+                 <div style='word-wrap: break-word; white-space: pre-wrap;' ng-bind-html="esEventCtrl.document.descriptionNative | linky"></div>
               </span>
               <br><br>
         </div>
