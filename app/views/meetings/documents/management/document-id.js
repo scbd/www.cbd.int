@@ -39,6 +39,8 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', './cha
 
         var forceUpdate;
 
+        $scope.getFilePatterns = function() { return getFilePatterns(_ctrl && _ctrl.document) };
+
         _ctrl.addItem     = addItem;
         _ctrl.removeItem  = removeItem;
         _ctrl.removeFile  = removeFile;
@@ -388,12 +390,70 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', './cha
                 metadata:    _.cloneDeep(document.metadata||{}),
             };
 
-            doc.metadata.patterns = _(document.files).map('name').map(parseFilename).map('prefix').uniq().sort().value();
+            doc.metadata.patterns = getFilePatterns(document);
 
             if(doc.metadata.message)
                 doc.metadata.message.level = doc.metadata.message.level || null;
 
             return doc;
+        }
+
+        //==============================
+        //
+        //==============================
+        function getFilePatterns(doc) {
+
+            if(!doc)
+                return [];
+
+            var patterns = _(doc.files).map('name').map(parseFilename).map('prefix').uniq().sort().value();
+
+            if(patterns.length)
+                return patterns;
+
+            if(!doc.symbol)
+                return [];
+
+            var symbol = normalizeSymbol(doc.symbol);
+
+            if(symbol.indexOf(_ctrl.meeting.EVT_UN_CD)!=0)
+                return [];
+
+            var parts = _.compact((_ctrl.meeting.normalizedSymbol+'/'+symbol.substr(_ctrl.meeting.EVT_UN_CD.length)).toLowerCase().split('/'));
+
+            var jointed = /^(WG|CRP|L)(\d+)$/i;
+
+            parts = _.map(parts, function(part) {
+
+                if(jointed.test(part)) {
+                    return [
+                        part.replace(jointed, '$1'),
+                        tryPad0(part.replace(jointed, '$2'))
+                    ];
+                }
+
+                return tryPad0(part);
+            });
+
+            return [_.flatten(parts).join('-')];
+        }
+
+        //==============================
+        //
+        //==============================
+        function tryPad0(input) {
+
+            var output = parseInt((input || '').toString());
+
+            if(isNaN(output))
+                return input
+
+            output = output.toString();
+
+            while(output.length<2)
+                output = '0' + output;
+
+            return output;
         }
 
         //==============================
