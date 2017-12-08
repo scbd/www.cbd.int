@@ -136,14 +136,13 @@
 
                                                         </span>
 
-                                                        <span ng-if="res.agenda.showStatus" class="label doc-status" ng-class="{plain : agendaItem.status }" ng-switch="agendaItem.status">
+                                                        <span ng-if="agendaItem.status" class="label doc-status" ng-class="{plain : agendaItem.status }" ng-switch="agendaItem.status">
                                                             <span ng-switch-when="pre-session" title="Pre-Session" style="cursor:help">Pre</span>
                                                             <span ng-switch-when="draft">Draft</span>
                                                             <span ng-switch-when="crp">CRP</span>
                                                             <span ng-switch-when="l">L</span>
                                                         </span>
                                                     </div>
-
                                                     <span class="visible-xs-inline-block label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::agendaItem.item}}</span>
                                                     <span class="title agenda">
                                                         <div class="hidden-xs" ng-if="::type._id=='570fd1552e3fa5cfa61d90f0'" style="font-weight:bold">

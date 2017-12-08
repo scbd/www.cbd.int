@@ -1,4 +1,4 @@
-define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/moment', 'directives/view-injector', 
+define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/moment', 'directives/view-injector',
 'directives/print-smart/print-smart-checkout', './meeting-document', 'services/conference-service'],
  function(_, moment, ng) {
     //'css!./agenda.css' // moved to template
@@ -21,7 +21,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
 
 	return ["$scope", "$route", "$http", '$q', '$interval', 'conferenceService', function ($scope, $route, $http, $q, $interval, conferenceService) {
 
-        var eventId; 
+        var eventId;
         var streamId;
         var timeTimer;
         var refreshTimer;
@@ -32,7 +32,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         _ctrl.expandAll = expandAll;
         _ctrl.selectTab = selectTab;
         _ctrl.resolveLiteral = function(value) { return function() { return value; }; };
-        
+
         $q.when(conferenceService.getActiveConference())
         .then(function(meeting){
             eventId     = meeting._id;
@@ -130,8 +130,9 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                             meeting : meetingCode,
                             documents : _(res.data).map(function(d) {
                                 d.metadata = d.metadata || {};
+                
                                 _.defaults(d.metadata, {
-                                    printable: ['crp', 'limited', 'non-paper'].indexOf(d.type)>=0
+                                    printable: ['crp', 'limited', 'non-paper'].indexOf(d.nature)>=0
                                 });
 
                                 return d;
@@ -158,7 +159,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                 var meetings  = res[0];
                 var meetingDocuments = res[1];
                 var reservationTypes = res[2];
-
+console.log(meetingDocuments);
                 reservations.forEach(function(r) {
 
                     var startOfDay = moment(r.start).tz(event.timezone).startOf('day').toISOString();
@@ -171,15 +172,18 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
 
                         var types;
 
-                        if(rItem.status=='pre-session') types = ['official', 'information'];
-                        if(rItem.status=='draft')       types = ['non-paper'];
-                        if(rItem.status=='crp')         types = ['crp'];
-                        if(rItem.status=='l')           types = ['limited'];
+                        if(rItem.status=='pre-session') types = ['official/', 'information/'];
+                        if(rItem.status=='draft')       types = ['in-session/non-paper'];
+                        if(rItem.status=='crp')         types = ['in-session/crp'];
+                        if(rItem.status=='l')           types = ['in-session/limited'];
 
                         var mAgenda        = _(meetings)        .where({ code:     rItem.meeting }).map('agenda').flatten().first();
                         var mItem          = _(mAgenda.items)   .where({ item:     rItem.item    }).first();
+
                         var mItemDocuments = _(meetingDocuments).where({ meeting : rItem.meeting }).map('documents').flatten().filter(function(d) {
-                            return ~(d.agendaItems||[]).indexOf(rItem.item) && (!types || ~types.indexOf(d.type));
+
+
+                            return ~(d.agendaItems||[]).indexOf(rItem.item) && (!types || ~types.indexOf(d.type+'/'+(d.nature||'')));
                         }).sortBy(function(d){
                             return buildSortKey(d, types);
                         }).value();
