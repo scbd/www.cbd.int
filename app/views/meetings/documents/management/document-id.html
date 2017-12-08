@@ -67,13 +67,17 @@
                 <div class="form-group" ng-class="{ 'has-success' : editCtrl.document.status=='public', 'has-error' : editCtrl.document.status!='public', }">
                     <label class="control-label" for="symbol">Status</label>
                     <select ng-disabled="uploading" class="form-control" ng-model="editCtrl.document.status">
-                        <option value="awaited">Awaited</option>
-                        <option value="received">Received</option>
-                        <option value="reviewed">Reviewed</option>
-                        <option value="edited">Edited</option>
-                        <option value="public">Posted/Public</option>
-                        <option value="held">On Hold ✋</option>
-                        <option value="archived">Archived</option>
+                        <optgroup label="Visible">
+                            <option value="public">Posted/Public</option>
+                        </optgroup>
+                        <optgroup label="Invisible">
+                            <option value="awaited">Awaited</option>
+                            <option value="received">Received</option>
+                            <option value="reviewed">Reviewed</option>
+                            <option value="edited">Edited</option>
+                            <option value="held">On Hold ✋</option>
+                            <option value="archived">Archived</option>
+                        </optgroup>
                     </select>
                 </div>
 
@@ -274,7 +278,12 @@
                     Uploading {{uploadProgress}}%
                 </span>
             </label>
-            <h4 style="color:inherit">Files</h4>
+            <h4 style="color:inherit">
+                Files
+                <small ng-if="getFilePatterns().length">(
+                    <span ng-repeat="p in getFilePatterns()">{{p}}<span ng-if="!$last">, </span></span> )
+                </small>
+            </h4>
 
         </div>
         <div class="panel-body">

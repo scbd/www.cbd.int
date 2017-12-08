@@ -118,8 +118,9 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       routeProvider
       //legacy redirect
       .when('/2016/cop-13-hls/documents',   { redirectTo    : '/2016/cop13-hls/documents'})
+      .when('/2016/cp-mop-08/documents',    { redirectTo    : '/2016/mop-08/documents'})
       .when('/2016/cp-mop-8/documents',     { redirectTo    : '/2016/mop-08/documents'})
-
+      
       .when('/:code?',                      { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })    
       .when('/:code/schedules',             { templateUrl   : 'views/meetings/documents/agenda.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting',              { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })

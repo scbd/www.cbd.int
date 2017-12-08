@@ -1,4 +1,4 @@
-define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sanitizer'], function(app, _, moment) { "use strict";
+define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sanitizer', 'services/conference-service'], function(app, _, moment) { "use strict";
 
     var CALENDAR_SETTINGS = {
         lastDay: '[Yesterday] - dddd D',
@@ -9,7 +9,7 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
         sameElse: 'dddd, D MMMM YYYY'
     };
 
-	return ['$scope', '$http', '$route', '$q', 'streamId', function($scope, $http, $route, $q, defaultStreamId) {
+	return ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService', function($scope, $http, $route, $q, defaultStreamId, conferenceService) {
 
         var _streamData;
 
@@ -31,11 +31,25 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
             var now = new Date();
 
             if($route.current.params.datetime) {
-                now = moment($route.current.params.datetime).toDate();
-                options.params.datetime = moment($route.current.params.datetime).toDate();
+                now = moment.tz($route.current.params.datetime).toDate();
+                options.params.datetime = moment.tz($route.current.params.datetime).toDate();
             }
 
-            $http.get('/api/v2016/cctv-streams/'+streamId, options).then(function(res) {
+            $q.when($route.current.params.code).then(function(code){
+
+                if(!code) return;
+            
+                return conferenceService.getActiveConference(code).then(function(e){
+
+                    now = moment.tz($route.current.params.datetime, e.timezone).toDate();
+                    options.params.datetime = moment.tz($route.current.params.datetime, e.timezone).toDate();
+                })
+
+            }).then(function(){
+                
+                return $http.get('/api/v2016/cctv-streams/'+streamId, options);
+
+            }).then(function(res) {
 
                 _streamData = res.data;
 
