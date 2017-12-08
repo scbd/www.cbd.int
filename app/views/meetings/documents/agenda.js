@@ -129,7 +129,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                             meeting : meetingCode,
                             documents : _(res.data).map(function(d) {
                                 d.metadata = d.metadata || {};
-                
+
                                 _.defaults(d.metadata, {
                                     printable: ['crp', 'limited', 'non-paper'].indexOf(d.nature)>=0
                                 });
@@ -158,7 +158,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                 var meetings  = res[0];
                 var meetingDocuments = res[1];
                 var reservationTypes = res[2];
-console.log(meetingDocuments);
+
                 reservations.forEach(function(r) {
 
                     var startOfDay = moment(r.start).tz(event.timezone).startOf('day').toISOString();
