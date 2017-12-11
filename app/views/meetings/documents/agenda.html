@@ -47,14 +47,14 @@
                 <li ng-if="agendaCtrl.meeting.conference.parallelMeetingLinks.length > 0" class="visible-xs divider" role="separator"></li>
                 <li ng-repeat="link in agendaCtrl.meeting.conference.parallelMeetingLinks">
                     <a ng-href="{{link.url}}" target="_self" role="tab">{{link.title}}</a>
-                </li>                
+                </li>
             </ul>
         </li>
     </ul>
 
     <div  class="pull-right hidden-print" style="padding-top:8px">
         <div id="print-smart-checkout">
-            <print-smart-checkout ng-cloak ng-show="agendaCtrl.types.length && agendaCtrl.currentTab!='cctv'" documents="agendaCtrl.documents|filter:{selected:true}:true"></print-smart-checkout>
+            <print-smart-checkout ng-cloak ng-show="agendaCtrl.types.length && agendaCtrl.currentTab!='cctv'" documents="agendaCtrl.documents|filter:{selected:true}:true" allow-print="agendaCtrl.meetings[0].printSmart"></print-smart-checkout>
         </div>
     </div>
 
