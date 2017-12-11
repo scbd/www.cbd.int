@@ -66,11 +66,9 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 _ctrl.meeting = meeting;
                 _ctrl.agenda  = meeting.agenda;
 
-                if(meeting.insession) { // Quick insession fix
-                    groups['in-session']    .position = 110;
-                    groups['in-session/wg1'].position = 120;
-                    groups['in-session/wg2'].position = 130;
-                }
+                if(meeting.insession)
+                  applyInsessionToGroups()
+
 
                 return meeting;
             }).catch(function(err) {
@@ -111,7 +109,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
                     var docs =  _.where(documents, { displayGroup : group });
 
-                    if(!docs.length)
+                    if((!isGroupInsession(group)) && !docs.length)
                         continue;
 
                     var itemIds = _(docs).map('agendaItems').flatten().uniq().value();
@@ -145,12 +143,38 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         //
         //==============================
+        function applyInsessionToGroups(){
+
+            if(isGroupInSession('in-session'))
+              groups['in-session']    .position = 110;
+
+            if(isGroupInSession('in-session/wg1'))
+              groups['in-session/wg1'].position = 120;
+            else
+              delete(groups['in-session/wg1'])
+
+            if(isGroupInSession('in-session'))
+              groups['in-session/wg2'].position = 130;
+            else
+              delete(groups['in-session/wg2'])
+        }
+
+        //==============================
+        //
+        //==============================
         function normalizeDocument(d){
 
             d.metadata = _.defaults(d.metadata||{}, { printable: ['crp', 'limited', 'non-paper'].indexOf(d.nature)>=0 });
             d.metadata.visible = !!(d.files||[]).length && (d.status||'public')=='public';
 
             return d;
+        }
+
+        //==============================
+        //
+        //==============================
+        function isGroupInsession(groupName){
+            return ~_ctrl.meeting.insession.indexOf(groupName)
         }
 
         //==============================
@@ -183,9 +207,14 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //
         //==============================
         function isInSessionTab(tab) {
-            return !_ctrl.meeting.insession && /^in-session/.test(tab.code);
+            return ~_ctrl.meeting.insession.indexOf(tab.code);
         }
-
+        //==============================
+        //
+        //==============================
+        function isGroupInSession(group) {
+            return ~_ctrl.meeting.insession.indexOf(group);
+        }
         //==============================
         //
         //==============================
@@ -285,7 +314,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function injectTab(code, docs, options){
 
-            if(!docs || !docs.length)
+            if(!isGroupInsession(code) && (!docs || !docs.length))
                 return;
 
             options = _.defaults(options||{}, {
