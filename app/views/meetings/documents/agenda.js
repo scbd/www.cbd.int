@@ -117,8 +117,8 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
 
                 var meetingCodes = _(reservations).map('agenda.items').flatten().map('meeting').uniq().value();
 
-                var meetings = $http.get('/api/v2016/meetings', { params: { q: { EVT_CD: { $in: meetingCodes } }, f : { EVT_TIT_EN:1, EVT_CD:1, print:1 , agenda:1 } } }).then(function(res){
-                    return _.forEach(res.data, function(m){
+                var meetings = $http.get('/api/v2016/meetings', { params: { q: { EVT_CD: { $in: meetingCodes } }, f : { EVT_TIT_EN:1, EVT_CD:1, printSmart:1 , agenda:1 } } }).then(function(res){
+                    return _ctrl.meetings  = _.forEach(res.data, function(m){
                         m.code  = m.EVT_CD;
                         m.title = m.EVT_TIT_EN;
                     });
