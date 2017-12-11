@@ -147,7 +147,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function normalizeDocument(d){
 
-            d.metadata = _.defaults(d.metadata||{}, { printable: ['crp', 'limited', 'non-paper'].indexOf(d.type)>=0 });
+            d.metadata = _.defaults(d.metadata||{}, { printable: ['crp', 'limited', 'non-paper'].indexOf(d.nature)>=0 });
             d.metadata.visible = !!(d.files||[]).length && (d.status||'public')=='public';
 
             return d;
