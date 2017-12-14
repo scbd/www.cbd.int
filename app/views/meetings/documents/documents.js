@@ -9,7 +9,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
     //'css!./agenda.css' // moved to template
     var currentUser;
 
-	return ["$scope", "$route", "$http", '$q', '$location', 'authentication', 'showMeeting', function ($scope, $route, $http, $q, $location, authentication, showMeeting) {
+	return ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting) {
 
         var _ctrl = $scope.documentsCtrl = this;
         var meetingCode = $route.current.params.meeting.toUpperCase();
@@ -166,7 +166,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function updateMaxTabCount(){
 
-            var size = $scope.$root.deviceSize;
+            var size = $rootScope.deviceSize;
 
                  if(size=='xs') _ctrl.maxTabCount = 2;
             else if(size=='sm') _ctrl.maxTabCount = 4;
