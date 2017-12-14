@@ -186,7 +186,8 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                             return buildSortKey(d, types);
                         }).value();
 
-                        mItemDocuments = getItemDocs (rItem, mItemDocuments);
+                        if(rItem.files && rItem.files.length)
+                            mItemDocuments = getItemDocs (rItem, mItemDocuments);
 
                         rItem.prefix    = (mAgenda||{}).prefix;
                         rItem.title     = (mItem||{}).title;
