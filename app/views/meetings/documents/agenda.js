@@ -243,7 +243,8 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
 
               itemDocs.push(f);
             });
-            return itemDocs.reverse()
+
+            return itemDocs
         }
 
         //==============================
