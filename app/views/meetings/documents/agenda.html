@@ -129,7 +129,8 @@
                                                             </span>
 
                                                             <a class="text-muted" ng-if="::agendaItem.documents.length" style="text-decoration:none" href="#">
-                                                                <b>{{::agendaItem.documents.length}} documents</b>
+                                                                <b ng-if="::agendaItem.documents.length==1">{{::agendaItem.documents.length}} document</b>
+                                                                <b ng-if="::agendaItem.documents.length> 1">{{::agendaItem.documents.length}} documents</b>
                                                                 <i class="fa fa-fw fa-caret-up"   ng-show="agendaItem.expanded"></i>
                                                                 <i class="fa fa-fw fa-caret-down" ng-hide="agendaItem.expanded"></i>
                                                             </a>
