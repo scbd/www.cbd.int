@@ -9,7 +9,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
     //'css!./agenda.css' // moved to template
     var currentUser;
 
-	return ["$scope", "$route", "$http", '$q', '$location', 'authentication', 'showMeeting', function ($scope, $route, $http, $q, $location, authentication, showMeeting) {
+	return ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting) {
 
         var _ctrl = $scope.documentsCtrl = this;
         var meetingCode = $route.current.params.meeting.toUpperCase();
@@ -53,7 +53,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function load() {
 
-            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache:true, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1 , agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1 } } }).then(function(res){
+            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache:true, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1 } } }).then(function(res){
 
                 meeting = _.defaults(res.data, {
                     code: res.data.EVT_CD,
@@ -65,6 +65,12 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 _ctrl.noTabs  = meeting.EVT_STY_CD=='BAR';
                 _ctrl.meeting = meeting;
                 _ctrl.agenda  = meeting.agenda;
+
+                if(meeting.insession) { // Quick insession fix
+                    groups['in-session']    .position = 110;
+                    groups['in-session/wg1'].position = 120;
+                    groups['in-session/wg2'].position = 130;
+                }
 
                 return meeting;
             }).catch(function(err) {
@@ -141,7 +147,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function normalizeDocument(d){
 
-            d.metadata = _.defaults(d.metadata||{}, { printable: ['crp', 'limited', 'non-paper'].indexOf(d.type)>=0 });
+            d.metadata = _.defaults(d.metadata||{}, { printable: ['crp', 'limited', 'non-paper'].indexOf(d.nature)>=0 });
             d.metadata.visible = !!(d.files||[]).length && (d.status||'public')=='public';
 
             return d;
@@ -160,13 +166,17 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function updateMaxTabCount(){
 
-            var size = $scope.$root.deviceSize;
+            var size = $rootScope.deviceSize;
 
                  if(size=='xs') _ctrl.maxTabCount = 2;
             else if(size=='sm') _ctrl.maxTabCount = 4;
-            else if(size=='md') _ctrl.maxTabCount = 3;
-            else if(size=='lg') _ctrl.maxTabCount = 5;
-            else                _ctrl.maxTabCount = 6;
+            else if(size=='md') _ctrl.maxTabCount = 5;
+            else if(size=='lg') _ctrl.maxTabCount = 6;
+            else                _ctrl.maxTabCount = 7;
+
+            if(_ctrl.tabs && _ctrl.tabs.length && (_ctrl.tabs.length - _ctrl.maxTabCount) <= 1) {
+                _ctrl.maxTabCount = 999;
+            }
 
             if(_ctrl.tabs && _ctrl.tabs.length && _.findIndex(_ctrl.tabs, isInSessionTab)>0) {
                 _ctrl.maxTabCount = Math.min(_ctrl.maxTabCount, _.findIndex(_ctrl.tabs, isInSessionTab));
@@ -177,7 +187,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //
         //==============================
         function isInSessionTab(tab) {
-            return /^in-session/.test(tab.code);
+            return !_ctrl.meeting.insession && /^in-session/.test(tab.code);
         }
 
         //==============================

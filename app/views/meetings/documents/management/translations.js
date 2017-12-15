@@ -80,17 +80,7 @@ define(['lodash', 'filters/lstring', 'directives/file'], function(_) {
                     file.exist = _(file.document.files).findWhere({ language: file.language, type : file.type });
 
                     if(file.exist) {
-                        return ask(file, "Replace?").then(function(ans){
-
-                            if(!ans) {
-                                file.status = "canceled";
-                                file.error  = "CANCELED";
-                                throw file.error;
-                            }
-
-                            return removeFile(file.document._id, file.exist._id);
-                        });
-
+                        return removeFile(file.document._id, file.exist._id);
                     }
 
                 }).then(function() {

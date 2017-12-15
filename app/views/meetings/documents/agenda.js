@@ -117,8 +117,8 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
 
                 var meetingCodes = _(reservations).map('agenda.items').flatten().map('meeting').uniq().value();
 
-                var meetings = $http.get('/api/v2016/meetings', { params: { q: { EVT_CD: { $in: meetingCodes } }, f : { EVT_TIT_EN:1, EVT_CD:1, print:1 , agenda:1 } } }).then(function(res){
-                    return _.forEach(res.data, function(m){
+                var meetings = $http.get('/api/v2016/meetings', { params: { q: { EVT_CD: { $in: meetingCodes } }, f : { EVT_TIT_EN:1, EVT_CD:1, printSmart:1 , agenda:1 } } }).then(function(res){
+                    return _ctrl.meetings  = _.forEach(res.data, function(m){
                         m.code  = m.EVT_CD;
                         m.title = m.EVT_TIT_EN;
                     });
@@ -181,12 +181,13 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                         var mItem          = _(mAgenda.items)   .where({ item:     rItem.item    }).first();
 
                         var mItemDocuments = _(meetingDocuments).where({ meeting : rItem.meeting }).map('documents').flatten().filter(function(d) {
-
-
                             return ~(d.agendaItems||[]).indexOf(rItem.item) && (!types || ~types.indexOf(d.type+'/'+(d.nature||'')));
                         }).sortBy(function(d){
                             return buildSortKey(d, types);
                         }).value();
+
+                        if(rItem.files && rItem.files.length)
+                            mItemDocuments = getItemDocs (rItem, mItemDocuments);
 
                         rItem.prefix    = (mAgenda||{}).prefix;
                         rItem.title     = (mItem||{}).title;
@@ -228,6 +229,22 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             if(_(res).some({type:'570fd1ac2e3fa5cfa61d90f5'})) _ctrl.types.push({_id:'570fd1ac2e3fa5cfa61d90f5', title:"Plenary" });
             if(_(res).some({type:'58379a233456cf0001550cac'})) _ctrl.types.push({_id:'58379a233456cf0001550cac', title:"Working Group I"  });
             if(_(res).some({type:'58379a293456cf0001550cad'})) _ctrl.types.push({_id:'58379a293456cf0001550cad', title:"Working Group II" });
+        }
+
+        //==============================
+        //
+        //==============================
+        function  getItemDocs (item, allMeetingDocs){
+            var itemDocs = [];
+
+            _.each(item.files,function(file){
+
+              var f = _.find(allMeetingDocs,{_id:file._id})
+
+              itemDocs.push(f);
+            });
+
+            return itemDocs
         }
 
         //==============================
