@@ -170,9 +170,13 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
                  if(size=='xs') _ctrl.maxTabCount = 2;
             else if(size=='sm') _ctrl.maxTabCount = 4;
-            else if(size=='md') _ctrl.maxTabCount = 3;
-            else if(size=='lg') _ctrl.maxTabCount = 5;
-            else                _ctrl.maxTabCount = 6;
+            else if(size=='md') _ctrl.maxTabCount = 5;
+            else if(size=='lg') _ctrl.maxTabCount = 6;
+            else                _ctrl.maxTabCount = 7;
+
+            if(_ctrl.tabs && _ctrl.tabs.length && (_ctrl.tabs.length - _ctrl.maxTabCount) <= 1) {
+                _ctrl.maxTabCount = 999;
+            }
 
             if(_ctrl.tabs && _ctrl.tabs.length && _.findIndex(_ctrl.tabs, isInSessionTab)>0) {
                 _ctrl.maxTabCount = Math.min(_ctrl.maxTabCount, _.findIndex(_ctrl.tabs, isInSessionTab));
