@@ -179,15 +179,28 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
 
                         var mAgenda        = _(meetings)        .where({ code:     rItem.meeting }).map('agenda').flatten().first();
                         var mItem          = _(mAgenda.items)   .where({ item:     rItem.item    }).first();
+                        var mItemDocuments;
 
-                        var mItemDocuments = _(meetingDocuments).where({ meeting : rItem.meeting }).map('documents').flatten().filter(function(d) {
-                            return ~(d.agendaItems||[]).indexOf(rItem.item) && (!types || ~types.indexOf(d.type+'/'+(d.nature||'')));
-                        }).sortBy(function(d){
-                            return buildSortKey(d, types);
-                        }).value();
+                        if(rItem.files && rItem.files.length) {
 
-                        if(rItem.files && rItem.files.length)
-                            mItemDocuments = getItemDocs (rItem, mItemDocuments);
+                            var docsById = _(meetingDocuments).map('documents').flatten().reduce(function(ret, d) {
+                                ret[d._id] = d;
+                                return ret;
+                            }, {});
+
+                            mItemDocuments = _(rItem.files).map(function(f) {
+                                return docsById[f._id];
+                            }).compact().value();
+
+                        }
+                        else {
+
+                            mItemDocuments = _(meetingDocuments).where({ meeting : rItem.meeting }).map('documents').flatten().filter(function(d) {
+                                return ~(d.agendaItems||[]).indexOf(rItem.item) && (!types || ~types.indexOf(d.type+'/'+(d.nature||'')));
+                            }).sortBy(function(d){
+                                return buildSortKey(d, types);
+                            }).value();
+                        }
 
                         rItem.prefix    = (mAgenda||{}).prefix;
                         rItem.title     = (mItem||{}).title;
@@ -229,22 +242,6 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             if(_(res).some({type:'570fd1ac2e3fa5cfa61d90f5'})) _ctrl.types.push({_id:'570fd1ac2e3fa5cfa61d90f5', title:"Plenary" });
             if(_(res).some({type:'58379a233456cf0001550cac'})) _ctrl.types.push({_id:'58379a233456cf0001550cac', title:"Working Group I"  });
             if(_(res).some({type:'58379a293456cf0001550cad'})) _ctrl.types.push({_id:'58379a293456cf0001550cad', title:"Working Group II" });
-        }
-
-        //==============================
-        //
-        //==============================
-        function  getItemDocs (item, allMeetingDocs){
-            var itemDocs = [];
-
-            _.each(item.files,function(file){
-
-              var f = _.find(allMeetingDocs,{_id:file._id})
-
-              itemDocs.push(f);
-            });
-
-            return itemDocs
         }
 
         //==============================

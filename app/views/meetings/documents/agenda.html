@@ -124,7 +124,7 @@
 
                                                         <span class="small">
 
-                                                            <span class="text-muted" ng-if="::agendaItem.status && !agendaItem.documents.length">
+                                                            <span class="text-muted" ng-if="::(agendaItem.status || agendaItem.files.length) && (!agendaItem.documents.length || agendaItem.documents.length!=agendaItem.files.length)">
                                                                 document not yet available<i class="fa fa-fw fa-caret-down" style="visibility:hidden"></i>
                                                             </span>
 
