@@ -1,6 +1,6 @@
 (function(document) { 'use strict';
 
-if(/Safari/.test(navigator.userAgent)) { console.log = function(){}; }
+if(/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) { console.log = function(){}; }
 
 var gitVersion = document.documentElement.attributes['git-version'].value;
 
