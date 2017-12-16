@@ -55,6 +55,7 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', './cha
         _ctrl.close  = close;
         _ctrl.saveLogEntry = saveLogEntry;
         _ctrl.autoGenerateNextSymbol = autoGenerateNextSymbol;
+        _ctrl.onSupersede = onSupersede;
         _ctrl.initials=function(t) { return _.startCase(t).replace(/[^A-Z]/g, ''); };
 
         $scope.$watch('editCtrl.document.type_nature', applyTypeNature);
@@ -269,8 +270,20 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', './cha
             return $http.get('/api/v2016/meetings/'+meetingId+'/documents').then(function(res) {
 
                 _ctrl.meetingDocuments  = _(res.data).forEach(function(d){
-                    d.display = (d.symbol || (d.title||{}).en) + ((d.metadata && d.metadata.superseded && ' - (Superseded by '+d.metadata.superseded+')')||'') ;
+
+                    var parts = [d.symbol];
+
+                    if(d.agendaItems && d.agendaItems.length)
+                        parts.push('['+d.agendaItems.join(', ')+']');
+
+                    if(d.metadata && d.metadata.superseded)
+                        parts.push('(Superseded by '+d.metadata.superseded+')');
+
+                    parts.push((d.title||{}).en);
+
+                    d.display = parts.join(' ');
                     d.sortKey = sortKey(d);
+
                 }).sortBy(sortKey).value();
 
                 _ctrl.meetingDocuments.unshift({ _id : undefined, display : ""});
@@ -284,6 +297,26 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', './cha
                 _ctrl.error = err.data || err;
                 console.error(err);
             });
+        }
+
+        //==============================
+        //
+        //==============================
+        function onSupersede() {
+            console.log(_ctrl.supersede);
+
+            if(_ctrl.document._id) return;
+            if(!_ctrl.supersede)   return;
+
+            var supersede = _.find(_ctrl.meetingDocuments, { _id: _ctrl.supersede });
+
+            console.log(supersede);
+
+            _ctrl.document.title       = _.cloneDeep(supersede.title);
+            _ctrl.document.description = _.cloneDeep(supersede.description);
+            _ctrl.document.agendaItems = _.cloneDeep(supersede.agendaItems);
+
+
         }
 
         //==============================
