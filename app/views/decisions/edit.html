@@ -285,10 +285,7 @@
     				<div class="panel panel-default" style="margin-top:4px;margin-bottom:4px" ng-repeat="item in element.data.decisions">
     		  			<div class="panel-body" style="padding:12px;font-size:0.9em">
     						<button class="btn btn-danger btn-xs pull-right" ng-click="deleteDecision(item)"><i class="fa fa-minus-circle"></i></button>
-    						<a href="#"><b>{{item}}</b></a>
-    						<div style="max-height:50px;overflow:hidden">
-    							TODO
-    						</div>
+                            <decision-reference symbol="item"></decision-reference>
     					</div>
     				</div>
     				<button class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectDecision()">add a decision</button>

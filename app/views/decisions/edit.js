@@ -1,4 +1,4 @@
-define(['lodash', 'angular', 'require', 'rangy', 'jquery', './data/romans', './data/sections', './data/paragraphes', './data/items', './data/sub-items', './data/actors', './data/statuses', 'ngDialog', 'authentication', 'filters/moment', 'filters/lodash', 'filters/lstring', './directives/notification', './directives/meeting-document', './directives/meeting'],
+define(['lodash', 'angular', 'require', 'rangy', 'jquery', './data/romans', './data/sections', './data/paragraphes', './data/items', './data/sub-items', './data/actors', './data/statuses', 'ngDialog', 'authentication', 'filters/moment', 'filters/lodash', 'filters/lstring', './directives/notification', './directives/meeting-document', './directives/meeting', './directives/decision-reference'],
 function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, subItemList, actorList, statusesList) { 'use strict';
 
     return ['$scope', '$http', '$route', '$location', '$filter', '$q', 'ngDialog', function($scope, $http, $route, $location, $filter, $q, ngDialog) {

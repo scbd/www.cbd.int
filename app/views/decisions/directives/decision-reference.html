@@ -1,0 +1,20 @@
+<div>
+    <b><a ng-href="{{url}}" target="_blank">
+        {{decision.symbol || decision.code || symbol}}
+        <span ng-if="decision.elements[0]">
+            <span ng-if="decision.elements[0].section">       {{decision.elements[0].section|uppercase}}</span>
+            <span ng-if="decision.elements[0].paragraph">para {{decision.elements[0].paragraph}}</span>
+            <span ng-if="decision.elements[0].item">          {{decision.elements[0].item|lowercase}})</span>
+            <span ng-if="decision.elements[0].subitem">       {{decision.elements[0].subitem|lowercase}})</span>
+        </span>
+        <i class="fa fa-external-link" aria-hidden="true"></i>
+    </a></b>
+    <div ng-if="::decision">
+    	<div style="max-height:50px;overflow:hidden">
+    		{{decision.title|lstring}}
+    	</div>
+    	<div style="max-height:50px;overflow:hidden">
+    		<i>{{decision.elements[0].text|lstring}}</i>
+    	</div>
+    </div>
+</div>
