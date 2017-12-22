@@ -5,8 +5,11 @@ define(['app','facebook','ngMeta'], function(app) {'use strict';
           version: 'v2.10',
           cookie: true
         });
-        FB.AppEvents.logPageView();
-        FB.XFBML.parse();
+
+        if(FB &&  FB.AppEvents) {
+          FB.AppEvents.logPageView();
+          FB.XFBML.parse();
+        }
 
         app.factory('fb', ['ngMeta',function(ngMeta) {
           var domain = 'www.cbd.int';
