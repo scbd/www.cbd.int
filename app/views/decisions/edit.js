@@ -1,7 +1,7 @@
 define(['lodash', 'angular', 'require', 'rangy', 'jquery', './data/romans', './data/sections', './data/paragraphes', './data/items', './data/sub-items', './data/actors', './data/statuses', 'ngDialog', 'authentication', 'filters/moment', 'filters/lodash', 'filters/lstring', './directives/notification', './directives/meeting-document', './directives/meeting', './directives/decision-reference'],
 function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, subItemList, actorList, statusesList) { 'use strict';
 
-    return ['$scope', '$http', '$route', '$location', '$filter', '$q', 'ngDialog', function($scope, $http, $route, $location, $filter, $q, ngDialog) {
+    return ['$scope', '$http', '$route', '$location', '$filter', '$q', '$compile', 'ngDialog', 'user', '$anchorScroll', function($scope, $http, $route, $location, $filter, $q, $compile, ngDialog, user, $anchorScroll) {
 
         var treaty        = null;
         var body          = $route.current.params.body.toUpperCase();
@@ -23,10 +23,16 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
         var data = { content: 'loading...' };
 
-        $scope.symbol =
+        $scope.canEdit = canEdit();
+        $scope.canView = canView();
+        $scope.canDebug = canDebug();
+        $scope.user   = _.pick(user, ['userID', 'name']);
         $scope.close  = close;
         $scope.save   = save;
         $scope.upload = upload;
+        $scope.comments    = {};
+        $scope.postComment = postComment;
+        $scope.deleteComment = deleteComment;
         $scope.buildFileUrl = buildFileUrl;
         $scope.deleteFile = deleteFile;
         $scope.selectActors = selectActors;
@@ -47,6 +53,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         $scope.actionBox   = surroundSelection;
         $scope.actionUnbox = unsurroundSelection;
         $scope.actionClean = removeSelectionFormatting;
+        $scope.jumpTo      = jumpTo;
+        $scope.initials=function(t) { return _.startCase(t).replace(/[^A-Z]/g, ''); };
+
         $scope.collections = {
             sections    : sectionList,
             paragraphes : paragraphList,
@@ -71,7 +80,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //==============================
         //
         //==============================
-        function close() {
+        function close(hash) {
+            console.log(hash);
+
             $location.url(('/'+body+'/'+session+'/'+decision).toLowerCase());
         }
 
@@ -119,6 +130,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             }).then(function(){
 
                 lazyRetag();
+                loadComments();
 
             }).catch(function(err){
 
@@ -148,17 +160,23 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             $scope.$applyAsync(function(){ lazyRetag(paragraphes); });
         }
 
-
         //===========================
         //
         //===========================
         function save() {
+
+            if(!canEdit()) {
+                alert("Unauthorized to save");
+                throw new Error("unauthorized to save");
+            }
 
             var selectedNode = selectedElement;
 
             selectNode(null);
 
             //Cleanup data;
+
+            clearCommentButton();
 
             $('#content element').each(function() {
                 var info = $(this).data('info');
@@ -172,6 +190,8 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             // Save
 
             data.content = $('#content').html();
+
+            updateCommentButton();
 
             var req = {
                 method : data._id ? 'PUT' : 'POST',
@@ -196,6 +216,106 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
                 alert(err.message||JSON.stringify(err, null, ' '));
             });
+        }
+
+        //===========================
+        //
+        //===========================
+        function loadComments() {
+
+            return $http.get('/api/v2017/comments', { params : { q: { type:'decision', resources: data.code } } }).then(function(res){
+
+                var comments = res.data;
+
+                $scope.comments = {};
+
+                comments.forEach(function(comment){
+                    comment.resources.forEach(function(key){
+                        $scope.comments[key] = $scope.comments[key]||[];
+                        $scope.comments[key].push(comment);
+                    });
+                });
+
+                updateCommentButton();
+
+            }).catch(console.error);
+        }
+
+        //===========================
+        //
+        //===========================
+        function postComment(text) {
+
+            text = (text||'').trim()
+
+            if(!text)
+                return;
+
+            var comment = {
+                type: "decision",
+                resources: [data.code, $scope.element.code],
+                text: text
+            };
+
+            return $http.post('/api/v2017/comments', comment).then(function(res){
+
+                return loadComments();
+
+            }).catch(function(err){
+
+                console.log(err);
+
+            });
+        }
+
+
+        //===========================
+        //
+        //===========================
+        function deleteComment(id) {
+
+            return $http.delete('/api/v2017/comments/'+id).then(function(res){
+
+                return loadComments();
+
+            }).catch(function(err){
+
+                console.log(err);
+
+            });
+
+        }
+
+        //===========================
+        //
+        //===========================
+        function clearCommentButton() {
+            ng.element('#content button.comment').remove();
+        }
+
+        //===========================
+        //
+        //===========================
+        function updateCommentButton() {
+
+            clearCommentButton();
+
+            $scope.$applyAsync(function(){
+
+                ng.element('#content element[data-type^=paragraph]').each(function(){
+
+                    var $this = ng.element(this);
+                    var info =  $this.data('info');
+                    var btn   = $compile('<button class="btn btn-link comment" ng-click="jumpTo(\'comment\')"><span class="fa fa-comment-o"></span><span class="fa fa-comments-o"></span></button>')($scope);
+
+                    if(($scope.comments[info.code]||[]).length)
+                        btn.addClass('has-comments');
+
+                    $this.append(btn);
+                });
+
+            });
+
         }
 
         //===========================
@@ -266,6 +386,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             if(tag) $(selectedElement).attr('data-type', tag);
             else    $(selectedElement).removeAttr('data-type');
 
+            updateCommentButton();
         }
 
         //===========================
@@ -350,6 +471,8 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             var node = this; // jshint ignore: line
 
             event.stopPropagation();
+
+            jumpTo('top');
 
             $scope.$applyAsync(function(){
                 selectNode(node);
@@ -723,6 +846,23 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                     resolve(dialog);
 
                 }, reject);
+            });
+        }
+
+        function canDebug() { return !!_.intersection(user.roles, ["Administrator"]).length; }
+        function canEdit()  { return !!_.intersection(user.roles, ["Administrator","DecisionTrackingTool"]).length; }
+        function canView()  { return !!_.intersection(user.roles, ["Administrator","DecisionTrackingTool", "ScbdStaff"]).length; }
+
+        //==============================
+        //
+        //==============================
+        function jumpTo(hash) {
+
+            if(!hash)
+                return;
+
+            $scope.$applyAsync(function() {
+                $anchorScroll(hash);
             });
         }
     }];

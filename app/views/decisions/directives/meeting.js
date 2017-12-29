@@ -25,11 +25,11 @@ define(['app', 'text!./meeting.html', 'lodash', 'filters/lstring', 'filters/mome
                         return;
                     }
 
-                    $scope.url  = '/meetings/'+encodeURIComponent(symbol);
+                    $scope.url  = '/meetings/'+encodeURIComponent(code);
 
                     $http.get("/api/v2016/meetings/"+code.toUpperCase(), { cache: true, params: { f: { symbol:1, EVT_CD:1, EVT_FROM_DT:1, EVT_TO_DT:1, title:1, dateText:1, venueText:1 } } }).then(function(res){
 
-                        $scope.url  = '/meetings/'+encodeURIComponent(res.data.symbol||res.data.EVT_CD||symbol);
+                        $scope.url  = '/meetings/'+encodeURIComponent(res.data.symbol||res.data.EVT_CD||code);
 
                         $scope.meeting = _.defaults({}, res.data, {
                             symbol:    res.data.EVT_CD,

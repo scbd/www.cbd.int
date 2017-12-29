@@ -62,7 +62,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       //routeProvider.when('/cop', { templateUrl: 'views/decisions/search.html', resolveController: true });
       routeProvider.when('/:body/:session',                      { templateUrl: 'views/decisions/list.html',      resolveController: true });
       routeProvider.when('/:body/:session/:decision',            { templateUrl: 'views/decisions/view.html',      resolveController: true, resolve : { user : currentUser() } } );
-      routeProvider.when('/:body/:session/:decision/edit',       { templateUrl: 'views/decisions/edit.html',      resolveController: true, resolve : { user : securize(["Administrator","DecisionTrackingTool"]) } } );
+      routeProvider.when('/:body/:session/:decision/edit',       { templateUrl: 'views/decisions/edit.html',      resolveController: true, resolve : { user : securize(["Administrator","DecisionTrackingTool", "ScbdStaff"]) } } );
       routeProvider.when('/:body/:session/:decision/:paragraph', { templateUrl: 'views/decisions/paragraph.html', resolveController: true });
       //routeProvider.when('/', { templateUrl: 'views/decisions/search.html', resolveController: true });
   }

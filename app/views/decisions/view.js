@@ -17,7 +17,8 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', './view
             throw 'ONLY "COP" DECISIONS ARE SUPPORTED';
         }
 
-        $scope.canEdit       = canEdit;
+        $scope.canComment    = canComment();
+        $scope.canEdit       = canEdit();
         $scope.edit          = edit;
         $scope.decision      = undefined;
         $scope.documents     = undefined;
@@ -83,14 +84,43 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', './view
 
             }).sortByOrder(['position_i', 'symbol_s'], ['asc', 'asc']).value();
 
+        }).then(function(res){
 
+            if(!canComment())
+                return;
 
-
+            return $http.get('/api/v2017/comments', { params : { q: { type:'decision', resources: decision.code }, c: 1 } }).then(function(res){
+                $scope.hasComments = res && res.data && res.data.count;
+            });
 
         }).catch(function(err){
             $scope.error = (err||{}).data || err;
             console.error($scope.error);
         });
+
+        //===========================
+        //
+        //===========================
+        function loadComments() {
+
+            return $http.get('/api/v2017/comments', { params : { q: { type:'decision', resources: data.code } } }).then(function(res){
+
+                var comments = res.data;
+
+                $scope.comments = {};
+
+                comments.forEach(function(comment){
+                    comment.resources.forEach(function(key){
+                        $scope.comments[key] = $scope.comments[key]||[];
+                        $scope.comments[key].push(comment);
+                    });
+                });
+
+                updateCommentButton();
+
+            }).catch(console.error);
+        }
+
 
         //==============================
         //
@@ -280,12 +310,15 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', './view
         //==============================
         //
         //==============================
-        function edit() {
+        function edit(hash) {
 
-            if(!$scope.canEdit)
+            if(!canEdit() && !canComment())
                 return;
 
             $location.url(('/'+decision.body+'/'+decision.session+'/'+decision.decision+'/edit').toLowerCase());
+
+            if(hash)
+                $location.hash(hash);
         }
 
         //==============================
@@ -293,6 +326,13 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', './view
         //==============================
         function canEdit() {
             return _.intersection(user.roles, ["Administrator","DecisionTrackingTool"]).length>0
+        }
+
+        //==============================
+        //
+        //==============================
+        function canComment() {
+            return canEdit() || _.intersection(user.roles, ["ScbdStaff"]).length>0;
         }
     }];
 });
