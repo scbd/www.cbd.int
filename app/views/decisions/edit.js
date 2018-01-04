@@ -849,7 +849,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         }
 
         function canDebug() { return !!_.intersection(user.roles, ["Administrator"]).length; }
-        function canEdit()  { return !!_.intersection(user.roles, ["Administrator","DecisionTrackingTool"]).length; }
+        function canEdit()  { return !!_.intersection(user.roles, ["DecisionTrackingTool"]).length; }
         function canView()  { return !!_.intersection(user.roles, ["Administrator","DecisionTrackingTool", "ScbdStaff"]).length; }
 
         //==============================
