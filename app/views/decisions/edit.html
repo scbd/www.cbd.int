@@ -193,7 +193,7 @@
 
                 <a name="top"></a>
                 <h4>
-                    Formatting <small ng-if="formattingLocked"><button ng-if="::canEdit" class="btn btn-xs btn-default" ng-click="$parent.formattingLocked=false">edit</button></small>
+                    Formatting <small ng-if="formattingLocked"><button ng-if="::canEdit" class="btn btn-xs btn-default" ng-click="self.formattingLocked=false">edit</button></small>
                 </h4>
                 <div class="row">
                     <div class="col-sm-4">
@@ -266,7 +266,7 @@
                          {{collections.statusesMap[item].title||item}}</i>
                      </div>
 
-    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedStatus" ng-options="status.code as status.title for status in collections.statusesMap" ng-change="selectStatuses()" ng-disabled="element.type!='paragraph'">
+    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="self.selectedStatus" ng-options="status.code as status.title for status in collections.statusesMap" ng-change="selectStatuses()" ng-disabled="element.type!='paragraph'">
                         <option value="">add a status</option>
     				</select>
     		  	</div>
@@ -301,7 +301,7 @@
                          {{collections.actorsMap[item].code||item}}
                      </div>
 
-    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" style="width:100px" id="elementDirectedTo" ng-model="selectedActor" ng-options="actor.code as actor.title group by actor.group for actor in collections.actorsMap" ng-change="selectActors()"  ng-disabled="element.type!='paragraph'">
+    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" style="width:100px" id="elementDirectedTo" ng-model="self.selectedActor" ng-options="actor.code as actor.title group by actor.group for actor in collections.actorsMap" ng-change="selectActors()"  ng-disabled="element.type!='paragraph'">
                         <option value="">add an actor</option>
     				</select>
 
@@ -461,7 +461,7 @@
         <hr/>
         <h4 ng-if="::canDebug">
             Debug
-            <i ng-hide="showDebug" class="fa fa-plus-circle" ng-click="$parent.showDebug=true"></i>
+            <i ng-hide="showDebug" class="fa fa-plus-circle" ng-click="self.showDebug=true"></i>
     	</h4>
         <pre ng-show="showDebug" ng-if="::canDebug">{{element | json}}</pre>
         <br><br>

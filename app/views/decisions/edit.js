@@ -23,6 +23,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
         var data = { content: 'loading...' };
 
+        $scope.self    = $scope;
         $scope.canEdit = canEdit();
         $scope.canView = canView();
         $scope.canDebug = canDebug();
