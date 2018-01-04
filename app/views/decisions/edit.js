@@ -81,9 +81,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //==============================
         //
         //==============================
-        function close(hash) {
-            console.log(hash);
-
+        function close() {
             $location.url(('/'+body+'/'+session+'/'+decision).toLowerCase());
         }
 
@@ -264,7 +262,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             }).catch(function(err){
 
-                console.log(err);
+                console.error(err);
 
             });
         }
@@ -281,7 +279,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             }).catch(function(err){
 
-                console.log(err);
+                console.error(err);
 
             });
 
