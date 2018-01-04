@@ -1,6 +1,6 @@
 define(['app','./directives/meeting'], function() { 'use strict';
 
-    return ['$scope', '$http', '$route', function($scope, $http, $route) {
+    return ['$scope', '$http', '$route', '$location', function($scope, $http, $route, $location) {
 
         var treaty        = null;
         var body          = $route.current.params.body.toUpperCase();
@@ -17,6 +17,7 @@ define(['app','./directives/meeting'], function() { 'use strict';
 
         load();
 
+        $scope.edit = edit;
         $scope.body = body;
         $scope.session = session;
         $scope.$root.page = { title: body+'-'+session+' Decisions' };
@@ -42,6 +43,18 @@ define(['app','./directives/meeting'], function() { 'use strict';
 
                 console.error(err);
             });
+        }
+
+        //==============================
+        //
+        //==============================
+        function edit(decision, hash) {
+
+            $location.url(('/'+decision.body+'/'+decision.session+'/'+decision.decision+'/edit').toLowerCase());
+
+            if(hash)
+                $location.hash(hash);
+
         }
     }];
 });

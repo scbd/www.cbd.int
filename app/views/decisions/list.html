@@ -20,6 +20,7 @@ BODY {
 				<tr>
 					<th>Symbol</th>
 		            <th>Title</th>
+		            <th style="width=1px;">&nbsp;</th>
 				</tr>
 				<tr ng-repeat="d in decisions">
 					<td nowrap>
@@ -28,6 +29,9 @@ BODY {
 		            <td>
 		                <div>{{d.title}}</div>
 					</td>
+		            <td style="width=1px;">
+                        <a href="#" ng-click="edit(d)"><i class="fa" ng-class="{ 'fa-comment-o' : !d.hasComments, 'fa-comments-o' : d.hasComments }" aria-hidden="true"></i></a>
+                    </td>
 				</tr>
 			</table>
 		</div>

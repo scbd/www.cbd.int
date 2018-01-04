@@ -8,8 +8,8 @@
 <div>
 
 	<ol class="breadcrumb">
-		<li ng-if="::(canEdit || canComment)" class="pull-right">
-            <a ng-if="::canComment" href="#" ng-click="edit('comment')"><i class="fa" ng-class="{ 'fa-comment-o' : !hasComments, 'fa-comments-o' : hasComments }" aria-hidden="true"></i></a>
+		<li class="pull-right">
+            <a href="#" ng-click="edit()"><i class="fa" ng-class="{ 'fa-comment-o' : !hasComments, 'fa-comments-o' : hasComments }" aria-hidden="true"></i></a>
             <a ng-if="::canEdit"    href="#" ng-click="edit()"><i class="fa fa-edit" aria-hidden="true"></i></a>
 		</li>
 		<li><a href="#">Home</a></li>

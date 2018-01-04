@@ -312,9 +312,6 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', './view
         //==============================
         function edit(hash) {
 
-            if(!canEdit() && !canComment())
-                return;
-
             $location.url(('/'+decision.body+'/'+decision.session+'/'+decision.decision+'/edit').toLowerCase());
 
             if(hash)
