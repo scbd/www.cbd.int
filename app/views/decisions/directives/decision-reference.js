@@ -52,8 +52,6 @@ define(['app', 'text!./decision-reference.html', 'lodash', 'filters/lstring'], f
 
                         $scope.url = url;
                         $scope.decision = decision;
-
-                        console.log($scope.decision);
                     });
                 }
 
