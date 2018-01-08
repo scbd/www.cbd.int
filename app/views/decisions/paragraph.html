@@ -2,10 +2,10 @@
 <div>
 
 	<ol class="breadcrumb">
-		<li><a href="#">Home</a></li>
-		<li><a href="/decisions/tracking">Decision Tracking Tool</a></li>
-		<li><a href="/decisions/cop/{{session}}">COP-{{session}}</a></li>
-		<li><a href="/decisions/cop/{{session}}/{{decision}}">Decision {{romanize(decision.session)}}/{{decision.decision}}</a></li>
+		<li><a href="/" target="_self">Home</a></li>
+		<li><a href="/decisions" target="_self">Decisions</a></li>
+		<li><a href="/decisions/{{::decision.body|lowercase}}/{{::decision.session}}">{{::decision.body|uppercase}}-{{::decision.session}}</a></li>
+		<li><a href="/decisions/{{::decision.body|lowercase}}/{{::decision.session}}/{{::decision.decision}}">Decision {{romanize(decision.session)}}/{{decision.decision}}</a></li>
 		<li class="active">Paragraph {{paragraph}}</li>
 	</ol>
 
