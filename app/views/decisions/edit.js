@@ -436,7 +436,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             delete $scope.formattingLocked;
 
-            $(selectedElement).attr('data-info', ng.toJson($scope.element));
+            $(selectedElement).attr('data-info', ng.toJson(cleanup($scope.element)));
 
             $(selectedElement).removeClass('selected');
 
@@ -449,7 +449,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             $(selectedElement).addClass('selected');
 
-            $scope.element = $(selectedElement).data('info') || {};
+            $scope.element = cleanup($(selectedElement).data('info') || {});
 
             if(($scope.element.data||{}).type == 'information')
                 $scope.element.data.type = 'informational';
@@ -461,6 +461,38 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             $scope.formattingLocked = !!$scope.element.type;
         }
+
+        //===========================
+        //
+        //===========================
+        function cleanup(element) {
+
+            var data = element && element.data;
+
+            if(data && data.actors)        data.actors        = _(data.actors       ).uniq().value();
+            if(data && data.statuses)      data.statuses      = _(data.statuses     ).uniq().value();
+            if(data && data.decisions)     data.decisions     = _(data.decisions    ).uniq().value();
+            if(data && data.notifications) data.notifications = _(data.notifications).uniq().value();
+            if(data && data.meetings)      data.meetings      = _(data.meetings     ).uniq().map(mettingUrlToCode).value();
+
+            return element;
+        }
+
+        //===========================
+        //
+        //===========================
+        function mettingUrlToCode(m) {
+            console.log(m);
+
+            var meetingUrlRE = /^https?:\/\/www.cbd.int\/meetings\/([a-zA-Z0-9\-]+)$/;
+
+            if(meetingUrlRE.test(m))
+                m = m.replace(meetingUrlRE, '$1');
+            console.log(m);
+
+            return m;
+        }
+
 
         //===========================
         //
@@ -654,8 +686,8 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function selectActors() {
 
-            if($scope.selectedActor && !~($scope.element.data.actors||[]).indexOf($scope.selectedActor)) {
-                $scope.element.data.actors.push($scope.selectedActor);
+            if($scope.element && $scope.element.data && $scope.selectedActor) {
+                $scope.element.data.actors = _.union($scope.element.data.actors||[], [$scope.selectedActor]);
             }
 
             $scope.selectedActor = '';
@@ -669,14 +701,10 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             if(!$scope.element && !$scope.element.data)
                 return;
 
-            var items = $scope.element.data.actors || [];
-            var index = items.indexOf(item);
+            $scope.element.data.actors = _.without($scope.element.data.actors||[], item);
 
-            if(index>=0) {
-                items.splice(index, 1);
-            }
-
-            $scope.element.data.actors = items.length ? items : undefined;
+            if(!$scope.element.data.actors.length)
+                delete $scope.element.data.actors;
         }
 
 
@@ -685,8 +713,8 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function selectStatuses() {
 
-            if($scope.selectedStatus && !~($scope.element.data.statuses||[]).indexOf($scope.selectedStatus)) {
-                $scope.element.data.statuses.push($scope.selectedStatus);
+            if($scope.element && $scope.element.data && $scope.selectedStatus) {
+                $scope.element.data.statuses = _.union($scope.element.data.statuses||[], [$scope.selectedStatus]);
             }
 
             $scope.selectedStatus = '';
@@ -700,13 +728,10 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             if(!$scope.element && !$scope.element.data)
                 return;
 
-            var index, items = $scope.element.data.statuses || [];
+            $scope.element.data.statuses = _.without($scope.element.data.statuses||[], item);
 
-            while((index=items.indexOf(item))>=0)
-                items.splice(index, 1);
-
-            if(!items.length)
-                $scope.element.data.statuses = undefined;
+            if(!$scope.element.data.statuses.length)
+                delete $scope.element.data.statuses;
         }
 
         //===========================
@@ -721,10 +746,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                     if(!res.value)
                         return;
 
-                    $scope.element.data.decisions = $scope.element.data.decisions || [];
-                    $scope.element.data.decisions.push(res.value);
-
-                    $scope.element.data.decisions = _.uniq($scope.element.data.decisions);
+                    $scope.element.data.decisions = _.union($scope.element.data.decisions||[], [res.value]);
                 });
             });
         }
@@ -737,13 +759,10 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             if(!$scope.element && !$scope.element.data)
                 return;
 
-            var index, items = $scope.element.data.decisions || [];
+            $scope.element.data.decisions = _.without($scope.element.data.decisions||[], item);
 
-            while((index=items.indexOf(item))>=0)
-                items.splice(index, 1);
-
-            if(!items.length)
-                $scope.element.data.decisions = undefined;
+            if(!$scope.element.data.decisions.length)
+                delete $scope.element.data.decisions;
         }
 
         //===========================
@@ -758,8 +777,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                     if(!res.value)
                         return;
 
-                    $scope.element.data.notifications = $scope.element.data.notifications || [];
-                    $scope.element.data.notifications.push(res.value.symbol);
+                    $scope.element.data.notifications = _.union($scope.element.data.notifications||[], [res.value.symbol]);
                 });
             });
         }
@@ -772,13 +790,10 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             if(!$scope.element && !$scope.element.data)
                 return;
 
-            var index, items = $scope.element.data.notifications || [];
+            $scope.element.data.notifications = _.without($scope.element.data.notifications||[], item);
 
-            while((index=items.indexOf(item))>=0)
-                items.splice(index, 1);
-
-            if(!items.length)
-                $scope.element.data.notifications = undefined;
+            if(!$scope.element.data.notifications.length)
+                delete $scope.element.data.notifications;
         }
 
         //===========================
@@ -793,8 +808,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                     if(!res.value)
                         return;
 
-                    $scope.element.data.meetings = $scope.element.data.meetings || [];
-                    $scope.element.data.meetings.push(res.value.symbol);
+                        console.log(res.value);
+
+                    $scope.element.data.meetings = _.union($scope.element.data.meetings||[], [mettingUrlToCode(res.value.symbol)]);
                 });
             });
         }
@@ -804,16 +820,14 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function deleteMeeting(item) {
 
+
             if(!$scope.element && !$scope.element.data)
                 return;
 
-            var index, items = $scope.element.data.meetings || [];
+            $scope.element.data.meetings = _.without($scope.element.data.meetings||[], item);
 
-            while((index=items.indexOf(item))>=0)
-                items.splice(index, 1);
-
-            if(!items.length)
-                $scope.element.data.meetings = undefined;
+            if(!$scope.element.data.meetings.length)
+                delete $scope.element.data.meetings;
         }
 
         //===========================
