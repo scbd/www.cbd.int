@@ -1,18 +1,23 @@
 define(['jquery'], function($) {
 
-    return ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+    return ['$scope', '$http', '$timeout', '$q', function ($scope, $http, $timeout, $q) {
 
         $timeout(function(){ $('form #symbol').focus(); }, 100);
 
+        var searching = null;
+
         $scope.search = search;
-        $scope.save = save;
+        $scope.save = function() { $q.when(searching).then(save); } ;
         $scope.canSave = canSave;
         $scope.isUrl= isUrl;
+
 
 		//==========================
 		//
 		//==========================
         function search(text) {
+
+            searching = null;
 
             if(!text) {
                 $scope.results = null;
@@ -28,8 +33,9 @@ define(['jquery'], function($) {
                 rows: 1
             };
 
-            $http.get("/api/v2013/index", { params : qsParams, cache : true }).then(function(res){
+            searching = $http.get("/api/v2013/index", { params : qsParams, cache : true }).then(function(res){
 
+                searching = null;
                 var results = res.data.response;
 
                 $scope.results = results;
