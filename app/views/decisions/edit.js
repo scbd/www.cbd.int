@@ -482,13 +482,11 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //
         //===========================
         function mettingUrlToCode(m) {
-            console.log(m);
 
             var meetingUrlRE = /^https?:\/\/www.cbd.int\/meetings\/([a-zA-Z0-9\-]+)$/;
 
             if(meetingUrlRE.test(m))
                 m = m.replace(meetingUrlRE, '$1');
-            console.log(m);
 
             return m;
         }
@@ -807,8 +805,6 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
                     if(!res.value)
                         return;
-
-                        console.log(res.value);
 
                     $scope.element.data.meetings = _.union($scope.element.data.meetings||[], [mettingUrlToCode(res.value.symbol)]);
                 });
