@@ -4,7 +4,10 @@
     <b>{{notification.symbol||symbol}}</b> <i ng-if="::notification.number">({{::notification.number}})</i>
     <div style="max-height:50px;overflow:hidden" title="{{::notification.title|lstring}}" ng-bind-html="::notification.title|lstring">
     </div>
-    <i ng-if="::notification.date" class="fa fa-calendar fa-fw"></i> {{::notification.date|moment:'utc'|moment:'format':'LL'}}
+
+    <div ng-if="::notification.date">
+        <i class="fa fa-calendar fa-fw"></i> {{::notification.date|moment:'utc'|moment:'format':'LL'}}
+    </div>
 
     <document-files class="hidden-xs" files="::notification.files" style="padding-top:10px"></document-files>
 </div>
