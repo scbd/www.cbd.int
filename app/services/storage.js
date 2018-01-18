@@ -543,7 +543,7 @@
                         continue;
 
                     bExist = true;
-                    if(params[key])
+                    if(params[key] !== undefined)
                       qMatches[i].value = params[key].toString();
                 }
 
