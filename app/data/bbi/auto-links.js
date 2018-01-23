@@ -1,4 +1,4 @@
-define(['text!./auto-links.json'], function(rawData) {
+define(['text-loader!./auto-links.json'], function(rawData) {
 
     try
     {

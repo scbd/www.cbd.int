@@ -1,4 +1,4 @@
-define(['app', 'text!./legend42.html','directives/aichi-targets/progress-pie','directives/aichi-targets/national-targets-map'], function(app, templateHtml) {
+define(['app', 'text-loader!./legend42.html','directives/aichi-targets/progress-pie','directives/aichi-targets/national-targets-map'], function(app, templateHtml) {
     'use strict';
 
     //============================================================

@@ -1,10 +1,11 @@
-define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
+define(['lodash', 'angular', 'boot', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
     // Prefetch optimization
-    'directives/print-smart/print-smart-checkout', 'text!directives/print-smart/print-smart-checkout.html',
+    'directives/print-smart/print-smart-checkout', 'text-loader!directives/print-smart/print-smart-checkout.html',
     'ngDialog','directives/view-injector',
     'moment', 'moment-timezone', 'filters/moment',
-    'directives/checkbox', 'text!directives/checkbox.html',
+    'directives/checkbox', 'text-loader!directives/checkbox.html',
     'views/meetings/documents/meeting-document',
+    'views/meetings/documents/management/translations'
 ], function(_, ng) {
     //'css!./agenda.css' // moved to template
     var currentUser;

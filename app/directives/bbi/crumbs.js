@@ -1,4 +1,4 @@
-define(['app', 'text!./crumbs.html'], function(app, templateHtml) { 'use strict';
+define(['app', 'text-loader!./crumbs.html'], function(app, templateHtml) { 'use strict';
 
     //============================================================
     //

@@ -1,6 +1,6 @@
-define(['app', 'text!./forum-details-directive.html',
-    'text!./forum-post-directive.html', 'text!./file-upload-directive.html',
-    'text!./thread-list-directive.html', 'text!./post-list-directive.html',
+define(['app', 'text-loader!./forum-details-directive.html',
+    'text-loader!./forum-post-directive.html', 'text-loader!./file-upload-directive.html',
+    'text-loader!./thread-list-directive.html', 'text-loader!./post-list-directive.html',
     'lodash',
 ],
 function(app, details, forumPostTemplate, kmUploadTemplate, forumThreadsTemplate, postsTemplate, _) { 'use strict';

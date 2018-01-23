@@ -1,4 +1,4 @@
-define(['app','text!./filter-indicator.html'], function(app,template) {
+define(['app','text-loader!./filter-indicator.html'], function(app,template) {
   'use strict';
   app.directive('filterIndicator', [function() {
     return {

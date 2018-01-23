@@ -1,5 +1,5 @@
-define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'text!./template-footer.html',
-'lodash', 'services/conference-service', 'providers/realm'], function(app, ng, toastTemplate,headerHtml, footerHtml,_) {
+define(['app', 'angular','text-loader!./toast.html', 'text-loader!./template-header.html', 'text-loader!./template-footer.html',
+'lodash', 'services/conference-service', 'providers/realm', 'boot'], function(app, ng, toastTemplate,headerHtml, footerHtml,_) {
     'use strict';
 
     app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$http', 'conferenceService', '$route',
@@ -15,7 +15,7 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
                     $q.when(conferenceService.getActiveConference())
                     .then(function(meeting){
                         $scope.meeting = meeting;
-                    });   
+                    });
 
                 });
                 $templateCache.put("directives/toast/toast.html", toastTemplate);
@@ -30,26 +30,26 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
                     if (!user)
                         return;
 
-                    require(["_slaask"], function(_slaask) {
-
-                        if (user.isAuthenticated) {
-                            _slaask.identify(user.name, {
-                                'user-id' : user.userID,
-                                'name' : user.name,
-                                'email' : user.email,
-                            });
-
-                            if(_slaask.initialized) {
-                                _slaask.slaaskSendUserInfos();
-                            }
-                        }
-
-                        if(!_slaask.initialized) {
-                            _slaask.init('ae83e21f01860758210a799872e12ac4');
-                            _slaask.initialized = true;
-                            killWatch();
-                        }
-                    });
+                    // require(["_slaask"], function(_slaask) {
+                    //
+                    //     if (user.isAuthenticated) {
+                    //         _slaask.identify(user.name, {
+                    //             'user-id' : user.userID,
+                    //             'name' : user.name,
+                    //             'email' : user.email,
+                    //         });
+                    //
+                    //         if(_slaask.initialized) {
+                    //             _slaask.slaaskSendUserInfos();
+                    //         }
+                    //     }
+                    //
+                    //     if(!_slaask.initialized) {
+                    //         _slaask.init('ae83e21f01860758210a799872e12ac4');
+                    //         _slaask.initialized = true;
+                    //         killWatch();
+                    //     }
+                    // });
                 }, 1000));
                 updateSize();
 
@@ -81,11 +81,11 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
 
                         var selected = false;
                         var path = basePath + $location.path();
-      
+
                         //handle legacy redirect for /2016/mop-08/documents
                         if(/^\/conferences\/2016\/mop-08/.test(path) && /^\/conferences\/2016\/cp-mop-08/.test(name))
                             selected = true;
-                                                        
+
                         if(exact) selected = selected || path === name;
                         else if(name) selected = selected || path.indexOf(name)===0;
                         else     selected = selected || path.indexOf('/conferences/')===0;
@@ -95,21 +95,21 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
                     isMajorEventSelected : function(){
                         if(!$scope.meeting)
                             return;
-                        var isSelected = false; 
-                        
+                        var isSelected = false;
+
                         for(var i=0; i<$scope.meeting.conference.events.length; i++){
                             isSelected = $scope.meetingNavCtrl.isSelected('/conferences/'+$scope.meeting.code+
                                         '/'+$scope.meeting.conference.events[i].code+'/')
                             if(isSelected)
                                 break;
-                        }                
+                        }
                         return isSelected;
                     },
                     hash : function() {
                         return $location.hash();
                     }
-                };                
-                
+                };
+
                 //============================================================
                 //
                 //

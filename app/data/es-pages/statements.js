@@ -1,4 +1,4 @@
-define(['text!./statements.json'], function(rawData) {
+define(['text-loader!./statements.json'], function(rawData) {
 
     try
     {

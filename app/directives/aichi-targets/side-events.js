@@ -1,4 +1,4 @@
-define(['app','lodash', 'text!./side-events.html','data/aichi-targets/targets','directives/aichi-targets/sorter-mongo','directives/aichi-targets/pagination','providers/locale','services/mongo-storage','filters/moment'], function(app,_, templateHtml,targetsData) {
+define(['app','lodash', 'text-loader!./side-events.html','data/aichi-targets/targets','directives/aichi-targets/sorter-mongo','directives/aichi-targets/pagination','providers/locale','services/mongo-storage','filters/moment'], function(app,_, templateHtml,targetsData) {
     'use strict';
 
     //============================================================

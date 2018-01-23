@@ -1,5 +1,5 @@
-define(['angular', 'ngSanitize','toastr','ngMeta'], function(angular) { 'use strict';
-
+define(['angular-flex', 'ngSanitize','toastr','ngMeta'], function(angular) { 'use strict';
+console.log('app');
     var app = angular.module('app', angular.defineModules(['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','ngMeta']));
 
     app.config(['$httpProvider','toastrConfig', function($httpProvider,toastrConfig) {

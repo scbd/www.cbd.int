@@ -1,4 +1,4 @@
-define(['app', 'text!./menu.html','lodash','providers/locale'], function(app, templateHtml,_) { 'use strict';
+define(['app', 'text-loader!./menu.html','lodash','providers/locale'], function(app, templateHtml,_) { 'use strict';
 
     //============================================================
     //

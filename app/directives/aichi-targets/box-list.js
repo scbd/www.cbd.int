@@ -1,4 +1,4 @@
-define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','directives/aichi-targets/sorter','directives/aichi-targets/pagination','providers/locale'], function(app,_, templateHtml,targetsData) {
+define(['app','lodash', 'text-loader!./box-list.html','data/aichi-targets/targets','directives/aichi-targets/sorter','directives/aichi-targets/pagination','providers/locale'], function(app,_, templateHtml,targetsData) {
     'use strict';
 
     //============================================================

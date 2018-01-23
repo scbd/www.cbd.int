@@ -7,7 +7,7 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
         var domain = window.location.hostname.replace(/[^\.]+\./, '');
 
         if(domain=='localhost')
-            domain = 'cbddev.xyz';
+            domain = 'cbd.int';
 
         return 'https://accounts.'+domain;
 

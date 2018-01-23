@@ -1,4 +1,4 @@
-define(['app', 'text!./meeting.html', 'lodash', 'filters/lstring', 'filters/moment'], function(app, template, _) { 'use strict';
+define(['app', 'text-loader!./meeting.html', 'lodash', 'filters/lstring', 'filters/moment'], function(app, template, _) { 'use strict';
 
 	return app.directive('decisionMeeting', ['$http', function($http) {
 		return {

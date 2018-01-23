@@ -1,4 +1,4 @@
-define(['app', 'text!./notification.html', 'lodash', 'moment', 'filters/lstring', 'directives/meetings/documents/document-files'], function(app, template, _) { 'use strict';
+define(['app', 'text-loader!./notification.html', 'lodash', 'moment', 'filters/lstring', 'directives/meetings/documents/document-files'], function(app, template, _) { 'use strict';
 
 	return app.directive('decisionNotification', ['$http', '$q', function($http, $q) {
 		return {

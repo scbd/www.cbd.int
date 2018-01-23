@@ -1,4 +1,4 @@
-FROM node:4.8.7-alpine
+FROM node:8-alpine
 
 RUN apk update  -q && \
     apk upgrade -q && \
@@ -6,9 +6,11 @@ RUN apk update  -q && \
 
 WORKDIR /usr/src/app
 
-COPY package.json bower.json .bowerrc .npmrc ./
+COPY package.json .npmrc ./
 
 RUN npm install -q
+RUN npm build -q
+
 
 COPY . ./
 

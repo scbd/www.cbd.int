@@ -1,4 +1,4 @@
-define(['text!./pagination.html', 'app'], function(template, app) {
+define(['text-loader!./pagination.html', 'app'], function(template, app) {
     'use strict';
     app.directive('pagination', [function() {
         return {

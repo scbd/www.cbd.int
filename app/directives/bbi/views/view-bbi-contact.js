@@ -1,4 +1,4 @@
-define(['text!./view-bbi-contact.html', 'app', 'angular', 'lodash', 'authentication',
+define(['text-loader!./view-bbi-contact.html', 'app', 'angular', 'lodash', 'authentication',
 	'services/editFormUtility',
 	'services/storage',
 	'services/workflows',

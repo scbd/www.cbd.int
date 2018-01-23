@@ -1,4 +1,4 @@
-define(['app', 'text!./fisheye.html', 'angular', 'interface'], function(app, templateHtml) {
+define(['app', 'text-loader!./fisheye.html', 'angular', 'interface'], function(app, templateHtml) {
     'use strict';
 
     //============================================================

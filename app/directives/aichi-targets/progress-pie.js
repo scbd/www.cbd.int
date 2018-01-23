@@ -1,4 +1,4 @@
-define(['app', 'lodash','text!./progress-pie.html',
+define(['app', 'lodash','text-loader!./progress-pie.html',
     'amchart',
     'shim!amchart/pie[amchart]',
     'shim!amchart/themes/light[amchart]'

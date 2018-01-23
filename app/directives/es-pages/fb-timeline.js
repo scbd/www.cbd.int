@@ -1,6 +1,5 @@
-define(['app', 'text!./fb-timeline.html', 'services/fb'], function(app, html) {
-  'use strict';
-  var _savedHtml;
+define(['app', 'text-loader!./fb-timeline.html','services/fb'], function(app, html) { 'use strict';
+var _savedHtml;
 
   return app.directive('fbTimeline', ['$timeout', '$compile', function($timeout, $compile) {
     return {

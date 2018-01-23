@@ -2,17 +2,42 @@
   "name": "www-cbd-int",
   "description": "Website of the Convention on Biological Diversity",
   "dependencies": {
-    "bower": "1.7.9",
+    "angular": "^1.5.6",
+    "angular-animate": "^1.5.6",
+    "angular-cookies": "^1.5.6",
+    "angular-flex": "git://github.com/scbd/angular-flex.git#1.0.4",
+    "angular-route": "^1.5.6",
+    "angular-sanitize": "^1.5.6",
+    "angular-toastr": "^1.7.0",
+    "animate.css": "^3.5.2",
+    "bootstrap": "^3.3.6",
+    "compression": "^1.7.1",
+    "dragula": "^3.7.2",
     "ejs": "2.5.5",
+    "exports-loader": "^0.6.4",
+    "expose-loader": "^0.7.4",
     "express": "4.13.4",
+    "flag-icon-css": "^2.9.0",
+    "font-awesome": "^4.7.0",
     "http-proxy": "1.13.3",
+    "imports-loader": "^0.7.1",
+    "jquery": "^2.2.4",
+    "lodash": "^3.10.1",
+    "moment-timezone": "^0.5.4",
     "morgan": "1.7.0",
-    "request": "^2.81.0"
+    "ng-dialog": "^0.6.1",
+    "ng-meta": "^1.0.2",
+    "request": "^2.81.0",
+    "text-loader": "0.0.1"
   },
   "license": "MIT",
   "private": true,
   "repository": "scbd/www.cbd.int",
   "scripts": {
-    "postinstall": "./node_modules/.bin/bower install --allow-root -q"
+    "start": "webpack --config webpack.config.js",
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "webpack": "^3.10.0"
   }
 }

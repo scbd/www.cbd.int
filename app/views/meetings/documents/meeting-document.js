@@ -1,4 +1,4 @@
-define(['app', 'lodash', 'text!./meeting-document.html', 'directives/meetings/documents/document-files', 'directives/checkbox', 'filters/html-sanitizer'], function(app, _, html) { 'use strict';
+define(['app', 'lodash', 'text-loader!./meeting-document.html', 'directives/meetings/documents/document-files', 'directives/checkbox', 'filters/html-sanitizer'], function(app, _, html) { 'use strict';
 
     var ONLINE = 'text/html';
     var MIMES = {

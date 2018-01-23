@@ -1,4 +1,4 @@
-define(['text!./links-about-platform.json'], function(rawData) {
+define(['text-loader!./links-about-platform.json'], function(rawData) {
   // ,
   // {
   //     "title": {

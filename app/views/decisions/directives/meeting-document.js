@@ -1,4 +1,4 @@
-define(['app', 'text!./meeting-document.html', 'filters/lstring', 'directives/meetings/documents/document-files'], function(app, template) { 'use strict';
+define(['app', 'text-loader!./meeting-document.html', 'filters/lstring', 'directives/meetings/documents/document-files'], function(app, template) { 'use strict';
 
 	return app.directive('decisionMeetingDocument', ['$http', '$q', function($http, $q) {
 		return {

@@ -1,4 +1,4 @@
-define(['app', 'angular', 'jquery', 'lodash', 'text!./km-select.html',
+define(['app', 'angular', 'jquery', 'lodash', 'text-loader!./km-select.html',
        'providers/locale','filters/truncate','filters/lstring'],
 function(app, angular, $, _, template) {
   //============================================================

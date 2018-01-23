@@ -1,4 +1,4 @@
-define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular', 'ngDialog', 'filters/lstring'], function(app, templateHtml, require, _, ng) {
+define(['app', 'text-loader!./print-smart-checkout.html', 'require', 'lodash', 'angular', 'ngDialog', 'filters/lstring'], function(app, templateHtml, require, _, ng) {
 
     var PDF    = 'application/pdf';
     var ONLINE = 'text/html';
@@ -191,7 +191,7 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
 
             return $q(function(resolve, reject) {
 
-                require(['text!'+dialog+'.html', dialog], function(template, controller) {
+                require(['text-loader!'+dialog+'.html', dialog], function(template, controller) {
 
                     options.plain = true;
                     options.template = template;

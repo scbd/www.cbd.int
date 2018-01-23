@@ -1,4 +1,4 @@
-define(['text!./edit-bbi-profile.html', 'text!./bbi-records-dialog.html', 'text!./first-provider-dialog.html', 'app', 'angular', 'lodash', 'authentication',
+define(['text-loader!./edit-bbi-profile.html', 'text-loader!./bbi-records-dialog.html', 'text-loader!./first-provider-dialog.html', 'app', 'angular', 'lodash', 'authentication',
 	'services/editFormUtility',
 	'services/storage',
 	'services/workflows',

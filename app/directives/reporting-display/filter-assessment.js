@@ -1,4 +1,4 @@
-define(['text!./filter-assessment.html', 'app', 'underscore'], function(template, app, _) {
+define(['text-loader!./filter-assessment.html', 'app', 'underscore'], function(template, app, _) {
   'use strict';
 
   app.directive('filterAssessment', ['$http',  '$location', function($http,  $location) {

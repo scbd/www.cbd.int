@@ -758,7 +758,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             return $q(function(resolve, reject) {
 
-                require(['text!'+dialog+'.html', dialog], function(template, controller) {
+                require(['text-loader!'+dialog+'.html', dialog], function(template, controller) {
 
                     options.plain = true;
                     options.template = template;

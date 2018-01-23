@@ -1,4 +1,5 @@
 'use strict'; // jshint node: true, browser: false, esnext: true
+var compression = require('compression')
 var express     = require('express');
 var httpProxy   = require('http-proxy');
 var prerender   = require('./prerender');
@@ -19,7 +20,8 @@ console.info(`info: API address: ${apiUrl}`);
 console.info(`info: IS DEV: ${process.env.IS_DEV}`);
 // Configure options
 
-app.set('views', `${__dirname}/app`);
+app.use(compression());
+app.set('views', `${__dirname}/dist`);
 app.set('view engine', 'ejs');
 app.use(require('morgan')('dev'));
 app.use(function(req, res, next) {  if(req.url.indexOf(".geojson")>0) res.contentType('application/json'); next(); } ); // override contentType for geojson files
@@ -29,7 +31,9 @@ app.use(function(req, res, next) {  if(req.url.indexOf(".geojson")>0) res.conten
 app.use('/app/images/p03qv92p.jpg', express.static(__dirname + '/app/images/p03qv92p.jpg',{ maxAge: 365*24*60*60*1000 }));
 
 app.use('/favicon.png',   express.static(__dirname + '/app/images/favicon.png', { maxAge: 24*60*60*1000 }));
+app.use('/app/dist',      express.static(__dirname + '/dist',                   { setHeaders: setCustomCacheControl }));
 app.use('/app',           express.static(__dirname + '/app',                    { setHeaders: setCustomCacheControl }));
+app.use('/app/libs',      express.static(__dirname + '/node_modules',           { setHeaders: setCustomCacheControl }));
 app.all('/app/*',         function(req, res) { res.status(404).send(); } );
 
 app.get('/doc/*', function(req, res) { proxy.web(req, res, { target: "https://www.cbd.int:443", secure: false } ); } );

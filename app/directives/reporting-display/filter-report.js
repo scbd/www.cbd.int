@@ -1,4 +1,4 @@
-define(['text!./filter-report.html', 'app', 'underscore'], function(template, app, _) {
+define(['text-loader!./filter-report.html', 'app', 'underscore'], function(template, app, _) {
   'use strict';
   app.directive('filterReport', ['$http',  '$location', function($http, $location) {
     return {

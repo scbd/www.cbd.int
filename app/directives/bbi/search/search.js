@@ -1,4 +1,4 @@
-define(['text!./search.html',
+define(['text-loader!./search.html',
 		'app',
 		'jquery',
 		'lodash',

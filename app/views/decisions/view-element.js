@@ -1,4 +1,4 @@
-define(['app', 'text!./view-element.html'], function(app, html) { 'use strict';
+define(['app', 'text-loader!./view-element.html'], function(app, html) { 'use strict';
 
 	return app.directive('info', [function() {
 		return {

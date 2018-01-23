@@ -1,4 +1,4 @@
-define(['text!./edit-bbi-assistance.html', 'text!./bbi-records-dialog.html', 'text!./first-request-dialog.html', 'app', 'angular', 'lodash', 'authentication', 'ngSmoothScroll',
+define(['text-loader!./edit-bbi-assistance.html', 'text-loader!./bbi-records-dialog.html', 'text-loader!./first-request-dialog.html', 'app', 'angular', 'lodash', 'authentication', 'ngSmoothScroll',
 	'services/editFormUtility',
 	'services/mongo-storage',
 	'services/storage',

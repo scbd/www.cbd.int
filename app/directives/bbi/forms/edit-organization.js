@@ -1,4 +1,4 @@
-define(['text!./edit-organization.html', 'text!./bbi-records-dialog.html','app', 'angular', 'lodash', 'gmapsapi', 'authentication',
+define(['text-loader!./edit-organization.html', 'text-loader!./bbi-records-dialog.html','app', 'angular', 'lodash', 'gmapsapi', 'authentication',
 'services/editFormUtility',
 'services/storage',
 'services/workflows',

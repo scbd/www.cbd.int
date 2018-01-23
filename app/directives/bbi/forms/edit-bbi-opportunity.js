@@ -1,4 +1,4 @@
-define(['text!./edit-bbi-opportunity.html', 'text!./bbi-records-dialog.html', 'text!./first-opportunity-dialog.html', 'app', 'angular', 'lodash', 'moment', 'authentication',
+define(['text-loader!./edit-bbi-opportunity.html', 'text-loader!./bbi-records-dialog.html', 'text-loader!./first-opportunity-dialog.html', 'app', 'angular', 'lodash', 'moment', 'authentication',
 	'services/editFormUtility',
 	'services/storage',
 	'services/workflows',

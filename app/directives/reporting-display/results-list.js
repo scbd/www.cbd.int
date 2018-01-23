@@ -1,4 +1,4 @@
-define(['text!./results-list.html', 'app', 'underscore'], function(template, app, _) {
+define(['text-loader!./results-list.html', 'app', 'underscore'], function(template, app, _) {
   'use strict';
 
   app.directive('resultsList', ['$location',function($location) {

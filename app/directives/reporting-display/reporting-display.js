@@ -1,4 +1,4 @@
-define(['text!./reporting-display.html',
+define(['text-loader!./reporting-display.html',
   'app',
   'jquery',
   'underscore',

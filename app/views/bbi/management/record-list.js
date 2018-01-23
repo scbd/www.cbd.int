@@ -1,5 +1,5 @@
 define(['lodash',
-    'text!./del-dial.html',
+    'text-loader!./del-dial.html',
     'data/bbi/links-platform',
     'app',
     'directives/bbi/crumbs',

@@ -1,4 +1,4 @@
-define(['app', 'text!./slider.html','lodash','directives/bbi/ani-scroll'], function(app, templateHtml,_) { 'use strict';
+define(['app', 'text-loader!./slider.html','lodash','directives/bbi/ani-scroll'], function(app, templateHtml,_) { 'use strict';
 
     //============================================================
     //

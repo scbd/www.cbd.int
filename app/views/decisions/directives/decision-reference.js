@@ -1,4 +1,4 @@
-define(['app', 'text!./decision-reference.html', 'lodash', 'filters/lstring'], function(app, template, _) { 'use strict';
+define(['app', 'text-loader!./decision-reference.html', 'lodash', 'filters/lstring'], function(app, template, _) { 'use strict';
 
 	return app.directive('decisionReference', ['$http', function($http) {
 		return {

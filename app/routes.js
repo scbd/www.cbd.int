@@ -1,8 +1,8 @@
-define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/extended-route', 'ngRoute', 'authentication', 'ngDialog','ngCookies'], function(app, $, _,redirectDialog) {
+define(['app', 'jquery', 'lodash', 'text-loader!./redirect-dialog.html', 'ngRoute', 'authentication', 'ngDialog','ngCookies'], function(app, $, _,redirectDialog) {
 
     var locationPath = window.location.pathname.toLowerCase().split('?')[0];
 
-    app.config(['extendedRouteProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+    app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
         $locationProvider.html5Mode(true);
         $locationProvider.hashPrefix('!');
@@ -66,9 +66,9 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         $("base").attr('href', '/meetings/'); // allow full page reload outside of  /insession/*
 
         routeProvider
-        .when('/import-translations',    { templateUrl : 'views/meetings/documents/management/translations.html', resolveController : true,                       resolve : { user : securize(["Administrator","EditorialService"]) } })
-        .when('/:meeting/documents/:id', { templateUrl : 'views/meetings/documents/management/document-id.html',  resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService"]) } })
-        .when('/:meeting',               { templateUrl : 'views/meetings/documents/documents.html',               resolveController : true, reloadOnSearch:false, resolve : { showMeeting : resolveLiteral(true) } } );
+        .when('/import-translations',    { templateUrl : '/app/views/meetings/documents/management/translations.html', controller : resolveController, resolve : { controller: [function() { return import('views/meetings/documents/management/translations').then(m=>m); }], user : securize(["Administrator","EditorialService"]) } })
+        .when('/:meeting/documents/:id', { templateUrl : '/app/views/meetings/documents/management/document-id.html',  controller : resolveController, resolve : { controller: [function() { return import('views/meetings/documents/management/document-id' ).then(m=>m); }], user : securize(["Administrator","EditorialService"]) }, reloadOnSearch:false })
+        .when('/:meeting',               { templateUrl : '/app/views/meetings/documents/documents.html',               controller : resolveController, resolve : { controller: [function() { return import('views/meetings/documents/documents').then(m=>m); }],  showMeeting : resolveLiteral(true) }, reloadOnSearch:false } );
 
     }
 
@@ -221,6 +221,21 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
           .when('/forums/bbi',                    { templateUrl: 'views/bbi/forums/thread-list-view.html',    resolveController: true,resolve : { user : securize(['User'])}, forumId:17490, postUrl:'/biobridge/forums/bbi', text:'BBI' } )
 
     }
+
+    //============================================================
+    //
+    //
+    //============================================================
+    function resolveController($injector, $scope, $route, controller) {
+
+        if(!controller)
+            return;
+
+        var locals = angular.extend($route.current.locals, { $scope: $scope });
+
+        return $injector.instantiate(controller, locals);
+    }
+    resolveController.$inject = ['$injector', '$scope', '$route', 'controller'];
 
     //============================================================
     //

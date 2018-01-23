@@ -1,4 +1,4 @@
-define(['text!./targets.json'], function(rawData) {
+define(['text-loader!./targets.json'], function(rawData) {
 
     try
     {
