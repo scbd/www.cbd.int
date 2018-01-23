@@ -8,11 +8,11 @@ BODY {
 <div>
 
 	<ol class="breadcrumb">
-		<li><a href="#">Home</a></li>
-		<li><a href="/decisions/tracking">Decision Tracking Tool</a></li>
-		<li class="active">COP-{{session}}</li>
+		<li><a href="/" target="_self">Home</a></li>
+		<li><a href="/decisions" target="_self">Decisions</a></li>
+		<li class="active">{{body|uppercase}}-{{session}}</li>
 	</ol>
-		<h1>COP-{{session}} Decisions</h1>
+		<h1>{{body|uppercase}}-{{session}} Decisions</h1>
 
 	<div class="row">
   		<div class="col-md-7">
@@ -20,14 +20,18 @@ BODY {
 				<tr>
 					<th>Symbol</th>
 		            <th>Title</th>
+		            <th style="width=1px;">&nbsp;</th>
 				</tr>
 				<tr ng-repeat="d in decisions">
 					<td nowrap>
-		                <div><a ng-href="/decisions/{{d.body.toLowerCase()}}/{{d.session}}/{{d.decision}}"><strong>{{d.symbol}}</strong></a></div>
+		                <div><a ng-href="/decisions/{{d.body|lowercase}}/{{d.session}}/{{d.decision}}"><strong>{{d.symbol}}</strong></a></div>
 					</td>
 		            <td>
 		                <div>{{d.title}}</div>
 					</td>
+		            <td style="width=1px;">
+                        <a href="#" ng-click="edit(d)"><i class="fa" ng-class="{ 'fa-comment-o' : !d.hasComments, 'fa-comments-o' : d.hasComments }" aria-hidden="true"></i></a>
+                    </td>
 				</tr>
 			</table>
 		</div>
@@ -38,7 +42,7 @@ BODY {
 
 			  <dt>Body</dt>
 			  <dd ng-if="body=='COP'">Conference of the Parties (COP)</dd>
-			  <dd ng-if="body!='COP'">TODO</dd><br>
+			  <dd ng-if="body!='COP'">{{body|uppercase}}</dd><br>
 
 			  <dt ng-if="::decisions[0].meeting">Meeting</dt>
               <dd ng-if="::decisions[0].meeting">

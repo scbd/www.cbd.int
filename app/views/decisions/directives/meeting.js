@@ -36,8 +36,6 @@ define(['app', 'text!./meeting.html', 'lodash', 'filters/lstring', 'filters/mome
                             startDate: res.data.EVT_FROM_DT,
                             endDate:   res.data.EVT_TO_DT,
                         });
-
-                        console.log($scope.meeting);
                     });
                 }
 

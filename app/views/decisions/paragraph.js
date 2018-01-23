@@ -1,4 +1,4 @@
-define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view-element', 'filters/moment', 'filters/lodash', './directives/notification', './directives/meeting-document', './directives/meeting'], function(ng, _) { 'use strict';
+define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view-element', 'filters/moment', 'filters/lodash', './directives/notification', './directives/meeting-document', './directives/meeting', './directives/decision-reference'], function(ng, _) { 'use strict';
 
     return ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', function($scope, $http, $route, $location, $compile, $anchorScroll) {
 
@@ -32,7 +32,7 @@ define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view
         $scope.section       = section;
         $scope.paragraph     = paragraph;
         $scope.item          = item ? String.fromCharCode(96+item) : '';
-        $scope.$root.page    = { title: 'Decision '+romanize(session)+'/'+decision };
+        $scope.$root.page    = { title: 'Decision '+romanize(session)+'/'+number };
         $scope.isPublicMeetingDocument = isPublicMeetingDocument;
 
         if(section)   $scope.$root.page.title += ' section ' + section;

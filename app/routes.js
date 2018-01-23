@@ -11,14 +11,6 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         if(/^\/decisions\/cop($|\/.*)/.test(locationPath))
             registerRoutes_CopDecisions($routeProvider);
 
-        // /management/decisions/*
-        if(/^\/management\/decisions($|\/.*)/.test(locationPath))
-            registerRoutes_ManagementDecisions($routeProvider);
-
-        // /insession/*
-        if(/^\/insession($|\/.*)/.test(locationPath))
-            registerRoutes_insession($routeProvider);
-
         // /conferences/**
         if(/^\/conferences($|\/.*)/.test(locationPath))
             registerRoutes_conferences($routeProvider);
@@ -59,38 +51,11 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
       $('base').attr('href', '/decisions/'); // allow full page reload outside of  /decisions/*
 
-      //routeProvider.when('/cop', { templateUrl: 'views/decisions/search.html', resolveController: true });
-      routeProvider.when('/:body/:session',                      { templateUrl: 'views/decisions/list.html',      resolveController: true });
+      routeProvider.when('/:body/:session',                      { templateUrl: 'views/decisions/list.html',      resolveController: true, resolve : { user : currentUser() } } );
       routeProvider.when('/:body/:session/:decision',            { templateUrl: 'views/decisions/view.html',      resolveController: true, resolve : { user : currentUser() } } );
       routeProvider.when('/:body/:session/:decision/edit',       { templateUrl: 'views/decisions/edit.html',      resolveController: true, resolve : { user : securize(["Administrator","DecisionTrackingTool", "ScbdStaff"]) } } );
       routeProvider.when('/:body/:session/:decision/:paragraph', { templateUrl: 'views/decisions/paragraph.html', resolveController: true });
-      //routeProvider.when('/', { templateUrl: 'views/decisions/search.html', resolveController: true });
   }
-
-  //============================================================
-  //
-  //
-  //============================================================
-  function registerRoutes_ManagementDecisions(routeProvider) {
-
-      $("base").attr('href', '/management/decisions/'); // allow full page reload outside of  /decisions/*
-
-      routeProvider.when('/',                         { templateUrl: 'views/decisions/index.html', resolveController: true, resolve : { user : securize(["Administrator","DecisionTrackingTool"]) } } );
-  }
-
-  //============================================================
-  //
-  //
-  //============================================================
-  function registerRoutes_insession(routeProvider) {
-
-      $("base").attr('href', '/insession/'); // allow full page reload outside of  /insession/*
-
-      routeProvider
-      .when('/',           { template : '<div></div>', resolve: { r: function() { window.location='/conferences/2016'; } } })
-      .when('/management', { templateUrl : 'views/meetings/documents/in-session/management.html', resolveController : true, resolve : { user : securize(["Administrator","EditorialService"]) } } )
-      .when('/:meeting',   { templateUrl : 'views/meetings/documents/in-session/meeting-id.html', resolveController : true, progress : { stop : false } } );
-    }
 
     //============================================================
     //
@@ -120,12 +85,12 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       .when('/2016/cop-13-hls/documents',   { redirectTo    : '/2016/cop13-hls/documents'})
       .when('/2016/cp-mop-08/documents',    { redirectTo    : '/2016/mop-08/documents'})
       .when('/2016/cp-mop-8/documents',     { redirectTo    : '/2016/mop-08/documents'})
-      
-      .when('/:code?',                      { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })    
+
+      .when('/:code?',                      { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/schedules',             { templateUrl   : 'views/meetings/documents/agenda.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting',              { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting/documents',    { templateUrl   : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
-      
+
     }
 
   //============================================================

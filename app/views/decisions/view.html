@@ -8,12 +8,14 @@
 <div>
 
 	<ol class="breadcrumb">
-		<li ng-if="::(canEdit || canComment)" class="pull-right">
-            <a ng-if="::canComment" href="#" ng-click="edit('comment')"><i class="fa" ng-class="{ 'fa-comment-o' : !hasComments, 'fa-comments-o' : hasComments }" aria-hidden="true"></i></a>
+		<li class="pull-right">
+            <a href="#" ng-click="edit()"><i class="fa" ng-class="{ 'fa-comment-o' : !hasComments, 'fa-comments-o' : hasComments }" aria-hidden="true"></i></a>
             <a ng-if="::canEdit"    href="#" ng-click="edit()"><i class="fa fa-edit" aria-hidden="true"></i></a>
 		</li>
-		<li><a href="#">Home</a></li>
-		<li><a ng-href="/decisions/{{::decision.body}}/{{::decision.session}}">{{::decision.body|uppercase}}-{{::decision.session}}</a></li>
+
+		<li><a href="/" target="_self">Home</a></li>
+		<li><a href="/decisions" target="_self">Decisions</a></li>
+		<li><a href="/decisions/{{::decision.body|lowercase}}/{{::decision.session}}">{{::decision.body|uppercase}}-{{::decision.session}}</a></li>
 		<li class="active">Decision {{romanize(decision.session)}}/{{::decision.decision}}</li>
 	</ol>
 

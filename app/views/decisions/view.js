@@ -98,30 +98,6 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', './view
             console.error($scope.error);
         });
 
-        //===========================
-        //
-        //===========================
-        function loadComments() {
-
-            return $http.get('/api/v2017/comments', { params : { q: { type:'decision', resources: data.code } } }).then(function(res){
-
-                var comments = res.data;
-
-                $scope.comments = {};
-
-                comments.forEach(function(comment){
-                    comment.resources.forEach(function(key){
-                        $scope.comments[key] = $scope.comments[key]||[];
-                        $scope.comments[key].push(comment);
-                    });
-                });
-
-                updateCommentButton();
-
-            }).catch(console.error);
-        }
-
-
         //==============================
         //
         //==============================
@@ -311,9 +287,6 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', './view
         //
         //==============================
         function edit(hash) {
-
-            if(!canEdit() && !canComment())
-                return;
 
             $location.url(('/'+decision.body+'/'+decision.session+'/'+decision.decision+'/edit').toLowerCase());
 
