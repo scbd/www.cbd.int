@@ -9,10 +9,10 @@ WORKDIR /usr/src/app
 COPY package.json .npmrc ./
 
 RUN npm install -q
-RUN npm build -q
-
 
 COPY . ./
+
+RUN npm run build -q
 
 ENV PORT 8000
 
@@ -21,4 +21,4 @@ EXPOSE 8000
 ARG COMMIT
 ENV COMMIT $COMMIT
 
-CMD ["node", "server"]
+CMD ["npm", "start"]

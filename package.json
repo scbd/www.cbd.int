@@ -5,7 +5,7 @@
     "angular": "^1.5.6",
     "angular-animate": "^1.5.6",
     "angular-cookies": "^1.5.6",
-    "angular-flex": "git://github.com/scbd/angular-flex.git#1.0.4",
+    "angular-flex": "git://github.com/scbd/angular-flex.git#2.0.0",
     "angular-route": "^1.5.6",
     "angular-sanitize": "^1.5.6",
     "angular-toastr": "^1.7.0",
@@ -34,8 +34,8 @@
   "private": true,
   "repository": "scbd/www.cbd.int",
   "scripts": {
-    "start": "webpack --config webpack.config.js",
-    "build": "webpack"
+    "start": "node server",
+    "build": "webpack --config webpack.config.js"
   },
   "devDependencies": {
     "webpack": "^3.10.0"

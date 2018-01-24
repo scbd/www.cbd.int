@@ -18,7 +18,7 @@
             })(window,document,'script','dataLayer','GTM-NL82D37');
         }
     </script>
-    <script src="https://cdn.slaask.com/chat.js"></script>
+    <!-- <script src="https://cdn.slaask.com/chat.js"></script>
     <script>
         //patch slaask to works with requireJS
         window._slaask.createScriptTag = function (url) {
@@ -26,9 +26,10 @@
             require([url], function() { t.onload(); });
             return t;
         };
-    </script>
-    <script src="/app/libs/requirejs/require.js?v=<%=gitVersion%>"></script>
-    <script src="/app/boot.js?v=<%=gitVersion%>"></script>
+    </script> -->
+    <!-- <script src="/app/libs/requirejs/require.js?v=<%=gitVersion%>"></script> -->
+    <script src="/app/dist/common.bundle.js?v=<%=gitVersion%>"></script>
+    <script src="/app/dist/template.bundle.js?v=<%=gitVersion%>"></script>
     <script async src='https://www.google-analytics.com/analytics.js'></script>
     <title ng-bind="$root.page.title">Convention on Biological Diversity</title>
     <meta name="description" content="{{$root.page.description || ngMeta['og:description']}}" ng-if="$root.page.description || ngMeta['og:description']">
@@ -67,13 +68,13 @@
     <link rel="stylesheet" href="/app/libs/bootstrap/dist/css/bootstrap.min.css?v=<%=gitVersion%>">
     <link rel="stylesheet" href="/app/libs/font-awesome/css/font-awesome.min.css?v=<%=gitVersion%>">
     <link rel="stylesheet" href="/app/libs/animate.css/animate.min.css?v=<%=gitVersion%>">
-    <link rel="stylesheet" href="/app/libs/magnific-popup/dist/magnific-popup.css?v=<%=gitVersion%>">
+    <!-- <link rel="stylesheet" href="/app/libs/magnific-popup/dist/magnific-popup.css?v=<%=gitVersion%>"> -->
     <link rel="stylesheet" href="/app/libs/flag-icon-css/css/flag-icon.css?v=<%=gitVersion%>" >
     <link rel="stylesheet" href="app/libs/angular-toastr/dist/angular-toastr.min.css?v=<%=gitVersion%>" >
     <link rel="stylesheet" href="/app/libs/ng-dialog/css/ngDialog.min.css?v=<%=gitVersion%>">
     <link rel="stylesheet" href="/app/libs/ng-dialog/css/ngDialog-theme-default.min.css?v=<%=gitVersion%>">
     <link rel="stylesheet" href="/app/views/meetings/documents/agenda.css?v=<%=gitVersion%>">
-    <link rel="stylesheet" href="/app/libs/bootstrap-datepicker/css/datepicker.css?v=<%=gitVersion%>">
+    <!-- <link rel="stylesheet" href="/app/libs/bootstrap-datepicker/css/datepicker.css?v=<%=gitVersion%>"> -->
 
     <style>
 

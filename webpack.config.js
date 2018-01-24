@@ -8,7 +8,6 @@ module.exports = {
     extensions: [".js", ".json", '.css'],
     alias: {
 //        'jquery'          : 'jquery/dist/jquery.min',
-        'angular-flex'    : 'angular-flex/angular-flex',
         'ngRoute'         : 'angular-route/angular-route.min',
         'ngCookies'       : 'angular-cookies/angular-cookies.min',
         'ngAnimate'       : 'angular-animate/angular-animate.min',
@@ -23,9 +22,10 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: require.resolve('jquery'), loader: 'expose-loader?jQuery!expose-loader?$' },
-      { test: /angular/,                 loader: 'imports-loader?jquery' },
-      { test: /bootstrap/,               loader: 'imports-loader?jquery' },
+      { test: require.resolve('jquery'),  loader: 'expose-loader?jQuery!expose-loader?$' },
+      { test: /angular/,                  loader: 'imports-loader?jquery' },
+      { test: /bootstrap/,                loader: 'imports-loader?jquery' },
+      { test: /angular-flex/,             loader: 'imports-loader?angular' },
     ]
   },
   entry: {
