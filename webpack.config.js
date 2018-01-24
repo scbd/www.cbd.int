@@ -26,7 +26,7 @@ module.exports = {
       { test: /angular/,                  loader: 'imports-loader?jquery' },
       { test: /bootstrap/,                loader: 'imports-loader?jquery' },
       { test: /angular-flex/,             loader: 'imports-loader?angular' },
-      { test: /\.js$/, include: /(node_modules|^\/app)/, loader: 'uglify-loader' }
+      { test: /\.js$/, include: /(node_modules\/)/, loader: 'uglify-loader' }
     ]
   },
   entry: {

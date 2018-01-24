@@ -66,6 +66,7 @@ define(['app', 'jquery', 'lodash', 'text-loader!./redirect-dialog.html', 'ngRout
         $("base").attr('href', '/meetings/'); // allow full page reload outside of  /insession/*
 
         routeProvider
+        .when('/',    { template : '<a href="./sbstta-21">sbstta-21</a>' })
         .when('/import-translations',    { templateUrl : '/app/views/meetings/documents/management/translations.html', controller : resolveController, resolve : { controller: [function() { return import('views/meetings/documents/management/translations'); }], user : securize(["Administrator","EditorialService"]) } })
         .when('/:meeting/documents/:id', { templateUrl : '/app/views/meetings/documents/management/document-id.html',  controller : resolveController, resolve : { controller: [function() { return import('views/meetings/documents/management/document-id' ); }], user : securize(["Administrator","EditorialService"]) }, reloadOnSearch:false })
         .when('/:meeting',               { templateUrl : '/app/views/meetings/documents/documents.html',               controller : resolveController, resolve : { controller: [function() { return import('views/meetings/documents/documents'); }],  showMeeting : resolveLiteral(true) }, reloadOnSearch:false } );
