@@ -1,6 +1,7 @@
 'use strict'; // jshint node: true, browser: false, esnext: true
 const path = require('path');
 const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
   resolve: {
@@ -26,17 +27,17 @@ module.exports = {
       { test: /angular/,                  loader: 'imports-loader?jquery' },
       { test: /bootstrap/,                loader: 'imports-loader?jquery' },
       { test: /angular-flex/,             loader: 'imports-loader?angular' },
-      { test: /\.js$/, include: /(node_modules\/)/, loader: 'uglify-loader' }
+//      { test: /\.js$/, include: /(node_modules\/|\/app\/)/, loader: 'uglify-loader' }
     ]
   },
   entry: {
       template : './app/template.js',
-      meetings : './app/views/meetings/documents/entry.js',
   },
   plugins: [
+    new UglifyJsPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common', // Specify the common bundle's name.
-      names : ['template', 'meetings'],
+      names : ['template'],
     })
   ],
   output: {

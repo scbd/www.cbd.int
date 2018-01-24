@@ -1,23 +1,15 @@
 define(['app', 'angular','text-loader!./toast.html', 'text-loader!./template-header.html', 'text-loader!./template-footer.html',
-'lodash', 'services/conference-service', 'providers/realm', 'boot'], function(app, ng, toastTemplate,headerHtml, footerHtml,_) {
+'lodash', 'providers/realm', 'boot'], function(app, ng, toastTemplate,headerHtml, footerHtml,_) {
     'use strict';
 
-    app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$http', 'conferenceService', '$route',
-                             function($rootScope,   $window,   $browser,   $document,   authentication,   $q,toastr,$templateCache, $http, conferenceService, $route) {
+    app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$http', '$route',
+                             function($rootScope,   $window,   $browser,   $document,   authentication,   $q,toastr,$templateCache, $http, $route) {
         return {
             restrict: 'E',
             template: headerHtml,
-            link: function(scope, elem) {},
-            controller: function($scope, $location, $route) {
+            controller: ['$scope', '$location', '$route' , function($scope, $location, $route) {
 
-                angular.element(document).ready(function () {
 
-                    $q.when(conferenceService.getActiveConference())
-                    .then(function(meeting){
-                        $scope.meeting = meeting;
-                    });
-
-                });
                 $templateCache.put("directives/toast/toast.html", toastTemplate);
                 var basePath = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
 
@@ -190,16 +182,14 @@ define(['app', 'angular','text-loader!./toast.html', 'text-loader!./template-hea
           toastr.error(msg);
       });
 
-              }
+  }]
         };
     }]);
 
     app.directive('templateFooter', [function() {
         return {
             restrict: 'E',
-            template: footerHtml,
-            link: function(scope, elem) {},
-            controller: function($scope, $location) {}
+            template: footerHtml
         };
     }]);
 
