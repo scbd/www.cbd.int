@@ -8,12 +8,12 @@ module.exports = {
     extensions: [".js", ".json", '.css'],
     alias: {
 //        'jquery'          : 'jquery/dist/jquery.min',
-        'ngRoute'         : 'angular-route/angular-route.min',
-        'ngCookies'       : 'angular-cookies/angular-cookies.min',
-        'ngAnimate'       : 'angular-animate/angular-animate.min',
-        'ngSanitize'      : 'angular-sanitize/angular-sanitize.min',
-        'ngDialog'        : 'ng-dialog/js/ngDialog.min',
-        'ngMeta'          : 'ng-meta/dist/ngMeta.min',
+        'ngRoute'         : 'angular-route/angular-route',
+        'ngCookies'       : 'angular-cookies/angular-cookies',
+        'ngAnimate'       : 'angular-animate/angular-animate',
+        'ngSanitize'      : 'angular-sanitize/angular-sanitize',
+        'ngDialog'        : 'ng-dialog/js/ngDialog',
+        'ngMeta'          : 'ng-meta/dist/ngMeta',
         'authentication'  : 'services/authentication',
         'toastr'          : 'angular-toastr',
         'dragula'         : 'dragula/dist/dragula',
@@ -26,6 +26,7 @@ module.exports = {
       { test: /angular/,                  loader: 'imports-loader?jquery' },
       { test: /bootstrap/,                loader: 'imports-loader?jquery' },
       { test: /angular-flex/,             loader: 'imports-loader?angular' },
+      { test: /\.js$/, include: /(node_modules|^\/app)/, loader: 'uglify-loader' }
     ]
   },
   entry: {
