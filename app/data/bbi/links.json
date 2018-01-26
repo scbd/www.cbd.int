@@ -21,7 +21,13 @@
                     "en": "Operational Framework"
                 },
                 "source": "/about/framework"
-            }, {
+            },  {
+                "title": {
+                    "en": "Steering Committee"
+                },
+                "source": "/about/steering-committee"
+            },
+            {
                 "title": {
                     "en": "Action Plan"
                 },
@@ -59,15 +65,27 @@
 
             "children": [{
                 "title": {
-                    "en": "Projects"
+                    "en": "Criteria and  Procedure"
                 },
                 "source": "/projects"
-            }, {
+            },
+            {"title": {
+                "en": "Project Review Panel"
+            },
+            "source": "/projects/project-review-panel"
+            },{
                 "title": {
                     "en": "Selected Projects"
                 },
                 "source": "/projects/selected"
-            }]
+            },
+             {
+                "title": {
+                    "en": "Completed Projects"
+                },
+                "source": "/projects/completed"
+            }
+          ]
         },
         {
             "title": {
