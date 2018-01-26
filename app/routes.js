@@ -194,15 +194,17 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
           .when('/about/framework',        { templateUrl: 'views/bbi/about/framework.html',  controllerAs: 'frameworkCtrl',  resolveController: true})
           .when('/about/plan',             { templateUrl: 'views/bbi/about/plan.html',  controllerAs: 'planCtrl',  resolveController: true})
           .when('/about/partners',         { templateUrl: 'views/bbi/about/partners.html',  controllerAs: 'partnersCtrl',  resolveController: true})
+          .when('/about/steering-committee',         { templateUrl: 'views/bbi/about/steering-committee.html',  controllerAs: 'steeringCommitteeCtrl',  resolveController: true})
 
           .when('/participation',                { templateUrl: 'views/bbi/participation/index-part.html',  controllerAs: 'participationCtrl',  resolveController: true})
           .when('/participation/request',        { templateUrl: 'views/bbi/participation/request.html',  controllerAs: 'requestCtrl',  resolveController: true})
           .when('/participation/provide',        { templateUrl: 'views/bbi/participation/provide.html',  controllerAs: 'provideCtrl',  resolveController: true})
           .when('/participation/opportunity',    { templateUrl: 'views/bbi/participation/opportunity.html',  controllerAs: 'opportunityCtrl',  resolveController: true})
-
-          .when('/projects',                { templateUrl: 'views/bbi/pilot-projects/index-proj.html',  controllerAs: 'pilotCtrl',  resolveController: true})
+//criteria-procedure
+          .when('/projects',      { templateUrl: 'views/bbi/pilot-projects/index-proj.html',  controllerAs: 'pilotCtrl',  resolveController: true})
+          .when('/projects/project-review-panel',    { templateUrl: 'views/bbi/pilot-projects/project-review-panel.html',  controllerAs: 'prpCtrl',  resolveController: true})
           .when('/projects/selected',       { templateUrl: 'views/bbi/pilot-projects/selected.html',  controllerAs: 'selectedCtrl',  resolveController: true})
-
+          .when('/projects/completed',      { templateUrl: 'views/bbi/pilot-projects/completed.html',  controllerAs: 'completedCtrl',  resolveController: true})
 
           // .when('/proposals',                     { templateUrl: 'views/bbi/search.html',  controllerAs: 'searchCtrl',  resolveController: true})
 
