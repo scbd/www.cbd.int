@@ -1,0 +1,23 @@
+<section>
+  <legend >{{project.title}}</legend>
+  <div class="row">
+      <div class="col-xs-3 text-left">
+          <strong> Country</strong>
+      </div>
+      <div class="col-xs-9">
+          <strong>Description</strong>
+      </div>
+  </div>
+  <div class="row">
+      <div class="col-xs-3">
+          {{ formatCollaborator(project.country)}}
+          <span ng-if="project.proponent"></br></br><strong> Proponent</strong></br></span>
+          {{project.proponent}}
+          <span ng-if="project.collaborators.length"></br></br><strong>Collaborators</strong></span></br>
+          <span ng-repeat="co in project.collaborators track by $index">{{formatCollaborator(co)}}<span ng-if="!$last">, </span></span>
+      </div>
+      <div class="col-xs-9">
+          {{project.description}}
+      </div>
+  </div>
+</section>
