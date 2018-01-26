@@ -4,16 +4,21 @@ return ['$location','$scope', function ($location,$scope) {
 
 			var _ctrl = this;
 			_ctrl.links=links.links;
-      _ctrl.projects=projects.projects;
+      _ctrl.projects=angular.copy(projects.projects);
 			_ctrl.goTo = goTo;
 			$scope.$root.page={};
 			$scope.$root.page.title = "Selected Projects: Bio Bridge Initiative";
-
+console.log(_ctrl.projects)
 				//============================================================
 				//
 				//============================================================
 				function goTo (url) {
 								$location.path(url);
 				}
+        function getProjects () {
+          console.log(_ctrl.projects);
+              return _ctrl.projects
+        }
+        $scope.getProjects = getProjects;
     }];
 });
