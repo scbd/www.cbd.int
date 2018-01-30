@@ -1,13 +1,13 @@
 define(['app', 'angular','text-loader!./toast.html', 'text-loader!./template-header.html', 'text-loader!./template-footer.html',
-'lodash', 'providers/realm', 'boot'], function(app, ng, toastTemplate,headerHtml, footerHtml,_) {
+'lodash', 'providers/realm', 'routes', 'bootstrap'], function(app, ng, toastTemplate,headerHtml, footerHtml,_) {
     'use strict';
 
-    app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$http', '$route',
-                             function($rootScope,   $window,   $browser,   $document,   authentication,   $q,toastr,$templateCache, $http, $route) {
+    app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$http',
+                             function($rootScope,   $window,   $browser,   $document,   authentication,   $q,  toastr,  $templateCache,   $http) {
         return {
             restrict: 'E',
             template: headerHtml,
-            controller: ['$scope', '$location', '$route' , function($scope, $location, $route) {
+            controller: ['$scope', '$location', function($scope, $location) {
 
 
                 $templateCache.put("directives/toast/toast.html", toastTemplate);

@@ -1,4 +1,4 @@
-define(['lodash', 'angular', 'boot', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
+define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
     // Prefetch optimization
     'directives/print-smart/print-smart-checkout', 'text-loader!directives/print-smart/print-smart-checkout.html',
     'ngDialog','directives/view-injector',

@@ -1,5 +1,5 @@
-define(['angular-flex', 'ngSanitize','toastr','ngMeta'], function(angular) { 'use strict';
-console.log('app');
+define(['angular-flex', 'ngSanitize', 'ngRoute', 'toastr','ngMeta'], function(angular) { 'use strict';
+
     var app = angular.module('app', angular.defineModules(['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','ngMeta']));
 
     app.config(['$httpProvider','toastrConfig', function($httpProvider,toastrConfig) {
@@ -40,6 +40,11 @@ console.log('app');
 			}
 		};
 	}]);
+
+    angular.element(document).ready(function(){
+        console.log('app.boot');
+        angular.bootstrap(document, [app.name]);
+    });
 
     return app;
 });
