@@ -8,7 +8,7 @@ return ['$location','$scope', function ($location,$scope) {
 			_ctrl.goTo = goTo;
 			$scope.$root.page={};
 			$scope.$root.page.title = "Selected Projects: Bio Bridge Initiative";
-console.log(_ctrl.projects)
+
 				//============================================================
 				//
 				//============================================================
