@@ -2,6 +2,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   resolve: {
@@ -38,10 +39,15 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common', // Specify the common bundle's name.
       names : ['template'],
+    }),
+    new HtmlWebpackPlugin({
+       title: 'Output Management',
+       template: 'app/template.ejs',
+       filename: 'template.html'
     })
   ],
   output: {
-    filename: '[name].bundle.js',
+    filename: '[name].[chunkhash].js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/app/dist/'
   }

@@ -1,4 +1,4 @@
-define(['app', 'jquery', 'lodash', 'text-loader!./redirect-dialog.html', 'ngRoute', 'authentication', 'ngDialog','ngCookies'], function(app, $, _,redirectDialog) {
+define(['app', 'jquery', 'lodash', 'text-loader!./redirect-dialog.html', 'angular', 'ngRoute', 'authentication', 'ngDialog','ngCookies'], function(app, $, _,redirectDialog, angular) {
 
     var locationPath = window.location.pathname.toLowerCase().split('?')[0];
 
@@ -6,6 +6,8 @@ define(['app', 'jquery', 'lodash', 'text-loader!./redirect-dialog.html', 'ngRout
 
         $locationProvider.html5Mode(true);
         $locationProvider.hashPrefix('!');
+
+        $routeProvider.whenAsync = whenAsync;
 
         // /decisions/cop/*
         if(/^\/decisions\/cop($|\/.*)/.test(locationPath))
@@ -40,6 +42,7 @@ define(['app', 'jquery', 'lodash', 'text-loader!./redirect-dialog.html', 'ngRout
 
         $routeProvider.when('/403', { templateUrl: '/app/views/403.html' });
         $routeProvider.when('/404', { templateUrl: '/app/views/404.html' }).otherwise({redirectTo: '/404'});
+
     }
   ]);
 
@@ -66,11 +69,10 @@ define(['app', 'jquery', 'lodash', 'text-loader!./redirect-dialog.html', 'ngRout
         $("base").attr('href', '/meetings/'); // allow full page reload outside of  /insession/*
 
         routeProvider
-        .when('/',    { template : '<a href="./sbstta-21">sbstta-21</a>' })
-        .when('/import-translations',    { templateUrl : '/app/views/meetings/documents/management/translations.html', controller : resolveController, resolve : { controller: [function() { return import('views/meetings/documents/management/translations'); }], user : securize(["Administrator","EditorialService"]) } })
-        .when('/:meeting/documents/:id', { templateUrl : '/app/views/meetings/documents/management/document-id.html',  controller : resolveController, resolve : { controller: [function() { return import('views/meetings/documents/management/document-id' ); }], user : securize(["Administrator","EditorialService"]) }, reloadOnSearch:false })
-        .when('/:meeting',               { templateUrl : '/app/views/meetings/documents/documents.html',               controller : resolveController, resolve : { controller: [function() { return import('views/meetings/documents/documents'); }],  showMeeting : resolveLiteral(true) }, reloadOnSearch:false } );
-
+        .when     ('/',                       { template : '<a href="./sbstta-21">sbstta-21</a>' })
+        .whenAsync('/import-translations',    { templateUrl : 'views/meetings/documents/management/translations.html', controller : function() { return import('views/meetings/documents/management/translations'); }, resolve : { user : securize(["Administrator","EditorialService"]) } })
+        .whenAsync('/:meeting/documents/:id', { templateUrl : 'views/meetings/documents/management/document-id.html',  controller : function() { return import('views/meetings/documents/management/document-id'); },  resolve : { user : securize(["Administrator","EditorialService"]) }, reloadOnSearch:false })
+        .whenAsync('/:meeting',               { templateUrl : 'views/meetings/documents/documents.html',               controller : function() { return import('views/meetings/documents/documents'); },               resolve : { user : currentUser(), showMeeting : resolveLiteral(true) }, reloadOnSearch:false });
     }
 
   //============================================================
@@ -227,16 +229,38 @@ define(['app', 'jquery', 'lodash', 'text-loader!./redirect-dialog.html', 'ngRout
     //
     //
     //============================================================
-    function resolveController($injector, $scope, $route, controller) {
+    function whenAsync(path, route) {
 
-        if(!controller)
-            return;
+        route = route || {};
 
-        var locals = angular.extend($route.current.locals, { $scope: $scope });
+        if(route.templateUrl && route.templateUrl.indexOf('/')!==0) {
+            route.templateUrl = '/app/'+route.templateUrl;
+        }
 
-        return $injector.instantiate(controller, locals);
+        var controller = route.controller && angular.isFunction(route.controller) && route.controller;
+
+        if(controller) {
+
+            route.resolve = route.resolve || {};
+
+            route.resolve.lazyController = ['$injector', function($injector) {
+                return controller && $injector.invoke(controller, {});
+            }];
+
+            route.controller = ['$injector', '$scope', '$route', 'lazyController', function ($injector, $scope, $route, lazyController) {
+
+                if(!lazyController) return;
+
+                var locals = angular.extend($route.current.locals, { $scope: $scope });
+
+                return $injector.instantiate(lazyController, locals);
+            }];
+        }
+
+        this.when(path, route);
+
+        return this;
     }
-    resolveController.$inject = ['$injector', '$scope', '$route', 'controller'];
 
     //============================================================
     //

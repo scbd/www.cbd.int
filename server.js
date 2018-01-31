@@ -59,7 +59,7 @@ app.get('/reports/map*', function(req, res) { res.cookie('VERSION', process.env.
 
 app.get('/insession',    function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
 app.get('/insession/*',  function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
-app.get('/*',            function(req, res) { res.render('template', { gitVersion: gitVersion }); });
+app.get('/*',            function(req, res) { res.sendFile(__dirname + '/dist/template.html'); });
 app.all('/*',            function(req, res) { res.status(404).send(); } );
 
 // START HTTP SERVER
