@@ -27,15 +27,9 @@ return ['$location','$scope','$http', function ($location,$scope,$http) {
 
             _ctrl.loading         = true;
 
-
-            var queryParameters = {
-                'q': query,
-            };
-
-
            return $http.get('/api/v2018/projects')
               .then(function (data) {
-                  data=data.data;
+                data=data.data;
                 _ctrl.projects=data;
                 _ctrl.count = data.length;
             }).catch(function(error) {
