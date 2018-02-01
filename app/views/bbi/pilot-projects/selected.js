@@ -1,10 +1,10 @@
-define(['app', 'data/bbi/links',  'data/bbi/projects','directives/bbi/bbi-project-row','directives/bbi/menu'], function(app,links,projects) { 'use strict';
+define(['app', 'data/bbi/links', 'directives/bbi/bbi-project-row','directives/bbi/menu'], function(app,links,) { 'use strict';
 
-return ['$location','$scope', function ($location,$scope) {
+return ['$location','$scope','$http', function ($location,$scope,$http) {
 
 			var _ctrl = this;
 			_ctrl.links=links.links;
-      _ctrl.projects=angular.copy(projects.projects);
+      _ctrl.projects=[];
 			_ctrl.goTo = goTo;
 			$scope.$root.page={};
 			$scope.$root.page.title = "Selected Projects: Bio Bridge Initiative";
@@ -16,9 +16,36 @@ return ['$location','$scope', function ($location,$scope) {
 								$location.path(url);
 				}
         function getProjects () {
-          console.log(_ctrl.projects);
               return _ctrl.projects
         }
         $scope.getProjects = getProjects;
+
+        //=======================================================================
+        //
+        //=======================================================================
+        function query() {
+
+            _ctrl.loading         = true;
+
+
+            var queryParameters = {
+                'q': query,
+            };
+
+
+           return $http.get('/api/v2018/projects')
+              .then(function (data) {
+                  data=data.data;
+                _ctrl.projects=data;
+                _ctrl.count = data.length;
+            }).catch(function(error) {
+                console.log('ERROR: ' + error);
+            })
+            .finally(function(){
+              _ctrl.loading = false;
+            });
+
+        }// query
+        query()
     }];
 });
