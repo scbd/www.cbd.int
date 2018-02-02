@@ -1,4 +1,4 @@
-define(['app', 'data/bbi/links', 'directives/bbi/bbi-project-row','directives/bbi/menu'], function(app,links,) { 'use strict';
+define(['app', 'data/bbi/links', 'directives/bbi/bbi-project-row','directives/bbi/menu'], function(app,links) { 'use strict';
 
 return ['$location','$scope','$http', function ($location,$scope,$http) {
 
