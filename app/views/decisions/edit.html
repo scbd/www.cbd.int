@@ -117,6 +117,8 @@
     .edit-decision button.comment.has-comments > .fa-comment-o  { display: none; }
     .edit-decision button.comment.has-comments > .fa-comments-o { display: inline; }
 
+    select.btn { max-width: 125px;}
+
 
     /*element.selected div {
         -moz-user-select: all;
@@ -184,6 +186,37 @@
 
         <div class="row" style="margin-top:60px;height:100%">
             <div class="col-sm-6 edit-decision" style="height:86%">
+
+            	<div class="row">
+            		<div class="col-sm-6">
+
+                        <div class="form-group">
+            		    	<label for="elementSubject">CBD Subjects</label><br>
+                            <div ng-repeat="item in self.subjects" class="form-control" style="margin-bottom:2px;overflow-y:hidden" title="">
+                                <button ng-if="::canEdit" class="btn btn-danger btn-xs pull-right" ng-click="removeFrom(item, self.subjects)"><i class="fa fa-minus-circle"></i></button>
+                                 {{(collections.subjectsMap[item].title|lstring)||item}}
+                             </div>
+            		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedSubject" ng-options="subject.identifier as (subject.title|lstring) group by collections.subjectsMap[subject.broaderTerms[0]].name for subject in collections.subjects|filter:noNarrower" ng-change="addTo(selectedSubject, self.subjects); selectedSubject=''">
+                                <option value="">add a subject</option>
+            				</select>
+            		  	</div>
+                    </div>
+            		<div class="col-sm-6">
+
+                        <div class="form-group">
+            		    	<label for="elementSubject">Aichi Targets</label><br>
+
+                            <div ng-repeat="item in self.aichiTargets" class="form-control" style="margin-bottom:2px;overflow-y:hidden">
+                                <button ng-if="::canEdit" class="btn btn-danger btn-xs pull-right" ng-click="removeFrom(item, self.aichiTargets)"><i class="fa fa-minus-circle"></i></button>
+                                 {{(collections.aichiTargetsMap[item].title|lstring)||item}}
+                             </div>
+            		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedTarget" ng-options="target.identifier as (target.title|lstring) group by collections.aichiTargetsMap[target.broaderTerms[0]].name for target in collections.aichiTargets|filter:noNarrower" ng-change="addTo(selectedTarget, self.aichiTargets); selectedTarget=''">
+                                <option value="">add a target</option>
+            				</select>
+            		  	</div>
+                    </div>
+                </div>
+
                 <div class="bg-orange">Decision {{symbol}}</div>
                 <div class="document" style="height:100%;overflow-y:scroll;padding:5px">
                     <div id='content' class='decision' style="min-height:100%"></div>
@@ -245,7 +278,7 @@
                 </div>
 
         <h4 ng-if="element.type=='paragraph'">
-            Details
+            Paragraph details
         </h4>
     	<div ng-if="element.type=='paragraph'" class="row">
     		<div class="col-sm-6">
@@ -316,9 +349,38 @@
     		</div>
     	</div>
         <hr ng-if="element.type=='paragraph'"/>
-    	<h4 ng-if="element.type=='paragraph'">
-    		Related Information
-    	</h4>
+    	<div ng-if="element.type=='paragraph'" class="row">
+    		<div class="col-sm-6">
+
+                <div class="form-group">
+    		    	<label for="elementSubject">CBD Subjects</label><br>
+
+                    <div ng-repeat="item in element.data.subjects" class="form-control" style="margin-bottom:2px;overflow-y:hidden" title="" ng-disabled="element.type!='paragraph'">
+                        <button ng-if="::canEdit" class="btn btn-danger btn-xs pull-right" ng-click="removeFrom(item, element.data.subjects)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                         {{(collections.subjectsMap[item].title|lstring)||item}}
+                     </div>
+    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedSubject" ng-options="subject.identifier as (subject.title|lstring) group by collections.subjectsMap[subject.broaderTerms[0]].name for subject in collections.subjects|filter:noNarrower" ng-change="addTo(selectedSubject, element.data.subjects); selectedSubject=''" ng-disabled="element.type!='paragraph'">
+                        <option value="">add a subject</option>
+    				</select>
+    		  	</div>
+            </div>
+    		<div class="col-sm-6">
+
+                <div class="form-group">
+    		    	<label for="elementSubject">Aichi Targets</label><br>
+
+                    <div ng-repeat="item in element.data.aichiTargets" class="form-control" style="margin-bottom:2px;overflow-y:hidden" ng-disabled="element.type!='paragraph'">
+                        <button ng-if="::canEdit" class="btn btn-danger btn-xs pull-right" ng-click="removeFrom(item, element.data.aichiTargets)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                         {{(collections.aichiTargetsMap[item].title|lstring)||item}}
+                     </div>
+    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedTarget" ng-options="target.identifier as (target.title|lstring) group by collections.aichiTargetsMap[target.broaderTerms[0]].name for target in collections.aichiTargets|filter:noNarrower" ng-change="addTo(selectedTarget, element.data.aichiTargets); selectedTarget=''" ng-disabled="element.type!='paragraph'">
+                        <option value="">add a target</option>
+    				</select>
+    		  	</div>
+            </div>
+        </div>
+
+        <hr ng-if="element.type=='paragraph'"/>
     	<div ng-if="element.type=='paragraph'" class="row">
     		<div class="col-sm-6">
     			<div class="form-group">

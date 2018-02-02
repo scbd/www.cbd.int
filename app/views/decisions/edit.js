@@ -56,7 +56,10 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         $scope.actionClean = removeSelectionFormatting;
         $scope.jumpTo      = jumpTo;
         $scope.initials=function(t) { return _.startCase(t).replace(/[^A-Z]/g, ''); };
+        $scope.addTo       = addTo;
+        $scope.removeFrom  = removeFrom;
 
+        $scope.noNarrower = function(t) { return !t.narrowerTerms || !t.narrowerTerms.length; };
         $scope.collections = {
             sections    : sectionList,
             paragraphes : paragraphList,
@@ -91,9 +94,18 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function load() {
 
-            $http.get('/api/v2015/treaties/'+treaty.code, { cache: true } ).then(function(res) {
+            var q0 = $http.get('/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms',  { cache: true } );
+            var q1 = $http.get('/api/v2013/thesaurus/domains/AICHI-TARGETS/terms', { cache: true } );
+            var q2 = $http.get('/api/v2015/treaties/'+ encodeURIComponent(treaty.code), { cache: true } );
 
-                treaty = res.data;
+            $q.all([q0, q1, q2]).then(function(res) {
+
+                $scope.collections.subjects        =   res[0].data;
+                $scope.collections.aichiTargets    =   res[1].data;
+                $scope.collections.subjectsMap     = _(res[0].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
+                $scope.collections.aichiTargetsMap = _(res[1].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
+
+                treaty   = res[2].data;
 
                 return $http.get('/api/v2016/decision-texts', { params : { q : { $or: [{ decision: roman[session] + '/' + decision}, { treaty:treaty.code,  body: body, session: session, decision: decision }]}, fo: 1 }});
 
@@ -105,20 +117,28 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                     session : session,
                     decision: decision,
                     meeting : body+'-'+ pad(session),
+                    subjects : [],
+                    aichiTargets : [],
                     content: 'paste here'
                 };
 
                 data = _.defaults(data, {
                     symbol : data.decision,
                     body   : body,
-                    treaty : treaty.code
+                    treaty : treaty.code,
+                    subjects : [],
+                    aichiTargets : []
                 });
 
                 if(typeof(data.decision)=='string') {
                     data.decision = parseInt(data.symbol.replace(/.*\/(\d+)$/, '$1'));
                 }
 
+                $scope.subjects     = data.subjects     = (data.subjects     || []);
+                $scope.aichiTargets = data.aichiTargets = (data.aichiTargets || []);
+
                 $('#content').html(data.content);
+
 
                 clean($('#content')[0]);
                 clean($('#content')[0]);
@@ -195,7 +215,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             var req = {
                 method : data._id ? 'PUT' : 'POST',
                 url    : '/api/v2016/decision-texts' + (data._id ? '/'+data._id : ''),
-                data   : _.pick(data, "_id","treaty","body","session","decision","meeting","content")
+                data   : _.pick(data, "_id","treaty","body","session","decision","meeting","content","subjects","aichiTargets")
             };
 
 
@@ -436,7 +456,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             delete $scope.formattingLocked;
 
-            $(selectedElement).attr('data-info', ng.toJson(cleanup($scope.element)));
+            $(selectedElement).attr('data-info', ng.toJson(cleanup($scope.element, true)));
 
             $(selectedElement).removeClass('selected');
 
@@ -465,15 +485,35 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         //
         //===========================
-        function cleanup(element) {
+        function cleanup(element, deleteEmpty) {
 
-            var data = element && element.data;
+            if(element && element.data) {
 
-            if(data && data.actors)        data.actors        = _(data.actors       ).uniq().value();
-            if(data && data.statuses)      data.statuses      = _(data.statuses     ).uniq().value();
-            if(data && data.decisions)     data.decisions     = _(data.decisions    ).uniq().value();
-            if(data && data.notifications) data.notifications = _(data.notifications).uniq().value();
-            if(data && data.meetings)      data.meetings      = _(data.meetings     ).uniq().map(mettingUrlToCode).value();
+                element.data.subjects      = _(element.data.subjects     ||[]).uniq().value();
+                element.data.aichiTargets  = _(element.data.aichiTargets ||[]).uniq().value();
+                element.data.actors        = _(element.data.actors       ||[]).uniq().value();
+                element.data.statuses      = _(element.data.statuses     ||[]).uniq().value();
+                element.data.decisions     = _(element.data.decisions    ||[]).uniq().value();
+                element.data.notifications = _(element.data.notifications||[]).uniq().value();
+                element.data.documents     = _(element.data.documents    ||[]).uniq().value();
+                element.data.meetings      = _(element.data.meetings     ||[]).uniq().map(mettingUrlToCode).value();
+
+                if(deleteEmpty) { // Remove empty fields/arrays
+
+                    for(var key in element.data) {
+
+                        var val = element.data[key];
+
+                        if(val===undefined) { delete element.data[key]; continue; }
+                        if(val===null)      { delete element.data[key]; continue; }
+                        if(val==="")        { delete element.data[key]; continue; }
+
+                        if(_.isArray(val) && !val.length) {
+                            delete element.data[key]; continue;
+                        }
+                    }
+                }
+            }
 
             return element;
         }
@@ -530,6 +570,34 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                         node.removeChild(child);
                 }
             }
+        }
+
+        //===========================
+        //
+        //===========================
+        function addTo(item, target) {
+
+            if(!_.isArray(target)) throw new Error("target must be an array");
+
+            if(target.indexOf(item) < 0)
+                target.push(item);
+
+            return target;
+        }
+
+        //===========================
+        //
+        //===========================
+        function removeFrom(item, target) {
+
+            if(!_.isArray(target)) throw new Error("target must be an array");
+
+            var index;
+
+            while((index = target.indexOf(item)) >= 0)
+                target.splice(index, 1);
+
+            return target;
         }
 
         ////////////////////
