@@ -35,19 +35,10 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         $scope.postComment = postComment;
         $scope.deleteComment = deleteComment;
         $scope.buildFileUrl = buildFileUrl;
-        $scope.deleteFile = deleteFile;
-        $scope.selectActors = selectActors;
-        $scope.deleteActor  = deleteActor;
-        $scope.selectStatuses = selectStatuses;
-        $scope.deleteStatus   = deleteStatus;
         $scope.selectDecision = selectDecision;
-        $scope.deleteDecision = deleteDecision;
         $scope.selectMeeting  = selectMeeting;
-        $scope.deleteMeeting  = deleteMeeting;
         $scope.selectMeetingDocument = selectMeetingDocument;
-        $scope.deleteMeetingDocument = deleteMeetingDocument;
         $scope.selectNotification = selectNotification;
-        $scope.deleteNotification = deleteNotification;
         $scope.actionEdit  = edit;
         $scope.isEditable  = isEditable;
         $scope.tag         = tag;
@@ -686,26 +677,8 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             return '/api/v2016/decision-texts/'+data._id+'/attachments/'+item.hash+'/stream';
         }
 
-        //===========================
-        //
-        //===========================
-        function deleteFile(item) {
-
-            if(!$scope.element && !$scope.element.data)
-                return;
-
-            var items = $scope.element.data.files || [];
-            var index = items.indexOf(item);
-
-            if(index>=0) {
-                items.splice(index, 1);
-            }
-
-            $scope.element.data.files = items.length ? items : undefined;
-        }
-
         ////////////////////
-        // DOCUMENTS
+        // DIALOGS
         ////////////////////
 
         //===========================
@@ -720,84 +693,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                     if(!res.value)
                         return;
 
-                    $scope.element.data.documents = _.union($scope.element.data.documents||[], [res.value]);
+                    addTo(res.value, $scope.element.data.documents);
                 });
             });
-        }
-
-        //===========================
-        //
-        //===========================
-        function deleteMeetingDocument(item) {
-
-            if(!$scope.element && !$scope.element.data)
-                return;
-
-            var items = $scope.element.data.documents || [];
-            var index = items.indexOf(item);
-
-            if(index>=0) {
-                items.splice(index, 1);
-            }
-
-            $scope.element.data.documents = items.length ? items : undefined;
-        }
-
-        ////////////////////
-        // DIALOGS
-        ////////////////////
-
-        //===========================
-        //
-        //===========================
-        function selectActors() {
-
-            if($scope.element && $scope.element.data && $scope.selectedActor) {
-                $scope.element.data.actors = _.union($scope.element.data.actors||[], [$scope.selectedActor]);
-            }
-
-            $scope.selectedActor = '';
-        }
-
-        //===========================
-        //
-        //===========================
-        function deleteActor(item) {
-
-            if(!$scope.element && !$scope.element.data)
-                return;
-
-            $scope.element.data.actors = _.without($scope.element.data.actors||[], item);
-
-            if(!$scope.element.data.actors.length)
-                delete $scope.element.data.actors;
-        }
-
-
-        //===========================
-        //
-        //===========================
-        function selectStatuses() {
-
-            if($scope.element && $scope.element.data && $scope.selectedStatus) {
-                $scope.element.data.statuses = _.union($scope.element.data.statuses||[], [$scope.selectedStatus]);
-            }
-
-            $scope.selectedStatus = '';
-        }
-
-        //===========================
-        //
-        //===========================
-        function deleteStatus(item) {
-
-            if(!$scope.element && !$scope.element.data)
-                return;
-
-            $scope.element.data.statuses = _.without($scope.element.data.statuses||[], item);
-
-            if(!$scope.element.data.statuses.length)
-                delete $scope.element.data.statuses;
         }
 
         //===========================
@@ -812,23 +710,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                     if(!res.value)
                         return;
 
-                    $scope.element.data.decisions = _.union($scope.element.data.decisions||[], [res.value]);
+                    addTo(res.value, $scope.element.data.decisions);
                 });
             });
-        }
-
-        //===========================
-        //
-        //===========================
-        function deleteDecision(item) {
-
-            if(!$scope.element && !$scope.element.data)
-                return;
-
-            $scope.element.data.decisions = _.without($scope.element.data.decisions||[], item);
-
-            if(!$scope.element.data.decisions.length)
-                delete $scope.element.data.decisions;
         }
 
         //===========================
@@ -843,23 +727,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                     if(!res.value)
                         return;
 
-                    $scope.element.data.notifications = _.union($scope.element.data.notifications||[], [res.value.symbol]);
+                    addTo(res.value.symbol, $scope.element.data.notifications);
                 });
             });
-        }
-
-        //===========================
-        //
-        //===========================
-        function deleteNotification(item) {
-
-            if(!$scope.element && !$scope.element.data)
-                return;
-
-            $scope.element.data.notifications = _.without($scope.element.data.notifications||[], item);
-
-            if(!$scope.element.data.notifications.length)
-                delete $scope.element.data.notifications;
         }
 
         //===========================
@@ -874,24 +744,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                     if(!res.value)
                         return;
 
-                    $scope.element.data.meetings = _.union($scope.element.data.meetings||[], [mettingUrlToCode(res.value.symbol)]);
+                    addTo(mettingUrlToCode(res.value.symbol), $scope.element.data.meetings);
                 });
             });
-        }
-
-        //===========================
-        //
-        //===========================
-        function deleteMeeting(item) {
-
-
-            if(!$scope.element && !$scope.element.data)
-                return;
-
-            $scope.element.data.meetings = _.without($scope.element.data.meetings||[], item);
-
-            if(!$scope.element.data.meetings.length)
-                delete $scope.element.data.meetings;
         }
 
         //===========================
