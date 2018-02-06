@@ -3,8 +3,6 @@ define(['app','ngMeta'], function(app) {'use strict';
 
 
         	require(['facebook'], function() {
-
-
             if(FB &&  FB.AppEvents && FB.init) {
               FB.init({
                 appId: '168158870409056',
@@ -19,7 +17,6 @@ define(['app','ngMeta'], function(app) {'use strict';
          }, function(err) {
            FB={}
            window.FB={}
-
          });
 
         app.factory('fb', ['ngMeta',function(ngMeta) {
