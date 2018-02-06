@@ -1,5 +1,5 @@
 define(['app','ngMeta'], function(app) {'use strict';
-        require(['facebook'], function() {
+        require(['facebook'], function(FB) {
           if (FB && FB.AppEvents && FB.init) {
             FB.init({
               appId: '168158870409056',
@@ -10,9 +10,8 @@ define(['app','ngMeta'], function(app) {'use strict';
             FB.AppEvents.logPageView();
             FB.XFBML.parse();
           }
-        }, function(err) {
-          FB = {}
-          window.FB = {}
+        }, function() {
+          window.FB = {};
         });
 
         app.factory('fb', ['ngMeta',function(ngMeta) {
