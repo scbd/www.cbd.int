@@ -476,8 +476,9 @@
   <!-- page content -->
   <div class="row" ng-if="esEventCtrl.cover">
     <div class="col-md-12">
-      <div class="hc" ng-style="{'background-image': 'url(https://api.cbd.int'+esEventCtrl.cover+')'}" style="margin-bottom:0px;">
-        <div class="page-title">
+      <div class="hc" style="margin-bottom:0px;position:relative;overflow:hidden">
+          <img ng-src="{{'https://api.cbd.int'+esEventCtrl.cover}}" style="width:100%">
+        <div class="page-title" >
           <h4>{{esEventCtrl.document.title.en | titleCase}}<h4>
 
                 </div>
