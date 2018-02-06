@@ -1,23 +1,19 @@
 define(['app','ngMeta'], function(app) {'use strict';
-
-
-
-        	require(['facebook'], function() {
-            if(FB &&  FB.AppEvents && FB.init) {
-              FB.init({
-                appId: '168158870409056',
-                fbml: true,
-                version: 'v2.10',
-                cookie: true
-              });
-              FB.AppEvents.logPageView();
-              FB.XFBML.parse();
-            }
-
-         }, function(err) {
-           FB={}
-           window.FB={}
-         });
+        require(['facebook'], function() {
+          if (FB && FB.AppEvents && FB.init) {
+            FB.init({
+              appId: '168158870409056',
+              fbml: true,
+              version: 'v2.10',
+              cookie: true
+            });
+            FB.AppEvents.logPageView();
+            FB.XFBML.parse();
+          }
+        }, function(err) {
+          FB = {}
+          window.FB = {}
+        });
 
         app.factory('fb', ['ngMeta',function(ngMeta) {
           var domain = 'www.cbd.int';
