@@ -9,7 +9,10 @@ var _savedHtml;
             replace: true,
 			scope: {},
 			compile: function ($elm) {
+        require(['services/fb'], function() {
+              if(window.FB && window.FB.XFBML)
                 window.FB.XFBML.parse();
+        ));
 			}
 		};
 	}]);
