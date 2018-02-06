@@ -7,6 +7,7 @@ define(['app', 'require'], function(app, require) {'use strict';
       scope: {},
       link: function($scope) {
         require(['services/fb'], function() {
+            console.log();
           if (window.FB && window.FB.XFBML)
             window.FB.XFBML.parse();
         });
