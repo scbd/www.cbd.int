@@ -476,8 +476,9 @@
   <!-- page content -->
   <div class="row" ng-if="esEventCtrl.cover">
     <div class="col-md-12">
-      <div class="hc" ng-style="{'background-image': 'url(https://api.cbd.int'+esEventCtrl.cover+')'}" style="margin-bottom:0px;">
-        <div class="page-title">
+      <div class="hc" style="margin-bottom:0px;position:relative;overflow:hidden">
+          <img ng-src="{{'https://api.cbd.int'+esEventCtrl.cover}}" style="width:100%">
+        <div class="page-title" >
           <h4>{{esEventCtrl.document.title.en | titleCase}}<h4>
 
                 </div>
@@ -511,45 +512,39 @@
 
 <div class="row">
     <div class="text-center"><i ng-show="esEventCtrl.loading" style="color:#069554;" class="fa fa-circle-o-notch fa-spin fa-5x fa-fw"></i></div>
-      <div class="col-xs-12 col-md-3">
-        <div style="min-height:75px;margin: 5px 10px 5px 0;padding:10px;border: 1px dashed #eee">
+      <div ng-if="esEventCtrl.document" class="col-xs-12 col-md-3 hidden-xs hidden-sm" style="padding-right:30px;border-right: 1px dashed #eee">
+        <div class="hidden-xs hidden-sm" style="min-height:75px;">
           <p>{{esEventCtrl.document.startDate | moment:'format':'DD MMMM YYYY'}}</p>
           <p><span ng-if="esEventCtrl.document.address.city.en">{{esEventCtrl.document.address.city.en}},</span> {{esEventCtrl.document.address.country | term}} <span ng-if="esEventCtrl.document.address.googleMapsUrl">(<a ng-href="{{esEventCtrl.document.address.googleMapsUrl}}">map</a>)</span></p>
           <p ng-if="esEventCtrl.eventWebsite()"><a ng-href="{{esEventCtrl.eventWebsite()}}">Event Website</a> </p>
           <p ng-if="esEventCtrl.contactOrganization">Organized By</p>
-          <p ng-if="esEventCtrl.contactOrganization" class="text-center">
-            <img width="50%"  ng-src="{{esEventCtrl.contactOrganization.logo.url}}"></img>
-          </p>
           <p ng-if="esEventCtrl.contactOrganization">
-            <span><br><strong>{{esEventCtrl.contactOrganization.document.name | lstring:locale}} </strong></span>
+            <span><strong>{{esEventCtrl.contactOrganization.document.name | lstring:locale}} </strong></span>
           </p>
-
+          <p ng-if="esEventCtrl.contactOrganization" class="text-center">
+            <img style="max-width:100%"  ng-src="{{esEventCtrl.contactOrganization.logo.url}}"></img>
+          </p>
         </div>
 
-        <div class=" hidden-xs hidden-sm">
-
-          <div class="col-xs-12 " ng-if="esEventCtrl.document.aichiTargets">
-            <div><br></div>
-            <div><label class="view" style="color:#009B48;">Aichi Biodiversity Target(s)</label> </div>
-            <div class="row">
+        <div ng-if="esEventCtrl.document.aichiTargets">
+          <hr>
+          <div><label class="view" style="color:#009B48;">Aichi Biodiversity Target(s)</label> </div>
+          <div class="row">
             <div class="col-xs-3" ng-repeat="term in esEventCtrl.document.aichiTargets">
-              <a ng-href="https://www.cbd.int/aichi-targets/target/{{term.identifier.slice(-2)}}}"><img ng-src="https://www.cbd.int/images/aichi/48/abt-{{term.identifier.slice(-2)}}-48.png" ></a>
+              <a ng-href="https://www.cbd.int/aichi-targets/target/{{term.identifier.slice(-2)}}"><img ng-src="https://www.cbd.int/images/aichi/48/abt-{{term.identifier.slice(-2)}}-48.png" ></a>
             </div>
           </div>
-          <div><br></div>
         </div>
 
-          <div class="col-xs-12 " ng-if="esEventCtrl.document.thematicAreas">
+        <div ng-if="esEventCtrl.document.thematicAreas">
+            <hr>
             <label class="view" style="color:#009B48;">CBD subject area(s)</label>
             <div class="km-value">
               <div ng-repeat="term in esEventCtrl.document.thematicAreas">{{term | term:locale}}</div>
             </div>
-
-          </div>
-
         </div>
+      </div>
 
-    </div>
 
 
       <div class="col-xs-12 col-md-9">
@@ -559,19 +554,41 @@
                   <hr class="hidden-md hidden-sm hidden-xs" style="margin:0;"/><hr/>
                  <div style='word-wrap: break-word; white-space: pre-wrap;' ng-bind-html="esEventCtrl.document.descriptionNative | linky"></div>
               </span>
-              <br><br>
         </div>
 
         <div class="col-xs-12 hidden-md hidden-lg hidden-xl" >
 
-          <div class="col-xs-12 " ng-if="esEventCtrl.document.aichiTargets">
-            <div><label class="view" style="color:#009B48;">Aichi Biodiversity Target(s)</label> </div>
-            <div class="col-xs-3" ng-repeat="term in esEventCtrl.document.aichiTargets">
-              <a ng-href="https://www.cbd.int/aichi-targets/target/{{term.identifier.slice(-2)}}}"><img ng-src="https://www.cbd.int/images/aichi/48/abt-{{term.identifier.slice(-2)}}-48.png" ></a>
-            </div>
+          <div class="visible-xs visible-sm text-center">
+            <hr>
+            <p>
+              {{esEventCtrl.document.startDate | moment:'format':'DD MMMM YYYY'}},
+              <span ng-if="esEventCtrl.document.address.city.en">{{esEventCtrl.document.address.city.en}},</span>
+              {{esEventCtrl.document.address.country | term}}
+              <span ng-if="esEventCtrl.document.address.googleMapsUrl">(<a ng-href="{{esEventCtrl.document.address.googleMapsUrl}}">map</a>)</span>
+            </p>
+            <p ng-if="esEventCtrl.eventWebsite()"><a ng-href="{{esEventCtrl.eventWebsite()}}">Event Website</a> </p>
+            <p ng-if="esEventCtrl.contactOrganization" >
+                <strong>{{esEventCtrl.contactOrganization.document.name | lstring:locale}} </strong>
+            </p>
+            <p ng-if="esEventCtrl.contactOrganization">
+              <img style="max-width:230px;max-height:150px"  ng-src="{{esEventCtrl.contactOrganization.logo.url}}"></img>
+            </p>
           </div>
 
-          <div class="col-xs-12  " ng-if="esEventCtrl.document.thematicAreas">
+          <div ng-if="esEventCtrl.document.aichiTargets">
+            <hr>
+
+            <div><label class="view" style="color:#009B48;">Aichi Biodiversity Target(s)</label> </div>
+              <div class="row">
+                <div class="col-xs-2" ng-repeat="term in esEventCtrl.document.aichiTargets">
+                  <a ng-href="https://www.cbd.int/aichi-targets/target/{{term.identifier.slice(-2)}}}"><img ng-src="https://www.cbd.int/images/aichi/48/abt-{{term.identifier.slice(-2)}}-48.png" ></a>
+                </div>
+              </div>
+          </div>
+
+          <div ng-if="esEventCtrl.document.thematicAreas">
+            <hr>
+
             <label class="view" style="color:#009B48;">CBD subject area(s)</label>
             <div class="km-value">
               <div ng-repeat="term in esEventCtrl.document.thematicAreas">{{term | term:locale}}</div>

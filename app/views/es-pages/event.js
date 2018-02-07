@@ -1,4 +1,4 @@
-define(['app', 'directives/es-pages/header-nav', 'filters/term', 'filters/moment', 'filters/title-case', 'services/storage'], function(app) {
+define(['app', 'lodash', 'directives/es-pages/header-nav', 'filters/term', 'filters/moment', 'filters/title-case', 'services/storage'], function(app, _) {
     'use strict';
 
     return ['$routeParams', '$scope', '$sce', '$location', '$window', 'IStorage', '$timeout', function($routeParams, $scope, $sce, $location, $window, storage, $timeout) {
@@ -53,7 +53,7 @@ define(['app', 'directives/es-pages/header-nav', 'filters/term', 'filters/moment
                         var cover;
 
                         if (_ctrl.document && _ctrl.document.images)
-                            cover = _ctrl.document.images.find(function(i) {
+                            cover = _.find(_ctrl.document.images, function(i) {
                                 if (i.name === 'cover') return true;
                             });
                         if (cover)
@@ -74,7 +74,7 @@ define(['app', 'directives/es-pages/header-nav', 'filters/term', 'filters/moment
 							_ctrl.contactOrganization ={};
 								_ctrl.contactOrganization.document=ref.data;
 								if(_ctrl.contactOrganization.document.relevantDocuments)
-								_ctrl.contactOrganization.logo=_ctrl.contactOrganization.document.relevantDocuments.find(function(e){if(e.name==='logo')return true;});
+								_ctrl.contactOrganization.logo=_.find(_ctrl.contactOrganization.document.relevantDocuments, function(e){if(e.name==='logo')return true;});
 						});
                     }).then(null,
                     function(err) {
@@ -126,7 +126,7 @@ define(['app', 'directives/es-pages/header-nav', 'filters/term', 'filters/moment
 
             if (_ctrl.document.websites) {
                 var sites = _ctrl.document.websites
-                var s =sites.find(function(element) {
+                var s =_.find(sites, function(element) {
                     if (element.name === 'website') return true
                 });
                 if(s)return s.url
