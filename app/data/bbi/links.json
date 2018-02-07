@@ -21,17 +21,17 @@
                     "en": "Operational Framework"
                 },
                 "source": "/about/framework"
-            },  {
-                "title": {
-                    "en": "Steering Committee"
-                },
-                "source": "/about/steering-committee"
             },
             {
                 "title": {
                     "en": "Action Plan"
                 },
                 "source": "/about/plan"
+            },  {
+                "title": {
+                    "en": "Steering Committee"
+                },
+                "source": "/about/steering-committee"
             }, {
                 "title": {
                     "en": "Participation"

@@ -35,19 +35,10 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         $scope.postComment = postComment;
         $scope.deleteComment = deleteComment;
         $scope.buildFileUrl = buildFileUrl;
-        $scope.deleteFile = deleteFile;
-        $scope.selectActors = selectActors;
-        $scope.deleteActor  = deleteActor;
-        $scope.selectStatuses = selectStatuses;
-        $scope.deleteStatus   = deleteStatus;
         $scope.selectDecision = selectDecision;
-        $scope.deleteDecision = deleteDecision;
         $scope.selectMeeting  = selectMeeting;
-        $scope.deleteMeeting  = deleteMeeting;
         $scope.selectMeetingDocument = selectMeetingDocument;
-        $scope.deleteMeetingDocument = deleteMeetingDocument;
         $scope.selectNotification = selectNotification;
-        $scope.deleteNotification = deleteNotification;
         $scope.actionEdit  = edit;
         $scope.isEditable  = isEditable;
         $scope.tag         = tag;
@@ -56,7 +47,10 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         $scope.actionClean = removeSelectionFormatting;
         $scope.jumpTo      = jumpTo;
         $scope.initials=function(t) { return _.startCase(t).replace(/[^A-Z]/g, ''); };
+        $scope.addTo       = addTo;
+        $scope.removeFrom  = removeFrom;
 
+        $scope.noNarrower = function(t) { return !t.narrowerTerms || !t.narrowerTerms.length; };
         $scope.collections = {
             sections    : sectionList,
             paragraphes : paragraphList,
@@ -91,9 +85,18 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function load() {
 
-            $http.get('/api/v2015/treaties/'+treaty.code, { cache: true } ).then(function(res) {
+            var q0 = $http.get('/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms',  { cache: true } );
+            var q1 = $http.get('/api/v2013/thesaurus/domains/AICHI-TARGETS/terms', { cache: true } );
+            var q2 = $http.get('/api/v2015/treaties/'+ encodeURIComponent(treaty.code), { cache: true } );
 
-                treaty = res.data;
+            $q.all([q0, q1, q2]).then(function(res) {
+
+                $scope.collections.subjects        =   res[0].data;
+                $scope.collections.aichiTargets    =   res[1].data;
+                $scope.collections.subjectsMap     = _(res[0].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
+                $scope.collections.aichiTargetsMap = _(res[1].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
+
+                treaty   = res[2].data;
 
                 return $http.get('/api/v2016/decision-texts', { params : { q : { $or: [{ decision: roman[session] + '/' + decision}, { treaty:treaty.code,  body: body, session: session, decision: decision }]}, fo: 1 }});
 
@@ -105,20 +108,28 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                     session : session,
                     decision: decision,
                     meeting : body+'-'+ pad(session),
+                    subjects : [],
+                    aichiTargets : [],
                     content: 'paste here'
                 };
 
                 data = _.defaults(data, {
                     symbol : data.decision,
                     body   : body,
-                    treaty : treaty.code
+                    treaty : treaty.code,
+                    subjects : [],
+                    aichiTargets : []
                 });
 
                 if(typeof(data.decision)=='string') {
                     data.decision = parseInt(data.symbol.replace(/.*\/(\d+)$/, '$1'));
                 }
 
+                $scope.subjects     = data.subjects     = (data.subjects     || []);
+                $scope.aichiTargets = data.aichiTargets = (data.aichiTargets || []);
+
                 $('#content').html(data.content);
+
 
                 clean($('#content')[0]);
                 clean($('#content')[0]);
@@ -195,7 +206,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             var req = {
                 method : data._id ? 'PUT' : 'POST',
                 url    : '/api/v2016/decision-texts' + (data._id ? '/'+data._id : ''),
-                data   : _.pick(data, "_id","treaty","body","session","decision","meeting","content")
+                data   : _.pick(data, "_id","treaty","body","session","decision","meeting","content","subjects","aichiTargets")
             };
 
 
@@ -436,7 +447,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             delete $scope.formattingLocked;
 
-            $(selectedElement).attr('data-info', ng.toJson(cleanup($scope.element)));
+            $(selectedElement).attr('data-info', ng.toJson(cleanup($scope.element, true)));
 
             $(selectedElement).removeClass('selected');
 
@@ -465,15 +476,35 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         //
         //===========================
-        function cleanup(element) {
+        function cleanup(element, deleteEmpty) {
 
-            var data = element && element.data;
+            if(element && element.data) {
 
-            if(data && data.actors)        data.actors        = _(data.actors       ).uniq().value();
-            if(data && data.statuses)      data.statuses      = _(data.statuses     ).uniq().value();
-            if(data && data.decisions)     data.decisions     = _(data.decisions    ).uniq().value();
-            if(data && data.notifications) data.notifications = _(data.notifications).uniq().value();
-            if(data && data.meetings)      data.meetings      = _(data.meetings     ).uniq().map(mettingUrlToCode).value();
+                element.data.subjects      = _(element.data.subjects     ||[]).uniq().value();
+                element.data.aichiTargets  = _(element.data.aichiTargets ||[]).uniq().value();
+                element.data.actors        = _(element.data.actors       ||[]).uniq().value();
+                element.data.statuses      = _(element.data.statuses     ||[]).uniq().value();
+                element.data.decisions     = _(element.data.decisions    ||[]).uniq().value();
+                element.data.notifications = _(element.data.notifications||[]).uniq().value();
+                element.data.documents     = _(element.data.documents    ||[]).uniq().value();
+                element.data.meetings      = _(element.data.meetings     ||[]).uniq().map(mettingUrlToCode).value();
+
+                if(deleteEmpty) { // Remove empty fields/arrays
+
+                    for(var key in element.data) {
+
+                        var val = element.data[key];
+
+                        if(val===undefined) { delete element.data[key]; continue; }
+                        if(val===null)      { delete element.data[key]; continue; }
+                        if(val==="")        { delete element.data[key]; continue; }
+
+                        if(_.isArray(val) && !val.length) {
+                            delete element.data[key]; continue;
+                        }
+                    }
+                }
+            }
 
             return element;
         }
@@ -530,6 +561,34 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                         node.removeChild(child);
                 }
             }
+        }
+
+        //===========================
+        //
+        //===========================
+        function addTo(item, target) {
+
+            if(!_.isArray(target)) throw new Error("target must be an array");
+
+            if(target.indexOf(item) < 0)
+                target.push(item);
+
+            return target;
+        }
+
+        //===========================
+        //
+        //===========================
+        function removeFrom(item, target) {
+
+            if(!_.isArray(target)) throw new Error("target must be an array");
+
+            var index;
+
+            while((index = target.indexOf(item)) >= 0)
+                target.splice(index, 1);
+
+            return target;
         }
 
         ////////////////////
@@ -618,26 +677,8 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             return '/api/v2016/decision-texts/'+data._id+'/attachments/'+item.hash+'/stream';
         }
 
-        //===========================
-        //
-        //===========================
-        function deleteFile(item) {
-
-            if(!$scope.element && !$scope.element.data)
-                return;
-
-            var items = $scope.element.data.files || [];
-            var index = items.indexOf(item);
-
-            if(index>=0) {
-                items.splice(index, 1);
-            }
-
-            $scope.element.data.files = items.length ? items : undefined;
-        }
-
         ////////////////////
-        // DOCUMENTS
+        // DIALOGS
         ////////////////////
 
         //===========================
@@ -652,84 +693,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                     if(!res.value)
                         return;
 
-                    $scope.element.data.documents = _.union($scope.element.data.documents||[], [res.value]);
+                    addTo(res.value, $scope.element.data.documents);
                 });
             });
-        }
-
-        //===========================
-        //
-        //===========================
-        function deleteMeetingDocument(item) {
-
-            if(!$scope.element && !$scope.element.data)
-                return;
-
-            var items = $scope.element.data.documents || [];
-            var index = items.indexOf(item);
-
-            if(index>=0) {
-                items.splice(index, 1);
-            }
-
-            $scope.element.data.documents = items.length ? items : undefined;
-        }
-
-        ////////////////////
-        // DIALOGS
-        ////////////////////
-
-        //===========================
-        //
-        //===========================
-        function selectActors() {
-
-            if($scope.element && $scope.element.data && $scope.selectedActor) {
-                $scope.element.data.actors = _.union($scope.element.data.actors||[], [$scope.selectedActor]);
-            }
-
-            $scope.selectedActor = '';
-        }
-
-        //===========================
-        //
-        //===========================
-        function deleteActor(item) {
-
-            if(!$scope.element && !$scope.element.data)
-                return;
-
-            $scope.element.data.actors = _.without($scope.element.data.actors||[], item);
-
-            if(!$scope.element.data.actors.length)
-                delete $scope.element.data.actors;
-        }
-
-
-        //===========================
-        //
-        //===========================
-        function selectStatuses() {
-
-            if($scope.element && $scope.element.data && $scope.selectedStatus) {
-                $scope.element.data.statuses = _.union($scope.element.data.statuses||[], [$scope.selectedStatus]);
-            }
-
-            $scope.selectedStatus = '';
-        }
-
-        //===========================
-        //
-        //===========================
-        function deleteStatus(item) {
-
-            if(!$scope.element && !$scope.element.data)
-                return;
-
-            $scope.element.data.statuses = _.without($scope.element.data.statuses||[], item);
-
-            if(!$scope.element.data.statuses.length)
-                delete $scope.element.data.statuses;
         }
 
         //===========================
@@ -744,23 +710,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                     if(!res.value)
                         return;
 
-                    $scope.element.data.decisions = _.union($scope.element.data.decisions||[], [res.value]);
+                    addTo(res.value, $scope.element.data.decisions);
                 });
             });
-        }
-
-        //===========================
-        //
-        //===========================
-        function deleteDecision(item) {
-
-            if(!$scope.element && !$scope.element.data)
-                return;
-
-            $scope.element.data.decisions = _.without($scope.element.data.decisions||[], item);
-
-            if(!$scope.element.data.decisions.length)
-                delete $scope.element.data.decisions;
         }
 
         //===========================
@@ -775,23 +727,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                     if(!res.value)
                         return;
 
-                    $scope.element.data.notifications = _.union($scope.element.data.notifications||[], [res.value.symbol]);
+                    addTo(res.value.symbol, $scope.element.data.notifications);
                 });
             });
-        }
-
-        //===========================
-        //
-        //===========================
-        function deleteNotification(item) {
-
-            if(!$scope.element && !$scope.element.data)
-                return;
-
-            $scope.element.data.notifications = _.without($scope.element.data.notifications||[], item);
-
-            if(!$scope.element.data.notifications.length)
-                delete $scope.element.data.notifications;
         }
 
         //===========================
@@ -806,24 +744,9 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
                     if(!res.value)
                         return;
 
-                    $scope.element.data.meetings = _.union($scope.element.data.meetings||[], [mettingUrlToCode(res.value.symbol)]);
+                    addTo(mettingUrlToCode(res.value.symbol), $scope.element.data.meetings);
                 });
             });
-        }
-
-        //===========================
-        //
-        //===========================
-        function deleteMeeting(item) {
-
-
-            if(!$scope.element && !$scope.element.data)
-                return;
-
-            $scope.element.data.meetings = _.without($scope.element.data.meetings||[], item);
-
-            if(!$scope.element.data.meetings.length)
-                delete $scope.element.data.meetings;
         }
 
         //===========================
