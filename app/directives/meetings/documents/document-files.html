@@ -2,7 +2,7 @@
     <div class="hidden-xs" ng-repeat="(type,languages) in ::byTypes ">
         <i class="fa {{::(MIMES[type]||MIMES.default).icon}}" ng-style="::{ color: MIMES[type].color}"></i>
         <span ng-repeat="(language,file) in ::languages track by language">
-            <a target="_blank" href="{{::file.url}}"  style="cursor:auto" ng-click="$event.stopPropagation();">
+            <a target="_blank" href="{{::file.url}}" ng-click="$event.stopPropagation();">
 
                 <span class="visible-md-inline visible-lg-inline visible-xl-inline">
                     {{::LANGUAGES[language]||language}}
