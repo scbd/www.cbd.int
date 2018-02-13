@@ -16,7 +16,7 @@
            width:100%;
            background-color:rgba(128,128,128,0.25);
            border-left:4px solid #fff;
-           border-right:4px solid #fff;
+           border-right:none;
            border-bottom:1px solid #fff;
            /*border-top:4px solid black*/
        }
@@ -138,6 +138,9 @@
            background: -moz-linear-gradient(bottom right, #bdc3c7, #2c3e50); /* For Firefox 3.6 to 15 */
            background: linear-gradient(to bottom right, #bdc3c7, #2c3e50); /* Standard syntax (must be last) */
        }
+       .no-left-border, .meetingnav-table{
+           border-left: none!important;
+       }
    </style>
    <!-- NAVIGATION BAR -->
    <div ng-cloak ng-if="meetingNavCtrl.isSelected()" class="meetingnav hidden-print">
@@ -145,7 +148,7 @@
            <div class="row menu-gradient">
                <table class="meetingnav-table">
                    <tr>
-                       <td  class="notselected meetingnav-button"  ng-class="{selected:meetingNavCtrl.isSelected('/conferences/'+meeting.code, true)}">
+                       <td  class="notselected meetingnav-button no-left-border"  ng-class="{selected:meetingNavCtrl.isSelected('/conferences/'+meeting.code, true)}">
                            <a href="/conferences/{{meeting.code}}" class="link"></a>
                            <i class="fa fa-home fa-2x" ng-if="!meeting.conference.logo"></i>
                            <img ng-if="meeting.conference.logo" ng-src="/app/images/{{meeting.conference.logo}}" style="width:44px;height:44px">
