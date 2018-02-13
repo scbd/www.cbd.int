@@ -90,7 +90,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       .when('/:code/schedules',             { templateUrl   : 'views/meetings/documents/agenda.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting',              { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting/documents',    { templateUrl   : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
-
+      
     }
 
   //============================================================
@@ -292,4 +292,22 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         }];//return array
     }//securize
 
+
+    function runTheRun(){       
+        require(['directives/meetings/conference-header']);
+
+        app.run(['$compile', '$rootScope', function($compile, $rootScope){
+            console.log('run from routes')
+            require(['directives/meetings/conference-header'], function(){
+                var conferenceHeader = angular.element("#conferenceHeader");
+                conferenceHeader.css('display', 'block');
+                conferenceHeader.html('').append('<conference-header><conference-header>')
+                $compile(conferenceHeader.contents())($rootScope);
+            })
+        }]);
+    }
+
+    // /conferences/**
+    if(/^\/conferences($|\/.*)/.test(locationPath))
+        runTheRun();
 });
