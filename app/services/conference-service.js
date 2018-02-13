@@ -3,6 +3,8 @@
     app.factory("conferenceService", ['$http', '$rootScope', '$q', '$timeout', '$filter', '$route', 
     function ($http, $rootScope, $q, $timeout, $filter, $route) {
             var meeting
+            var conferenceArticle;
+
             function getActiveConference(){
 
                 if(meeting){                    
@@ -38,8 +40,21 @@
                 
             }
 
+
+            function getConferenceArticle(articleId){
+                
+                if(conferenceArticle){                    
+                    return $q.when(conferenceArticle);
+                }
+                return conferenceArticle =  $q.when($http.get('/api/v2017/articles/' + articleId, {cache:true}))
+                                                .then(function(data){
+                                                    return article = data.data;
+                                                });
+                
+            }
             return {
-                getActiveConference    : getActiveConference
+                getActiveConference     : getActiveConference,
+                getConferenceArticle    : getConferenceArticle
             }
 
     }]);
