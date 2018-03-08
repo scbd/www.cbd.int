@@ -44,7 +44,8 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 				  var rx = /(^).*?(?=\n|$)/g;
 				  var arr = rx.exec(txt);
 
-				  if(arr[0].length>380)arr[0] = arr[0].subString(0,380);
+				  if(arr[0] && typeof arr[0] === 'string' && arr[0].length>350)
+            arr[0] = arr[0].substring(0,350);
 				  return arr[0] || txt;
 				}
 				//=======================================================================
@@ -58,7 +59,7 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 								'fl': 'title_t,description_t,identifier_s,startDate_dt,cover_s',
 								'wt': 'json',
 								'start': 0,
-								'rows': 5,
+								'rows': 100,
 								'facet': true,
 								'facet.limit': 999999,
 								'facet.mincount' : 1
