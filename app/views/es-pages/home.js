@@ -44,7 +44,8 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 				  var rx = /(^).*?(?=\n|$)/g;
 				  var arr = rx.exec(txt);
 
-				  if(arr[0] && typeof arr[0] === 'string' && arr[0].length>350)
+          if(arr && arr[0])
+				      if(typeof arr[0] === 'string' && arr[0].length>350)
                       arr[0] = arr[0].substring(0,350);
 				  return arr[0] || txt;
 				}
