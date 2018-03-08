@@ -45,7 +45,7 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 				  var arr = rx.exec(txt);
 
 				  if(arr[0] && typeof arr[0] === 'string' && arr[0].length>350)
-            arr[0] = arr[0].substring(0,350);
+                      arr[0] = arr[0].substring(0,350);
 				  return arr[0] || txt;
 				}
 				//=======================================================================
@@ -55,11 +55,11 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 
 						var queryParameters = {
 								'q': 'schema_s:event AND thematicArea_ss:3FEF79FF-9EA2-4E3A-BEC9-2991CCDD7F3A',
-								'sort': 'startDate_dt asc',
+								'sort': 'updatedDate_dt desc',
 								'fl': 'title_t,description_t,identifier_s,startDate_dt,cover_s',
 								'wt': 'json',
 								'start': 0,
-								'rows': 100,
+								'rows': 5,
 								'facet': true,
 								'facet.limit': 999999,
 								'facet.mincount' : 1
