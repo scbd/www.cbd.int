@@ -14,6 +14,8 @@ function(sectionList,       paragraphList,        itemList,       subItemList) {
                 { code : "WGRI",    title : "WGRI" },
                 { code : "WG8J",    title : "WG8J" },
                 { code : "WGPA",    title : "WGPA" },
+                { code : "ICCP",    title : "ICCP" },
+                { code : "ICNP",    title : "ICNP" },
             ],
             sessions    : paragraphList, //TODO
             decisions   : paragraphList, //TODO
