@@ -45,8 +45,8 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 				  var arr = rx.exec(txt);
 
           if(arr && arr[0])
-				      if(typeof arr[0] === 'string' && arr[0].length>350)
-                      arr[0] = arr[0].substring(0,350);
+				      if(typeof arr[0] === 'string' && arr[0].length>130)
+                      arr[0] = arr[0].substring(0,130);
 				  return arr[0] || txt;
 				}
 				//=======================================================================
@@ -71,7 +71,7 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 								for(var i in data.response.docs){
 									data.response.docs[i].description_t=extractFirstParagraph(data.response.docs[i].description_t);
 									data.response.docs[i].url_ss ='/event/'+data.response.docs[i].identifier_s
-										data.response.docs[i].visible = true;
+									data.response.docs[i].visible = true;
 								}
 
 								$scope.carousel=data.response.docs;
