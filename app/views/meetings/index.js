@@ -1,7 +1,7 @@
-﻿define(['app', 'lodash', 'services/conference-service'], function(app, _) { 'use strict';
+﻿define(['app', 'lodash', 'services/conference-service', 'services/article-service', 'services/fb'], function(app, _) { 'use strict';
 
-return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', '$q',
-        function ($location,$scope,$timeout,  $route, $sce, conferenceService, $q) {
+return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', '$q', 'articleService',
+        function ($location,$scope,$timeout,  $route, $sce, conferenceService, $q, articleService) {
        
 			var _ctrl = this;
 
@@ -19,7 +19,7 @@ return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', 
                     }, 500)
                 }
                 else{
-                    $q.when(conferenceService.getConferenceArticle(meeting.conference.articleId))
+                    $q.when(articleService.getArticle(meeting.conference.articleId))
                     .then(function(article){
                         $scope.meeting.conference.article = article
                     })
