@@ -3,7 +3,6 @@
     app.factory("conferenceService", ['$http', '$rootScope', '$q', '$timeout', '$filter', '$route',
     function ($http, $rootScope, $q, $timeout, $filter, $route) {
             var meeting
-            var conferenceArticle;
 
             function getActiveConference(){
 
@@ -99,7 +98,8 @@
                 getFuture               : getFuture,
                 getActiveConference     : getActiveConference,
                 getConferenceArticle    : getConferenceArticle,
-                getConference           : getConference
+                getConference           : getConference,
+                getActiveConference     : getActiveConference
             }
 
     }]);
