@@ -194,7 +194,9 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
           .when('/about/framework',        { templateUrl: 'views/bbi/about/framework.html',  controllerAs: 'frameworkCtrl',  resolveController: true})
           .when('/about/plan',             { templateUrl: 'views/bbi/about/plan.html',  controllerAs: 'planCtrl',  resolveController: true})
           .when('/about/partners',         { templateUrl: 'views/bbi/about/partners.html',  controllerAs: 'partnersCtrl',  resolveController: true})
+          .when('/about/advisory-committee',         { templateUrl: 'views/bbi/about/steering-committee.html',  controllerAs: 'steeringCommitteeCtrl',  resolveController: true})
           .when('/about/steering-committee',         { templateUrl: 'views/bbi/about/steering-committee.html',  controllerAs: 'steeringCommitteeCtrl',  resolveController: true})
+          .when('/about/governance',         { templateUrl: 'views/bbi/about/steering-committee.html',  controllerAs: 'steeringCommitteeCtrl',  resolveController: true})
 
           .when('/participation',                { templateUrl: 'views/bbi/participation/index-part.html',  controllerAs: 'participationCtrl',  resolveController: true})
           .when('/participation/request',        { templateUrl: 'views/bbi/participation/request.html',  controllerAs: 'requestCtrl',  resolveController: true})
