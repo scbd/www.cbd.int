@@ -11,11 +11,17 @@
             documentUrl: function() {
                 return "/api/v2013/documents/:identifier";
             },
+            documentRealmUrl: function() {
+                return "/api/v2013/documents/:identifier/realm";
+            },
             validateUrl: function() {
                 return "/api/v2013/documents/x/validate";
             },
             draftUrl: function() {
                 return "/api/v2013/documents/:identifier/versions/draft";
+            },
+            draftRealmUrl: function() {
+                return "/api/v2013/documents/:identifier/versions/draft/realm";
             },
             attachmentUrl: function() {
                 return "/api/v2013/documents/:identifier/attachments/:filename";
@@ -170,6 +176,22 @@
                 canDelete: function(identifier, schema, metadata, config) {
                     return canDo(serviceUrls.securityUrl(), "delete", identifier, schema, metadata, config);
                 }
+            },
+            //===========================
+            //
+            //===========================
+            "getRealm": function(identifier, params, config) {
+                params = clone(params || {});
+                params.identifier = identifier;
+
+                var useCache = !!params.cache;
+
+                var oTrans = transformPath(serviceUrls.documentRealmUrl(), params);
+
+                return $http.get(oTrans.url, getConfig(config, oTrans.params, useCache));
+
+                //TODO: return result.data;
+
             }
         };
 
@@ -364,6 +386,26 @@
                         return success.data;
                     });
                 }
+            },
+
+
+            //===========================
+            //
+            //===========================
+            "getRealm": function(identifier, params, config) {
+                params = clone(params || {});
+                params.identifier = identifier;
+
+                var useCache = !!params.cache;
+
+                if (!params.cache)
+                    params.cache = true;
+
+                var oTrans = transformPath(serviceUrls.draftRealmUrl(), params);
+
+                return $http.get(oTrans.url, getConfig(config, oTrans.params, useCache));
+
+                //TODO: return result.data;
             }
         };
 
