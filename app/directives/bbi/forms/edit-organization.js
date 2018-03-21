@@ -483,7 +483,11 @@ app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter"
 
 				if(identifier && identifier!=='new'){
 					$scope.editExisting = true;
-					promise = editFormUtility.load(identifier, "organization");
+					promise = editFormUtility.getRealm(identifier)
+					.then(function(realm){
+						$scope.documentRealm =  realm;
+						return editFormUtility.load(identifier, "organization", {headers: {realm: realm}});
+					});
 				}
 				else
 					promise = $q.when({
