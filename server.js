@@ -10,7 +10,7 @@ if(!process.env.API_URL) {
     console.warn('warning: evironment API_URL not set. USING default (https://api.cbd.int:443)');
 }
 
-var apiUrl = process.env.API_URL || 'https://api.cbd.int:443';
+var apiUrl = process.env.API_URL || 'https://api.cbddev.xyz';
 var gitVersion = (process.env.COMMIT || 'UNKNOWN').substr(0, 7);
 
 console.info(`info: www.cbd.int`);
