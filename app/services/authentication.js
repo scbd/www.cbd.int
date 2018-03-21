@@ -313,9 +313,9 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
         return {
             request: function(config) {
 
-
-                if(config.method!=='PUT' && config.method!=='POST') return config; // no realm on gets
-
+				if((config.headers || {}).hasOwnProperty('realm'))
+					return config;
+					
                 var trusted = /^https:\/\/api.cbd.int\//i .test(config.url) ||
                               /^https:\/\/localhost[:\/]/i.test(config.url) ||
                               /^\/\w+/i                   .test(config.url);
@@ -329,19 +329,26 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
                     config.headers = angular.extend(config.headers || {}, { realm : realm });
                 }
 
-                var docExists = !!(config.data && config.data.header && config.data.header.identifier);
-                var sharedRefRecord = !!(config.data && config.data.header && config.data.header.schema==='organization');
-
-                if(docExists && sharedRefRecord && !hasRealmParam) // share reference records between realms
-                    return $injector.get('editFormUtility').getRealm(config.data.header.identifier).then(function(res){
-
-                            if(res) {
-                                if(sameEnv(realm, res))
-                                    config.headers = angular.extend(config.headers || {}, { realm : res });
-                            }
-                            return config;
-                    });
-
+                // this logic should not here
+                var isOrganization = !!(config.data && config.data.header && config.data.header.schema==='organization');
+				if(config.params && config.params.metadata && config.params.metadata.schema)
+				isOrganization	=	config.params.metadata.schema==='organization';
+					
+				if(isOrganization){ // share reference records between realms
+					var identifier;
+					if(config.data && config.data.header && config.data.header.identifier)
+						identifier = config.data.header.identifier;
+					else{
+						var identifierRegex = /(\/api\/v2013\/documents\/)([A-Za-z0-9\-]+)\/?/;
+						var identifierMatch = config.url.match(identifierRegex);
+						if(identifierMatch.length > 0)
+							identifier = identifierMatch[2];
+					}
+					return $injector.get('editFormUtility').getRealm(identifier).then(function(res){
+							config.headers = angular.extend(config.headers || {}, { realm : res });                          
+							return config;
+					});
+				}
                 return config;
             }
         };
