@@ -96,31 +96,21 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
       "resourceMobilisation"      : { name: "publishNationalRecord", version: "0.4" },
       "nationalReport6"           : { name: "publishNationalRecord", version: "0.4" },
     };
-
+    var documentRealmCache = {};
     var _self = {
         //==================================
         //
         //==================================
-        getRealm: function(identifier) {
+        getRealm: function(identifier, config) {
 
-          return storage.drafts.get(identifier, {
-            info: ""
-          }).then(
-            function(success) {
-              return success;
-            },
-            function(error) {
-              if (error.status == 404)
-                return storage.documents.get(identifier, {
-                  info: ""
-                });
-              throw error;
-            }).then(
-            function(success) {
-              var info = success.data;
-              if(!info.Realm) return false;
-              return info.Realm;
+          if(documentRealmCache[identifier])
+            return $q.when(documentRealmCache[identifier]);
 
+          return storage.drafts.getRealm(identifier)
+          .then(function(success) {              
+              if(!success.data) return false;
+
+              return documentRealmCache[identifier] = success.data;
           },
           function(error) {
               if (error.status == 404)
@@ -131,19 +121,13 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
       //==================================
       //
       //==================================
-      load: function(identifier, expectedSchema) {
+      load: function(identifier, expectedSchema, config) {
 
-        return storage.drafts.get(identifier, {
-          info: ""
-        }).then(
-          function(success) {
-            return success;
-          },
+        return storage.drafts.get(identifier, {info: ""}, config).then(
+          function(success) { return success; },
           function(error) {
             if (error.status == 404)
-              return storage.documents.get(identifier, {
-                info: ""
-              });
+              return storage.documents.get(identifier, {info: ""}, config);
             throw error;
           }).then(
           function(success) {
@@ -159,8 +143,8 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
 
             var hasDraft = !!info.workingDocumentCreatedOn;
             var securityPromise = hasDraft ?
-              storage.drafts.security.canUpdate(info.identifier, info.type) :
-              storage.drafts.security.canCreate(info.identifier, info.type);
+              storage.drafts.security.canUpdate(info.identifier, info.type, undefined, config) :
+              storage.drafts.security.canCreate(info.identifier, info.type, undefined, config);
 
             return securityPromise.then(
               function(isAllowed) {
@@ -173,8 +157,8 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
                   };
 
                 var documentPromise = hasDraft ?
-                  storage.drafts.get(identifier) :
-                  storage.documents.get(identifier);
+                  storage.drafts.get(identifier, undefined, config) :
+                  storage.documents.get(identifier, undefined, config);
 
                 return documentPromise.then(
                   function(success) {
@@ -187,23 +171,40 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
       //==================================
       //
       //==================================
-      draftExists: function(identifier) {
+      draftExists: function(identifier, config) {
 
-        return storage.drafts.get(identifier, {
-          info: ""
-        }).then(function() {
-          return true;
-        }, function(error) {
-          if (error.status == 404)
-            return false;
-          throw error;
-        });
+        return storage.drafts.exists(identifier, null, config);
       },
 
       //==================================
       //
       //==================================
-      saveDraft: function(document) {
+      canSaveDraft: function(document, config) {
+
+        var identifier = document.header.identifier;
+        var schema = document.header.schema;
+        var metadata = {};
+
+        if (document.government)
+          metadata.government = document.government.identifier;
+
+        // Check if document exists
+
+        return _self.draftExists(identifier, config).then(function(exists) {
+
+          // Check user security on document
+
+          var qCanWrite = exists ? storage.drafts.security.canUpdate(identifier, schema, metadata, config) :
+            storage.drafts.security.canCreate(identifier, schema, metadata, config);
+
+          return qCanWrite;
+
+        });
+      },
+      //==================================
+      //
+      //==================================
+      saveDraft: function(document, config) {
 
         var identifier = document.header.identifier;
         var metadata = {};
@@ -215,8 +216,8 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
           function(hasDraft) {
 
             var securityPromise = hasDraft ?
-              storage.drafts.security.canUpdate(identifier, document.header.schema, metadata) :
-              storage.drafts.security.canCreate(identifier, document.header.schema, metadata);
+              storage.drafts.security.canUpdate(identifier, document.header.schema, metadata, config) :
+              storage.drafts.security.canCreate(identifier, document.header.schema, metadata, config);
 
             return securityPromise.then(
               function(isAllowed) {
@@ -225,7 +226,7 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
                     error: "Not authorized to save draft"
                   };
 
-                return storage.drafts.put(identifier, document);
+                return storage.drafts.put(identifier, document, config);
               });
           });
       },
@@ -233,22 +234,16 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
       //==================================
       //
       //==================================
-      documentExists: function(identifier) {
+      documentExists: function(identifier, config) {
 
-        return storage.documents.get(identifier).then(function() {
-          return true;
-        }, function(error) {
-          if (error.status == 404)
-            return false;
-          throw error;
-        });
+        return storage.documents.exists(identifier, undefined, config);
       },
 
 
       //==================================
       //
       //==================================
-      canPublish: function(document) {
+      canPublish: function(document, config) {
 
         var identifier = document.header.identifier;
         var schema = document.header.schema;
@@ -259,12 +254,12 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
 
         // Check if document exists
 
-        return _self.documentExists(identifier).then(function(exists) {
+        return _self.documentExists(identifier, config).then(function(exists) {
 
           // Check user security on document
 
-          var qCanWrite = exists ? storage.documents.security.canUpdate(identifier, schema, metadata) :
-            storage.documents.security.canCreate(identifier, schema, metadata);
+          var qCanWrite = exists ? storage.documents.security.canUpdate(identifier, schema, metadata, config) :
+            storage.documents.security.canCreate(identifier, schema, metadata, config);
 
           return qCanWrite;
 
@@ -274,7 +269,7 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
       //==================================
       //
       //==================================
-      publish: function(document) {
+      publish: function(document, config) {
 
         var identifier = document.header.identifier;
         var schema = document.header.schema;
@@ -285,12 +280,12 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
 
         // Check if document exists
 
-        return _self.documentExists(identifier).then(function(exists) {
+        return _self.documentExists(identifier, config).then(function(exists) {
 
           // Check user security on document
 
-          var qCanWrite = exists ? storage.documents.security.canUpdate(identifier, schema, metadata) :
-            storage.documents.security.canCreate(identifier, schema, metadata);
+          var qCanWrite = exists ? storage.documents.security.canUpdate(identifier, schema, metadata, config) :
+            storage.documents.security.canCreate(identifier, schema, metadata, config);
 
           return qCanWrite;
 
@@ -307,18 +302,16 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
             // if the user is editing a locked record, remove the lock, update draft,
             // lock the draft and then update the workflow status.
             var metadata = {};
-            processRequest = storage.drafts.locks.get(document.header.identifier, {
-                lockID: ''
-              })
+            processRequest = storage.drafts.locks.get(document.header.identifier, { lockID: ''}, config)
               .then(function(lockInfo) {
-                return storage.drafts.locks.delete(document.header.identifier, lockInfo.data[0].lockID)
+                return storage.drafts.locks.delete(document.header.identifier, lockInfo.data[0].lockID, config)
                   .then(function() {
-                    return storage.drafts.put(document.header.identifier, document);
+                    return storage.drafts.put(document.header.identifier, document, config);
                   })
                   .then(function(draftInfo) {
                     return storage.drafts.locks.put(document.header.identifier, {
                       lockID: lockInfo.data[0].lockID
-                    });
+                    }, config);
                   }).then(function(draftInfo) {
                     console.log(draftInfo);
 
@@ -330,7 +323,7 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
                 })
               });
           } else {
-            processRequest = storage.drafts.put(identifier, document).then(function(draftInfo) {
+            processRequest = storage.drafts.put(identifier, document, config).then(function(draftInfo) {
               return createWorkflow(draftInfo); // return workflow info
             }); //editFormUtility.publish(document);
           }
@@ -341,7 +334,7 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
       //==================================
       //
       //==================================
-      publishRequest: function(document) {
+      publishRequest: function(document, config) {
 
         var identifier = document.header.identifier;
         var schema = document.header.schema;
@@ -352,13 +345,13 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
 
         // Check if doc & draft exists
 
-        return _self.draftExists(identifier).then(function(exists) {
+        return _self.draftExists(identifier, config).then(function(exists) {
 
           // Check user security on drafts
 
           var qCanWrite = exists ?
-            storage.drafts.security.canUpdate(identifier, schema, metadata) :
-            storage.drafts.security.canCreate(identifier, schema, metadata);
+            storage.drafts.security.canUpdate(identifier, schema, metadata, config) :
+            storage.drafts.security.canCreate(identifier, schema, metadata, config);
 
           return qCanWrite;
 
@@ -370,7 +363,7 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
             };
 
           //Save draft
-          return storage.drafts.put(identifier, document);
+          return storage.drafts.put(identifier, document, config);
 
         }).then(function(draftInfo) {
           return createWorkflow(draftInfo); // return workflow info
