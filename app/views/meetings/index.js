@@ -33,5 +33,10 @@ return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', 
                 var size = '1200x600'
                 return url.replace(/attachments\.cbd\.int\//, '$&'+size+'/')
             }
+
+            if (window.FB && window.FB.XFBML){
+                window.FB.XFBML.parse();
+            }
+            
     }];
 });
