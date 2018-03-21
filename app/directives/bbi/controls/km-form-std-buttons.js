@@ -139,27 +139,18 @@ define(['app', 'angular', 'text!./km-form-std-buttons.html','jquery'], function(
 
 						var identifier = document.header.identifier;
 						var schema     = document.header.schema;
-
-						storage.documents.exists(identifier).then(function(exist){
-
-							var q = exist ?
-									storage.documents.security.canUpdate(document.header.identifier, schema) :
-									storage.documents.security.canCreate(document.header.identifier, schema);
-
-							q.then(function(allowed) {
+						
+						getCustomConfig(document).then(function(conf){
+							editFormUtility.canPublish(document, conf)
+							.then(function(allowed) {
 								$scope.security.canSave = allowed;
-							});
-						});
-
-						storage.drafts.exists(identifier).then(function(exist){
-
-							var q = exist ?
-									storage.drafts.security.canUpdate(document.header.identifier, schema) :
-									storage.drafts.security.canCreate(document.header.identifier, schema);
-
-							q.then(function(allowed) {
+							})
+						})
+						getCustomConfig(document).then(function(conf){
+							editFormUtility.canSaveDraft(document, conf)
+							.then(function(allowed) {
 								$scope.security.canSaveDraft = allowed;
-							});
+							})
 						});
 					});
 				};
@@ -185,11 +176,13 @@ define(['app', 'angular', 'text!./km-form-std-buttons.html','jquery'], function(
 						if(!document)
 							throw "Invalid document";
 
-						return editFormUtility.publish(document).then(function(documentInfo) {
-							$scope.$emit('showSuccess', 'Document Published');
-							$scope.onPostPublishFn({ data: documentInfo });
+						return getCustomConfig(document).then(function(conf){
+							return editFormUtility.publish(document, conf).then(function(documentInfo) {
+								$scope.$emit('showSuccess', 'Document Published');
+								$scope.onPostPublishFn({ data: documentInfo });
 
-							return documentInfo;
+								return documentInfo;
+							});
 						});
 
 					}).catch(function(error){
@@ -220,12 +213,14 @@ define(['app', 'angular', 'text!./km-form-std-buttons.html','jquery'], function(
 
 						if(!document)
 							throw "Invalid document";
-
-						return editFormUtility.publishRequest(document).then(function(workflowInfo) {
-
-							$scope.onPostWorkflowFn({ data: workflowInfo });
-							$scope.$emit('showSuccess', 'Document Publish Request Processed');
-							return workflowInfo;
+						
+						return getCustomConfig(document).then(function(conf){
+							return editFormUtility.publishRequest(document, conf)
+								.then(function(workflowInfo) {
+									$scope.onPostWorkflowFn({ data: workflowInfo });
+									$scope.$emit('showSuccess', 'Document Publish Request Processed');
+									return workflowInfo;
+								});
 						});
 
 					}).catch(function(error){
@@ -256,10 +251,13 @@ define(['app', 'angular', 'text!./km-form-std-buttons.html','jquery'], function(
 						if(!document)
 							throw "Invalid document";
 
-						return editFormUtility.saveDraft(document).then(function(draftInfo) {
+						return getCustomConfig(document).then(function(conf){
+							
+							return editFormUtility.saveDraft(document, conf).then(function(draftInfo) {
 
-							$scope.onPostSaveDraftFn({ data: draftInfo });
-							$scope.$emit('showSuccess', 'Document Saved as Draft');
+								$scope.onPostSaveDraftFn({ data: draftInfo });
+								$scope.$emit('showSuccess', 'Document Saved as Draft');
+							});
 						});
 					}).catch(function(error){
 						$scope.onErrorFn({ action: "saveDraft", error: error });
@@ -317,6 +315,20 @@ define(['app', 'angular', 'text!./km-form-std-buttons.html','jquery'], function(
 					if(data)
 						return angular.fromJson(angular.toJson(data));
 				};
+
+				function getCustomConfig(document){
+
+					if(document.header.schema == 'organization'){
+						return editFormUtility.getRealm(document.header.identifier)
+											.then(function(realm){
+												if(realm && realm.trim()!=''){
+													return {headers: {realm:realm}}
+												}
+											});
+					}
+
+					return $q.when(null);
+				}
 			}]
 		};
 	}]);
