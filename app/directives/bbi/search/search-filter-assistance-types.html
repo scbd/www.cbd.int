@@ -1,0 +1,116 @@
+<div class="row filter-row" >
+	<div class="col-xs-12">
+		<span><strong>Assistance Types<span class="bg-blue badge">{{total}}</span></strong>
+		<!-- <p class="helpinfo"><i class="fa fa-info-circle helpicon"></i> Subjects and Cross Cutting Issues
+		</p> -->
+		</span>
+
+		</span>
+		<hr/ style="    border-color: #bbb!important;margin: 5px 0 10px 0;padding: 0;">
+	</div>
+	<div class="col-xs-12 col-md-4" style="padding-bottom:10px">
+		<div class="input-group">
+				<input type="text" ng-model="search" class="form-control" placeholder="Search Assistance Type by key word" ng-model-options="{ debounce: { 'default': 300, 'blur': 0 } }" style="font-weight:bold;">
+				<span type="button" class="input-group-addon pointer" id="basic-addon2" ng-click="search='';">
+					<i ng-if="search" class="fa fa-times"></i>
+					<i ng-if="!search"  class="fa fa-search"></i>
+				</span>
+		</div>
+	</div>
+	<div class="col-xs-12" style="height:200px;overflow-y:auto" ng-if="search" >
+		<div ng-repeat="item in termsArray | filter:{title:{en:search}} " class="checkbox"   >
+			<div class="col-xs-12 checkbox text-nowrap"  style="margin: 0 0 0 0;">
+					<label style="font-size: 1em;">
+							<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
+							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+							 {{item.title | lstring}}
+
+					</label>
+			</div>
+	</div>
+	</div>
+
+	<div class="col-xs-12" style="height:200px;overflow-y:auto" ng-if="!search">
+
+		<div ng-repeat="item in terms "  ng-init="index1 = $index"  >
+
+			<!-- <label><input type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)" > {{item.title | lstring}} <span class="bg-blue badge">{{termsModal[index1].count}}</span></label> -->
+			<div class="col-xs-12 checkbox text-nowrap"  style="margin: 0 0 0 0;">
+					<label style="font-size: 1em;">
+							<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
+							<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+							 {{item.title | lstring}}
+
+					</label>
+			</div>
+			<div ng-repeat="item in (item.narrowerTerms )"   ng-init="index2 = $index" ng-if="item.init">
+				<div class="col-xs-12 checkbox text-nowrap"  style="margin: 0 0 0 0;">
+					  <i class="fa fa-arrow-down" aria-hidden="true"></i>
+					  <i class="fa fa-arrow-right" aria-hidden="true"></i>
+						<label style="font-size: 1em;">
+								<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
+								<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+								 {{item.title | lstring}}
+
+						</label>
+				</div>
+				<div  ng-repeat="item in item.narrowerTerms"   ng-init="index3 = $index" ng-if="item.init">
+					<div class="col-xs-12 checkbox text-nowrap"  >
+						<i class="fa fa-arrow-down" aria-hidden="true"></i>
+						<i class="fa fa-arrow-right" aria-hidden="true"></i>
+						<i class="fa fa-arrow-right" aria-hidden="true"></i>
+							<label style="font-size: 1em;">
+									<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
+									<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+									 {{item.title | lstring}}
+
+							</label>
+					</div>
+					<div  ng-repeat="item in item.narrowerTerms"   ng-init="index4 = $index" ng-if="item.init">
+						<div class="col-xs-12 checkbox text-nowrap"  >
+							<i class="fa fa-arrow-down" aria-hidden="true"></i>
+							<i class="fa fa-arrow-right" aria-hidden="true"></i>
+							<i class="fa fa-arrow-right" aria-hidden="true"></i>
+							<i class="fa fa-arrow-right" aria-hidden="true"></i>
+								<label style="font-size: 1em;">
+										<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
+										<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+										 {{item.title | lstring}}
+
+								</label>
+						</div>
+						<div  ng-repeat="item in item.narrowerTerms"   ng-init="index5 = $index" ng-if="item.init">
+							<div class="col-xs-12 checkbox text-nowrap"  >
+								<i class="fa fa-arrow-down" aria-hidden="true"></i>
+								<i class="fa fa-arrow-right" aria-hidden="true"></i>
+								<i class="fa fa-arrow-right" aria-hidden="true"></i>
+								<i class="fa fa-arrow-right" aria-hidden="true"></i>
+								<i class="fa fa-arrow-right" aria-hidden="true"></i>
+									<label style="font-size: 1em;">
+											<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
+											<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+											 {{item.title | lstring}}
+									</label>
+							</div>
+							<div  ng-repeat="item in item.narrowerTerms" style="background-color:red;padding-left:20px" ng-init="index6 = $index" >
+								<div class="col-xs-12 checkbox text-nowrap"  >
+									<i class="fa fa-arrow-down" aria-hidden="true"></i>
+									<i class="fa fa-arrow-right" aria-hidden="true"></i>
+									<i class="fa fa-arrow-right" aria-hidden="true"></i>
+									<i class="fa fa-arrow-right" aria-hidden="true"></i>
+									<i class="fa fa-arrow-right" aria-hidden="true"></i>
+										<i class="fa fa-arrow-right" aria-hidden="true"></i>
+										<label style="font-size: 1em;">
+												<input  type="checkbox" ng-model="item.selected" bind-indeterminate="item.indeterminate" ng-change="refresh(item)">
+												<span class="cr"><i class="cr-icon fa fa-check"></i></span>
+												 {{item.title | lstring}}
+										</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

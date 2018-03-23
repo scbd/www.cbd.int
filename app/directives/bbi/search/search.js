@@ -12,6 +12,7 @@ define(['text!./search.html',
 		"./search-filter-aichi",
 		"./search-filter-themes",
 		"./search-filter-dates",
+    "./search-filter-assistance-types",
 		'ngInfiniteScroll'
 	], function(template, app, $, _) { 'use strict';
 
@@ -20,7 +21,7 @@ define(['text!./search.html',
 	        restrict: 'E',
 	        template: template,
 	        replace: true,
-	        scope: {optionsParam:'=options'},
+	        scope: {optionsParam:'=options',user:"="},
 					require: '^search',
 			link : function($scope, $element, $attr, searchCtrl) {  // jshint ignore:line
 
@@ -176,7 +177,8 @@ define(['text!./search.html',
 																								getFormatedSubQuery('thematicArea_REL_ss'),
 																								getFormatedSubQuery('aichiTarget_ss'),
 																								getFormatedSubQuery('createdDate_s'),
-																								getFormatedSubQuery('keywords')]);
+																								getFormatedSubQuery('keywords'),
+                                                getFormatedSubQuery('assistanceTypes_ss')]);
 
 										if(subQueries.length)
 											q += " AND " + subQueries.join(" AND ");
@@ -298,9 +300,9 @@ define(['text!./search.html',
 												 }else if(subQueriesArr[i]==='capacityBuildingInitiative' ){
 												 		 	returnSubQ+= '(schema_s:(capacityBuildingInitiative) AND (absSubjects_ss:16CEAEC3B006443A903284CA65C73C29 OR categories_ss:9D6E1BC7-4656-46A7-B1BC-F733017B5F9B)) OR ';
 												 }
-												 else if(subQueriesArr[i]==='bbiOpportunity' ){
-												 		 	returnSubQ+= '(schema_s:bbiOpportunity AND ((*:* NOT applicationDeadline_dt:*) OR applicationDeadline_dt: [NOW TO *]))  OR ';//OR applicationDeadline_dt: [NOW TO *]
-												 }
+												 // else if(subQueriesArr[i]==='bbiOpportunity' ){
+												 // 		 	returnSubQ+= '(schema_s:bbiOpportunity AND ((*:* NOT applicationDeadline_dt:*) OR applicationDeadline_dt: [NOW TO *]))  OR ';//OR applicationDeadline_dt: [NOW TO *]
+												 // }
 												 else returnSubQ+= '(schema_s:'+subQueriesArr[i]+') OR ';
 											}
 											returnSubQ=returnSubQ.slice(0,-4);
@@ -329,14 +331,14 @@ define(['text!./search.html',
 						readQueryString ();
 						var queryParameters = {
 								'q': $scope.buildQuery(),
-								'sort': 'createdDate_dt desc',
+								'sort': 'applicationDeadline_dt desc, createdDate_dt desc',
 								// 'fl': 'organizationType_s,logo_s,identifier_s,id,title_t,description_t,url_ss,schema_EN_t,date_dt,government_EN_t,schema_s,number_d,aichiTarget_ss,reference_s,sender_s,meeting_ss,recipient_ss,symbol_s,eventCity_EN_t,eventCountry_EN_t,startDate_s,endDate_s,body_s,code_s,meeting_s,group_s,function_t,department_t,organization_t,summary_EN_t,reportType_EN_t,completion_EN_t,jurisdiction_EN_t,development_EN_t',
 
 								'wt': 'json',
 								'start': $scope.currentPage * $scope.itemsPerPage,
 								'rows': $scope.itemsPerPage,
 								'facet': true,
-								'facet.field': ['schema_s', 'hostGovernments_ss', 'government_REL_ss', 'aichiTarget_ss', 'thematicArea_REL_ss'],
+								'facet.field': ['schema_s', 'hostGovernments_ss', 'government_REL_ss', 'aichiTarget_ss', 'thematicArea_REL_ss', 'assistanceTypes_ss'],
 								'facet.limit': 999999,
 								'facet.mincount' : 1
 						};
@@ -368,7 +370,7 @@ define(['text!./search.html',
 									$scope.regions       = $scope.readFacets2(data.facet_counts.facet_fields.government_REL_ss);
 									$scope.aichiTargets  = $scope.readFacets2(data.facet_counts.facet_fields.aichiTarget_ss);
 									$scope.thematicAreas = $scope.readFacets2(data.facet_counts.facet_fields.thematicArea_REL_ss);
-
+                  $scope.assistanceTypes = $scope.readFacets2(data.facet_counts.facet_fields.assistanceTypes_ss);
 						}).catch(function(error) {
 								console.log('ERROR: ' + error);
 						})
@@ -395,9 +397,9 @@ define(['text!./search.html',
 						var qsAichi = _([$location.search().aichiTarget_ss]).flatten().compact().value(); // takes query string into array
 						var qsThematic = _([$location.search().thematicArea_REL_ss]).flatten().compact().value(); // takes query string into array
 						var qsGovRel = _([$location.search().government_REL_ss]).flatten().compact().value(); // takes query string into array
+            var qsAssistanceTypes = _([$location.search().assistanceTypes_ss]).flatten().compact().value(); // takes query string into array
 
-
-						var qsArrByField = {'schema_s':qsSchema,'hostGovernments_ss':qsCountry,'aichiTarget_ss':qsAichi,'thematicArea_REL_ss':qsThematic,'government_REL_ss':qsGovRel};
+						var qsArrByField = {'schema_s':qsSchema,'hostGovernments_ss':qsCountry,'aichiTarget_ss':qsAichi,'thematicArea_REL_ss':qsThematic,'government_REL_ss':qsGovRel,'assistanceTypes_ss':qsAssistanceTypes};
 						_.each(qsArrByField,function (idArr,schemaKey){
 								_.each(idArr,function(id){
 
