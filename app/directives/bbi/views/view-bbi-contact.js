@@ -68,7 +68,7 @@ define(['text!./view-bbi-contact.html', 'app', 'angular', 'lodash', 'authenticat
 				//====================
 				$scope.isAdmin = function() {
 					if($scope.user)
-						 return !!_.intersection($scope.user.roles, ["Administrator","BBiAdministrator"]).length;
+						 return !!_.intersection($scope.user.roles, ["Administrator","BbiAdministrator"]).length;
 				};
 				//====================
 				//
