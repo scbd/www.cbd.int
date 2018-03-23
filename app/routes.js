@@ -90,7 +90,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       .when('/:code/schedules',             { templateUrl   : 'views/meetings/documents/agenda.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting',              { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting/documents',    { templateUrl   : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
-      
+
     }
 
   //============================================================
@@ -185,10 +185,10 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
           .when('/platform/submit/:schema/:id',     { templateUrl: 'views/bbi/management/edit.html',         controllerAs: 'editCtrl',    resolveController: true ,resolve : { user : securize(['User']) }})
           .when('/platform/submit/:schema/:id/view',{ templateUrl: 'views/bbi/management/view.html',    controllerAs: 'viewCtrl',    resolveController: true,resolve : { user : securize(['Everyone']) } })
           .when('/platform/dashboard'              ,{ templateUrl: 'views/bbi/management/index-man.html',    controllerAs: 'dashCtrl',    resolveController: true ,resolve : { user : securize(['User']) }})
-          .when('/platform/search',                 { templateUrl: 'views/bbi/management/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
+          .when('/platform/search',                 { templateUrl: 'views/bbi/management/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false, resolve : { user : securize(['Everyone']) }})
           .when('/platform/tools',                  { templateUrl: 'views/bbi/management/tools.html',  controllerAs: 'toolsCtrl',  resolveController: true,resolve : { user : securize(['Everyone']) }})
           .when('/platform/about',                  { templateUrl: 'views/bbi/management/about/index.html',  controllerAs: 'pAboutCtrl',  resolveController: true})
-          .when('/platform/:schema',                       { templateUrl: 'views/bbi/management/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
+          .when('/platform/:schema',                { templateUrl: 'views/bbi/management/search.html',  controllerAs: 'searchCtrl',   resolveController: true, reloadOnSearch : false})
 
           .when('/about',                  { templateUrl: 'views/bbi/about/index-about.html',  controllerAs: 'initCtrl',  resolveController: true})
           .when('/about/framework',        { templateUrl: 'views/bbi/about/framework.html',  controllerAs: 'frameworkCtrl',  resolveController: true})
@@ -244,7 +244,8 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
             return $q.when(authentication.getUser()).then(function (user) {
 
                 var hasRole = !!_.intersection(user.roles, requiredRoles).length;
-
+//                 console.log(requiredRoles)
+// throw 'saddassad'
                 if (!user.isAuthenticated) {
                     $rootScope.authRediectChange=authRediectChange;
                     if(!!_.intersection(requiredRoles, ['Everyone']).length)
@@ -295,7 +296,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
     }//securize
 
 
-    function runTheRun(){       
+    function runTheRun(){
         require(['directives/meetings/conference-header']);
 
         app.run(['$compile', '$rootScope', function($compile, $rootScope){

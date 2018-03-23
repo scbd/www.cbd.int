@@ -33,7 +33,7 @@ define(['text!./view-bbi-request.html', 'app', 'lodash',  'services/storage','se
 								//====================
 								$scope.isAdmin = function() {
 									if($scope.user)
-										 return !!_.intersection($scope.user.roles, ["Administrator","BBiAdministrator"]).length;
+										 return !!_.intersection($scope.user.roles, ["Administrator","BbiAdministrator"]).length;
 								};
 								//====================
 								//
@@ -41,7 +41,7 @@ define(['text!./view-bbi-request.html', 'app', 'lodash',  'services/storage','se
 									$scope.isOwnerOrAdmin= function() {
 																					 var isAdmin;
 										if($scope.user)
-											 isAdmin = !!_.intersection($scope.user.roles, ["Administrator","BBiAdministrator"]).length;
+											 isAdmin = !!_.intersection($scope.user.roles, ["Administrator","BbiAdministrator"]).length;
 											 var isNotReview = !!($location.url().indexOf('/view')>-1);
 											 var isOwner = ($scope.document && $scope.document.meta && $scope.user && $scope.user.userID===$scope.document.meta.createdBy);
 

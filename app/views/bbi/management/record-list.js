@@ -18,7 +18,7 @@ define(['lodash',
         function($scope, $route, $http, $location, $q, user, storage, ngDialog, realm,$timeout,mongoStorage,$interval) {
 
             $scope.pageSize = 15;
-			      $scope.isAdmin = !!_.intersection(user.roles, ["Administrator","BBiAdministrator"]).length;
+			      $scope.isAdmin = !!_.intersection(user.roles, ["Administrator","BbiAdministrator"]).length;
             $scope.loading={data:true,facets:true};
             $scope.links = links.links;
             $scope.schema = _.camelCase($route.current.params.schema);
