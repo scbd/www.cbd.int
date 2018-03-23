@@ -1,4 +1,4 @@
-<div  >
+<div  ng-if="!(oppIsExpired() && document.applicationDeadline_dt && !isAdmin()) ">
 
 	<a class="nostyle" ng-href="{{goToUrl()}}" ng-click="goTo($event);">
 <div class="card card-1 records" >
