@@ -23,7 +23,7 @@
 				</div>
 				<div class="modal-footer" style="margin-top:0">
 					<button type="button" ng-click="closeDialog()" 		 class="btn btn-default" >Cancel</button>
-					<button type="button" ng-click="saveDraftFn();closeDialog()"       ng-disabled="disabledSave" class="btn btn-info">Save as draft</button>
+					<button ng-if="!isAdmin" type="button" ng-click="saveDraftFn();closeDialog()"       ng-disabled="disabledSave" class="btn btn-info">Save as draft</button>
 					<button type="button" ng-click="saveRequestFn();closeDialog()"  ng-disabled="disabledSave"  class="btn btn-primary" >Submit request</button>
 					<button ng-if="isAdmin" type="button" ng-click="saveCompletedFn();closeDialog()"  ng-disabled="disabledSave"  class="btn btn-primary" >Submit & Publish</button>
 				</div>
