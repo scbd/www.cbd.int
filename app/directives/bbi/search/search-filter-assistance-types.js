@@ -24,48 +24,7 @@ define(['text!./search-filter-assistance-types.html', 'app', 'lodash','angular']
 						$scope.terms = [];
 
 						$scope.filters=searchCtrl.filters;
-						// var filterWatchKill = addFilterWatch();
-						//=======================================================================
-						//
-						//=======================================================================
-						//  function addFilterWatch(){
-						// 			return $scope.$watch('filters.length',function(){
-						// 											unselectAll();
-						// 											addCount();
-						// 									});
-						// }//
-						//=======================================================================
-						//
-						//=======================================================================
-						//  function addCount(){
-						// 			var wasFiltersUpdated = false;
-						// 			_.each($scope.filters,function(filter,index){
-						// 				if(filter.name!==$scope.facet)return;
-						// 				if(filter.name===filter.title || typeof filter.count ==='undefined'){
-						// 					var termFound = _.find($scope.termsArray,{identifier:filter.identifier});
-						// 					if(termFound){
-						// 						filterWatchKill();
-						// 						$scope.filters[index] = termFound;
-						// 						wasFiltersUpdated =true;
-						// 					}
-						// 				}
-						// 			});
-						// 			if(wasFiltersUpdated)
-            //         $timeout(function(){filterWatchKill = addFilterWatch();},100);
-						// }//
-            //=======================================================================
-      			//
-      			//=======================================================================
-            //  function unselectAll(){
-            //
-            //       _.each($scope.termsArray,function(rec){
-            //             if(_.find($scope.filters,{'identifier':rec.identifier}))
-            //               rec.selected=true;
-            //             else
-            //               rec.selected=false;
-            //       });
-            // }//
-
+					
 						buildTermsAndQuery();
             $scope.$watch('items',function(){
 
