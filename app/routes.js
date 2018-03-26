@@ -66,10 +66,10 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         $("base").attr('href', '/meetings/'); // allow full page reload outside of  /insession/*
 
         routeProvider
-        .when('/import-translations',    { templateUrl : 'views/meetings/documents/management/translations.html', resolveController : true,                       resolve : { user : securize(["Administrator","EditorialService"]) } })
-        .when('/:meeting/documents/:id', { templateUrl : 'views/meetings/documents/management/document-id.html',  resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService"]) } })
-        .when('/:meeting',               { templateUrl : 'views/meetings/documents/documents.html',               resolveController : true, reloadOnSearch:false, resolve : { showMeeting : resolveLiteral(true) } } );
-
+        .when('/import-translations',         { templateUrl : 'views/meetings/documents/management/translations.html', resolveController : true,                       resolve : { user : securize(["Administrator","EditorialService"]) } })
+        .when('/:meeting/documents/status',   { templateUrl : 'views/meetings/documents/documents-progress.html',      resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService", "ScbdStaff"]) } })
+        .when('/:meeting/documents/:id',      { templateUrl : 'views/meetings/documents/management/document-id.html',  resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService"]) } })
+        .when('/:meeting',                    { templateUrl : 'views/meetings/documents/documents.html',               resolveController : true, reloadOnSearch:false, resolve : { showMeeting : resolveLiteral(true) } } );
     }
 
   //============================================================

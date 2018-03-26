@@ -1,0 +1,87 @@
+<table class="document-status table table-condensed">
+    <tr>
+        <th class="hidden-xs">#</th>
+        <th>Step</th>
+        <th class="hidden-xs">Status</th>
+        <th>Due date</th>
+        <th>Assigned To</th>
+        <th>Revision</th>
+        <th>Completed On</th>
+        <th>With Revision</th>
+        <th></th>
+    </tr>
+    <tr ng-repeat="s in document.workflow.steps" ng-class="{ success: s.status=='completed', info: s.status=='active', danger: s.status=='active' && s.dueDate<TODAY }">
+        <td class="hidden-xs">{{$index+1}}</td>
+        <td>
+            <div>{{s.type}}</div>
+            <i class="visible-xs">{{s.status}}</i>
+        </td>
+        <td class="hidden-xs">{{s.status}}</td>
+        <td>
+            <div ng-if="s.newDueDate">
+                <input type="date" ng-model="s.newDueDate">
+                <button type="button" class="btn btn-link btn-xs" ng-click="_self.update(s, { dueDate : s.newDueDate }); s.newDueDate=null;" ng-disabled="s.dueDate == s.newDueDate"><i class="fa fa-check"></i></button>
+                <button type="button" class="btn btn-link btn-xs" ng-click="s.newDueDate=null"><i class="fa fa-times"></i></button>
+            </div>
+            
+            <div ng-hide="s.newDueDate">
+                <span class="hidden-xs" title="{{s.dueDate|date:'yyyy-MM-dd'}}">{{s.dueDate|moment:'format':'D MMMM YYYY'}} </span>
+                <span class="visible-xs text-nowrap" title="{{s.dueDate|date:'yyyy-MM-dd'}}">{{s.dueDate|moment:'format':'D MMMM'}}</span>
+                <button ng-if="document.workflow.canEdit" class="btn btn-link" ng-click="s.newDueDate = s.dueDate"><i class="fa fa-edit"></i></button>
+            </div>
+            <div ng-show="s.status=='active'">{{s.dueDate|moment:'fromNow'}}<div>
+        </td>
+        <td>
+            <div ng-if="s.newAssignedTo">
+                <select-user ng-if="s.newAssignedTo" caption="Assign to" role="1275" ng-model="_selectedUser" ng-change="s.newAssignedTo.push(_selectedUser)"></select-user>
+                <button type="button" class="btn btn-link btn-xs" ng-click="_self.update(s, { assignedTo : toIDs(s.newAssignedTo) });"><i class="fa fa-check"></i></button>
+                <button type="button" class="btn btn-link btn-xs" ng-click="s.newAssignedTo=null"><i class="fa fa-times"></i></button>
+
+                <div ng-repeat="o in s.newAssignedTo">
+                    <button type="button" class="btn btn-link btn-xs btn-danger" ng-click="s.newAssignedTo.splice(s.newAssignedTo.indexOf(o),1)"><i class="fa fa-times"></i></button>
+                    <span title="{{o.firstName}} {{o.lastName}}">{{o|initials}}<span ng-if="!$last">, </span></span>
+                </div>
+            </div>
+
+            <div ng-if="!s.newAssignedTo">
+                <span ng-repeat="o in (s.assignedTo.length ? s.assignedTo : document.workflow.owners)" title="{{o.firstName}} {{o.lastName}}">{{o.userID ? (o|initials) : o}}<span ng-if="!$last">, </span></span>
+                <button ng-if="document.workflow.canEdit" class="btn btn-link" ng-click="s.newAssignedTo = (s.assignedTo||[]).slice(0)"><i class="fa fa-edit"></i></button>
+            </div>
+        </td>
+        <td>
+            <div ng-if="s.inRevision">
+                <span ng-if="s.status!='active'">v{{s.inRevision}}</span>
+                <a    ng-if="s.status=='active'" target="_blank" href="{{document.workflow.files[s.inRevision-1].url}}">v{{s.inRevision}}</a>
+            </div>
+        </td>
+        <td>
+            <span class="hidden-xs"  title="{{s.date|date:'yyyy-MM-dd HH:mm.ss'}}">{{s.date|moment:'format':'D MMMM YYYY'}}</span>
+            <span class="visible-xs text-nowrap" title="{{s.date|date:'yyyy-MM-dd HH:mm.ss'}}">{{s.date|moment:'format':'D MMMM'}}</span>
+        </td>
+        <td>
+            <span ng-if="s.outRevision">v{{s.outRevision}}</span>
+        </td>
+        <td>
+            <div class="dropdown" ng-if=" (s.status=='active' && (s.assignedToMe || document.workflow.canEdit)) || (s.status=='pending' && (s.assignedToMe || document.workflow.canEdit) && $first && s.canActivate)">
+              <button class="btn btn-xs btn-default" type="button" ng-click="_self.action(_self.document)">
+                Action
+              </button>
+            </div>
+        </td>
+    </tr>
+    
+    <tr ng-if="document.workflow.canEdit && !document.workflow.steps.length && document.status=='awaited'">
+        <td colspan="9" class="text-center">
+            <!-- Single button -->
+            <div class="btn-group">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Initilize workflow for this documment <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="#" ng-click="initializeWorkflow('official')">Drafting of an official document</a></li>
+                <li><a href="#" ng-click="initializeWorkflow('official-peer')">Drafting of an official document with peer-review</a></li>
+              </ul>
+            </div>
+        </td>
+    </tr>
+</table>
