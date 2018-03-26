@@ -1,4 +1,4 @@
-define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', './change-case-button', '../meeting-document'], function(_) {
+define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filters/initials', './change-case-button', '../meeting-document'], function(_) {
 
     var MIMES = {
         'application/pdf':                                                            { title: 'PDF',               color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
@@ -56,7 +56,6 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', './cha
         _ctrl.saveLogEntry = saveLogEntry;
         _ctrl.autoGenerateNextSymbol = autoGenerateNextSymbol;
         _ctrl.onSupersede = onSupersede;
-        _ctrl.initials=function(t) { return _.startCase(t).replace(/[^A-Z]/g, ''); };
 
         $scope.$watch('editCtrl.document.type_nature', applyTypeNature);
         $scope.$watch('editCtrl.document.symbol',      function(symbol){
@@ -329,7 +328,7 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', './cha
 
             var data = { text: _ctrl.log };
 
-            return $http.post('/api/v2016/meetings/'+meetingId+'/documents/'+_ctrl.document._id+'/logs', data).then(resData).then(function(log) {
+            return $http.post('/api/v2016/documents/'+_ctrl.document._id+'/logs', data).then(resData).then(function(log) {
 
                 _ctrl.log = null;
                 _ctrl.document.logs.push(log);

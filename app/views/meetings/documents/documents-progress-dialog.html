@@ -1,0 +1,109 @@
+<style>
+
+.ngdialog > .ngdialog-content {
+    background: transparent !important;
+    border:none !important;
+    padding: none !important;
+    width: 50% !important;
+}  
+
+@media (min-width: 768px) and 
+       (max-width: 991px) { .ngdialog > .ngdialog-content { width: 75% !important; } }
+@media (min-width: 992px) { .ngdialog > .ngdialog-content { width: 60% !important; } }
+@media (max-width: 767px) { .ngdialog > .ngdialog-content > .modal-content { 
+    width: auto !important; 
+    height: auto;
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+} }
+</style>
+
+<div class="modal-content">
+		<style>
+
+		.btn-xxl        { width:     225px; }
+		.btn-xxl > span:first-child { font-size:   2em; }
+		.btn-xxl > i.fa { font-size:   6em; }
+
+		@media (max-width: 767px) {
+			.btn-xxl        { width:     135px; }
+			.btn-xxl > span:first-child { font-size:   1em; }
+			.btn-xxl > i.fa { font-size:   5em; }
+		}
+		</style>
+
+	<div class="modal-header">
+		<button type="button" class="close" ng-click="close()" aria-hidden="true">×</button>
+        <h4>Next action....</h4>
+	</div>
+	<div class="modal-body">
+
+        <div class="panel panel-default document-info">
+            <div class="panel-heading">Document</div>
+            <div class="panel-body">
+                
+                <div ng-if="!_self.uploadStatus && !_self.selectedDocument" class="alert alert-warning">
+                    The system was unable to detect which document the file should be uploaded to.<br> Please select in the dropdown below the document.
+                </div>
+
+                <div ng-if="!data.document" >
+                    <select class="form-control" ng-model='_self.selectedDocument' ng-options="d.symbol + ' - ' + (d.title|lstring) for d in data.documents"></select>
+                    <br>
+                </div>
+                <div><strong>{{_self.selectedDocument.symbol}}</strong></div>
+                <div>{{_self.selectedDocument.title|lstring}}</div>
+                
+            </div>
+        </div>
+
+        <div class="panel panel-default file-info" ng-style="{ 'text-decoration' : _self.fileInfo ? 'line-through' : 'none' } ">
+            <div class="panel-heading" >Latest file</div>
+            <div class="panel-body">
+                <strong>{{_self.latestfileInfo.name}}</strong><br>
+                <i>revision: <a href="{{_self.latestfileInfo.url}}"> v{{_self.latestfileInfo.revision}}</a></i>
+            </div>
+        </div>
+
+        <div class="panel panel-default file-info" ng-if="_self.fileInfo || _self.uploadStatus">
+            <div class="panel-heading">New file</div>
+            <div class="panel-body">
+                
+                <div ng-if="_self.uploadStatus=='uploading'" class="alert alert-info">Uploading file...</div>
+                <div ng-if="_self.uploadStatus=='detecting'" class="alert alert-info">Detecting the document...</div>
+                
+                <div ng-if="_self.fileInfo">
+                    <strong>{{_self.fileInfo.name}}</strong><br>
+                    <i>revision: <a href="{{_self.fileInfo.url}}"> NEW</a></i>
+                </div>
+                
+                <p>
+                    <div>{{_self.fileInfo.word.subject}}</div>
+                    <div><i>{{_self.fileInfo.word.title}}</i></div>
+                </p>
+            </div>
+        </div>
+        
+        <file-drop class="xs" ng-if="!data.file" ng-model="_file" ng-change="upload(_file)" auto-reset="true" caption="Or chose another file"></file-drop>
+        
+	</div>
+	<div class="modal-footer">
+        
+        <table>
+            <tr>
+                <td class="text-center">
+                    Send to:
+		            <button type="button" class="btn btn-default" ng-click="action(s)" ng-disabled="s.status=='active'||!s.canActivate" ng-repeat="s in selectedDocument.workflow.steps|filter:{}">
+                        <span>{{s.type}}</span>
+                    </button>
+                </td>
+                <td style="width:1%">
+		            <button type="button" class="btn btn-default" ng-click="close()"><i class="fa fa-power-off"></i> <span>Close</span></button>
+                </td>
+            </tr>
+        </table>
+
+
+	</div>
+</div><!-- /.modal-content -->

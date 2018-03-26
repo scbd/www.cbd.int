@@ -9,14 +9,8 @@
             color:blue;
         }
     </style>
-
-    <form id="uploadForm" class="alert"  ng-class="{ 'alert-info': !dragOver, 'alert-success': dragOver }" name="uploadForm" method="post" action="" enctype="multipart/form-data" style="">
-        <label for="files" class="text-center" style="cursor:pointer;display:block;">
-            <i class="fa fa-cloud-upload" style="font-size:96px" aria-hidden="true"></i><br>
-            <strong>Choose files</strong><span ng-if="allowDragDrop"> or drag them here</span>
-        </label>
-        <input class="hidden" ng-disabled="uploading" type="file" auto-reset="true" id="files" name="files" ng-model="filesToUpload" data-multiple-caption="{count} files selected" multiple  />
-    </form>
+    
+    <file-drop ng-disabled="uploading" ng-model="filesToUpload" multiple></file-drop>
 
     <table class="table table-striped">
         <tr>
