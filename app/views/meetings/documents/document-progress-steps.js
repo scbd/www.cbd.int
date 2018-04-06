@@ -21,6 +21,7 @@ define(['app', 'require', 'lodash','text!./document-progress-steps.html', 'filte
                 $scope.canEdit  = function(s)    { return s && s.canEdit; };
                 $scope.toIDs    = function(list) { return _(list).map(function(u) { return u.userID || u.userId || u; }).uniq().value(); };
                 $scope.initializeWorkflow = initializeWorkflow;
+                $scope.startWorkflow = startWorkflow;
                 
                 function refresh() {
                     $scope.$emit('load-document-progress');
@@ -90,6 +91,22 @@ define(['app', 'require', 'lodash','text!./document-progress-steps.html', 'filte
                 //===========================
                 function resolver(value) {
                     return function() { return value; };
+                }  
+
+                //===========================
+                //
+                //===========================
+                function startWorkflow() {
+                    
+                    var doc  = $scope.document;
+                    var step = $scope.document.workflow.steps[0];
+                    
+                    if(step.status!='pending' && step!=$scope.document.workflow.activeStep)
+                        return;
+                    
+                    $http.post('/api/v2016/documents/'+doc._id+'/workflow/steps/'+step._id+'/activate', {}).then(function(){
+                        refresh();
+                    });
                 }  
                 
                 
