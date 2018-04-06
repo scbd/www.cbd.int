@@ -79,8 +79,7 @@
                     <span ng-repeat="o in d.workflow.owners" title="{{o.firstName}} {{o.lastName}}">{{o|initials}}<span ng-if="!$last">, </span></span>
                     <button ng-if="d.workflow.canEdit" class="btn btn-link" ng-click="d.workflow.newOwners = (d.workflow.owners||[]).slice(0)"><i class="fa fa-edit"></i></button>
                 </div>
-                
-                <span ng-repeat="o in ">{{o}}<span ng-if="!$last">, <span></span>
+
             </td>
             <td ng-click="d.expanded=true" style="position:relative">
                 

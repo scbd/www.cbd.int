@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        <div class="panel panel-default file-info" ng-style="{ 'text-decoration' : _self.fileInfo ? 'line-through' : 'none' } ">
+        <div ng-if="_self.latestfileInfo" class="panel panel-default file-info" ng-style="{ 'text-decoration' : _self.fileInfo ? 'line-through' : 'none' } ">
             <div class="panel-heading" >Latest file</div>
             <div class="panel-body">
                 <strong>{{_self.latestfileInfo.name}}</strong><br>

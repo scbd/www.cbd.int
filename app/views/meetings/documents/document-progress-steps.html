@@ -62,11 +62,12 @@
             <span ng-if="s.outRevision">v{{s.outRevision}}</span>
         </td>
         <td>
-            <div class="dropdown" ng-if=" (s.status=='active' && (s.assignedToMe || document.workflow.canEdit)) || (s.status=='pending' && (s.assignedToMe || document.workflow.canEdit) && $first && s.canActivate)">
-              <button class="btn btn-xs btn-default" type="button" ng-click="_self.action(_self.document)">
+              <button ng-if="(s.status=='pending' && (s.assignedToMe || document.workflow.canEdit) && $first && s.canActivate)" class="btn btn-xs btn-default" type="button" ng-click="_self.startWorkflow()">
+                Start
+              </button>
+              <button ng-if=" (s.status=='active' && (s.assignedToMe || document.workflow.canEdit))" class="btn btn-xs btn-default" type="button" ng-click="_self.action(_self.document)">
                 Action
               </button>
-            </div>
         </td>
     </tr>
     
