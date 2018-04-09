@@ -20,8 +20,12 @@ define(['app', 'require', 'lodash','text!./document-progress-steps.html', 'filte
                 $scope.update   = updateStep;
                 $scope.canEdit  = function(s)    { return s && s.canEdit; };
                 $scope.toIDs    = function(list) { return _(list).map(function(u) { return u.userID || u.userId || u; }).uniq().value(); };
-                $scope.initializeWorkflow = initializeWorkflow;
                 $scope.startWorkflow = startWorkflow;
+                $scope.initializeWorkflow = initializeWorkflow;
+                $scope.workflowTemplates  = [];
+                
+                if(!$scope.document.workflow || !$scope.document.workflow.steps || !$scope.document.workflow.steps.length)
+                    loadTemplates();
                 
                 function refresh() {
                     $scope.$emit('load-document-progress');
@@ -109,6 +113,18 @@ define(['app', 'require', 'lodash','text!./document-progress-steps.html', 'filte
                     });
                 }  
                 
+
+                //===========================
+                //
+                //===========================
+                function loadTemplates() {
+                    
+                    $scope.workflowTemplates = [];
+
+                    $http.get('/api/v2016/documents/workflow-templates').then(function(res){
+                        $scope.workflowTemplates = res.data;
+                    });
+                }
                 
                 //===========================
                 //
@@ -118,7 +134,7 @@ define(['app', 'require', 'lodash','text!./document-progress-steps.html', 'filte
                     var meetingDate;
                     var meeting;
                     var doc = $scope.document;
-                    var steps = workflowTemplates[template];
+                    var steps = template.steps;
                     
                     $q.when(null).then(function() {
                         
@@ -173,19 +189,4 @@ define(['app', 'require', 'lodash','text!./document-progress-steps.html', 'filte
             }
         };
     }]);
-    
-    workflowTemplates['official'] = [
-        { type: 'draft',    dueDate: -92 },
-        { type: 'internal', dueDate: -62 },
-        { type: 'es',       dueDate: -52, assignedTo: ['ES-Review'] },
-        { type: 'edit',     dueDate: -42, assignedTo: ['EditorialService']},
-    ];
-    
-    workflowTemplates['official-peer'] = [
-        { type: 'draft',    dueDate: -102 },
-        { type: 'internal', dueDate: -72 },
-        { type: 'peer',     dueDate: -62 },
-        { type: 'es',       dueDate: -52, assignedTo: ['ES-Review'] },
-        { type: 'edit',     dueDate: -42, assignedTo: ['EditorialService']},
-    ];
 });

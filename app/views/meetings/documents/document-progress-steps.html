@@ -79,8 +79,7 @@
                 Initilize workflow for this documment <span class="caret"></span>
               </button>
               <ul class="dropdown-menu">
-                <li><a href="#" ng-click="initializeWorkflow('official')">Drafting of an official document</a></li>
-                <li><a href="#" ng-click="initializeWorkflow('official-peer')">Drafting of an official document with peer-review</a></li>
+                <li ng-repeat="t in workflowTemplates"><a href="#" ng-click="initializeWorkflow(t)">{{t.title}}</a></li>
               </ul>
             </div>
         </td>
