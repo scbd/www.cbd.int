@@ -39,7 +39,7 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 			//
 			//============================================================
 			function getCountry (code) {
-        console.log('all ????',code)
+
               if(code==='all') {
                 console.log({title:{en:'All Countries'}});
                 return {title:{en:'All Countries'}} }
