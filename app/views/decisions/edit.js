@@ -1,4 +1,4 @@
-define(['lodash', 'angular', 'require', 'rangy', 'jquery', './data/romans', './data/sections', './data/paragraphes', './data/items', './data/sub-items', './data/actors', './data/statuses', 'ngDialog', 'authentication', 'filters/moment', 'filters/lodash', 'filters/lstring', './directives/notification', './directives/meeting-document', './directives/meeting', './directives/decision-reference'],
+define(['lodash', 'angular', 'require', 'rangy', 'jquery', './data/romans', './data/sections', './data/paragraphes', './data/items', './data/sub-items', './data/actors', './data/statuses', 'ngDialog', 'authentication', 'filters/moment', 'filters/lodash', 'filters/lstring', 'directives/comments/internal-comments', './directives/notification', './directives/meeting-document', './directives/meeting', './directives/decision-reference'],
 function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, subItemList, actorList, statusesList) { 'use strict';
 
     return ['$scope', '$http', '$route', '$location', '$filter', '$q', '$compile', 'ngDialog', 'user', '$anchorScroll', function($scope, $http, $route, $location, $filter, $q, $compile, ngDialog, user, $anchorScroll) {
@@ -32,8 +32,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         $scope.save   = save;
         $scope.upload = upload;
         $scope.comments    = {};
-        $scope.postComment = postComment;
-        $scope.deleteComment = deleteComment;
+        $scope.commentResources = [];
         $scope.buildFileUrl = buildFileUrl;
         $scope.selectDecision = selectDecision;
         $scope.selectMeeting  = selectMeeting;
@@ -62,6 +61,8 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
         $scope.selectedActor = '';
         $scope.selectedStatus = '';
+        
+        $scope.$on('comments', loadComments);
 
         load();
 
@@ -250,51 +251,8 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             }).catch(console.error);
         }
-
-        //===========================
-        //
-        //===========================
-        function postComment(text) {
-
-            text = (text||'').trim()
-
-            if(!text)
-                return;
-
-            var comment = {
-                type: "decision",
-                resources: [data.code, $scope.element.code],
-                text: text
-            };
-
-            return $http.post('/api/v2017/comments', comment).then(function(res){
-
-                return loadComments();
-
-            }).catch(function(err){
-
-                console.error(err);
-
-            });
-        }
-
-
-        //===========================
-        //
-        //===========================
-        function deleteComment(id) {
-
-            return $http.delete('/api/v2017/comments/'+id).then(function(res){
-
-                return loadComments();
-
-            }).catch(function(err){
-
-                console.error(err);
-
-            });
-
-        }
+        
+        updateCommentButton();
 
         //===========================
         //
@@ -367,7 +325,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //
         //===========================
         function tag() {
-
+            
             if(!selectedElement) return;
             if(!$scope.element)  return;
 
@@ -395,7 +353,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             if(tag) $(selectedElement).attr('data-type', tag);
             else    $(selectedElement).removeAttr('data-type');
-
+            
             updateCommentButton();
         }
 
@@ -455,8 +413,10 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             selectedElement = node;
 
-            if(!selectedElement)
+            if(!selectedElement) {
+                $scope.commentResources = [];
                 return;
+            }
 
             $(selectedElement).addClass('selected');
 
@@ -471,6 +431,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
             }
 
             $scope.formattingLocked = !!$scope.element.type;
+            $scope.commentResources = _.compact([data.code, $scope.element.code]);
         }
 
         //===========================
