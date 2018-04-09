@@ -1,6 +1,6 @@
-define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-vertical','filters/lstring'], function(app,links) { 'use strict';
+define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-vertical','filters/lstring','providers/locale'], function(app,links) { 'use strict';
 
-	return ['$scope','$routeParams','$q','$http','$filter','$location', function ($scope,$routeParams,$q,$http,$filter,$location) {
+	return ['$scope','$routeParams','$q','$http','$filter','$location','locale', function ($scope,$routeParams,$q,$http,$filter,$location,locale) {
 
         var _ctrl   = this;
 				var canceler = null;
@@ -18,6 +18,7 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
 
 				getCountries().then(getEvents().then(function(){
 					 mapGovernment();
+           getArticle();
 				}));
 
 				//============================================================
@@ -30,6 +31,35 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
 					});
 				}
 
+        //============================================================
+        //
+        //============================================================
+        function getArticle() {
+          var years = {  '2017':'5acb91f979283d00018011cd',
+                        '2018':'5acb8d46e57fe1000109191e',
+                        '2019':'5acb8f0fe57fe10001091924',
+                        '2020':'5acb8f0fe57fe10001091926',
+                        '2021':'5acb8f0fe57fe10001091928',
+                        '2022':'5acb8f0fe57fe1000109192a',
+                        '2023':'5acb8f10e57fe1000109192c',
+                        '2024':'5acb8f10e57fe1000109192e',
+                        '2025':'5acb8f10e57fe10001091930',
+                      }
+          var params = {
+              q: {
+                  'tags': '52000000cbd0330000001948',
+                  'customTags': years[_ctrl.year]
+              }
+          };
+          return $http.get("/api/v2017/articles",{params:params}).then(
+            function(o){
+              console.log(o)
+              if(o.data && o.data.length)
+                _ctrl.article = o.data[0].content[locale]
+
+          });
+        }
+///management/articles/5acb8b88bf653b00011f5112/IDB-Celebrations-Around-the-World
 				//============================================================
 				//
 				//============================================================
