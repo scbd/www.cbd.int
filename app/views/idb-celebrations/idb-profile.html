@@ -171,19 +171,7 @@
                         </a>
                       </div>
                     </div>
-                    <div   ng-show="event.thematicArea_ss">
-                        <h6>Thematic Area(s)</h6>
-                        <div  ng-repeat="theme in event.thematicArea_ss track by $index ">
 
-                          		<span class="label label-default">{{theme | term:idbProfileCtrl.locale}}</span>
-                        </div>
-                    </div>
-                    <div   ng-if="event.aichiTarget_ss">
-                        <h6>Aichi Biodiversity Targets</h6>
-                        <div  >
-                          <a ng-href="https://www.cbd.int/aichi-targets/target/{{term.slice(-2)}}" ng-repeat="term in event.aichiTarget_ss track by $index ">						<img   style="height: 20px;  width: 20px; margin-bottom:5px; " ng-src="https://www.cbd.int/images/aichi/48/abt-{{term.slice(-2)}}-48.png" ></a>
-                        </div>
-                    </div>
                     <div   ng-if="event.documents_C_ss">
                         <h6>Documents</h6>
                         <div  ng-repeat="doc in event.documents_C_ss">
@@ -218,9 +206,7 @@
                 <div  ng-if="event.images_C_ss">
                     <h6>Images</h6>
                     <div class="col-xs-3 text-center" ng-repeat="image in event.images_C_ss">
-                        <a ng-href="{{image.url}}" target="_blank"><img ng-src="{{image.url}}" style="max-width:100%;"></img>
-                          {{image.name}}
-                        </a>
+                        <a ng-href="{{image.url}}" target="_blank"><img ng-src="{{image.url}}" style="max-width:100%;"></img></a>
                     </div>
                 </div>
 
