@@ -81,7 +81,7 @@
                 </div>
 
             </td>
-            <td ng-click="d.expanded=true" style="position:relative">
+            <td ng-click="statusCtrl.expand(d, true)" style="position:relative">
                 
                 <div style="position:absolute;height:100%;left:50%;top:0px;border-right:dotted 2px red" title="Today">
                     &nbsp;
@@ -115,19 +115,23 @@
                 
                 <div ng-if="d.expanded">
                     <div class="row">
+                        
                     <div class="col-md-12">
                         <document-progress-steps document="d" documents="statusCtrl.documents"></document-progress-steps>
                     </div>
                     
                     <div class="col-md-12">
+                        <h5 colspan="2">Comments</h5>
+                        <internal-comments type="document-draft" resources="::[d._id]" can-edit="false"></internal-comments>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <h5 colspan="2" ng-click="d.logs ? d.logs=null : statusCtrl.loadLogs(d)" style="cursor:pointer">
+                            Events 
+                            <i ng-show="d.logs" class="fa fa-caret-up"></i>
+                            <i ng-hide="d.logs" class="fa fa-caret-down"></i>
+                        </h5>
                         <table class="document-status table table-condensed" style="max-heigth:600px;overflow-y:scroll">
-                            <tr ng-click="d.logs ? d.logs=null : statusCtrl.loadLogs(d)">
-                                <th colspan="2">Events</th>
-                                <th colspan="1" class="text-right" >
-                                    <i ng-show="d.logs" class="fa fa-caret-up"></i>
-                                    <i ng-hide="d.logs" class="fa fa-caret-down"></i>
-                                </th>
-                            </tr>
                             <tr ng-repeat="log in d.logs | orderBy:'date':true">
                                 <td class="text-nowrap" title="{{log.date|date:'yyyy-MM-dd HH:mm.ss'}}">{{log.date|moment:'fromNow':true}}</td>
                                 <td class="text-nowrap" title="{{log.user.name}}">{{log.user|initials}}</td>
@@ -138,7 +142,7 @@
                     </div>
                 </div>
             </td>
-            <td style="width:1%" ng-click="d.expanded = !d.expanded">
+            <td style="width:1%" ng-click="statusCtrl.expand(d)">
                 <i ng-show="d.expanded" class="fa fa-caret-up"></i>
                 <i ng-hide="d.expanded" class="fa fa-caret-down"></i>
             </td>

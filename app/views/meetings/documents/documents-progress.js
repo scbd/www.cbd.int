@@ -1,5 +1,5 @@
 define(['lodash', 'require', 'angular', 'moment-timezone', 'filters/lstring', 'filters/moment', 'filters/initials', 'directives/file','ngDialog',
-        'directives/meetings/documents/document-files','./document-progress-steps',
+        'directives/meetings/documents/document-files','./document-progress-steps', 'directives/comments/internal-comments', 
 ], function(_,require) {
 
 	return ["$scope", "$route", "$http", '$location', '$q', 'user', 'ngDialog', function ($scope, $route, $http, $location, $q, user, ngDialog) {
@@ -15,6 +15,7 @@ define(['lodash', 'require', 'angular', 'moment-timezone', 'filters/lstring', 'f
         _ctrl.onFile   = upload;
         _ctrl.updateWorkflow = updateWorkflow;
         _ctrl.toIDs    = toIDs;
+        _ctrl.expand   = expand;
         
         _ctrl.filters = {
             type_nature:  'official',
@@ -184,6 +185,16 @@ define(['lodash', 'require', 'angular', 'moment-timezone', 'filters/lstring', 'f
         //==============================
         function toIDs (list) { 
             return _(list).map(function(u) { return u.userID || u.userId || u; }).uniq().value();
+        }
+        
+        function expand(doc, val) {
+
+            if(val===undefined)
+                val = !doc.expanded;
+                
+            _ctrl.documents.forEach(function(d){ d.expanded=false; });
+
+            doc.expanded = val;
         }
 
         //==============================
