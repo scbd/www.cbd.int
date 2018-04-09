@@ -31,7 +31,7 @@ define(['text!./zoom-map.html', 'app', 'lodash',
         //
         //=======================================================================
         function zoomTo() {
-          if ($scope.zoomTo)
+          if ($scope.zoomTo && $scope.zoomTo!=='all')
             $scope.map.clickMapObject(zoomMap.getMapObject(_.clone($scope.zoomTo).toUpperCase()));
         } //$scope.legendHide
 
