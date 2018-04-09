@@ -1,4 +1,4 @@
-define(['app','data/idb-celebrations/links','lodash','directives/idb-celebrations/menu-vertical','filters/lstring','filters/truncate','services/storage','directives/idb-celebrations/zoom-map','filters/term',,'filters/trust-as-resource-url'], function(app,links,_) { 'use strict';
+define(['app','data/idb-celebrations/links','lodash','directives/idb-celebrations/menu-vertical','filters/lstring','filters/truncate','services/storage','directives/idb-celebrations/zoom-map','filters/term','filters/moment','filters/trust-as-resource-url'], function(app,links,_) { 'use strict';
 
 	return ['$location', '$routeParams','$http','$filter','$q','IStorage','locale','$timeout', function( $location, $routeParams,$http,$filter,$q,storage,locale,$timeout) {
 
@@ -49,7 +49,7 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 			//
 			//============================================================
 			function getEvents () {
-							var q = 'schema_s:event AND _state_s:public AND (startDate_s:['+_ctrl.year+'-01-01T00:00:00.000Z TO '+_ctrl.year+'-12-31T00:00:00.000Z])';//_state_s:public AND
+							var q = 'schema_s:event AND _state_s:public AND thematicArea_ss:CBD-SUBJECT-IYB AND (startDate_s:['+_ctrl.year+'-01-01T00:00:00.000Z TO '+_ctrl.year+'-12-31T00:00:00.000Z]) AND (country_s:'+_ctrl.gov+' OR hostGovernments_ss:'+_ctrl.gov+') AND _state_s:public ';//_state_s:public AND
 							return query('event',q);
 			}
 			//============================================================
