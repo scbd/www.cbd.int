@@ -45,7 +45,7 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
 				//
 				//============================================================
 				function getEvents () {
-								var q = 'schema_s:event AND  (startDate_s:['+_ctrl.year+'-01-01T00:00:00.000Z TO '+_ctrl.year+'-12-31T00:00:00.000Z])';//_state_s:public AND
+								var q = 'schema_s:event AND thematicArea_ss:CBD-SUBJECT-IBD AND  (startDate_s:['+_ctrl.year+'-01-01T00:00:00.000Z TO '+_ctrl.year+'-12-31T00:00:00.000Z])';//_state_s:public AND
 								return query('event',q);
 				}
 				//============================================================
@@ -55,9 +55,9 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
 								_ctrl.numGovernments={};
 								if(_ctrl.documents && Array.isArray(_ctrl.documents.event))
 									for(var i=0; i<_ctrl.documents.event.length;i++){
-										if(_ctrl.documents.event[i].governments_ss)
-											for(var j=0; j<_ctrl.documents.event[i].governments_ss.length;j++){
-												    var government = _ctrl.documents.event[i].governments_ss[j];
+										if(_ctrl.documents.event[i].hostGovernments_ss)
+											for(var j=0; j<_ctrl.documents.event[i].hostGovernments_ss.length;j++){
+												    var government = _ctrl.documents.event[i].hostGovernments_ss[j];
 														if(_ctrl.numGovernments[government]) _ctrl.numGovernments[government]++;
 														else _ctrl.numGovernments[government]=1;
 											}
