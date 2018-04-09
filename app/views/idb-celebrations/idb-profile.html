@@ -121,8 +121,9 @@
                 <zoom-map zoom-to="idbProfileCtrl.gov"></zoom-map>
             </div>
             <div class="col-md-7 col-xs-12">
-                <div><img class="pull-right" ng-src="https://www.cbd.int/images/flags/96/flag-{{idbProfileCtrl.gov}}-96.png" />
-                <h2 style="display:inline;">{{idbProfileCtrl.getCountry(idbProfileCtrl.gov).title | lstring}} </h2>
+                <div>
+                    <img ng-if="idbProfileCtrl.gov!=='all'" class="pull-right" ng-src="https://www.cbd.int/images/flags/96/flag-{{idbProfileCtrl.gov}}-96.png" />
+                <h2 style="display:inline;">{{idbProfileCtrl.getCountry(idbProfileCtrl.gov).title | lstring}}</h2>
 
               </div>
               <div class="text-center">
@@ -160,7 +161,7 @@
                 <div ng-if="event.websites_C_ss">
 
                     <h6>Links</h6>
-                    <div ng-repeat="site in event.websites_C_ss">
+                    <div ng-repeat="site in event.websites_C_ss track by $index ">
                         <a ng-href="{{site.url}}" target="_blank" ng-switch="site.name">
                             <i class="fa fa-home" aria-hidden="true" ng-switch-when="website"></i>
                             <i class="fa fa-facebook-square" aria-hidden="true" ng-switch-when="facebook"></i>
@@ -172,7 +173,7 @@
                     </div>
                     <div   ng-show="event.thematicArea_ss">
                         <h6>Thematic Area(s)</h6>
-                        <div  ng-repeat="theme in event.thematicArea_ss">
+                        <div  ng-repeat="theme in event.thematicArea_ss track by $index ">
 
                           		<span class="label label-default">{{theme | term:idbProfileCtrl.locale}}</span>
                         </div>
@@ -180,7 +181,7 @@
                     <div   ng-if="event.aichiTarget_ss">
                         <h6>Aichi Biodiversity Targets</h6>
                         <div  >
-                          <a ng-href="https://www.cbd.int/aichi-targets/target/{{term.slice(-2)}}" ng-repeat="term in event.aichiTarget_ss">						<img   style="height: 20px;  width: 20px; margin-bottom:5px; " ng-src="https://www.cbd.int/images/aichi/48/abt-{{term.slice(-2)}}-48.png" ></a>
+                          <a ng-href="https://www.cbd.int/aichi-targets/target/{{term.slice(-2)}}" ng-repeat="term in event.aichiTarget_ss track by $index ">						<img   style="height: 20px;  width: 20px; margin-bottom:5px; " ng-src="https://www.cbd.int/images/aichi/48/abt-{{term.slice(-2)}}-48.png" ></a>
                         </div>
                     </div>
                     <div   ng-if="event.documents_C_ss">
@@ -206,9 +207,9 @@
                 <label>{{event.title_s}}</label>
 
                 <span ng-if="event.onlineEvent_b"><label>Online Event:</label> <a ng-href="idbProfileCtrl.getWebsite(event).url"><i class="fa fa-home" aria-hidden="true" ></i> {{idbProfileCtrl.getWebsite(event).url}}</a></span>
-                <div class="well" ng-if="!event.onlineEvent_b"><span><label>Address:</label> <span class="small">{{event.address_s}},<span ng-if="event.city_s">{{event.city_s}}, <span ng-if="event.city_s">{{event.state_s}},</span>  <span ng-if="event.postalCode_s">{{event.postalCode_s}},</span> {{idbProfileCtrl.getCountry(event.country_s).title|lstring}} </span></span>
+                <!-- <div class="well" ng-if="!event.onlineEvent_b"><span><label>Address:</label> <span class="small">{{event.address_s}},<span ng-if="event.city_s">{{event.city_s}}, <span ng-if="event.city_s">{{event.state_s}},</span>  <span ng-if="event.postalCode_s">{{event.postalCode_s}},</span> {{idbProfileCtrl.getCountry(event.country_s).title|lstring}} </span></span>
                         <iframe ng-if="idbProfileCtrl.getEmbedMapUrl(event.googlePlaceId_s)" ng-src="{{idbProfileCtrl.getEmbedMapUrl(event.googlePlaceId_s)| trustAsResourceUrl}} " width="100%" height="200" frameborder="0" style="border:0" allowfullscreen></iframe>
-                </div>
+                </div> -->
                 <p>{{event.description_s}}</p>
                 <p ng-if="event.descriptionNative_s">
                     <hr class="style5">
