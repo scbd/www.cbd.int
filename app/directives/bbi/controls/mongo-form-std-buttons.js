@@ -36,6 +36,15 @@ define(['app', 'text!./mongo-form-std-buttons.html','lodash'], function(app,  te
 				$scope.saveDialogDefered = [];
 				$scope.cancelDialogDefered = [];
 
+        // $scope.isNotOwnerAndAdmin= function() {
+        //                          var isAdmin;
+        //   if($scope.user)
+        //      isAdmin = !!_.intersection($scope.user.roles, ["Administrator","BbiAdministrator"]).length;
+        //      var isNotReview = !!($location.url().indexOf('/view')>-1);
+        //      var isOwner = ($scope.document && $scope.document.meta && $scope.user && $scope.user.userID===$scope.document.meta.createdBy);
+        //
+        //    return ((isOwner || isAdmin) && isNotReview);
+        // }
 				$scope.showSaveDialog = function(visible) {
 
 					var isVisible = qSaveDialog.css("display")!='none';

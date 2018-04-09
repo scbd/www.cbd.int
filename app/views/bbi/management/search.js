@@ -1,10 +1,12 @@
 define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','directives/bbi/search/search'], function(app, _,links) { 'use strict';
 
-	return ['$location','$route','$scope', function ($location,$route,$scope) {
+	return ['$location','$route','$scope','user', function ($location,$route,$scope,user) {
 
         var _ctrl = this;
 				_ctrl.links=links.links;
 				_ctrl.goTo = goTo;
+        _ctrl.user = {};
+  
 				_ctrl.schema = _.camelCase($route.current.params.schema);
 				init();
 				$scope.$root.page={};

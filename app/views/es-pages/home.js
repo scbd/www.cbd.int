@@ -44,7 +44,9 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 				  var rx = /(^).*?(?=\n|$)/g;
 				  var arr = rx.exec(txt);
 
-				  if(arr[0].length>380)arr[0] = arr[0].subString(0,380);
+          if(arr && arr[0])
+				      if(typeof arr[0] === 'string' && arr[0].length>130)
+                      arr[0] = arr[0].substring(0,130);
 				  return arr[0] || txt;
 				}
 				//=======================================================================
@@ -54,7 +56,7 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 
 						var queryParameters = {
 								'q': 'schema_s:event AND thematicArea_ss:3FEF79FF-9EA2-4E3A-BEC9-2991CCDD7F3A',
-								'sort': 'startDate_dt asc',
+								'sort': 'updatedDate_dt desc',
 								'fl': 'title_t,description_t,identifier_s,startDate_dt,cover_s',
 								'wt': 'json',
 								'start': 0,
@@ -69,7 +71,7 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 								for(var i in data.response.docs){
 									data.response.docs[i].description_t=extractFirstParagraph(data.response.docs[i].description_t);
 									data.response.docs[i].url_ss ='/event/'+data.response.docs[i].identifier_s
-										data.response.docs[i].visible = true;
+									data.response.docs[i].visible = true;
 								}
 
 								$scope.carousel=data.response.docs;

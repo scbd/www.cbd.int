@@ -1,4 +1,4 @@
-<div  >
+<div  ng-if="!(oppIsExpired() && document.applicationDeadline_dt && !isAdmin()) ">
 
 	<a class="nostyle" ng-href="{{goToUrl()}}" ng-click="goTo($event);">
 <div class="card card-1 records" >
@@ -7,7 +7,7 @@
 		<div style=" font-weight:bold;color:#001470;" ng-show="type">{{type}}</div>
 		<div class="pull-right" ng-if="document.schema_s==='bbiOpportunity'">
 			<span class="text-warning" ng-if="!oppIsExpired() && document.applicationDeadline_dt"><strong>Application Deadline: {{document.applicationDeadline_dt | moment:'format':'YYYY-MM-DD'}}</strong></span>
-			<span class="text-warning"  ng-if="oppIsExpired() && document.applicationDeadline_dt"><strong>No Longer Available</strong></span>
+			<span class="text-warning"  ng-if="oppIsExpired() && document.applicationDeadline_dt "><strong>No Longer Available</strong></span>
 			<span class="text-warning"  ng-if="!document.applicationDeadline_dt"><strong>Open-Ended</strong></span>
 		</div>
 		<div class="truncatex" style="font-size:15px;font-weight:bold;color:#444;">

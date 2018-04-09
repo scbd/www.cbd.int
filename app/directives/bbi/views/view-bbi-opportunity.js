@@ -45,7 +45,7 @@ define(['text!./view-bbi-opportunity.html', 'app', 'lodash',  'services/storage'
 								//====================
 								$scope.isAdmin = function() {
 									if($scope.user)
-										 return !!_.intersection($scope.user.roles, ["Administrator","BBiAdministrator"]).length;
+										 return !!_.intersection($scope.user.roles, ["Administrator","BbiAdministrator"]).length;
 								};
 								//====================
 								//

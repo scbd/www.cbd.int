@@ -5,7 +5,7 @@ define(['text!./search-result.html', 'app', 'lodash', 'moment', 'lodash', 'authe
         return {
             restrict: 'EAC',
             template: template,
-scope:{document:"="},
+            scope:{document:"=", user:'='},
             link: function($scope, $el, $attr) {
                 if($scope.document.applicationDeadline_dt)
 
@@ -79,6 +79,13 @@ scope:{document:"="},
                     }
 
                 });
+                //====================
+								//
+								//====================
+								$scope.isAdmin = function() {
+									if($scope.user)
+										 return !!_.intersection($scope.user.roles, ["Administrator","BbiAdministrator"]).length;
+								};
 
                 //==================================
                 //
