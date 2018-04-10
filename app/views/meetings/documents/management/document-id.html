@@ -397,11 +397,8 @@
         <table class="table table-striped">
             <tr>
                 <td class="text-nowrap" style="vertical-align:middle">Now</td>
-<<<<<<< Updated upstream
-                <td class="text-nowrap" style="vertical-align:middle" title="{{editCtrl.user.name}}">{{editCtrl.initials(editCtrl.user.name)}}</td>
-=======
+
                 <td class="text-nowrap" style="vertical-align:middle" title="{{editCtrl.user.name}}">{{editCtrl.user|initials}}</td>
->>>>>>> Stashed changes
                 <td style="width:99%">
                     <div class="input-group">
                         <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr" id="log" ng-model="editCtrl.log" placeholder="Type a new comment to log">
