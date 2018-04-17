@@ -1,26 +1,24 @@
 define(['app', 'lodash', 'directives/es-pages/header-nav', 'filters/term', 'filters/moment', 'filters/title-case', 'services/storage'], function(app, _) {
     'use strict';
 
-    return ['$routeParams', '$scope', '$sce', '$location', '$window', 'IStorage', '$timeout', function($routeParams, $scope, $sce, $location, $window, storage, $timeout) {
+    return ['$routeParams', '$scope', '$sce', '$location', '$window', 'IStorage', '$timeout','user', function($routeParams, $scope, $sce, $location, $window, storage, $timeout,user) {
 
         var _ctrl = this;
         _ctrl.loading = false;
         _ctrl.isFeatured = isFeatured;
         _ctrl.eventWebsite = eventWebsite
         _ctrl.showWebsites = showWebsites
-        // if(~$routeParams.id.indexOf('twiiter')){
-        // 	_ctrl.twitter=true;
-        //     _ctrl.url=decodeURIComponent($routeParams.id);
-        // }else
-        // 	_ctrl.url= $sce.trustAsResourceUrl('https://www.youtube.com/embed/'+$routeParams.id+'?rel=0');
-        //
-        // $scope.$root.page={};
-        // $scope.$root.page.title = "Media: Cristiana Pașca Palmer";
+        _ctrl.isAdmin  = isAdmin
 
-        // window.location.replace("https://www.cbd.int/2011-2020/dashboard/submit/event/"+$routeParams.id+"/view", "_self")
         init();
 
-
+        //============================================================
+        //
+        //============================================================
+       function isAdmin () {
+          if($scope.user)
+             return !!_.intersection($scope.user.roles, ["Administrator","ChmAdministrator","undb-administrator"]).length;
+        }
         //==================================
         //
         //==================================

@@ -17,14 +17,27 @@ app.filter("byDate", function() {
  };
 });
 
-return ['$location','$scope','$q','$http','fb','$document','ngMeta', function ($location,$scope,$q,$http,fb,$document,ngMeta) {
+return ['$location','$scope','$q','$http','fb','$document','ngMeta','user', function ($location,$scope,$q,$http,fb,$document,ngMeta,user) {
 
 			var _ctrl = this;
 			_ctrl.documents ={}
 			var canceler = null;
 			_ctrl.goTo = goTo;
-            _ctrl.getTypeCount = getTypeCount;
-            _ctrl.getYearCount = getYearCount;
+      _ctrl.getTypeCount = getTypeCount;
+      _ctrl.getYearCount = getYearCount;
+
+      _ctrl.isAdmin  = isAdmin
+
+
+
+      //============================================================
+      //
+      //============================================================
+     function isAdmin () {
+        if($scope.user)
+           return !!_.intersection($scope.user.roles, ["Administrator","ChmAdministrator","undb-administrator"]).length;
+      }
+
 			$scope.$root.page={};
 			_ctrl.work = statements;
             _ctrl.hasMonthChange = hasMonthChange;

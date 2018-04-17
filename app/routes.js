@@ -132,12 +132,12 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
       routeProvider
         .when('/',          { templateUrl: 'views/es-pages/home.html',      resolveController: true, controllerAs: 'esHomeCtrl' })
-        .when('/bio',       { templateUrl: 'views/es-pages/bio.html',       resolveController: true, controllerAs: 'esBioCtrl'  })
-        .when('/work',      { templateUrl: 'views/es-pages/work.html',      resolveController: true, controllerAs: 'esWorkCtrl'  })
+        .when('/bio',       { templateUrl: 'views/es-pages/bio.html',       resolveController: true, controllerAs: 'esBioCtrl' })
+        .when('/work',      { templateUrl: 'views/es-pages/work.html',      resolveController: true, controllerAs: 'esWorkCtrl',resolve:{ user : securize(['Everyone']) }   })
         .when('/media',     { templateUrl: 'views/es-pages/media.html',     resolveController: true, controllerAs: 'esMediaCtrl' })
         .when('/contact',   { templateUrl: 'views/es-pages/contact.html',   resolveController: true, controllerAs: 'esContactCtrl'  })
         .when('/video/:id',   { templateUrl: 'views/es-pages/youtube-video.html',resolveController: true, controllerAs: 'esVideoCtrl'  })
-        .when('/event/:id',   { templateUrl: 'views/es-pages/event.html',resolveController: true, controllerAs: 'esEventCtrl'  })
+        .when('/event/:id',   { templateUrl: 'views/es-pages/event.html',resolveController: true, controllerAs: 'esEventCtrl',resolve:{ user : securize(['Everyone']) }  })
         .when('/statement/:id',   { templateUrl: 'views/es-pages/statement.html',resolveController: true, controllerAs: 'esStatementCtrl'  });
   }
 
