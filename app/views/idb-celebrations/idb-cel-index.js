@@ -1,26 +1,44 @@
 define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-vertical','filters/lstring','providers/locale'], function(app,links) { 'use strict';
 
-	return ['$scope','$routeParams','$q','$http','$filter','$location','locale', function ($scope,$routeParams,$q,$http,$filter,$location,locale) {
+	return ['$scope','$routeParams','$q','$http','$filter','$location','locale','user', function ($scope,$routeParams,$q,$http,$filter,$location,locale, user) {
 
         var _ctrl   = this;
 				var canceler = null;
 				var currentDate= new Date();
 
-	      _ctrl.links 		= links.links;
+	      _ctrl.links 	= links.links;
+        _ctrl.isAdmin = isAdmin;
 
-				if(parseInt($routeParams.year) ===404 || !parseInt($routeParams.year))
-		    	$location.path(currentDate.getFullYear());
+				if(!parseInt($routeParams.year) ||  Number($routeParams.year) < 2018)
+		    	window.location.href = '/404'
 				else
 					_ctrl.year  	= parseInt($routeParams.year);
 
 				_ctrl.documents	= {};
 				_ctrl.getCountry= getCountry;
+        var years = {  '2017':'5acb91f979283d00018011cd',
+                      '2018':'5acb8d46e57fe1000109191e',
+                      '2019':'5acb8f0fe57fe10001091924',
+                      '2020':'5acb8f0fe57fe10001091926',
+                      '2021':'5acb8f0fe57fe10001091928',
+                      '2022':'5acb8f0fe57fe1000109192a',
+                      '2023':'5acb8f10e57fe1000109192c',
+                      '2024':'5acb8f10e57fe1000109192e',
+                      '2025':'5acb8f10e57fe10001091930',
+                    }
 
 				getCountries().then(getEvents().then(function(){
 					 mapGovernment();
            getArticle();
+           getOtherCelebrations();
 				}));
-
+        //============================================================
+        //
+        //============================================================
+       function isAdmin () {
+          if($scope.user)
+             return !!_.intersection($scope.user.roles, ["Administrator","ChmAdministrator","undb-administrator"]).length;
+        }
 				//============================================================
 				//
 				//============================================================
@@ -35,28 +53,39 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
         //
         //============================================================
         function getArticle() {
-          var years = {  '2017':'5acb91f979283d00018011cd',
-                        '2018':'5acb8d46e57fe1000109191e',
-                        '2019':'5acb8f0fe57fe10001091924',
-                        '2020':'5acb8f0fe57fe10001091926',
-                        '2021':'5acb8f0fe57fe10001091928',
-                        '2022':'5acb8f0fe57fe1000109192a',
-                        '2023':'5acb8f10e57fe1000109192c',
-                        '2024':'5acb8f10e57fe1000109192e',
-                        '2025':'5acb8f10e57fe10001091930',
-                      }
+
           var params = {
               q: {
-                  'tags': '52000000cbd0330000001948',
+                  'tags': '52000000cbd0330000001948',//IDB
                   'customTags': years[_ctrl.year]
               }
           };
-          return $http.get("/api/v2017/articles",{params:params}).then(
+          return $http.get("https://api.cbd.int/api/v2017/articles",{params:params}).then(
             function(o){
-              console.log(o)
-              if(o.data && o.data.length)
-                _ctrl.article = o.data[0].content[locale]
+              if(o.data && o.data.length){
+                _ctrl.article = o.data[0]
+                _ctrl.articleContent = o.data[0].content[locale]
+              }
+          });
+        }
+        //============================================================
+        //
+        //============================================================
+        function getOtherCelebrations() {
 
+          var params = {
+              q: {
+                  'tags': '52000000cbd0330000001948',//IDB
+                  'customTags': years[_ctrl.year],
+                  'customTags': '5ad52734990e540001a09458'//other-celebrations
+              }
+          };
+          return $http.get("https://api.cbd.int/api/v2017/articles",{params:params}).then(
+            function(o){
+              if(o.data && o.data.length){
+                _ctrl.otherCelebrations = o.data[0]
+                _ctrl.otherCelebrationsContent = o.data[0].content[locale]
+              }
           });
         }
 ///management/articles/5acb8b88bf653b00011f5112/IDB-Celebrations-Around-the-World

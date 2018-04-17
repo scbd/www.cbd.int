@@ -31,7 +31,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
             registerRoutes_bbi($routeProvider);
 
         //idb/celebrations/*
-        if(/^\/idb\/celebrations($|\/.*)/.test(locationPath))
+        if(/^\/idb($|\/.*)/.test(locationPath))
             registerRoutes_idbCelebrations($routeProvider);
 
         //es/*
@@ -112,13 +112,13 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
   //============================================================
   function registerRoutes_idbCelebrations(routeProvider) {
 
-      $("base").attr('href', '/idb/celebrations/'); // allow full page reload outside of  /insession/*
+      $("base").attr('href', '/idb/'); // allow full page reload outside of  /insession/*
 
       routeProvider
 
-        .when('/',  { templateUrl: 'views/idb-celebrations/idb-cel-index.html', controllerAs: 'idbProfileCtrl', resolveController: true })
-        .when('/:year',       { templateUrl: 'views/idb-celebrations/idb-cel-index.html',    controllerAs: 'idbCelIndexCtrl',   resolveController: true,resolve: { routeParams: injectRouteParams({ year: '2017'    })   } })
-        .when('/:year/:gov',  { templateUrl: 'views/idb-celebrations/idb-profile.html', controllerAs: 'idbProfileCtrl', resolveController: true, resolveController: true,resolve: { routeParams: injectRouteParams({ year: '2017'    })   } });
+        // .when('/',  { templateUrl: 'views/idb-celebrations/idb-cel-index.html', controllerAs: 'idbProfileCtrl', resolveController: true })
+        .when('/:year/celebrations',       { templateUrl: 'views/idb-celebrations/idb-cel-index.html',    controllerAs: 'idbCelIndexCtrl',   resolveController: true, resolve : { user : securize(['Everyone']) }})
+        .when('/:year/celebrations/:gov',  { templateUrl: 'views/idb-celebrations/idb-profile.html', controllerAs: 'idbProfileCtrl', resolveController: true, resolveController: true , resolve : { user : securize(['Everyone']) }});
 
   }
 
