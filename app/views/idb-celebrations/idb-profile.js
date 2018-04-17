@@ -1,6 +1,6 @@
 define(['app','data/idb-celebrations/links','lodash','directives/idb-celebrations/menu-vertical','filters/lstring','filters/truncate','services/storage','directives/idb-celebrations/zoom-map','filters/term','filters/moment','filters/trust-as-resource-url'], function(app,links,_) { 'use strict';
 
-	return ['$location', '$routeParams','$http','$filter','$q','IStorage','locale','$timeout', function( $location, $routeParams,$http,$filter,$q,storage,locale,$timeout) {
+	return ['$location', '$routeParams','$http','$filter','$q','IStorage','locale','$timeout','user', '$scope',  function( $location, $routeParams,$http,$filter,$q,storage,locale,$timeout, user, $scope) {
 
 		var _ctrl 		= this;
 		var canceler = null;
@@ -9,24 +9,85 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 		_ctrl.year 						= parseInt($routeParams.year);
 	  _ctrl.links 					= links.links;
 		_ctrl.getCountry  		= getCountry;
+    _ctrl.isAdmin         = isAdmin;
 		_ctrl.documents				= {};
 		_ctrl.getOrgLogo  		= getOrgLogo;
 		_ctrl.getWebsite  		= getWebsite;
 		_ctrl.getCountry  		= getCountry;
 		_ctrl.locale      		= locale;
 		_ctrl.getEmbedMapUrl  = getEmbedMapUrl;
-			getCountries();
-			getEvents ();
 
+    var years = {  '2017':'5acb91f979283d00018011cd',
+                  '2018':'5acb8d46e57fe1000109191e',
+                  '2019':'5acb8f0fe57fe10001091924',
+                  '2020':'5acb8f0fe57fe10001091926',
+                  '2021':'5acb8f0fe57fe10001091928',
+                  '2022':'5acb8f0fe57fe1000109192a',
+                  '2023':'5acb8f10e57fe1000109192c',
+                  '2024':'5acb8f10e57fe1000109192e',
+                  '2025':'5acb8f10e57fe10001091930',
+                }
+
+			getCountries().then(function(){
+        getEvents ();
+        getCountryTagId();
+      });
+
+      //============================================================
+      //
+      //============================================================
+      function getCountryTagId() {
+
+        var params = {
+            q: {
+                'title.en': getNameEnglish(_ctrl.gov),//IDB
+            }
+        };
+        return $http.get("https://api.cbd.int/api/v2017/article-tags/",{params:params}).then(
+          function(o){
+
+            if(o.data && o.data.length){
+              _ctrl.counrtyTagId = o.data[0]._id
+              getArticle()
+            }
+        });
+      }
+      //============================================================
+      //
+      //============================================================
+      function getArticle() {
+
+        var params = {
+            q: {
+                'tags': '52000000cbd0330000001948',//IDB
+                'customTags': years[_ctrl.year],
+                'tags': _ctrl.counrtyTagId
+            }
+        };
+        return $http.get("https://api.cbd.int/api/v2017/articles",{params:params}).then(
+          function(o){
+            if(o.data && o.data.length){
+              _ctrl.article = o.data[0]
+              _ctrl.articleContent = o.data[0].content[locale]
+            }
+        });
+      }
 			//============================================================
 			//
 			//============================================================
 			function getCountries() {
-				return $http.get("/api/v2013/thesaurus/domains/countries/terms",{ cache: true }).then(
+				return $http.get("/api/v2013/thesaurus/domains/countries/terms").then(
 					function(o){
 						_ctrl.governments	=$filter('orderBy')(o.data, 'name');
 				});
 			}
+      //============================================================
+      //
+      //============================================================
+     function isAdmin () {
+        if($scope.user)
+           return !!_.intersection($scope.user.roles, ["Administrator","ChmAdministrator","undb-administrator"]).length;
+      }
 			//============================================================
 			//
 			//============================================================
@@ -34,6 +95,9 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 				if(!id) return false;
 				return 'https://www.google.com/maps/embed/v1/place?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&q=place_id:'+id;
 			}
+      //============================================================
+			//
+			//============================================================
 
 			//============================================================
 			//
@@ -41,7 +105,7 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 			function getCountry (code) {
 
               if(code==='all') {
-                console.log({title:{en:'All Countries'}});
+
                 return {title:{en:'All Countries'}} }
 							if(_ctrl.governments && _ctrl.governments.length)
 								for(var i=0; i<_ctrl.governments.length;i++){
@@ -50,6 +114,16 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 								}
 
 			}
+
+      //============================================================
+      //
+      //============================================================
+      function getNameEnglish(code) {
+        if(_ctrl.governments && _ctrl.governments.length)
+          for(var i=0; i<_ctrl.governments.length;i++)
+              if(_ctrl.governments[i].identifier===code)
+                return _ctrl.governments[i].title.en;
+      }
 			//============================================================
 			//
 			//============================================================
@@ -143,15 +217,7 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 						});
 
 			}
-			//============================================================
-			//
-			//============================================================
-			function getCountries() {
-				return $http.get("/api/v2013/thesaurus/domains/countries/terms",{ cache: true }).then(
-					function(o){
-						_ctrl.governments	=$filter('orderBy')(o.data, 'name');
-				});
-			}
+
 			//============================================================
 			//
 			//============================================================
@@ -173,7 +239,7 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 					var queryParameters = {
 							'q': query,
 							'sort': 'createdDate_dt desc',
-				      'fl': 'governments_ss,country_s,postalCode_s,state_s,city_s,address_s,lat_d,lng_d,googlePlaceId_s,onlineEvent_b,thematicArea_ss,descriptionNative_s,logo_s,websites_C_ss,images_C_ss,documents_C_ss,startDate_s,endDate_sidentifier_s,id,title_s,description_s,url_ss,schema_EN_t,government_EN_t,schema_s,aichiTarget_ss,symbol_s,',
+				      'fl': 'hostGovernments_ss,governments_ss,country_s,postalCode_s,state_s,city_s,address_s,lat_d,lng_d,googlePlaceId_s,onlineEvent_b,thematicArea_ss,descriptionNative_s,logo_s,websites_C_ss,images_C_ss,documents_C_ss,startDate_s,endDate_s,identifier_s,id,title_s,description_s,url_ss,schema_EN_t,government_EN_t,schema_s,aichiTarget_ss,symbol_s,',
 							'wt': 'json',
 							'start': 0,
 							'rows': 25,

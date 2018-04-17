@@ -1,4 +1,20 @@
 <style>
+  .card {
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+      transition: 0.3s;
+      border-radius: 5px; /* 5px rounded corners */
+      border-top: 1px #eeeeee solid;
+      margin: 20px 10px 20px 10px;
+      padding: 20px 20px 20px 20px;
+  }
+  .top-padding{
+    padding-top: 20px;
+  }
+
+  /* Add rounded corners to the top left and the top right corner of the image */
+  .card  .card-img {
+      border-radius: 5px 5px 5px 5px;
+  }
     .banner {
         height: 120px;
         background: #ab42a6;
@@ -63,30 +79,6 @@
         list-style-image: url("/app/images/bullet.gif");
     }
 
-    hr.style5 {
-        background-color: #fff;
-        border-top: 2px dashed #8c8b8b;
-        margin: 5px 0 5px 0;
-    }
-
-    hr.style18 {
-        height: 30px;
-        border-style: solid;
-        border-color: #8c8b8b;
-        border-width: 1px 0 0 0;
-        border-radius: 20px;
-    }
-
-    hr.style18:before {
-        display: block;
-        content: "";
-        height: 30px;
-        margin-top: -31px;
-        border-style: solid;
-        border-color: #8c8b8b;
-        border-width: 0 0 1px 0;
-        border-radius: 20px;
-    }
 </style>
 
 
@@ -111,16 +103,14 @@
         <a href="https://www.cbd.int/programmes/default.shtml">Programmes </a> >
         <a href="https://www.cbd.int/cepa/default.shtml">CEPA </a> >
         <a href="https://www.cbd.int/idb/">IDB </a> >
-        <a href="/idb/celebrations/">Celebrations</a> >
-        <a ng-href="/idb/celebrations/{{idbProfileCtrl.gov}}/{{idbProfileCtrl.year}}">{{idbProfileCtrl.getCountry(idbProfileCtrl.gov).title | lstring}}</a> >
-        <span>{{idbProfileCtrl.year}}</span>
+        <a ng-href="https://www.cbd.int/idb/{{idbProfileCtrl.year}}"> <span>{{idbProfileCtrl.year}}</span></a> >
+        <a ng-href="/idb/{{idbProfileCtrl.year}}/celebrations">Celebrations</a> >
+        <span>{{idbProfileCtrl.getCountry(idbProfileCtrl.gov).title | lstring}}</span>
       </div>
         <hr style="margin:0px;" />
-        <div class="row" style="padding-bottom:20px;">
-            <div class="col-md-5 col-xs-12">
-                <zoom-map zoom-to="idbProfileCtrl.gov"></zoom-map>
-            </div>
-            <div class="col-md-7 col-xs-12">
+        <div class="row" style="padding-top:10px; padding-bottom:10px;">
+
+            <div class="col-xs-12">
                 <div>
                     <img ng-if="idbProfileCtrl.gov!=='all'" class="pull-right" ng-src="https://www.cbd.int/images/flags/96/flag-{{idbProfileCtrl.gov}}-96.png" />
                 <h2 style="display:inline;">{{idbProfileCtrl.getCountry(idbProfileCtrl.gov).title | lstring}}</h2>
@@ -132,89 +122,81 @@
                 <h2>{{idbProfileCtrl.year}}  IDB Celebration<span ng-if="idbProfileCtrl.documents.event.length!==1">s</span> </h2>
                 <hr>
               </div>
+              <a ng-href="https://www.cbd.int/management/articles/{{idbProfileCtrl.article._id}}/edit" ng-if="idbProfileCtrl.articleContent && idbProfileCtrl.isAdmin()" target="_blank">
+                <i class="fa fa-edit pull-right"  ></i>
+              </a>
+              <div  ng-if="idbProfileCtrl.articleContent" ng-bind-html="idbProfileCtrl.articleContent"></div>
 
-
-
-            </div>
-
+              </div>
         </div>
         <div class="row">
             <div class="col-xs-12 text-center" ng-if="idbProfileCtrl.loading">
                     <h1><i class="fa fa-spin fa-spinner " /> Loading...</h1>
             </div>
-            <div class="col-md-12 col-xs-12">
-                <hr class="style18">
-            </div>
-            <div class="col-md-4 col-xs-12" ng-repeat-start="event in idbProfileCtrl.documents.event track by $index ">
+            <div class="row card" ng-repeat="event in idbProfileCtrl.documents.event track by $index ">
+              <a ng-href="https://www.cbd.int/2011-2020/dashboard/submit/event/{{event.identifier_s}}" target="_blank">
+                <i class="fa fa-edit pull-right"  ng-if="idbProfileCtrl.isAdmin()"></i>
+              </a>
+            <div class="col-md-4 col-xs-12 " >
 
-                <img class="pull-right" style="max-width:100%;padding-bottom:10px;" ng-src="{{event.logo_s}}" />
-                <img class="pull-right" style="max-width:100%;padding-bottom:10px;" ng-src="{{idbProfileCtrl.getOrgLogo(event).url}}" ng-if="!event.logo_s" />
-                <div   ng-show="event.startDate_s">
-                    <h6>Date</h6>
+                <img class="pull-right card-img" style="max-width:100%;" ng-src="{{event.logo_s}}" />
+                <img class="pull-right card-img" style="max-width:100%;" ng-src="{{idbProfileCtrl.getOrgLogo(event).url}}" ng-if="!event.logo_s" />
+                <div   ng-show="event.startDate_s" >
                     <div class="row" >
-                          <div class="col-xs-3"><label>From:</label></div><div class="col-xs-7"> {{event.startDate_s |moment:'format':'YYYY.MM.DD HH:mm'}}</div>
+                      <div ng-if="event.onlineEvent_b" class="col-xs-12 top-padding text-center" >
+                        <label>Online Event</label>
+                      </div>
+                          <div class="col-xs-4" ng-class="{'top-padding':!event.onlineEvent_b && (event.logo_s || idbProfileCtrl.getOrgLogo(event).url) }"><label>From:</label></div><div class="col-xs-8" ng-class="{'top-padding':!event.onlineEvent_b && (event.logo_s || idbProfileCtrl.getOrgLogo(event).url) }"> {{event.startDate_s |moment:'format':'YYYY.MM.DD HH:mm'}}</div>
                     </div>
                     <div class="row" >
-                        <div class="col-xs-3"><label>To:</label></div><div class="col-xs-7">{{event.endDate_s |moment:'format':'YYYY.MM.DD HH:mm'}}</div>
+                        <div class="col-xs-4"><label>To:</label></div><div class="col-xs-8">{{event.endDate_s |moment:'format':'YYYY.MM.DD HH:mm'}}</div>
                     </div>
                 </div>
                 <div ng-if="event.websites_C_ss">
-
-                    <h6>Links</h6>
                     <div ng-repeat="site in event.websites_C_ss track by $index ">
-                        <a ng-href="{{site.url}}" target="_blank" ng-switch="site.name">
-                            <i class="fa fa-home" aria-hidden="true" ng-switch-when="website"></i>
-                            <i class="fa fa-facebook-square" aria-hidden="true" ng-switch-when="facebook"></i>
-                            <i class="fa fa-twitter-square" aria-hidden="true" ng-switch-when="twitter"></i>
-                            <i class="fa fa-youtube-square" aria-hidden="true" ng-switch-when="youtube"></i>
-                            <i class="fa fa-external-link-square" aria-hidden="true" ng-switch-default></i> {{site.name |truncate:50}}
+                        <a ng-href="{{site.url}}" target="_blank" ng-if="site.name!=='website'">
+                            {{site.name |truncate:50}}
                         </a>
-                      </div>
                     </div>
+                </div>
 
-                    <div   ng-if="event.documents_C_ss">
-                        <h6>Documents</h6>
-                        <div  ng-repeat="doc in event.documents_C_ss">
-                            <a ng-href="{{doc.url}}" target="_blank"><i class="fa fa-file" aria-hidden="true"></i>
-                              {{doc.name}}
-                            </a>
-                        </div>
-                    </div>
 
-                    <div   ng-if="event.governments_ss">
-                        <h6>Related Parties & Governments</h6>
-                        <div  ng-repeat="doc in event.governments_ss" ng-show="doc !== idbProfileCtrl.gov">
-                            <a ng-href="/idb/celebrations/{{doc}}/{{idbProfileCtrl.year}}" >
-                              <img  width="25px" ng-src="https://www.cbd.int/images/flags/96/flag-{{doc}}-96.png" /> {{idbProfileCtrl.getCountry(doc).title|lstring}}
-                            </a>
-                        </div>
+
+                <div   ng-if="event.hostGovernments_ss">
+                    <div  ng-repeat="doc in event.hostGovernments_ss" ng-show="doc !== idbProfileCtrl.gov">
+                        <a ng-href="/idb/celebrations/{{doc}}/{{idbProfileCtrl.year}}" >
+                          <img  width="25px" ng-src="https://www.cbd.int/images/flags/96/flag-{{doc}}-96.png" /> {{idbProfileCtrl.getCountry(doc).title|lstring}}
+                        </a>
                     </div>
+                </div>
 
             </div>
             <div class="col-md-8 col-xs-12">
-                <label>{{event.title_s}}</label>
 
-                <span ng-if="event.onlineEvent_b"><label>Online Event:</label> <a ng-href="idbProfileCtrl.getWebsite(event).url"><i class="fa fa-home" aria-hidden="true" ></i> {{idbProfileCtrl.getWebsite(event).url}}</a></span>
-                <!-- <div class="well" ng-if="!event.onlineEvent_b"><span><label>Address:</label> <span class="small">{{event.address_s}},<span ng-if="event.city_s">{{event.city_s}}, <span ng-if="event.city_s">{{event.state_s}},</span>  <span ng-if="event.postalCode_s">{{event.postalCode_s}},</span> {{idbProfileCtrl.getCountry(event.country_s).title|lstring}} </span></span>
-                        <iframe ng-if="idbProfileCtrl.getEmbedMapUrl(event.googlePlaceId_s)" ng-src="{{idbProfileCtrl.getEmbedMapUrl(event.googlePlaceId_s)| trustAsResourceUrl}} " width="100%" height="200" frameborder="0" style="border:0" allowfullscreen></iframe>
-                </div> -->
-                <p>{{event.description_s}}</p>
-                <p ng-if="event.descriptionNative_s">
-                    <hr class="style5">
+                <label>
+                  <a ng-href="idbProfileCtrl.getWebsite(event)" ng-if="idbProfileCtrl.getWebsite(event)"> {{event.title_s}}</a>
+                  <span ng-if="!idbProfileCtrl.getWebsite(event)">{{event.title_s}}</span>
+                </label>
+
+                <p ng-bind-html="event.description_s | linky"></p>
+                <p >
+                    <hr ng-if="event.descriptionNative_s">
                 </p>
-                <p ng-if="event.descriptionNative_s">{{event.descriptionNative_s}}</p>
-                <div  ng-if="event.images_C_ss">
-                    <h6>Images</h6>
+                <p ng-if="event.descriptionNative_s" ng-bind-html="event.descriptionNative_s | linky"></p>
+                <div class="row" ng-if="event.images_C_ss">
                     <div class="col-xs-3 text-center" ng-repeat="image in event.images_C_ss">
                         <a ng-href="{{image.url}}" target="_blank"><img ng-src="{{image.url}}" style="max-width:100%;"></img></a>
                     </div>
                 </div>
-
+                <div  class="row" ng-if="event.documents_C_ss">
+                    <div  class="col-xs-12 top-padding" ng-repeat="doc in event.documents_C_ss">
+                        <a ng-href="{{doc.url}}" target="_blank">
+                          {{doc.name}}
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-12 col-xs-12" ng-repeat-end>
-<!-- <pre>{{event |json}}</pre> -->
-                <hr class="style18">
-            </div>
+          </div>
 <!-- <pre>{{idbProfileCtrl.documents.event | json}}</pre> -->
         </div>
     </div>
