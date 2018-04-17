@@ -16,23 +16,30 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 		_ctrl.getCountry  		= getCountry;
 		_ctrl.locale      		= locale;
 		_ctrl.getEmbedMapUrl  = getEmbedMapUrl;
-
-    var years = {  '2017':'5acb91f979283d00018011cd',
-                  '2018':'5acb8d46e57fe1000109191e',
-                  '2019':'5acb8f0fe57fe10001091924',
-                  '2020':'5acb8f0fe57fe10001091926',
-                  '2021':'5acb8f0fe57fe10001091928',
-                  '2022':'5acb8f0fe57fe1000109192a',
-                  '2023':'5acb8f10e57fe1000109192c',
-                  '2024':'5acb8f10e57fe1000109192e',
-                  '2025':'5acb8f10e57fe10001091930',
-                }
+    _ctrl.createArticle   = createArticle;
 
 			getCountries().then(function(){
         getEvents ();
-        getCountryTagId();
+        getCountryTagId().then(getYearTagId).then(getArticle);
       });
+      //============================================================
+      //
+      //============================================================
+      function getYearTagId() {
 
+        var params = {
+            q: {
+                'title.en': `${_ctrl.year}`,//IDB
+            }
+        };
+        return $http.get("https://api.cbd.int/api/v2017/article-custom-tags/",{params:params}).then(
+          function(o){
+
+            if(o.data && o.data.length)
+              _ctrl.yearTagId = o.data[0]._id
+
+        });
+      }
       //============================================================
       //
       //============================================================
@@ -46,10 +53,10 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
         return $http.get("https://api.cbd.int/api/v2017/article-tags/",{params:params}).then(
           function(o){
 
-            if(o.data && o.data.length){
+            if(o.data && o.data.length)
               _ctrl.counrtyTagId = o.data[0]._id
-              getArticle()
-            }
+
+
         });
       }
       //============================================================
@@ -60,7 +67,7 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
         var params = {
             q: {
                 'tags': '52000000cbd0330000001948',//IDB
-                'customTags': years[_ctrl.year],
+                'customTags': _ctrl.yearTagId,
                 'tags': _ctrl.counrtyTagId
             }
         };
@@ -70,6 +77,25 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
               _ctrl.article = o.data[0]
               _ctrl.articleContent = o.data[0].content[locale]
             }
+        });
+      }
+      //============================================================
+      //
+      //============================================================
+      function createArticle() {
+
+        var data =  {
+                'tags': ['52000000cbd0330000001948',_ctrl.counrtyTagId],//IDB
+                'customTags': [_ctrl.yearTagId],
+                'title':{en:' '}
+              };
+        return $http.post("/api/v2017/articles",data).then(function(o){
+          _ctrl.article = o.data
+
+          if(_ctrl.article.id)
+            window.open(`https://www.cbd.int/management/articles/${_ctrl.article.id}/edit`, '_blank')
+
+
         });
       }
 			//============================================================

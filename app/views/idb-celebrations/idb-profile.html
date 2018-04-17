@@ -125,6 +125,9 @@
               <a ng-href="https://www.cbd.int/management/articles/{{idbProfileCtrl.article._id}}/edit" ng-if="idbProfileCtrl.articleContent && idbProfileCtrl.isAdmin()" target="_blank">
                 <i class="fa fa-edit pull-right"  ></i>
               </a>
+              <a ng-href="#" ng-click="idbProfileCtrl.createArticle()" ng-if="!idbProfileCtrl.articleContent && idbProfileCtrl.isAdmin()" >
+                <i class="fa fa-plus pull-right"  ></i>
+              </a>
               <div  ng-if="idbProfileCtrl.articleContent" ng-bind-html="idbProfileCtrl.articleContent"></div>
 
               </div>

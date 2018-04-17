@@ -16,22 +16,32 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
 
 				_ctrl.documents	= {};
 				_ctrl.getCountry= getCountry;
-        var years = {  '2017':'5acb91f979283d00018011cd',
-                      '2018':'5acb8d46e57fe1000109191e',
-                      '2019':'5acb8f0fe57fe10001091924',
-                      '2020':'5acb8f0fe57fe10001091926',
-                      '2021':'5acb8f0fe57fe10001091928',
-                      '2022':'5acb8f0fe57fe1000109192a',
-                      '2023':'5acb8f10e57fe1000109192c',
-                      '2024':'5acb8f10e57fe1000109192e',
-                      '2025':'5acb8f10e57fe10001091930',
-                    }
+
 
 				getCountries().then(getEvents().then(function(){
 					 mapGovernment();
-           getArticle();
+           getYearTagId().then(getArticle);
            getOtherCelebrations();
 				}));
+
+        //============================================================
+        //
+        //============================================================
+        function getYearTagId() {
+
+          var params = {
+              q: {
+                  'title.en': `${_ctrl.year}`,//IDB
+              }
+          };
+          return $http.get("https://api.cbd.int/api/v2017/article-custom-tags/",{params:params}).then(
+            function(o){
+
+              if(o.data && o.data.length)
+                _ctrl.yearTagId = o.data[0]._id
+
+          });
+        }
         //============================================================
         //
         //============================================================
@@ -57,7 +67,7 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
           var params = {
               q: {
                   'tags': '52000000cbd0330000001948',//IDB
-                  'customTags': years[_ctrl.year]
+                  'customTags': _ctrl.yearTagId
               }
           };
           return $http.get("https://api.cbd.int/api/v2017/articles",{params:params}).then(
@@ -76,7 +86,7 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
           var params = {
               q: {
                   'tags': '52000000cbd0330000001948',//IDB
-                  'customTags': years[_ctrl.year],
+                  'customTags': _ctrl.yearTagId,
                   'customTags': '5ad52734990e540001a09458'//other-celebrations
               }
           };
