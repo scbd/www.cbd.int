@@ -6,6 +6,7 @@
         .document-status .progress-bar:last-child  { border-right: none; }
         .document-status .progress-bar-na          { background-color: gray; }
         .document-status .progress-bar.skipped     { text-decoration: line-through; background-color: lightgray; }
+        .document-status .progress-bar.dimmed      { opacity: 0.5 }
     </style>
 
     <div class="panel panel-default">
@@ -103,7 +104,7 @@
                 <div  ng-if="d.workflow.steps.length && (d.status!='public' || !d.files.length)" class="progress"  style="width:50%;margin-left:{{50-d.workflow.progress/2}}%;height:25px;display:inline-block">
                     <div ng-repeat="s in d.workflow.steps" title="Due: {{s.dueDate|moment:'format':'DD MMMM YYYY'}} - {{s.dueDate|moment:'fromNow'}}" 
                     class="progress-bar {{s.status}}" 
-                    ng-class="{ 'progress-bar-na': ((s.status=='pending' && s.dueDate>=TODAY) || s.status=='skipped'), 'progress-bar-success': s.status=='completed', 'progress-bar-info': s.status=='active',  'progress-bar-danger': ((s.status=='active'||s.status=='pending') && s.dueDate<TODAY) }" 
+                    ng-class="{ 'progress-bar-na': ((s.status=='pending' && s.dueDate>=TODAY) || s.status=='skipped'), 'progress-bar-success': s.status=='completed', 'progress-bar-info': s.status=='active',  'progress-bar-danger': ((s.status=='active'||s.status=='pending') && s.dueDate<TODAY),  'dimmed': (s.status=='pending' && s.dueDate<TODAY)  }" 
                     style="width: {{100/d.workflow.steps.length}}%;">
                         {{s.type}}
                     </div>
