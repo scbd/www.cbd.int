@@ -84,6 +84,8 @@
             </td>
             <td ng-click="statusCtrl.expand(d, true)" style="position:relative">
                 
+                <div ng-if="!d.expanded" class="text-muted" title="{{d.title|lstring}}">{{d.title|lstring}}</div>
+                
                 <div style="position:absolute;height:100%;left:50%;top:0px;border-right:dotted 2px red" title="Today">
                     &nbsp;
                 </div>
