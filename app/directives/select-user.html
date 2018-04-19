@@ -5,6 +5,12 @@
     <ul class="dropdown-menu">
         <div ng-if="searching" style="position:absolute;top:10px;right:5px"><i class="fa fa-cog fa-spin"></i></div>
         <li><input class="form-control" type="text" ng-model="_text" ng-model-options="{ debounce: { 'default': 500, 'blur': 0 } }" ng-change="searchUsers(_text)" placeholder="Search user"></li>
-        <li ng-repeat="u in users"><a href="#" ng-click="selectUser(u)">{{u.firstName}} {{u.lastName}}</a></li>
+        
+        <li ng-if="users.length" role="separator" class="divider"></li>
+        <li ng-repeat="u in users"><a href="#" ng-click="selectUser(u)">{{::getName(u)}} ({{u|initials}})</a></li>
+        
+        <li ng-if="options.length" role="separator" class="divider"></li>
+        <li ng-repeat="o in options"><a href="#" ng-click="selectUser(o)">{{::getName(o)}}</a></li>
+        
     </ul>
 </div>

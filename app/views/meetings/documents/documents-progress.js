@@ -16,6 +16,11 @@ define(['lodash', 'require', 'angular', 'moment-timezone', 'filters/lstring', 'f
         _ctrl.updateWorkflow = updateWorkflow;
         _ctrl.toIDs    = toIDs;
         _ctrl.expand   = expand;
+        _ctrl.standardRoles = [
+            'ScbdDirectors',
+            'ES-Review',
+            'EditorialService'
+        ];
         
         _ctrl.filters = {
             type_nature:  'official',

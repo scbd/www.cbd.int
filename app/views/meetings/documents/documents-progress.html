@@ -66,7 +66,7 @@
             <td class="hidden-xs text-nowrap" style="width:1%">
                 
                 <div ng-if="d.workflow.newOwners">
-                    <select-user ng-if="d.workflow.newOwners" caption="Assign to" role="1275" ng-model="_selectedUser" ng-change="d.workflow.newOwners.push(_selectedUser)"></select-user>
+                    <select-user ng-if="d.workflow.newOwners" extra-options="statusCtrl.standardRoles" caption="Assign to" role="1275" ng-model="_selectedUser" ng-change="d.workflow.newOwners.push(_selectedUser)"></select-user>
                     <button type="button" class="btn btn-link btn-xs" ng-click="statusCtrl.updateWorkflow(d, { owners : statusCtrl.toIDs(d.workflow.newOwners) })"><i class="fa fa-check"></i></button>
                     <button type="button" class="btn btn-link btn-xs" ng-click="d.workflow.newOwners=null"><i class="fa fa-times"></i></button>
 
