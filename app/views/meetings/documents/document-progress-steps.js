@@ -8,6 +8,7 @@ define(['app', 'require', 'lodash','text!./document-progress-steps.html', 'filte
             replace: true,
             template: template,
             scope: {
+                editMode: '<editMode',
                 document: '<document',
                 documents: '<documents'
             },
