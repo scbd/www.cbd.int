@@ -23,6 +23,11 @@ define(['app', 'require', 'lodash','text!./document-progress-steps.html', 'filte
                 $scope.startWorkflow = startWorkflow;
                 $scope.initializeWorkflow = initializeWorkflow;
                 $scope.workflowTemplates  = [];
+                $scope.standardRoles = [
+                    'ScbdDirectors',
+                    'ES-Review',
+                    'EditorialService'
+                ];
                 
                 if(!$scope.document.workflow || !$scope.document.workflow.steps || !$scope.document.workflow.steps.length)
                     loadTemplates();

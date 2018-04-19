@@ -33,7 +33,7 @@
         </td>
         <td>
             <div ng-if="s.newAssignedTo">
-                <select-user ng-if="s.newAssignedTo" caption="Assign to" role="1275" ng-model="_selectedUser" ng-change="s.newAssignedTo.push(_selectedUser)"></select-user>
+                <select-user ng-if="s.newAssignedTo" caption="Assign to" role="1275" extra-options="_self.standardRoles" ng-model="_selectedUser" ng-change="s.newAssignedTo.push(_selectedUser)"></select-user>
                 <button type="button" class="btn btn-link btn-xs" ng-click="_self.update(s, { assignedTo : toIDs(s.newAssignedTo) });"><i class="fa fa-check"></i></button>
                 <button type="button" class="btn btn-link btn-xs" ng-click="s.newAssignedTo=null"><i class="fa fa-times"></i></button>
 
