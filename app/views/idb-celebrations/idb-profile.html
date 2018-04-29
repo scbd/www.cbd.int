@@ -177,7 +177,7 @@
             <div class="col-md-8 col-xs-12">
 
                 <label>
-                  <a ng-href="{{idbProfileCtrl.getWebsite(event)}}" ng-if="idbProfileCtrl.getWebsite(event)"> {{event.title_s}}</a>
+                  <a ng-href="{{idbProfileCtrl.getWebsite(event).url}}" ng-if="idbProfileCtrl.getWebsite(event)"> {{event.title_s}}</a>
                   <span ng-if="!idbProfileCtrl.getWebsite(event)">{{event.title_s}}</span>
                 </label>
 

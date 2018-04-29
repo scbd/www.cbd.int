@@ -5,22 +5,10 @@
         "children": [
             {
                 "title": {
-                    "en": "Messages"
-                },
-                "source": "https://www.cbd.int/idb/2017/messages/"
-            },
-            {
-                "title": {
                     "en": "Celebrations"
                 },
                 "source": "#",
                 "selected":true
-            },
-            {
-                "title": {
-                    "en": "Logo"
-                },
-                "source": "https://www.cbd.int/idb/2017/logo/"
             }
         ]
     }]
