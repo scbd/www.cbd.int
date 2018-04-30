@@ -124,7 +124,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         .when('/:year/celebrations/:gov',  { templateUrl: 'views/idb-celebrations/idb-profile.html',    controllerAs: 'idbProfileCtrl',   resolveController: true, resolveController: true , resolve : { user : securize(['Everyone']) }})
         .when('/',                         { templateUrl: 'views/idb-celebrations/redirect.html',       controllerAs: 'redirectCtrl',     resolveController: true })
         //.when('/:path',                    { templateUrl: 'views/idb-celebrations/redirect.html',       controllerAs: 'redirectCtrl',     resolveController: true })
-        .otherwise({redirectTo: function(){ alert(window.location); return '/?path='+ encodeURIComponent(window.location)}});
+        .otherwise({redirectTo: function(){ return '/?path='+ encodeURIComponent(window.location)}});
   }
 
   //============================================================
