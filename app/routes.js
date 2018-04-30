@@ -31,7 +31,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
             registerRoutes_bbi($routeProvider);
 
         //idb/celebrations/* \/20(?!0[0-9]|1[0-7])\d\d\/celebrations
-        if(/^\/idb($|\/.*)/.test(locationPath))
+        if(/^\/idb\/20(?!0[0-9]|1[0-7])\d\d\/celebrations($|\/.*)/.test(locationPath))
             registerRoutes_idbCelebrations($routeProvider);
 
         //es/*
