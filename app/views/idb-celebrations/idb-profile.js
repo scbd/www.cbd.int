@@ -7,7 +7,7 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 
 		_ctrl.gov 						= $routeParams.gov;
 		_ctrl.year 						= parseInt($routeParams.year);
-	  _ctrl.links 					= links.links;
+	  _ctrl.links 					= links.links[_ctrl.year];
 		_ctrl.getCountry  		= getCountry;
     _ctrl.isAdmin         = isAdmin;
 		_ctrl.documents				= {};

@@ -6,7 +6,7 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
 				var canceler = null;
 				var currentDate= new Date();
 
-	      _ctrl.links 	= links.links;
+
         _ctrl.isAdmin = isAdmin;
 
 				if(!parseInt($routeParams.year) ||  Number($routeParams.year) < 2018)
@@ -14,6 +14,7 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
 				else
 					_ctrl.year  	= parseInt($routeParams.year);
 
+        _ctrl.links 	= links.links[_ctrl.year];
 				_ctrl.documents	= {};
 				_ctrl.getCountry= getCountry;
 

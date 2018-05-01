@@ -126,7 +126,7 @@ height:550px;
 <div  style="position:relative;height:520px;z-index: 1;">
   <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
-                <li ng-repeat-start="link in links" ng-class="{'selected':link.selected,'sidebar-header':link.children}" ng-show="false">
+                <li ng-repeat-start="link in links" ng-class="{'selected':link.selected,'sidebar-header':link.children}" >
                     <a ng-href="{{link.source}}"  >{{link.title.en}}</a>
                 </li>
                 <section ng-repeat-end>
