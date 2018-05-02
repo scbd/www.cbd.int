@@ -146,9 +146,16 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //
         //==============================
         function normalizeDocument(d){
+            
+            d.status = d.status||'public';
 
-            d.metadata = _.defaults(d.metadata||{}, { printable: ['crp', 'limited', 'non-paper'].indexOf(d.nature)>=0 });
-            d.metadata.visible = !!(d.files||[]).length && (d.status||'public')=='public';
+            d.metadata = _.defaults(d.metadata||{}, { 
+                printable: ['crp', 'limited', 'non-paper'].indexOf(d.nature)>=0,
+                visible : d.status=='public' && !!(d.files||[]).length
+            });
+            
+            if(d.status!='public')
+                delete d.metadata.visible;
 
             return d;
         }

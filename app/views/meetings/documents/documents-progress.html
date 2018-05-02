@@ -6,6 +6,7 @@
         .document-status .progress-bar:last-child  { border-right: none; }
         .document-status .progress-bar-na          { background-color: gray; }
         .document-status .progress-bar.skipped     { text-decoration: line-through; background-color: lightgray; }
+        .document-status .progress-bar.dimmed      { opacity: 0.5 }
     </style>
 
     <div class="panel panel-default">
@@ -52,7 +53,7 @@
             <th class="hidden-xs">Symbol</th>
             <th class="hidden-xs">Owner</th>
             <th>Status</th>
-            <th></th>
+            <th><button type="button" ng-if="statusCtrl.isAdmin" ng-click="statusCtrl.editMode=!statusCtrl.editMode" class="btn btn-default btn-xs pull-right" ng-class="{ 'btn-info': statusCtrl.editMode, 'active': statusCtrl.editMode }"><i class="fa fa-edit"></i></button></th>
         <tr ng-repeat="d in statusCtrl.documents|filter:statusCtrl.filters.assignedToFilter|filter:statusCtrl.filters.dueFilter|filter:statusCtrl.filters.documentTypeFilter|filter:statusCtrl.filters.statusFilter" ng-class="{ success:d.status=='public'}">
             <td class="hidden-xs" style="width:1%">
                 <div class="text-nowrap">
@@ -65,7 +66,7 @@
             <td class="hidden-xs text-nowrap" style="width:1%">
                 
                 <div ng-if="d.workflow.newOwners">
-                    <select-user ng-if="d.workflow.newOwners" caption="Assign to" role="1275" ng-model="_selectedUser" ng-change="d.workflow.newOwners.push(_selectedUser)"></select-user>
+                    <select-user ng-if="d.workflow.newOwners" extra-options="statusCtrl.standardRoles" caption="Assign to" role="1275" ng-model="_selectedUser" ng-change="d.workflow.newOwners.push(_selectedUser)"></select-user>
                     <button type="button" class="btn btn-link btn-xs" ng-click="statusCtrl.updateWorkflow(d, { owners : statusCtrl.toIDs(d.workflow.newOwners) })"><i class="fa fa-check"></i></button>
                     <button type="button" class="btn btn-link btn-xs" ng-click="d.workflow.newOwners=null"><i class="fa fa-times"></i></button>
 
@@ -77,11 +78,13 @@
                 
                 <div ng-if="!d.workflow.newOwners">
                     <span ng-repeat="o in d.workflow.owners" title="{{o.firstName}} {{o.lastName}}">{{o|initials}}<span ng-if="!$last">, </span></span>
-                    <button ng-if="d.workflow.canEdit" class="btn btn-link" ng-click="d.workflow.newOwners = (d.workflow.owners||[]).slice(0)"><i class="fa fa-edit"></i></button>
+                    <button ng-if="statusCtrl.editMode && d.workflow.canEdit" class="btn btn-link" ng-click="d.workflow.newOwners = (d.workflow.owners||[]).slice(0)"><i class="fa fa-edit"></i></button>
                 </div>
 
             </td>
             <td ng-click="statusCtrl.expand(d, true)" style="position:relative">
+                
+                <div ng-if="!d.expanded" class="text-muted" title="{{d.title|lstring}}">{{d.title|lstring}}</div>
                 
                 <div style="position:absolute;height:100%;left:50%;top:0px;border-right:dotted 2px red" title="Today">
                     &nbsp;
@@ -103,7 +106,7 @@
                 <div  ng-if="d.workflow.steps.length && (d.status!='public' || !d.files.length)" class="progress"  style="width:50%;margin-left:{{50-d.workflow.progress/2}}%;height:25px;display:inline-block">
                     <div ng-repeat="s in d.workflow.steps" title="Due: {{s.dueDate|moment:'format':'DD MMMM YYYY'}} - {{s.dueDate|moment:'fromNow'}}" 
                     class="progress-bar {{s.status}}" 
-                    ng-class="{ 'progress-bar-na': ((s.status=='pending' && s.dueDate>=TODAY) || s.status=='skipped'), 'progress-bar-success': s.status=='completed', 'progress-bar-info': s.status=='active',  'progress-bar-danger': ((s.status=='active'||s.status=='pending') && s.dueDate<TODAY) }" 
+                    ng-class="{ 'progress-bar-na': ((s.status=='pending' && s.dueDate>=TODAY) || s.status=='skipped'), 'progress-bar-success': s.status=='completed', 'progress-bar-info': s.status=='active',  'progress-bar-danger': ((s.status=='active'||s.status=='pending') && s.dueDate<TODAY),  'dimmed': (s.status=='pending' && s.dueDate<TODAY)  }" 
                     style="width: {{100/d.workflow.steps.length}}%;">
                         {{s.type}}
                     </div>
@@ -117,7 +120,7 @@
                     <div class="row">
                         
                     <div class="col-md-12">
-                        <document-progress-steps document="d" documents="statusCtrl.documents"></document-progress-steps>
+                        <document-progress-steps document="d" documents="statusCtrl.documents" edit-mode="statusCtrl.editMode"></document-progress-steps>
                     </div>
                     
                     <div class="col-md-12">

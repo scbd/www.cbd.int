@@ -8,10 +8,37 @@
         <th>Revision</th>
         <th>Completed On</th>
         <th>With Revision</th>
-        <th></th>
+        <th class="text-right">
+            <!-- Single button -->
+            <div class="dropdown" ng-if="editMode && document.workflow.canEdit" style="display: inline-block;">
+              <button class="btn btn-success btn-xs  dropdown-toggle" ng-disabled="s.status=='active'" type="button" data-toggle="dropdown">
+                  <i class="fa fa-plus-circle"></i>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li><a href="#" ng-click="createStep({ type: 'draft',     dueDate: 0 })">Draft</a></li>
+                <li><a href="#" ng-click="createStep({ type: 'peer',      dueDate: 0 })">Peer Review</a></li>
+                <li><a href="#" ng-click="createStep({ type: 'expert',    dueDate: 0 })">Expert Review</a></li>
+                <li><a href="#" ng-click="createStep({ type: 'directors', dueDate: 0, assignedTo: ['ScbdDirectors']    })">Directors</a></li>
+                <li><a href="#" ng-click="createStep({ type: 'es',        dueDate: 0, assignedTo: ['ES-Review']        })">Executive Secretary</a></li>
+                <li><a href="#" ng-click="createStep({ type: 'edit',      dueDate: 0, assignedTo: ['EditorialService'] })">Editors</a></li>
+
+                <li role="separator" class="divider"></li>
+                <li>
+                    <div class="input-group">
+                        <input type="text" class="form-control" ng-model="_step"  placeholder="custom step">
+                        <div class="input-group-addon">
+                            <a href="#" ng-click="createStep({ type: _step, dueDate: 0 })">+</a>
+                        </div>
+                    </div>
+                </li>
+              </ul>
+            </div>
+        </th>
     </tr>
     <tr ng-repeat="s in document.workflow.steps" ng-class="{ success: s.status=='completed', info: s.status=='active', danger: s.status=='active' && s.dueDate<TODAY }">
-        <td class="hidden-xs">{{$index+1}}</td>
+        <td class="hidden-xs">
+            {{$index+1}}
+        </td>
         <td>
             <div>{{s.type}}</div>
             <i class="visible-xs">{{s.status}}</i>
@@ -27,13 +54,13 @@
             <div ng-hide="s.newDueDate">
                 <span class="hidden-xs" title="{{s.dueDate|date:'yyyy-MM-dd'}}">{{s.dueDate|moment:'format':'D MMMM YYYY'}} </span>
                 <span class="visible-xs text-nowrap" title="{{s.dueDate|date:'yyyy-MM-dd'}}">{{s.dueDate|moment:'format':'D MMMM'}}</span>
-                <button ng-if="document.workflow.canEdit" class="btn btn-link" ng-click="s.newDueDate = s.dueDate"><i class="fa fa-edit"></i></button>
+                <button ng-if="editMode && document.workflow.canEdit" class="btn btn-link" ng-click="s.newDueDate = s.dueDate"><i class="fa fa-edit"></i></button>
             </div>
             <div ng-show="s.status=='active'">{{s.dueDate|moment:'fromNow'}}<div>
         </td>
         <td>
             <div ng-if="s.newAssignedTo">
-                <select-user ng-if="s.newAssignedTo" caption="Assign to" role="1275" ng-model="_selectedUser" ng-change="s.newAssignedTo.push(_selectedUser)"></select-user>
+                <select-user ng-if="s.newAssignedTo" caption="Assign to" role="1275" extra-options="_self.standardRoles" ng-model="_selectedUser" ng-change="s.newAssignedTo.push(_selectedUser)"></select-user>
                 <button type="button" class="btn btn-link btn-xs" ng-click="_self.update(s, { assignedTo : toIDs(s.newAssignedTo) });"><i class="fa fa-check"></i></button>
                 <button type="button" class="btn btn-link btn-xs" ng-click="s.newAssignedTo=null"><i class="fa fa-times"></i></button>
 
@@ -45,7 +72,7 @@
 
             <div ng-if="!s.newAssignedTo">
                 <span ng-repeat="o in (s.assignedTo.length ? s.assignedTo : document.workflow.owners)" title="{{o.firstName}} {{o.lastName}}">{{o.userID ? (o|initials) : o}}<span ng-if="!$last">, </span></span>
-                <button ng-if="document.workflow.canEdit" class="btn btn-link" ng-click="s.newAssignedTo = (s.assignedTo||[]).slice(0)"><i class="fa fa-edit"></i></button>
+                <button ng-if="editMode && document.workflow.canEdit" class="btn btn-link" ng-click="s.newAssignedTo = (s.assignedTo||[]).slice(0)"><i class="fa fa-edit"></i></button>
             </div>
         </td>
         <td>
@@ -61,13 +88,23 @@
         <td>
             <span ng-if="s.outRevision">v{{s.outRevision}}</span>
         </td>
-        <td>
+        <td class="text-nowrap text-right">
               <button ng-if="(s.status=='pending' && (s.assignedToMe || document.workflow.canEdit) && $first && s.canActivate)" class="btn btn-xs btn-default" type="button" ng-click="_self.startWorkflow()">
                 Start
               </button>
               <button ng-if=" (s.status=='active' && (s.assignedToMe || document.workflow.canEdit))" class="btn btn-xs btn-default" type="button" ng-click="_self.action(_self.document)">
                 Action
               </button>
+              
+                <div class="dropdown" ng-if="editMode && document.workflow.canEdit" style="display: inline-block;">
+                  <button class="btn btn-danger btn-xs  dropdown-toggle" ng-disabled="s.status=='active'" type="button" data-toggle="dropdown">
+                      <i class="fa fa-minus-circle"></i>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#" ng-click="deleteStep(s._id)">Delete step</a></li>
+                  </ul>
+                </div>
+              
         </td>
     </tr>
     

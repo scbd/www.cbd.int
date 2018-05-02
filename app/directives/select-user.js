@@ -8,6 +8,7 @@ define(['app', 'text!./select-user.html', 'lodash'], function(app, html, _) { 'u
             replace: true,
 			scope: {
                 role : '<role',
+                options : '<extraOptions',
                 caption : '@caption'
             },
 			link: function ($scope, elem, y, ngModelCtrl) {
@@ -20,12 +21,24 @@ define(['app', 'text!./select-user.html', 'lodash'], function(app, html, _) { 'u
                 $scope.selectUser = function(user) {
                     ngModelCtrl.$setViewValue(user);    
                 };
+                
+                //==============================
+                //
+                //==============================
+                $scope.getName = function(u) {
+                    if(u.lastName) return u.firstName+' '+u.lastName;
+                    if(u.name)     return u.name;
+                    return u;
+                };
 
                 //==============================
                 //
                 //==============================
                 $scope.focus = function() {
-                    setTimeout(function() { searchBox.focus(); }, 100);
+                    setTimeout(function() { 
+                        searchBox.focus(); 
+                        searchBox.select(); 
+                    }, 100);
                 };
 
                 //==============================
@@ -44,7 +57,7 @@ define(['app', 'text!./select-user.html', 'lodash'], function(app, html, _) { 'u
                         $scope.users = res.data;
                     }).catch(console.error).finally(function(){
                         delete $scope.searching;
-                    })
+                    });
                 };
 			}
 		};

@@ -1,13 +1,12 @@
 define(['app', 'require', 'lodash','text!./document-progress-steps.html', 'filters/moment', 'filters/initials', 'ngDialog', 'directives/select-user'], function(app, require, _, template) { 'use strict';
 
-    var workflowTemplates = {};
-
     app.directive('documentProgressSteps', ['ngDialog', '$q',"$http", function(ngDialog, $q, $http) {
         return {
             restrict: 'E',
             replace: true,
             template: template,
             scope: {
+                editMode: '<editMode',
                 document: '<document',
                 documents: '<documents'
             },
@@ -20,9 +19,16 @@ define(['app', 'require', 'lodash','text!./document-progress-steps.html', 'filte
                 $scope.update   = updateStep;
                 $scope.canEdit  = function(s)    { return s && s.canEdit; };
                 $scope.toIDs    = function(list) { return _(list).map(function(u) { return u.userID || u.userId || u; }).uniq().value(); };
+                $scope.createStep    = createStep;
+                $scope.deleteStep    = deleteStep;
                 $scope.startWorkflow = startWorkflow;
                 $scope.initializeWorkflow = initializeWorkflow;
                 $scope.workflowTemplates  = [];
+                $scope.standardRoles = [
+                    'ScbdDirectors',
+                    'ES-Review',
+                    'EditorialService'
+                ];
                 
                 if(!$scope.document.workflow || !$scope.document.workflow.steps || !$scope.document.workflow.steps.length)
                     loadTemplates();
@@ -112,7 +118,45 @@ define(['app', 'require', 'lodash','text!./document-progress-steps.html', 'filte
                         refresh();
                     });
                 }  
-                
+
+                //===========================
+                //
+                //===========================
+                function createStep(s) {
+                    
+                    var doc = $scope.document;
+                    
+                    var data = {
+                        type:       (s.type||'').replace(/[^A-Z0-9]/ig, ''),
+                        dueDate:    adjustDate(TODAY, s.dueDate),
+                        assignedTo: s.assignedTo
+                    };
+                    
+                    if(!data.type)
+                        return;
+                            
+                    return $http.post('/api/v2016/documents/'+doc._id+'/workflow/steps', data).then(function() {
+                        
+                        refresh();
+                        
+                    }).catch(console.error);
+                }
+
+                //===========================
+                //
+                //===========================
+                function deleteStep(stepId) {
+                    
+                    var doc  = $scope.document;
+                    var step = _.find($scope.document.workflow.steps||[], { _id: stepId });
+                    
+                    if(!step)
+                        return;
+                    
+                    $http.delete('/api/v2016/documents/'+doc._id+'/workflow/steps/'+step._id).then(function(){
+                        refresh();
+                    });
+                }
 
                 //===========================
                 //

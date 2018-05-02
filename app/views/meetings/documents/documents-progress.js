@@ -16,6 +16,13 @@ define(['lodash', 'require', 'angular', 'moment-timezone', 'filters/lstring', 'f
         _ctrl.updateWorkflow = updateWorkflow;
         _ctrl.toIDs    = toIDs;
         _ctrl.expand   = expand;
+        _ctrl.editMode = false;
+        _ctrl.isAdmin  = !!_.intersection(user.roles, ['EditorialService', 'Administrator']).length;
+        _ctrl.standardRoles = [
+            'ScbdDirectors',
+            'ES-Review',
+            'EditorialService'
+        ];
         
         _ctrl.filters = {
             type_nature:  'official',

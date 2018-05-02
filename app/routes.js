@@ -30,8 +30,8 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         if(/^\/biobridge($|\/.*)/.test(locationPath))
             registerRoutes_bbi($routeProvider);
 
-        //idb/celebrations/*
-        if(/^\/idb($|\/.*)/.test(locationPath))
+        //idb/celebrations/* \/20(?!0[0-9]|1[0-7])\d\d\/celebrations
+        if(/^\/idb\/20(?!0[0-9]|1[0-7])\d\d\/celebrations($|\/.*)/.test(locationPath))
             registerRoutes_idbCelebrations($routeProvider);
 
         //es/*
@@ -39,7 +39,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
             registerRoutes_esPages($routeProvider);
 
         $routeProvider.when('/403', { templateUrl: '/app/views/403.html' });
-        $routeProvider.when('/404', { templateUrl: '/app/views/404.html' }).otherwise({redirectTo: '/404'});
+        $routeProvider.when('/404', { templateUrl: '/app/views/404.html' });
     }
   ]);
 
@@ -55,6 +55,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       routeProvider.when('/:body/:session/:decision',            { templateUrl: 'views/decisions/view.html',      resolveController: true, resolve : { user : currentUser() } } );
       routeProvider.when('/:body/:session/:decision/edit',       { templateUrl: 'views/decisions/edit.html',      resolveController: true, resolve : { user : securize(["Administrator","DecisionTrackingTool", "ScbdStaff"]) } } );
       routeProvider.when('/:body/:session/:decision/:paragraph', { templateUrl: 'views/decisions/paragraph.html', resolveController: true });
+      routeProvider.otherwise({redirectTo: '/404'});
   }
 
     //============================================================
@@ -69,7 +70,8 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         .when('/import-translations',         { templateUrl : 'views/meetings/documents/management/translations.html', resolveController : true,                       resolve : { user : securize(["Administrator","EditorialService"]) } })
         .when('/:meeting/documents/status',   { templateUrl : 'views/meetings/documents/documents-progress.html',      resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService", "ScbdStaff"]) } })
         .when('/:meeting/documents/:id',      { templateUrl : 'views/meetings/documents/management/document-id.html',  resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService"]) } })
-        .when('/:meeting',                    { templateUrl : 'views/meetings/documents/documents.html',               resolveController : true, reloadOnSearch:false, resolve : { showMeeting : resolveLiteral(true) } } );
+        .when('/:meeting',                    { templateUrl : 'views/meetings/documents/documents.html',               resolveController : true, reloadOnSearch:false, resolve : { showMeeting : resolveLiteral(true) } } )
+        .otherwise({redirectTo: '/404'});
     }
 
   //============================================================
@@ -90,6 +92,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       .when('/:code/schedules',             { templateUrl   : 'views/meetings/documents/agenda.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting',              { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting/documents',    { templateUrl   : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .otherwise({redirectTo: '/404'});
 
     }
 
@@ -103,7 +106,8 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
       routeProvider
         .when('/',                  { templateUrl: 'views/aichi-targets/index.html',    controllerAs: 'indexCtrl',   resolveController: true })
-        .when('/target/:targetId',  { templateUrl: 'views/aichi-targets/index-id.html', controllerAs: 'indexIdCtrl', resolveController: true });
+        .when('/target/:targetId',  { templateUrl: 'views/aichi-targets/index-id.html', controllerAs: 'indexIdCtrl', resolveController: true })
+        .otherwise({redirectTo: '/404'});
   }
 
   //============================================================
@@ -116,10 +120,9 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
       routeProvider
 
-        // .when('/',  { templateUrl: 'views/idb-celebrations/idb-cel-index.html', controllerAs: 'idbProfileCtrl', resolveController: true })
-        .when('/:year/celebrations',       { templateUrl: 'views/idb-celebrations/idb-cel-index.html',    controllerAs: 'idbCelIndexCtrl',   resolveController: true, resolve : { user : securize(['Everyone']) }})
-        .when('/:year/celebrations/:gov',  { templateUrl: 'views/idb-celebrations/idb-profile.html', controllerAs: 'idbProfileCtrl', resolveController: true, resolveController: true , resolve : { user : securize(['Everyone']) }});
-
+        .when('/:year/celebrations',       { templateUrl: 'views/idb-celebrations/idb-cel-index.html',  controllerAs: 'idbCelIndexCtrl',  resolveController: true, resolve : { user : securize(['Everyone']) }})
+        .when('/:year/celebrations/:gov',  { templateUrl: 'views/idb-celebrations/idb-profile.html',    controllerAs: 'idbProfileCtrl',   resolveController: true, resolveController: true , resolve : { user : securize(['Everyone']) }})
+        .otherwise({redirectTo: function(){ window.location.href= window.location}});
   }
 
   //============================================================
@@ -138,7 +141,8 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         .when('/contact',   { templateUrl: 'views/es-pages/contact.html',   resolveController: true, controllerAs: 'esContactCtrl'  })
         .when('/video/:id',   { templateUrl: 'views/es-pages/youtube-video.html',resolveController: true, controllerAs: 'esVideoCtrl'  })
         .when('/event/:id',   { templateUrl: 'views/es-pages/event.html',resolveController: true, controllerAs: 'esEventCtrl'  })
-        .when('/statement/:id',   { templateUrl: 'views/es-pages/statement.html',resolveController: true, controllerAs: 'esStatementCtrl'  });
+        .when('/statement/:id',   { templateUrl: 'views/es-pages/statement.html',resolveController: true, controllerAs: 'esStatementCtrl'  })
+        .otherwise({redirectTo: '/404'});
   }
 
   //============================================================
@@ -150,7 +154,8 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       $("base").attr('href', '/kronos/list-of-participants/'); // allow full page reload outside of  /insession/*
 
       routeProvider
-        .when('/',                  { templateUrl: 'views/meetings/participants/index.html',    controllerAs: 'indexCtrl',   resolveController: true, resolve: { user : securize(["Administrator","KronosAdministrator", "ScbdStaff"]) }  });
+        .when('/',                  { templateUrl: 'views/meetings/participants/index.html',    controllerAs: 'indexCtrl',   resolveController: true, resolve: { user : securize(["Administrator","KronosAdministrator", "ScbdStaff"]) }  })
+        .otherwise({redirectTo: '/404'});
   }
 
     //============================================================
@@ -221,6 +226,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
           .when('/forums/bbi/:threadId',          { templateUrl: 'views/bbi/forums/post-list-view.html',  resolveController: true,resolve : { user : securize(['User'])},forumId:17490,forumListUrl:'/biobridge/forums/bbi', text:'BBI'} ) //,
           .when('/forums/bbi',                    { templateUrl: 'views/bbi/forums/thread-list-view.html',    resolveController: true,resolve : { user : securize(['User'])}, forumId:17490, postUrl:'/biobridge/forums/bbi', text:'BBI' } )
+          .otherwise({redirectTo: '/404'});
 
     }
 
