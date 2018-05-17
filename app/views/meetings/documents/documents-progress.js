@@ -1,16 +1,16 @@
-define(['lodash', 'require', 'angular', 'moment-timezone', 'filters/lstring', 'filters/moment', 'filters/initials', 'directives/file','ngDialog',
+define(['lodash', 'require', 'moment', 'angular', 'moment-timezone', 'filters/lstring', 'filters/moment', 'filters/initials', 'directives/file','ngDialog',
         'directives/meetings/documents/document-files','./document-progress-steps', 'directives/comments/internal-comments', 
-], function(_,require) {
+], function(_,require, moment) {
 
 	return ["$scope", "$route", "$http", '$location', '$q', 'user', 'ngDialog', function ($scope, $route, $http, $location, $q, user, ngDialog) {
-
-        var TODAY = new Date(); TODAY.setHours(0, 0, 0, 0);
         
         var meetingCode = $route.current.params.meeting.toUpperCase();
         var _ctrl       = $scope.statusCtrl = this;
 
-        _ctrl.TODAY    = $scope.TODAY = TODAY;
+        var TODAY = _ctrl.TODAY = $scope.TODAY = moment().startOf('day').toDate();
+
         _ctrl.loadLogs = loadLogs;
+        _ctrl.refresh  = load;
         _ctrl.action   = action;
         _ctrl.onFile   = upload;
         _ctrl.updateWorkflow = updateWorkflow;
@@ -29,7 +29,8 @@ define(['lodash', 'require', 'angular', 'moment-timezone', 'filters/lstring', 'f
             dueFilter:    dueFilter,
             statusFilter: statusFilter,
             documentTypeFilter: documentTypeFilter,
-            assignedToFilter:   assignedToFilter
+            assignedToFilter:   assignedToFilter,
+            gridIncrement : 'months'
         };
 
         $scope.$on('load-document-progress', load);
@@ -41,7 +42,7 @@ define(['lodash', 'require', 'angular', 'moment-timezone', 'filters/lstring', 'f
         //==============================
         function load() {
 
-            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache:true, params: { f : { EVT_CD:1, agenda:1, title:1, type:1 } } }).then(function(res){
+            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache:true, params: { f : { EVT_CD:1, EVT_FROM_DT:1, agenda:1, title:1, type:1 } } }).then(function(res){
 
                 meeting = _.defaults(res.data, {
                     code: res.data.EVT_CD,
@@ -62,9 +63,18 @@ define(['lodash', 'require', 'angular', 'moment-timezone', 'filters/lstring', 'f
 
             var documents = $http.get('/api/v2016/meetings/'+meetingCode+'/documents', { params: { q: { type : "official" } } }).then(function(res){
 
-                documents = _(res.data).each(normalizeDocument).each(progress).each(expanded).sortBy(sortKey).value();
+                documents = _(res.data).each(normalizeDocument).each(expanded).sortBy(sortKey).value();
                 
                 _ctrl.documents = documents;
+
+                computeAbsoluteProgress();
+
+            }).then(function(){
+
+                $scope.$applyAsync(function(){
+                    $("[help-date]").tooltip();
+                    $("[help-step]").tooltip();
+                })
 
             }).catch(console.error).then(function(){ _ctrl.loaded = true; });
         }
@@ -74,41 +84,68 @@ define(['lodash', 'require', 'angular', 'moment-timezone', 'filters/lstring', 'f
         //==============================
         function normalizeDocument(d){
             d.type_nature = _.compact([d.type, d.nature]).join('/');
-            d.workflow    = d.workflow||{
-                canEdit : !!_.intersection(user.roles, ['Administrator', 'EditorialService']).length
-            };
+            d.workflow    = _.defaults(d.workflow||{}, {
+                canEdit : !!_.intersection(user.roles, ['Administrator', 'EditorialService']).length,
+                steps : []
+            });
         }
 
         //==============================
         //
         //==============================
-        function progress(d){
+        function computeAbsoluteProgress() {
+
+            var meeting      = _ctrl.meeting;
+            var documents    = _ctrl.documents;
+            var cutOffDate   = moment(meeting.EVT_FROM_DT).subtract(6, 'weeks');
+            var ignoreBefore = moment(meeting.EVT_FROM_DT).subtract(6, 'months');
             
-            if(!d.workflow.steps)        return;
-            if(!d.workflow.steps.length) return;
-                
-            var stepLen = 1000 / d.workflow.steps.length;
+            var stepDates = _(documents).map('workflow').map('steps').compact().flatten().map('dueDate').compact().union([cutOffDate.toISOString()]).filter(function(date) {
+                return moment(date).isAfter(ignoreBefore);
+            }).sortBy().value();
             
-            d.workflow.progress = 0;
-            d.workflow.activeStep = _.find(d.workflow.steps, { status: 'active'}) || d.workflow.steps[0];
+            var minDate = moment(_.first(stepDates))               .startOf('week');
+            var maxDate = moment(_.last (stepDates)).add(1,"weeks").startOf('week');
+            var days    = maxDate.diff(minDate, 'days');
+
+            // Compute grid |  |  |  |  |  |
+
+            var gridDates = [
+                { date  : moment()  .toDate(), start : (moment()  .diff(minDate, 'days') * 100 / days) | 0, type: "today" },
+                { date  : cutOffDate.toDate(), start : (cutOffDate.diff(minDate, 'days') * 100 / days) | 0, type: "cutoff" }
+            ];
+
+            var gridInc = _ctrl.filters.gridIncrement;
+            var incr    = moment(minDate).startOf('week');
+
+            while(incr.isBefore(maxDate)) {
+                gridDates.push({ date  : incr.toDate(), start : (incr.diff(minDate, 'days') * 100 / days) | 0, type: "grid" });
+                incr = incr.add(1, gridInc).startOf(gridInc);
+
+                console.log(gridDates[gridDates.length-1])
+            }
+
+            _ctrl.gridDates = _.sortBy(gridDates, 'date');
+
+            // Compute steps  ---- ---- - --- --
             
-            d.workflow.steps.forEach(function(s){
-                
-                s.canEdit = true;
-                
-                s.dueDate = s.dueDate && new Date(s.dueDate);
-                
-                if(s.dueDate < TODAY) 
-                    d.workflow.progress += stepLen;
-                    
-                if(s.dueDate >= TODAY && s.status=='active') 
-                    d.workflow.progress += stepLen/2;
+            documents.forEach(function(doc) {
+
+                var steps = doc.workflow.steps;
+
+                for(var i in steps) {
+
+                    var step = steps[i]
+                    var prev = steps[i-1] || { dueDate : moment(step.dueDate).subtract(1, 'months').toDate() };
+
+                    step.dueStartDate = prev.dueDate;
+
+                    step.absProgress = {
+                        start : (Math.max(moment(step.dueStartDate).diff(minDate, 'days'), 0) * 100 / days) | 0,
+                        stop  : (Math.max(moment(step.dueDate)     .diff(minDate, 'days'), 0) * 100 / days) | 0,
+                    }
+                }
             });
-            
-            d.workflow.progress = (d.workflow.progress / 10)|0;
-            
-            if(d.status=='public')
-                d.workflow.progress = 100;
         }
 
         //==============================
