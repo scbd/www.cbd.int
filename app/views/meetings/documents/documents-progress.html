@@ -1,12 +1,24 @@
 <div>
     <style>
 
-        .document-status .progress                 { border-radius: 0px; margin-bottom:5px; }
-        .document-status .progress-bar             { border-right: dotted 1px black; }
-        .document-status .progress-bar:last-child  { border-right: none; }
-        .document-status .progress-bar-na          { background-color: gray; }
-        .document-status .progress-bar.skipped     { text-decoration: line-through; background-color: lightgray; }
-        .document-status .progress-bar.dimmed      { opacity: 0.5 }
+        .document-status .progress-step { 
+            position: absolute; 
+            overflow: hidden; 
+            text-align: center; 
+            font-size: 90%;
+            padding-top: 3px;
+            padding-bottom: 3px; 
+            border-right: 1px solid darkgray; 
+        }
+
+        .document-status .progress-step            { background-color: gray;       color: whitesmoke; cursor: help;}
+        .document-status .progress-step.active     { background-color: darkgrey;   color: whitesmoke; border: solid 4px royalblue;   margin-top: -4px; }
+        .document-status .progress-step.completed  { background-color: seagreen;   color: whitesmoke; }
+        .document-status .progress-step.skipped    { background-color: lightgray;  color: slategray; text-decoration: line-through; }
+        
+        .document-status .grid-date                { border-left:solid 1px silver;      opacity: 0.3; position:absolute;height:100%;top:0px; padding:5px }
+        .document-status .grid-date.today          { border-left:solid 2px forestgreen; opacity: 1.0; }
+        .document-status .grid-date.cutoff         { border-left:solid 2px red;         opacity: 1.0; }
     </style>
 
     <div class="panel panel-default">
@@ -15,12 +27,12 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-xs-6 col-sm-3">
+                <div class="col-xs-6 col-sm-2">
                     <label>
                         Assigned to me <input type="checkbox" ng-model="statusCtrl.filters.assignedToMe"> 
                     </label>
                 </div>
-                <div class="col-xs-6 col-sm-3">
+                <div class="col-xs-6 col-sm-2">
                     <label>
                         Overdue <input type="checkbox" ng-model="statusCtrl.filters.overdue"> 
                     </label>
@@ -42,6 +54,13 @@
                         <option value="">All status</option>
                         <option value="public">Public</option>
                         <option value="!public">Not public</option>
+                    </select>
+                </div>
+
+                <div class="col-xs-12 col-sm-2">
+                    <select class="form-control" ng-model="statusCtrl.filters.gridIncrement" ng-change="statusCtrl.refresh()">
+                        <option value="weeks">Weekly grid</option>
+                        <option value="months">Montly grid</option>
                     </select>
                 </div>
             </div>
@@ -83,13 +102,11 @@
 
             </td>
             <td ng-click="statusCtrl.expand(d, true)" style="position:relative">
-                
-                <div ng-if="!d.expanded" class="text-muted" title="{{d.title|lstring}}">{{d.title|lstring}}</div>
-                
-                <div style="position:absolute;height:100%;left:50%;top:0px;border-right:dotted 2px red" title="Today">
-                    &nbsp;
-                </div>
-                
+
+                <div ng-if="d.status=='public'" class='pull-right'>
+                    <document-files files="d.files"></document-files>
+                </div>                
+
                 <div class="visible-xs">                
                     <span ng-repeat="item in ::d.agendaItems" class="label agenda {{::statusCtrl.meeting.agenda.prefix}}">{{::statusCtrl.meeting.agenda.prefix}} {{item}}</span> 
                     <strong>{{d.symbol}}</strong>
@@ -98,24 +115,25 @@
                         {{o|initials}}
                         <span ng-if="!$last">, </span>
                     </span>
-
-                    <div ng-if="d.expanded" title="{{d.title|lstring}}">{{d.title|lstring}}</div>
                 </div>
 
-            
-                <div  ng-if="d.workflow.steps.length && (d.status!='public' || !d.files.length)" class="progress"  style="width:50%;margin-left:{{50-d.workflow.progress/2}}%;height:25px;display:inline-block">
-                    <div ng-repeat="s in d.workflow.steps" title="Due: {{s.dueDate|moment:'format':'DD MMMM YYYY'}} - {{s.dueDate|moment:'fromNow'}}" 
-                    class="progress-bar {{s.status}}" 
-                    ng-class="{ 'progress-bar-na': ((s.status=='pending' && s.dueDate>=TODAY) || s.status=='skipped'), 'progress-bar-success': s.status=='completed', 'progress-bar-info': s.status=='active',  'progress-bar-danger': ((s.status=='active'||s.status=='pending') && s.dueDate<TODAY),  'dimmed': (s.status=='pending' && s.dueDate<TODAY)  }" 
-                    style="width: {{100/d.workflow.steps.length}}%;">
-                        {{s.type}}
+                <div class="text-muted" title="{{d.title|lstring}}">{{d.title|lstring}}</div>
+
+                <div ng-if="d.workflow.steps.length && (d.status!='public' || !d.files.length)" style="padding: 5px;margin-bottom: 5px" >
+                    <div ng-repeat="g in ::statusCtrl.gridDates" class="grid-date {{::g.type}}" ng-style="::{ left: g.start+'%' }" title="{{g.type=='today'&&'Today: '||''}} {{g.type=='cutoff'&&'Deadline: '||''}} {{::g.date|moment:'format':'DD MMMM YYYY'}}" data-toggle="tooltip" data-placement="top" help-date>
+                        &nbsp;
                     </div>
-                </div>       
-                <div ng-if="d.status=='public'" class='text-right'>
-                    <document-files files="d.files"></document-files>
+                    <div style="position: relative; height: 20px">
+                        <div ng-repeat="s in d.workflow.steps" title="Step: {{s.type}}
+Due: {{s.dueDate|moment:'format':'DD MMMM YYYY'}} - {{s.dueDate|moment:'fromNow'}}" 
+                            class="progress-step {{s.status}}"
+                            ng-style="{ left: s.absProgress.start+'%', right: (100-s.absProgress.stop)+'%' }" data-toggle="tooltip" data-placement="top" help-step>
+                                {{s.type}}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                
-                
+
                 <div ng-if="d.expanded">
                     <div class="row">
                         
