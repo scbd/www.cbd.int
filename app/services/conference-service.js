@@ -29,9 +29,8 @@
                                             meeting.conference.parallelMeetingLinks     = _.filter(meeting.conference.scheduleLinks, {type:'parallel-meeting'});
 
                                             var datetime = moment.tz($route.current.params.datetime || new Date(), meeting.timezone).toDate();
-                                            if(meeting.schedule && datetime >= new Date(meeting.schedule.start)
-                                                && new Date() <= new Date(meeting.schedule.end)){
-                                                    meeting.conference.showSchedule = true;
+                                            if(meeting.schedule && new Date(meeting.schedule.start) <= datetime && datetime <= new Date(meeting.schedule.end)){
+                                                meeting.conference.showSchedule = true;
                                             }
 
                                             return meeting;
