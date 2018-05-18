@@ -133,6 +133,8 @@ define(['lodash', 'require', 'moment', 'angular', 'moment-timezone', 'filters/ls
 
                 var steps = doc.workflow.steps;
 
+                doc.workflow.activeStep = _.find(steps, { status: 'active'}) || steps[0];
+
                 for(var i in steps) {
 
                     var step = steps[i]
