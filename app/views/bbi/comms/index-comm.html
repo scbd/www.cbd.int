@@ -7,37 +7,40 @@
 </div>
 
 <div class="row">
-    <div class="col-xs-12" auto-linker>
+    <div class="col-xs-12" >
         <h1>Communication and Outreach</h1>
 
+          <p auto-linker>The Bio-Bridge Initiative (BBI) will facilitate broader communication and partnership building among Parties and institutions through various communication and outreach activities to promote TSC as an approach to achieving biodiversity targets, including through regional and thematic roundtables and/or online forums. The communication and outreach activities are intended to publicize Bio-Bridge Initiative and catalyze support for TSC among Parties, communicate and showcase Bio-Bridge Initiative success stories and lessons learned to inspire further cooperation, foster peer-to-peer learing, and facilitate the development of a committed and active network of partners in all regions that can support Bio-Bridge Initiative activities.</p>
 
-          <p>The Bio-Bridge Initiative (BBI) will facilitate broader communication and partnership building among Parties and institutions through various communication and outreach activities to promote TSC as an approach to achieving biodiversity targets, including through regional and thematic roundtables and/or online forums. The communication and outreach activities are intended to publicize Bio-Bridge Initiative and catalyze support for TSC among Parties, communicate and showcase Bio-Bridge Initiative success stories and lessons learned to inspire further cooperation, foster peer-to-peer learing, and facilitate the development of a committed and active network of partners in all regions that can support Bio-Bridge Initiative activities.</p>
-          <h3>Upcoming Events</h3>
-          <lu class="bbilist-">
-              <li><a href="https://www.cbd.int/conferences/2016" target="_blank"> Conference of the Parties (COP 13) (December 4-17, 2016)</a></li>
-              <li>COP 13 Bio-Bridge Initiative side-events (Decebmer 5-8, 2016)</li>
+          <span ng-if="commsCtrl.futureLoading || commsCtrl.pastLoading"><i class="fa fa-spinner fa-pulse  fa-fw"></i> Loading...</span>
+
+          <h3 ng-if="commsCtrl.future.length">Upcoming Events</h3>
+
+          <lu class="bbilist"  ng-if="commsCtrl.future.length">
+
+            <li ng-repeat="doc in commsCtrl.future | orderBy :'startDate_dt' : true">
+              <span>({{doc.startDate_dt | moment:'format':'YYYY-MM-DD HH:mm'}})</span>
+              <a ng-href="{{doc.url_ss[0]}}" >
+                {{doc.title_t}}
+              </a>
+            </li>
+
           </lu>
-          <lu class="bbilist-2">
-            <li>Monday, 5 December (13:15-14:45): <a href="https://www.cbd.int/side-events/2308" target="_blank">Bio-Bridge Initiative side event to launch Bio-Bridge Initiative Action Plan 2017-2020</a></li>
-            <li>Tuesday, 6 December (13:15-14:45): <a href="https://www.cbd.int/side-events/1762" target="_blank">Bio-Bridge Initiative side event in English</a></li>
-            <li>Wednesday, 7 December(13:15-14:45): <a href="https://www.cbd.int/side-events/1763" target="_blank">Bio-Bridge Initiative eventos paralelos en Español</a></li>
-            <li>Thursday, 8 December(13:15-14:45): <a href="https://www.cbd.int/side-events/1777" target="_blank">Bio-Bridge Initiative événement parallèle en Français</a></li>
-        </lu>
-          <h3>Recent Events</h3>
-          <lu class="bbilist">
-            <li><a href="http://cop13.mx/en/science-for-biodiversity-forum/" target="_blank">Third Science for Biodiversity Forum (December 1-2 2016)</a></li>
-          </lu>
-          <lu class="bbilist-2">
-            <li>Panel on experiences in technical and scientific cooperation with a focus on the CBD's BIo-Bridge Initiative</li>
-          </lu>
-          <lu class="bbilist">
-            <li><a href="https://portals.iucn.org/congress/session/16324" target="_blank">IUCN World Conservation Congress (September 1-10 2016)</a></li>
-          </lu>
-          <lu class="bbilist-2">
-            <li>International Workshop on Technical and Scientific Cooperation for the Conservation and Sustainable Use of Biological Diversity and the Bio-Bridge Initiative</li>
+
+
+          <h3>Past Events</h3>
+
+
+          <lu class="bbilist"  >
+            <li ng-repeat="doc in commsCtrl.past | orderBy :'startDate_dt' : true">
+              <span>({{doc.startDate_dt | moment:'format':'YYYY-MM-DD HH:mm'}})</span>
+              <a ng-href="{{doc.url_ss[0]}}" >
+                {{doc.title_t}}
+              </a>
+
+            </li>
           </lu>
         </div>
-
 
 </div>
 

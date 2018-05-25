@@ -75,7 +75,7 @@
             "source": "/projects/project-review-panel"
             },{
                 "title": {
-                    "en": "Selected Projects"
+                    "en": "Demonstration Projects"
                 },
                 "source": "/projects/selected"
             },
@@ -91,21 +91,8 @@
             "title": {
                 "en": "Outreach"
             },
-            "children": [{
-                    "title": {
-                        "en": "Communication and Outreach"
-                    },
-                    "source": "/comms"
-                },
-                {
-                    "title": {
-                        "en": "Panel Discussions"
-                    },
-                    "source": "/comms/panel"
-                }
-
-
-            ]
+            "source": "/comms",
+            "children": []
         }, {
             "title": {
                 "en": "FAQ"
