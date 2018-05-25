@@ -2,7 +2,6 @@
 <style>
 
         .top-button-container{
-
           color:white
         }
         .top-button-container img{
@@ -21,14 +20,14 @@
         }
 
         .hvr-reveal {
-    /*display: inline-block;
-    vertical-align: middle;*/
-    -webkit-transform: perspective(1px) translateZ(0);
-    transform: perspective(1px) translateZ(0);
-    box-shadow: 0 0 1px transparent;
-    position: relative;
-    overflow: hidden;
-}
+              /*display: inline-block;
+              vertical-align: middle;*/
+              -webkit-transform: perspective(1px) translateZ(0);
+              transform: perspective(1px) translateZ(0);
+              box-shadow: 0 0 1px transparent;
+              position: relative;
+              overflow: hidden;
+        }
 .hvr-reveal:before {
     content: "";
     position: absolute;
@@ -166,7 +165,7 @@ left: 0;
           <br>
           <i class="fa fa-spinner fa-pulse fa-2x fa-fwt"></i>
         </div>
-        <a translation-url ng-repeat="doc in indexCtrl.outReachRecords.meeting.data  | orderBy :'startDate_dt' : true" ng-if="doc.title_t && $index <3" href="{{doc.url_ss[0]}}" target="_blank" style="padding-bottom:5px;text-decoration: none;color:#333;">
+        <a translation-url ng-repeat="doc in indexCtrl.outReachRecords.meeting.data  | orderBy :'startDate_dt' : true" ng-if="doc.title_t && $index <3" ng-href="{{doc.url_ss[0]||doc.urls_ss[0]}}" target="_blank" style="padding-bottom:5px;text-decoration: none;color:#333;">
           <div class="out-reach-row" class="link1">
             <!-- <div id="communityProtocol" ng-include="home-list.html"> -->
             <span ng-if="doc.schema_s==='event'" class="color-darkgrey" style="text-transform:uppercase;font-weight:bold;font-size:10px;">
