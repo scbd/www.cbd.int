@@ -18,6 +18,7 @@ define(['app', 'angular', 'text!./km-form-std-buttons.html','jquery'], function(
 				onPrePublishFn    : "&onPrePublish",
 				onPostPublishFn   : "&onPostPublish",
 				onPostWorkflowFn  : "&onPostWorkflow",
+        getCustomConfig   : "&?getCustomConfig",
 				onErrorFn: "&onError"
 			},
 			link: function ($scope, $element)
@@ -317,16 +318,9 @@ define(['app', 'angular', 'text!./km-form-std-buttons.html','jquery'], function(
 				};
 
 				function getCustomConfig(document){
-
-					if(document.header.schema == 'organization'){
-						return editFormUtility.getRealm(document.header.identifier)
-											.then(function(realm){
-												if(realm && realm.trim()!=''){
-													return {headers: {realm:realm}}
-												}
-											});
-					}
-
+          console.log('$scope.getCustomConfig$scope.getCustomConfig$scope.getCustomConfig',$scope.getCustomConfig)
+          if($scope.getCustomConfig)
+            return $scope.getCustomConfig(document)
 					return $q.when(null);
 				}
 			}]
