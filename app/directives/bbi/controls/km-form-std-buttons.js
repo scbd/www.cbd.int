@@ -318,7 +318,6 @@ define(['app', 'angular', 'text!./km-form-std-buttons.html','jquery'], function(
 				};
 
 				function getCustomConfig(document){
-          console.log('$scope.getCustomConfig$scope.getCustomConfig$scope.getCustomConfig',$scope.getCustomConfig)
           if($scope.getCustomConfig)
             return $scope.getCustomConfig(document)
 					return $q.when(null);
