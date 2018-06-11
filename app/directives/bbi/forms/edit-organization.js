@@ -248,7 +248,19 @@ app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter"
 
 					});
 			}
+      function getCustomConfig(document){
+        if(document && document.header && document.header.schema == 'organization'){
+          return editFormUtility.getRealm(document.header.identifier)
+                    .then(function(realm){
+                      if(realm && realm.trim()!=''){
+                        return {headers: {realm:realm}}
+                      }
+                    });
+        }
 
+        return $q.when(null);
+      }
+      $scope.getCustomConfig = getCustomConfig
 			//==============================
 			//
 			//
