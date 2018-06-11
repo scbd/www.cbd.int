@@ -505,12 +505,13 @@
             <a href="/executive-secretary">Executive Secretary </a> >
             <a href="/executive-secretary/work">At Work</a> >
             <span>Event </span>
-            <!-- <span class="pull-right"><a href="#">Share <i class="fa fa-share-alt" aria-hidden="true"></i></a></span> -->
+              <a ng-href="https://www.cbd.int/2011-2020/dashboard/submit/event/{{esEventCtrl.document.header.identifier}}" ng-if="esEventCtrl.isAdmin()"><i class="fa fa-edit pull-right"  ></i></a>
             <hr class="crumb-hr" />
 
         </div>
 
 <div class="row">
+
     <div class="text-center"><i ng-show="esEventCtrl.loading" style="color:#069554;" class="fa fa-circle-o-notch fa-spin fa-5x fa-fw"></i></div>
       <div ng-if="esEventCtrl.document" class="col-xs-12 col-md-3 hidden-xs hidden-sm" style="padding-right:30px;border-right: 1px dashed #eee">
         <div class="hidden-xs hidden-sm" style="min-height:75px;">
