@@ -73,6 +73,7 @@
                     </div>
                     <div class="col-sm-12 col-md-9 ">
                         <div style="width:100%;">
+                          <a ng-href="https://www.cbd.int/2011-2020/dashboard/submit/event/{{ine.identifier_s}}" ng-if="esWorkCtrl.isAdmin()"><i class="fa fa-edit pull-right"  ></i></a>
                             <!-- <span class="work-type">{{line.schema_s}}: </span> -->
                             <a class="work-title" ng-href="{{line.schema_s}}/{{line._id || line.identifier_s}}">{{line.title_s}}</a><br>
                             <span class="work-date">{{line.startDate_dt | momentUtc:'format':'DD MMM YYYY'}}</span>
@@ -88,6 +89,7 @@
                     </div>
                     <div class="col-sm-12 col-md-9 ">
                         <div style="width:100%;">
+                          <a ng-href="https://www.cbd.int/2011-2020/dashboard/submit/event/{{line.identifier_s}}" ng-if="esWorkCtrl.isAdmin()"><i class="fa fa-edit pull-right"  ></i></a>
                             <!-- <span class="work-type">{{line.schema_s}}: </span> -->
                             <a class="work-title" ng-href="{{line.schema_s}}/{{line._id || line.identifier_s}}">{{line.title_s}}</a><br>
                             <span class="work-date">{{line.startDate_dt | momentUtc:'format':'DD MMM YYYY'}}</span>
@@ -131,8 +133,9 @@
             </div>
             <div>
                 <h4 class="color-blue" style="border-bottom:1px solid #eee;">Filter by date</h4>
-                    <input type="checkbox" ng-model="esWorkCtrl.date" ng-true-value="'2017-02-01T00:00:02.987Z'" ng-false-value=""> 2017 <span class="badge ">{{esWorkCtrl.getYearCount('2017-02-01T00:00:02.987Z')}}</span><br>
-                    <input type="checkbox" ng-model="esWorkCtrl.date" ng-true-value="'2016-02-01T00:00:02.987Z'"> 2016 <span class="badge ">{{esWorkCtrl.getYearCount('2016-02-01T00:00:02.987Z')}}</span><br>
+
+                   <span ng-repeat="year in esWorkCtrl.years"><input   type="checkbox" ng-model="esWorkCtrl.date" ng-true-value="'{{year}}-02-01T00:00:02.987Z'" ng-false-value=""> {{year}} <span class="badge ">{{esWorkCtrl.getYearCount(year+'-02-01T00:00:02.987Z')}}</span><br></span>
+
             </div>
         </div>
     </div>
