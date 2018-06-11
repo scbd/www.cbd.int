@@ -107,14 +107,16 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
             return $q.when(documentRealmCache[identifier]);
 
           return storage.drafts.getRealm(identifier)
-          .then(function(success) {              
+          .then(function(success) {
               if(!success.data) return false;
 
               return documentRealmCache[identifier] = success.data;
           },
           function(error) {
-              if (error.status == 404)
-                return false;
+              if (error.status == 404){
+                documentRealmCache[identifier]=realm
+                return realm;
+              }
               throw error;
           });
         },
