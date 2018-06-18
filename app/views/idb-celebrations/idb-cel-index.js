@@ -32,7 +32,7 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
 
           var params = {
               q: {
-                  'title.en': `${_ctrl.year}`,//IDB
+                  'title.en': _ctrl.year,//IDB
               }
           };
           return $http.get("https://api.cbd.int/api/v2017/article-custom-tags/",{params:params}).then(
