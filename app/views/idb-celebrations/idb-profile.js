@@ -66,9 +66,8 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 
         var params = {
             q: {
-                'tags': '52000000cbd0330000001948',//IDB
-                'customTags': _ctrl.yearTagId,
-                'tags': _ctrl.counrtyTagId
+                'tags': [_ctrl.counrtyTagId,'52000000cbd0330000001948'],//IDB
+                'customTags': _ctrl.yearTagId
             }
         };
         return $http.get("https://api.cbd.int/api/v2017/articles",{params:params}).then(
