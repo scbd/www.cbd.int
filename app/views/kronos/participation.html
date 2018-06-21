@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h1>Accreditation Request</h1>
+  </div>
+  <div class="col-xs-4">
+    <div class="form-group">
+      <label for="conference">Select your conference and meeting</label>
+
+      <select
+        id="conference"
+        class="form-control"
+        ng-options="conference as conference.Title.en for conference in participationCtrl.conferences track by conference._id"
+        ng-change="participationCtrl.conferenceSelected(conference)"
+        ng-model="conference">
+      </select>
+    </div>
+  </div>
+  <div class="col-xs-4">
+    <div class="form-group">
+      <label for="meeting">&nbsp;</label>
+      <select
+        id="meeting"
+        class="form-control"
+        ng-options="meeting as meeting.EVT_CD for meeting in participationCtrl.meetings track by meeting._id"
+        ng-model="meeting"
+        ng-disabled="!participationCtrl.meetings"
+        >
+      </select>
+    </div>
+  </div>
+  <div class="col-xs-12">
+    <div class="form-group">
+      <label for="meeting">Choose your accreditation type</label>
+      <p>
+        <button ng-click="participationCtrl.goTo('observer',meeting)" ng-disabled="!meeting" type="button" class="btn btn-primary btn-lg">Observer</button>
+        <button ng-click="participationCtrl.goTo('media',meeting)" ng-disabled="!meeting" type="button" class="btn btn-primary btn-lg">Media</button>
+      </p>
+    </div>
+  </div>
+
+</div>
