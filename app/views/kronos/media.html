@@ -1,0 +1,376 @@
+<div class="row">
+  <style>
+  .debug {
+    border: 1px solid red;
+  }
+  .desc {
+    padding-top:.5em;
+  }
+  </style>
+  <div class="col-xs-12">
+    <h1>Media Accreditation Request</h1>
+    <h2>Preparation checklist</h2>
+  </div>
+
+      <div class="col-xs-2">
+
+          <div class="checkbox">
+             <label>
+               <input type="checkbox" ng-model="letterOfAssignment"> <b>Letter of assignment</b>
+             </label>
+           </div>
+      </div>
+
+    <div class="col-xs-10">
+      <p class="help-block desc">A digital copy on official letterhead of a media organization signed by the Publisher/Assignment Editor, Editor-in-chief or Bureau Chief, specifying the name and functional title of each member of the attending party.  Unsigned letters or e-mails will not be accepted.</p>
+    </div>
+    <div class="col-xs-2">
+
+        <div class="checkbox">
+           <label>
+             <input type="checkbox" ng-model="pressPass"> <b>Press card/work pass</b>
+           </label>
+         </div>
+    </div>
+    <div class="col-xs-10">
+      <p class="help-block desc">A digital copy of press the card/work pass for each attending member of your party.<br><br>&nbsp;</p>
+    </div>
+
+    <div class="col-xs-2">
+
+        <div class="checkbox">
+           <label>
+             <input type="checkbox" ng-model="passport"> <b>Passport/national ID card</b>
+           </label>
+         </div>
+    </div>
+    <div class="col-xs-10">
+      <p class="help-block desc">A digital copy of the passport/national ID card for each attending member of your party.<br><br>&nbsp;</p>
+    </div>
+    <div class="col-xs-2">
+        <div class="checkbox">
+           <label>
+             <input type="checkbox" ng-model="focalpoint"> <b>Focal point contact information</b>
+           </label>
+         </div>
+    </div>
+    <div class="col-xs-10">
+      <p class="help-block desc">The contact information of the person designated to be your organizations main contact with the SCBD.<br><br>&nbsp;</p>
+    </div>
+    <div class="col-xs-2">
+        <div class="checkbox">
+           <label>
+             <input type="checkbox" ng-model="head"> <b>Head of organization</b>
+           </label>
+         </div>
+    </div>
+    <div class="col-xs-10">
+      <p class="help-block desc">The contact information of the person designated to be in charge of your organization.<br><br>&nbsp;</p>
+    </div>
+    <div class="col-xs-2">
+        <div class="checkbox">
+           <label>
+             <input type="checkbox" ng-model="accomidations"> <b>Address/contact while at meeting</b></b>
+           </label>
+         </div>
+    </div>
+    <div class="col-xs-10">
+      <p class="help-block desc">The address and phone number while at the meeting.<br><br>&nbsp;</p>
+    </div>
+  <div class="col-xs-12 ">
+    <button ng-disabled="!(letterOfAssignment && pressPass && passport && accomidations && head && focalpoint )" type="button" class="btn btn-success pull-right">Next</button>
+  </div>
+  <div class="col-xs-12 ">
+  <hr/>
+  </div>
+
+<section>
+    <div class="col-xs-12 ">
+      <h2>Organization Information</h2>
+    </div>
+    <div class="col-md-8">
+      <div class="form-group">
+        <label class="control-label" for="title">Name of the organization</label>
+        <input type="text" class="form-control" id="title" >
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label class="control-label" for="title">Acronym</label>
+        <input type="text" class="form-control" id="Acronym" >
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="form-group">
+        <label class="control-label" for="title">Street Number</label>
+        <input type="text" class="form-control" id="streetNumber" >
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="form-group">
+        <label class="control-label" for="title">Street</label>
+        <input type="text" class="form-control" id="street" >
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="form-group">
+        <label class="control-label" for="title">Unit Number</label>
+        <input type="text" class="form-control" id="Acronym" >
+      </div>
+    </div>
+
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="title">Locality </label>
+        <span  class="help-block"><small>City, town or villiage</small></span>
+        <input type="text" class="form-control" id="locality" >
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="title">State or province </label>
+        <span  class="help-block"><small>First level administrative area within the country.  Usually province or state.</small></span>
+        <input type="text" class="form-control" id="administrativeArea" >
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="title">State or province </label>
+        <!-- <span  class="help-block"><small>First level administrative area within the country.  Usually province or state.</small></span> -->
+        <input type="text" class="form-control" id="administrativeArea" >
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="title">Postal/Zip Code </label>
+        <input type="text" class="form-control" id="postalCode" >
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="form-group">
+        <label class="control-label" for="title">Country </label>
+        <select
+          id="country"
+          class="form-control"
+          ng-options="country.code as country.name.en for country in mediaRequestCtrl.countries track by country._id"
+          ng-model="country"
+          >
+        </select>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <label class="control-label" for="title">Phone </label>
+        <!-- <span  class="help-block"><small>First level administrative area within the country.  Usually province or state.</small></span> -->
+        <input type="text" class="form-control" id="phone" >
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label class="control-label" for="title">Email </label>
+        <input type="text" class="form-control" id="email" >
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label class="control-label" for="title">Email CCs </label>
+        <input type="text" class="form-control" id="emailCc" >
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="website">Website </label>
+        <input type="text" class="form-control" id="website" >
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="title">Operating Language </label>
+        <select class="form-control">
+          <option selected>English</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="letterOfAssignment">Letter of assignment </label>
+        <input type="file" class="form-control" id="letterOfAssignment" >
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="attachments">Attachments </label>
+        <input type="file" class="form-control" id="attachments" >
+      </div>
+    </div>
+    <div class="col-xs-12 ">
+      <button ng-disabled="false" type="button" class="btn btn-success pull-right">Next</button>
+    </div>
+  </section>
+  <div class="col-xs-12 ">
+  <hr/>
+  </div>
+  <section>
+    <div class="col-xs-12">
+      <h2>Organization's Contacts</h2>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <button type="button" class="btn btn-default btn-xs pull-right">Edit >></button>
+          <h3 class="panel-title">The Secretariat of the Convention on Biological Diversity (SCBD)</h3>
+
+        </div>
+        <div class="panel-body">
+          <div class="col-xs-4">
+          413, Saint Jacques Street, suite 800<br/>
+          Montreal QC H2Y 1N9 <br/>
+          Canada<br/>
+          </div>
+          <div class="col-xs-4">
+            +1 514 288 2220 <br>
+            <a href="mailto:secretariat@cbd.int">secretariat@cbd.int</a><br>
+            <a href="https://www.cbd.int">www.cbd.int</a><br>
+          </div>
+          <div class="col-xs-4">
+
+            <a href="#">Letter of Assignment</a><br>
+            <a href="#">Some other document Uploaded</a><br>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 ">
+      <h3>Contacts</h3>
+      <div class="table-responsive">
+        <table class="table table-condensed table-hover">
+          <tr>
+            <th>Role</th>
+            <th>Name</th>
+            <th>Position/Email</th>
+            <th>&nbsp;</th>
+          </tr>
+          <tr>
+            <td >Head</td>
+            <td >Randy J. Houlahan</td>
+            <td >
+              Executive Secretary,<br>
+              <a href="mailto:randy.houlahan@cbd.int">randy.houlahan@cbd.int</a>
+            </td>
+            <td ><button type="button" class="btn btn-default btn-xs">Edit >></button></td>
+          </tr>
+          <tr>
+            <td >Focal Point</td>
+            <td >&nbsp;</td>
+            <td >&nbsp;</td>
+            <td ><button type="button" class="btn btn-default btn-xs">Add Focal Point >></button></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="col-xs-12 ">
+      <button ng-disabled="false" type="button" class="btn btn-success pull-right">Next</button>
+    </div>
+  </section>
+  <div class="col-xs-12 ">
+  <hr/>
+  </div>
+  <div class="col-xs-12 ">
+  <hr/>
+  </div>
+  <section>
+    <div class="col-xs-12">
+      <h2>Organization's Participants</h2>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <button type="button" class="btn btn-default btn-xs pull-right">Edit >></button>
+          <h3 class="panel-title">The Secretariat of the Convention on Biological Diversity (SCBD)</h3>
+
+        </div>
+        <div class="panel-body">
+          <div class="col-xs-4">
+          413, Saint Jacques Street, suite 800<br/>
+          Montreal QC H2Y 1N9 <br/>
+          Canada<br/>
+          </div>
+          <div class="col-xs-4">
+            +1 514 288 2220 <br>
+            <a href="mailto:secretariat@cbd.int">secretariat@cbd.int</a><br>
+            <a href="https://www.cbd.int">www.cbd.int</a><br>
+          </div>
+          <div class="col-xs-4">
+
+            <a href="#">Letter of Assignment</a><br>
+            <a href="#">Some other document Uploaded</a><br>
+          </div>
+          <div class="col-xs-12">
+            <h4>Contacts</h4>
+            <hr/>
+          </div>
+          <div class="col-xs-2">
+            Head
+          </div>
+          <div class="col-xs-9">
+              Randy J. Houlahan<br>
+              Executive Secretary,<br>
+              <a href="mailto:dddd@sss.com">randy.houlahan@cbd.int</a>
+          </div>
+
+          <div class="col-xs-1">
+              <button type="button" class="btn btn-default btn-xs">Edit >></button>
+          </div>
+          <div class="col-xs-12">
+            <hr/>
+          </div>
+          <div class="col-xs-2">
+            Focal Point
+          </div>
+          <div class="col-xs-9">
+              Blaise Fonseca<br>
+              Lead Tabber,<br>
+              <a href="mailto:dddd@sss.com">Blaise.Fonseca@cbd.int</a>
+          </div>
+          <div class="col-xs-1">
+              <button type="button" class="btn btn-default btn-xs">Edit >></button>
+          </div>
+          <div class="col-xs-12">
+            <hr/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 ">
+      <h3>Participants</h3>
+      <div class="table-responsive">
+        <table class="table table-condensed table-hover">
+          <tr>
+            <th>Name</th>
+            <th>Position/Email</th>
+            <th>&nbsp;</th>
+          </tr>
+          <tr>
+            <td >Randy J. Houlahan</td>
+            <td >
+              Camera Man,<br>
+              <a href="mailto:randy.houlahan@cbd.int">randy.houlahan@cbd.int</a>
+            </td>
+            <td ><button type="button" class="btn btn-default btn-xs">Edit >></button></td>
+          </tr>
+          <tr>
+            <td >Maximus Decimus Meridius</td>
+            <td >
+              General of the Armies to the North,<br>
+              <a href="mailto:randy.houlahan@cbd.int">Maximus.Decimus.Meridius@colosseum.com</a>
+            </td>
+            <td ><button type="button" class="btn btn-default btn-xs">Edit >></button></td>
+          </tr>
+        </table>
+        <button type="button" class="btn btn-default btn-xs">Add Participant >></button>
+      </div>
+    </div>
+  </section>
+  <div class="col-xs-12 ">
+    <button ng-disabled="false" type="button" class="btn btn-primary pull-right">Submit</button>
+  </div>
+</div>
