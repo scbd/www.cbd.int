@@ -241,15 +241,16 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         $("base").attr('href', '/participation/'); // allow full page reload outside of  /insession/*
 
         routeProvider
-        .when('/',{ templateUrl : 'views/kronos/participation.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
-        .when('/media/:meeting',     { templateUrl : 'views/kronos/media.html', resolveController : true,controllerAs: 'mediaRequestCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
-        .when('/observer/:meeting',  { templateUrl : 'views/kronos/observer.html', resolveController : true,controllerAs: 'observerRequestCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
-
-        .otherwise({redirectTo: '/404'});
+        .when('/:conference/:type/:step'   ,{ templateUrl : 'views/kronos/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
+      //  .when('/:conference/observer/:step',{ templateUrl : 'views/kronos/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
+        .when('/:step',{ templateUrl : 'views/kronos/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
+        // .when('/media/:meeting',     { templateUrl : 'views/kronos/media.html', resolveController : true,controllerAs: 'mediaRequestCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
+        // .when('/observer/:meeting',  { templateUrl : 'views/kronos/observer.html', resolveController : true,controllerAs: 'observerRequestCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
+        // .when('/observer/:meeting',  { templateUrl : 'views/kronos/observer.html', resolveController : true,controllerAs: 'observerRequestCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
+      //  .otherwise({redirectTo: '/404'});
     }
 
     //============================================================
-    //
     //
     //============================================================
     function currentUser() {
@@ -290,7 +291,6 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
             //============================================================
             //
-            //
             //============================================================
             function openDialog() {
                 $rootScope.redirectOnAuthMsg=false;
@@ -308,6 +308,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
                           $window.history.back();
                   });
             }
+
             //============================================================
             //
             //

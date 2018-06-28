@@ -1,0 +1,92 @@
+<section>
+  <div class="col-xs-12">
+    <h2>Organization's Participants</h2>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <button ng-click="participationCtrl.editOrg()" type="button" class="btn btn-default btn-xs pull-right">Edit >></button>
+        <h3 class="panel-title">The Secretariat of the Convention on Biological Diversity (SCBD)</h3>
+      </div>
+      <div class="panel-body">
+        <div class="col-xs-4">
+          413, Saint Jacques Street, suite 800<br/>
+          Montreal QC H2Y 1N9 <br/>
+          Canada<br/>
+        </div>
+        <div class="col-xs-4">
+          +1 514 288 2220 <br>
+          <a href="mailto:secretariat@cbd.int">secretariat@cbd.int</a><br>
+          <a href="https://www.cbd.int">www.cbd.int</a><br>
+        </div>
+        <div class="col-xs-4">
+          <a href="#">Letter of Assignment</a><br>
+          <a href="#">Some other document Uploaded</a><br>
+        </div>
+        <div class="col-xs-12">
+          <h4>Contacts</h4>
+          <hr/>
+        </div>
+        <div class="col-xs-2">
+          Head
+        </div>
+        <div class="col-xs-9">
+            Randy J. Houlahan<br>
+            Executive Secretary,<br>
+            <a href="mailto:dddd@sss.com">randy.houlahan@cbd.int</a>
+        </div>
+        <div class="col-xs-1">
+            <button type="button" class="btn btn-default btn-xs">Edit >></button>
+        </div>
+        <div class="col-xs-12">
+          <hr/>
+        </div>
+        <div class="col-xs-2">
+          Focal Point
+        </div>
+        <div class="col-xs-9">
+            Blaise Fonseca<br>
+            Lead Tabber,<br>
+            <a href="mailto:dddd@sss.com">Blaise.Fonseca@cbd.int</a>
+        </div>
+        <div class="col-xs-1">
+            <button ng-click="participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Edit >></button>
+        </div>
+        <div class="col-xs-12">
+          <hr/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12 ">
+    <h3>Participants</h3>
+    <div class="table-responsive">
+      <table class="table table-condensed table-hover">
+        <tr>
+          <th>Name</th>
+          <th>Position/Email</th>
+          <th>&nbsp;</th>
+        </tr>
+        <tr>
+          <td >Randy J. Houlahan</td>
+          <td >
+            Camera Man,<br>
+            <a href="mailto:randy.houlahan@cbd.int">randy.houlahan@cbd.int</a>
+          </td>
+          <td ><button ng-click="participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Edit >></button></td>
+        </tr>
+        <tr>
+          <td >Maximus Decimus Meridius</td>
+          <td >
+            General of the Armies to the North,<br>
+            <a href="mailto:randy.houlahan@cbd.int">Maximus.Decimus.Meridius@colosseum.com</a>
+          </td>
+          <td ><button type="button" class="btn btn-default btn-xs">Edit >></button></td>
+        </tr>
+      </table>
+            <participant ng-show="participationCtrl.addContact" show-contact="participationCtrl.addContact" type="participationCtrl.type"></participant>
+      <button ng-if="!participationCtrl.addContact" ng-click="participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Add Participant >></button>
+    </div>
+  </div>
+</section>
+<div class="col-xs-12 ">
+  <button ng-disabled="false" type="button" class="btn btn-primary pull-right">Submit</button>
+</div>

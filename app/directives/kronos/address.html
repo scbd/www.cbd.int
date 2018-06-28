@@ -1,0 +1,56 @@
+<section>
+
+        <section >
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="control-label" for="title">Street number</label>
+              <input ng-model="binding.streetNumber" type="text" class="form-control" id="streetNumber" >
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="form-group">
+              <label class="control-label" for="title">Street</label>
+              <input required ng-model="binding.street"  type="text" class="form-control" id="street" >
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="control-label" for="title">Unit number</label>
+              <input  ng-model="binding.unitNumber" type="text" class="form-control" id="unitNumber" >
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label" for="title">Locality <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="City, town or villiage" help></i></label>
+              <input required ng-model="binding.locality"  type="text" class="form-control" id="locality" >
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label" for="title">State or province <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="First level administrative area within the country.  Usually province or state." help></i></label>
+              <input ng-model="binding.administrativeArea" type="text" class="form-control" id="administrativeArea" >
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label" for="title">Postal/Zip Code </label>
+              <input  ng-model="binding.postalCode" type="text" class="form-control" id="postalCode" >
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label" for="title">Country </label>
+              <select
+                required
+                id="country"
+                class="form-control"
+                ng-options="country.code as country.name.en for country in countries track by country._id"
+                ng-model="binding.country"
+                >
+              </select>
+            </div>
+          </div>
+        </section>
+        <div><pre>{{binding |json}}</pre></div>
+
+</section>

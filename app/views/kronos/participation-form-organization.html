@@ -1,0 +1,167 @@
+<section>
+    <div class="col-xs-12 ">
+      <h2>Organization Information</h2>
+    </div>
+
+    <div class="col-xs-12 ">
+      <label>Identification</label>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="col-md-8">
+            <div class="form-group">
+              <label class="control-label" for="title">Name of the organization</label>
+              <input ng-model="organization.title" type="text" class="form-control" id="title" >
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="control-label" for="title">Acronym</label>
+              <input ng-model="organization.acronym" type="text" class="form-control" id="Acronym" >
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label" for="title">Type</label>
+              <select
+                id="type"
+                class="form-control"
+                ng-options="type.identifier as type.title for type in participationCtrl.orgTypes track by type.identifier"
+                ng-model="organization.type"
+                ></select>
+            </div>
+          </div>
+          <div class="col-md-6" ng-if="participationCtrl.type==='media'">
+            <div class="form-group">
+              <label class="control-label" for="title">Medium</label>
+              <select
+                id="medium"
+                class="form-control"
+                ng-options="medium.identifier as medium.title for medium in participationCtrl.orgMediums track by medium.identifier"
+                ng-model="organization.medium"
+                ></select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-12 ">
+      <label>Address</label>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <address ng-model="organization.address"></address>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-12 ">
+      <label>Communication</label>
+      <div class="panel panel-default">
+        <div class="panel-body">
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="control-label" for="title">Phone </label>
+                <!-- <span  class="help-block"><small>First level administrative area within the country.  Usually province or state.</small></span> -->
+                <input ng-model="organization.phone" type="text" class="form-control" id="phone" >
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="control-label" for="title">Email </label>
+                <input ng-model="organization.email" type="text" class="form-control" id="email" >
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="control-label" for="title">Email CCs </label>
+                <input ng-model="organization.emailCc" type="text" class="form-control" id="emailCc" >
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label" for="website">Website </label>
+                <input ng-model="organization.website" type="text" class="form-control" id="website" >
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label" for="title">Operating language </label>
+                <select
+                  id="language"
+                  class="form-control"
+                  ng-options="language.identifier as language.title.en for language in participationCtrl.languages track by language.identifier"
+                  ng-model="organization.language"
+                  >
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="col-xs-12" ng-show="participationCtrl.type==='media'">
+      <label>Media Requirements</label>
+      <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label" for="letterOfAssignment">Letter of assignment</label>
+
+                <!-- <file-drop ng-model="organization.letterOfAssignment" ng-change="participationCtrl.onFile(organization.letterOfAssignment)" auto-reset="true"></file-drop> -->
+                <!-- <input  type="file" auto-reset="autoReset" ng-model="organization.letterOfAssignment" ng-change="onFile(files)" data-multiple-caption="{count} files selected" /> -->
+                <input  ng-model="organization.letterOfAssignment" type="file" class="form-control" id="letterOfAssignment" >
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label" for="attachments">Attachments </label>
+                <input ng-model="organization.attachments" type="file" class="form-control" id="attachments" >
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12" ng-if="participationCtrl.type==='observer'">
+      <label>Observer Requirements</label>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label" for="letterOfAssignment">Letter of interest </label>
+              <input type="file" class="form-control" id="letterOfAssignment" >
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label" for="letterOfAssignment">Statement demonstrating qualifications </label>
+              <input type="file" class="form-control" id="letterOfAssignment" >
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label" for="letterOfAssignment">Statutes / by-laws / articels of incorporation</label>
+              <input type="file" class="form-control" id="letterOfAssignment" >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="control-label" for="attachments">Attachments </label>
+            <input type="file" class="form-control" id="attachments" >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <pre>
+        {{organization | json}}
+      </pre>
+    </div>
+
+    <div class="col-xs-12">
+      <button ng-click="participationCtrl.changeStep('contacts')" ng-disabled="false" type="button" class="btn btn-success pull-right">Next</button>
+    </div>
+</section>

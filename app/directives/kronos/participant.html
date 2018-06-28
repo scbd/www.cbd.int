@@ -1,0 +1,262 @@
+<section>
+
+
+    <h2>Add Contact</h2>
+    <div class="col-xs-12 ">
+      <label>Identification</label>
+
+      <div class="panel panel-default">
+        <div class="panel-body">
+
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="control-label" for="title">Title</label>
+              <select class="form-control" ng-model="doc.title">
+                <option value=" " selected>&nbsp;</option>
+                <option value="Ms.">Ms.</option>
+                <option value="Mr.">Mr.</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="form-group">
+              <label class="control-label" for="title">First name</label>
+              <input type="text" class="form-control" ng-model="doc.firstName" id="firstName" >
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="form-group">
+              <label class="control-label" for="title">Last name</label>
+              <input type="text" class="form-control" ng-model="doc.lastName" id="lastName" >
+            </div>
+          </div>
+          <div class="col-md-6" ng-if="type==='media'">
+            <div class="form-group">
+              <label class="control-label" for="designation">Job title</label>
+              <select ng-model="doc.designation" class="form-control" id="designation" >
+                <option value=" "> &nbsp;</option>
+                <option value="Cameraperson">Cameraperson</option>
+                <option value="Director">Director</option>
+                <option value="Photographer">Photographer</option>
+                <option value="Reporter">Reporter</option>
+                <option value="Correspondent">Correspondent</option>
+                <option value="Editor">Editor</option>
+                <option value="Producer">Producer</option>
+                <option value="Technician">Technician</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-6" ng-if="doc.designation==='Other'">
+            <div class="form-group">
+              <label class="control-label" for="designationOthert">Job title other</label>
+              <input ng-model="doc.designationOther" type="text" class="form-control" id="designationOther" >
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label" for="department">Deaprtment, division or unit (with the organization)</label>
+              <input ng-model="doc.department" type="text" class="form-control" id="department" >
+            </div>
+          </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="control-label" for="dateOfBirth">Date of birth </label>
+            <input ng-model="doc.dateOfBirth" type="input" class="form-control" id="dateOfBirth" >
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="control-label" for="nationality">Citizenship </label>
+            <select ng-disable="useOrgs"
+              id="nationality"
+              class="form-control"
+              ng-options="country.code as country.name.en for country in mediaRequestCtrl.countries track by country._id"
+              ng-model="doc.nationality"
+              >
+            </select>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="control-label" for="pressCard">Press card / work pass</label>
+            <input ng-model="doc.pressCard" type="file" class="form-control" id="pressCard" >
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="control-label" for="passport">Passport</label>
+            <input ng-model="doc.passport" type="file" class="form-control" id="passport" >
+          </div>
+        </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label class="control-label" for="passportNumber">Passport number </label>
+          <input ng-model="doc.passportNumber" type="input" class="form-control" id="passportNumber" >
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label class="control-label" for="organizationName">Organization name <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="(if different from nominating organization)" help></i> </label>
+          <input ng-model="doc.organizationName" type="text" class="form-control" id="organizationName" >
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12 ">
+    <label>Communication</label>
+    <div class="panel panel-default">
+      <div class="panel-body">
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="title">Phone </label>
+        <input ng-model="doc.phone" type="text" class="form-control" id="phone" >
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="title">Mobile </label>
+        <!-- <span  class="help-block"><small>First level administrative area within the country.  Usually province or state.</small></span> -->
+        <input ng-model="doc.mobile" type="text" class="form-control" id="mobile" >
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="title">Email </label>
+        <input ng-model="doc.email" type="text" class="form-control" id="email" >
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="title">Email CCs </label>
+        <input ng-model="doc.emailCc" type="text" class="form-control" id="emailCc" >
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group">
+        <label class="control-label" for="title">Language </label>
+        <select
+          id="language"
+          class="form-control"
+          ng-options="language.identifier as language.title.en for language in languages track by language.identifier"
+          ng-model="doc.language"
+          >
+        </select>
+      </div>
+    </div>
+  </div>
+ </div>
+</div>
+
+
+      <div class="col-xs-12 ">
+        <label>Address</label>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="col-md-12">
+              <div class="form-group">
+                <div class="checkbox">
+                 <label>
+                   <input type="checkbox" ng-model="doc.useOrganizationAddress" ng-checked="true" value="true"> <b>Use organization's address</b>
+                 </label>
+               </div>
+             </div>
+            </div>
+
+            <section ng-show="!doc.useOrganizationAddress">
+              <address ng-model="doc.address"></address>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 ">
+          <label>During Meeting</label>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label" for="phoneDuringMeeting">Phone <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Phone number you can be reached during the meeting." help></i></label>
+                  <input ng-model="doc.phoneDuringMeeting" type="text" class="form-control" id="phoneDuringMeeting" >
+                </div>
+              </div>
+              <div class="col-md-12">
+
+
+                    <button ng-click="showAddressDuringMeeting=!showAddressDuringMeeting" type="button" class="btn btn-default btn-xs">Add address during meeting >></button> <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Address where you will be staying during the meeting (if known)" help></i>
+                    <div class="row" ng-show="showAddressDuringMeeting" style="margin-top:20px;">
+                      <address  ng-model="doc.addressDuringMeeting"></address>
+                    </div>
+
+              </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12" ng-if="type==='media'">
+        <label>Media Requirements</label>
+        <div class="panel panel-default">
+            <div class="panel-body">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label" for="byLineArticleOne">Bylined article one <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A Bylined article dated within the past four months" help></i></label>
+                <input type="file" class="form-control" id="byLineArticleOne" >
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label" for="byLineArticleTwo">Bylined article two <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A Bylined article dated within the past four months" help></i></label>
+                <input type="file" class="form-control" id="byLineArticleTwo" >
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label" for="byLineArticleTwo">Publication copy <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A copy of the publication containing one of the bylined articles " help></i></label>
+                <input type="file" class="form-control" id="byLineArticleTwo" >
+              </div>
+            </div>
+
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label" for="reportRecordingOne">Report recording one <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" title="A report recording dated within the past four months" help></i></label>
+                <span  class="help-block"><small></small></span>
+                <input type="file" class="form-control" id="reportRecordingOne" >
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label" for="reportRecordingTwo">Report recording two <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A report recording dated within the past four months" help></i></label>
+                <input type="file" class="form-control" id="reportRecordingTwo" >
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label" for="tearSheetOrPhotoOne">Tear sheet or photo <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
+                <input type="file" class="form-control" id="tearSheetOrPhotoOne" >
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label" for="tearSheetOrPhotoTwo">Original tear sheet or a photo with credits of the issuing organization <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
+                <input type="file" class="form-control" id="tearSheetOrPhotoTwo" >
+              </div>
+            </div>
+
+          </div>
+        </div>
+    </div>
+      <div class="col-xs-12 ">
+        <div class="pull-right">
+
+          <button ng-click="showContact=false; initDoc();" ng-disabled="false" type="button" class="btn btn-default">Cancel</button>
+          <button ng-disabled="false" type="button" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+        <div><pre>{{doc |json}}</pre></div>
+  </section>
