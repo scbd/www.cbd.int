@@ -1,0 +1,69 @@
+<div class="col-xs-12">
+    <div class="col-xs-12">
+      <h1>Media Accreditation Request</h1>
+      <h2>Preparation checklist</h2>
+    </div>
+    <div class="col-xs-2">
+      <div class="checkbox">
+         <label>
+           <input type="checkbox" ng-model="letterOfAssignment"> <b>Letter of assignment</b>
+         </label>
+       </div>
+    </div>
+    <div class="col-xs-10">
+      <p class="help-block desc">A digital copy on official letterhead of a media organization signed by the Publisher/Assignment Editor, Editor-in-chief or Bureau Chief, specifying the name and functional title of each member of the attending party.  Unsigned letters or e-mails will not be accepted.</p>
+    </div>
+    <div class="col-xs-2">
+      <div class="checkbox">
+         <label>
+           <input type="checkbox" ng-model="pressPass"> <b>Press card/work pass</b>
+         </label>
+      </div>
+    </div>
+    <div class="col-xs-10">
+      <p class="help-block desc">A digital copy of press the card/work pass for each attending member of your party.<br><br>&nbsp;</p>
+    </div>
+    <div class="col-xs-2">
+      <div class="checkbox">
+         <label>
+           <input type="checkbox" ng-model="passport"> <b>Passport/national ID card</b>
+         </label>
+       </div>
+    </div>
+    <div class="col-xs-10">
+      <p class="help-block desc">A digital copy of the passport/national ID card for each attending member of your party.<br><br>&nbsp;</p>
+    </div>
+    <div class="col-xs-2">
+        <div class="checkbox">
+           <label>
+             <input type="checkbox" ng-model="focalpoint"> <b>Focal point contact information</b>
+           </label>
+         </div>
+    </div>
+    <div class="col-xs-10">
+      <p class="help-block desc">The contact information of the person designated to be your organizations main contact with the SCBD.<br><br>&nbsp;</p>
+    </div>
+    <div class="col-xs-2">
+        <div class="checkbox">
+           <label>
+             <input type="checkbox" ng-model="head"> <b>Head of organization</b>
+           </label>
+         </div>
+    </div>
+    <div class="col-xs-10">
+      <p class="help-block desc">The contact information of the person designated to be in charge of your organization.<br><br>&nbsp;</p>
+    </div>
+    <div class="col-xs-2">
+      <div class="checkbox">
+         <label>
+           <input type="checkbox" ng-model="accomidations"> <b>Address/contact while at meeting</b></b>
+         </label>
+       </div>
+    </div>
+    <div class="col-xs-10">
+      <p class="help-block desc">The address and phone number while at the meeting.<br><br>&nbsp;</p>
+    </div>
+  <div class="col-xs-12 ">
+    <button ng-click="participationCtrl.saveCheckList()" ng-disabled="!(letterOfAssignment && pressPass && passport && accomidations && head && focalpoint )" type="button" class="btn btn-success pull-right">Next</button>
+  </div>
+</div>

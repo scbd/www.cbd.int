@@ -50,6 +50,21 @@
                 }
               )
             }
+            function getConference(codeOrId){
+              var isOID = RegExp(/^[0-9a-fA-F]{24}$/)
+              var query = {}
+              if(isOID.test(codeOrId))
+                query._id = {'$oid':codeOrId}
+              else
+                query.code = codeOrId
+
+              return $http.get('/api/v2016/conferences', {params : { q : query, f:{ StartDate:1,MajorEventIDs:1,Title:1,Venua:1,code:1,Description:1}, s: { StartDate: 1}}, cache:true}).then(
+                function(res){
+
+                  return res.data
+                }
+              )
+            }
             function getMeetings(ids){
               var oidArray=[];
 
@@ -85,7 +100,8 @@
                 getMeetings             : getMeetings,
                 getFuture               : getFuture,
                 getActiveConference     : getActiveConference,
-                getConferenceArticle    : getConferenceArticle
+                getConferenceArticle    : getConferenceArticle,
+                getConference           : getConference
             }
 
     }]);
