@@ -47,7 +47,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.conferenceSelected = conferenceSelected
     _ctrl.saveCheckList      = saveCheckList
     _ctrl.editOrg            = editOrg
-    
+
     // options
     _ctrl.orgTypes           = orgTypes[_ctrl.type]
     _ctrl.orgMediums         = mediums
@@ -116,14 +116,14 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     function save(){
       if(!_ctrl.doc._id)
-        $http.post('http://localhost:8000/api/v2018/participation-requests',_ctrl.doc)
+        $http.post('/api/v2018/participation-requests',_ctrl.doc)
             .then(function(res){
               _ctrl.doc._id = res.data._id
             }).catch(function(err){
     					console.error(err)
     				})
       else
-        $http.put('http://localhost:8000/api/v2018/participation-requests/'+encodeURIComponent(_ctrl.doc._id),_ctrl.doc)
+        $http.put('/api/v2018/participation-requests/'+encodeURIComponent(_ctrl.doc._id),_ctrl.doc)
             .catch(function(err){
               console.error(err)
             })
@@ -135,7 +135,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
 
     function loadParticipationRequest(){
-        return $http.get('http://localhost:8000/api/v2018/participation-requests',{ params : { q : { 'meta.createdBy':user.userID }} })
+        return $http.get('/api/v2018/participation-requests',{ params : { q : { 'meta.createdBy':user.userID }} })
                  .then(function(res){
                    console.log(res.data[0])
                    if(res.data.length)
