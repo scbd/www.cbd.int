@@ -1,0 +1,30 @@
+<div class="row">
+  <style>
+    .debug {
+      border: 1px solid red;
+    }
+    .desc {
+      padding-top:.5em;
+    }
+    .section-title {
+      margin-top:0;
+    }
+    #myProgress {
+        width: 100%;
+        background-color: grey;
+    }
+    #myBar {
+        width: 1%;
+        height: 10px;
+        background-color: green;
+    }
+  </style>
+
+  <div class="col-xs-12">
+    <div id="myProgress">
+      <div id="myBar"></div>
+    </div>
+  </div>
+
+  <div  ng-include="participationCtrl.partialMap[participationCtrl.step]"></div>
+</div>
