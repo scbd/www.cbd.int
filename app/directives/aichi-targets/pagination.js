@@ -11,12 +11,13 @@ define(['text!./pagination.html', 'app'], function(template, app) {
                 search :'=',
                 pages   :'=',
                 count:'=',
-                onPage:'&'
+                onPage:'&',
+                paginationSize: '@?'
             },
 
             controller: ['$scope', function($scope) {
                 function getPageCount(){
-                  return Math.ceil($scope.count/3);
+                  return Math.ceil($scope.count/($scope.itemsPerPage||3));
                 }
                 $scope.getPageCount =getPageCount;
             }],

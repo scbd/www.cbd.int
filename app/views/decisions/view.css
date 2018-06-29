@@ -93,5 +93,19 @@
 	BODY {
 		-webkit-font-smoothing:antialiased;
 	}
-
+	.decision-parent{
+		padding-right: 15px;
+	}
+	.decision-box {
+        border: 1px solid #e8e8e8;
+        border-radius: 4px;
+		padding:8px;
+		margin:8px;
+	}
+	.decision-box, .paragraph-box element{
+		background: #eee;
+	}
+	.decision-box element{
+		margin:8px;
+	}
 </style>

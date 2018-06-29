@@ -33,10 +33,16 @@
             <span ng-switch-default>{{::actor}}</span>
         </span>
 	</span>
-
+    
 	<p ng-if="::info.type=='paragraph'">
+        <a type="button" class="btn btn-primary btn-xs" ng-if="::showDecision"
+         ng-href="/decisions/cop/{{::info.data.session}}/{{::info.data.decision}}">
+            <i class="fa fa-search" aria-hidden="true"></i> UNEP/CBD/COP/DEC/{{romanize(info.data.session)}}/{{info.data.decision}}
+        </a>
 		<a type="button" class="btn btn-primary btn-xs" ng-href="/decisions/cop/{{::info.data.session}}/{{::info.data.decision}}/{{::info.data.section|lowercase}}{{::info.paragraph}}{{::info.item && ('.'+info.item)}}" ng-click="$root.hiddenHash='view'">
-			<i class="fa fa-search" aria-hidden="true"></i> paragraph <span ng-if="::info.data.section">{{::info.data.section}}.</span> {{::info.paragraph}} <span ng-if="::info.item">item ({{::info.item}})</span>
+            <i class="fa fa-search" aria-hidden="true"></i> 
+            paragraph 
+            <span ng-if="::info.data.section">{{::info.data.section}}.</span> {{::info.paragraph}} <span ng-if="::info.item">item ({{::info.item}})</span>
 		</a>
 	</p>
 

@@ -8,7 +8,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         $locationProvider.hashPrefix('!');
 
         // /decisions/cop/*
-        if(/^\/decisions\/cop($|\/.*)/.test(locationPath))
+        if(/^\/decisions($|\/.*)/.test(locationPath))
             registerRoutes_CopDecisions($routeProvider);
 
         // /conferences/**
@@ -50,7 +50,8 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
   function registerRoutes_CopDecisions(routeProvider) {
 
       $('base').attr('href', '/decisions/'); // allow full page reload outside of  /decisions/*
-
+      
+      routeProvider.when('/',                              { templateUrl: 'views/decisions/search.html',    resolveController: true, reloadOnSearch : false, resolve : { user : currentUser() } } );
       routeProvider.when('/:body/:session',                      { templateUrl: 'views/decisions/list.html',      resolveController: true, resolve : { user : currentUser() } } );
       routeProvider.when('/:body/:session/:decision',            { templateUrl: 'views/decisions/view.html',      resolveController: true, resolve : { user : currentUser() } } );
       routeProvider.when('/:body/:session/:decision/edit',       { templateUrl: 'views/decisions/edit.html',      resolveController: true, resolve : { user : securize(["Administrator","DecisionTrackingTool", "ScbdStaff"]) } } );
