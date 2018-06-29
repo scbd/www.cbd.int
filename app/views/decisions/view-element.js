@@ -6,8 +6,9 @@ define(['app', 'text!./view-element.html'], function(app, html) { 'use strict';
 			template : html,
 			transclude: true,
 			scope: {},
-			link: function ($scope, element) {
+			link: function ($scope, element, atr) {
 
+				$scope.showDecision = atr.showDecision
                 $scope.info = element.data('info');
 
                 if(!$scope.info)
@@ -19,6 +20,16 @@ define(['app', 'text!./view-element.html'], function(app, html) { 'use strict';
 				if($scope.info.type=='paragraph') {
                     element.addClass('box');
 				}
+
+
+				//==============================
+				//
+				//==============================
+				function romanize (n) {
+					var roman = [ '', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI', 'XXII', 'XXII', 'XXIV', 'XXV', 'XXVI', 'XXVII', 'XXVIII', 'XXIX', 'XXX' ];
+					return roman[n];
+				}
+				$scope.romanize = romanize;
 			}
 		};
 	}]);
