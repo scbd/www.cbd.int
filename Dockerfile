@@ -1,8 +1,11 @@
-FROM node:4.8.7-alpine
+FROM node:6.10-alpine
 
 RUN apk update  -q && \
     apk upgrade -q && \
     apk add     -q --no-cache bash git openssh
+
+RUN apk add --update curl && \
+    rm -rf /var/cache/apk/*
 
 WORKDIR /usr/src/app
 
