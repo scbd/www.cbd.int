@@ -1,35 +1,13 @@
 <section>
   <div class="col-xs-12">
     <h2>Organization's Contacts</h2>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <button ng-click="participationCtrl.editOrg()" type="button" class="btn btn-default btn-xs pull-right">Edit >></button>
-        <h3 class="panel-title">The Secretariat of the Convention on Biological Diversity (SCBD)</h3>
-
-      </div>
-      <div class="panel-body">
-        <div class="col-xs-4">
-        413, Saint Jacques Street, suite 800<br/>
-        Montreal QC H2Y 1N9 <br/>
-        Canada<br/>
-        </div>
-        <div class="col-xs-4">
-          +1 514 288 2220 <br>
-          <a href="mailto:secretariat@cbd.int">secretariat@cbd.int</a><br>
-          <a href="https://www.cbd.int">www.cbd.int</a><br>
-        </div>
-        <div class="col-xs-4">
-
-          <a href="#">Letter of Assignment</a><br>
-          <a href="#">Some other document Uploaded</a><br>
-        </div>
-      </div>
-    </div>
+    <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
+    <div  ng-include="'/app/views/kronos/participation-form-org-header.html'"></div>
   </div>
-  <div class="col-xs-12 ">
+  <div class="col-xs-12 " ng-if="!participationCtrl.addContact">
     <h3>Contacts</h3>
-    <div class="table-responsive">
-      <table class="table table-condensed table-hover">
+    <div class="table-responsive" >
+      <table class="table table-condensed table-hover" >
         <tr>
           <th>Role</th>
           <th>Name</th>
@@ -38,24 +16,35 @@
         </tr>
         <tr>
           <td >Head</td>
-          <td >Randy J. Houlahan</td>
+          <td >{{participationCtrl.head.title}} {{participationCtrl.head.firstName}} {{participationCtrl.head.lastName}}</td>
           <td >
-            Executive Secretary,<br>
-            <a href="mailto:randy.houlahan@cbd.int">randy.houlahan@cbd.int</a>
+            {{participationCtrl.head.designation}}<br>
+            <a ng-href="{{participationCtrl.head.email}}">{{participationCtrl.head.email}}</a>
           </td>
-          <td ><button ng-click="participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Edit >></button></td>
+          <td >
+            <button ng-if="participationCtrl.hasHead()" ng-click="participationCtrl.activeParticipant=participationCtrl.head;  participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Edit >></button>
+            <button ng-if="!participationCtrl.hasHead()" ng-click="participationCtrl.activeParticipant=participationCtrl.head; participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Add Head >></button>
+          </td>
         </tr>
         <tr>
           <td >Focal Point</td>
-          <td >&nbsp;</td>
-          <td >&nbsp;</td>
-          <td ><button ng-click="participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Add Focal Point >></button></td>
+          <td >{{participationCtrl.focalPoint.title}} {{participationCtrl.focalPoint.firstName}} {{participationCtrl.focalPoint.lastName}}</td>
+          <td >
+            {{participationCtrl.focalPoint.designation}}<br>
+            <a ng-href="{{participationCtrl.head.email}}">{{participationCtrl.focalPoint.email}}</a>
+          </td>
+          <td >
+            <button ng-if="participationCtrl.hasFocalPoint()" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-default btn-xs">Edit >></button>
+            <button ng-if="!participationCtrl.hasFocalPoint()" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-default btn-xs">Add Focal Point >></button>
+          </td>
         </tr>
       </table>
-      <participant ng-show="participationCtrl.addContact" show-contact="participationCtrl.addContact" type="participationCtrl.type"></participant>
+
     </div>
   </div>
-  <div class="col-xs-12 ">
-    <button ng-click="participationCtrl.changeStep('participants')" ng-disabled="false" type="button" class="btn btn-success pull-right">Next</button>
+        <participant is-contact="true" request-id="participationCtrl.doc._id" conference-code="participationCtrl.conferenceCode" organization="participationCtrl.organization" ng-model="participationCtrl.activeParticipant" ng-show="participationCtrl.addContact" show-contact="participationCtrl.addContact" type="participationCtrl.type"></participant>
+  <div class="col-xs-12 " ng-if="!participationCtrl.addContact">
+    <button ng-click="participationCtrl.changeStep('organization')" ng-disabled="false" type="button" class="btn btn-default">Previos</button>
+    <button ng-click="participationCtrl.changeStep('participants')" ng-disabled="!participationCtrl.hasHead() || !participationCtrl.hasFocalPoint()" type="button" class="btn btn-success pull-right">Next</button>
   </div>
 </section>
