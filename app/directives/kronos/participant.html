@@ -1,7 +1,56 @@
-<section>
+<section >
 
+    <div class="col-xs-12 ">
+      <h2>
+        <span ng-if="binding._id">Edit</span>
+        <span ng-if="!binding._id">Add</span>
+        <span ng-if="isContact">Contact</span>
+        <span ng-if="!isContact">Participant</span>
+      </h2>
+    </div>
+    <user-message error="error" msg="msg" ></user-message>
+    <form  name="editForm"  novalidate>
+    <div class="col-xs-12 ">
+      <label>Participation</label>
 
-    <h2>Add Contact</h2>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="col-md-12" ng-if="isContact">
+            <div class="form-group">
+              <label class="control-label" for="needAccredidation">Does this person intend on attending the conference?</label>
+              <div class="radio">
+                <label>
+                  <input ng-model="attending" type="radio" name="needAccredidation" ng-value="false" checked>
+                  No
+                </label>
+              </div>
+              <div class="radio">
+                <label>
+                  <input ng-model="attending" type="radio" name="needAccredidation"  ng-value="true" >
+                  Yes
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12" ng-if="attending">
+          <div class="form-group" ng-class="{'has-error': (!binding.meeting.length && (editForm.meeting.$touched || editForm.$submitted)) }">
+            <label class="control-label" for="meeting">Select the meetings this person would like to attend</label>
+            <select
+              multiple
+              required
+              name='meeting'
+              id="meeting"
+              class="form-control"
+              ng-model="binding.meeting"
+              >
+                <option ng-repeat="m in meetings" ng-value="m._id">{{m.title.en}}</option>
+              </select>
+              <p ng-show="!binding.meeting.length && (editForm.meeting.$touched || editForm.$submitted)" class="help-block text-danger small">A meeting selection is required.</p>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="col-xs-12 ">
       <label>Identification</label>
 
@@ -11,7 +60,7 @@
           <div class="col-md-2">
             <div class="form-group">
               <label class="control-label" for="title">Title</label>
-              <select class="form-control" ng-model="doc.title">
+              <select class="form-control" ng-model="binding.title">
                 <option value=" " selected>&nbsp;</option>
                 <option value="Ms.">Ms.</option>
                 <option value="Mr.">Mr.</option>
@@ -21,19 +70,21 @@
           <div class="col-md-5">
             <div class="form-group">
               <label class="control-label" for="title">First name</label>
-              <input type="text" class="form-control" ng-model="doc.firstName" id="firstName" >
+              <input type="text" class="form-control" ng-model="binding.firstName" id="firstName" >
             </div>
           </div>
           <div class="col-md-5">
-            <div class="form-group">
-              <label class="control-label" for="title">Last name</label>
-              <input type="text" class="form-control" ng-model="doc.lastName" id="lastName" >
+            <div class="form-group" ng-class="{'has-error': (!binding.lastName && (editForm.lastName.$touched || editForm.$submitted)) }">
+              <label class="control-label" for="lastName">Last name</label>
+              <input required type="text" class="form-control" ng-model="binding.lastName" id="lastName" name="lastName">
+              <p ng-show="!binding.lastName && (editForm.lastName.$touched || editForm.$submitted)" class="help-block text-danger small">A last name is required.</p>
             </div>
           </div>
+          
           <div class="col-md-6" ng-if="type==='media'">
-            <div class="form-group">
+            <div class="form-group" ng-class="{'has-error': (!binding.designation && (editForm.designation.$touched || editForm.$submitted)) }">
               <label class="control-label" for="designation">Job title</label>
-              <select ng-model="doc.designation" class="form-control" id="designation" >
+              <select required ng-model="binding.designation" class="form-control" id="designation" name="designation">
                 <option value=" "> &nbsp;</option>
                 <option value="Cameraperson">Cameraperson</option>
                 <option value="Director">Director</option>
@@ -45,60 +96,68 @@
                 <option value="Technician">Technician</option>
                 <option value="Other">Other</option>
               </select>
+              <p ng-show="!binding.designation && (editForm.designation.$touched || editForm.$submitted)" class="help-block text-danger small">A job title is required.</p>
+
             </div>
           </div>
-          <div class="col-md-6" ng-if="doc.designation==='Other'">
-            <div class="form-group">
-              <label class="control-label" for="designationOthert">Job title other</label>
-              <input ng-model="doc.designationOther" type="text" class="form-control" id="designationOther" >
+          <div class="col-md-6" ng-if="binding.designation==='Other'">
+            <div class="form-group" ng-class="{'has-error': (!binding.designationOther && (editForm.designationOther.$touched || editForm.$submitted)) }">
+              <label class="control-label" for="designationOther">Job title other</label>
+              <input required ng-model="binding.designationOther" type="text" class="form-control" id="designationOther" name="designationOther">
+              <p ng-show="!binding.designationOther && (editForm.designationOther.$touched || editForm.$submitted)" class="help-block text-danger small">A written job title is required.</p>
             </div>
           </div>
           <div class="col-md-6">
-            <div class="form-group">
+            <div class="form-group" ng-class="{'has-error': (!binding.department && (editForm.department.$touched || editForm.$submitted)) }">
               <label class="control-label" for="department">Deaprtment, division or unit (with the organization)</label>
-              <input ng-model="doc.department" type="text" class="form-control" id="department" >
+              <input required ng-model="binding.department" type="text" class="form-control" id="department" name="department">
+              <p ng-show="!binding.department && (editForm.department.$touched || editForm.$submitted)" class="help-block text-danger small">A department, division or unit is required.</p>
             </div>
           </div>
-        <div class="col-md-6">
-          <div class="form-group">
+        <div class="col-md-6" ng-if="binding.meeting.length" >
+          <div class="form-group" ng-class="{'has-error': (!binding.dateOfBirth && (editForm.dateOfBirth.$touched || editForm.$submitted)) }">
             <label class="control-label" for="dateOfBirth">Date of birth </label>
-            <input ng-model="doc.dateOfBirth" type="input" class="form-control" id="dateOfBirth" >
+            <input required ng-model="binding.dateOfBirth" type="input" class="form-control" id="dateOfBirth" name="dateOfBirth">
+            <p ng-show="!binding.dateOfBirth && (editForm.dateOfBirth.$touched || editForm.$submitted)" class="help-block text-danger small">Date of birth is required.</p>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label class="control-label" for="nationality">Citizenship </label>
+        <div class="col-md-6" ng-show="binding.meeting.length">
+          <div class="form-group" ng-class="{'has-error': (!binding.nationality && (editForm.nationality.$touched || editForm.$submitted)) }">
+            <label class="control-label" for="nationality">Citizenship</label>
             <select ng-disable="useOrgs"
+              required required
               id="nationality"
+              name="nationality"
               class="form-control"
-              ng-options="country.code as country.name.en for country in mediaRequestCtrl.countries track by country._id"
-              ng-model="doc.nationality"
+              ng-model="binding.nationality"
               >
+              <option ng-repeat="country in countries   track by country._id" ng-selected="!!(country.code===binding.nationality)" ng-value="country.code">{{country.name.en}}</option>
             </select>
+            <p ng-show="!binding.nationality && (editForm.nationality.$touched || editForm.$submitted)" class="help-block text-danger small">Nationality is required.</p>
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" ng-if="binding.meeting.length">
           <div class="form-group">
             <label class="control-label" for="pressCard">Press card / work pass</label>
-            <input ng-model="doc.pressCard" type="file" class="form-control" id="pressCard" >
+            <input ng-model="binding.pressCard" type="file" class="form-control" id="pressCard" >
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" ng-if="binding.meeting.length">
           <div class="form-group">
             <label class="control-label" for="passport">Passport</label>
-            <input ng-model="doc.passport" type="file" class="form-control" id="passport" >
+            <input ng-model="binding.passport" type="file" class="form-control" id="passport" >
           </div>
         </div>
-      <div class="col-md-6">
+      <div class="col-md-6" ng-if="binding.meeting.length">
         <div class="form-group">
           <label class="control-label" for="passportNumber">Passport number </label>
-          <input ng-model="doc.passportNumber" type="input" class="form-control" id="passportNumber" >
+          <input ng-model="binding.passportNumber" type="input" class="form-control" id="passportNumber" >
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-6" ng-if="binding.meeting.length">
         <div class="form-group">
           <label class="control-label" for="organizationName">Organization name <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="(if different from nominating organization)" help></i> </label>
-          <input ng-model="doc.organizationName" type="text" class="form-control" id="organizationName" >
+          <input ng-model="binding.organizationName" type="text" class="form-control" id="organizationName" >
         </div>
       </div>
       </div>
@@ -111,87 +170,91 @@
       <div class="panel-body">
 
     <div class="col-md-6">
-      <div class="form-group">
-        <label class="control-label" for="title">Phone </label>
-        <input ng-model="doc.phone" type="text" class="form-control" id="phone" >
+      <div class="form-group" ng-class="{'has-error': (!binding.phone && (editForm.phone.$touched || editForm.$submitted)) }">
+        <label class="control-label" for="phone">Phone </label>
+        <input required ng-model="binding.phone" type="text" class="form-control" id="phone" name="phone" >
+        <p ng-show="!binding.phone && (editForm.phone.$touched || editForm.$submitted)" class="help-block text-danger small">Nationality is required.</p>
       </div>
     </div>
     <div class="col-md-6">
       <div class="form-group">
         <label class="control-label" for="title">Mobile </label>
         <!-- <span  class="help-block"><small>First level administrative area within the country.  Usually province or state.</small></span> -->
-        <input ng-model="doc.mobile" type="text" class="form-control" id="mobile" >
+        <input ng-model="binding.mobile" type="text" class="form-control" id="mobile" >
       </div>
     </div>
     <div class="col-md-6">
-      <div class="form-group">
-        <label class="control-label" for="title">Email </label>
-        <input ng-model="doc.email" type="text" class="form-control" id="email" >
+      <div class="form-group" ng-class="{'has-error': (!binding.email && (editForm.email.$touched || editForm.$submitted)) }">
+        <label class="control-label" for="email">Email </label>
+        <input ng-model="binding.email" type="text" class="form-control" id="email" name="email">
+        <p ng-show="!binding.phone && (editForm.phone.$touched || editForm.$submitted)" class="help-block text-danger small">Email is required.</p>
       </div>
     </div>
     <div class="col-md-6">
-      <div class="form-group">
+      <div class="form-group" >
         <label class="control-label" for="title">Email CCs </label>
-        <input ng-model="doc.emailCc" type="text" class="form-control" id="emailCc" >
+        <input ng-model="binding.emailCc" type="text" class="form-control" id="emailCc" >
       </div>
     </div>
 
     <div class="col-md-6">
-      <div class="form-group">
-        <label class="control-label" for="title">Language </label>
+      <div class="form-group" ng-class="{'has-error': (!binding.language && (editForm.language.$touched || editForm.$submitted)) }">
+        <label class="control-label" for="language">Language </label>
         <select
           id="language"
+          required
+          name="language"
           class="form-control"
-          ng-options="language.identifier as language.title.en for language in languages track by language.identifier"
-          ng-model="doc.language"
+
+          ng-model="binding.language"
           >
+          <option ng-repeat="language in languages   track by language.identifier" ng-selected="!!(language.identifier===binding.language)" ng-value="language.identifier">{{language.title.en}}</option>
         </select>
+        <p ng-show="!binding.language && (editForm.language.$touched || editForm.$submitted)" class="help-block text-danger small">Language is required.</p>
       </div>
     </div>
   </div>
  </div>
 </div>
-
-
-      <div class="col-xs-12 ">
-        <label>Address</label>
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <div class="col-md-12">
-              <div class="form-group">
-                <div class="checkbox">
-                 <label>
-                   <input type="checkbox" ng-model="doc.useOrganizationAddress" ng-checked="true" value="true"> <b>Use organization's address</b>
-                 </label>
-               </div>
-             </div>
-            </div>
-
-            <section ng-show="!doc.useOrganizationAddress">
-              <address ng-model="doc.address"></address>
-            </section>
-          </div>
-        </div>
+<div class="col-xs-12 ">
+  <label>Address</label>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="col-md-12">
+        <div class="form-group">
+          <div class="checkbox">
+           <label>
+             <input type="checkbox" ng-model="binding.useOrganizationAddress" ng-checked="true" value="true" checked> <b>Use organization's address</b>
+           </label>
+         </div>
+       </div>
       </div>
+
+      <section ng-if="!binding.useOrganizationAddress">
+        <address ng-model="binding.address"></address>
+      </section>
+    </div>
+  </div>
+</div>
+<section ng-if="binding.meeting.length">
+
 
       <div class="col-xs-12 ">
           <label>During Meeting</label>
           <div class="panel panel-default">
             <div class="panel-body">
-              <div class="col-md-6">
+              <div class="col-md-6" ng-class="{'has-error': (!binding.phoneDuringMeeting && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)) }">
                 <div class="form-group">
                   <label class="control-label" for="phoneDuringMeeting">Phone <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Phone number you can be reached during the meeting." help></i></label>
-                  <input ng-model="doc.phoneDuringMeeting" type="text" class="form-control" id="phoneDuringMeeting" >
+                  <input required ng-model="binding.phoneDuringMeeting" type="text" class="form-control" id="phoneDuringMeeting" name="phoneDuringMeeting">
+                  <p ng-show="!binding.phoneDuringMeeting && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)" class="help-block text-danger small">Phone during meeting is required.</p>
                 </div>
               </div>
               <div class="col-md-12">
-
-
-                    <button ng-click="showAddressDuringMeeting=!showAddressDuringMeeting" type="button" class="btn btn-default btn-xs">Add address during meeting >></button> <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Address where you will be staying during the meeting (if known)" help></i>
-                    <div class="row" ng-show="showAddressDuringMeeting" style="margin-top:20px;">
-                      <address  ng-model="doc.addressDuringMeeting"></address>
-                    </div>
-
+                <button ng-click="showAddressDuringMeeting=!showAddressDuringMeeting" type="button" class="btn btn-default btn-xs">Add address during meeting >></button> <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Address where you will be staying during the meeting (if known)" help></i>
+                <div class="row" ng-show="showAddressDuringMeeting" style="margin-top:20px;">
+                  <address  ng-if="showAddressDuringMeeting" ng-model="binding.addressDuringMeeting"></address>
+                </div>
               </div>
             </div>
         </div>
@@ -201,6 +264,7 @@
         <label>Media Requirements</label>
         <div class="panel panel-default">
             <div class="panel-body">
+
             <div class="col-md-6">
               <div class="form-group">
                 <label class="control-label" for="byLineArticleOne">Bylined article one <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A Bylined article dated within the past four months" help></i></label>
@@ -251,12 +315,14 @@
           </div>
         </div>
     </div>
+  </form>
+  </section>
       <div class="col-xs-12 ">
         <div class="pull-right">
 
           <button ng-click="showContact=false; initDoc();" ng-disabled="false" type="button" class="btn btn-default">Cancel</button>
-          <button ng-disabled="false" type="button" class="btn btn-primary">Save</button>
+          <button ng-click="save()" ng-disabled="false" type="button" class="btn btn-primary">Save</button>
         </div>
       </div>
-        <div><pre>{{doc |json}}</pre></div>
+        <!-- <div><pre>{{binding |json}}</pre></div> -->
   </section>

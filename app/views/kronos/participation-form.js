@@ -1,6 +1,6 @@
-define(['app', 'services/conference-service','providers/locale','directives/kronos/participant'], function(app) { 'use strict';
+define(['app', 'services/conference-service','providers/locale','directives/kronos/participant','directives/kronos/user-messages','filters/term'], function(app) { 'use strict';
 
-	return ['$scope','$http','conferenceService','$filter','$route','$location','locale','user', function( $scope,$http,conferenceService,$filter,$route,$location,locale,user) {
+	return ['$scope','$http','conferenceService','$filter','$route','$location','locale','user','$timeout', function( $scope,$http,conferenceService,$filter,$route,$location,locale,user,$timeout) {
 
 		var _ctrl 		           = this
     var orgTypes = {media:[
@@ -17,10 +17,26 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       {'identifier':'Radio',                  'title':'Radio'},
       {'identifier':'Photo/visual',           'title':'Photo/visual'},
       {'identifier':'Television',             'title':'Television'},
+
+      {'identifier':'Independent broadcast or film production',             'title':'Independent broadcast or film production'},
       {'identifier':'Weekly publication',     'title':'Weekly publication'},
+      {'identifier':'Web publication',     'title':'Web publication'},
+      {'identifier':'Online journal',     'title':'Online journal'},
+      {'identifier':'Blog',                   'title':'Blog'},
+      {'identifier':'Other online media',     'title':'Other online media'},
+      {'identifier':'Freelance journalist',     'title':'Freelance journalist'},
       {'identifier':'Other',                  'title':'Other'},
     ]
+// _ctrl.msg = [
+//   {title:'hello title', description:'helo desciption helo desciption helo desciption helo desciption helo desciption helo desciption', state:'info'},
+// {title:'hello title', description:'helo desciption helo desciption helo desciption helo desciption helo desciption helo desciption', state:'warning'},
+// {title:'hello title', description:'helo desciption helo desciption helo desciption helo desciption helo desciption helo desciption', state:'danger'},
+// {title:'hello title', description:'helo desciption helo desciption helo desciption helo desciption helo desciption helo desciption', state:'success'}
+// ]
+    var PATTERNS = {
+        email : /^http[s]?:\/\/(www.)?facebook.com\/.+/i
 
+    }
 
     var MIMES = {
         'application/pdf':                                                            { title: 'PDF',               color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
@@ -35,9 +51,10 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
 
     //route params
-    _ctrl.conferenceId       = $route.current.params.conference
+    _ctrl.conferenceCode     = $route.current.params.conference
     _ctrl.step               = $route.current.params.step || 'request'
     _ctrl.type               = $route.current.params.type
+
 
     loadParticipationRequest()
       .then(initSteps)
@@ -47,7 +64,13 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.conferenceSelected = conferenceSelected
     _ctrl.saveCheckList      = saveCheckList
     _ctrl.editOrg            = editOrg
-
+    _ctrl.saveOrganization   = saveOrganization
+    _ctrl.saveConference     = saveConference
+    _ctrl.hasHead            = hasHead
+    _ctrl.hasFocalPoint      = hasFocalPoint
+    _ctrl.loadParticipantForm= loadParticipantForm
+    _ctrl.mediumHas     = mediumHas
+    _ctrl.designationHas=designationHas
     // options
     _ctrl.orgTypes           = orgTypes[_ctrl.type]
     _ctrl.orgMediums         = mediums
@@ -59,18 +82,30 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       'contacts'        : '/app/views/kronos/participation-form-contacts.html',
       'participants'    : '/app/views/kronos/participation-form-participants.html',
     }
+    _ctrl.patterns=PATTERNS
 
-    _ctrl.addContact         = false
-    _ctrl.doc                = {}
-    $scope.organization      = {}
+    _ctrl.addContact              = false
+    _ctrl.doc                     = {}
+    _ctrl.organization            = {}
+    _ctrl.organization.medium     = []
+    _ctrl.organization.language   = ''
 
-
+    _ctrl.activeParticipant       = {}
+    _ctrl.head                    = {}
+    _ctrl.focalPoint              = {}
+    _ctrl.participants            = []
+    _ctrl.showChecklist           = false
     function initSteps(){
-        if(!_ctrl.conferenceId)
-          initStepRequest()
 
-        if(initStepsChecklist() && !_ctrl.participationRequest.nominatingOrganization)
+        initStepRequest()
+        if(_ctrl.step==='checklist')
+          initStepsChecklist()
+        if(_ctrl.step==='organization')
           initStepsOrganization()
+        if(_ctrl.step==='contacts')
+          initStepsContacts()
+        if(_ctrl.step==='participants')
+          initStepsParticipants()
     }
 
     function initStepRequest(){
@@ -80,50 +115,229 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
           })
     }
     function initStepsChecklist(){
-        if(_ctrl.participationRequest  && _ctrl.participationRequest.checklist){
+        if(_ctrl.doc  && _ctrl.doc.checklist){
           $scope.letterOfAssignment = true
           $scope.pressPass = true
           $scope.passport = true
           $scope.accomidations = true
           $scope.head = true
           $scope.focalpoint = true
+
           return true
         }
         return false
     }
     function initStepsOrganization(){
-      $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms',{ cache: true })
-          .then(function(res){_ctrl.languages = res.data})
+     $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms',{ cache: true })
+      .then(function(res){
+        _ctrl.languages = res.data
+        getOrg()
+      })
+
+    }
+
+    function initStepsContacts(){
+      return getOrg().then(function(){
+        var headP  = getHead()
+        var focalP = getFocalPoint()
+        return Promise.all([headP,focalP]).then(function(){
+          $timeout(function(){
+                $scope.$watch('participationCtrl.head',function(newValue, oldValue){
+                  if(newValue._id != oldValue._id){
+                    _ctrl.doc.head = newValue._id
+                    save()
+                  }
+                },true)
+                $scope.$watch('participationCtrl.focalPoint',function(newValue, oldValue){
+                  if(newValue._id != oldValue._id){
+                    _ctrl.doc.focalPoint = newValue._id
+                    save()
+                  }
+                },true)
+          })
+        })
+      })
+    }
+    function initStepsParticipants (){
+      return initStepsContacts().then(function(){
+        return getParticipants().then(function(){
+          $scope.$watch('participationCtrl.activeParticipant._id',function(newValue, oldValue){
+            if(newValue!= oldValue && newValue)
+              getParticipants()
+
+          })
+        })
+      })
+    }
+
+    function mediumHas(medium){
+
+      if(!_ctrl.doc || !_ctrl.doc.medium)return false
+
+      for(var i=0; i<_ctrl.doc.medium.length;i++ )
+        if(_ctrl.doc.medium[i]===medium)return true
+
+    }
+    function designationHas(title){
+
+      if(!_ctrl.doc || !_ctrl.doc.designation)return false
+
+      for(var i=0; i<_ctrl.doc.designation.length;i++ )
+        if(_ctrl.doc.designation[i]===title)return true
+
+    }
+    function loadParticipantForm (p) {
+      console.log('loadParticipantFormloadParticipantFormloadParticipantForm')
+      _ctrl.addContact=true;
+
+        _ctrl.activeParticipant = p;
+
+    }
+
+    function getParticipants(){
+      if(!_ctrl.doc._id) return new Promise(function(r){r(true)})
+      var params = {
+                      q : {
+                        'meta.createdBy':user.userID,
+                        'requestId':_ctrl.doc._id,
+                        'meeting':{'$exists':true}
+                      },
+                      f:{meta:0}
+                    }
+      return $http.get('http://localhost:8000/api/v2018/participants',{ params : params })
+               .then(function(res){
+                 if(res.data.length)
+                   _ctrl.participants = res.data
+
+                  return _ctrl.participants
+               }).catch(function(e){
+                 _ctrl.error=e
+                 console.error(e)
+               })
+    }
+    function hasHead(){
+      return !!_ctrl.head._id
+    }
+
+    function hasFocalPoint(){
+      return !!_ctrl.focalPoint._id
     }
 
     function conferenceSelected (conference){
-        _ctrl.conferenceId=conference.code
+        _ctrl.conferenceId=conference._id
+        _ctrl.conferenceCode=conference.code
+    }
+
+    function getHead(){
+      if(!_ctrl.doc.head) return new Promise(function(r){r(true)})
+      return $http.get('http://localhost:8000/api/v2018/participants/'+encodeURIComponent(_ctrl.doc.head),{ cache: true })
+          .then(function(res){
+            _ctrl.head = res.data
+            delete(_ctrl.head.meta)
+          }).catch(function(err){
+            _ctrl.error = err
+            console.error(err)
+          })
+    }
+
+    function getFocalPoint(){
+      if(!_ctrl.doc.focalPoint) return new Promise(function(r){r(true)})
+      return $http.get('http://localhost:8000/api/v2018/participants/'+encodeURIComponent(_ctrl.doc.focalPoint),{ cache: true })
+          .then(function(res){
+            _ctrl.focalPoint = res.data
+            delete(_ctrl.focalPoint.meta)
+          }).catch(function(err){
+            _ctrl.error = err
+            console.error(err)
+          })
+    }
+
+    function getOrg(){
+      return $http.get('http://localhost:8000/api/v2018/organizations/'+encodeURIComponent(_ctrl.doc.nominatingOrganization),{ cache: true })
+          .then(function(res){
+            _ctrl.organization = res.data
+            delete(_ctrl.organization.meta)
+          }).catch(function(err){
+            _ctrl.error = err
+            console.error(err)
+          })
     }
 
     function changeStep(step,type){
-
+      if(type==='request')$location.url('/'+step)
       if(type)
-        $location.url('/'+_ctrl.conferenceId+'/'+type+'/'+step)
+        $location.url('/'+_ctrl.conferenceCode+'/'+type+'/'+step)
       else
-        $location.url('/'+_ctrl.conferenceId+'/'+_ctrl.type+'/'+step)
+        $location.url('/'+_ctrl.conferenceCode+'/'+_ctrl.type+'/'+step)
     }
 
     function saveCheckList(){
-        _ctrl.doc.checklist=true
-        save()
+        if(!_ctrl.doc.checklist){
+          _ctrl.doc.checklist=true
+          _ctrl.doc.currentStep = 'organization'
+          save()
+        }
         changeStep('organization')
     }
 
-    function save(){
-      if(!_ctrl.doc._id)
-        $http.post('/api/v2018/participation-requests',_ctrl.doc)
+    function saveConference(type){
+        if(!_ctrl.doc.conference){
+          _ctrl.doc.conference = _ctrl.conferenceId
+          _ctrl.doc.currentStep = 'checklist'
+          _ctrl.doc.requestType = type
+          save()
+        }
+        changeStep('checklist',type)
+    }
+
+    function saveOrganization(){
+      _ctrl.doc.currentStep = 'contacts'
+      if(!_ctrl.organization._id)
+        return $http.post('http://localhost:8000/api/v2018/organizations',_ctrl.organization)
             .then(function(res){
-              _ctrl.doc._id = res.data._id
+              _ctrl.organization._id = res.data.id
+              _ctrl.doc.nominatingOrganization = res.data.id
+              save()
+                .then(function(){
+                  changeStep('contacts')
+                })
+                .catch(function(err){
+                  _ctrl.error = err
+                  console.error(err)
+                })
+            }).catch(function(err){
+              _ctrl.error = err
+              console.error(err)
+            })
+      else
+        return $http.put('http://localhost:8000/api/v2018/organizations/'+encodeURIComponent(_ctrl.organization._id),_ctrl.organization)
+            .then(function(res){
+              _ctrl.doc.nominatingOrganization = _ctrl.organization._id
+              save()
+                .then(function(){
+                  changeStep('contacts')
+                })
+                .catch(function(err){
+                  _ctrl.error = err
+                  console.error(err)
+                })
+            }).catch(function(err){
+              _ctrl.error = err
+              console.error(err)
+            })
+    }
+
+    function save(){
+
+      if(!_ctrl.doc._id)
+        return $http.post('http://localhost:8000/api/v2018/participation-requests',_ctrl.doc)
+            .then(function(res){
+              _ctrl.doc._id = res.data.id
             }).catch(function(err){
     					console.error(err)
     				})
       else
-        $http.put('/api/v2018/participation-requests/'+encodeURIComponent(_ctrl.doc._id),_ctrl.doc)
+        return $http.put('http://localhost:8000/api/v2018/participation-requests/'+encodeURIComponent(_ctrl.doc._id),_ctrl.doc)
             .catch(function(err){
               console.error(err)
             })
@@ -131,17 +345,26 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
 
     function editOrg(){
-        $location.url($location.url('/'+_ctrl.conferenceId+'/'+_ctrl.type+'/'+'organization'))
+        $location.url('/'+_ctrl.conferenceCode+'/'+_ctrl.type+'/'+'organization')
     }
 
     function loadParticipationRequest(){
-        return $http.get('/api/v2018/participation-requests',{ params : { q : { 'meta.createdBy':user.userID }} })
+        var params = {
+                        q : {
+                          'meta.createdBy':user.userID,
+                          'conference':_ctrl.conferenceId
+                        }
+                      }
+        return $http.get('http://localhost:8000/api/v2018/participation-requests',{ params : params })
                  .then(function(res){
-                   console.log(res.data[0])
-                   if(res.data.length)
-                    return _ctrl.participationRequest = res.data[0]
 
+                   if(res.data.length){
+                    delete(res.data[0].meta)
+                    return _ctrl.doc = res.data[0]
+                   }
                     return null
+                 }).catch(function(e){
+                   _ctrl.error=e
                  })
     }
 //====================================

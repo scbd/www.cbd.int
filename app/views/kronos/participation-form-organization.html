@@ -3,165 +3,194 @@
       <h2>Organization Information</h2>
     </div>
 
-    <div class="col-xs-12 ">
-      <label>Identification</label>
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div class="col-md-8">
-            <div class="form-group">
-              <label class="control-label" for="title">Name of the organization</label>
-              <input ng-model="organization.title" type="text" class="form-control" id="title" >
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label class="control-label" for="title">Acronym</label>
-              <input ng-model="organization.acronym" type="text" class="form-control" id="Acronym" >
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="control-label" for="title">Type</label>
-              <select
-                id="type"
-                class="form-control"
-                ng-options="type.identifier as type.title for type in participationCtrl.orgTypes track by type.identifier"
-                ng-model="organization.type"
-                ></select>
-            </div>
-          </div>
-          <div class="col-md-6" ng-if="participationCtrl.type==='media'">
-            <div class="form-group">
-              <label class="control-label" for="title">Medium</label>
-              <select
-                id="medium"
-                class="form-control"
-                ng-options="medium.identifier as medium.title for medium in participationCtrl.orgMediums track by medium.identifier"
-                ng-model="organization.medium"
-                ></select>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <div class="col-xs-12 ">
-      <label>Address</label>
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <address ng-model="organization.address"></address>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-xs-12 ">
-      <label>Communication</label>
-      <div class="panel panel-default">
-        <div class="panel-body">
-
-            <div class="col-md-4">
-              <div class="form-group">
-                <label class="control-label" for="title">Phone </label>
-                <!-- <span  class="help-block"><small>First level administrative area within the country.  Usually province or state.</small></span> -->
-                <input ng-model="organization.phone" type="text" class="form-control" id="phone" >
+    <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
+    <form  name="editForm"  novalidate>
+      <div class="col-xs-12 ">
+        <label>Identification</label>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="col-md-8">
+              <!-- ng-class="{'has-error': (editForm.assistanceTypes.$invalid && editForm.$submitted) }" -->
+              <div class="form-group" ng-class="{'has-error': (editForm.title.$invalid && (editForm.title.$touched || editForm.$submitted)) }">
+                <label class="control-label" for="title">Name of the organization</label>
+                <input required ng-model="participationCtrl.organization.title" type="text" class="form-control" id="title" name="title" >
+                <p ng-show="editForm.title.$invalid && (editForm.title.$touched || editForm.$submitted)" class="help-block text-danger small">name is required.</p>
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-group">
-                <label class="control-label" for="title">Email </label>
-                <input ng-model="organization.email" type="text" class="form-control" id="email" >
+                <label class="control-label" for="title">Acronym</label>
+                <input ng-model="participationCtrl.organization.acronym" type="text" class="form-control" id="Acronym" >
               </div>
             </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label class="control-label" for="title">Email CCs </label>
-                <input ng-model="organization.emailCc" type="text" class="form-control" id="emailCc" >
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label" for="website">Website </label>
-                <input ng-model="organization.website" type="text" class="form-control" id="website" >
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label" for="title">Operating language </label>
+            <div class="col-md-6" ng-if="participationCtrl.type==='media'">
+              <div class="form-group" ng-class="{'has-error': (!participationCtrl.organization.type && (editForm.type.$touched || editForm.$submitted)) }">
+                <label class="control-label" for="type" >Type</label>
                 <select
-                  id="language"
+                  id="type"
+                  name="type"
                   class="form-control"
-                  ng-options="language.identifier as language.title.en for language in participationCtrl.languages track by language.identifier"
-                  ng-model="organization.language"
+                  ng-model="participationCtrl.organization.type"
                   >
+                  <option ng-repeat="option in participationCtrl.orgTypes" ng-value="option.identifier">{{option.title}}</option>
                 </select>
+                  <p ng-show="!participationCtrl.organization.type && (editForm.type.$touched || editForm.$submitted)" class="help-block text-danger small">type is required.</p>
               </div>
             </div>
+            <div class="col-md-6" ng-if="participationCtrl.type==='media'">
+              <div class="form-group" ng-class="{'has-error': (!participationCtrl.organization.medium && (editForm.medium.$touched || editForm.$submitted)) }">
+                <label class="control-label" for="medium">Medium</label>
+                <select
+                  multiple
+                  required
+                  name='medium'
+                  id="medium"
+                  class="form-control"
+                  ng-model="participationCtrl.organization.medium"
+                  >
+                    <option ng-repeat="option in participationCtrl.orgMediums" ng-value="option.identifier">{{option.title}}</option>
+                  </select>
+                  <p ng-show="!participationCtrl.organization.medium && (editForm.medium.$touched || editForm.$submitted)" class="help-block text-danger small">medium is required.</p>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
 
-    <div class="col-xs-12" ng-show="participationCtrl.type==='media'">
-      <label>Media Requirements</label>
-      <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label" for="letterOfAssignment">Letter of assignment</label>
-
-                <!-- <file-drop ng-model="organization.letterOfAssignment" ng-change="participationCtrl.onFile(organization.letterOfAssignment)" auto-reset="true"></file-drop> -->
-                <!-- <input  type="file" auto-reset="autoReset" ng-model="organization.letterOfAssignment" ng-change="onFile(files)" data-multiple-caption="{count} files selected" /> -->
-                <input  ng-model="organization.letterOfAssignment" type="file" class="form-control" id="letterOfAssignment" >
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label" for="attachments">Attachments </label>
-                <input ng-model="organization.attachments" type="file" class="form-control" id="attachments" >
-              </div>
-            </div>
-          </div>
-        </div>
-    </div>
-
-    <div class="col-xs-12" ng-if="participationCtrl.type==='observer'">
-      <label>Observer Requirements</label>
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="control-label" for="letterOfAssignment">Letter of interest </label>
-              <input type="file" class="form-control" id="letterOfAssignment" >
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="control-label" for="letterOfAssignment">Statement demonstrating qualifications </label>
-              <input type="file" class="form-control" id="letterOfAssignment" >
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="control-label" for="letterOfAssignment">Statutes / by-laws / articels of incorporation</label>
-              <input type="file" class="form-control" id="letterOfAssignment" >
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label class="control-label" for="attachments">Attachments </label>
-            <input type="file" class="form-control" id="attachments" >
+      <div class="col-xs-12 ">
+        <label>Address</label>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <address name="address" ng-model="participationCtrl.organization.address"></address>
           </div>
         </div>
       </div>
-    </div>
+
+      <div class="col-xs-12 ">
+        <label>Communication</label>
+        <div class="panel panel-default">
+          <div class="panel-body">
+
+              <div class="col-md-4">
+                <div class="form-group" ng-class="{'has-error': (editForm.phone.$invalid && (editForm.phone.$touched || editForm.$submitted)) }">
+                  <label class="control-label" for="phone">Phone </label>
+
+                  <input required ng-model="participationCtrl.organization.phone" type="text" class="form-control" id="phone" name="phone" ng-pattern="patterns.phone">
+                  <p ng-show="editForm.phone.$invalid && (editForm.phone.$touched || editForm.$submitted)" class="help-block text-danger small">phone is required.</p>
+							    <p ng-show="editForm.phone.$invalid && (editForm.phone.$touched || editForm.$submitted)"class="help-block text-danger  small">Please use the following format: +[country code] [city code] [telephone number] [extension, if necessary].</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group" ng-class="{'has-error': (editForm.email.$invalid && (editForm.email.$touched || editForm.$submitted)) }">
+                  <label class="control-label" for="title">Email </label>
+                  <input required ng-model="participationCtrl.organization.email" type="email" class="form-control" id="email" name="email">
+                  <p ng-show="editForm.email.$error.required && (editForm.email.$touched || editForm.$submitted)" class="help-block text-danger small">email is required.</p>
+                  <p ng-show="editForm.email.$error.email && (editForm.email.$touched || editForm.$submitted)" class="help-block text-danger small">email is required.</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="control-label" for="title">Email CCs </label>
+                  <input ng-model="participationCtrl.organization.emailCc" type="email" class="form-control" id="emailCc" >
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group" ng-class="{'has-error': ((editForm.website.$invalid || editForm.website.$error.url) && (editForm.website.$touched || editForm.$submitted)) }">
+                  <label class="control-label" for="website">Website </label>
+                  <input ng-model="participationCtrl.organization.website" type="url" class="form-control" id="website" name="website">
+                  <p ng-show="editForm.website.$error.url && (editForm.website.$touched || editForm.$submitted)" class="help-block text-danger small">website url not correct format</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group" ng-class="{'has-error': (!participationCtrl.organization.language && (editForm.language.$touched || editForm.$submitted)) }">
+                  <label class="control-label" for="language">Operating language {{participationCtrl.organization.language}}</label>
+                  <select
+                    ng-if="participationCtrl.languages.length"
+                    id="language"
+                    required
+                    name="language"
+                    class="form-control"
+
+                    ng-model="participationCtrl.organization.language"
+                    >
+                    <option ng-repeat="language in participationCtrl.languages   track by language.identifier" ng-selected="!!(participationCtrl.organization.language===language.identifier)" ng-value="language.identifier">{{language.title.en}}</option>
+
+                  </select>
+                  <p ng-show="!participationCtrl.organization.language && (editForm.language.$touched || editForm.$submitted)" class="help-block text-danger small">language is required.</p>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <div class="col-xs-12" ng-show="participationCtrl.type==='media'">
+        <label>Media Requirements</label>
+        <div class="panel panel-default">
+          <div class="panel-body">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label" for="letterOfAssignment">Letter of assignment</label>
+
+                  <!-- <file-drop ng-model="participationCtrl.organization.letterOfAssignment" ng-change="participationCtrl.onFile(participationCtrl.organization.letterOfAssignment)" auto-reset="true"></file-drop> -->
+                  <!-- <input  type="file" auto-reset="autoReset" ng-model="participationCtrl.organization.letterOfAssignment" ng-change="onFile(files)" data-multiple-caption="{count} files selected" /> -->
+                  <input  ng-model="participationCtrl.organization.letterOfAssignment" type="file" class="form-control" id="letterOfAssignment" >
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label" for="attachments">Attachments </label>
+                  <input ng-model="participationCtrl.organization.attachments" type="file" class="form-control" id="attachments" >
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <div class="col-xs-12" ng-if="participationCtrl.type==='observer'">
+        <label>Observer Requirements</label>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label" for="letterOfAssignment">Letter of interest </label>
+                <input type="file" class="form-control" id="letterOfAssignment" >
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label" for="letterOfAssignment">Statement demonstrating qualifications </label>
+                <input type="file" class="form-control" id="letterOfAssignment" >
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="control-label" for="letterOfAssignment">Statutes / by-laws / articels of incorporation</label>
+                <input type="file" class="form-control" id="letterOfAssignment" >
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label" for="attachments">Attachments </label>
+              <input type="file" class="form-control" id="attachments" >
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
     <div>
       <pre>
-        {{organization | json}}
+        {{participationCtrl.doc| json}}
+      </pre>
+      <pre>
+        {{participationCtrl.organization | json}}
       </pre>
     </div>
 
     <div class="col-xs-12">
-      <button ng-click="participationCtrl.changeStep('contacts')" ng-disabled="false" type="button" class="btn btn-success pull-right">Next</button>
+      <button ng-click="participationCtrl.changeStep('checklist')" ng-disabled="false" type="button" class="btn btn-default">Previos</button>
+      <button ng-click="participationCtrl.saveOrganization()" ng-disabled="false" type="button" class="btn btn-success pull-right">Next</button>
     </div>
 </section>

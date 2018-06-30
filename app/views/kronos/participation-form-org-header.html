@@ -1,0 +1,55 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <button ng-click="participationCtrl.editOrg()" type="button" class="btn btn-default btn-xs pull-right">Edit >></button>
+    <h3 class="panel-title">{{participationCtrl.organization.title}}</h3>
+
+  </div>
+  <div class="panel-body">
+    <div class="col-xs-4">
+    {{participationCtrl.organization.address.streetNumber}}, {{participationCtrl.organization.address.street}}, {{participationCtrl.organization.address.unitNumber}}<br/>
+    {{participationCtrl.organization.address.locality}} {{participationCtrl.organization.address.administrativeArea}} {{participationCtrl.organization.address.postalCode}} <br/>
+    {{participationCtrl.organization.address.country.toLowerCase() | term:locale }}<br/>
+    </div>
+    <div class="col-xs-4">
+      {{participationCtrl.organization.phone}} <br>
+      <a ng-href="mailto:{{participationCtrl.organization.email}}">{{participationCtrl.organization.email}}</a><br>
+      <a ng-href="{{participationCtrl.organization.website}}">{{participationCtrl.organization.website}}</a><br>
+    </div>
+    <div class="col-xs-4">
+
+      <!-- <a href="#">Letter of Assignment</a><br>
+      <a href="#">Some other document Uploaded</a><br> -->
+    </div>
+    <section ng-if="false">
+    <div class="col-xs-12">
+      <h4>Contacts</h4>
+      <hr/>
+    </div>
+    <div class="col-xs-2">
+      Head
+    </div>
+    <div class="col-xs-9">
+        Randy J. Houlahan<br>
+        Executive Secretary,<br>
+        <a href="mailto:dddd@sss.com">randy.houlahan@cbd.int</a>
+    </div>
+    <div class="col-xs-1">
+        <button type="button" class="btn btn-default btn-xs">Edit >></button>
+    </div>
+    <div class="col-xs-12">
+      <hr/>
+    </div>
+    <div class="col-xs-2">
+      Focal Point
+    </div>
+    <div class="col-xs-9">
+        Blaise Fonseca<br>
+        Lead Tabber,<br>
+        <a href="mailto:dddd@sss.com">Blaise.Fonseca@cbd.int</a>
+    </div>
+    <div class="col-xs-1">
+        <button ng-click="participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Edit >></button>
+    </div>
+  </section>
+  </div>
+</div>
