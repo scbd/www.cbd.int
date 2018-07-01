@@ -69,8 +69,9 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.hasHead            = hasHead
     _ctrl.hasFocalPoint      = hasFocalPoint
     _ctrl.loadParticipantForm= loadParticipantForm
-    _ctrl.mediumHas     = mediumHas
-    _ctrl.designationHas=designationHas
+    _ctrl.mediumHas          = mediumHas
+    _ctrl.designationHas     = designationHas
+    _ctrl.isStepComplete     = isStepComplete
     // options
     _ctrl.orgTypes           = orgTypes[_ctrl.type]
     _ctrl.orgMediums         = mediums
@@ -83,6 +84,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       'participants'    : '/app/views/kronos/participation-form-participants.html',
     }
     _ctrl.patterns=PATTERNS
+
 
     _ctrl.addContact              = false
     _ctrl.doc                     = {}
@@ -122,6 +124,18 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
           $scope.accomidations = true
           $scope.head = true
           $scope.focalpoint = true
+          $scope.freelance = true
+          $scope.onlineJournal = true
+          $scope.blog = true
+          $scope.otherOnlineMedia = true
+          $scope.webPub = true
+          $scope.online = true
+          $scope.photographer = true
+          $scope.radio = true
+          $scope.television = true
+          $scope.print = true
+          $scope.broadcastFilmLetter = true
+          $scope.accomidations = true
 
           return true
         }
@@ -170,14 +184,27 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       })
     }
 
+    function isStepComplete(step){
+      if(!_ctrl.doc)return false
+      if(stepToNum(_ctrl.doc.currentStep)+1>=stepToNum(step)) return true
+      return false
+    }
+    function stepToNum(step){
+      var stepMap ={
+        'checklist':0,
+        'organization':1,
+        'contacts':2,
+        'participants':3,
+        'complete':4
+      }
+      return stepMap[step]
+    }
     function mediumHas(medium){
-
       if(!_ctrl.doc || !_ctrl.doc.medium)return false
-
       for(var i=0; i<_ctrl.doc.medium.length;i++ )
         if(_ctrl.doc.medium[i]===medium)return true
-
     }
+
     function designationHas(title){
 
       if(!_ctrl.doc || !_ctrl.doc.designation)return false
@@ -275,8 +302,8 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         if(!_ctrl.doc.checklist){
           _ctrl.doc.checklist=true
           _ctrl.doc.currentStep = 'organization'
-          save()
         }
+        save()
         changeStep('organization')
     }
 
@@ -328,7 +355,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
 
     function save(){
-
+console.log('saving _ctrl.doc',_ctrl.doc)
       if(!_ctrl.doc._id)
         return $http.post('http://localhost:8000/api/v2018/participation-requests',_ctrl.doc)
             .then(function(res){
@@ -360,6 +387,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
                    if(res.data.length){
                     delete(res.data[0].meta)
+console.log(res.data[0])
                     return _ctrl.doc = res.data[0]
                    }
                     return null
