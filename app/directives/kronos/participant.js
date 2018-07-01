@@ -33,7 +33,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         function save(){
 
           if(!$scope.binding._id)
-            return $http.post('http://localhost:8000/api/v2018/participants',$scope.binding)
+            return $http.post('api/v2018/participants',$scope.binding)
                 .then(function(res){
                   $scope.binding._id = res.data.id
                   $scope.showContact=false;
@@ -42,7 +42,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
                   console.error(err)
                 })
           else
-            return $http.put('http://localhost:8000/api/v2018/participants/'+encodeURIComponent($scope.binding._id),$scope.binding)
+            return $http.put('api/v2018/participants/'+encodeURIComponent($scope.binding._id),$scope.binding)
                 .then(function(res){
                   $scope.showContact=false;
                 })
@@ -80,7 +80,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         $http.get('/api/v2015/countries',{ cache: true })
           .then(function(o){return $filter('orderBy')(o.data, 'name.en');})
             .then(function(res){$scope.countries = res})
-            
+
         $scope.$applyAsync(function(){
             $("[help]").tooltip();
         })

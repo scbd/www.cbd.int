@@ -231,7 +231,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
                       },
                       f:{meta:0}
                     }
-      return $http.get('http://localhost:8000/api/v2018/participants',{ params : params })
+      return $http.get('api/v2018/participants',{ params : params })
                .then(function(res){
                  if(res.data.length)
                    _ctrl.participants = res.data
@@ -257,7 +257,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     function getHead(){
       if(!_ctrl.doc.head) return new Promise(function(r){r(true)})
-      return $http.get('http://localhost:8000/api/v2018/participants/'+encodeURIComponent(_ctrl.doc.head),{ cache: true })
+      return $http.get('api/v2018/participants/'+encodeURIComponent(_ctrl.doc.head),{ cache: true })
           .then(function(res){
             _ctrl.head = res.data
             delete(_ctrl.head.meta)
@@ -269,7 +269,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     function getFocalPoint(){
       if(!_ctrl.doc.focalPoint) return new Promise(function(r){r(true)})
-      return $http.get('http://localhost:8000/api/v2018/participants/'+encodeURIComponent(_ctrl.doc.focalPoint),{ cache: true })
+      return $http.get('api/v2018/participants/'+encodeURIComponent(_ctrl.doc.focalPoint),{ cache: true })
           .then(function(res){
             _ctrl.focalPoint = res.data
             delete(_ctrl.focalPoint.meta)
@@ -280,7 +280,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
 
     function getOrg(){
-      return $http.get('http://localhost:8000/api/v2018/organizations/'+encodeURIComponent(_ctrl.doc.nominatingOrganization),{ cache: true })
+      return $http.get('api/v2018/organizations/'+encodeURIComponent(_ctrl.doc.nominatingOrganization),{ cache: true })
           .then(function(res){
             _ctrl.organization = res.data
             delete(_ctrl.organization.meta)
@@ -320,7 +320,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     function saveOrganization(){
       _ctrl.doc.currentStep = 'contacts'
       if(!_ctrl.organization._id)
-        return $http.post('http://localhost:8000/api/v2018/organizations',_ctrl.organization)
+        return $http.post('api/v2018/organizations',_ctrl.organization)
             .then(function(res){
               _ctrl.organization._id = res.data.id
               _ctrl.doc.nominatingOrganization = res.data.id
@@ -337,7 +337,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
               console.error(err)
             })
       else
-        return $http.put('http://localhost:8000/api/v2018/organizations/'+encodeURIComponent(_ctrl.organization._id),_ctrl.organization)
+        return $http.put('api/v2018/organizations/'+encodeURIComponent(_ctrl.organization._id),_ctrl.organization)
             .then(function(res){
               _ctrl.doc.nominatingOrganization = _ctrl.organization._id
               save()
@@ -357,14 +357,14 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     function save(){
 console.log('saving _ctrl.doc',_ctrl.doc)
       if(!_ctrl.doc._id)
-        return $http.post('http://localhost:8000/api/v2018/participation-requests',_ctrl.doc)
+        return $http.post('api/v2018/participation-requests',_ctrl.doc)
             .then(function(res){
               _ctrl.doc._id = res.data.id
             }).catch(function(err){
     					console.error(err)
     				})
       else
-        return $http.put('http://localhost:8000/api/v2018/participation-requests/'+encodeURIComponent(_ctrl.doc._id),_ctrl.doc)
+        return $http.put('api/v2018/participation-requests/'+encodeURIComponent(_ctrl.doc._id),_ctrl.doc)
             .catch(function(err){
               console.error(err)
             })
@@ -382,7 +382,7 @@ console.log('saving _ctrl.doc',_ctrl.doc)
                           'conference':_ctrl.conferenceId
                         }
                       }
-        return $http.get('http://localhost:8000/api/v2018/participation-requests',{ params : params })
+        return $http.get('api/v2018/participation-requests',{ params : params })
                  .then(function(res){
 
                    if(res.data.length){
