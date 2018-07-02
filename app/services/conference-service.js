@@ -76,10 +76,8 @@
               var query = {
                             _id:{$in:oidArray}
                           }
-// /
               return  $http.get('/api/v2016/meetings', { cache:true, params: { q : query,f : { EVT_CD:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1 }  } })
               .then(function(res){
-  console.log('meetings',res.data)
                   return res.data
                 }
               )
