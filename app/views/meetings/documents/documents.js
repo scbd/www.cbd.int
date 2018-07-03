@@ -139,7 +139,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 loadNotifications();
                 switchTab();
 
-            }).catch(console.error).then(function(){ _ctrl.loaded = true; });
+            }).catch(console.error).finally(function(){ _ctrl.loaded = true; });
         }
 
         //==============================

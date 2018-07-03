@@ -231,7 +231,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
 
                 selectTab(_.findWhere(_ctrl.types, { _id: _ctrl.currentTab}));
 
-            }).catch(console.error);
+            }).catch(console.error).finally(function() { _ctrl.loaded=true; });
         }
 
         //==============================
