@@ -1,8 +1,9 @@
-define(['app', 'services/conference-service','providers/locale','directives/kronos/participant','directives/kronos/user-messages','filters/term'], function(app) { 'use strict';
+define(['app', 'services/conference-service','providers/locale','directives/kronos/participant','directives/kronos/user-messages','filters/term','directives/file',], function(app) { 'use strict';
 
-	return ['$scope','$http','conferenceService','$filter','$route','$location','locale','user','$timeout', function( $scope,$http,conferenceService,$filter,$route,$location,locale,user,$timeout) {
+	return ['$scope','$http','conferenceService','$filter','$route','$location','locale','user','$timeout','$document', function( $scope,$http,conferenceService,$filter,$route,$location,locale,user,$timeout,$document) {
 
 		var _ctrl 		           = this
+
     var orgTypes = {media:[
       {'identifier':'Educational/Public', 'title':'Educational/Public'},
       {'identifier':'Government/State',   'title':'Government/State'},
@@ -27,16 +28,6 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       {'identifier':'Freelance journalist',     'title':'Freelance journalist'},
       {'identifier':'Other',                  'title':'Other'},
     ]
-// _ctrl.msg = [
-//   {title:'hello title', description:'helo desciption helo desciption helo desciption helo desciption helo desciption helo desciption', state:'info'},
-// {title:'hello title', description:'helo desciption helo desciption helo desciption helo desciption helo desciption helo desciption', state:'warning'},
-// {title:'hello title', description:'helo desciption helo desciption helo desciption helo desciption helo desciption helo desciption', state:'danger'},
-// {title:'hello title', description:'helo desciption helo desciption helo desciption helo desciption helo desciption helo desciption', state:'success'}
-// ]
-    var PATTERNS = {
-        email : /^http[s]?:\/\/(www.)?facebook.com\/.+/i
-
-    }
 
     var MIMES = {
         'application/pdf':                                                            { title: 'PDF',               color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
@@ -55,10 +46,6 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.step               = $route.current.params.step || 'request'
     _ctrl.type               = $route.current.params.type
 
-
-    loadParticipationRequest()
-      .then(initSteps)
-
     //functions
     _ctrl.changeStep         = changeStep
     _ctrl.conferenceSelected = conferenceSelected
@@ -72,6 +59,8 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.mediumHas          = mediumHas
     _ctrl.designationHas     = designationHas
     _ctrl.isStepComplete     = isStepComplete
+    _ctrl.saveContacts =saveContacts
+
     // options
     _ctrl.orgTypes           = orgTypes[_ctrl.type]
     _ctrl.orgMediums         = mediums
@@ -82,40 +71,54 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       'organization'    : '/app/views/kronos/participation-form-organization.html',
       'contacts'        : '/app/views/kronos/participation-form-contacts.html',
       'participants'    : '/app/views/kronos/participation-form-participants.html',
+      'finished'        : '/app/views/kronos/participation-form-finished.html'
     }
-    _ctrl.patterns=PATTERNS
 
-
+    //flags
     _ctrl.addContact              = false
+    _ctrl.showChecklist           = false
+
+    //model inits
     _ctrl.doc                     = {}
     _ctrl.organization            = {}
     _ctrl.organization.medium     = []
     _ctrl.organization.language   = ''
-
+    _ctrl.organization.attachment = []
     _ctrl.activeParticipant       = {}
     _ctrl.head                    = {}
     _ctrl.focalPoint              = {}
     _ctrl.participants            = []
-    _ctrl.showChecklist           = false
+
+    //init
+    initStepRequest().then(loadParticipationRequest).then(initSteps)
+
+
     function initSteps(){
 
-        initStepRequest()
-        if(_ctrl.step==='checklist')
-          initStepsChecklist()
-        if(_ctrl.step==='organization')
-          initStepsOrganization()
-        if(_ctrl.step==='contacts')
-          initStepsContacts()
-        if(_ctrl.step==='participants')
-          initStepsParticipants()
+      if(_ctrl.step==='checklist')
+        initStepsChecklist()
+      if(_ctrl.step==='organization')
+        initStepsOrganization()
+      if(_ctrl.step==='contacts')
+        initStepsContacts()
+      if(_ctrl.step==='participants')
+        initStepsParticipants()
     }
 
     function initStepRequest(){
-      conferenceService.getFuture()
+      return conferenceService.getFuture()
           .then(function(confrences){
             _ctrl.conferences=confrences
+          }).then(function(){
+            initConference()
           })
     }
+    function initConference(){
+      for(var i=0; i<_ctrl.conferences.length;i++)
+        if(_ctrl.conferences[i].code===_ctrl.conferenceCode)
+          _ctrl.conferenceId=_ctrl.conferences[i]._id
+    }
+
     function initStepsChecklist(){
         if(_ctrl.doc  && _ctrl.doc.checklist){
           $scope.letterOfAssignment = true
@@ -141,13 +144,13 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         }
         return false
     }
+
     function initStepsOrganization(){
      $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms',{ cache: true })
       .then(function(res){
         _ctrl.languages = res.data
         getOrg()
       })
-
     }
 
     function initStepsContacts(){
@@ -172,6 +175,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         })
       })
     }
+
     function initStepsParticipants (){
       return initStepsContacts().then(function(){
         return getParticipants().then(function(){
@@ -186,19 +190,24 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     function isStepComplete(step){
       if(!_ctrl.doc)return false
-      if(stepToNum(_ctrl.doc.currentStep)+1>=stepToNum(step)) return true
+
+      if(stepToNum(_ctrl.doc.currentStep)>=stepToNum(step)) return true
+
+      if(_ctrl.doc.currentStep==='finished') return true
       return false
     }
+
     function stepToNum(step){
       var stepMap ={
         'checklist':0,
         'organization':1,
         'contacts':2,
         'participants':3,
-        'complete':4
+        'finished':4
       }
       return stepMap[step]
     }
+
     function mediumHas(medium){
       if(!_ctrl.doc || !_ctrl.doc.medium)return false
       for(var i=0; i<_ctrl.doc.medium.length;i++ )
@@ -213,8 +222,9 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         if(_ctrl.doc.designation[i]===title)return true
 
     }
+
     function loadParticipantForm (p) {
-      console.log('loadParticipantFormloadParticipantFormloadParticipantForm')
+
       _ctrl.addContact=true;
 
         _ctrl.activeParticipant = p;
@@ -231,7 +241,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
                       },
                       f:{meta:0}
                     }
-      return $http.get('api/v2018/participants',{ params : params })
+      return $http.get('http://localhost:2000/api/v2018/kronos-request-participants',{ params : params })
                .then(function(res){
                  if(res.data.length)
                    _ctrl.participants = res.data
@@ -257,7 +267,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     function getHead(){
       if(!_ctrl.doc.head) return new Promise(function(r){r(true)})
-      return $http.get('api/v2018/participants/'+encodeURIComponent(_ctrl.doc.head),{ cache: true })
+      return $http.get('http://localhost:2000/api/v2018/kronos-request-participants/'+encodeURIComponent(_ctrl.doc.head),{ cache: true })
           .then(function(res){
             _ctrl.head = res.data
             delete(_ctrl.head.meta)
@@ -269,7 +279,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     function getFocalPoint(){
       if(!_ctrl.doc.focalPoint) return new Promise(function(r){r(true)})
-      return $http.get('api/v2018/participants/'+encodeURIComponent(_ctrl.doc.focalPoint),{ cache: true })
+      return $http.get('http://localhost:2000/api/v2018/kronos-request-participants/'+encodeURIComponent(_ctrl.doc.focalPoint),{ cache: true })
           .then(function(res){
             _ctrl.focalPoint = res.data
             delete(_ctrl.focalPoint.meta)
@@ -280,14 +290,16 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
 
     function getOrg(){
-      return $http.get('api/v2018/organizations/'+encodeURIComponent(_ctrl.doc.nominatingOrganization),{ cache: true })
-          .then(function(res){
-            _ctrl.organization = res.data
-            delete(_ctrl.organization.meta)
-          }).catch(function(err){
-            _ctrl.error = err
-            console.error(err)
-          })
+      if(_ctrl.doc.nominatingOrganization)
+        return $http.get('http://localhost:2000/api/v2018/kronos-request-organizations/'+encodeURIComponent(_ctrl.doc.nominatingOrganization),{ cache: true })
+            .then(function(res){
+              _ctrl.organization = res.data
+              if(!_ctrl.organization.attachment)_ctrl.organization.attachment=[]
+              delete(_ctrl.organization.meta)
+            }).catch(function(err){
+              _ctrl.error = err
+              console.error(err)
+            })
     }
 
     function changeStep(step,type){
@@ -303,11 +315,23 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
           _ctrl.doc.checklist=true
           _ctrl.doc.currentStep = 'organization'
         }
-        save()
-        changeStep('organization')
-    }
+        save().then(function(){
+          changeStep('organization')
+        })
 
+    }
+    function saveContacts(){
+
+        _ctrl.doc.currentStep = 'participants'
+
+        save().then(function(){
+          changeStep('participants')
+        })
+
+    }
     function saveConference(type){
+
+      if(!_ctrl.doc) throw new Error('no doc found')
         if(!_ctrl.doc.conference){
           _ctrl.doc.conference = _ctrl.conferenceId
           _ctrl.doc.currentStep = 'checklist'
@@ -320,7 +344,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     function saveOrganization(){
       _ctrl.doc.currentStep = 'contacts'
       if(!_ctrl.organization._id)
-        return $http.post('api/v2018/organizations',_ctrl.organization)
+        return $http.post('http://localhost:2000/api/v2018/kronos-request-organizations',_ctrl.organization)
             .then(function(res){
               _ctrl.organization._id = res.data.id
               _ctrl.doc.nominatingOrganization = res.data.id
@@ -337,7 +361,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
               console.error(err)
             })
       else
-        return $http.put('api/v2018/organizations/'+encodeURIComponent(_ctrl.organization._id),_ctrl.organization)
+        return $http.put('http://localhost:2000/api/v2018/kronos-request-organizations/'+encodeURIComponent(_ctrl.organization._id),_ctrl.organization)
             .then(function(res){
               _ctrl.doc.nominatingOrganization = _ctrl.organization._id
               save()
@@ -355,16 +379,16 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
 
     function save(){
-console.log('saving _ctrl.doc',_ctrl.doc)
+
       if(!_ctrl.doc._id)
-        return $http.post('api/v2018/participation-requests',_ctrl.doc)
+        return $http.post('http://localhost:2000/api/v2018/kronos-participation-requests',_ctrl.doc)
             .then(function(res){
               _ctrl.doc._id = res.data.id
             }).catch(function(err){
     					console.error(err)
     				})
       else
-        return $http.put('api/v2018/participation-requests/'+encodeURIComponent(_ctrl.doc._id),_ctrl.doc)
+        return $http.put('http://localhost:2000/api/v2018/kronos-participation-requests/'+encodeURIComponent(_ctrl.doc._id),_ctrl.doc)
             .catch(function(err){
               console.error(err)
             })
@@ -382,12 +406,12 @@ console.log('saving _ctrl.doc',_ctrl.doc)
                           'conference':_ctrl.conferenceId
                         }
                       }
-        return $http.get('api/v2018/participation-requests',{ params : params })
+        return $http.get('http://localhost:2000/api/v2018/kronos-participation-requests',{ params : params })
                  .then(function(res){
 
                    if(res.data.length){
                     delete(res.data[0].meta)
-console.log(res.data[0])
+
                     return _ctrl.doc = res.data[0]
                    }
                     return null
@@ -400,13 +424,45 @@ console.log(res.data[0])
         $("[help]").tooltip();
     })
 
+    _ctrl.onUpload=onUpload
+    function onUpload (params, file, error){
+
+      var exists = findAttachement(params.container.attachment,params.tag)
+
+      if(!exists){
+        var newAttch = {}
+        if(params.tag)newAttch.tag = params.tag
+        newAttch.url = file.url
+        newAttch.title = file.metadata.fileName
+        params.container.attachment.push(newAttch)
+      } else{
+        if(params.tag)exists.tag = params.tag
+        exists.url = file.url
+        exists.title = file.metadata.fileName
+      }
+    }
+
+    _ctrl.findAttachement = findAttachement
+    function findAttachement (attachments, searchParam){
+      if(!Array.isArray(attachments)) return ''
+      for (var i = 0; i < attachments.length; i++) {
+        if(attachments[i].url === searchParam || (attachments[i].tag && attachments[i].tag === searchParam) || (attachments[i].title && attachments[i].title === searchParam))
+          return attachments[i]
+      }
+      return ''
+    }
+
+    _ctrl.submit=submit
+    function submit (){
+      $http.put('http://localhost:2000/api/v2018/kronos-participation-requests/'+encodeURIComponent(_ctrl.doc._id)+'/submit',_ctrl.doc)
+      .then(function(){
+        changeStep('finished')
+      }).catch(function(err){
+        console.error(err)
+      })
+    }
+
 	}];
 });
-// conferenceService.getConference('sbstta-sbi')
-//   .then(function(c){
-//     console.log('c',c)
-//   })
-// conferenceService.getMeetings(confrence.MajorEventIDs)
-//   .then(function(meetings){
-//     _ctrl.meetings = meetings
+
 //   })

@@ -20,19 +20,19 @@
               <label class="control-label" for="needAccredidation">Does this person intend on attending the conference?</label>
               <div class="radio">
                 <label>
-                  <input ng-model="attending" type="radio" name="needAccredidation" ng-value="false" checked>
+                  <input ng-model="attending.val" type="radio" name="needAccredidation" ng-value="false" checked>
                   No
                 </label>
               </div>
               <div class="radio">
                 <label>
-                  <input ng-model="attending" type="radio" name="needAccredidation"  ng-value="true" >
+                  <input ng-model="attending.val" type="radio" name="needAccredidation"  ng-value="true" >
                   Yes
                 </label>
               </div>
             </div>
           </div>
-          <div class="col-md-12" ng-if="attending">
+          <div class="col-md-12" ng-if="attending.val">
           <div class="form-group" ng-class="{'has-error': (!binding.meeting.length && (editForm.meeting.$touched || editForm.$submitted)) }">
             <label class="control-label" for="meeting">Select the meetings this person would like to attend</label>
             <select
@@ -80,8 +80,8 @@
               <p ng-show="!binding.lastName && (editForm.lastName.$touched || editForm.$submitted)" class="help-block text-danger small">A last name is required.</p>
             </div>
           </div>
-          
-          <div class="col-md-6" ng-if="type==='media'">
+
+          <div class="col-md-6" ng-if="typee==='media'">
             <div class="form-group" ng-class="{'has-error': (!binding.designation && (editForm.designation.$touched || editForm.$submitted)) }">
               <label class="control-label" for="designation">Job title</label>
               <select required ng-model="binding.designation" class="form-control" id="designation" name="designation">
@@ -125,7 +125,7 @@
           <div class="form-group" ng-class="{'has-error': (!binding.nationality && (editForm.nationality.$touched || editForm.$submitted)) }">
             <label class="control-label" for="nationality">Citizenship</label>
             <select ng-disable="useOrgs"
-              required required
+              required 
               id="nationality"
               name="nationality"
               class="form-control"
@@ -136,18 +136,24 @@
             <p ng-show="!binding.nationality && (editForm.nationality.$touched || editForm.$submitted)" class="help-block text-danger small">Nationality is required.</p>
           </div>
         </div>
-        <div class="col-md-6" ng-if="binding.meeting.length">
+
+        <div class="col-md-6">
           <div class="form-group">
             <label class="control-label" for="pressCard">Press card / work pass</label>
-            <input ng-model="binding.pressCard" type="file" class="form-control" id="pressCard" >
           </div>
-        </div>
-        <div class="col-md-6" ng-if="binding.meeting.length">
+          <file-drop class="xs" style="height:90px;" on-upload="onUpload({tag:'pressCard',container:binding},file,error)" ng-model="pressCard"  class="form-control" id="pressCard" ></file-drop>
+          <p><a ng-href="{{findAttachement(binding.attachment,'pressCard').url}}">{{findAttachement(binding.attachment,'pressCard').title}}</a></p>
+      </div>
+
+      <div class="col-md-6">
           <div class="form-group">
             <label class="control-label" for="passport">Passport</label>
-            <input ng-model="binding.passport" type="file" class="form-control" id="passport" >
+
           </div>
-        </div>
+          <file-drop class="xs" style="height:90px;" on-upload="onUpload({tag:'passport',container:binding},file,error)" ng-model="passport"  class="form-control" id="passport" ></file-drop>
+          <p><a ng-href="{{findAttachement(binding.attachment,'passport').url}}">{{findAttachement(binding.attachment,'passport').title}}</a></p>
+      </div>
+
       <div class="col-md-6" ng-if="binding.meeting.length">
         <div class="form-group">
           <label class="control-label" for="passportNumber">Passport number </label>
@@ -236,10 +242,27 @@
     </div>
   </div>
 </div>
+<div class="col-xs-12" >
+  <label>Attachments</label>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label class="control-label" for="attachments">Attachments</label>
+        </div>
+        <file-drop multiple class="xs" style="height:90px;" on-upload="onUpload({container:binding},file,error)"
+          ng-model="attachment" class="form-control" id="attachments"></file-drop>
+        <p ng-repeat="att in binding.attachment track by $index" ng-if="!att.tag">
+          <a ng-href="{{att.url}}">{{att.title}}</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 <section ng-if="binding.meeting.length">
 
 
-      <div class="col-xs-12 ">
+      <div class="col-xs-12" >
           <label>During Meeting</label>
           <div class="panel panel-default">
             <div class="panel-body">
@@ -260,63 +283,72 @@
         </div>
       </div>
 
-      <div class="col-xs-12" ng-if="type==='media'">
+      <div class="col-xs-12" >
         <label>Media Requirements</label>
         <div class="panel panel-default">
             <div class="panel-body">
+                <div class="col-md-6" ng-if="isMedia('Print')">
+                    <div class="form-group">
+                        <label class="control-label" for="byLineArticleOne">Bylined article one <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A Bylined article dated within the past four months" help></i></label>
+                    </div>
+                    <file-drop class="xs" style="height:90px;" on-upload="onUpload({tag:'byLineArticleOne',container:binding},file,error)" ng-model="byLineArticleOne"  class="form-control" id="byLineArticleOne" ></file-drop>
+                    <p><a ng-href="{{findAttachement(binding.attachment,'byLineArticleOne').url}}">{{findAttachement(binding.attachment,'byLineArticleOne').title}}</a></p>
+                </div>
 
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label" for="byLineArticleOne">Bylined article one <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A Bylined article dated within the past four months" help></i></label>
-                <input type="file" class="form-control" id="byLineArticleOne" >
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label" for="byLineArticleTwo">Bylined article two <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A Bylined article dated within the past four months" help></i></label>
-                <input type="file" class="form-control" id="byLineArticleTwo" >
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label" for="byLineArticleTwo">Publication copy <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A copy of the publication containing one of the bylined articles " help></i></label>
-                <input type="file" class="form-control" id="byLineArticleTwo" >
-              </div>
-            </div>
+                <div class="col-md-6" ng-if="isMedia('Print')">
+                    <div class="form-group">
+                        <label class="control-label" for="byLineArticleTwo">Bylined article two <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A Bylined article dated within the past four months" help></i></label>
+                      </div>
+                    <file-drop class="xs" style="height:90px;" on-upload="onUpload({tag:'byLineArticleTwo',container:binding},file,error)" ng-model="byLineArticleTwo"  class="form-control" id="byLineArticleTwo" ></file-drop>
+                    <p><a ng-href="{{findAttachement(binding.attachment,'byLineArticleTwo').url}}">{{findAttachement(binding.attachment,'byLineArticleTwo').title}}</a></p>
+                </div>
+
+                <div class="col-md-6" ng-if="isMedia('Print')">
+                    <div class="form-group">
+                        <label class="control-label" for="publicationCopy">Publication copy <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A copy of the publication containing one of the bylined articles " help></i></label>
+                      </div>
+                    <file-drop class="xs" style="height:90px;" on-upload="onUpload({tag:'publicationCopy',container:binding},file,error)" ng-model="publicationCopy"  class="form-control" id="publicationCopy" ></file-drop>
+                    <p><a ng-href="{{findAttachement(binding.attachment,'publicationCopy').url}}">{{findAttachement(binding.attachment,'publicationCopy').title}}</a></p>
+                </div>
 
 
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label" for="reportRecordingOne">Report recording one <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" title="A report recording dated within the past four months" help></i></label>
-                <span  class="help-block"><small></small></span>
-                <input type="file" class="form-control" id="reportRecordingOne" >
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label" for="reportRecordingTwo">Report recording two <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A report recording dated within the past four months" help></i></label>
-                <input type="file" class="form-control" id="reportRecordingTwo" >
-              </div>
-            </div>
+                <div class="col-md-6" ng-if="isMedia('Radio') || isMedia('Television')">
+                    <div class="form-group">
+                        <label class="control-label" for="reportRecordingOne">Report recording one <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" title="A report recording dated within the past four months" help></i></label>
+                      </div>
+                    <file-drop class="xs" style="height:90px;" on-upload="onUpload({tag:'reportRecordingOne',container:binding},file,error)" ng-model="reportRecordingOne"  class="form-control" id="reportRecordingOne" ></file-drop>
+                    <p><a ng-href="{{findAttachement(binding.attachment,'reportRecordingOne').url}}">{{findAttachement(binding.attachment,'reportRecordingOne').title}}</a></p>
+                </div>
 
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label" for="tearSheetOrPhotoOne">Tear sheet or photo <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
-                <input type="file" class="form-control" id="tearSheetOrPhotoOne" >
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label" for="tearSheetOrPhotoTwo">Original tear sheet or a photo with credits of the issuing organization <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
-                <input type="file" class="form-control" id="tearSheetOrPhotoTwo" >
-              </div>
-            </div>
+                <div class="col-md-6" ng-if="isMedia('Radio') || isMedia('Television')">
+                    <div class="form-group">
+                        <label class="control-label" for="reportRecordingTwo">Report recording two <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A report recording dated within the past four months" help></i></label>
+                      </div>
+                    <file-drop class="xs" style="height:90px;" on-upload="onUpload({tag:'reportRecordingTwo',container:binding},file,error)" ng-model="reportRecordingTwo"  class="form-control" id="reportRecordingTwo" ></file-drop>
+                    <p><a ng-href="{{findAttachement(binding.attachment,'reportRecordingTwo').url}}">{{findAttachement(binding.attachment,'reportRecordingTwo').title}}</a></p>
+                </div>
 
+                <div class="col-md-6" ng-if="isDesignation('Photographer')">
+                    <div class="form-group">
+                        <label class="control-label" for="tearSheetOrPhotoOne">Tear sheet or photo <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
+                      </div>
+                    <file-drop class="xs" style="height:90px;" on-upload="onUpload({tag:'tearSheetOrPhotoOne',container:binding},file,error)" ng-model="tearSheetOrPhotoOne"  class="form-control" id="tearSheetOrPhotoOne" ></file-drop>
+                    <p><a ng-href="{{findAttachement(binding.attachment,'tearSheetOrPhotoOne').url}}">{{findAttachement(binding.attachment,'tearSheetOrPhotoOne').title}}</a></p>
+                </div>
+
+                <div class="col-md-6" ng-if="isDesignation('Photographer')">
+                    <div class="form-group">
+                        <label class="control-label" for="tearSheetOrPhotoTwo">Tear sheet or photo <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
+                      </div>
+                    <file-drop class="xs" style="height:90px;" on-upload="onUpload({tag:'tearSheetOrPhotoTwo',container:binding},file,error)" ng-model="tearSheetOrPhotoTwo"  class="form-control" id="tearSheetOrPhotoTwo" ></file-drop>
+                    <p><a ng-href="{{findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url}}">{{findAttachement(binding.attachment,'tearSheetOrPhotoTwo').title}}</a></p>
+                </div>
           </div>
         </div>
     </div>
-  </form>
+
   </section>
+</form>
       <div class="col-xs-12 ">
         <div class="pull-right">
 
@@ -324,5 +356,5 @@
           <button ng-click="save()" ng-disabled="false" type="button" class="btn btn-primary">Save</button>
         </div>
       </div>
-        <!-- <div><pre>{{binding |json}}</pre></div> -->
+
   </section>
