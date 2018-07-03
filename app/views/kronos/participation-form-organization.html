@@ -111,14 +111,11 @@
                     required
                     name="language"
                     class="form-control"
-
                     ng-model="participationCtrl.organization.language"
                     >
                     <option ng-repeat="language in participationCtrl.languages   track by language.identifier" ng-selected="!!(participationCtrl.organization.language===language.identifier)" ng-value="language.identifier">{{language.title.en}}</option>
-
                   </select>
                   <p ng-show="!participationCtrl.organization.language && (editForm.language.$touched || editForm.$submitted)" class="help-block text-danger small">language is required.</p>
-
                 </div>
               </div>
             </div>
@@ -132,17 +129,18 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="control-label" for="letterOfAssignment">Letter of assignment</label>
-
-                  <!-- <file-drop ng-model="participationCtrl.organization.letterOfAssignment" ng-change="participationCtrl.onFile(participationCtrl.organization.letterOfAssignment)" auto-reset="true"></file-drop> -->
-                  <!-- <input  type="file" auto-reset="autoReset" ng-model="participationCtrl.organization.letterOfAssignment" ng-change="onFile(files)" data-multiple-caption="{count} files selected" /> -->
-                  <input  ng-model="participationCtrl.organization.letterOfAssignment" type="file" class="form-control" id="letterOfAssignment" >
                 </div>
+                <file-drop class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({tag:'letterOfAssignment',container:participationCtrl.organization},file,error)" ng-model="participationCtrl.letterOfAssignment"  class="form-control" id="letterOfAssignment" ></file-drop>
+                <p><a ng-href="{{participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url}}">{{participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').title}}</a></p>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="control-label" for="attachments">Attachments </label>
-                  <input ng-model="participationCtrl.organization.attachments" type="file" class="form-control" id="attachments" >
+                  <label class="control-label" for="attachments">Attachments</label>
                 </div>
+                <file-drop multiple class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({container:participationCtrl.organization},file,error)" ng-model="participationCtrl.attachment"  class="form-control" id="attachments" ></file-drop>
+                <p ng-repeat="att in participationCtrl.organization.attachment track by $index" ng-if="!att.tag">
+                  <a  ng-href="{{att.url}}">{{att.title}}</a>
+                </p>
               </div>
             </div>
           </div>
@@ -182,7 +180,9 @@
     </form>
     <div>
     </div>
-
+<div>
+  <div><pre>{{participationCtrl.organization.attachment | json}}</pre></div>
+</div>
     <div class="col-xs-12">
       <button ng-click="participationCtrl.changeStep('checklist')" ng-disabled="false" type="button" class="btn btn-default">Previos</button>
       <button ng-click="participationCtrl.saveOrganization()" ng-disabled="false" type="button" class="btn btn-success pull-right">Next</button>
