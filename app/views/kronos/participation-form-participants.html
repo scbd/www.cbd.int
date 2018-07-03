@@ -27,9 +27,9 @@
       </table>
     </div>
   </div>
-  <participant request-id="participationCtrl.doc._id" conference-code="participationCtrl.conferenceCode" organization="participationCtrl.organization" ng-model="participationCtrl.activeParticipant" ng-show="participationCtrl.addContact" show-contact="participationCtrl.addContact" type="participationCtrl.type"></participant>
+  <participant request-id="participationCtrl.doc._id" conference-code="participationCtrl.conferenceCode" organization="participationCtrl.organization" ng-model="participationCtrl.activeParticipant" ng-show="participationCtrl.addContact" show-contact="participationCtrl.addContact" typee="participationCtrl.type"></participant>
 </section>
 <div class="col-xs-12 " ng-if="!participationCtrl.addContact"><br>
   <button ng-click="participationCtrl.changeStep('contacts')" ng-disabled="false" type="button" class="btn btn-default">Previos</button>
-  <button ng-disabled="false" type="button" class="btn btn-primary pull-right">Submit</button>
+  <button ng-click="participationCtrl.submit()" ng-disabled="false" type="button" class="btn btn-primary pull-right">Submit</button>
 </div>
