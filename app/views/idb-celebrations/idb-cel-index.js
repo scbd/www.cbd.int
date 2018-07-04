@@ -32,7 +32,7 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
 
           var params = {
               q: {
-                  'title.en': `${_ctrl.year}`,//IDB
+                  'title.en': _ctrl.year,//IDB
               }
           };
           return $http.get("https://api.cbd.int/api/v2017/article-custom-tags/",{params:params}).then(
@@ -87,8 +87,7 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
           var params = {
               q: {
                   'tags': '52000000cbd0330000001948',//IDB
-                  'customTags': _ctrl.yearTagId,
-                  'customTags': '5ad52734990e540001a09458'//other-celebrations
+                  'customTags': [_ctrl.yearTagId,'5ad52734990e540001a09458']
               }
           };
           return $http.get("https://api.cbd.int/api/v2017/articles",{params:params}).then(

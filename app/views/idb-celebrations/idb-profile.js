@@ -29,7 +29,7 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 
         var params = {
             q: {
-                'title.en': `${_ctrl.year}`,//IDB
+                'title.en': _ctrl.year,//IDB
             }
         };
         return $http.get("https://api.cbd.int/api/v2017/article-custom-tags/",{params:params}).then(
@@ -66,9 +66,8 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 
         var params = {
             q: {
-                'tags': '52000000cbd0330000001948',//IDB
-                'customTags': _ctrl.yearTagId,
-                'tags': _ctrl.counrtyTagId
+                'tags': [_ctrl.counrtyTagId,'52000000cbd0330000001948'],//IDB
+                'customTags': _ctrl.yearTagId
             }
         };
         return $http.get("https://api.cbd.int/api/v2017/articles",{params:params}).then(
@@ -93,7 +92,7 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
           _ctrl.article = o.data
 
           if(_ctrl.article.id)
-            window.open(`https://www.cbd.int/management/articles/${_ctrl.article.id}/edit`, '_blank')
+            window.open('https://www.cbd.int/management/articles/'+_ctrl.article.id+'/edit', '_blank')
 
 
         });
