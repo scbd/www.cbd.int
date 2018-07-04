@@ -125,12 +125,12 @@ function(ng, _, actorList, statusesList, sessionList){
                 countQuery = $http.get('/api/v2016/decision-texts/search',  { params : qs} );
             }
             else
-                countQuery = { data : [ {count : count }]};
+                countQuery = { data : {count : count }};
 
             $q.when(countQuery)
             .then(function(result){
                 
-                $scope.searchCount = result.data[0].count;                
+                $scope.searchCount = result.data.count;                
                 refreshPager($scope.currentPage);
 
                 if($scope.searchCount == 0 ){
