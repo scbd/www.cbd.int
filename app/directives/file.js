@@ -37,7 +37,7 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
                             var qs = {};
 
                             if(attr.encrypt!==undefined)
-                                qs.encrypt = "";
+                                qs.encrypt = "true";
 
                             $http.post('/api/v2015/temporary-files', formData, {
                                 params: qs,
@@ -118,6 +118,7 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
                 autoReset: '<autoReset',
                 caption: '@caption',
                 onUpload : "&onUpload",
+                danger : "=?"
             },
 	        link: function($scope, form, attr, ngModelCtrl) {
                 
