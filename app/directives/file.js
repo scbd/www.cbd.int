@@ -4,9 +4,9 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
 	    return {
 	        restrict: 'A',
 	        replace: true,
-            require: '?ngModel', 
+            require: '?ngModel',
             scope: {
-                onUpload : "&onUpload"
+                onUpload : "&onUpload",
             },
 	        link: function($scope, element, attr, ctrl) {
 
@@ -17,8 +17,8 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
 
                 $scope.$on('$destroy', function(){
                     element.off('change');
-                });                
-                
+                });
+
 	            element.on('change', function() {
 
                     var htmlFiles = element[0].files;
@@ -37,7 +37,7 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
                             var qs = {};
 
                             if(attr.encrypt!==undefined)
-                                qs.encrypt = "";
+                                qs.encrypt = "true";
 
                             $http.post('/api/v2015/temporary-files', formData, {
                                 params: qs,
@@ -76,31 +76,31 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
                         reset();
                 });
 
-                function isMutiple() { 
-                    return element.attr('multiple')!==undefined; 
+                function isMutiple() {
+                    return element.attr('multiple')!==undefined;
                 }
-                
-                function isAutoUpload() { 
-                    return attr.onUpload!==undefined; 
-                }  
-                
-                function onUpload(htmlFile, file, err) { 
+
+                function isAutoUpload() {
+                    return attr.onUpload!==undefined;
+                }
+
+                function onUpload(htmlFile, file, err) {
 
                     return $scope.onUpload({
                         htmlFile: htmlFile,
-                        file:     file, 
+                        file:     file,
                         error:    err
-                    }); 
-                }   
+                    });
+                }
 
-                function isAutoReset() { 
-                    return $scope.$eval(attr.autoReset) || isAutoUpload(); 
-                }       
+                function isAutoReset() {
+                    return $scope.$eval(attr.autoReset) || isAutoUpload();
+                }
 
-                function reset() { 
+                function reset() {
                     $scope.$applyAsync(function() { element.val(''); });
-                } 
-                
+                }
+
                 function setViewValue(files){
                     ctrl.$setViewValue(isMutiple() ? files : files[0]);
                 }
@@ -113,21 +113,23 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
 	        restrict: 'E',
 	        replace: true,
             template: fileDropTemplate,
-            require: 'ngModel', 
+            require: 'ngModel',
             scope: {
                 autoReset: '<autoReset',
                 caption: '@caption',
                 onUpload : "&onUpload",
+                danger : "=?"
             },
 	        link: function($scope, form, attr, ngModelCtrl) {
-                
+
                 var inputFile = ng.element('<span><input class="hidden" ng-disabled="isDisabled()" type="file" auto-reset="autoReset" ng-model="files" ng-change="proxyOnChange()" data-multiple-caption="{count} files selected" /><span>').find('input:file');
 
-                if(attr.multiple!==undefined) inputFile.attr('multiple', '');
-                if(attr.accept  !==undefined) inputFile.attr('accept',   attr.accept);
-                if(attr.encrypt !==undefined) inputFile.attr('encrypt',   "");
-                if(attr.onUpload!==undefined) inputFile.attr('on-upload', "proxyOnUpload({ htmlFile: htmlFile, file: file, error: error})");
-                
+
+                if(attr.multiple!==undefined)   inputFile.attr('multiple', '');
+                if(attr.accept  !==undefined)   inputFile.attr('accept',   attr.accept);
+                if(attr.encrypt !==undefined)   inputFile.attr('encrypt',   "");
+                if(attr.onUpload!==undefined)   inputFile.attr('on-upload', "proxyOnUpload({ htmlFile: htmlFile, file: file, error: error})");
+
                 inputFile = $compile(inputFile.parent().html())($scope);
 
                 form.find('label').append(inputFile);
@@ -138,9 +140,9 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
                 $scope.isDisabled = isDisabled;
                 $scope.proxyOnUpload = $scope.onUpload;
                 $scope.proxyOnChange = function() { ngModelCtrl.$setViewValue($scope.files); };
-                
+
                 var div = document.createElement('div');
-                
+
                 $scope.allowDragDrop = (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
 
                 if ($scope.allowDragDrop) {
@@ -152,20 +154,20 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
                         e.preventDefault(); // preventing the unwanted behaviours
                         e.stopPropagation();
                     });
-                    
+
                     $scope.$on('$destroy', function(){
                         form.off('drag dragstart dragend dragover dragenter dragleave drop');
                     });
                 }
-                
+
                 function isMutiple() {
                     return inputFile.attr('multiple')!==undefined;
                 }
-                
+
                 function isDisabled() {
                     return form.attr('disabled')!==undefined;
                 }
-                
+
                 function onFileDrop(e) {
 
                     e.preventDefault();
@@ -175,5 +177,5 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
 	        }
 	    };
 	}]);
-    
+
 });
