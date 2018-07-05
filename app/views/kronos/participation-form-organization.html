@@ -86,7 +86,7 @@
                   <label class="control-label" for="title">Email </label>
                   <input required ng-model="participationCtrl.organization.email" type="email" class="form-control" id="email" name="email">
                   <p ng-show="editForm.email.$error.required && (editForm.email.$touched || editForm.$submitted)" class="help-block text-danger small">email is required.</p>
-                  <p ng-show="editForm.email.$error.email && (editForm.email.$touched || editForm.$submitted)" class="help-block text-danger small">email is required.</p>
+                  <p ng-show="editForm.email.$error.email && (editForm.email.$touched || editForm.$submitted)" class="help-block text-danger small">email is not valid.</p>
                 </div>
               </div>
               <div class="col-md-4">
@@ -130,14 +130,14 @@
                 <div class="form-group">
                   <label class="control-label" for="letterOfAssignment">Letter of assignment</label>
                 </div>
-                <file-drop class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({tag:'letterOfAssignment',container:participationCtrl.organization},file,error)" ng-model="participationCtrl.letterOfAssignment"  class="form-control" id="letterOfAssignment" ></file-drop>
+                <file-drop metadata="participationCtrl.genMeta()" class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({tag:'letterOfAssignment',container:participationCtrl.organization},file,error)" ng-model="participationCtrl.letterOfAssignment"  class="form-control" id="letterOfAssignment" ></file-drop>
                 <p><a ng-href="{{participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url}}">{{participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').title}}</a></p>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="control-label" for="attachments">Attachments</label>
                 </div>
-                <file-drop multiple class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({container:participationCtrl.organization},file,error)" ng-model="participationCtrl.attachment"  class="form-control" id="attachments" ></file-drop>
+                <file-drop  multiple class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({container:participationCtrl.organization},file,error)" ng-model="participationCtrl.attachment"  class="form-control" id="attachments" ></file-drop>
                 <p ng-repeat="att in participationCtrl.organization.attachment track by $index" ng-if="!att.tag">
                   <a  ng-href="{{att.url}}">{{att.title}}</a>
                 </p>
@@ -180,11 +180,8 @@
     </form>
     <div>
     </div>
-<div>
-  <div><pre>{{participationCtrl.organization.attachment | json}}</pre></div>
-</div>
     <div class="col-xs-12">
       <button ng-click="participationCtrl.changeStep('checklist')" ng-disabled="false" type="button" class="btn btn-default">Previos</button>
-      <button ng-click="participationCtrl.saveOrganization()" ng-disabled="false" type="button" class="btn btn-success pull-right">Next</button>
+      <button ng-click="participationCtrl.saveOrganization()" ng-disabled="editForm.$invalid" type="button" class="btn btn-success pull-right">Next</button>
     </div>
 </section>
