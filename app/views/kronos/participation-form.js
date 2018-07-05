@@ -92,8 +92,46 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     //init
     initStepRequest().then(loadParticipationRequest).then(initSteps)
 
+    _ctrl.genMeta=genMeta
+    function genMeta(){
+      return {requestid:_ctrl.doc._id,conferencecode:_ctrl.conferenceCode}
+    }
+    _ctrl.viewAttachment=viewAttachment
+    function viewAttachment(url){
+      if(!url)return''
+      if(~url.indexOf('cbd.documents.temporary')||~url.indexOf('temporary-files'))
+        return url
+      return '/api/v2018/kronos/participation/requests/attachement/'+encodeURIComponent(url)
+
+    }
+
+
+
+    function loadPresigned(url){
+      var atts = _ctrl.organization.attachment
+
+      for (var i = 0; i < atts.length; i++) {
+
+          if(!isTemp(atts[i].url))
+            getPresigned(i,atts[i].url)
+      }
+    }
+
+    function getPresigned(i,url){
+      return $http.get('/api/v2018/kronos/participation/requests/attachement/presign/'+encodeURIComponent(url)).then(function(u){
+      _ctrl.organization.attachment[i].url = u.data.signedUrl
+      })
+    }
+
+    function isTemp(url){
+      if(~url.indexOf('cbd.documents.temporary')||~url.indexOf('temporary-files'))
+        return true
+      return false
+    }
 
     function initSteps(){
+      if(_ctrl.doc.requested)
+       return changeStep('finished',_ctrl.type)
 
       if(_ctrl.step==='checklist')
         initStepsChecklist()
@@ -295,6 +333,9 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
             .then(function(res){
               _ctrl.organization = res.data
               if(!_ctrl.organization.attachment)_ctrl.organization.attachment=[]
+              else {
+                loadPresigned()
+              }
               delete(_ctrl.organization.meta)
             }).catch(function(err){
               _ctrl.error = err
@@ -344,7 +385,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     function saveOrganization(){
       _ctrl.doc.currentStep = 'contacts'
       if(!_ctrl.organization._id)
-        return $http.post('http://localhost:2000/api/v2018/kronos/request/organizations',_ctrl.organization)
+        return $http.post('http://localhost:2000/api/v2018/kronos/request/organizations',_ctrl.organization,{headers:{requestId:_ctrl.requestId,conferenceCode:_ctrl.conferenceCode}})
             .then(function(res){
               _ctrl.organization._id = res.data.id
               _ctrl.doc.nominatingOrganization = res.data.id
@@ -361,7 +402,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
               console.error(err)
             })
       else
-        return $http.put('http://localhost:2000/api/v2018/kronos/participation/request/organizations/'+encodeURIComponent(_ctrl.organization._id),_ctrl.organization)
+        return $http.put('http://localhost:2000/api/v2018/kronos/participation/request/organizations/'+encodeURIComponent(_ctrl.organization._id),_ctrl.organization,{headers:{requestId:_ctrl.doc._id,conferenceCode:_ctrl.conferenceCode}})
             .then(function(res){
               _ctrl.doc.nominatingOrganization = _ctrl.organization._id
               save()
