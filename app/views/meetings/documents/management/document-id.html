@@ -23,7 +23,7 @@
                 <div class="form-group" ng-class="{'has-error' : duplicate }" >
                     <label class="control-label" for="symbol">Symbol</label>
                     <div class="input-group">
-                        <input ng-disabled="uploading" type="text" class="form-control" id="symbol" ng-model="editCtrl.document.symbol" placeholder="Type a symbol eg: {{editCtrl.meeting.EVT_UN_CD}}/..."  ng-change="editCtrl.autoGenerateNextSymbol('symbol')">
+                        <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" id="symbol" ng-model="editCtrl.document.symbol" placeholder="Type a symbol eg: {{editCtrl.meeting.EVT_UN_CD}}/..."  ng-change="editCtrl.autoGenerateNextSymbol('symbol')">
                         <span class="input-group-btn">
                             <button  class="btn btn-default" ng-click="editCtrl.document.symbol=editCtrl.normalizeSymbol(editCtrl.document.symbol||'')" type="button"
                                     ng-class="{ 'btn-warning' : editCtrl.document.symbol && editCtrl.document.symbol != editCtrl.normalizeSymbol(editCtrl.document.symbol||'') }"
@@ -90,7 +90,7 @@
 
             <div class="input-group">
                 <span class="input-group-addon" style="min-width:45px">EN</span>
-                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr" id="title_en" ng-model="editCtrl.document.title.en" placeholder="English">
+                <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr" id="title_en" ng-model="editCtrl.document.title.en" placeholder="English">
                 <span class="input-group-btn">
                     <button ng-disabled="uploading" class="btn btn-default" ng-click="showTitleLang=!showTitleLang" type="button"><i class="fa fa-caret-{{showTitleLang?'up':'down'}}" aria-hidden="true"></i></button>
                     <change-case-button ng-model="editCtrl.document.title.en"></change-case-button>
@@ -99,7 +99,7 @@
 
             <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
                 <span class="input-group-addon" style="min-width:45px">ES</span>
-                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="title_es" ng-model="editCtrl.document.title.es"  placeholder="Spanish">
+                <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="title_es" ng-model="editCtrl.document.title.es"  placeholder="Spanish">
                 <span class="input-group-btn">
                     <change-case-button ng-model="editCtrl.document.title.es"></change-case-button>
                 </span>
@@ -107,7 +107,7 @@
 
             <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
                 <span class="input-group-addon" style="min-width:45px">FR</span>
-                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="title_fr" ng-model="editCtrl.document.title.fr"  placeholder="French">
+                <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="title_fr" ng-model="editCtrl.document.title.fr"  placeholder="French">
                 <span class="input-group-btn">
                     <change-case-button ng-model="editCtrl.document.title.fr"></change-case-button>
                 </span>
@@ -115,17 +115,17 @@
 
             <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
                 <span class="input-group-addon" style="min-width:45px">AR</span>
-                <input ng-disabled="uploading" type="text" class="form-control" style="direction:rtl"  id="title_ar" ng-model="editCtrl.document.title.ar"  placeholder="Arabic">
+                <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:rtl"  id="title_ar" ng-model="editCtrl.document.title.ar"  placeholder="Arabic">
             </div>
 
             <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
                 <span class="input-group-addon" style="min-width:45px">RU</span>
-                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="title_ru" ng-model="editCtrl.document.title.ru"  placeholder="Russian">
+                <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="title_ru" ng-model="editCtrl.document.title.ru"  placeholder="Russian">
             </div>
 
             <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
                 <span class="input-group-addon" style="min-width:45px">ZH</span>
-                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="title_zh" ng-model="editCtrl.document.title.zh"  placeholder="Chinese">
+                <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="title_zh" ng-model="editCtrl.document.title.zh"  placeholder="Chinese">
             </div>
         </div>
 
@@ -135,7 +135,7 @@
 
             <div class="input-group">
                 <span class="input-group-addon" style="min-width:45px">EN</span>
-                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr" id="description_en" ng-model="editCtrl.document.description.en" placeholder="English">
+                <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr" id="description_en" ng-model="editCtrl.document.description.en" placeholder="English">
                 <span class="input-group-btn">
                     <button ng-disabled="uploading" class="btn btn-default" ng-click="showDescriptionLang=!showDescriptionLang" type="button"><i class="fa fa-caret-{{showDescriptionLang?'up':'down'}}" aria-hidden="true"></i></button>
                     <change-case-button ng-model="editCtrl.document.description.en"></change-case-button>
@@ -144,7 +144,7 @@
 
             <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
                 <span class="input-group-addon" style="min-width:45px">ES</span>
-                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="description_es" ng-model="editCtrl.document.description.es"  placeholder="Spanish">
+                <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="description_es" ng-model="editCtrl.document.description.es"  placeholder="Spanish">
                 <span class="input-group-btn">
                     <change-case-button ng-model="editCtrl.document.description.es"></change-case-button>
                 </span>
@@ -152,7 +152,7 @@
 
             <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
                 <span class="input-group-addon" style="min-width:45px">FR</span>
-                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="description_fr" ng-model="editCtrl.document.description.fr"  placeholder="French">
+                <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="description_fr" ng-model="editCtrl.document.description.fr"  placeholder="French">
                 <span class="input-group-btn">
                     <change-case-button ng-model="editCtrl.document.description.fr"></change-case-button>
                 </span>
@@ -160,17 +160,17 @@
 
             <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
                 <span class="input-group-addon" style="min-width:45px">AR</span>
-                <input ng-disabled="uploading" type="text" class="form-control" style="direction:rtl"  id="description_ar" ng-model="editCtrl.document.description.ar"  placeholder="Arabic">
+                <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:rtl"  id="description_ar" ng-model="editCtrl.document.description.ar"  placeholder="Arabic">
             </div>
 
             <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
                 <span class="input-group-addon" style="min-width:45px">RU</span>
-                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="description_ru" ng-model="editCtrl.document.description.ru"  placeholder="Russian">
+                <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="description_ru" ng-model="editCtrl.document.description.ru"  placeholder="Russian">
             </div>
 
             <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
                 <span class="input-group-addon" style="min-width:45px">ZH</span>
-                <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr"  id="description_zh" ng-model="editCtrl.document.description.zh"  placeholder="Chinese">
+                <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="description_zh" ng-model="editCtrl.document.description.zh"  placeholder="Chinese">
             </div>
         </div>
 
