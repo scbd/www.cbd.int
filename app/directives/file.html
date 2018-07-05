@@ -1,17 +1,16 @@
-<form class="uploadForm alert"  ng-class="{ 'alert-default': isDisabled(), 'alert-info': !dragOver && !isDisabled(), 'alert-success': dragOver && !isDisabled() }" method="post" action="" enctype="multipart/form-data" style="">
+<form class="uploadForm alert"  ng-class="{ 'alert-default': isDisabled(), 'alert-info': !dragOver && !isDisabled(), 'alert-success': dragOver && !isDisabled(), 'alert-danger':danger}" method="post" action="" enctype="multipart/form-data" style="">
     <label class="text-center" style="display:block;" ng-style="{ cursor:  (isDisabled() ? 'default' : 'pointer') }">
-        
+
         <i class="fa fa-cloud-upload" aria-hidden="true"></i><br>
-        
+
         <span ng-if="caption">{{caption}}</span>
         <span ng-if="!caption">
             <span ng-if="!isMutiple()"><strong>Choose a file</strong> <span ng-if="allowDragDrop">or drag it here</span></span>
             <span ng-if=" isMutiple()"><strong>Choose files</strong>  <span ng-if="allowDragDrop">or drag them here</span></span>
         </span>
-        
-        <input class="hidden" ng-disabled="isDisabled()" type="file" auto-reset="autoReset" ng-model="files" ng-change="onFile(files)" data-multiple-caption="{count} files selected" />
+
     </label>
-    
+
     <style>
         .uploadForm.drop.dragover {
             background-color: white;
@@ -20,10 +19,10 @@
         .uploadForm.drop.dragover fa {
             color:blue;
         }
-        
+
         .uploadForm    > label > i.fa-cloud-upload { font-size:96px; }
         .uploadForm.sm > label > i.fa-cloud-upload { font-size:48px; }
         .uploadForm.xs > label > i.fa-cloud-upload { font-size:32px; }
-        
-    </style>    
+
+    </style>
 </form>
