@@ -257,6 +257,7 @@
   </div>
 </section>
     <div class="col-xs-12 ">
+      <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
       <button ng-click="participationCtrl.changeStep('request')" ng-disabled="false" type="button" class="btn btn-default">Previos</button>
       <button ng-click="participationCtrl.saveCheckList()" ng-disabled="!(letterOfAssignment && pressPass && passport && accomidations && head && focalpoint )" type="button" class="btn btn-success pull-right">Next</button>
     </div>

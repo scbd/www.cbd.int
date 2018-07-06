@@ -131,7 +131,8 @@
                   <label class="control-label" for="letterOfAssignment">Letter of assignment</label>
                 </div>
                 <file-drop metadata="participationCtrl.genMeta()" class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({tag:'letterOfAssignment',container:participationCtrl.organization},file,error)" ng-model="participationCtrl.letterOfAssignment"  class="form-control" id="letterOfAssignment" ></file-drop>
-                <p><a ng-href="{{participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url}}">{{participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').title}}</a></p>
+                <p><a ng-href="{{participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url}}">{{participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').title}}</a>
+                  <i ng-show="participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment')"  class="fa fa-times-circle-o pointer" ng-click="participationCtrl.removeAttachement(participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment'))"></i></p>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
@@ -140,6 +141,7 @@
                 <file-drop  multiple class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({container:participationCtrl.organization},file,error)" ng-model="participationCtrl.attachment"  class="form-control" id="attachments" ></file-drop>
                 <p ng-repeat="att in participationCtrl.organization.attachment track by $index" ng-if="!att.tag">
                   <a  ng-href="{{att.url}}">{{att.title}}</a>
+                    <i ng-show="att.url"  class="fa fa-times-circle-o pointer" ng-click="participationCtrl.removeAttachement(att.url)"></i>
                 </p>
               </div>
             </div>
@@ -181,6 +183,7 @@
     <div>
     </div>
     <div class="col-xs-12">
+        <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
       <button ng-click="participationCtrl.changeStep('checklist')" ng-disabled="false" type="button" class="btn btn-default">Previos</button>
       <button ng-click="participationCtrl.saveOrganization()" ng-disabled="editForm.$invalid" type="button" class="btn btn-success pull-right">Next</button>
     </div>
