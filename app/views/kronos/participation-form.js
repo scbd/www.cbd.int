@@ -130,7 +130,8 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
 
     function initSteps(){
-      if(_ctrl.doc.requested)
+
+      if(_ctrl.doc.requested && !~user.roles.indexOf('SCBDMedia'))
        return changeStep('finished',_ctrl.type)
 
       if(_ctrl.step==='checklist')
@@ -156,7 +157,15 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         if(_ctrl.conferences[i].code===_ctrl.conferenceCode)
           _ctrl.conferenceId=_ctrl.conferences[i]._id
     }
+    function getConference(id){
+      for(var i=0; i<_ctrl.conferences.length;i++)
+        if(_ctrl.conferences[i]._id===id)
+          return _ctrl.conferences[i]
+    }
+    function getConferenceCode(id){
+      return getConference(id).code
 
+    }
     function initStepsChecklist(){
         if(_ctrl.doc  && _ctrl.doc.checklist){
           $scope.letterOfAssignment = true
@@ -450,11 +459,16 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         return $http.get('/api/v2018/kronos/participation/requests',{ params : params })
                  .then(function(res){
 
-                   if(res.data.length){
-                    delete(res.data[0].meta)
+                   if(res.data[0].conference)
+                     _ctrl.conferenceCode=getConferenceCode(res.data[0].conference)
 
-                    return _ctrl.doc = res.data[0]
-                   }
+                   if(res.data[0].requestType)
+                     _ctrl.type=res.data[0].requestType
+
+                   if(res.data.length){
+                      delete(res.data[0].meta)
+                      return _ctrl.doc = res.data[0]
+                    }
                     return null
                  }).catch(function(e){
                    _ctrl.error=e
@@ -491,6 +505,19 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
           return attachments[i]
       }
       return ''
+    }
+    function findAttachementIndex ( url){
+      if(!Array.isArray(_ctrl.organization.attachment)) return ''
+      for (var i = 0; i < _ctrl.organization.attachment.length; i++) {
+        if(_ctrl.organization.attachment.url === url)
+          return i
+      }
+      return ''
+    }
+    _ctrl.removeAttachement = removeAttachement
+    function removeAttachement (attachment){
+      var i = findAttachementIndex ( attachment.url)
+      _ctrl.organization.attachment.splice(i,1)
     }
 
     _ctrl.submit=submit
