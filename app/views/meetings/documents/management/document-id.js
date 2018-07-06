@@ -681,7 +681,9 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
                 $location.search({ tabFor: _ctrl.document._id});
             }
 
-            return $location.path('/'+meetingId);
+            var base = encodeURIComponent($route.current.params.code || '');
+
+            return $location.path([base, encodeURIComponent(meetingId), 'documents'].join('/'));
         }
 
         //==============================
