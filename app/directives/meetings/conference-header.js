@@ -32,6 +32,9 @@
 
                         var selected = false;
                         var path = basePath + $location.path();
+
+                        path = path && path.toLowerCase();
+                        name = name && name.toLowerCase();
       
                         //handle legacy redirect for /2016/mop-08/documents
                         if(/^\/conferences\/2016\/mop-08/.test(path) && /^\/conferences\/2016\/cp-mop-08/.test(name))
