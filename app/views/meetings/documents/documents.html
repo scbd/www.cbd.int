@@ -10,6 +10,9 @@
         }
     </style>
 
+
+    <a ng-if="documentsCtrl.showMeeting && documentsCtrl.meeting.EVT_WEB" class="hidden-print pull-right btn btn-default" ng-class="{'btn-lg':$root.deviceSize!='xs'}" ng-style="{ 'margin-top': $root.deviceSize=='xs' ? '5px' : '' }" ng-href="{{documentsCtrl.meeting.EVT_WEB}}" target="_self">Official conference page <i class="fa fa-external-link" aria-hidden="true"></i> </a>
+
     <h1 class="visible-print" style="color:black;position:absolute;top:0px;right:0px"> {{::documentsCtrl.meeting.code}} <em><small>{{documentsCtrl.currentTabX.title}}</small></em></h1>
 
     <h1 ng-if="::documentsCtrl.showMeeting" class="hidden-print hidden-xs">Meeting Documents</h1>
