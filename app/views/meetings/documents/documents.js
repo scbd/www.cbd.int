@@ -518,9 +518,10 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function edit(doc) {
 
-            var id = doc ? doc._id : 'new';
+            var id =   doc && doc._id             || 'new';
+            var base = encodeURIComponent($route.current.params.code || '');
 
-            $location.url('/'+_ctrl.meeting.code+ '/documents/'+id);
+            $location.url([base, encodeURIComponent(_ctrl.meeting.code), 'documents', encodeURIComponent(id)].join('/'));
         }
 	}];
 });
