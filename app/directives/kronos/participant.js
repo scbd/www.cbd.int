@@ -16,9 +16,9 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         isContact:"=isContact"
       },
       link:function($scope){
-        $scope.$applyAsync(function(){
+        $timeout(function(){$scope.$applyAsync(function(){
           $("[help]").tooltip();
-        })
+        })},3000)
       },
 			controller: function ($scope ) {
         $scope.countries = []
@@ -28,6 +28,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         $scope.save       = save
         $scope.isMedia    = isMedia
         $scope.isDesignation = isDesignation
+        $scope.dobRegex= /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/
 
         var conference
         $scope.$watch('binding',function(){
@@ -35,12 +36,46 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
             initDoc()
             if(!$scope.binding.meeting ) $scope.binding.meeting =[]
             if(!$scope.binding.attachment)$scope.binding.attachment=[]
+            else loadPresigned()
         })
+        function loadPresigned(url){
+          var atts = $scope.binding.attachment
+
+          for (var i = 0; i < atts.length; i++) {
+
+              if(!isTemp(atts[i].url))
+                getPresigned(i,atts[i].url)
+          }
+        }
+
+function getPresigned(i,url){
+
+  return $http.get('/api/v2018/kronos/participation/requests/attachement/presign/'+encodeURIComponent(url)).then(function(u){
+    $scope.binding.attachment[i].url = u.data.signedUrl
+    console.log('u.data.signedUrl',u.data.signedUrl)
+    console.log($scope.binding.attachment)
+  })
+
+}
+        function isTemp(url){
+          if(~url.indexOf('cbd.documents.temporary')||~url.indexOf('temporary-files'))
+            return true
+          return false
+        }
+
+        $scope.viewAttachment=viewAttachment
+        function viewAttachment(url){
+          if(!url)return''
+          if(~url.indexOf('cbd.documents.temporary')||~url.indexOf('temporary-files'))
+            return url
+          return '/api/v2018/kronos/participation/requests/attachement/'+encodeURIComponent(url)
+        }
 
         function save(){
 
+
           if(!$scope.binding._id)
-            return $http.post('http://localhost:2000/api/v2018/kronos-request-participants',$scope.binding)
+            return $http.post('/api/v2018/kronos/participation/request/participants',$scope.binding,{headers:{requestId:$scope.requestId,conferenceCode:$scope.conferenceCode}})
                 .then(function(res){
                   $scope.binding._id = res.data.id
                   $scope.showContact=false;
@@ -49,7 +84,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
                   console.error(err)
                 })
           else
-            return $http.put('http://localhost:2000/api/v2018/kronos-request-participants/'+encodeURIComponent($scope.binding._id),$scope.binding)
+            return $http.put('/api/v2018/kronos/participation/request/participants/'+encodeURIComponent($scope.binding._id),$scope.binding,{headers:{requestId:$scope.requestId,conferenceCode:$scope.conferenceCode}})
                 .then(function(res){
                   $scope.showContact=false;
                 })
@@ -91,7 +126,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
           $scope.onUpload=onUpload
           function onUpload (params, file, error){
             var exists = findAttachement(params.container.attachment,params.tag)
-      
+
             if(!exists){
               var newAttch = {}
               if(params.tag)newAttch.tag = params.tag
@@ -104,7 +139,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
               exists.title = file.metadata.fileName
             }
           }
-      
+
           $scope.findAttachement = findAttachement
           function findAttachement (attachments, searchParam){
             if(!Array.isArray(attachments)) return ''
