@@ -32,31 +32,30 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
 
         var conference
         $scope.$watch('binding',function(){
-          if($scope.binding.useOrganizationAddress===undefined)
-            initDoc()
+            if($scope.binding.useOrganizationAddress===undefined)
+              initDoc()
             if(!$scope.binding.meeting ) $scope.binding.meeting =[]
             if(!$scope.binding.attachment)$scope.binding.attachment=[]
             else loadPresigned()
+
+            $timeout(function(){$scope.$applyAsync(function(){
+              $("[help]").tooltip();
+            })},3000)
         })
         function loadPresigned(url){
           var atts = $scope.binding.attachment
 
-          for (var i = 0; i < atts.length; i++) {
-
+          for (var i = 0; i < atts.length; i++)
               if(!isTemp(atts[i].url))
                 getPresigned(i,atts[i].url)
-          }
         }
 
-function getPresigned(i,url){
+        function getPresigned(i,url){
+          return $http.get('/api/v2018/kronos/participation/requests/attachement/presign/'+encodeURIComponent(url)).then(function(u){
+            $scope.binding.attachment[i].url = u.data.signedUrl
+          })
+        }
 
-  return $http.get('/api/v2018/kronos/participation/requests/attachement/presign/'+encodeURIComponent(url)).then(function(u){
-    $scope.binding.attachment[i].url = u.data.signedUrl
-    console.log('u.data.signedUrl',u.data.signedUrl)
-    console.log($scope.binding.attachment)
-  })
-
-}
         function isTemp(url){
           if(~url.indexOf('cbd.documents.temporary')||~url.indexOf('temporary-files'))
             return true
@@ -72,7 +71,6 @@ function getPresigned(i,url){
         }
 
         function save(){
-
 
           if(!$scope.binding._id)
             return $http.post('/api/v2018/kronos/participation/request/participants',$scope.binding,{headers:{requestId:$scope.requestId,conferenceCode:$scope.conferenceCode}})
@@ -148,6 +146,19 @@ function getPresigned(i,url){
                 return attachments[i]
             }
             return ''
+          }
+          function findAttachementIndex ( url){
+            if(!Array.isArray($scope.binding.attachment)) return ''
+            for (var i = 0; i < $scope.binding.attachment.length; i++) {
+              if($scope.binding.attachment.url === url)
+                return i
+            }
+            return ''
+          }
+          $scope.removeAttachement = removeAttachement
+          function removeAttachement (attachment){
+            var i = findAttachementIndex ( attachment.url)
+            $scope.binding.attachment.splice(i,1)
           }
 
         $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms',{ cache: true })
