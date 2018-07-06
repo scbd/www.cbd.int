@@ -77,4 +77,44 @@
   </div>
 
   <div  ng-include="participationCtrl.partialMap[participationCtrl.step]"></div>
+
+  <div class="col-xs-12" ng-if="participationCtrl.step!=='request'">
+
+    <div class="col-xs-2 col-xs-offset-1 paddingless" ng-click="participationCtrl.changeStep('checklist')">
+      <div id="myProgress">
+        <div ng-class="{'incomplete':!participationCtrl.isStepComplete('checklist'),'complete':participationCtrl.isStepComplete('checklist')}">
+          Checklist
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-2 paddingless" ng-click="participationCtrl.changeStep('organization')">
+      <div id="myProgress">
+        <div ng-class="{'incomplete':!participationCtrl.isStepComplete('organization'),'complete':participationCtrl.isStepComplete('organization')}">
+          Organization
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-2 paddingless" ng-click="participationCtrl.changeStep('contacts')">
+      <div id="myProgress">
+        <div ng-class="{'incomplete':!participationCtrl.isStepComplete('contacts'),'complete':participationCtrl.isStepComplete('contacts')}">
+          Contacts
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-2 paddingless" ng-click="participationCtrl.changeStep('participants')">
+      <div id="myProgress">
+        <div ng-class="{'incomplete':!participationCtrl.isStepComplete('participants'),'complete':participationCtrl.isStepComplete('participants')}">
+          Participants
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-2 paddingless" >
+      <div id="myProgress">
+        <div ng-class="{'incomplete':!participationCtrl.isStepComplete('finished'),'complete':participationCtrl.isStepComplete('finished')}">
+          Finished
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
