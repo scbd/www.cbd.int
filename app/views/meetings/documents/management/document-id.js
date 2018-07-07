@@ -301,6 +301,7 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
         //==============================
         //
         //==============================
+        var prev = {};
         function onSupersede() {
             console.log(_ctrl.supersede);
 
@@ -311,11 +312,29 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
 
             console.log(supersede);
 
-            _ctrl.document.title       = _.cloneDeep(supersede.title);
-            _ctrl.document.description = _.cloneDeep(supersede.description);
-            _ctrl.document.agendaItems = _.cloneDeep(supersede.agendaItems);
+            if(isEmptyOrSame(_ctrl.document.title      , prev.title      )) _ctrl.document.title       = _.cloneDeep(supersede.title);
+            if(isEmptyOrSame(_ctrl.document.description, prev.description)) _ctrl.document.description = _.cloneDeep(supersede.description);
+            if(isEmptyOrSame(_ctrl.document.agendaItems, prev.agendaItems)) _ctrl.document.agendaItems = _.cloneDeep(supersede.agendaItems);
 
+            prev.title       = _.cloneDeep(supersede.title);
+            prev.description = _.cloneDeep(supersede.description);
+            prev.agendaItems = _.cloneDeep(supersede.agendaItems);
+        }
+        //==============================
+        //
+        //==============================
+        function isEmptyOrSame(val, prev) {
 
+            val  = JSON.parse(JSON.stringify(val ||{}));
+            prev = JSON.parse(JSON.stringify(prev||{}));
+
+            if(_.isEmpty(val))
+                return true;
+
+            for(let k in val)  if(val[k]!=prev[k]) return false;
+            for(let k in prev) if(val[k]!=prev[k]) return false;
+
+            return true;
         }
 
         //==============================
