@@ -101,7 +101,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       if(!url)return''
       if(~url.indexOf('cbd.documents.temporary')||~url.indexOf('temporary-files'))
         return url
-      return '/api/v2018/kronos/participation/requests/attachement/'+encodeURIComponent(url)
+      return '/api/v2018/kronos/participation-requests/attachment/'+encodeURIComponent(url)
 
     }
 
@@ -117,10 +117,22 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       }
     }
 
-    function getPresigned(i,url){
-      return $http.get('/api/v2018/kronos/participation/requests/attachement/presign/'+encodeURIComponent(url)).then(function(u){
-      _ctrl.organization.attachment[i].url = u.data.signedUrl
-      })
+    function redirect_blank(url) {
+      var a = document.createElement('a');
+      a.target="_blank";
+      a.href=url;
+      a.click();
+    }
+
+    _ctrl.getPresigned = getPresigned
+    function getPresigned(url){
+
+      if(!isTemp(url))
+        return $http.post('/api/v2018/kronos/participation-requests/'+encodeURIComponent(url)+'/sign').then(function(u){
+          redirect_blank(u.data.signedUrl)
+        })
+      else
+        redirect_blank(url)
     }
 
     function isTemp(url){
@@ -202,9 +214,9 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     function initStepsContacts(){
       return getOrg().then(function(){
-        var headP  = getHead()
+        var headPromise  = getHead()
         var focalP = getFocalPoint()
-        return Promise.all([headP,focalP]).then(function(){
+        return Promise.all([headPromise,focalP]).then(function(){
           $timeout(function(){
                 $scope.$watch('participationCtrl.head',function(newValue, oldValue){
                   if(newValue._id != oldValue._id){
@@ -288,7 +300,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
                       },
                       f:{meta:0}
                     }
-      return $http.get('/api/v2018/kronos/participation/request/participants',{ params : params })
+      return $http.get('/api/v2018/kronos/participation-request/participants',{ params : params })
                .then(function(res){
                  if(res.data.length)
                    _ctrl.participants = res.data
@@ -314,7 +326,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     function getHead(){
       if(!_ctrl.doc.head) return new Promise(function(r){r(true)})
-      return $http.get('/api/v2018/kronos/participation/request/participants/'+encodeURIComponent(_ctrl.doc.head),{ cache: true })
+      return $http.get('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent(_ctrl.doc.head),{ cache: true })
           .then(function(res){
             _ctrl.head = res.data
             delete(_ctrl.head.meta)
@@ -326,7 +338,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     function getFocalPoint(){
       if(!_ctrl.doc.focalPoint) return new Promise(function(r){r(true)})
-      return $http.get('/api/v2018/kronos/participation/request/participants/'+encodeURIComponent(_ctrl.doc.focalPoint),{ cache: true })
+      return $http.get('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent(_ctrl.doc.focalPoint),{ cache: true })
           .then(function(res){
             _ctrl.focalPoint = res.data
             delete(_ctrl.focalPoint.meta)
@@ -338,13 +350,13 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     function getOrg(){
       if(_ctrl.doc.nominatingOrganization)
-        return $http.get('/api/v2018/kronos/participation/request/organizations/'+encodeURIComponent(_ctrl.doc.nominatingOrganization),{ cache: true })
+        return $http.get('/api/v2018/kronos/participation-request/organizations/'+encodeURIComponent(_ctrl.doc.nominatingOrganization),{ cache: true })
             .then(function(res){
               _ctrl.organization = res.data
               if(!_ctrl.organization.attachment)_ctrl.organization.attachment=[]
-              else {
-                loadPresigned()
-              }
+              // else {
+              //   loadPresigned()
+              // }
               delete(_ctrl.organization.meta)
             }).catch(function(err){
               _ctrl.error = err
@@ -411,7 +423,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
               console.error(err)
             })
       else
-        return $http.put('/api/v2018/kronos/participation/request/organizations/'+encodeURIComponent(_ctrl.organization._id),_ctrl.organization,{headers:{requestId:_ctrl.doc._id,conferenceCode:_ctrl.conferenceCode}})
+        return $http.put('/api/v2018/kronos/participation-request/organizations/'+encodeURIComponent(_ctrl.organization._id),_ctrl.organization,{headers:{requestId:_ctrl.doc._id,conferenceCode:_ctrl.conferenceCode}})
             .then(function(res){
               _ctrl.doc.nominatingOrganization = _ctrl.organization._id
               save()
@@ -431,14 +443,14 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     function save(){
 
       if(!_ctrl.doc._id)
-        return $http.post('/api/v2018/kronos/participation/requests',_ctrl.doc)
+        return $http.post('/api/v2018/kronos/participation-requests',_ctrl.doc)
             .then(function(res){
               _ctrl.doc._id = res.data.id
             }).catch(function(err){
     					console.error(err)
     				})
       else
-        return $http.put('/api/v2018/kronos/participation/requests/'+encodeURIComponent(_ctrl.doc._id),_ctrl.doc)
+        return $http.put('/api/v2018/kronos/participation-requests/'+encodeURIComponent(_ctrl.doc._id),_ctrl.doc)
             .catch(function(err){
               console.error(err)
             })
@@ -456,16 +468,18 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
                           'conference':_ctrl.conferenceId
                         }
                       }
-        return $http.get('/api/v2018/kronos/participation/requests',{ params : params })
+        return $http.get('/api/v2018/kronos/participation-requests',{ params : params })
                  .then(function(res){
 
-                   if(res.data[0].conference)
-                     _ctrl.conferenceCode=getConferenceCode(res.data[0].conference)
 
-                   if(res.data[0].requestType)
-                     _ctrl.type=res.data[0].requestType
 
                    if(res.data.length){
+                     if(res.data[0].conference)
+                       _ctrl.conferenceCode=getConferenceCode(res.data[0].conference)
+
+                     if(res.data[0].requestType)
+                       _ctrl.type=res.data[0].requestType
+
                       delete(res.data[0].meta)
                       return _ctrl.doc = res.data[0]
                     }
@@ -522,7 +536,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     _ctrl.submit=submit
     function submit (){
-      $http.put('/api/v2018/kronos/participation/requests/'+encodeURIComponent(_ctrl.doc._id)+'/submit',_ctrl.doc)
+      $http.put('/api/v2018/kronos/participation-requests/'+encodeURIComponent(_ctrl.doc._id)+'/submit',_ctrl.doc)
       .then(function(){
         changeStep('finished')
       }).catch(function(err){

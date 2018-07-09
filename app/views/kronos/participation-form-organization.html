@@ -1,4 +1,10 @@
 <section>
+    <style>
+      .pointer{
+        cursor: pointer;
+      }
+    </style>
+
     <div class="col-xs-12 ">
       <h2>Organization Information</h2>
     </div>
@@ -131,7 +137,7 @@
                   <label class="control-label" for="letterOfAssignment">Letter of assignment</label>
                 </div>
                 <file-drop metadata="participationCtrl.genMeta()" class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({tag:'letterOfAssignment',container:participationCtrl.organization},file,error)" ng-model="participationCtrl.letterOfAssignment"  class="form-control" id="letterOfAssignment" ></file-drop>
-                <p><a ng-href="{{participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url}}">{{participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').title}}</a>
+                <p><a ng-click="participationCtrl.getPresigned(participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url)" ng-href="#">{{participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').title}}</a>
                   <i ng-show="participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment')"  class="fa fa-times-circle-o pointer" ng-click="participationCtrl.removeAttachement(participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment'))"></i></p>
               </div>
               <div class="col-md-6">
@@ -140,7 +146,7 @@
                 </div>
                 <file-drop  multiple class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({container:participationCtrl.organization},file,error)" ng-model="participationCtrl.attachment"  class="form-control" id="attachments" ></file-drop>
                 <p ng-repeat="att in participationCtrl.organization.attachment track by $index" ng-if="!att.tag">
-                  <a  ng-href="{{att.url}}">{{att.title}}</a>
+                  <a  ng-click="participationCtrl.getPresigned(att.url)" ng-href="#">{{att.title}}</a>
                     <i ng-show="att.url"  class="fa fa-times-circle-o pointer" ng-click="participationCtrl.removeAttachement(att.url)"></i>
                 </p>
               </div>

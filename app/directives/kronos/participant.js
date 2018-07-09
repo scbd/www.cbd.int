@@ -16,9 +16,9 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         isContact:"=isContact"
       },
       link:function($scope){
-        $timeout(function(){$scope.$applyAsync(function(){
+        $timeout(function(){
           $("[help]").tooltip();
-        })},3000)
+        },3000)
       },
 			controller: function ($scope ) {
         $scope.countries = []
@@ -36,24 +36,28 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
               initDoc()
             if(!$scope.binding.meeting ) $scope.binding.meeting =[]
             if(!$scope.binding.attachment)$scope.binding.attachment=[]
-            else loadPresigned()
+
 
             $timeout(function(){$scope.$applyAsync(function(){
               $("[help]").tooltip();
             })},3000)
         })
-        function loadPresigned(url){
-          var atts = $scope.binding.attachment
-
-          for (var i = 0; i < atts.length; i++)
-              if(!isTemp(atts[i].url))
-                getPresigned(i,atts[i].url)
+        function redirect_blank(url) {
+          var a = document.createElement('a');
+          a.target="_blank";
+          a.href=url;
+          a.click();
         }
 
-        function getPresigned(i,url){
-          return $http.get('/api/v2018/kronos/participation/requests/attachement/presign/'+encodeURIComponent(url)).then(function(u){
-            $scope.binding.attachment[i].url = u.data.signedUrl
-          })
+        $scope.getPresigned = getPresigned
+        function getPresigned(url){
+
+          if(!isTemp(url))
+            return $http.post('/api/v2018/kronos/participation-requests/'+encodeURIComponent(url)+'/sign').then(function(u){
+              redirect_blank(u.data.signedUrl)
+            })
+          else
+            redirect_blank(url)
         }
 
         function isTemp(url){
@@ -67,13 +71,13 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
           if(!url)return''
           if(~url.indexOf('cbd.documents.temporary')||~url.indexOf('temporary-files'))
             return url
-          return '/api/v2018/kronos/participation/requests/attachement/'+encodeURIComponent(url)
+          return '/api/v2018/kronos/participation-requests/attachment/'+encodeURIComponent(url)
         }
 
         function save(){
 
           if(!$scope.binding._id)
-            return $http.post('/api/v2018/kronos/participation/request/participants',$scope.binding,{headers:{requestId:$scope.requestId,conferenceCode:$scope.conferenceCode}})
+            return $http.post('/api/v2018/kronos/participation-request/participants',$scope.binding,{headers:{requestId:$scope.requestId,conferenceCode:$scope.conferenceCode}})
                 .then(function(res){
                   $scope.binding._id = res.data.id
                   $scope.showContact=false;
@@ -82,7 +86,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
                   console.error(err)
                 })
           else
-            return $http.put('/api/v2018/kronos/participation/request/participants/'+encodeURIComponent($scope.binding._id),$scope.binding,{headers:{requestId:$scope.requestId,conferenceCode:$scope.conferenceCode}})
+            return $http.put('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent($scope.binding._id),$scope.binding,{headers:{requestId:$scope.requestId,conferenceCode:$scope.conferenceCode}})
                 .then(function(res){
                   $scope.showContact=false;
                 })
@@ -164,10 +168,13 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms',{ cache: true })
             .then(function(res){$scope.languages = res.data})
 
-        $http.get('/api/v2015/countries',{ cache: true })
-          .then(function(o){return $filter('orderBy')(o.data, 'name.en');})
-            .then(function(res){$scope.countries = res})
+        var params = {
+                        s:{'name.en':1},
+                        f:{'name.en':1,code:1}
+                      }
 
+        $http.get('/api/v2015/countries',{ params : params })
+            .then(function(res){$scope.countries = res.data})
 			}
 		};
 	}]);

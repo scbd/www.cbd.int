@@ -10,9 +10,13 @@ define(['app', 'text!./address.html'], function(app, html) { 'use strict';
         binding: "=ngModel",
       },
 			link: function ($scope) {
-        $http.get('/api/v2015/countries',{ cache: true })
-          .then(function(o){return $filter('orderBy')(o.data, 'name.en');})
-            .then(function(res){$scope.countries = res})
+        var params = {
+                        s:{'name.en':1},
+                        f:{'name.en':1,code:1}
+                      }
+
+        $http.get('/api/v2015/countries',{ params : params },{ cache: true })
+            .then(function(res){$scope.countries = res.data})
 
         $scope.$applyAsync(function(){
             $("[help]").tooltip();
