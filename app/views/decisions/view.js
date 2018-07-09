@@ -52,6 +52,9 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', './view
 
             ng.element("#content").html(content);
 
+            $scope.subjectsToShow        = getTags($scope.decision, 'subjects');
+            $scope.aichiTargetsToShow    = getTags($scope.decision, 'aichiTargets');
+
         }).then(function(){
 
             scrollTo($scope.$root.hiddenHash || $location.hash());
@@ -245,9 +248,12 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', './view
 
             var match = true;
 
-            if(match && filters.actors)     match = _(filters.actors    ).intersection( entry.data.actors  ).some();
-            if(match && filters.statuses)   match = _(filters.statuses  ).intersection( entry.data.statuses).some();
-            if(match && filters.types)      match = _(filters.types     ).intersection([entry.data.type   ]).some();
+            if(match && filters.actors)         match = _(filters.actors    ).intersection( entry.data.actors  ).some();
+            if(match && filters.statuses)       match = _(filters.statuses  ).intersection( entry.data.statuses).some();
+            if(match && filters.types)          match = _(filters.types     ).intersection([entry.data.type   ]).some();
+
+            if(match && filters.aichiTargets)   match = _(filters.aichiTargets    ).intersection( entry.data.aichiTargets  ).some();
+            if(match && filters.subjects)   match = _(filters.subjects    ).intersection( entry.data.subjects  ).some();
 
             return match;
         }
@@ -306,6 +312,26 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', './view
         //==============================
         function canComment() {
             return canEdit() || _.intersection(user.roles, ["ScbdStaff"]).length>0;
+        }
+
+        function getTags(collection, field){
+            var list  = []
+            if(collection[field])
+                list = collection[field];
+
+            if(collection.elements){
+                var elList = _(collection.elements).map(field).compact().flatten().value();
+                list.push(elList);
+            }
+
+            _.each(_.flatten(list), function(o){
+                if(!$scope[field+'Counts'])
+                    $scope[field+'Counts']  = {};
+                $scope[field+'Counts'][o] = ($scope[field+'Counts'][o] || 0) + 1; 
+
+            })
+
+            return _(list).flatten().uniq().value();
         }
     }];
 });
