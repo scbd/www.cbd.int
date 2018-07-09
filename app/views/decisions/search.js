@@ -33,7 +33,12 @@ function(ng, _, actorList, statusesList, sessionList){
         $scope.addSearchFilter = function(selected, list, skipQS){
             
             if(list == 'freeText'){
-                $scope.selectedFilter.freeText[0] = ({ title: selected, type:list, code:selected });
+                if(selected!=''){
+                    $scope.selectedFilter.freeText[0] = ({ title: selected, type:list, code:selected });
+                }
+                else{
+                    $scope.selectedFilter.freeText.splice(0, 1);
+                }
                 return;
             }
 
@@ -66,11 +71,14 @@ function(ng, _, actorList, statusesList, sessionList){
             if(value.type=='freeText')
                 $scope.freeText = undefined;
             updateQueryString();
-
+            $scope.search();
         }
 
 
-        $scope.search = function(count){
+		var canceler 				= null;
+        $scope.search = function(selected, list, skipQS, count){
+            if(selected)
+                $scope.addSearchFilter(selected, list, skipQS);
 
             $scope.isLoading = true;
             
@@ -120,9 +128,15 @@ function(ng, _, actorList, statusesList, sessionList){
             qs.q  =  JSON.stringify(query)
 
             var countQuery;
+
+            if (canceler) {
+                    canceler.resolve(true);
+            }
+            canceler = $q.defer();
+
             if(!count){
                 $scope.currentPage  = 0;      
-                countQuery = $http.get('/api/v2016/decision-texts/search',  { params : qs} );
+                countQuery = $http.get('/api/v2016/decision-texts/search',  { params : qs, timeout: canceler.promise} );
             }
             else
                 countQuery = { data : {count : count }};
@@ -130,6 +144,7 @@ function(ng, _, actorList, statusesList, sessionList){
             $q.when(countQuery)
             .then(function(result){
                 
+                canceler = null;
                 $scope.searchCount = result.data.count;                
                 refreshPager($scope.currentPage);
 
@@ -167,9 +182,17 @@ function(ng, _, actorList, statusesList, sessionList){
             });
         }
 
+        $scope.freeTextSearch = function(selected, list){
+            
+            $scope.addSearchFilter(selected, list);
+            // $timeout(function(){
+                $scope.search(selected, list);
+            // }, 2000)
+
+        }
         $scope.onPage = function(pageIndex){
             $scope.currentPage = pageIndex;
-            $scope.search($scope.searchCount);
+            $scope.search(undefined, undefined, undefined, $scope.searchCount);
         }
 
         $scope.trustedHtml = function (plainText) {
@@ -182,6 +205,7 @@ function(ng, _, actorList, statusesList, sessionList){
         }
 
         $scope.updateQueryString = updateQueryString;
+        $scope.romanize          = romanize;
         //===========================
         //
         //===========================
@@ -274,6 +298,15 @@ function(ng, _, actorList, statusesList, sessionList){
             }
 
             $scope.pages       = pages;
+        }
+
+
+        //==============================
+        //
+        //==============================
+        function romanize (n) {
+            var roman = [ '', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI', 'XXII', 'XXII', 'XXIV', 'XXV', 'XXVI', 'XXVII', 'XXVIII', 'XXIX', 'XXX' ];
+            return roman[n];
         }
 
         init();
