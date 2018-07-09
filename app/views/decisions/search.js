@@ -108,7 +108,7 @@ function(ng, _, actorList, statusesList, sessionList){
                     var codes = _.map(item, 'code');
                     if(codes.length){
                         inQuery = {
-                            [key] : { '$in' : codes } 
+                            ['inheritance.'+key] : { '$in' : codes } 
                         }
                     }
                 }
