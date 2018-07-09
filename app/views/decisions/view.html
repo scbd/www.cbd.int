@@ -72,6 +72,27 @@
 				</dd>
 				<br>
 
+				<dt>AICHI targets</dt>
+				<dd>
+					<!-- ng-click="toggleFilters({ aichiTargets : [item] })" -->
+                    <a class="label label-default text-nowrap" ng-click="toggleFilters({ aichiTargets : null })" ng-class="{ disabled : filters &&  filters.aichiTargets }">{{aichiTargetsToShow.length}}</a>
+					<span ng-repeat="item in aichiTargetsToShow"><a class="label label-default text-nowrap" 
+						 ng-class="{ disabled : filters && (!filters.aichiTargets || filters.aichiTargets.indexOf(item)<0) }">{{aichiTargetsCounts[item]}} {{item}} 
+							<!-- <i class="fa fa-filter" aria-hidden="true"></i>&nbsp; -->
+						</a> </span>
+				</dd>
+				<br>
+
+				<dt>Subjects</dt>
+				<dd>
+					<!-- ng-click="toggleFilters({ subjects : [item] })" -->
+                    <a class="label label-default text-nowrap" ng-click="toggleFilters({ subjects : null })" ng-class="{ disabled : filters &&  filters.subjects }">{{subjectsToShow.length}}</a>
+					<span ng-repeat="item in subjectsToShow"><a class="label label-default text-nowrap" 
+						 ng-class="{ disabled : filters && (!filters.subjects || filters.subjects.indexOf(item)<0) }">{{subjectsCounts[item]}} {{item}} 
+							<!-- <i class="fa fa-filter" aria-hidden="true"></i>&nbsp; -->
+						</a> </span>
+				</dd>
+				<br>
 				<dt ng-if="documents.length">Document</dt>
                 <span ng-repeat="d in documents">
     				<dd>
