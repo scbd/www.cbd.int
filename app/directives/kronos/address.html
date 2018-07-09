@@ -45,7 +45,7 @@
             <div class="form-group" ng-class="{'has-error': (editForm.country.$invalid && (editForm.country.$touched || editForm.$submitted)) }">
               <label class="control-label" for="country">Country </label>
               <select
-              
+
                 required
                 id="country"
                 name="country"
@@ -53,7 +53,7 @@
 
                 ng-model="binding.country"
                 >
-                <option ng-repeat="country in countries   track by country._id" ng-selected="!!(country.code===binding.country)" ng-value="country.code">{{country.name.en}}</option>
+                <option ng-repeat="country in countries   track by country.code" ng-selected="!!(country.code===binding.country)" ng-value="country.code">{{country.name.en}}</option>
               </select>
               <p ng-show="editForm.country.$invalid && (editForm.country.$touched || editForm.$submitted)" class="help-block text-danger">country is required.</p>
 
