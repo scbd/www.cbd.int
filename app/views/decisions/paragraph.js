@@ -1,6 +1,7 @@
-define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view-element', 'filters/moment', 'filters/lodash', './directives/notification', './directives/meeting-document', './directives/meeting', './directives/decision-reference'], function(ng, _) { 'use strict';
+define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view-element', 'filters/moment', 'filters/lodash', './directives/notification', './directives/meeting-document', './directives/meeting', './directives/decision-reference','filters/term'], function(ng, _) { 'use strict';
 
-    return ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', function($scope, $http, $route, $location, $compile, $anchorScroll) {
+    return ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', '$filter',
+    function($scope, $http, $route, $location, $compile, $anchorScroll, $filter) {
 
         var treaty    = null ;
         var body      = $route.current.params.body.toUpperCase();
@@ -54,6 +55,7 @@ define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view
         }).then(function(res){
 
             $scope.decision = decision = res.data;
+            loadRelatedDecisions(decision.code);
 
             var link     = $compile(decision.content);
             var content  = link($scope);
@@ -152,6 +154,25 @@ define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view
             return parseInt(val);
         }
 
+        function loadRelatedDecisions(code){
+
+            var slashWithDot = code.replace(/(\w+\/\w+\/\w+\/\w+)\/(.+)/, '$1.$2');
+            var dotWithSlash = code.replace(/(\w+\/\w+\/\w+\/\w+)\/(.+)/, '$1.$2');
+
+            var qs = {
+                q : { "decisions" : { "$in" : [slashWithDot, dotWithSlash]} },
+                f : { "code":1 }
+            }
+            return $http.get('/api/v2016/decision-texts/search',  { params : qs} )
+                .then(function(result){
+                    console.log(result)
+                });
+        }
+
+        $scope.term = function(code){
+            var termCode = {identifier:code};
+            return $filter("term")(termCode);
+        }
     }];
 
     //========================================
@@ -192,4 +213,5 @@ define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view
 
         return value;
     }
+
 });
