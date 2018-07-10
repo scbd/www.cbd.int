@@ -17,7 +17,7 @@ function(ng, _, actorList, statusesList, sessionList){
             subjects        : [], 
             aichiTargets    : [],
             actors          : [],
-            status          : [],
+            statuses        : [],
             freeText        : []            
         };
 
@@ -27,7 +27,7 @@ function(ng, _, actorList, statusesList, sessionList){
                 decision:{title:'Decision', code: 'decision'},paragraph:{title:'Paragraph', code: 'paragraph'},
             },
             actors  : _(actorList   ).reduce(function(r,v){ r[v.code] = v; return r; }, {}),
-            status  : _(statusesList).reduce(function(r,v){ r[v.code] = v; return r; }, {})
+            statuses  : _(statusesList).reduce(function(r,v){ r[v.code] = v; return r; }, {})
         };
 
         $scope.addSearchFilter = function(selected, list, skipQS){
@@ -107,8 +107,12 @@ function(ng, _, actorList, statusesList, sessionList){
                 else{
                     var codes = _.map(item, 'code');
                     if(codes.length){
+                        var prefix = '';
+                        if(key != 'elementType')
+                            prefix = 'inheritance.';
+
                         inQuery = {
-                            ['inheritance.'+key] : { '$in' : codes } 
+                            [prefix+key] : { '$in' : codes } 
                         }
                     }
                 }
@@ -192,6 +196,7 @@ function(ng, _, actorList, statusesList, sessionList){
         }
         $scope.onPage = function(pageIndex){
             $scope.currentPage = pageIndex;
+            updateQueryString();
             $scope.search(undefined, undefined, undefined, $scope.searchCount);
         }
 
