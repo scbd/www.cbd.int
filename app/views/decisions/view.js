@@ -1,6 +1,9 @@
-define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', './view-element', 'directives/meetings/documents/document-files', './directives/meeting'], function(app, _, ng) { 'use strict';
+define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', 
+'./view-element', 'directives/meetings/documents/document-files', 
+'./directives/meeting','filters/term'], function(app, _, ng) { 'use strict';
 
-    return ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', 'user', function($scope, $http, $route, $location, $compile, $anchorScroll, user) {
+    return ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', 'user', '$filter',
+    function($scope, $http, $route, $location, $compile, $anchorScroll, user, $filter) {
 
         var treaty    = null ;
         var body      = $route.current.params.body.toUpperCase();
@@ -332,6 +335,12 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', './view
             })
 
             return _(list).flatten().uniq().value();
+        }
+
+
+        $scope.term = function(code){
+            var termCode = {identifier:code};
+            return $filter("term")(termCode);
         }
     }];
 });
