@@ -74,22 +74,22 @@
 
 				<dt>AICHI targets</dt>
 				<dd>
-					<!-- ng-click="toggleFilters({ aichiTargets : [item] })" -->
-                    <a class="label label-default text-nowrap" ng-click="toggleFilters({ aichiTargets : null })" ng-class="{ disabled : filters &&  filters.aichiTargets }">{{aichiTargetsToShow.length}}</a>
-					<span ng-repeat="item in aichiTargetsToShow"><a class="label label-default text-nowrap" 
-						 ng-class="{ disabled : filters && (!filters.aichiTargets || filters.aichiTargets.indexOf(item)<0) }">{{aichiTargetsCounts[item]}} {{item}} 
-							<!-- <i class="fa fa-filter" aria-hidden="true"></i>&nbsp; -->
-						</a> </span>
+					<a class="label label-default text-nowrap" ng-click="toggleFilters({ aichiTargets : null })" 
+					ng-class="{ disabled : filters &&  filters.aichiTargets }">{{aichiTargetsToShow.length}}</a>
+						<span class="chip-sm" ng-repeat="aichiTarget in aichiTargetsToShow | orderBy" ng-if="::aichiTargetsToShow"
+						ng-class="{ disabled : filters && (!filters.aichiTargets || filters.aichiTargets.indexOf(item)<0) }">
+							<img title="{{aichiTarget}}" ng-src="/app/images/aichi-targets/abt-{{::aichiTarget.replace('AICHI-TARGET-','')}}-96.png" width="20" style="margin: 1px 1px 1px 1px;">
+						</span>	
+					</a> 
 				</dd>
 				<br>
 
 				<dt>Subjects</dt>
 				<dd>
-					<!-- ng-click="toggleFilters({ subjects : [item] })" -->
-                    <a class="label label-default text-nowrap" ng-click="toggleFilters({ subjects : null })" ng-class="{ disabled : filters &&  filters.subjects }">{{subjectsToShow.length}}</a>
-					<span ng-repeat="item in subjectsToShow"><a class="label label-default text-nowrap" 
-						 ng-class="{ disabled : filters && (!filters.subjects || filters.subjects.indexOf(item)<0) }">{{subjectsCounts[item]}} {{item}} 
-							<!-- <i class="fa fa-filter" aria-hidden="true"></i>&nbsp; -->
+					<a class="label label-default text-nowrap" ng-click="toggleFilters({ subjects : null })" ng-class="{ disabled : filters &&  filters.subjects }">{{subjectsToShow.length}}</a>
+					<span style="margin-right:3px;" ng-repeat="item in subjectsToShow"><a class="label label-default text-nowrap" 
+						 ng-class="{ disabled : filters && (!filters.subjects || filters.subjects.indexOf(item)<0) }">
+							 {{::term(item)}}
 						</a> </span>
 				</dd>
 				<br>
