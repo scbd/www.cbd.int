@@ -42,23 +42,43 @@
                     <decision-meeting symbol="decision.meeting"></decision-meeting>
                 </dd>
 				<br ng-if="::decision.meeting">
-
+				<span ng-if="current.data.type">
 				<dt>Type</dt>
 				<dd><span class="label label-default" ng-class="{ 'label-info' : current.data.type=='operational'}">{{current.data.type}}</span></dd>
 				<br>
-
+				</span>
+				<span ng-if="current.data.statuses.length">
 				<dt>Status</dt>
 				<dd ng-repeat="item in current.data.statuses"><span class="label label-default" ng-class="{ 'label-success' : item=='active' }">{{item}}</span></dd>
 				<dd ng-if="current.data.statusInfo||current.elementStatusDetails"><i>{{current.data.statusInfo||current.elementStatusDetails}}</i></dd>
 				<br>
-
+				</span>
                 <span ng-if="current.data.actors.length">
     				<dt>Actors</dt>
     				<dd ng-repeat="item in current.data.actors"><span class="label label-default">{{item}}</span></dd>
     				<dd ng-if="current.data.actorsInfo"><i>{{current.data.actorsInfo}}</i></dd>
     				<br>
-                </span>
-
+				</span>
+				<div ng-if="current.data.aichiTargets.length">
+					<br>
+					<dt>AICHI targets</dt>
+					<dd>
+						<img ng-repeat="aichiTarget in current.data.aichiTargets | orderBy" title="{{aichiTarget}}" ng-src="/app/images/aichi-targets/abt-{{::aichiTarget.replace('AICHI-TARGET-','')}}-96.png" 
+						width="25" style="margin: 1px 1px 1px 1px;">
+					</dd>
+				</div>
+				
+				<div ng-if="current.data.subjects.length">
+					<br>
+					<dt>Subjects</dt>
+					<dd>
+						<span class="label label-default" style="margin-right:3px;" 
+						ng-repeat="item in current.data.subjects">
+							{{::term(item)}}
+						</span>
+					</dd>
+				</div>
+				<br>
                 <span ng-if="current.data.decisions.length">
     				<dt>Related decisions</dt>
     				<dd ng-repeat="item in current.data.decisions">
