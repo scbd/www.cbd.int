@@ -55,7 +55,6 @@ define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view
         }).then(function(res){
 
             $scope.decision = decision = res.data;
-            loadRelatedDecisions(decision.code);
 
             var link     = $compile(decision.content);
             var content  = link($scope);
@@ -90,7 +89,11 @@ define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view
         }).then(function(){
 
             if(!$scope.current)
-                throw { code : 'notFoud', message : "Paragraph not found" };
+                throw { code : 'notFound', message : "Paragraph not found" };
+
+            loadRelatedDecisions($scope.current.data.code).then(function(results){
+                $scope.current.data.decisions = _.union($scope.current.data.decisions||[], results);
+            });  
 
             scrollTo($scope.$root.hiddenHash || $location.hash());
 
@@ -154,19 +157,23 @@ define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view
             return parseInt(val);
         }
 
+        //========================================
+        //
+        //
+        //========================================
         function loadRelatedDecisions(code){
 
-            var slashWithDot = code.replace(/(\w+\/\w+\/\w+\/\w+)\/(.+)/, '$1.$2');
-            var dotWithSlash = code.replace(/(\w+\/\w+\/\w+\/\w+)\/(.+)/, '$1.$2');
+            var WithDot   = code.replace(/(\w+\/\w+\/\w+\/\w+)\/(.+)/, '$1.$2');
+            var WithSlash = code.replace(/(\w+\/\w+\/\w+\/\w+)\.(.+)/, '$1/$2');
 
             var qs = {
-                q : { "decisions" : { "$in" : [slashWithDot, dotWithSlash]} },
+                q : { "decisions" : { "$in" : [WithDot, WithSlash]} },
                 f : { "code":1 }
-            }
-            return $http.get('/api/v2016/decision-texts/search',  { params : qs} )
-                .then(function(result){
-                    console.log(result)
-                });
+            };
+
+            return $http.get('/api/v2016/decision-texts/search',  { params : qs} ).then(function(res){
+                return _.map(res.data, 'code');
+            });
         }
 
         $scope.term = function(code){

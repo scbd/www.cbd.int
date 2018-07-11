@@ -1,5 +1,5 @@
 define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', 
-'./view-element', 'directives/meetings/documents/document-files', 
+'./view-element', 'directives/meetings/documents/document-files', './directives/decision-reference', 
 './directives/meeting','filters/term'], function(app, _, ng) { 'use strict';
 
     return ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', 'user', '$filter',
@@ -66,7 +66,9 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css',
 
             updateSums();
 
-
+            loadRelatedDecisions($scope.decision.code).then(function(results){
+                $scope.decision.decisions = _.union($scope.decision.decisions||[], results);
+            });  
 
             return $http.get('/api/v2013/index', { params: { q : 'schema_s:(decision recommendation) AND treaty_s:'+decision.treaty + ' AND body_s:'+decision.body + ' AND session_i:'+decision.session + ' AND decision_i:'+decision.decision, fl: 'id,symbol_s,schema_s,position_i,meeting_ss,title_*, description_*,file_ss,url_ss', rows:999 } });
 
@@ -103,6 +105,25 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css',
             $scope.error = (err||{}).data || err;
             console.error($scope.error);
         });
+
+        //========================================
+        //
+        //
+        //========================================
+        function loadRelatedDecisions(code){
+
+            var WithDot   = code.replace(/(\w+\/\w+\/\w+\/\w+)\/(.+)/, '$1.$2');
+            var WithSlash = code.replace(/(\w+\/\w+\/\w+\/\w+)\.(.+)/, '$1/$2');
+
+            var qs = {
+                q : { "decisions" : { "$in" : [WithDot, WithSlash]} },
+                f : { "code":1 }
+            };
+
+            return $http.get('/api/v2016/decision-texts/search',  { params : qs} ).then(function(res){
+                return _.map(res.data, 'code');
+            });
+        }        
 
         //==============================
         //
