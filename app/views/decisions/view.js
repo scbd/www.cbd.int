@@ -35,7 +35,7 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css',
         $scope.actorCounts   = { };
         $scope.actors        = [];
 
-        ng.element("#decision-meta").affix({ offset: { top: 295, bottom:350 } });
+     //   ng.element("#decision-meta").affix({ offset: { top: 295, bottom:350 } });
 
         //==============================
         //
