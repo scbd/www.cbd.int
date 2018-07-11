@@ -106,7 +106,19 @@
                         </div>
                     </dd>
                 </span>
-				<br>
+
+                <span ng-if="decision.decisions.length">
+    				<dt>Related decisions</dt>
+    				<dd ng-repeat="item in decision.decisions | orderBy">
+                        <div class="panel panel-default" style="margin-bottom:4px">
+                            <div class="panel-body" style="padding:12px;font-size:0.9em">
+                                <decision-reference symbol="item"></decision-reference>
+                            </div>
+                        </div>
+                    </dd>
+    				<br>
+				</span>
+								
 			</dl>
             </div>
 		</div>
