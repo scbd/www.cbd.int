@@ -212,30 +212,6 @@
     <p class="help-block desc">Must be a registered business, such as a media organization, and have a specific, verifiable non-web address and a telephone number.<br><br>&nbsp;</p>
   </div>
 </section>
-<section ng-if="participationCtrl.mediumHas('Other online media')">
-  <div class="col-xs-2">
-    <div class="checkbox">
-       <label>
-         <input ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.otherOnlineMedia"> <b>Registered business and contact info</b></b>
-       </label>
-     </div>
-  </div>
-  <div class="col-xs-10">
-    <p class="help-block desc">Must be a registered business, such as a media organization, and have a specific, verifiable non-web address and a telephone number.<br><br>&nbsp;</p>
-  </div>
-</section>
-<section ng-if="participationCtrl.mediumHas('Blog')">
-  <div class="col-xs-2">
-    <div class="checkbox">
-       <label>
-         <input ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.blog"> <b>Registered business and contact info</b></b>
-       </label>
-     </div>
-  </div>
-  <div class="col-xs-10">
-    <p class="help-block desc">Must be a registered business, such as a media organization, and have a specific, verifiable non-web address and a telephone number.<br><br>&nbsp;</p>
-  </div>
-</section>
 <section ng-if="participationCtrl.mediumHas('Online journal')">
   <div class="col-xs-2">
     <div class="checkbox">
