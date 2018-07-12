@@ -180,6 +180,8 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         initStepsContacts()
       if(_ctrl.step==='participants')
         initStepsParticipants()
+
+      window.scroll(0, 0)
     }
 
     function initStepRequest(){
