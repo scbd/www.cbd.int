@@ -591,8 +591,10 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     function submit (){
       $http.put('/api/v2018/kronos/participation-requests/'+encodeURIComponent(_ctrl.doc._id)+'/submit',_ctrl.doc)
       .then(function(){
+        $scope.$emit('showSuccess', 'Participant(s) Saved and Request Submitted');
         changeStep('finished')
       }).catch(function(err){
+        _ctrl.error=err
         console.error(err)
       })
     }
