@@ -14,7 +14,9 @@ define(['app', 'text!./user-messages.html'], function(app, html) { 'use strict';
         var messages = [
           {title:'Saved', description:'Your data was successfully saved.', state:'success'},
           {title:'Manditory', description:'', state:'warning'},
-          {code:"NO_SERVICE", title:'Service not available', description:'Service is not avialibale at {{config.url}}', state:'danger'}
+          {code:"NO_SERVICE", title:'Service not available', description:'Service is not avialibale at {{config.method}} {{config.url}}', state:'danger'},
+          {code:"NOT_FOUND", title:'Service not available or document was not found', description:'Service is not avialibale or not found  at {{config.url}}', state:'danger'},
+          {code:"INVALID_SCHEMA", title:'The data passed to the server is not in the required format.', description:'Please contact the SCBD IT unit to report this error.  it@cbd.int <pre>{{data |json}}</pre>', state:'danger'}
         ]
 
 
@@ -23,6 +25,15 @@ define(['app', 'text!./user-messages.html'], function(app, html) { 'use strict';
 
             if($scope.error.status==-1)
               createMsg('NO_SERVICE',$scope.error)
+
+            if($scope.error.status==502)
+              createMsg('NO_SERVICE',$scope.error)
+
+            if($scope.error.status==404)
+              createMsg('NOT_FOUND',$scope.error)
+
+            if($scope.error.status==400)
+                createMsg('INVALID_SCHEMA',$scope.error)
         })
 
         function remove(i){
@@ -45,6 +56,8 @@ define(['app', 'text!./user-messages.html'], function(app, html) { 'use strict';
 
           if(!Array.isArray($scope.msg))$scope.msg=[]
           $scope.msg.push(msgTemplate)
+
+          $scope.$emit('showError',msgTemplate.title)
         }
 
 			}

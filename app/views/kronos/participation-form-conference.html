@@ -5,7 +5,7 @@
   <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
   <div class="col-xs-4">
     <div class="form-group">
-      <label for="conference">Select your conference</label>
+      <label for="conference">Conference</label>
       <select
         id="conference"
         class="form-control"
@@ -17,7 +17,7 @@
   </div>
   <div class="col-xs-12">
     <div class="form-group">
-      <label for="meeting">Choose your accreditation type</label>
+      <label for="meeting">Accreditation type</label>
       <p>
         <button ng-click="participationCtrl.saveConference('observer')" ng-disabled="true" type="button" class="btn btn-primary btn-lg">Observer</button>
         <button ng-click="participationCtrl.saveConference('media')" ng-disabled="!participationCtrl.conferenceId" type="button" class="btn btn-primary btn-lg">Media</button>

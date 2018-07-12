@@ -6,9 +6,8 @@
     </style>
 
     <div class="col-xs-12 ">
-      <h2>Organization Information</h2>
+      <h2>Organization</h2>
     </div>
-
     <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
     <form  name="editForm"  novalidate>
       <div class="col-xs-12 ">
@@ -31,7 +30,7 @@
             </div>
             <div class="col-md-6" ng-if="participationCtrl.type==='media'">
               <div class="form-group" ng-class="{'has-error': (!participationCtrl.organization.type && (editForm.type.$touched || editForm.$submitted)) }">
-                <label class="control-label" for="type" >Type</label>
+                <label class="control-label" for="type" >Sector</label>
                 <select
                   id="type"
                   name="type"
@@ -45,7 +44,7 @@
             </div>
             <div class="col-md-6" ng-if="participationCtrl.type==='media'">
               <div class="form-group" ng-class="{'has-error': (!participationCtrl.organization.medium && (editForm.medium.$touched || editForm.$submitted)) }">
-                <label class="control-label" for="medium">Medium</label>
+                <label class="control-label" for="medium">Type of media</label>
                 <select
                   multiple
                   required
@@ -74,7 +73,7 @@
       </div>
 
       <div class="col-xs-12 ">
-        <label>Communication</label>
+        <label>Contact</label>
         <div class="panel panel-default">
           <div class="panel-body">
 
@@ -129,7 +128,7 @@
         </div>
 
       <div class="col-xs-12" ng-show="participationCtrl.type==='media'">
-        <label>Media Requirements</label>
+        <label>File Uploads</label>
         <div class="panel panel-default">
           <div class="panel-body">
               <div class="col-md-6">
@@ -143,6 +142,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="control-label" for="attachments">Attachments</label>
+                  <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Any other related files you would like to submit." help></i></label>
                 </div>
                 <file-drop  multiple class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({container:participationCtrl.organization},file,error)" ng-model="participationCtrl.attachment"  class="form-control" id="attachments" ></file-drop>
                 <p ng-repeat="att in participationCtrl.organization.attachment track by $index" ng-if="!att.tag">
@@ -190,7 +190,7 @@
     </div>
     <div class="col-xs-12">
         <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
-      <button ng-click="participationCtrl.changeStep('checklist')" ng-disabled="false" type="button" class="btn btn-default">Previos</button>
+      <button ng-click="participationCtrl.changeStep('checklist')" ng-disabled="false" type="button" class="btn btn-default">Previous</button>
       <button ng-click="participationCtrl.saveOrganization()" ng-disabled="editForm.$invalid" type="button" class="btn btn-success pull-right">Next</button>
     </div>
 </section>

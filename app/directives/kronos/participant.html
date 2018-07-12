@@ -170,7 +170,7 @@
           <p ng-show="!binding.passportNumber && (editForm.passportNumber.$touched || editForm.$submitted)" class="text-danger small">Passport number is required.</p>
         </div>
       </div>
-      <div class="col-md-6" ng-if="binding.meeting.length">
+      <div class="col-md-6" ng-show="binding.meeting.length">
         <div class="form-group">
           <label class="control-label" for="organizationName">Organization name <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="(if different from nominating organization)" help></i> </label>
           <input ng-model="binding.organizationName" type="text" class="form-control" id="organizationName" >
@@ -181,7 +181,7 @@
   </div>
 
   <div class="col-xs-12 ">
-    <label>Communication</label>
+    <label>Contact</label>
     <div class="panel panel-default">
       <div class="panel-body">
 
@@ -255,7 +255,7 @@
   </div>
 </div>
 <div class="col-xs-12" >
-  <label>Attachments</label>
+  <label>Attachments <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Any other files you would like to submit to support your request" help></i></label>
   <div class="panel panel-default">
     <div class="panel-body">
       <div class="col-md-12">
@@ -269,7 +269,7 @@
     </div>
   </div>
 </div>
-<section ng-if="binding.meeting.length">
+<section ng-show="binding.meeting.length">
 
 
       <div class="col-xs-12" >
@@ -279,7 +279,7 @@
               <div class="col-md-6" ng-class="{'has-error': (!binding.phoneDuringMeeting && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)) }">
                 <div class="form-group">
                   <label class="control-label" for="phoneDuringMeeting">Phone <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Phone number you can be reached during the meeting." help></i></label>
-                  <input required ng-model="binding.phoneDuringMeeting" type="text" class="form-control" id="phoneDuringMeeting" name="phoneDuringMeeting">
+                  <input ng-if="binding.meeting.length" required ng-model="binding.phoneDuringMeeting" type="text" class="form-control" id="phoneDuringMeeting" name="phoneDuringMeeting">
                   <p ng-show="!binding.phoneDuringMeeting && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)" class="help-block text-danger small">Phone during meeting is required.</p>
                 </div>
               </div>
@@ -297,7 +297,7 @@
         <label>Media Requirements</label>
         <div class="panel panel-default">
             <div class="panel-body">
-                <div class="col-md-6" ng-if="isMedia('Print')">
+                <div class="col-md-6" ng-show="isMedia('Print')">
                     <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'byLineArticleOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)) }">
                         <label class="control-label" for="byLineArticleOne">Bylined article one <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A Bylined article dated within the past four months" help></i></label>
                     </div>
@@ -306,7 +306,7 @@
                     <p ng-show="(!findAttachement(binding.attachment,'byLineArticleOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="text-danger small">Bylined article one  is required.</p>
                 </div>
 
-                <div class="col-md-6" ng-if="isMedia('Print')">
+                <div class="col-md-6" ng-show="isMedia('Print')">
                     <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'byLineArticleTwo').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)) }">
                         <label class="control-label" for="byLineArticleTwo">Bylined article two <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A Bylined article dated within the past four months" help></i></label>
                       </div>
@@ -315,7 +315,7 @@
                     <p ng-show="(!findAttachement(binding.attachment,'byLineArticleTwo').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="text-danger small">Bylined article two  is required.</p>
                 </div>
 
-                <div class="col-md-6" ng-if="isMedia('Print')">
+                <div class="col-md-6" ng-show="isMedia('Print')">
                     <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'publicationCopy').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)) }">
                         <label class="control-label" for="publicationCopy">Publication copy <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A copy of the publication containing one of the bylined articles " help></i></label>
                       </div>
@@ -325,7 +325,7 @@
 
                 </div>
 
-                <div class="col-md-6" ng-if="isMedia('Radio') || isMedia('Television')">
+                <div class="col-md-6" ng-show="isMedia('Radio') || isMedia('Television')">
                     <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'reportRecordingOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)) }">
                         <label class="control-label" for="reportRecordingOne">Report recording one <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" title="A report recording dated within the past four months" help></i></label>
                       </div>
@@ -335,7 +335,7 @@
 
                 </div>
 
-                <div class="col-md-6" ng-if="isMedia('Radio') || isMedia('Television')">
+                <div class="col-md-6" ng-show="isMedia('Radio') || isMedia('Television')">
                     <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'reportRecordingTwo').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))}">
                         <label class="control-label" for="reportRecordingTwo">Report recording two <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A report recording dated within the past four months" help></i></label>
                       </div>
@@ -344,7 +344,7 @@
                     <p ng-show="(!findAttachement(binding.attachment,'reportRecordingTwo').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="text-danger small">Report recording two required.</p>
                 </div>
 
-                <div class="col-md-6" ng-if="isDesignation('Photographer')">
+                <div class="col-md-6" ng-show="isDesignation('Photographer')">
                     <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))}">
                         <label class="control-label" for="tearSheetOrPhotoOne">Tear sheet or photo <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
                       </div>
@@ -353,7 +353,7 @@
                     <p ng-show="(!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="text-danger small">Tear sheet or photo one is  required.</p>
                 </div>
 
-                <div class="col-md-6" ng-if="isDesignation('Photographer')">
+                <div class="col-md-6" ng-show="isDesignation('Photographer')">
                     <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))}">
                         <label class="control-label" for="tearSheetOrPhotoTwo">Tear sheet or photo <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
                       </div>

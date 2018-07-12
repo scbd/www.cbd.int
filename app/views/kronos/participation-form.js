@@ -47,6 +47,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.type               = $route.current.params.type
 
     //functions
+    _ctrl.save               = save
     _ctrl.changeStep         = changeStep
     _ctrl.conferenceSelected = conferenceSelected
     _ctrl.saveCheckList      = saveCheckList
@@ -59,7 +60,8 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.mediumHas          = mediumHas
     _ctrl.designationHas     = designationHas
     _ctrl.isStepComplete     = isStepComplete
-    _ctrl.saveContacts =saveContacts
+    _ctrl.saveContacts       = saveContacts
+    _ctrl.showChecklist      = showChecklist
 
     // options
     _ctrl.orgTypes           = orgTypes[_ctrl.type]
@@ -76,7 +78,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     //flags
     _ctrl.addContact              = false
-    _ctrl.showChecklist           = false
+
 
     //model inits
     _ctrl.doc                     = {}
@@ -105,7 +107,31 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     }
 
+    // function isChecklistComplete(){
+    //     participationCtrl.doc.list.freelance
+    //     participationCtrl.doc.list.onlineJournal
+    //     participationCtrl.doc.list.blog
+    //     participationCtrl.doc.list.otherOnlineMedia
+    //     participationCtrl.doc.list.online
+    //     participationCtrl.doc.list.photographer
+    //     participationCtrl.doc.list.radio
+    //     participationCtrl.doc.list.television
+    //     participationCtrl.doc.list.print
+    //     participationCtrl.doc.list.broadcastFilmLetter
+    //     participationCtrl.doc.list.accomidations
+    //     participationCtrl.doc.list.head
+    //     participationCtrl.doc.list.focalpoint
+    //     participationCtrl.doc.list.passport
+    //     participationCtrl.doc.list.pressPass
+    //     participationCtrl.doc.list.letterOfAssignment
+    //   }
 
+    function showChecklist(){
+      $scope.showChecklist=true;
+      _ctrl.save();
+      if(!_ctrl.doc.list)
+        _ctrl.doc.list={}
+    }
 
     function loadPresigned(url){
       var atts = _ctrl.organization.attachment
@@ -166,8 +192,10 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
     function initConference(){
       for(var i=0; i<_ctrl.conferences.length;i++)
-        if(_ctrl.conferences[i].code===_ctrl.conferenceCode)
-          _ctrl.conferenceId=_ctrl.conferences[i]._id
+        if(_ctrl.conferences[i].code===_ctrl.conferenceCode){
+          _ctrl.conferenceId   = _ctrl.conferences[i]._id
+          _ctrl.doc.conference = _ctrl.conferences[i]._id
+        }
     }
     function getConference(id){
       for(var i=0; i<_ctrl.conferences.length;i++)
@@ -377,8 +405,11 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
           _ctrl.doc.checklist=true
           _ctrl.doc.currentStep = 'organization'
         }
-        save().then(function(){
-          changeStep('organization')
+        save().then(function(isSaved){
+          if(isSaved){
+            $scope.$emit('showSuccess', 'Checklist saved');
+            changeStep('organization')
+          }
         })
 
     }
@@ -386,8 +417,11 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
         _ctrl.doc.currentStep = 'participants'
 
-        save().then(function(){
-          changeStep('participants')
+        save().then(function(isSaved){
+          if(isSaved){
+            $scope.$emit('showSuccess', 'Contacts saved');
+            changeStep('participants')
+          }
         })
 
     }
@@ -406,13 +440,18 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     function saveOrganization(){
       _ctrl.doc.currentStep = 'contacts'
       if(!_ctrl.organization._id)
-        return $http.post('/api/v2018/kronos/request/organizations',_ctrl.organization,{headers:{requestId:_ctrl.requestId,conferenceCode:_ctrl.conferenceCode}})
+        return $http.post('/api/v2018/kronos/participation-request/organizations',_ctrl.organization,{headers:{requestId:_ctrl.requestId,conferenceCode:_ctrl.conferenceCode}})
             .then(function(res){
               _ctrl.organization._id = res.data.id
               _ctrl.doc.nominatingOrganization = res.data.id
               save()
-                .then(function(){
-                  changeStep('contacts')
+                .then(function(isSaved){
+                  if(isSaved){
+                    $scope.$emit('showSuccess', 'Organization saved');
+                    changeStep('contacts')
+                  }
+
+
                 })
                 .catch(function(err){
                   _ctrl.error = err
@@ -427,8 +466,12 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
             .then(function(res){
               _ctrl.doc.nominatingOrganization = _ctrl.organization._id
               save()
-                .then(function(){
-                  changeStep('contacts')
+                .then(function(isSaved){
+                  if(isSaved){
+                    $scope.$emit('showSuccess', 'Organization saved');
+                    changeStep('contacts')
+                  }
+
                 })
                 .catch(function(err){
                   _ctrl.error = err
@@ -446,13 +489,22 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         return $http.post('/api/v2018/kronos/participation-requests',_ctrl.doc)
             .then(function(res){
               _ctrl.doc._id = res.data.id
-            }).catch(function(err){
+              return true
+            })
+            .catch(function(err){
+              _ctrl.error = err
     					console.error(err)
+              return false
     				})
       else
         return $http.put('/api/v2018/kronos/participation-requests/'+encodeURIComponent(_ctrl.doc._id),_ctrl.doc)
+            .then(function(res){
+              return true
+            })
             .catch(function(err){
+              _ctrl.error = err
               console.error(err)
+              return false
             })
 
     }
@@ -495,7 +547,8 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     _ctrl.onUpload=onUpload
     function onUpload (params, file, error){
-
+      if(error)
+        return _ctrl.error =error
       var exists = findAttachement(params.container.attachment,params.tag)
 
       if(!exists){

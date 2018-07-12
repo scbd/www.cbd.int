@@ -52,7 +52,7 @@
     <div ng-repeat="m in msg track by $index" class="bs-callout" ng-class="{ ['bs-callout-'+m.state]: m.state }">
       <i class="fa fa-times-circle pull-right" aria-hidden="true" ng-click="remove($index)"></i>
       <h4>{{m.title}}</h4>
-      <p>{{m.description}}</p>
+      <p ng-bind-html="m.description"></p>
     </div>
   </div>
 </section>
