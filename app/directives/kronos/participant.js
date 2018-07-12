@@ -77,12 +77,13 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         function save(){
           if($scope.binding && $scope.binding.meeting && !$scope.binding.meeting.length)
             delete($scope.binding.meeting)
-            
+
           if(!$scope.binding._id)
             return $http.post('/api/v2018/kronos/participation-request/participants',$scope.binding,{headers:{requestId:$scope.requestId,conferenceCode:$scope.conferenceCode}})
                 .then(function(res){
                   $scope.binding._id = res.data.id
                   $scope.showContact=false;
+                  $scope.$emit('showSuccess', 'Participant saved ');
                 }).catch(function(err){
                   $scope.error = err
                   console.error(err)
@@ -91,6 +92,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
             return $http.put('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent($scope.binding._id),$scope.binding,{headers:{requestId:$scope.requestId,conferenceCode:$scope.conferenceCode}})
                 .then(function(res){
                   $scope.showContact=false;
+                  $scope.$emit('showSuccess', 'Participant saved ');
                 })
                 .catch(function(err){
                   $scope.error = err
