@@ -1,11 +1,10 @@
 <section>
   <div class="col-xs-12">
-    <h2>Organization's Participants</h2>
+    <h2>Participant(s)</h2>
     <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
-    <div  ng-include="'/app/views/kronos/participation-form-org-header.html'"></div>
   </div>
   <div class="col-xs-12 " ng-if="!participationCtrl.addContact">
-    <h3>Participants       <button ng-if="!participationCtrl.addContact" ng-click="participationCtrl.activeParticipant={};participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Add Participant >></button>
+    <h3><button ng-if="!participationCtrl.addContact" ng-click="participationCtrl.activeParticipant={};participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Add Participant >></button>
     </h3>
     <div class="table-responsive">
       <table class="table table-condensed table-hover">
@@ -14,7 +13,7 @@
           <th>Position/Email</th>
           <th>&nbsp;</th>
         </tr>
-        <tr ng-repeat="p in participationCtrl.participants track by p._id">
+        <tr ng-repeat="p in participationCtrl.participants track by p._id" ng-if="p.meeting">
           <td >{{p.title}} {{p.firstName}} {{p.lastName}}</td>
           <td >
             <span ng-if="p.designation!=='Other'">{{p.designation}}<span ng-if="p.organizationName">,</span> {{p.organizationName}}<br></span>
@@ -32,6 +31,6 @@
 <div class="col-xs-12 " ng-if="!participationCtrl.addContact">
   <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
   <br>
-  <button ng-click="participationCtrl.changeStep('contacts')" ng-disabled="false" type="button" class="btn btn-default">Previos</button>
+  <button ng-click="participationCtrl.changeStep('contacts')" ng-disabled="false" type="button" class="btn btn-default">Previous</button>
   <button ng-click="participationCtrl.submit()" ng-disabled="false" type="button" class="btn btn-primary pull-right">Submit</button>
 </div>

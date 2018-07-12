@@ -37,11 +37,16 @@
   </style>
 
   <div class="col-xs-12" ng-if="participationCtrl.step!=='request'">
-
+    <div class="col-xs-12">
+      <h1>Media Accreditation Request</h1>
+    </div>
+    <div class="col-xs-10 col-xs-offset-1 text-center">
+      <h5>Steps and Progress</h5>
+    </div>
     <div class="col-xs-2 col-xs-offset-1 paddingless" ng-click="participationCtrl.changeStep('checklist')">
       <div id="myProgress">
         <div ng-class="{'incomplete':!participationCtrl.isStepComplete('checklist'),'complete':participationCtrl.isStepComplete('checklist')}">
-          Checklist
+          Requirements
         </div>
       </div>
     </div>
@@ -62,7 +67,7 @@
     <div class="col-xs-2 paddingless" ng-click="participationCtrl.changeStep('participants')">
       <div id="myProgress">
         <div ng-class="{'incomplete':!participationCtrl.isStepComplete('participants'),'complete':participationCtrl.isStepComplete('participants')}">
-          Participants
+          Participant(s)
         </div>
       </div>
     </div>
@@ -79,7 +84,8 @@
   <div  ng-include="participationCtrl.partialMap[participationCtrl.step]"></div>
 
   <div class="col-xs-12" ng-if="participationCtrl.step!=='request'">
-
+    <br>
+    <br>
     <div class="col-xs-2 col-xs-offset-1 paddingless" ng-click="participationCtrl.changeStep('checklist')">
       <div id="myProgress">
         <div ng-class="{'incomplete':!participationCtrl.isStepComplete('checklist'),'complete':participationCtrl.isStepComplete('checklist')}">
@@ -104,7 +110,7 @@
     <div class="col-xs-2 paddingless" ng-click="participationCtrl.changeStep('participants')">
       <div id="myProgress">
         <div ng-class="{'incomplete':!participationCtrl.isStepComplete('participants'),'complete':participationCtrl.isStepComplete('participants')}">
-          Participants
+          Participant(s)
         </div>
       </div>
     </div>
@@ -115,6 +121,8 @@
         </div>
       </div>
     </div>
-
+    <div class="col-xs-10 col-xs-offset-1 text-center">
+      <h5>Steps and Progress</h5>
+    </div>
   </div>
 </div>

@@ -38,9 +38,9 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
             if(!$scope.binding.attachment)$scope.binding.attachment=[]
 
 
-            $timeout(function(){$scope.$applyAsync(function(){
-              $("[help]").tooltip();
-            })},3000)
+            $timeout(function(){
+              $("[help]").tooltip()
+            },3000)
         })
         function redirect_blank(url) {
           var a = document.createElement('a');
@@ -75,7 +75,9 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         }
 
         function save(){
-
+          if($scope.binding && $scope.binding.meeting && !$scope.binding.meeting.length)
+            delete($scope.binding.meeting)
+            
           if(!$scope.binding._id)
             return $http.post('/api/v2018/kronos/participation-request/participants',$scope.binding,{headers:{requestId:$scope.requestId,conferenceCode:$scope.conferenceCode}})
                 .then(function(res){

@@ -1,11 +1,10 @@
 <section>
   <div class="col-xs-12">
-    <h2>Organization's Contacts</h2>
+    <h2>Contacts</h2>
     <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
-    <div  ng-include="'/app/views/kronos/participation-form-org-header.html'"></div>
+    <!-- <div  ng-include="'/app/views/kronos/participation-form-org-header.html'"></div> -->
   </div>
   <div class="col-xs-12 " ng-if="!participationCtrl.addContact">
-    <h3>Contacts</h3>
     <div class="table-responsive" >
       <table class="table table-condensed table-hover" >
         <tr>
@@ -42,10 +41,10 @@
 
     </div>
   </div>
-        <participant is-contact="true" request-id="participationCtrl.doc._id" conference-code="participationCtrl.conferenceCode" organization="participationCtrl.organization" ng-model="participationCtrl.activeParticipant" ng-show="participationCtrl.addContact" show-contact="participationCtrl.addContact" typee="participationCtrl.type"></participant>
+  <participant is-contact="true" request-id="participationCtrl.doc._id" conference-code="participationCtrl.conferenceCode" organization="participationCtrl.organization" ng-model="participationCtrl.activeParticipant" ng-show="participationCtrl.addContact" show-contact="participationCtrl.addContact" typee="participationCtrl.type"></participant>
   <div class="col-xs-12 " ng-if="!participationCtrl.addContact">
       <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
-    <button ng-click="participationCtrl.changeStep('organization')" ng-disabled="false" type="button" class="btn btn-default">Previos</button>
+    <button ng-click="participationCtrl.changeStep('organization')" ng-disabled="false" type="button" class="btn btn-default">Previous</button>
     <button ng-click="participationCtrl.saveContacts()" ng-disabled="!participationCtrl.hasHead() || !participationCtrl.hasFocalPoint()" type="button" class="btn btn-success pull-right">Next</button>
   </div>
 </section>
