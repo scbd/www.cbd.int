@@ -56,10 +56,16 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
             return $http.post('/api/v2018/kronos/participation-requests/'+encodeURIComponent(url)+'/sign').then(function(u){
               redirect_blank(u.data.signedUrl)
             })
+          if(isLocal(url))
+            redirect_blank(url.replace('http://localhost:8000','http://'+window.location.host))
           else
             redirect_blank(url)
         }
-
+        function isLocal(url){
+          if(~url.indexOf('http://localhost:8000'))
+            return true
+          return false
+        }
         function isTemp(url){
           if(~url.indexOf('cbd.documents.temporary')||~url.indexOf('temporary-files'))
             return true
@@ -115,7 +121,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
           return false
         }
         function isDesignation(designation){
-          if($scope.organization.designation === designation)
+          if($scope.binding.designation === designation)
               return true
           return false
         }

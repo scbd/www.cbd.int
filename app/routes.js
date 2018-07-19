@@ -241,15 +241,11 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
     function registerRoutes_participation(routeProvider) {
 
         $("base").attr('href', '/participation/'); // allow full page reload outside of  /insession/*
-
         routeProvider
+        .when('/2018/media'   ,{redirectTo: '/2018/media/checklist'})
         .when('/:conference/:type/:step'   ,{ templateUrl : 'views/kronos/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
-      //  .when('/:conference/observer/:step',{ templateUrl : 'views/kronos/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
         .when('/:step',{ templateUrl : 'views/kronos/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
-        // .when('/media/:meeting',     { templateUrl : 'views/kronos/media.html', resolveController : true,controllerAs: 'mediaRequestCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
-        // .when('/observer/:meeting',  { templateUrl : 'views/kronos/observer.html', resolveController : true,controllerAs: 'observerRequestCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
-        // .when('/observer/:meeting',  { templateUrl : 'views/kronos/observer.html', resolveController : true,controllerAs: 'observerRequestCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
-      //  .otherwise({redirectTo: '/404'});
+        .otherwise({redirectTo: '/404'});
     }
 
     //============================================================

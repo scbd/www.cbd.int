@@ -32,5 +32,5 @@
   <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
   <br>
   <button ng-click="participationCtrl.changeStep('contacts')" ng-disabled="false" type="button" class="btn btn-default">Previous</button>
-  <button ng-click="participationCtrl.submit()" ng-disabled="false" type="button" class="btn btn-primary pull-right">Submit</button>
+  <button ng-click="participationCtrl.submit()" ng-disabled="!participationCtrl.numParticipants()" type="button" class="btn btn-primary pull-right">Submit</button>
 </div>

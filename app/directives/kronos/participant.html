@@ -262,7 +262,7 @@
         <file-drop multiple class="xs" style="height:90px;" on-upload="onUpload({container:binding},file,error)"
           ng-model="attachment" class="form-control" id="attachments"></file-drop>
         <p ng-repeat="att in binding.attachment track by $index" ng-if="!att.tag">
-          <a ng-click="getPresigned(findAttachement(binding.attachment,'byLineArticleOne').url)" ng-href="#">{{att.title}}</a>
+          <a ng-click="getPresigned(att.url)" ng-href="#">{{att.title}}</a>
           <i ng-show="att.url"  class="fa fa-times-circle-o pointer" ng-click="removeAttachement(att)"></i>
         </p>
       </div>
@@ -293,8 +293,8 @@
         </div>
       </div>
 
-      <div class="col-xs-12" >
-        <label>Media Requirements</label>
+      <div class="col-xs-12" ng-if="isMedia('Print') || isMedia('Radio') || isMedia('Television') || isDesignation('Photographer')">
+        <label>Media Requirements </label>
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="col-md-6" ng-show="isMedia('Print')">
@@ -348,7 +348,7 @@
                     <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))}">
                         <label class="control-label" for="tearSheetOrPhotoOne">Tear sheet or photo <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
                       </div>
-                    <file-drop danger="(!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" lass="xs" style="height:90px;" on-upload="onUpload({tag:'tearSheetOrPhotoOne',container:binding},file,error)" ng-model="tearSheetOrPhotoOne"  class="form-control" id="tearSheetOrPhotoOne" ></file-drop>
+                    <file-drop danger="(!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'tearSheetOrPhotoOne',container:binding},file,error)" ng-model="tearSheetOrPhotoOne"  class="form-control" id="tearSheetOrPhotoOne" ></file-drop>
                     <p><a ng-click="getPresigned(findAttachement(binding.attachment,'tearSheetOrPhotoOne').url)" ng-href="#">{{findAttachement(binding.attachment,'tearSheetOrPhotoOne').title}}</a> <i ng-show="findAttachement(binding.attachment,'tearSheetOrPhotoOne')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'tearSheetOrPhotoOne'))"></i></p>
                     <p ng-show="(!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="text-danger small">Tear sheet or photo one is  required.</p>
                 </div>

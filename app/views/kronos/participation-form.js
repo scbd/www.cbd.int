@@ -62,6 +62,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.isStepComplete     = isStepComplete
     _ctrl.saveContacts       = saveContacts
     _ctrl.showChecklist      = showChecklist
+_ctrl.numParticipants =numParticipants
 
     // options
     _ctrl.orgTypes           = orgTypes[_ctrl.type]
@@ -125,6 +126,14 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     //     participationCtrl.doc.list.pressPass
     //     participationCtrl.doc.list.letterOfAssignment
     //   }
+
+    function numParticipants(){
+      var count =0
+      for (var i = 0; i < _ctrl.participants; i++)
+        if(_ctrl.participants[0].meeting && _ctrl.participants[0].meeting.length)
+          count++
+      return count
+    }
 
     function showChecklist(){
       $scope.showChecklist=true;
@@ -392,14 +401,19 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
               _ctrl.error = err
               console.error(err)
             })
+      return new Promise(function(resolve){resolve(false)})
     }
 
     function changeStep(step,type){
       if(type==='request')$location.url('/'+step)
+
+if(!isStepComplete(step)) return
+
       if(type)
         $location.url('/'+_ctrl.conferenceCode+'/'+type+'/'+step)
       else
         $location.url('/'+_ctrl.conferenceCode+'/'+_ctrl.type+'/'+step)
+
     }
 
     function saveCheckList(){
