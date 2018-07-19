@@ -132,23 +132,26 @@
         <div class="panel panel-default">
           <div class="panel-body">
               <div class="col-md-6">
-                <div class="form-group">
+                <div class="form-group" ng-class="{'has-error': (!participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url && (editForm.language.$touched || editForm.$submitted || participationCtrl.organization.language)) }">
                   <label class="control-label" for="letterOfAssignment">Letter of assignment</label>
-                </div>
-                <file-drop metadata="participationCtrl.genMeta()" class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({tag:'letterOfAssignment',container:participationCtrl.organization},file,error)" ng-model="participationCtrl.letterOfAssignment"  class="form-control" id="letterOfAssignment" ></file-drop>
-                <p><a ng-click="participationCtrl.getPresigned(participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url)" ng-href="#">{{participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').title}}</a>
+
+                  <file-drop danger="(!participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url && (editForm.language.$touched || editForm.$submitted || participationCtrl.organization.language))" metadata="participationCtrl.genMeta()" class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({tag:'letterOfAssignment',container:participationCtrl.organization},file,error)" ng-model="participationCtrl.letterOfAssignment"  class="form-control" id="letterOfAssignment" ></file-drop>
+                  <p><a ng-click="participationCtrl.getPresigned(participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url)" ng-href="#">{{participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').title}}</a>
                   <i ng-show="participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment')"  class="fa fa-times-circle-o pointer" ng-click="participationCtrl.removeAttachement(participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment'))"></i></p>
+                  <p ng-show="(!participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url && (editForm.language.$touched || editForm.$submitted || participationCtrl.organization.language))" class="text-danger small">Assignment leter is required.</p>
+                </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="control-label" for="attachments">Attachments</label>
-                  <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Any other related files you would like to submit." help></i></label>
-                </div>
+                  <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Any other related files you would like to submit." help></i>
+
                 <file-drop  multiple class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({container:participationCtrl.organization},file,error)" ng-model="participationCtrl.attachment"  class="form-control" id="attachments" ></file-drop>
                 <p ng-repeat="att in participationCtrl.organization.attachment track by $index" ng-if="!att.tag">
                   <a  ng-click="participationCtrl.getPresigned(att.url)" ng-href="#">{{att.title}}</a>
                     <i ng-show="att.url"  class="fa fa-times-circle-o pointer" ng-click="participationCtrl.removeAttachement(att.url)"></i>
                 </p>
+                  </div>
               </div>
             </div>
           </div>
@@ -191,6 +194,6 @@
     <div class="col-xs-12">
         <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
       <button ng-click="participationCtrl.changeStep('checklist')" ng-disabled="false" type="button" class="btn btn-default">Previous</button>
-      <button ng-click="participationCtrl.saveOrganization()" ng-disabled="editForm.$invalid" type="button" class="btn btn-success pull-right">Next</button>
+      <button ng-click="participationCtrl.saveOrganization()" ng-disabled="editForm.$invalid || !participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment')" type="button" class="btn btn-success pull-right">Next</button>
     </div>
 </section>
