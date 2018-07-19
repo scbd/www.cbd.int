@@ -131,7 +131,7 @@
           <div class="form-group" ng-class="{'has-error': (!binding.nationality && (editForm.nationality.$touched || editForm.$submitted)) }">
             <label class="control-label" for="nationality">Citizenship</label>
             <select ng-disable="useOrgs"
-              required 
+              ng-required="binding.meeting.length"
               id="nationality"
               name="nationality"
               class="form-control"
