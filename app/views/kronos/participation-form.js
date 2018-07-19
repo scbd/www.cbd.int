@@ -108,24 +108,6 @@ _ctrl.numParticipants =numParticipants
 
     }
 
-    // function isChecklistComplete(){
-    //     participationCtrl.doc.list.freelance
-    //     participationCtrl.doc.list.onlineJournal
-    //     participationCtrl.doc.list.blog
-    //     participationCtrl.doc.list.otherOnlineMedia
-    //     participationCtrl.doc.list.online
-    //     participationCtrl.doc.list.photographer
-    //     participationCtrl.doc.list.radio
-    //     participationCtrl.doc.list.television
-    //     participationCtrl.doc.list.print
-    //     participationCtrl.doc.list.broadcastFilmLetter
-    //     participationCtrl.doc.list.accomidations
-    //     participationCtrl.doc.list.head
-    //     participationCtrl.doc.list.focalpoint
-    //     participationCtrl.doc.list.passport
-    //     participationCtrl.doc.list.pressPass
-    //     participationCtrl.doc.list.letterOfAssignment
-    //   }
 
     function numParticipants(){
       var count = 0
