@@ -128,9 +128,9 @@ _ctrl.numParticipants =numParticipants
     //   }
 
     function numParticipants(){
-      var count =0
+      var count = 0
       for (var i = 0; i < _ctrl.participants; i++)
-        if(_ctrl.participants[0].meeting && _ctrl.participants[0].meeting.length)
+        if(_ctrl.participants[i].meeting && _ctrl.participants[i].meeting.length)
           count++
       return count
     }
