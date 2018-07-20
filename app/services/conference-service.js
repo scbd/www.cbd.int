@@ -3,15 +3,16 @@
     app.factory("conferenceService", ['$http', '$rootScope', '$q', '$timeout', '$filter', '$route',
     function ($http, $rootScope, $q, $timeout, $filter, $route) {
             var meeting
-            var conferenceArticle;
-            
-            function getActiveConference(){
+
+            function getActiveConference(code){
 
                 if(meeting){
                     return $q.when(meeting);
                 }
                 var query = {};
-                if($route.current && $route.current.params && $route.current.params.code){
+                if(code)
+                    query.code = code;
+                else if($route.current && $route.current.params && $route.current.params.code){
                     query.code = $route.current.params.code;
                 }
                 else
@@ -83,22 +84,9 @@
               )
             }
 
-            function getConferenceArticle(articleId){
-
-                if(conferenceArticle){
-                    return $q.when(conferenceArticle);
-                }
-                return conferenceArticle =  $q.when($http.get('/api/v2017/articles/' + articleId, {cache:true}))
-                                                .then(function(data){
-                                                    return article = data.data;
-                                                });
-
-            }
             return {
                 getMeetings             : getMeetings,
                 getFuture               : getFuture,
-                getActiveConference     : getActiveConference,
-                getConferenceArticle    : getConferenceArticle,
                 getConference           : getConference,
                 getActiveConference     : getActiveConference
             }

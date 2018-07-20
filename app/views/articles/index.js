@@ -17,10 +17,31 @@ return ['$location','$scope','$timeout', '$route', '$sce', '$q', 'articleService
                 return url.replace(/attachments\.cbd\.int\//, '$&'+size+'/')
             }
 
+            function loadArticle(){
+                var ag = [];
+                var match = {
+                    $and:[
+                        {"customTags.title.en":encodeURIComponent($route.current.params.code)},
+                        {"customTags.title.en":encodeURIComponent($route.current.params.articleTag)}
+                    ]
+                }
+                ag.push({"$match"   : match });
+                ag.push({"$project" : { title:1, content:1, coverImage:1}});
+                ag.push({"$sort"    : { "meta.updatedOn":-1}});
+                ag.push({"$limit"   : 1 });
 
-            $q.when(articleService.getArticle($route.current.params.articleId))
-            .then(function(article){
-                $scope.article = article
-            })
+                $q.when(articleService.query({ "ag" : JSON.stringify(ag) }))
+                .then(function(article){
+                    if(article.length ==0 )
+                        $scope.article = {
+                            content : { en : 'No information is available for this link'}
+                        }
+                    else
+                        $scope.article = article[0];
+                });
+            }
+
+            loadArticle();
+
     }];
 });
