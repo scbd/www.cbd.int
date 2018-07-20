@@ -3,7 +3,8 @@
     app.factory("conferenceService", ['$http', '$rootScope', '$q', '$timeout', '$filter', '$route',
     function ($http, $rootScope, $q, $timeout, $filter, $route) {
             var meeting
-
+            var conferenceArticle;
+            
             function getActiveConference(){
 
                 if(meeting){
