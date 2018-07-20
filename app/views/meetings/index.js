@@ -19,7 +19,7 @@ return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', 
                     }, 500)
                 }
                 else{
-                    $q.when(articleService.getArticle(meeting.conference.articleId))
+                    $q.when(articleService.get(meeting.conference.articleId))
                     .then(function(article){
                         $scope.meeting.conference.article = article
                     })
