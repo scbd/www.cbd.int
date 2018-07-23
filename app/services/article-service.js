@@ -4,7 +4,7 @@
 
             function query(qs){
                 
-                return $q.when($http.get('http://localhost:8000/api/v2017/articles', { params: qs, cache:true}))
+                return $q.when($http.get('/api/v2017/articles', { params: qs, cache:true}))
                         .then(function(data){
                             return data.data;
                         });
