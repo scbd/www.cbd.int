@@ -21,8 +21,8 @@ return ['$location','$scope','$timeout', '$route', '$sce', '$q', 'articleService
                 var ag = [];
                 var match = {
                     $and:[
-                        {"customTags.title.en":encodeURIComponent($route.current.params.code)},
-                        {"customTags.title.en":encodeURIComponent($route.current.params.articleTag)}
+                        {"adminTags.title.en":encodeURIComponent($route.current.params.code)},
+                        {"adminTags.title.en":encodeURIComponent($route.current.params.articleTag)}
                     ]
                 }
                 ag.push({"$match"   : match });
