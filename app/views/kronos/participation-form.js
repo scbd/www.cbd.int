@@ -439,7 +439,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       if(_ctrl.editFormOrg && (_ctrl.editFormOrg.$invalid || !_ctrl.findAttachement(_ctrl.organization.attachment,'letterOfAssignment')))
       {
         _ctrl.editFormOrg.$submitted=true
-        return $scope.$emit('showSuccess', 'Your form has errors');
+        return $scope.$emit('showError', 'Your form has errors');
       }
 
       _ctrl.doc.currentStep = 'contacts'

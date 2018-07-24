@@ -87,7 +87,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         }
 
         function save(){
-          if($scope.editForm.$invalid) return $scope.$emit('showSuccess', 'You have errors in your form. ');
+          if($scope.editForm.$invalid) return $scope.$emit('showError', 'You have errors in your form. ');
           if($scope.binding && $scope.binding.meeting && !$scope.binding.meeting.length)
             delete($scope.binding.meeting)
 
