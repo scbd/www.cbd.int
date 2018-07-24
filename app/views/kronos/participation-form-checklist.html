@@ -1,0 +1,236 @@
+<div class="col-xs-12">
+
+<div class="col-xs-12 ">
+  <h2>Requirements</h2>
+</div>
+    <div class="col-xs-12">
+      <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
+      <br>
+      <p>Media participation at CBD meetings is subject to accreditation by the CBD Secretariat.
+         Accreditation is strictly reserved for members of the press who represent a bona fide media organization.
+         Accreditation will be granted upon meeting the requirements.  Requirements differ based on type of media and the job titles/roles.
+      </p>
+    </div>
+    <div class="col-xs-12">
+      <label>Generate Requirements</label>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <form  name="editForm"  novalidate>
+            <div class="col-md-6" >
+              <div class="form-group" ng-class="{'has-error': (!participationCtrl.doc.medium && (editForm.medium.$touched || editForm.$submitted)) }">
+                <select
+                  size="12"
+                  multiple
+                  required
+                  name='medium'
+                  id="medium"
+                  class="form-control"
+                  ng-model="participationCtrl.doc.medium"
+                  >
+                    <option ng-repeat="option in participationCtrl.orgMediums" ng-value="option.identifier" ng-if="option.identifier!=='Other'">{{option.title}}</option>
+                  </select>
+                  <p ng-show="!participationCtrl.doc.medium && (editForm.medium.$touched || editForm.$submitted)" class="help-block text-danger small">medium is required.</p>
+              </div>
+            </div>
+            <div class="col-md-6" >
+              <div class="form-group" ng-class="{'has-error': (!participationCtrl.doc.designation && (editForm.designation.$touched || editForm.$submitted)) }">
+                <select size="7" required ng-model="participationCtrl.doc.designation" class="form-control" id="designation" name="designation" multiple>
+
+                  <option value="Photographer">Photographer</option>
+                  <option value="Reporter">Reporter</option>
+                  <option value="Correspondent">Correspondent</option>
+                  <option value="Editor">Editor</option>
+                  <option value="Producer">Producer</option>
+                  <option value="Technician">Technician</option>
+                </select>
+                <p ng-show="!participationCtrl.doc.designation && (editForm.designation.$touched || editForm.$submitted)" class="help-block text-danger small">A job title is required.</p>
+
+              </div>
+            </div>
+
+            <div class="col-xs-12 ">
+              <p class="text-danger" ng-if="participationCtrl.mediumHas('Online publication') || participationCtrl.mediumHas('Web publication') || participationCtrl.mediumHas('Other online media') || participationCtrl.mediumHas('Online journal')">Online publications which are communications outreach or advocacy publications of non-governmental or non-profit organizations do not qualify for media accreditation.</p>
+            </div>
+            <div class="col-xs-12 ">
+              <button ng-click="participationCtrl.showChecklist()" ng-disabled="!participationCtrl.doc.medium || !participationCtrl.doc.designation" type="button" class="btn btn-primary pull-right">Generate</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <section ng-show="showChecklist || participationCtrl.doc.checklist">
+      <div class="col-xs-12">
+        <h2>Requirements and preparation checklist</h2>
+        <p class="help-block desc " >Please ensure to have the following information and digital files ready for upload before proceeding.</p>
+      </div>
+  <form  name="editFormCheckList"  novalidate>
+      <div class="col-xs-2">
+        <div class="checkbox">
+           <label>
+             <input required ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.letterOfAssignment"> <b>Letter of assignment</b>
+           </label>
+         </div>
+      </div>
+      <div class="col-xs-10">
+        <p class="help-block desc">Digital copy on official letterhead of a media organization signed by the Publisher/Assignment Editor, Editor-in-chief or Bureau Chief, specifying the name and functional title of each person attending.  Unsigned letters or e-mails will not be accepted.</p>
+        <p ng-if="participationCtrl.mediumHas('Freelance journalist')" class="help-block desc">Freelance journalists can only obtain accreditation for a specific event or time period. Freelance journalists, including photographers, must provide clear evidence they are on assignment from a specific news organization or publication. A valid assignment letter from that news organization, or publication, is required.</p>
+      </div>
+      <div class="col-xs-2">
+        <div class="checkbox">
+           <label>
+             <input required ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.pressPass"> <b>Press card/work pass</b>
+           </label>
+        </div>
+      </div>
+      <div class="col-xs-10">
+        <p class="help-block desc">Digital copy of press card / work pass for each attending person.<br><br>&nbsp;</p>
+      </div>
+      <div class="col-xs-2">
+        <div class="checkbox">
+           <label>
+             <input required ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.passport"> <b>Passport/national ID card</b>
+           </label>
+         </div>
+      </div>
+      <div class="col-xs-10">
+        <p class="help-block desc">Digital copy of the passport/national ID card for each attending person.<br><br>&nbsp;</p>
+      </div>
+      <div class="col-xs-2">
+          <div class="checkbox">
+             <label>
+               <input required ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.focalpoint"> <b>Main contact information</b>
+             </label>
+           </div>
+      </div>
+      <div class="col-xs-10">
+        <p class="help-block desc">Contact information of the person designated as your organization’s main contact with the Secretariat of the UN Biodiversity Convention.<br><br>&nbsp;</p>
+      </div>
+      <div class="col-xs-2">
+          <div class="checkbox">
+             <label>
+               <input required ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.head"> <b>Head of organization</b>
+             </label>
+           </div>
+      </div>
+      <div class="col-xs-10">
+        <p class="help-block desc">Contact information of the person leading your organization.<br><br>&nbsp;</p>
+      </div>
+      <div class="col-xs-2">
+        <div class="checkbox">
+           <label>
+             <input required ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.accomidations"> <b>Address/contact while at meeting</b></b>
+           </label>
+         </div>
+      </div>
+
+        <div class="col-xs-10">
+          <p class="help-block desc">Address (if known) and phone number while at the meeting.<br><br>&nbsp;</p>
+        </div>
+      <section ng-if="participationCtrl.mediumHas('Independent broadcast or film production')">
+        <div class="col-xs-2">
+          <div class="checkbox">
+             <label>
+               <input required  ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.broadcastFilmLetter"> <b>Letter from a distributor or from a UN partner</b></b>
+             </label>
+           </div>
+        </div>
+        <div class="col-xs-10">
+          <p class="help-block desc">Letter from a broadcast organization or film distributor which has committed to air or distribute your film/broadcast work or from a United Nations partner organization that supports the production.<br><br>&nbsp;</p>
+        </div>
+      </section>
+      <section ng-if="participationCtrl.mediumHas('Print')">
+        <div class="col-xs-2">
+          <div class="checkbox">
+             <label>
+               <input required ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.print"> <b>Two bylined articles</b></b>
+             </label>
+           </div>
+        </div>
+        <div class="col-xs-10">
+          <p class="help-block desc">Two bylined articles within the past four months and a copy of the publication.<br><br>&nbsp;</p>
+        </div>
+      </section>
+<!--  -->
+<section ng-if="participationCtrl.mediumHas('Television') ">
+  <div class="col-xs-2">
+    <div class="checkbox">
+       <label>
+         <input required ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.television"> <b>Two television recordings</b></b>
+       </label>
+     </div>
+  </div>
+  <div class="col-xs-10">
+    <p class="help-block desc">Two television reports made within the past four months.<br><br>&nbsp;</p>
+  </div>
+</section>
+
+<section ng-if="participationCtrl.mediumHas('Radio')">
+  <div class="col-xs-2">
+    <div class="checkbox">
+       <label>
+         <input required ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.radio"> <b>Two radio recordings</b></b>
+       </label>
+     </div>
+  </div>
+  <div class="col-xs-10">
+    <p class="help-block desc">Two radio reports made within the past four months.<br><br>&nbsp;</p>
+  </div>
+</section>
+<section ng-if="participationCtrl.designationHas('Photographer') || participationCtrl.mediumHas('Photo/visual')">
+  <div class="col-xs-2">
+    <div class="checkbox">
+       <label>
+         <input required ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.photographer"> <b>Tear sheets or photos</b></b>
+       </label>
+     </div>
+  </div>
+  <div class="col-xs-10">
+    <p class="help-block desc">Photographers are required to submit original tear sheets or photos with credits of the issuing organization.<br><br>&nbsp;</p>
+  </div>
+</section>
+<section ng-if="participationCtrl.mediumHas('Online publication')">
+  <div class="col-xs-2">
+    <div class="checkbox">
+       <label>
+         <input required ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.online"> <b>Tear sheets or photos</b></b>
+       </label>
+     </div>
+  </div>
+  <div class="col-xs-10">
+    <p class="help-block desc">Photographers are required to submit original tear sheets or photos with credits of the issuing organization.<br><br>&nbsp;</p>
+  </div>
+</section>
+<section ng-if="participationCtrl.mediumHas('Web publication')">
+  <div class="col-xs-2">
+    <div class="checkbox">
+       <label>
+         <input required ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.webPub"> <b>Registered business and contact info</b></b>
+       </label>
+     </div>
+  </div>
+  <div class="col-xs-10">
+    <p class="help-block desc">Must be a registered business, such as a media organization, and have a specific, verifiable non-web address and a telephone number.<br><br>&nbsp;</p>
+  </div>
+</section>
+<section ng-if="participationCtrl.mediumHas('Online journal')">
+  <div class="col-xs-2">
+    <div class="checkbox">
+       <label>
+         <input required ng-change="participationCtrl.save()" type="checkbox" ng-model="participationCtrl.doc.list.onlineJournal"> <b>Substantial amount of content</b></b>
+       </label>
+     </div>
+  </div>
+  <div class="col-xs-10">
+    <p class="help-block desc">Must have a substantial amount of original news content or commentary or analysis on international issues.<br><br>&nbsp;</p>
+  </div>
+</form>
+</section>
+
+    <div class="col-xs-12 ">
+      <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
+      <button ng-click="participationCtrl.changeStep('request')" ng-disabled="false" type="button" class="btn btn-default">Previous</button>
+      <button ng-click="participationCtrl.saveCheckList()"  ng-disabled="!editFormCheckList.$valid" ng-disabled="false" type="button" class="btn btn-success pull-right">Next</button>
+    </div>
+  </section>
+
+</div>

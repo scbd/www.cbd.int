@@ -1,0 +1,65 @@
+<section>
+
+        <section >
+          <ng-form name="editForm">
+          <div class="col-md-2">
+            <div class="form-group" ng-class="{'has-error': (editForm.streetnumber.$invalid && (editForm.streetnumber.$touched || editForm.$submitted)) }">
+              <label class="control-label" for="title">Street number</label>
+              <input required ng-model="binding.streetNumber" type="text" class="form-control" id="streetnumber" name="streetnumber" >
+              <p ng-show="editForm.streetnumber.$invalid && (editForm.streetnumber.$touched || editForm.$submitted)" class="help-block text-danger">street number is required.</p>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="form-group" ng-class="{'has-error': (editForm.street.$invalid && (editForm.street.$touched || editForm.$submitted)) }">
+              <label class="control-label" for="title">Street</label>
+
+              <input required ng-model="binding.street"  type="text" class="form-control" id="street" name="street" >
+              <p ng-show="editForm.street.$invalid && (editForm.street.$touched || editForm.$submitted)" class="help-block text-danger">street is required.</p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-group">
+              <label class="control-label" for="title">Unit number</label>
+              <input  ng-model="binding.unitNumber" type="text" class="form-control" id="unitNumber" >
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group" ng-class="{'has-error': (editForm.locality.$invalid && (editForm.locality.$touched || editForm.$submitted)) }">
+              <label class="control-label" for="locality">Locality <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="City, town or villiage" help></i></label>
+              <input required ng-model="binding.locality"  type="text" class="form-control" id="locality" name="locality" >
+              <p ng-show="editForm.locality.$invalid && (editForm.locality.$touched || editForm.$submitted)" class="help-block text-danger">locality is required.</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label" for="title">State or province <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="First level administrative area within the country.  Usually province or state." help></i></label>
+              <input ng-model="binding.administrativeArea" type="text" class="form-control" id="administrativeArea" >
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="control-label" for="title">Postal/Zip Code </label>
+              <input  ng-model="binding.postalCode" type="text" class="form-control" id="postalCode" >
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group" ng-class="{'has-error': (editForm.country.$invalid && (editForm.country.$touched || editForm.$submitted)) }">
+              <label class="control-label" for="country">Country </label>
+              <select
+
+                required
+                id="country"
+                name="country"
+                class="form-control"
+
+                ng-model="binding.country"
+                >
+                <option ng-repeat="country in countries   track by country.code" ng-selected="!!(country.code===binding.country)" ng-value="country.code">{{country.name.en}}</option>
+              </select>
+              <p ng-show="editForm.country.$invalid && (editForm.country.$touched || editForm.$submitted)" class="help-block text-danger">country is required.</p>
+
+            </div>
+          </div>
+        </ng-form>
+        </section>
+</section>

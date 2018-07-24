@@ -38,6 +38,10 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         if(/^\/executive-secretary($|\/.*)/.test(locationPath))
             registerRoutes_esPages($routeProvider);
 
+        //es/*
+        if(/^\/participation($|\/.*)/.test(locationPath))
+            registerRoutes_participation($routeProvider);
+
         $routeProvider.when('/403', { templateUrl: '/app/views/403.html' });
         $routeProvider.when('/404', { templateUrl: '/app/views/404.html' });
     }
@@ -90,6 +94,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       .when('/2016/cp-mop-8/documents',     { redirectTo    : '/2016/mop-08/documents'})
 
       .when('/:code?',                      { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/:code/information/:articleTag',{ templateUrl   : 'views/articles/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences'] }) }, reloadOnSearch:false })
       .when('/:code/schedules',             { templateUrl   : 'views/meetings/documents/agenda.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting',              { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting/documents',    { templateUrl   : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
@@ -233,6 +238,18 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
     //============================================================
     //
+    //============================================================
+    function registerRoutes_participation(routeProvider) {
+
+        $("base").attr('href', '/participation/'); // allow full page reload outside of  /insession/*
+        routeProvider
+        .when('/2018/media'   ,{redirectTo: '/2018/media/checklist'})
+        .when('/:conference/:type/:step'   ,{ templateUrl : 'views/kronos/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
+        .when('/:step',{ templateUrl : 'views/kronos/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
+        .otherwise({redirectTo: '/404'});
+    }
+
+    //============================================================
     //
     //============================================================
     function currentUser() {
@@ -273,7 +290,6 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
             //============================================================
             //
-            //
             //============================================================
             function openDialog() {
                 $rootScope.redirectOnAuthMsg=false;
@@ -291,6 +307,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
                           $window.history.back();
                   });
             }
+
             //============================================================
             //
             //
@@ -307,7 +324,6 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         require(['directives/meetings/conference-header']);
 
         app.run(['$compile', '$rootScope', function($compile, $rootScope){
-            console.log('run from routes')
             require(['directives/meetings/conference-header'], function(){
                 var conferenceHeader = angular.element("#conferenceHeader");
                 conferenceHeader.css('display', 'block');

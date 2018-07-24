@@ -32,9 +32,11 @@
                 bottom: 0;
                 right: 0;
             }
-            .content{
-                padding-top:15px;
-                font-size:13px;
+
+            .content {
+                padding-top: 15px;
+                font-size: 13px;
+                text-align: justify;
             }
         </style>
         <div class="image-credit-wrapper">
@@ -42,5 +44,49 @@
             <img class="img-responsive" ng-src="{{::getSizedImage(meeting.conference.article.coverImage.url)}}">
         </div>
     </div>
-    <div ng-bind-html="trustedHtml(meeting.conference.article.content.en)" class="content"></div>
+    <div class="row">
+        <div class="col-lg-8 col-md-12 col-md-12 col-sm-12 col-xs-12">
+            <div ng-bind-html="trustedHtml(meeting.conference.article.content.en)" class="content"></div>
+        </div>
+        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="padding-top:15px;">
+            
+            <div class="col-lg-12 col-md-12 col-md-6 col-sm-12 col-xs-12">
+
+                <div class="panel panel-default">
+
+                    <div class="panel-body">
+                        <div class="text-center" style="margin-bottom:15px;">
+                            <a class="twitter-timeline tw-align-center" data-width="500" data-height="500" data-dnt="true" href="https://twitter.com/UNBiodiversity">
+                                Tweets by cbdnews</a>
+                        </div>
+                        <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-md-6 col-sm-12 col-xs-12">
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        <h5 class="smedia-title color-grey">
+                            <i class="fa fa-facebook-official fa-3" style="color:#3b5998;" aria-hidden="true"></i>
+                            UN Biodiversity on facebook
+                        </h5>
+                    </div>
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <div class="fb-page center-block" 
+                            data-href="https://www.facebook.com/UNBiodiversity/" 
+                            data-tabs="timeline,events,messages" data-small-header="false"  
+                            data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
+                                <blockquote cite="https://www.facebook.com/UNBiodiversity/" class="fb-xfbml-parse-ignore">
+                                    <a href="https://www.facebook.com/UNBiodiversity/">United Nations Biodiversity</a>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

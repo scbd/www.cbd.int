@@ -1,0 +1,36 @@
+<section>
+  <div class="col-xs-12">
+    <h2>Participant(s)</h2>
+    <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
+  </div>
+  <div class="col-xs-12 " ng-if="!participationCtrl.addContact">
+    <h3><button ng-if="!participationCtrl.addContact" ng-click="participationCtrl.activeParticipant={};participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Add Participant >></button>
+    </h3>
+    <div class="table-responsive">
+      <table class="table table-condensed table-hover">
+        <tr>
+          <th>Name</th>
+          <th>Position/Email</th>
+          <th>&nbsp;</th>
+        </tr>
+        <tr ng-repeat="p in participationCtrl.participants track by p._id" ng-if="p.meeting">
+          <td >{{p.title}} {{p.firstName}} {{p.lastName}}</td>
+          <td >
+            <span ng-if="p.designation!=='Other'">{{p.designation}}<span ng-if="p.organizationName">,</span> {{p.organizationName}}<br></span>
+            <span ng-if="p.designation==='Other'">{{p.designationOther}}<span ng-if="p.organizationName">,</span> {{p.organizationName}}<br></span>
+            <a ng-href="{{participationCtrl.head.email}}">{{p.email}}</a>
+          </td>
+          <td ><button ng-click="participationCtrl.loadParticipantForm(p)" type="button" class="btn btn-default btn-xs">Edit >></button></td>
+        </tr>
+
+      </table>
+    </div>
+  </div>
+  <participant request-id="participationCtrl.doc._id" conference-code="participationCtrl.conferenceCode" organization="participationCtrl.organization" ng-model="participationCtrl.activeParticipant" ng-show="participationCtrl.addContact" show-contact="participationCtrl.addContact" typee="participationCtrl.type"></participant>
+</section>
+<div class="col-xs-12 " ng-if="!participationCtrl.addContact">
+  <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
+  <br>
+  <button ng-click="participationCtrl.changeStep('contacts')" ng-disabled="false" type="button" class="btn btn-default">Previous</button>
+  <button ng-click="participationCtrl.submit()" ng-disabled="participationCtrl.numParticipants()" type="button" class="btn btn-primary pull-right">Submit</button>
+</div>
