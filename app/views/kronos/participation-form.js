@@ -63,6 +63,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.saveContacts       = saveContacts
     _ctrl.showChecklist      = showChecklist
 _ctrl.numParticipants =numParticipants
+_ctrl.submitted=submitted
 
     // options
     _ctrl.orgTypes           = orgTypes[_ctrl.type]
@@ -108,7 +109,10 @@ _ctrl.numParticipants =numParticipants
 
     }
 
-
+    function submitted(){
+        if($scope.editForm && !$scope.editForm.$submitted)
+          $timeout(function(){ $scope.editForm.$submitted=true;})
+    }
     function numParticipants(){
       var count = 0
       for (var i = 0; i < _ctrl.participants; i++)
@@ -389,7 +393,7 @@ _ctrl.numParticipants =numParticipants
     function changeStep(step,type){
       if(type==='request')$location.url('/'+step)
 
-if(!isStepComplete(step)) return
+      if(!isStepComplete(step)&& step!=='finished') return
 
       if(type)
         $location.url('/'+_ctrl.conferenceCode+'/'+type+'/'+step)

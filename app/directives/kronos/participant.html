@@ -13,6 +13,14 @@
       </h2>
     </div>
     <user-message error="error" msg="msg" ></user-message>
+    <div class="col-xs-12 " >
+      <div class="pull-right" ng-mouseover="submitted();">
+
+        <button ng-click="showContact=false; initDoc();" ng-disabled="false" type="button" class="btn btn-default">Cancel</button>
+        <button ng-click="save()"  ng-disabled="editForm.$invalid" type="button" class="btn btn-primary">Save</button>
+      </div>
+      <user-message error="error" msg="msg" ></user-message>
+    </div>
     <form  name="editForm"  novalidate>
     <div class="col-xs-12 ">
       <label>Participation</label>
@@ -255,7 +263,7 @@
   </div>
 </div>
 <div class="col-xs-12" >
-  <label>Attachments <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Any other files you would like to submit to support your request" help></i></label>
+  <label>Attachments <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Any other related files you would like to submit, supporting this person's accreditation." help></i></label>
   <div class="panel panel-default">
     <div class="panel-body">
       <div class="col-md-12">
@@ -369,7 +377,7 @@
 </form>
 
       <div class="col-xs-12 ">
-        <div class="pull-right">
+        <div class="pull-right" ng-mouseover="submitted();">
 
           <button ng-click="showContact=false; initDoc();" ng-disabled="false" type="button" class="btn btn-default">Cancel</button>
           <button ng-click="save()" ng-disabled="editForm.$invalid" type="button" class="btn btn-primary">Save</button>

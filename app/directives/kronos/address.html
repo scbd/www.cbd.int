@@ -3,9 +3,10 @@
         <section >
           <ng-form name="editForm">
           <div class="col-md-2">
-            <div class="form-group">
+            <div class="form-group" ng-class="{'has-error': (editForm.streetnumber.$invalid && (editForm.streetnumber.$touched || editForm.$submitted)) }">
               <label class="control-label" for="title">Street number</label>
-              <input ng-model="binding.streetNumber" type="text" class="form-control" id="streetNumber" >
+              <input required ng-model="binding.streetNumber" type="text" class="form-control" id="streetnumber" name="streetnumber" >
+              <p ng-show="editForm.streetnumber.$invalid && (editForm.streetnumber.$touched || editForm.$submitted)" class="help-block text-danger">street number is required.</p>
             </div>
           </div>
           <div class="col-md-8">
