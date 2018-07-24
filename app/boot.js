@@ -85,9 +85,6 @@ define('xlsx', ['js-zip', 'ods'], function (jszip, ods) {
 
 define('underscore', ['lodash'], function(_) { console.log('Deprecated: use lodash'); return _; });
 
-if (!require.defined('_slaask'))
-    define("_slaask", window._slaask);
-
 define('dropbox-dropins', ['https://www.dropbox.com/static/api/2/dropins.js'], function(){
     if(window.Dropbox)
         window.Dropbox.appKey = "uvo7kuhmckw68pl"; //registration@cbd.int

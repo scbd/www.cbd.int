@@ -22,7 +22,7 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
                     if (!user)
                         return;
 
-                    require(["_slaask"], function(_slaask) {
+                    require(["js/slaask"], function(_slaask) {
 
                         if (user.isAuthenticated) {
                             _slaask.identify(user.name, {
