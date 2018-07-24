@@ -42,6 +42,12 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
               $("[help]").tooltip()
             },3000)
         })
+
+        function submitted(){
+            if($scope.editForm && !$scope.editForm.$submitted)
+              $timeout(function(){ $scope.editForm.$submitted=true;})
+        }
+        $scope.submitted=submitted
         function redirect_blank(url) {
           var a = document.createElement('a');
           a.target="_blank";
