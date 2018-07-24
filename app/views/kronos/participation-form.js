@@ -62,8 +62,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.isStepComplete     = isStepComplete
     _ctrl.saveContacts       = saveContacts
     _ctrl.showChecklist      = showChecklist
-_ctrl.numParticipants =numParticipants
-_ctrl.submitted=submitted
+    _ctrl.numParticipants =numParticipants
 
     // options
     _ctrl.orgTypes           = orgTypes[_ctrl.type]
@@ -109,10 +108,6 @@ _ctrl.submitted=submitted
 
     }
 
-    function submitted(){
-        if($scope.editForm && !$scope.editForm.$submitted)
-          $timeout(function(){ $scope.editForm.$submitted=true;})
-    }
     function numParticipants(){
       var count = 0
       for (var i = 0; i < _ctrl.participants; i++)
@@ -440,6 +435,13 @@ _ctrl.submitted=submitted
     }
 
     function saveOrganization(){
+
+      if(_ctrl.editFormOrg && (_ctrl.editFormOrg.$invalid || !_ctrl.findAttachement(_ctrl.organization.attachment,'letterOfAssignment')))
+      {
+        _ctrl.editFormOrg.$submitted=true
+        return $scope.$emit('showSuccess', 'Your form has errors');
+      }
+
       _ctrl.doc.currentStep = 'contacts'
       if(!_ctrl.organization._id)
         return $http.post('/api/v2018/kronos/participation-request/organizations',_ctrl.organization,{headers:{requestId:_ctrl.requestId,conferenceCode:_ctrl.conferenceCode}})

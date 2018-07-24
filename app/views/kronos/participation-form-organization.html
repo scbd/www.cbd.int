@@ -9,17 +9,17 @@
       <h2>Organization</h2>
     </div>
     <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
-    <form  name="editForm"  novalidate>
+    <ng-form  name="editFormOrg"  novalidate>
       <div class="col-xs-12 ">
         <label>Identification</label>
         <div class="panel panel-default">
           <div class="panel-body">
             <div class="col-md-8">
-              <!-- ng-class="{'has-error': (editForm.assistanceTypes.$invalid && editForm.$submitted) }" -->
-              <div class="form-group" ng-class="{'has-error': (editForm.title.$invalid && (editForm.title.$touched || editForm.$submitted)) }">
+              <!-- ng-class="{'has-error': (editFormOrg.assistanceTypes.$invalid && editFormOrg.$submitted) }" -->
+              <div class="form-group" ng-class="{'has-error': (editFormOrg.title.$invalid && (editFormOrg.title.$touched || editFormOrg.$submitted)) }">
                 <label class="control-label" for="title">Name of the organization</label>
                 <input required ng-model="participationCtrl.organization.title" type="text" class="form-control" id="title" name="title" >
-                <p ng-show="editForm.title.$invalid && (editForm.title.$touched || editForm.$submitted)" class="help-block text-danger small">name is required.</p>
+                <p ng-show="editFormOrg.title.$invalid && (editFormOrg.title.$touched || editFormOrg.$submitted)" class="help-block text-danger small">name is required.</p>
               </div>
             </div>
             <div class="col-md-4">
@@ -29,7 +29,7 @@
               </div>
             </div>
             <div class="col-md-6" ng-if="participationCtrl.type==='media'">
-              <div class="form-group" ng-class="{'has-error': (!participationCtrl.organization.type && (editForm.type.$touched || editForm.$submitted)) }">
+              <div class="form-group" ng-class="{'has-error': (!participationCtrl.organization.type && (editFormOrg.type.$touched || editFormOrg.$submitted)) }">
                 <label class="control-label" for="type" >Sector</label>
                 <select
                   id="type"
@@ -39,11 +39,11 @@
                   >
                   <option ng-repeat="option in participationCtrl.orgTypes" ng-value="option.identifier">{{option.title}}</option>
                 </select>
-                  <p ng-show="!participationCtrl.organization.type && (editForm.type.$touched || editForm.$submitted)" class="help-block text-danger small">type is required.</p>
+                  <p ng-show="!participationCtrl.organization.type && (editFormOrg.type.$touched || editFormOrg.$submitted)" class="help-block text-danger small">type is required.</p>
               </div>
             </div>
             <div class="col-md-6" ng-if="participationCtrl.type==='media'">
-              <div class="form-group" ng-class="{'has-error': (!participationCtrl.organization.medium && (editForm.medium.$touched || editForm.$submitted)) }">
+              <div class="form-group" ng-class="{'has-error': (!participationCtrl.organization.medium && (editFormOrg.medium.$touched || editFormOrg.$submitted)) }">
                 <label class="control-label" for="medium">Type of media</label>
                 <select
                   multiple
@@ -55,7 +55,7 @@
                   >
                     <option ng-repeat="option in participationCtrl.orgMediums" ng-value="option.identifier">{{option.title}}</option>
                   </select>
-                  <p ng-show="!participationCtrl.organization.medium && (editForm.medium.$touched || editForm.$submitted)" class="help-block text-danger small">medium is required.</p>
+                  <p ng-show="!participationCtrl.organization.medium && (editFormOrg.medium.$touched || editFormOrg.$submitted)" class="help-block text-danger small">medium is required.</p>
               </div>
             </div>
 
@@ -78,20 +78,20 @@
           <div class="panel-body">
 
               <div class="col-md-4">
-                <div class="form-group" ng-class="{'has-error': (editForm.phone.$invalid && (editForm.phone.$touched || editForm.$submitted)) }">
+                <div class="form-group" ng-class="{'has-error': (editFormOrg.phone.$invalid && (editFormOrg.phone.$touched || editFormOrg.$submitted)) }">
                   <label class="control-label" for="phone">Phone </label>
 
                   <input required ng-model="participationCtrl.organization.phone" type="text" class="form-control" id="phone" name="phone" ng-pattern="patterns.phone">
-                  <p ng-show="editForm.phone.$invalid && (editForm.phone.$touched || editForm.$submitted)" class="help-block text-danger small">phone is required.</p>
-							    <p ng-show="editForm.phone.$invalid && (editForm.phone.$touched || editForm.$submitted)"class="help-block text-danger  small">Please use the following format: +[country code] [city code] [telephone number] [extension, if necessary].</p>
+                  <p ng-show="editFormOrg.phone.$invalid && (editFormOrg.phone.$touched || editFormOrg.$submitted)" class="help-block text-danger small">phone is required.</p>
+							    <p ng-show="editFormOrg.phone.$invalid && (editFormOrg.phone.$touched || editFormOrg.$submitted)"class="help-block text-danger  small">Please use the following format: +[country code] [city code] [telephone number] [extension, if necessary].</p>
                 </div>
               </div>
               <div class="col-md-4">
-                <div class="form-group" ng-class="{'has-error': (editForm.email.$invalid && (editForm.email.$touched || editForm.$submitted)) }">
+                <div class="form-group" ng-class="{'has-error': (editFormOrg.email.$invalid && (editFormOrg.email.$touched || editFormOrg.$submitted)) }">
                   <label class="control-label" for="title">Email </label>
                   <input required ng-model="participationCtrl.organization.email" type="email" class="form-control" id="email" name="email">
-                  <p ng-show="editForm.email.$error.required && (editForm.email.$touched || editForm.$submitted)" class="help-block text-danger small">email is required.</p>
-                  <p ng-show="editForm.email.$error.email && (editForm.email.$touched || editForm.$submitted)" class="help-block text-danger small">email is not valid.</p>
+                  <p ng-show="editFormOrg.email.$error.required && (editFormOrg.email.$touched || editFormOrg.$submitted)" class="help-block text-danger small">email is required.</p>
+                  <p ng-show="editFormOrg.email.$error.email && (editFormOrg.email.$touched || editFormOrg.$submitted)" class="help-block text-danger small">email is not valid.</p>
                 </div>
               </div>
               <div class="col-md-4">
@@ -101,14 +101,14 @@
                 </div>
               </div>
               <div class="col-md-6">
-                <div class="form-group" ng-class="{'has-error': ((editForm.website.$invalid || editForm.website.$error.url) && (editForm.website.$touched || editForm.$submitted)) }">
+                <div class="form-group" ng-class="{'has-error': ((editFormOrg.website.$invalid || editFormOrg.website.$error.url) && (editFormOrg.website.$touched || editFormOrg.$submitted)) }">
                   <label class="control-label" for="website">Website </label>
                   <input ng-model="participationCtrl.organization.website" type="url" class="form-control" id="website" name="website">
-                  <p ng-show="editForm.website.$error.url && (editForm.website.$touched || editForm.$submitted)" class="help-block text-danger small">website url not correct format</p>
+                  <p ng-show="editFormOrg.website.$error.url && (editFormOrg.website.$touched || editFormOrg.$submitted)" class="help-block text-danger small">website url not correct format</p>
                 </div>
               </div>
               <div class="col-md-6">
-                <div class="form-group" ng-class="{'has-error': (!participationCtrl.organization.language && (editForm.language.$touched || editForm.$submitted)) }">
+                <div class="form-group" ng-class="{'has-error': (!participationCtrl.organization.language && (editFormOrg.language.$touched || editFormOrg.$submitted)) }">
                   <label class="control-label" for="language">Operating language {{participationCtrl.organization.language}}</label>
                   <select
                     ng-if="participationCtrl.languages.length"
@@ -120,7 +120,7 @@
                     >
                     <option ng-repeat="language in participationCtrl.languages   track by language.identifier" ng-selected="!!(participationCtrl.organization.language===language.identifier)" ng-value="language.identifier">{{language.title.en}}</option>
                   </select>
-                  <p ng-show="!participationCtrl.organization.language && (editForm.language.$touched || editForm.$submitted)" class="help-block text-danger small">language is required.</p>
+                  <p ng-show="!participationCtrl.organization.language && (editFormOrg.language.$touched || editFormOrg.$submitted)" class="help-block text-danger small">language is required.</p>
                 </div>
               </div>
             </div>
@@ -132,13 +132,13 @@
         <div class="panel panel-default">
           <div class="panel-body">
               <div class="col-md-6">
-                <div class="form-group" ng-class="{'has-error': (!participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url && (editForm.language.$touched || editForm.$submitted || participationCtrl.organization.language)) }">
+                <div class="form-group" ng-class="{'has-error': (!participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url && (editFormOrg.language.$touched || editFormOrg.$submitted || participationCtrl.organization.language)) }">
                   <label class="control-label" for="letterOfAssignment">Letter of assignment</label>
 
-                  <file-drop danger="(!participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url && (editForm.language.$touched || editForm.$submitted || participationCtrl.organization.language))" metadata="participationCtrl.genMeta()" class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({tag:'letterOfAssignment',container:participationCtrl.organization},file,error)" ng-model="participationCtrl.letterOfAssignment"  class="form-control" id="letterOfAssignment" ></file-drop>
+                  <file-drop danger="(!participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url && (editFormOrg.language.$touched || editFormOrg.$submitted || participationCtrl.organization.language))" metadata="participationCtrl.genMeta()" class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({tag:'letterOfAssignment',container:participationCtrl.organization},file,error)" ng-model="participationCtrl.letterOfAssignment"  class="form-control" id="letterOfAssignment" ></file-drop>
                   <p><a ng-click="participationCtrl.getPresigned(participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url)" ng-href="#">{{participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').title}}</a>
                   <i ng-show="participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment')"  class="fa fa-times-circle-o pointer" ng-click="participationCtrl.removeAttachement(participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment'))"></i></p>
-                  <p ng-show="(!participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url && (editForm.language.$touched || editForm.$submitted || participationCtrl.organization.language))" class="text-danger small">Assignment letter is required.</p>
+                  <p ng-show="(!participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url && (editFormOrg.language.$touched || editFormOrg.$submitted || participationCtrl.organization.language))" class="text-danger small">Assignment letter is required.</p>
                 </div>
               </div>
               <div class="col-md-6">
@@ -188,14 +188,12 @@
           </div>
         </div>
       </div>
-    </form>
+    </ng-form>
     <div>
     </div>
     <div class="col-xs-12">
         <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
-      <div ng-mouseover="participationCtrl.submitted();">
         <button ng-click="participationCtrl.changeStep('checklist')" ng-disabled="false" type="button" class="btn btn-default">Previous</button>
-        <button ng-click="participationCtrl.saveOrganization()" ng-disabled="editForm.$invalid || !participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment')" type="button" class="btn btn-success pull-right">Next</button>
-      </div>
+        <button ng-click="editFormOrg.$submitted=true;participationCtrl.editFormOrg=editFormOrg;participationCtrl.saveOrganization()" type="button" class="btn btn-success pull-right">Next</button>
     </div>
 </section>
