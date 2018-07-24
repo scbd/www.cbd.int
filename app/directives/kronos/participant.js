@@ -43,7 +43,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
             },3000)
         })
 
-        $scope.submitted=submitted
+
         function redirect_blank(url) {
           var a = document.createElement('a');
           a.target="_blank";
