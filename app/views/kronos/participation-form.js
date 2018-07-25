@@ -233,38 +233,40 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
 
     function initStepsContacts(){
-      return getOrg().then(function(){
-        var headPromise  = getHead()
-        var focalP = getFocalPoint()
-        return Promise.all([headPromise,focalP]).then(function(){
-          $timeout(function(){
-                $scope.$watch('participationCtrl.head',function(newValue, oldValue){
-                  if(newValue._id != oldValue._id){
-                    _ctrl.doc.head = newValue._id
-                    save()
-                  }
-                },true)
-                $scope.$watch('participationCtrl.focalPoint',function(newValue, oldValue){
-                  if(newValue._id != oldValue._id){
-                    _ctrl.doc.focalPoint = newValue._id
-                    save()
-                  }
-                },true)
+      if(_ctrl.doc.nominatingOrganization)
+        return getOrg().then(function(){
+          var headPromise  = getHead()
+          var focalP = getFocalPoint()
+          return Promise.all([headPromise,focalP]).then(function(){
+            $timeout(function(){
+                  $scope.$watch('participationCtrl.head',function(newValue, oldValue){
+                    if(newValue._id != oldValue._id){
+                      _ctrl.doc.head = newValue._id
+                      save()
+                    }
+                  },true)
+                  $scope.$watch('participationCtrl.focalPoint',function(newValue, oldValue){
+                    if(newValue._id != oldValue._id){
+                      _ctrl.doc.focalPoint = newValue._id
+                      save()
+                    }
+                  },true)
+            })
           })
         })
-      })
     }
 
     function initStepsParticipants (){
-      return initStepsContacts().then(function(){
-        return getParticipants().then(function(){
-          $scope.$watch('participationCtrl.activeParticipant._id',function(newValue, oldValue){
-            if(newValue!= oldValue && newValue)
-              getParticipants()
+      if(_ctrl.doc.nominatingOrganization)
+        return initStepsContacts().then(function(){
+          return getParticipants().then(function(){
+            $scope.$watch('participationCtrl.activeParticipant._id',function(newValue, oldValue){
+              if(newValue!= oldValue && newValue)
+                getParticipants()
 
+            })
           })
         })
-      })
     }
 
     function isStepComplete(step){
@@ -306,7 +308,8 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
       _ctrl.addContact=true;
 
-        _ctrl.activeParticipant = p;
+        _ctrl.activeParticipant = {};
+        $applyAsync(function(){_ctrl.activeParticipant=p})
 
     }
 
@@ -382,7 +385,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
               _ctrl.error = err
               console.error(err)
             })
-      return new Promise(function(resolve){resolve(false)})
+      return false
     }
 
     function changeStep(step,type){
