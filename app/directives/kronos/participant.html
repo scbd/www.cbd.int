@@ -54,8 +54,8 @@
               id="meeting"
               class="form-control"
               ng-model="binding.meeting"
+              ng-options="m._id as m.title.en for m in meetings"
               >
-                <option ng-repeat="m in meetings" ng-value="m._id">{{m.title.en}}</option>
               </select>
               <p ng-show="!binding.meeting.length && (editForm.meeting.$touched || editForm.$submitted)" class="help-block text-danger small">A meeting selection is required.</p>
           </div>
