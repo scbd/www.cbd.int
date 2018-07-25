@@ -1,6 +1,6 @@
 <section>
   <div class="col-xs-12">
-    <h2>Contacts</h2>
+    <h2 ng-if="!participationCtrl.addContact">Contacts</h2>
     <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
   </div>
   <div class="col-xs-12 " ng-if="!participationCtrl.addContact">

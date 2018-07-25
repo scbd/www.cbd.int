@@ -46,14 +46,25 @@
               <div class="form-group" ng-class="{'has-error': (!participationCtrl.organization.medium && (editFormOrg.medium.$touched || editFormOrg.$submitted)) }">
                 <label class="control-label" for="medium">Type of media</label>
                 <select
-                  multiple
                   required
                   name='medium'
                   id="medium"
                   class="form-control"
                   ng-model="participationCtrl.organization.medium"
+                  multiple
                   >
-                    <option ng-repeat="option in participationCtrl.orgMediums" ng-value="option.identifier">{{option.title}}</option>
+                    <option value="Print">Print</option>
+                    <option value="News agency/service">News agency/service</option>
+                    <option value="Radio">Radio</option>
+                    <option value="Photo/visual">Photo/visual</option>
+                    <option value="Television">Television</option>
+                    <option value="Independent broadcast or film production">Independent broadcast or film production</option>
+                    <option value="Weekly publication">Weekly publication</option>
+                    <option value="Online journal">Online journal</option>
+                    <option value="Blog">Blog</option>
+                    <option value="Other online media">Other online media</option>
+                    <option value="Freelance journalist">Freelance journalist</option>
+                    <option value="Other">Other</option>
                   </select>
                   <p ng-show="!participationCtrl.organization.medium && (editFormOrg.medium.$touched || editFormOrg.$submitted)" class="help-block text-danger small">medium is required.</p>
               </div>
@@ -81,9 +92,9 @@
                 <div class="form-group" ng-class="{'has-error': (editFormOrg.phone.$invalid && (editFormOrg.phone.$touched || editFormOrg.$submitted)) }">
                   <label class="control-label" for="phone">Phone </label>
 
-                  <input required ng-model="participationCtrl.organization.phone" type="text" class="form-control" id="phone" name="phone" ng-pattern="patterns.phone">
-                  <p ng-show="editFormOrg.phone.$invalid && (editFormOrg.phone.$touched || editFormOrg.$submitted)" class="help-block text-danger small">phone is required.</p>
-							    <p ng-show="editFormOrg.phone.$invalid && (editFormOrg.phone.$touched || editFormOrg.$submitted)"class="help-block text-danger  small">Please use the following format: +[country code] [city code] [telephone number] [extension, if necessary].</p>
+                  <input required ng-model="participationCtrl.organization.phone" type="text" class="form-control" id="phone" name="phone" ng-minlength="8" ng-maxlength="35" placeholder="example: +1 514.288.2220">
+                  <p ng-show="!participationCtrl.organization.phone  && (editFormOrg.phone.$touched || editFormOrg.$submitted)" class="help-block text-danger small">Phone number is required.</p>
+                  <p class="help-block text-danger small" ng-show="(editFormOrg.phone.$error.minlength || editFormOrg.phone.$error.maxlength ) && (editFormOrg.phone.$touched || editFormOrg.$submitted)">Please match pattern +1 514.288.2220 </span>
                 </div>
               </div>
               <div class="col-md-4">

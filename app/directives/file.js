@@ -147,8 +147,8 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
                 $scope.proxyOnChange = function() { ngModelCtrl.$setViewValue($scope.files); };
                 
                 var div = document.createElement('div');
-                
-                $scope.allowDragDrop = (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
+
+                $scope.allowDragDrop = (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window && !(navigator.userAgent.toLowerCase().indexOf('firefox') > -1);
 
                 if ($scope.allowDragDrop) {
 

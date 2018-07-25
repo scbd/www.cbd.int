@@ -21,9 +21,10 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         },3000)
       },
 			controller: function ($scope ) {
-        $scope.countries = []
-        $scope.languages = []
-        $scope.attending  = {val:false}
+        $scope.countries  = []
+        $scope.languages  = []
+        $scope.attending  = {}
+        $scope.attending.val = false
         $scope.initDoc    = initDoc
         $scope.save       = save
         $scope.isMedia    = isMedia
@@ -34,8 +35,17 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         $scope.$watch('binding',function(){
             if($scope.binding.useOrganizationAddress===undefined)
               initDoc()
-            if(!$scope.binding.meeting ) $scope.binding.meeting =[]
+            if(!$scope.binding.meeting || !$scope.binding.meeting.length){
+               $scope.binding.meeting =[]
+               $scope.attending.val  = false
+             }else{
+
+               if($scope.binding.meeting && $scope.binding.meeting.length)
+                  $scope.attending.val  = true
+
+             }
             if(!$scope.binding.attachment)$scope.binding.attachment=[]
+
 
 
             $timeout(function(){
@@ -83,7 +93,10 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         }
 
         function save(){
-          if($scope.editForm.$invalid) return $scope.$emit('showError', 'You have errors in your form. ');
+          if($scope.editForm.$invalid) {
+            $scope.editForm.$submitted=true
+            return $scope.$emit('showError', 'You have errors in your form. ');
+          }
           if($scope.binding && $scope.binding.meeting && !$scope.binding.meeting.length)
             delete($scope.binding.meeting)
 
@@ -110,7 +123,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         }
 
         function initDoc(){
-          if(!$scope.isContact) $scope.attending  = {val:true}
+          if(!$scope.isContact) $scope.attending.val=true
           $scope.binding.useOrganizationAddress = true
           $scope.binding.requestId = $scope.requestId
           $scope.binding.requestType = $scope.typee
