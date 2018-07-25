@@ -21,28 +21,10 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
 
 				getCountries().then(getEvents().then(function(){
 					 mapGovernment();
-           getYearTagId().then(getArticle);
+           getArticle();
            getOtherCelebrations();
 				}));
 
-        //============================================================
-        //
-        //============================================================
-        function getYearTagId() {
-
-          var params = {
-              q: {
-                  'title.en': _ctrl.year,//IDB
-              }
-          };
-          return $http.get("https://api.cbd.int/api/v2017/article-custom-tags/",{params:params}).then(
-            function(o){
-
-              if(o.data && o.data.length)
-                _ctrl.yearTagId = o.data[0]._id
-
-          });
-        }
         //============================================================
         //
         //============================================================
@@ -67,15 +49,15 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
 
           var params = {
               q: {
-                  'tags': '52000000cbd0330000001948',//IDB
-                  'customTags': _ctrl.yearTagId
-              }
+									'tags.title.en'				: 'International Day for Biodiversity',//IDB
+                  'customTags.title.en'	: _ctrl.year.toString()
+              }, fo:1
           };
           return $http.get("https://api.cbd.int/api/v2017/articles",{params:params}).then(
             function(o){
-              if(o.data && o.data.length){
-                _ctrl.article = o.data[0]
-                _ctrl.articleContent = o.data[0].content[locale]
+              if(o.data){
+                _ctrl.article = o.data
+                _ctrl.articleContent = o.data.content[locale]
               }
           });
         }
@@ -86,15 +68,15 @@ define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-ve
 
           var params = {
               q: {
-                  'tags': '52000000cbd0330000001948',//IDB
-                  'customTags': [_ctrl.yearTagId,'5ad52734990e540001a09458']
-              }
+									'tags.title.en'				: 'International Day for Biodiversity',//IDB
+                  'customTags.title.en'	: { $all : [_ctrl.year.toString(), 'other-celebrations']}
+              }, fo:1
           };
           return $http.get("https://api.cbd.int/api/v2017/articles",{params:params}).then(
             function(o){
-              if(o.data && o.data.length){
-                _ctrl.otherCelebrations = o.data[0]
-                _ctrl.otherCelebrationsContent = o.data[0].content[locale]
+              if(o.data){
+                _ctrl.otherCelebrations = o.data
+                _ctrl.otherCelebrationsContent = o.data.content[locale]
               }
           });
         }
