@@ -21,6 +21,8 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
                 
 	            element.on('change', function() {
 
+                    increaseChange();
+
                     var htmlFiles = element[0].files;
 
                     if(isAutoUpload())
@@ -104,6 +106,10 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
                 function setViewValue(files){
                     ctrl.$setViewValue(isMutiple() ? files : files[0]);
                 }
+
+                function increaseChange() {
+                    element.data('changeCount', (element.data('changeCount')||0) + 1);
+                }
 	        }
 	    };
 	}]);
@@ -169,10 +175,27 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
                 
                 function onFileDrop(e) {
 
+                    var oldChangeCount, newChangeCount;
+
+                    var value = e.originalEvent.dataTransfer.files;
+
                     e.preventDefault();
 
-                    inputFile[0].files = e.originalEvent.dataTransfer.files;
+                    oldChangeCount = fileChangeCount();
+
+                    inputFile[0].files = value;
+
+                    newChangeCount = fileChangeCount();
+
+                    if(oldChangeCount == newChangeCount) { // Firefox do not trigger `change` when `files` is set;
+                        inputFile.change();
+                    }
+
                 }
+
+                function fileChangeCount() {
+                    return inputFile.data('changeCount') || 0;
+                }                
 	        }
 	    };
 	}]);
