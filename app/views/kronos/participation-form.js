@@ -1,6 +1,6 @@
 define(['app', 'services/conference-service','providers/locale','directives/kronos/participant','directives/kronos/user-messages','filters/term','directives/file',], function(app) { 'use strict';
 
-	return ['$scope','$http','conferenceService','$filter','$route','$location','locale','user','$timeout','$document', function( $scope,$http,conferenceService,$filter,$route,$location,locale,user,$timeout,$document) {
+	return ['$scope','$http','conferenceService','$filter','$route','$location','locale','user','$timeout','$document','$q', function( $scope,$http,conferenceService,$filter,$route,$location,locale,user,$timeout,$document,$q) {
 
 		var _ctrl 		           = this
 
@@ -237,8 +237,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         return getOrg().then(function(){
           var headPromise  = getHead()
           var focalP = getFocalPoint()
-          return Promise.all([headPromise,focalP]).then(function(){
-            $timeout(function(){
+          return $q.all([headPromise,focalP]).then(function(){
                   $scope.$watch('participationCtrl.head',function(newValue, oldValue){
                     if(newValue._id != oldValue._id){
                       _ctrl.doc.head = newValue._id
@@ -251,7 +250,6 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
                       save()
                     }
                   },true)
-            })
           })
         })
     }
