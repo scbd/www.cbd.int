@@ -11,7 +11,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       {'identifier':'Other',              'title':'Other'}],
       observer:[]
     }
-    "Print","News agency/service","Radio","Photo/visual","Television","Weekly publication","Other"
+
     var mediums = [
       {'identifier':'Print',                  'title':'Print'},
       {'identifier':'News agency/service',    'title':'News agency/service'},
@@ -307,12 +307,14 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       _ctrl.addContact=true;
 
         _ctrl.activeParticipant = {};
-        $applyAsync(function(){_ctrl.activeParticipant=p})
+        $scope.$applyAsync(function(){_ctrl.activeParticipant=p})
 
     }
 
     function getParticipants(){
-      if(!_ctrl.doc._id) return new Promise(function(r){r(true)})
+      var deferred = $q.defer()
+      deferred.resolve(true)
+      if(!_ctrl.doc._id) return deferred.promise
       var params = {
                       q : {
                         'meta.createdBy':user.userID,
@@ -346,7 +348,9 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
 
     function getHead(){
-      if(!_ctrl.doc.head) return new Promise(function(r){r(true)})
+      var deferred = $q.defer()
+      deferred.resolve(true)
+      if(!_ctrl.doc.head) return deferred.promise
       return $http.get('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent(_ctrl.doc.head),{ cache: true })
           .then(function(res){
             _ctrl.head = res.data
@@ -358,7 +362,9 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
 
     function getFocalPoint(){
-      if(!_ctrl.doc.focalPoint) return new Promise(function(r){r(true)})
+      var deferred = $q.defer()
+      deferred.resolve(true)
+      if(!_ctrl.doc.focalPoint) return deferred.promise
       return $http.get('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent(_ctrl.doc.focalPoint),{ cache: true })
           .then(function(res){
             _ctrl.focalPoint = res.data

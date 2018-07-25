@@ -37,7 +37,10 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
               initDoc()
             if(!$scope.binding.meeting || !$scope.binding.meeting.length){
                $scope.binding.meeting =[]
-               $scope.attending.val  = false
+               if($scope.isContact)
+                $scope.attending.val  = false
+                else
+                  $scope.attending.val  = true
              }else{
 
                if($scope.binding.meeting && $scope.binding.meeting.length)
