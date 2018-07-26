@@ -172,6 +172,9 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         initStepsParticipants()
 
       window.scroll(0, 0)
+      $scope.$applyAsync(function(){
+          $("[help]").tooltip();
+      })
     }
 
     function initStepRequest(){

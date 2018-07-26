@@ -12,7 +12,7 @@
       </p>
     </div>
     <div class="col-xs-12">
-      <label>Select your types(s) of media and job title(s) to find out which requirements apply to you.</label>
+      <label>Select your types(s) <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ctrl & click on windows &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp cmd & click on mac" help></i>  of media and job title(s) <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ctrl & click on windows &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp cmd & click on mac" help></i>  to find out which requirements apply to you.</label>
       <div class="panel panel-default">
         <div class="panel-body">
           <form  name="editForm"  novalidate>
@@ -52,7 +52,7 @@
               <p class="text-danger" ng-if="participationCtrl.mediumHas('Online publication') || participationCtrl.mediumHas('Web publication') || participationCtrl.mediumHas('Other online media') || participationCtrl.mediumHas('Online journal')">Online publications which are communications outreach or advocacy publications of non-governmental or non-profit organizations do not qualify for media accreditation.</p>
             </div>
             <div class="col-xs-12 ">
-              <button ng-click="participationCtrl.showChecklist()" ng-disabled="!participationCtrl.doc.medium || !participationCtrl.doc.designation" type="button" class="btn btn-primary pull-right">Generate</button>
+              <button ng-click="participationCtrl.showChecklist()" ng-disabled="!participationCtrl.doc.medium || !participationCtrl.doc.designation" type="button" class="btn btn-primary pull-right">Submit</button>
             </div>
           </form>
         </div>
