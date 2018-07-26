@@ -13,27 +13,27 @@
           <th>&nbsp;</th>
         </tr>
         <tr>
-          <td >Head</td>
+          <td >Head of organization</td>
           <td >{{participationCtrl.head.title}} {{participationCtrl.head.firstName}} {{participationCtrl.head.lastName}}</td>
           <td >
             {{participationCtrl.head.designation}}<br>
             <a ng-href="{{participationCtrl.head.email}}">{{participationCtrl.head.email}}</a>
           </td>
           <td >
-            <button ng-if="participationCtrl.hasHead()" ng-click="participationCtrl.activeParticipant=participationCtrl.head;  participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Edit >></button>
-            <button ng-if="!participationCtrl.hasHead()" ng-click="participationCtrl.activeParticipant=participationCtrl.head; participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Add Head >></button>
+            <button ng-if="participationCtrl.hasHead()" ng-click="participationCtrl.activeParticipant=participationCtrl.head;  participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Edit   </button>
+            <button ng-if="!participationCtrl.hasHead()" ng-click="participationCtrl.activeParticipant=participationCtrl.head; participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Add Head   </button>
           </td>
         </tr>
         <tr>
-          <td >Focal Point</td>
+          <td >Main contact</td>
           <td >{{participationCtrl.focalPoint.title}} {{participationCtrl.focalPoint.firstName}} {{participationCtrl.focalPoint.lastName}}</td>
           <td >
             {{participationCtrl.focalPoint.designation}}<br>
             <a ng-href="{{participationCtrl.head.email}}">{{participationCtrl.focalPoint.email}}</a>
           </td>
           <td >
-            <button ng-if="participationCtrl.hasFocalPoint()" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-default btn-xs">Edit >></button>
-            <button ng-if="!participationCtrl.hasFocalPoint()" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-default btn-xs">Add Focal Point >></button>
+            <button ng-if="participationCtrl.hasFocalPoint()" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-default btn-xs">Edit   </button>
+            <button ng-if="!participationCtrl.hasFocalPoint()" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-default btn-xs">Add Focal Point   </button>
           </td>
         </tr>
       </table>
