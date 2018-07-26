@@ -62,8 +62,8 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.isStepComplete     = isStepComplete
     _ctrl.saveContacts       = saveContacts
     _ctrl.showChecklist      = showChecklist
-    _ctrl.numParticipants =numParticipants
-
+    _ctrl.numParticipants    = numParticipants
+    _ctrl.encode=function(u){return(encodeURIComponent(u))}
     // options
     _ctrl.orgTypes           = orgTypes[_ctrl.type]
     _ctrl.orgMediums         = mediums
@@ -148,7 +148,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
           redirect_blank(u.data.signedUrl)
         })
       else
-        redirect_blank(url)
+        return url
     }
 
     function isTemp(url){
