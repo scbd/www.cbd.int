@@ -1,19 +1,26 @@
-define(['app', 'services/conference-service'], function(app) {
+define(['app'], function() {
+ 
+	return ['$http','$route', '$timeout', function( $http,$route) {
 
-	return ['$http','conferenceService','$location', function( $http,conferenceService,$location) {
+    var _ctrl = this;
 
-		var _ctrl 		= this;
-    _ctrl.host=window.location.origin
+    _ctrl.loading=true;
 
+    var resource = $route.current.params.file;
+    
+    $http.post('/api/v2018/kronos/participation-requests/'+encodeURIComponent(resource)+'/sign').then(function(u){
+      
+      _ctrl.signedUrl = u.data.url || u.data.signedUrl;
+      _ctrl.fileInfo  = u.data;
+      
+      window.location = u.data.signedUrl;
 
+    }).catch(function(error) {
 
+      _ctrl.error = error.data || error;
 
-$http.post('/api/v2018/kronos/participation-requests/'+encodeURIComponent($location.search().q)+'/sign').then(function(u){
-  _ctrl.signed = u.data.signedUrl
-  window.location=u.data.signedUrl
-
-  // window.close();
-})
-
+    }).finally(function(){
+      delete _ctrl.loading;
+    });
 	}];
 });
