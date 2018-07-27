@@ -4,7 +4,7 @@
     <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
   </div>
   <div class="col-xs-12 " ng-if="!participationCtrl.addContact">
-    <h3><button ng-if="!participationCtrl.addContact" ng-click="participationCtrl.activeParticipant={};participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Add Participant >></button>
+    <h3><button ng-if="!participationCtrl.addContact" ng-click="participationCtrl.activeParticipant={};participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Add Participant   </button>
     </h3>
     <div class="table-responsive">
       <table class="table table-condensed table-hover">
@@ -20,7 +20,7 @@
             <span ng-if="p.designation==='Other'">{{p.designationOther}}<span ng-if="p.organizationName">,</span> {{p.organizationName}}<br></span>
             <a ng-href="{{participationCtrl.head.email}}">{{p.email}}</a>
           </td>
-          <td ><button ng-click="participationCtrl.loadParticipantForm(p)" type="button" class="btn btn-default btn-xs">Edit >></button></td>
+          <td ><button ng-click="participationCtrl.loadParticipantForm(p)" type="button" class="btn btn-default btn-xs">Edit   </button></td>
         </tr>
 
       </table>

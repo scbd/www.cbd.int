@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h1>Restricted file download</h1>
+  </div>
+  <div class="col-xs-12">
+    <p>
+    Access to this file is restricted. 
+    </p>
+
+    <p ng-if="downloadCtrl.loading">
+      <i class="fa fa-cog fa-spin"></i> Please wait a moment while we are giving you access to the file...
+    </p> 
+    
+    <p ng-if="downloadCtrl.signedUrl">
+      If your file has not started downloading please click the download button: 
+      <a ng-href="{{downloadCtrl.signedUrl}}" class="btn btn-default btn" download><i class="fa fa-arrow-down"></i> Download file</a>
+    </p> 
+
+    <div  ng-if="downloadCtrl.error" class="alert alert-warning" role="alert">
+      <span ng-switch="downloadCtrl.error.statusCode">
+          <span ng-switch-when="403">You are not authorized to access this file</span>
+          <span ng-switch-when="404">The request file do not exists</span>
+          <span ng-switch-default>{{downloadCtrl.error.message||downloadCtrl.error}}</span>
+      </span> 
+    </div> 
+
+
+</div>

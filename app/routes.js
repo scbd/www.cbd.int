@@ -243,9 +243,11 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
         $("base").attr('href', '/participation/'); // allow full page reload outside of  /insession/*
         routeProvider
+        .when('/download/:file*?', { templateUrl: 'views/kronos/download.html',  controllerAs: 'downloadCtrl',  resolveController: true, resolve : { user : currentUser() } } )
         .when('/2018/media'   ,{redirectTo: '/2018/media/checklist'})
         .when('/:conference/:type/:step'   ,{ templateUrl : 'views/kronos/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
         .when('/:step',{ templateUrl : 'views/kronos/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
+
         .otherwise({redirectTo: '/404'});
     }
 

@@ -143,6 +143,7 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
 
                 $scope.isMutiple  = isMutiple;
                 $scope.isDisabled = isDisabled;
+                $scope.isEncrypted = function() { return attr.encrypt !== undefined };
                 $scope.proxyOnUpload = $scope.onUpload;
                 $scope.proxyOnChange = function() { ngModelCtrl.$setViewValue($scope.files); };
                 

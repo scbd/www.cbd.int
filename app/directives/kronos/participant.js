@@ -92,7 +92,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
           if(!url)return''
           if(~url.indexOf('cbd.documents.temporary')||~url.indexOf('temporary-files'))
             return url
-          return '/api/v2018/kronos/participation-requests/attachment/'+encodeURIComponent(url)
+          return '/participation/download/'+encodeURIComponent(url).replace(/%2f/gi, '/');
         }
 
         function save(){
