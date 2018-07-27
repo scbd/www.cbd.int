@@ -63,7 +63,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.saveContacts       = saveContacts
     _ctrl.showChecklist      = showChecklist
     _ctrl.numParticipants    = numParticipants
-    _ctrl.encode=function(u){return(encodeURIComponent(u))}
+
     // options
     _ctrl.orgTypes           = orgTypes[_ctrl.type]
     _ctrl.orgMediums         = mediums
@@ -104,7 +104,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       if(!url)return''
       if(~url.indexOf('cbd.documents.temporary')||~url.indexOf('temporary-files'))
         return url
-      return '/api/v2018/kronos/participation-requests/attachment/'+encodeURIComponent(url)
+      return '/participation/download/'+encodeURIComponent(url).replace(/%2f/gi, '/');
 
     }
 
