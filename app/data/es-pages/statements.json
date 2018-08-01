@@ -189,5 +189,54 @@
     "startDate_dt": "2018-06-08T00:00:02.987Z",
     "url": "https://www.cbd.int/doc/speech/2018/sp-2018-06-08-wod-en.pdf",
       "img": "https://www.cbd.int/images/speech/2018/sp-2018-06-08-wod-en.jpg"
-  }
+  },
+
+{
+   "_id":"25",
+   "schema_s":"statement",
+   "title_s":"CARICOM Workshop for the Development of a Regional Biodiversity Strategy for the Caribbean Community.",
+   "startDate_dt":"2018-06-14T00:00:02.987Z",
+   "url":"https://www.cbd.int/doc/speech/2018/sp-2018-06-14-guyana-en.pdf",
+   "img":"https://attachments.cbd.int/150x100/sp-2018-06-14-guyana-en.jpg"
+},
+{
+   "_id":"26",
+               "schema_s":"statement",
+   "title_s":"World Day to Combat Desertification and Drought, 17 June 2018: Land has true value – invest in it",
+   "startDate_dt":"2018-06-17T00:00:02.987Z",
+   "url":"https://www.cbd.int/doc/speech/2018/sp-2018-06-17-wdcdd-en.pdf",
+   "img":"https://attachments.cbd.int/150x100/sp-2018-06-17-wdcdd-en.jpg"
+},
+{
+   "_id":"27",
+               "schema_s":"statement",
+   "title_s":"Address to the Global Environment Facility (GEF) Assembly Plenary on ways in which the GEF can help catalyze change in support of life on Earth.",
+   "startDate_dt":"2018-06-27T00:00:02.987Z",
+   "url":"https://www.cbd.int/doc/speech/2018/sp-2018-06-27-gef-en.pdf",
+   "img":"https://attachments.cbd.int/150x100/sp-2018-06-27-gef-en.jpg"
+},
+{
+   "_id":"28",
+               "schema_s":"statement",
+   "title_s":"22nd meeting of the Subsidiary Body on Scientific, Technical and Technological Advice to the Convention (SBSTTA-22).",
+   "startDate_dt":"2018-07-02T00:00:02.987Z",
+   "url":"https://www.cbd.int/doc/speech/2018/sp-2018-07-02-sbstta22-en.pdf",
+   "img":"https://attachments.cbd.int/150x100/sp-2018-07-02-sbstta22-en.jpg"
+},
+{
+   "_id":"29",
+               "schema_s":"statement",
+   "title_s":"CEPA-IAC: I place a high value on communication and outreach.",
+   "startDate_dt":"2018-07-05T00:00:02.987Z",
+   "url":"https://www.cbd.int/doc/speech/2018/sp-2018-07-06-cepa-iac-en.pdf",
+   "img":"https://attachments.cbd.int/150x100/sp-2018-07-06-cepa-iac-en.jpg"
+},
+{
+   "_id":"30",
+   "schema_s":"statement",
+   "title_s":"Second meeting of the Subsidiary Body on Implementation, in Montreal (SBI-2).",
+   "startDate_dt":"2018-07-09T00:00:02.987Z",
+   "url":"https://www.cbd.int/doc/speech/2018/sp-2018-07-09-sbi2-en.pdf",
+   "img":"https://attachments.cbd.int/150x100/sp-2018-07-09-sbi2-en.jpg"
+}
 ]
