@@ -1,4 +1,4 @@
-define(['app','data/es-pages/media','services/fb','directives/es-pages/header-nav','filters/title-case'], function(app,media) { 'use strict';
+define(['app','json!https://s3.amazonaws.com/cbddocumentspublic-imagebucket-15w2zyxk3prl8/es-pages/media.json','services/fb','directives/es-pages/header-nav','filters/title-case'], function(app,media) { 'use strict';
 
 return ['$location','$scope','fb','$document','ngMeta', function ($location,$scope,fb,$document,ngMeta) {
 

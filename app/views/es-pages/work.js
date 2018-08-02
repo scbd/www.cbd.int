@@ -1,4 +1,4 @@
-define(['app','data/es-pages/statements','moment','directives/es-pages/header-nav','filters/moment','services/fb'], function(app,statements,moment) { 'use strict';
+define(['app','json!https://s3.amazonaws.com/cbddocumentspublic-imagebucket-15w2zyxk3prl8/es-pages/statements.json','moment','directives/es-pages/header-nav','filters/moment','services/fb'], function(app,statements,moment) { 'use strict';
 
 
 app.filter("byDate", function() {
