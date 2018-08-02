@@ -1,4 +1,4 @@
-define(['app','linqjs', 'providers/realm','services/storage','services/workflows'], function(app,Enumerable) {
+define(['app','linqjs', 'utilities/realm','utilities/workflows','utilities/km-storage'], function(app,Enumerable) {
   'use strict';
   app.factory('guid', function() {
   	function S4() {
@@ -67,62 +67,61 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
   app.factory('underscore', [function() {
   return _;
 }]);
-  app.factory('editFormUtility', ["IStorage", "IWorkflows", "$q", "$route", "realm", function(storage, workflows, $q, $route, realm) {
+  app.factory('editFormUtility', ["IStorage", "workflows", "$q", "$route", "realm", function(storage, workflows, $q, $route, realm) {
 
 
     var schemasWorkflowTypes = {
-      "aichiTarget"               : { name: "publishReferenceRecord", version: undefined },
-      "contact"                   : { name: "publishReferenceRecord", version: undefined },
-      "caseStudy"                 : { name: "publishReferenceRecord", version: undefined },
-      "marineEbsa"                : { name: "publishReferenceRecord", version: undefined },
-      "strategicPlanIndicator"    : { name: "publishReferenceRecord", version: undefined },
-      "resource"                  : { name: "publishReferenceRecord", version: undefined },
-      "capacityBuildingInitiative": { name: "publishReferenceRecord", version: undefined },
+
       "organization"              : { name: "publishReferenceRecord", version: undefined },
-      "lwCampaigns"               : { name: "publishReferenceRecord", version: undefined },
-      "lwProject"                 : { name: "publishReferenceRecord", version: undefined },
-      "lwDonor"                   : { name: "publishReferenceRecord", version: undefined },
-      "bbiContact"                : { name: "publishReferenceRecord", version: undefined },
-      "bbiProfile"                : { name: "publishReferenceRecord", version: undefined },
-      "bbiOpportunity"            : { name: "publishReferenceRecord", version: undefined },
+      "undbActor"                 : { name: "publishReferenceRecord", version: undefined },
+      "event"                     : { name: "publishReferenceRecord", version: undefined },
+      "undbBizBioPledge"          : { name: "publishReferenceRecord", version: undefined },
+      "undbParty"                 : { name: "publishReferenceRecord", version:  undefined },
 
-      "database"                  : { name: "publishNationalRecord", version: "0.4" },
-      "implementationActivity"    : { name: "publishNationalRecord", version: "0.4" },
-      "nationalIndicator"         : { name: "publishNationalRecord", version: "0.4" },
-      "nationalReport"            : { name: "publishNationalRecord", version: "0.4" },
-      "nationalSupportTool"       : { name: "publishNationalRecord", version: "0.4" },
-      "nationalTarget"            : { name: "publishNationalRecord", version: "0.4" },
-      "nationalAssessment"        : { name: "publishNationalRecord", version: "0.4" },
-      "resourceMobilisation"      : { name: "publishNationalRecord", version: "0.4" },
-      "nationalReport6"           : { name: "publishNationalRecord", version: "0.4" },
     };
-    var documentRealmCache = {};
+
     var _self = {
-        //==================================
-        //
-        //==================================
-        getRealm: function(identifier, config) {
-
-          if(documentRealmCache[identifier])
-            return $q.when(documentRealmCache[identifier]);
-
-          return storage.drafts.getRealm(identifier)
-          .then(function(success) {
-              if(!success.data) return false;
-
-              return documentRealmCache[identifier] = success.data;
-          })
-        },
       //==================================
       //
       //==================================
-      load: function(identifier, expectedSchema, config) {
+      getRealm: function(identifier, config) {
 
-        return storage.drafts.get(identifier, {info: ""}, config).then(
-          function(success) { return success; },
+        if(documentRealmCache[identifier])
+          return $q.when(documentRealmCache[identifier]);
+
+        return storage.drafts.getRealm(identifier)
+        .then(function(success) {
+            if(!success.data) return false;
+
+            return documentRealmCache[identifier] = success.data;
+        })
+        .catch(function(error){
+          if (error.status == 404 || error.status == 403){
+            return storage.documents.getRealm(identifier)
+            .then(function(success) {
+                if(!success.data) return false;
+
+                return documentRealmCache[identifier] = success.data;
+            })
+          }
+        })
+      },
+      //==================================
+      //
+      //==================================
+      load: function(identifier, expectedSchema) {
+
+        return storage.drafts.get(identifier, {
+          info: ""
+        }).then(
+          function(success) {
+            return success;
+          },
           function(error) {
-            if (error.status == 404)
-              return storage.documents.get(identifier, {info: ""}, config);
+            if (error.status == 404 || error.status == 403)
+              return storage.documents.get(identifier, {
+                info: ""
+              });
             throw error;
           }).then(
           function(success) {
@@ -136,10 +135,10 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
                 status: "badSchema"
               };
 
-            var hasDraft = !!info.workingDocumentCreatedOn;
+            var hasDraft = !!info.workingDocumentCreatedOn || !!info.createdOn;
             var securityPromise = hasDraft ?
-              storage.drafts.security.canUpdate(info.identifier, info.type, undefined, config) :
-              storage.drafts.security.canCreate(info.identifier, info.type, undefined, config);
+              storage.drafts.security.canUpdate(info.identifier, info.type) :
+              storage.drafts.security.canCreate(info.identifier, info.type);
 
             return securityPromise.then(
               function(isAllowed) {
@@ -151,14 +150,7 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
                     status: "notAuthorized"
                   };
 
-                var documentPromise = hasDraft ?
-                  storage.drafts.get(identifier, undefined, config) :
-                  storage.documents.get(identifier, undefined, config);
-
-                return documentPromise.then(
-                  function(success) {
-                    return success.data;
-                  });
+                  return info.body;
               });
           });
       },
@@ -166,40 +158,23 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
       //==================================
       //
       //==================================
-      draftExists: function(identifier, config) {
+      draftExists: function(identifier) {
 
-        return storage.drafts.exists(identifier, null, config);
-      },
-
-      //==================================
-      //
-      //==================================
-      canSaveDraft: function(document, config) {
-
-        var identifier = document.header.identifier;
-        var schema = document.header.schema;
-        var metadata = {};
-
-        if (document.government)
-          metadata.government = document.government.identifier;
-
-        // Check if document exists
-
-        return _self.draftExists(identifier, config).then(function(exists) {
-
-          // Check user security on document
-
-          var qCanWrite = exists ? storage.drafts.security.canUpdate(identifier, schema, metadata, config) :
-            storage.drafts.security.canCreate(identifier, schema, metadata, config);
-
-          return qCanWrite;
-
+        return storage.drafts.get(identifier, {
+          info: ""
+        }).then(function() {
+          return true;
+        }, function(error) {
+          if (error.status == 404)
+            return false;
+          throw error;
         });
       },
+
       //==================================
       //
       //==================================
-      saveDraft: function(document, config) {
+      saveDraft: function(document) {
 
         var identifier = document.header.identifier;
         var metadata = {};
@@ -211,8 +186,8 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
           function(hasDraft) {
 
             var securityPromise = hasDraft ?
-              storage.drafts.security.canUpdate(identifier, document.header.schema, metadata, config) :
-              storage.drafts.security.canCreate(identifier, document.header.schema, metadata, config);
+              storage.drafts.security.canUpdate(identifier, document.header.schema, metadata) :
+              storage.drafts.security.canCreate(identifier, document.header.schema, metadata);
 
             return securityPromise.then(
               function(isAllowed) {
@@ -221,7 +196,7 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
                     error: "Not authorized to save draft"
                   };
 
-                return storage.drafts.put(identifier, document, config);
+                return storage.drafts.put(identifier, document);
               });
           });
       },
@@ -229,16 +204,22 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
       //==================================
       //
       //==================================
-      documentExists: function(identifier, config) {
+      documentExists: function(identifier) {
 
-        return storage.documents.exists(identifier, undefined, config);
+        return storage.documents.get(identifier).then(function() {
+          return true;
+        }, function(error) {
+          if (error.status == 404)
+            return false;
+          throw error;
+        });
       },
 
 
       //==================================
       //
       //==================================
-      canPublish: function(document, config) {
+      canPublish: function(document) {
 
         var identifier = document.header.identifier;
         var schema = document.header.schema;
@@ -249,12 +230,12 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
 
         // Check if document exists
 
-        return _self.documentExists(identifier, config).then(function(exists) {
+        return _self.documentExists(identifier).then(function(exists) {
 
           // Check user security on document
 
-          var qCanWrite = exists ? storage.documents.security.canUpdate(identifier, schema, metadata, config) :
-            storage.documents.security.canCreate(identifier, schema, metadata, config);
+          var qCanWrite = exists ? storage.documents.security.canUpdate(identifier, schema, metadata) :
+            storage.documents.security.canCreate(identifier, schema, metadata);
 
           return qCanWrite;
 
@@ -264,7 +245,7 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
       //==================================
       //
       //==================================
-      publish: function(document, config) {
+      publish: function(document) {
 
         var identifier = document.header.identifier;
         var schema = document.header.schema;
@@ -275,12 +256,12 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
 
         // Check if document exists
 
-        return _self.documentExists(identifier, config).then(function(exists) {
+        return _self.documentExists(identifier).then(function(exists) {
 
           // Check user security on document
 
-          var qCanWrite = exists ? storage.documents.security.canUpdate(identifier, schema, metadata, config) :
-            storage.documents.security.canCreate(identifier, schema, metadata, config);
+          var qCanWrite = exists ? storage.documents.security.canUpdate(identifier, schema, metadata) :
+            storage.documents.security.canCreate(identifier, schema, metadata);
 
           return qCanWrite;
 
@@ -297,16 +278,18 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
             // if the user is editing a locked record, remove the lock, update draft,
             // lock the draft and then update the workflow status.
             var metadata = {};
-            processRequest = storage.drafts.locks.get(document.header.identifier, { lockID: ''}, config)
+            processRequest = storage.drafts.locks.get(document.header.identifier, {
+                lockID: ''
+              })
               .then(function(lockInfo) {
-                return storage.drafts.locks.delete(document.header.identifier, lockInfo.data[0].lockID, config)
+                return storage.drafts.locks.delete(document.header.identifier, lockInfo.data[0].lockID)
                   .then(function() {
-                    return storage.drafts.put(document.header.identifier, document, config);
+                    return storage.drafts.put(document.header.identifier, document);
                   })
                   .then(function(draftInfo) {
                     return storage.drafts.locks.put(document.header.identifier, {
                       lockID: lockInfo.data[0].lockID
-                    }, config);
+                    });
                   }).then(function(draftInfo) {
                     console.log(draftInfo);
 
@@ -318,7 +301,7 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
                 })
               });
           } else {
-            processRequest = storage.drafts.put(identifier, document, config).then(function(draftInfo) {
+            processRequest = storage.drafts.put(identifier, document).then(function(draftInfo) {
               return createWorkflow(draftInfo); // return workflow info
             }); //editFormUtility.publish(document);
           }
@@ -329,7 +312,7 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
       //==================================
       //
       //==================================
-      publishRequest: function(document, config) {
+      publishRequest: function(document) {
 
         var identifier = document.header.identifier;
         var schema = document.header.schema;
@@ -340,13 +323,13 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
 
         // Check if doc & draft exists
 
-        return _self.draftExists(identifier, config).then(function(exists) {
+        return _self.draftExists(identifier).then(function(exists) {
 
           // Check user security on drafts
 
           var qCanWrite = exists ?
-            storage.drafts.security.canUpdate(identifier, schema, metadata, config) :
-            storage.drafts.security.canCreate(identifier, schema, metadata, config);
+            storage.drafts.security.canUpdate(identifier, schema, metadata) :
+            storage.drafts.security.canCreate(identifier, schema, metadata);
 
           return qCanWrite;
 
@@ -358,7 +341,7 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
             };
 
           //Save draft
-          return storage.drafts.put(identifier, document, config);
+          return storage.drafts.put(identifier, document);
 
         }).then(function(draftInfo) {
           return createWorkflow(draftInfo); // return workflow info
@@ -373,12 +356,12 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
         throw "No workflow type defined for this record type: " + draftInfo.type;
 
       var workflowData = {
-        "realm": draftInfo.realm || realm,
-        "documentID": draftInfo.documentID,
-        "identifier": draftInfo.identifier,
-        "title": draftInfo.workingDocumentTitle,
-        "abstract": draftInfo.workingDocumentSummary,
-        "metadata": draftInfo.workingDocumentMetadata,
+        "realm":        draftInfo.Realm || realm,
+        "documentID":   draftInfo.documentID,
+        "identifier":   draftInfo.identifier,
+        "title":        draftInfo.workingDocumentTitle,
+        "abstract":     draftInfo.workingDocumentSummary,
+        "metadata":     draftInfo.workingDocumentMetadata,
         "additionalInfo": additionalInfo
       };
 
