@@ -63,7 +63,8 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.saveContacts       = saveContacts
     _ctrl.showChecklist      = showChecklist
     _ctrl.numParticipants    = numParticipants
-
+    _ctrl.loading            = false
+    _ctrl.loadingObj         = {}
     // options
     _ctrl.orgTypes           = orgTypes[_ctrl.type]
     _ctrl.orgMediums         = mediums
@@ -92,7 +93,18 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.focalPoint              = {}
     _ctrl.participants            = []
 
-    //init
+    var loadingCheck = false
+    $scope.$watch('participationCtrl.loadingObj',function(){
+      if(!loadingCheck){
+        loadingCheck = true
+        _ctrl.loading = true
+        $timeout(function(){
+          _ctrl.loading = loading()
+          loadingCheck = false
+        },400)
+      }
+    },true);
+
     initStepRequest().then(loadParticipationRequest).then(initSteps)
 
     _ctrl.genMeta=genMeta
@@ -122,15 +134,20 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       if(!_ctrl.doc.list)
         _ctrl.doc.list={}
     }
+    function loading(){
+      var props = Object.keys(_ctrl.loadingObj)
+      for (var i = 0; i < props.length; i++)
+        if(_ctrl.loadingObj[props[i]])
+          return true
 
+      return false
+    }
     function loadPresigned(url){
       var atts = _ctrl.organization.attachment
 
-      for (var i = 0; i < atts.length; i++) {
-
-          if(!isTemp(atts[i].url))
-            getPresigned(i,atts[i].url)
-      }
+      for (var i = 0; i < atts.length; i++)
+        if(!isTemp(atts[i].url))
+          getPresigned(i,atts[i].url)
     }
 
     function redirect_blank(url) {
@@ -234,8 +251,9 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         getOrg()
       })
     }
-
+    _ctrl.initStepsContacts=initStepsContacts
     function initStepsContacts(){
+      initStepsOrganization()
       if(_ctrl.doc.nominatingOrganization)
         return getOrg().then(function(){
           var headPromise  = getHead()
@@ -244,28 +262,44 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
                   $scope.$watch('participationCtrl.head',function(newValue, oldValue){
                     if(newValue._id != oldValue._id){
                       _ctrl.doc.head = newValue._id
-                      save()
-                    }
+                      save().then(function(){
+                        getHead()
+                        getFocalPoint()
+                      })
+                      }else{
+                        getHead()
+                        getFocalPoint()
+                      }
+
                   },true)
                   $scope.$watch('participationCtrl.focalPoint',function(newValue, oldValue){
                     if(newValue._id != oldValue._id){
                       _ctrl.doc.focalPoint = newValue._id
-                      save()
-                    }
+                      save().then(function(){
+                        getHead()
+                        getFocalPoint()
+                      })
+                      }else{
+                        getHead()
+                        getFocalPoint()
+                      }
+
                   },true)
           })
         })
     }
-
+    // $scope.$watch('participationCtrl.addContact',function(newValue, oldValue){
+    //     getHead()
+    //     getFocalPoint()
+    // })
     function initStepsParticipants (){
       if(_ctrl.doc.nominatingOrganization)
         return initStepsContacts().then(function(){
           return getParticipants().then(function(){
-            $scope.$watch('participationCtrl.activeParticipant._id',function(newValue, oldValue){
+            $scope.$watch('participationCtrl.activeParticipant',function(newValue, oldValue){
               if(newValue!= oldValue && newValue)
                 getParticipants()
-
-            })
+            },true)
           })
         })
     }
@@ -315,6 +349,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
 
     function getParticipants(){
+      _ctrl.loadingObj.getParticipants = true
       var deferred = $q.defer()
       deferred.resolve(true)
       if(!_ctrl.doc._id) return deferred.promise
@@ -330,10 +365,11 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
                .then(function(res){
                  if(res.data.length)
                    _ctrl.participants = res.data
-
+                   _ctrl.loadingObj.getParticipants = false
                   return _ctrl.participants
                }).catch(function(e){
                  _ctrl.error=e
+                 _ctrl.loadingObj.getParticipants = false
                  console.error(e)
                })
     }
@@ -351,51 +387,76 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
 
     function getHead(){
+      _ctrl.loadingObj.getHead = true
       var deferred = $q.defer()
       deferred.resolve(true)
-      if(!_ctrl.doc.head) return deferred.promise
-      return $http.get('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent(_ctrl.doc.head),{ cache: true })
+
+      if(!_ctrl.doc.head) {
+         _ctrl.loadingObj.getHead = false
+         return deferred.promise
+      }
+      return $http.get('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent(_ctrl.doc.head))
           .then(function(res){
             _ctrl.head = res.data
+            _ctrl.loadingObj.getHead = false
             delete(_ctrl.head.meta)
           }).catch(function(err){
             _ctrl.error = err
+            _ctrl.loadingObj.getHead = false
             console.error(err)
           })
     }
 
     function getFocalPoint(){
+      _ctrl.loadingObj.getFP = true
       var deferred = $q.defer()
       deferred.resolve(true)
-      if(!_ctrl.doc.focalPoint) return deferred.promise
-      return $http.get('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent(_ctrl.doc.focalPoint),{ cache: true })
+      if(!_ctrl.doc.focalPoint){
+        _ctrl.loadingObj.getFP = false
+         return deferred.promise
+      }
+      return $http.get('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent(_ctrl.doc.focalPoint))
           .then(function(res){
             _ctrl.focalPoint = res.data
+            _ctrl.loadingObj.getFP = false
             delete(_ctrl.focalPoint.meta)
           }).catch(function(err){
             _ctrl.error = err
+            _ctrl.loadingObj.getFP = false
             console.error(err)
           })
     }
 
     function getOrg(){
+      _ctrl.loadingObj.getOrg = true
       if(_ctrl.doc.nominatingOrganization)
-        return $http.get('/api/v2018/kronos/participation-request/organizations/'+encodeURIComponent(_ctrl.doc.nominatingOrganization),{ cache: true })
+        return $http.get('/api/v2018/kronos/participation-request/organizations/'+encodeURIComponent(_ctrl.doc.nominatingOrganization))
             .then(function(res){
               _ctrl.organization = res.data
               if(!_ctrl.organization.attachment)_ctrl.organization.attachment=[]
-              // else {
-              //   loadPresigned()
-              // }
+              _ctrl.loadingObj.getOrg = false
               delete(_ctrl.organization.meta)
             }).catch(function(err){
               _ctrl.error = err
+              _ctrl.loadingObj.getOrg = false
               console.error(err)
             })
-      return false
+      else{
+        _ctrl.loadingObj.getOrg = false
+        return false
+      }
     }
 
     function changeStep(step,type){
+
+      if( (_ctrl.editForm && _ctrl.editForm.$dirty) ||
+          (_ctrl.editFormOrg && _ctrl.editFormOrg.$dirty) ||
+          _ctrl.addContact)
+        if(!confirm("Are you sure you want to leave this page?  Any data inputed in this step will be lost without proceeding to the next step."))
+          return
+
+      initStepsContacts()
+
       if(type==='request')$location.url('/'+step)
 
       if(!isStepComplete(step)&& step!=='finished') return
@@ -407,6 +468,19 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     }
 
+    function resetForms(){
+      if(_ctrl.editForm){
+        _ctrl.editForm.$touched = false
+        _ctrl.editForm.$submitted = false
+        _ctrl.editForm.$dirty = false
+      }
+      if(_ctrl.editFormOrg){
+        _ctrl.editFormOrg.$touched = false
+        _ctrl.editFormOrg.$submitted = false
+        _ctrl.editFormOrg.$dirty = false
+      }
+    }
+
     function saveCheckList(){
         if(!_ctrl.doc.checklist){
           _ctrl.doc.checklist=true
@@ -415,6 +489,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         save().then(function(isSaved){
           if(isSaved){
             $scope.$emit('showSuccess', 'Checklist saved');
+            resetForms()
             changeStep('organization')
           }
         })
@@ -427,6 +502,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         save().then(function(isSaved){
           if(isSaved){
             $scope.$emit('showSuccess', 'Contacts saved');
+            resetForms();
             changeStep('participants')
           }
         })
@@ -439,8 +515,9 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
           _ctrl.doc.conference = _ctrl.conferenceId
           _ctrl.doc.currentStep = 'checklist'
           _ctrl.doc.requestType = type
-          save()
+          save().then(function(){resetForms()})
         }
+        resetForms()
         changeStep('checklist',type)
     }
 
@@ -462,6 +539,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
                 .then(function(isSaved){
                   if(isSaved){
                     $scope.$emit('showSuccess', 'Organization saved');
+                    resetForms()
                     changeStep('contacts')
                   }
 
@@ -483,6 +561,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
                 .then(function(isSaved){
                   if(isSaved){
                     $scope.$emit('showSuccess', 'Organization saved');
+                    resetForms()
                     changeStep('contacts')
                   }
 
@@ -503,6 +582,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         return $http.post('/api/v2018/kronos/participation-requests',_ctrl.doc)
             .then(function(res){
               _ctrl.doc._id = res.data.id
+              resetForms()
               return true
             })
             .catch(function(err){
@@ -513,6 +593,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       else
         return $http.put('/api/v2018/kronos/participation-requests/'+encodeURIComponent(_ctrl.doc._id),_ctrl.doc)
             .then(function(res){
+              resetForms()
               return true
             })
             .catch(function(err){
@@ -588,17 +669,21 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       return ''
     }
     function findAttachementIndex ( url){
-      if(!Array.isArray(_ctrl.organization.attachment)) return ''
+      if(!Array.isArray(_ctrl.organization.attachment)) return -1
+
       for (var i = 0; i < _ctrl.organization.attachment.length; i++) {
-        if(_ctrl.organization.attachment.url === url)
+        if(_ctrl.organization.attachment[i].url === url)
           return i
       }
-      return ''
+      return -1
     }
     _ctrl.removeAttachement = removeAttachement
     function removeAttachement (attachment){
+
       var i = findAttachementIndex ( attachment.url)
-      _ctrl.organization.attachment.splice(i,1)
+
+      if(~i)
+        _ctrl.organization.attachment.splice(i,1)
     }
 
     _ctrl.submit=submit
