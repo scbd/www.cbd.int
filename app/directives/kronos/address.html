@@ -5,8 +5,9 @@
           <div class="col-md-2">
             <div class="form-group" ng-class="{'has-error': (addressEditForm.streetnumber.$invalid && (addressEditForm.streetnumber.$touched || addressEditForm.$submitted)) }">
               <label class="control-label" for="title">Street number</label>
-              <input required ng-model="binding.streetNumber" type="text" class="form-control" id="streetnumber" name="streetnumber" >
+              <input required ng-model="binding.streetNumber" type="text" class="form-control" id="streetnumber" name="streetnumber" ng-maxlength="25">
               <p ng-show="addressEditForm.streetnumber.$invalid && (addressEditForm.streetnumber.$touched || addressEditForm.$submitted)" class="help-block text-danger">street number is required.</p>
+                      <p class="help-block text-danger small" ng-show="(editForm.phone.$error.maxlength ) && (editForm.phone.$touched || editForm.$submitted)">Street number is too large. Max 25 chars.</span>
             </div>
           </div>
           <div class="col-md-8">
