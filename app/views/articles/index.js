@@ -49,6 +49,8 @@ return ['$location','$scope','$timeout', '$route', '$sce', '$q', 'articleService
             }
 
             loadArticle();
-
+            if (window.FB && window.FB.XFBML){
+                window.FB.XFBML.parse();
+            }
     }];
 });
