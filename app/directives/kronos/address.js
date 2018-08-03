@@ -8,8 +8,12 @@ define(['app', 'text!./address.html'], function(app, html) { 'use strict';
       scope: {
         type:'=',
         binding: "=ngModel",
+        isSubmitted: "="
       },
 			link: function ($scope) {
+        $scope.$watch('isSubmitted',function(){
+          $scope.addressEditForm.$submitted = $scope.isSubmitted
+        })
         var params = {
                         s:{'name.en':1},
                         f:{'name.en':1,code:1}
