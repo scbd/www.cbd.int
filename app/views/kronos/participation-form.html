@@ -31,6 +31,10 @@
     .paddingless{
       padding: 0 0 0 0 !important;
     }
+    .vertical_center {
+    		display: flex;
+    		align-items: center;
+    }
   </style>
 
   <div class="col-xs-12" ng-if="participationCtrl.step!=='request'">
@@ -40,9 +44,9 @@
     <div class="col-xs-10 col-xs-offset-1 text-center">
       <h5>Steps and Progress</h5>
     </div>
-    <div class="col-xs-2 col-xs-offset-1 paddingless" ng-click="participationCtrl.changeStep('checklist')">
+    <div class="col-xs-2 col-xs-offset-1 paddingless" class="incomplete" ng-click="participationCtrl.changeStep('checklist')">
       <div id="myProgress">
-        <div ng-class="{'incomplete':!participationCtrl.isStepComplete('checklist'),'complete':participationCtrl.isStepComplete('checklist')}">
+        <div ng-class="{'incomplete':!(participationCtrl.isStepComplete('checklist') || participationCtrl.step==='checklist'),'complete':(participationCtrl.isStepComplete('checklist') || participationCtrl.step==='checklist')}">
           Requirements
         </div>
       </div>
@@ -78,14 +82,24 @@
 
   </div>
 
-  <div  ng-include="participationCtrl.partialMap[participationCtrl.step]"></div>
+  <div  ng-show="!participationCtrl.loading" ng-include="participationCtrl.partialMap[participationCtrl.step]"></div>
+
+  <div class="col-xs-12" ng-if="participationCtrl.loading" style="width: 100%; height:200px; Background:rgba(10, 10, 10,.1);color:#fff;z-index:10000;">
+
+          <div class="vertical_center" style="height:200px;">
+            <div class="col-xs-12 text-center" >
+              <i style="color:#069554;" class="fa fa-circle-o-notch fa-spin fa-5x fa-fw"></i>
+            </div>
+          </div>
+
+  </div>
 
   <div class="col-xs-12" ng-if="participationCtrl.step!=='request'">
-    <br>
-    <br>
-    <div class="col-xs-2 col-xs-offset-1 paddingless" ng-click="participationCtrl.changeStep('checklist')">
+    <br ng-show="!participationCtrl.loading">
+    <br ng-show="!participationCtrl.loading">
+    <div class="col-xs-2 col-xs-offset-1 paddingless" class="incomplete" ng-click="participationCtrl.changeStep('checklist')">
       <div id="myProgress">
-        <div ng-class="{'incomplete':!participationCtrl.isStepComplete('checklist'),'complete':participationCtrl.isStepComplete('checklist')}">
+        <div ng-class="{'incomplete':!(participationCtrl.isStepComplete('checklist') || participationCtrl.step==='checklist'),'complete':(participationCtrl.isStepComplete('checklist') || participationCtrl.step==='checklist')}">
           Requirements
         </div>
       </div>

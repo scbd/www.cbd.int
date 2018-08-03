@@ -37,11 +37,7 @@
                 <select size="7" required ng-model="participationCtrl.doc.designation" class="form-control" id="designation" name="designation" multiple>
 
                   <option value="Photographer">Photographer</option>
-                  <option value="Reporter">Reporter</option>
-                  <option value="Correspondent">Correspondent</option>
-                  <option value="Editor">Editor</option>
-                  <option value="Producer">Producer</option>
-                  <option value="Technician">Technician</option>
+                  <option value="Other">Other</option>
                 </select>
                 <p ng-show="!participationCtrl.doc.designation && (editForm.designation.$touched || editForm.$submitted)" class="help-block text-danger small">A job title is required.</p>
 
@@ -228,8 +224,8 @@
 
     <div class="col-xs-12 ">
       <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
-      <button ng-click="participationCtrl.changeStep('request')" ng-disabled="false" type="button" class="btn btn-default">Previous</button>
-      <button ng-click="participationCtrl.saveCheckList()"  ng-disabled="!editFormCheckList.$valid" ng-disabled="false" type="button" class="btn btn-success pull-right">Next</button>
+      <button ng-click="participationCtrl.editForm=editForm;participationCtrl.changeStep('request')" ng-disabled="false" type="button" class="btn btn-default">Previous</button>
+      <button ng-click="participationCtrl.editForm=editForm;participationCtrl.saveCheckList()"  ng-disabled="!editFormCheckList.$valid" ng-disabled="false" type="button" class="btn btn-success pull-right">Next</button>
     </div>
   </section>
 

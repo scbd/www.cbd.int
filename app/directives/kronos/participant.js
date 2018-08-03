@@ -48,7 +48,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
 
              }
             if(!$scope.binding.attachment)$scope.binding.attachment=[]
-
+            if($scope.addressDuringMeeting && !$scope.showAddressDuringMeeting) $scope.showAddressDuringMeeting=true
 
 
             $timeout(function(){
@@ -56,6 +56,22 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
             },3000)
         })
 
+        function resetForm(){
+          if($scope.editForm){
+            $scope.editForm.$touched = false
+            $scope.editForm.$submitted = false
+            $scope.editForm.$dirty = false
+          }
+        }
+        $scope.cancel=cancel
+        function cancel(){
+
+          if(confirm("Are you sure you want to leave this page?  Any data inputed in this step will be lost without proceeding to the next step.")) {
+            $scope.showContact=false;
+            initDoc();
+          }else return
+
+        }
 
         function redirect_blank(url) {
           var a = document.createElement('a');
@@ -103,6 +119,12 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
           if($scope.binding && $scope.binding.meeting && !$scope.binding.meeting.length)
             delete($scope.binding.meeting)
 
+          var props = Object.keys($scope.binding)
+          for (var i = 0; i < props.length; i++)
+            if(!$scope.binding[props[i]])
+              delete($scope.binding[props[i]])
+
+
           if(!$scope.binding._id)
             return $http.post('/api/v2018/kronos/participation-request/participants',$scope.binding,{headers:{requestId:$scope.requestId,conferenceCode:$scope.conferenceCode}})
                 .then(function(res){
@@ -131,6 +153,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
           $scope.binding.requestId = $scope.requestId
           $scope.binding.requestType = $scope.typee
           $scope.binding.organization = $scope.organization._id
+          $scope.editForm.$submitted=false
         }
 
         function isMedia(media){
@@ -180,18 +203,20 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
             }
             return ''
           }
-          function findAttachementIndex ( url){
-            if(!Array.isArray($scope.binding.attachment)) return ''
+          function findAttachementIndex (url){
+            if(!Array.isArray($scope.binding.attachment)) return -1
             for (var i = 0; i < $scope.binding.attachment.length; i++) {
-              if($scope.binding.attachment.url === url)
+              if($scope.binding.attachment[i].url === url)
                 return i
             }
-            return ''
+            return -1
           }
           $scope.removeAttachement = removeAttachement
           function removeAttachement (attachment){
-            var i = findAttachementIndex ( attachment.url)
-            $scope.binding.attachment.splice(i,1)
+            var i = findAttachementIndex (attachment.url)
+
+            if(~i)
+              $scope.binding.attachment.splice(i,1)
           }
 
         $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms',{ cache: true })
