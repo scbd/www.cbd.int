@@ -12,14 +12,14 @@
         <span ng-if="!isContact">Participant</span>
       </h2>
     </div>
-    <user-message error="error" msg="msg" ></user-message>
+
     <div class="col-xs-12 " >
       <div class="pull-right">
 
-        <button ng-click="showContact=false; initDoc();" ng-disabled="false" type="button" class="btn btn-default">Cancel</button>
+        <button ng-click="cancel()" ng-disabled="false" type="button" class="btn btn-default">Cancel</button>
         <button ng-click="save()"   type="button" class="btn btn-primary">Save</button>
       </div>
-      <user-message error="error" msg="msg" ></user-message>
+
     </div>
     <form  name="editForm"  novalidate>
     <div class="col-xs-12 ">
@@ -99,12 +99,12 @@
               <select required ng-model="binding.designation" class="form-control" id="designation" name="designation">
                 <option value=" "> &nbsp;</option>
                 <option value="Cameraperson">Cameraperson</option>
-                <option value="Director">Director</option>
-                <option value="Photographer">Photographer</option>
-                <option value="Reporter">Reporter</option>
                 <option value="Correspondent">Correspondent</option>
+                <option value="Director">Director</option>
                 <option value="Editor">Editor</option>
+                <option value="Photographer">Photographer</option>
                 <option value="Producer">Producer</option>
+                <option value="Reporter">Reporter</option>
                 <option value="Technician">Technician</option>
                 <option value="Other">Other</option>
               </select>
@@ -260,7 +260,7 @@
       </div>
 
       <section ng-if="!binding.useOrganizationAddress">
-        <address ng-model="binding.address"></address>
+        <address is-submitted="editForm.$submitted" ng-model="binding.address"></address>
       </section>
     </div>
   </div>
@@ -287,19 +287,19 @@
           <label>During Meeting</label>
           <div class="panel panel-default">
             <div class="panel-body">
-              <div class="col-md-6" ng-class="{'has-error': (!binding.phoneDuringMeeting && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)) }">
+              <div class="col-md-6" ng-class="{'has-error': (editForm.phoneDuringMeeting.$error.minlength || editForm.phoneDuringMeeting.$error.maxlength ) && (editForm.phoneDuringMeeting.$touched || editForm.$submitted) }">
                 <div class="form-group">
                   <label class="control-label" for="phoneDuringMeeting">Phone <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Phone number you can be reached during the meeting." help></i></label>
-                  <input ng-if="binding.meeting.length" required ng-model="binding.phoneDuringMeeting" type="text" class="form-control" id="phoneDuringMeeting" name="phoneDuringMeeting" ng-minlength="8" ng-maxlength="35" placeholder="example: +1 514.288.2220">
+                  <input ng-if="binding.meeting.length" ng-model="binding.phoneDuringMeeting" type="text" class="form-control" id="phoneDuringMeeting" name="phoneDuringMeeting" ng-minlength="8" ng-maxlength="35" placeholder="example: +1 514.288.2220">
 
-                  <p ng-show="!binding.phoneDuringMeeting  && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)" class="help-block text-danger small">Phone number is required.</p>
-                  <p class="help-block text-danger small" ng-show="(editForm.phoneDuringMeeting.$error.minlength || editForm.phoneDuringMeeting.$error.maxlength ) && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)">Please match pattern [+1 514.288.2220]</span>
+                  <p class="help-block text-danger small" ng-if="(editForm.phoneDuringMeeting.$error.minlength || editForm.phoneDuringMeeting.$error.maxlength ) && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)">Please match pattern [+1 514.288.2220]</span>
                 </div>
               </div>
               <div class="col-md-12">
-                <button ng-click="showAddressDuringMeeting=!showAddressDuringMeeting" type="button" class="btn btn-default btn-xs">Add address during meeting >></button> <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Address where you will be staying during the meeting (if known)" help></i>
-                <div class="row" ng-show="showAddressDuringMeeting" style="margin-top:20px;">
-                  <address  ng-if="showAddressDuringMeeting" ng-model="binding.addressDuringMeeting"></address>
+                <button  ng-click="showAddressDuringMeeting=!showAddressDuringMeeting" type="button" class="btn btn-default btn-xs">Add address during meeting </button> <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Address where you will be staying during the meeting (if known)" help></i>
+                <div class="row" ng-if="showAddressDuringMeeting" style="margin-top:20px;">
+                  <address  is-submitted="editForm.$submitted" ng-model="binding.addressDuringMeeting"></address>
+
                 </div>
               </div>
             </div>
@@ -316,7 +316,7 @@
                     </div>
                     <file-drop danger="(!findAttachement(binding.attachment,'byLineArticleOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'byLineArticleOne',container:binding},file,error)" ng-model="byLineArticleOne"  class="form-control" id="byLineArticleOne" ></file-drop>
                     <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'byLineArticleOne').url)}}">{{findAttachement(binding.attachment,'byLineArticleOne').title}}</a> <i ng-show="findAttachement(binding.attachment,'byLineArticleOne')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'byLineArticleOne'))"></i></p>
-                    <p ng-show="(!findAttachement(binding.attachment,'byLineArticleOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="text-danger small">Bylined article one  is required.</p>
+                    <p ng-if="(!findAttachement(binding.attachment,'byLineArticleOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="text-danger small">Bylined article one  is required.</p>
                 </div>
 
                 <div class="col-md-6" ng-show="isMedia('Print')">
@@ -380,14 +380,13 @@
 
   </section>
 </form>
-
       <div class="col-xs-12 ">
         <div class="pull-right" >
 
-          <button ng-click="showContact=false; initDoc();" ng-disabled="false" type="button" class="btn btn-default">Cancel</button>
+          <button ng-click="cancel()" ng-disabled="false" type="button" class="btn btn-default">Cancel</button>
           <button ng-click="save()" type="button" class="btn btn-primary">Save</button>
         </div>
-        <user-message error="error" msg="msg" ></user-message>
+
       </div>
 
   </section>
