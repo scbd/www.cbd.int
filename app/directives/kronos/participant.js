@@ -31,10 +31,15 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         $scope.isDesignation = isDesignation
         $scope.dobRegex= /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/
 
+        $scope.$watch('showContact',function(prev, after){
+          if(prev!==after)
+            initDoc()
+        });
         var conference
+
         $scope.$watch('binding',function(){
-            if($scope.binding.useOrganizationAddress===undefined)
-              initDoc()
+            //if($scope.binding.useOrganizationAddress===undefined)
+              // initDoc()
             if(!$scope.binding.meeting || !$scope.binding.meeting.length){
                $scope.binding.meeting =[]
                if($scope.isContact)
@@ -148,6 +153,11 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         }
 
         function initDoc(){
+
+          $scope.editForm.$setPristine()
+          $scope.editForm.$setUntouched()
+          $scope.editForm.$submitted=false
+
           if(!$scope.isContact) $scope.attending.val=true
           $scope.binding.useOrganizationAddress = true
           $scope.binding.requestId = $scope.requestId
