@@ -3,7 +3,7 @@
     <h2 ng-if="!participationCtrl.addContact">Contacts</h2>
     <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
   </div>
-  <div class="col-xs-12 " ng-if="!participationCtrl.addContact">
+  <div class="col-xs-12 " ng-if="!participationCtrl.addContact" ng-init="participationCtrl.initStepsContacts()">
     <div class="table-responsive" >
       <table class="table table-condensed table-hover" >
         <tr>
@@ -33,7 +33,7 @@
           </td>
           <td >
             <button ng-if="participationCtrl.hasFocalPoint()" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-default btn-xs">Edit   </button>
-            <button ng-if="!participationCtrl.hasFocalPoint()" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-default btn-xs">Add Focal Point   </button>
+            <button ng-if="!participationCtrl.hasFocalPoint()" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-default btn-xs">Main contact   </button>
           </td>
         </tr>
       </table>
