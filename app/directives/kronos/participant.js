@@ -197,7 +197,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
 
         function isMedia(media){
           for(var i=0; i<$scope.organization.medium.length; i++)
-            if($scope.organization.medium[0]===media)
+            if($scope.organization.medium[i]===media)
               return true
           return false
         }
