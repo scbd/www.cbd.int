@@ -280,10 +280,10 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       if(_ctrl.doc.nominatingOrganization)
         return initStepsContacts().then(function(){
           return getParticipants().then(function(){
-            $scope.$watch('participationCtrl.activeParticipant',function(newValue, oldValue){
+            $scope.$watch('participationCtrl.activeParticipant._id',function(newValue, oldValue){
               if(newValue!= oldValue && newValue)
                 getParticipants()
-            },true)
+            })
           })
         })
     }
