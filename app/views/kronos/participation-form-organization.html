@@ -43,8 +43,8 @@
               </div>
             </div>
             <div class="col-md-6" ng-if="participationCtrl.type==='media'">
-              <div class="form-group" ng-class="{'has-error': (!participationCtrl.organization.medium && (editFormOrg.medium.$touched || editFormOrg.$submitted)) }">
-                <label class="control-label" for="medium">Type of media(s) <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ctrl & click on windows &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp cmd & click on mac" help></i> </label>
+              <div class="form-group" ng-class="{'has-error': ((!participationCtrl.organization.medium || !participationCtrl.organization.medium.length)  && (editFormOrg.medium.$touched || editFormOrg.$submitted)) }">
+                <label class="control-label" for="medium">Type of media(s)<i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ctrl & click on windows &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp cmd & click on mac" help></i> </label>
                 <select
                   required
                   name='medium'
@@ -55,7 +55,7 @@
                   ng-options="o.identifier as o.title for o in participationCtrl.orgMediums"
                   >
                   </select>
-                  <p ng-show="!participationCtrl.organization.medium && (editFormOrg.medium.$touched || editFormOrg.$submitted)" class="help-block text-danger small">medium is required.</p>
+                  <p ng-show="(!participationCtrl.organization.medium || !participationCtrl.organization.medium.length) && (editFormOrg.medium.$touched || editFormOrg.$submitted)" class="help-block text-danger small">medium is required.</p>
               </div>
             </div>
 
@@ -67,7 +67,7 @@
         <label>Address</label>
         <div class="panel panel-default">
           <div class="panel-body">
-            <address name="address" ng-model="participationCtrl.organization.address"></address>
+            <address is-submitted="editFormOrg.$submitted" name="address" ng-model="participationCtrl.organization.address"></address>
           </div>
         </div>
       </div>
@@ -109,7 +109,7 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group" ng-class="{'has-error': (!participationCtrl.organization.language && (editFormOrg.language.$touched || editFormOrg.$submitted)) }">
-                  <label class="control-label" for="language">Operating language </label>
+                  <label class="control-label" for="language">Language </label>
                   <select
                     ng-if="participationCtrl.languages.length"
                     id="language"
@@ -132,13 +132,13 @@
         <div class="panel panel-default">
           <div class="panel-body">
               <div class="col-md-6">
-                <div class="form-group" ng-class="{'has-error': (!participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url && (editFormOrg.language.$touched || editFormOrg.$submitted || participationCtrl.organization.language)) }">
+                <div class="form-group" ng-class="{'has-error': (!participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url && ( editFormOrg.$submitted)) }">
                   <label class="control-label" for="letterOfAssignment">Letter of assignment</label>
 
-                  <file-drop danger="(!participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url && (editFormOrg.language.$touched || editFormOrg.$submitted || participationCtrl.organization.language))" metadata="participationCtrl.genMeta()" class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({tag:'letterOfAssignment',container:participationCtrl.organization},file,error)" ng-model="participationCtrl.letterOfAssignment"  class="form-control" id="letterOfAssignment" ></file-drop>
+                  <file-drop danger="(!participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url && (editFormOrg.$submitted ))" metadata="participationCtrl.genMeta()" class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({tag:'letterOfAssignment',container:participationCtrl.organization},file,error)" ng-model="participationCtrl.letterOfAssignment"  class="form-control" id="letterOfAssignment" ></file-drop>
                   <p><a  ng-href="{{participationCtrl.viewAttachment(participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url)}}" target="_blank" >{{participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').title}}</a>
                   <i ng-show="participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment')"  class="fa fa-times-circle-o pointer" ng-click="participationCtrl.removeAttachement(participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment'))"></i></p>
-                  <p ng-show="(!participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url && (editFormOrg.language.$touched || editFormOrg.$submitted || participationCtrl.organization.language))" class="text-danger small">Assignment letter is required.</p>
+                  <p ng-show="(!participationCtrl.findAttachement(participationCtrl.organization.attachment,'letterOfAssignment').url && ( editFormOrg.$submitted ))" class="text-danger small">Assignment letter is required.</p>
                 </div>
               </div>
               <div class="col-md-6">
@@ -149,51 +149,19 @@
                 <file-drop  multiple class="xs" style="height:90px;" on-upload="participationCtrl.onUpload({container:participationCtrl.organization},file,error)" ng-model="participationCtrl.attachment"  class="form-control" id="attachments" ></file-drop>
                 <p ng-repeat="att in participationCtrl.organization.attachment track by $index" ng-if="!att.tag">
                   <a   ng-href="{{participationCtrl.viewAttachment(att.url)}}" target="_blank">{{att.title}}</a>
-                    <i ng-show="att.url"  class="fa fa-times-circle-o pointer" ng-click="participationCtrl.removeAttachement(att.url)"></i>
+                    <i ng-show="att.url"  class="fa fa-times-circle-o pointer" ng-click="participationCtrl.removeAttachement(att)"></i>
                 </p>
                   </div>
               </div>
             </div>
           </div>
       </div>
-
-      <div class="col-xs-12" ng-if="participationCtrl.type==='observer'">
-        <label>Observer Requirements</label>
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label" for="letterOfAssignment">Letter of interest </label>
-                <input type="file" class="form-control" id="letterOfAssignment" >
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label" for="letterOfAssignment">Statement demonstrating qualifications </label>
-                <input type="file" class="form-control" id="letterOfAssignment" >
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label class="control-label" for="letterOfAssignment">Statutes / by-laws / articels of incorporation</label>
-                <input type="file" class="form-control" id="letterOfAssignment" >
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label class="control-label" for="attachments">Attachments </label>
-              <input type="file" class="form-control" id="attachments" >
-            </div>
-          </div>
-        </div>
-      </div>
     </ng-form>
     <div>
     </div>
     <div class="col-xs-12">
         <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
-        <button ng-click="participationCtrl.changeStep('checklist')" ng-disabled="false" type="button" class="btn btn-default">Previous</button>
+        <button ng-click="participationCtrl.editFormOrg=editFormOrg;participationCtrl.changeStep('checklist')" ng-disabled="false" type="button" class="btn btn-default">Previous</button>
         <button ng-click="editFormOrg.$submitted=true;participationCtrl.editFormOrg=editFormOrg;participationCtrl.saveOrganization()" type="button" class="btn btn-success pull-right">Next</button>
     </div>
 </section>
