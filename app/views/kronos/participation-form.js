@@ -259,39 +259,23 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
           var headPromise  = getHead()
           var focalP = getFocalPoint()
           return $q.all([headPromise,focalP]).then(function(){
-                  $scope.$watch('participationCtrl.head',function(newValue, oldValue){
-                    if(newValue._id != oldValue._id){
-                      _ctrl.doc.head = newValue._id
-                      save().then(function(){
-                        getHead()
-                        getFocalPoint()
-                      })
-                      }else{
-                        getHead()
-                        getFocalPoint()
-                      }
+                  $scope.$watch('participationCtrl.head._id',function(newValue, oldValue){
+                    if(newValue != oldValue){
+                      _ctrl.doc.head = newValue
+                      save()
+                    }
 
-                  },true)
-                  $scope.$watch('participationCtrl.focalPoint',function(newValue, oldValue){
-                    if(newValue._id != oldValue._id){
-                      _ctrl.doc.focalPoint = newValue._id
-                      save().then(function(){
-                        getHead()
-                        getFocalPoint()
-                      })
-                      }else{
-                        getHead()
-                        getFocalPoint()
-                      }
-
-                  },true)
+                  })
+                  $scope.$watch('participationCtrl.focalPoint._id',function(newValue, oldValue){
+                    if(newValue != oldValue){
+                      _ctrl.doc.focalPoint = newValue
+                      save()
+                    }
+                  })
           })
         })
     }
-    // $scope.$watch('participationCtrl.addContact',function(newValue, oldValue){
-    //     getHead()
-    //     getFocalPoint()
-    // })
+
     function initStepsParticipants (){
       if(_ctrl.doc.nominatingOrganization)
         return initStepsContacts().then(function(){
