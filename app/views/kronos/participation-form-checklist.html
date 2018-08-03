@@ -12,7 +12,7 @@
       </p>
     </div>
     <div class="col-xs-12">
-      <label>Select your types(s) <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ctrl & click on windows &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp cmd & click on mac" help></i>  of media and job title(s) <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ctrl & click on windows &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp cmd & click on mac" help></i>  to find out which requirements apply to you.</label>
+      <label>Select your types(s) <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-html="true" data-title="<b>To select more than one choice:</b><br><br>windows: ctrl & click <br> mac: cmd & click" help></i>  of media and job title(s) <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-html="true" data-title="<b>To select more than one choice:</b><br><br>windows: ctrl & click <br> mac: cmd & click" help></i>  to find out which requirements apply to you.</label>
       <div class="panel panel-default">
         <div class="panel-body">
           <form  name="editForm"  novalidate>
@@ -27,6 +27,19 @@
                   class="form-control"
                   ng-model="participationCtrl.doc.medium"
                   >
+                  <!-- <option value="Blog">Blog</option>
+                  <option value="Freelance journalist">Freelance journalist</option>
+
+                  <option value="Independent broadcast or film production">Independent broadcast or film production</option>
+                  <option value="Online journal">Online journal</option>
+                  <option value="Photo/visual">Photo/visual</option>
+                  <option value="Print">Print</option>
+                  <option value="Radio">Radio</option>
+                  <option value="Television">Television</option>
+                  <option value="Web publication">Web publication</option>
+                  <option value="Other online media">Other online media</option>
+                  <option value="Other">Other</option> -->
+
                     <option ng-repeat="option in participationCtrl.orgMediums" ng-value="option.identifier" ng-if="option.identifier!=='Other'">{{option.title}}</option>
                   </select>
                   <p ng-show="!participationCtrl.doc.medium && (editForm.medium.$touched || editForm.$submitted)" class="help-block text-danger small">medium is required.</p>

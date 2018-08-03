@@ -44,7 +44,7 @@
             </div>
             <div class="col-md-6" ng-if="participationCtrl.type==='media'">
               <div class="form-group" ng-class="{'has-error': ((!participationCtrl.organization.medium || !participationCtrl.organization.medium.length)  && (editFormOrg.medium.$touched || editFormOrg.$submitted)) }">
-                <label class="control-label" for="medium">Type of media(s)<i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ctrl & click on windows &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp cmd & click on mac" help></i> </label>
+                <label class="control-label" for="medium">Type of media(s)<i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-html="true" data-title="<b>To select more than one choice:</b><br><br>windows: ctrl & click <br> mac: cmd & click" help></i> </label>
                 <select
                   required
                   name='medium'
