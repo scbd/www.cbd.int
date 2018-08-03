@@ -112,6 +112,15 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
 
               return documentRealmCache[identifier] = success.data;
           })
+          .catch(function(error){
+            if (error.status == 404)
+              return storage.documents.getRealm(identifier)
+              .then(function(success) {
+                  if(!success.data) return false;
+
+                  return documentRealmCache[identifier] = success.data;
+              })
+          })
         },
       //==================================
       //

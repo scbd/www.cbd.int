@@ -18,7 +18,7 @@ define(['app', 'angular', 'text!./km-form-std-buttons.html','jquery'], function(
 				onPrePublishFn    : "&onPrePublish",
 				onPostPublishFn   : "&onPostPublish",
 				onPostWorkflowFn  : "&onPostWorkflow",
-        getCustomConfig   : "&?getCustomConfig",
+        		getCustomConfig   : "&?getCustomConfig",
 				onErrorFn: "&onError"
 			},
 			link: function ($scope, $element)
@@ -318,8 +318,10 @@ define(['app', 'angular', 'text!./km-form-std-buttons.html','jquery'], function(
 				};
 
 				function getCustomConfig(document){
-          if($scope.getCustomConfig)
-            return $scope.getCustomConfig(document)
+
+					if($scope.getCustomConfig)
+						return $scope.getCustomConfig({data:document});
+					
 					return $q.when(null);
 				}
 			}]
