@@ -357,18 +357,18 @@
                     <p ng-show="(!findAttachement(binding.attachment,'reportRecordingTwo').url && (  editForm.$submitted))" class="text-danger small">Report recording two required.</p>
                 </div>
 
-                <div class="col-md-6" ng-show="isDesignation('Photographer')">
+                <div class="col-md-6" ng-show="isDesignation('Photographer') || isMedia('Photo/visual')">
                     <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (  editForm.$submitted))}">
-                        <label class="control-label" for="tearSheetOrPhotoOne">Tear sheet or photo 1<i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
+                        <label class="control-label" for="tearSheetOrPhotoOne">Tear sheet or photo 1 <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
                       </div>
                     <file-drop danger="(!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'tearSheetOrPhotoOne',container:binding},file,error)" ng-model="tearSheetOrPhotoOne"  class="form-control" id="tearSheetOrPhotoOne" ></file-drop>
                     <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'tearSheetOrPhotoOne').url)}}">{{findAttachement(binding.attachment,'tearSheetOrPhotoOne').title}}</a> <i ng-show="findAttachement(binding.attachment,'tearSheetOrPhotoOne')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'tearSheetOrPhotoOne'))"></i></p>
                     <p ng-show="(!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (  editForm.$submitted))" class="text-danger small">Tear sheet or photo one is  required.</p>
                 </div>
 
-                <div class="col-md-6" ng-show="isDesignation('Photographer')">
+                <div class="col-md-6" ng-show="isDesignation('Photographer') || isMedia('Photo/visual')">
                     <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (  editForm.$submitted))}">
-                        <label class="control-label" for="tearSheetOrPhotoTwo">Tear sheet or photo 2<i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
+                        <label class="control-label" for="tearSheetOrPhotoTwo">Tear sheet or photo 2 <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
                       </div>
                     <file-drop danger="(!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'tearSheetOrPhotoTwo',container:binding},file,error)" ng-model="tearSheetOrPhotoTwo"  class="form-control" id="tearSheetOrPhotoTwo" ></file-drop>
                     <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url)}}">{{findAttachement(binding.attachment,'tearSheetOrPhotoTwo').title}}</a> <i ng-show="findAttachement(binding.attachment,'tearSheetOrPhotoTwo')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'tearSheetOrPhotoTwo'))"></i></p>
