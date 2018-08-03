@@ -115,8 +115,31 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
             return url
           return '/participation/download/'+encodeURIComponent(url).replace(/%2f/gi, '/');
         }
+        function validateRequireUploads(){
+          if(  isMedia('Print') &&
+              (!findAttachement($scope.binding.attachment,'byLineArticleOne') ||
+               !findAttachement($scope.binding.attachment,'byLineArticleTwo') ||
+               !findAttachement($scope.binding.attachment,'publicationCopy')
+              )
+            )
+            $scope.editForm.$invalid = true
 
+          if(  (isMedia('Radio') || isMedia('Television')) &&
+              (!findAttachement($scope.binding.attachment,'reportRecordingOne') ||
+              !findAttachement($scope.binding.attachment,'reportRecordingTwo')
+              )
+            )
+            $scope.editForm.$invalid = true
+
+          if( isDesignation('Photographer') &&
+              (!findAttachement($scope.binding.attachment,'tearSheetOrPhotoOne') ||
+              !findAttachement($scope.binding.attachment,'tearSheetOrPhotoTwo')
+              )
+            )
+            $scope.editForm.$invalid = true
+        }
         function save(){
+          validateRequireUploads()
           if($scope.editForm.$invalid) {
             $scope.editForm.$submitted=true
             return $scope.$emit('showError', 'You have errors in your form. ');
