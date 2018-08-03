@@ -1,4 +1,4 @@
-﻿define(['app', 'lodash', 'services/article-service'], function(app, _) { 'use strict';
+﻿define(['app', 'lodash', 'services/article-service','services/fb'], function(app, _) { 'use strict';
 
 return ['$location','$scope','$timeout', '$route', '$sce', '$q', 'articleService',
         function ($location,$scope,$timeout,  $route, $sce, $q, articleService) {
