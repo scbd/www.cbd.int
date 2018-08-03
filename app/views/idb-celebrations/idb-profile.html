@@ -167,12 +167,11 @@
                 </div>
 
 
-
                 <div   ng-if="event.hostGovernments_ss">
                     <div  ng-repeat="doc in event.hostGovernments_ss" ng-show="doc !== idbProfileCtrl.gov">
                         <a ng-href="/idb/celebrations/{{doc}}/{{idbProfileCtrl.year}}" >
                           <img  ng-if="doc!=='eu'" width="25px" ng-src="https://www.cbd.int/images/flags/96/flag-{{doc}}-96.png" />
-                          <img  ng-if="doc!=='eur'" width="25px" ng-src="https://www.cbd.int/images/flags/96/flag-eur-96.png" />
+                          <img  ng-if="doc==='eu'" width="25px" ng-src="https://www.cbd.int/images/flags/96/flag-eur-96.png" />
                           {{idbProfileCtrl.getCountry(doc).title|lstring}}
                         </a>
                     </div>
