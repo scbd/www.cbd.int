@@ -244,13 +244,13 @@
   </div>
  </div>
 </div>
-<div class="col-xs-12 " ng-class="{'has-error': ((!binding.useOrganizationAddress && !binding.address) && (!binding.phoneDuringMeeting || editForm.$submitted)) }">
+<div class="col-xs-12 " >
   <label >Address</label>
   <div class="panel panel-default" >
     <div class="panel-body">
       <div class="col-md-12">
-        <p ng-show="{'has-error': ((!binding.useOrganizationAddress && !binding.address) && (!binding.phoneDuringMeeting || editForm.$submitted)) }" class="help-block text-danger small">Address is required.</p>
-        <div class="form-group">
+        <p ng-class="{'has-error': ((!binding.useOrganizationAddress && !binding.address) && ( editForm.$submitted)) }" ng-show="((!binding.useOrganizationAddress && !binding.address) && (editForm.$submitted))" class="help-block text-danger small">Address is required.</p>
+        <div class="form-group" ng-class="{'has-error': ((!binding.useOrganizationAddress && !binding.address) && ( editForm.$submitted)) }">
           <div class="checkbox">
            <label>
              <input type="checkbox" ng-model="binding.useOrganizationAddress" ng-checked="true" value="true" checked> <b>Use organization's address</b>
@@ -259,7 +259,7 @@
        </div>
       </div>
 
-      <section ng-if="!binding.useOrganizationAddress">
+      <section ng-if="!binding.useOrganizationAddress" ng-class="{'has-error': ((!binding.useOrganizationAddress && !binding.address) && ( editForm.$submitted)) }">
         <address is-submitted="editForm.$submitted" ng-model="binding.address"></address>
       </section>
     </div>
