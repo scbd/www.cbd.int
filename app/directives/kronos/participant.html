@@ -287,12 +287,12 @@
           <label>During Meeting</label>
           <div class="panel panel-default">
             <div class="panel-body">
-              <div class="col-md-6" ng-class="{'has-error': (editForm.phoneDuringMeeting.$error.minlength || editForm.phoneDuringMeeting.$error.maxlength ) && (editForm.phoneDuringMeeting.$touched || editForm.$submitted) }">
+              <div class="col-md-6" ng-class="{'has-error': (editForm.phoneDuringMeeting.$error.minlength || editForm.phoneDuringMeeting.$error.maxlength ) && (  editForm.$submitted) }">
                 <div class="form-group">
                   <label class="control-label" for="phoneDuringMeeting">Phone <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Phone number you can be reached during the meeting." help></i></label>
                   <input ng-if="binding.meeting.length" ng-model="binding.phoneDuringMeeting" type="text" class="form-control" id="phoneDuringMeeting" name="phoneDuringMeeting" ng-minlength="8" ng-maxlength="35" placeholder="example: +1 514.288.2220">
 
-                  <p class="help-block text-danger small" ng-if="(editForm.phoneDuringMeeting.$error.minlength || editForm.phoneDuringMeeting.$error.maxlength ) && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)">Please match pattern [+1 514.288.2220]</span>
+                  <p class="help-block text-danger small" ng-if="(editForm.phoneDuringMeeting.$error.minlength || editForm.phoneDuringMeeting.$error.maxlength ) && (  editForm.$submitted)">Please match pattern [+1 514.288.2220]</span>
                 </div>
               </div>
               <div class="col-md-12">
@@ -311,68 +311,68 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="col-md-6" ng-show="isMedia('Print')">
-                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'byLineArticleOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)) }">
+                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'byLineArticleOne').url && (  editForm.$submitted)) }">
                         <label class="control-label" for="byLineArticleOne">Bylined article one <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A Bylined article dated within the past four months" help></i></label>
                     </div>
-                    <file-drop danger="(!findAttachement(binding.attachment,'byLineArticleOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'byLineArticleOne',container:binding},file,error)" ng-model="byLineArticleOne"  class="form-control" id="byLineArticleOne" ></file-drop>
+                    <file-drop danger="(!findAttachement(binding.attachment,'byLineArticleOne').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'byLineArticleOne',container:binding},file,error)" ng-model="byLineArticleOne"  class="form-control" id="byLineArticleOne" ></file-drop>
                     <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'byLineArticleOne').url)}}">{{findAttachement(binding.attachment,'byLineArticleOne').title}}</a> <i ng-show="findAttachement(binding.attachment,'byLineArticleOne')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'byLineArticleOne'))"></i></p>
-                    <p ng-if="(!findAttachement(binding.attachment,'byLineArticleOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="text-danger small">Bylined article one  is required.</p>
+                    <p ng-if="(!findAttachement(binding.attachment,'byLineArticleOne').url && (  editForm.$submitted))" class="text-danger small">Bylined article one  is required.</p>
                 </div>
 
                 <div class="col-md-6" ng-show="isMedia('Print')">
-                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'byLineArticleTwo').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)) }">
+                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'byLineArticleTwo').url && (  editForm.$submitted)) }">
                         <label class="control-label" for="byLineArticleTwo">Bylined article two <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A Bylined article dated within the past four months" help></i></label>
                       </div>
-                    <file-drop danger="(!findAttachement(binding.attachment,'byLineArticleTwo').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'byLineArticleTwo',container:binding},file,error)" ng-model="byLineArticleTwo"  class="form-control" id="byLineArticleTwo" ></file-drop>
+                    <file-drop danger="(!findAttachement(binding.attachment,'byLineArticleTwo').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'byLineArticleTwo',container:binding},file,error)" ng-model="byLineArticleTwo"  class="form-control" id="byLineArticleTwo" ></file-drop>
                     <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'byLineArticleTwo').url)}}">{{findAttachement(binding.attachment,'byLineArticleTwo').title}}</a> <i ng-show="findAttachement(binding.attachment,'byLineArticleTwo')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'byLineArticleTwo'))"></i></p>
-                    <p ng-show="(!findAttachement(binding.attachment,'byLineArticleTwo').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="text-danger small">Bylined article two  is required.</p>
+                    <p ng-show="(!findAttachement(binding.attachment,'byLineArticleTwo').url && (  editForm.$submitted))" class="text-danger small">Bylined article two  is required.</p>
                 </div>
 
                 <div class="col-md-6" ng-show="isMedia('Print')">
-                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'publicationCopy').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)) }">
+                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'publicationCopy').url && (  editForm.$submitted)) }">
                         <label class="control-label" for="publicationCopy">Publication copy <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A copy of the publication containing one of the bylined articles " help></i></label>
                       </div>
-                    <file-drop danger=" (!findAttachement(binding.attachment,'publicationCopy').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'publicationCopy',container:binding},file,error)" ng-model="publicationCopy"  class="form-control" id="publicationCopy" ></file-drop>
+                    <file-drop danger=" (!findAttachement(binding.attachment,'publicationCopy').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'publicationCopy',container:binding},file,error)" ng-model="publicationCopy"  class="form-control" id="publicationCopy" ></file-drop>
                     <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'publicationCopy').url)}}">{{findAttachement(binding.attachment,'publicationCopy').title}}</a> <i ng-show="findAttachement(binding.attachment,'publicationCopy')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'publicationCopy'))"></i></p>
-                    <p ng-show="(!findAttachement(binding.attachment,'publicationCopy').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="text-danger small">Publication copy required.</p>
+                    <p ng-show="(!findAttachement(binding.attachment,'publicationCopy').url && (  editForm.$submitted))" class="text-danger small">Publication copy required.</p>
 
                 </div>
 
                 <div class="col-md-6" ng-show="isMedia('Radio') || isMedia('Television')">
-                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'reportRecordingOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted)) }">
+                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'reportRecordingOne').url && (  editForm.$submitted)) }">
                         <label class="control-label" for="reportRecordingOne">Report recording one <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" title="A report recording dated within the past four months" help></i></label>
                       </div>
-                    <file-drop danger="(!findAttachement(binding.attachment,'reportRecordingOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'reportRecordingOne',container:binding},file,error)" ng-model="reportRecordingOne"  class="form-control" id="reportRecordingOne" ></file-drop>
+                    <file-drop danger="(!findAttachement(binding.attachment,'reportRecordingOne').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'reportRecordingOne',container:binding},file,error)" ng-model="reportRecordingOne"  class="form-control" id="reportRecordingOne" ></file-drop>
                     <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'reportRecordingOne').url)}}">{{findAttachement(binding.attachment,'reportRecordingOne').title}}</a> <i ng-show="findAttachement(binding.attachment,'reportRecordingOne')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'reportRecordingOne'))"></i></p>
-                    <p ng-show="(!findAttachement(binding.attachment,'reportRecordingOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="text-danger small">Report recording one required.</p>
+                    <p ng-show="(!findAttachement(binding.attachment,'reportRecordingOne').url && (  editForm.$submitted))" class="text-danger small">Report recording one required.</p>
 
                 </div>
 
                 <div class="col-md-6" ng-show="isMedia('Radio') || isMedia('Television')">
-                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'reportRecordingTwo').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))}">
+                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'reportRecordingTwo').url && (  editForm.$submitted))}">
                         <label class="control-label" for="reportRecordingTwo">Report recording two <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A report recording dated within the past four months" help></i></label>
                       </div>
-                    <file-drop danger="(!findAttachement(binding.attachment,'reportRecordingTwo').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'reportRecordingTwo',container:binding},file,error)" ng-model="reportRecordingTwo"  class="form-control" id="reportRecordingTwo" ></file-drop>
+                    <file-drop danger="(!findAttachement(binding.attachment,'reportRecordingTwo').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'reportRecordingTwo',container:binding},file,error)" ng-model="reportRecordingTwo"  class="form-control" id="reportRecordingTwo" ></file-drop>
                     <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'reportRecordingTwo').url)}}">{{findAttachement(binding.attachment,'reportRecordingTwo').title}}</a> <i ng-show="findAttachement(binding.attachment,'reportRecordingTwo')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'reportRecordingTwo'))"></i></p>
-                    <p ng-show="(!findAttachement(binding.attachment,'reportRecordingTwo').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="text-danger small">Report recording two required.</p>
+                    <p ng-show="(!findAttachement(binding.attachment,'reportRecordingTwo').url && (  editForm.$submitted))" class="text-danger small">Report recording two required.</p>
                 </div>
 
                 <div class="col-md-6" ng-show="isDesignation('Photographer')">
-                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))}">
+                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (  editForm.$submitted))}">
                         <label class="control-label" for="tearSheetOrPhotoOne">Tear sheet or photo <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
                       </div>
-                    <file-drop danger="(!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'tearSheetOrPhotoOne',container:binding},file,error)" ng-model="tearSheetOrPhotoOne"  class="form-control" id="tearSheetOrPhotoOne" ></file-drop>
+                    <file-drop danger="(!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'tearSheetOrPhotoOne',container:binding},file,error)" ng-model="tearSheetOrPhotoOne"  class="form-control" id="tearSheetOrPhotoOne" ></file-drop>
                     <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'tearSheetOrPhotoOne').url)}}">{{findAttachement(binding.attachment,'tearSheetOrPhotoOne').title}}</a> <i ng-show="findAttachement(binding.attachment,'tearSheetOrPhotoOne')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'tearSheetOrPhotoOne'))"></i></p>
-                    <p ng-show="(!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="text-danger small">Tear sheet or photo one is  required.</p>
+                    <p ng-show="(!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (  editForm.$submitted))" class="text-danger small">Tear sheet or photo one is  required.</p>
                 </div>
 
                 <div class="col-md-6" ng-show="isDesignation('Photographer')">
-                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))}">
+                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (  editForm.$submitted))}">
                         <label class="control-label" for="tearSheetOrPhotoTwo">Tear sheet or photo <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
                       </div>
-                    <file-drop danger="(!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'tearSheetOrPhotoTwo',container:binding},file,error)" ng-model="tearSheetOrPhotoTwo"  class="form-control" id="tearSheetOrPhotoTwo" ></file-drop>
+                    <file-drop danger="(!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'tearSheetOrPhotoTwo',container:binding},file,error)" ng-model="tearSheetOrPhotoTwo"  class="form-control" id="tearSheetOrPhotoTwo" ></file-drop>
                     <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url)}}">{{findAttachement(binding.attachment,'tearSheetOrPhotoTwo').title}}</a> <i ng-show="findAttachement(binding.attachment,'tearSheetOrPhotoTwo')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'tearSheetOrPhotoTwo'))"></i></p>
-                    <p ng-show="(!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (editForm.phoneDuringMeeting.$touched || editForm.$submitted))" class="text-danger small">Tear sheet or photo two is  required.</p>
+                    <p ng-show="(!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (  editForm.$submitted))" class="text-danger small">Tear sheet or photo two is  required.</p>
                 </div>
           </div>
         </div>
