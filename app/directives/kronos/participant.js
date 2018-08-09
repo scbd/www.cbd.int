@@ -76,6 +76,11 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
 
         }
 
+        function clearMeetings(){
+          $scope.binding.meeting =undefined
+        }
+        $scope.clearMeetings=clearMeetings
+
         function redirect_blank(url) {
           var a = document.createElement('a');
           a.target="_blank";
@@ -114,6 +119,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
           return '/participation/download/'+encodeURIComponent(url).replace(/%2f/gi, '/');
         }
         function validateRequireUploads(){
+          if(!$scope.attending.val)return
           if(isPrintFileValidation())
             return $scope.editForm.$invalid = true
 
