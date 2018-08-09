@@ -104,7 +104,7 @@
                 <div class="form-group" ng-class="{'has-error': ((editFormOrg.website.$invalid || editFormOrg.website.$error.url) && (editFormOrg.website.$touched || editFormOrg.$submitted)) }">
                   <label class="control-label" for="website">Website </label>
                   <input ng-model="participationCtrl.organization.website" type="url" class="form-control" id="website" name="website" placeholder="https://www.cbd.int">
-                  <p ng-show="editFormOrg.website.$error.url && (editFormOrg.website.$touched || editFormOrg.$submitted)" class="help-block text-danger small">website url not correct format</p>
+                  <p ng-show="editFormOrg.website.$error.url && (editFormOrg.website.$touched || editFormOrg.$submitted)" class="help-block text-danger small">website url not correct format such as https://www.cbd.int</p>
                 </div>
               </div>
               <div class="col-md-6">
