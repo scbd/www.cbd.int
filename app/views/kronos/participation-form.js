@@ -184,9 +184,9 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       if(_ctrl.step==='organization')
         initStepsOrganization()
       if(_ctrl.step==='contacts')
-        initStepsContacts()
+        initStepsOrganization().then(initStepsContacts)
       if(_ctrl.step==='participants')
-        initStepsParticipants()
+        initStepsOrganization().then(initStepsParticipants)
 
       window.scroll(0, 0)
       $scope.$applyAsync(function(){
@@ -245,15 +245,15 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
 
     function initStepsOrganization(){
-     $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms',{ cache: true })
+     return $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms',{ cache: true })
       .then(function(res){
         _ctrl.languages = res.data
-        getOrg()
+        return getOrg()
       })
     }
     _ctrl.initStepsContacts=initStepsContacts
     function initStepsContacts(){
-      initStepsOrganization()
+
       if(_ctrl.doc.nominatingOrganization)
         return getOrg().then(function(){
           var headPromise  = getHead()
@@ -439,7 +439,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         if(!confirm("Are you sure you want to leave this page?  Any data inputed in this step will be lost without proceeding to the next step."))
           return
 
-      initStepsContacts()
+      initStepsOrganization().then(initStepsContacts)
 
       if(type==='request')$location.url('/'+step)
 
@@ -513,7 +513,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         return $scope.$emit('showError', 'Your form has errors');
       }
 
-      _ctrl.doc.currentStep = 'contacts'
+
       if(!_ctrl.organization._id)
         return $http.post('/api/v2018/kronos/participation-request/organizations',_ctrl.organization,{headers:{requestId:_ctrl.requestId,conferenceCode:_ctrl.conferenceCode}})
             .then(function(res){
@@ -522,6 +522,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
               save()
                 .then(function(isSaved){
                   if(isSaved){
+                    _ctrl.doc.currentStep = 'contacts'
                     $scope.$emit('showSuccess', 'Organization saved');
                     resetForms()
                     changeStep('contacts')
@@ -544,6 +545,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
               save()
                 .then(function(isSaved){
                   if(isSaved){
+                    _ctrl.doc.currentStep = 'contacts'
                     $scope.$emit('showSuccess', 'Organization saved');
                     resetForms()
                     changeStep('contacts')
