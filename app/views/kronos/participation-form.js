@@ -443,8 +443,12 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
       if(type==='request')$location.url('/'+step)
 
-      if(!isStepComplete(step)&& step!=='finished') return
-
+      if(!isStepComplete(step)&& step!=='finished'){
+          var e = new Error('STEP_NOT_COMPLETE')
+          e.status="STEP_NOT_COMPLETE"
+          this.error=e
+         return
+       }
       if(type)
         $location.url('/'+_ctrl.conferenceCode+'/'+type+'/'+step)
       else
@@ -519,10 +523,11 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
             .then(function(res){
               _ctrl.organization._id = res.data.id
               _ctrl.doc.nominatingOrganization = res.data.id
+              _ctrl.doc.currentStep = 'contacts'
               save()
                 .then(function(isSaved){
                   if(isSaved){
-                    _ctrl.doc.currentStep = 'contacts'
+
                     $scope.$emit('showSuccess', 'Organization saved');
                     resetForms()
                     changeStep('contacts')
@@ -542,10 +547,11 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         return $http.put('/api/v2018/kronos/participation-request/organizations/'+encodeURIComponent(_ctrl.organization._id),_ctrl.organization,{headers:{requestId:_ctrl.doc._id,conferenceCode:_ctrl.conferenceCode}})
             .then(function(res){
               _ctrl.doc.nominatingOrganization = _ctrl.organization._id
+              _ctrl.doc.currentStep = 'contacts'
               save()
                 .then(function(isSaved){
                   if(isSaved){
-                    _ctrl.doc.currentStep = 'contacts'
+
                     $scope.$emit('showSuccess', 'Organization saved');
                     resetForms()
                     changeStep('contacts')
