@@ -49,10 +49,25 @@
   </style>
 
   <div class="col-xs-12">
-    <div ng-repeat="m in msg track by $index" class="bs-callout" ng-class="{ ['bs-callout-'+m.state]: m.state }">
-      <i class="fa fa-times-circle pull-right" aria-hidden="true" ng-click="remove($index)"></i>
-      <h4>{{m.title}}</h4>
-      <p ng-bind-html="m.description"></p>
+    <div ng-if="msg['STEP_NOT_COMPLETE']" class="bs-callout bs-callout-danger">
+      <i class="fa fa-times-circle pull-right" aria-hidden="true" ng-click="remove('STEP_NOT_COMPLETE')"></i>
+      <h4>Step incomplete</h4>
+      <p >You must complete the steps sequentially.</p>
+    </div>
+    <div ng-if="msg['NO_SERVICE']" class="bs-callout bs-callout-danger" >
+      <i class="fa fa-times-circle pull-right" aria-hidden="true" ng-click="remove('NO_SERVICE')"></i>
+      <h4>Service not available</h4>
+      <p>Service is not avialibale at {{msg['NO_SERVICE'].error.config.method}} {{msg['NO_SERVICE'].error.config.url}}</p>
+    </div>
+    <div ng-if="msg['NOT_FOUND']" class="bs-callout bs-callout-danger" >
+      <i class="fa fa-times-circle pull-right" aria-hidden="true" ng-click="remove('NOT_FOUND')"></i>
+      <h4>Service not available or document was not found</h4>
+      <p>Service is not avialibale or not found  at {{msg['NOT_FOUND'].error.config.url}}</p>
+    </div>
+    <div ng-if="msg['INVALID_SCHEMA']" class="bs-callout bs-callout-danger" >
+      <i class="fa fa-times-circle pull-right" aria-hidden="true" ng-click="remove('INVALID_SCHEMA')"></i>
+      <h4>The data passed to the server is not in the required format</h4>
+      <p>Please contact the SCBD IT unit to report this error.  it@cbd.int <pre>{{msg['INVALID_SCHEMA'].error.data |json}}</pre></p>
     </div>
   </div>
 </section>
