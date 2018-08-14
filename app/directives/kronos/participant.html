@@ -156,7 +156,8 @@
             <label class="control-label" for="pressCard"  >Press card / work pass</label>
           </div>
           <file-drop danger="!findAttachement(binding.attachment,'pressCard').url && (editForm.passportNumber.$touched || editForm.$submitted) " encrypt="true" metadata="{requestid:requestId,conferencecode:conferenceCode}" class="xs" style="height:90px;" on-upload="onUpload({tag:'pressCard',container:binding},file,error)" ng-model="pressCard"  class="form-control" id="pressCard" ></file-drop>
-          <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'pressCard').url)}}">{{findAttachement(binding.attachment,'pressCard').title}}</a> <i ng-show="findAttachement(binding.attachment,'pressCard')"  class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'pressCard'))"></i></p>
+          <p ng-if="!isTemp(viewAttachment(findAttachement(binding.attachment,'pressCard').url))"><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'pressCard').url)}}">{{findAttachement(binding.attachment,'pressCard').title}}</a> <i ng-show="findAttachement(binding.attachment,'pressCard')"  class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'pressCard'))"></i></p>
+          <p ng-if="isTemp(viewAttachment(findAttachement(binding.attachment,'pressCard').url))">{{findAttachement(binding.attachment,'pressCard').title}} <i ng-show="findAttachement(binding.attachment,'pressCard')"  class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'pressCard'))"></i></p>
           <p ng-show="!findAttachement(binding.attachment,'pressCard').url && (editForm.passportNumber.$touched || editForm.$submitted)" class="text-danger small">Press card / work pass is required.</p>
       </div>
 
@@ -166,7 +167,8 @@
           </div>
 
           <file-drop danger="!findAttachement(binding.attachment,'passport').url && (editForm.passportNumber.$touched || editForm.$submitted)" encrypt="true"   class="xs" style="height:90px;" on-upload="onUpload({tag:'passport',container:binding},file,error)" ng-model="passport"  class="form-control" id="passport" ></file-drop>
-          <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'passport').url)}}" >{{findAttachement(binding.attachment,'passport').title}}</a> <i ng-show="findAttachement(binding.attachment,'passport')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'passport'))"></i></p>
+          <p ng-if="!isTemp(viewAttachment(findAttachement(binding.attachment,'passport').url))"><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'passport').url)}}" >{{findAttachement(binding.attachment,'passport').title}}</a> <i ng-show="findAttachement(binding.attachment,'passport')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'passport'))"></i></p>
+          <p ng-if="isTemp(viewAttachment(findAttachement(binding.attachment,'passport').url))">{{findAttachement(binding.attachment,'passport').title}} <i ng-show="findAttachement(binding.attachment,'passport')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'passport'))"></i></p>
           <p ng-show="!findAttachement(binding.attachment,'passport').url && (editForm.passportNumber.$touched || editForm.$submitted) " class="text-danger small">Passport is required.</p>
 
       </div>

@@ -13,6 +13,7 @@ define(['app', 'text!./user-messages.html'], function(app, html) { 'use strict';
         $scope.remove = remove
         var messages = [
           {title:'Saved', description:'Your data was successfully saved.', state:'success'},
+          {code:"STEP_NOT_COMPLETE", title:'Step incomplete', description:'You must complete the steps sequentially.', state:'danger'},
           {title:'Manditory', description:'', state:'warning'},
           {code:"NO_SERVICE", title:'Service not available', description:'Service is not avialibale at {{config.method}} {{config.url}}', state:'danger'},
           {code:"NOT_FOUND", title:'Service not available or document was not found', description:'Service is not avialibale or not found  at {{config.url}}', state:'danger'},
@@ -34,6 +35,10 @@ define(['app', 'text!./user-messages.html'], function(app, html) { 'use strict';
 
             if($scope.error.status==400)
                 createMsg('INVALID_SCHEMA',$scope.error)
+            if($scope.error.status==='STEP_NOT_COMPLETE')
+              createMsg('STEP_NOT_COMPLETE',$scope.error)
+
+            $scope.error=false
         })
 
         function remove(i){
@@ -55,9 +60,16 @@ define(['app', 'text!./user-messages.html'], function(app, html) { 'use strict';
           }
 
           if(!Array.isArray($scope.msg))$scope.msg=[]
-          $scope.msg.push(msgTemplate)
 
-          $scope.$emit('showError',msgTemplate.title)
+          var exists = false
+          for (var i = 0; i < $scope.msg.length; i++)
+            if(msgTemplate.code===$scope.msg[i].code)
+              exists = true
+
+          if(!exists)
+            $scope.msg.push(msgTemplate)
+
+
         }
 
 			}
