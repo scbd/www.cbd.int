@@ -194,7 +194,8 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
           $scope.editForm.$submitted=false
 
           if(!$scope.isContact) $scope.attending.val=true
-          $scope.binding.useOrganizationAddress = true
+          if(!$scope.binding._id)
+            $scope.binding.useOrganizationAddress = true
           $scope.binding.requestId = $scope.requestId
           $scope.binding.requestType = $scope.typee
           $scope.binding.organization = $scope.organization._id
@@ -263,7 +264,10 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
             if(~i)
               $scope.binding.attachment.splice(i,1)
           }
-
+          $scope.isTemp = isTemp
+          function isTemp (url){
+            return ~url.indexOf('temporary-files')
+          }
         $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms',{ cache: true })
             .then(function(res){$scope.languages = res.data})
 

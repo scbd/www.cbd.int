@@ -52,10 +52,9 @@
                 id="country"
                 name="country"
                 class="form-control"
-
+                ng-options="country.code as country.name.en for country in countries"
                 ng-model="binding.country"
                 >
-                <option ng-repeat="country in countries   track by country.code" ng-selected="!!(country.code===binding.country)" ng-value="country.code">{{country.name.en}}</option>
               </select>
               <p ng-show="addressEditForm.country.$invalid && (addressEditForm.country.$touched || addressEditForm.$submitted)" class="help-block text-danger">country is required.</p>
 
