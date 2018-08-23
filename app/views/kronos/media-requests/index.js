@@ -3,8 +3,9 @@ define(['app', 'lodash', './media-organization-partial'], function(app, _) {
 	return ['$http', 'user', function($http, user) {
         var _ctrl = this;
 
-        _ctrl.selectOrganization = selectOrganization;
-        _ctrl.searchKronos = searchKronos;
+        _ctrl.selectOrganization    = selectOrganization;
+        _ctrl.searchKronos          = searchKronos;
+        _ctrl.loadParticipants      = loadParticipants;
         _ctrl.kronos = {};
 
         load();
@@ -71,14 +72,28 @@ define(['app', 'lodash', './media-organization-partial'], function(app, _) {
         //===================================
         //
         //===================================
-        function selectOrganization(organization) {
-
-            if(organization.kronosId) {
+        function selectOrganization(request) {
+            _ctrl.selectedRequest = request;
+            if(request.organization.kronosId) {
 
             } else {
-                _ctrl.kronos.search = organization.title;    
+                _ctrl.kronos.search = request.organization.title;    
                 searchKronos();
             }
+        }
+
+        function loadParticipants(request){
+            request.loadingParticipants = true;
+            $http.get('/api/v2018/kronos/participation-request/participants', { 
+                params: {
+                    q: { requestId: { $oid : request._id }}
+                }
+            }).then(resData).then(function(result) {
+                request.participants = result.data;
+            })
+            .finally(function(){
+                request.loadingParticipants = false;
+            })
         }
 
         ///////////////////////////////////////////
@@ -105,7 +120,7 @@ define(['app', 'lodash', './media-organization-partial'], function(app, _) {
 
             _ctrl.kronos.loading=true;
 
-            return $http.get('http://bilodeaux7.local/api/v2018/organizations', { params: { q: query } }).then(resData).then(function(organizations){
+            return $http.get('/api/v2018/organizations', { params: { q: query } }).then(resData).then(function(organizations){
 
                 _ctrl.kronos.organizations = organizations;
 
