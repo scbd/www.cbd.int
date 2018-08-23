@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="row">
+
+        <div ng-if="!indexCtrl.isAuthenticated" class="col-xs-12 col-sm-6">
+            <a href="#" ng-click="$emit('signIn')">
+                <i class="fa fa-power-off" aria-hidden="true"></i> Sign In to connect to Kronos Web
+            </a>
+        </div>
+
+        <div ng-if="indexCtrl.isKronosUser" class="col-xs-12 col-sm-6">
+            <a href="/media-requests">
+                <i class="fa fa-power-off" aria-hidden="true"></i> Access Kronos Web
+            </a>
+        </div>
+    
+        <div class="col-xs-12 col-sm-6">
+            <a href="https://www.cbd.int/kronos-app">
+                <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Install the Kronos Windows Application (Classic Kronos)
+            </a>
+        </div>
+            
+    </div>
+</div>
