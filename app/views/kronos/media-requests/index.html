@@ -54,7 +54,7 @@
                                                 <td colspan="2">
                                                     <div class="panel panel-default">
                                                         <div class="panel-body">
-                                                           <media-organization ng-model="request.organization"></media-organization>
+                                                           <media-organization ng-click="mediaRequestCtrl.selectOrganization(request.organization)" ng-model="request.organization"></media-organization>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -87,32 +87,28 @@
                 <div class="col-xs-6">
                     <div class="pull-right" style="display: inline-block;">
                         <div class="input-group input-sm" style="width: 200px;">
-                            <input type="text" class="form-control">
+                            <i ng-if="mediaRequestCtrl.kronos.loading" class="fa fa-cog fa-spin"></i>
+                            <input type="text" class="form-control" ng-change="mediaRequestCtrl.searchKronos()" ng-model="mediaRequestCtrl.kronos.search" ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 500, 'blur': 0 } }">
                             <span type="button" class="input-group-addon">
-                                <i class="eco-search"></i>
+                                <i class="fa fa-search"></i>
                             </span>
                         </div>
                     </div>
                 </div>
                 <div class="col-xs-12 ">
+                    
                     <table class="table table-striped table-hover table-condensed">
                         <tbody>
-                            <tr>
-                                <td>...</td>
-                                <td width="10%">...</td>
-                            </tr>
-                            <tr>
-                                <td>...</td>
-                                <td width="10%">...</td>
-                            </tr>
-                            <tr>
-                                <td>...</td>
-                                <td width="10%">...</td>
+                            <tr ng-repeat="korg in mediaRequestCtrl.kronos.organizations">
+                                <td>{{korg.Title}}</td>
                             </tr>
                         </tbody>
                     </table>
+                    {{mediaRequestCtrl.kronos}}
                 </div>
             </div>
         </div>
     </div>
+
+    {{mediaRequestCtrl.error}}
 </div>
