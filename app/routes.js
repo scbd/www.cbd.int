@@ -23,7 +23,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
             registerRoutes_aichiTargets($routeProvider);
 
         // /kronos/*
-        if(/^\/kronos\/list-of-participants($|\/.*)/.test(locationPath))
+        if(/^\/kronos($|\/.*)/.test(locationPath))
             registerRoutes_kronos($routeProvider);
 
         //bbi/*
@@ -158,10 +158,12 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
   //============================================================
   function registerRoutes_kronos(routeProvider) {
 
-      $("base").attr('href', '/kronos/list-of-participants/'); // allow full page reload outside of  /insession/*
+      $("base").attr('href', '/kronos/'); // allow full page reload outside of  /insession/*
 
       routeProvider
-        .when('/',                  { templateUrl: 'views/meetings/participants/index.html',    controllerAs: 'indexCtrl',   resolveController: true, resolve: { user : securize(["Administrator","KronosAdministrator", "ScbdStaff"]) }  })
+        .when('/',                                      { templateUrl: 'views/kronos/index.html',                   controllerAs: 'indexCtrl',         resolveController: true, resolve: { user : currentUser() }  })
+        .when('/media-requests',                        { templateUrl: 'views/kronos/media-requests.html',          controllerAs: 'mediaRequestCtrl',  resolveController: true, resolve: { user : securize(["Administrator","KronosAdministrator"]) }  })
+        .when('/list-of-participants',                  { templateUrl: 'views/meetings/participants/index.html',    controllerAs: 'indexCtrl',         resolveController: true, resolve: { user : securize(["Administrator","KronosAdministrator", "ScbdStaff"]) }  })
         .otherwise({redirectTo: '/404'});
   }
 
