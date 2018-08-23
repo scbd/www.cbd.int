@@ -1,4 +1,4 @@
-define(['app'], function(app) {
+define(['app', 'lodash', './media-organization-partial'], function(app, _) {
 
 	return ['$http', 'user', function($http, user) {
         var _ctrl = this;
@@ -14,24 +14,48 @@ define(['app'], function(app) {
             
             return $http.get('/api/v2016/conferences', { 
                 params: {
-                    f: { code:1, Title:1, MajorEventIDs:1 }, 
+                    f: { code:1, Title:1, MajorEventIDs:1, active:1,StartDate:1 }, 
                     q: { timezone: { $exists:true }, venueId: { $exists:true } },
                     s: { StartDate:-1 } 
                 }
             }).then(resData).then(function(conferences) {
 
                 _ctrl.conferences = conferences;
-                _ctrl.conference  = conferences[0];
+
+                _ctrl.conference  = _.findWhere(conferences, {active:true});
+                if(!_ctrl.conference)
+                    _ctrl.conference  = conferences[0];
 
                 return _ctrl.conference
 
             }).then(function(){
                 
-                return $http.get('/api/v2018/xxx', { params: { q: { xyz : _ctrl.conference._id } } }).then(resData) // TODO
+                return $http.get('/api/v2018/kronos/participation-requests', { params: { q : { $or : [{conference : { $oid:_ctrl.conference._id }}, { conference : _ctrl.conference._id }]}}}).then(resData) // TODO
 
             }).then(function(mediaRequests) { 
 
                 _ctrl.requests = mediaRequests;
+
+                var requestIds = _.map(mediaRequests,function(r){ return { $oid : r._id}});
+
+                var orgQuery = {
+                    q : { requestId : {$in : requestIds} }
+                }
+                
+                return $http.get('/api/v2018/kronos/participation-request/organizations', { params: orgQuery})
+                    .then(function(result) { 
+                        var organizations = result.data;
+                        if(organizations && organizations.length >0){
+
+                            _.map(organizations, function(organization){
+                                var request = _.findWhere(_ctrl.requests, {_id : organization.requestId});
+                                if(request){
+                                    request.organization = organization
+                                }
+                            })
+                        }
+
+                    }) // TODO
 
             }).catch(function(err) {
 
