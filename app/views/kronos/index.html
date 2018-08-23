@@ -1,23 +1,30 @@
 <div class="container">
-    <div class="row">
 
-        <div ng-if="!indexCtrl.isAuthenticated" class="col-xs-12 col-sm-6">
-            <a href="#" ng-click="$emit('signIn')">
-                <i class="fa fa-power-off" aria-hidden="true"></i> Sign In to connect to Kronos Web
-            </a>
-        </div>
+    <h1>Welcome to Kronos </h1>
 
-        <div ng-if="indexCtrl.isKronosUser" class="col-xs-12 col-sm-6">
-            <a href="/media-requests">
-                <i class="fa fa-power-off" aria-hidden="true"></i> Access Kronos Web
-            </a>
-        </div>
-    
-        <div class="col-xs-12 col-sm-6">
-            <a href="https://www.cbd.int/kronos-app">
-                <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Install the Kronos Windows Application (Classic Kronos)
-            </a>
-        </div>
+    <p>
+        Kronos the meeting registration database that was developed by SCBD  and which is used for preregistering
+        and accrediting participants for CBD meetings and workshops. It is also used for completing the
+        registration process onsite and issuing relevant badges. This system also allows online registration, meaning
+        that National Focal Points and recognized CBD partners/stakeholders are able to register their delegations
+        online.  
+    </p>
+
+    <div class="row text-center" >
+
+
+        <a ng-if="::!indexCtrl.isAuthenticated" href="#" ng-click="$emit('signIn')" class="btn btn-success btn-lg">
+            <br><i class="fa fa-power-off" aria-hidden="true"></i> Sign In to connect to Kronos Web <br>&nbsp;
+        </a>
+
+        <a ng-if="::indexCtrl.isKronosUser"  ng-href="media-requests" class="btn btn-primary btn-lg ">
+            <br> <i class="fa fa-hourglass-half" aria-hidden="true"></i> Access Kronos Web<br>&nbsp;
+        </a>
+
+        <a href="https://www.cbd.int/kronos-app"class="btn btn-default btn-lg">
+            <br><i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Install the Kronos Windows Application <br>&nbsp;
+        </a>
             
     </div>
+
 </div>
