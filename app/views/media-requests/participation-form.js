@@ -70,12 +70,12 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.orgMediums         = mediums
     _ctrl.locale             = locale
     _ctrl.partialMap         = {
-      'request'         : '/app/views/kronos/participation-form-conference.html',
-      'checklist'       : '/app/views/kronos/participation-form-checklist.html',
-      'organization'    : '/app/views/kronos/participation-form-organization.html',
-      'contacts'        : '/app/views/kronos/participation-form-contacts.html',
-      'participants'    : '/app/views/kronos/participation-form-participants.html',
-      'finished'        : '/app/views/kronos/participation-form-finished.html'
+      'request'         : '/app/views/media-requests/participation-form-conference.html',
+      'checklist'       : '/app/views/media-requests/participation-form-checklist.html',
+      'organization'    : '/app/views/media-requests/participation-form-organization.html',
+      'contacts'        : '/app/views/media-requests/participation-form-contacts.html',
+      'participants'    : '/app/views/media-requests/participation-form-participants.html',
+      'finished'        : '/app/views/media-requests/participation-form-finished.html'
     }
 
     //flags

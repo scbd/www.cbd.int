@@ -60,6 +60,10 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
                 $scope.$on('signOut', function(){
                     $window.location.href = '/';
                 });
+
+                $scope.$on('signIn', function(){
+                    $scope.signIn();
+                });
                 
                 //============================================================
                 //

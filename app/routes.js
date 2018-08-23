@@ -161,9 +161,9 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       $("base").attr('href', '/kronos/'); // allow full page reload outside of  /insession/*
 
       routeProvider
-        .when('/',                                      { templateUrl: 'views/kronos/index.html',                   controllerAs: 'indexCtrl',         resolveController: true, resolve: { user : currentUser() }  })
-        .when('/media-requests',                        { templateUrl: 'views/kronos/media-requests.html',          controllerAs: 'mediaRequestCtrl',  resolveController: true, resolve: { user : securize(["Administrator","KronosAdministrator"]) }  })
-        .when('/list-of-participants',                  { templateUrl: 'views/meetings/participants/index.html',    controllerAs: 'indexCtrl',         resolveController: true, resolve: { user : securize(["Administrator","KronosAdministrator", "ScbdStaff"]) }  })
+        .when('/',                                      { templateUrl: 'views/kronos/index.html',                       controllerAs: 'indexCtrl',         resolveController: true, resolve: { user : currentUser() }  })
+        .when('/media-requests',                        { templateUrl: 'views/kronos/media-requests/index.html',        controllerAs: 'mediaRequestCtrl',  resolveController: true, resolve: { user : securize(["Administrator","KronosAdministrator"]) }  })
+        .when('/list-of-participants',                  { templateUrl: 'views/kronos/list-of-participants/index.html',  controllerAs: 'indexCtrl',         resolveController: true, resolve: { user : securize(["Administrator","KronosAdministrator", "ScbdStaff"]) }  })
         .otherwise({redirectTo: '/404'});
   }
 
@@ -245,10 +245,10 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
         $("base").attr('href', '/participation/'); // allow full page reload outside of  /insession/*
         routeProvider
-        .when('/download/:file*?', { templateUrl: 'views/kronos/download.html',  controllerAs: 'downloadCtrl',  resolveController: true, resolve : { user : currentUser() } } )
+        .when('/download/:file*?', { templateUrl: 'views/media-requests/download.html',  controllerAs: 'downloadCtrl',  resolveController: true, resolve : { user : currentUser() } } )
         .when('/2018/media'   ,{redirectTo: '/2018/media/checklist'})
-        .when('/:conference/:type/:step'   ,{ templateUrl : 'views/kronos/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
-        .when('/:step',{ templateUrl : 'views/kronos/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
+        .when('/:conference/:type/:step'   ,{ templateUrl : 'views/media-requests/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
+        .when('/:step',{ templateUrl : 'views/media-requests/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
 
         .otherwise({redirectTo: '/404'});
     }
