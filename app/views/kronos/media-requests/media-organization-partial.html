@@ -1,0 +1,26 @@
+﻿<div>
+    <div ng-if="document.type">{{document.type}}</div>
+    <address style="margin-bottom:2px!important">
+            <div>{{document.address.unitNumber}} {{document.address.streetNumber}} {{document.address.street}}</div>            
+            <div ng-if="document.address.locality">{{document.address.locality}},</div>
+            <div ng-if="document.address.administrativeArea">{{document.address.administrativeArea}},</div>
+            {{document.address.postalCode}}<span ng-show="document.address.postalCode">, </span>
+            <span style="font-weight:500;"><br ng-show="!document.address.postalCode" />{{document.address.country|term}}</span>
+    </address>
+
+    <div ng-if="document.phone">
+        Phone: {{document.phone}}
+    </div>
+    <div ng-if="document.email">
+        Email: <a translation-url  ng-href="mailto:{{document.email}}">{{document.email}}</a>
+        <span ng-if="document.emailCc"><br><a translation-url  ng-href="mailto:{{document.emailCc}}">{{document.emailCc}}</a></span>
+    </div>
+    <div ng-if="document.website">
+        Website:<a translation-url  target="_new" ng-href="{{document.website}}">{{document.website}}</a>
+    </div>
+
+
+    <div ng-show="document.medium">
+        Medium: <span ng-repeat="item in document.medium">{{item}}<span ng-show="!$last">, </span></span>
+    </div>
+</div>
