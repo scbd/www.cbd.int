@@ -3,6 +3,10 @@ define(['app', 'lodash', './media-organization-partial'], function(app, _) {
 	return ['$http', 'user', function($http, user) {
         var _ctrl = this;
 
+        _ctrl.selectOrganization = selectOrganization;
+        _ctrl.searchKronos = searchKronos;
+        _ctrl.kronos = {};
+
         load();
         
         //===================================
@@ -62,6 +66,57 @@ define(['app', 'lodash', './media-organization-partial'], function(app, _) {
                 _ctrl.error = err.data || err;
 
             })
+        }
+
+        //===================================
+        //
+        //===================================
+        function selectOrganization(organization) {
+
+            if(organization.kronosId) {
+
+            } else {
+                _ctrl.kronos.search = organization.title;    
+                searchKronos();
+            }
+        }
+
+        ///////////////////////////////////////////
+        ///////////////KRONOS//////////////////////
+        ///////////////////////////////////////////
+
+        //===================================
+        //
+        //===================================
+        function searchKronos() {
+
+            var query = {};
+
+            if(_ctrl.kronos.search) query.FreeText = _ctrl.kronos.search;
+            
+            loadKronosOrganization({ FreeText : _ctrl.kronos.search });
+        }
+
+
+        //===================================
+        //
+        //===================================
+        function loadKronosOrganization(query) {
+
+            _ctrl.kronos.loading=true;
+
+            return $http.get('http://bilodeaux7.local/api/v2018/organizations', { params: { q: query } }).then(resData).then(function(organizations){
+
+                _ctrl.kronos.organizations = organizations;
+
+            }).catch(function(err) {
+
+                _ctrl.error = err.data || err;
+
+            }).finally(function(){
+                delete _ctrl.kronos.loading;
+            })
+
         }
 
         //===================================
