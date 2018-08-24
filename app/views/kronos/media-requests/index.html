@@ -8,30 +8,6 @@
             background: #c5dff1 !important;
         }
 
-        .media-table .panel-heading a.collapse-icon {
-            padding: 12px 35px 12px 15px;
-            display: inline-block;
-            width: 100%;
-            position: relative;
-            text-decoration: none;
-        }
-
-        .media-table .panel-heading a.collapse-icon:after {
-            font-family: "FontAwesome";
-            content: "\f01a";
-            position: absolute;
-            right: 20px;
-            font-size: 20px;
-            font-weight: 400;
-            top: 50%;
-            line-height: 1;
-            margin-top: -10px;
-        }
-
-        .media-table .panel-heading a.collapse-icon.collapsed:after {
-            content: "\f01b";
-        }
-
         .media-table h3 {
             font-size: 13px;
             margin-top: 2px;
@@ -48,45 +24,43 @@
         }
     </style>
     <div class="container-fluid">
+        <div class="col-xs-12">
+            <h3 class="marginless ">
+                Media Requests
+            </h3>
+        </div>
         <div class="panel  panel-default">
             <div class="panel-body">
-                <table>
+                <table  width="100%">
+                    <colgroup>
+                        <col style="width: 50%" />
+                        <col style="width: 50%" />
+                    </colgroup>
                     <tr>
                         <td>
                             <div class="row">
+                               
                                 <div class="col-xs-6">
-                                    <h3 class="marginless ">
-                                        Media Requests
-                                    </h3>
-                                </div>
-                                <div class="col-xs-6 text-right ">
-                                    <div class="btn-group atop">
-                                        <button type="button" class="btn btn-sm btn-default dropdown-toggle">
-                                            Status
-                                            <span class="caret"></span>
-                                        </button>
-                                        <!---->
+                                        <select class="form-control">
+                                            <option>New</option>
+                                            <option>Approved</option>
+                                            <option>Rejected</option>
+                                        </select>
                                     </div>
-                                    <div style="display: inline-block;">
+                                    <div  class="col-xs-6">
                                         <div class="input-group input-sm" style="width: 200px;">
                                             <input type="text" class="form-control">
                                             <span type="button" class="input-group-addon">
-                                                <i class="eco-search"></i>
+                                                <i class="fa fa-search"></i>
                                             </span>
                                         </div>
                                     </div>
-                                </div>
                             </div>
 
                         </td>
                         <td>
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <h3 class="marginless ">
-                                        Search
-                                    </h3>
-                                </div>
-                                <div class="col-xs-6">
+                            <div class="row">                                
+                                <div class="col-xs-12">
                                     <div class="pull-right" style="display: inline-block;">
                                         <div class="input-group input-sm" style="width: 200px;">
                                             <i ng-if="mediaRequestCtrl.kronos.loading" class="fa fa-cog fa-spin"></i>
@@ -123,10 +97,10 @@
                                                 <i class="fa fa-search"></i>
                                             </button>
                                             <button type="button" class="btn btn-default">
-                                                <i class="fa fa-thumbs-up-alt"></i>
+                                                <i class="fa fa-thumbs-up"></i>
                                             </button>
                                             <button type="button" class="btn btn-default">
-                                                <i class="fa fa-thumbs-down-alt"></i>
+                                                <i class="fa fa-thumbs-down"></i>
                                             </button>
                                         </div>
                                     </td>
