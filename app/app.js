@@ -20,9 +20,12 @@ define(['angular', 'ngSanitize','toastr','ngMeta'], function(angular) { 'use str
           progressBar: true,
         });
         $httpProvider.useApplyAsync(true);
+        $httpProvider.interceptors.push('flexHttpInterceptor');
         $httpProvider.interceptors.push('authenticationHttpIntercepter');
         $httpProvider.interceptors.push('realmHttpIntercepter');
         $httpProvider.interceptors.push('apiRebase'); //should be last interceptor
+
+        app.$httpProvider = $httpProvider;
     }]);
 
 	app.factory('apiRebase', ["$location", function($location) {
@@ -39,7 +42,40 @@ define(['angular', 'ngSanitize','toastr','ngMeta'], function(angular) { 'use str
 				return config;
 			}
 		};
-	}]);
+    }]);
+    
+	app.provider('flexHttpInterceptor', [function() { // TODO Move to anfularFlex
+
+        var fatoryInterceptors = [];
+
+        this.interceptors = fatoryInterceptors,
+
+		this.$get = ["$q", "$injector", function($q, $injector) {
+
+            return {
+
+                request: function(config) {
+
+                    if(fatoryInterceptors.length===0)
+                        return config;
+
+                    var interceptors = fatoryInterceptors.concat(); // clone
+
+                    var q = $q.when(config);
+
+                    for(var i in interceptors) {
+
+                        var interceptor = $injector.get(interceptors[i]);
+
+                        if(interceptor.request)
+                            q = $q.when(q.then(interceptor.request));
+                    }
+
+                    return q;
+                }
+            };
+        }];
+    }]);
 
     return app;
 });

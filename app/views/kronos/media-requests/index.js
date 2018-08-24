@@ -1,14 +1,16 @@
-define(['app', 'lodash', './media-organization-partial'], function(app, _) {
+define(['app', 'lodash', 'services/kronos', './media-organization-partial'], function(app, _) {
 
-	return ['$http', 'user', function($http, user) {
+    var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
+
+	return ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $q) {
         var _ctrl = this;
 
-        _ctrl.selectOrganization    = selectOrganization;
-        _ctrl.selectParticipant     = selectParticipant;
-        _ctrl.searchKronos          = searchKronos;
+        _ctrl.selectRequest         = selectRequest;
+        _ctrl.selectParticipant     = selectRequest;
         _ctrl.loadParticipants      = loadParticipants;
         _ctrl.attachmentUrl         = attachmentUrl
-        _ctrl.kronos = {};
+        _ctrl.selectedRequest       = null;
+        _ctrl.selectedParticipant   = null;
 
         load();
         
@@ -74,31 +76,28 @@ define(['app', 'lodash', './media-organization-partial'], function(app, _) {
         //===================================
         //
         //===================================
-        function selectOrganization(request) {
-            _ctrl.selectedRequest = request;
-            if(request.organization.kronosId) {
+        function selectRequest(request, participant) {
 
-            } else {
-                _ctrl.kronos.search = request.organization.title;    
-                searchKronos();
-            }
+            var prevRequest     = _ctrl.selectedRequest;
+            var prevParticipant = _ctrl.selectedParticipant;
+
+            request     = request     || null;
+            participant = participant || null;
+
+            _ctrl.selectedRequest       = request;
+            _ctrl.selectedParticipant   = participant;
+
+            var qChain = $q.when(0);
+
+            if(request     && request    !=prevRequest)     qChain = qChain.then(function() { return lookUpKronosOrganizations(request); });
+            if(participant && participant!=prevParticipant) qChain = qChain.then(function() { return lookUpKronosContact(participant, request); });
+
+            return qChain;
         }
-
 
         //===================================
         //
         //===================================
-        function selectParticipant(request, participant) {
-            _ctrl.selectedRequest       = request;
-            _ctrl.selectedParticipant   = participant;
-            if(request.organization.kronosId) {
-
-            } else {
-                _ctrl.kronos.search = request.organization.title;    
-                searchKronos();
-            }
-        }
-
         function attachmentUrl(url){
             if(!url)return''
             if(~url.indexOf('cbd.documents.temporary'))
@@ -107,6 +106,9 @@ define(['app', 'lodash', './media-organization-partial'], function(app, _) {
 
         }
         
+        //===================================
+        //
+        //===================================
         function loadParticipants(request){
             request.showParticipants = !request.showParticipants;
             
@@ -133,35 +135,82 @@ define(['app', 'lodash', './media-organization-partial'], function(app, _) {
         //===================================
         //
         //===================================
-        function searchKronos() {
+        function lookUpKronosOrganizations(request) {
+
+            request = request || _ctrl.selectedRequest;
+
+            if(!request)
+                return;
 
             var query = {};
 
-            if(_ctrl.kronos.search) query.FreeText = _ctrl.kronos.search;
-            
-            loadKronosOrganization({ FreeText : _ctrl.kronos.search });
-        }
+            if(request.organization.kronosIds) {
+                query.OrganizationUIDs = request.organization.kronosIds;
+            }
+            else {
+                query.FreeText = request.organization.title;
+                query.TypeUIDs = [ KRONOS_MEDIA_TYPE ];
+            }
 
+            var _kronos = request.kronos = request.kronos || {};
+
+            _kronos.loading = true;
+            _kronos.error   = null;
+
+            return $http.get(kronos.baseUrl+'/api/v2018/organizations', { params: { q: query } }).then(resData).then(function(organizations){
+
+                organizations.forEach(function(o){
+                    o.isLinked = _.includes(request.organization.kronosIds||[], o.OrganizationUID);
+                });
+
+                _kronos.organizations = organizations;
+
+            }).catch(function(err) {
+                _kronos.error = err.data || err;
+            }).finally(function(){
+                delete _kronos.loading;
+            })
+        }
 
         //===================================
         //
         //===================================
-        function loadKronosOrganization(query) {
+        function lookUpKronosContact(participant, request) {
 
-            _ctrl.kronos.loading=true;
+            var participant = participant || _ctrl.selectedParticipant;
 
-            return $http.get('/api/v2018/organizations', { params: { q: query } }).then(resData).then(function(organizations){
+            if(!participant)
+                return;
 
-                _ctrl.kronos.organizations = organizations;
+            var query = {};
+
+            if(participant.kronosId) {
+                query.ContactUID = participant.kronosId;
+            }
+            else {
+                query.FreeText = participant.firstName||'' + ' ' + participant.lastName||'';
+                query.limit    = 25;
+
+                if(request && request.kronos && request.kronos.organizations && request.kronos.organizations.length)
+                    query.OrganizationUIDs = _.map(request.kronos.organizations, 'OrganizationUID');
+            }
+
+            var _kronos = participant.kronos = participant.kronos || {};
+
+            _kronos.loading = true;
+            _kronos.error   = null;
+
+            return $http.get(kronos.baseUrl+'/api/v2018/contacts', { params: { q: query } }).then(resData).then(function(contacts){
+
+                contacts.forEach(function(o){ o.isLinked = participant.kronosId && participant.kronosId == o.ContactUID; });
+
+                participant.kronos.contacts = contacts;
 
             }).catch(function(err) {
-
-                _ctrl.error = err.data || err;
-
+                _kronos.error = err.data || err;
             }).finally(function(){
-                delete _ctrl.kronos.loading;
+                delete _kronos.loading;
             })
-
         }
 
         //===================================
