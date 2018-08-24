@@ -4,8 +4,10 @@ define(['app', 'lodash', './media-organization-partial'], function(app, _) {
         var _ctrl = this;
 
         _ctrl.selectOrganization    = selectOrganization;
+        _ctrl.selectParticipant     = selectParticipant;
         _ctrl.searchKronos          = searchKronos;
         _ctrl.loadParticipants      = loadParticipants;
+        _ctrl.attachmentUrl         = attachmentUrl
         _ctrl.kronos = {};
 
         load();
@@ -82,18 +84,46 @@ define(['app', 'lodash', './media-organization-partial'], function(app, _) {
             }
         }
 
+
+        //===================================
+        //
+        //===================================
+        function selectParticipant(request, participant) {
+            _ctrl.selectedRequest       = request;
+            _ctrl.selectedParticipant   = participant;
+            if(request.organization.kronosId) {
+
+            } else {
+                _ctrl.kronos.search = request.organization.title;    
+                searchKronos();
+            }
+        }
+
+        function attachmentUrl(url){
+            if(!url)return''
+            if(~url.indexOf('cbd.documents.temporary'))
+                return url
+            return '/participation/download/'+encodeURIComponent(url).replace(/%2f/gi, '/');
+
+        }
+        
         function loadParticipants(request){
-            request.loadingParticipants = true;
-            $http.get('/api/v2018/kronos/participation-request/participants', { 
-                params: {
-                    q: { requestId: { $oid : request._id }}
-                }
-            }).then(resData).then(function(result) {
-                request.participants = result.data;
-            })
-            .finally(function(){
-                request.loadingParticipants = false;
-            })
+            request.showParticipants = !request.showParticipants;
+            
+            if(!request.participants){
+                    
+                request.loadingParticipants = true;
+                $http.get('/api/v2018/kronos/participation-request/participants', { 
+                    params: {
+                        q: { requestId: { $oid : request._id }}
+                    }
+                }).then(function(result) {
+                    request.participants = result.data;
+                })
+                .finally(function(){
+                    request.loadingParticipants = false;
+                })
+            }
         }
 
         ///////////////////////////////////////////

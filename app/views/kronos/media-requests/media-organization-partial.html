@@ -23,4 +23,14 @@
     <div ng-show="document.medium">
         Medium: <span ng-repeat="item in document.medium">{{item}}<span ng-show="!$last">, </span></span>
     </div>
+
+    <hr/>
+    <div ng-if="document.attachment">
+        <ul class="list">
+            <li ng-repeat="item in document.attachment" >
+                <a target="_blank" ng-href="{{item.url}}">{{item.title||item.url}} <span ng-if="item.tag">({{item.tag}})</span></a>
+            </li>
+        </ul>
+    </div>
+    
 </div>
