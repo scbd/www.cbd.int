@@ -12,6 +12,17 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
         _ctrl.selectedRequest       = null;
         _ctrl.selectedParticipant   = null;
 
+
+
+        _ctrl.linkKronsOrganization             = linkKronsOrganization;
+        _ctrl.removeKronsOrganization           = removeKronsOrganization;
+        _ctrl.linkKronosContact                 = linkKronosContact;
+        _ctrl.removeKronosContact               = removeKronosContact;        
+        _ctrl.removeOrganizationAccreditation   = removeOrganizationAccreditation;
+        _ctrl.accrediateOrganization            = accrediateOrganization
+        _ctrl.isLinked                          = isLinked
+        
+
         load();
         
         //===================================
@@ -144,7 +155,7 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
 
             var query = {};
 
-            if(request.organization.kronosIds) {
+            if((request.organization.kronosIds||[]).length) {
                 query.OrganizationUIDs = request.organization.kronosIds;
             }
             else {
@@ -156,7 +167,7 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
 
             _kronos.loading = true;
             _kronos.error   = null;
-
+// kronos.baseUrl+
             return $http.get(kronos.baseUrl+'/api/v2018/organizations', { params: { q: query } }).then(resData).then(function(organizations){
 
                 organizations.forEach(function(o){
@@ -213,6 +224,95 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
             })
         }
 
+        function accrediateOrganization(request){
+            
+            return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/accrediate')
+            .then(function(result){               
+                request.organization.accredited = result.data.accredited;
+            }).catch(function(err) {
+               console.log(err)
+            }).finally(function(){
+                // delete _kronos.loading;
+            })
+        }
+
+        function removeOrganizationAccreditation(request){
+            
+            return $http.delete('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/accrediate')
+            .then(function(result){               
+                request.organization.accredited = result.data.accredited;
+            }).catch(function(err) {
+               console.log(err)
+            }).finally(function(){
+                // delete _kronos.loading;
+            });
+        }
+
+        function linkKronsOrganization(request, korg){
+
+            return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/link-kronos/' + korg.OrganizationUID,)
+            .then(function(result){               
+                if(result.status == 200){                    
+                    if(!request.organization.kronosIds)
+                        request.organization.kronosIds = [];
+                    request.organization.kronosIds.push(korg.OrganizationUID);
+                }
+            }).catch(function(err) {
+               console.log(err)
+            }).finally(function(){
+                // delete _kronos.loading;
+            })
+        }
+
+        function removeKronsOrganization(request, korg){
+            
+            return $http.delete('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/link-kronos/' + korg.OrganizationUID,)
+            .then(function(result){               
+                if(result.status == 200){
+                    var index =  _.indexOf(request.organization.kronosIds, korg.OrganizationUID)
+                    request.organization.kronosIds.splice(index, 1);
+                }
+            }).catch(function(err) {
+               console.log(err)
+            }).finally(function(){
+                // delete _kronos.loading;
+            })    
+        }
+
+        function linkKronosContact(request, participant, korg){
+
+            return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
+            '/participants/' + participant._id+ '/link-kronos/' + korg.ContactUID)
+            .then(function(result){               
+                if(result.status == 200){                    
+                    participant.kronosId = korg.ContactUID;
+                }
+            }).catch(function(err) {
+               console.log(err)
+            }).finally(function(){
+                // delete _kronos.loading;
+            })
+        }
+
+        function removeKronosContact(request, participant, korg){
+            
+            return $http.delete('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
+            '/participants/' + participant._id+ '/link-kronos/' + korg.ContactUID)
+            .then(function(result){               
+                if(result.status == 200){             
+                    participant.kronosId = undefined;
+                }
+            }).catch(function(err) {
+               console.log(err)
+            }).finally(function(){
+                // delete _kronos.loading;
+            })    
+        }
+        
+        
+        function isLinked(LinkedIds, kronosId){
+            return _.contains(LinkedIds, kronosId)
+        }
         //===================================
         //
         //===================================
