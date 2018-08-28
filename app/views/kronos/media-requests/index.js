@@ -12,17 +12,17 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
         _ctrl.selectedRequest       = null;
         _ctrl.selectedParticipant   = null;
 
-
-
         _ctrl.linkKronsOrganization             = linkKronsOrganization;
         _ctrl.removeKronsOrganization           = removeKronsOrganization;
         _ctrl.linkKronosContact                 = linkKronosContact;
         _ctrl.removeKronosContact               = removeKronosContact;        
         _ctrl.removeOrganizationAccreditation   = removeOrganizationAccreditation;
         _ctrl.accrediateOrganization            = accrediateOrganization
-        _ctrl.isLinked                          = isLinked
+        _ctrl.searchKronosOrg                   = searchKronosOrg
         
-
+        _ctrl.createKronosOrg                   = createKronosOrg;  
+        _ctrl.createKronosContact               = createKronosContact;        
+        
         load();
         
         //===================================
@@ -146,7 +146,7 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
         //===================================
         //
         //===================================
-        function lookUpKronosOrganizations(request) {
+        function lookUpKronosOrganizations(request, searchText) {
 
             request = request || _ctrl.selectedRequest;
 
@@ -155,11 +155,11 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
 
             var query = {};
 
-            if((request.organization.kronosIds||[]).length) {
+            if((!searchText && request.organization.kronosIds||[]).length) {
                 query.OrganizationUIDs = request.organization.kronosIds;
             }
             else {
-                query.FreeText = request.organization.title;
+                query.FreeText = searchText || request.organization.title;
                 query.TypeUIDs = [ KRONOS_MEDIA_TYPE ];
             }
 
@@ -167,7 +167,7 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
 
             _kronos.loading = true;
             _kronos.error   = null;
-// kronos.baseUrl+
+            
             return $http.get(kronos.baseUrl+'/api/v2018/organizations', { params: { q: query } }).then(resData).then(function(organizations){
 
                 organizations.forEach(function(o){
@@ -256,6 +256,7 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
                     if(!request.organization.kronosIds)
                         request.organization.kronosIds = [];
                     request.organization.kronosIds.push(korg.OrganizationUID);
+                    korg.isLinked=true;
                 }
             }).catch(function(err) {
                console.log(err)
@@ -271,6 +272,7 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
                 if(result.status == 200){
                     var index =  _.indexOf(request.organization.kronosIds, korg.OrganizationUID)
                     request.organization.kronosIds.splice(index, 1);
+                    korg.isLinked=false;
                 }
             }).catch(function(err) {
                console.log(err)
@@ -284,8 +286,10 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
             return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
             '/participants/' + participant._id+ '/link-kronos/' + korg.ContactUID)
             .then(function(result){               
-                if(result.status == 200){                    
+                if(result.status == 200){
+                    _.map(participant.kronos.contacts, function(con){con.isLinked=false;})                    
                     participant.kronosId = korg.ContactUID;
+                    korg.isLinked=true;
                 }
             }).catch(function(err) {
                console.log(err)
@@ -301,6 +305,7 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
             .then(function(result){               
                 if(result.status == 200){             
                     participant.kronosId = undefined;
+                    korg.isLinked=false;
                 }
             }).catch(function(err) {
                console.log(err)
@@ -309,9 +314,108 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
             })    
         }
         
+        function createKronosOrg(request){
+
+            var organization = request.organization;
+            var kronosOrg = {
+                OrganizationName        : organization.title,
+                OrganizationAcronym     : organization.acronym,
+                OrganizationTypeUID     : '0000000052000000cbd05ebe0000000b',
+                Address                 : (organization.address.unitNumber||'') + '' + (organization.address.streetNumber||'') + '' +(organization.address.street||''),
+                City                    : organization.address.locality,
+                State                   : organization.address.administrativeArea,
+                Country                 : organization.address.country,
+                PostalCode              : organization.address.postalCode,
+                Phones                  : [organization.phone],
+                Emails                  : [organization.email],
+                EmailCcs                : [organization.emailCc],
+                Webs                    : [organization.website]
+
+            }
+            request.creatingKronosOrg = true;
+            return $http.post('/api/v2018/organizations', kronosOrg)
+            .then(function(result){               
+                if(result.status == 200){                    
+                    if(!organization.kronosIds)
+                        organization.kronosIds = [];
+                    organization.kronosIds.push(result.data.OrganizationUID);
+
+                    return linkKronsOrganization(request, result.data).then(function(data){
+                            if((request.kronos.organizations||[]).length)
+                            request.kronos.organizations.push(result.data);
+                        else
+                            request.kronos.organizations = [result.data];
+                    })
+                }
+            }).catch(function(err) {
+               console.log(err)
+            }).finally(function(){
+                delete request.creatingKronosOrg;
+            })
+
+        }
         
-        function isLinked(LinkedIds, kronosId){
-            return _.contains(LinkedIds, kronosId)
+        function createKronosContact(participant, request){
+
+            if((request.organization.kronosIds||[]).length == 0){
+                throw error
+            }
+
+            var organizationUID;
+            
+            if(request.organization.kronosIds.length == 1)
+                organizationUID = request.organization.kronosIds[0];
+            else{
+                //show dialog?
+                organizationUID = request.organization.kronosIds[0];
+            }
+            var kronosContact = {
+                OrganizationUID            : organizationUID,
+                OrganizationTypeUID        : '0000000052000000cbd05ebe0000000b',
+                Title                      : participant.title,
+                FirstName                  : participant.firstName,
+                LastName                   : participant.lastName,
+                Designation                : participant.designation,
+                Department                 : participant.department,
+                Affiliation                : participant.affiliation,
+                Language                   : participant.language,
+                Phones                     : [participant.phones, participant.phoneDuringMeeting],
+                Mobiles                    : [participant.mobile],
+                Emails                     : [participant.email],
+                EmailCcs                   : [participant.emailCc],
+                DateOfBirth                : participant.dateOfBirth,
+                UseOrganizationAddress     : participant.useOrganizationAddress
+            };
+
+            if(!participant.useOrganizationAddress){                
+                kronosContact.Address    = (participant.address.unitNumber||'') + '' + (participant.address.streetNumber||'') + '' + (participant.address.street||'');
+                kronosContact.City       = participant.address.locality;
+                kronosContact.State      = participant.address.administrativeArea;
+                kronosContact.Country    = participant.address.country;
+                kronosContact.PostalCode = participant.address.postalCode;
+            }
+
+            participant.creatingKronosContact = true;
+            return $http.post('/api/v2018/organizations/'+organizationUID+'/contacts', kronosContact)
+            .then(function(result){               
+                if(result.status == 200){   
+                    participant.kronosId = result.data.contactUID;
+                    return linkKronosContact(request, participant, result.data).then(function(data){
+                        if((participant.kronos.contacts||[]).length)
+                            participant.kronos.contacts.push(result.data)
+                        else
+                            participant.kronos.contacts = [result.data];
+                    })
+                }
+            }).catch(function(err) {
+               console.log(err)
+            }).finally(function(){
+                delete request.creatingKronosContact;
+            })
+        }
+
+        function searchKronosOrg(search, request){
+            return lookUpKronosOrganizations(request, search)
         }
         //===================================
         //
