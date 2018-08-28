@@ -16,19 +16,21 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
         _ctrl.removeKronsOrganization           = removeKronsOrganization;
         _ctrl.linkKronosContact                 = linkKronosContact;
         _ctrl.removeKronosContact               = removeKronosContact;        
-        _ctrl.removeOrganizationAccreditation   = removeOrganizationAccreditation;
-        _ctrl.accrediateOrganization            = accrediateOrganization
-        _ctrl.searchKronosOrg                   = searchKronosOrg
+        _ctrl.updateOrganizationStatus            = updateOrganizationStatus; 
+        _ctrl.updateParticipantStatus            = updateParticipantStatus;
+        _ctrl.searchKronosOrg                   = searchKronosOrg;
+        _ctrl.searchKronosContact               = searchKronosContact;
         
         _ctrl.createKronosOrg                   = createKronosOrg;  
-        _ctrl.createKronosContact               = createKronosContact;        
+        _ctrl.createKronosContact               = createKronosContact;  
+        _ctrl.refreshRequestList               = refreshRequestList;         
         
         load();
         
         //===================================
         //
         //===================================
-        function load() {
+        function load(addtionalReqQuery) {
 
             delete _ctrl.error;
             
@@ -49,10 +51,34 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
                 return _ctrl.conference
 
             }).then(function(){
-                
-                return $http.get('/api/v2018/kronos/participation-requests', { params: { q : { $or : [{conference : { $oid:_ctrl.conference._id }}, { conference : _ctrl.conference._id }]}}}).then(resData) // TODO
+                return refreshRequestList('New')    
+            }).catch(function(err) {
 
-            }).then(function(mediaRequests) { 
+                _ctrl.error = err.data || err;
+
+            })
+        }
+        function refreshRequestList(status){
+
+            var requestQuery = { $or : [{conference : { $oid:_ctrl.conference._id }}, { conference : _ctrl.conference._id }]};
+
+            requestQuery.currentStep = "finished";
+
+            if(status!=''){
+
+                if(status == 'Approved')
+                    requestQuery.accredited = true;
+                else if(status == 'Rejected')
+                    requestQuery.rejected = true;
+                else if(status == 'New'){
+                    requestQuery.accredited = {$exists : false}
+                    requestQuery.rejected   = {$exists : false}
+                };
+            }            
+
+            return $http.get('/api/v2018/kronos/participation-requests', { params: { q : requestQuery}})
+            .then(resData)
+            .then(function(mediaRequests) { 
 
                 _ctrl.requests = mediaRequests;
 
@@ -83,7 +109,6 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
 
             })
         }
-
         //===================================
         //
         //===================================
@@ -186,7 +211,7 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
         //===================================
         //
         //===================================
-        function lookUpKronosContact(participant, request) {
+        function lookUpKronosContact(participant, request, searchText) {
 
             var participant = participant || _ctrl.selectedParticipant;
 
@@ -195,11 +220,11 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
 
             var query = {};
 
-            if(participant.kronosId) {
+            if(!searchText && participant.kronosId) {
                 query.ContactUID = participant.kronosId;
             }
             else {
-                query.FreeText = participant.firstName||'' + ' ' + participant.lastName||'';
+                query.FreeText = searchText || (participant.firstName||'' + ' ' + participant.lastName||'');
                 query.limit    = 25;
 
                 if(request && request.kronos && request.kronos.organizations && request.kronos.organizations.length)
@@ -224,11 +249,20 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
             })
         }
 
-        function accrediateOrganization(request){
+        function updateOrganizationStatus(request, status){
             
-            return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/accrediate')
-            .then(function(result){               
-                request.organization.accredited = result.data.accredited;
+            return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/' + status)
+            .then(function(result){ 
+                if(result.status == 200){              
+                    if(status == 'accreditate'){
+                        request.organization.accredited = true;
+                        delete request.organization.rejected;
+                    }
+                    else {
+                        delete request.organization.accredited;
+                        request.organization.rejected = true;
+                    }
+                }
             }).catch(function(err) {
                console.log(err)
             }).finally(function(){
@@ -236,17 +270,28 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
             })
         }
 
-        function removeOrganizationAccreditation(request){
+        function updateParticipantStatus(participant, request, status){
             
-            return $http.delete('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/accrediate')
-            .then(function(result){               
-                request.organization.accredited = result.data.accredited;
+            return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
+            '/participants/' + participant._id + '/' + status)
+            .then(function(result){ 
+                if(result.status == 200){              
+                    if(status == 'accreditate'){
+                        participant.accredited = true;
+                        delete participant.rejected;
+                    }
+                    else {
+                        delete participant.accredited;
+                        participant.rejected = true;
+                    }
+                }
             }).catch(function(err) {
                console.log(err)
             }).finally(function(){
                 // delete _kronos.loading;
-            });
+            })
         }
+        
 
         function linkKronsOrganization(request, korg){
 
@@ -417,6 +462,11 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
         function searchKronosOrg(search, request){
             return lookUpKronosOrganizations(request, search)
         }
+
+        function searchKronosContact(search, participant, request){
+            return lookUpKronosContact(participant, request, search)
+        }
+        
         //===================================
         //
         //===================================
