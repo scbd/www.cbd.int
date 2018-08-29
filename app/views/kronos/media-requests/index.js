@@ -432,7 +432,7 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
                 Mobiles                    : [participant.mobile],
                 Emails                     : [participant.email],
                 EmailCcs                   : [participant.emailCc],
-                DateOfBirth                : participant.dateOfBirth,
+      //          DateOfBirth                : participant.dateOfBirth ? moment(participant.dateOfBirth).toDate() : null, // TO FIX DATES IN ASP.NET
                 UseOrganizationAddress     : participant.useOrganizationAddress
             };
 
