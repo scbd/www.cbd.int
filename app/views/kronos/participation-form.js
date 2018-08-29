@@ -340,7 +340,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       var params = {
                       q : {
                         'meta.createdBy':user.userID,
-                        'requestId':_ctrl.doc._id,
+                        'requestId':{$oid:_ctrl.doc._id},
                         'meeting':{'$exists':true}
                       },
                       f:{meta:0}
@@ -604,7 +604,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         var params = {
                         q : {
                           'meta.createdBy':user.userID,
-                          'conference':_ctrl.conferenceId
+                          'conference':{$oid:_ctrl.conferenceId}
                         }
                       }
         return $http.get('/api/v2018/kronos/participation-requests',{ params : params })
