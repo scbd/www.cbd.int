@@ -1,4 +1,4 @@
-define(['app', 'lodash', 'services/kronos', './media-organization-partial'], function(app, _) {
+define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-partial'], function(app, _, moment) {
 
     var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
 
@@ -11,19 +11,22 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
         _ctrl.attachmentUrl         = attachmentUrl
         _ctrl.selectedRequest       = null;
         _ctrl.selectedParticipant   = null;
+        _ctrl.requestStatus = 'new'
 
         _ctrl.linkKronsOrganization             = linkKronsOrganization;
         _ctrl.removeKronsOrganization           = removeKronsOrganization;
         _ctrl.linkKronosContact                 = linkKronosContact;
         _ctrl.removeKronosContact               = removeKronosContact;        
-        _ctrl.updateOrganizationStatus            = updateOrganizationStatus; 
-        _ctrl.updateParticipantStatus            = updateParticipantStatus;
+        _ctrl.updateOrganizationStatus          = updateOrganizationStatus; 
+        _ctrl.updateParticipantStatus           = updateParticipantStatus;
         _ctrl.searchKronosOrg                   = searchKronosOrg;
         _ctrl.searchKronosContact               = searchKronosContact;
+        _ctrl.lookUpKronosOrganizations         = lookUpKronosOrganizations;
+        _ctrl.lookUpKronosContact               = lookUpKronosContact;
         
         _ctrl.createKronosOrg                   = createKronosOrg;  
         _ctrl.createKronosContact               = createKronosContact;  
-        _ctrl.refreshRequestList               = refreshRequestList;         
+        _ctrl.refreshRequestList                = LoadRequests;         
         
         load();
         
@@ -51,26 +54,28 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
                 return _ctrl.conference
 
             }).then(function(){
-                return refreshRequestList('New')    
+                return LoadRequests()    
             }).catch(function(err) {
 
                 _ctrl.error = err.data || err;
 
             })
         }
-        function refreshRequestList(status){
+        function LoadRequests(status){
+
+            status = status || _ctrl.requestStatus;
 
             var requestQuery = { $or : [{conference : { $oid:_ctrl.conference._id }}, { conference : _ctrl.conference._id }]};
 
             requestQuery.currentStep = "finished";
 
-            if(status!=''){
+            if(status){
 
-                if(status == 'Approved')
+                if(status == 'accreditated')
                     requestQuery.accredited = true;
-                else if(status == 'Rejected')
+                else if(status == 'rejected')
                     requestQuery.rejected = true;
-                else if(status == 'New'){
+                else if(status == 'new'){
                     requestQuery.accredited = {$exists : false}
                     requestQuery.rejected   = {$exists : false}
                 };
@@ -190,6 +195,7 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
 
             var _kronos = request.kronos = request.kronos || {};
 
+            _kronos.search  = query.FreeText||'';
             _kronos.loading = true;
             _kronos.error   = null;
             
@@ -224,15 +230,16 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
                 query.ContactUID = participant.kronosId;
             }
             else {
-                query.FreeText = searchText || (participant.firstName||'' + ' ' + participant.lastName||'');
+                query.FreeText = searchText || ((participant.firstName||'') + ' ' + (participant.lastName||''));
                 query.limit    = 25;
 
-                if(request && request.kronos && request.kronos.organizations && request.kronos.organizations.length)
-                    query.OrganizationUIDs = _.map(request.kronos.organizations, 'OrganizationUID');
+                if(request && request.organization && request.organization.kronosIds && request.organization.kronosIds.length)
+                    query.OrganizationUIDs = request.organization.kronosIds;
             }
 
             var _kronos = participant.kronos = participant.kronos || {};
 
+            _kronos.search = query.FreeText||'';
             _kronos.loading = true;
             _kronos.error   = null;
 
@@ -254,14 +261,11 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
             return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/' + status)
             .then(function(result){ 
                 if(result.status == 200){              
-                    if(status == 'accreditate'){
-                        request.organization.accredited = true;
-                        delete request.organization.rejected;
-                    }
-                    else {
-                        delete request.organization.accredited;
-                        request.organization.rejected = true;
-                    }
+
+                    request             .accredited = status == 'accreditate';
+                    request.organization.accredited = status == 'accreditate';
+                    request             .rejected   = status == 'reject';
+                    request.organization.rejected   = status == 'reject';
                 }
             }).catch(function(err) {
                console.log(err)
@@ -378,7 +382,7 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
 
             }
             request.creatingKronosOrg = true;
-            return $http.post('/api/v2018/organizations', kronosOrg)
+            return $http.post(kronos.baseUrl+'/api/v2018/organizations', kronosOrg)
             .then(function(result){               
                 if(result.status == 200){                    
                     if(!organization.kronosIds)
@@ -441,7 +445,7 @@ define(['app', 'lodash', 'services/kronos', './media-organization-partial'], fun
             }
 
             participant.creatingKronosContact = true;
-            return $http.post('/api/v2018/organizations/'+organizationUID+'/contacts', kronosContact)
+            return $http.post(kronos.baseUrl+'/api/v2018/organizations/'+organizationUID+'/contacts', kronosContact)
             .then(function(result){               
                 if(result.status == 200){   
                     participant.kronosId = result.data.contactUID;

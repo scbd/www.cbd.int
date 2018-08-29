@@ -23,90 +23,72 @@
             margin: 2px;
         }
     </style>
-    <div class="container-fluid media-request-container">
+    <div class="container-fluid">
         <div class="col-xs-12">
-            <h3 class="marginless ">
+            <h2 class="marginless ">
                 Media Requests
-            </h3>
+            </h2>
         </div>
-        <div class="panel  panel-default">
+        <div class="col-xs-12 panel  panel-default">
             <div class="panel-body">
-                <table width="100%">
-                    <colgroup>
-                        <col style="width: 50%" />
-                        <col style="width: 50%" />
-                    </colgroup>
-                    <tr>
-                        <td>
-                            <div class="row">
+                <div class="row">
 
-                                <div class="col-xs-6">
-                                    <select class="form-control" ng-change="mediaRequestCtrl.refreshRequestList(requestStatus)" ng-model="requestStatus">
-                                        <option value="">New</option>
-                                        <option value="Approved">Approved</option>
-                                        <option value="Rejected">Rejected</option>
-                                    </select>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="input-group input-sm" style="width: 200px;">
-                                        <input type="text" class="form-control">
-                                        <span type="button" class="input-group-addon">
-                                            <i class="fa fa-search"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="col-sm-3">
+                        <select class="form-control" ng-change="mediaRequestCtrl.refreshRequestList(mediaRequestCtrl.requestStatus)" ng-model="mediaRequestCtrl.requestStatus">
+                            <option value="">All</option>
+                            <option value="new">New</option>
+                            <option value="accreditated">Accreditated</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <!-- <div class="col-sm-3">
+                        <div class="input-group" style="width: 200px;">
+                            <input type="text" class="form-control">
+                            <span type="button" class="input-group-addon">
+                                <i class="fa fa-search"></i>
+                            </span>
+                        </div>
+                    </div> -->
+                </div>
 
-                        </td>
-                        <td>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="pull-right" style="display: inline-block;">
-                                        <div class="input-group input-sm" style="width: 200px;">
-                                            <i ng-if="mediaRequestCtrl.kronos.loading" class="fa fa-cog fa-spin"></i>
-                                            <input type="text" class="form-control" ng-change="mediaRequestCtrl.searchKronos()" ng-model="mediaRequestCtrl.kronos.search"
-                                                ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 500, 'blur': 0 } }">
-                                            <span type="button" class="input-group-addon">
-                                                <i class="fa fa-search"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
+                <hr>
 
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-                <div class="panel  panel-default" ng-repeat="request in mediaRequestCtrl.requests">
-                    <div class="panel-heading">
+                <div class="panel  panel-default" ng-repeat="request in mediaRequestCtrl.requests" ng-class="{'panel-info': request.organization._id == mediaRequestCtrl.selectedRequest.organization._id }">
+                    <div class="panel-heading" style="cursor:pointer" ng-click="mediaRequestCtrl.selectRequest(request==mediaRequestCtrl.selectedRequest?null:request); mediaRequestCtrl.selectedRequest.organization.kronosIds.length && mediaRequestCtrl.lookUpKronosOrganizations()">
                         <i class="eco-plus-circled"></i> {{request.organization.title}}
-                        <span ng-if="request.organization.acronym">{{request.organization.acronym}}</span>
+                        <span ng-if="request.organization.acronym">({{request.organization.acronym}})</span>
+
+                        <em>{{request.organization.address.country|lowercase|term}}</em>
 
                         <div class="pull-right btn-group">
-                            <a ng-href="#" ng-click="request.showOrganization=!request.showOrganization">Show</a>
+                            <span class="label label-success" ng-if="request.organization.accredited">Accreditated</span>
+                            <span class="label label-danger"  ng-if="request.organization.rejected">Rejected</span>
+                            <i ng-hide="request == mediaRequestCtrl.selectedRequest" class="fa fa-caret-down" aria-hidden="true"></i></a>
+                            <i ng-show="request == mediaRequestCtrl.selectedRequest" class="fa fa-caret-up" aria-hidden="true"></i></a>
                         </div>
                     </div>
-                    <div class="panel-body" ng-if="request.organization && request.showOrganization">
+                    <div class="panel-body" ng-if="request == mediaRequestCtrl.selectedRequest">
+
+                        <h3>Organization</h3>
 
                         <div class="panel panel-default">
-                            <div class="panel-heading">
-                                Organization
-                            </div>
-
                             <div class="panel-body collapse in">
                                 <div ng-click="mediaRequestCtrl.selectRequest(request)">
                                     <div class="row" style="border-bottom:1px solid #eee;padding-bottom:5px;">
                                         <div class="col-xs-6" >
-                                            <div role="group" class="btn-group btn-group-xs">
-
-                                                <button type="button" class="btn btn-default" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'accreditate')"
-                                                    ng-disabled="request.organization.accredited">
-                                                    <i class="fa fa-thumbs-up"></i> Accreditate
-                                                </button>
-                                                <button type="button" class="btn btn-default" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'reject')" ng-disabled="request.organization.rejected">
-                                                    <i class="fa fa-thumbs-down"></i> Reject
-                                                </button>
+                                            <div class="pull-right">
+                                                <div role="group" class="btn-group btn-group-xs">
+                                                    <button type="button" class="btn btn-default" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'accreditate')"
+                                                        ng-disabled="request.organization.accredited">
+                                                        <i class="fa fa-thumbs-up"></i> Accreditate
+                                                    </button>
+                                                    <button type="button" class="btn btn-default" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'reject')" ng-disabled="request.organization.rejected">
+                                                        <i class="fa fa-thumbs-down"></i> Reject
+                                                    </button>
+                                                </div>
                                             </div>
+                                            <b>{{request.organization.title}}</b>
+                                            <span ng-if="request.organization.acronym">({{request.organization.acronym}})</span>
                                         </div>
                                         <div class="col-xs-6" style="border-left:1px solid #eee;">
                                             Kronos Organization
@@ -123,7 +105,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row" style="padding-top:5px">
+                                    <div class="row" style="padding-top:5px" >
                                         <div class="col-xs-6" style="border-right:1px solid #eee;"  
                                         ng-class="{'active':request.organization._id == mediaRequestCtrl.selectedRequest.organization._id}">
 
@@ -142,7 +124,7 @@
                                                 {{request.organization.address.postalCode}}
                                                 <span ng-show="request.organization.address.postalCode">, </span>
                                                 <span style="font-weight:500;">
-                                                    <br ng-show="!request.organization.address.postalCode" />{{request.organization.address.country|term}}</span>
+                                                    <br ng-show="!request.organization.address.postalCode" />{{request.organization.address.country|lowercase|term}}</span>
                                             </address>
 
                                             <div ng-if="request.organization.phone">
@@ -193,12 +175,12 @@
                                                             <td>{{korg.OrganizationName}}
                                                                 <span ng-if="korg.OrganizationAcronym">({{korg.OrganizationAcronym}})</span>
                                                             </td>
-                                                            <td>{{korg.Country|term}}</td>
+                                                            <td>{{korg.Country|lowercase|term}}</td>
                                                             <td>
 
                                                                 <div role="group" class="btn-group btn-group-xs pull-right">
                                                                     <button type="button" class="btn" ng-click="mediaRequestCtrl.linkKronsOrganization(request, korg)" ng-if="!korg.isLinked">
-                                                                        <i class="fa fa-square"></i>
+                                                                        <i class="fa fa-square-o"></i>
                                                                     </button>
                                                                     <button type="button" class="btn btn-success" ng-click="mediaRequestCtrl.removeKronsOrganization(request, korg)" ng-if="korg.isLinked">
                                                                         <i class="fa fa-check-square"></i>
@@ -222,14 +204,13 @@
                             </div>
                         </div>
 
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                Participants
-                                <div class="pull-right btn-group">
-                                    <a ng-href="#" ng-click="mediaRequestCtrl.loadParticipants(request)">Show all</a>
-                                </div>
-                            </div>
+                        <div class="pull-right btn-group">
+                                <a ng-href="#" ng-click="mediaRequestCtrl.loadParticipants(request)">Show all</a>
+                        </div>
+                        <h4>Participants</h4>
 
+                        <div class="panel panel-default">
+    
                             <div class="panel-body collapse in" id="mediaRequestCtrl.participants{{$index}}" ng-if="request.participants && request.showParticipants">
                                 <div class="row">
                                     <i class="fa fa-spin fa-spinner" ng-if="request.loadingParticipants" />
@@ -242,7 +223,7 @@
                                             </colgroup>
                                             <tbody>
                                                 <tr >
-                                                    <td ng-class="{'active':participant._id == mediaRequestCtrl.selectedParticipant._id}">
+                                                    <td ng-class="{'active':participant._id == mediaRequestCtrl.selectedParticipant._id}" class="text-right">
                                                         <div role="group" class="btn-group btn-group-xs">
 
                                                             <button type="button" class="btn btn-default" ng-click="mediaRequestCtrl.updateParticipantStatus(participant, request,'accreditate')"
@@ -259,7 +240,7 @@
                                                         <i ng-if="participant.kronos.loading" class="fa fa-cog fa-spin"></i>
                                                         <div class="pull-right" style="display: inline-block;">
                                                             <div class="input-group input-sm" style="width: 200px;padding:0px">
-                                                                <input style="height:30px" type="text" class="form-control" ng-change="mediaRequestCtrl.searchKronosContact(participant.kronos.search, participant)"
+                                                                <input style="height:30px" type="text" class="form-control" ng-change="mediaRequestCtrl.searchKronosContact(participant.kronos.search, participant, request)"
                                                                     ng-model="participant.kronos.search" ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 500, 'blur': 0 } }">
                                                                 <span type="button" class="input-group-addon">
                                                                     <i class="fa fa-search"></i>
@@ -291,7 +272,7 @@
                                                             <span ng-show="participant.designation && participant.department">, </span> {{participant.department}}
                                                         </div>
                                                         <div ng-if="participant.nationality">
-                                                            <span style="font-weight:500;">{{participant.nationality|term}}</span>
+                                                            <span style="font-weight:500;">{{participant.nationality|lowercase|term}}</span>
                                                         </div>
                                                         <table>
                                                             <tr>
@@ -324,7 +305,7 @@
                                                                 {{participant.address.postalCode}}
                                                                 <span ng-show="participant.address.postalCode">, </span>
                                                                 <span style="font-weight:500;">
-                                                                    <br ng-show="!participant.address.postalCode" />{{participant.address.country|term}}</span>
+                                                                    <br ng-show="!participant.address.postalCode" />{{participant.address.country|lowercase|term}}</span>
                                                             </address>
                                                         </div>
                                                         <hr/>
@@ -343,12 +324,12 @@
                                                             <tbody ng-repeat="kctc in participant.kronos.contacts">
                                                                 <tr ng-class="{'active':kctc.isLinked}">
                                                                     <td>{{kctc.FirstName}} {{kctc.LastName}}</td>
-                                                                    <td>{{kctc.Country|term}}</td>
+                                                                    <td>{{kctc.Country|lowercase|term}}</td>
                                                                     <td>
 
                                                                         <div role="group" class="btn-group btn-group-xs pull-right">
                                                                             <button type="button" class="btn" ng-click="mediaRequestCtrl.linkKronosContact(request, participant, kctc)" ng-if="!kctc.isLinked">
-                                                                                <i class="fa fa-square"></i>
+                                                                                <i class="fa fa-square-o"></i>
                                                                             </button>
                                                                             <button type="button" class="btn btn-success" ng-click="mediaRequestCtrl.removeKronosContact(request, participant, kctc)"
                                                                                 ng-if="kctc.isLinked">
@@ -357,9 +338,9 @@
                                                                         </div>
                                                                     </td>
                                                                 </tr>
-                                                                <tfoot ng-if="participant._id == mediaRequestCtrl.selectedParticipant._id">
+                                                                <tfoot ng-if="participant._id == mediaRequestCtrl.selectedParticipant._id && !participant.kronosId">
                                                                     <tr>
-                                                                        <td>
+                                                                        <td colspan="2">
                                                                             <button class="btn btn-xs btn-primary" ng-click="mediaRequestCtrl.createKronosContact(participant, request)">Create Kronos Contact</button>
                                                                         </td>
                                                                     </tr>
