@@ -55,14 +55,16 @@
 
                 <div class="panel  panel-default" ng-repeat="request in mediaRequestCtrl.requests" ng-class="{'panel-info': request.organization._id == mediaRequestCtrl.selectedRequest.organization._id }">
                     <div class="panel-heading" style="cursor:pointer" ng-click="mediaRequestCtrl.selectRequest(request==mediaRequestCtrl.selectedRequest?null:request); mediaRequestCtrl.selectedRequest.organization.kronosIds.length && mediaRequestCtrl.lookUpKronosOrganizations()">
-                        <i class="eco-plus-circled"></i> {{request.organization.title}}
+                        <i class="eco-plus-circled"></i> {{request.organization.title}} 
                         <span ng-if="request.organization.acronym">({{request.organization.acronym}})</span>
 
                         <em>{{request.organization.address.country|lowercase|term}}</em>
 
                         <div class="pull-right btn-group">
-                            <span class="label label-success" ng-if="request.organization.accredited">Accreditated</span>
-                            <span class="label label-danger"  ng-if="request.organization.rejected">Rejected</span>
+                            <span class="label label-info" ng-if="request.currentStep=='finished' && !request.accredited && !request.rejected">New</span>
+                            <span class="label label-warning" ng-if="request.currentStep!='finished'">Pending</span>
+                            <span class="label label-success" ng-if="request.accredited">Accreditated</span>
+                            <span class="label label-danger"  ng-if="request.rejected">Rejected</span>
                             <i ng-hide="request == mediaRequestCtrl.selectedRequest" class="fa fa-caret-down" aria-hidden="true"></i></a>
                             <i ng-show="request == mediaRequestCtrl.selectedRequest" class="fa fa-caret-up" aria-hidden="true"></i></a>
                         </div>
@@ -77,12 +79,12 @@
                                     <div class="row" style="border-bottom:1px solid #eee;padding-bottom:5px;">
                                         <div class="col-xs-6" >
                                             <div class="pull-right">
-                                                <div role="group" class="btn-group btn-group-xs">
+                                                <div role="group" class="btn-group btn-group-xs" ng-if="request.currentStep=='finished'">
                                                     <button type="button" class="btn btn-default" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'accreditate')"
-                                                        ng-disabled="request.organization.accredited">
+                                                        ng-disabled="request.accredited">
                                                         <i class="fa fa-thumbs-up"></i> Accreditate
                                                     </button>
-                                                    <button type="button" class="btn btn-default" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'reject')" ng-disabled="request.organization.rejected">
+                                                    <button type="button" class="btn btn-default" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'reject')" ng-disabled="request.rejected">
                                                         <i class="fa fa-thumbs-down"></i> Reject
                                                     </button>
                                                 </div>
@@ -110,8 +112,8 @@
                                         ng-class="{'active':request.organization._id == mediaRequestCtrl.selectedRequest.organization._id}">
 
                                             <div class="pull-right">
-                                                <span class="label label-success" ng-if="request.organization.accredited">Accreditated</span>
-                                                <span class="label label-danger" ng-if="request.organization.rejected">Rejected</span>
+                                                <span class="label label-success" ng-if="request.accredited">Accreditated</span>
+                                                <span class="label label-danger" ng-if="request.rejected">Rejected</span>
                                                 <span class="label label-primary" ng-if="request.organization.kronosIds.length">Linked with kronos</span>
                                             </div>
                                             <div ng-if="request.organization.type"></div>
@@ -224,7 +226,7 @@
                                             <tbody>
                                                 <tr >
                                                     <td ng-class="{'active':participant._id == mediaRequestCtrl.selectedParticipant._id}" class="text-right">
-                                                        <div role="group" class="btn-group btn-group-xs">
+                                                        <div role="group" class="btn-group btn-group-xs" ng-if="request.currentStep=='finished'">
 
                                                             <button type="button" class="btn btn-default" ng-click="mediaRequestCtrl.updateParticipantStatus(participant, request,'accreditate')"
                                                                 ng-disabled="participant.accredited">
@@ -338,7 +340,7 @@
                                                                         </div>
                                                                     </td>
                                                                 </tr>
-                                                                <tfoot ng-if="participant._id == mediaRequestCtrl.selectedParticipant._id && !participant.kronosId">
+                                                                <tfoot ng-if="participant._id == mediaRequestCtrl.selectedParticipant._id && !participant.kronosId && request.currentStep=='finished'">
                                                                     <tr>
                                                                         <td colspan="2">
                                                                             <button class="btn btn-xs btn-primary" ng-click="mediaRequestCtrl.createKronosContact(participant, request)">Create Kronos Contact</button>
