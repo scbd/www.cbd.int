@@ -65,11 +65,15 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
 
             status = status || _ctrl.requestStatus;
 
-            var requestQuery = { $or : [{conference : { $oid:_ctrl.conference._id }}, { conference : _ctrl.conference._id }]};
+            var requestQuery = { 
+                nominatingOrganization : { $exists: 1 },
+                $or : [{conference : { $oid:_ctrl.conference._id }}, { conference : _ctrl.conference._id }]
+            };
 
-            requestQuery.currentStep = "finished";
 
             if(status){
+
+                requestQuery.currentStep = "finished";
 
                 if(status == 'accreditated')
                     requestQuery.accredited = true;
@@ -79,7 +83,7 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
                     requestQuery.accredited = {$exists : false}
                     requestQuery.rejected   = {$exists : false}
                 };
-            }            
+            }
 
             return $http.get('/api/v2018/kronos/participation-requests', { params: { q : requestQuery}})
             .then(resData)
@@ -87,10 +91,10 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
 
                 _ctrl.requests = mediaRequests;
 
-                var requestIds = _.map(mediaRequests,function(r){ return { $oid : r._id}});
+                var requestIds = _(mediaRequests).map(function(r){ return [r._id, { $oid : r._id}] }).flatten().value();
 
                 var orgQuery = {
-                    q : { requestId : {$in : requestIds} }
+                    q : { $or : [{ requestId : {$in : requestIds} }, {requestId:{$exists:false}}] }
                 }
                 
                 return $http.get('/api/v2018/kronos/participation-request/organizations', { params: orgQuery})
@@ -99,7 +103,13 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
                         if(organizations && organizations.length >0){
 
                             _.map(organizations, function(organization){
-                                var request = _.findWhere(_ctrl.requests, {_id : organization.requestId});
+                                var request = _.find(_ctrl.requests, function(r) {
+
+                                    return (r.nominatingOrganization && r.nominatingOrganization == organization._id) 
+                                        || (organization.requestId  &&  r._id                    == organization.requestId)
+
+                                });
+                                
                                 if(request){
                                     request.organization = organization
                                 }
@@ -156,11 +166,11 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
             if(!request.participants){
                     
                 request.loadingParticipants = true;
-                $http.get('/api/v2018/kronos/participation-request/participants', { 
-                    params: {
-                        q: { requestId: { $oid : request._id }}
-                    }
-                }).then(function(result) {
+
+                var query = { $or : [ { requestId : request._id }, { requestId : { $oid : request._id } } ] };
+
+                $http.get('/api/v2018/kronos/participation-request/participants', { params: { q: query } }).then(function(result) {
+
                     request.participants = result.data;
                 })
                 .finally(function(){
