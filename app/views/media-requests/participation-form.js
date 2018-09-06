@@ -1,6 +1,6 @@
-define(['app', 'services/conference-service','providers/locale','directives/kronos/participant','directives/kronos/user-messages','filters/term','directives/file',], function(app) { 'use strict';
+define(['app', 'services/conference-service','providers/locale','directives/kronos/participant','directives/kronos/user-messages','filters/term','directives/file','ngSmoothScroll'], function(app) { 'use strict';
 
-	return ['$scope','$http','conferenceService','$filter','$route','$location','locale','user','$timeout','$document','$q', function( $scope,$http,conferenceService,$filter,$route,$location,locale,user,$timeout,$document,$q) {
+	return ['$scope','$http','conferenceService','$filter','$route','$location','locale','user','$timeout','$document','$q','smoothScroll', function( $scope,$http,conferenceService,$filter,$route,$location,locale,user,$timeout,$document,$q,smoothScroll) {
 
 		var _ctrl 		           = this
 
@@ -133,6 +133,10 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       _ctrl.save();
       if(!_ctrl.doc.list)
         _ctrl.doc.list={}
+      $timeout(function(){
+        var element = document.getElementById('checklist');
+        smoothScroll(element)
+      })
     }
     function loading(){
       var props = Object.keys(_ctrl.loadingObj)
