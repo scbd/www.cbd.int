@@ -521,6 +521,8 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         return $scope.$emit('showError', 'Your form has errors');
       }
 
+      if(!_ctrl.organization.requestId)
+        _ctrl.organization.requestId = _ctrl.requestId
 
       if(!_ctrl.organization._id)
         return $http.post('/api/v2018/kronos/participation-request/organizations',_ctrl.organization,{headers:{requestId:_ctrl.requestId,conferenceCode:_ctrl.conferenceCode}})
@@ -578,6 +580,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         return $http.post('/api/v2018/kronos/participation-requests',_ctrl.doc)
             .then(function(res){
               _ctrl.doc._id = res.data.id
+              _ctrl.requestId = _ctrl.doc._id
               resetForms()
               return true
             })
@@ -623,6 +626,9 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
                      if(res.data[0].requestType)
                        _ctrl.type=res.data[0].requestType
 
+                      if(res.data[0]._id)
+                        _ctrl.requestId = res.data[0]._id
+                        
                       delete(res.data[0].meta)
                       return _ctrl.doc = res.data[0]
                     }
