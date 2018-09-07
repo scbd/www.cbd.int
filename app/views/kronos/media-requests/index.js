@@ -53,7 +53,22 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
 
                 return _ctrl.conference
 
-            }).then(function(){
+            })
+            .then(function(){
+                return $http.get('/api/v2016/meetings', { 
+                    params: {
+                        f: { EVT_CD:1, title:1, _id:1}, 
+                        q: { _id : { $in : _.map(_ctrl.conference.MajorEventIDs, function(evt){return { $oid: evt} })} }
+                    }
+                }).then(resData).then(function(meetings) {    
+                    _ctrl.meetings = {}
+                    _.each(meetings, function(meeting){
+                        _ctrl.meetings[meeting._id] = meeting;
+                    }); 
+                    console.log(_ctrl.meetings)   
+                });
+            })
+            .then(function(){
                 return LoadRequests()    
             }).catch(function(err) {
 
@@ -287,7 +302,7 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
         function updateParticipantStatus(participant, request, status){
             
             return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
-            '/participants/' + participant._id + '/' + status)
+            '/participants/' + participant._id + '/' + status)            
             .then(function(result){ 
                 if(result.status == 200){              
                     if(status == 'accreditate'){
@@ -301,6 +316,7 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
                 }
             }).catch(function(err) {
                console.log(err)
+            //    TODO: Delete linking
             }).finally(function(){
                 // delete _kronos.loading;
             })
@@ -340,15 +356,16 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
             })    
         }
 
-        function linkKronosContact(request, participant, korg){
+        function linkKronosContact(request, participant, kcontact){
 
+            //link KRONOS contact with Media request particiapnt
             return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
-            '/participants/' + participant._id+ '/link-kronos/' + korg.ContactUID)
+            '/participants/' + participant._id+ '/link-kronos/' + kcontact.ContactUID)            
             .then(function(result){               
                 if(result.status == 200){
                     _.map(participant.kronos.contacts, function(con){con.isLinked=false;})                    
-                    participant.kronosId = korg.ContactUID;
-                    korg.isLinked=true;
+                    participant.kronosId = kcontact.ContactUID;
+                    kcontact.isLinked = participant.isNominated = kcontact.isNominated = true;
                 }
             }).catch(function(err) {
                console.log(err)
@@ -357,14 +374,14 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
             })
         }
 
-        function removeKronosContact(request, participant, korg){
+        function removeKronosContact(request, participant, kcontact){
             
             return $http.delete('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
-            '/participants/' + participant._id+ '/link-kronos/' + korg.ContactUID)
+            '/participants/' + participant._id+ '/link-kronos/' + kcontact.ContactUID)
             .then(function(result){               
                 if(result.status == 200){             
                     participant.kronosId = undefined;
-                    korg.isLinked=false;
+                    participant.accredited = participant.isNominated = kcontact.isNominated = kcontact.isLinked = participant.rejected = false;
                 }
             }).catch(function(err) {
                console.log(err)
@@ -385,10 +402,10 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
                 State                   : organization.address.administrativeArea,
                 Country                 : organization.address.country,
                 PostalCode              : organization.address.postalCode,
-                Phones                  : [organization.phone],
-                Emails                  : [organization.email],
-                EmailCcs                : [organization.emailCc],
-                Webs                    : [organization.website]
+                Phones                  : _.compact([organization.phone]),
+                Emails                  : _.compact([organization.email]),
+                EmailCcs                : _.compact([organization.emailCc]),
+                Webs                    : _.compact([organization.website])
 
             }
             request.creatingKronosOrg = true;
@@ -417,7 +434,7 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
         function createKronosContact(participant, request){
 
             if((request.organization.kronosIds||[]).length == 0){
-                throw error
+               return;
             }
 
             var organizationUID;
@@ -438,10 +455,10 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
                 Department                 : participant.department,
                 Affiliation                : participant.affiliation,
                 Language                   : participant.language,
-                Phones                     : [participant.phones, participant.phoneDuringMeeting],
-                Mobiles                    : [participant.mobile],
-                Emails                     : [participant.email],
-                EmailCcs                   : [participant.emailCc],
+                Phones                     : _.compact([participant.phones, participant.phoneDuringMeeting]),
+                Mobiles                    : _.compact([participant.mobile]),
+                Emails                     : _.compact([participant.email]),
+                EmailCcs                   : _.compact([participant.emailCc]),
       //          DateOfBirth                : participant.dateOfBirth ? moment(participant.dateOfBirth).toDate() : null, // TO FIX DATES IN ASP.NET
                 UseOrganizationAddress     : participant.useOrganizationAddress
             };
