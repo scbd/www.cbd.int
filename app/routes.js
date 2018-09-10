@@ -162,8 +162,9 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
       routeProvider
         .when('/',                                      { templateUrl: 'views/kronos/index.html',                       controllerAs: 'indexCtrl',         resolveController: true, resolve: { user : currentUser() }  })
-        .when('/media-requests',                        { templateUrl: 'views/kronos/media-requests/index.html',        controllerAs: 'mediaRequestCtrl',  resolveController: true, resolve: { user : securize(["Administrator","Kronos-FullAccess"]) }  })
-        .when('/list-of-participants',                  { templateUrl: 'views/kronos/list-of-participants/index.html',  controllerAs: 'indexCtrl',         resolveController: true, resolve: { user : securize(["Administrator","Kronos-FullAccess", "ScbdStaff"]) }  })
+        .when('/media-requests',                        { templateUrl: 'views/kronos/media-requests/index.html',        controllerAs: 'mediaRequestCtrl',  resolveController: true, resolve: { user : securize(["Administrator","KronosAdministrator","SCBDMedia"]) }  })
+        .when('/list-of-participants',                  { templateUrl: 'views/kronos/list-of-participants/index.html',  controllerAs: 'indexCtrl',         resolveController: true, resolve: { user : securize(["Administrator","KronosAdministrator", "ScbdStaff"]) }  })
+
         .otherwise({redirectTo: '/404'});
   }
 
