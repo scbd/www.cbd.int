@@ -54,7 +54,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
   function registerRoutes_CopDecisions(routeProvider) {
 
       $('base').attr('href', '/decisions/'); // allow full page reload outside of  /decisions/*
-      
+
       routeProvider.when('/search',                              { templateUrl: 'views/decisions/search.html',    resolveController: true, reloadOnSearch : false, resolve : { user : currentUser() } } );
       routeProvider.when('/:body/:session',                      { templateUrl: 'views/decisions/list.html',      resolveController: true, resolve : { user : currentUser() } } );
       routeProvider.when('/:body/:session/:decision',            { templateUrl: 'views/decisions/view.html',      resolveController: true, resolve : { user : currentUser() } } );
@@ -162,8 +162,8 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
       routeProvider
         .when('/',                                      { templateUrl: 'views/kronos/index.html',                       controllerAs: 'indexCtrl',         resolveController: true, resolve: { user : currentUser() }  })
-        .when('/media-requests',                        { templateUrl: 'views/kronos/media-requests/index.html',        controllerAs: 'mediaRequestCtrl',  resolveController: true, resolve: { user : securize(["Administrator","KronosAdministrator","SCBDMedia"]) }  })
-        .when('/list-of-participants',                  { templateUrl: 'views/kronos/list-of-participants/index.html',  controllerAs: 'indexCtrl',         resolveController: true, resolve: { user : securize(["Administrator","KronosAdministrator", "ScbdStaff"]) }  })
+        .when('/media-requests',                        { templateUrl: 'views/kronos/media-requests/index.html',        controllerAs: 'mediaRequestCtrl',  resolveController: true, resolve: { user : securize(["Administrator","Kronos-FullAccess","SCBDMedia"]) }  })
+        .when('/list-of-participants',                  { templateUrl: 'views/kronos/list-of-participants/index.html',  controllerAs: 'indexCtrl',         resolveController: true, resolve: { user : securize(["Administrator","Kronos-FullAccess", "ScbdStaff"]) }  })
 
         .otherwise({redirectTo: '/404'});
   }
