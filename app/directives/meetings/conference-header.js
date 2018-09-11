@@ -61,6 +61,19 @@
                     },
                     hash : function() {
                         return $location.hash();
+                    },
+                    isSegmentEventSelected : function(){
+                        if(!$scope.meeting)
+                            return;
+                        var isSelected = false; 
+                        
+                        for(var i=0; i<$scope.meeting.conference.segments.length; i++){
+                            isSelected = $scope.meetingNavCtrl.isSelected('/conferences/'+$scope.meeting.code+
+                                        '/segments/'+$scope.meeting.conference.segments[i].code   )
+                            if(isSelected)
+                                break;
+                        }                
+                        return isSelected;
                     }
                 };
 
