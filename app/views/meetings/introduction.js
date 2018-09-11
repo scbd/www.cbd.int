@@ -1,8 +1,8 @@
 ﻿define(['app', 'services/fb', 'directives/articles/cbd-article'], function(app) { 'use strict';
 
-return ['$scope', '$route', function ($scope,  $route) {
+return ['$scope', '$route', '$location', function ($scope,  $route, $location) {
        
-			var _ctrl = this;
+            $scope.isLoading = true;
 
             function buildQuery(){
                 var ag   = [];
@@ -27,12 +27,19 @@ return ['$scope', '$route', function ($scope,  $route) {
                 $scope.articleQuery = ag;
             }
 
-            buildQuery();
+            $scope.onArticleLoad = function(article){
 
-            if (window.FB && window.FB.XFBML){
-                window.FB.XFBML.parse();
+                if(!article){
+                     $location.path($location.path()+'/documents');
+                     return;
+                }
+                    
+                $scope.isLoading = false;
+                if (window.FB && window.FB.XFBML){
+                    window.FB.XFBML.parse();
+                }
             }
 
-            $scope.documentsLink = '/conferences/' + $route.current.params.code +  '/segments/' + $route.current.params.meeting + '/documents'
+            buildQuery();
     }];
 });

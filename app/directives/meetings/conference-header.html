@@ -166,7 +166,7 @@
                        </td>
                        <td class="meetingnav-button visible-xs segments" ng-if="meeting.conference.segments.length"
                        ng-class="{selected:meetingNavCtrl.isSummitEventSelected()}">
-                           <a href="/conferences/{{meeting.code}}/segments/{{meeting.conference.segments[0].code}}#{{meetingNavCtrl.hash()}}" class="link"></a>
+                           <a href="/conferences/{{meeting.code}}/{{meeting.conference.segments[0].code}}#{{meetingNavCtrl.hash()}}" class="link"></a>
                            <i class="fa fa-globe" aria-hidden="true" style="font-size:24px"></i>
                        </td>
                        <td class="meetingnav-buttongroup hidden-xs">
@@ -199,10 +199,10 @@
                                 </tr>
                                 <tr style="height:90%">
                                     <td width="25%" class="{{cssClass(event.code)}}" 
-                                    ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{meeting.code}}/segments/{{event.code}}'), 'menu-border':$index>0}" 
+                                    ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{meeting.code}}/{{event.code}}'), 'menu-border':$index>0}" 
                                     style="position:relative;padding:0 6px" align="center" 
                                     ng-repeat="event in meeting.conference.segments">
-                                        <a href="/conferences/{{meeting.code}}/segments/{{event.code}}#{{meetingNavCtrl.hash()}}" class="link"></a>                                       
+                                        <a href="/conferences/{{meeting.code}}/{{event.code}}#{{meetingNavCtrl.hash()}}" class="link"></a>                                       
                                         <div class="visible-md visible-lg" style="font-size:11px;font-weight:bold" ng-if="event.title">{{event.title}}</div>
                                         <div style="margin-top:2px">
                                             <span class="hidden-xs">{{event.subTitle}}</span>
@@ -257,11 +257,11 @@
                    </tr>
                </table>
                
-               <table class="meetings visible-xs" style="width:100%" ng-if="meetingNavCtrl.isSegmentEventSelected()">
+               <table class="meetings visible-xs" style="width:100%" ng-if="meetingNavCtrl.isMajorEventSelected()">
                     <tr>
-                        <td class="notselected meeting {{event.cssClass}}" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{meeting.code}}/segments/{{event.code}}')}" 
+                        <td class="notselected meeting {{event.cssClass}}" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{meeting.code}}/{{event.code}}')}" 
                         ng-repeat="event in meeting.conference.segments">
-                            <a href="/conferences/{{meeting.code}}/segments/{{event.code}}#{{meetingNavCtrl.hash()}}"></a>
+                            <a href="/conferences/{{meeting.code}}/{{event.code}}#{{meetingNavCtrl.hash()}}"></a>
                             {{event.mobileTitle}}
                         </td>
                     </tr>
