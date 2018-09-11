@@ -99,6 +99,10 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       .when('/:code/:meeting',              { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting/documents',    { templateUrl   : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting/documents/:id',{ templateUrl   : 'views/meetings/documents/management/document-id.html',  resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService"]) } })
+
+      .when('/:code/segments/:meeting',              { templateUrl   : 'views/meetings/segments/index.html', resolveController : true, resolve: { routePrams: injectRouteParams({ urlTag: ['conferences', 'segments']}), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/:code/segments/:meeting/documents',    { templateUrl   : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/:code/segments/:meeting/documents/:id',{ templateUrl   : 'views/meetings/documents/management/document-id.html',  resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService"]) } })
       .otherwise({redirectTo: '/404'});
 
     }
