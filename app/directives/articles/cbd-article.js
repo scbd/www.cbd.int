@@ -8,7 +8,8 @@ define(['app', 'text!./cbd-article.html','lodash', 'services/article-service'], 
 			template : template,
 			replace: true,
 			scope: {
-				query : '=query'
+				query : '=query',
+				onLoad: '&onLoad'
 			},
 			link: function ($scope, $element, $attr)
 			{
@@ -35,6 +36,8 @@ define(['app', 'text!./cbd-article.html','lodash', 'services/article-service'], 
 							}
 						else
 							$scope.article = article[0];
+						
+						$scope.onLoad({article: article[0]});
 					});
 				}
 				
