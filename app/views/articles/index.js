@@ -1,23 +1,10 @@
-﻿define(['app', 'lodash', 'services/article-service','services/fb'], function(app, _) { 'use strict';
+﻿define(['app', 'services/fb', 'directives/articles/cbd-article'], function(app) { 'use strict';
 
-return ['$location','$scope','$timeout', '$route', '$sce', '$q', 'articleService',
-        function ($location,$scope,$timeout,  $route, $sce, $q, articleService) {
+return ['$scope', '$route', function ($scope,  $route) {
        
 			var _ctrl = this;
 
-            $scope.trustedHtml = function (plainText) {
-                return $sce.trustAsHtml(plainText);
-            }
-            
-
-            $scope.getSizedImage = function(url){
-                if(!url)
-                    return url;
-                var size = '1200x600'
-                return url.replace(/attachments\.cbd\.int\//, '$&'+size+'/')
-            }
-
-            function loadArticle(){
+            function buildQuery(){
                 var ag   = [];
                 var tags = [];
                 
@@ -37,18 +24,11 @@ return ['$location','$scope','$timeout', '$route', '$sce', '$q', 'articleService
                 ag.push({"$sort"    : { "meta.updatedOn":-1}});
                 ag.push({"$limit"   : 1 });
 
-                $q.when(articleService.query({ "ag" : JSON.stringify(ag) }))
-                .then(function(article){
-                    if(article.length ==0 )
-                        $scope.article = {
-                            content : { en : 'No information is available for this link'}
-                        }
-                    else
-                        $scope.article = article[0];
-                });
+                $scope.articleQuery = ag;
             }
 
-            loadArticle();
+            buildQuery();
+
             if (window.FB && window.FB.XFBML){
                 window.FB.XFBML.parse();
             }
