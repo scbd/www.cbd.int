@@ -1,4 +1,4 @@
-define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-partial'], function(app, _, moment) {
+define(['app', 'lodash', 'moment', 'services/kronos', 'filters/term'], function(app, _, moment) {
 
     var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
 
@@ -396,7 +396,7 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
             var kronosOrg = {
                 OrganizationName        : organization.title,
                 OrganizationAcronym     : organization.acronym,
-                OrganizationTypeUID     : '0000000052000000cbd05ebe0000000b',
+                OrganizationTypeUID     : KRONOS_MEDIA_TYPE,
                 Address                 : (organization.address.unitNumber||'') + '' + (organization.address.streetNumber||'') + '' +(organization.address.street||''),
                 City                    : organization.address.locality,
                 State                   : organization.address.administrativeArea,
@@ -447,7 +447,7 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
             }
             var kronosContact = {
                 OrganizationUID            : organizationUID,
-                OrganizationTypeUID        : '0000000052000000cbd05ebe0000000b',
+                OrganizationTypeUID        : KRONOS_MEDIA_TYPE,
                 Title                      : participant.title,
                 FirstName                  : participant.firstName,
                 LastName                   : participant.lastName,
@@ -459,7 +459,7 @@ define(['app', 'lodash', 'moment', 'services/kronos', './media-organization-part
                 Mobiles                    : _.compact([participant.mobile]),
                 Emails                     : _.compact([participant.email]),
                 EmailCcs                   : _.compact([participant.emailCc]),
-      //          DateOfBirth                : participant.dateOfBirth ? moment(participant.dateOfBirth).toDate() : null, // TO FIX DATES IN ASP.NET
+               DateOfBirth                : participant.dateOfBirth ? moment(participant.dateOfBirth).toDate() : null, // TO FIX DATES IN ASP.NET
                 UseOrganizationAddress     : participant.useOrganizationAddress
             };
 
