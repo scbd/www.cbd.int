@@ -31,6 +31,7 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
             template: headerHtml,
             link: function($scope) {
 
+                $scope.viewOnly = (new URL(location)).searchParams.get('viewOnly') || false
                 $templateCache.put("directives/toast/toast.html", toastTemplate);
           
                 $q.when(authentication.getUser()).then(function(user){
