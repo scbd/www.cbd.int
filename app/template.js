@@ -2,25 +2,38 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
 'lodash', 'providers/realm'], function(app, ng, toastTemplate,headerHtml, footerHtml,_) {
     'use strict';
 
+    app.controller('TemplateController', ['$rootScope', '$location', '$window', function($rootScope, $location, $window) {
+
+        var basePath = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
+
+        ng.element($window).on('resize', updateSize);
+
+        $rootScope.$on('$routeChangeSuccess', function(){
+            $window.ga('set',  'page', basePath+$location.path());
+            $window.ga('send', 'pageview');
+        });
+
+        function updateSize() {
+            $rootScope.$applyAsync(function(){
+                $rootScope.deviceSize = $('.device-size:visible').attr('size');
+            });
+        }      
+
+        updateSize();
+    }]);
+
     app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', 
                              function($rootScope,   $window,   $browser,   $document,   authentication,   $q,toastr,$templateCache) {
         return {
             restrict: 'E',
             template: headerHtml,
-            link: function(scope, elem) {},
-            controller: ['$scope', '$location', function($scope, $location) {
+            link: function($scope) {
 
                 $templateCache.put("directives/toast/toast.html", toastTemplate);
-                var basePath = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
+          
+                $q.when(authentication.getUser()).then(function(user){
 
-                $rootScope.$on('$routeChangeSuccess', function(){
-                    $window.ga('set',  'page', basePath+$location.path());
-                    $window.ga('send', 'pageview');
-                });
-                var killWatch = $scope.$watch('user', _.debounce(function(user) {
-
-                    if (!user)
-                        return;
+                    $scope.user = user;
 
                     require(["js/slaask"], function(_slaask) {
 
@@ -39,22 +52,8 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
                         if(!_slaask.initialized) {
                             _slaask.init('ae83e21f01860758210a799872e12ac4');
                             _slaask.initialized = true;
-                            killWatch();
                         }
-                    });
-                }, 1000));
-                updateSize();
-
-                ng.element($window).on('resize', updateSize);
-
-                function updateSize() {
-                    $rootScope.$applyAsync(function(){
-                        $rootScope.deviceSize = $('.device-size:visible').attr('size');
-                    });
-                }
-
-                $q.when(authentication.getUser()).then(function(u){
-                    $scope.user = u;
+                    });                    
                 });
 
                 $scope.$on('signOut', function(){
@@ -145,7 +144,7 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
                     toastr.error(msg);
                 });
 
-            }]
+            }
         };
     }]);
 
