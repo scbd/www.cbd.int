@@ -4,6 +4,8 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
 
     app.controller('TemplateController', ['$rootScope', '$location', '$window', function($rootScope, $location, $window) {
 
+        this.viewOnly = $rootScope.viewOnly = $location.search().viewOnly;
+
         var basePath = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
 
         ng.element($window).on('resize', updateSize);

@@ -135,7 +135,7 @@
 </head>
 <body class="ltr">
 
-    <template-header></template-header>
+    <template-header ng-if="!templateCtrl.viewOnly"></template-header>
 
     <!-- CONTENT -->
     <a name="view"></a>
@@ -143,7 +143,7 @@
         <ng-view></ng-view>
     </div>
 
-    <template-footer></template-footer>
+    <template-footer ng-if="!templateCtrl.viewOnly"></template-footer>
 
 
     <div class="device-size visible-xs" size="xs"></div>
