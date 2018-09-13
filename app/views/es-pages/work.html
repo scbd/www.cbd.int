@@ -74,8 +74,8 @@
                     <div class="col-sm-12 col-md-9 ">
                         <div style="width:100%;">
                           <a ng-href="https://www.cbd.int/2011-2020/dashboard/submit/event/{{ine.identifier_s}}" ng-if="esWorkCtrl.isAdmin()"><i class="fa fa-edit pull-right"  ></i></a>
-                            <!-- <span class="work-type">{{line.schema_s}}: </span> -->
-                            <a class="work-title" ng-href="{{line.schema_s}}/{{line._id || line.identifier_s}}">{{line.title_s}}</a><br>
+                          <a ng-if="!(line.schema_s==='statement' && line.url.indexOf('.pdf')==-1)" class="work-title" ng-href="{{line.schema_s}}/{{line._id || line.identifier_s}}">{{line.title_s}}</a><br>
+                          <a ng-if="line.schema_s==='statement' && line.url.indexOf('.pdf')==-1" class="work-title" ng-href="{{line.url}}" rel="noopener noreferrer" target="_blank">{{line.title_s}}</a><br>
                             <span class="work-date">{{line.startDate_dt | momentUtc:'format':'DD MMM YYYY'}}</span>
                         </div>
                     </div>
@@ -90,8 +90,9 @@
                     <div class="col-sm-12 col-md-9 ">
                         <div style="width:100%;">
                           <a ng-href="https://www.cbd.int/2011-2020/dashboard/submit/event/{{line.identifier_s}}" ng-if="esWorkCtrl.isAdmin()"><i class="fa fa-edit pull-right"  ></i></a>
-                            <!-- <span class="work-type">{{line.schema_s}}: </span> -->
-                            <a class="work-title" ng-href="{{line.schema_s}}/{{line._id || line.identifier_s}}">{{line.title_s}}</a><br>
+
+                            <a ng-if="!(line.schema_s==='statement' && line.url.indexOf('.pdf')==-1)" class="work-title" ng-href="{{line.schema_s}}/{{line._id || line.identifier_s}}">{{line.title_s}}</a><br>
+                            <a ng-if="line.schema_s==='statement' && line.url.indexOf('.pdf')==-1" class="work-title" ng-href="{{line.url}}" rel="noopener noreferrer" target="_blank">{{line.title_s}}</a><br>
                             <span class="work-date">{{line.startDate_dt | momentUtc:'format':'DD MMM YYYY'}}</span>
                         </div>
                     </div>
