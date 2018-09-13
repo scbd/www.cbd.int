@@ -29,9 +29,8 @@ return ['$scope', '$route', '$location', function ($scope,  $route, $location) {
 
             $scope.onArticleLoad = function(article){
 
-                $scope.documentsLink = $location.path()+'/documents'
                 if(!article){
-                     $location.path($scope.documentsLink);
+                     $location.path($location.path()+'/documents');
                      return;
                 }
                     
