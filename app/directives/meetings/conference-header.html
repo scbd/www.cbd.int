@@ -165,7 +165,7 @@
                            <i class="fa fa-file-text-o" aria-hidden="true" style="font-size:24px"></i>
                        </td>
                        <td class="meetingnav-button visible-xs segments" ng-if="meeting.conference.segments.length"
-                       ng-class="{selected:meetingNavCtrl.isSummitEventSelected()}">
+                       ng-class="{selected:meetingNavCtrl.isSegmentEventSelected()}">
                            <a href="/conferences/{{meeting.code}}/{{meeting.conference.segments[0].code}}#{{meetingNavCtrl.hash()}}" class="link"></a>
                            <i class="fa fa-globe" aria-hidden="true" style="font-size:24px"></i>
                        </td>
@@ -257,7 +257,7 @@
                    </tr>
                </table>
                
-               <table class="meetings visible-xs" style="width:100%" ng-if="meetingNavCtrl.isMajorEventSelected()">
+               <table class="meetings visible-xs" style="width:100%" ng-if="meetingNavCtrl.isSegmentEventSelected()">
                     <tr>
                         <td class="notselected meeting {{event.cssClass}}" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{meeting.code}}/{{event.code}}')}" 
                         ng-repeat="event in meeting.conference.segments">
