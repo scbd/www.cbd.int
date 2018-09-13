@@ -46,27 +46,20 @@
 
                         return selected;
                     },
-                    isMajorEventSelected : function(){
+                    isMajorEventSelected : function(code){
                         if(!$scope.meeting)
                             return;
                         var isSelected = false; 
                         
                         for(var i=0; i<$scope.meeting.conference.events.length; i++){
-                            isSelected = $scope.meetingNavCtrl.isSelected('/conferences/'+$scope.meeting.code+
-                                        '/'+$scope.meeting.conference.events[i].code+'/')
-                            if(isSelected)
-                                break;
-                        }                
-                        return isSelected;
-                    },
-                    isSegmentEventSelected : function(){
-                        if(!$scope.meeting)
-                            return;
-                        var isSelected = false; 
-                        
-                        for(var i=0; i<$scope.meeting.conference.segments.length; i++){
-                            isSelected = $scope.meetingNavCtrl.isSelected('/conferences/'+$scope.meeting.code+
-                                        '/'+$scope.meeting.conference.segments[i].code)
+
+                            var event = $scope.meeting.conference.events[i];
+
+                            for(var j=0; j<event.menus.length; j++){                                
+                                isSelected = code == event.code && $scope.meetingNavCtrl.isSelected('/conferences/'+$scope.meeting.code+'/'+event.menus[j].code)
+                                if(isSelected)
+                                    break;
+                            }
                             if(isSelected)
                                 break;
                         }                
