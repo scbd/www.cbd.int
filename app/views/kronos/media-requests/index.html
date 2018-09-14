@@ -37,7 +37,7 @@
                         <select class="form-control" ng-change="mediaRequestCtrl.refreshRequestList(mediaRequestCtrl.requestStatus)" ng-model="mediaRequestCtrl.requestStatus">
                             <option value="">All</option>
                             <option value="new">New</option>
-                            <option value="accreditated">Accreditated</option>
+                            <option value="accredited">Accredited</option>
                             <option value="rejected">Rejected</option>
                         </select>
                     </div>
@@ -63,7 +63,7 @@
                         <div class="pull-right btn-group">
                             <span class="label label-info" ng-if="request.currentStep=='finished' && !request.accredited && !request.rejected">New</span>
                             <span class="label label-warning" ng-if="request.currentStep!='finished'">Pending</span>
-                            <span class="label label-success" ng-if="request.accredited">Accreditated</span>
+                            <span class="label label-success" ng-if="request.accredited">Accredited</span>
                             <span class="label label-danger"  ng-if="request.rejected">Rejected</span>
                             <i ng-hide="request == mediaRequestCtrl.selectedRequest" class="fa fa-caret-down" aria-hidden="true"></i></a>
                             <i ng-show="request == mediaRequestCtrl.selectedRequest" class="fa fa-caret-up" aria-hidden="true"></i></a>
@@ -112,7 +112,7 @@
                                         ng-class="{'active':request.organization._id == mediaRequestCtrl.selectedRequest.organization._id}">
 
                                             <div class="pull-right">
-                                                <span class="label label-success" ng-if="request.accredited">Accreditated</span>
+                                                <span class="label label-success" ng-if="request.accredited">Accredited</span>
                                                 <span class="label label-danger" ng-if="request.rejected">Rejected</span>
                                                 <span class="label label-primary" ng-if="request.organization.kronosIds.length">Linked with kronos</span>
                                             </div>
@@ -282,7 +282,7 @@
                                                 <tr>
                                                     <td  ng-class="{'active':participant._id == mediaRequestCtrl.selectedParticipant._id}">
                                                         <div class="pull-right">
-                                                            <span class="label label-success" ng-if="participant.accredited">Accreditated</span>
+                                                            <span class="label label-success" ng-if="participant.accredited">Accredited</span>
                                                             <span class="label label-danger" ng-if="participant.rejected">Rejected</span>
                                                             <span class="label label-primary" ng-if="participant.kronosId">Nominated in kronos</span>
                                                             <span class="label label-primary" ng-if="request.focalPoint == participant._id">Focal point</span>
