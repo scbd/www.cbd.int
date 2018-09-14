@@ -26,11 +26,16 @@ return ['$scope', '$route', function ($scope,  $route) {
 
                 $scope.articleQuery = ag;
             }
+            $scope.onArticleLoad = function(article){
+
+                $scope.article = article;
+                $scope.isLoading = false;
+                if (window.FB && window.FB.XFBML){
+                    window.FB.XFBML.parse();
+                }
+            }
 
             buildQuery();
 
-            if (window.FB && window.FB.XFBML){
-                window.FB.XFBML.parse();
-            }
     }];
 });
