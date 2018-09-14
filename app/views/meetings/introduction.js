@@ -1,6 +1,7 @@
-﻿define(['app', 'services/fb', 'directives/articles/cbd-article'], function(app) { 'use strict';
+﻿define(['app', 'services/fb', 'directives/articles/cbd-article', 'services/conference-service'], function(app) { 'use strict';
 
-return ['$scope', '$route', '$location', function ($scope,  $route, $location) {
+return ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope',
+ function ($scope,  $route, $location, conferenceService, $q, $rootScope) {
        
             $scope.isLoading = true;
 
@@ -29,18 +30,23 @@ return ['$scope', '$route', '$location', function ($scope,  $route, $location) {
 
             $scope.onArticleLoad = function(article){
 
-                $scope.documentsLink = $location.path()+'/documents'
-                if(!article){
-                     $location.path($scope.documentsLink);
-                     return;
-                }
+                $q.when(conferenceService.getActiveConference())
+                    .then(function(meeting){
+                    $scope.documentsLink = $location.path()+'/documents'
                     
-                $scope.isLoading = false;
+                    if(($rootScope.conference||{}).selectedMenu && $rootScope.conference.selectedMenu.hideDocumentsLink)
+                        $scope.documentsLink = undefined;
+                    else if(!article){
+                            $location.path($scope.documentsLink);
+                            return;
+                        }
+                    $scope.isLoading = false;
+                });
                 if (window.FB && window.FB.XFBML){
                     window.FB.XFBML.parse();
                 }
             }
-
+            
             buildQuery();
     }];
 });
