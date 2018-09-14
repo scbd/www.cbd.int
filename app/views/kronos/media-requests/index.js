@@ -90,7 +90,7 @@ define(['app', 'lodash', 'moment', 'services/kronos', 'filters/term'], function(
 
                 requestQuery.currentStep = "finished";
 
-                if(status == 'accreditated')
+                if(status == 'accredited')
                     requestQuery.accredited = true;
                 else if(status == 'rejected')
                     requestQuery.rejected = true;
