@@ -137,6 +137,9 @@
                             </td>
 
                             <td ng-if="documentsCtrl.editMode" style="width:10px">
+                                <div ng-if="::document.linkedToId">
+                                    <span class="label agenda">Linked</span>
+                                </div>
                                 <div ng-repeat="item in document.agendaItems|orderBy">
                                     <span class="label agenda {{::documentsCtrl.meeting.agenda.prefix}}">{{::documentsCtrl.meeting.agenda.prefix}} {{::item}}</span>
                                 </div>

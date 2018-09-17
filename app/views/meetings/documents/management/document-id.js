@@ -1,4 +1,4 @@
-define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filters/initials', './change-case-button', '../meeting-document'], function(_) {
+define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'directives/file', 'filters/initials', './change-case-button', '../meeting-document'], function(_) {
 
     var MIMES = {
         'application/pdf':                                                            { title: 'PDF',               color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
@@ -22,16 +22,13 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
          zh : "Chinese"
      };
 
-	return ["$scope", "$route", "$http", '$location', '$q', '$window', 'user', function ($scope, $route, $http, $location, $q, $window, user) {
+	return ["$scope", "$route", "$http", '$location', '$q', '$window', 'user', '$filter', function ($scope, $route, $http, $location, $q, $window, user, $filter) {
 
         $scope.FILETYPES  = MIMES;
         $scope.LANGUAGES  = LANGUAGES;
 
         var documentId = $route.current.params.id;
-        var meetingId  = $route.current.params.meeting.toUpperCase();
-
-        console.log($location.path());
-
+        var meetingCode  = $route.current.params.meeting.toUpperCase();
 
         var _ctrl = $scope.editCtrl = this;
         var document_bak;
@@ -48,6 +45,8 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
         _ctrl.fileCache   = {};
         _ctrl.normalizeSymbol=normalizeSymbol;
         _ctrl.user        = user;
+        _ctrl.linkTo      = linkTo;
+        _ctrl.canBeLinked = canBeLinked;
 
         _ctrl.clearErrors = clearErrors;
         _ctrl.del    = del;
@@ -56,21 +55,50 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
         _ctrl.saveLogEntry = saveLogEntry;
         _ctrl.autoGenerateNextSymbol = autoGenerateNextSymbol;
         _ctrl.onSupersede = onSupersede;
+        _ctrl.getPlaceholder = getPlaceholder;
 
         $scope.$watch('editCtrl.document.type_nature', applyTypeNature);
         $scope.$watch('editCtrl.document.symbol',      function(symbol){
 
-            if(!symbol) return;
-            if(!_ctrl.meetingDocuments) return;
+            if(!symbol)
+                return;
 
             symbol = normalizeSymbol(symbol);
 
-            $scope.duplicate = _.some(_ctrl.meetingDocuments, function(d){
-                return d._id!=_ctrl.document._id && normalizeSymbol(d.symbol||'') == symbol;
-            });
+            lookupDuplicates(symbol||'');
         });
 
         load();
+
+        //==============================
+        //
+        //==============================
+        function getPlaceholder(type, locale) {
+
+            if(!_ctrl.document)
+                return;
+
+            var d = _ctrl.document;
+            var m = _ctrl.meeting || { } ;
+
+            m.EVT_UN_CD = m.EVT_UN_CD || 'CBD/XYZ';
+
+            if(type=='symbol') {
+
+                if(d.linkedTo)
+                    return 'Inherited: ' + d.linkedTo.symbol||'N/A';
+                
+                return 'Type a symbol eg: ' + m.EVT_UN_CD+'/...';
+            }
+
+            if(type=='title' || type=='description') {
+
+                if(d.linkedTo && d.linkedTo[type])
+                    return 'Inherited: ' + (d.linkedTo[type][locale]||'N/A');
+
+                return LANGUAGES[locale];
+            }
+        }
 
         //==============================
         //
@@ -80,6 +108,7 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
             if(!_ctrl.document)         return;
             if( _ctrl.document._id)      return;
             if(!_ctrl.meetingDocuments) return;
+            if( _ctrl.document.linkedToId) return;
 
             var symbol    = _ctrl.document.symbol;
             var documents = _ctrl.meetingDocuments;
@@ -134,18 +163,24 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
 
             clearErrors();
 
-            $http.get('/api/v2016/meetings/'+meetingId).then(function(res) {
+            getMeeting(meetingCode).then(function(meeting) {
 
-                _ctrl.meeting = res.data;
+                _ctrl.meeting = meeting;
 
                 if(documentId=='new')
                     return { };
 
-                return $http.get('/api/v2016/meetings/'+meetingId+'/documents/'+documentId).then(function(res) {
-                    return res.data;
+                return $http.get('/api/v2016/meetings/'+meetingCode+'/documents/'+documentId).then(function(res) {
+                    return _.defaults(res.data, { meetingCode : meetingCode });
                 });
 
             }).then(function(document) {
+
+                if(document.virtualFields) {
+                    _(document.virtualFields).without('files').forEach(function(f){
+                        delete document[f];
+                    }).value();
+                }
 
                 if(document.metadata && document.metadata.message)
                     document.metadata.message.level = document.metadata.message.level || "";
@@ -163,12 +198,42 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
 
                 return loadSupersede();
 
+            }).then(function() {
+
+                if(!_ctrl.document.linkedTo)
+                    return;
+
+                var linkedTo = _ctrl.document.linkedTo;
+
+                return getMeeting(linkedTo.meeting).then(function(meeting){
+                    linkedTo.meetingCode = meeting.EVT_CD;
+                });
+
             }).catch(function(err) {
                 _ctrl.error = err.data || err;
                 console.error(err);
             });
         }
 
+        //==============================
+        //
+        //==============================
+        function getMeeting(id, fields) {
+
+            var q;
+
+            if(isId(id)) q = { _id : { $oid : id } };
+            else         q = { normalizedSymbol: id };
+
+            return $http.get('/api/v2016/meetings', { params: {q: q, fo: 1, f: fields }, cache: true }).then(resData);
+        }
+
+        //==============================
+        //
+        //==============================
+        function isId(id) {
+            return /^[0-9a-fA-F]{24}$/i.test(id||'');
+        }
 
         //==============================
         //
@@ -180,8 +245,13 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
 
             var fileIds       = _(_ctrl.document.files).map('_id').compact().uniq().value();
 
-            var filesToCreate = _(_ctrl.document.files||[]).filter(function(f) { return !f._id;                   }).value();
-            var filesToDelete = _(document_bak  .files||[]).filter(function(f) { return !~fileIds.indexOf(f._id); }).value();
+            var filesToCreate = [];
+            var filesToDelete = [];
+
+            if(!newDoc.linkedToId) {
+                filesToCreate = _(_ctrl.document.files||[]).filter(function(f) { return !f._id;                   }).value();
+                filesToDelete = _(document_bak  .files||[]).filter(function(f) { return !~fileIds.indexOf(f._id); }).value();
+            }
 
             var req = $q.resolve(newDoc._id);
 
@@ -192,12 +262,21 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
                 req = $http({
                     data   : newDoc,
                     method : newDoc._id ? 'PUT' : 'POST',
-                    url    : newDoc._id ? '/api/v2016/meetings/'+meetingId+'/documents/'+newDoc._id :
-                                          '/api/v2016/meetings/'+meetingId+'/documents'
+                    url    : newDoc._id ? '/api/v2016/meetings/'+meetingCode+'/documents/'+newDoc._id :
+                                          '/api/v2016/meetings/'+meetingCode+'/documents'
                 }).then(function(res) {
 
-                    _ctrl.document._id  = _ctrl.document._id  || res.data._id;
-                    _ctrl.document.logs = res.data.logs || _ctrl.document.logs;
+                    var doc = res.data;
+
+                    _ctrl.document._id  = _ctrl.document._id  || doc._id;
+                    _ctrl.document.logs = doc.logs || _ctrl.document.logs;
+
+                    if(doc.linkedToId) {
+                        filesToCreate = [];
+                        filesToDelete = []
+
+                        _ctrl.document.files = doc.files;
+                    }
 
                     return _ctrl.document._id;
 
@@ -248,10 +327,14 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
             if(!_ctrl.document._id)
                 return;
 
-            if(!confirm("Delete this document?\n"+(document_bak.symbol||document_bak.title.en)))
+            var linkedTo_bak = document_bak.linkedTo||document_bak;
+
+            var title = $filter('lstring')(document_bak.symbol || document_bak.title || linkedTo_bak.symbol || linkedTo_bak.title)
+
+            if(!confirm("Delete this document?\n"+title))
                 return;
 
-            return $http.delete('/api/v2016/meetings/'+meetingId+'/documents/'+_ctrl.document._id).then(function() {
+            return $http.delete('/api/v2016/meetings/'+meetingCode+'/documents/'+_ctrl.document._id).then(function() {
 
                 close();
 
@@ -266,9 +349,11 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
         //==============================
         function loadSupersede() {
 
-            return $http.get('/api/v2016/meetings/'+meetingId+'/documents').then(function(res) {
+            return $http.get('/api/v2016/meetings/'+meetingCode+'/documents').then(function(res) {
 
                 _ctrl.meetingDocuments  = _(res.data).forEach(function(d){
+
+                    d = _.defaults(d, { meetingCode : meetingCode });
 
                     var parts = [d.symbol];
 
@@ -373,7 +458,7 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
 
                 old = $q.when(null).then(function(){
 
-                    return $http.get('/api/v2016/meetings/'+meetingId+'/documents/'+supersede_bak).then(resData);
+                    return $http.get('/api/v2016/meetings/'+meetingCode+'/documents/'+supersede_bak).then(resData);
 
                 }).then(function(doc) {
 
@@ -382,7 +467,7 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
 
                     delete doc.metadata.superseded;
 
-                    return $http.put('/api/v2016/meetings/'+meetingId+'/documents/'+doc._id, doc);
+                    return $http.put('/api/v2016/meetings/'+meetingCode+'/documents/'+doc._id, doc);
 
                 }).then(function(){
 
@@ -399,14 +484,14 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
 
                 $q.when(old).then(function(){
 
-                    return $http.get('/api/v2016/meetings/'+meetingId+'/documents/'+_ctrl.supersede).then(resData);
+                    return $http.get('/api/v2016/meetings/'+meetingCode+'/documents/'+_ctrl.supersede).then(resData);
 
                 }).then(function(doc) {
 
                     doc.metadata = doc.metadata || {};
                     doc.metadata.superseded = _ctrl.document.symbol || _ctrl.document.title.en;
 
-                    return $http.put('/api/v2016/meetings/'+meetingId+'/documents/'+doc._id, doc);
+                    return $http.put('/api/v2016/meetings/'+meetingCode+'/documents/'+doc._id, doc);
 
                 }).then(function(){
 
@@ -428,6 +513,7 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
 
             var doc = {
                 _id:         document._id,
+                linkedToId:  document.linkedToId,
                 symbol:      document.symbol || undefined,
                 type:        document.type,
                 nature:      document.nature,
@@ -445,6 +531,9 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
 
             if(doc.metadata.message)
                 doc.metadata.message.level = doc.metadata.message.level || null;
+
+            if(doc.linkedToId)
+                delete doc.metadata.patterns;
 
             return doc;
         }
@@ -702,7 +791,7 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
 
             var base = encodeURIComponent($route.current.params.code || '');
 
-            return $location.path([base, encodeURIComponent(meetingId), 'documents'].join('/'));
+            return $location.path([base, encodeURIComponent(meetingCode), 'documents'].join('/'));
         }
 
         //==============================
@@ -719,6 +808,120 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'directives/file', 'filte
         function normalizeSymbol(symbol) {
             return symbol.toUpperCase().replace(/[^A-Z0-9\/\-\*]/gi, '').replace(/\/$/g, '');
         }
+
+        //==============================
+        //
+        //==============================
+        var duplicateTimeout;
+        function lookupDuplicates(symbol) {
+
+            if(duplicateTimeout) {
+                duplicateTimeout.resolve();
+                duplicateTimeout = null;
+            }
+
+            symbol = normalizeSymbol(symbol || '');
+
+            var linkedSymbol = normalizeSymbol((_ctrl.document.linkedTo||{}).symbol||'');
+
+            var meetingDuplicates = getMeetingDuplicates(symbol || linkedSymbol);
+
+            if(!symbol) {
+                _ctrl.duplicates = meetingDuplicates;
+                return;
+            }
+            
+            var excludeIds = _(meetingDuplicates).map('_id').union([_ctrl.document._id, _ctrl.document.linkedToId]).compact().map(function(_id){
+                return { $oid : _id };
+            }).value();
+
+            var $and = [{ linkedToId : { $exists : false } }]; 
+
+            if(excludeIds.length) $and.push({ _id : { $nin : excludeIds } });
+            if(isId(symbol))      $and.push({ _id : { $oid : symbol } });
+            else                  $and.push({ symbol: symbol });
+
+            if(_ctrl.document._id)        $and.push({ _id : { $ne: { $oid : _ctrl.document._id } }})
+            if(_ctrl.document.linkedToId) $and.push({ _id : { $ne: { $oid : _ctrl.document.linkedToId } }})
+
+
+            duplicateTimeout = $q.defer();
+
+            $http.get('/api/v2016/documents', { params: { q: { $and: $and } }, timeout: duplicateTimeout.promise }).then(function(res) {
+
+                duplicateTimeout = null;
+
+                var duplicates = _.map(res.data, function(d){
+                    
+                    return getMeeting(d.meeting).then(function(m){
+                        d.meetingCode = m.EVT_CD;
+                        return d;
+                    });
+                });
+
+                return $q.all(duplicates);
+
+            }).then(function(duplicates){
+
+                duplicates = _.sortByAll(duplicates, 'meetingCode', 'symbol')
+    
+                _ctrl.duplicates = _.union(meetingDuplicates, duplicates);
+            })
+        }
+
+        //==============================
+        //
+        //==============================
+        function getMeetingDuplicates(symbol) {
+
+            if(!symbol || !_ctrl.meetingDocuments)
+                return [];
+
+            symbol = normalizeSymbol(symbol);
+
+            return _(_ctrl.meetingDocuments).filter(function(d){
+                return d._id!=_ctrl.document._id && normalizeSymbol(d.symbol||'') == symbol;
+            }).forEach(function(d){
+                d.meetingDuplicate = true;
+            }).value();
+        }
+
+        //==============================
+        //
+        //==============================
+        function linkTo(linkedTo) {
+
+            delete _ctrl.duplicates;
+
+            if(!linkedTo || !canBeLinked())
+                return;
+
+            _ctrl.document.linkedTo   = linkedTo;
+            _ctrl.document.linkedToId = linkedTo._id;
+            _ctrl.document.files      = linkedTo.files;
+            _ctrl.document.symbol     = '';
+
+            if(!_ctrl.document.status) 
+                _ctrl.document.status = linkedTo.status;
+
+            initFiles();
+        }
+
+        //==============================
+        //
+        //==============================
+        function canBeLinked(linkTo) {
+
+            var doc = _ctrl.document||{};
+
+            if(!doc)            return;
+            if( doc._id)        return;
+            if( doc.linkedToId) return;
+            if( linkTo && linkTo.meetingDuplicate) return;
+
+            return true;
+        }
+
 
         //==============================
         //
