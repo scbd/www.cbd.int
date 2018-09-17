@@ -30,18 +30,17 @@ return ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope'
 
             $scope.onArticleLoad = function(article){
 
-                $q.when(conferenceService.getActiveConference())
-                    .then(function(meeting){
-                    $scope.documentsLink = $location.path()+'/documents'
-                    
-                    if(($rootScope.conference||{}).selectedMenu && $rootScope.conference.selectedMenu.hideDocumentsLink)
-                        $scope.documentsLink = undefined;
-                    else if(!article){
-                            $location.path($scope.documentsLink);
-                            return;
-                        }
-                    $scope.isLoading = false;
-                });
+                $scope.article = article;                
+                $scope.documentsLink = $location.path()+'/documents'
+                $scope.isLoading = false;
+                
+                if(($rootScope.conference||{}).selectedMenu && $rootScope.conference.selectedMenu.hideDocumentsLink)
+                    $scope.documentsLink = undefined;
+                else if(!article){
+                    $location.path($scope.documentsLink);
+                    return;
+                }
+                
                 if (window.FB && window.FB.XFBML){
                     window.FB.XFBML.parse();
                 }

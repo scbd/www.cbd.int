@@ -3,16 +3,44 @@
         <h3 ng-show="isLoading" style="color: #777"><i class="fa fa-circle-o-notch fa-spin"></i></h3>
     </div>
     <div class="row" ng-hide="isLoading">
-        
-        <div class="col-lg-8 col-md-12 col-md-12 col-sm-12 col-xs-12">
-                <a class="btn btn-default btn-lg pull-right" href="/conferences/{{documentsLink}}" style="margin:5px" ng-if="documentsLink">
-                    <i class="fa fa-file"></i> View Documents
-                </a>
-            <cbd-article query="articleQuery" ng-if="articleQuery" on-load="onArticleLoad(article)"></cbd-article>
+       
+        <div class="image-credit-wrapper">
+            <span class="image-credit" ng-if="article.coverImage.credits">{{article.coverImage.credits}}</span>
+            <img class="img-responsive" ng-src="{{::article.coverImage.url}}">
+            <style>
+            .hvr-grow {
+                display: inline-block;
+                vertical-align: middle;
+                transform: translateZ(0);
+                box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+                backface-visibility: hidden;
+                -moz-osx-font-smoothing: grayscale;
+                transition-duration: 0.3s;
+                transition-property: transform;
+            }
+
+            .hvr-grow:hover,
+            .hvr-grow:focus,
+            .hvr-grow:active {
+                transform: scale(1.1);
+            }
+            </style>
+            <a class="btn btn-default btn-lg pull-right hvr-grow" href="/conferences/{{documentsLink}}" 
+                style="margin: 10px;top: 0px;background: rgba(0, 0, 0, .7);color: #fff;padding: 5px 8px;position: absolute;"
+             ng-if="article.coverImage && documentsLink">
+                <i class="fa fa-file"></i> View Documents
+            </a>
         </div>
+        <div class="col-lg-8 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;"> 
+            <a class="btn btn-default btn-lg pull-right hvr-grow" href="/conferences/{{documentsLink}}" style="margin:5px;background: rgba(0, 0, 0, .7);color: #fff;padding: 5px 8px;"
+             ng-if="!article.coverImage && documentsLink">
+                <i class="fa fa-file"></i> View Documents
+            </a>                  
+            <cbd-article query="articleQuery" ng-if="articleQuery" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article>
+        </div>        
         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="padding-top:15px;">
 
-            <div class="col-lg-12 col-md-12 col-md-6 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-6 col-sm-12 col-xs-12">
 
                 <div class="panel panel-default">
 
@@ -25,7 +53,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12 col-md-12 col-md-6 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-6 col-sm-12 col-xs-12">
                 <div class="panel panel-default">
 
                     <div class="panel-heading">
