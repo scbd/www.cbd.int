@@ -1,7 +1,7 @@
 ﻿define(['app', 'angular', 'text!./conference-header.html', 'services/conference-service'], function(app, ng, html){
 
-    return app.directive('conferenceHeader', ['$location', 'conferenceService', '$q',
-     function($location, conferenceService, $q){
+    return app.directive('conferenceHeader', ['$location', 'conferenceService', '$q', '$rootScope',
+     function($location, conferenceService, $q, $rootScope){
         return {
 			restrict : "E",
 			template : html,
@@ -35,27 +35,44 @@
 
                         path = path && path.toLowerCase();
                         name = name && name.toLowerCase();
-      
+
                         //handle legacy redirect for /2016/mop-08/documents
                         if(/^\/conferences\/2016\/mop-08/.test(path) && /^\/conferences\/2016\/cp-mop-08/.test(name))
                             selected = true;
                                                         
                         if(exact) selected = selected || path === name;
-                        else if(name) selected = selected || path.indexOf(name)===0;
+                        
+                        else if(name) selected = selected || (path+'/').indexOf(name+'/')===0;
                         else     selected = selected || path.indexOf('/conferences/')===0;
 
                         return selected;
                     },
-                    isMajorEventSelected : function(){
+                    isMajorEventSelected : function(code){
                         if(!$scope.meeting)
                             return;
                         var isSelected = false; 
-                        
+                        var selectedMenu;
                         for(var i=0; i<$scope.meeting.conference.events.length; i++){
-                            isSelected = $scope.meetingNavCtrl.isSelected('/conferences/'+$scope.meeting.code+
-                                        '/'+$scope.meeting.conference.events[i].code+'/')
-                            if(isSelected)
+
+                            var event = $scope.meeting.conference.events[i];
+
+                            for(var j=0; j<event.menus.length; j++){                                
+                                isSelected = code == event.code && $scope.meetingNavCtrl.isSelected('/conferences/'+$scope.meeting.code+'/'+event.menus[j].code, true)
+                                if(isSelected){
+                                    selectedMenu = event.menus[j];
+                                    break;
+                                }
+                                
+                                isSelected = code == event.code && $scope.meetingNavCtrl.isSelected('/conferences/'+$scope.meeting.code+'/'+event.menus[j].code+'/')
+                                if(isSelected){
+                                    selectedMenu = event.menus[j];
+                                    break;
+                                }
+                            }
+                            if(isSelected){
+                                $rootScope.conference = { selectedMenu : selectedMenu};
                                 break;
+                            }
                         }                
                         return isSelected;
                     },
