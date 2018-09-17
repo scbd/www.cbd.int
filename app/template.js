@@ -24,8 +24,8 @@ define(['app', 'angular','text!./toast.html', 'text!./template-header.html', 'te
         updateSize();
     }]);
 
-    app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', 
-                             function($rootScope,   $window,   $browser,   $document,   authentication,   $q,toastr,$templateCache) {
+    app.directive('templateHeader', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$location', 
+                             function($rootScope,   $window,   $browser,   $document,   authentication,   $q,  toastr,  $templateCache,   $location) {
         return {
             restrict: 'E',
             template: headerHtml,
