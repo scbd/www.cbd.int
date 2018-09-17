@@ -193,7 +193,7 @@ define(['lodash', 'filters/lstring', 'directives/file'], function(_) {
         //==============================
         function lookupDocuments(file) {
 
-            var query = { 'metadata.patterns' : file.prefix };
+            var query = { 'metadata.patterns' : file.prefix, linkedToId : { $exists : false } };
 
             return $http.get('/api/v2016/documents', { params : { q : query } }).then(resData).catch(function(err) {
                 file.error = "LOOKUP_DOCUMENTS";
