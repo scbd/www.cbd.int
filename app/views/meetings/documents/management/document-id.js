@@ -55,7 +55,6 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'dire
         _ctrl.saveLogEntry = saveLogEntry;
         _ctrl.autoGenerateNextSymbol = autoGenerateNextSymbol;
         _ctrl.onSupersede = onSupersede;
-        _ctrl.getPlaceholder = getPlaceholder;
 
         $scope.$watch('editCtrl.document.type_nature', applyTypeNature);
         $scope.$watch('editCtrl.document.symbol',      function(symbol){
@@ -69,36 +68,6 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'dire
         });
 
         load();
-
-        //==============================
-        //
-        //==============================
-        function getPlaceholder(type, locale) {
-
-            if(!_ctrl.document)
-                return;
-
-            var d = _ctrl.document;
-            var m = _ctrl.meeting || { } ;
-
-            m.EVT_UN_CD = m.EVT_UN_CD || 'CBD/XYZ';
-
-            if(type=='symbol') {
-
-                if(d.linkedTo)
-                    return 'Inherited: ' + d.linkedTo.symbol||'N/A';
-                
-                return 'Type a symbol eg: ' + m.EVT_UN_CD+'/...';
-            }
-
-            if(type=='title' || type=='description') {
-
-                if(d.linkedTo && d.linkedTo[type])
-                    return 'Inherited: ' + (d.linkedTo[type][locale]||'N/A');
-
-                return LANGUAGES[locale];
-            }
-        }
 
         //==============================
         //
@@ -175,12 +144,6 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'dire
                 });
 
             }).then(function(document) {
-
-                if(document.virtualFields) {
-                    _(document.virtualFields).without('files').forEach(function(f){
-                        delete document[f];
-                    }).value();
-                }
 
                 if(document.metadata && document.metadata.message)
                     document.metadata.message.level = document.metadata.message.level || "";
@@ -899,7 +862,9 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'dire
             _ctrl.document.linkedTo   = linkedTo;
             _ctrl.document.linkedToId = linkedTo._id;
             _ctrl.document.files      = linkedTo.files;
-            _ctrl.document.symbol     = '';
+            _ctrl.document.symbol     = linkedTo.symbol;
+            _ctrl.document.title      = linkedTo.title;
+            _ctrl.document.description= linkedTo.description;
 
             if(!_ctrl.document.status) 
                 _ctrl.document.status = linkedTo.status;
