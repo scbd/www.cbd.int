@@ -4,7 +4,7 @@
         <td ng-click="enableSelection && downloadble && (document.selected=!document.selected);" style="vertical-align:top;">
             <div ng-class="::{ superseded : document.metadata.superseded }">
                 <div>
-                    <div ng-if="::document.symbol">
+                    <div ng-if="::document.symbol" title="{{::document.publishedOn|date:'yyyy-MM-dd':'UTC'}}">
                         <a ng-href="{{::document.url}}" style="color:inherit">
                             <strong ng-if="::document.type=='decision'">Decision</strong>
                             <strong ng-if="::document.type=='recommendation'">Recommendation</strong>
