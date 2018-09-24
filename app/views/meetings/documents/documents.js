@@ -504,6 +504,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
                 _ctrl.edit       = edit;
                 _ctrl.editMode   = $scope.$root.documentEditMode;
+                _ctrl.isStaff    = edit || !!_.intersection(user.roles||[], ["ScbdStaff"]).length
 
                 $scope.$watch('documentsCtrl.editMode', function(n,o){
                     $scope.$root.documentEditMode = n;
