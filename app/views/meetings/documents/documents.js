@@ -497,7 +497,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
                 currentUser = user;
 
-                _ctrl.isEditor = authentication.isInRole(user, ["Administrator","EditorialService"]);
+                _ctrl.isEditor = authentication.isInRole(user, ["EditorialService"]);
                 _ctrl.isStaff  = authentication.isInRole(user, ["ScbdStaff"]) || _ctrl.isEditor;
 
                 if(!user.isAuthenticated)
