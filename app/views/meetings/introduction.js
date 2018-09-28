@@ -1,4 +1,4 @@
-﻿define(['app', 'services/fb', 'directives/articles/cbd-article', 'services/conference-service'], function(app) { 'use strict';
+﻿define(['app', 'directives/social-media', 'directives/articles/cbd-article', 'services/conference-service'], function(app) { 'use strict';
 
 return ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope',
  function ($scope,  $route, $location, conferenceService, $q, $rootScope) {
@@ -31,19 +31,16 @@ return ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope'
             $scope.onArticleLoad = function(article){
 
                 $scope.article = article;                
-                $scope.documentsLink = $location.path()+'/documents'
                 $scope.isLoading = false;
                 
-                if(($rootScope.conference||{}).selectedMenu && $rootScope.conference.selectedMenu.hideDocumentsLink)
-                    $scope.documentsLink = undefined;
-                else if(!article){
-                    $location.path($scope.documentsLink);
+                if(!article){
+                    $location.path($location.path()+'/documents');
                     return;
                 }
-                
-                if (window.FB && window.FB.XFBML){
-                    window.FB.XFBML.parse();
-                }
+                else if(($rootScope.conference||{}).selectedMenu && $rootScope.conference.selectedMenu.hideDocumentsLink)
+                    $scope.documentsLink = undefined;
+                else
+                    $scope.documentsLink = $location.path()+'/documents'
             }
             
             buildQuery();
