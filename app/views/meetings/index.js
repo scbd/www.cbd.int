@@ -1,4 +1,4 @@
-﻿define(['app', 'lodash', 'services/conference-service', 'services/article-service', 'services/fb', 'directives/articles/cbd-article'], function(app, _) { 'use strict';
+﻿define(['app', 'lodash', 'services/conference-service', 'services/article-service', 'directives/social-media', 'directives/articles/cbd-article'], function(app, _) { 'use strict';
 
 return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', '$q', 
         function ($location,$scope,$timeout,  $route, $sce, conferenceService, $q) {
@@ -42,9 +42,6 @@ return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', 
                 article.coverImage.url =  article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/');
                 $scope.article = article;
                 $scope.isLoading = false;
-                if (window.FB && window.FB.XFBML){
-                    window.FB.XFBML.parse();
-                }
             } 
     }];
 });

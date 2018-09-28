@@ -1,4 +1,4 @@
-﻿define(['app', 'services/fb', 'directives/articles/cbd-article'], function(app) { 'use strict';
+﻿define(['app', 'directives/social-media', 'directives/articles/cbd-article'], function(app) { 'use strict';
 
 return ['$scope', '$route', function ($scope,  $route) {
        
@@ -30,9 +30,6 @@ return ['$scope', '$route', function ($scope,  $route) {
 
                 $scope.article = article;
                 $scope.isLoading = false;
-                if (window.FB && window.FB.XFBML){
-                    window.FB.XFBML.parse();
-                }
             }
 
             buildQuery();
