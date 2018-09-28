@@ -1,6 +1,6 @@
 /* jshint sub:true */
 
-define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
+define(['app', 'angular', 'jquery', 'lodash'], function (app, ng, $, _) { 'use strict';
 
     var accountsBaseUrl = (function(){
 
@@ -268,10 +268,26 @@ define(['app', 'angular', 'jquery'], function (app, ng, $) { 'use strict';
 			$rootScope.user = user || anonymous();
 		}
 
+		//============================================================
+	    //
+	    //
+	    //============================================================
+		function isInRole(user, roles) {
+
+			if(!user)  return false;
+			if(!roles) return false;
+
+			if( _.isString(roles)) roles = [roles];
+			if(!_.isArray (roles)) throw new Error("`roles` must be string or array od string");
+
+			return !!_.intersection(user.roles||[], roles).length;
+		}
+
 		return {
 			getUser  : getUser,
 			signIn   : signIn,
 			signOut  : signOut,
+			isInRole : isInRole,
 			user     : LEGACY_user,
             accountsBaseUrl : function() { return accountsBaseUrl; }
 		};

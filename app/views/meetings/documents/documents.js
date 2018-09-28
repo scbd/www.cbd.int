@@ -45,7 +45,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         $scope.$watch('$root.deviceSize', updateMaxTabCount);
 
         initAffix();
-        initEditor();
+        initSecurity();
         load();
 
         //==============================
@@ -491,24 +491,27 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         //
         //==============================
-        function initEditor() {
+        function initSecurity() {
 
             $q.when(currentUser || authentication.getUser()).then(function(user){
+
                 currentUser = user;
+
+                _ctrl.isEditor = authentication.isInRole(user, ["EditorialService"]);
+                _ctrl.isStaff  = authentication.isInRole(user, ["ScbdStaff"]) || _ctrl.isEditor;
 
                 if(!user.isAuthenticated)
                     return;
 
-                if(!_.intersection(user.roles||[], ["Administrator","EditorialService"]).length)
-                    return;
+                if(_ctrl.isEditor) {
+                    _ctrl.edit       = edit;
+                    _ctrl.editMode   = $scope.$root.documentEditMode;
 
-                _ctrl.edit       = edit;
-                _ctrl.editMode   = $scope.$root.documentEditMode;
-
-                $scope.$watch('documentsCtrl.editMode', function(n,o){
-                    $scope.$root.documentEditMode = n;
-                    if(n!=o) load();
-                });
+                    $scope.$watch('documentsCtrl.editMode', function(n,o){
+                        $scope.$root.documentEditMode = n;
+                        if(n!=o) load();
+                    });
+                }
             });
         }
 

@@ -1,5 +1,6 @@
 define(['app', 'lodash', 'text!./meeting-document.html', 'directives/meetings/documents/document-files', 'directives/checkbox', 'filters/html-sanitizer'], function(app, _, html) { 'use strict';
 
+    var LANGUAGES = { ar : "العربية", en : "English", es : "Español", fr : "Français", ru : "Русский", zh : "中文" };
     var ONLINE = 'text/html';
     var MIMES = {
         'application/pdf':                                                            { priority: 10,  color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
@@ -21,12 +22,14 @@ define(['app', 'lodash', 'text!./meeting-document.html', 'directives/meetings/do
             replace: true,
 			scope: {
                 document:"<",
-                enableSelection:"<"
+                enableSelection:"<",
+                showStatistics:"<"
             },
 			link: function ($scope) {
 
                 $scope.breakSymbol    = breakSymbol;
                 $scope.downloadble    = canDownload();
+                $scope.LANGUAGES      = LANGUAGES
 
                 //==============================
                 //

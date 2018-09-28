@@ -4,7 +4,7 @@
         <td ng-click="enableSelection && downloadble && (document.selected=!document.selected);" style="vertical-align:top;">
             <div ng-class="::{ superseded : document.metadata.superseded }">
                 <div>
-                    <div ng-if="::document.symbol">
+                    <div ng-if="::document.symbol" title="{{::document.publishedOn|date:'yyyy-MM-dd':'UTC'}}">
                         <a ng-href="{{::document.url}}" style="color:inherit">
                             <strong ng-if="::document.type=='decision'">Decision</strong>
                             <strong ng-if="::document.type=='recommendation'">Recommendation</strong>
@@ -39,6 +39,13 @@
             <div ng-if="::document.recipient_ss.length">Notification to: <span ng-repeat="recipient in ::document.recipient_ss"> {{::recipient}}</div>
             <div ng-if="::document.subject_ss.length">Subjects to: {{::document.subject_ss}}</div>
             <div ng-if="::document.actionDate_dt" class="text-danger">Action required by {{::document.actionDate_dt|moment:'add':23.9:'hours'|moment:'toDate'|date:'yyyy-MM-dd'}}</div>
+
+            <table class="xtable table-bordered table-condensed  hidden-xs hidden-sm" ng-if="showStatistics" >
+                <tr><th ng-repeat="(locale, name) in ::LANGUAGES" class="text-muted">{{name}}</th></tr>
+                <tr><td ng-repeat="(locale, name) in ::LANGUAGES" class="text-muted text-nowrap">{{(document.file_stats[locale]|date:'yyyy-MM-dd':'UTC') || 'N/A'}}</td></tr>
+            </table>
+
+
         </td>
         <td class="languages-bar hidden-print">
             <document-files files="document.files"></document-files>
