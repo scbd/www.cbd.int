@@ -7,7 +7,7 @@
         
         <div class="image-credit-wrapper" >
             <span class="image-credit" ng-if="article.coverImage.credits">{{article.coverImage.credits}}</span>
-            <img class="img-responsive" ng-src="{{::article.coverImage.url}}">
+            <img class="img-responsive" ng-src="{{::article.coverImage.url_1200}}">
         </div>
         <div class="col-lg-8 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
             <cbd-article query="articleQuery" ng-if="articleQuery" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article>

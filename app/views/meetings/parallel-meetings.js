@@ -30,7 +30,7 @@ return ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope'
 
             $scope.onArticleLoad = function(article){
                 if(article)
-                    $scope.showArticleSection = true;
+                    $scope.article = true;
             }
             $scope.getUrl = function(parallelMeeting){
 
