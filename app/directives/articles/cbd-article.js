@@ -38,7 +38,7 @@ define(['app', 'text!./cbd-article.html','lodash', 'services/article-service', '
 						$q.when(authentication.getUser())
 						.then(function(user){
 							if(user)
-								$scope.showEdit = user.roles.indexOf('oasisArticleEditor')>=0 || user.roles.indexOf('Administrator')>=0;
+								$scope.showEdit = authentication.isInRole(user, ['oasisArticleEditor', 'Administrator']);
 						})
 					});
 				}
