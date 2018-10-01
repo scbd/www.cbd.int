@@ -39,7 +39,6 @@ return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', 
 
             $scope.onArticleLoad = function(article){               
                 
-                article.coverImage.url =  article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/');
                 $scope.article = article;
                 $scope.isLoading = false;
             } 
