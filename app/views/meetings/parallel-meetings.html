@@ -4,7 +4,7 @@
     </div>
     <div class="row" ng-hide="isLoading">
        
-             <style>
+        <style>
             .hvr-grow {
                 display: inline-block;
                 vertical-align: middle;
@@ -24,25 +24,35 @@
             .meeting-box:hover{
                 background: #f2f4f4;
             }
-            </style>
+        </style>
+        <div class="row">
+            <div class="image-credit-wrapper" ng-show="article">
+                <span class="image-credit" ng-if="article.coverImage.credits">{{article.coverImage.credits}}</span>
+                <img class="img-responsive" ng-src="{{::article.coverImage.url_1200}}">
+            </div>
+            <div class="col-sm-12 col-lg-12 col-md-12 " style="margin-left:10px">
+                <h3 style="border-bottom:1px solid #eee">Parallel Meetings</h3>
+            </div>
+
+        </div>
         <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;"> 
             <div class="row">
                 <div class="col-sm-12 col-lg-12 col-md-12 " >
-                    <h3 style="border-bottom:1px solid #eee">Parallel Meetings</h3>
-                </div>
-                <div class="col-sm-12 col-lg-12 col-md-12 " >
-                    <cbd-article query="articleQuery" ng-if="articleQuery && showArticleSection" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article>
+                    <cbd-article query="articleQuery" ng-if="articleQuery && article" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article>
                 </div>
                 <div class="col-sm-12" style="margin-top:5px;">
                     <table class="table table-hover">
                         <tr ng-repeat="parallelMeeting in meeting.conference.parallelMeetingLinks" >
                             <td style="width:80%">
-                                <a target="{{parallelMeeting.url ? '_blank':''}}"  ng-href="{{getUrl(parallelMeeting)}}">
-                                        {{parallelMeeting.title}}
-                                </a>
+                                <span ng-switch="getUrl(parallelMeeting)">                                        
+                                    <span ng-switch-when="#" >{{parallelMeeting.title}}</span>
+                                    <a ng-switch-default target="{{parallelMeeting.url ? '_blank':''}}"  ng-href="{{getUrl(parallelMeeting)}}">
+                                            {{parallelMeeting.title}}
+                                    </a>
+                                </span>
                             </td>
                             <td>
-                                <a target="{{parallelMeeting.url ? '_blank':''}}"  ng-href="{{getUrl(parallelMeeting)}}">Read More <i class="fa fa-arrow-right"></i></a>
+                                <a ng-if="getUrl(parallelMeeting)!='#'" target="{{parallelMeeting.url ? '_blank':''}}"  ng-href="{{getUrl(parallelMeeting)}}">Read More <i class="fa fa-arrow-right"></i></a>
                             </td>
                         </tr>
                     </table>
@@ -67,3 +77,4 @@
         </div>
     </div>
 </div>
+

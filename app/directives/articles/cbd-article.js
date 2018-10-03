@@ -1,7 +1,7 @@
-define(['app', 'text!./cbd-article.html','lodash', 'services/article-service'], function(app, template, _) {
+define(['app', 'text!./cbd-article.html','lodash', 'services/article-service', 'authentication'], function(app, template, _) {
 	 'use strict';
 
-	app.directive('cbdArticle', ['$sce', '$q', 'articleService', function ($sce, $q, articleService)
+	app.directive('cbdArticle', ['$sce', '$q', 'articleService', 'authentication',  function ($sce, $q, articleService, authentication)
 	{
 		return {
 			restrict: 'E',
@@ -19,13 +19,6 @@ define(['app', 'text!./cbd-article.html','lodash', 'services/article-service'], 
 					return $sce.trustAsHtml(plainText);
 				}
 				
-				$scope.getSizedImage = function(url){
-					if(!url)
-						return url;
-					var size = '1200x600'
-					return url.replace(/attachments\.cbd\.int\//, '$&'+size+'/')
-				}
-	
 				function loadArticle(){
 					
 					$q.when(articleService.query({ "ag" : JSON.stringify($scope.query) }))
@@ -36,8 +29,17 @@ define(['app', 'text!./cbd-article.html','lodash', 'services/article-service'], 
 							}
 						else
 							$scope.article = article[0];
+
+						if(($scope.article.coverImage||{}).url)
+							$scope.article.coverImage.url_1200  = $scope.article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/')
 						
 						$scope.onLoad({article: article[0]});
+						
+						$q.when(authentication.getUser())
+						.then(function(user){
+							if(user)
+								$scope.showEdit = authentication.isInRole(user, ['oasisArticleEditor', 'Administrator']);
+						})
 					});
 				}
 				

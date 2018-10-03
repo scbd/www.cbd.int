@@ -1,10 +1,14 @@
-﻿define(['app', 'lodash', 'services/conference-service', 'services/article-service', 'directives/social-media', 'directives/articles/cbd-article'], function(app, _) { 'use strict';
+﻿ define(['app', 'lodash','vue','conferenceCal', 'ngVue', 'services/conference-service', 'services/article-service', 'directives/social-media', 'directives/articles/cbd-article','css!conferenceCalCSS'], function(app, _,Vue,ConferenceCalComp) { 'use strict';
 
-return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', '$q', 
+var VueComponent = Vue.component('conference-cal', ConferenceCalComp)
+app.value('ConferenceCal',VueComponent)
+
+return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', '$q',
         function ($location,$scope,$timeout,  $route, $sce, conferenceService, $q) {
        
 			var _ctrl = this;
 
+             $scope.code = $route.current.params.code
             $scope.trustedHtml = function (plainText) {
                 return $sce.trustAsHtml(plainText);
             }
@@ -39,7 +43,6 @@ return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', 
 
             $scope.onArticleLoad = function(article){               
                 
-                article.coverImage.url =  article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/');
                 $scope.article = article;
                 $scope.isLoading = false;
             } 
