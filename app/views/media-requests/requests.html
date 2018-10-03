@@ -10,18 +10,48 @@
     <table class="table table-striped">
       <tr>
         <th>Organization</th>
-        <th>Status</th>
-        <th>
-          <button class="btn btn-default btn-xs" type="button" ng-click="requestsCtrl.edit(null)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+        <th style="width:50px" class="text-nowrap text-center">Progress</th>
+        <th style="width:50px" class="text-nowrap text-center">Submited On</th>
+        <th style="width:50px" class="text-nowrap text-center">Status</th>
+        <th style="width:50px" class="text-nowrap text-right">
+          <button class="btn btn-default btn-sm" type="button" ng-click="requestsCtrl.edit(null)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i></button>
         </th>
       </tr>
       <tr ng-repeat="request in requestsCtrl.requests">
-        <td>{{request}}</td>
-        <td>{{request.status}}</td>
-        <td><button class="btn btn-default btn-xs" type="button" ng-click="requestsCtrl.edit(request)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>
+        <td>
+            {{request.organization.title}}
+            <span ng-if="!request.organization.title">N/A</span>
+          <em ng-if="request.organization.acronym">({{request.organization.acronym}})</em>
+        </td>
+
+        <td class="text-nowrap text-center">
+          <span ng-switch="request.currentStep">
+            <span ng-switch-default="checklist">0%</span>
+            <span ng-switch-when="organization">25%</span>
+            <span ng-switch-when="contacts">50%</span>
+            <span ng-switch-when="participants">75%</span>
+            <span ng-switch-when="finished">Submitted</span>
+          </span>
+        </td>
+
+        <td>
+            {{request.requested|date:'yyyy-MM-dd HH:mm'}}
+        </td>
+        <td class="text-nowrap text-center">
+            <span class="text-muted"          ng-if="request.currentStep!='finished'">Incomplete</span>
+            <span class="text-muted"          ng-if="request.currentStep=='finished' && !request.accredited && !request.rejected">Pending</span>
+            <span class="label label-success" ng-if="request.accredited">Accredited</span>
+            <span class="label label-danger"  ng-if="request.rejected">Rejected</span>
+        </td>
+        <td class="text-right">
+          <button class="btn btn-default btn-sm" type="button" ng-click="requestsCtrl.edit(request)">
+              <i ng-if="request.currentStep!='finished'" class="fa  fa-fw fa-pencil-square-o" aria-hidden="true"></i>
+              <i ng-if="request.currentStep=='finished'" class="fa  fa-fw fa-eye" aria-hidden="true"></i>
+          </button>
+        </td>
       </tr>
       <tr ng-if="requestsCtrl.requests.length===0">
-        <td colspan="3">
+        <td colspan="5">
           No request.<br><br>
           <button class="btn btn-primary" type="button" ng-click="requestsCtrl.edit(null)"><i class="fa fa-plus" aria-hidden="true"></i> Create a new request for accreditation</button>
         </td>

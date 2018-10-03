@@ -22,18 +22,31 @@ define(['lodash', 'app', 'filters/lstring', 'services/conference-service'], func
 
         _ctrl.conference = conference;
 
-        var query = {
-          'meta.createdBy': user.userID,
-          $or : [ { 'conference': {$oid: conference._id} }, 
-                  { 'conference':        conference._id  } ]
-        };
+
+        query = [{
+          $match : {
+            'meta.createdBy': user.userID,
+            $or : [ { 'conference': {$oid: conference._id} }, 
+                    { 'conference':        conference._id  } ]
+          }
+        }, {
+          $lookup: {
+            from: "kronos-request-organizations",
+            localField: "nominatingOrganization",
+            foreignField : "_id",
+            as : "organizations"
+          }
+        }]
         
-        return $http.get('/api/v2018/kronos/participation-requests', { params: { q: query } }).then(resData);
+        return $http.get('/api/v2018/kronos/participation-requests', { params: { ag: JSON.stringify(query) } }).then(resData);
 
       }).then(function(requests){
 
-        _ctrl.requests = requests;
+        _.forEach(requests, function(r) {
+          r.organization = r.organizations && r.organizations[0];
+        });
 
+        _ctrl.requests = requests;
 
       }).catch(function(error) {
 
@@ -57,7 +70,7 @@ define(['lodash', 'app', 'filters/lstring', 'services/conference-service'], func
 
       if(request) {
         segments.push(encodeURIComponent(request._id));
-        segments.push(encodeURIComponent(request.currentStep));
+        segments.push(encodeURIComponent(request.currentStep||'checklist'));
       }
       else
         segments.push('checklist');
