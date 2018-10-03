@@ -243,6 +243,8 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
           $scope.broadcastFilmLetter = true
           $scope.accomidations = true
 
+          _ctrl.showChecklist();
+
           return true
         }
         return false
@@ -453,11 +455,22 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
           this.error=e
          return
        }
-      if(type)
-        $location.url('/'+_ctrl.conferenceCode+'/'+type+'/'+step)
-      else
-        $location.url('/'+_ctrl.conferenceCode+'/'+_ctrl.type+'/'+step)
+       jumpTo(type, step);
+    }
 
+    function jumpTo(type, step, replace) {
+
+      var segments = [
+        encodeURIComponent(_ctrl.conferenceCode), 
+        encodeURIComponent(type  || _ctrl.type),
+        encodeURIComponent(_ctrl.requestId),
+        encodeURIComponent(step  || _ctrl.step)
+      ];
+
+      if(replace)
+        $location.replace();
+
+      $location.path('/'+segments.join('/'));
     }
 
     function resetForms(){
@@ -582,6 +595,9 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
               _ctrl.doc._id = res.data.id
               _ctrl.requestId = _ctrl.doc._id
               resetForms()
+
+              jumpTo(null, null, true);
+
               return true
             })
             .catch(function(err){
@@ -603,21 +619,42 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     }
 
+    function updatePath() {
+
+      var segments = [
+          encodeURIComponent($route.current.params.conference), 
+          encodeURIComponent($route.current.params.type),
+          encodeURIComponent(_ctrl.requestId),
+          encodeURIComponent(_ctrl.step)
+      ];
+
+      $location.path('/'+segments.join('/'), false);
+
+    }
+
     function editOrg(){
         $location.url('/'+_ctrl.conferenceCode+'/'+_ctrl.type+'/'+'organization')
     }
 
     function loadParticipationRequest(){
-        var params = {
-                        q : {
-                          'meta.createdBy':user.userID,
-                          $or : [ { 'conference': {$oid:_ctrl.conferenceId} }, { conference: _ctrl.conferenceId } ]
-                        }
-                      }
-        return $http.get('/api/v2018/kronos/participation-requests',{ params : params })
+
+        var requestId = $route.current.params.requestId;
+
+        if(!requestId && _ctrl.step!='checklist') {
+          throw new Error("requestId is mandatory for steps other than checklist");
+        }
+
+        var query = {
+          '_id' : requestId ? {$oid: requestId } : 0, // _id: 0 => force NEW record
+          'meta.createdBy':user.userID,
+          $or : [ { 'conference': {$oid:_ctrl.conferenceId} }, { conference: _ctrl.conferenceId } ]
+        }
+        
+        return $http.get('/api/v2018/kronos/participation-requests',{ params : { q: query } })
                  .then(function(res){
 
-
+                  if(requestId && !res.data.length)
+                   throw new Error("Request not found");
 
                    if(res.data.length){
                      if(res.data[0].conference)
