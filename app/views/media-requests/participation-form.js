@@ -619,19 +619,6 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     }
 
-    function updatePath() {
-
-      var segments = [
-          encodeURIComponent($route.current.params.conference), 
-          encodeURIComponent($route.current.params.type),
-          encodeURIComponent(_ctrl.requestId),
-          encodeURIComponent(_ctrl.step)
-      ];
-
-      $location.path('/'+segments.join('/'), false);
-
-    }
-
     function editOrg(){
         $location.url('/'+_ctrl.conferenceCode+'/'+_ctrl.type+'/'+'organization')
     }
