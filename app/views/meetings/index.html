@@ -10,6 +10,7 @@
             </div>
             <div class="col-lg-8 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
                 <cbd-article query="articleQuery" ng-if="articleQuery" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article>
+                <vue-component name="ConferenceCal" v-props-code="code"></vue-component>
             </div>
             <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="padding-top:15px;">
                 

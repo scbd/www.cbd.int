@@ -46,6 +46,10 @@ require.config({
         'ngMeta'          : 'libs/ngMeta/dist/ngMeta.min',
         'facebook'        : '//connect.facebook.net/en_US/sdk',
         'gmapsapi'        : 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places',
+        'vue'             : 'libs/vue/vue.min',
+        'ngVue'           : 'libs/ngVue/index.min',
+        'conferenceCal'    : 'libs/@scbd/conference-cal/dist/lib/ConferenceCal.umd.min',
+        'conferenceCalCSS' : 'libs/@scbd/conference-cal/dist/lib/ConferenceCal'
 
     },
     shim: {
@@ -70,6 +74,8 @@ require.config({
         'ngInfiniteScroll'     : { deps : ['angular-flex'] },
         'gmapsapi'             : { exports: 'google'},
         'facebook'             : { exports: 'FB'}
+        'ngVue'                : { deps : ['vue'] },
+        'conferenceCal'         : { deps : ['ngVue'] }
     },
     packages: [
         { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },

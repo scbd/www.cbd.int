@@ -30,6 +30,9 @@ app.use('/app/images/p03qv92p.jpg', express.static(__dirname + '/app/images/p03q
 
 app.use('/favicon.png',   express.static(__dirname + '/app/images/favicon.png', { maxAge: 24*60*60*1000 }));
 app.use('/app',           express.static(__dirname + '/app',                    { setHeaders: setCustomCacheControl }));
+app.use('/app/libs/vue',    express.static(__dirname + '/node_modules/vue/dist',      { setHeaders: setCustomCacheControl }));
+app.use('/app/libs/ngVue',  express.static(__dirname + '/node_modules/ngVue/build',   { setHeaders: setCustomCacheControl }));
+app.use('/app/libs/@scbd',  express.static(__dirname + '/node_modules/@scbd',         { setHeaders: setCustomCacheControl }));
 app.all('/app/*',         function(req, res) { res.status(404).send(); } );
 
 app.get('/doc/*', function(req, res) { proxy.web(req, res, { target: "https://www.cbd.int:443", secure: false } ); } );
