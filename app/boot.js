@@ -73,7 +73,7 @@ require.config({
         'ngSmoothScroll'       : { deps : ['angular-flex'] },
         'ngInfiniteScroll'     : { deps : ['angular-flex'] },
         'gmapsapi'             : { exports: 'google'},
-        'facebook'             : { exports: 'FB'}
+        'facebook'             : { exports: 'FB'},
         'ngVue'                : { deps : ['vue'] },
         'conferenceCal'         : { deps : ['ngVue'] }
     },
