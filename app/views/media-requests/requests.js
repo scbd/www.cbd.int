@@ -18,7 +18,7 @@ define(['lodash', 'app', 'filters/lstring', 'services/conference-service'], func
 
       var conferenceCode = $route.current.params.conference;
 
-      conferenceService.getConference($route.current.params.conference).then(function(conference){
+      conferenceService.getConference(conferenceCode).then(function(conference){
 
         _ctrl.conference = conference;
 
