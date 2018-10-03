@@ -253,7 +253,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         .when('/download/:file*?', { templateUrl: 'views/media-requests/download.html',  controllerAs: 'downloadCtrl',  resolveController: true, resolve : { user : currentUser() } } )
         .when('/2018/media'   ,{redirectTo: '/2018/media/checklist'})
         .when('/:conference/:type/requests'         ,{ templateUrl : 'views/media-requests/requests.html',           resolveController : true,controllerAs: 'requestsCtrl',       resolve : { user : securize(['User']) } } )
-        .when('/:conference/:type/checklist'        ,{ templateUrl : 'views/media-requests/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']), routeParams: injectRouteParams({step: ['checklist'] })  } } )
+        .when('/:conference/:type/checklist'        ,{ templateUrl : 'views/media-requests/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']), routeParams: injectRouteParams({step: 'checklist' })  } } )
         .when('/:conference/:type/:requestId/:step' ,{ templateUrl : 'views/media-requests/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
 //        .when('/:step',{ templateUrl : 'views/media-requests/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
 
