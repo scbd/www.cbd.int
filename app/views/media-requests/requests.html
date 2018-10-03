@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h1>Accreditation requests</h1>
+  </div>
+  <div class="col-xs-12">
+
+    <h3>{{requestsCtrl.conference.Title|lstring}}</h3>
+
+    
+    <table class="table table-striped">
+      <tr>
+        <th>Organization</th>
+        <th>Status</th>
+        <th>
+          <button class="btn btn-default btn-xs" type="button" ng-click="requestsCtrl.edit(null)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+        </th>
+      </tr>
+      <tr ng-repeat="request in requestsCtrl.requests">
+        <td>{{request}}</td>
+        <td>{{request.status}}</td>
+        <td><button class="btn btn-default btn-xs" type="button" ng-click="requestsCtrl.edit(request)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>
+      </tr>
+      <tr ng-if="requestsCtrl.requests.length===0">
+        <td colspan="3">
+          No request.<br><br>
+          <button class="btn btn-primary" type="button" ng-click="requestsCtrl.edit(null)"><i class="fa fa-plus" aria-hidden="true"></i> Create a new request for accreditation</button>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+</div>

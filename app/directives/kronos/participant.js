@@ -215,7 +215,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         }
         conferenceService.getConference($scope.conferenceCode)
           .then(function(c){
-            conference=c[0]
+            conference=c
             if(conference && conference.MajorEventIDs)
             conferenceService.getMeetings(conference.MajorEventIDs)
               .then(function(meetings){
