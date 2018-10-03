@@ -251,7 +251,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         $("base").attr('href', '/participation/'); // allow full page reload outside of  /insession/*
         routeProvider
         .when('/download/:file*?', { templateUrl: 'views/media-requests/download.html',  controllerAs: 'downloadCtrl',  resolveController: true, resolve : { user : currentUser() } } )
-        .when('/2018/media'   ,{redirectTo: '/2018/media/checklist'})
+        .when('/:conference/media'                  ,{ templateUrl: 'views/media-requests/detect.html',              resolveController : true,   resolve : { user : securize(['User']), routeParams: injectRouteParams({ type: 'media' })  } } ) // Force media
         .when('/:conference/:type/requests'         ,{ templateUrl : 'views/media-requests/requests.html',           resolveController : true,controllerAs: 'requestsCtrl',       resolve : { user : securize(['User']) } } )
         .when('/:conference/:type/checklist'        ,{ templateUrl : 'views/media-requests/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']), routeParams: injectRouteParams({step: 'checklist' })  } } )
         .when('/:conference/:type/:requestId/:step' ,{ templateUrl : 'views/media-requests/participation-form.html', resolveController : true,controllerAs: 'participationCtrl',  reloadOnSearch:false,resolve : { user : securize(['User']) } } )
