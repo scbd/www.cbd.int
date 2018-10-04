@@ -11,7 +11,7 @@
       <tr>
         <th>Organization</th>
         <th style="width:50px" class="text-nowrap text-center">Progress</th>
-        <th style="width:50px" class="text-nowrap text-center">Submited On</th>
+        <th style="width:50px" class="text-nowrap text-center">Submited</th>
         <th style="width:50px" class="text-nowrap text-center">Status</th>
         <th style="width:50px" class="text-nowrap text-right">
           <button class="btn btn-default btn-sm" type="button" ng-click="requestsCtrl.edit(null)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i></button>
@@ -34,8 +34,9 @@
           </span>
         </td>
 
-        <td>
-            {{request.requested|date:'yyyy-MM-dd HH:mm'}}
+        <td class="text-nowrap">
+            <div >{{request.requested|fromNow}}</div>
+            <div class="text-muted">{{request.requested|date:'MMM dd HH:mm'}}</div>
         </td>
         <td class="text-nowrap text-center">
             <span class="text-muted"          ng-if="request.currentStep!='finished'">Incomplete</span>
