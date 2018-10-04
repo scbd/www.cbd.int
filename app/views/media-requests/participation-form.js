@@ -69,6 +69,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.orgTypes           = orgTypes[_ctrl.type]
     _ctrl.orgMediums         = mediums
     _ctrl.locale             = locale
+    _ctrl.jumpToDashboard    = function() { jumpTo(null, 'requests'); };
     _ctrl.partialMap         = {
       'request'         : '/app/views/media-requests/participation-form-conference.html',
       'checklist'       : '/app/views/media-requests/participation-form-checklist.html',
@@ -191,11 +192,24 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         initStepsOrganization().then(initStepsContacts)
       if(_ctrl.step==='participants')
         initStepsOrganization().then(initStepsParticipants)
+      if(_ctrl.step==='finished')
+        initStepsFinished()
 
       window.scroll(0, 0)
       $scope.$applyAsync(function(){
           $("[help]").tooltip();
       })
+    }
+
+    function initStepsFinished() {
+
+      delete _ctrl.showDashboardButton;
+
+      var query = { 'meta.createdBy':user.userID, $or : [ { 'conference': {$oid:_ctrl.conferenceId} }, { conference: _ctrl.conferenceId } ] }
+      
+      return $http.get('/api/v2018/kronos/participation-requests',{ params : { q: query, l:2, f:{_id:1} } }).then(function(res){
+        _ctrl.showDashboardButton = !!res.data.length;
+      });
     }
 
     function initStepRequest(){
@@ -460,17 +474,17 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     function jumpTo(type, step, replace) {
 
-      var segments = [
-        encodeURIComponent(_ctrl.conferenceCode), 
-        encodeURIComponent(type  || _ctrl.type),
-        encodeURIComponent(_ctrl.requestId),
-        encodeURIComponent(step  || _ctrl.step)
-      ];
+      var segments = [ _ctrl.conferenceCode, type || _ctrl.type ];
+
+      if(step!='requests')
+        segments.push(_ctrl.requestId);
+
+      segments.push(step  || _ctrl.step)
 
       if(replace)
         $location.replace();
 
-      $location.path('/'+segments.join('/'));
+      $location.path('/'+_.map(segments, encodeURIComponent).join('/'));
     }
 
     function resetForms(){
