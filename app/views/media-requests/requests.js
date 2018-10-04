@@ -1,4 +1,4 @@
-define(['lodash', 'app', 'filters/lstring', 'services/conference-service'], function(_) {
+define(['lodash', 'app', 'filters/lstring', 'filters/moment', 'services/conference-service'], function(_) {
  
 	return ['$http', '$route', '$location', 'conferenceService', 'user', function($http, $route, $location, conferenceService, user) {
 
