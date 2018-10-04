@@ -29,6 +29,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         $scope.save       = save
         $scope.isMedia    = isMedia
         $scope.isDesignation = isDesignation
+        $scope.selectAllMeetings = selectAllMeetings
         $scope.dobRegex= /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/
 
         $scope.$watch('showContact',function(prev, after){
@@ -58,7 +59,15 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
               $("[help]").tooltip()
             },3000)
         })
-
+        
+        function selectAllMeetings(){
+          if(!$scope.binding.meeting)$scope.binding.meeting=[]
+          $scope.meetings.forEach(pushMeetingId)
+          $scope.editForm.meeting.$setValidity('required',true)
+        }
+        function pushMeetingId(meeting){
+          $scope.binding.meeting.push(meeting._id)
+        }
         function resetForm(){
           if($scope.editForm){
             $scope.editForm.$touched = false
