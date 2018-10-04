@@ -3,18 +3,19 @@
 if(/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) { console.log = function(){}; }
 
 var gitVersion = document.documentElement.attributes['git-version'].value;
+var cdnHost = 'https://cdn.cbd.int/';
 
 require.config({
     waitSeconds: 30,
     baseUrl : '/app/',
     paths: {
         'authentication'  : 'services/authentication',
-        'angular'         : 'libs/angular/angular.min',
+        'angular'         : cdnHost + 'angular@1.5.6/angular.min',
+        'ngRoute'         : cdnHost + 'angular-route@1.5.6/angular-route.min',
+        'ngCookies'       : cdnHost + 'angular-cookies@1.5.6/angular-cookies.min',
+        'ngAnimate'       : cdnHost + 'angular-animate@1.5.6/angular-animate.min',
+        'ngSanitize'      : cdnHost + 'angular-sanitize@1.5.6/angular-sanitize.min',
         'angular-flex'    : 'libs/angular-flex/angular-flex',
-        'ngRoute'         : 'libs/angular-route/angular-route.min',
-        'ngCookies'       : 'libs/angular-cookies/angular-cookies.min',
-        'ngAnimate'       : 'libs/angular-animate/angular-animate.min',
-        'ngSanitize'      : 'libs/angular-sanitize/angular-sanitize.min',
         'ngDialog'        : 'libs/ng-dialog/js/ngDialog.min',
         'text'            : 'libs/requirejs-text/text',
         'css'             : 'libs/require-css/css.min',
