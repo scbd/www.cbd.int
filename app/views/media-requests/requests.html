@@ -4,6 +4,7 @@
   </div>
   <div class="col-xs-12">
 
+      <input class="pull-right form-control" type="text" ng-model="search.$" style="width:auto" placeholder="Search"/>
     <h3>{{requestsCtrl.conference.Title|lstring}}</h3>
 
     
@@ -17,11 +18,13 @@
           <button class="btn btn-default btn-sm" type="button" ng-click="requestsCtrl.edit(null)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i></button>
         </th>
       </tr>
-      <tr ng-repeat="request in requestsCtrl.requests">
+      <tr ng-repeat="request in requestsCtrl.requests|filter:search">
         <td>
             {{request.organization.title}}
             <span ng-if="!request.organization.title">N/A</span>
           <em ng-if="request.organization.acronym">({{request.organization.acronym}})</em>
+
+          <div><span ng-repeat="m in request.medium|orderBy"> <span class="label label-default">{{m}}</span> </span></div>
         </td>
 
         <td class="text-nowrap text-center">
