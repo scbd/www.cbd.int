@@ -40,12 +40,19 @@
             max-width: 100%;
             margin :5px;
         }
+        .cover-image{
+            padding-top: 75%;
+            width: 100%;
+            background-repeat: no-repeat;
+            background-position: top;
+            background-size: contain;
+        }
     </style>
     <div ng-if="!hideCoverImage && article.coverImage">
 
         <div class="image-credit-wrapper">
             <span class="image-credit" ng-if="article.coverImage.credits">{{article.coverImage.credits}}</span>
-            <img class="img-responsive" ng-src="{{::article.coverImage.url_1200}}">
+            <div class="img cover-image" style="background-image: url({{::article.coverImage.url_1200}});padding-top: 75%;"></div>
         </div>
     </div>
     <div ng-if="showEdit">        
