@@ -38,13 +38,13 @@
               </div>
               <div class="radio">
                 <label>
-                  <input ng-model="attending.val" type="radio" name="needAccredidation"  ng-value="true" >
+                  <input ng-model="attending.val" type="radio" name="needAccredidation"  ng-value="true" ng-change="selectAllMeetings()">
                   Yes
                 </label>
               </div>
             </div>
           </div>
-          <div class="col-md-12" ng-if="attending.val">
+          <div class="col-md-12" ng-show="false">
           <div class="form-group" ng-class="{'has-error': (!binding.meeting.length && (editForm.meeting.$touched || editForm.$submitted)) }">
             <label class="control-label" for="meeting">Select the meetings this person would like to attend <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-html="true" data-title="<b>To select more than one choice:</b><br><br>windows: ctrl & click <br> mac: cmd & click" help></i> </label>
             <select

@@ -65,6 +65,8 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.numParticipants    = numParticipants
     _ctrl.loading            = false
     _ctrl.loadingObj         = {}
+    _ctrl.isSameAsHead       = isSameAsHead
+    _ctrl.toggleMainIsHead   = toggleMainIsHead        
     // options
     _ctrl.orgTypes           = orgTypes[_ctrl.type]
     _ctrl.orgMediums         = mediums
@@ -93,7 +95,9 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     _ctrl.head                    = {}
     _ctrl.focalPoint              = {}
     _ctrl.participants            = []
+    _ctrl.config                  = {sameAsHead:false}
 
+    
     var loadingCheck = false
     $scope.$watch('participationCtrl.loadingObj',function(){
       if(!loadingCheck){
@@ -120,7 +124,22 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       return '/participation/download/'+encodeURIComponent(url).replace(/%2f/gi, '/');
 
     }
+    
+    function toggleMainIsHead(){
 
+      if(!_ctrl.config.sameAsHead){
+        delete(_ctrl.doc.focalPoint)
+        _ctrl.focalPoint={}
+      } else{
+        _ctrl.doc.focalPoint = _ctrl.doc.head
+        _ctrl.focalPoint=_ctrl.head
+      }
+    }
+
+    function isSameAsHead(){
+      return _ctrl.doc.focalPoint === _ctrl.doc.head
+    }
+        
     function numParticipants(){
       var count = 0
       for (var i = 0; i < _ctrl.participants; i++)
@@ -131,9 +150,9 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
 
     function showChecklist(){
       $scope.showChecklist=true;
-      _ctrl.save();
       if(!_ctrl.doc.list)
         _ctrl.doc.list={}
+      _ctrl.save();
       $timeout(function(){
         var element = document.getElementById('checklist');
         smoothScroll(element)
@@ -279,6 +298,8 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
           var headPromise  = getHead()
           var focalP = getFocalPoint()
           return $q.all([headPromise,focalP]).then(function(){
+                  _ctrl.config.sameAsHead = _ctrl.isSameAsHead()
+            
                   $scope.$watch('participationCtrl.head._id',function(newValue, oldValue){
                     if(newValue != oldValue){
                       _ctrl.doc.head = newValue
