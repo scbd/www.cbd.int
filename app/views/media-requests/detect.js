@@ -1,8 +1,19 @@
-define(['lodash', 'app', 'filters/lstring', 'services/conference-service'], function(_) {
+define(['lodash', 'app', 'filters/lstring', 'services/conference-service', 'directives/articles/cbd-article'], function(_) {
  
-	return ['$scope', '$http', '$route', '$location', 'conferenceService', 'user', function($scope, $http, $route, $location, conferenceService, user) {
+	return ['$scope', '$http', '$route', '$location', '$window', 'conferenceService', 'authentication', 'user', function($scope, $http, $route, $location, $window, conferenceService, authentication, user) {
+
+    $scope.isAuthenticated = user.isAuthenticated;
+    $scope.signIn = signIn;
+    $scope.onArticleLoad = function() { delete $scope.loading; } 
 
     load();
+
+    //====================================
+    //
+    //====================================
+    function signIn() {
+      $window.location.href = authentication.accountsBaseUrl()+'/signin?returnUrl='+encodeURIComponent($location.absUrl());
+    }
 
     //====================================
     //
@@ -10,6 +21,18 @@ define(['lodash', 'app', 'filters/lstring', 'services/conference-service'], func
     function load() {
 
       $scope.loading = true;
+
+      if(!user.isAuthenticated) {
+
+        $scope.articleQuery= [
+          {"$match"   : { "adminTags.title.en" : { $all: ['accounts', 'Sign-in', 'Sign-up'] }} },
+          {"$sort"    : { "meta.updatedOn":-1}},
+          {"$project" : { title:1, content:1, coverImage:1}},
+          {"$limit"   : 1 }
+        ];
+
+        return;
+      }
 
       var conferenceCode = $route.current.params.conference;
       var type           = $route.current.params.type;
@@ -31,6 +54,7 @@ define(['lodash', 'app', 'filters/lstring', 'services/conference-service'], func
         if(requests.length >1) return $location.path('/'+_.map([conferenceCode, type, 'requests'                              ], encodeURIComponent).join('/'));
         if(requests.length==1) return $location.path('/'+_.map([conferenceCode, type, requests[0]._id, requests[0].currentStep], encodeURIComponent).join('/'));
         
+        $location.replace();
         $location.path('/'+_.map([conferenceCode, type, 'checklist'], encodeURIComponent).join('/'));
 
       }).catch(function(error) {
