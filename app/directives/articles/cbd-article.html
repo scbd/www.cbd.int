@@ -50,7 +50,7 @@
     </style>
     <div ng-if="!hideCoverImage && article.coverImage">
 
-        <div class="image-credit-wrapper">
+        <div class="image-credit-wrapper"  ng-show="article.coverImage">
             <span class="image-credit" ng-if="article.coverImage.credits">{{article.coverImage.credits}}</span>
             <div class="img cover-image" style="background-image: url({{::article.coverImage.url_1200}});padding-top: 75%;"></div>
         </div>
