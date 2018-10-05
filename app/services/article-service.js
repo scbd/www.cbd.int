@@ -4,7 +4,7 @@
 
             function query(qs){
                 
-                return $q.when($http.get('/api/v2017/articles', { params: qs, cache:true}))
+                return $q.when($http.get('/api/v2017/articles', { params: qs}))
                         .then(function(data){
                             return data.data;
                         });
@@ -12,7 +12,7 @@
             }
             function get(articleId){
                 
-                return $q.when($http.get('/api/v2017/articles/' + encodeURIComponent(articleId), {cache:true}))
+                return $q.when($http.get('/api/v2017/articles/' + encodeURIComponent(articleId)))
                         .then(function(data){
                             return data.data;
                         });                
