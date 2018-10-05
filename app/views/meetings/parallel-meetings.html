@@ -26,7 +26,7 @@
             }
         </style>
         <div class="row">
-            <div class="image-credit-wrapper" ng-show="article">
+            <div class="image-credit-wrapper"  ng-show="article.coverImage">
                 <span class="image-credit" ng-if="article.coverImage.credits">{{article.coverImage.credits}}</span>
                 <div class="img cover-image" style="background-image: url({{::article.coverImage.url_1200}});"></div>
             </div>

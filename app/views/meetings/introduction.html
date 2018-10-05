@@ -4,7 +4,7 @@
     </div>
     <div class="row" ng-hide="isLoading">
        
-        <div class="image-credit-wrapper">
+        <div class="image-credit-wrapper"  ng-show="article.coverImage">
             <span class="image-credit" ng-if="article.coverImage.credits">{{article.coverImage.credits}}</span>
             <div class="img cover-image" style="background-image: url({{::article.coverImage.url_1200}});"></div>
             <style>
