@@ -1,3 +1,10 @@
 <div>
-    <i ng-show="loading" class="fa fa-spinner fa-spin"></i> Loading...
+    <div ng-if="loading" class="text-center">
+        <i class="fa fa-spinner fa-spin"></i> Loading...
+    </div>
+    <cbd-article query="articleQuery" ng-if="articleQuery" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article>
+
+    <div class="text-center">
+        <button ng-if="!isAuthenticated" type="button" ng-click="signIn()" class="btn btn-primary btn-lg">Sign In / Sign Up for an account</button>
+    </div>
 </div>
