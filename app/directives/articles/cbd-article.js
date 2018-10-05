@@ -1,7 +1,7 @@
 define(['app', 'text!./cbd-article.html','lodash', 'services/article-service', 'authentication'], function(app, template, _) {
 	 'use strict';
 
-	app.directive('cbdArticle', ['$sce', '$q', 'articleService', 'authentication',  function ($sce, $q, articleService, authentication)
+	app.directive('cbdArticle', ['$sce', '$q', 'articleService', 'authentication', '$location',  function ($sce, $q, articleService, authentication, $location)
 	{
 		return {
 			restrict: 'E',
@@ -14,6 +14,7 @@ define(['app', 'text!./cbd-article.html','lodash', 'services/article-service', '
 			link: function ($scope, $element, $attr)
 			{
 				$scope.hideCoverImage = $attr.hideCoverImage||false;
+				$scope.returnUrl	  = $location.$$absUrl;
 
 				$scope.trustedHtml = function (plainText) {
 					return $sce.trustAsHtml(plainText);
