@@ -56,9 +56,9 @@
         </div>
     </div>
     <div ng-if="showEdit">        
-        <a ng-if="article._id"  class="btn btn-primary" ng-href="https://www.cbd.int/management/articles/{{article._id}}/edit">
+        <a ng-if="article._id"  class="btn btn-primary" ng-href="https://www.cbd.int/management/articles/{{article._id}}/edit?returnUrl={{returnUrl}}">
             <i class="fa fa-edit"></i> Edit content</a>
-        <a ng-if="!article._id" class="btn btn-primary" ng-href="https://www.cbd.int/management/articles/new">
+        <a ng-if="!article._id" class="btn btn-primary" ng-href="https://www.cbd.int/management/articles/new?returnUrl={{returnUrl}}">
             <i class="fa fa-edit"></i> Add content</a>    
         <br/>    
     </div>
