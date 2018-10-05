@@ -14,7 +14,7 @@ define(['app', 'text!./cbd-article.html','lodash', 'services/article-service', '
 			link: function ($scope, $element, $attr)
 			{
 				$scope.hideCoverImage = $attr.hideCoverImage||false;
-				$scope.returnUrl	  = $location.$$absUrl;
+				$scope.returnUrl	  = $location.absUrl();
 
 				$scope.trustedHtml = function (plainText) {
 					return $sce.trustAsHtml(plainText);
