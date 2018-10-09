@@ -227,7 +227,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
       var query = { 'meta.createdBy':user.userID, $or : [ { 'conference': {$oid:_ctrl.conferenceId} }, { conference: _ctrl.conferenceId } ] }
       
       return $http.get('/api/v2018/kronos/participation-requests',{ params : { q: query, l:2, f:{_id:1} } }).then(function(res){
-        _ctrl.showDashboardButton = !!res.data.length;
+        _ctrl.showDashboardButton = res.data.length>1;
       });
     }
 
