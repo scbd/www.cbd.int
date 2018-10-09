@@ -47,9 +47,10 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
                   $scope.attending.val  = true
              }else{
 
-               if($scope.binding.meeting && $scope.binding.meeting.length)
+               if($scope.binding.meeting && $scope.binding.meeting.length){
                   $scope.attending.val  = true
-
+                  selectAllMeetings()
+                }
              }
             if(!$scope.binding.attachment)$scope.binding.attachment=[]
             if($scope.addressDuringMeeting && !$scope.showAddressDuringMeeting) $scope.showAddressDuringMeeting=true
@@ -61,10 +62,14 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
         })
         
         function selectAllMeetings(){
+
           if(!$scope.binding.meeting)$scope.binding.meeting=[]
-          $scope.meetings.forEach(pushMeetingId)
           $scope.editForm.meeting.$setValidity('required',true)
+          if($scope.meetings.length === $scope.binding.meeting.length && $scope.attending.val ) return
+          $scope.meetings.forEach(pushMeetingId)
+          
         }
+        
         function pushMeetingId(meeting){
           $scope.binding.meeting.push(meeting._id)
         }
@@ -202,13 +207,13 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
           $scope.editForm.$setUntouched()
           $scope.editForm.$submitted=false
 
-          if(!$scope.isContact) $scope.attending.val=true
           if(!$scope.binding._id)
             $scope.binding.useOrganizationAddress = true
           $scope.binding.requestId = $scope.requestId
           $scope.binding.requestType = $scope.typee
           $scope.binding.organization = $scope.organization._id
           $scope.editForm.$submitted=false
+          if($scope.attending.val)selectAllMeetings()
         }
 
         function isMedia(media){
@@ -229,6 +234,7 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
             conferenceService.getMeetings(conference.MajorEventIDs)
               .then(function(meetings){
                 $scope.meetings = meetings
+                selectAllMeetings()
               })
           })
 
