@@ -5,7 +5,6 @@ require.config({
     paths: {
         'app'            : 'js/apps/national-reports/app',
         'authentication' : 'services/authentication',
-        'angular'         : 'libs/angular/angular.min',
         'angular-flex'    : 'libs/angular-flex/angular-flex',
         'angular'         : cdnHost + 'angular@1.5.6/angular.min',
         'ngRoute'         : cdnHost + 'angular-route@1.5.6/angular-route.min',
@@ -14,8 +13,8 @@ require.config({
         'async'          : 'libs/requirejs-plugins/src/async',
         'text'           : 'libs/requirejs-text/text',
         'jquery'         : 'libs/jquery/dist/jquery.min',
-        'bootstrap'      : 'libs/bootstrap/dist/js/bootstrap.min',
-        'moment'         : 'libs/moment/min/moment.min',
+        'bootstrap'       : cdnHost + 'bootstrap@3.3.6/dist/js/bootstrap.min',
+        'moment'          : cdnHost + 'moment@2.6.0/min/moment.min',
         'lodash'          : cdnHost + 'lodash@3.10.1/index',
         'angular-flex'    : 'libs/angular-flex/angular-flex',
 
