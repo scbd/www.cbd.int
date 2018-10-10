@@ -493,8 +493,8 @@ define(['text!./edit-bbi-opportunity.html', 'text!./bbi-records-dialog.html', 't
 					if ($scope.document && $scope.document.contact) {
 						$scope.loadingOrg = true;
 						$scope.loadRecords($scope.document.contact.identifier)
-							.then(function(data) {
-								$scope.loadRecords(data.contactOrganization.identifier)
+							.then(function(res) {
+								$scope.loadRecords(res.data.contactOrganization.identifier)
 									.then(function(d) {
 										$scope.document.primaryOrganization = {
 											identifier: d.header.identifier

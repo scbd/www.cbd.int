@@ -175,11 +175,11 @@ define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','dir
                   $http.get('/api/v2013/index/select', {
                     params: queryParameters,
                     // cache: true
-                  }).success(function(data) {
+                  }).then(function(res) {
 
 
-                    $scope.count = data.response.numFound;
-                    $scope.docs  = data.response.docs;
+                    $scope.count = res.data.response.numFound;
+                    $scope.docs  = res.data.response.docs;
 
                     if($scope.schema ==='measures'){
 

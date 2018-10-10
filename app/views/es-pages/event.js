@@ -136,13 +136,13 @@ define(['app', 'lodash', 'directives/es-pages/header-nav', 'filters/term', 'filt
 				return storage.documents.get(ref.identifier, { cache : true})
 					.success(function(data){
 						return ref= data;
-					}).error(function(error, code){
+					}).catch(function(error, code){
 						if (code == 404 && $scope.allowDrafts == "true") {
 
 							return storage.drafts.get(ref.identifier, { cache : true})
 								.success(function(data){
 									return ref= data;
-								}).error(function(draftError, draftCode){
+								}).catch(function(draftError, draftCode){
 									ref.document  = undefined;
 									ref.error     = draftError;
 									ref.errorCode = draftCode;

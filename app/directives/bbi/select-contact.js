@@ -267,20 +267,20 @@ function(template,app,_) {
                     function loadSelectedContact(identifier,selectedContacts) {
                           $scope.loadingDocuments=true;
                           return $http.get('/api/v2013/documents/'+identifier, {
-                          }).success(function(doc) {
-                              selectedContacts.push(doc);
+                          }).then(function(doc) {
+                              selectedContacts.push(doc.data);
                               $scope.loadingDocuments=false;
-                              if(doc.organization && doc.organization.identifier)
-                                return loadOrgData(doc.organization.identifier,doc);
+                              if(doc.data.organization && doc.data.organization.identifier)
+                                return loadOrgData(doc.data.organization.identifier,doc.data);
                           }).catch(function(){
 
                             return $http.get('/api/v2013/documents/'+identifier+'/versions/draft', {
-                            }).success(function(doc) {
-                                doc.header.version='draft';
-                                selectedContacts.push(doc);
+                            }).then(function(doc) {
+                                doc.data.header.version='draft';
+                                selectedContacts.push(doc.data);
                                 $scope.loadingDocuments=false;
-                                if(doc.organization && doc.organization.identifier)
-                                  return loadOrgData(doc.organization.identifier,doc);
+                                if(doc.data.organization && doc.data.organization.identifier)
+                                  return loadOrgData(doc.data.organization.identifier,doc.data);
                                 else
                                   return 'draft';
                             }).catch(function(err){throw err;});
@@ -295,15 +295,15 @@ function(template,app,_) {
                     function loadOrgData(identifier,doc) {
                           $scope.loadingDocuments=true;
                           $http.get('/api/v2013/documents/'+identifier, {
-                          }).success(function(responceDoc) {
-                               delete(responceDoc.header);
-                               Object.assign(doc,responceDoc);
+                          }).then(function(responceDoc) {
+                               delete(responceDoc.data.header);
+                               Object.assign(doc,responceDoc.data);
                                $scope.loadingDocuments=false;
                           }).catch(function(){
                               $http.get('/api/v2013/documents/'+identifier+'/versions/draft', {
-                              }).success(function(responceDoc) {
-                               delete(responceDoc.header);
-                               Object.assign(doc,responceDoc);
+                              }).then(function(responceDoc) {
+                               delete(responceDoc.data.header);
+                               Object.assign(doc,responceDoc.data);
                                $scope.loadingDocuments=false;
                               }).catch(function(err){throw err;});
                           });

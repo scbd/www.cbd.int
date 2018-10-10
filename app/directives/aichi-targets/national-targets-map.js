@@ -193,9 +193,9 @@ define(['app', 'lodash',
                     return $http.get('/api/v2013/index/select', {
                         params: queryParameters,
                         cache:true
-                    }).success(function(data) {
-                        $scope.count = data.response.numFound;
-                        $scope.documents = data.response.docs;
+                    }).then(function(res) {
+                        $scope.count = res.data.response.numFound;
+                        $scope.documents = res.data.response.docs;
                     });
                 } // query
 
@@ -221,9 +221,9 @@ define(['app', 'lodash',
                     return $http.get('/api/v2013/index/select', {
                         params: queryParameters,
                         cache:true
-                    }).success(function(data) {
-                        $scope.tcount = data.response.numFound;
-                        $scope.tdocuments = data.response.docs;
+                    }).then(function(res) {
+                        $scope.tcount = res.data.response.numFound;
+                        $scope.tdocuments = res.data.response.docs;
                     });
                 } // query
                 //=======================================================================

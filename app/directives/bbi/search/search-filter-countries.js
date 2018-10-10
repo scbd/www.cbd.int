@@ -81,14 +81,14 @@ define(['text!./search-filter-countries.html','app','lodash','filters/byLetter']
             function buildTermsAndQuery() {
 
                     if(!rawCountries){
-                        $http.get('/api/v2013/thesaurus/domains/countries/terms').success(function (data) {
+                        $http.get('/api/v2013/thesaurus/domains/countries/terms').then(function (data) {
 
-                            rawCountries = data;
+                            rawCountries = data.data;
                             _.each(rawCountries,function(country){
                                 country.name=$scope.facet;
                             });
-                            $scope.terms = searchCtrl.updateTerms($scope.terms,$scope.items,$scope.facet,data);
-                            searchCtrl.buildChildQuery($scope.terms,$scope.items,$scope.facet,data);
+                            $scope.terms = searchCtrl.updateTerms($scope.terms,$scope.items,$scope.facet,data.data);
+                            searchCtrl.buildChildQuery($scope.terms,$scope.items,$scope.facet,data.data);
                         });
                     }else{
                         $scope.terms=searchCtrl.updateTerms($scope.terms,$scope.items,$scope.facet,rawCountries); // save terms to avoid multiple server quiries for same data
