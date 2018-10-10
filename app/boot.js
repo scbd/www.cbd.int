@@ -10,7 +10,7 @@ require.config({
     baseUrl : '/app/',
     paths: {
         'authentication'  : 'services/authentication',
-        'angular'         : cdnHost + 'angular@1.7/angular.min',
+        'angular'         : cdnHost + 'angular@1.7.4/angular.min',
         'ngRoute'         : cdnHost + 'angular-route@1.7/angular-route.min',
         'ngCookies'       : cdnHost + 'angular-cookies@1.7/angular-cookies.min',
         'ngAnimate'       : cdnHost + 'angular-animate@1.7/angular-animate.min',

@@ -341,9 +341,7 @@ define(['text!./reporting-display.html',
               timeout: canceler.promise,
               cache: true
             }).then(function(res) {
-              console.log(res.data)
               canceler = null;
-              console.log(res.data.response.numFound)
               $scope.count = res.data.response.numFound;
               $scope.count = res.data.response.docs.length;
               $scope.documents = groupByCountry(res.data.response.docs);
