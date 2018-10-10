@@ -343,7 +343,6 @@ define(['text!./reporting-display.html',
             }).then(function(res) {
               canceler = null;
               $scope.count = res.data.response.numFound;
-              $scope.count = res.data.response.docs.length;
               $scope.documents = groupByCountry(res.data.response.docs);
             });
           } // query
