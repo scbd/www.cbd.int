@@ -15,7 +15,7 @@ define(['app', 'lodash', 'text!./meeting-document.html', 'directives/meetings/do
         'default':                                                                    { priority:999,  color: 'orange', btn: 'btn-default', icon: 'fa-file-o' }
     };
 
-	 return app.directive('meetingDocument', [function() {
+	 return app.directive('meetingDocument', ['$rootScope',function($rootScope) {
 		return {
 			restrict : "E",
 			template : html,
@@ -27,6 +27,7 @@ define(['app', 'lodash', 'text!./meeting-document.html', 'directives/meetings/do
             },
 			link: function ($scope) {
 
+                $scope.viewOnly       = $rootScope.viewOnly
                 $scope.breakSymbol    = breakSymbol;
                 $scope.downloadble    = canDownload();
                 $scope.LANGUAGES      = LANGUAGES

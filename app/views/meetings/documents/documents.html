@@ -37,26 +37,26 @@
 
     <div ng-if="!documentsCtrl.error" id="print-smart-checkout" ng-cloak  class="pull-right hidden-print" style="margin-top:5px">
 
-        <span ng-if="documentsCtrl.edit" class="edit">
+        <span ng-if="documentsCtrl.edit && !viewOnly" class="edit">
             <button type="button" class="btn btn-default" ng-click="documentsCtrl.edit(null)"><i class="fa fa-plus"></i></button>
             <button type="button" class="btn btn-default" ng-class="{active:documentsCtrl.editMode, 'btn-info': documentsCtrl.editMode }" ng-click="documentsCtrl.editMode=!documentsCtrl.editMode"><i class="fa fa-edit"></i></button>
         </span>
 
-        <button type="button" ng-if="documentsCtrl.isStaff" class="btn btn-default" ng-class="{active:documentsCtrl.statsMode, 'btn-info': documentsCtrl.statsMode }" ng-click="documentsCtrl.statsMode=!documentsCtrl.statsMode && documentsCtrl.isStaff"><i class="fa fa-bar-chart"></i></button>
-
-        <span ng-if="::documentsCtrl.meeting.links.length || documentsCtrl.meeting.EVT_WEB || documentsCtrl.meeting.EVT_INFO_PART_URL || documentsCtrl.meeting.isMontreal || documentsCtrl.meeting.EVT_REG_NOW_YN" class="btn-group">
-          <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Info links <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu">
-            <li ng-if="::documentsCtrl.meeting.EVT_WEB"><a ng-href="{{::documentsCtrl.meeting.EVT_WEB}}" target="_blank">Official Web Site</a></li>
-            <li ng-if="::documentsCtrl.meeting.EVT_INFO_PART_URL"><a ng-href="{{::documentsCtrl.meeting.EVT_INFO_PART_URL}}" target="_blank">Information for participants</a></li>
-            <li ng-if="::documentsCtrl.meeting.isMontreal"><a ng-href="/meetings/montreal.shtml" target="_blank">Montreal information for visitors</a></li>
-            <li ng-if="::documentsCtrl.meeting.EVT_REG_NOW_YN"><a ng-href="/side-events" target="_blank">Register side-events</a></li>
-            <li ng-repeat="link in ::documentsCtrl.meeting.links"><a ng-href="{{::link.url}}" target="_blank">{{::link.title|lstring}}</a></li>
-          </ul>
-        </span>
-
+        <button type="button" ng-if="documentsCtrl.isStaff && !viewOnly" class="btn btn-default" ng-class="{active:documentsCtrl.statsMode, 'btn-info': documentsCtrl.statsMode }" ng-click="documentsCtrl.statsMode=!documentsCtrl.statsMode && documentsCtrl.isStaff"><i class="fa fa-bar-chart"></i></button>
+        <span ng-show="!viewOnly">
+          <span ng-if="::documentsCtrl.meeting.links.length || documentsCtrl.meeting.EVT_WEB || documentsCtrl.meeting.EVT_INFO_PART_URL || documentsCtrl.meeting.isMontreal || documentsCtrl.meeting.EVT_REG_NOW_YN" class="btn-group">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Info links <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li ng-if="::documentsCtrl.meeting.EVT_WEB"><a ng-href="{{::documentsCtrl.meeting.EVT_WEB}}" target="_blank">Official Web Site</a></li>
+              <li ng-if="::documentsCtrl.meeting.EVT_INFO_PART_URL"><a ng-href="{{::documentsCtrl.meeting.EVT_INFO_PART_URL}}" target="_blank">Information for participants</a></li>
+              <li ng-if="::documentsCtrl.meeting.isMontreal"><a ng-href="/meetings/montreal.shtml" target="_blank">Montreal information for visitors</a></li>
+              <li ng-if="::documentsCtrl.meeting.EVT_REG_NOW_YN"><a ng-href="/side-events" target="_blank">Register side-events</a></li>
+              <li ng-repeat="link in ::documentsCtrl.meeting.links"><a ng-href="{{::link.url}}" target="_blank">{{::link.title|lstring}}</a></li>
+            </ul>
+          </span>
+      </span>
         <!-- Sort/Display -->
         <span ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length" class="hidden-print btn-group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">

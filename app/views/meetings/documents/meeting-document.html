@@ -47,8 +47,8 @@
 
 
         </td>
-        <td class="languages-bar hidden-print">
-            <document-files files="document.files"></document-files>
+        <td   class="languages-bar hidden-print">
+            <document-files ng-if="!viewOnly" files="document.files"></document-files>
         </td>
 
         <td ng-style="::{ visibility: (enableSelection && downloadble ? 'visible' : 'hidden') }" class="hidden-print" ng-click="document.selected=!document.selected;" style="width:20px; position:relative;">
