@@ -506,17 +506,17 @@ define(['text!./edit-bbi-profile.html', 'text!./bbi-records-dialog.html', 'text!
 
 					if ($scope.document && $scope.document.organization)
 						$scope.loadRecords($scope.document.organization.identifier)
-						.then(function(data) {
-							$scope.document.title = data.name;
+						.then(function(res) {
+							$scope.document.title = res.data.name;
 						});
 				});
 				$scope.$watch("document.contact", function() {
 
 					if ($scope.document && $scope.document.contact) {
 						$scope.loadRecords($scope.document.contact.identifier)
-							.then(function(data) {
+							.then(function(res) {
 
-								$scope.loadRecords(data.contactOrganization.identifier)
+								$scope.loadRecords(res.data.contactOrganization.identifier)
 									.then(function(d) {
 										$scope.document.organization = {
 											identifier: d.header.identifier

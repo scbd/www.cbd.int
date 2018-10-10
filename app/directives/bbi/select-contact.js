@@ -268,19 +268,19 @@ function(template,app,_) {
                           $scope.loadingDocuments=true;
                           return $http.get('/api/v2013/documents/'+identifier, {
                           }).then(function(doc) {
-                              selectedContacts.push(doc);
+                              selectedContacts.push(doc.data);
                               $scope.loadingDocuments=false;
-                              if(doc.organization && doc.organization.identifier)
-                                return loadOrgData(doc.organization.identifier,doc);
+                              if(doc.data.organization && doc.data.organization.identifier)
+                                return loadOrgData(doc.data.organization.identifier,doc.data);
                           }).catch(function(){
 
                             return $http.get('/api/v2013/documents/'+identifier+'/versions/draft', {
                             }).then(function(doc) {
-                                doc.header.version='draft';
-                                selectedContacts.push(doc);
+                                doc.data.header.version='draft';
+                                selectedContacts.push(doc.data);
                                 $scope.loadingDocuments=false;
-                                if(doc.organization && doc.organization.identifier)
-                                  return loadOrgData(doc.organization.identifier,doc);
+                                if(doc.data.organization && doc.data.organization.identifier)
+                                  return loadOrgData(doc.data.organization.identifier,doc.data);
                                 else
                                   return 'draft';
                             }).catch(function(err){throw err;});
@@ -296,14 +296,14 @@ function(template,app,_) {
                           $scope.loadingDocuments=true;
                           $http.get('/api/v2013/documents/'+identifier, {
                           }).then(function(responceDoc) {
-                               delete(responceDoc.header);
-                               Object.assign(doc,responceDoc);
+                               delete(responceDoc.data.header);
+                               Object.assign(doc,responceDoc.data);
                                $scope.loadingDocuments=false;
                           }).catch(function(){
                               $http.get('/api/v2013/documents/'+identifier+'/versions/draft', {
                               }).then(function(responceDoc) {
-                               delete(responceDoc.header);
-                               Object.assign(doc,responceDoc);
+                               delete(responceDoc.data.header);
+                               Object.assign(doc,responceDoc.data);
                                $scope.loadingDocuments=false;
                               }).catch(function(err){throw err;});
                           });

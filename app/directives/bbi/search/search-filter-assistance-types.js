@@ -39,7 +39,7 @@ define(['text!./search-filter-assistance-types.html', 'app', 'lodash','angular']
 
 												$http.get('/api/v2013/thesaurus/domains/441381DA-856A-4E89-8568-9EBE7145FA50/terms').then(function (data) {
 
-														$scope.terms = thesaurus.buildTree(data);
+														$scope.terms = thesaurus.buildTree(data.data);
 
 														termsMap   = flatten($scope.terms, {});
 														$scope.termsArray = _.values(termsMap);

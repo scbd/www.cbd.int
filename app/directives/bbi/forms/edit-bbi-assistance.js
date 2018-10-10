@@ -214,12 +214,12 @@ define(['text!./edit-bbi-assistance.html', 'text!./bbi-records-dialog.html', 'te
 					if ($scope.document && $scope.document.contact) {
 						$scope.loading.contact = true;
 						$scope.loadRecords($scope.document.contact.identifier)
-							.then(function(data) {
+							.then(function(res) {
 								$scope.loading.contact = false;
 
-								if (data.contactOrganization && data.contactOrganization.identifier) {
+								if (res.data.contactOrganization && res.data.contactOrganization.identifier) {
 									$scope.loading.org = true;
-									$scope.loadRecords(data.contactOrganization.identifier)
+									$scope.loadRecords(res.data.contactOrganization.identifier)
 										.then(function(d) {
 											$scope.document.organization = {
 												identifier: d.header.identifier
@@ -239,9 +239,9 @@ define(['text!./edit-bbi-assistance.html', 'text!./bbi-records-dialog.html', 'te
 
 					if ($scope.document && $scope.document.organization)
 						$scope.loadRecords($scope.document.organization.identifier)
-						.then(function(data) {
-							if (data.country)
-								$scope.document.country = data.country;
+						.then(function(res) {
+							if (res.data.country)
+								$scope.document.country = res.data.country;
 							killOrgWatch();
 						});
 				});

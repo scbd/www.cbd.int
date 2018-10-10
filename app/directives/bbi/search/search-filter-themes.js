@@ -80,7 +80,7 @@ define(['text!./search-filter-themes.html', 'app', 'lodash','angular'], function
 
 												$http.get('/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms').then(function (data) {
 
-														$scope.terms = thesaurus.buildTree(data);
+														$scope.terms = thesaurus.buildTree(data.data);
 														termsMap   = flatten($scope.terms, {});
 														$scope.termsArray = _.values(termsMap);
 														_.each($scope.termsArray,function(term){
