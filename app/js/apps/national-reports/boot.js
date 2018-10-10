@@ -1,3 +1,4 @@
+var cdnHost = 'https://cdn.cbd.int/';
 require.config({
     waitSeconds: 30,
     baseUrl : '/app/',
@@ -6,16 +7,16 @@ require.config({
         'authentication' : 'services/authentication',
         'angular'         : 'libs/angular/angular.min',
         'angular-flex'    : 'libs/angular-flex/angular-flex',
-        'ngRoute'        : 'libs/angular-route/angular-route.min',
-        'ngCookies'      : 'libs/angular-cookies/angular-cookies.min',
-        'ngAnimate'      : 'libs/angular-animate/angular-animate.min',
-        'ngSanitize'      : 'libs/angular-sanitize/angular-sanitize.min',
+        'angular'         : cdnHost + 'angular@1.5.6/angular.min',
+        'ngRoute'         : cdnHost + 'angular-route@1.5.6/angular-route.min',
+        'ngCookies'       : cdnHost + 'angular-cookies@1.5.6/angular-cookies.min',
+        'ngSanitize'      : cdnHost + 'angular-sanitize@1.5.6/angular-sanitize.min',
         'async'          : 'libs/requirejs-plugins/src/async',
         'text'           : 'libs/requirejs-text/text',
         'jquery'         : 'libs/jquery/dist/jquery.min',
         'bootstrap'      : 'libs/bootstrap/dist/js/bootstrap.min',
         'moment'         : 'libs/moment/min/moment.min',
-        'underscore'     : 'libs/lodash/lodash.min',
+        'lodash'          : cdnHost + 'lodash@3.10.1/index',
         'angular-flex'    : 'libs/angular-flex/angular-flex',
 
         'ammap3WorldHigh'     : 'directives/reporting-display/worldEUHigh',
@@ -53,7 +54,7 @@ require(['angular', 'app', 'bootstrap', 'js/apps/national-reports/routes', 'view
             ng.bootstrap(document, [app.name]);
         });
 });
-
+define('underscore', ['lodash'], function(_) { console.log('Deprecated: use lodash'); return _; });
 // MISC
 
 //==================================================
