@@ -48,12 +48,11 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
 		}
 
     function download(event){
-      console.log()
       $scope.success='download'
       if($rootScope.viewOnly){
         event.preventDefault()
         $scope.downloadLink = ''
-        window.parent.postMessage(JSON.stringify(selectedLinks()),'*');
+        window.parent.postMessage({type:'saveFiles',data:selectedLinks()},'*');
       }
     }
         //==============================================
