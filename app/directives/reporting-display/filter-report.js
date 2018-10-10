@@ -16,7 +16,12 @@ define(['text!./filter-report.html', 'app', 'underscore'], function(template, ap
           $scope.classPanelCollapse = "panel-collapse";
           $scope.classCollapse = "collapse";
 
-          $scope.terms = [{
+          $scope.terms = [
+            {
+              id: 'nr6',
+              title: '6th National Report',
+              selected: 0
+            },{
             id: 'nr5',
             title: '5th National Report',
             selected: 0
@@ -39,6 +44,12 @@ define(['text!./filter-report.html', 'app', 'underscore'], function(template, ap
           }];
 
           $scope.queries = {
+            'nr6': {
+              'schema_s': ['nationalReport6'],
+              // 'reportType_s': ['B3079A36-32A3-41E2-BDE0-65E4E3A51601'],
+              '_latest_s': ['true'],
+              '_state_s': ['public']
+            },
             'nr5': {
               'schema_s': ['nationalReport'],
               'reportType_s': ['B3079A36-32A3-41E2-BDE0-65E4E3A51601'],

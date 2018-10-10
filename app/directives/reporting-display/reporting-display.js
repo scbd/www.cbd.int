@@ -340,11 +340,13 @@ define(['text!./reporting-display.html',
               params: queryParameters,
               timeout: canceler.promise,
               cache: true
-            }).success(function(data) {
+            }).then(function(res) {
+              console.log(res.data)
               canceler = null;
-              $scope.count = data.response.numFound;
-              $scope.count = data.response.docs.length;
-              $scope.documents = groupByCountry(data.response.docs);
+              console.log(res.data.response.numFound)
+              $scope.count = res.data.response.numFound;
+              $scope.count = res.data.response.docs.length;
+              $scope.documents = groupByCountry(res.data.response.docs);
             });
           } // query
 
