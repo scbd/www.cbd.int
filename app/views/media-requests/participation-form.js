@@ -384,7 +384,8 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
                         $or : [ { requestId : { $oid:_ctrl.doc._id } }, { requestId : _ctrl.doc._id }],
                         'meeting':{'$exists':true}
                       },
-                      f:{meta:0}
+                      f:{meta:0},
+                      rp:'primary'
                     }
       return $http.get('/api/v2018/kronos/participation-request/participants',{ params : params })
                .then(function(res){
@@ -420,7 +421,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
          _ctrl.loadingObj.getHead = false
          return deferred.promise
       }
-      return $http.get('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent(_ctrl.doc.head))
+      return $http.get('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent(_ctrl.doc.head), { params : { rp:'primary' }})
           .then(function(res){
             _ctrl.head = res.data
             _ctrl.loadingObj.getHead = false
@@ -440,7 +441,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
         _ctrl.loadingObj.getFP = false
          return deferred.promise
       }
-      return $http.get('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent(_ctrl.doc.focalPoint))
+      return $http.get('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent(_ctrl.doc.focalPoint), { params : { rp:'primary' } })
           .then(function(res){
             _ctrl.focalPoint = res.data
             _ctrl.loadingObj.getFP = false
@@ -455,7 +456,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     function getOrg(){
       _ctrl.loadingObj.getOrg = true
       if(_ctrl.doc.nominatingOrganization)
-        return $http.get('/api/v2018/kronos/participation-request/organizations/'+encodeURIComponent(_ctrl.doc.nominatingOrganization))
+        return $http.get('/api/v2018/kronos/participation-request/organizations/'+encodeURIComponent(_ctrl.doc.nominatingOrganization), { params : { rp:'primary' } })
             .then(function(res){
               _ctrl.organization = res.data
               if(!_ctrl.organization.attachment)_ctrl.organization.attachment=[]
@@ -672,7 +673,7 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
           $or : [ { 'conference': {$oid:_ctrl.conferenceId} }, { conference: _ctrl.conferenceId } ]
         }
         
-        return $http.get('/api/v2018/kronos/participation-requests',{ params : { q: query } })
+        return $http.get('/api/v2018/kronos/participation-requests',{ params : { q: query, rp:'primary' } })
                  .then(function(res){
 
                   if(requestId && !res.data.length)

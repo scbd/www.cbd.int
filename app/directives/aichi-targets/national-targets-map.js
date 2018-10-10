@@ -193,7 +193,7 @@ define(['app', 'lodash',
                     return $http.get('/api/v2013/index/select', {
                         params: queryParameters,
                         cache:true
-                    }).success(function(data) {
+                    }).then(function(data) {
                         $scope.count = data.response.numFound;
                         $scope.documents = data.response.docs;
                     });
@@ -221,7 +221,7 @@ define(['app', 'lodash',
                     return $http.get('/api/v2013/index/select', {
                         params: queryParameters,
                         cache:true
-                    }).success(function(data) {
+                    }).then(function(data) {
                         $scope.tcount = data.response.numFound;
                         $scope.tdocuments = data.response.docs;
                     });

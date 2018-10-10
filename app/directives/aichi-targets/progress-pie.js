@@ -191,7 +191,7 @@ define(['app', 'lodash','text!./progress-pie.html',
                     return $http.get('https://api.cbd.int/api/v2013/index/select', {
                         params: queryParameters,
 
-                    }).success(function(data) {
+                    }).then(function(data) {
 
                         $scope.count = data.response.numFound;
                         $scope.documents = data.response.docs;
