@@ -78,7 +78,7 @@ define(['text!./search-filter-themes.html', 'app', 'lodash','angular'], function
             function buildTermsAndQuery() {
                     if(_.isEmpty(termsMap)){ // get terms once and save
 
-												$http.get('/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms').success(function (data) {
+												$http.get('/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms').then(function (data) {
 
 														$scope.terms = thesaurus.buildTree(data);
 														termsMap   = flatten($scope.terms, {});

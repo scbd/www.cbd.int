@@ -213,14 +213,14 @@ define(['app','data/idb-celebrations/links','lodash','directives/idb-celebration
 						.success(function(data){
 							ref= data;
 							return ref;
-						}).error(function(error, code){
+						}).catch(function(error, code){
 							if (code == 404 ) {
 
 								return storage.drafts.get(ref.identifier, { cache : true})
 									.success(function(data){
 										ref= data;
 										return ref;
-									}).error(function(draftError, draftCode){
+									}).catch(function(draftError, draftCode){
 										ref.document  = undefined;
 										ref.error     = draftError;
 										ref.errorCode = draftCode;

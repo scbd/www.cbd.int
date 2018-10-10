@@ -267,7 +267,7 @@ function(template,app,_) {
                     function loadSelectedContact(identifier,selectedContacts) {
                           $scope.loadingDocuments=true;
                           return $http.get('/api/v2013/documents/'+identifier, {
-                          }).success(function(doc) {
+                          }).then(function(doc) {
                               selectedContacts.push(doc);
                               $scope.loadingDocuments=false;
                               if(doc.organization && doc.organization.identifier)
@@ -275,7 +275,7 @@ function(template,app,_) {
                           }).catch(function(){
 
                             return $http.get('/api/v2013/documents/'+identifier+'/versions/draft', {
-                            }).success(function(doc) {
+                            }).then(function(doc) {
                                 doc.header.version='draft';
                                 selectedContacts.push(doc);
                                 $scope.loadingDocuments=false;
@@ -295,13 +295,13 @@ function(template,app,_) {
                     function loadOrgData(identifier,doc) {
                           $scope.loadingDocuments=true;
                           $http.get('/api/v2013/documents/'+identifier, {
-                          }).success(function(responceDoc) {
+                          }).then(function(responceDoc) {
                                delete(responceDoc.header);
                                Object.assign(doc,responceDoc);
                                $scope.loadingDocuments=false;
                           }).catch(function(){
                               $http.get('/api/v2013/documents/'+identifier+'/versions/draft', {
-                              }).success(function(responceDoc) {
+                              }).then(function(responceDoc) {
                                delete(responceDoc.header);
                                Object.assign(doc,responceDoc);
                                $scope.loadingDocuments=false;
