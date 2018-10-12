@@ -31,7 +31,7 @@
                 </li>
             </ul>
         </li>
-        <li class="dropdown-toggle"  ng-if="agendaCtrl.meeting.conference.parallelMeetingLinks.length > 0 || ($parent.deviceSize =='xs' && agendaCtrl.meeting.conference.sideEventLinks.length > 0)">
+        <li class="dropdown-toggle"  ng-if="!viewOnly && (agendaCtrl.meeting.conference.parallelMeetingLinks.length > 0 || ($parent.deviceSize =='xs' && agendaCtrl.meeting.conference.sideEventLinks.length > 0))">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
                 <div class="hidden-xs">Parallel Meetings<span class="caret"></span></div>
                 <div class="visible-xs">Others <span class="caret"></span></div>
