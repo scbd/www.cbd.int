@@ -49,8 +49,8 @@ require.config({
         'gmapsapi'        : 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places',
         'vue'             : cdnHost + 'vue@2.5.17/dist/vue.min',
         'ngVue'           : cdnHost + 'ngVue@1.6.0/build/index.min',
-        'conferenceCal'    :cdnHost + '@scbd/conference-cal@0.0.7/dist/lib/ConferenceCal.umd.min',
-        'conferenceCalCSS' :cdnHost + '@scbd/conference-cal@0.0.7/dist/lib/ConferenceCal'
+        'conferenceCal'    :cdnHost + '@scbd/conference-cal@0.0.8/dist/lib/ConferenceCal.umd.min',
+        'conferenceCalCSS' :cdnHost + '@scbd/conference-cal@0.0.8/dist/lib/ConferenceCal'
 
     },
     shim: {
