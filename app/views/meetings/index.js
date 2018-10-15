@@ -1,4 +1,4 @@
-﻿ define(['app', 'lodash','vue','conferenceCal', 'ngVue', 'services/conference-service', 'services/article-service', 'directives/social-media', 'directives/articles/cbd-article','css!conferenceCalCSS'], function(app, _,Vue,ConferenceCalComp) { 'use strict';
+﻿ define(['app', 'lodash','vue','conferenceCal', 'ngVue', 'services/conference-service', 'services/article-service', 'directives/social-media', 'directives/articles/cbd-article'], function(app, _,Vue,ConferenceCalComp) { 'use strict';
 
 var VueComponent = Vue.component('conference-cal', ConferenceCalComp)
 app.value('ConferenceCal',VueComponent)
