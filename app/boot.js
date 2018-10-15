@@ -75,7 +75,7 @@ require.config({
         'gmapsapi'             : { exports: 'google'},
         'facebook'             : { exports: 'FB'},
         'ngVue'                : { deps : ['vue'] },
-        'conferenceCal'         : { deps : ['ngVue','css!'+ cdnHost + '@scbd/conference-cal@0.0.9/dist/lib/ConferenceCal'] }
+        'conferenceCal'         : { deps : ['ngVue','css!'+ cdnHost + '@scbd/conference-cal@0.0.9/dist/lib/ConferenceCal.css'] }
     },
     packages: [
         { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },
