@@ -42,9 +42,15 @@
     display: inline;
 }
 #print-smart-checkout.affix  {
-    top:5px;
-    right:15px;
+    top:0px;
+    right:0px;
     z-index: 999;
+    padding: 5px 15px;
+    background-color: white;
+    border-bottom: solid 1px #c0c0c0;
+    text-align: right;
+    width: 100%;
+    margin-top:0px !important;
 }
 
 .documents a:hover       { text-decoration:none; }
