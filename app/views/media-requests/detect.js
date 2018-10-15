@@ -52,7 +52,7 @@ define(['lodash', 'app', 'filters/lstring', 'services/conference-service', 'dire
       }).then(function(requests){
 
         if(requests.length >1) return $location.path('/'+_.map([conferenceCode, type, 'requests'                              ], encodeURIComponent).join('/'));
-        if(requests.length==1) return $location.path('/'+_.map([conferenceCode, type, requests[0]._id, requests[0].currentStep], encodeURIComponent).join('/'));
+        if(requests.length==1) return $location.path('/'+_.map([conferenceCode, type, requests[0]._id, requests[0].currentStep || 'checklist'], encodeURIComponent).join('/'));
         
         $location.replace();
         $location.path('/'+_.map([conferenceCode, type, 'checklist'], encodeURIComponent).join('/'));
