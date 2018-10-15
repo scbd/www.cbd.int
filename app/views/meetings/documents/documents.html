@@ -58,13 +58,16 @@
         </span>
 
         <!-- Sort/Display -->
-        <span ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length" class="hidden-print" style="margin-right:5px;margin-left:5px;">
-            <select class="form-control" ng-model="documentsCtrl.sort" style="width:auto;display:inline-block">
-                <option value="agenda">By items</option>
-                <option value="document">By symbols</option>
-            </select>
+        <span ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length" class="hidden-print btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                Sort By <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li ><a ng-click="documentsCtrl.sort='agenda'" href="#">Sort and group by agenda items</a></li>
+                <li ><a ng-click="documentsCtrl.sort='document'" href="#">Sort by document symbols</a></li>
+            </ul>
         </span>
-
+    
         <print-smart-checkout ng-if="documentsCtrl.documents.length" style="display:inline-block" documents="documentsCtrl.documents|filter:{selected:true}:true" allow-print="documentsCtrl.meeting.printSmart"></print-smart-checkout>
     </div>
 
