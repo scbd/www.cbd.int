@@ -94,7 +94,7 @@
 
 				<i class="fa fa-cog fa-spin" ng-show="printCtrl.loading" style="margin:5px"></i>
 
-				<button type="button" ng-hide=" printCtrl.success"                           class="btn btn-default hidden-xs" ng-click="printCtrl.close('checkout')"           ng-disabled="printCtrl.loading">                          <i class="fa fa-arrow-left"></i> Back</button>
+				<button type="button" ng-hide=" printCtrl.success || !printCtrl.allowBack"   class="btn btn-default hidden-xs" ng-click="printCtrl.close('checkout')"           ng-disabled="printCtrl.loading">                          <i class="fa fa-arrow-left"></i> Back</button>
 				<button type="button" ng-show="!printCtrl.success && printCtrl.hasPrintShop" class="btn btn-success"           ng-click="printCtrl.printShop()"                 ng-disabled="printCtrl.loading || !printCtrl.canPrint()"> <i class="fa fa-print"></i> <i class="fa fa-print"></i> <i class="fa fa-print"></i> Print Shop</button>
 				<button type="submit" ng-show="!printCtrl.success"   form="printForm"        class="btn btn-primary"           ng-class="{ disabled : !printCtrl.canPrint() }"  ng-disabled="printCtrl.loading">                          <i class="fa fa-print"></i> Send print request</button>
 				<button type="button"                                                        class="btn btn-default"           ng-click="printCtrl.close(printCtrl.success && 'clear')"   ng-disabled="printCtrl.loading">                          <i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>

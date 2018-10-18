@@ -2,12 +2,13 @@ define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbo
 
     var PDF = 'application/pdf';
 
-    return ['$scope', '$http', '$cookies', 'documents', '$filter', function ($scope, $http, $cookies, documents, $filter) {
+    return ['$scope', '$http', '$cookies', 'documents', '$filter', 'allowBack', function ($scope, $http, $cookies, documents, $filter, allowBack) {
 
         var _ctrl = $scope.printCtrl = this;
 
         documents = _(documents).filter(function(d) { return _.some(d.files, { type : PDF }); }).value();
 
+        _ctrl.allowBack = allowBack;
         _ctrl.documents = documents;
 		_ctrl.languages = _(documents).map('files').flatten().where({ type : PDF}).map('language').uniq().sortBy().value();
 		_ctrl.selectedLanguages  = {};
