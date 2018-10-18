@@ -1,12 +1,13 @@
 define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function(angular, _, Dropbox) {'use strict';
 
-    return ['$scope', '$http', 'documents','$rootScope', function ($scope, $http, documents,$rootScope) {
+    return ['$scope', '$http', 'documents','$rootScope', 'allowBack', function ($scope, $http, documents,$rootScope, allowBack) {
 
 		var publicComputer    = true; // TODO
 		var signedInToDropbox = false;
 
 		$scope.close            = close;
 		$scope.documents        = documents;
+		$scope.allowBack        = allowBack;
 		$scope.languages        = _(documents).map('files').flatten().map('language').uniq().sortBy().value();
 		$scope.formats          = _(documents).map('files').flatten().map('type'  ).uniq().sortBy().value();
 		$scope.selectedLanguages= {};
