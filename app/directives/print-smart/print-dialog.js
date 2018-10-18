@@ -17,6 +17,7 @@ define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbo
         _ctrl.canPrint = canPrint;
         _ctrl.printShop = printShop;
         _ctrl.hasPrintShop = $cookies.get("printShop")=="true";
+		_ctrl.badgeCode    = loadBadge();
 
 		//==============================================
 		//
@@ -39,6 +40,9 @@ define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbo
 
 			$http.post("/api/v2014/printsmart-requests/batch", postData).then(function() {
 
+				if($scope.$root.viewOnly) saveBadge(postData.badge);
+				else                      saveBadge(null);
+
 				_ctrl.success = true;
 
 			}).catch(function(res){
@@ -51,6 +55,27 @@ define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbo
 			}).finally(function(){
 				delete _ctrl.loading;
             });
+		}
+
+		//==============================================
+		//
+		//
+		//==============================================
+		function saveBadge(badge) {
+
+			var expires = new Date();
+			expires.setDate(expire.getDate()+14); //in 14 days;
+
+			if(badge) $cookies.put  ("badgeCode", cleanBadge(badge), { path:'/', expires: expires });
+			else      $cookie.remove('badgeCode');
+		}
+
+		//==============================================
+		//
+		//
+		//==============================================
+		function loadBadge() {
+			return $cookies.get("badgeCode")||'';
 		}
 
 		//==============================================
