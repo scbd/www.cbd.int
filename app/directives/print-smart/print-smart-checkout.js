@@ -92,21 +92,30 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
 				//==============================================
 				function checkout() {
 
-                    if(!$scope.documents().length) return help(true);
-
-					openDialog('./checkout-dialog', { resolve : {
-                        allowPrint : resolver($scope.allowPrint),
-                        documents: resolver({
-                            printable : printableDocuments(),
-                            downloadable: downloadableDocuments()
-                        })
-                    }}).then(function(dialog){
-                        dialog.closePromise.then(function(res) {
-                            onCloseDialog(res.value, 'checkout');
+                    if(canPrint() && canDownload())
+                    {
+                        return openDialog('./checkout-dialog', { resolve : {
+                            allowPrint : resolver($scope.allowPrint),
+                            documents: resolver({
+                                printable : printableDocuments(),
+                                downloadable: downloadableDocuments()
+                            })
+                        }}).then(function(dialog){
+                            dialog.closePromise.then(function(res) {
+                                onCloseDialog(res.value, 'checkout');
+                            });
                         });
-                    });
-				}
+                    }
 
+                    if(canPrint())    return print();
+                    if(canDownload()) return download();
+
+                    help(true);
+                }
+
+                function canPrint()    { return !!printableDocuments()   .length && !!$scope.allowPrint; }
+                function canDownload() { return !!downloadableDocuments().length; }
+            
 				//==============================================
 				//
 				//
@@ -116,7 +125,7 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
                     if(!$scope.documents()  .length) return help(true);
                     if(!printableDocuments().length) return;
 
-					openDialog('./print-dialog', { resolve : { documents: resolver(printableDocuments()) } }).then(function(dialog){
+					openDialog('./print-dialog', { resolve : { documents: resolver(printableDocuments()), allowBack: resolver(canDownload()) } }).then(function(dialog){
                         dialog.closePromise.then(function(res) {
                             onCloseDialog(res.value, 'print');
                         });
@@ -132,7 +141,7 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
                     if(!$scope.documents()     .length) return help(true);
                     if(!downloadableDocuments().length) return;
 
-					openDialog('./download-dialog', { resolve : { documents: resolver(downloadableDocuments()) } }).then(function(dialog){
+					openDialog('./download-dialog', { resolve : { documents: resolver(downloadableDocuments()), allowBack: resolver(canPrint()) } }).then(function(dialog){
                         dialog.closePromise.then(function(res) {
                             onCloseDialog(res.value, 'download');
                         });

@@ -3,7 +3,7 @@
 				<button type="button" class="close" ng-click="close(success && 'clear')" aria-hidden="true">×</button>
 				<h4 class="modal-title">
 					<i class="fa fa-arrow-circle-down"></i>
-					Download copies - {{documents.length}} document(s)
+					Download copies <span class="hidden-xs"> - {{documents.length}} document(s)</span>
 				</h4>
 			</div>
 			<div class="modal-body">
@@ -86,7 +86,7 @@
 
 			<div class="modal-footer" style="white-space:nowrap">
 
-				<button type="button" ng-hide="success"  class="btn btn-default hidden-xs" ng-click="close('checkout')"><i class="fa fa-arrow-left"></i> Back</button>
+				<button type="button" ng-hide="success || !allowBack"  class="btn btn-default hidden-xs" ng-click="close('checkout')"><i class="fa fa-arrow-left"></i> Back</button>
 
 				<a      target="_self" ng-show="!success" class="btn btn-success" ng-disabled="!downloadLink" ng-click="success='download'" href="{{downloadLink}}"><i class="fa fa-arrow-circle-down"></i> Download</a>
 				<button type="button"  ng-show="!success && canDropbox()" class="btn btn-primary" ng-disabled="!downloadLink" ng-click="sendToDropbox()"><i class="fa fa-dropbox"></i> Dropbox</button>

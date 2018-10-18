@@ -1,5 +1,13 @@
 <div>
     <style>
+        .slaask-button {
+            z-index: 1000000;
+        }
+
+        .ngdialog.printsmart {
+            z-index: 1000001;
+        }
+
         .ngdialog.printsmart .ngdialog-content {
             background-color: transparent;
             padding: 0px;
@@ -7,6 +15,48 @@
 
         .ngdialog.printsmart .ngdialog-content {
           width: 650px;
+        }
+
+        @media (max-width: 768px ) { 
+
+            .ngdialog.printsmart .btn,
+            .ngdialog.printsmart .fa,
+            .ngdialog.printsmart .modal-title, 
+            .ngdialog.printsmart .control-label, 
+            .ngdialog.printsmart button[type="button"]
+            {
+                zoom: 1.25;
+            }
+
+            .ngdialog.printsmart .ngdialog-content,
+            .ngdialog.printsmart .ngdialog-content > .modal-content {
+                position: absolute;
+                width:unset;
+                top:0px; right: 0px; bottom:0px; left:0px;
+            }
+
+            .ngdialog.printsmart .ngdialog-content > .modal-content {
+                border:none;
+                border-radius: 0px;
+                overflow-y:scroll;
+            }
+
+            .ngdialog.printsmart .ngdialog-content > .modal-content > .modal-header {
+                position: fixed;
+                right: 0px; top:0px; left:0px;
+                background-color: white;
+            }
+
+            .ngdialog.printsmart .ngdialog-content > .modal-content > .modal-body {
+                margin-top: 55px;
+                margin-bottom: 60px;
+            }
+
+            .ngdialog.printsmart .ngdialog-content > .modal-content > .modal-footer {
+                position: fixed;
+                right: 0px; bottom:0px; left:0px;
+                background-color: white;
+            }
         }
 
     </style>
