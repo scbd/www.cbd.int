@@ -16,11 +16,9 @@ return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', 
             .then(function(meeting){
                 $scope.meeting = meeting;
 
-                if(!$route.current.params.code){
-                    $timeout(function(){
-                        if(meeting)
-                            $location.path('/'+ meeting.code);                    
-                    }, 500)
+                if(!$route.current.params.code){                    
+                    if(meeting)
+                        $location.path('/'+ meeting.code);  
                 }
                 else{
                     // $q.when(articleService.get(meeting.conference.articleId))

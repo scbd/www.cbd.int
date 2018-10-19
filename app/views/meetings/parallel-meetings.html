@@ -25,7 +25,8 @@
                 background: #f2f4f4;
             }
         </style>
-        <div class="row">
+        <div class="row" ng-if="article">
+
             <div class="image-credit-wrapper"  ng-show="article.coverImage">
                 <span class="image-credit" ng-if="article.coverImage.credits">{{article.coverImage.credits}}</span>
                 <div class="img cover-image" style="background-image: url({{::article.coverImage.url_1200}});"></div>
@@ -38,7 +39,7 @@
         <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;"> 
             <div class="row">
                 <div class="col-sm-12 col-lg-12 col-md-12 " >
-                    <cbd-article query="articleQuery" ng-if="articleQuery && article" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article>
+                    <cbd-article query="articleQuery" ng-if="articleQuery" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article>
                 </div>
                 <div class="col-sm-12" style="margin-top:5px;">
                     <table class="table table-hover">
@@ -57,22 +58,9 @@
                         </tr>
                     </table>
                 </div>
-                <!-- <div ng-repeat="parallelMeeting in meeting.conference.parallelMeetingLinks"
-                class="col-sm-12 col-lg-6 col-md-6 " style="margin-top:5px;">
-                    <a target="{{parallelMeeting.url ? '_blank':''}}"  ng-href="{{getUrl(parallelMeeting)}}">
-                        <div style="text-align:center;border:1px solid #f2f4f4;padding:5px;" class="meeting-box">
-                            <div style="height:150px;color:black">
-                                <strong>{{parallelMeeting.title}}</strong>
-                            </div>
-                            <div>
-                                <a target="{{parallelMeeting.url ? '_blank':''}}"  ng-href="{{getUrl(parallelMeeting)}}">Read More <i class="fa fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </a>
-                </div> -->
             </div>
         </div>        
-        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="padding-top:15px;">          
+        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="padding-top:15px;" ng-if="article">          
             <social-media></social-media>
         </div>
     </div>
