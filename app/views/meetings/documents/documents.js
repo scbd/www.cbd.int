@@ -5,15 +5,18 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
     'moment', 'moment-timezone', 'filters/moment',
     'directives/checkbox', 'text!directives/checkbox.html',
     'views/meetings/documents/meeting-document',
+    'angular-cache'
 ], function(_, ng) {
     //'css!./agenda.css' // moved to template
     var currentUser;
+    var STATISTICS = {}; 
 
-	return ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting) {
+	return ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting, CacheFactory) {
 
         var _ctrl = $scope.documentsCtrl = this;
         var meetingCode = $route.current.params.meeting.toUpperCase();
         var hardTab = false;
+        var httpCache = initCache();
 
         var groups = {
             'outcome'        : { position: 100 , title : 'Outcomes'      },
@@ -53,7 +56,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function load() {
 
-            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache:true, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1 } } }).then(function(res){
+            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1 } } }).then(function(res){
 
                 meeting = _.defaults(res.data, {
                     code: res.data.EVT_CD,
@@ -81,7 +84,11 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 _ctrl.error = "meetingNotFound";
             });
 
-            var documents = $http.get('/api/v2016/meetings/'+meetingCode+'/documents', { params: {  } }).then(function(res){
+            $q.when(httpCache.reValidate()).then(function(){
+
+                return $http.get('/api/v2016/meetings/'+encodeURIComponent(meetingCode)+'/documents', { cache: httpCache });
+
+            }).then(function(res) {
 
                 documents = _(res.data).map(normalizeDocument).filter(isDocumentVisible).sortBy(sortKey).value();
 
@@ -525,6 +532,52 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
             var base = encodeURIComponent($route.current.params.code || '');
 
             $location.url([base, encodeURIComponent(_ctrl.meeting.code), 'documents', encodeURIComponent(id)].join('/'));
+        }
+
+        //==============================
+        //
+        //==============================
+        function initCache() {
+
+            var cacheId = 'meeting_documents_'+meetingCode;
+            var cache   = CacheFactory.get(cacheId)
+            
+            if(!cache) {
+
+                cache = CacheFactory.createCache(cacheId, {
+                    deleteOnExpire: 'passive',
+                    recycleFreq   :     10 * 1000,
+                    maxAge        : 5 * 60 * 1000,
+                    storageMode   : 'localStorage',
+                    storagePrefix : 'httpCache_'
+                });
+
+                cache.reValidate = function() {
+
+                    var thisCache = this;
+                    
+                    return $http.get('/api/v2016/meetings/'+encodeURIComponent(meetingCode)+'/documents/statistics').then(function(res){
+
+                        var oldStats = STATISTICS[meetingCode] || thisCache.get('statistics');
+                        var newStats = res.data;
+
+                        if(!oldStats || !_.isEqual(oldStats, newStats)) {
+                            thisCache.removeAll();
+                            thisCache.put('statistics', newStats);
+                            STATISTICS[meetingCode]   = newStats;
+                        }
+
+                        return thisCache;
+
+                    }).catch(function(){
+
+                        thisCache.removeAll();
+                        return thisCache;
+                    });
+                };
+            }
+
+            return cache;
         }
 	}];
 });
