@@ -29,15 +29,15 @@ return ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope'
             }
 
             $scope.onArticleLoad = function(article){
-
-                $scope.article = article;                
-                $scope.isLoading = false;
-                
                 if(!article){
                     $location.path($location.path()+'/documents');
                     return;
                 }
-                else if(($rootScope.conference||{}).selectedMenu && $rootScope.conference.selectedMenu.hideDocumentsLink)
+
+                $scope.article = article;                
+                $scope.isLoading = false;                
+                
+                if(($rootScope.conference||{}).selectedMenu && $rootScope.conference.selectedMenu.hideDocumentsLink)
                     $scope.documentsLink = undefined;
                 else
                     $scope.documentsLink = $location.path()+'/documents'

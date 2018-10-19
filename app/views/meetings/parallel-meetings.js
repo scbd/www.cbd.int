@@ -29,8 +29,7 @@ return ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope'
             }
 
             $scope.onArticleLoad = function(article){
-                if(article)
-                    $scope.article = true;
+                    $scope.article = article;
             }
             $scope.getUrl = function(parallelMeeting){
 
