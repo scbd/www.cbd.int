@@ -1,9 +1,18 @@
-﻿define(['app', 'lodash', 'moment-timezone'], function (app, _, moment) {
+﻿define(['app', 'lodash', 'moment-timezone', 'angular-cache'], function (app, _, moment) {
 
-    app.factory("conferenceService", ['$http', '$rootScope', '$q', '$timeout', '$filter', '$route',
-    function ($http, $rootScope, $q, $timeout, $filter, $route) {
+    app.factory("conferenceService", ['$http', '$rootScope', '$q', '$timeout', '$filter', '$route', 'CacheFactory',
+    function ($http, $rootScope, $q, $timeout, $filter, $route, CacheFactory) {
             var meeting
-
+            var httpCache = CacheFactory.get('conferenceHttpCache');
+            if (!httpCache) {
+                httpCache = CacheFactory.createCache('conferenceHttpCache', {
+                    deleteOnExpire: 'aggressive',
+                    recycleFreq   : 10000,
+                    maxAge        : 5 * 60 * 1000,
+                    storageMode   : 'localStorage',
+                    storagePrefix : 'httpCache_'
+                });
+            }
             function getActiveConference(code){
 
                 if(meeting){
@@ -18,7 +27,7 @@
                 else
                     query.active = true;
 
-                return meeting = $q.when($http.get('/api/v2016/conferences', {params : { q : query, s: { StartDate: 1}}, cache:true}))
+                return meeting = $q.when($http.get('/api/v2016/conferences', {params : { q : query, s: { StartDate: 1}}, cache:httpCache}))
                                     .then(function(data){
                                         meeting             = _.head(data.data);
                                         if(meeting){
@@ -44,7 +53,7 @@
                             EndDate:{ $gt: { $date: new Date()  } },
                             institution:"CBD"
                           }
-              return $http.get('/api/v2016/conferences', {params : { q : query, f:{ StartDate:1,MajorEventIDs:1,Title:1,Venua:1,code:1,Description:1}, s: { StartDate: 1}}, cache:true}).then(
+              return $http.get('/api/v2016/conferences', {params : { q : query, f:{ StartDate:1,MajorEventIDs:1,Title:1,Venua:1,code:1,Description:1}, s: { StartDate: 1}}, cache:httpCache}).then(
                 function(res){
 
                   return res.data
@@ -59,7 +68,7 @@
               else
                 query.code = codeOrId
 
-              return $http.get('/api/v2016/conferences', {params : { q : query, f:{ StartDate:1,MajorEventIDs:1,Title:1,Venue:1,code:1,Description:1}, s: { StartDate: 1}, fo: 1}, cache:true}).then(
+              return $http.get('/api/v2016/conferences', {params : { q : query, f:{ StartDate:1,MajorEventIDs:1,Title:1,Venue:1,code:1,Description:1}, s: { StartDate: 1}, fo: 1}, cache:httpCache}).then(
                 function(res){
 
                   return res.data
@@ -77,7 +86,7 @@
               var query = {
                             _id:{$in:oidArray}
                           }
-              return  $http.get('/api/v2016/meetings', { cache:true, params: { q : query,f : { EVT_CD:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1 }  } })
+              return  $http.get('/api/v2016/meetings', { cache:httpCache, params: { q : query,f : { EVT_CD:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1 }  } })
               .then(function(res){
                   return res.data
                 }
