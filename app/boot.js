@@ -49,7 +49,8 @@ require.config({
         'gmapsapi'        : 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places',
         'vue'             : cdnHost + 'vue@2.5.17/dist/vue.min',
         'ngVue'           : cdnHost + 'ngVue@1.6.0/build/index.min',
-        'conferenceCal'    :cdnHost + '@scbd/conference-cal@0.0.9/dist/lib/ConferenceCal.umd.min'
+        'conferenceCal'   : cdnHost + '@scbd/conference-cal@0.0.9/dist/lib/ConferenceCal.umd.min',
+        'angular-cache'   : cdnHost + 'angular-cache@4.6.0/dist/angular-cache.min'
 
     },
     shim: {
@@ -75,7 +76,8 @@ require.config({
         'gmapsapi'             : { exports: 'google'},
         'facebook'             : { exports: 'FB'},
         'ngVue'                : { deps : ['vue'] },
-        'conferenceCal'         : { deps : ['ngVue','css!'+ cdnHost + '@scbd/conference-cal@0.0.9/dist/lib/ConferenceCal.css'] }
+        'conferenceCal'        : { deps : ['ngVue','css!'+ cdnHost + '@scbd/conference-cal@0.0.9/dist/lib/ConferenceCal.css'] },
+        'angular-cache'        : { deps : ['angular-flex'] }
     },
     packages: [
         { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },
