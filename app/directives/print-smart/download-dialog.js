@@ -1,19 +1,19 @@
 define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function(angular, _, Dropbox) {'use strict';
 
-    return ['$scope', '$http', 'documents','$rootScope', 'allowBack', function ($scope, $http, documents,$rootScope, allowBack) {
+    return ['$scope', '$http', 'documents','$rootScope', function ($scope, $http, documents,$rootScope) {
 
 		var publicComputer    = true; // TODO
 		var signedInToDropbox = false;
 
 		$scope.close            = close;
 		$scope.documents        = documents;
-		$scope.allowBack        = allowBack;
 		$scope.languages        = _(documents).map('files').flatten().map('language').uniq().sortBy().value();
 		$scope.formats          = _(documents).map('files').flatten().map('type'  ).uniq().sortBy().value();
 		$scope.selectedLanguages= {};
 		$scope.selectedFormats  = {};
         $scope.canDropbox       = canDropbox;
         $scope.sendToDropbox    = sendToDropbox;
+    $scope.download        = download
 
 		if($scope.languages.length==1) $scope.selectedLanguages[$scope.languages[0]] = true;
 		if($scope.formats  .length==1) $scope.selectedFormats[$scope.formats[0]] = true;
@@ -36,7 +36,9 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
 			var urls = selectedLinks();
 
 			if(urls.length) {
-
+        if($rootScope.viewOnly)
+          return $scope.downloadLink = ''
+          
 				$http.post('/api/v2014/printsmart-downloads', urls).then(function(res){
 					$scope.downloadLink = '/api/v2014/printsmart-downloads/'+res.data._id;
 				}).catch(function(err){
@@ -45,6 +47,15 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
 			}
 		}
 
+    function download(event){
+      console.log()
+      $scope.success='download'
+      if($rootScope.viewOnly){
+        event.preventDefault()
+        $scope.downloadLink = ''
+        window.parent.postMessage(JSON.stringify(selectedLinks()),'*');
+      }
+    }
         //==============================================
         //
         //
