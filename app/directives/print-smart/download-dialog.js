@@ -1,6 +1,6 @@
 define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function(angular, _, Dropbox) {'use strict';
 
-    return ['$scope', '$http', 'documents','$rootScope', 'allowBack', function ($scope, $http, documents,$rootScope, allowBack) {
+    return ['$scope', '$http', 'documents','$rootScope', 'allowBack','$window', function ($scope, $http, documents,$rootScope, allowBack,$window) {
 
 		var publicComputer    = true; // TODO
 		var signedInToDropbox = false;
@@ -21,7 +21,8 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
 
 		$scope.$watch('selectedFormats', initDownloadLink, true);
 		$scope.$watch('selectedLanguages', initDownloadLink, true);
-
+    $window.addEventListener('message', closeDialogRemote)
+    
 		if(canDropbox && publicComputer)
 			signoutDropbox();
 
@@ -53,7 +54,7 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
       if($rootScope.viewOnly){
         event.preventDefault()
         $scope.downloadLink = ''
-        window.parent.postMessage({type:'saveFiles',data:selectedLinks()},'*');
+        $window.parent.postMessage({type:'saveFiles',data:selectedLinks()},'*');
       }
     }
         //==============================================
@@ -148,6 +149,19 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
 			angular.element('body').append('<iframe height="0" width="0" style="display:none" src="https://www.dropbox.com/logout"></iframe>');
 		}
 
+    //==============================================
+		//
+		//
+		//==============================================    
+    function closeDialogRemote(data) {
+
+      var msg = data.data
+      if(msg) msg = JSON.parse(msg)
+
+      if(msg && msg.type==='closeDialogRemote')
+        $scope.closeThisDialog($scope.success && 'clear');
+		}
+    
 		//==============================================
 		//
 		//
