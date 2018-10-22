@@ -276,7 +276,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 return d._id==_ctrl.meeting.reportDocument;
             });
 
-            if(!report) {
+            if(!report && _ctrl.meeting.reportDocument) {
                 report = $http.get('/api/v2016/documents', { params: { q : { _id : { $oid : _ctrl.meeting.reportDocument } } } }).then(function(res){
                     return res.data.length ? res.data[0] : undefined;
                 }).catch(function(e){
