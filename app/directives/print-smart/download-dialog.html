@@ -1,4 +1,5 @@
 		<div class="modal-content">
+      <style>.view-only-margin{margin-bottom: 100px;}</style>
 			<div class="modal-header">
 				<button type="button" class="close" ng-click="close(success && 'clear')" aria-hidden="true">×</button>
 				<h4 class="modal-title">
@@ -84,7 +85,7 @@
 
 			</div>
 
-			<div class="modal-footer" style="white-space:nowrap">
+			<div class="modal-footer" style="white-space:nowrap" ng-class="{'view-only-margin':viewOnly}">
 
 				<button type="button" ng-hide="success || !allowBack"  class="btn btn-default hidden-xs" ng-click="close('checkout')"><i class="fa fa-arrow-left"></i> Back</button>
 
