@@ -90,7 +90,7 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
 		//
 		//==============================================
 		function canDropbox() {
-			return Dropbox && Dropbox.isBrowserSupported();
+			return Dropbox && Dropbox.isBrowserSupported() && !$rootScope.viewOnly;
 		}
 
 		//==============================================
