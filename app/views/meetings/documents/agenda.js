@@ -31,6 +31,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         _ctrl.CALENDAR = CALENDAR_SETTINGS;
         _ctrl.expandAll = expandAll;
         _ctrl.selectTab = selectTab;
+        _ctrl.hasTab    = hasTab;
         _ctrl.resolveLiteral = function(value) { return function() { return value; }; };
 
         $q.when(conferenceService.getActiveConference())
@@ -249,12 +250,22 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         //==============================
         function selectTab(type) {
 
+            if(_.isString(type))
+                type = _.findWhere(_ctrl.types, { _id: type});
+
             if(!type)
                 type = _ctrl.types[0];
 
             _ctrl.currentTab = type._id;
 
             type.loaded = true;
+        }
+
+        //========================================
+        //
+        //========================================
+        function hasTab(tab) {
+            return !!_.findWhere(_ctrl.types, { _id: tab});
         }
 
         //==============================
