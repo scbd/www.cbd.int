@@ -76,15 +76,16 @@
                                     <td>
                                         <div class="schedule-item-type pull-right">
                                             <span class="text-{{r.type.style}}">{{r.type.title}}</span>
-                                            <div  ng-if="r.sideEvent" class="side-event-id hidden-xs text-muted text-right">
-                                                <a href="https://www.cbd.int/side-events/{{r.sideEvent.id}}" target="sideEvent" style="color:inherit">
+                                            <div  ng-if="::r.sideEvent" class="side-event-id hidden-xs text-muted text-right">
+                                                <a ng-href="https://www.cbd.int/side-events/{{::r.sideEvent.id}}" target="sideEvent" style="color:inherit">
                                                     <em>#{{r.sideEvent.id}}</em>
                                                 </a>
                                             </div>
                                         </div>
 
                                         <div class="schedule-item-title" style="font-weight:bold">
-                                            {{r.sideEvent.title || r.title}}
+                                            <span ng-if="::!r.sideEvent">{{r.sideEvent.title || r.title}}</span>
+                                            <a    ng-if=":: r.sideEvent" ng-href="https://www.cbd.int/side-events/{{::r.sideEvent.id}}" target="sideEvent" style="color:inherit">{{r.sideEvent.title || r.title}}</a>
                                         </div>
 
                                         <div class="schedule-item-location">
