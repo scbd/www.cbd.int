@@ -346,6 +346,6 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
     }
 
     // /conferences/**
-    if(/^\/conferences($|\/.*)/.test(locationPath) && !((new URL(location)).searchParams.get('viewOnly')))
+    if(/^\/conferences($|\/.*)/.test(locationPath) && !((new URL(window.location)).searchParams.get('viewOnly')))
         runTheRun();
 });
