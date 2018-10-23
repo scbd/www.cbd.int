@@ -75,16 +75,42 @@
                                     </td>
                                     <td>
                                         <div class="schedule-item-type pull-right">
-                                            <span class="text-{{r.type.style}}">{{r.type.title}}</span>
+
+                                            <span ng-switch="r.type._id">
+
+                                                <span ng-switch-when="570fd0a52e3fa5cfa61d90ee"> 
+                                                    <!-- Side Event -->
+                                                    <a href="https://www.cbd.int/side-events/" target="sideEvent" style="color:inherit">
+                                                        <span class="text-{{r.type.style}}" >
+                                                            {{r.type.title}}
+                                                        </span>
+                                                    </a>
+                                                </span>
+
+                                                <span ng-switch-default="*"> 
+                                                    <!-- Clickable -->
+                                                    <a ng-if="::agendaCtrl.hasTab(r.type._id)" class="text-{{r.type.style}}" ng-click="agendaCtrl.selectTab(r.type._id)" href="#">
+                                                        <span class="text-{{r.type.style}}">{{r.type.title}}</span>
+                                                    </a>
+
+                                                    <!-- Non-Clickable -->
+                                                    <span ng-if="::!agendaCtrl.hasTab(r.type._id)" class="text-{{r.type.style}}" >
+                                                        {{r.type.title}}
+                                                    </span>
+                                                </span>
+                                            </span>
+
                                             <div  ng-if="::r.sideEvent" class="side-event-id hidden-xs text-muted text-right">
-                                                <a ng-href="https://www.cbd.int/side-events/{{::r.sideEvent.id}}" target="sideEvent" style="color:inherit">
-                                                    <em>#{{r.sideEvent.id}}</em>
-                                                </a>
+                                                    <a ng-href="https://www.cbd.int/side-events/{{::r.sideEvent.id}}" target="sideEvent" style="color:inherit">
+                                                        <em>#{{r.sideEvent.id}}</em>
+                                                    </a>
                                             </div>
+                                            
                                         </div>
 
                                         <div class="schedule-item-title" style="font-weight:bold">
-                                            <span ng-if="::!r.sideEvent">{{r.sideEvent.title || r.title}}</span>
+                                            <span ng-if="::!r.sideEvent && !agendaCtrl.hasTab(r.type._id)">{{r.title}}</span>
+                                            <a    ng-if="::!r.sideEvent &&  agendaCtrl.hasTab(r.type._id)" ng-click="agendaCtrl.selectTab(r.type._id)" href="#" style="color:inherit">{{r.title}}</a>
                                             <a    ng-if=":: r.sideEvent" ng-href="https://www.cbd.int/side-events/{{::r.sideEvent.id}}" target="sideEvent" style="color:inherit">{{r.sideEvent.title || r.title}}</a>
                                         </div>
 
