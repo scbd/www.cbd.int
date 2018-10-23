@@ -21,7 +21,11 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
 
 		$scope.$watch('selectedFormats', initDownloadLink, true);
 		$scope.$watch('selectedLanguages', initDownloadLink, true);
+    
     $window.addEventListener('message', closeDialogRemote)
+    $scope.$on('$destroy', function(){
+      $window.removeEventListener('message', closeDialogRemote)
+    });
     
 		if(canDropbox && publicComputer)
 			signoutDropbox();
