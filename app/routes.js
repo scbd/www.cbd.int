@@ -94,7 +94,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       .when('/2016/cp-mop-8/documents',     { redirectTo    : '/2016/mop-08/documents'})
 
       .when('/:code?',                              { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
-      .when('/:code/parallel-meetings',             { templateUrl   : 'views/meetings/parallel-meetings.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings'] })             }, reloadOnSearch:false })
+      .when('/:code/parallel-meetings',             { templateUrl   : 'views/meetings/parallel-meetings.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings', 'introduction'] })             }, reloadOnSearch:false })
       .when('/:code/parallel-meetings/:articleTag', { templateUrl   : 'views/articles/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings'] }) }, reloadOnSearch:false })
       .when('/:code/information/:articleTag',       { templateUrl   : 'views/articles/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences'] }) }, reloadOnSearch:false })
       

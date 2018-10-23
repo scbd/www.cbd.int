@@ -30,6 +30,7 @@ return ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope'
 
             $scope.onArticleLoad = function(article){
                     $scope.article = article;
+                    $scope.finishLoading = true;
             }
             $scope.getUrl = function(parallelMeeting){
 
