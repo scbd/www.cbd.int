@@ -90,7 +90,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
             }).then(function(res) {
 
-                documents = _(res.data).map(normalizeDocument).filter(isDocumentVisible).sortBy(sortKey).value();
+                _ctrl.documents = documents = _(res.data).map(normalizeDocument).filter(isDocumentVisible).sortBy(sortKey).value();
 
                 return meeting; // force resolve
 
@@ -144,8 +144,8 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 loadReport();
                 loadDecisions();
                 loadNotifications();
+            }).then(function(){
                 switchTab();
-
             }).catch(console.error).finally(function(){ _ctrl.loaded = true; });
         }
 
@@ -344,7 +344,6 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
             section.documents = docs;
             tab    .length    = _.sum(tab.sections, function(s) { return s.documents.length; });
-            _ctrl.documents   = _(_ctrl.tabs).map('sections').flatten().map('documents').flatten().uniq().compact().value();
 
             updateMaxTabCount();
 
@@ -367,6 +366,15 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //
         //==============================
         function switchTab(tab, extra) {
+            $scope.$applyAsync(function(){
+                switchTabDirect(tab, extra);
+            });
+        }
+
+        //==============================
+        //
+        //==============================
+        function switchTabDirect(tab, extra) {
 
             if(!tab && $location.search().tabFor) {
                 tab = _(_ctrl.tabs).find(function(t) {
@@ -546,7 +554,6 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
                 cache = CacheFactory.createCache(cacheId, {
                     deleteOnExpire: 'passive',
-                    recycleFreq   :     10 * 1000,
                     maxAge        : 5 * 60 * 1000,
                     storageMode   : 'localStorage',
                     storagePrefix : 'httpCache_'
@@ -561,7 +568,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                         var oldStats = STATISTICS[meetingCode] || thisCache.get('statistics');
                         var newStats = res.data;
 
-                        if(!oldStats || !_.isEqual(oldStats, newStats)) {
+                        if(!_.isEqual(oldStats, newStats)) {
                             thisCache.removeAll();
                             thisCache.put('statistics', newStats);
                             STATISTICS[meetingCode]   = newStats;

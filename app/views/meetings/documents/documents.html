@@ -116,17 +116,17 @@
     <!-- Tab panes -->
     <div class="tab-content">
 
-        <div ng-repeat="type in documentsCtrl.tabs" ng-class="{ active: (documentsCtrl.currentTab==type.code || documentsCtrl.noTabs) }" role="tabpanel" class="tab-pane" id="{{::type.code}}">
+        <div ng-repeat="type in documentsCtrl.tabs track by type.code" ng-class="{ active: (documentsCtrl.currentTab==type.code || documentsCtrl.noTabs) }" role="tabpanel" class="tab-pane" id="{{::type.code}}">
 
             <div ng-if="type.loaded || documentsCtrl.currentTab==type.code || documentsCtrl.noTabs">
 
-                <h3 ng-if="documentsCtrl.noTabs">{{::type.title}}</h3>
+                <h3 ng-if="::documentsCtrl.noTabs">{{::type.title}}</h3>
 
-                <div style="padding:10px;" ng-if="!type.length">No in-session documents have yet been posted.</div>
+                <div style="padding:10px;" ng-if="::!type.length">No in-session documents have yet been posted.</div>
 
-                <div ng-repeat="section in type.sections">
+                <div ng-repeat="section in type.sections track by section.code">
 
-                    <h4 ng-if="section.title" style="margin-left:5px">{{::section.title}}</h4>
+                    <h4 ng-if="::section.title" style="margin-left:5px">{{::section.title}}</h4>
 
                     <!-- Document List view -->
 
