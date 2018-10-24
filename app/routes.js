@@ -335,17 +335,19 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
     function runTheRun(){
         require(['directives/meetings/conference-header']);
 
-        app.run(['$compile', '$rootScope', function($compile, $rootScope){
+        app.run(['$compile', '$rootScope','$location', function($compile, $rootScope,$location){
+          if(!$location.search().viewOnly){
             require(['directives/meetings/conference-header'], function(){
                 var conferenceHeader = angular.element("#conferenceHeader");
                 conferenceHeader.css('display', 'block');
                 conferenceHeader.html('').append('<conference-header><conference-header>')
                 $compile(conferenceHeader.contents())($rootScope);
             })
+          }
         }]);
     }
 
     // /conferences/**
-    if(/^\/conferences($|\/.*)/.test(locationPath) && !((new URL(window.location)).searchParams.get('viewOnly')))
+    if(/^\/conferences($|\/.*)/.test(locationPath) )
         runTheRun();
 });
