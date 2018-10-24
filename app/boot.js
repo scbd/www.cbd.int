@@ -102,7 +102,7 @@ define('dropbox-dropins', ['https://www.dropbox.com/static/api/2/dropins.js'], f
 // BOOT
 require(['angular', 'app', 'bootstrap', 'routes', 'template', 'ngSanitize', 'ngRoute', 'providers/extended-route', 
 //cop-14 optimization
-'lodash','vue','conferenceCal', 'ngVue', 'services/conference-service', 'services/article-service', 'directives/social-media', 'directives/articles/cbd-article'], function(ng, app) {
+'lodash','services/conference-service', 'services/article-service', 'directives/social-media', 'directives/articles/cbd-article'], function(ng, app) {
     ng.element(document).ready(function(){
         ng.bootstrap(document, [app.name]);
     });
