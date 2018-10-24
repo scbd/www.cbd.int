@@ -10,7 +10,7 @@
     "request": "^2.88.0"
   },
   "devDependencies": {
-    "@scbd/conference-cal": "0.0.9",
+    "@scbd/conference-cal": "0.1.2",
     "vue": "2.5.17", 
     "ngVue": "1.6.0"
   },
