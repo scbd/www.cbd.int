@@ -28,16 +28,16 @@ define(['app', 'lodash', 'text!./document-files.html'], function(app, _, html) {
                 $scope.LANGUAGES = LANGUAGES;
 
                 $scope.initByLanguages= initByLanguages;
-                $scope.initByTypes    = initByTypes;
 
                 var destroyWatch = $scope.$watch('$root.deviceSize', function(size){
                     if(!$scope.files || size=='xs') return; // for performance only load files byTypes  if sreeen > xs
-                    initByTypes();         // it prevent unless ng-repeat
+                    $scope.$applyAsync(initByTypes);        // for performance init Async
                     destroyWatch();
                 });
 
                 $scope.$watch('::files', function(){
-                    initByTypes();         // it prevent unless ng-repeat
+                    if($scope.$root.deviceSize=='xs') return; // for performance only load files byTypes  if sreeen > xs
+                    $scope.$applyAsync(initByTypes);          // for performance init Async
                 });
 
                 //==============================
