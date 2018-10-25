@@ -76,14 +76,16 @@ define(['app', 'text!./slider.html','lodash','json!https://attachments.cbd.int/b
 
 
                       };
+
             },
             controller: function ($scope, $location) {
-                //============================================================
-                //
-                //============================================================
-                $scope.goTo = function (url) {
-
-                        $location.path(url);
+              $scope.go = function (url) {
+                try {
+                  (new URL(url)).hostname 
+                  window.location.href = url
+                } catch(errr){           
+                  $location.path(url);
+                }
 
                 };
             }
