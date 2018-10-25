@@ -101,7 +101,7 @@
         <div class="carousel-inner" role="listbox" style="height:400px;">
 
             <div class="item pointer" ng-repeat="item in carouselData.items" ng-class="{active: $index==0}">
-                <div class="img-cont" ng-click="goTo(item.targetUrl)" >
+                <div class="img-cont" ng-click="go(item.targetUrl)" >
                     <img class="caro-img" ng-src="{{item.imageUrl}}" alt="{{item.title}}" width="100%" height="100%">
                 </div>
                 <div class="carousel-text">
@@ -113,7 +113,7 @@
                         <span class="icon-next" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
                     </a>
-                    <center class="pointer" ng-click="goTo(item.targetUrl)">
+                    <center class="pointer" ng-click="go(item.targetUrl)">
                         <h3 style="color:white;">{{item.title}}</h3>
                         <p class="color-white text-justify hidden-xs" style="margin-bottom:20px;font-size:1.5em;">{{item.description}}</p>
                     </center>
