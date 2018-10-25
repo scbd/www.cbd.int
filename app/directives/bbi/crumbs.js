@@ -25,7 +25,7 @@ define(['app', 'text!./crumbs.html','json!https://attachments.cbd.int/bbi-platfo
                 $scope.goTo = function (url) {
                   try {
                     (new URL(url)).hostname 
-                    window.location.href = url
+                    window.open(url,"_blank")
                   } catch(errr){           
                     $location.path(url);
                   }

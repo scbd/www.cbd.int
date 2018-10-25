@@ -82,7 +82,7 @@ define(['app', 'text!./slider.html','lodash','json!https://attachments.cbd.int/b
               $scope.go = function (url) {
                 try {
                   (new URL(url)).hostname 
-                  window.location.href = url
+                  window.open(url,"_blank")
                 } catch(errr){           
                   $location.path(url);
                 }
