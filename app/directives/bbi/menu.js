@@ -16,7 +16,7 @@ define(['app', 'text!./menu.html','lodash','providers/locale'], function(app, te
             link: function ($scope) {
               $scope.locale=locale;
 
-                  require(["_slaask"], function(_slaask) {
+                  require(["js/slaask"], function(_slaask) {
 
                       if(!_slaask.initialized) {
                           _slaask.init('d611635fe9b46e439afb79833e255443');

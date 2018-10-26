@@ -77,17 +77,6 @@ define(['app', 'text!./slider.html','lodash','json!https://attachments.cbd.int/b
 
                       };
 
-            },
-            controller: function ($scope, $location) {
-              $scope.go = function (url) {
-                try {
-                  (new URL(url)).hostname 
-                  window.open(url,"_blank")
-                } catch(errr){           
-                  $location.path(url);
-                }
-
-                };
             }
         };
     }]);
