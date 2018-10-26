@@ -17,19 +17,6 @@ define(['app', 'text!./crumbs.html','json!https://attachments.cbd.int/bbi-platfo
                     items :slider
                   };
 
-            },
-            controller: function ($scope, $location) {
-                //============================================================
-                //
-                //============================================================
-                $scope.goTo = function (url) {
-                  try {
-                    (new URL(url)).hostname 
-                    window.open(url,"_blank")
-                  } catch(errr){           
-                    $location.path(url);
-                  }
-                };
             }
         };
     });
