@@ -1,4 +1,4 @@
-define(['app', 'text!./slider.html','lodash','directives/bbi/ani-scroll'], function(app, templateHtml,_) { 'use strict';
+define(['app', 'text!./slider.html','lodash','json!https://attachments.cbd.int/bbi-slider.json','directives/bbi/ani-scroll'], function(app, templateHtml,_,bbiSlider) { 'use strict';
 
     //============================================================
     //
@@ -23,34 +23,7 @@ define(['app', 'text!./slider.html','lodash','directives/bbi/ani-scroll'], funct
             }
 
                   $scope.carouselData=  {
-                        items :[
-                          {
-                                        title: "About the Bio-Bridge Initiative",
-                                        description: "Learn more about the purpose and main features of the Bio-Bridge Initiative",
-                                        imageUrl: "/app/images/bbi/slider-bee.jpg",
-                                        targetUrl: "/about"
-                                    }, {
-                                        title: "The Bio-Bridge Operational Framework",
-                                        description: "Learn about the Bio-Bridge operational procedures, criteria and guidelines",
-                                        imageUrl: "/app/images/bbi/slider-crab.jpg",
-                                        targetUrl: "/about/framework"
-                                    }, {
-                                        title: "The Bio-Bridge tools and services",
-                                        description: "Search technical and scientific cooperation records on the Platform",
-                                        imageUrl: "/app/images/bbi/slider-flamingo.jpg",
-                                        targetUrl: "/platform"
-                                    }, {
-                                        title: "Participation in the Bio-Bridge Initiative",
-                                        description: "Learn more about ways in which one can participate in the Initiative",
-                                        imageUrl: "/app/images/bbi/pic_3_opt.jpg",
-                                        targetUrl: "/participation"
-                                    }, {
-                                        title: "The Bio-Bridge projects",
-                                        description: "Learn more about technical and scientific cooperation projects facilitated through the Initiative",
-                                        imageUrl: "/app/images/bbi/pic_2_opt.jpg",
-                                        targetUrl: "/projects"
-                                    }
-                              ]
+                        items :bbiSlider
                       };
             //           angular.element($window).bind('scroll', function() {
             //
@@ -103,16 +76,7 @@ define(['app', 'text!./slider.html','lodash','directives/bbi/ani-scroll'], funct
 
 
                       };
-            },
-            controller: function ($scope, $location) {
-                //============================================================
-                //
-                //============================================================
-                $scope.goTo = function (url) {
 
-                        $location.path(url);
-
-                };
             }
         };
     }]);

@@ -1,4 +1,4 @@
-define(['app', 'text!./crumbs.html'], function(app, templateHtml) { 'use strict';
+define(['app', 'text!./crumbs.html','json!https://attachments.cbd.int/bbi-platform-carousel.json'], function(app, templateHtml, slider) { 'use strict';
 
     //============================================================
     //
@@ -14,46 +14,9 @@ define(['app', 'text!./crumbs.html'], function(app, templateHtml) { 'use strict'
                        });
             });
               $scope.carouselData=  {
-                    items :[
-                      {
-                                title: "Requests for Assistance",
-                                    description: "Browse the latest requests for assistance",
-                                    imageUrl: "/app/images/bbi/slider-sea-turtle.jpg",
-                                    targetUrl: "/platform/bbi-request"
-                                }, {
-                                    title: "Technical Assistance Providers",
-                                    description: "Browse the profiles of technical assistance providers registered with the Bio-Bridge Initiative",
-                                    imageUrl: "/app/images/bbi/slider-insect.png",
-                                    targetUrl: "/platform/bbi-profile"
-                                }, {
-                                    title: "Latest technical and scientific cooperation Opportunities",
-                                    description: "View the list of new technical and scientific cooperation opportunities currently available",
-                                    imageUrl: "/app/images/bbi/slider-turtle.jpg",
-                                    targetUrl: "/platform/bbi-opportunity"
-                                }, {
-                                    title: "Technical and scientific cooperation project proposals",
-                                    description: "Browse vetted technical and scientific cooperation proposals awaiting funding support",
-                                    imageUrl: "/app/images/bbi/slider-hands.jpg",
-                                    targetUrl: "/platform/bbi-proposals"
-                                }, {
-                                    title: "Technical and scientific cooperation Resources",
-                                    description: "Browse technical and scientific cooperation tools, resources and initiatives",
-                                    imageUrl: "/app/images/bbi/slider-flower.jpg",
-                                    targetUrl: "/platform/tools"
-                                }
-            ]
+                    items :slider
                   };
 
-            },
-            controller: function ($scope, $location) {
-                //============================================================
-                //
-                //============================================================
-                $scope.goTo = function (url) {
-
-                        $location.path(url);
-
-                };
             }
         };
     });
