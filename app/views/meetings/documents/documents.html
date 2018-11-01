@@ -1,18 +1,25 @@
-<div>
+<div class="meeting-documents">
     <style>
-        .nav.nowrap {
+        .meeting-documents .nav.nowrap {
             white-space: nowrap;
         }
 
-        .nav.nowrap > li {
+        .meeting-documents .nav.nowrap > li {
             display:inline-block;
             float:none;
         }
-        .view-only{
+
+
+        .meeting-documents .doc-tabs {
+            margin-top:20px
+        }
+
+        .mobile-app .mobile-spacer{
           height:96vh;
           overflow-y: auto;
         }
-        .view-only-fix{
+
+        .mobile-app .meeting-documents #print-smart-checkout {
           position: fixed;
           top:-10px;
           left:0;
@@ -22,9 +29,26 @@
           border-bottom: solid 1px #c0c0c0;
           background-color: #ffffff;
           z-index:99;
+          margin-top: 5px !important;
         }
-        .view-only-tabs{
+
+        .mobile-app .meeting-documents .doc-tabs {
           padding-top: 25px;
+        }
+
+        @media (max-width:767px){
+            .meeting-documents .nav-tabs, 
+            .meeting-documents .tab-content 
+            {
+                margin-left: -15px;
+                margin-right: -15px
+            }
+
+            .mobile-app .meeting-documents .nav-tabs, 
+            .mobile-app .meeting-documents .tab-content {
+                margin-left: 0px;
+                margin-right: 0px
+            }            
         }
     </style>
 
@@ -41,7 +65,7 @@
         <span ng-if="::(documentsCtrl.meeting.dateText|lstring) && (documentsCtrl.meeting.venueText|lstring)"> - </span>
         {{::documentsCtrl.meeting.venueText|lstring}}
     </h5>
-    <div ng-class="{'view-only':viewOnly}">
+    <div class="mobile-spacer">
     <div ng-if="documentsCtrl.error" class="alert alert-warning" role="alert">
         <span ng-switch="documentsCtrl.error">
             <span ng-switch-when="meetingNotFound">
@@ -53,16 +77,16 @@
         </span>
     </div>
 
-    <div ng-if="!documentsCtrl.error" id="print-smart-checkout" ng-cloak  ng-class="{'view-only-fix':viewOnly}" class="pull-right hidden-print" style="margin-top:5px">
+    <div ng-if="!documentsCtrl.error" id="print-smart-checkout" ng-cloak class="pull-right hidden-print" style="margin-top:5px">
 
         <span ng-if="documentsCtrl.edit" class="edit">
             <button type="button" class="btn btn-default" ng-click="documentsCtrl.edit(null)"><i class="fa fa-plus"></i></button>
             <button type="button" class="btn btn-default" ng-class="{active:documentsCtrl.editMode, 'btn-info': documentsCtrl.editMode }" ng-click="documentsCtrl.editMode=!documentsCtrl.editMode"><i class="fa fa-edit"></i></button>
         </span>
 
-        <button type="button" ng-if="documentsCtrl.isStaff && !viewOnly" class="btn btn-default" ng-class="{active:documentsCtrl.statsMode, 'btn-info': documentsCtrl.statsMode }" ng-click="documentsCtrl.statsMode=!documentsCtrl.statsMode && documentsCtrl.isStaff"><i class="fa fa-bar-chart"></i></button>
-        <span ng-show="!viewOnly">
-        <span ng-if="::documentsCtrl.meeting.links.length || documentsCtrl.meeting.EVT_WEB || documentsCtrl.meeting.EVT_INFO_PART_URL || documentsCtrl.meeting.isMontreal || documentsCtrl.meeting.EVT_REG_NOW_YN" class="btn-group">
+        <button type="button" ng-if="documentsCtrl.isStaff" class="btn btn-default" ng-class="{active:documentsCtrl.statsMode, 'btn-info': documentsCtrl.statsMode }" ng-click="documentsCtrl.statsMode=!documentsCtrl.statsMode && documentsCtrl.isStaff"><i class="fa fa-bar-chart"></i></button>
+
+        <span class="mobile-app-hidden" ng-if="::documentsCtrl.meeting.links.length || documentsCtrl.meeting.EVT_WEB || documentsCtrl.meeting.EVT_INFO_PART_URL || documentsCtrl.meeting.isMontreal || documentsCtrl.meeting.EVT_REG_NOW_YN" class="btn-group">
           <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Info links <span class="caret"></span>
           </button>
@@ -74,7 +98,7 @@
             <li ng-repeat="link in ::documentsCtrl.meeting.links"><a ng-href="{{::link.url}}" target="_blank">{{::link.title|lstring}}</a></li>
           </ul>
         </span>
-      </span>
+      
         <!-- Sort/Display -->
         <span ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length" class="hidden-print btn-group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -108,7 +132,7 @@
         No documents have yet been posted.
     </p>
 
-    <ul ng-if="!documentsCtrl.noTabs" ng-class="{'view-only-tabs':viewOnly}" class="nav nav-tabs nowrap hidden-print" style="margin-top:20px" role="tablist">
+    <ul ng-if="!documentsCtrl.noTabs" class="nav nav-tabs nowrap hidden-print doc-tabs" role="tablist">
         <li ng-repeat="type in documentsCtrl.tabs|limitTo:documentsCtrl.maxTabCount" ng-class="{active:documentsCtrl.currentTab==type.code}" code="{{type.code}}">
             <div class="bg" ng-if="::type.code.startsWith('in-session')"></div>
             <div ng-if="::type.code=='in-session'" style="position:absolute;top:-18px;left:0px;right:2px;height:15px;font-size:10px;font-weight:bold;color:#444">&nbsp;&nbsp;&nbsp;IN-SESSION</div>
