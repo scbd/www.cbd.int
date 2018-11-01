@@ -71,6 +71,12 @@
 
     [ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }
 
+                .mobile-app-visbile,
+                .mobile-app-visbile-inline,
+    .mobile-app .mobile-app-hidden         { display: none    }
+    .mobile-app .mobile-app-visbile        { display: block;  }
+    .mobile-app .mobile-app-visbile-inline { display: inline; }
+
     body, .greybg { background: #f4f4f4; }
     .whitebg      { background: #FFFFFF; }
 
@@ -133,7 +139,7 @@
 
     </style>
 </head>
-<body class="ltr">
+<body class="ltr" ng-class="::{ 'mobile-app' : templateCtrl.viewOnly }">
 
     <template-header ng-if="!templateCtrl.viewOnly"></template-header>
 
