@@ -58,7 +58,7 @@
                 </div> -->
                 <h2 class="pull-right"><small ng-if=":: false && scheduleCtrl.now"><em>Time at venue:</em> <b>{{scheduleCtrl.now | moment:'tz':scheduleCtrl.event.timezone | moment:'format':'H:mm'}}</b></small></h2>
                 <h3>{{frame.content.title}}</h3>
-                <p class="alert alert-info" ng-if="!viewOnly && (frame.reservations | filter:{ type : { _id: '570fd0a52e3fa5cfa61d90ee' } }).length">
+                <p class="alert alert-info mobile-app-hidden" ng-if="(frame.reservations | filter:{ type : { _id: '570fd0a52e3fa5cfa61d90ee' } }).length">
                     <a href='/side-events'  style="color:inherit">For a detailed and complete list of side-events, please click here to visit the CBD Side-Events page</a>.
                 </p>
                 <table class="table table-striped">
