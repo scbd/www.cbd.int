@@ -1,4 +1,4 @@
-﻿define(['app', 'text!./social-media.html', 'https://platform.twitter.com/widgets.js', 'services/fb'], function(app, html) { 'use strict';
+﻿define(['app', 'text!./social-media.html', 'require'], function(app, html, require) { 'use strict';
 
 	return app.directive('socialMedia', ['$window', function($window) {
 		return {
@@ -8,13 +8,23 @@
 			scope: {},
 			link: function ($scope, $element) {
 
-                $window.twttr.widgets.load($element.find('#twitterTimeline')[0]);
+				require(['https://platform.twitter.com/widgets.js'], function(){
+					$window.twttr.widgets.load($element.find('#twitterTimeline')[0]);
+					setServiceReady('twitter');
+				})
 
+				require(['services/fb'], function(){
+					if ($window.FB && $window.FB.XFBML){
+						$window.FB.XFBML.parse();
+						setServiceReady('facebook');
+					}
+				});
 
-                if ($window.FB && $window.FB.XFBML){
-                    $window.FB.XFBML.parse();
-                }
-               
+				function setServiceReady(service) {
+					$scope.$applyAsync(function(){
+						$scope[service]=true;
+					});
+				}
 			}
 		};
 	}]);

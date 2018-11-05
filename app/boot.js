@@ -3,7 +3,7 @@
 if(/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) { console.log = function(){}; }
 
 var gitVersion = document.documentElement.attributes['git-version'].value;
-var cdnHost = 'https://cdn.cbd.int/';
+var cdnHost    = document.documentElement.attributes['cdn-url'    ].value || 'https://cdn.cbd.int/';
 
 require.config({
     waitSeconds: 30,
@@ -84,6 +84,12 @@ require.config({
         { name: 'ammap'  , main: 'ammap'   , location : 'libs/ammap3/ammap' }
     ],
     urlArgs: 'v=' + gitVersion
+});
+
+define('cdn', {
+    load: function (name, req, onload, config) {
+        req([cdnHost + name], onload);
+    }
 });
 
 define('xlsx', ['js-zip', 'ods'], function (jszip, ods) {
