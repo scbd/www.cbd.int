@@ -11,11 +11,13 @@ if(!process.env.API_URL) {
 }
 
 var apiUrl = process.env.API_URL || 'https://api.cbddev.xyz';
+var cdnUrl =(process.env.CDN_URL || 'https://cdn.cbd.int/').replace(/\/+$/, '')+'/';
 var gitVersion = (process.env.COMMIT || 'UNKNOWN').substr(0, 7);
 
 console.info(`info: www.cbd.int`);
 console.info(`info: Git version: ${gitVersion}`);
 console.info(`info: API address: ${apiUrl}`);
+console.info(`info: CDN address: ${cdnUrl}`);
 console.info(`info: IS DEV: ${process.env.IS_DEV}`);
 // Configure options
 
@@ -58,7 +60,7 @@ app.get('/reports/map*', function(req, res) { res.cookie('VERSION', process.env.
 
 app.get('/insession',    function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
 app.get('/insession/*',  function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
-app.get('/*',            function(req, res) { res.render('template', { gitVersion: gitVersion }); });
+app.get('/*',            function(req, res) { res.render('template', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
 app.all('/*',            function(req, res) { res.status(404).send(); } );
 
 // START HTTP SERVER
