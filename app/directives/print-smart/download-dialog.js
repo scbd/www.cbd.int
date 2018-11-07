@@ -50,8 +50,6 @@ define(['angular', 'lodash',  'directives/checkbox'], function(angular, _ ) {'us
 			var urls = selectedLinks();
 
 			if(urls.length) {
-        if($scope.viewOnly)
-          return $scope.downloadLink = ''
           
 				$http.post('/api/v2014/printsmart-downloads', urls).then(function(res){
 					$scope.downloadLink = '/api/v2014/printsmart-downloads/'+res.data._id;
@@ -63,10 +61,11 @@ define(['angular', 'lodash',  'directives/checkbox'], function(angular, _ ) {'us
 
     function download(event){
       
-      if($scope.viewOnly) {
+      if($scope.viewOnly ) {
         $scope.success='download'
         event.preventDefault()
-        $scope.downloadLink = ''
+        event.stopPropagation()
+        console.log(selectedLinks(true))
         $window.parent.postMessage({type:'saveFiles',data:selectedLinks(true)},'*');
       } else if(!$scope.downloadLink){
         event.preventDefault()
