@@ -177,8 +177,9 @@ define(['angular', 'lodash',  'directives/checkbox'], function(angular, _ ) {'us
 
       var msg = event.data
 
-      if(!msg || msg !== '{"type":"closeDialogRemote"}' ) return //other events
+      if(!msg || typeof msg !== 'string' || msg.indexOf('{')!==0  ) return //other events
 
+      if(msg.type === 'closeDialogRemote')
       msg = JSON.parse(msg)
 
       $scope.closeThisDialog($scope.success && 'clear');
