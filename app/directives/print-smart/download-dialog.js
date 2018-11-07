@@ -1,7 +1,13 @@
-define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function(angular, _, Dropbox) {'use strict';
+define(['angular', 'lodash',  'directives/checkbox'], function(angular, _ ) {'use strict'; 
+    var Dropbox;
+    
 
     return ['$scope', '$http', 'documents','$rootScope', 'allowBack','$window', function ($scope, $http, documents,$rootScope, allowBack,$window) {
 
+    if(!$scope.viewOnly)
+      require(['dropbox-dropins'],function(val){
+        Dropbox = val;
+      })
 		var publicComputer    = true; // TODO
 		var signedInToDropbox = false;
 
@@ -22,10 +28,12 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
 		$scope.$watch('selectedFormats', initDownloadLink, true);
 		$scope.$watch('selectedLanguages', initDownloadLink, true);
     
-    $window.addEventListener('message', closeDialogRemote)
-    $scope.$on('$destroy', function(){
-      $window.removeEventListener('message', closeDialogRemote)
-    });
+    if($scope.viewOnly) {
+      $window.addEventListener('message', closeDialogRemote)
+      $scope.$on('$destroy', function(){
+        $window.removeEventListener('message', closeDialogRemote)
+      });
+    }
     
 		if(canDropbox && publicComputer)
 			signoutDropbox();
@@ -42,7 +50,7 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
 			var urls = selectedLinks();
 
 			if(urls.length) {
-        if($rootScope.viewOnly)
+        if($scope.viewOnly)
           return $scope.downloadLink = ''
           
 				$http.post('/api/v2014/printsmart-downloads', urls).then(function(res){
@@ -64,7 +72,7 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
         event.preventDefault()
         event.stopPropagation()
       }
-      $scope.success='download'
+
     }
         //==============================================
         //
@@ -81,14 +89,18 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
 		//
 		//
 		//==============================================
-		function selectedLinks() {
-
+		function selectedLinks(allProps) {
+            
             return _(documents).map(function(doc){
+                if(allProps) {
+                  return _(doc.files||[])
+                      .filter(function(f){ return $scope.selectedLanguages[f.language] && $scope.selectedFormats[f.type]; })
+                      .value()
+                }
                 return _(doc.files||[])
                     .filter(function(f){ return $scope.selectedLanguages[f.language] && $scope.selectedFormats[f.type]; })
                     .pluck('url')
                     .value();
-
             }).flatten()
               .compact()
               .uniq()
@@ -100,7 +112,8 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
 		//
 		//==============================================
 		function canDropbox() {
-			return Dropbox && Dropbox.isBrowserSupported() && !$rootScope.viewOnly;
+    
+			return !$scope.viewOnly && Dropbox && Dropbox.isBrowserSupported();
 		}
 
 		//==============================================
@@ -165,9 +178,12 @@ define(['angular', 'lodash', 'dropbox-dropins', 'directives/checkbox'], function
     function closeDialogRemote(data) {
 
       var msg = data.data
-      if(msg) msg = JSON.parse(msg)
 
-      if(msg && msg.type==='closeDialogRemote')
+      if(!msg || msg !== '{"type":"closeDialogRemote"}' ) return //other events
+
+      if(!_.isObject(msg)) msg = JSON.parse(msg)
+
+      if(msg.type==='closeDialogRemote')
         $scope.closeThisDialog($scope.success && 'clear');
 		}
     
