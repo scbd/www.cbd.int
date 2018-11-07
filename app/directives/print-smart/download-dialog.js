@@ -65,6 +65,7 @@ define(['angular', 'lodash',  'directives/checkbox'], function(angular, _ ) {'us
         $scope.success='download'
         event.preventDefault()
         event.stopPropagation()
+        console.log(selectedLinks(true))
         $window.parent.postMessage({type:'saveFiles',data:selectedLinks(true)},'*');
       } else if(!$scope.downloadLink){
         event.preventDefault()
@@ -177,12 +178,13 @@ define(['angular', 'lodash',  'directives/checkbox'], function(angular, _ ) {'us
 
       var msg = event.data
 
-      if(!msg || typeof msg !== 'string' || msg.indexOf('{')!==0  ) return //other events
-
-      if(msg.type === 'closeDialogRemote')
-      msg = JSON.parse(msg)
-
-      $scope.closeThisDialog($scope.success && 'clear');
+      if(msg && typeof msg === 'string' && /^(\{|\[)/.test(msg))) {
+        
+        msg = JSON.parse(msg)
+        
+        if(msg.type === 'closeDialogRemote')
+          $scope.closeThisDialog($scope.success && 'clear');
+      }
 		}
     
 		//==============================================
