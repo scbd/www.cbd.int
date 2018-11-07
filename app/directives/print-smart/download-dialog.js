@@ -178,7 +178,7 @@ define(['angular', 'lodash',  'directives/checkbox'], function(angular, _ ) {'us
 
       var msg = event.data
 
-      if(msg && typeof msg === 'string' && /^(\{|\[)/.test(msg))) {
+      if(msg && typeof msg === 'string' && /^(\{|\[)/.test(msg)) {
         
         msg = JSON.parse(msg)
         
