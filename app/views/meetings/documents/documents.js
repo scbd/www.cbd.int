@@ -378,11 +378,13 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         //
         //==============================
+        var postSent = false;
         function finished() {
-            if(!$rootScope.viewOnly) return
+            if(!$rootScope.viewOnly && postSent) return
             
             $timeout(function(){
               $window.parent.postMessage({type:'loadingFinished',data:true},'*');
+              postSent=true;
             },300)
         }
         

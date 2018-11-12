@@ -12,7 +12,7 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
 	return ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService','$rootScope','$timeout','$window', function($scope, $http, $route, $q, defaultStreamId, conferenceService,$rootScope,$timeout,$window) {
 
         var _streamData;
-
+        var postSent = false
         var _ctrl = $scope.scheduleCtrl =  this;
 
         _ctrl.CALENDAR = CALENDAR_SETTINGS;
@@ -25,10 +25,11 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
         //
         //==============================
         function finished() {
-            if(!$rootScope.viewOnly) return
+            if(!$rootScope.viewOnly && postSent) return
             
             $timeout(function(){
               $window.parent.postMessage({type:'loadingFinished',data:true},'*');
+              postSent = true
             },300)
         }
         
