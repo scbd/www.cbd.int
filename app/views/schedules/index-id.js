@@ -9,18 +9,29 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
         sameElse: 'dddd, D MMMM YYYY'
     };
 
-	return ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService', function($scope, $http, $route, $q, defaultStreamId, conferenceService) {
+	return ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService','$rootScope','$timeout','$window', function($scope, $http, $route, $q, defaultStreamId, conferenceService,$rootScope,$timeout,$window) {
 
         var _streamData;
 
         var _ctrl = $scope.scheduleCtrl =  this;
 
         _ctrl.CALENDAR = CALENDAR_SETTINGS;
-
+        _ctrl.finished = finished;
         $scope.$on("refresh",  load);
 
         load();
 
+        //==============================
+        //
+        //==============================
+        function finished() {
+            if(!$rootScope.viewOnly) return
+            
+            $timeout(function(){
+              $window.parent.postMessage({type:'loadingFinished',data:true},'*');
+            },300)
+        }
+        
 		//========================================
 		//
 		//========================================
@@ -98,6 +109,7 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
 
                 return (timePriority + '-' + typePriority + '-' + roomPriority + '-' + (r.title||'')).toLowerCase();
             }
+
 
         }
 	}];

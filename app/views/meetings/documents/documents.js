@@ -11,7 +11,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
     var currentUser;
     var STATISTICS = {}; 
 
-	return ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting, CacheFactory) {
+	return ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory','$window','$timeout', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting, CacheFactory, $window, $timeout) {
 
         var _ctrl = $scope.documentsCtrl = this;
         var meetingCode = $route.current.params.meeting.toUpperCase();
@@ -41,6 +41,8 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         _ctrl.tabs = [];
         _ctrl.switchTab  = switchTab;
 
+        _ctrl.finished = finished;
+        
         $scope.$watch('documentsCtrl.sort', function(s){
             $location.hash(s=='agenda' ? 'agenda' : null);
         });
@@ -373,6 +375,18 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
             });
         }
 
+        //==============================
+        //
+        //==============================
+        function finished() {
+            if(!$rootScope.viewOnly) return
+            
+            $timeout(function(){
+              $window.parent.postMessage({type:'loadingFinished',data:true},'*');
+            },300)
+        }
+        
+        
         //==============================
         //
         //==============================
