@@ -25,7 +25,7 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
         //
         //==============================
         function finished() {
-            if(!$rootScope.viewOnly && postSent) return
+            if(!$rootScope.viewOnly || postSent) return
             
             $timeout(function(){
               $window.parent.postMessage({type:'loadingFinished',data:true},'*');
