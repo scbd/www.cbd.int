@@ -20,36 +20,6 @@
                 </span>
             </a>
         </li>
-        <!-- <li><a href="#cctv" data-toggle="tab" role="tab">Daily Schedule</a></li> -->
-        <li class="dropdown-toggle hidden-xs" ng-if="agendaCtrl.meeting.conference.sideEventLinks.length > 0">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-                Side Events <span class="caret">
-            </a>
-            <ul class="dropdown-menu">
-                <li ng-repeat="link in agendaCtrl.meeting.conference.sideEventLinks">
-                    <a href="{{link.url}}" target="_self" role="tab">{{link.title}}</a>
-                </li>
-            </ul>
-        </li>
-        <li class="dropdown-toggle mobile-app-hidden"  ng-if="!viewOnly && (agendaCtrl.meeting.conference.parallelMeetingLinks.length > 0 || ($parent.deviceSize =='xs' && agendaCtrl.meeting.conference.sideEventLinks.length > 0))">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-                <div class="hidden-xs">Parallel Meetings<span class="caret"></span></div>
-                <div class="visible-xs">Others <span class="caret"></span></div>
-            </a>
-            <ul class="dropdown-menu">
-                <li ng-if="agendaCtrl.meeting.conference.sideEventLinks.length > 0" class="visible-xs" style="padding:10px;">Side-Events</li>
-                <li ng-if="agendaCtrl.meeting.conference.sideEventLinks.length > 0" class="visible-xs divider" role="separator"></li>
-                <li ng-repeat="link in agendaCtrl.meeting.conference.sideEventLinks" class="visible-xs" >
-                    <a ng-href="{{link.url}}" target="_self" role="tab">{{link.title}}</a>
-                </li>
-                <li class="visible-xs divider" role="separator" ng-if="agendaCtrl.meeting.conference.parallelMeetingLinks.length > 0"></li>
-                <li ng-if="agendaCtrl.meeting.conference.parallelMeetingLinks.length > 0" class="visible-xs"  style="padding:10px;">Parallel Meetings </li>
-                <li ng-if="agendaCtrl.meeting.conference.parallelMeetingLinks.length > 0" class="visible-xs divider" role="separator"></li>
-                <li ng-repeat="link in agendaCtrl.meeting.conference.parallelMeetingLinks">
-                    <a ng-href="{{link.url}}" target="_self" role="tab">{{link.title}}</a>
-                </li>
-            </ul>
-        </li>
         <li ng-hide="agendaCtrl.loaded" ><a><h3  style="color: #777;margin: 0px"><i class="fa fa-circle-o-notch fa-spin"></i></h3></a></li>
     </ul>
 
