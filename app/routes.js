@@ -233,6 +233,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
           .when('/resources',                     { templateUrl: 'views/bbi/resources.html',  controllerAs: 'resoCtrl',  resolveController: true})
           .when('/faq',                           { templateUrl: 'views/bbi/faq.html',  controllerAs: 'faqCtrl',  resolveController: true})
+          .when('/portfolio',                     { templateUrl: 'views/bbi/portfolio.html',  controllerAs: 'portfolioCtrl',  resolveController: true})
           .when('/contact',                       { templateUrl: 'views/bbi/contact.html',  controllerAs: 'contCtrl',  resolveController: true})
 
           .when('/comms',                         { templateUrl: 'views/bbi/comms/index-comm.html'    ,  controllerAs: 'commsCtrl',  resolveController: true})
