@@ -105,16 +105,24 @@ define(['app', 'lodash', 'moment', 'services/kronos', 'filters/term'], function(
             .then(function(mediaRequests) { 
 
                 _ctrl.requests = mediaRequests;
+                var mediaRequestQueries = []
+                var queryRequests;
+                while(mediaRequests.length) {
+                    queryRequests = _.take(mediaRequests, 20);
+                    mediaRequests = _.drop(mediaRequests, 20);
 
-                var requestIds = _(mediaRequests).map(function(r){ return [r._id, { $oid : r._id}] }).flatten().value();
-
-                var orgQuery = {
-                    q : { $or : [{ requestId : {$in : requestIds} }, {requestId:{$exists:false}}] }
+                    requestIds = _(queryRequests).map(function(r){ return [r._id, { $oid : r._id}] }).flatten().value();
+                    var orgQuery = {
+                        q : { $or : [{ requestId : {$in : requestIds} }, {requestId:{$exists:false}}] }
+                    }
+                    mediaRequestQueries.push($http.get('/api/v2018/kronos/participation-request/organizations', { params: orgQuery}));
                 }
                 
-                return $http.get('/api/v2018/kronos/participation-request/organizations', { params: orgQuery})
-                    .then(function(result) { 
-                        var organizations = result.data;
+                
+                return $q.all(mediaRequestQueries)
+                    .then(function(results) { 
+                        var organizations = _(results).map('data').flatten().compact().value();
+                       
                         if(organizations && organizations.length >0){
 
                             _.map(organizations, function(organization){
