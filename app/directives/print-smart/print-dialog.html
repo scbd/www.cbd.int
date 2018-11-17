@@ -1,9 +1,14 @@
 		<div class="modal-content">
+			<style>
+				@media (max-width: 767px) {
+					button.location {  width: 165px; }
+				}
+			</style>	
 			<div class="modal-header">
 				<button type="button" class="close" ng-click="printCtrl.close(printCtrl.success)" aria-hidden="true">×</button>
 				<h4 class="modal-title">
 					<i class="fa fa-print"></i>
-					Request prints - {{printCtrl.documents.length}} document(s)
+					Request prints <span class="hidden-xs"> - {{printCtrl.documents.length}} document(s)</span>
 					<i class="fa fa-cog fa-spin" ng-show="printCtrl.loading"></i>
 				</h4>
 			</div>
@@ -40,12 +45,17 @@
 					<div class="form-group" ng-class="{ 'has-warning' : printCtrl.error.error=='INVALID_BADGE_ID' || (printForm.$submitted && (printForm.badgeCode.$error.required || printForm.badgeCode.$error.pattern)) }">
 						<label for="badgeCode" class="col-sm-4 control-label">Badge number</label>
 						<div class="col-sm-6">
-							<input type="text" required ng-change="printCtrl.error=null" class="form-control" id="badgeCode" name="badgeCode" placeholder="1234-5678" maxlength="9" ng-model="printCtrl.badgeCode" pattern="[0-9\-]{8,9}">
+							<input type="text" required ng-change="printCtrl.error=null" class="form-control" id="badgeCode" name="badgeCode" placeholder="1234-5678" maxlength="9" ng-model="printCtrl.badgeCode" pattern="[0-9\-]{8,9}" autocomplete="off" autocorrect="off" autocapitalize="off">
 							<span class="help-block"ng-show="printForm.$submitted && (printForm.badgeCode.$error.required||printForm.badgeCode.$error.pattern)">Enter badge number to request printed hard copies.</span>
 						</div>
 					</div>
 
-
+					<div ng-if="::printCtrl.locations.length" class="form-group">
+						<label for="location" class="col-sm-4 control-label">Pickup location</label>
+						<div class="col-sm-6">
+							<select class="form-control" ng-model="printCtrl.location" ng-options="l.code as l.title+' - '+l.location for l in printCtrl.locations" ng-change="printCtrl.updateLocation()"></select>
+						</div>
+					</div>
 				</form>
 
 				<div class="alert alert-warning" ng-show="printCtrl.error" ng-switch="printCtrl.error.error">
@@ -71,6 +81,11 @@
 						Please visit the registration desk or document distribution counter for assitance.
 					</span>
 
+					<span ng-switch-when="NO_FREE_BOX">
+						<b>Sorry!</b> No more pigeon holes are available for your requests<br>
+						Please visit the registration desk or document distribution counter for assitance.
+					</span>
+
 					<span ng-switch-when="NO_SERVICE">
 						<b>Error: service is unavailable!</b> Sorry, the PrintSmart service is not available at this moment.<br>
 						Please wait 5 minutes and try again or go to the registration desk or document distribution counter for further assitance.
@@ -82,12 +97,33 @@
 					</span>
 
 				</div>
+				<div ng-show="printCtrl.success">
 
-				<div class="alert alert alert-success" ng-show="printCtrl.success">
-					<b>Your hard copies are on their way...</b> <br/>
-					The document(s) you requested are getting printed. You are invited to claim them at the document distribution counter.
+					<div class="alert alert alert-success" ng-show="printCtrl.success" style="margin-bottom: 5px">
+						<b>Your hard copies are on their way...</b> <br/>
+						The document(s) you requested are getting printed. You are invited to claim them at the document distribution counter.
+					</div>
+
+					<div ng-show="printCtrl.selectedLocation" style="padding: 15px">
+
+						<p>
+							Remember to collect your documents at the following counter:
+						</p>
+
+						<p class="text-center" style="padding-top:10px" >
+							<button type="button" class="btn btn-default active location" 
+									ng-style="{ 'background-image' : 'url(\'/app/images/printsmart/'+printCtrl.selectedLocation.code+'.jpg\')' }"
+									ng-click="printCtrl.close(printCtrl.success && 'clear')">
+								<br/>
+								<span>{{printCtrl.selectedLocation.title}}</span><br/>
+								<span>{{printCtrl.selectedLocation.description}}</span><br/>
+								<span>{{printCtrl.selectedLocation.location}}</span><br/>
+								<br/>
+							</button>					
+						</p>
+					</div>
+
 				</div>
-
 			</div>
 
 			<div class="modal-footer" style="white-space:nowrap">
