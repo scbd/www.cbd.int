@@ -1,46 +1,46 @@
-		<div class="modal-content">
-				<style>
+<div class="modal-content">
+	<style>
 
-				.btn-xxl        { width:     225px; }
-				.btn-xxl > span:first-child { font-size:   2em; }
-				.btn-xxl > i.fa { font-size:   6em; }
+		.btn-xxl        { width:     225px; }
+		.btn-xxl > span:first-child { font-size:   2em; }
+		.btn-xxl > i.fa { font-size:   6em; }
 
-				@media (max-width: 767px) {
-					.btn-xxl        { width:     135px; }
-					.btn-xxl > span:first-child { font-size:   1em; }
-					.btn-xxl > i.fa { font-size:   5em; }
-				}
-				</style>
+		@media (max-width: 767px) {
+			.btn-xxl        { width:     135px; }
+			.btn-xxl > span:first-child { font-size:   1em; }
+			.btn-xxl > i.fa { font-size:   5em; }
+		}
+	</style>
 
-			<div class="modal-header">
-				<button type="button" class="close" ng-click="close()" aria-hidden="true">×</button>
-				<h4 class="modal-title">Request copies - {{documents.length}} document(s)
-				</h4>
+	<div class="modal-header">
+		<button type="button" class="close" ng-click="close(success && 'clear')" aria-hidden="true">×</button>
+		<h4 class="modal-title">
+			<i class="fa fa-arrow-circle-down"></i>
+			Download copies <span class="hidden-xs"> - {{documents.length}} document(s)</span>
+		</h4>
+	</div>
+	<div class="modal-body">
+			<div ng-hide="target">
+				<table style="width:100%">
+					<tr>
+						<td class="text-center" ng-style="{ width: (allowPrint ? '50%' : '100%') }">
+							<button type="button" class="btn btn-success btn-xxl" ng-click="download()">
+								<span>Download</span><br /><br />
+								<i class="fa fa-arrow-circle-down"></i>
+							</button>
+						</td>
+						<td class="text-center" ng-show="allowPrint" ng-style="{ width: (allowPrint ? '50%' : '100%') }">
+							<button type="button" class="btn btn-primary btn-xxl" ng-disabled="!printableDocuments.length" ng-click="print()">
+								<span>Request Prints</span><br /><br />
+								<i class="fa fa-print"></i>
+							</button>
+						</td>
+					</tr>
+				</table>
 			</div>
-			<div class="modal-body">
-				<div ng-hide="target">
-					<table style="width:100%">
-						<tr>
-							<td class="text-center" ng-style="{ width: (allowPrint ? '50%' : '100%') }" >
-								<button type="button" class="btn btn-success btn-xxl" ng-click="download()">
-									<span >Download</span><br/><br/>
-									<i class="fa fa-arrow-circle-down"></i>
-								</button>
-							</td>
-							<td class="text-center" ng-show="allowPrint" ng-style="{ width: (allowPrint ? '50%' : '100%') }">
-								<button type="button" class="btn btn-primary btn-xxl" ng-disabled="!printableDocuments.length" ng-click="print()">
-									<span>Request Prints</span><br/><br/>
-									<i class="fa fa-print"></i>
-								</button>
-							</td>
-						</tr>
-					</table>
-				</div>
-			</div>
+	</div>
 
-			<div class="modal-footer">
-
-				<button type="button" class="btn btn-default" ng-click="close()"><i class="fa fa-power-off"></i> <span>Close</span></button>
-
-			</div>
-		</div><!-- /.modal-content -->
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" ng-click="close()"><i class="fa fa-power-off"></i> <span>Close</span></button>
+	</div>
+</div>

@@ -1,4 +1,4 @@
-define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular', 'ngDialog', 'filters/lstring'], function(app, templateHtml, require, _, ng) {
+define(['./locations','app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular', 'ngDialog', 'filters/lstring'], function(locations, app, templateHtml, require, _, ng) {
 
     var PDF    = 'application/pdf';
     var ONLINE = 'text/html';
@@ -115,17 +115,46 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
 
                 function canPrint()    { return !!printableDocuments()   .length && !!$scope.allowPrint; }
                 function canDownload() { return !!downloadableDocuments().length; }
-            
+
 				//==============================================
 				//
 				//
 				//==============================================
-				function print() {
+				function setLocation() {
 
                     if(!$scope.documents()  .length) return help(true);
                     if(!printableDocuments().length) return;
 
-					openDialog('./print-dialog', { resolve : { documents: resolver(printableDocuments()), allowBack: resolver(canDownload()) } }).then(function(dialog){
+					openDialog('./print-location-dialog', { resolve : { } }).then(function(dialog){
+                        dialog.closePromise.then(function(res) {
+                            var val = res.value || {};
+
+                            onCloseDialog(val.action, 'print', { location: val.location });
+                        });
+                    });
+                }
+
+				//==============================================
+				//
+				//
+				//==============================================
+				function print(options) {
+
+                    if(!$scope.documents()  .length) return help(true);
+                    if(!printableDocuments().length) return;
+
+                    var location = (options||{}).location;
+
+                    if(locations && locations.length && !location)
+                        return setLocation();
+
+					openDialog('./print-dialog', { 
+                        resolve : { 
+                            documents: resolver(printableDocuments()), 
+                            allowBack: resolver(canDownload()), 
+                            location: resolver(location) 
+                        }
+                    }).then(function(dialog){
                         dialog.closePromise.then(function(res) {
                             onCloseDialog(res.value, 'print');
                         });
@@ -152,10 +181,11 @@ define(['app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular
 				//
 				//
 				//==============================================
-				function onCloseDialog(action, source) {
-                    if(action=='checkout') checkout();
-                    if(action=='download') download();
-                    if(action=='print')    print();
+				function onCloseDialog(action, source, options) {
+                    if(action=='checkout') checkout(options);
+                    if(action=='download') download(options);
+                    if(action=='location') setLocation(options);
+                    if(action=='print')    print(options);
                     if(action=='clear')    clear(source);
                 }
 

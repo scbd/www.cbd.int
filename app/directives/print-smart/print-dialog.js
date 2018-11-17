@@ -1,8 +1,9 @@
-define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbox', 'filters/lstring'], function(angular, _, Dropbox) {'use strict';
+define(['./locations', 'angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbox', 'filters/lstring', 'css!./location-button.css'], function(locations, angular, _, Dropbox) {'use strict';
 
     var PDF = 'application/pdf';
 
-    return ['$scope', '$http', '$cookies', 'documents', '$filter', 'allowBack', function ($scope, $http, $cookies, documents, $filter, allowBack) {
+	return  ['$scope', '$http', '$cookies', 'documents', '$filter', 'allowBack', 'location',
+	function ($scope,   $http,   $cookies,   documents,   $filter,   allowBack,   location) {
 
         var _ctrl = $scope.printCtrl = this;
 
@@ -11,13 +12,28 @@ define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbo
         _ctrl.allowBack = allowBack;
         _ctrl.documents = documents;
 		_ctrl.languages = _(documents).map('files').flatten().where({ type : PDF}).map('language').uniq().sortBy().value();
-		_ctrl.selectedLanguages  = {};
         _ctrl.print = print;
 		_ctrl.close = close;
         _ctrl.canPrint = canPrint;
         _ctrl.printShop = printShop;
         _ctrl.hasPrintShop = $cookies.get("printShop")=="true";
-		_ctrl.badgeCode    = loadBadge();
+		_ctrl.locations    = locations; 
+		_ctrl.location     = location; 
+		_ctrl.updateLocation = updateLocation
+
+		_ctrl.badgeCode         = loadPref().badge;
+		_ctrl.selectedLanguages = loadPref().languages || {};
+
+		updateLocation();
+
+		//==============================================
+		//
+		//
+		//==============================================
+		function updateLocation() {
+			location = _ctrl.location
+			_ctrl.selectedLocation = location && _.find(locations, {code:location});
+		}
 
 		//==============================================
 		//
@@ -33,6 +49,7 @@ define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbo
 
 			var postData = {
 				badge     : cleanBadge(),
+				location  : location,
 				documents : documentsToPrint()
 			};
 
@@ -40,8 +57,8 @@ define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbo
 
 			$http.post("/api/v2014/printsmart-requests/batch", postData).then(function() {
 
-				if($scope.$root.viewOnly) saveBadge(postData.badge);
-				else                      saveBadge(null);
+				if($scope.$root.viewOnly) savePref();
+				else                      clearPref();
 
 				_ctrl.success = true;
 
@@ -61,21 +78,37 @@ define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbo
 		//
 		//
 		//==============================================
-		function saveBadge(badge) {
+		function savePref() {
 
 			var expires = new Date();
-			expires.setDate(expire.getDate()+14); //in 14 days;
+			expires.setDate(expires.getDate()+14); //in 14 days;
 
-			if(badge) $cookies.put  ("badgeCode", cleanBadge(badge), { path:'/', expires: expires });
-			else      $cookie.remove('badgeCode');
+			$cookies.put("printSmartPref", JSON.stringify({
+				badge: cleanBadge(),
+				location: location,
+				languages: _ctrl.selectedLanguages
+			}), { path:'/', expires: expires });
 		}
 
 		//==============================================
 		//
 		//
 		//==============================================
-		function loadBadge() {
-			return $cookies.get("badgeCode")||'';
+		function clearPref() {
+			$cookies.remove("printSmartPref");
+		}
+
+		//==============================================
+		//
+		//
+		//==============================================
+		function loadPref() {
+			try {
+				return JSON.parse($cookies.get("printSmartPref")||'{}')
+			}
+			catch(e){
+				return {};
+			}
 		}
 
 		//==============================================
@@ -133,7 +166,8 @@ define(['angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbo
 			delete _ctrl.success;
 
             localStorage.setItem("printShop", JSON.stringify({
-                badge     : cleanBadge(),
+				badge     : cleanBadge(),
+				location  : location,
                 documents : documentsToPrint()
             }));
 
