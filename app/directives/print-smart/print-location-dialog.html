@@ -8,42 +8,37 @@
 				
 			</div>
 			<div class="modal-body">
+        
+				<p class="help-print">
+						Please select below the dictribution counter where you want to collect
+						your documents: 
+				</p>
+				<div class="row">
+          <div class="col-xs-12 col-sm-6 text-center location-col" ng-repeat="location in locations">
+            <button type="button" class="btn btn-default btn-xxl location" 
+                ng-class="{ 'active': $parent.selectedLocation==location.code }"
+                ng-click="selectLocation(location.code)"
+                ng-style="{ 'background-image' : 'url(\'/app/images/printsmart/'+location.code+'.jpg\')' }">
+              <br/>
+              <span>{{location.title}}</span><br/>
+              <span>{{location.description}}</span><br/>
+              <span>{{location.location}}</span><br/>
+              <br/>
+            </button>
+          </div>
+				</div>
 
-				<div class="alert alert alert-info">
-					<p>
+				<div class="alert alert alert-info hidden-xs" style="margin-top: 20px;">
+					<p >
 						Due to the great size of the venue and the distance between the 
 						the two meeting rooms, two document distribution counters are available
 						for your convenience. 
 					</p>
-					
-	
-				</div>
-				<p style="padding:15px">
-						Please select below the dictribution counter where you want to collect
-						your documents: 
-					</p>
-				<div>
-					<table style="width:100%">
-						<tr>
-							<td ng-repeat="location in locations" class="text-center" ng-style="{ width: (100/locations.length)+'%' }" >
-								<button type="button" class="btn btn-default btn-xxl location" 
-										ng-class="{ 'active': $parent.selectedLocation==location.code }"
-										ng-click="selectLocation(location.code)"
-										ng-style="{ 'background-image' : 'url(\'/app/images/printsmart/'+location.code+'.jpg\')' }">
-									<br/>
-									<span>{{location.title}}</span><br/>
-									<span>{{location.description}}</span><br/>
-									<span>{{location.location}}</span><br/>
-									<br/>
-								</button>
-							</td>
-						</tr>
-					</table>
 				</div>
 			</div>
 
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" ng-click="back()"><i class="fa fa-arrow-left"></i> Back</button>
+				<button type="button" class="btn btn-default" ng-click="back()" ng-if="!viewOnly"><i class="fa fa-arrow-left"></i> Back</button>
 				<button type="button" class="btn btn-primary" ng-click="print()" ng-disabled="!selectedLocation"><i class="fa fa-print"></i> Continue</button>
 				<button type="button" class="btn btn-default" ng-click="close()"><i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
 			</div>

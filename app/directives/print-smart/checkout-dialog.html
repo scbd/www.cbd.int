@@ -6,9 +6,12 @@
 		.btn-xxl > i.fa { font-size:   6em; }
 
 		@media (max-width: 767px) {
-			.btn-xxl        { width:     135px; }
+			.btn-xxl        { width:     135px;
+				 			  height:     100px; }
 			.btn-xxl > span:first-child { font-size:   1em; }
-			.btn-xxl > i.fa { font-size:   5em; }
+			.btn-xxl > i.fa { font-size:   3em; }
+			.print-btn {margin-top:1em;}
+
 		}
 	</style>
 
@@ -20,23 +23,19 @@
 		</h4>
 	</div>
 	<div class="modal-body">
-			<div ng-hide="target">
-				<table style="width:100%">
-					<tr>
-						<td class="text-center" ng-style="{ width: (allowPrint ? '50%' : '100%') }">
-							<button type="button" class="btn btn-success btn-xxl" ng-click="download()">
-								<span>Download</span><br /><br />
-								<i class="fa fa-arrow-circle-down"></i>
-							</button>
-						</td>
-						<td class="text-center" ng-show="allowPrint" ng-style="{ width: (allowPrint ? '50%' : '100%') }">
-							<button type="button" class="btn btn-primary btn-xxl" ng-disabled="!printableDocuments.length" ng-click="print()">
-								<span>Request Prints</span><br /><br />
-								<i class="fa fa-print"></i>
-							</button>
-						</td>
-					</tr>
-				</table>
+			<div class="row" ng-hide="target">
+              <div class="col-xs-12 col-sm-6 text-center" >
+                <button type="button" class="btn btn-success btn-xxl" ng-click="download()">
+                  <span>Download</span><br /><br />
+                  <i class="fa fa-arrow-circle-down"></i>
+                </button>
+              </div>
+              <div class="col-xs-12 col-sm-6 text-center "  ng-show="allowPrint"  >
+                <button type="button" class="btn btn-primary btn-xxl print-btn" ng-disabled="!printableDocuments.length" ng-click="print()">
+                  <span>Request Prints</span><br /><br />
+                  <i class="fa fa-print"></i>
+                </button>
+              </div>
 			</div>
 	</div>
 

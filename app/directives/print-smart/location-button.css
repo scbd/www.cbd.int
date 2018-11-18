@@ -1,3 +1,13 @@
+.modal-body .help-print{
+  margin-bottom: 25px;
+  padding: 0px 15px;
+}
+.mobile-app .modal-body .help-print { 
+    padding: 0 15px 15px 15px;
+    margin-top: -1em;
+    margin-bottom: 0px;
+}
+
 button.location > span:nth-of-type(1) { font-size:   2.0em; font-weight: bold; }
 button.location > span:nth-of-type(2) { font-size:   1.5em; font-variant:small-caps; }
 button.location > span:nth-of-type(3) { font-size:   1.0em; font-style: italic; }
@@ -19,10 +29,10 @@ button.location.active,
 button.location:active,
 button.location:active {
     box-shadow: 0px 0px 16px 7px #337ab7;
-    font-size:   105%;
 }
 
 @media (max-width: 767px) {
+    .location-col:not(:first-child)  { margin-top: 2em; }
     button.location > span:nth-of-type(1) { font-size:   1.5em; font-weight: bold; }
     button.location > span:nth-of-type(2) { font-size:   1.3em; font-variant:small-caps; white-space:normal ; }
     button.location {  
