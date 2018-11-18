@@ -65,8 +65,6 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                     isMontreal : /montr.al.*canada/i.test((res.data.venueText||{}).en||'')
                 });
 
-                meeting.printSmart=true;
-
                 _ctrl.noTabs  = meeting.EVT_STY_CD=='BAR';
                 _ctrl.meeting = meeting;
                 _ctrl.agenda  = meeting.agenda;
@@ -163,7 +161,6 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 visible : d.status=='public' && !!(d.files||[]).length
             });
             
-            d.metadata.printable = true;
             if(d.status!='public')
                 delete d.metadata.visible;
 
