@@ -95,7 +95,7 @@ define(['./locations', 'angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'dir
 		//
 		//==============================================
 		function clearPref() {
-			$cookies.remove("printSmartPref");
+			$cookies.remove("printSmartPref", { path:'/' });
 		}
 
 		//==============================================
