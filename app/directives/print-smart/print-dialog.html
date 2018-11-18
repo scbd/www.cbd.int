@@ -50,7 +50,7 @@
 						</div>
 					</div>
 
-					<div ng-if="::printCtrl.locations.length" class="form-group">
+					<div  ng-if="::printCtrl.locations.length" class="form-group hidden-xs">
 						<label for="location" class="col-sm-4 control-label">Pickup location</label>
 						<div class="col-sm-6">
 							<select class="form-control" ng-model="printCtrl.location" ng-options="l.code as l.title+' - '+l.location for l in printCtrl.locations" ng-change="printCtrl.updateLocation()"></select>
@@ -106,7 +106,7 @@
 
 					<div ng-show="printCtrl.selectedLocation" style="padding: 15px">
 
-						<p>
+						<p class="help-print">
 							Remember to collect your documents at the following counter:
 						</p>
 
