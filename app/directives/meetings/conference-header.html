@@ -138,9 +138,12 @@
        .single-menu{
             max-width:60px
        }
+       .hover-link{
+           text-decoration: none!important;
+       }
    </style>
    <!-- NAVIGATION BAR -->
-   <div ng-cloak ng-if="meetingNavCtrl.isSelected()" class="meetingnav hidden-print">
+   <div ng-cloak ng-if="meeting && meetingNavCtrl.isSelected()" class="meetingnav hidden-print">
        <div class="container">
            <div class="row menu-gradient">
                <table class="meetingnav-table">
@@ -158,16 +161,21 @@
                        </td>
                        <td class="meetingnav-button visible-xs docs"  ng-repeat="event in meeting.conference.events"
                        ng-class="{selected:meetingNavCtrl.isMajorEventSelected(event.code)}">
-                           <a href="/conferences/{{meeting.code}}/{{event.menus[0].code}}#{{meetingNavCtrl.hash()}}" class="link"></a>
+                           <a href="/conferences/{{meeting.code}}/{{event.clickable ? event.code : event.menus[0].code}}#{{meetingNavCtrl.hash()}}" class="link"></a>
                            <i class="fa {{event.iconClass}}" aria-hidden="true" style="font-size:24px"></i>
                        </td>
                        <td class="meetingnav-buttongroup hidden-xs" ng-repeat="event in meeting.conference.events" ng-class="{'single-menu' : event.menus.length ==1}">
                            <table style="height:100%;width:100%;font-size:12px;font-weight:bold">
                                <tr style="height:0px" ng-if="event.title">
-                                   <td colspan="4" style="vertical-align:top">
-                                       <div style="border-bottom:1px solid #ffff;ont-size:12px;font-weight:normal;height:30px;padding-top:5px;color:#ddd">
-                                        <span ng-bind-html="event.title"></span>
-                                    </div>
+                                   <td colspan="4" style="vertical-align:top" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{meeting.code}}/{{event.code}}', true)}" >
+                                        <a ng-if="event.clickable" class="hover-link" ng-href="/conferences/{{meeting.code}}/{{event.code}}#{{meetingNavCtrl.hash()}}">
+                                            <div style="border-bottom:1px solid #ffff;ont-size:12px;font-weight:normal;height:30px;padding-top:5px;color:#ddd">
+                                                <span ng-bind-html="event.title"></span>
+                                            </div>
+                                        </a>
+                                        <div ng-if="!event.clickable" style="border-bottom:1px solid #ffff;ont-size:12px;font-weight:normal;height:30px;padding-top:5px;color:#ddd">
+                                            <span ng-bind-html="event.title"></span>
+                                        </div>
                                    </td>
                                </tr>
                                <tr style="height:90%">
@@ -221,6 +229,11 @@
                </table>
                <table class="meetings visible-xs" style="width:100%" ng-if="meetingNavCtrl.isMajorEventSelected(event.code) && event.menus.length > 1" ng-repeat="event in meeting.conference.events">
                    <tr>
+                        <td ng-if="event.clickable" class="notselected meeting {{event.cssClass}}" 
+                            ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{meeting.code}}/{{event.code}}')}" >
+                            <a href="/conferences/{{meeting.code}}/{{event.code}}#{{meetingNavCtrl.hash()}}"></a>
+                            {{event.mobileTitle}}
+                        </td>
                        <td class="notselected meeting {{menu.cssClass}}" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{meeting.code}}/{{menu.code}}')}" 
                        ng-repeat="menu in event.menus">
                            <a href="/conferences/{{meeting.code}}/{{menu.code}}#{{meetingNavCtrl.hash()}}"></a>
