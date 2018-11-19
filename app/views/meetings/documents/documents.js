@@ -1,11 +1,5 @@
 define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
-    // Prefetch optimization
-    'directives/print-smart/print-smart-checkout', 'text!directives/print-smart/print-smart-checkout.html',
-    'ngDialog','directives/view-injector',
-    'moment', 'moment-timezone', 'filters/moment',
-    'directives/checkbox', 'text!directives/checkbox.html',
-    'views/meetings/documents/meeting-document',
-    'angular-cache'
+        'css!./meeting-documents.css', 'angular-cache'
 ], function(_, ng) {
     //'css!./agenda.css' // moved to template
     var currentUser;

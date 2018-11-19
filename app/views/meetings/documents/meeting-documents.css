@@ -1,0 +1,50 @@
+.meeting-documents .nav.nowrap {
+    white-space: nowrap;
+}
+
+.meeting-documents .nav.nowrap > li {
+    display:inline-block;
+    float:none;
+}
+
+
+.meeting-documents .doc-tabs {
+    margin-top:20px
+}
+
+.mobile-app .mobile-spacer{
+  height:96vh;
+  overflow-y: auto;
+}
+
+.mobile-app .meeting-documents #print-smart-checkout {
+  position: fixed;
+  top:-10px;
+  left:0;
+  right:0;
+  padding: 5px 10px 5px 10px;
+  text-align: right;
+  border-bottom: solid 1px #c0c0c0;
+  background-color: #ffffff;
+  z-index:99;
+  margin-top: 5px !important;
+}
+
+.mobile-app .meeting-documents .doc-tabs {
+  padding-top: 25px;
+}
+
+@media (max-width:767px){
+    .meeting-documents .nav-tabs, 
+    .meeting-documents .tab-content 
+    {
+        margin-left: -15px;
+        margin-right: -15px
+    }
+
+    .mobile-app .meeting-documents .nav-tabs, 
+    .mobile-app .meeting-documents .tab-content {
+        margin-left: 0px;
+        margin-right: 0px
+    }            
+}
