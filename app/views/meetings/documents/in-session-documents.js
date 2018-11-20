@@ -5,12 +5,15 @@
     var CRP = /.*\/CRP(\d+)(?:$|\/[A-Z]+\d+$)/i
     var REV = /.*\/REV(\d+)$/i
     var ADD = /.*\/ADD(\d+)$/i
+    var STATISTICS = {}; 
 
-    return  ["$scope", "$route", "$http", '$q', '$location', 'authentication', 'conferenceService', '$filter', function(
-              $scope,   $route,   $http,   $q,   $location,   authentication,   conferenceService,   $filter) {
+    return  ["$scope", "$route", "$http", '$q', '$location', 'authentication', 'conferenceService', '$filter', 'CacheFactory', function(
+              $scope,   $route,   $http,   $q,   $location,   authentication,   conferenceService,   $filter,   CacheFactory) {
         
         var $ctrl = this;
         var lstring  = $filter('lstring');
+        var conferenceCode = $route.current.params.code;
+        var httpCache = initCache();
 
         $ctrl.documents = null;
         $ctrl.meetings  = null;
@@ -34,15 +37,14 @@
         //====================================
         function load() {
 
-            var conference = conferenceService.getActiveConference($route.current.params.code);
             var meetings;
             
-            return $q.when(conference).then(function(c){
-            
-                conference = c;
-            
-            }).then(function(){
+            return $q.when(httpCache.reValidate()).then(function(){
 
+                return conferenceService.getActiveConference(conferenceCode);
+
+            }).then(function(conference){
+            
                 var query, fields;
 
                 var ids = _.map(conference.MajorEventIDs, function(id){
@@ -54,7 +56,7 @@
                 query  = { _id: { $in : ids } };
                 fields = { EVT_CD:1, agenda:1, printSmart:1 };
 
-                meetings = $http.get("/api/v2016/meetings", { params: { q: query, f: fields } }).then(resData);
+                meetings = $http.get("/api/v2016/meetings", { params: { q: query, f: fields }, cache: httpCache }).then(resData);
 
                 // load documents
 
@@ -65,7 +67,7 @@
                     nature: { $in : ['non-paper', 'crp', 'limited'] }
                 };
 
-                return $http.get('/api/v2016/documents', { params: { q: query } }).then(resData);
+                return $http.get('/api/v2016/documents', { params: { q: query }, cache: httpCache }).then(resData);
 
             }).then(function(documents){
                 
@@ -223,7 +225,59 @@
                     affixReady();
                 }
             });
-        }        
-    }]
+        }
 
+        //==============================
+        //
+        //==============================
+        function initCache() {
+
+            var cacheId = 'meeting_documents_insession_'+conferenceCode;
+            var cache   = CacheFactory.get(cacheId)
+            
+            if(!cache) {
+
+                cache = CacheFactory.createCache(cacheId, {
+                    deleteOnExpire: 'passive',
+                    maxAge        : 5 * 60 * 1000,
+                    storageMode   : 'localStorage',
+                    storagePrefix : 'httpCache_'
+                });
+
+                cache.reValidate = function() {
+
+                    var thisCache = this;
+
+                    return conferenceService.getActiveConference(conferenceCode).then(function(conference) {
+
+                        var reqs = _.map(conference.MajorEventIDs, function(id){
+                            return $http.get('/api/v2016/meetings/'+encodeURIComponent(id)+'/documents/statistics').then(resData);
+                        });
+
+                        return $q.all(reqs);
+                        
+                    }).then(function(stats){
+
+                        var oldStats = STATISTICS[conferenceCode] || thisCache.get('statistics');
+                        var newStats = stats;
+
+                        if(!_.isEqual(oldStats, newStats)) {
+                            thisCache.removeAll();
+                            thisCache.put('statistics', newStats);
+                            STATISTICS[conferenceCode]= newStats;
+                        }
+
+                        return thisCache;
+
+                    }).catch(function(e){
+
+                        thisCache.removeAll();
+                        return thisCache;
+                    });
+                };
+            }
+
+            return cache;
+        }
+    }]
 });
