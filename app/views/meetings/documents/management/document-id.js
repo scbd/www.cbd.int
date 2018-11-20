@@ -139,7 +139,7 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'dire
                 if(documentId=='new')
                     return { };
 
-                return $http.get('/api/v2016/meetings/'+meetingCode+'/documents/'+documentId).then(function(res) {
+                return $http.get('/api/v2016/meetings/'+meetingCode+'/documents/'+documentId, {params:{rp:'primary'}}).then(function(res) {
                     return _.defaults(res.data, { meetingCode : meetingCode });
                 });
 
