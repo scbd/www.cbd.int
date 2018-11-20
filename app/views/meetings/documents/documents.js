@@ -59,6 +59,8 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                     isMontreal : /montr.al.*canada/i.test((res.data.venueText||{}).en||'')
                 });
 
+                meeting.insession=true;
+
                 _ctrl.noTabs  = meeting.EVT_STY_CD=='BAR';
                 _ctrl.meeting = meeting;
                 _ctrl.agenda  = meeting.agenda;
@@ -126,6 +128,8 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
                     var tab = injectTab(group, docs);
 
+                    tab.insession = isInSessionTab(tab);
+
                     if(items.length) {
                         tab.agenda = {
                             items : items,
@@ -174,6 +178,9 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function updateMaxTabCount(){
 
+            (_(_ctrl.tabs).first({ insession: true })||{}).insessionFirst = true;
+            (_(_ctrl.tabs).last ({ insession: true })||{}).insessionLast  = true;
+
             var size = $rootScope.deviceSize;
 
                  if(size=='xs') _ctrl.maxTabCount = 2;
@@ -186,16 +193,18 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 _ctrl.maxTabCount = 999;
             }
 
-            if(_ctrl.tabs && _ctrl.tabs.length && _.findIndex(_ctrl.tabs, isInSessionTab)>0) {
+            if(_ctrl.tabs && _ctrl.tabs.length && !_ctrl.meeting.insession && _.findIndex(_ctrl.tabs, isInSessionTab)>0) {
                 _ctrl.maxTabCount = Math.min(_ctrl.maxTabCount, _.findIndex(_ctrl.tabs, isInSessionTab));
             }
+
+
         }
 
         //==============================
         //
         //==============================
         function isInSessionTab(tab) {
-            return !_ctrl.meeting.insession && /^in-session/.test(tab.code);
+            return /^in-session/.test(tab.code);
         }
 
         //==============================
