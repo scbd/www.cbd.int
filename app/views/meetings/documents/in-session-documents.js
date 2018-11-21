@@ -1,4 +1,4 @@
-﻿define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
+define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
         'css!./meeting-documents.css', 'angular-cache', 'services/conference-service'
 ], function(_, ng) {
 
@@ -18,7 +18,8 @@
         $ctrl.documents = null;
         $ctrl.meetings  = null;
         $ctrl.toHtmlID  = toHtmlID;
-        $ctrl.isEditor  = false;
+        $ctrl.edit = edit;
+        $ctrl.add  = add;
 
         load();
         initAffix();
@@ -28,8 +29,7 @@
         //===================================
         $q.when(authentication.getUser()).then(function(user){
             $ctrl.isEditor = authentication.isInRole(user, ["EditorialService"]);
-            $ctrl.edit = edit;
-            $ctrl.add  = add;
+            $ctrl.isStaff  = authentication.isInRole(user, ["ScbdStaff"]) || $ctrl.isEditor;
         });
 
         //====================================
@@ -89,10 +89,10 @@
 
                 }, {});
 
-                var firstTab = _($ctrl.tabs).values().first();
+                $ctrl.currentTab = _($ctrl.tabs).values().first();
 
-                if(firstTab)
-                    firstTab.loaded = true;
+                if($ctrl.currentTab)
+                    $ctrl.currentTab.loaded = true;
 
                 $ctrl.documents = documents;
 

@@ -48,3 +48,9 @@
         margin-right: 0px
     }            
 }
+
+@media print {
+    .meeting-documents table.statistics {
+        display: table !important;
+    }
+}
