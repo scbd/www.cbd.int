@@ -191,7 +191,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //====================================
         function pad(t) {
 
-            t = `${t||''}`;
+            t = (t||'').toString();
 
             while(t.length<4)
                 t = '0'+t;
