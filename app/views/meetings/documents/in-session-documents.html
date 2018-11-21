@@ -1,4 +1,4 @@
-﻿<div class="meeting-documents">
+<div class="meeting-documents">
     <style>
         .meeting-documents .nav-tabs>li.in-session                      { padding-left:4px; }
         .meeting-documents .nav-tabs>li.in-session             >div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0   4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
@@ -6,6 +6,14 @@
         .meeting-documents .nav-tabs>li.in-session:last-child  >div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0   4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
 
     </style>
+                    
+    <h1 class="visible-print" style="color:black;position:absolute;top:0px;right:0px"> 
+        <span ng-repeat="m in $ctrl.meetings track by m._id">
+            {{m.EVT_CD}}<span ng-if="!$last">, </span>
+        </span>
+        <em><small>({{$ctrl.currentTab.code|uppercase}})</small></em>
+    </h1>
+
     <div ng-if="!$ctrl.error" id="print-smart-checkout" ng-cloak class="pull-right hidden-print" style="margin-top:5px">
 
         <span ng-if="$ctrl.isEditor" class="edit">
@@ -20,6 +28,8 @@
             </div>
             <button type="button" class="btn btn-default" ng-class="{active:$ctrl.editMode, 'btn-info': $ctrl.editMode }" ng-click="$ctrl.editMode=!$ctrl.editMode"><i class="fa fa-edit"></i></button>
         </span>
+      
+        <button type="button" ng-if="$ctrl.isStaff" class="btn btn-default" ng-class="{active:$ctrl.statsMode, 'btn-info': $ctrl.statsMode }" ng-click="$ctrl.statsMode=!$ctrl.statsMode && $ctrl.isStaff"><i class="fa fa-bar-chart"></i></button>
       
         <!-- Sort/Display -->
         <!-- <span ng-cloak ng-if="$ctrl.meeting.agenda.items.length" class="hidden-print btn-group">
@@ -46,7 +56,7 @@
             <li ng-repeat="tab in ::$ctrl.tabs track by tab.code" class="in-session" ng-class="::{ active: $index==0 }">
                 <div class="bg"></div>
                 <div ng-if="$index==0" style="position:absolute;top:-18px;left:0px;right:2px;height:15px;font-size:10px;font-weight:bold;color:#444">&nbsp;&nbsp;&nbsp;IN-SESSION</div>
-                <a ng-href="#{{::$ctrl.toHtmlID(tab.code)}}" ng-click="tab.loaded=true" role="tab" data-toggle="tab">
+                <a ng-href="#{{::$ctrl.toHtmlID(tab.code)}}" ng-click="tab.loaded=true; $ctrl.currentTab=tab" role="tab" data-toggle="tab">
                     <span ng-switch="tab.code">
                         <span ng-switch-when="plenary">Plenary</span>
                         <span ng-switch-when="WG.1">
@@ -57,7 +67,7 @@
                             <span class="visible-md-inline visible-lg-inline">Working Group II</span>
                             <span class="visible-xs-inline visible-sm-inline">WG II</span>
                         </span>
-                        <span ng-switch-default="plenary"> {{::tab.code}}</span>
+                        <span ng-switch-default=""> {{::tab.code}}</span>
                     </span>
                     ({{tab.documents.length}})
                 </a>
@@ -82,7 +92,7 @@
 
                         </td>
                         <td>
-                            <meeting-document document="document" enable-selection="!$ctrl.editMode" show-statistics="false"></meeting-document>
+                            <meeting-document document="document" enable-selection="!$ctrl.editMode" show-statistics="$ctrl.statsMode"></meeting-document>
                         </td>
 
                         <td ng-if="$ctrl.editMode" style="width:10px">
