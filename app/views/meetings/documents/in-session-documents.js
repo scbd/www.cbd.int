@@ -71,7 +71,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
             }).then(function(documents){
                 
-                $ctrl.tabs = _(documents).sortBy(buildSortKey).reduce(function(tabs, d){
+                var tabs = _(documents).sortBy(buildSortKey).reduce(function(tabs, d){
 
                     d.metadata = _.defaults(d.metadata||{}, { //Normalize
                         printable: true,
@@ -83,13 +83,16 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                         documents : []
                     };
 
+                    tab.sortKey = (d.group||'').toUpperCase();
+
                     tab.documents.push(d);
 
                     return tabs;
 
                 }, {});
 
-                $ctrl.currentTab = _($ctrl.tabs).values().first();
+                $ctrl.tabs = _(tabs).values().sortBy('sortKey').value();
+                $ctrl.currentTab = _.first($ctrl.tabs);
 
                 if($ctrl.currentTab)
                     $ctrl.currentTab.loaded = true;
