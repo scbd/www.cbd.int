@@ -102,7 +102,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                 //Lookup for first reservation
                 var query  = { 'agenda.items': { $exists: true, $ne: [] }, 'meta.status': { $ne : 'deleted' } };
 
-                return $http.get('/api/v2016/reservations', { params: { q : query, f : { start : 1 }, s: { start : 1 }, fo:1 } }).then(function(res){
+                return $http.get('/api/v2016/reservations', { params: { q : query, f : { start : 1 }, s: { start : 1 }, fo:1, cache: true } }).then(function(res){
 
                     if(res.data && res.data.start && now.toISOString() < res.data.start)
                         return loadReservations(new Date(res.data.start));
@@ -118,7 +118,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
 
                 var meetingCodes = _(reservations).map('agenda.items').flatten().map('meeting').uniq().value();
 
-                var meetings = $http.get('/api/v2016/meetings', { params: { q: { EVT_CD: { $in: meetingCodes } }, f : { EVT_TIT_EN:1, EVT_CD:1, printSmart:1 , agenda:1 } } }).then(function(res){
+                var meetings = $http.get('/api/v2016/meetings', { params: { q: { EVT_CD: { $in: meetingCodes } }, f : { EVT_TIT_EN:1, EVT_CD:1, printSmart:1 , agenda:1 }, cache: true } }).then(function(res){
                     return _ctrl.meetings  = _.forEach(res.data, function(m){
                         m.code  = m.EVT_CD;
                         m.title = m.EVT_TIT_EN;
@@ -126,7 +126,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                 });
 
                 var meetingDocuments = $q.all(_.map(meetingCodes, function(meetingCode) {
-                    return $http.get('/api/v2016/meetings/'+meetingCode+'/documents', { params: {  } }).then(function(res){
+                    return $http.get('/api/v2016/meetings/'+meetingCode+'/documents', { params: { cache:true } }).then(function(res){
                         return {
                             meeting : meetingCode,
                             documents : _(res.data).map(function(d) {
@@ -273,7 +273,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         //==============================
         function loadReservations(now) {
 
-            var start = moment(now).toDate(); // from now
+            var start = moment(now).startOf('minute').toDate(); // start of minute to avois cache busting
             var end   = moment(now).tz(_ctrl.event.timezone).startOf('day').add(2, 'days').toDate(); // to tomorrow
 
             var fields = { start : 1, end : 1, agenda :1, type: 1, title: 1 };
@@ -289,7 +289,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                 ]
             };
 
-            return $http.get('/api/v2016/reservations', { params: { q : query, f : fields, s: sort } }).then(function(res){
+            return $http.get('/api/v2016/reservations', { params: { q : query, f : fields, s: sort, cache: true } }).then(function(res){
                 return res.data;
             });
         }

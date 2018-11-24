@@ -56,7 +56,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 query  = { _id: { $in : ids } };
                 fields = { EVT_CD:1, agenda:1, printSmart:1 };
 
-                meetings = $http.get("/api/v2016/meetings", { params: { q: query, f: fields }, cache: httpCache }).then(resData);
+                meetings = $http.get("/api/v2016/meetings", { params: { q: query, f: fields, cache:true } }).then(resData);
 
                 // load documents
 
@@ -67,7 +67,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                     nature: { $in : ['non-paper', 'crp', 'limited'] }
                 };
 
-                return $http.get('/api/v2016/documents', { params: { q: query }, cache: httpCache }).then(resData);
+                return $http.get('/api/v2016/documents', { params: { q: query, cache:!$ctrl.isEditor }, cache: httpCache }).then(resData);
 
             }).then(function(documents){
                 
