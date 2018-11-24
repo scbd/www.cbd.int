@@ -84,9 +84,9 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             }
 
             var reservations, now;
-            var event = $http.get('/api/v2016/event-groups/'+eventId, { params: { f : { timezone:1, MajorEventIDs:1, Title: 1, Description:1, venueId:1, schedule:1 } } }).then(function(res) {
+            var event = conferenceService.getConference(eventId).then(function(conf) {
 
-                _ctrl.event = event = res.data;
+                _ctrl.event = event = conf;
 
             }).then(function(){
 
