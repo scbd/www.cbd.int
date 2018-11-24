@@ -45,8 +45,6 @@
         <print-smart-checkout ng-if="$ctrl.tabs" style="display:inline-block" documents="$ctrl.documents|filter:{selected:true}:true" allow-print="$ctrl.printSmart"></print-smart-checkout>
     </div>    
 
-    <h3 ng-hide="$ctrl.meetings" style="color: #777"><i class="fa fa-circle-o-notch fa-spin"></i></h3>
-
     <div class="clearfix visible-xs" style="height:50px">&nbsp</div>
 
     <div>
@@ -72,6 +70,7 @@
                     ({{tab.documents.length}})
                 </a>
             </li>
+            <li ng-hide="$ctrl.meetings" ><a><h3  style="color: #777;margin: 0px"><i class="fa fa-circle-o-notch fa-spin"></i></h3></a></li>
         </ul>
         
         <!-- Tab panes -->

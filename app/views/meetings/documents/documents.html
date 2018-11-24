@@ -59,7 +59,6 @@
         <print-smart-checkout ng-if="documentsCtrl.documents.length" style="display:inline-block" documents="documentsCtrl.documents|filter:{selected:true}:true" allow-print="documentsCtrl.meeting.printSmart"></print-smart-checkout>
     </div>
 
-    <h3 ng-hide="documentsCtrl.loaded" style="color: #777"><i class="fa fa-circle-o-notch fa-spin"></i></h3>
 
     <div class="clearfix" ng-if="documentsCtrl.edit"></div>
     <div class="clearfix visible-md visible-sm visible-xs"></div>
@@ -103,6 +102,7 @@
                 </li>
             </ul>
         </li>
+        <li ng-hide="documentsCtrl.loaded" ><a><h3  style="color: #777;margin: 0px"><i class="fa fa-circle-o-notch fa-spin"></i></h3></a></li>
     </ul>
 
     <!-- Tab panes -->
