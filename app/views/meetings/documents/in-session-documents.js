@@ -241,9 +241,10 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
             if(!cache) {
 
                 cache = CacheFactory.createCache(cacheId, {
-                    deleteOnExpire: 'passive',
+                    deleteOnExpire: 'aggressive',
+                    recycleFreq   : 10000,
                     maxAge        : 5 * 60 * 1000,
-                    storageMode   : 'localStorage',
+                    storageMode   : 'memory',
                     storagePrefix : 'httpCache_'
                 });
 

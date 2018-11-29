@@ -9,7 +9,7 @@ define(['app', 'lodash', 'moment-timezone', 'angular-cache'], function (app, _, 
                     deleteOnExpire: 'aggressive',
                     recycleFreq   : 10000,
                     maxAge        : 5 * 60 * 1000,
-                    storageMode   : 'localStorage',
+                    storageMode   : 'memory',
                     storagePrefix : 'httpCache_'
                 });
             }
