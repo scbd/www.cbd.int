@@ -364,7 +364,10 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
           } else if (schemaName == 'nr5' || schemaName == 'nr4' || schemaName == 'nr3' || schemaName == 'nr2' || schemaName == 'nr1') {
             $scope.legendTitle = schema[0].reportType_EN_t;
 
-          } else if (schemaName == 'nbsaps') {
+          } else if (schemaName == 'nr6') {
+            $scope.legendTitle = `${schema[0].schema_EN_t} (2014-2018)`;
+
+          }else if (schemaName == 'nbsaps') {
             $scope.legendTitle = 'National Biodiversity Strategies and Action Plans';
 
           } else if (schemaName == 'nationalIndicator') {
