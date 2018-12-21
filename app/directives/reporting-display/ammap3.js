@@ -462,6 +462,10 @@ define(['text!./ammap3.html', 'app', 'underscore', 'ammap3', 'ammap3WorldHigh', 
             _.each(country.docs, function(schema, schemaName) {
 
               switch (schemaName) {
+                case 'nationalReport6':
+                  if ($scope.schema !== 'all')
+                    balloonBody = " <div class='panel-body' style='text-align:left;'>" + country.docs.nationalReport6[0].schema_EN_t + " (2014-2018)</div>";
+                  break;
                 case 'nationalReport':
                   if ($scope.schema !== 'all')
                     balloonBody = " <div class='panel-body' style='text-align:left;'>" + country.docs.nationalReport[0].reportType_EN_t + "</div>";

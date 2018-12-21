@@ -18,6 +18,7 @@ define(['text!./results-list.html', 'app', 'underscore'], function(template, app
 
             'nationalAssessment': 'National Assessments',
             'nationalReport': 'National Reports',
+            'nationalReport6': 'National Reports',
             'nbsaps': 'NBSAPs',
             'nationalIndicator': 'National Indicators',
             'nationalTarget': 'National Targets',
@@ -37,7 +38,21 @@ define(['text!./results-list.html', 'app', 'underscore'], function(template, app
           function init() {
             if(!$location.search().filter)
                 $location.search('filter','all');
-                
+
+            if($scope.items)
+            {
+              _.forEach($scope.items, country => {
+                  if(country && country.docs)
+                  {
+                    if(country.docs.nationalReport && country.docs.nationalReport6)
+                    {
+                      $scope.items[country.identifier].docs['nationalReport'] = country.docs.nationalReport.concat(country.docs.nationalReport6);
+                      delete country.docs.nationalReport6;
+                    }
+                  }
+              });
+            }
+
             $scope.numCountries = _.size($scope.items);
             if (!$scope.totalRecords) $scope.totalRecords = 0;
             $scope.numRecords = _.clone($scope.totalRecords);
