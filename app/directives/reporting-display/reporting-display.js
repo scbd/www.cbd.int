@@ -44,6 +44,7 @@ define(['text!./reporting-display.html',
 
         $scope.navTag = {
 
+          'nr6': '6th National Report (2014-2018)',          
           'nr5': '5th National Report (2009-2014)',
           'nr4': '4th National Report (2005-2009)',
           'nr3': '3rd National Report (2001-2005)',
@@ -80,6 +81,7 @@ define(['text!./reporting-display.html',
           'all': {
             'schema_s': [
               'nationalReport',
+              'nationalReport6',
               'nationalAssessment',
               'resourceMobilisation',
               'nationalIndicator',
@@ -88,6 +90,11 @@ define(['text!./reporting-display.html',
             '_latest_s': ['true'],
             '_state_s': ['public']
           },
+          'nr6': {
+            'schema_s': ['nationalReport6'],
+            '_latest_s': ['true'],
+            '_state_s': ['public']
+          },          
           'nr5': {
             'schema_s': ['nationalReport'],
             'reportType_s': ['B3079A36-32A3-41E2-BDE0-65E4E3A51601'],
