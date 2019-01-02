@@ -37,6 +37,10 @@ define(['require', 'app', 'angular', 'ngRoute'], function(require, app, angular)
                 ext.resolve.controller = resolveController(templateModule);
             }
 
+            if(ext.controller && !route.controllerAs) {
+                route.controllerAs = '$ctrl';
+            }
+
             return __when(path, angular.extend(route, ext));
         }
 

@@ -1,11 +1,5 @@
 define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
-    // Prefetch optimization
-    'directives/print-smart/print-smart-checkout', 'text!directives/print-smart/print-smart-checkout.html',
-    'ngDialog','directives/view-injector',
-    'moment', 'moment-timezone', 'filters/moment',
-    'directives/checkbox', 'text!directives/checkbox.html',
-    'views/meetings/documents/meeting-document',
-    'angular-cache'
+        'css!./meeting-documents.css', 'angular-cache'
 ], function(_, ng) {
     //'css!./agenda.css' // moved to template
     var currentUser;
@@ -56,7 +50,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function load() {
 
-            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1 } } }).then(function(res){
+            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1 }, cache:true } }).then(function(res){
 
                 meeting = _.defaults(res.data, {
                     code: res.data.EVT_CD,
@@ -64,6 +58,8 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                     printSmart : false,
                     isMontreal : /montr.al.*canada/i.test((res.data.venueText||{}).en||'')
                 });
+
+                meeting.insession=true;
 
                 _ctrl.noTabs  = meeting.EVT_STY_CD=='BAR';
                 _ctrl.meeting = meeting;
@@ -86,7 +82,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
             $q.when(httpCache.reValidate()).then(function(){
 
-                return $http.get('/api/v2016/meetings/'+encodeURIComponent(meetingCode)+'/documents', { cache: httpCache });
+                return $http.get('/api/v2016/meetings/'+encodeURIComponent(meetingCode)+'/documents', { cache: httpCache, params: { cache:!_ctrl.isEditor } });
 
             }).then(function(res) {
 
@@ -131,6 +127,8 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                     var noAgendaDocs = _(docs).difference(_(items).map('documents').flatten().value()).value();
 
                     var tab = injectTab(group, docs);
+
+                    tab.insession = isInSessionTab(tab);
 
                     if(items.length) {
                         tab.agenda = {
@@ -180,6 +178,9 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function updateMaxTabCount(){
 
+            (_(_ctrl.tabs).first({ insession: true })||{}).insessionFirst = true;
+            (_(_ctrl.tabs).last ({ insession: true })||{}).insessionLast  = true;
+
             var size = $rootScope.deviceSize;
 
                  if(size=='xs') _ctrl.maxTabCount = 2;
@@ -192,16 +193,18 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 _ctrl.maxTabCount = 999;
             }
 
-            if(_ctrl.tabs && _ctrl.tabs.length && _.findIndex(_ctrl.tabs, isInSessionTab)>0) {
+            if(_ctrl.tabs && _ctrl.tabs.length && !_ctrl.meeting.insession && _.findIndex(_ctrl.tabs, isInSessionTab)>0) {
                 _ctrl.maxTabCount = Math.min(_ctrl.maxTabCount, _.findIndex(_ctrl.tabs, isInSessionTab));
             }
+
+
         }
 
         //==============================
         //
         //==============================
         function isInSessionTab(tab) {
-            return !_ctrl.meeting.insession && /^in-session/.test(tab.code);
+            return /^in-session/.test(tab.code);
         }
 
         //==============================
@@ -555,9 +558,10 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
             if(!cache) {
 
                 cache = CacheFactory.createCache(cacheId, {
-                    deleteOnExpire: 'passive',
+                    deleteOnExpire: 'aggressive',
+                    recycleFreq   : 10000,
                     maxAge        : 5 * 60 * 1000,
-                    storageMode   : 'localStorage',
+                    storageMode   : 'memory',
                     storagePrefix : 'httpCache_'
                 });
 

@@ -14,6 +14,7 @@ define(['text!./filter-all.html', 'app', 'underscore'], function(template, app, 
             'all': {
               'schema_s': [
                 'nationalReport',
+                'nationalReport6',
                 'nationalAssessment',
                 'resourceMobilisation',
                 'nationalIndicator',

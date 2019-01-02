@@ -56,6 +56,11 @@
 
                             var event = $scope.meeting.conference.events[i];
 
+                            isSelected = code == event.code && $scope.meetingNavCtrl.isSelected('/conferences/'+$scope.meeting.code+'/'+event.code, true)
+                            if(isSelected){
+                                break;
+                            }
+
                             for(var j=0; j<event.menus.length; j++){                                
                                 isSelected = code == event.code && $scope.meetingNavCtrl.isSelected('/conferences/'+$scope.meeting.code+'/'+event.menus[j].code, true)
                                 if(isSelected){

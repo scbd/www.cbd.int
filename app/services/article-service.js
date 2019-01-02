@@ -1,4 +1,4 @@
-﻿define(['app', 'angular-cache'], function (app) {
+define(['app', 'lodash', 'angular-cache'], function (app, _) {
 
     app.factory("articleService", ['$http', 'CacheFactory', function ($http, CacheFactory) {
             var httpCache = CacheFactory.get('articlesHttpCache');
@@ -7,12 +7,14 @@
                     deleteOnExpire: 'aggressive',
                     recycleFreq   : 10000,
                     maxAge        : 5 * 60 * 1000,
-                    storageMode   : 'localStorage',
+                    storageMode   : 'memory',
                     storagePrefix : 'httpCache_'
                 });
             }
             
             function query(qs){
+                
+                qs = _.defaults({}, qs||{}, { cache: true });
                 
                 return $http.get('/api/v2017/articles', { params: qs, cache:httpCache})
                         .then(function(data){
@@ -22,7 +24,7 @@
             }
             function get(articleId){
                 
-                return $http.get('/api/v2017/articles/' + encodeURIComponent(articleId), {cache:httpCache})
+                return $http.get('/api/v2017/articles/' + encodeURIComponent(articleId), {cache:httpCache, params: { cache: true }})
                         .then(function(data){
                             return data.data;
                         });                

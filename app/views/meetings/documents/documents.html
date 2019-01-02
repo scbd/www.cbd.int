@@ -1,58 +1,4 @@
 <div class="meeting-documents">
-    <style>
-        .meeting-documents .nav.nowrap {
-            white-space: nowrap;
-        }
-
-        .meeting-documents .nav.nowrap > li {
-            display:inline-block;
-            float:none;
-        }
-
-
-        .meeting-documents .doc-tabs {
-            margin-top:20px
-        }
-
-        .mobile-app .mobile-spacer{
-          height:96vh;
-          overflow-y: auto;
-        }
-
-        .mobile-app .meeting-documents #print-smart-checkout {
-          position: fixed;
-          top:-10px;
-          left:0;
-          right:0;
-          padding: 5px 10px 5px 10px;
-          text-align: right;
-          border-bottom: solid 1px #c0c0c0;
-          background-color: #ffffff;
-          z-index:99;
-          margin-top: 5px !important;
-        }
-
-        .mobile-app .meeting-documents .doc-tabs {
-          padding-top: 25px;
-        }
-
-        @media (max-width:767px){
-            .meeting-documents .nav-tabs, 
-            .meeting-documents .tab-content 
-            {
-                margin-left: -15px;
-                margin-right: -15px
-            }
-
-            .mobile-app .meeting-documents .nav-tabs, 
-            .mobile-app .meeting-documents .tab-content {
-                margin-left: 0px;
-                margin-right: 0px
-            }            
-        }
-    </style>
-
-
     <a ng-if="documentsCtrl.showMeeting && documentsCtrl.meeting.EVT_WEB" class="hidden-print pull-right btn btn-default" ng-class="{'btn-lg':$root.deviceSize!='xs'}" ng-style="{ 'margin-top': $root.deviceSize=='xs' ? '5px' : '' }" ng-href="{{documentsCtrl.meeting.EVT_WEB}}" target="_self">Official conference page <i class="fa fa-external-link" aria-hidden="true"></i> </a>
 
     <h1 class="visible-print" style="color:black;position:absolute;top:0px;right:0px"> {{::documentsCtrl.meeting.code}} <em><small>{{documentsCtrl.currentTabX.title}}</small></em></h1>
@@ -86,7 +32,7 @@
 
         <button type="button" ng-if="documentsCtrl.isStaff" class="btn btn-default" ng-class="{active:documentsCtrl.statsMode, 'btn-info': documentsCtrl.statsMode }" ng-click="documentsCtrl.statsMode=!documentsCtrl.statsMode && documentsCtrl.isStaff"><i class="fa fa-bar-chart"></i></button>
 
-        <span class="mobile-app-hidden" ng-if="::documentsCtrl.meeting.links.length || documentsCtrl.meeting.EVT_WEB || documentsCtrl.meeting.EVT_INFO_PART_URL || documentsCtrl.meeting.isMontreal || documentsCtrl.meeting.EVT_REG_NOW_YN" class="btn-group">
+        <span class="mobile-app-hidden hidden-print btn-group" ng-if="::documentsCtrl.meeting.links.length || documentsCtrl.meeting.EVT_WEB || documentsCtrl.meeting.EVT_INFO_PART_URL || documentsCtrl.meeting.isMontreal || documentsCtrl.meeting.EVT_REG_NOW_YN" class="btn-group">
           <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Info links <span class="caret"></span>
           </button>
@@ -113,7 +59,6 @@
         <print-smart-checkout ng-if="documentsCtrl.documents.length" style="display:inline-block" documents="documentsCtrl.documents|filter:{selected:true}:true" allow-print="documentsCtrl.meeting.printSmart"></print-smart-checkout>
     </div>
 
-    <h3 ng-hide="documentsCtrl.loaded" style="color: #777"><i class="fa fa-circle-o-notch fa-spin"></i></h3>
 
     <div class="clearfix" ng-if="documentsCtrl.edit"></div>
     <div class="clearfix visible-md visible-sm visible-xs"></div>
@@ -121,11 +66,12 @@
     <!-- Nav tabs -->
 
     <style>
-        .nav-tabs>li[code='in-session']>a           { margin-left: 4px; }
-        .nav-tabs>li[code='official']>a             { margin-left: 6px; }
-        .nav-tabs>li[code='in-session']>div.bg      { position:absolute;top:-21px;left:0px;right:-2px;height:62px;background-color:#eee;border-radius: 4px 4px 0 0;border-top:1px solid #ddd;border-left:1px solid #ddd;border-right:1px solid #ddd;}
-        .nav-tabs>li[code='in-session/wg1']>div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0 4px 0 0  ;border-top:1px solid #ddd;border-right:1px solid #ddd;}
-        .nav-tabs>li[code='in-session/wg2']>div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0 4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
+        .meeting-documents .nav-tabs>li                  > div.in-session-label { display: none }
+        .meeting-documents .nav-tabs>li.in-session.first > div.in-session-label { display: block }
+        .meeting-documents .nav-tabs>li.in-session                { padding-left:4px; }
+        .meeting-documents .nav-tabs>li.in-session       >div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0   4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
+        .meeting-documents .nav-tabs>li.in-session.first >div.bg  { position:absolute;top:-21px;left:0px; right:-2px;height:62px;background-color:#eee;border-radius: 4px 4px 0 0;border-top:1px solid #ddd;border-left:1px  solid #ddd;border-right:1px solid #ddd;}
+        .meeting-documents .nav-tabs>li.in-session.last  >div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0   4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
     </style>
 
     <p ng-if="!documentsCtrl.error && documentsCtrl.loaded && !documentsCtrl.tabs.length">
@@ -133,9 +79,12 @@
     </p>
 
     <ul ng-if="!documentsCtrl.noTabs" class="nav nav-tabs nowrap hidden-print doc-tabs" role="tablist">
-        <li ng-repeat="type in documentsCtrl.tabs|limitTo:documentsCtrl.maxTabCount" ng-class="{active:documentsCtrl.currentTab==type.code}" code="{{type.code}}">
-            <div class="bg" ng-if="::type.code.startsWith('in-session')"></div>
-            <div ng-if="::type.code=='in-session'" style="position:absolute;top:-18px;left:0px;right:2px;height:15px;font-size:10px;font-weight:bold;color:#444">&nbsp;&nbsp;&nbsp;IN-SESSION</div>
+        <li code="{{type.code}}"
+            ng-repeat="type in documentsCtrl.tabs|limitTo:documentsCtrl.maxTabCount"  
+            ng-class="{'active': documentsCtrl.currentTab==type.code, 'in-session': type.insession, 'first': type.insessionFirst, 'last': type.insessionLast }" >
+            
+            <div class="bg"></div>
+            <div class="in-session-label" style="position:absolute;top:-18px;left:0px;right:2px;height:15px;font-size:10px;font-weight:bold;color:#444">&nbsp;&nbsp;&nbsp;IN-SESSION</div>
             <a href="#" ng-click="documentsCtrl.switchTab(type)" role="tab" data-toggle="tab">
                 {{::type.title}} ({{type.length}})
             </a>
@@ -153,6 +102,7 @@
                 </li>
             </ul>
         </li>
+        <li ng-hide="documentsCtrl.loaded" ><a><h3  style="color: #777;margin: 0px"><i class="fa fa-circle-o-notch fa-spin"></i></h3></a></li>
     </ul>
 
     <!-- Tab panes -->

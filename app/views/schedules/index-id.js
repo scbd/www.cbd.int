@@ -27,24 +27,23 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
         function load() {
 
             var streamId = $route.current.params.streamId || defaultStreamId;
-            var options  = { params : { } };
+            var options  = { params : { cache:true } };
             var now = new Date();
-
-            if($route.current.params.datetime) {
-                now = moment.tz($route.current.params.datetime).toDate();
-                options.params.datetime = moment.tz($route.current.params.datetime).toDate();
-            }
-
+         
             $q.when($route.current.params.code).then(function(code){
 
                 if(!code) return;
             
-                return conferenceService.getActiveConference(code).then(function(e){
+                return conferenceService.getActiveConference(code);
 
-                    now = moment.tz($route.current.params.datetime, e.timezone).toDate();
-                    options.params.datetime = moment.tz($route.current.params.datetime, e.timezone).toDate();
-                })
+            }).then(function(conf){
 
+                if($route.current.params.datetime) // only add if set. avoid cache busting
+                {
+                    now = moment.tz($route.current.params.datetime, conf.timezone).toDate();
+                    options.params.datetime = now;
+                }
+                
             }).then(function(){
                 
                 return $http.get('/api/v2016/cctv-streams/'+streamId, options);
@@ -56,8 +55,8 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
                 var venueId = _streamData.eventGroup.venueId;
 
                 return $q.all([
-                    $http.get('/api/v2016/types',       { cache : true, params: { q: { schema: 'reservations' }, f: { title: 1, priority: 1, closed: 1, style: 1 } } }),
-                    $http.get('/api/v2016/venue-rooms', { cache : true, params: { q: { venue : venueId },        f: { title: 1, location: 1 } } })
+                    $http.get('/api/v2016/types',       { cache : true, params: { q: { schema: 'reservations' }, f: { title: 1, priority: 1, closed: 1, style: 1 }, cache:true } }),
+                    $http.get('/api/v2016/venue-rooms', { cache : true, params: { q: { venue : venueId },        f: { title: 1, location: 1 }, cache:true } })
                 ]);
 
             }).then(function(res) {
