@@ -1,4 +1,4 @@
-define(['app','data/idb-celebrations/links','lodash','directives/idb-celebrations/menu-vertical','filters/lstring','filters/truncate','services/storage','directives/idb-celebrations/zoom-map','filters/term','filters/moment','filters/trust-as-resource-url'], function(app,links,_) { 'use strict';
+define(['app','json!https://s3.amazonaws.com/cbddocumentspublic-imagebucket-15w2zyxk3prl8/idb-data/menu.json','lodash','directives/idb-celebrations/menu-vertical','filters/lstring','filters/truncate','services/storage','directives/idb-celebrations/zoom-map','filters/term','filters/moment','filters/trust-as-resource-url'], function(app,links,_) { 'use strict';
 
 	return ['$location', '$routeParams','$http','$filter','$q','IStorage','locale','$timeout','user', '$scope',  function( $location, $routeParams,$http,$filter,$q,storage,locale,$timeout, user, $scope) {
 
