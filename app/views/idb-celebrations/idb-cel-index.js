@@ -1,4 +1,4 @@
-define(['app','data/idb-celebrations/links','directives/idb-celebrations/menu-vertical','filters/lstring','providers/locale'], function(app,links) { 'use strict';
+define(['app','json!https://s3.amazonaws.com/cbddocumentspublic-imagebucket-15w2zyxk3prl8/idb-data/menu.json','directives/idb-celebrations/menu-vertical','filters/lstring','providers/locale'], function(app,links) { 'use strict';
 
 	return ['$scope','$routeParams','$q','$http','$filter','$location','locale','user', function ($scope,$routeParams,$q,$http,$filter,$location,locale, user) {
 
