@@ -1,15 +1,45 @@
 ﻿<span>
+	<style>
+		.dropdown-menu > li .km-selected-item{
+			position:absolute;top:5px;left:3px;
+		}
+		.dropdown-inline-submenu > li .km-selected-item{
+			position:absolute;top:5px;left:-23px;
+		}
+		.km-select-item > a {
+			font-weight: 500 !important;
+		}
+		.km-select-item-title {
+			font-weight: 500 !important;
+		}
+		.dropdown-inline-submenu > li {
+		list-style-type: none;
+		}
+		.dropdown-inline-submenu > li> a, .dropdown-inline-submenu>a:focus, .dropdown-inline-submenu>a:hover{
+			display: block;
+			padding: 3px ;
+			clear: both;
+			font-weight: 400;
+			line-height: 1.42857143;
+			color: #333;
+			white-space: nowrap;
+
+		}
+		.dropdown-inline-submenu>.disabled>a, .dropdown-inline-submenu>.disabled>a:focus, .dropdown-inline-submenu>.disabled>a:hover {
+    		color: #777;
+		}		
+	</style>
 	<script type="text/ng-template"  id="select-tree-renderer.html">
-		<a ng-click="clicked(item)" href="">
-		{{item.title||item.name | lstring:currentLocale | truncate:120:'...'}}
+		<a ng-class="{'km-select-item-title':!itemEnabled(item)}" class="btn " style="text-align:left;" ng-click="clicked(item)" href="">
+			{{item.title||item.name | lstring:currentLocale | truncate:120:'...'}}
 		</a>
 		<div class="km-select-description" ng-if="showDescription=='true' && item.description"
 			style="padding: 3px 25px;">
 			{{item.description}}
 		</div>
-		<i class="glyphicon glyphicon-ok" ng-show="item.selected" style="position:absolute;top:5px;left:3px;"></i>
+		<i class="glyphicon glyphicon-ok km-selected-item" ng-show="item.selected" ></i>
 		<ul class="dropdown-inline-submenu" ng-if="item.children">
-			<li ng:repeat="item in item.children" ng-include="'select-tree-renderer.html'" style="position:relative">
+			<li  ng:repeat="item in item.children" ng-class="{disabled:!itemEnabled(item)}" ng-include="'select-tree-renderer.html'" style="position:relative">
 		</ul>
 	</script>
 
@@ -39,7 +69,7 @@
 					<button class="btn btn-xs btn-default" ng-show="hasSelectedItems()"type ="button" ng-click="clearSelection()" ng-disabled="!hasSelectedItems()">Clear selection</button>
 					<button class="btn btn-xs btn-default" ng-show="allowOther == 'true'" type="button" ng-click="chooseOther()"    ng-show="allowOther">Specify another value</button>
 				</li>
-				<li ng:repeat="item in rootItems | filter:searchFil" ng-class="{disabled:!itemEnabled(item)}" ng-include="'select-tree-renderer.html'" style="position:relative">
+				<li class="km-select-item" ng:repeat="item in rootItems | filter:searchFil" ng-class="{disabled:!itemEnabled(item)}" ng-include="'select-tree-renderer.html'" style="position:relative">
 				</li>
 			</ul>
 		</div>

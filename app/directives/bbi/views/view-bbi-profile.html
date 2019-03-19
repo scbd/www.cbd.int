@@ -43,9 +43,24 @@
                   </span>
                     </div>
                 </div>
-
+                <div class="col-xs-12 col-md-6" ng-show="document.cbdSubjects">
+                    <label class="view">Priority themes and subject matter expertise</label>
+                    <div class="km-value">
+                        <span ng-repeat="item in document.cbdSubjects">
+                      {{item| term:locale}}<br/>
+                  </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-12" ng-show="document.assistanceTypesFree">
+                    <label class="view">Services or expertise that can be provided free of charge to partners (max. 3)</label>
+                    <div class="km-value">
+                        <span ng-repeat="item in document.assistanceTypesFree">                      
+                            ● {{item| term:locale}}<br/>
+                        </span>
+                    </div>
+                </div>
                 <div class="col-xs-12 col-md-12" ng-show="document.assistanceTypes">
-                    <label class="view">Type(s) of assistance</label>
+                    <label class="view">Services or expertise that can be provided at a cost to partners (max. 3)</label>
                     <div class="km-value">
                         <span ng-repeat="item in document.assistanceTypes">                      
                             ● {{item| term:locale}}<br/>
@@ -67,7 +82,7 @@
                 </div>
 
                 <div class="col-xs-12 col-md-12" ng-show="document.collaborationAreas">
-                    <label class="view">Potential areas of collaboration</label>
+                    <label class="view">Past experience, collaborations, technical assistance or support provided</label>
                     <div class="km-value">
                         {{document.collaborationAreas| lstring:locale}}
                     </div>
