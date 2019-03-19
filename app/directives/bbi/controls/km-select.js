@@ -132,7 +132,8 @@ $scope.searchFil = function(item){
                 children: transform(d.children || d.narrowerTerms),
                 selected: false,
                 metadata: d.metadata,
-                description: d.description
+                description: d.description,
+                isDisabled:d.isDisabled
               };
             });
           }
@@ -387,6 +388,8 @@ $scope.searchFil = function(item){
         //
         //==============================
         $scope.itemEnabled = function(item) {
+  
+          if(item.isDisabled) return false
 
           if ($scope.getMinimum() > 0 && $scope.getSelectedItems().length <= $scope.getMinimum())
             if (item === null || $scope.getSelectedItems().indexOf(item) >= 0)

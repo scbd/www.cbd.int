@@ -66,6 +66,28 @@ define(['text!./edit-bbi-profile.html', 'text!./bbi-records-dialog.html', 'text!
 							return $filter('orderBy')(_.union(o[0].data, o[1].data), 'name');
 						});
 					},
+
+					cbdSubjects     : function() { return $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms", { cache: true }).then(function(o){
+
+						var subjects = ['CBD-SUBJECT-BIOMES', 'CBD-SUBJECT-CROSS-CUTTING'];
+						var items = [];
+							_.forEach(subjects, function(subject) {
+								var term = _.findWhere(o.data, {'identifier': subject } );
+								items.push(term);
+	 
+								_(term.narrowerTerms).forEach(function (term) {
+									items.push(_.findWhere(o.data, {'identifier':term}));
+								}).value();
+	 
+							});
+							items = thesaurus.buildTree(items)
+							_.forEach( items, function(subject) {
+								subject.isDisabled = true
+							})
+							return items;
+			
+						});
+					},
 				};
 
 				//==================================
@@ -510,21 +532,13 @@ define(['text!./edit-bbi-profile.html', 'text!./bbi-records-dialog.html', 'text!
 							$scope.document.title = data.name;
 						});
 				});
-				$scope.$watch("document.contact", function() {
 
-					if ($scope.document && $scope.document.contact) {
-						$scope.loadRecords($scope.document.contact.identifier)
-							.then(function(data) {
-
-								$scope.loadRecords(data.contactOrganization.identifier)
-									.then(function(d) {
-										$scope.document.organization = {
-											identifier: d.header.identifier
-										};
-									});
-							});
-					}
-				});
+				//==================================
+				//
+				//==================================
+				$scope.assistanceTypesMax = function() {
+					return 3;
+				}
 				$scope.init();
 			}
 		};

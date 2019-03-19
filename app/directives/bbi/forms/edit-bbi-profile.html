@@ -56,13 +56,6 @@
                     </ul>
                 </div>
 
-                <!-- <div class="col-sm-4 hidden-xs" style="text-align:right">
-					<div class="pagination">
-						<span km-form-languages xs ng-model="document.header.languages"></span>
-						<span km-form-std-buttons document="document" on-post-close="onPostClose()" on-error="onError(error, errorCode)" on-post-workflow="onPostWorkflow(data)" on-post-publish="onPostPublish(data)" on-post-save-draft="onPostSaveDraft(data)" on-pre-save-draft="onPreSaveDraft()" on-pre-publish="onPrePublish()"></span>
-					</div>
-				</div> -->
-
             </div>
             <div>
 
@@ -82,10 +75,21 @@
                                     <div km-select multiple="true" required name="coverageAreas" ng-model="document.coverageAreas" items="options.regions()"></div>
                                 </div>
                             </div>
+                            <div class="col-xs-12">
+                                <div class="km-control-group" name="cbdSubjects" required caption="Priority themes and subject matter expertise">
+                                    <div km-select multiple="true" maximum="assistanceTypesMax()" required name="cbdSubjects" ng-model="document.cbdSubjects" items="options.cbdSubjects()"></div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="km-control-group" name="assistanceTypesFree" required caption="Services or expertise that can be provided free of charge to partners (max. 3)">
+                                    <div km-select  multiple="true" maximum="assistanceTypesMax()" required name="assistanceTypesFree" ng-model="document.assistanceTypesFree" items="options.assistanceTypes()"></div>
+                                </div>
+                            </div>
 
                             <div class="col-xs-12">
-                                <div class="km-control-group" name="assistanceTypes" required caption="Type(s) of assistance">
-                                    <div km-select  multiple="true" required name="assistanceTypes" ng-model="document.assistanceTypes" items="options.assistanceTypes()"></div>
+                                <div class="km-control-group" name="assistanceTypes" required caption="Services or expertise that can be provided at a cost to partners (max. 3)">
+                                    <div km-select  multiple="true" maximum="assistanceTypesMax()" required name="assistanceTypes" ng-model="document.assistanceTypes" items="options.assistanceTypes()"></div>
+                                    <p class="help-block " ng-show="document.assistanceTypes.length===3">Maximum of 3 types selected</p>
                                 </div>
                             </div>
 
@@ -100,18 +104,10 @@
                             </div>
                             <div class="col-xs-12">
                                 <div class=" control-group" name="collaborationAreas">
-                                    <label class="control-label">Potential areas of collaboration</label>
-                                    <div class="help-info small">Briefly describe your institution’s work that involves catalyzing and facilitating TSC - max 200 words <span class="pull-right small red" style="color:red;" ng-if="document.collaborationAreas.en.length">Word Count: {{wordCount(document.collaborationAreas.en)}}</span></div>
+                                    <label class="control-label">Past experience, collaborations, technical assistance or support provided</label>
+                                    <div class="help-info small">Briefly describe your institution’s work that involves catalyzing and facilitating TSC - List any biodiversity-related activities/projects involving TSC which your organization has implemented in the last 5 years - provide the title, main activities/ outcomes timeframe - max 500 words. <span class="pull-right small red" style="color:red;" ng-if="document.collaborationAreas.en.length">Word Count: {{wordCount(document.collaborationAreas.en)}}</span></div>
                                     <div km-textbox-ml rows="4" name="collaborationAreas" ng-model="document.collaborationAreas" placeholder="text entry" locales="document.header.languages"></div>
 
-                                </div>
-                            </div>
-                            <div class="col-xs-12">
-                                <div class=" control-group" name="recentExperiance">
-                                    <label class="control-label">Recent experience relevant to BBI's mission</label>
-                                    <div class="help-info small">List any biodiversity-related activities/projects involving TSC which your organization has implemented in the last 5 years - provide the title, main activities/ outcomes timeframe - max 500 words. <span class="pull-right small red"
-                                            style="color:red;" ng-if="document.recentExperiance.en.length">Word Count: {{wordCount(document.recentExperiance.en)}}</span></div>
-                                    <div km-textbox-ml rows="4" name="recentExperiance" ng-model="document.recentExperiance" placeholder="text entry" locales="document.header.languages"></div>
                                 </div>
                             </div>
                             <div class="col-xs-12">
