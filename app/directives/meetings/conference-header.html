@@ -179,7 +179,8 @@
                        ng-class="{selected:meetingNavCtrl.isMajorEventSelected(event.code)}">
                            <a href="/conferences/{{::meeting.code}}/{{::event.clickable ? event.code : event.menus[0].code}}#{{meetingNavCtrl.hash()}}" class="link"></a>
                            <a href="/conferences/{{::meeting.code}}/{{::event.clickable ? event.code : event.menus[0].code}}#{{meetingNavCtrl.hash()}}" class="hover-link">
-                           <i class="fa {{::event.iconClass}}" aria-hidden="true" style="font-size:24px"></i>
+                           <i    ng-if=":: event.iconClass" class="fa {{::event.iconClass}}" aria-hidden="true" style="font-size:24px"></i>
+                           <span ng-if="::!event.iconClass" >{{event.mobileTitle||event.title}}</span>
                            </a>
                        </td>
                        <td class="meetingnav-buttongroup hidden-xs" ng-repeat="event in meeting.conference.events" ng-class="{'single-menu' : event.menus.length ==1 }">
