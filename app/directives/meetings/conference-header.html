@@ -81,7 +81,6 @@
            padding-top: 12px;
            padding-bottom: 12px;
            text-align: center;
-           width: 25%;
        }
        .meetingnav table.meetings td.meeting:not(:first-child) {
            border-left: 1px solid #888;
@@ -186,20 +185,20 @@
                        <td class="meetingnav-buttongroup hidden-xs" ng-repeat="event in meeting.conference.events" ng-class="{'single-menu' : event.menus.length ==1 }">
                            <table style="height:100%;width:100%;font-size:12px;font-weight:bold">
                                <tr style="height:0px" ng-if="event.title">
-                                   <td colspan="4" style="vertical-align:top" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{::meeting.code}}/{{::event.code}}', true), 'clickable': event.clickable}" >
+                                   <td colspan="{{::(event.menus.length||1)}}" style="vertical-align:top" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{::meeting.code}}/{{::event.code}}', true), 'clickable': event.clickable}" >
                                         <a ng-if="::event.clickable" ng-href="/conferences/{{::meeting.code}}/{{::event.code}}#{{meetingNavCtrl.hash()}}" class="link"></a>
                                         <a ng-if="::event.clickable" ng-href="/conferences/{{::meeting.code}}/{{::event.code}}#{{meetingNavCtrl.hash()}}" class="hover-link">
-                                            <div style="border-bottom:1px solid #ffff;ont-size:12px;font-weight:normal;height:30px;padding-top:5px;">
+                                            <div style="border-bottom:1px solid #fff;font-size:12px;font-weight:normal;height:30px;padding-top:5px;">
                                                 <span ng-bind-html="event.title"></span>
                                             </div>
                                         </a>
-                                        <div ng-if="!event.clickable" style="border-bottom:1px solid #ffff;ont-size:12px;font-weight:normal;height:30px;padding-top:5px;color:#ddd">
+                                        <div ng-if="!event.clickable" style="border-bottom:1px solid #fff;font-size:12px;font-weight:normal;height:30px;padding-top:5px;color:#ddd">
                                             <span ng-bind-html="event.title"></span>
                                         </div>
                                    </td>
                                </tr>
-                               <tr style="height:90%">
-                                   <td width="25%" class="single-menu clickable {{::cssClass(menu.code)}}" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{::meeting.code}}/{{::menu.code}}'), 'menu-border':$index>0}" 
+                               <tr style="height:90%" ng-if="event.menus.length">
+                                   <td width="{{::(100/event.menus.length)}}%" class="single-menu clickable {{::cssClass(menu.code)}}" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{::meeting.code}}/{{::menu.code}}'), 'menu-border':$index>0}" 
                                    style="position:relative;padding:0 6px" align="center" ng-repeat="menu in event.menus">
                                        <a href="/conferences/{{::meeting.code}}/{{::menu.code}}#{{meetingNavCtrl.hash()}}" class="link"></a>
                                        <a href="/conferences/{{::meeting.code}}/{{::menu.code}}#{{meetingNavCtrl.hash()}}" class="hover-link">
@@ -254,12 +253,12 @@
                </table>
                <table class="meetings visible-xs" style="width:100%" ng-if="meetingNavCtrl.isMajorEventSelected(event.code) && event.menus.length > 1" ng-repeat="event in meeting.conference.events">
                    <tr>
-                        <td ng-if="event.clickable" class="notselected meeting {{::event.cssClass}}" 
+                        <td width="{{::(100/event.menus.length)}}%" ng-if="event.clickable" class="notselected meeting {{::event.cssClass}}" 
                             ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{::meeting.code}}/{{::event.code}}')}" >
                             <a href="/conferences/{{::meeting.code}}/{{::event.code}}#{{meetingNavCtrl.hash()}}"></a>
                             {{::event.mobileTitle}}
                         </td>
-                       <td class="notselected meeting {{::menu.cssClass}}" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{::meeting.code}}/{{::menu.code}}')}" 
+                       <td width="{{::(100/event.menus.length)}}%" class="notselected meeting {{::menu.cssClass}}" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{::meeting.code}}/{{::menu.code}}')}" 
                        ng-repeat="menu in event.menus">
                            <a href="/conferences/{{::meeting.code}}/{{::menu.code}}#{{meetingNavCtrl.hash()}}"></a>
                            {{::menu.mobileTitle}}
