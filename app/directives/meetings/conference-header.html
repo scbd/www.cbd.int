@@ -240,7 +240,7 @@
                               <div style="font-size:12px;font-weight:bold">MEDIA</div>                                
                            </a>           
                        </td>
-                       <td class="notselected meetingnav-button">
+                       <td class="notselected meetingnav-button" ng-if="::(meeting.conference.information.length || meeting.conference.media.length)">
                            <i class="fa fa-info fa-2x" data-toggle="dropdown" aria-hidden="true" style="cursor:pointer"></i>
                            <ul class="dropdown-menu dropdown-menu-right">
                                <li class="visible-xs" ng-if="meeting.conference.media.length >1" ng-repeat="link in meeting.conference.media">
