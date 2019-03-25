@@ -20,8 +20,6 @@ define(['app', 'text!./menu.html','lodash','providers/locale'], function(app, te
 
                       if(!_slaask.initialized) {
                           _slaask.init('d611635fe9b46e439afb79833e255443');
-                          _slaask.initialized = true;
-
                       }
                   });
 
