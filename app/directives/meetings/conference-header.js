@@ -20,6 +20,9 @@
 
                 });
 
+                $scope.cssClass = function(code){
+                    return (code||'').replace(/\-([a-z]{3})\-.*/, '').toUpperCase();
+                }
                 $scope.meetingNavCtrl = {
                     fullPath : function(name) {
                         return basePath + $location.path();

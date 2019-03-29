@@ -143,7 +143,102 @@
 </head>
 <body class="ltr" ng-class="::{ 'mobile-app' : templateCtrl.viewOnly }">
 
-    <template-header ng-if="!templateCtrl.viewOnly"></template-header>
+    <!-- HEADER -->
+    <div ng-if="!templateCtrl.viewOnly">
+        <!-- HEADER -->
+        <header class="mobile navbar visible-xs" role="banner">
+            <div class="container">
+
+                <div class="navbar-header">
+                    <button class="navbar-toggle collapsed hidden-print" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                        <i class="fa fa-bars" style="font-size:1.66em;"></i>
+                    </button>
+
+                    <div ng-cloak ng-show="user" class="pull-right hidden-print">
+
+                        <a ng-hide="user.isAuthenticated" ng-href="{{templateCtrl.accountsUrl+'/signin?returnUrl='+templateCtrl.getEncodedReturnUrl()}}" class="navbar-toggle collapsed" style="text-decoration:none;color:#009B48" style="color: black">
+                            <i  class="fa fa-power-off" style="font-size:1.66em;"></i>
+                        </a>
+
+                        <div ng-show="user.isAuthenticated" class="dropdown">
+
+                            <button class="navbar-toggle collapsed" title="{{user.name}}" style="text-decoration:none;color:#009B48" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <i class="fa fa-user" style="font-size:1.66em;"></i>
+                            </button>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
+                                <li><a ng-href="{{templateCtrl.accountsUrl+'/profile?returnUrl=' +templateCtrl.getEncodedReturnUrl()}}"><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
+                                <li><a ng-href="{{templateCtrl.accountsUrl+'/password?returnUrl='+templateCtrl.getEncodedReturnUrl()}}"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
+                                <li><a ng-click="templateCtrlsignOut()"  href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
+                            </ul>
+                        </div>
+
+                </div> <!--  end sign in-->
+
+                    <a href="/" target="_self">
+                        <a href="/"><img class="logo" src="https://attachments.cbd.int/cbd-logo-en.svg?v=<%=gitVersion%>" style="padding-top:4px;padding-left:2px"/></a>
+                    </a>
+
+                </div>
+
+                <nav class="collapse navbar-collapse hidden-print" role="navigation">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a target="_self" href="/convention">The Convention</a></li>
+                        <li class="active"><a target="_self" href="/biosafety">Cartagena Protocol</a></li>
+                        <li class="active"><a target="_self" href="/abs">Nagoya Protocol</a></li>
+                        <li class="active"><a target="_self" href="/programmes">Programmes</a></li>
+                        <li class="active"><a target="_self" href="/information">Information</a></li>
+                        <li class="active"><a target="_self" href="/secretariat">Secretariat</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- LARGE -->
+        <header class="large hidden-xs">
+            <div class="container whitebg">
+                <div>
+
+                    <div class="pull-left" style="margin:5px 0px">
+                        <a href="/"><img class="logo" src="https://attachments.cbd.int/cbd-logo-en.svg?v=<%=gitVersion%>"/></a>
+                    </div>
+
+                    <div  class="pull-right hidden-print">
+
+                        <a class="btn btn-link" ng-href="{{templateCtrl.accountsUrl+'/signin?returnUrl='+templateCtrl.getEncodedReturnUrl()}}"  style="text-decoration:none;color:#009B48" ng-hide="user.isAuthenticated" style="color: black">
+                            <i  class="fa fa-power-off"></i> <span ng-cloak ng-show="user && !user.isAuthenticated">Sign in</span>
+                        </a>
+
+                        <div ng-cloak ng-show="user.isAuthenticated" class="dropdown">
+                            <button class="btn btn-link dropdown-toggle" style="text-decoration:none;color:#009B48" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <span class="caret"></span> {{user.name}}
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
+                                <li><a ng-href="{{templateCtrl.accountsUrl+'/profile?returnUrl=' +templateCtrl.getEncodedReturnUrl()}}"><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
+                                <li><a ng-href="{{templateCtrl.accountsUrl+'/password?returnUrl='+templateCtrl.getEncodedReturnUrl()}}"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
+                                <li><a ng-click="templateCtrl.signOut()"  href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
+                            </ul>
+                        </div>
+
+                </div> <!--  end sign in-->
+
+                    <div style="clear:right;" class="pull-right hidden-print">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="/convention">The Convention</a></li>
+                            <li class="active"><a href="/biosafety">Cartagena Protocol</a></li>
+                            <li class="active"><a href="/abs">Nagoya Protocol</a></li>
+                            <li class="active"><a href="/programmes">Programmes</a></li>
+                            <li class="active"><a href="/information">Information</a></li>
+                            <li class="active hidden-sm"><a href="/secretariat">Secretariat</a></li>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </header>
+
+        <div id="conferenceHeader" style="display:none;"></div>
+    </div>
 
     <!-- CONTENT -->
     <a name="view"></a>
@@ -151,9 +246,72 @@
         <ng-view></ng-view>
     </div>
 
-    <template-footer ng-if="!templateCtrl.viewOnly"></template-footer>
+    <!-- FOOTER -->
+    <div ng-if="!templateCtrl.viewOnly">
+      <footer class="container whitebg hidden-print">
+        <div class="greybg">
+            <div class="col-sm-4 fleft">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a target="_self" href="/decisions">Decisions</a></li>
+                    <li><a target="_self" href="/meetings">Meetings</a></li>
+                    <li><a target="_self" href="/notifications">Notifications</a></li>
+                    <li><a target="_self" href="/news">News Headlines</a></li>
+                    <li><a target="_self" href="/publications">Publications</a></li>
+                    <li><a target="_self" href="/chm">CHM</a></li>
+                    <li><a target="_self" href="http://bch.cbd.int/">BCH</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-4 fleft">
+                <h4 class="hidden-xs">&nbsp;</h4>
+                <ul>
+                    <li><a target="_self" href="/parties">Parties</a></li>
+                    <li><a target="_self" href="/countries">Country Profiles</a></li>
+                    <li><a target="_self" href="/nfp">National Focal Point</a></li>
+                    <li><a target="_self" href="/nbsap">National Strategies (NBSAPs)</a></li>
+                    <li><a target="_self" href="/reports">National Reports</a></li>
+                    <li><a target="_self" href="/contributions">Contributions</a></li>
+                    <li><a target="_self" href="/cooperation">Cooperation & Partnerships</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-4 fleft">
+                <h4>Follow us</h4>
+                <ul>
+                  <li><img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/ic-rss.png">&nbsp;&nbsp;<a href="https://www.cbd.int/rss">RSS</a></li>
+                  <li><img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/ic-twitter.png">&nbsp;&nbsp;<a href="https://twitter.com/unbiodiversity">Twitter</a></li>
+                  <li><img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/ic-facebook.png">&nbsp;&nbsp;<a href="https://www.facebook.com/UNBiodiversity">Facebook</a></li>
+                  <li><img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/ic-youtube.png">&nbsp;&nbsp;<a href="https://www.youtube.com/user/chmcbd">YouTube</a></li>
+                  <li><img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/ic-instagram.png">&nbsp;&nbsp;<a href="https://instagram.com/unbiodiversity">Instagram</a></li>
+                  <li><img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/ic-linkedin.png">&nbsp;&nbsp;<a href="https://www.linkedin.com/company/unbiodiversity">LinkedIn</a></li>
+                </ul>
 
+            </div>
 
+            <div class="clearfix"></div>
+
+        </div>
+      </footer>
+
+      <footer class="container standard whitebg">
+          <div class="col-md-9 hidden-print">
+              <ul class="list-inline">
+                  <li><a target="_self" href="/feedback">Feedback</a></li>
+                  <li><a target="_self" href="/map">Site Map</a></li>
+                  <li><a target="_self" href="/contact">Contact Us</a></li>
+                  <li><a target="_self" href="/terms">Terms of Use</a></li>
+                  <li><a target="_self" href="/privacy">Privacy Policy</a></li>
+                  <li><a target="_self" href="/credits">Credits</a></li>
+                  <li><a target="_self" href="/copyright">&copy; CBD Secretariat</a></li>
+              </ul>
+          </div>
+          <div class="col-md-3 pull-right">
+              <a href="http://www.un.org/" target="_blank"><img src="/app/images/un-logo-white.gif?v=<%=gitVersion%>" alt="UN logo" /></a>
+              <a href="http://unep.org/"   target="_blank"><img src="/app/images/unep-logo-white-en.png?v=<%=gitVersion%>" alt="UNEP logo" /></a>
+          </div>
+      </footer>
+    </div>
+
+    <!-- JS screen-size detector -->
     <div class="device-size visible-xs" size="xs"></div>
     <div class="device-size visible-sm" size="sm"></div>
     <div class="device-size visible-md" size="md"></div>
