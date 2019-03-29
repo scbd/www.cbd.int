@@ -294,7 +294,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
                     if(!$cookies.get('redirectOnAuthMsg') || $cookies.get('redirectOnAuthMsg')==='false')
                         openDialog();
                     else
-                        $window.location.href = authentication.accountsBaseUrl()+'/signin?returnurl='+encodeURIComponent($location.absUrl());
+                        $rootScope.$emit("signIn");
 
                     throw user; // stop route change!
                 }
@@ -318,7 +318,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
                       scope:$rootScope
                   }).closePromise.then(function(retVal){
                         if(retVal.value)
-                          $window.location.href = authentication.accountsBaseUrl()+'/signin?returnurl='+encodeURIComponent($location.absUrl());
+                          $rootScope.$emit("signIn");
                         else
                           $window.history.back();
                   });
