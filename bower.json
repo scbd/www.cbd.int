@@ -6,7 +6,7 @@
     "requirejs-plugins": "1.0.3",
     "require-css": "0.1.8",
     "jquery": "2.2.4",
-    "bootstrap": "3.3.6",
+    "bootstrap": "3.4.1",
     "angular": "1.5.6",
     "angular-route": "1.5.6",
     "angular-cookies": "1.5.6",

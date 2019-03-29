@@ -20,7 +20,6 @@ require.config({
         'text'            : 'libs/requirejs-text/text',
         'css'             : 'libs/require-css/css.min',
         'json'            : 'libs/requirejs-plugins/src/json',
-        'bootstrap'       : cdnHost + 'bootstrap@3.3.6/dist/js/bootstrap.min',
         'lodash'          : cdnHost + 'lodash@3.10.1/index',
         'dragula'         : 'libs/dragula.js/dist/dragula',
         'bootstrap-notify': cdnHost + 'libs/remarkable-bootstrap-notify/bootstrap-notify.min',
@@ -30,7 +29,6 @@ require.config({
         'shim'            : 'libs/require-shim/src/shim',
         'interface'       : 'js/interface',
         'magnific-popup'  : 'libs/magnific-popup/dist/jquery.magnific-popup.min',
-        'jquery'          : cdnHost + 'jquery@2.2.4/dist/jquery.min',
         'jquery-migrate'  : 'libs/jquery-migrate/jquery-migrate.min',
         'ammap3WorldHigh' : 'directives/reporting-display/worldEUHigh',
         'alasql'          : 'libs/alasql/dist/alasql.min',
@@ -61,8 +59,7 @@ require.config({
         'ngAnimate'            : { deps : ['angular-flex'] },
         'ngSanitize'           : { deps : ['angular-flex'] },
         'ngDialog'             : { deps : ['angular-flex' ]},// 'css!libs/ng-dialog/css/ngDialog.min', 'css!libs/ng-dialog/css/ngDialog-theme-default.css'] },
-        'bootstrap'            : { deps : ['jquery' ] },
-        'bootstrap-notify'     : { deps : ['jquery', 'bootstrap'] },
+        'bootstrap-notify'     : { deps : ['jquery'] },
         'moment-timezone'      : { deps : ['moment'] },
         'jquery-migrate'       : { deps : ['jquery']},
         'interface'            : { deps : ['jquery-migrate']},
@@ -106,7 +103,7 @@ define('dropbox-dropins', ['https://www.dropbox.com/static/api/2/dropins.js'], f
 });
 
 // BOOT
-require(['angular', 'app', 'bootstrap', 'routes', 'template', 'ngSanitize', 'ngRoute', 'providers/extended-route', 
+require(['angular', 'app', 'routes', 'template', 'ngSanitize', 'ngRoute', 'providers/extended-route', 
 //cop-14 optimization
 'lodash','services/conference-service', 'services/article-service', 'directives/social-media', 'directives/articles/cbd-article'], function(ng, app) {
     ng.element(document).ready(function(){
