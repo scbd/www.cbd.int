@@ -21,7 +21,7 @@ define(['app', 'angular', 'jquery', 'lodash'], function (app, ng, $, _) { 'use s
 
 			$("body").prepend(frame);
 
-			frame.load(function(evt){
+			frame.on("load", function(evt){
 				resolve(evt.target || evt.srcElement);
 			});
 

@@ -102,6 +102,8 @@ define('dropbox-dropins', ['https://www.dropbox.com/static/api/2/dropins.js'], f
     return window.Dropbox;
 });
 
+define('jquery', function(){ if(window.jQuery) { return window.jQuery; }});
+
 // BOOT
 require(['angular', 'app', 'routes', 'template', 'ngSanitize', 'ngRoute', 'providers/extended-route', 
 //cop-14 optimization
