@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en" ng-controller="TemplateController as templateCtrl" git-version="<%=gitVersion%>" cdn-url="<%=cdnUrl%>">
+<head>
+    <base href="/">
+    <script> //Analytics
+        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+
+        if(~document.location.hostname.indexOf('cbd.int')){
+            ga('create', 'UA-1996573-1', 'auto');
+            ga('set',    'hostname', window.location.hostname);
+            ga('set',    'location', undefined);
+
+            //tag manager
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-NL82D37');
+        }
+    </script>
+    <!-- <script type="application/json" data-drupal-selector="drupal-settings-json">{"path":{"baseUrl":"\/","scriptPath":null,"pathPrefix":"","currentPath":"node\/708","currentPathIsAdmin":false,"isFront":false,"currentLanguage":"en"},"pluralDelimiter":"\u0003","ajaxPageState":{"libraries":"better_exposed_filters\/general,bootstrap_barrio\/form,bootstrap_barrio\/global-styling,bootstrap_barrio\/node,bootstrap_sass\/gallery,bootstrap_sass\/global-styling,cbd_article\/cbd_article.article,cbd_article\/cbd_article.node_form,cbd_carousel\/cbd_carousel.carousel,core\/html5shiv,layout_discovery\/onecol,paragraphs\/drupal.paragraphs.unpublished,search_api_autocomplete\/search_api_autocomplete,system\/base,views\/views.module","theme":"bootstrap_sass","theme_token":null},"ajaxTrustedUrl":{"\/search":true},"search_api_autocomplete":{"search":{"auto_submit":true,"min_length":2}},"user":{"uid":0,"permissionsHash":"d875d49554b92b565754f36cfa619628bc4e5bfdeaeb1b5a4d5598b8993430fe"}}</script> -->
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/domready/ready.min.js?v=1.0.8"></script>
+    <script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery/jquery.min.js?v=3.2.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery-once/jquery.once.min.js?v=2.2.0"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/misc/drupalSettingsLoader.js?v=8.6.4"></script>
+	<!-- <script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/misc/drupal.js?v=8.6.4"></script> -->
+	<!-- <script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/misc/drupal.init.js?v=8.6.4"></script> -->
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/data-min.js?v=1.12.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/disable-selection-min.js?v=1.12.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/form-min.js?v=1.12.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/labels-min.js?v=1.12.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/jquery-1-7-min.js?v=1.12.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/scroll-parent-min.js?v=1.12.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/tabbable-min.js?v=1.12.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/unique-id-min.js?v=1.12.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/version-min.js?v=1.12.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/focusable-min.js?v=1.12.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/ie-min.js?v=1.12.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/keycode-min.js?v=1.12.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/plugin-min.js?v=1.12.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/safe-active-element-min.js?v=1.12.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/safe-blur-min.js?v=1.12.1"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/ui/widget-min.js?v=1.12.1"></script>
+	<!-- <script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/misc/autocomplete.js?v=8.6.4"></script> -->
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/js/popper.min.js?v=8.6.4"></script>
+	<script src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/js/bootstrap.min.js?v=8.6.4"></script>
+	<!-- <script src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/js/global.js?v=8.6.4"></script> -->
+    <!-- <script> !function (e) { var s = {}; function o(l) { if (s[l]) return s[l].exports; var a = s[l] = { i: l, l: !1, exports: {} }; return e[l].call(a.exports, a, a.exports, o), a.l = !0, a.exports } o.m = e, o.c = s, o.d = function (e, s, l) { o.o(e, s) || Object.defineProperty(e, s, { configurable: !1, enumerable: !0, get: l }) }, o.n = function (e) { var s = e && e.__esModule ? function () { return e.default } : function () { return e }; return o.d(s, "a", s), s }, o.o = function (e, s) { return Object.prototype.hasOwnProperty.call(e, s) }, o.p = "/", o(o.s = 8) }({ 8: function (e, s, o) { e.exports = o(9) }, 9: function (e, s) { !function (e, s) { Drupal.behaviors.topNavigation = { attach: function (s) { var o = function (s) { var o = e(".header .mobile-menu"); o.hasClass("show-mini-mobile-menu") && s ? o.removeClass("show-mini-mobile-menu") : o.addClass("show-mini-mobile-menu") }; e(window).width() > 992 && e(".header .main-menu-item", s).hover(function () { e(".header .show").removeClass("show") }), e(window).width() < 992 && (e(".second-level .dropdown-second-item", s).click(function () { e(".first-level").addClass("custom-show"), e(".second-level").addClass("custom-show") }), e(".header .navbar-collapse").click(function () { var s = e(".first-level"), l = e(".second-level"); !s.hasClass("show") || s.hasClass("custom-show") && e(".header .mobile-nav-wrapper").hasClass("show-mini-mobile-menu") || (s.removeClass("custom-show"), s.removeClass("show"), l.removeClass("custom-show"), l.removeClass("show"), s.find("a").addClass("show"), o(!0), s.toggle(), s.show()) }), e(".first-level").click(function () { var s = e(".first-level"), l = e(".second-level"); s.hasClass("show") && !e(".header .mobile-nav-wrapper").hasClass("show-mini-mobile-menu") && (s.removeClass("custom-show"), s.removeClass("show"), l.removeClass("custom-show"), l.removeClass("show"), s.find("a").addClass("show"), o(!0), s.toggle(), s.show()) }), e(".header .mobile-menu .main-nav .first-level .nav-link.dropdown", s).on("click", function () { var s = e(this).parent(), l = e(".first-level"), a = e(".second-level"); a.hasClass("custom-show") ? (o(!1), a.removeClass("custom-show"), a.removeClass("show"), l.removeClass("custom-show"), l.removeClass("show"), l.hide(), s.show()) : (o(!0), l.toggle(), s.toggle()) }), e(".header .mobile-only .navbar-toggler", s).on("click", function () { e("body").toggleClass("lockscroll"), e(".header .mobile-nav-wrapper").toggleClass("mobile-wrapper") }), e(".header .mobile-menu .main-nav .third-level", s).on("click", function () { o(!1) }), e(".header .mini-menu-icons span", s).on("click", function () { e(".header .previous-menu-btn").click() }), e(".header .previous-menu-btn", s).on("click", function () { var s = e(".first-level"), l = e(".second-level"); e(".third-level").hasClass("show") ? o(!1) : (e(".second-level").hasClass("show") || e(".second-level").hasClass("custom-show")) && (s.removeClass("custom-show"), s.removeClass("show"), l.removeClass("custom-show"), l.removeClass("show"), e(".first-level a").addClass("show"), o(!0), s.toggle(), s.show()) })) } } }(jQuery) } }); </script> -->
+    
+    <script src="<%=cdnUrl%>requirejs@2.2.0/require.js"></script>
+    <script async src="/app/boot.js?v=<%=gitVersion%>"></script>
+    <link rel="stylesheet" href="/app/css/bootstrap-migrate-3-to-4.css">
+    <link rel="stylesheet" href="<%=cdnUrl%>font-awesome@4.7.0/css/font-awesome.css">
+
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+    <title>Convention on Biological Diversity</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style media="all">
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/modules/custom/cbd_article/css/navigation-block.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/modules/custom/cbd_carousel/css/carousel.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/modules/custom/cbd_article/css/node_form.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/ajax-progress.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/align.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/autocomplete-loading.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/fieldgroup.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/container-inline.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/clearfix.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/details.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/hidden.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/item-list.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/js.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/nowrap.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/position-container.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/progress.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/reset-appearance.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/resize.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/sticky-header.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/system-status-counter.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/system-status-report-counters.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/system-status-report-general-info.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/tabledrag.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/tablesort.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/system/css/components/tree-child.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/views/css/views.module.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/themes/base/core.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/themes/base/menu.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/themes/base/autocomplete.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/modules/layout_discovery/layouts/onecol/onecol.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/modules/contrib/paragraphs/css/paragraphs.unpublished.css");
+    </style>
+    <style media="all">
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/modules/contrib/better_exposed_filters/css/better_exposed_filters.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/jquery.ui/themes/base/theme.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/modules/contrib/search_api_autocomplete/css/search_api_autocomplete.css");
+    </style>
+    <style media="all">
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/themes/contrib/bootstrap_barrio/css/components/node.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/css/style.css"); 
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/lib/photoswipe/photoswipe.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/lib/photoswipe/default-skin.css");
+        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/themes/contrib/bootstrap_barrio/css/components/form.css");
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=BenchNine:300,400,600,900" media="all" />
+
+	<!--[if lte IE 8]>
+    <script src="//s3.amazonaws.com/phoenix.www.cbd.int/core/assets/vendor/html5shiv/html5shiv.min.js?v=3.7.3"></script>
+    <![endif]-->
+
+	<!--[if IE 9]>
+    <script src="https://cdn.jsdelivr.net/gh/coliff/bootstrap-ie8/js/bootstrap-ie9.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/gh/coliff/bootstrap-ie8/css/bootstrap-ie9.min.css" rel="stylesheet">
+    <link href="/themes/custom/bootstrap_sass/css/ie-9-fix.css" rel="stylesheet">
+    <![endif]-->
+
+	<!--[if lt IE 9]>
+    <style type="text/css">
+      #page-wrapper {
+        display: none;
+      }
+    </style>
+    <![endif]-->
+    <style>
+        body { font-size: 1.2rem!important; }
+        #block-loginlinkblock ul.dropdown-menu { background-color: #01463a; }
+        .content { font-size: 1.2rem!important; }
+        .meetingnav-table a { font-size: 1.04rem; }
+    </style>
+   
+</head>
+
+    <body class="layout-no-sidebars page-node-708 path-node node--type-article">
+
+        <script>
+            if (screen.width < 375) {
+                var viewportMetaTag = document.querySelector('meta[name="viewport"]');
+                viewportMetaTag.setAttribute('content', 'user-scalable=no,width=375');
+            }
+        </script>
+        <!--[if lt IE 9]>
+        The site doesn’t support this version of the browser.<br>
+        Please download the latest version of Internet Explorer
+        <a href="https://www.microsoft.com/en-us/download/internet-explorer-9-details.aspx" style="font-family: inherit; font-weight:400;">
+            here
+        </a>
+        <![endif]-->
+    
+        <a href="#main-content" class="visually-hidden focusable skip-link">Skip to main content
+        </a>
+    
+        <div class="dialog-off-canvas-main-canvas" data-off-canvas-main-canvas>
+            <div id="page-wrapper">
+                <div id="page">
+                    <header id="header" class="header" role="banner" aria-label="Site header">
+                        <div class="navbar-wrapper desktop-only">
+                            <nav class="navbar navbar-expand-lg top-nav">
+                                <div class="limited-width-content">
+    
+                                    <span class="navbar-brand">
+                                        <a href="/" title="Convention on Biological Diversity">
+                                            <img src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/images/UN_brand_neg.png" alt="UN" />UN
+                                        </a>
+                                    </span>
+    
+                                    <div class="collapse navbar-collapse" id="topNavigationLinks">
+                                        <ul class="navbar-nav mr-auto">
+                                            <li class="topmenu nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" href="" role="button"
+                                                    data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="false" title="Information">Information
+                                                </a>
+    
+                                                <div class="Information dropdown-menu">
+                                                    <div class="dropdown-item-container">
+    
+                                                        <a href="https://www.cbd.int/feedback" title="feedback" class="dropdown-item"><span class="dropdown-item-label">Feedback</span>
+                                                        </a>
+    
+                                                        <a href="https://www.cbd.int/map" title="Sitemap" class="dropdown-item"><span class="dropdown-item-label">Sitemap</span>
+                                                        </a>
+    
+                                                        <a href="https://www.cbd.int/contact" title="Contact us" class="dropdown-item"><span class="dropdown-item-label">Contact us</span>
+                                                        </a>
+    
+                                                        <a href="https://www.cbd.int/terms" title="Terms of Use" class="dropdown-item"><span class="dropdown-item-label">Terms of Use</span>
+                                                        </a>
+    
+                                                        <a href="https://www.cbd.int/privacy" title="Privacy Policy" class="dropdown-item"><span class="dropdown-item-label">Privacy Policy</span>
+                                                        </a>
+    
+                                                        <a href="https://www.cbd.int/credits" title="Credits" class="dropdown-item"><span class="dropdown-item-label">Credits</span>
+                                                        </a>
+    
+                                                        <a href="https://www.cbd.int/copyright" title="© CBD Secretariat" class="dropdown-item"><span class="dropdown-item-label">© CBD Secretariat</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+    
+                                            <li class="topmenu nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" href="/secretariat" role="button"
+                                                    data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="false" title="Secretariat">Secretariat
+                                                </a>
+    
+                                                <div class="Secretariat dropdown-menu">
+                                                    <div class="dropdown-item-container">
+    
+                                                        <a href="https://www.cbd.int/secretariat/role" title="About the Secretariat" class="dropdown-item"><span class="dropdown-item-label">About the Secretariat</span>
+                                                        </a>
+    
+                                                        <a href="https://www.cbd.int/staff" title="Staff" class="dropdown-item"><span class="dropdown-item-label">Staff</span>
+                                                        </a>
+    
+                                                        <a href="https://www.cbd.int/museum" title="Museum of Nature and Culture" class="dropdown-item"><span class="dropdown-item-label">Museum of Nature and Culture</span>
+                                                        </a>
+    
+                                                        <a href="https://www.cbd.int/secretariat/initiatives" title="Initiatives" class="dropdown-item"><span class="dropdown-item-label">Initiatives</span>
+                                                        </a>
+    
+                                                        <a href="https://www.cbd.int/secretariat/documents.shtml" title="Secretariat Documents" class="dropdown-item"><span class="dropdown-item-label">Secretariat Documents</span>
+                                                        </a>
+    
+                                                        <a href="https://www.cbd.int/employment" title="Employment Opportunities" class="dropdown-item"><span class="dropdown-item-label">Employment Opportunities</span>
+                                                        </a>
+    
+                                                        <a href="https://www.cbd.int/secretariat/business" title="Doing Business with the CBD" class="dropdown-item"><span class="dropdown-item-label">Doing Business with the CBD</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+    
+                                        <ul class="hidden navbar-nav control-items not-for-ie-9">
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button" data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="false">LANGUAGE <span class="flag-icon"></span>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="langDropdown">
+    
+                                                    <div class="dropdown-item-container">
+                                                        <a href="?lg=en" class="dropdown-item" hreflang="en"><span class="flag-icon"></span>
+                                                            <div class="language-option">English</div>
+                                                        </a>
+    
+                                                        <a href="?lg=es" class="dropdown-item" hreflang="es"><span class="flag-icon"></span>
+                                                            <div class="language-option">Español</div>
+                                                        </a>
+    
+                                                        <a href="?lg=ar" class="dropdown-item" hreflang="ar"><span class="flag-icon"></span>
+                                                            <div class="language-option">العربية</div>
+                                                        </a>
+    
+                                                        <a href="?lg=fr" class="dropdown-item" hreflang="fr"><span class="flag-icon"></span>
+                                                            <div class="language-option">Français</div>
+                                                        </a>
+    
+                                                        <a href="?lg=ru" class="dropdown-item" hreflang="ru"><span class="flag-icon"></span>
+                                                            <div class="language-option">Русский</div>
+                                                        </a>
+    
+                                                        <a href="?lg=zh" class="dropdown-item" hreflang="zh-hans"><span class="flag-icon"></span>
+                                                            <div class="language-option">简体中文</div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+    
+                                        <ul class="hidden navbar-nav control-items ie-9-only">
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" href="#" id="A1" role="button" data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="false">LANGUAGE <span class="flag-icon"></span>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="langDropdown">
+    
+                                                    <div class="dropdown-item-container">
+                                                        <a href="?lg=en" class="dropdown-item" hreflang="en"><span class="flag-icon"></span>
+                                                            <div class="language-option">English</div>
+                                                        </a>
+    
+                                                        <a href="?lg=es" class="dropdown-item" hreflang="es"><span class="flag-icon"></span>
+                                                            <div class="language-option">Español</div>
+                                                        </a>
+    
+                                                        <a href="?lg=ar" class="dropdown-item" hreflang="ar"><span class="flag-icon"></span>
+                                                            <div class="language-option">العربية</div>
+                                                        </a>
+    
+                                                        <a href="?lg=fr" class="dropdown-item" hreflang="fr"><span class="flag-icon"></span>
+                                                            <div class="language-option">Français</div>
+                                                        </a>
+    
+                                                        <a href="?lg=ru" class="dropdown-item" hreflang="ru"><span class="flag-icon"></span>
+                                                            <div class="language-option">Русский</div>
+                                                        </a>
+    
+                                                        <a href="?lg=zh" class="dropdown-item" hreflang="zh-hans"><span class="flag-icon"></span>
+                                                            <div class="language-option">简体中文</div>
+                                                        </a>
+    
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+    
+                                        <div id="block-loginlinkblock" class="settings-tray-editable block block-cbd-utility block-login-link-block" data-drupal-settingstray="editable">
+                                            <div  class="pull-right hidden-print hidden-xs">
+
+                                                <a class="btn btn-link" ng-href="{{templateCtrl.accountsUrl+'/signin?returnUrl='+templateCtrl.getEncodedReturnUrl()}}"  style="text-decoration:none;color:#fff" ng-hide="user.isAuthenticated" style="color: black">
+                                                    <i  class="fa fa-power-off"></i> <span ng-cloak ng-show="user && !user.isAuthenticated">Sign in</span>
+                                                </a>
+                            
+                                                <div ng-cloak ng-show="user.isAuthenticated" class="dropdown">
+                                                    <button class="btn btn-link dropdown-toggle" style="text-decoration:none;color:#fff" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    <span class="caret"></span> {{user.name}}
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuL" style="padding: 5px;">
+                                                        <li><a ng-href="{{templateCtrl.accountsUrl+'/profile?returnUrl=' +templateCtrl.getEncodedReturnUrl()}}"><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
+                                                        <li><a ng-href="{{templateCtrl.accountsUrl+'/password?returnUrl='+templateCtrl.getEncodedReturnUrl()}}"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
+                                                        <li><a ng-click="templateCtrl.signOut()"  href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div> <!--  end sign in-->
+                                        </div>
+                                        <div id="block-topsearchblock" class="settings-tray-editable block block-cbd-utility block-top-search-block" data-drupal-settingstray="editable">
+    
+                                            <form class="views-exposed-form bef-exposed-form" data-drupal-selector="views-exposed-form-search-search" action="/search" method="get" id="views-exposed-form-search-search" accept-charset="UTF-8">
+                                                <div class="form-row">
+                                                    <div data-drupal-selector="edit-actions" class="form-actions" id="edit-actions">
+                                                        <input data-drupal-selector="edit-submit-search" type="submit" id="edit-submit-search" value="" class="button js-form-submit form-submit btn btn-primary form-control" />
+                                                    </div>
+    
+                                                    <fieldset class="js-form-item js-form-type-search-api-autocomplete form-type-search-api-autocomplete js-form-item-query form-item-query form-group col-auto">
+                                                        <label for="edit-query">Search</label>
+                                                        <input data-drupal-selector="edit-query" data-search-api-autocomplete-search="search" class="form-autocomplete form-text form-control" data-autocomplete-path="/search_api_autocomplete/search?display=search&amp;&amp;filter=query" placeholder="Search" type="text" id="edit-query" name="q" value="" size="30" maxlength="128" />
+                                                    </fieldset>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nav>
+                            <nav class="navbar navbar-expand-lg sub-nav">
+                                <div class="limited-width-content">
+    
+                                    <a class="navbar-brand" href="/" title="Convention on Biological Diversity">
+                                        <img src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/images/CBD_logo_green.png" alt="" />
+                                    </a>
+    
+                                    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#subNavigationLinks,#mobileTopNavigationLinks,#miniMenu" aria-controls="subNavigationLinks" aria-expanded="false" aria-label="Toggle navigation">
+                                        <span class="navbar-toggler-icon"></span>
+                                    </button>
+    
+                                    <div class="mobile-nav-wrapper ml-auto">
+    
+                                        <div class="collapse navbar-collapse" id="subNavigationLinks">
+                                            <ul class="navbar-nav ml-auto main-nav">
+                                                <li class="nav-item dropdown main-menu-item">
+                                                    <a class="nav-link dropdown-toggle" href="https://www.cbd.int/convention" role="button" title="The convention">THE CONVENTION
+                                                    </a>
+    
+                                                    <div class="dropdown-menu dropdown-submenu-centered" aria-labelledby="mainNavigationDropdown">
+                                                        <div class="row">
+                                                            <div class="col-xl-6">
+    
+                                                                <a href="/intro" title="About the Convention" class="dropdown-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                    <div class="dropdown-item-label">ABOUT THE CONVENTION</div>
+                                                                </a>
+    
+                                                                <a href="/convention/protocols" title="Convention Protocols" class="dropdown-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                    <div class="dropdown-item-label">CONVENTION PROTOCOLS</div>
+                                                                </a>
+    
+                                                                <a href="/convention/bodies" title="Convention Bodies" class="dropdown-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                    <div class="dropdown-item-label">CONVENTION BODIES</div>
+                                                                </a>
+                                                            </div>
+    
+                                                            <div class="col-xl-6">
+                                                                <a href="/sp" title="Strategic Plan for Biodiversity 2011-2020" class="dropdown-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                    <div class="dropdown-item-label">STRATEGIC PLAN FOR BIODIVERSITY 2011-2020</div>
+                                                                </a>
+                                                                <a href="/mechanisms" title="Mechanisms for Implementation" class="dropdown-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                    <div class="dropdown-item-label">MECHANISMS FOR IMPLEMENTATION</div>
+                                                                </a>
+                                                                <a href="/cooperation" title="Cooperation &amp; Partnerships" class="dropdown-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                    <div class="dropdown-item-label">COOPERATION &amp; PARTNERSHIPS </div>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="nav-item dropdown main-menu-item">
+                                                    <a class="nav-link dropdown-toggle" href="/biosafety" role="button" title="Cartagena Protocol">CARTAGENA PROTOCOL
+                                                    </a>
+    
+                                                    <div class="dropdown-menu dropdown-submenu-centered" aria-labelledby="mainNavigationDropdown">
+                                                        <div class="row">
+                                                            <div class="col-xl-6">
+                                                                <a href="/biosafety" title="The Cartagena Protocol" class="dropdown-item">
+                                                                    <div class="dropdown-item-label">THE CARTAGENA PROTOCOL</div>
+                                                                </a>
+                                                                <a href="http://bch.cbd.int/protocol/supplementary/" title="Nagoya – Kuala Lumpur Supplementary Protocol on Liability and Redress" class="dropdown-item">
+                                                                    <div class="dropdown-item-label">NAGOYA – KUALA LUMPUR SUPPLEMENTARY PROTOCOL ON LIABILITY AND REDRESS</div>
+                                                                </a>
+                                                                <a href="http://bch.cbd.int/protocol/issues/" title="Key Protocol Issues" class="dropdown-item">
+                                                                    <div class="dropdown-item-label">KEY PROTOCOL ISSUES</div>
+                                                                </a>
+                                                                <a href="https://bch.cbd.int/protocol/parties/" title="Parties" class="dropdown-item">
+                                                                    <div class="dropdown-item-label">PARTIES</div>
+                                                                </a>
+                                                                <a href="https://bch.cbd.int/protocol/cop-mop" title="COP-MOP (Governing Body)" class="dropdown-item">
+                                                                    <div class="dropdown-item-label">COP-MOP (GOVERNING BODY)</div>
+                                                                </a>
+                                                            </div>
+    
+                                                            <div class="col-xl-6">
+                                                                <a href="https://bch.cbd.int/protocol/meetings/" title="Activities and Documentation" class="dropdown-item">
+                                                                    <div class="dropdown-item-label">ACTIVITIES AND DOCUMENTATION</div>
+                                                                </a>
+                                                                <a href="https://bch.cbd.int/resources/" title="Resources" class="dropdown-item">
+                                                                    <div class="dropdown-item-label">RESOURCES</div>
+                                                                </a>
+                                                                <a href="https://bch.cbd.int/protocol/cpb_publications.shtml" title="Publications" class="dropdown-item">
+                                                                    <div class="dropdown-item-label">PUBLICATIONS</div>
+                                                                </a>
+                                                                <a href="http://bch.cbd.int/" title="The Biosafety Clearing-House (BCH)" class="dropdown-item">
+                                                                    <div class="dropdown-item-label">THE BIOSAFETY CLEARING-HOUSE (BCH)</div>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="nav-item  main-menu-item">
+                                                    <a class="nav-link dropdown-toggle" href="/abs" role="button" title="Nagoya Protocol">NAGOYA PROTOCOL
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item  main-menu-item">
+                                                    <a class="nav-link dropdown-toggle" href="/countries" role="button" title="Countries">COUNTRIES
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+    
+                        <div class="navbar-wrapper mobile-only">
+                            <nav class="navbar navbar-expand-lg sub-nav">
+                                <div class="limited-width-content">
+    
+                                    <a class="navbar-brand" href="/">
+                                        <img src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/images/CBD_brand_green.png" alt="" />
+                                    </a>
+    
+                                    <div class="text-center sub-nav-title ">
+                                        <img src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/images/Brand text.png" alt="">
+                                    </div>
+    
+                                    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#subNavigationLinksMobile,#mobileTopNavigationLinks,#miniMenu" aria-controls="subNavigationLinks" aria-expanded="false" aria-label="Toggle navigation">
+                                        <span class="navbar-toggler-icon"></span>
+                                    </button>
+    
+                                    <div class="mobile-nav-wrapper ml-auto mobile-menu">
+                                        <div class="mobile-nav-mini-menu collapse" id="miniMenu">
+                                            <div class="previous-menu-btn">
+                                                <div><</div>
+                                                <div class="previous-text">
+                                                    PREVIOUS
+                                                </div>
+                                            </div>
+                                            <div class="empty-mini-menu">
+                                                &nbsp;
+                                            </div>
+                                            <div class="mini-menu-icons">
+                                                <div>
+                                                    <span class="flag-icon"></span>
+                                                </div>
+                                                <div>
+                                                    <span class="lock-icon"></span>
+                                                </div>
+                                                <div>
+                                                    <span class="search-icon"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        <div class="collapse navbar-collapse" id="subNavigationLinksMobile">
+    
+                                            <ul class="navbar-nav ml-auto main-nav">
+                                                <li class="nav-item first-level dropdown">
+                                                    <a class="nav-link dropdown" href="/convention" role="button"
+                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="The convention">THE CONVENTION
+                                                    </a>
+    
+                                                    <ul class="dropdown-menu dropdown-submenu-centered second-level">
+                                                        <div class="column">
+                                                            <li class="dropdown">
+                                                                <a class="dropdown-second-item" href="/intro" role="button" data-toggle="dropdown">
+                                                                    <div class="dropdown-item-label">ABOUT THE CONVENTION</div>
+    
+                                                                </a>
+    
+                                                                <ul class="dropdown-menu third-level">
+                                                                    <li>
+                                                                        <a href="/history" title="History of the Convention" class="dropdown-third-item">
+                                                                            <div class="dropdown-item-label">HISTORY OF THE CONVENTION</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/convention/text" title="Convention Text" class="dropdown-third-item">
+                                                                            <div class="dropdown-item-label">CONVENTION TEXT</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/convention/parties/list" title="List of Parties" class="dropdown-third-item">
+                                                                            <div class="dropdown-item-label">LIST OF PARTIES</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/decisions" title="Decisions" class="dropdown-third-item">
+                                                                            <div class="dropdown-item-label">DECISIONS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/gbo" title="Global Biodiversity Outlook" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">GLOBAL BIODIVERSITY OUTLOOK (GBO 4)</div>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="dropdown">
+                                                                <a class="dropdown-second-item" href="/convention/protocols" role="button" data-toggle="dropdown">
+                                                                    <div class="dropdown-item-label">CONVENTION PROTOCOLS</div>
+                                                                </a>
+    
+                                                                <ul class="dropdown-menu third-level">
+                                                                    <li>
+                                                                        <a href="/biosafety" title="Cartagena Protocol on Biosafety" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">CARTAGENA PROTOCOL ON BIOSAFETY</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/abs" title="Nagoya Protocol on Access and Benefit-Sharing" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">NAGOYA PROTOCOL ON ACCESS AND BENEFIT-SHARING</div>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="dropdown">
+                                                                <a class="dropdown-second-item" href="/convention/bodies" role="button" data-toggle="dropdown">
+                                                                    <div class="dropdown-item-label">CONVENTION BODIES</div>
+                                                                </a>
+    
+                                                                <ul class="dropdown-menu third-level">
+                                                                    <li>
+                                                                        <a href="/cop" title="Conference of the Parties (COP)" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">CONFERENCE OF THE PARTIES (COP)</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/sbstta" title="Subsidiary Body on Implementation (SBI)" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">SUBSIDIARY BODY ON IMPLEMENTATION (SBI)</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/sbi" title="Subsidiary Body on Scientific, Technical and Technological Advice (SBSTTA)" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">SUBSIDIARY BODY ON SCIENTIFIC, TECHNICAL AND TECHNOLOGICAL ADVICE (SBSTTA)</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/convention/wg8j.shtml" title="Working Group on Article 8(j)" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">WORKING GROUP ON ARTICLE 8(J)</div>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="dropdown">
+                                                                <a class="dropdown-second-item" href="/sp" role="button" data-toggle="dropdown">
+                                                                    <div class="dropdown-item-label">STRATEGIC PLAN FOR BIODIVERSITY 2011-2020</div>
+                                                                </a>
+    
+                                                                <ul class="dropdown-menu third-level">
+                                                                    <li>
+                                                                        <a href="/sp" title="Key Elements" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">KEY ELEMENTS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/aichi-targets" title="Aichi Biodiversity Targets" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">AICHI BIODIVERSITY TARGETS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="" title="Implementation" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">IMPLEMENTATION</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/2011-2020" title="United Nations Decade on Biodiversity 2011-2020" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">UNITED NATIONS DECADE ON BIODIVERSITY 2011-2020</div>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="dropdown">
+                                                                <a class="dropdown-second-item" href="/mechanisms" role="button" data-toggle="dropdown">
+                                                                    <div class="dropdown-item-label">MECHANISMS FOR IMPLEMENTATION</div>
+                                                                </a>
+    
+                                                                <ul class="dropdown-menu third-level">
+                                                                    <li>
+                                                                        <a href="/nbsap" title="National Biodiversity Strategies &amp; Action Plans" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">NATIONAL BIODIVERSITY STRATEGIES &amp; ACTION PLANS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/reports" title="National Reports" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">NATIONAL REPORTS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="" title="Financial Resources &amp; Mechanism" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">FINANCIAL RESOURCES &amp; MECHANISM</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/cb" title="Capacity Building" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">CAPACITY BUILDING</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/chm" title="Clearing-House Mechanism (CHM)" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">CLEARING-HOUSE MECHANISM (CHM)</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/tsc" title="Technical and Scientific Cooperation" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">TECHNICAL AND SCIENTIFIC COOPERATION</div>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="dropdown">
+                                                                <a class="dropdown-second-item" href="/cooperation" role="button" data-toggle="dropdown">
+                                                                    <div class="dropdown-item-label">COOPERATION &amp; PARTNERSHIPS</div>
+                                                                </a>
+    
+                                                                <ul class="dropdown-menu third-level">
+                                                                    <li>
+                                                                        <a href="/ssc" title="South-South Cooperation" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">SOUTH-SOUTH COOPERATION</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/cooperation/csp" title="Consortium of Scientific Partners" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">CONSORTIUM OF SCIENTIFIC PARTNERS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/rio" title="Rio Conventions" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">RIO CONVENTIONS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/brc" title="Biodiversity-related Conventions" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">BIODIVERSITY-RELATED CONVENTIONS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/cooperation/japanfund.shtml" title="Japan Biodiversity Fund" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">JAPAN BIODIVERSITY FUND</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="/agreements" title="Partnership Agreements" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">PARTNERSHIP AGREEMENTS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </div>
+                                                    </ul>
+                                                </li>
+                                                <li class="nav-item first-level dropdown-disabled">
+                                                    <a class="nav-link dropdown-disabled" href="https://www.cbd.int/biosafety" role="button"
+                                                        data-toggle-x="dropdown-disabled" aria-haspopup="true" aria-expanded="false" title="Cartagena Protocol">CARTAGENA PROTOCOL
+                                                    </a>
+    
+                                                    <ul class="dropdown-menu dropdown-submenu-centered second-level">
+                                                        <div class="column">
+                                                            <li class="dropdown">
+                                                                <a class="dropdown-second-item" href="http://bch.cbd.int/protocol/" role="button" data-toggle="dropdown">
+                                                                    <div class="dropdown-item-label">THE CARTAGENA PROTOCOL</div>
+                                                                </a>
+    
+                                                                <ul class="dropdown-menu third-level">
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/news/" title="What&#039;s new" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">WHAT&#039;S NEW</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/background/" title="About the Protocol" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">ABOUT THE PROTOCOL</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/text/s" title="Text of the Cartagena Protocol" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">TEXT OF THE CARTAGENA PROTOCOL</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/issues/cpb_stplan.shtml" title="Strategic Plan" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">STRATEGIC PLAN</div>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-second-item" href="http://bch.cbd.int/protocol/supplementary/" role="button">
+                                                                    <div class="dropdown-item-label">NAGOYA – KUALA LUMPUR SUPPLEMENTARY PROTOCOL ON LIABILITY AND REDRESS</div>
+                                                                </a>
+    
+                                                            </li>
+                                                            <li class="dropdown">
+                                                                <a class="dropdown-second-item" href="https://bch.cbd.int/protocol/" role="button" data-toggle="dropdown">
+                                                                    <div class="dropdown-item-label">KEY PROTOCOL ISSUES</div>
+                                                                </a>
+    
+                                                                <ul class="dropdown-menu third-level">
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/issues/cpb_art35.shtml" title="Assessment and Review" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">ASSESSMENT AND REVIEW</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_art22.shtml" title="Capacity Building" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">CAPACITY BUILDING</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_art34.shtml" title="Compliance" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">COMPLIANCE</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_art28.shtml" title="Financial Mechanism" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">FINANCIAL MECHANISM</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/issues/mainstreaming/" title="Mainstreaming" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">MAINSTREAMING</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_art18.shtml" title="Handling, Transport, Packaging and Identification" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">HANDLING, TRANSPORT, PACKAGING AND IDENTIFICATION</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_art20.shtml" title="Information sharing" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">INFORMATION SHARING</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_art33.shtml" title="Monitoring and Reporting" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">MONITORING AND REPORTING</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_art23.shtml" title="Public Awareness and Participation" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">PUBLIC AWARENESS AND PARTICIPATION</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_art15.shtml" title="Risk Assessment" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">RISK ASSESSMENT</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_art16.shtml" title="Risk Management" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">RISK MANAGEMENT</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_roster.shtml" title="Roster of Experts" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">ROSTER OF EXPERTS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_detection.shtml" title="Sampling, Detection and Identification" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">SAMPLING, DETECTION AND IDENTIFICATION</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_art26.shtml" title="Socio-economic Considerations" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">SOCIO-ECONOMIC CONSIDERATIONS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_art6.shtml" title="Transit and Contained Use" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">TRANSIT AND CONTAINED USE</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_art17.shtml" title="Unintentional Transboundary Movements" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">UNINTENTIONAL TRANSBOUNDARY MOVEMENTS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="dropdown">
+                                                                <a class="dropdown-second-item" href="https://bch.cbd.int/protocol/parties/" role="button" data-toggle="dropdown">
+                                                                    <div class="dropdown-item-label">PARTIES</div>
+                                                                </a>
+    
+                                                                <ul class="dropdown-menu third-level">
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/parties/" title="List of Parties" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">LIST OF PARTIES</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/ratification.shtml" title="Becoming a Party" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">BECOMING A PARTY</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/database/compiled-national-contacts" title="National Contacts" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">NATIONAL CONTACTS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_natreports.shtml" title="National Reports" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">NATIONAL REPORTS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/budget/" title="Status of Contributions" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">STATUS OF CONTRIBUTIONS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="dropdown">
+                                                                <a class="dropdown-second-item" href="https://bch.cbd.int/protocol/cpb_mop" role="button" data-toggle="dropdown">
+                                                                    <div class="dropdown-item-label">COP-MOP (GOVERNING BODY)</div>
+                                                                </a>
+    
+                                                                <ul class="dropdown-menu third-level">
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_mopmeetings.shtml" title="COP-MOP Meetings" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">COP-MOP MEETINGS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_bureau.shtml" title="COP-MOP Bureau" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">COP-MOP BUREAU</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/decisions/" title="COP-MOP Decisions" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">COP-MOP DECISIONS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="dropdown">
+                                                                <a class="dropdown-second-item" href="/activities" role="button" data-toggle="dropdown">
+                                                                    <div class="dropdown-item-label">ACTIVITIES AND DOCUMENTATION</div>
+                                                                </a>
+    
+                                                                <ul class="dropdown-menu third-level">
+                                                                    <li>
+                                                                        <a href="https://www.cbd.int/meetings/?thm=CPB" title="Meetings and Documents" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">MEETINGS AND DOCUMENTS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="http://bch.cbd.int/protocol/notifications/" title="Notifications" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">NOTIFICATIONS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="http://bch.cbd.int/protocol/cpb_esreports.shtml" title="Reports of the Executive Secretary" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">REPORTS OF THE EXECUTIVE SECRETARY</div>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="dropdown">
+                                                                <a class="dropdown-second-item" href="http://bch.cbd.int/resources/" role="button" data-toggle="dropdown">
+                                                                    <div class="dropdown-item-label">RESOURCES</div>
+                                                                </a>
+    
+                                                                <ul class="dropdown-menu third-level">
+                                                                    <li>
+                                                                        <a href="http://bch.cbd.int/" title="The Biosafety Clearing-House" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">THE BIOSAFETY CLEARING-HOUSE</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="http://bch.cbd.int/help/faq/" title="Frequently Asked Questions" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">FREQUENTLY ASKED QUESTIONS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="http://bch.cbd.int/protocol/cpb_media.shtml" title="Media and Outreach" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">MEDIA AND OUTREACH</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="http://bch.cbd.int/protocol/cpb_media_video1.shtml" title="A video on the Cartagena Protocol" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">A VIDEO ON THE CARTAGENA PROTOCOL</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="http://bch.cbd.int/database/resources/" title="Search the BIRC" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">SEARCH THE BIRC</div>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="dropdown"s>
+                                                                <a class="dropdown-second-item" href="https://bch.cbd.int/protocol/cpb_publications.shtml" role="button" data-toggle="dropdown">
+                                                                    <div class="dropdown-item-label">PUBLICATIONS</div>
+                                                                </a>
+    
+                                                                <ul class="dropdown-menu third-level">
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_publications.shtml" title="Protocols and decisions" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">PROTOCOLS AND DECISIONS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_factsheets.shtml" title="Fact Sheets and Banners" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">FACT SHEETS AND BANNERS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_newsletter.shtml" title="Newsletter" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">NEWSLETTER</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_technicalseries.shtml" title="Biosafety Technical Series" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">BIOSAFETY TECHNICAL SERIES</div>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="https://bch.cbd.int/protocol/cpb_otherpubl.shtml" title="Other Publications" class="dropdown-third-item" data-drupal-link-system-path="&lt;front&gt;">
+                                                                            <div class="dropdown-item-label">OTHER PUBLICATIONS</div>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-second-item" href="http://bch.cbd.int/" role="button">
+                                                                    <div class="dropdown-item-label">THE BIOSAFETY CLEARING-HOUSE (BCH)</div>
+                                                                </a>
+                                                            </li>
+                                                        </div>
+                                                    </ul>
+                                                </li>
+                                                <li class="nav-item first-level ">
+                                                    <a class="nav-link " href="/abs" role="button"
+                                                        title="Nagoya Protocol">NAGOYA PROTOCOL
+                                                    </a>
+    
+                                                </li>
+                                                <li class="nav-item first-level ">
+                                                    <a class="nav-link " href="/countries" role="button"
+                                                        title="Countries">COUNTRIES
+                                                    </a>
+                                                </li>
+                                            </ul>
+    
+                                            <div class="mobile-top-menu">
+                                                <hr />
+                                                <ul class="navbar-nav mr-auto">
+    
+                                                    <li class="topmenu nav-item dropdown">
+                                                        <a class="nav-link dropdown-toggle" href="" role="button"
+                                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Information">Information
+                                                        </a>
+    
+                                                        <div class="Information dropdown-menu">
+                                                            <div class="dropdown-item-container">
+                                                                <a href="https://www.cbd.int/feedback" title="feedback" class="dropdown-item"><span class="dropdown-item-label">Feedback</span>
+                                                                </a>
+    
+                                                                <a href="https://www.cbd.int/map" title="Sitemap" class="dropdown-item"><span class="dropdown-item-label">Sitemap</span>
+                                                                </a>
+    
+                                                                <a href="https://www.cbd.int/contact" title="Contact us" class="dropdown-item"><span class="dropdown-item-label">Contact us</span>
+                                                                </a>
+    
+                                                                <a href="https://www.cbd.int/terms" title="Terms of Use" class="dropdown-item"><span class="dropdown-item-label">Terms of Use</span>
+                                                                </a>
+    
+                                                                <a href="https://www.cbd.int/privacy" title="Privacy Policy" class="dropdown-item"><span class="dropdown-item-label">Privacy Policy</span>
+                                                                </a>
+    
+                                                                <a href="https://www.cbd.int/credits" title="Credits" class="dropdown-item"><span class="dropdown-item-label">Credits</span>
+                                                                </a>
+    
+                                                                <a href="https://www.cbd.int/copyright" title="© CBD Secretariat" class="dropdown-item"><span class="dropdown-item-label">© CBD Secretariat</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+    
+                                                    <li class="topmenu nav-item dropdown">
+                                                        <a class="nav-link dropdown-toggle" href="/secretariat" role="button"
+                                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Secretariat">Secretariat
+                                                        </a>
+    
+                                                        <div class="Secretariat dropdown-menu">
+                                                            <div class="dropdown-item-container">
+                                                                <a href="https://www.cbd.int/secretariat/role.shtml" title="About the Secretariat" class="dropdown-item"><span class="dropdown-item-label">About the Secretariat</span>
+                                                                </a>
+    
+                                                                <a href="https://www.cbd.int/staff" title="Staff" class="dropdown-item"><span class="dropdown-item-label">Staff</span>
+                                                                </a>
+    
+                                                                <a href="https://www.cbd.int/museum" title="Museum of Nature and Culture" class="dropdown-item"><span class="dropdown-item-label">Museum of Nature and Culture</span>
+                                                                </a>
+    
+                                                                <a href="https://www.cbd.int/secretariat/initiatives.shtml" title="Initiatives" class="dropdown-item"><span class="dropdown-item-label">Initiatives</span>
+                                                                </a>
+    
+                                                                <a href="https://www.cbd.int/secretariat/documents.shtml" title="Secretariat Documents" class="dropdown-item"><span class="dropdown-item-label">Secretariat Documents</span>
+                                                                </a>
+    
+                                                                <a href="https://www.cbd.int/employment" title="Employment Opportunities" class="dropdown-item"><span class="dropdown-item-label">Employment Opportunities</span>
+                                                                </a>
+    
+                                                                <a href="https://www.cbd.int/secretariat/business" title="Doing Business with the CBD" class="dropdown-item"><span class="dropdown-item-label">Doing Business with the CBD</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+    
+                                                <hr />
+                                                <ul class="hidden navbar-nav">
+                                                    <li class="nav-item dropdown">
+                                                        <a class="nav-link dropdown-toggle" href="#" id="A2" role="button" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="false">LANGUAGE <span class="flag-icon"></span>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="langDropdown">
+                                                            <a href="?lg=en" class="dropdown-item" hreflang="es"><span class="flag-icon"></span>
+                                                                <div class="language-option">English</div>
+                                                            </a>
+                                                            <a href="?lg=es" class="dropdown-item" hreflang="es"><span class="flag-icon"></span>
+                                                                <div class="language-option">Español</div>
+                                                            </a>
+                                                            <a href="?lg=ar" class="dropdown-item" hreflang="ar"><span class="flag-icon"></span>
+                                                                <div class="language-option">العربية</div>
+                                                            </a>
+                                                            <a href="?lg=fr" class="dropdown-item" hreflang="fr"><span class="flag-icon"></span>
+                                                                <div class="language-option">Français</div>
+                                                            </a>
+                                                            <a href="?lg=ru" class="dropdown-item" hreflang="ru"><span class="flag-icon"></span>
+                                                                <div class="language-option">Русский</div>
+                                                            </a>
+                                                            <a href="?lg=zh" class="dropdown-item" hreflang="zh-hans"><span class="flag-icon"></span>
+                                                                <div class="language-option">简体中文</div>
+                                                            </a>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+    
+                                                <ul class="hidden navbar-nav">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="/user/login">LOGIN
+                                                            <span class="lock-icon"></span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+    
+                                                <form class="views-exposed-form bef-exposed-form" data-drupal-selector="views-exposed-form-search-search" action="/search" method="get" id="views-exposed-form-search-search--2" accept-charset="UTF-8">
+                                                    <div class="form-row">
+                                                        <div data-drupal-selector="edit-actions" class="form-actions" id="Div1">
+                                                            <input data-drupal-selector="edit-submit-search" type="submit" id="edit-submit-search--2" value="" class="button js-form-submit form-submit btn btn-primary form-control" />
+                                                        </div>
+    
+                                                        <fieldset class="js-form-item js-form-type-search-api-autocomplete form-type-search-api-autocomplete js-form-item-query form-item-query form-group col-auto">
+                                                            <label for="edit-query--2">Search</label>
+                                                            <input data-drupal-selector="edit-query" data-search-api-autocomplete-search="search" class="form-autocomplete form-text form-control" data-autocomplete-path="/search_api_autocomplete/search?display=search&amp;&amp;filter=query" placeholder="Search" type="text" id="edit-query--2" name="q" value="" size="30" maxlength="128" />
+                                                        </fieldset>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </header>
+    
+                    <div class="page-content">
+    
+                        <article role="article" about="/article/post-2020-708" typeof="schema:Article" class="node node--type-article node--view-mode-full clearfix">
+                            <header>
+                                <span property="schema:name" content="Post 2020" class="rdf-meta hidden"></span>
+                            </header>
+                            <div class="node__content clearfix">
+                                <section id="carouselSection">
+                                    <div class="block block-block-content block-block-content01fbce51-ba92-465a-b950-3bbfd07baee0 container-fluid">
+                                        <div class="main-carousel-wrapper  home-page">
+                                            <div class="carousel slide main-carousel" id="mainCarousel" data-ride="carousel" data-interval="4000">
+                                                <!-- Indicators -->
+                                                <ol class="hidden carousel-indicators">
+                                                    <li data-target="#mainCarousel" data-slide-to="0" class="active"></li>
+                                                </ol>
+  
+                                                <div class="carousel-inner">
+                                                    <div class="carousel-item active">
+                                                        <a id="CCarouselLink">
+                                                            <div class="paragraph paragraph--type--carousel paragraph--view-mode--carousel portal-banner"   id="CPortalBanner">
+                                                                <div class="carousel-item-text-block">
+                                                                    <div class="carousel-item-header">
+                                                                        <div class="field field--name-field-title field--type-string field--label-hidden field__item">
+                                                                            <span ID="CCarouselTitle"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="carousel-item-text">
+    
+                                                                        <div class="clearfix text-formatted field field--name-field-description field--type-text-long field--label-hidden field__item">
+                                                                            <p id="CCarouselText"></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+    
+                                                <!-- Left and right controls -->
+                                                <a class="hidden carousel-control-prev" href="#mainCarousel" data-slide="prev">
+                                                    <span class="carousel-control-prev-icon"></span>
+                                                    <span class="sr-only">Previous</span>
+                                                </a>
+                                                <a class="hidden carousel-control-next" href="#mainCarousel" data-slide="next">
+                                                    <span class="carousel-control-next-icon"></span>
+                                                    <span class="sr-only">Next</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </article>
+                        <!-- HEADER -->
+                        <div class="container">
+                            <div id="conferenceHeader"></div>
+                        </div>
+                        <div class="container">
+                                <ng-view></ng-view>
+                        </div>                                
+                        <a href="#" class="go-to-top-btn"></a>
+                    </div>
+                    
+                    <footer class="footer">
+    
+                        <div id="block-followblock" class="follow-us settings-tray-editable block block-cbd-utility block-follow-block" data-drupal-settingstray="editable">
+    
+                            <div class="limited-width-content">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="offset-0 col-12 offset-md-0 col-lg-3">
+                                            <div class="follow-us-headline">FOLLOW US</div>
+                                        </div>
+                                        <div class="offset-0 col-12 offset-md-0 col-lg-8">
+                                            <div class="nav flex-follow-us">
+                                                <a href="http://www.youtube.com/user/chmcbd" title="YouTube">
+                                                    <img src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/images/someround_youtube_neg.svg" alt="YouTube" />
+                                                </a>
+                                                <a href="http://www.facebook.com/UNBiodiversity" title="Facebook">
+                                                    <img src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/images/someround_facebook_neg.svg" alt="Facebook" />
+                                                </a>
+                                                <a href="https://twitter.com/unbiodiversity" title="Twitter">
+                                                    <img src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/images/someround_twitter_neg.svg" alt="Twitter" />
+                                                </a>
+                                                <a href="https://www.linkedin.com/company/unbiodiversity" title="LinkedIn">
+                                                    <img src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/images/someround_linkedin_neg.svg" alt="LinkedIn" />
+                                                </a>
+                                                <a href="https://instagram.com/unbiodiversity" title="Instagram">
+                                                    <img src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/images/someround_instagram_neg.svg" alt="Instagram" />
+                                                </a>
+                                                <a href="/rss" title="RSS">
+                                                    <img src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/images/someround_feed_neg.svg" alt="RSS" />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="cbd-footer">
+                            <div class="container">
+                                <div class="row">
+                                    <div id="block-quicklinksblock" class="footer-block footer-margin col-12 col-lg-4 settings-tray-editable block block-cbd-utility block-quick-links-block" data-drupal-settingstray="editable">
+    
+                                        <div class="footer-headline">QUICK LINKS</div>
+                                        <hr>
+                                        <div class="flex-two-column">
+                                            <a href="https://www.cbd.int/decisions" title="Decisions">Decisions</a>
+                                            <a href="https://www.cbd.int/meetings" title="Meetings">Meetings</a>
+                                            <a href="https://www.cbd.int/notifications" title="Notifications">Notifications</a>
+                                            <a href="https://www.cbd.int/news" title="News Headlines">News Headlines</a>
+                                            <a href="https://www.cbd.int/publications" title="Publications">Publications</a>
+                                            <a href="https://chm.cbd.int/" title="CHM">CHM</a>
+                                            <a href="http://absch.cbd.int/" title="ABSCH">ABSCH</a>
+                                            <a href="http://bch.cbd.int/" title="BCH">BCH</a>
+                                            <a href="https://www.cbd.int/parties" title="Parties">Parties</a>
+                                            <a href="https://www.cbd.int/countries" title="Country Profiles">Country Profiles</a>
+                                            <a href="https://www.cbd.int/nfp" title="National Focal Points">National Focal Points</a>
+                                            <a href="https://www.cbd.int/nbsap" title="National Strategies (NBSAPs)">National Strategies (NBSAPs)</a>
+                                            <a href="https://www.cbd.int/reports" title="National Reports">National Reports</a>
+                                            <a href="https://www.cbd.int/contributions" title="Contributions">Contributions</a>
+                                            <a href="https://www.cbd.int/cooperation" title="Cooperation &amp; Partnerships">Cooperation &amp; Partnerships</a>
+                                        </div>
+                                    </div>
+    
+                                    <div id="block-topicsfooterblock" class="footer-block footer-margin col-12 col-lg-4 settings-tray-editable block block-cbd-utility block-topics-footer-block" data-drupal-settingstray="editable">
+    
+                                        <div class="footer-headline">TOPICS</div>
+                                        <hr>
+                                        <div class="flex-two-column">
+                                            <a href="/youth" title="Children & Youth">Children & Youth</a>
+                                            <!--<a href="/topics/energy" title="Energy">Energy</a> -->
+                                            <a href="/climate" title="Climate Change and Biodiversity">Climate Change and Biodiversity</a>
+                                            <a href="/development" title="Biodiversity for Development">Biodiversity for Development</a>
+                                            <a href="/impact" title="Impact Assessment">Impact Assessment</a>
+                                            <a href="/authorities" title="Local Authoritiest">Local Authorities</a>
+                                            <!--<a href="/topics/finance" title="Finance">Finance</a> -->
+                                            <!--<a href="/topics/food-distribution" title="Food distribution">Food distribution</a> -->
+                                            <!--<a href="/topics/food-security" title="Food Security">Food Security</a> -->
+                                            <a href="/gender" title="Gender and Biodiversity">Gender and Biodiversity</a>
+                                            <a href="/health" title="Health & Biodiversity">Health & Biodiversity</a>
+                                            <a href="/tech-transfer" title="Technology Transfer">Technology Transfer</a>
+                                            <a href="/drylands" title="Dry and Sub-humid Lands Biodiversity">Dry and Sub-humid Lands Biodiversity</a>
+                                            <a href="/business" title="Business and Biodiversity">Business and Biodiversity</a>
+                                            <a href="/tourism" title="Tourism and Biodiversity">Tourism and Biodiversity</a>
+                                            <!--<a href="/topics/transport" title="Transport">Transport</a> -->
+                                            <a href="/waters" title="Water Security">Inland Water Biodiversity</a>
+                                        </div>
+                                    </div>
+    
+                                    <div class="desktop-only footer-block footer-margin col-6 col-lg-2">
+                                        <div class="footer-headline">INFORMATION</div>
+                                        <hr>
+                                        <div class="flex-one-column">
+                                            <a href="https://www.cbd.int/feedback" title="Feedback">Feedback</a>
+                                            <a href="https://www.cbd.int/map" title="Sitemap">Sitemap</a>
+                                            <a href="https://www.cbd.int/contact" title="Contact us">Contact us</a>
+                                            <a href="https://www.cbd.int/terms" title="Terms of Use">Terms of Use</a>
+                                            <a href="https://www.cbd.int/privacy" title="Privacy Policy">Privacy Policy</a>
+                                            <a href="https://www.cbd.int/credits" title="Credits">Credits</a>
+                                            <a href="https://www.cbd.int/copyright" title="© CBD Secretariat">© CBD Secretariat</a>
+                                        </div>
+                                    </div>
+                                    <div class="desktop-only footer-block footer-margin col-6 col-lg-2">
+                                        <div class="footer-headline">A PART OF</div>
+                                        <hr>
+                                        <a href="http://www.un.org">
+                                            <img class="uno-brand" src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/images/UN_brand_neg.svg">
+                                        </a>
+                                        <a href="http://www.unep.org">
+                                            <img class="uno-environment" src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/images/uno_environment.png">
+                                        </a>
+                                    </div>
+    
+                                    <div class="mobile-only footer-block footer-margin col-12">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="footer-headline">INFORMATION</div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="footer-headline">A PART OF</div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class=" col-12">
+                                                <hr>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="footer-block col-6 ">
+                                                <div class="flex-one-column">
+                                                    <a href="https://www.cbd.int/feedback" title="Feedback">Feedback</a>
+                                                    <a href="https://www.cbd.int/map" title="Sitemap">Sitemap</a>
+                                                    <a href="https://www.cbd.int/contact" title="Contact us">Contact us</a>
+                                                    <a href="https://www.cbd.int/terms" title="Terms of Use">Terms of Use</a>
+                                                    <a href="https://www.cbd.int/privacy" title="Privacy Policy">Privacy Policy</a>
+                                                    <a href="https://www.cbd.int/credits" title="Credits">Credits</a>
+                                                    <a href="https://www.cbd.int/copyright" title="© CBD Secretariat">© CBD Secretariat</a>
+                                                </div>
+                                            </div>
+                                            <div class="footer-block col-6 ">
+                                                <a href="http://www.un.org">
+                                                    <img class="uno-brand" src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/images/UN_brand_neg.svg" alt="UNO BRAND">
+                                                </a>
+                                                <a href="http://www.unep.org">
+                                                    <img class="uno-environment" src="//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/images/uno_environment.png" alt="UNO ENVIRONMENT ">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    <!-- JS screen-size detector -->
+    <div class="device-size d-block d-sm-none" size="xs"></div>
+    <div class="device-size d-none d-sm-block d-md-none" size="sm"></div>
+    <div class="device-size d-none d-md-block d-lg-none" size="md"></div>
+    <div class="device-size d-none d-lg-block d-xl-none" size="lg"></div>    
+    <div class="device-size d-none d-xl-block" size="xl"></div>    
+    </body>
+</html>

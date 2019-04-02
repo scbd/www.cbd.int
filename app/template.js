@@ -7,6 +7,8 @@ define(['app', 'angular','text!./toast.html',
 
         $templateCache.put("directives/toast/toast.html", toastTemplate);
 
+        if(!window.$ && window.jQuery) window.$ = window.jQuery;
+
         var basePath  = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
 
         // exports: 
