@@ -1,5 +1,5 @@
 define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
-        'css!./meeting-documents.css', 'angular-cache'
+        'css!./meeting-documents.css', 'angular-cache', 'css!./agenda.css'
 ], function(_, ng) {
     //'css!./agenda.css' // moved to template
     var currentUser;
@@ -41,7 +41,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
         $scope.$watch('$root.deviceSize', updateMaxTabCount);
 
-        initAffix();
+        initAffix(); //to be fixed later
         initSecurity();
         load();
 
@@ -498,7 +498,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
                 var psc = ng.element('#print-smart-checkout');
 
-                if(psc.size()) {
+                if(psc.length) {
                     psc.affix({ offset: { top:psc.offset().top - 10 } });
                     affixReady();
                 }

@@ -1,5 +1,5 @@
 define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/moment', 'directives/view-injector',
-'directives/print-smart/print-smart-checkout', './meeting-document', 'services/conference-service'],
+'directives/print-smart/print-smart-checkout', './meeting-document', 'services/conference-service', 'css!./agenda.css'],
  function(_, moment, ng) {
     //'css!./agenda.css' // moved to template
 
@@ -341,7 +341,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
 
                 var psc = ng.element('#print-smart-checkout');
 
-                if(psc.size()) {
+                if(psc.length) {
                     psc.affix({ offset: { top:psc.offset().top - 10 } });
                     affixReady();
                 }

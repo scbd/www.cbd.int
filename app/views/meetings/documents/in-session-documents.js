@@ -1,5 +1,5 @@
 define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
-        'css!./meeting-documents.css', 'angular-cache', 'services/conference-service'
+        'css!./meeting-documents.css', 'angular-cache', 'services/conference-service', 'css!./agenda.css'
 ], function(_, ng) {
 
     var CRP = /.*\/CRP(\d+)(?:$|\/[A-Z]+\d+$)/i
@@ -223,7 +223,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
                 var psc = ng.element('#print-smart-checkout');
 
-                if(psc.size()) {
+                if(psc.length) {
                     psc.affix({ offset: { top:psc.offset().top - 10 } });
                     affixReady();
                 }
