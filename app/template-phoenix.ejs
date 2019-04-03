@@ -126,7 +126,37 @@
         body { font-size: 1.2rem!important; }
         #block-loginlinkblock ul.dropdown-menu { background-color: #01463a; }
         .content { font-size: 1.2rem!important; }
-        .meetingnav-table a { font-size: 1.04rem; }
+        .meetingnav-table a, .meetingnav-table b { font-size: 1.04rem; }
+        table.table-striped table tr { background-color: transparent!important;}
+        table.table-striped table td { border: none;}
+
+        .documents span { 
+            font-size: 15px;
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif!important;
+        }
+        .meeting-documents .table td, .meeting-documents .table th {
+            padding: .20rem!important;
+            vertical-align: top;
+        }
+        .meeting-documents div > table > tbody > tr > td:first-child { padding-top: 6px!important; }
+
+        @media (max-width: 767px) {
+            .languages-bar {
+                width: 70px;
+                padding-right: 10px;
+                text-align: right;
+            }
+        }
+        @media (min-width: 768px) {
+            .languages-bar { width: 160px; }
+        }                
+        @media (min-width: 992px){
+            .languages-bar { width: 350px; }
+        }        
+        .languages-bar {
+            padding-left: 5px;
+            padding-right: 5px;
+        }    
     </style>
    
 </head>
@@ -1159,7 +1189,7 @@
                             </div>
                         </article>
                         <!-- HEADER -->
-                        <div class="container">
+                        <div class="container-fluid">
                             <div id="conferenceHeader"></div>
                         </div>
                         <div class="container">
