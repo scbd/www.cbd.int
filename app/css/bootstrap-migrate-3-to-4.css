@@ -205,3 +205,35 @@
     display: none !important;
   }
 }
+
+.btn-default {
+  color: #212529;
+  background-color: #f8f9fa;
+  border-color: #f8f9fa
+}
+
+.btn-default:hover {
+  color: #212529;
+  background-color: #e2e6ea;
+  border-color: #dae0e5
+}
+
+.btn-default.focus,.btn-default:focus {
+  box-shadow: 0 0 0 .2rem rgba(248,249,250,.5)
+}
+
+.btn-default.disabled,.btn-default:disabled {
+  color: #212529;
+  background-color: #f8f9fa;
+  border-color: #f8f9fa
+}
+
+.btn-default:not(:disabled):not(.disabled).active,.btn-default:not(:disabled):not(.disabled):active,.show>.btn-default.dropdown-toggle {
+  color: #212529;
+  background-color: #dae0e5;
+  border-color: #d3d9df
+}
+
+.btn-default:not(:disabled):not(.disabled).active:focus,.btn-default:not(:disabled):not(.disabled):active:focus,.show>.btn-default.dropdown-toggle:focus {
+  box-shadow: 0 0 0 .2rem rgba(248,249,250,.5)
+}
