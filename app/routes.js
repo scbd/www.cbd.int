@@ -42,6 +42,9 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         if(/^\/participation($|\/.*)/.test(locationPath))
             registerRoutes_participation($routeProvider);
 
+        if(/^\/notifications\/.+/.test(locationPath))
+            registerRoutes_notifications($routeProvider);
+
         $routeProvider.when('/403', { templateUrl: '/app/views/403.html' });
         $routeProvider.when('/404', { templateUrl: '/app/views/404.html' });
     }
@@ -264,6 +267,21 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
         .otherwise({redirectTo: '/404'});
     }
+
+  //============================================================
+  //
+  //
+  //============================================================
+  function registerRoutes_notifications(routeProvider) {
+
+    $("base").attr('href', '/notifications/'); // allow full page reload outside of  /insession/*
+
+    routeProvider
+        .when('/:code',                    { templateUrl   : 'views/notifications/index.html', resolveController : true })
+
+        .otherwise({redirectTo: '/404'});
+}
+
 
     //============================================================
     //
