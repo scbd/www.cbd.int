@@ -1,0 +1,59 @@
+﻿<div  ng-if="notifCtrl.notification">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>Notification</h1> 
+
+            <h4>Reference: {{notifCtrl.notification.reference_s}} ({{::notifCtrl.notification.number}})</h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h4>{{::notifCtrl.notification.title | lstring}}</h4>
+        </div>
+    </div>
+
+    <div class="row" ng-if="notifCtrl.notification.recipients">
+        <div class="col-xs-12">
+            <p>To: {{::notifCtrl.notification.recipients}}</p>
+        </div>
+    </div>
+
+    <div class="row" ng-if="notifCtrl.notification.actionDate">
+        <div class="col-xs-12">
+            <p>Action required by: {{::notifCtrl.notification.actionDate | date:'yyyy-MM-dd'}}</p>
+        </div>
+    </div>
+
+    <div class="row" ng-if="notifCtrl.article">
+        <div class="col-xs-12">    
+            <div ng-bind-html="trustedHtml(notifCtrl.article.content.en)" class="content"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h4>Submissions here</h4>
+
+            <ul>
+                <li>Submission</li>
+                <li>Submission</li>
+                <li>Submission</li>
+                <li>Submission</li>
+            </ul>
+            
+        </div>
+    </div>
+</div>
+
+<div ng-if="!notifCtrl.notification">
+    <div class="row">
+        <div class="col-xs-12">
+            <h4>Sorry, no notification found!</h4>    
+        </div>
+    </div>
+</div>
+
+
+
+
