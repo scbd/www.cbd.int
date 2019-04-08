@@ -55,3 +55,8 @@
 
 .documents a:hover       { text-decoration:none; }
 .documents a[href]:hover { text-decoration:underline; }
+
+
+body.bootstrap4 .meeting-documents {
+    padding-top: 10px;
+}

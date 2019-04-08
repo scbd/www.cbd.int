@@ -37,11 +37,11 @@
             Info links <span class="caret"></span>
           </button>
           <ul class="dropdown-menu">
-            <li ng-if="::documentsCtrl.meeting.EVT_WEB"><a ng-href="{{::documentsCtrl.meeting.EVT_WEB}}" target="_blank">Official Web Site</a></li>
-            <li ng-if="::documentsCtrl.meeting.EVT_INFO_PART_URL"><a ng-href="{{::documentsCtrl.meeting.EVT_INFO_PART_URL}}" target="_blank">Information for participants</a></li>
-            <li ng-if="::documentsCtrl.meeting.isMontreal"><a ng-href="/meetings/montreal.shtml" target="_blank">Montreal information for visitors</a></li>
-            <li ng-if="::documentsCtrl.meeting.EVT_REG_NOW_YN"><a ng-href="/side-events" target="_blank">Register side-events</a></li>
-            <li ng-repeat="link in ::documentsCtrl.meeting.links"><a ng-href="{{::link.url}}" target="_blank">{{::link.title|lstring}}</a></li>
+            <li class="dropdown-item" ng-if="::documentsCtrl.meeting.EVT_WEB"><a ng-href="{{::documentsCtrl.meeting.EVT_WEB}}" target="_blank">Official Web Site</a></li>
+            <li class="dropdown-item" ng-if="::documentsCtrl.meeting.EVT_INFO_PART_URL"><a ng-href="{{::documentsCtrl.meeting.EVT_INFO_PART_URL}}" target="_blank">Information for participants</a></li>
+            <li class="dropdown-item" ng-if="::documentsCtrl.meeting.isMontreal"><a ng-href="/meetings/montreal.shtml" target="_blank">Montreal information for visitors</a></li>
+            <li class="dropdown-item" ng-if="::documentsCtrl.meeting.EVT_REG_NOW_YN"><a ng-href="/side-events" target="_blank">Register side-events</a></li>
+            <li class="dropdown-item" ng-repeat="link in ::documentsCtrl.meeting.links"><a ng-href="{{::link.url}}" target="_blank">{{::link.title|lstring}}</a></li>
           </ul>
         </span>
       
@@ -51,8 +51,8 @@
                 Sort By <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li ><a ng-click="documentsCtrl.sort='agenda'" href="#">Sort and group by agenda items</a></li>
-                <li ><a ng-click="documentsCtrl.sort='document'" href="#">Sort by document symbols</a></li>
+                <li class="dropdown-item"><a ng-click="documentsCtrl.sort='agenda'" href="#">Sort and group by agenda items</a></li>
+                <li class="dropdown-item"><a ng-click="documentsCtrl.sort='document'" href="#">Sort by document symbols</a></li>
             </ul>
         </span>
     
@@ -113,6 +113,8 @@
             <div ng-if="type.loaded || documentsCtrl.currentTab==type.code || documentsCtrl.noTabs">
 
                 <h3 ng-if="::documentsCtrl.noTabs">{{::type.title}}</h3>
+
+                <div class="clearfix"></div>
 
                 <div style="padding:10px;" ng-if="::!type.length">No in-session documents have yet been posted.</div>
 
