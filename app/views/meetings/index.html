@@ -4,9 +4,9 @@
         </div>
         <div class="row" ng-hide="isLoading">
            
-            <div class="image-credit-wrapper"  ng-show="article.coverImage">
+            <div class="image-credit-wrapper"  ng-show="article.coverImage" style="background-image: url({{::article.coverImage.url_1200}}); background-size: cover">
                 <span class="image-credit" ng-if="article.coverImage.credits">{{article.coverImage.credits}}</span>
-                <div class="img cover-image" style="background-image: url({{::article.coverImage.url_1200}});"></div>
+                <div class="img cover-image"></div>
             </div>
             <div class="col-lg-8 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
                 <cbd-article query="articleQuery" ng-if="articleQuery" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article>
