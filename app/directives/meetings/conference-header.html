@@ -1,7 +1,8 @@
-<div class="conference-header">
+<div class="conference-header" ng-class="{ [conference.code]: true }">
     <!-- MEETING HEADER -->
-
     <style>
+
+
         .conference-header{
             padding-bottom: 0px;
         }
@@ -15,11 +16,25 @@
            height:80px;
            width:100%;
            background-color:rgba(128,128,128,0.25);
-           border-left:4px solid #fff;
            border-right:none;
            border-bottom:2px solid #fff;
            /*border-top:4px solid black*/
        }
+
+       body.bootstrap4 TABLE.meetingnav-table {
+        border-bottom:none;
+        border-left:4px solid #fff;
+        border-right:4px solid #fff;
+       }
+
+       .conference-header.post2020 {
+            border-bottom:2px solid #fff;
+            background-image: url('//www.cbd.int/images/banners/banner-0-3675.jpg');
+            background-position: center;
+            background-size: cover;
+        }
+
+
        @media (max-width: 767px) { TABLE.meetingnav-table { height: 72px; border-left: none; border-right: none } }
 
        .meetingnav-button {
@@ -132,14 +147,14 @@
        .menu-border{
            border-left:2px solid #fff
        }
-       .menu-gradient {
+       body.bootstrap3 .menu-gradient {
            background: #bdc3c7; /* For browsers that do not support gradients */    
            background: -webkit-linear-gradient(left top, #bdc3c7, #2c3e50); /* For Safari 5.1 to 6.0 */
            background: -o-linear-gradient(bottom right, #bdc3c7, #2c3e50); /* For Opera 11.1 to 12.0 */
            background: -moz-linear-gradient(bottom right, #bdc3c7, #2c3e50); /* For Firefox 3.6 to 15 */
            background: linear-gradient(to bottom right, #bdc3c7, #2c3e50); /* Standard syntax (must be last) */
        }
-       .no-left-border, .meetingnav-table{
+       .no-left-border {
            border-left: none!important;
        }
        .single-menu{
@@ -153,10 +168,11 @@
            text-decoration: none!important;
            color: inherit;
        }
+
    </style>
    <!-- NAVIGATION BAR -->
    <div ng-cloak ng-if="meeting && meetingNavCtrl.isSelected()" class="meetingnav hidden-print">
-       <div class="container">
+       <div ng-class="{ container: $root.deviceSize!='xs' && $root.deviceSize!='sm'}">
            <div class="row menu-gradient">
                <table class="meetingnav-table">
                    <tr>

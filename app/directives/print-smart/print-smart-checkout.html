@@ -84,31 +84,31 @@
         </button>
 
         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
+            <i class="fa fa-caret-down" aria-hidden="true"></i>
         </button>
         <ul class="dropdown-menu dropdown-menu-right text-left" role="menu">
 
-            <li style="font-size:inherit" ng-class="{ disabled : !documents().length }">
+            <li class="dropdown-item" style="font-size:inherit" ng-class="{ disabled : !documents().length }">
                 <a style="cursor:pointer;font-size:14px" ng-click="download()">
                     <i class="fa fa-arrow-circle-down"></i> Download <span ng-if="downloadableDocuments().length">({{downloadableDocuments().length}})</span>
                 </a>
             </li>
 
-            <li style="font-size:inherit" ng-if="allowPrint" ng-class="{ disabled : !printableDocuments().length }">
+            <li class="dropdown-item" style="font-size:inherit" ng-if="allowPrint" ng-class="{ disabled : !printableDocuments().length }">
                 <a style="cursor:pointer;font-size:14px" ng-show="allowPrint" ng-click="print()">
                     <i class="fa fa-print"></i> Request Prints <span ng-if="printableDocuments().length">({{printableDocuments().length}})</span>
                 </a>
             </li>
 
-            <li class="divider"></li>
+            <li class="divider"><hr></li>
 
-            <li style="font-size:inherit" ng-class="{ disabled : !documents().length }">
+            <li class="dropdown-item" style="font-size:inherit" ng-class="{ disabled : !documents().length }">
                 <a style="cursor:pointer;font-size:14px" ng-click="clear()"><i class="fa fa-times-circle"></i> Clear selection</a>
             </li>
 
-            <li ng-if="documents().length" class="divider"></li>
+            <li ng-if="documents().length" class="divider"><hr></li>
 
-            <li ng-repeat="d in documents()|orderBy:'sortKey'" title="{{d.title|lstring}}">
+            <li class="dropdown-item" ng-repeat="d in documents()|orderBy:'sortKey'" title="{{d.title|lstring}}">
                 <a style="cursor:pointer;font-size:14px" ng-click="remove(d); documents().length && $event.stopPropagation();" style="font-size:14px"><i class="fa fa-times"></i> {{displayText(d)}}</a>
             </li>
         </ul>
