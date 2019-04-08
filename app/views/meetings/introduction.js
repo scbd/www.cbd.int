@@ -1,7 +1,7 @@
 ﻿define(['app', 'directives/social-media', 'directives/articles/cbd-article', 'services/conference-service'], function(app) { 'use strict';
 
-return ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope',
- function ($scope,  $route, $location, conferenceService, $q, $rootScope) {
+return ['$scope', '$route', '$location', '$http', '$rootScope',
+ function ($scope,  $route, $location, $http, $rootScope) {
        
             $scope.isLoading = true;
 
@@ -37,11 +37,16 @@ return ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope'
 
                 $scope.article = article;                
                 $scope.isLoading = false;                
-                
+                $scope.selectedMenu = ($rootScope.conference||{}).selectedMenu;
+
                 if(($rootScope.conference||{}).selectedMenu && $rootScope.conference.selectedMenu.hideDocumentsLink)
                     $scope.documentsLink = undefined;
-                else
-                    $scope.documentsLink = $location.path()+'/documents'
+                else {
+                    $http.get("/api/v2016/meetings/"+encodeURIComponent($route.current.params.meeting)+"/documents/statistics", { params: {c:1},  cache:true}).then(function(res){
+                        if((res.data||{}).count)
+                            $scope.documentsLink = $location.path()+'/documents'
+                    });
+                }
             }
             
             buildQuery();
