@@ -51,6 +51,8 @@
     <script async src="/app/boot.js?v=<%=gitVersion%>"></script>
     <link rel="stylesheet" href="/app/css/bootstrap-migrate-3-to-4.css">
     <link rel="stylesheet" href="<%=cdnUrl%>font-awesome@4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="<%=cdnUrl%>ng-dialog@0.6.1/css/ngDialog.min.css">
+    <link rel="stylesheet" href="<%=cdnUrl%>ng-dialog@0.6.1/css/ngDialog-theme-default.min.css">
 
     <script async src='https://www.google-analytics.com/analytics.js'></script>
     <title>Convention on Biological Diversity</title>
@@ -130,10 +132,6 @@
         table.table-striped table tr { background-color: transparent!important;}
         table.table-striped table td { border: none;}
 
-        .documents span { 
-            font-size: 15px;
-            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif!important;
-        }
         .meeting-documents .table td, .meeting-documents .table th {
             padding: .20rem!important;
             vertical-align: top;
@@ -150,6 +148,37 @@
             body.conference .page-content {
                 padding-top:242px;
             }
+        }
+
+        .ngdialog.printsmart > .ngdialog-content > .modal-content > .modal-header {
+            display:block
+        }
+
+        .ngdialog.printsmart > .ngdialog-content > .modal-content .text,
+        .ngdialog.printsmart > .ngdialog-content > .modal-content .text * {
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif!important;
+        }
+
+        .printsmart .language,
+        .document-files .language
+        {
+            font-size: 14px;
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif!important;
+            font-weight: 400;
+        }
+
+        .printsmart a.language:not([href]),
+        .document-files a.language:not([href]) {
+            color: inherit;
+        }
+
+        .ngdialog.printsmart .help-block {
+            font-style: italic;
+            font-size: 85%;
+            opacity: 0.75;
+        }
+        .ngdialog.printsmart .close {
+            font-size: 35px;
         }
 
     </style>

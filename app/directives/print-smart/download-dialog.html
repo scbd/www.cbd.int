@@ -10,21 +10,21 @@
 
 				<form class="form-horizontal" ng-hide="success">
 
-					<div class="form-group">
-						<label for="preferedLanguage" class="col-sm-4 control-label">Prefered language(s)</label>
-						<div class="col-sm-6">
+					<div class="form-group row">
+						<label for="preferedLanguage" class="col-sm-4 col-sm control-label">Prefered language(s)</label>
+						<div class="col-sm-6 col-sm">
 							<div class="row">
 								<div ng-repeat="language in languages" class="col-sm-6 col-xs-6">
 									<a class="btn btn-link" ng-click="selectedLanguages[language] = !selectedLanguages[language]" style="color:black;text-decoration:none;text-align:left" ng-style="{ opacity: (!selectedLanguages[language] ? 0.65 : 1) }" >
                                         <checkbox ng-model="selectedLanguages[language]" style="font-size:20px"></checkbox>
                                         <span ng-switch="language">
-                                            <span ng-switch-when="ar">العربية</span>
-                                            <span ng-switch-when="en">English</span>
-                                            <span ng-switch-when="es">Español</span>
-                                            <span ng-switch-when="fr">Français</span>
-                                            <span ng-switch-when="ru">Русский</span>
-                                            <span ng-switch-when="zh">中文</span>
-                                            <span ng-switch-default>{{language|uppercase}}</span>
+                                            <span class="language" ng-switch-when="ar">العربية</span>
+                                            <span class="language" ng-switch-when="en">English</span>
+                                            <span class="language" ng-switch-when="es">Español</span>
+                                            <span class="language" ng-switch-when="fr">Français</span>
+                                            <span class="language" ng-switch-when="ru">Русский</span>
+                                            <span class="language" ng-switch-when="zh">中文</span>
+                                            <span class="language" ng-switch-default>{{language|uppercase}}</span>
                                         </span>
 									</a>
 								</div>
@@ -33,25 +33,29 @@
 						</div>
 					</div>
 
-					<div class="form-group">
-						<label for="format" class="col-sm-4 control-label">Prefered format(s)</label>
-						<div class="col-sm-6">
+					<div class="form-group row">
+						<label for="format" class="col-sm-4 col-sm control-label">Prefered format(s)</label>
+						<div class="col-sm-6  col-sm">
 							<div class="row">
 								<div ng-repeat="format in formats" class="col-sm-12 col-xs-12">
 									<a class="btn btn-link" ng-click="selectedFormats[format] = !selectedFormats[format]" style="color:black;text-decoration:none;text-align:left" ng-style="{ opacity: (!selectedFormats[format] ? 0.65 : 1) }" >
                                         <checkbox ng-model="selectedFormats[format]" style="font-size:20px"></checkbox>
                                         <span ng-switch="format">
                                             <span ng-switch-when="application/pdf">
-                                                <i class="fa fa-file-pdf-o" style="color:red"></i> PDF
+												<i class="fa fa-file-pdf-o" style="color:red"></i>
+												<span class="language">PDF</span>
                                             </span>
                                             <span ng-switch-when="application/msword">
-                                                <i class="fa fa-file-word-o"  style="color:blue"></i> Word 97-2003
+                                                <i class="fa fa-file-word-o"  style="color:blue"></i>
+												<span class="language">Word 97-2003</span>
                                             </span>
                                             <span ng-switch-when="application/vnd.openxmlformats-officedocument.wordprocessingml.document">
-                                                <i class="fa fa-file-word-o"  style="color:blue"></i> Word
+												<i class="fa fa-file-word-o"  style="color:blue"></i>
+												<span class="language">Word</span>
                                             </span>
                                             <span ng-switch-default>
-                                                <i class="fa fa-file-o"></i> {{format}}
+                                                <i class="fa fa-file-o"></i> 
+												<span class="language">{{format}}</span>
                                             </span>
                                         </span>
 									</a>
