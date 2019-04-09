@@ -23,9 +23,14 @@
 
        body.bootstrap4 TABLE.meetingnav-table {
         border-bottom:none;
-        border-left:4px solid #fff;
-        border-right:4px solid #fff;
        }
+
+       @media (min-width:768px) {
+           body.bootstrap4 TABLE.meetingnav-table {
+                border-left:2px solid #fff;
+                border-right:2px solid #fff;
+            }
+        }
 
        .conference-header.post2020 {
             border-bottom:2px solid #fff;
@@ -44,7 +49,7 @@
            color:#fff;
            text-align:center;
            background-color:rgba(0,0,0,0.40);
-           border-left:4px solid #fff;
+           border-left:2px solid #fff;
        }
        @media (max-width: 767px) { .meetingnav-button { border-left: 1px solid #fff; max-width: 20% } }
        @media (max-width: 767px) { .meetingnav-button:first-child { border-left: none; } }
@@ -67,7 +72,7 @@
            background-clip:padding-box;
            text-align:center;
            background-color:rgba(0,0,0,0.40);
-           border-left:4px solid #fff;
+           border-left:2px solid #fff;
            vertical-align:top;
            color:#ddd;
        }
@@ -173,7 +178,7 @@
    <!-- NAVIGATION BAR -->
    <div ng-cloak ng-if="meeting && meetingNavCtrl.isSelected()" class="meetingnav hidden-print">
        <div ng-class="{ container: $root.deviceSize!='xs' && $root.deviceSize!='sm'}">
-           <div class="row menu-gradient">
+           <div class="menu-gradient" ng-class="{ row: $root.deviceSize!='xs' && $root.deviceSize!='sm'}">
                <table class="meetingnav-table">
                    <tr>
                        <td  class="notselected meetingnav-button no-left-border"  ng-class="{selected:meetingNavCtrl.isSelected('/conferences/'+meeting.code, true)}">

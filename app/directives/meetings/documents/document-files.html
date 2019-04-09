@@ -1,14 +1,14 @@
-<div>
+<div class="document-files">
     <div class="hidden-xs" ng-repeat="(type,languages) in ::byTypes ">
         <i class="fa {{::(MIMES[type]||MIMES.default).icon}}" ng-style="::{ color: MIMES[type].color}"></i>
         <span ng-repeat="(language,file) in ::languages track by language">
             <a target="_blank" href="{{::file.url}}" ng-click="$event.stopPropagation();">
 
-                <span class="visible-md-inline visible-lg-inline visible-xl-inline">
+                <span class="visible-md-inline visible-lg-inline visible-xl-inline language">
                     {{::LANGUAGES[language]||language}}
                 </span>
 
-                <span class="visible-xs-inline visible-sm-inline">{{::language}}</span>
+                <span class="language visible-xs-inline visible-sm-inline">{{::language}}</span>
             </a>
         </span>
     </div>
@@ -23,9 +23,9 @@
 
             <li role="presentation" class="dropdown-header">Select a file to download</li>
 
-            <li role="presentation" ng-repeat="(language,types) in byLanguages track by language" style="font-size:16px;margin:4px 0px;white-space:nowrap;" class="ng-scope">
+            <li role="presentation" class="dropdown-item" ng-repeat="(language,types) in byLanguages track by language" style="font-size:16px;margin:4px 0px;white-space:nowrap;" class="ng-scope">
 
-                <a role="menuitem" tabindex="-1" style="display:inline-block;width:120px;font-size:inherit;" class="ng-binding">
+                <a role="menuitem" tabindex="-1" style="display:inline-block;width:120px;font-size:inherit;" class="language">
                     {{::LANGUAGES[language]||language}}
                 </a>
 
