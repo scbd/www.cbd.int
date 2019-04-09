@@ -139,6 +139,19 @@
             vertical-align: top;
         }
         .meeting-documents div > table > tbody > tr > td:first-child { padding-top: 6px!important; }
+
+        @media (min-width:992px) {
+                body.conference .conference-header {
+                z-index:500;
+                position: fixed;
+                top: 160px;
+                width: 100%;
+            }
+            body.conference .page-content {
+                padding-top:242px;
+            }
+        }
+
     </style>
    
 </head>
@@ -1115,67 +1128,13 @@
                                 </div>
                             </nav>
                         </div>
+
                     </header>
     
                     <div class="page-content">
-    
-                        <article role="article" about="/article/post-2020-708" typeof="schema:Article" class="node node--type-article node--view-mode-full clearfix">
-                            <header>
-                                <span property="schema:name" content="Post 2020" class="rdf-meta hidden"></span>
-                            </header>
-                            <div class="node__content clearfix">
-                                <section id="carouselSection">
-                                    <div class="block block-block-content block-block-content01fbce51-ba92-465a-b950-3bbfd07baee0 container-fluid">
-                                        <div class="main-carousel-wrapper  home-page">
-                                            <div class="carousel slide main-carousel" id="mainCarousel" data-ride="carousel" data-interval="4000">
-                                                <!-- Indicators -->
-                                                <ol class="hidden carousel-indicators">
-                                                    <li data-target="#mainCarousel" data-slide-to="0" class="active"></li>
-                                                </ol>
-  
-                                                <div class="carousel-inner">
-                                                    <div class="carousel-item active">
-                                                        <a id="CCarouselLink">
-                                                            <div class="paragraph paragraph--type--carousel paragraph--view-mode--carousel portal-banner"   id="CPortalBanner">
-                                                                <div class="carousel-item-text-block">
-                                                                    <div class="carousel-item-header">
-                                                                        <div class="field field--name-field-title field--type-string field--label-hidden field__item">
-                                                                            <span ID="CCarouselTitle"></span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="carousel-item-text">
-    
-                                                                        <div class="clearfix text-formatted field field--name-field-description field--type-text-long field--label-hidden field__item">
-                                                                            <p id="CCarouselText"></p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-    
-                                                <!-- Left and right controls -->
-                                                <a class="hidden carousel-control-prev" href="#mainCarousel" data-slide="prev">
-                                                    <span class="carousel-control-prev-icon"></span>
-                                                    <span class="sr-only">Previous</span>
-                                                </a>
-                                                <a class="hidden carousel-control-next" href="#mainCarousel" data-slide="next">
-                                                    <span class="carousel-control-next-icon"></span>
-                                                    <span class="sr-only">Next</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section>
-                            </div>
-                        </article>
-                        <!-- HEADER -->
-                        <div class="container-fluid">
-                            <div id="conferenceHeader"></div>
-                        </div>
+                        <div id="conferenceHeader"></div>
                         <div class="container">
-                                <ng-view></ng-view>
+                            <ng-view></ng-view>
                         </div>                                
                         <a href="#" class="go-to-top-btn"></a>
                     </div>
