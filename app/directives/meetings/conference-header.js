@@ -13,6 +13,8 @@
                 var basePath = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
                 ng.element(document).ready(function () {
 
+                    angular.element('body').addClass("conference")
+
                     $q.when(conferenceService.getActiveConference()).then(function(conference){
                         $scope.conference = $scope.meeting = conference; //Keep meeting for tmp compatibility
                     });   
