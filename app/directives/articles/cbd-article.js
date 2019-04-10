@@ -22,6 +22,8 @@ define(['app', 'text!./cbd-article.html','lodash', 'require', 'services/article-
 					return $sce.trustAsHtml(plainText);
 				}
 				
+				loadArticle();
+				
 				function loadArticle(){
 					
 					$q.when(articleService.query({ "ag" : JSON.stringify($scope.query) }))
@@ -32,6 +34,10 @@ define(['app', 'text!./cbd-article.html','lodash', 'require', 'services/article-
 							}
 						else
 							$scope.article = article[0];
+
+						for(var locale in $scope.article.content) {
+							$scope.article.content[locale] = preprocessHtml($scope.article.content[locale]);
+						}
 
 						if(($scope.article.coverImage||{}).url)
 							$scope.article.coverImage.url_1200  = $scope.article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/')
@@ -45,14 +51,37 @@ define(['app', 'text!./cbd-article.html','lodash', 'require', 'services/article-
 						})
 					});
 				}
-				
-				// $scope.$watch('query', function(newVal, oldVal){
-				// 	if(newVal){
-						loadArticle();
-				// 	}
-				// })
+
+				//============================================
+				//
+				//============================================
+				function preprocessHtml(html) {
+
+					var holder = $('<div>'+html+'</div>');
+
+					$(holder).find('figure.media > oembed').each(function(){
+						var oembed = $(this);
+						var src = oembed.attr('url');
+
+						if(src) {
+							src = src.replace(/www\.youtube\.com\/watch\?v\=/, "youtube.com/embed/" );
+							src = src.replace(/youtube\.com\/watch\?v\=/,      "youtube.com/embed/" );
+							src = src.replace(/youtu\.be\//,                   "youtube.com/embed/" );
+							src = src.replace(/vimeo\.com\//, "player.vimeo.com/video/" );
+	
+							oembed.after('<iframe src="'+src+'" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>')
+							oembed.remove();
+						}
+
+					})
+
+					return holder.html();
+				}
 			}
 		};
 	}]);
 });
+
+
+
 
