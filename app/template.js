@@ -68,7 +68,6 @@ define(['app', 'angular','text!./toast.html',
 
             $rootScope.$applyAsync(function(){
                 $rootScope.deviceSize = $('.device-size:visible').attr('size');
-                console.log("deviceSize", $rootScope.deviceSize);
             });
         }
 
