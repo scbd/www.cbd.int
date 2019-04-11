@@ -69,7 +69,7 @@ define(['app', 'text!./cbd-article.html','lodash', 'require', 'services/article-
 							src = src.replace(/youtu\.be\//,                   "youtube.com/embed/" );
 							src = src.replace(/vimeo\.com\//, "player.vimeo.com/video/" );
 	
-							oembed.after('<iframe src="'+src+'" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>')
+							oembed.after('<iframe src="'+src+'" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width: 100%; height: 450px;"></iframe>')
 							oembed.remove();
 						}
 
