@@ -100,7 +100,7 @@
     </style>
     <style media="all">
         @import url("//s3.amazonaws.com/phoenix.www.cbd.int/themes/contrib/bootstrap_barrio/css/components/node.css");
-        @import url("//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/css/style.css"); 
+        @import url("/app/template-phoenix.css"); 
         @import url("//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/lib/photoswipe/photoswipe.css");
         @import url("//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/lib/photoswipe/default-skin.css");
         @import url("//s3.amazonaws.com/phoenix.www.cbd.int/themes/contrib/bootstrap_barrio/css/components/form.css");
@@ -126,11 +126,9 @@
     <![endif]-->
 
     <style>
-        @import url("/app/template-phoenix.css");
+        @import url("/app/template-phoenix-overrides.css");
 
-        body { font-size: 1.2rem!important; }
         #block-loginlinkblock ul.dropdown-menu { background-color: #01463a; }
-        .content { font-size: 1.2rem!important; }
         .meetingnav-table a, .meetingnav-table b { font-size: 1.04rem; }
 
         .meeting-documents .table td, .meeting-documents .table th {
@@ -153,8 +151,6 @@
         .document-files .language
         {
             font-size: 14px;
-            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif!important;
-            font-weight: 400;
         }
 
         .printsmart a.language:not([href]),
