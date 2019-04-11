@@ -21,25 +21,6 @@
            /*border-top:4px solid black*/
        }
 
-       body.bootstrap4 TABLE.meetingnav-table {
-        border-bottom:none;
-       }
-
-       @media (min-width:768px) {
-           body.bootstrap4 TABLE.meetingnav-table {
-                border-left:2px solid #fff;
-                border-right:2px solid #fff;
-            }
-        }
-
-       .conference-header.post2020 {
-            border-bottom:2px solid #fff;
-            background-image: url('//www.cbd.int/images/banners/banner-0-3675.jpg');
-            background-position: center;
-            background-size: cover;
-        }
-
-
        @media (max-width: 767px) { TABLE.meetingnav-table { height: 72px; border-left: none; border-right: none } }
 
        .meetingnav-button {
@@ -174,11 +155,38 @@
            color: inherit;
        }
 
+       body.phoenix TABLE.meetingnav-table {
+        border-bottom:none;
+       }
+
+       body.phoenix .conference-header TABLE.meetings {
+         border-top:1px solid #888;
+       }
+       
+       body.phoenix .conference-header {
+         border-top:1px solid #fff;
+       }
+
+       @media (min-width:768px) {
+           body.phoenix TABLE.meetingnav-table {
+                border-left:2px solid #fff;
+                border-right:2px solid #fff;
+            }
+        }
+        
+        .conference-header.post2020 {
+            border-bottom:2px solid #fff;
+            background-image: url('//www.cbd.int/images/banners/banner-0-3675.jpg');
+            background-position: center;
+            background-size: cover;
+        }
+
+
    </style>
    <!-- NAVIGATION BAR -->
    <div ng-cloak ng-if="meeting && meetingNavCtrl.isSelected()" class="meetingnav hidden-print">
-       <div ng-class="{ container: $root.deviceSize!='xs' && $root.deviceSize!='sm'}">
-           <div class="menu-gradient" ng-class="{ row: $root.deviceSize!='xs' && $root.deviceSize!='sm'}">
+       <div ng-class="{ container: ($root.deviceSize!='xs' && $root.deviceSize!='sm') || $root.templateVersion=='cbd'}">
+           <div class="menu-gradient" ng-class="{ row: ($root.deviceSize!='xs' && $root.deviceSize!='sm') || $root.templateVersion=='cbd'}">
                <table class="meetingnav-table">
                    <tr>
                        <td  class="notselected meetingnav-button no-left-border"  ng-class="{selected:meetingNavCtrl.isSelected('/conferences/'+meeting.code, true)}">
@@ -277,12 +285,12 @@
                </table>
                <table class="meetings visible-xs" style="width:100%" ng-if="meetingNavCtrl.isMajorEventSelected(event.code) && event.menus.length > 1" ng-repeat="event in meeting.conference.events">
                    <tr>
-                        <td width="{{::(100/event.menus.length)}}%" ng-if="event.clickable" class="notselected meeting {{::event.cssClass}}" 
+                        <td width="{{::100/(event.menus.length+(event.clickable?1:0))}}%" ng-if="event.clickable" class="notselected meeting {{::event.cssClass}}" 
                             ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{::meeting.code}}/{{::event.code}}')}" >
                             <a href="/conferences/{{::meeting.code}}/{{::event.code}}#{{meetingNavCtrl.hash()}}"></a>
                             {{::event.mobileTitle}}
                         </td>
-                       <td width="{{::(100/event.menus.length)}}%" class="notselected meeting {{::menu.cssClass}}" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{::meeting.code}}/{{::menu.code}}')}" 
+                       <td width="{{::100/(event.menus.length+(event.clickable?1:0))}}%" class="notselected meeting {{::menu.cssClass}}" ng-class="{selected:meetingNavCtrl.isSelected('/conferences/{{::meeting.code}}/{{::menu.code}}')}" 
                        ng-repeat="menu in event.menus">
                            <a href="/conferences/{{::meeting.code}}/{{::menu.code}}#{{meetingNavCtrl.hash()}}"></a>
                            {{::menu.mobileTitle}}

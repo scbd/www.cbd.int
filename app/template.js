@@ -62,6 +62,10 @@ define(['app', 'angular','text!./toast.html',
         //
         //=====================
         function updateSize() {
+
+            if(!$rootScope.bootstrapVersion) $rootScope.bootstrapVersion = ng.element("body").hasClass("bootstrap4") ? 4 : 3;
+            if(!$rootScope.templateVersion)  $rootScope.templateVersion  = ng.element("body").hasClass("phoenix") ? "phoenix" : "cbd";
+
             $rootScope.$applyAsync(function(){
                 $rootScope.deviceSize = $('.device-size:visible').attr('size');
                 console.log("deviceSize", $rootScope.deviceSize);

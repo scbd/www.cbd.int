@@ -124,13 +124,14 @@
       }
     </style>
     <![endif]-->
+
     <style>
+        @import url("/app/template-phoenix.css");
+
         body { font-size: 1.2rem!important; }
         #block-loginlinkblock ul.dropdown-menu { background-color: #01463a; }
         .content { font-size: 1.2rem!important; }
         .meetingnav-table a, .meetingnav-table b { font-size: 1.04rem; }
-        table.table-striped table tr { background-color: transparent!important;}
-        table.table-striped table td { border: none;}
 
         .meeting-documents .table td, .meeting-documents .table th {
             padding: .20rem!important;
@@ -138,17 +139,6 @@
         }
         .meeting-documents div > table > tbody > tr > td:first-child { padding-top: 6px!important; }
 
-        @media (min-width:992px) {
-                body.conference .conference-header {
-                z-index:8;
-                position: fixed;
-                top: 160px;
-                width: 100%;
-            }
-            body.conference .page-content {
-                padding-top:242px;
-            }
-        }
 
         .ngdialog.printsmart > .ngdialog-content > .modal-content > .modal-header {
             display:block
@@ -181,11 +171,22 @@
             font-size: 35px;
         }
 
+        @media (max-width:991px) {
+            header #conferenceHeader {
+                margin-top:60px;
+            }
+        }
+        @media (max-width:749px) {
+            header #conferenceHeader {
+                margin-top:30px;
+            }
+        }
+
     </style>
    
 </head>
 
-    <body class="layout-no-sidebars page-node-708 path-node node--type-article bootstrap4">
+    <body class="layout-no-sidebars phoenix bootstrap4">
 
         <script>
             if (screen.width < 375) {
@@ -1158,10 +1159,10 @@
                             </nav>
                         </div>
 
+                        <div id="conferenceHeader"></div>
                     </header>
     
                     <div class="page-content">
-                        <div id="conferenceHeader"></div>
                         <div class="container">
                             <ng-view></ng-view>
                         </div>                                

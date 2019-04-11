@@ -1,0 +1,37 @@
+
+table.table-striped table tr { background-color: transparent!important;}
+table.table-striped table td { border: none;}
+
+/* vvv Top nav scrollable vvv */
+.page-content {
+    padding-top:unset;
+}
+
+header .navbar-wrapper {
+    position: unset;
+    width: unset;
+    top: unset;
+    z-index: unset;
+}
+
+/* dekstop */
+header .navbar-wrapper.desktop-only > nav.top-nav {
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    z-index: 10;
+}
+header .navbar-wrapper.desktop-only > nav.sub-nav {
+    margin-top:44px;
+}
+
+/* Mobile  */
+header .navbar-wrapper.mobile-only {
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    z-index: 10;
+}
+
+/* ^^^ Top nav scrollable ^^^ */
+

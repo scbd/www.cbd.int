@@ -56,16 +56,15 @@
 .documents a:hover       { text-decoration:none; }
 .documents a[href]:hover { text-decoration:underline; }
 
-
-body.bootstrap4 .meeting-documents {
+body.phoenix .meeting-documents {
     padding-top: 10px;
 }
 
-body.bootstrap4 .printsmart .help-block {
+body.phoenix .printsmart .help-block {
     font-style: italic;
     font-size: 75%;
     opacity: 0.75;
 }
-body.bootstrap4 .printsmart .close {
+body.phoenix .printsmart .close {
     font-size: 48px;
 }
