@@ -49,7 +49,7 @@
     
     <script src="<%=cdnUrl%>requirejs@2.2.0/require.js"></script>
     <script async src="/app/boot.js?v=<%=gitVersion%>"></script>
-    <link rel="stylesheet" href="/app/css/bootstrap-migrate-3-to-4.css">
+    <link rel="stylesheet" href="/app/css/bootstrap-migrate-3-to-4.css?v=<%=gitVersion%>">
     <link rel="stylesheet" href="<%=cdnUrl%>font-awesome@4.7.0/css/font-awesome.css">
     <link rel="stylesheet" href="<%=cdnUrl%>ng-dialog@0.6.1/css/ngDialog.min.css">
     <link rel="stylesheet" href="<%=cdnUrl%>ng-dialog@0.6.1/css/ngDialog-theme-default.min.css">
@@ -100,7 +100,7 @@
     </style>
     <style media="all">
         @import url("//s3.amazonaws.com/phoenix.www.cbd.int/themes/contrib/bootstrap_barrio/css/components/node.css");
-        @import url("/app/template-phoenix.css"); 
+        @import url("/app/template-phoenix.css?v=<%=gitVersion%>"); 
         @import url("//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/lib/photoswipe/photoswipe.css");
         @import url("//s3.amazonaws.com/phoenix.www.cbd.int/themes/custom/bootstrap_sass/lib/photoswipe/default-skin.css");
         @import url("//s3.amazonaws.com/phoenix.www.cbd.int/themes/contrib/bootstrap_barrio/css/components/form.css");
@@ -126,7 +126,7 @@
     <![endif]-->
 
     <style>
-        @import url("/app/template-phoenix-overrides.css");
+        @import url("/app/template-phoenix-overrides.css?v=<%=gitVersion%>");
 
         #block-loginlinkblock ul.dropdown-menu { background-color: #01463a; }
         .meetingnav-table a, .meetingnav-table b { font-size: 1.04rem; }
