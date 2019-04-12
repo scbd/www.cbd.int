@@ -167,17 +167,6 @@
             font-size: 35px;
         }
 
-        @media (max-width:991px) {
-            header #conferenceHeader {
-                margin-top:60px;
-            }
-        }
-        @media (max-width:749px) {
-            header #conferenceHeader {
-                margin-top:30px;
-            }
-        }
-
     </style>
    
 </head>
@@ -519,7 +508,7 @@
                                     <div class="mobile-nav-wrapper ml-auto mobile-menu">
                                         <div class="mobile-nav-mini-menu collapse" id="miniMenu">
                                             <div class="previous-menu-btn">
-                                                <div><</div>
+                                                <div></div>
                                                 <div class="previous-text">
                                                     PREVIOUS
                                                 </div>
@@ -978,7 +967,7 @@
                                                                     </li>
                                                                 </ul>
                                                             </li>
-                                                            <li class="dropdown"s>
+                                                            <li class="dropdown">
                                                                 <a class="dropdown-second-item" href="https://bch.cbd.int/protocol/cpb_publications.shtml" role="button" data-toggle="dropdown">
                                                                     <div class="dropdown-item-label">PUBLICATIONS</div>
                                                                 </a>
@@ -1154,11 +1143,10 @@
                                 </div>
                             </nav>
                         </div>
-
-                        <div id="conferenceHeader"></div>
                     </header>
     
                     <div class="page-content">
+                        <div id="conferenceHeader"></div>
                         <div class="container">
                             <ng-view></ng-view>
                         </div>                                
