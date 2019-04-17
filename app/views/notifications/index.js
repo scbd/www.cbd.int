@@ -1,18 +1,23 @@
-﻿define(['app', 'lodash','services/article-service','filters/lstring'], function(app, _) { 'use strict';
+﻿define(['app', 'angular', 'lodash','services/article-service','filters/lstring'], function(app, angular, _) { 'use strict';
 
     return ['$scope', '$route','$http', '$q','$sce', 'articleService', function ($scope, $route, $http, $q, $sce, articleService) {
 
-        var code    = $route.current.params.code;
-        var _ctrl   = $scope.notifCtrl = this;
+        var code   = $route.current.params.code;
+        var _ctrl  = $scope.notifCtrl = this;
 
-        var matches = code.match(/^\d{4}-\d{3}$/);
-
-        if(matches){
-            loadNotification(code)
-            loadArticle(code);
-            // loadSubmissions(code);
+        if(code.match(/^\d{4}-\d{3}$/)){
+            loadNotification(code);
         }
         
+        //===========================
+        //
+        //===========================        
+        $scope.$watch('notifCtrl.notification.id', function(newId, oldId){
+            if(newId){
+                loadSubmissions(newId);
+                loadArticle(_ctrl.notification.code);
+            }
+         });            
 
         //===========================
         //
@@ -36,11 +41,11 @@
                     return _.defaults(n, {
                         _id       : n.id,
                         symbol    : n.reference_s || n.symbol_s,
-                        number    : n.symbol_s,
+                        code      : n.symbol_s,
                         date      : n.date_dt,
                         type      : 'notification',
                         actionDate: n.actionDate_dt,
-                        recipients: n.recipient_ss.join(', '),
+                        recipients: (n.recipient_ss || []).join(', '),
                         status    : 'public',
                         title     : { en: n.title_t },
                         files     : urlToFiles(n.url_ss)
@@ -51,10 +56,9 @@
             });
 
             $q.when(result).then(function(n){
-                _ctrl.notification = n;
+                 _ctrl.notification = n;
             });
         }
-
 
         //==============================
         //
@@ -136,9 +140,13 @@
         //
         //===========================
         function loadArticle(code){
+            
+            var tags = [code, 'notification'];
+
+            var match = { "adminTags.title.en" : { $all: tags}};     
 
             var query= [
-                            {"$match"   : {'title.en': "UNDP-GEF ABS around the world"}},//{ "tags" : code } },
+                            {"$match"   : match },
                             {"$sort"    : { "meta.updatedOn":-1}},
                             {"$project" : { title:1, content:1}},
                             {"$limit"   : 1 }
@@ -154,15 +162,15 @@
         //===========================
         //
         //===========================
-        function loadSubmissions (code) {
-            
-            var result = { code : code };
+       function loadSubmissions(id) {
+
+            var result = { id : id };
 
             var options = {
                 cache   : true,
                 params  : {
-                    q   : "schema_s: submission AND notification_ss: "+solrEscape(code),
-                    fl  : "id,title_t,submittedDate_dt,referenceRecord_info_ss,file_ss",
+                    q   : "schema_s: submission AND referenceRecord_ss: "+solrEscape(id),
+                    fl  : "id,title_t,submittedDate_dt,referenceRecord_info_ss, url_ss, files_ss",
                     rows: 500
                 }
             };
@@ -171,11 +179,14 @@
 
                 var results = _.map(res.data.response.docs, function(s) {
                     return _.defaults(s, {
-                        _id       : s.id,
-                        date      : s.submittedDate_dt,
-                        type      : 'notification',
-                        status    : 'public',
-                        title     : { en: s.title_t },
+                        _id             : s.id,
+                        date            : s.submittedDate_dt,
+                        type            : 'notification',
+                        title           : { en: s.title_t },
+                        files           : _.map(s.files_ss, function(f){ return JSON.parse(f); }),
+                        isOrganization  : !_.isEmpty(_.filter(_.map(s.referenceRecord_info_ss, function(f){ return JSON.parse(f); }), { field: 'organization'})),
+                        countryOrOrganization : "org or country",
+                        status          : 'public'
                     });
                 });
 
@@ -186,6 +197,5 @@
                 _ctrl.submissions = s;
             });
         }        
-
     }];
 });
