@@ -1,9 +1,7 @@
 ﻿<div  ng-if="notifCtrl.notification">
     <div class="row">
-        <div class="col-xs-12">
-            <h1>Notification</h1> 
-
-            <h4>Reference: {{notifCtrl.notification.reference_s}} ({{::notifCtrl.notification.number}})</h4>
+        <div class="col-sm-9">
+             <p class="h1">Notification <span class="h4">{{notifCtrl.notification.reference_s}}  <small style="font-weight: 600;">({{::notifCtrl.notification.code}})</small></span></p>
         </div>
     </div>
 
@@ -15,13 +13,13 @@
 
     <div class="row" ng-if="notifCtrl.notification.recipients">
         <div class="col-xs-12">
-            <p>To: {{::notifCtrl.notification.recipients}}</p>
+            <p>To: <em>{{::notifCtrl.notification.recipients}}</em></p>
         </div>
     </div>
 
     <div class="row" ng-if="notifCtrl.notification.actionDate">
         <div class="col-xs-12">
-            <p>Action required by: {{::notifCtrl.notification.actionDate | date:'yyyy-MM-dd'}}</p>
+            <p class="text-danger">Action required by: {{::notifCtrl.notification.actionDate | date:'yyyy-MM-dd'}}</p>
         </div>
     </div>
 
@@ -31,17 +29,30 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" ng-if="::notifCtrl.submissions.length">
         <div class="col-xs-12">
-            <h4>Submissions here</h4>
+            <h4>Submissions</h4>
 
-            <ul>
-                <li>Submission</li>
-                <li>Submission</li>
-                <li>Submission</li>
-                <li>Submission</li>
-            </ul>
-            
+            <table class="table table-striped table-hover">
+                <tbody>
+                    <tr ng-repeat="submission in notifCtrl.submissions track by $index"> 
+                        <td>
+                            <strong ng-if="section.code!='report'" class="text-nowrap">{{($index+1)}}.</strong>
+                        </td>
+                        <td>
+                            <strong><a ng-href="{{submission.url_ss[0]}}">{{submission.title | lstring}} </a></strong>
+                            <br><small><em>{{submission.submittedDate_dt | date:'yyyy-MM-dd'}}</em></small>
+                        </td>
+                        <td>
+                            <ul class="list-unstyled">
+                                <li ng-repeat="file in submission.files track by $index">
+                                    <a class="list-inline-item" ng-href="{{file.url}}">{{file.name}}</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -53,7 +64,3 @@
         </div>
     </div>
 </div>
-
-
-
-
