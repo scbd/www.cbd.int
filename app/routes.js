@@ -274,10 +274,10 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
   //============================================================
   function registerRoutes_notifications(routeProvider) {
 
-    $("base").attr('href', '/notifications/'); // allow full page reload outside of  /insession/*
+    $("base").attr('href', '/notifications/'); // allow full page reload outside of  /notifications/*
 
     routeProvider
-        .when('/:code',                    { templateUrl   : 'views/notifications/index.html', resolveController : true })
+        .when('/:code', { templateUrl   : 'views/notifications/index-id.html', resolveController : true })
 
         .otherwise({redirectTo: '/404'});
 }
