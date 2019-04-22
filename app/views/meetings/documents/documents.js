@@ -212,15 +212,14 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function loadNotifications() {
 
-            $http.get('/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'id,symbol_s,reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
+            $http.get('/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'id,symbol:symbol_s,reference:reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
 
                 return _(res.data.response.docs).map(function(n) {
                     return normalizeDocument(_.defaults(n, {
                         _id: n.id,
-                        symbol: n.reference_s || n.symbol_s,
-                        number: n.symbol_s,
                         date:   n.date_dt,
                         type:  'notification',
+                        url: '/notifications/'+encodeURIComponent(n.symbol),
                         status : 'public',
                         title : { en : n.title_t },
                         files : urlToFiles(n.url_ss)

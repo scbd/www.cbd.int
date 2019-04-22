@@ -5,10 +5,24 @@
             <div ng-class="::{ superseded : document.metadata.superseded }">
                 <div>
                     <div ng-if="::document.symbol" title="{{::document.publishedOn|date:'yyyy-MM-dd':'UTC'}}">
-                        <a ng-href="{{::document.url}}" style="color:inherit">
-                            <strong ng-if="::document.type=='decision'">Decision</strong>
-                            <strong ng-if="::document.type=='recommendation'">Recommendation</strong>
-                            <strong ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></strong>
+                        <a ng-href="{{::document.url}}" style="color:inherit" ng-switch="::document.type">
+
+                            <strong ng-switch-when="decision">
+                                Decision <span ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></span>
+                            </strong>
+    
+                            <strong ng-switch-when="recommendation">
+                                    Recommendation <span ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></span>
+                            </strong>
+
+                            <span ng-switch-when="notification">
+                                    <strong ng-bind-html="::breakSymbol((document.reference|encodeHtml))|safeHtml"></strong>
+                                    <i>({{document.symbol}})</i>
+                            </span>
+
+                            <strong ng-switch-default="default">
+                                    <span ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></span>
+                            </strong>
                         </a>
                     </div>
                     <div>{{::document.title|lstring}}</div>
