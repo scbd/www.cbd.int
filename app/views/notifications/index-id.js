@@ -30,7 +30,7 @@
                 cache   : true,
                 params  : {
                     q   : "schema_s: notification AND symbol_s: "+solrEscape(code),
-                    fl  : "id, symbol_s,reference_s,title_t,date_dt,url_ss,actionDate_dt,recipient_ss",
+                    fl  : "id, symbol:symbol_s,reference:reference_s,title_t,date:date_dt,url_ss,actionDate:actionDate_dt,recipient_ss",
                     rows: 1
                 }
             };
@@ -40,8 +40,6 @@
                 var results = _.map(res.data.response.docs, function(n) {
                     return _.defaults(n, {
                         _id       : n.id,
-                        symbol    : n.reference_s || n.symbol_s,
-                        code      : n.symbol_s,
                         date      : n.date_dt,
                         type      : 'notification',
                         actionDate: n.actionDate_dt,
