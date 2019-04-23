@@ -1,23 +1,15 @@
-﻿define(['app', 'angular', 'lodash','services/article-service','filters/lstring'], function(app, angular, _) { 'use strict';
+﻿define(['app', 'angular', 'lodash','services/article-service','filters/lstring', 'directives/meetings/documents/document-files'], function(app, angular, _) { 'use strict';
 
     return ['$scope', '$route','$http', '$q','$sce', 'articleService', function ($scope, $route, $http, $q, $sce, articleService) {
 
         var code   = $route.current.params.code;
         var _ctrl  = $scope.notifCtrl = this;
 
-        if(code.match(/^\d{4}-\d{3}$/)){
-            loadNotification(code);
-        }
-        
-        //===========================
-        //
-        //===========================        
-        $scope.$watch('notifCtrl.notification.id', function(newId, oldId){
-            if(newId){
-                loadSubmissions(newId);
-                loadArticle(_ctrl.notification.code);
-            }
-         });            
+        _ctrl.onArticleLoad = onArticleLoad;
+
+
+        loadNotification(code);
+
 
         //===========================
         //
@@ -30,7 +22,7 @@
                 cache   : true,
                 params  : {
                     q   : "schema_s: notification AND symbol_s: "+solrEscape(code),
-                    fl  : "id, symbol:symbol_s,reference:reference_s,title_t,date:date_dt,url_ss,actionDate:actionDate_dt,recipient_ss",
+                    fl  : "_id:id, symbol:symbol_s,reference:reference_s,title_t,date:date_dt,url_ss,actionDate:actionDate_dt,recipients:recipient_ss",
                     rows: 1
                 }
             };
@@ -39,22 +31,20 @@
 
                 var results = _.map(res.data.response.docs, function(n) {
                     return _.defaults(n, {
-                        _id       : n.id,
-                        date      : n.date_dt,
                         type      : 'notification',
-                        actionDate: n.actionDate_dt,
-                        recipients: (n.recipient_ss || []).join(', '),
-                        status    : 'public',
                         title     : { en: n.title_t },
                         files     : urlToFiles(n.url_ss)
                     });
                 });
 
                 return results.length ? results[0] : null;
-            });
 
-            $q.when(result).then(function(n){
+            }).then(function(n) {
+
                  _ctrl.notification = n;
+
+                 loadSubmissions(n._id);
+                 loadArticle(code);
             });
         }
 
@@ -82,7 +72,7 @@
                 return {
                     type : mime,
                     language: locale,
-                    url : 'https://www.cbd.int'+url
+                    url : 'http://localhost:2000'+url
                 };
             });
         }
@@ -126,41 +116,10 @@
             return value;
         }
 
-        //========================================
-        //
-        //
-        //========================================        
-        $scope.trustedHtml = function (plainText) {
-            return $sce.trustAsHtml(plainText);
-        }
-        
         //===========================
         //
         //===========================
-        function loadArticle(code){
-            
-            var tags = [code, 'notification'];
-
-            var match = { "adminTags.title.en" : { $all: tags}};     
-
-            var query= [
-                            {"$match"   : match },
-                            {"$sort"    : { "meta.updatedOn":-1}},
-                            {"$project" : { title:1, content:1}},
-                            {"$limit"   : 1 }
-                        ];
-
-            $q.when(articleService.query({ "ag" : JSON.stringify(query) }))
-            .then(function(article){
-                if(article.length > 0 )
-                    _ctrl.article = article[0];
-            });
-        }
-
-        //===========================
-        //
-        //===========================
-       function loadSubmissions(id) {
+        function loadSubmissions(id) {
 
             var result = { id : id };
 
@@ -168,7 +127,8 @@
                 cache   : true,
                 params  : {
                     q   : "schema_s: submission AND referenceRecord_ss: "+solrEscape(id),
-                    fl  : "id,title_t,submittedDate_dt,referenceRecord_info_ss, url_ss, files_ss",
+                    fl  : "_id:id,title_t,submittedDate:submittedDate_dt,referenceRecord_info_ss,url_ss,files_ss",
+                    sort: "submittedDate_dt asc",
                     rows: 500
                 }
             };
@@ -177,14 +137,10 @@
 
                 var results = _.map(res.data.response.docs, function(s) {
                     return _.defaults(s, {
-                        _id             : s.id,
-                        date            : s.submittedDate_dt,
-                        type            : 'notification',
                         title           : { en: s.title_t },
                         files           : _.map(s.files_ss, function(f){ return JSON.parse(f); }),
                         isOrganization  : !_.isEmpty(_.filter(_.map(s.referenceRecord_info_ss, function(f){ return JSON.parse(f); }), { field: 'organization'})),
                         countryOrOrganization : "org or country",
-                        status          : 'public'
                     });
                 });
 
@@ -194,6 +150,32 @@
             $q.when(result).then(function(s){
                 _ctrl.submissions = s;
             });
-        }        
+        }    
+        
+        //===========================
+        //
+        //===========================
+        function loadArticle(code){
+            
+            var match = { "adminTags.title.en" : { $all: ['notification', code]}};     
+
+            _ctrl.articleQuery = [
+                {"$match"   : match },
+                {"$sort"    : { "meta.updatedOn":-1}},
+                {"$limit"   : 1 }
+            ];
+        }
+
+        //===========================
+        //
+        //===========================
+        function onArticleLoad(article) {
+
+            _ctrl.article = article;
+
+            if(!article) {
+                _ctrl.embed = _.findWhere(_ctrl.notification.files, { type : 'application/pdf', language: 'en' });
+            }
+        }
     }];
 });

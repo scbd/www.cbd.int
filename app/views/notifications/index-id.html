@@ -3,36 +3,53 @@
         <div class="col-sm-9">
              <h1>Notification
                 <small>
-                    <i>({{::notifCtrl.notification.symbol}})</i>
+                    
                 </small>
             </h1>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-xs-12">
-            <h2>{{::notifCtrl.notification.title|lstring}}</em></h2>
-        </div>
-    </div>
 
     <div class="row" >
-        <div class="col-xs-12">
-            <p>Reference: <strong>{{::notifCtrl.notification.reference}}</strong></p>
-            <p ng-if="::notifCtrl.notification.recipients">To: <em>{{::notifCtrl.notification.recipients}}</em></p>
-            <p>Date of issuance: {{::notifCtrl.notification.date|date:'yyyy-MM-dd'}}</p>
-            <p ng-if="::notifCtrl.notification.actionDate" class="text-danger">Action required by: {{::notifCtrl.notification.actionDate | date:'yyyy-MM-dd'}}</p>
+        <div class="col-sm-8">
+            <p>Reference: 
+                <strong>{{::notifCtrl.notification.reference}}</strong>
+                <i>({{::notifCtrl.notification.symbol}})</i>
+            </p>
+            <p ng-if="::notifCtrl.notification.recipients.length">To: 
+                <em ng-repeat="recipient in ::notifCtrl.notification.recipients">
+                    {{::recipient}}<span ng-if="!$last">,</span>
+                </em>
+            </p>
+            <p><i class="fa fa-calendar fa-fw"></i> {{::notifCtrl.notification.date|date:'yyyy-MM-dd'}}</p>
+            <p ng-if="::notifCtrl.notification.actionDate" class="text-danger"> <i class="fa fa-calendar-check-o fa-fw"></i> Action required by {{::notifCtrl.notification.actionDate | date:'yyyy-MM-dd'}}</p>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Notification documents
+                </div>
+                <div class="panel-body">
+                    <document-files ng-if="!viewOnly" files="notifCtrl.notification.files"></document-files>
+                </div>
+            </div>
         </div>
     </div>
 
-    
-    <div class="row" ng-if="notifCtrl.article">
+    <div class="row">
+            <div class="col-xs-12">
+                <h3>{{::notifCtrl.notification.title|lstring}}</em></h3>
+            </div>
+        </div>
+
+    <div class="row" ng-show="notifCtrl.article">
         <div class="col-xs-12">    
-            <div ng-bind-html="trustedHtml(notifCtrl.article.content.en)" class="content"></div>
+            <cbd-article query="notifCtrl.articleQuery" ng-if="notifCtrl.articleQuery" on-load="notifCtrl.onArticleLoad(article)" hide-cover-image="true"></cbd-article>
         </div>
     </div>
-    <div class="row" ng-if="!notifCtrl.article">
+    <div class="row" ng-if="notifCtrl.embed.url">
         <div class="col-xs-12">    
-            <embed ng-src="{{notifCtrl.notification.url_ss[0]}}" style="width:100%;height:650px"></embed>
+            <embed ng-src="{{notifCtrl.embed.url}}"  style="width:100%;height:650px"></embed>
         </div>
     </div>
             
@@ -47,13 +64,13 @@
                             <strong ng-if="section.code!='report'" class="text-nowrap">{{($index+1)}}.</strong>
                         </td>
                         <td>
-                            <strong><a ng-href="{{submission.url_ss[0]}}">{{submission.title | lstring}} </a></strong>
-                            <br><small><em>{{submission.submittedDate_dt | date:'yyyy-MM-dd'}}</em></small>
+                            <strong>{{submission.title | lstring}}</strong> <a ng-href="{{submission.url_ss[0]}}"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                            <div><i class="fa fa-calendar-check-o fa-fw"></i> {{submission.submittedDate | date:'yyyy-MM-dd'}}</div>
                         </td>
                         <td>
                             <ul class="list-unstyled">
                                 <li ng-repeat="file in submission.files track by $index">
-                                    <a class="list-inline-item" ng-href="{{file.url}}">{{file.name}}</a>
+                                    <i class="fa fa-file-o fa-fw"></i> <a class="list-inline-item" ng-href="{{file.url}}" target="_blank">{{file.name}}</a>
                                 </li>
                             </ul>
                         </td>
@@ -73,3 +90,4 @@
 </div>
 
 
+<pre>{{notifCtrl.notification|json}}</pre>
