@@ -1,8 +1,8 @@
-﻿define(['app', 'angular', 'lodash','services/article-service','filters/lstring', 'directives/meetings/documents/document-files'], function(app, angular, _) { 'use strict';
+define(['app', 'angular', 'lodash','services/article-service','filters/lstring', 'directives/meetings/documents/document-files'], function(app, angular, _) { 'use strict';
 
     return ['$scope', '$route','$http', '$q','$sce', 'articleService', function ($scope, $route, $http, $q, $sce, articleService) {
 
-        var code   = $route.current.params.code;
+        var code   = $route.current.params.symbol;
         var _ctrl  = $scope.notifCtrl = this;
 
         _ctrl.onArticleLoad = onArticleLoad;
