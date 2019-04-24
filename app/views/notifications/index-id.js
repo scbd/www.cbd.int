@@ -110,8 +110,6 @@
                     return _.defaults(s, {
                         title           : { en: s.title_t },
                         files           : _.map(s.files_ss, parseFile_s),
-                        isOrganization  : !_.isEmpty(_.filter(_.map(s.referenceRecord_info_ss, function(f){ return JSON.parse(f); }), { field: 'organization'})),
-                        countryOrOrganization : "org or country",
                         submitterType   : getSubmitterType(s)
                     });
                 });
@@ -168,7 +166,7 @@
             if(countries)
                 return $q.when(countries);
 
-            return countries = $http.get('/api/v2015/countries', { cache:true }).then(function(res){
+            return countries = $http.get('/api/v2015/countries', { cache:true, params: {f: {code:1, treaties:1}} }).then(function(res){
 
                 return countries = _.reduce(res.data, function(countries, country){
                     countries[country.code] = country;
