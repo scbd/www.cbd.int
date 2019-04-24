@@ -1,11 +1,7 @@
 ﻿<div  ng-if="notifCtrl.notification">
     <div class="row">
         <div class="col-sm-9">
-             <h1>Notification
-                <small>
-                    
-                </small>
-            </h1>
+             <h1>Notification</h1>
         </div>
     </div>
 
@@ -17,7 +13,7 @@
                 <i>({{::notifCtrl.notification.symbol}})</i>
             </p>
             <p ng-if="::notifCtrl.notification.recipients.length">To: 
-                <em ng-repeat="recipient in ::notifCtrl.notification.recipients">
+                <em ng-repeat="recipient in ::notifCtrl.notification.recipients track by $index">
                     {{::recipient}}<span ng-if="!$last">,</span>
                 </em>
             </p>
@@ -27,7 +23,7 @@
         <div class="col-sm-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Notification documents
+                    Notification text
                 </div>
                 <div class="panel-body">
                     <document-files ng-if="!viewOnly" files="notifCtrl.notification.files"></document-files>
@@ -55,28 +51,41 @@
             
     <div class="row" ng-if="::notifCtrl.submissions.length">
         <div class="col-xs-12">
+            <a name="submission"></a>
             <h3>Submissions</h3>
 
-            <table class="table table-striped table-hover">
-                <tbody>
-                    <tr ng-repeat="submission in notifCtrl.submissions track by $index"> 
-                        <td>
-                            <strong ng-if="section.code!='report'" class="text-nowrap">{{($index+1)}}.</strong>
-                        </td>
-                        <td>
-                            <strong>{{submission.title | lstring}}</strong> <a ng-href="{{submission.url_ss[0]}}"><i class="fa fa-external-link" aria-hidden="true"></i></a>
-                            <div><i class="fa fa-calendar-check-o fa-fw"></i> {{submission.submittedDate | date:'yyyy-MM-dd'}}</div>
-                        </td>
-                        <td>
-                            <ul class="list-unstyled">
-                                <li ng-repeat="file in submission.files track by $index">
-                                    <i class="fa fa-file-o fa-fw"></i> <a class="list-inline-item" ng-href="{{file.url}}" target="_blank">{{file.name}}</a>
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+
+            <div ng-repeat="type in ::['party', 'non-party', 'observer']">
+                <div ng-if="::(notifCtrl.submissions|filter:{ submitterType: type }).length">
+                <h4 ng-switch="type">
+                    <span ng-switch-when="party">Parties</span>
+                    <span ng-switch-when="non-party">Non-Parties</span>
+                    <span ng-switch-when="observer">Observers</span>
+                    <span ng-switch-default>{{type|uppercase}}</span>
+                </h4>
+                <table class="table table-striped table-hover">
+                    <tbody>
+                        <tr ng-repeat="submission in ::notifCtrl.submissions|filter:{ submitterType: type }|orderBy:'date' track by submission._id"> 
+                            <td style="width:20px">
+                                <strong class="text-nowrap">{{::$index+1}}.</strong>
+                            </td>
+                            <td>
+                                <div class="pull-right"><i class="fa fa-calendar-check-o fa-fw"></i> {{submission.submittedDate | date:'yyyy-MM-dd'}}</div>
+                                <strong>{{::submission.title | lstring}}</strong> <a ng-href="{{::submission.url_ss[0]}}"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                <div class="text-muted">{{::submission.government|term}}</div>
+                            </td>
+                            <td style="width:25%">
+                                <ul class="list-unstyled">
+                                    <li ng-repeat="file in submission.files track by $index">
+                                            <i class="fa {{::(MIMES[file.type]||MIMES.default).icon}}" ng-style="::{ color: MIMES[file.type].color}"></i> <a class="list-inline-item" ng-href="{{file.url}}" target="_blank">{{file.name}}</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -84,10 +93,7 @@
 <div ng-if="!notifCtrl.notification">
     <div class="row">
         <div class="col-xs-12">
-            <h4>Sorry, no notification found!</h4>    
+            Sorry, no notification found!
         </div>
     </div>
 </div>
-
-
-<pre>{{notifCtrl.notification|json}}</pre>
