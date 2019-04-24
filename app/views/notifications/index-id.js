@@ -1,15 +1,28 @@
-define(['app', 'angular', 'lodash','services/article-service','filters/lstring', 'directives/meetings/documents/document-files'], function(app, angular, _) { 'use strict';
+﻿define(['lodash', 'util/solr', 'app', 'services/article-service','filters/lstring', 'directives/meetings/documents/document-files', 'filters/term'], function(_, solr) { 'use strict';
 
+    var MIMES = {
+        'application/pdf':                                                            { priority: 10,  color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' :   { priority: 20,  color: 'blue',   btn: 'btn-primary', icon: 'fa-file-word-o'  },
+        'application/msword':                                                         { priority: 30,  color: 'blue',   btn: 'btn-primary', icon: 'fa-file-word-o'  },
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' :         { priority: 40,  color: 'green',  btn: 'btn-success', icon: 'fa-file-excel-o' },
+        'application/vnd.ms-excel':                                                   { priority: 50,  color: 'green',  btn: 'btn-success', icon: 'fa-file-excel-o' },
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation' : { priority: 60,  color: 'orange', btn: 'btn-warning', icon: 'fa-file-powerpoint-o' },
+        'application/vnd.ms-powerpoint':                                              { priority: 70,  color: 'orange', btn: 'btn-warning', icon: 'fa-file-powerpoint-o' },
+        'application/zip':                                                            { priority: 80,  color: '',       btn: 'btn-default', icon: 'fa-file-archive-o' },
+        'text/html':                                                                  { priority: 80,  color: '',       btn: 'btn-default', icon: 'fa-link' },
+        'default':                                                                    { priority:999,  color: 'orange', btn: 'btn-default', icon: 'fa-file-o' }
+    };
     return ['$scope', '$route','$http', '$q','$sce', 'articleService', function ($scope, $route, $http, $q, $sce, articleService) {
 
         var code   = $route.current.params.symbol;
         var _ctrl  = $scope.notifCtrl = this;
 
-        _ctrl.onArticleLoad = onArticleLoad;
+        _ctrl.onArticleLoad  = onArticleLoad;
 
+        $scope.MIMES = MIMES;
 
+        loadCountries();
         loadNotification(code);
-
 
         //===========================
         //
@@ -21,17 +34,16 @@ define(['app', 'angular', 'lodash','services/article-service','filters/lstring',
             var options = {
                 cache   : true,
                 params  : {
-                    q   : "schema_s: notification AND symbol_s: "+solrEscape(code),
-                    fl  : "_id:id, symbol:symbol_s,reference:reference_s,title_t,date:date_dt,url_ss,actionDate:actionDate_dt,recipients:recipient_ss",
+                    q   : "schema_s: notification AND symbol_s: "+solr.escape(code),
+                    fl  : "_id:id, symbol:symbol_s, reference:reference_s, title_t, date:date_dt,url_ss, actionDate:actionDate_dt, recipients:recipient_ss",
                     rows: 1
                 }
             };
 
-            result = $http.get("/api/v2013/index", options).then(function(res){
+            return $http.get("/api/v2013/index", options).then(function(res){
 
                 var results = _.map(res.data.response.docs, function(n) {
                     return _.defaults(n, {
-                        type      : 'notification',
                         title     : { en: n.title_t },
                         files     : urlToFiles(n.url_ss)
                     });
@@ -43,7 +55,7 @@ define(['app', 'angular', 'lodash','services/article-service','filters/lstring',
 
                  _ctrl.notification = n;
 
-                 loadSubmissions(n._id);
+                 loadSubmissions(code);
                  loadArticle(code);
             });
         }
@@ -72,48 +84,9 @@ define(['app', 'angular', 'lodash','services/article-service','filters/lstring',
                 return {
                     type : mime,
                     language: locale,
-                    url : 'http://localhost:2000'+url
+                    url : 'https://www.cbd.int'+url
                 };
             });
-        }
-
-        //========================================
-        //
-        //
-        //========================================
-        function solrEscape(value) {
-
-            if(value===undefined) throw "Value is undefined";
-            if(value===null)      throw "Value is null";
-            if(value==="")        throw "Value is null";
-
-            if(_.isNumber(value)) value = value.toString();
-            if(_.isDate  (value)) value = value.toISOString();
-
-            //TODO add more types
-
-            value = value.toString();
-
-            value = value.replace(/\\/g,   '\\\\');
-            value = value.replace(/\+/g,   '\\+');
-            value = value.replace(/\-/g,   '\\-');
-            value = value.replace(/\&\&/g, '\\&&');
-            value = value.replace(/\|\|/g, '\\||');
-            value = value.replace(/\!/g,   '\\!');
-            value = value.replace(/\(/g,   '\\(');
-            value = value.replace(/\)/g,   '\\)');
-            value = value.replace(/\{/g,   '\\{');
-            value = value.replace(/\}/g,   '\\}');
-            value = value.replace(/\[/g,   '\\[');
-            value = value.replace(/\]/g,   '\\]');
-            value = value.replace(/\^/g,   '\\^');
-            value = value.replace(/\"/g,   '\\"');
-            value = value.replace(/\~/g,   '\\~');
-            value = value.replace(/\*/g,   '\\*');
-            value = value.replace(/\?/g,   '\\?');
-            value = value.replace(/\:/g,   '\\:');
-
-            return value;
         }
 
         //===========================
@@ -121,36 +94,43 @@ define(['app', 'angular', 'lodash','services/article-service','filters/lstring',
         //===========================
         function loadSubmissions(id) {
 
-            var result = { id : id };
-
             var options = {
                 cache   : true,
                 params  : {
-                    q   : "schema_s: submission AND referenceRecord_ss: "+solrEscape(id),
-                    fl  : "_id:id,title_t,submittedDate:submittedDate_dt,referenceRecord_info_ss,url_ss,files_ss",
+                    q   : "schema_s: submission AND notifications_ss: "+solr.escape(id),
+                    fl  : "_id:id, government:government_s, title_t, submittedDate:submittedDate_dt, referenceRecord_info_ss, url_ss, files_ss",
                     sort: "submittedDate_dt asc",
                     rows: 500
                 }
             };
 
-            result = $http.get("/api/v2013/index", options).then(function(res){
+            return $q.all([loadCountries(), $http.get("/api/v2013/index", options)]).then(function(res){ return res[1] }).then(function(res) {
 
-                var results = _.map(res.data.response.docs, function(s) {
+                _ctrl.submissions = _.map(res.data.response.docs, function(s) {
                     return _.defaults(s, {
                         title           : { en: s.title_t },
-                        files           : _.map(s.files_ss, function(f){ return JSON.parse(f); }),
+                        files           : _.map(s.files_ss, parseFile_s),
                         isOrganization  : !_.isEmpty(_.filter(_.map(s.referenceRecord_info_ss, function(f){ return JSON.parse(f); }), { field: 'organization'})),
                         countryOrOrganization : "org or country",
+                        submitterType   : getSubmitterType(s)
                     });
                 });
-
-                return results.length ? results : null;
-            });
-
-            $q.when(result).then(function(s){
-                _ctrl.submissions = s;
             });
         }    
+
+        //===========================
+        //
+        //===========================
+        function parseFile_s(file_s){
+
+            var file = JSON.parse(file_s);
+
+            if(!file.type && /\.pdf$/ .test(file.url||'')) file.type = 'application/pdf';
+            if(!file.type && /\.doc$/ .test(file.url||'')) file.type = 'application/msword';
+            if(!file.type && /\.docx$/.test(file.url||'')) file.type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+            return file;
+        }
         
         //===========================
         //
@@ -176,6 +156,38 @@ define(['app', 'angular', 'lodash','services/article-service','filters/lstring',
             if(!article) {
                 _ctrl.embed = _.findWhere(_ctrl.notification.files, { type : 'application/pdf', language: 'en' });
             }
+        }
+
+        //========================
+        //
+        //========================
+        var countries;
+
+        function loadCountries() {
+
+            if(countries)
+                return $q.when(countries);
+
+            return countries = $http.get('/api/v2015/countries', { cache:true }).then(function(res){
+
+                return countries = _.reduce(res.data, function(countries, country){
+                    countries[country.code] = country;
+                    return countries;
+                }, {});
+            });
+        }
+
+        //========================
+        //
+        //========================
+        function getSubmitterType(submission) {
+
+            var country = countries[(submission.government||'').toUpperCase()];
+
+            if(country &&  country.treaties.XXVII8.party) return 'party';     // TODO CP+NP
+            if(country && !country.treaties.XXVII8.party) return 'non-party'; // TODO CP+NP
+            
+            return 'observer';
         }
     }];
 });

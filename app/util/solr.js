@@ -1,14 +1,16 @@
 define(['app', 'lodash'], function(app, _) { 'use strict';
 
-app.factory('solr', [function() {
-
-	return {
-		escape : escape,
+	var _exports = {
+		escape : solrEscape,
 		andOr : andOr,
 		lstring : lstring
 	};
 
-	function escape(value) {
+	app.factory('solr', [function() { return _exports; }])
+
+	return _exports;
+	
+	function solrEscape(value) {
 
 		if(value===undefined) throw "Value is undefined";
 		if(value===null)      throw "Value is null";
@@ -82,6 +84,4 @@ app.factory('solr', [function() {
 
 		}, {});
 	}
-
-}]);
 });
