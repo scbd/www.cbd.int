@@ -152,10 +152,10 @@ define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','dir
                 $scope.targets=targetsData.targets;
                 var countryQ ='';
 
-                if($scope.target.length===1)$scope.target2='0'+$scope.target;
+                if($scope.target.length===1)$scope.target='0'+$scope.target;
                 if($scope.schema==='nationalTarget' && $scope.country) countryQ = ' AND government_s:'+$scope.country.toLowerCase();
 
-                var q = 'schema_s:'+$scope.schema + countryQ+' AND (aichiTargets_ss:"AICHI-TARGET-'+$scope.target2 +'" OR aichiTarget_ss:"AICHI-TARGET-'+$scope.target2 +'") AND _state_s:public';
+                var q = 'schema_s:'+$scope.schema + countryQ+' AND (aichiTargets_ss:"AICHI-TARGET-'+$scope.target +'" OR aichiTarget_ss:"AICHI-TARGET-'+$scope.target +'") AND _state_s:public';
 
                 $scope.loading=true;
 
@@ -183,7 +183,7 @@ define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','dir
 
                     if($scope.schema ==='measures'){
 
-                          if($scope.targets[Number($scope.target)+1].activities){
+                          if($scope.targets[Number($scope.target)+1] && $scope.targets[Number($scope.target)+1].activities){
 
                             _.each($scope.targets[Number($scope.target)+1].activities,function(meas){
 

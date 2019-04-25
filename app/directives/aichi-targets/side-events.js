@@ -27,7 +27,7 @@ define(['app','lodash', 'text!./side-events.html','data/aichi-targets/targets','
                 if(!$scope.country) $scope.country='*';
 
 
-                $scope.sort={'sideEvent.id':-1};
+                $scope.sort={'sideEvent.id':1};
 
                 $scope.loadCountries().then(function(){
                   $scope.$watch('searchText',function(){
@@ -61,7 +61,7 @@ define(['app','lodash', 'text!./side-events.html','data/aichi-targets/targets','
                 //
                 //=======================================================================
                 $scope.conferenceName= function(res){
-                  var c =_.find($scope.confrences,{'_id':res.location.conference});
+                  var c =_.find($scope.conferences,{'_id':res.location.conference});
                   if(!c)return '';
                   else return c.Title.en;
                 };
@@ -69,9 +69,18 @@ define(['app','lodash', 'text!./side-events.html','data/aichi-targets/targets','
                 //
                 //============================================================
                 function loadConferences(){
-                    return mongoStorage.loadConferences().then(function(res){
-                        $scope.confrences=res;
-              console.log($scope.confrences);
+                  var q = {
+                    code: {$exists:true},
+                    schedule: {$exists:true}
+                  }
+                  var sort = {
+                    schedule : {
+                      start:1
+                    }
+                  }
+                  var fields = { Title:1,code:1}
+                    return mongoStorage.loadDocs('conferences',q, 0, 1000,null,fields).then(function(res){
+                      $scope.conferences = res.data
                     });
                 }
             },
@@ -175,7 +184,7 @@ define(['app','lodash', 'text!./side-events.html','data/aichi-targets/targets','
                   }
                   q['sideEvent.targets']={'$in':['AICHI-TARGET-'+$scope.target]};
                   q['meta.status']={'$nin':[ 'deleted', 'archived']};
-
+                  q['start']= {"$ne":null};
                   return q;
               }
 
@@ -191,7 +200,7 @@ define(['app','lodash', 'text!./side-events.html','data/aichi-targets/targets','
                   var q=buildQuery ();//{'location.conference':conference._id};
                   var f = {title:1,'sideEvent.title':1,'sideEvent.id':1,'sideEvent.targets':1,'location.conference':1,start:1,end:1};
 
-                  return mongoStorage.loadDocs('reservations',q, pageIndex,$scope.itemsPerPage,true,$scope.sort,f).then(
+                  return mongoStorage.loadDocs('reservations',q, pageIndex,$scope.itemsPerPage,$scope.sort,f).then(
                       function(responce) {
                             $scope.count=responce.count;
                             $scope.docs=responce.data;
