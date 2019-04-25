@@ -1,4 +1,4 @@
-﻿<div  ng-if="notifCtrl.notification">
+<div  ng-if="notifCtrl.notification">
     <div class="row">
         <div class="col-sm-9">
              <h1>Notification</h1>
@@ -26,31 +26,44 @@
                     Notification text
                 </div>
                 <div class="panel-body">
-                    <document-files ng-if="!viewOnly" files="notifCtrl.notification.files"></document-files>
+                    <document-files files="notifCtrl.notification.files"></document-files>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="row">
-            <div class="col-xs-12">
+            <div class="col-sm-12">
                 <h3>{{::notifCtrl.notification.title|lstring}}</h3>
             </div>
         </div>
 
-    <div class="row" ng-show="notifCtrl.article">
-        <div class="col-xs-12">    
+    <div class="row" ng-show="notifCtrl.preview.type=='article'">
+        <div class="col-sm-12">    
             <cbd-article query="notifCtrl.articleQuery" ng-if="notifCtrl.articleQuery" on-load="notifCtrl.onArticleLoad(article)" hide-cover-image="true"></cbd-article>
         </div>
     </div>
-    <div class="row" ng-if="notifCtrl.embed.url">
-        <div class="col-xs-12">    
-            <embed ng-src="{{notifCtrl.embed.url}}"  style="width:100%;height:650px"></embed>
+    <div class="row" ng-if="notifCtrl.preview.type=='embed'">
+        <div class="col-sm-12">    
+            <iframe src="{{notifCtrl.preview.url}}"  style="width:100%;height:650px"></iframe>
+        </div>
+    </div>
+    <div class="row" ng-if="notifCtrl.preview.type=='none'">
+        <div class="col-sm-12">    
+                <p><i>Sorry, no preview available.</i></p>
+                <p>Please download the Notification text file.</p>
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <document-files files="notifCtrl.notification.files"></document-files>
+                </div>
+            </div>
+
         </div>
     </div>
             
     <div class="row" ng-if="::notifCtrl.submissions.length">
-        <div class="col-xs-12">
+        <div class="col-sm-12">
             <a name="submission"></a>
             <h3>Submissions</h3>
 

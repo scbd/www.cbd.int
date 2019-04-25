@@ -1,4 +1,4 @@
-﻿define(['lodash', 'util/solr', 'app', 'services/article-service','filters/lstring', 'directives/meetings/documents/document-files', 'filters/term'], function(_, solr) { 'use strict';
+define(['lodash', 'util/solr', 'app', 'services/article-service','filters/lstring', 'directives/meetings/documents/document-files', 'filters/term'], function(_, solr) { 'use strict';
 
     var MIMES = {
         'application/pdf':                                                            { priority: 10,  color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
@@ -149,11 +149,16 @@
         //===========================
         function onArticleLoad(article) {
 
-            _ctrl.article = article;
+            var embed = null;
 
-            if(!article) {
-                _ctrl.embed = _.findWhere(_ctrl.notification.files, { type : 'application/pdf', language: 'en' });
-            }
+            embed = embed || _.findWhere(_ctrl.notification.files, { type : 'application/pdf', language: 'en' });
+            embed = embed || _.findWhere(_ctrl.notification.files, { type : 'application/pdf', language: 'es' });
+            embed = embed || _.findWhere(_ctrl.notification.files, { type : 'application/pdf', language: 'fr' });
+            
+            _ctrl.preview = { type: "none" };
+
+                 if(article) _ctrl.preview = { type: "article",  article: article   };
+            else if(embed)   _ctrl.preview = { type: "embed",    url:     embed.url };
         }
 
         //========================
