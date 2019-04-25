@@ -13,6 +13,11 @@
         background: url("/app/images/idb-celebrations/banner-0.jpg");
         text-align: left;
     }
+
+    .banner a{
+        text-decoration: none;
+    }
+
     /* .is-content-area{
       border: 1px red dashed;
       margin-bottom: 10px;
@@ -73,7 +78,9 @@
 <div class="row">
     <div class="col-xs-12">
         <div class="banner">
-            <h5 class="main-title">Year {{idbCelIndexCtrl.year}}</h5>
+            <a ng-href="https://www.cbd.int/idb/{{idbCelIndexCtrl.year}}"> 
+                <h5 class="main-title">Year {{idbCelIndexCtrl.year}}</h5>
+            </a>
         </div>
     </div>
 </div>
