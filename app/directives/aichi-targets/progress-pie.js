@@ -169,7 +169,7 @@ define(['app', 'lodash','text!./progress-pie.html',
                     else
                         targetText = 'AICHI-TARGET-' + $scope.aichiTarget;
 
-                    var query = 'NOT version_s:* AND realm_ss:chm AND schema_s:nationalAssessment AND nationalTarget_EN_t:"' + targetText + '" AND _latest_s:true AND _state_s:public';
+                    var query = 'NOT version_s:* AND realm_ss:chm AND schema_s:nationalAssessment AND (nationalTarget_s:"' + targetText + '" OR nationalTargetAichiTargets_ss:"' + targetText + '") AND _latest_s:true AND _state_s:public';
                     return query;
                 }
 
@@ -244,7 +244,8 @@ define(['app', 'lodash','text!./progress-pie.html',
                         color: progressToColor(4)
                     };
                     _.each(docs, function(doc) {
-                        if (!doc.progress_EN_t) throw "Error no progress reported";
+                        if (!progressToNum(doc.progress_EN_t)) return 
+
                         $scope.chartData[progressToNum(doc.progress_EN_t)].count++;
                         total++;
                         $scope.nothingReported = false;

@@ -42,7 +42,7 @@
          <span class="pull-right"><a ng-href="https://www.cbd.int/side-events/{{row.sideEvent.id}}">View Record <i class="fa fa-arrow-circle-right"></i></a></span>
        </td>
      </tr>
-     <tr ng-if="!count">
+     <tr ng-if="!docs || docs.length == 0">
        <td class="text-center"  colspan="2" >
          <span  ><b>No records found</b></span>
        </td>
