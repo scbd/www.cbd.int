@@ -35,7 +35,7 @@ define(['lodash', 'util/solr', 'app', 'services/article-service','filters/lstrin
                 cache   : true,
                 params  : {
                     q   : "schema_s: notification AND symbol_s: "+solr.escape(code),
-                    fl  : "_id:id, symbol:symbol_s, reference:reference_s, title_t, date:date_dt,url_ss, actionDate:actionDate_dt, recipients:recipient_ss",
+                    fl  : "_id:id, symbol:symbol_s, reference:reference_s, title_t, date:date_dt,url_ss, actionDate:actionDate_dt, recipients:recipient_ss, thematicAreas:thematicAreas_EN_txt",
                     rows: 1
                 }
             };
