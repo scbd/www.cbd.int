@@ -61,7 +61,7 @@ define(['app','lodash', 'text!./side-events.html','data/aichi-targets/targets','
                 //
                 //=======================================================================
                 $scope.conferenceName= function(res){
-                  var c =_.find($scope.confrences,{'_id':res.location.conference});
+                  var c =_.find($scope.conferences,{'_id':res.location.conference});
                   if(!c)return '';
                   else return c.Title.en;
                 };
@@ -80,7 +80,7 @@ define(['app','lodash', 'text!./side-events.html','data/aichi-targets/targets','
                   }
                   var fields = { Title:1,code:1}
                     return mongoStorage.loadDocs('conferences',q, 0, 1000,null,fields).then(function(res){
-                      $scope.confrences = res.data
+                      $scope.conferences = res.data
                     });
                 }
             },
