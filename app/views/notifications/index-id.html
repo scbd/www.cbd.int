@@ -1,46 +1,38 @@
 <div  ng-if="notifCtrl.notification">
     <div class="row">
         <div class="col-sm-9">
-             <h1>Notification</h1>
+             <h1>Notification <small><i>{{::notifCtrl.notification.symbol}}</i></small></h1>
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>{{::notifCtrl.notification.title|lstring}}</h3>
+        </div>
+    </div>
 
-    <div class="row" >
-        <div class="col-sm-8">
-            <p>Reference: 
-                <strong>{{::notifCtrl.notification.reference}}</strong>
-                <i>({{::notifCtrl.notification.symbol}})</i>
-            </p>
+    <div class="row" ng-show="notifCtrl.preview.type=='article'">
+        <div class="col-sm-9">    
+            <cbd-article query="notifCtrl.articleQuery" ng-if="notifCtrl.articleQuery" on-load="notifCtrl.onArticleLoad(article)" hide-cover-image="true"></cbd-article>
             <p ng-if="::notifCtrl.notification.recipients.length">To: 
                 <em ng-repeat="recipient in ::notifCtrl.notification.recipients track by $index">
                     {{::recipient}}<span ng-if="!$last">,</span>
                 </em>
             </p>
-            <p><i class="fa fa-calendar fa-fw"></i> {{::notifCtrl.notification.date|date:'yyyy-MM-dd'}}</p>
-            <p ng-if="::notifCtrl.notification.actionDate" class="text-danger"> <i class="fa fa-calendar-check-o fa-fw"></i> Action required by {{::notifCtrl.notification.actionDate | date:'yyyy-MM-dd'}}</p>
-        </div>
-        <div class="col-sm-4">
+        </div> 
+        <div class="col-sm-3">
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    Notification text
-                </div>
                 <div class="panel-body">
+                    <p><i class="fa fa-calendar fa-fw"></i> {{::notifCtrl.notification.date|date:'yyyy-MM-dd'}}</p>
+                    <p ng-if="::notifCtrl.notification.actionDate" class="text-danger"> <i class="fa fa-calendar-check-o fa-fw"></i> Action required by {{::notifCtrl.notification.actionDate | date:'yyyy-MM-dd'}}</p>
+                    <p ng-if="::notifCtrl.notification.thematicAreas.length"><strong>Subject(s): </strong>
+                        <em ng-repeat="thematicArea in ::notifCtrl.notification.thematicAreas track by $index">
+                            {{::thematicArea}}<span ng-if="!$last">,</span>
+                        </em>
+                    </p>
                     <document-files files="notifCtrl.notification.files"></document-files>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="row">
-            <div class="col-sm-12">
-                <h3>{{::notifCtrl.notification.title|lstring}}</h3>
-            </div>
-        </div>
-
-    <div class="row" ng-show="notifCtrl.preview.type=='article'">
-        <div class="col-sm-12">    
-            <cbd-article query="notifCtrl.articleQuery" ng-if="notifCtrl.articleQuery" on-load="notifCtrl.onArticleLoad(article)" hide-cover-image="true"></cbd-article>
         </div>
     </div>
     <div class="row" ng-if="notifCtrl.preview.type=='embed'">
@@ -78,7 +70,7 @@
                 </h4>
                 <table class="table table-striped table-hover">
                     <tbody>
-                        <tr ng-repeat="submission in ::notifCtrl.submissions|filter:{ submitterType: type }|orderBy:'date' track by submission._id"> 
+                        <tr ng-repeat="submission in ::notifCtrl.submissions|filter:{ submitterType: type }:true|orderBy:'date' track by submission._id"> 
                             <td style="width:20px">
                                 <strong class="text-nowrap">{{::$index+1}}.</strong>
                             </td>
