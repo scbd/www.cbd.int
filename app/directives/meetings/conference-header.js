@@ -1,4 +1,4 @@
-﻿define(['app', 'angular', 'text!./conference-header.html', 'services/conference-service'], function(app, ng, html){
+﻿define(['app', 'angular', 'text!./conference-header.html', 'services/conference-service', 'filters/lstring'], function(app, ng, html){
 
     return app.directive('conferenceHeader', ['$location', 'conferenceService', '$q', '$rootScope',
      function($location, conferenceService, $q, $rootScope){
@@ -87,6 +87,23 @@
                     },
                     hash : function() {
                         return $location.hash();
+                    },
+                    expandMenu : function(menu){
+                        _.each($scope.conference.conference.menus, function(menu){
+                            if(menu.behavior != 'fixed' && menu.menus)//expand behavior is only for menus with sub-menu
+                                menu.isExpanded = false;
+
+                            menu.isSelected = false;
+                             _.each(menu.menus, function(menu){
+                                    menu.isSelected = false;
+                             });
+                        });
+                        if(menu.behavior == 'collapsed'){
+                            menu.isExpanded = true;
+                        }
+                        menu.isSelected = true;
+                        if(menu.parent)
+                            menu.parent.isSelected = true;
                     }
                 };
 
