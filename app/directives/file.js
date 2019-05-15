@@ -1,19 +1,18 @@
 define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplate) { 'use strict';
 
-	app.directive('type', ['$http', function($http) {
+	app.directive('type', ['$http', '$parse', function($http, $parse) {
 	    return {
 	        restrict: 'A',
 	        replace: true,
             require: '?ngModel', 
-            scope: {
-                onUpload : "&onUpload"
-            },
 	        link: function($scope, element, attr, ctrl) {
 
                 if(element.prop("tagName")!=="INPUT") return;
                 if(attr.type              !=="file")  return;
 
                 if(!ctrl) return;
+
+                var onUploadHandler = attr.onUpload && $parse(attr.onUpload);
 
                 $scope.$on('$destroy', function(){
                     element.off('change');
@@ -88,7 +87,10 @@ define(['app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplat
                 
                 function onUpload(htmlFile, file, err) { 
 
-                    return $scope.onUpload({
+                    if(!onUploadHandler)
+                        return;
+
+                    return onUploadHandler($scope, {
                         htmlFile: htmlFile,
                         file:     file, 
                         error:    err
