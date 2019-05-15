@@ -43,11 +43,55 @@ define(['app', 'lodash', 'moment-timezone', 'angular-cache'], function (app, _, 
                                                 meeting.conference.showSchedule = true;
                                             }
 
-                                            return meeting;
+                                            if((meeting.conference.menus||[]).length){
+                                              normalizeMenus(meeting.conference.menus, meeting)
+
+                                            }
+
                                         }
+
+                                        return meeting;
                                     });
 
             }
+
+            function normalizeMenus(menus, meeting){
+
+                _.each(menus, function(menu, parentMenu){
+
+                    menu.exactSelection = true;
+
+                    if(menu.behavior == 'collapsed' && menu.menus)//expand behavior is only for menus with sub-menu
+                      menu.expanded = false;
+                    else if((menu.behavior == 'fixed' || menu.behavior == 'expanded') && menu.menus)
+                      menu.expanded = true;
+
+                    if(menu.behavior == 'collapsed' || menu.behavior == 'expanded')
+                      menu.isExpandable = true;
+
+
+                    if(!menu.menus){
+
+                      if(!menu.url && menu.code){
+                        menu.exactSelection = false;
+                        menu.url = '/conferences/' + meeting.code + '/' + menu.code;
+                      }
+                      if(menu.startDate || menu.endDate){
+                        menu.isHidden     = menu.startDate && new Date() < moment.tz(menu.startDate, meeting.timezone).toDate()
+                        menu.isHidden     = menu.isHidden || menu.endDate && new Date() > moment.tz(menu.endDate, meeting.timezone).toDate();                        
+                      }
+                      menu.parent = parentMenu;
+                    }
+                    else{
+
+                      menu.isParent = true;
+                      normalizeMenus(menu.menus, meeting, menu);
+                      menu.xsUrl = menu.menus[0].url;
+                    }
+                });
+
+            }
+
             function getFuture(){
               var query = {
                             EndDate:{ $gt: { $date: new Date()  } },
