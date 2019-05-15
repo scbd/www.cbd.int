@@ -121,8 +121,6 @@ define(['lodash', 'require', 'moment', 'angular', 'moment-timezone', 'filters/ls
             while(incr.isBefore(maxDate)) {
                 gridDates.push({ date  : incr.toDate(), start : (incr.diff(minDate, 'days') * 100 / days) | 0, type: "grid" });
                 incr = incr.add(1, gridInc).startOf(gridInc);
-
-                console.log(gridDates[gridDates.length-1])
             }
 
             _ctrl.gridDates = _.sortBy(gridDates, 'date');
