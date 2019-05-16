@@ -209,7 +209,7 @@
        <div ng-class="{ container: ($root.deviceSize!='xs' && $root.deviceSize!='sm') || $root.templateVersion=='cbd'}">
            <div class="menu-gradient" ng-class="{ row: ($root.deviceSize!='xs' && $root.deviceSize!='sm') || $root.templateVersion=='cbd'}">
                 
-                <div ng-if="!meeting.conference.menus">
+                <div ng-if="!meeting.conference.menus" style="width:100%">
                     <table class="meetingnav-table">
                         <tr>
                             <td  class="notselected meetingnav-button no-left-border"  ng-class="{selected:meetingNavCtrl.isSelected('/conferences/'+meeting.code, true)}">
