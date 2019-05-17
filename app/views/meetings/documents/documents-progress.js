@@ -103,15 +103,17 @@ define(['lodash', 'require', 'moment', 'angular', 'moment-timezone', 'filters/ls
             var stepDates = _(documents).map('workflow').map('steps').compact().flatten().map('dueDate').compact().union([cutOffDate.toISOString()]).filter(function(date) {
                 return moment(date).isAfter(ignoreBefore);
             }).sortBy().value();
+
+            var startDate = _(documents).map('workflow').map('steps').compact().flatten().map('startDate').compact().sortBy().first();
             
-            var minDate = moment(_.first(stepDates))               .startOf('week');
+            var minDate = moment.min(moment(_.first(stepDates)), moment(startDate)).startOf('week');
             var maxDate = moment(_.last (stepDates)).add(1,"weeks").startOf('week');
             var days    = maxDate.diff(minDate, 'days');
 
             // Compute grid |  |  |  |  |  |
 
             var gridDates = [
-                { date  : moment()  .toDate(), start : (moment()  .diff(minDate, 'days') * 100 / days) | 0, type: "today" },
+                { date  : moment()  .toDate(), start : (moment(TODAY).diff(minDate, 'days') * 100 / days) | 0, type: "today" },
                 { date  : cutOffDate.toDate(), start : (cutOffDate.diff(minDate, 'days') * 100 / days) | 0, type: "cutoff" }
             ];
 
@@ -136,7 +138,7 @@ define(['lodash', 'require', 'moment', 'angular', 'moment-timezone', 'filters/ls
                 for(var i in steps) {
 
                     var step = steps[i]
-                    var prev = steps[i-1] || { dueDate : moment(step.dueDate).subtract(1, 'months').toDate() };
+                    var prev = steps[i-1] || { dueDate : moment.min(moment(step.dueDate).subtract(1, 'months'), moment(step.startDate || TODAY)).toDate() };
 
                     step.dueStartDate = prev.dueDate;
 
