@@ -14,7 +14,7 @@ return ['$location','$scope','fb','$document','ngMeta', function ($location,$sco
 				fb.set('og:description', 'Contact information for Cristiana Pașca Palmer, Executive Secretary of the UN Biodiversity Convention. UN Assistant Secretary-General.');
 				fb.set('og:url',window.location.href);
 
-				fb.setImage('/app/images/es-pages/profile-pic.jpg');
+				fb.setImage('https://attachments.cbd.int/profile-pic.jpg');
 				fb.setOgType('profile');
 				fb.set('og:profile:first_name','Cristiana');
 				fb.set('og:profile:last_name','Pașca Palmer');
@@ -25,7 +25,7 @@ return ['$location','$scope','fb','$document','ngMeta', function ($location,$sco
 				ngMeta.setTag('twitter:creator','@CristianaPascaP');
 				ngMeta.setTag('twitter:title',$scope.$root.page.title);
 				ngMeta.setTag('twitter:description',$scope.$root.page.description);
-				ngMeta.setTag('twitter:image','/app/images/es-pages/profile-pic.jpg');
+				ngMeta.setTag('twitter:image','https://attachments.cbd.int/profile-pic.jpg');
 			});
     }];
 });
