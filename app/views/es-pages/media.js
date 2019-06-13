@@ -1,11 +1,12 @@
-define(['app','json!https://s3.amazonaws.com/cbddocumentspublic-imagebucket-15w2zyxk3prl8/es-pages/media.json','services/fb','directives/es-pages/header-nav','filters/title-case'], function(app,media) { 'use strict';
+define(['app','services/fb','directives/es-pages/header-nav','filters/title-case','services/google-sheet-service'], function(app) { 'use strict';
 
-return ['$location','$scope','fb','$document','ngMeta', function ($location,$scope,fb,$document,ngMeta) {
+return ['$scope','fb','$document','ngMeta','googleSheetService', function ($scope,fb,$document,ngMeta,googleSheetService) {
 
 			var _ctrl = this;
 			$scope.$root.page={};
-			_ctrl.media = media;
-
+			_ctrl.media = [];
+			getMedia()
+			
 			angular.element($document).ready(function() {
 
 				$scope.$root.page.title = "Mulitmedia collection of Cristiana Pașca Palmer.";
@@ -15,7 +16,7 @@ return ['$location','$scope','fb','$document','ngMeta', function ($location,$sco
 				fb.set('og:description', $scope.$root.page.description);
 				fb.set('og:url',window.location.href);
 
-				fb.setImage('/app/images/es-pages/es3.jpg');
+				fb.setImage('https://attachments.cbd.int/es3.jpg');
 				fb.setOgType('profile');
 				fb.set('og:profile:first_name','Cristiana');
 				fb.set('og:profile:last_name','Pașca Palmer');
@@ -26,7 +27,23 @@ return ['$location','$scope','fb','$document','ngMeta', function ($location,$sco
 				ngMeta.setTag('twitter:creator','@CristianaPascaP');
 				ngMeta.setTag('twitter:title',$scope.$root.page.title);
 				ngMeta.setTag('twitter:description',$scope.$root.page.description);
-				ngMeta.setTag('twitter:image','/app/images/es-pages/es3.jpg');
+				ngMeta.setTag('twitter:image','https://attachments.cbd.int/es3.jpg');
 			});
+
+			function getMedia() {
+				var url = 'https://spreadsheets.google.com/feeds/cells/1_RSS-SjMifBEfUetPfr6GX8eJ3M4GMYrTrg4pXFIKkg/5/public/values?alt=json'
+				return googleSheetService.get(url, 'media', 4)
+					.then(addDataToMedia)
+			}
+
+			function addDataToMedia(dataRows) {
+				_ctrl.media = _ctrl.media.concat(dataRows)
+				_ctrl.media=_ctrl.media.sort(function(a, b) {
+					a = new Date(a.startDate_dt);
+					b = new Date(b.startDate_dt);
+					return a>b ? -1 : a<b ? 1 : 0;
+				})
+				return _ctrl.media
+			}
     }];
 });

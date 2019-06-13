@@ -1,7 +1,7 @@
-define(['app','services/fb','directives/carousel', 'directives/es-pages/header-nav'], function() { 'use strict';
+define(['app','services/fb','directives/carousel', 'directives/es-pages/header-nav', 'services/google-sheet-service'], function() { 'use strict';
 
 
-return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($location,$scope,fb,$document,ngMeta,$q,$http) {
+return ['$location','$scope','fb','$document','ngMeta','googleSheetService', function ($location,$scope,fb,$document,ngMeta,googleSheetService) {
 
 			$scope.carousel=undefined;
 			query();
@@ -9,7 +9,7 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 			var _ctrl = this;
 			_ctrl.goTo = goTo;
 			$scope.$root.page={};
-
+			$scope.carousel = []
 			angular.element($document).ready(function() {
 
 				$scope.$root.page.title = "Cristiana Pașca Palmer, Executive Secretary of the UN Biodiversity Convention. UN Assistant Secretary-General.";
@@ -18,7 +18,7 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 				fb.set('og:description', $scope.$root.page.description);
 				fb.set('og:url',window.location.href);
 
-				fb.setImage('/app/images/es-pages/es5.jpg');
+				fb.setImage('https://attachments.cbd.int/es5.jpg');
 				fb.setOgType('profile');
 				fb.set('og:profile:first_name','Cristiana');
 				fb.set('og:profile:last_name','Pașca Palmer');
@@ -29,7 +29,7 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 				ngMeta.setTag('twitter:creator','@CristianaPascaP');
 				ngMeta.setTag('twitter:title',$scope.$root.page.title);
 				ngMeta.setTag('twitter:description',$scope.$root.page.description);
-				ngMeta.setTag('twitter:image','/app/images/es-pages/es5.jpg');
+				ngMeta.setTag('twitter:image','https://attachments.cbd.int/es5.jpg');
 
 			});
 
@@ -53,34 +53,15 @@ return ['$location','$scope','fb','$document','ngMeta','$q','$http', function ($
 				//
 				//=======================================================================
 				function query() {
+					var url = 'https://spreadsheets.google.com/feeds/cells/1_RSS-SjMifBEfUetPfr6GX8eJ3M4GMYrTrg4pXFIKkg/4/public/values?alt=json'
+					return googleSheetService.get(url, 'es-carousel', 4)
+						.then(saveToScope)
+				} // query
 
-						var queryParameters = {
-								'q': 'schema_s:event AND thematicArea_ss:3FEF79FF-9EA2-4E3A-BEC9-2991CCDD7F3A',
-								'sort': 'updatedDate_dt desc',
-								'fl': 'title_t,description_t,identifier_s,startDate_dt,cover_s',
-								'wt': 'json',
-								'start': 0,
-								'rows': 5,
-								'facet': true,
-								'facet.limit': 999999,
-								'facet.mincount' : 1
-						};
-						var pagePromise = $q.when($http.get('/api/v2013/index/select', {  params: queryParameters}))
-							.then(function (data) {
-									data=data.data;
-								for(var i in data.response.docs){
-									data.response.docs[i].description_t=extractFirstParagraph(data.response.docs[i].description_t);
-									data.response.docs[i].url_ss ='/event/'+data.response.docs[i].identifier_s
-									data.response.docs[i].visible = true;
-								}
-
-								$scope.carousel=data.response.docs;
-						}).catch(function(error) {
-								console.log('ERROR: ' + error);
-						});
-
-						return pagePromise;
-				}// query
+				function saveToScope(dataRows) {
+					$scope.carousel = $scope.carousel.concat(dataRows)
+					return $scope.carousel
+				}
 
     }];
 });

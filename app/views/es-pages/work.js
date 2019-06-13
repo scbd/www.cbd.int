@@ -1,4 +1,4 @@
-define(['app','json!https://s3.amazonaws.com/cbddocumentspublic-imagebucket-15w2zyxk3prl8/es-pages/statements.json','moment','directives/es-pages/header-nav','filters/moment','services/fb'], function(app,statements,moment) { 'use strict';
+define(['app','moment','directives/es-pages/header-nav','filters/moment','services/fb','services/google-sheet-service'], function(app,moment) { 'use strict';
 
 
 app.filter("byDate", function() {
@@ -17,7 +17,7 @@ app.filter("byDate", function() {
  };
 });
 
-return ['$location','$scope','$q','$http','fb','$document','ngMeta','user', function ($location,$scope,$q,$http,fb,$document,ngMeta,user) {
+return ['$location','$scope','$q','$http','fb','$document','ngMeta','user','googleSheetService', function ($location,$scope,$q,$http,fb,$document,ngMeta,user,googleSheetService) {
 
 			var _ctrl = this;
 			_ctrl.documents ={}
@@ -49,8 +49,11 @@ return ['$location','$scope','$q','$http','fb','$document','ngMeta','user', func
       }
 
 			$scope.$root.page={};
-			_ctrl.work = statements;
+			_ctrl.work = [];
             _ctrl.hasMonthChange = hasMonthChange;
+
+			getStatements()
+			getReports()
 
             angular.element($document).ready(function() {
 
@@ -60,7 +63,7 @@ return ['$location','$scope','$q','$http','fb','$document','ngMeta','user', func
 				fb.set('og:description', $scope.$root.page.description);
 				fb.set('og:url',window.location.href);
 
-				fb.setImage('/app/images/es-pages/es6.jpg');
+				fb.setImage('https://attachments.cbd.int/es6.jpg');
 				fb.setOgType('profile');
 				fb.set('og:profile:first_name','Cristiana');
 				fb.set('og:profile:last_name','Pașca Palmer');
@@ -71,9 +74,32 @@ return ['$location','$scope','$q','$http','fb','$document','ngMeta','user', func
                 ngMeta.setTag('twitter:creator','@CristianaPascaP');
 				ngMeta.setTag('twitter:title',$scope.$root.page.title);
 				ngMeta.setTag('twitter:description',$scope.$root.page.description);
-				ngMeta.setTag('twitter:image','/app/images/es-pages/es6.jpg');
+				ngMeta.setTag('twitter:image','https://attachments.cbd.int/es6.jpg');
 			});
 			getEvents();
+
+			function getStatements() {
+				var url = 'https://spreadsheets.google.com/feeds/cells/1_RSS-SjMifBEfUetPfr6GX8eJ3M4GMYrTrg4pXFIKkg/2/public/values?alt=json'
+				return googleSheetService.get(url, 'statement', 4)
+					.then(addDataToWork)
+			}
+	
+			function getReports() {
+				var url = 'https://spreadsheets.google.com/feeds/cells/1_RSS-SjMifBEfUetPfr6GX8eJ3M4GMYrTrg4pXFIKkg/3/public/values?alt=json'
+				return googleSheetService.get(url, 'report', 4)
+					.then(addDataToWork)
+			}
+	
+			function addDataToWork(dataRows) {
+				_ctrl.work = _ctrl.work.concat(dataRows)
+				_ctrl.work=_ctrl.work.sort(function(a, b) {
+					a = new Date(a.startDate_dt);
+					b = new Date(b.startDate_dt);
+					return a>b ? -1 : a<b ? 1 : 0;
+				})
+				return _ctrl.work
+			}
+
 			//============================================================
 			//
 			//============================================================
