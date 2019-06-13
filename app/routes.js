@@ -158,9 +158,13 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         .when('/work',      { templateUrl: 'views/es-pages/work.html',      resolveController: true, controllerAs: 'esWorkCtrl', resolve : { user : currentUser() }  })
         .when('/media',     { templateUrl: 'views/es-pages/media.html',     resolveController: true, controllerAs: 'esMediaCtrl' })
         .when('/contact',   { templateUrl: 'views/es-pages/contact.html',   resolveController: true, controllerAs: 'esContactCtrl'  })
+        
         .when('/video/:id',   { templateUrl: 'views/es-pages/youtube-video.html',resolveController: true, controllerAs: 'esVideoCtrl'  })
         .when('/event/:id',   { templateUrl: 'views/es-pages/event.html',resolveController: true, controllerAs: 'esEventCtrl', resolve : { user : currentUser() }  })
-        .when('/statement/:id',   { templateUrl: 'views/es-pages/statement.html',resolveController: true, controllerAs: 'esStatementCtrl'  })
+
+        .when('/statement/:id', { templateUrl: 'views/es-pages/statement.html',resolveController: true, controllerAs: 'esStatementCtrl' })
+        .when('/report/:id'   , { templateUrl: 'views/es-pages/report.html'   ,resolveController: true, controllerAs: 'esReportCtrl'    })
+
         .otherwise({redirectTo: '/404'});
   }
 
