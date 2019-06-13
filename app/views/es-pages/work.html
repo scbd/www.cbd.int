@@ -50,7 +50,7 @@
                 <h4  class="color-blue" style="border-bottom:1px solid #eee;">Filter by type</h4>
                     <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'event'" ng-false-value=""> event<br>
                     <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'statement'" ng-false-value=""> statement<br>
-                    <!-- <input type="checkbox"> news article<br> -->
+                    <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'report'" ng-false-value=""> report <br>
             </div>
             </div>
         </div>
@@ -130,6 +130,7 @@
                 <h4  class="color-blue" style="border-bottom:1px solid #eee;">Filter by type</h4>
                     <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'event'" ng-false-value=""> event <span class="badge ">{{esWorkCtrl.getTypeCount('event')}}</span><br>
                     <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'statement'" ng-false-value=""> statement <span class="badge ">{{esWorkCtrl.getTypeCount('statement')}}</span><br>
+                    <input type="checkbox" ng-model="esWorkCtrl.type" ng-true-value="'report'" ng-false-value=""> report <span class="badge ">{{esWorkCtrl.getTypeCount('report')}}</span><br>
                     <!-- <input type="checkbox"> news article<br> -->
             </div>
             <div>
