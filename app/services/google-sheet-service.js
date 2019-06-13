@@ -29,14 +29,14 @@ function cleanGoogleSheet(entry, schema, numProps) {
     var propNamesRow = entry.splice(0, numProps)
     var propNames = []
 
-    for (let j = 0; j < numProps; j++)
+    for (var j = 0; j < numProps; j++)
         propNames[j] = propNamesRow[j].content.$t
 
-    for (let i = 0; i < entry.length; i += 4) {
+    for (var i = 0; i < entry.length; i += 4) {
 
         var row = { _id: id, schema_s: schema }
 
-        for (let j = 0; j < numProps; j++)
+        for (var j = 0; j < numProps; j++)
             row[propNames[j]] = entry[i + j].content.$t
 
         id++
