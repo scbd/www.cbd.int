@@ -32,7 +32,7 @@ function cleanGoogleSheet(entry, schema, numProps) {
     for (var j = 0; j < numProps; j++)
         propNames[j] = propNamesRow[j].content.$t
 
-    for (var i = 0; i < entry.length; i += 4) {
+    for (var i = 0; i < entry.length; i += numProps) {
 
         var row = { _id: id, schema_s: schema }
 
