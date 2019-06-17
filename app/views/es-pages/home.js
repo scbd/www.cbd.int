@@ -54,11 +54,12 @@ return ['$location','$scope','fb','$document','ngMeta','googleSheetService', fun
 				//=======================================================================
 				function query() {
 					var url = 'https://spreadsheets.google.com/feeds/cells/1_RSS-SjMifBEfUetPfr6GX8eJ3M4GMYrTrg4pXFIKkg/4/public/values?alt=json'
-					return googleSheetService.get(url, 'es-carousel', 4)
+					return googleSheetService.get(url, 'es-carousel', 5)
 						.then(saveToScope)
 				} // query
 
 				function saveToScope(dataRows) {
+					console.log(dataRows)
 					$scope.carousel = $scope.carousel.concat(dataRows)
 					return $scope.carousel
 				}
