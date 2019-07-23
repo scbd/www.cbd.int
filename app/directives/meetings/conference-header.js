@@ -56,16 +56,17 @@
                             return;
                         var isSelected = false; 
                         var selectedMenu;
-                        for(var i=0; i<$scope.meeting.conference.events.length; i++){
+                        var menus = $scope.meeting.conference.menus || $scope.meeting.conference.events;
+                        for(var i=0; i<menus.length; i++){
 
-                            var event = $scope.meeting.conference.events[i];
+                            var event = menus[i];
 
                             isSelected = code == event.code && $scope.meetingNavCtrl.isSelected('/conferences/'+$scope.meeting.code+'/'+event.code, true)
                             if(isSelected){
                                 break;
                             }
 
-                            for(var j=0; j<event.menus.length; j++){                                
+                            for(var j=0; j<(event.menus||[]).length; j++){                                
                                 isSelected = code == event.code && $scope.meetingNavCtrl.isSelected('/conferences/'+$scope.meeting.code+'/'+event.menus[j].code, true)
                                 if(isSelected){
                                     selectedMenu = event.menus[j];

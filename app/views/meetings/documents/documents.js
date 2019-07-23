@@ -1,5 +1,5 @@
 define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
-        'css!./meeting-documents.css', 'angular-cache', 'css!./agenda.css'
+        'css!./meeting-documents.css', 'angular-cache', 'css!./agenda.css', 'filters/moment'
 ], function(_, ng) {
     //'css!./agenda.css' // moved to template
     var currentUser;
