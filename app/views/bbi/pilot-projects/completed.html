@@ -34,11 +34,11 @@
         </h3>
         
         <div ng-repeat="round in completedCtrl.rounds track by $index">
-            <h3 ng-if="1==$index">First Round (Pilot Projects)</h3>
-            <h3 ng-if="2==$index">Second Round</h3>
-            <h3 ng-if="3==$index">Third Round</h3>
-            <h3 ng-if="4==$index">Fourth Round</h3>
-            <h3 ng-if="5==$index">Fifth Round</h3>
+            <h3 ng-if="0==$index">First Round (Pilot Projects)</h3>
+            <h3 ng-if="1==$index">Second Round</h3>
+            <h3 ng-if="2==$index">Third Round</h3>
+            <h3 ng-if="3==$index">Fourth Round</h3>
+            <h3 ng-if="4==$index">Fifth Round</h3>
             <bbi-project-row project="prt" ng-repeat="prt in round track by $index"></bbi-project-row>
         </div>
         <br>
