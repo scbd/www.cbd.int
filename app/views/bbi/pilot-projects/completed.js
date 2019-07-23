@@ -61,7 +61,7 @@ function controller ($scope,$http) {
 
 		for (var i = 0; i < _ctrl.projects.length; i++) {
 			var project = _ctrl.projects[i]
-			var round = project.round
+			var round = project.round - 1
 			if(!_ctrl.rounds[round])
 				_ctrl.rounds[round]=[]
 			_ctrl.rounds[round].push(project)
