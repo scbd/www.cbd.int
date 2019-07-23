@@ -59,7 +59,6 @@ return ['$location','$scope','fb','$document','ngMeta','googleSheetService', fun
 				} // query
 
 				function saveToScope(dataRows) {
-					console.log(dataRows)
 					$scope.carousel = $scope.carousel.concat(dataRows)
 					return $scope.carousel
 				}
