@@ -1,45 +1,64 @@
-define(['app', 'data/bbi/links', 'directives/bbi/bbi-project-row','directives/bbi/menu'], function(app,links) { 'use strict';
+define(['data/bbi/links', 'directives/bbi/bbi-project-row', 'directives/bbi/menu'], loadGlobalModules)
 
-return ['$location','$scope','$http', function ($location,$scope,$http) {
+function loadGlobalModules(links) { 
+	this.links = links
+	return ['$scope','$http', controller.bind(this)]
+}
 
-			var _ctrl = this;
-			_ctrl.links=links.links;
-      _ctrl.projects=[];
-			_ctrl.goTo = goTo;
-			$scope.$root.page={};
-			$scope.$root.page.title = "Selected Projects: Bio Bridge Initiative";
+function controller($scope,$http) {
 
-				//============================================================
-				//
-				//============================================================
-				function goTo (url) {
-								$location.path(url);
-				}
-        function getProjects () {
-              return _ctrl.projects
-        }
-        $scope.getProjects = getProjects;
+    var _ctrl = this
+    _ctrl.links=links.links
+    _ctrl.projects=[]
 
-        //=======================================================================
-        //
-        //=======================================================================
-        function query() {
+    $scope.$root.page={}
+    $scope.$root.page.title = "Selected Projects: Bio Bridge Initiative";
 
-            _ctrl.loading         = true;
+    getRounds()
+      .then(getLatestRound)
+      .then(query)
 
-           return $http.get('/api/v2018/projects')
-              .then(function (data) {
-                data=data.data;
-                _ctrl.projects=data;
-                _ctrl.count = data.length;
-            }).catch(function(error) {
-                console.log('ERROR: ' + error);
-            })
-            .finally(function(){
-              _ctrl.loading = false;
-            });
+    function getLatestRound (res) {
+      
+      _ctrl.round = 1
+      _ctrl.projects = res.data
+  
+      for (var i = 0; i < _ctrl.projects.length; i++) 
+        if(_ctrl.projects[i].round > _ctrl.round) 
+          _ctrl.round=_ctrl.projects[i].round 
+        
+      return _ctrl.round
+    }
 
-        }// query
-        query()
-    }];
-});
+    function getRounds () {
+      _ctrl.loading  = true
+      var params     =  {
+                          s:{ 'round':1 },
+                          f:{ 'round':1 }
+                        }
+
+      return   $http.get('/api/v2018/projects', { params : params })        
+    }
+
+    function query () {
+      var params  =   {
+                        s:{ round:1 },
+                        f:{ title:1, description:1 , proponent:1, collaborators:1, country:1},
+                        q:{ round:_ctrl.round }
+                      }
+
+      return $http.get('/api/v2018/projects', { params : params })
+                  .then(function (res) {
+          
+                    _ctrl.projects = res.data
+                    _ctrl.count    = res.data.length
+
+                  }).catch(function(error) {
+                      console.log('ERROR: ' + error);
+                  })
+                  .finally(function(){
+                    _ctrl.loading = false;
+                  })
+
+    }
+}
