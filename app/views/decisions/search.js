@@ -111,9 +111,8 @@ function(ng, _, actorList, statusesList, sessionList){
                         if(key != 'elementType')
                             prefix = 'inheritance.';
 
-                        inQuery = {
-                            [prefix+key] : { '$in' : codes } 
-                        }
+                        inQuery = {}
+                        inQuery[prefix+key] = { '$in' : codes } 
                     }
                 }
                 if(inQuery)
