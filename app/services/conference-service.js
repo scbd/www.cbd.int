@@ -15,6 +15,8 @@ define(['app', 'lodash', 'moment-timezone', 'angular-cache'], function (app, _, 
             }
             function getActiveConference(code){
 
+                if(meeting && code && meeting.code != code)
+                  meeting = null;
                 if(meeting){
                     return $q.when(meeting);
                 }
@@ -54,6 +56,12 @@ define(['app', 'lodash', 'moment-timezone', 'angular-cache'], function (app, _, 
                                     });
 
             }
+
+            function getConferences(query, fields, sort){
+              var sort = sort || { StartDate: 1};
+
+              return $http.get('/api/v2016/conferences', {params : { q : query, s: sort, f: fields, cache: true }, cache:httpCache});
+          }
 
             function normalizeMenus(menus, meeting){
 
@@ -141,7 +149,8 @@ define(['app', 'lodash', 'moment-timezone', 'angular-cache'], function (app, _, 
                 getMeetings             : getMeetings,
                 getFuture               : getFuture,
                 getConference           : getConference,
-                getActiveConference     : getActiveConference
+                getActiveConference     : getActiveConference,
+                getConferences          : getConferences
             }
 
     }]);
