@@ -27,83 +27,23 @@
     <div class="col-xs-12" >
         <h1>Completed Projects</h1>
 
-        <h3>First Round (Pilot Projects)</h3>
-
-        <legend >Development of policies for tourist concessions within Southern African national parks systems</legend>
-        <div class="row">
-            <div class="col-xs-3 text-left">
-                <strong> Proponent</strong>
-            </div>
-            <div class="col-xs-9">
-                <strong>Description</strong>
-            </div>
+        <h3>
+            <span ng-if="completedCtrl.loading" style="margin:auto">
+                <i class="fa fa-spin fa-spinner " /> Loading...
+            </span>
+        </h3>
+        
+        <div ng-repeat="round in completedCtrl.rounds track by $index">
+            <h3 ng-if="1==$index">First Round (Pilot Projects)</h3>
+            <h3 ng-if="2==$index">Second Round</h3>
+            <h3 ng-if="3==$index">Third Round</h3>
+            <h3 ng-if="4==$index">Fourth Round</h3>
+            <h3 ng-if="5==$index">Fifth Round</h3>
+            <bbi-project-row project="prt" ng-repeat="prt in round track by $index"></bbi-project-row>
         </div>
-        <div class="row">
-            <div class="col-xs-3">
-                IUCN TAPAS Group.
-            </div>
-            <div class="col-xs-9">
-                IUCN's Tourism and Parks Specialist Group (TAPAS) will facilitate the cooperation between protected area authorities in Botswana, Namibia and South Africa which have efficient tourism concession systems and counterpart agencies in Lesotho, Mozambique
-                and Tanzania which are at early stages of private concessioning/partnerships in protected areas and need support. The project will enable the latter countries to undertake feasibility studies and pilot cases and develop their policies
-                and systems for tourism concessions in protected areas.
-            </div>
-        </div>
-        <legend>Transfer of DNA bar-coding analysis technology for biodiversity monitoring</legend>
-        <div class="row">
-            <div class="col-xs-3">
-                <strong> Proponent</strong>
-            </div>
-            <div class="col-xs-9">
-                <strong>Description</strong>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-3">
-                National Institute of Biological Resources of Korea (NIBR
-            </div>
-            <div class="col-xs-9">
-                NIBR will facilitate transfer of the DNA bar-coding analysis technology for biodiversity monitoring to countries in demand with technical support from Genome Analysis Center of National Instrumentation Center for Environmental Management (NICEM) at Seoul
-                National University. A technical workshop on DNA barcoding analysis and a roundtable discussion will be held to identify obstacles and future needs in the application of this technology.
-            </div>
-        </div>
-        <legend>Sustainable management of ASEAN Heritage Parks through valuing and improving eco-tourism</legend>
-        <div class="row">
-            <div class="col-xs-3">
-                <strong> Proponent</strong>
-            </div>
-            <div class="col-xs-9">
-                <strong>Description</strong>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-3">
-                Korea Environment Institute (KEI)
-            </div>
-            <div class="col-xs-9">
-                KEI in collaboration with ASEAN Center for Biodiversity (ACB) and Korea National Park Service (KNPS), will apply an innovative modeling approach using social big-data to examine the current status of management, and support the development of related
-                management strategies encouraging eco-tourism that enhances cultural services (e.g. recreation, education) focusing on eco-tourism that safeguards biodiversity for the countries and region where there are only limited field data.
-            </div>
-        </div>
-        <legend>Cooperation for the development of Ecosystem - Natural Capital Accounts in Francophone African Developing Countries</legend>
-        <div class="row">
-            <div class="col-xs-3">
-                <strong> Proponent</strong>
-            </div>
-            <div class="col-xs-9">
-                <strong>Description</strong>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-3">
-                Centre de coopération internationale en recherche agronomique pour le développement (CIRAD) and Université du Québec à Montréal (UQAM)
-            </div>
-            <div class="col-xs-9">
-                After their training in ecosystem accounting at a summer school to be held in August at UQAM, representatives of a few francophone African countries (Burkina-Faso, Guinea-Conakry, Morocco, Niger, Senegal and Tunisia) will convene two workshops to develop
-                a cooperation project on the development of economic valuation tools for biodiversity and national ecosystem-based accounting systems.
-            </div>
-        </div>
+        <br>
     </div>
-
+</div>
 
 </div>
 

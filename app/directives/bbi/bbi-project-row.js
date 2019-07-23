@@ -12,7 +12,7 @@ define(['app','text!./bbi-project-row.html','filters/term' ], function(app,templ
             },
             link: function ($scope) {
               function formatCollaborator(col){
-                if(col.length==2) return formatCountry(col)
+                if(col && col.length==2) return formatCountry(col)
                 else return col
               }
               $scope.formatCollaborator = formatCollaborator;
