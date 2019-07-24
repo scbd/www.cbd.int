@@ -122,9 +122,11 @@ function(ng, _, actorList, statusesList, sessionList){
                 c   : 1
             }
 
-            if($scope.pageSort)
-                qs.s = {[$scope.pageSort] : 1};
-
+            if($scope.pageSort){
+                qs.s = {};
+                qs.s[$scope.pageSort] = 1;
+            }
+            
             if(query.$and.length == 0)
                 query.$and = undefined;
 
