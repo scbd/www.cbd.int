@@ -47,7 +47,7 @@ app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiUrl, sec
 
 app.get('/robots.txt', function (req, res) {
 
-    var isValidHost = ['www.cbd.int', 'website-www'].includes(req.get('Host'));
+    var isValidHost = ['www.cbd.int'].includes(req.get('Host'));
 
     var text = isValidHost ? '' : '/';
 
@@ -66,7 +66,12 @@ app.get('/conferences/post2020/*',   function(req, res) { res.render('template-p
 
 app.use(require('./libs/prerender')); // set env PRERENDER_SERVICE_URL
 
-app.get('/*',            function(req, res) { res.render('template', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
+app.get('/*',            function(req, res) {
+    let template = 'template'
+    if(req.headers['x-wpt']=='phonenix')
+        template =  'template-phoenix';
+    res.render(template, { gitVersion: gitVersion, cdnUrl: cdnUrl }); 
+});
 app.all('/*',            function(req, res) { res.status(404).send(); } );
 
 // START HTTP SERVER
