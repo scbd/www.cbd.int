@@ -47,12 +47,12 @@ app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiUrl, sec
 
 app.get('/robots.txt', function (req, res) {
 
-    var isValidHost = ['www.cbd.int'].includes(req.get('Host'));
+    var isValidHost = ['www.cbd.int'].includes(req.headers['hosts']);
 
-    var text = isValidHost ? '' : '/';
+    var text = isValidHost ? 'Allow: /' : 'Disallow: /';
 
     res.contentType('text/plain');
-    res.end('User-agent: *\nDisallow: ' + text);
+    res.end('User-agent: *\n' + text);
 });
 
 app.get('/reports/map*', function(req, res) { res.cookie('VERSION', process.env.COMMIT||''); res.sendFile(__dirname + '/app/views/reports/template.html', { maxAge : 5*60*1000 }); });
