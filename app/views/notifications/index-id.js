@@ -98,8 +98,8 @@ define(['lodash', 'util/solr', 'app', 'services/article-service','filters/lstrin
                 cache   : true,
                 params  : {
                     q   : "schema_s: submission AND notifications_ss: "+solr.escape(id),
-                    fl  : "_id:id, government:government_s, title_t, submittedDate:submittedDate_dt, referenceRecord_info_ss, url_ss, files_ss",
-                    sort: "submittedDate_dt asc",
+                    fl  : "_id:id, government:government_s, title_t, submittedDate:date_dt, referenceRecord_info_ss, url_ss, files_ss",
+                    sort: "date_dt asc, government_s asc, title_s asc,",
                     rows: 500
                 }
             };
