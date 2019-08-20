@@ -43,7 +43,7 @@
 
     </style>
 
-    <div class="row">
+    <div>
 
         <div class="col-xs-12" ng-if="scheduleCtrl.frames.length==0">
             <h3>{{::scheduleCtrl.now|moment:'tz':scheduleCtrl.event.timezone|moment:'calendar':(undefined|moment):scheduleCtrl.CALENDAR}}</h3>
@@ -61,7 +61,7 @@
                 <p class="alert alert-info mobile-app-hidden" ng-if="(frame.reservations | filter:{ type : { _id: '570fd0a52e3fa5cfa61d90ee' } }).length">
                     <a href='/side-events'  style="color:inherit">For a detailed and complete list of side-events, please click here to visit the CBD Side-Events page</a>.
                 </p>
-                <table class="table table-striped">
+                <table class="table table-striped table-bordered">
                     <tr class="schedule-item {{r.message.level}}" ng-repeat="r in frame.reservations | filter:search">
                         <td>
                             <table class="table">
@@ -74,7 +74,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="schedule-item-type pull-right">
+                                        <div class="schedule-item-type pull-right" style="text-align:center">
 
                                             <span ng-switch="r.type._id">
 
@@ -105,6 +105,9 @@
                                                         <em>#{{r.sideEvent.id}}</em>
                                                     </a>
                                             </div>
+                                            <div ng-if="r.room.videoUrl">
+                                                <a title="video stream" target="_blank" ng-href="{{r.room.videoUrl}}"><i  class="fa fa-video-camera"></i></a>
+                                            </div>
                                             
                                         </div>
 
@@ -121,7 +124,7 @@
 
                                         <div ng-if="r.agenda.visible && r.agenda.items.length">
                                             <span ng-repeat="item in r.agenda.items">
-                                                <span class="label agenda {{item.prefix}}" title="{{item.title}}" style="width:51px">{{item.prefix}} {{item.item}}</span>
+                                                <span class="badge label agenda {{item.prefix}}" title="{{item.title}}" style="width:51px">{{item.prefix}} {{item.item}}</span>
                                                 <span ng-if="(item.title+item.text) != (r.agenda.items[$index+1].title+r.agenda.items[$index+1].text)">
                                                     {{item.title}} <span ng-if="::item.text"> - <b>{{item.text}}</b></span> <br>
                                                 </span>

@@ -1972,15 +1972,15 @@ pre {
 	padding: .3rem;
 }
 
-.table-bordered, .table-bordered td, .table-bordered th {
+.table-bordered, .table-bordered > td, .table-bordered > th {
 	border: 1px solid #dee2e6;
 }
 
-	.table-bordered thead td, .table-bordered thead th {
+	.table-bordered thead > td, .table-bordered thead > th {
 		border-bottom-width: 2px;
 	}
 
-.table-borderless tbody + tbody, .table-borderless td, .table-borderless th, .table-borderless thead th {
+.table-borderless tbody + tbody, .table-borderless > td, .table-borderless > th, .table-borderless thead > th {
 	border: 0;
 }
 
