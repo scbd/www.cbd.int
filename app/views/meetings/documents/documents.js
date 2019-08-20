@@ -59,7 +59,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                     isMontreal : /montr.al.*canada/i.test((res.data.venueText||{}).en||'')
                 });
 
-                meeting.insession=true;
+                // meeting.insession=true;
 
                 _ctrl.noTabs  = meeting.EVT_STY_CD=='BAR';
                 _ctrl.meeting = meeting;
