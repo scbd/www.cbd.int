@@ -9,17 +9,17 @@
     border-top: none;
 }
 
-.label.doc-status             { display: inline-block; width:40px;}
+.label.doc-status             { display: inline-block; width:45px;}
 .label.doc-status.plain       { border: dotted 1px #777;    color: #777;    background: none}
 .label.doc-status.pre-session { border: dotted 1px #777;    color: #777;    background: none}
 .label.doc-status.draft       { border: solid  1px #777;    color: #777;    background: none}
 .label.doc-status.l           { border: solid  1px #5bc0de; color: #5bc0de; background: none}
 .label.doc-status.crp         { border: solid  1px #f0ad4e; color: #f0ad4e; background: none}
 
-.label.agenda      { background: #777; display: inline-block; min-width: 45px;    }
-.label.agenda.CBD  { background: #009B48; }
-.label.agenda.CP   { background: #A05800; }
-.label.agenda.NP   { background: #0086B7; }
+.label.agenda      { color:#fff; background: #777; display: inline-block; min-width: 55px;    }
+.label.agenda.CBD  { color:#fff; background: #009B48; }
+.label.agenda.CP   { color:#fff; background: #A05800; }
+.label.agenda.NP   { color:#fff; background: #0086B7; }
 
 .title.agenda      {     }
 .handle  { cursor: all-scroll }
@@ -67,4 +67,11 @@ body.phoenix .printsmart .help-block {
 }
 body.phoenix .printsmart .close {
     font-size: 48px;
+}
+
+body.phoenix .meeting-agenda{
+    position:relative;
+}
+body.phoenix .meeting-agenda .nav-item {
+    text-transform: unset;
 }

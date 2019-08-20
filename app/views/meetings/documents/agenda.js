@@ -19,7 +19,8 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         { code: 'evening',   end : '24:00'}
     ];
 
-	return ["$scope", "$route", "$http", '$q', '$interval', 'conferenceService', function ($scope, $route, $http, $q, $interval, conferenceService) {
+	return ["$scope", "$route", "$http", '$q', '$interval', 'conferenceService', '$location', '$timeout',
+     function ($scope, $route, $http, $q, $interval, conferenceService, $location, $timeout) {
 
         var eventId;
         var streamId;
@@ -33,6 +34,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         _ctrl.selectTab = selectTab;
         _ctrl.hasTab    = hasTab;
         _ctrl.resolveLiteral = function(value) { return function() { return value; }; };
+        _ctrl.scheduleDateChanged = scheduleDateChanged;
 
         $q.when(conferenceService.getActiveConference())
         .then(function(meeting){
@@ -64,9 +66,9 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         //
         //==============================
         function updateTime() {
-            if(_ctrl.event)
-                _ctrl.now = moment.tz($route.current.params.datetime || new Date(), _ctrl.event.timezone).toDate();
-
+            if(_ctrl.event){                
+                _ctrl.now = moment.tz($route.current.params.datetime || new Date() , _ctrl.event.timezone).toDate();
+            }
             return _ctrl.now;
         }
 
@@ -86,7 +88,8 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             var reservations, now;
             var event = conferenceService.getConference(eventId).then(function(conf) {
 
-                _ctrl.event = event = conf;
+                _ctrl.event = event = conf; 
+                processScheduleDates();               
 
             }).then(function(){
 
@@ -98,7 +101,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
 
                 if(reservations.length)
                     return reservations;
-
+                
                 //Lookup for first reservation
                 var query  = { 'agenda.items': { $exists: true, $ne: [] }, 'meta.status': { $ne : 'deleted' } };
 
@@ -110,8 +113,19 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                     return reservations;
                 });
 
+            }).then(function(res){ //load rooms for reservations
+                
+                return $http.get('/api/v2016/venue-rooms', { cache : true, params: { q: { venue : _ctrl.event.venueId },        f: { title: 1, location: 1, videoUrl:1 }, cache:true } })
+                    .then(function(roomsResult){
+                        
+                        var rooms = _.reduce(roomsResult.data, function(ret, r){ ret[r._id] = r; return ret; }, {});
+                        _.each(res, function(r){
+                            r.room = rooms[(r.location||{}).room];
+                        });
+                        return res;
+                    })
             }).then(function(res){
-
+                
                 reservations = res;
 
                 prepopulateTabs(reservations);
@@ -232,7 +246,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
 
                 selectTab(_.findWhere(_ctrl.types, { _id: _ctrl.currentTab}));
 
-            }).catch(console.error).finally(function() { _ctrl.loaded=true; });
+            }).catch(console.error).finally(function() { _ctrl.loaded=true;});
         }
 
         //==============================
@@ -276,7 +290,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             var start = moment(now).startOf('minute').toDate(); // start of minute to avois cache busting
             var end   = moment(now).tz(_ctrl.event.timezone).startOf('day').add(2, 'days').toDate(); // to tomorrow
 
-            var fields = { start : 1, end : 1, agenda :1, type: 1, title: 1 };
+            var fields = { start : 1, end : 1, agenda :1, type: 1, title: 1, video:1, videoUrl:1,location: 1 };
             var sort   = { start : 1, end : 1 };
             var query  = {
                 'agenda.items': { $exists: true, $ne: [] },
@@ -340,12 +354,73 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             var affixReady = $scope.$watch(function() {
 
                 var psc = ng.element('#print-smart-checkout');
-
+                //TODO fix affix issue
                 if(psc.length) {
-                    psc.affix({ offset: { top:psc.offset().top - 10 } });
+                    // psc.affix({ offset: { top:psc.offset().top - 10 } });
                     affixReady();
                 }
             });
+        }
+
+        function processScheduleDates(){
+            var schedule = _ctrl.event.schedule;
+            if(!schedule.start)
+                return;
+
+            var start = moment.tz(schedule.start, _ctrl.event.timezone);
+            var end;
+            var now = moment.tz(new Date(), _ctrl.event.timezone);
+
+            if(schedule.end)
+               end = moment.tz(schedule.end, _ctrl.event.timezone);
+            else
+                end = moment.tz(schedule.start, _ctrl.event.timezone).add(30, 'd')
+
+
+            if($route.current.params.datetime)
+                _ctrl.scheduleDate =  moment.tz($route.current.params.datetime, _ctrl.event.timezone).format('YYYY-MM-DD');
+            else if(now > end){
+                _ctrl.scheduleDate =  moment.tz(end, _ctrl.event.timezone).format('YYYY-MM-DD');
+                 //update querystring so that schedule directive can load appropriate date/ this if for plain shedule url where the date 
+                 //is not specidied the default to end date
+                 $location.search({datetime:moment.tz(end, _ctrl.event.timezone).format('YYYY-MM-DD')});
+            }
+            if(end > now){
+                end = now;
+            }
+
+            var difference = end.diff(start, 'days')+1;
+            var dates = []
+            for(var i=0; i < difference; i++){
+                var date = moment.tz(schedule.start, _ctrl.event.timezone).add(i, 'd');
+                var dateOption = {
+                    value : date.format('YYYY-MM-DD'),
+                    text : date.format('DD MMM YYYY')
+                }
+                dates.push(dateOption)
+            }
+
+            if(end == now){
+                var date = moment.tz(new Date(), _ctrl.event.timezone).add(i, 'd');
+                var dateOption = {
+                    value : '',
+                    text : 'Now'
+                }
+                dates.push(dateOption)
+            }
+
+            _ctrl.scheduleDates = dates;
+        };
+
+        function scheduleDateChanged(){ 
+            var tab = _ctrl.currentTab;     
+            _ctrl.types[0].loaded = false;
+            _ctrl.currentTab = undefined;
+
+            $location.search({datetime:_ctrl.scheduleDate||undefined});
+            
+            $timeout(function(){load();_ctrl.currentTab = tab;}, 100)
+
         }
 	}];
 });
