@@ -72,6 +72,6 @@ body.phoenix .printsmart .close {
 body.phoenix .meeting-agenda{
     position:relative;
 }
-body.phoenix .meeting-agenda .nav-item {
+body.phoenix .meeting-agenda .nav-item, body.phoenix .meeting-documents .nav-item {
     text-transform: unset;
 }

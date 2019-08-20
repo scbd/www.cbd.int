@@ -34,7 +34,7 @@
 
         <span class="mobile-app-hidden hidden-print btn-group" ng-if="::documentsCtrl.meeting.links.length || documentsCtrl.meeting.EVT_WEB || documentsCtrl.meeting.EVT_INFO_PART_URL || documentsCtrl.meeting.isMontreal || documentsCtrl.meeting.EVT_REG_NOW_YN" class="btn-group">
           <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Info links <span class="caret"></span>
+            Info links
           </button>
           <ul class="dropdown-menu">
             <li class="dropdown-item" ng-if="::documentsCtrl.meeting.EVT_WEB"><a ng-href="{{::documentsCtrl.meeting.EVT_WEB}}" target="_blank">Official Web Site</a></li>
@@ -48,7 +48,7 @@
         <!-- Sort/Display -->
         <span ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length" class="hidden-print btn-group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                Sort By <span class="caret"></span>
+                Sort By
             </button>
             <ul class="dropdown-menu">
                 <li class="dropdown-item"><a ng-click="documentsCtrl.sort='agenda'" href="#">Sort and group by agenda items</a></li>
@@ -66,9 +66,11 @@
     <!-- Nav tabs -->
 
     <style>
+        .meeting-documents .nav-tabs> .nav-item  {  margin-top:30px }
         .meeting-documents .nav-tabs>li                  > div.in-session-label { display: none }
         .meeting-documents .nav-tabs>li.in-session.first > div.in-session-label { display: block }
-        .meeting-documents .nav-tabs>li.in-session                { padding-left:4px; }
+        .meeting-documents .nav-tabs>li.in-session.first          { margin-top:unset!important;padding-top:15px}
+        .meeting-documents .nav-tabs>li.in-session                { padding-left:4px; background:#eee;padding-right:4px;padding-top:5px;margin-top:25px }
         .meeting-documents .nav-tabs>li.in-session       >div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0   4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
         .meeting-documents .nav-tabs>li.in-session.first >div.bg  { position:absolute;top:-21px;left:0px; right:-2px;height:62px;background-color:#eee;border-radius: 4px 4px 0 0;border-top:1px solid #ddd;border-left:1px  solid #ddd;border-right:1px solid #ddd;}
         .meeting-documents .nav-tabs>li.in-session.last  >div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0   4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
@@ -77,36 +79,35 @@
     <p ng-if="!documentsCtrl.error && documentsCtrl.loaded && !documentsCtrl.tabs.length">
         No documents have yet been posted.
     </p>
-
-    <ul ng-if="!documentsCtrl.noTabs" class="nav nav-tabs nowrap hidden-print doc-tabs" role="tablist">
-        <li code="{{type.code}}"
-            ng-repeat="type in documentsCtrl.tabs|limitTo:documentsCtrl.maxTabCount"  
-            ng-class="{'active': documentsCtrl.currentTab==type.code, 'in-session': type.insession, 'first': type.insessionFirst, 'last': type.insessionLast }" >
-            
-            <div class="bg"></div>
-            <div class="in-session-label" style="position:absolute;top:-18px;left:0px;right:2px;height:15px;font-size:10px;font-weight:bold;color:#444">&nbsp;&nbsp;&nbsp;IN-SESSION</div>
-            <a href="#" ng-click="documentsCtrl.switchTab(type)" role="tab" data-toggle="tab">
-                {{::type.title}} ({{type.length}})
-            </a>
-        </li>
-        <li class="dropdown-toggle" ng-class="{active:!!documentsCtrl.currentExtraTab}" ng-if="(documentsCtrl.tabs|limitTo:999:documentsCtrl.maxTabCount).length">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-                <span>{{documentsCtrl.currentExtraTab||'More'}}</span>
-                <span class="caret">
-            </a>
-            <ul class="dropdown-menu">
-                <li ng-repeat="type in documentsCtrl.tabs|limitTo:999:documentsCtrl.maxTabCount" code="{{type.code}}">
-                    <a href="#" ng-click="documentsCtrl.switchTab(type, true)">
-                        {{::type.title}} ({{type.length}})
-                     </a>
-                </li>
-            </ul>
-        </li>
-        <li ng-hide="documentsCtrl.loaded" ><a><h3  style="color: #777;margin: 0px"><i class="fa fa-circle-o-notch fa-spin"></i></h3></a></li>
-    </ul>
+    <nav>
+        <ul ng-if="!documentsCtrl.noTabs" class="nav nav-tabs nowrap hidden-print doc-tabs" role="tablist">
+            <li code="{{type.code}}" class="nav-item" 
+                ng-repeat="type in documentsCtrl.tabs|limitTo:documentsCtrl.maxTabCount"  
+                ng-class="{'active': documentsCtrl.currentTab==type.code, 'in-session': type.insession, 'first': type.insessionFirst, 'last': type.insessionLast }" >
+                
+                <div class="in-session-label" style="top:-18px;left:0px;right:2px;height:15px;font-size:10px;font-weight:bold;color:#444">&nbsp;&nbsp;&nbsp;IN-SESSION</div>
+                <a class="nav-link" href="#" ng-click="documentsCtrl.switchTab(type)" role="tab" data-toggle="tab" ng-class="{'active': documentsCtrl.currentTab==type.code}">
+                    {{::type.title}} ({{type.length}})
+                </a>
+            </li>
+            <li class="nav-item"  ng-class="{active:!!documentsCtrl.currentExtraTab}" ng-if="(documentsCtrl.tabs|limitTo:999:documentsCtrl.maxTabCount).length">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" ng-class="{'active': !!documentsCtrl.currentExtraTab}">
+                    <span>{{documentsCtrl.currentExtraTab||'More'}}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="type in documentsCtrl.tabs|limitTo:999:documentsCtrl.maxTabCount" code="{{type.code}}">
+                        <a href="#" ng-click="documentsCtrl.switchTab(type, true)">
+                            {{::type.title}} ({{type.length}})
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li ng-hide="documentsCtrl.loaded" ><a><h3  style="color: #777;margin: 0px"><i class="fa fa-circle-o-notch fa-spin"></i></h3></a></li>
+        </ul>
+    </nav>
 
     <!-- Tab panes -->
-    <div class="tab-content">
+    <div class="tab-content" style="padding-top:5px">
 
         <div ng-repeat="type in documentsCtrl.tabs track by type.code" ng-class="{ active: (documentsCtrl.currentTab==type.code || documentsCtrl.noTabs) }" role="tabpanel" class="tab-pane" id="{{::type.code}}">
 
@@ -137,10 +138,10 @@
 
                             <td ng-if="documentsCtrl.editMode" style="width:10px">
                                 <div ng-if="::document.linkedToId">
-                                    <span class="label agenda">Linked</span>
+                                    <span class="badge label agenda">Linked</span>
                                 </div>
                                 <div ng-repeat="item in document.agendaItems|orderBy">
-                                    <span class="label agenda {{::documentsCtrl.meeting.agenda.prefix}}">{{::documentsCtrl.meeting.agenda.prefix}} {{::item}}</span>
+                                    <span class="badge label agenda {{::documentsCtrl.meeting.agenda.prefix}}">{{::documentsCtrl.meeting.agenda.prefix}} {{::item}}</span>
                                 </div>
                             </td>
 
@@ -161,11 +162,11 @@
 
                         <tr ng-repeat="item in type.agenda.items|orderBy:'item' track by item.item">
                             <td class="hidden-xs" style="width:1px">
-                                <span class="label agenda {{::documentsCtrl.agenda.prefix}}">{{::documentsCtrl.agenda.prefix}} {{::item.item}}</span>
+                                <span class="badge label agenda {{::documentsCtrl.agenda.prefix}}">{{::documentsCtrl.agenda.prefix}} {{::item.item}}</span>
                             </td>
                             <td>
                                 <div>
-                                    <span class="visible-xs-inline label agenda {{::documentsCtrl.agenda.prefix}}">{{::documentsCtrl.agenda.prefix}} {{::item.item}}</span>
+                                    <span class="visible-xs-inline badge agenda {{::documentsCtrl.agenda.prefix}}">{{::documentsCtrl.agenda.prefix}} {{::item.item}}</span>
 
                                     <span class="title agenda">
                                         <span class="hidden-xs" >{{::item.title}}</span>
@@ -193,12 +194,12 @@
 
                         <tr ng-if="type.agenda.otherDocuments.length">
                             <td class="hidden-xs" style="width:1px">
-                                <span class="label agenda">Other</span>
+                                <span class="badge label agenda">Other</span>
                             </td>
                             <td>
                                 <div>
                                     <span class="title agenda">
-                                        <span class="visible-xs label agenda">Other</span> <i>Document(s) not associated to an agenda item</i>
+                                        <span class="visible-xs badge agenda">Other</span> <i>Document(s) not associated to an agenda item</i>
                                     </span>
                                 </div>
                                 <table class="table table-striped table-hover" style="margin:10px 0px -5px 0px;">
