@@ -284,7 +284,7 @@
                                     <div data-toggle="dropdown" aria-hidden="true" style="font-size:12px;font-weight:bold">MEDIA</div>    
                                     </a>                                
                                     <ul class="dropdown-menu dropdown-menu-right">
-                                        <li><a ng-repeat="link in meeting.conference.media" href="{{::link.url}}" target="_blank">{{::link.title}}</a></li>                                        
+                                        <li><a class="dropdown-item" ng-repeat="link in meeting.conference.media" href="{{::link.url}}" target="_blank">{{::link.title}}</a></li>                                        
                                     </ul>
                                 </span>
                                 <a href="{{::meeting.conference.media[0].url}}"  class="link"       ng-if="meeting.conference.media.length ==1"></a>
@@ -296,12 +296,12 @@
                                 <i class="fa fa-info fa-2x" data-toggle="dropdown" aria-hidden="true" style="cursor:pointer"></i>
                                 <ul class="dropdown-menu dropdown-menu-right">
                                     <li class="visible-xs" ng-if="meeting.conference.media.length >1" ng-repeat="link in meeting.conference.media">
-                                            <a ng-repeat="link in meeting.conference.media" href="{{::link.url}}" target="_blank">{{::link.title}}</a>
+                                            <a class="dropdown-item" ng-repeat="link in meeting.conference.media" href="{{::link.url}}" target="_blank">{{::link.title}}</a>
                                     </li>
                                     <li class="visible-xs" ng-if="meeting.conference.media.length==1">
-                                            <a href="{{::meeting.conference.media[0].url}}">Media</a>
+                                            <a class="dropdown-item" href="{{::meeting.conference.media[0].url}}">Media</a>
                                     </li>
-                                    <li><a ng-repeat="link in meeting.conference.information" href="{{::link.url}}" target="{{::link.scope == 'external' ? '_blank' : '_self'}}">{{::link.title}}</a></li>                                  
+                                    <li><a class="dropdown-item" ng-repeat="link in meeting.conference.information" href="{{::link.url}}" target="{{::link.scope == 'external' ? '_blank' : '_self'}}">{{::link.title}}</a></li>                                  
                                 </ul>
                             </td>
                         </tr>
