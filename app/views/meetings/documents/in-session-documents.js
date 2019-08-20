@@ -224,7 +224,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 var psc = ng.element('#print-smart-checkout');
 
                 if(psc.length) {
-                    psc.affix({ offset: { top:psc.offset().top - 10 } });
+                    // psc.affix({ offset: { top:psc.offset().top - 10 } });
                     affixReady();
                 }
             });

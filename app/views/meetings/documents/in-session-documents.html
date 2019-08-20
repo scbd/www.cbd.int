@@ -1,6 +1,8 @@
 <div class="meeting-documents">
     <style>
-        .meeting-documents .nav-tabs>li.in-session                      { padding-left:4px; }
+        .meeting-documents .nav-tabs> .nav-item > .nav-link             {      margin-top: 25px; }
+        .meeting-documents .nav-tabs>li.in-session > .nav-link.first    { margin-top:10px!important;}
+        .meeting-documents .nav-tabs>li.in-session                      { padding-left:4px;background:#eee;padding-right:4px; }
         .meeting-documents .nav-tabs>li.in-session             >div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0   4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
         .meeting-documents .nav-tabs>li.in-session:first-child >div.bg  { position:absolute;top:-21px;left:0px; right:-2px;height:62px;background-color:#eee;border-radius: 4px 4px 0 0;border-top:1px solid #ddd;border-left:1px  solid #ddd;border-right:1px solid #ddd;}
         .meeting-documents .nav-tabs>li.in-session:last-child  >div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0   4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
@@ -50,32 +52,33 @@
     <div>
 
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs nowrap hidden-print doc-tabs" role="tablist">
-            <li ng-repeat="tab in ::$ctrl.tabs track by tab.code" class="in-session" ng-class="::{ active: $index==0 }">
-                <div class="bg"></div>
-                <div ng-if="$index==0" style="position:absolute;top:-18px;left:0px;right:2px;height:15px;font-size:10px;font-weight:bold;color:#444">&nbsp;&nbsp;&nbsp;IN-SESSION</div>
-                <a ng-href="#{{::$ctrl.toHtmlID(tab.code)}}" ng-click="tab.loaded=true; $ctrl.currentTab=tab" role="tab" data-toggle="tab">
-                    <span ng-switch="tab.code">
-                        <span ng-switch-when="plenary">Plenary</span>
-                        <span ng-switch-when="WG.1">
-                            <span class="visible-md-inline visible-lg-inline">Working Group I</span>
-                            <span class="visible-xs-inline visible-sm-inline">WG I</span>
+        <nav>
+            <ul class="nav nav-tabs nowrap hidden-print doc-tabs" role="tablist">
+                <li ng-repeat="tab in ::$ctrl.tabs track by tab.code" class="nav-item in-session" >
+                    <div ng-if="$index==0" style="padding-top:5px;top:-18px;left:0px;right:2px;height:15px;font-size:10px;font-weight:bold;color:#444">&nbsp;&nbsp;&nbsp;IN-SESSION</div>
+                    <a class="nav-link" ng-class="::{ active: $index==0, 'first': $index==0}" ng-href="#{{::$ctrl.toHtmlID(tab.code)}}" ng-click="tab.loaded=true; $ctrl.currentTab=tab" role="tab" data-toggle="tab">
+                        <span ng-switch="tab.code">
+                            <span ng-switch-when="plenary">Plenary</span>
+                            <span ng-switch-when="WG.1">
+                                <span class="visible-md-inline visible-lg-inline">Working Group I</span>
+                                <span class="visible-xs-inline visible-sm-inline">WG I</span>
+                            </span>
+                            <span ng-switch-when="WG.2">
+                                <span class="visible-md-inline visible-lg-inline">Working Group II</span>
+                                <span class="visible-xs-inline visible-sm-inline">WG II</span>
+                            </span>
+                            <span ng-switch-default=""> {{::tab.code}}</span>
                         </span>
-                        <span ng-switch-when="WG.2">
-                            <span class="visible-md-inline visible-lg-inline">Working Group II</span>
-                            <span class="visible-xs-inline visible-sm-inline">WG II</span>
-                        </span>
-                        <span ng-switch-default=""> {{::tab.code}}</span>
-                    </span>
-                    ({{tab.documents.length}})
-                </a>
-            </li>
-            <li ng-hide="$ctrl.meetings" ><a><h3  style="color: #777;margin: 0px"><i class="fa fa-circle-o-notch fa-spin"></i></h3></a></li>
-        </ul>
+                        ({{tab.documents.length}})
+                    </a>
+                </li>
+                <li ng-hide="$ctrl.meetings" ><a><h3  style="color: #777;margin: 0px"><i class="fa fa-circle-o-notch fa-spin"></i></h3></a></li>
+            </ul>
+        </nav>
         
         <!-- Tab panes -->
-        <div class="tab-content">
-            <div ng-repeat="tab in ::$ctrl.tabs track by tab.code" role="tabpanel" class="tab-pane" id="{{::$ctrl.toHtmlID(tab.code)}}" ng-class="::{ active: $index==0 }">
+        <div class="tab-content" style="padding-top:1px;">
+            <div ng-repeat="tab in ::$ctrl.tabs track by tab.code" role="tabpanel" class="tab-pane " id="{{::$ctrl.toHtmlID(tab.code)}}" ng-class="::{ active: $index==0 }">
 
                 <p ng-if="!tab.documents.length">
                     No documents have yet been posted.
@@ -86,7 +89,7 @@
                         <td style="width:10px">
                             <strong class="text-nowrap">{{($index+1)}}.</strong>
                             <span ng-repeat="item in ::document.agendaItems|orderBy">
-                                <span class="label agenda {{::$ctrl.meetings[document.meeting].agenda.prefix}}">{{::$ctrl.meetings[document.meeting].agenda.prefix}} {{::item}}</span>
+                                <span class="badge label agenda {{::$ctrl.meetings[document.meeting].agenda.prefix}}">{{::$ctrl.meetings[document.meeting].agenda.prefix}} {{::item}}</span>
                             </span>
 
                         </td>
@@ -96,10 +99,10 @@
 
                         <td ng-if="$ctrl.editMode" style="width:10px">
                             <div ng-if="::document.linkedToId">
-                                <span class="label agenda">Linked</span>
+                                <span class="badge label agenda">Linked</span>
                             </div>
                             <div ng-repeat="item in document.agendaItems|orderBy">
-                                <span class="label agenda {{::$ctrl.meeting.agenda.prefix}}">{{::$ctrl.meeting.agenda.prefix}} {{::item}}</span>
+                                <span class="badge label agenda {{::$ctrl.meeting.agenda.prefix}}">{{::$ctrl.meeting.agenda.prefix}} {{::item}}</span>
                             </div>
                         </td>
 
