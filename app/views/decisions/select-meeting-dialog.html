@@ -22,11 +22,11 @@
 
         </form>
 
-        <div class="panel panel-default" ng-class="{ 'panel-primary' : meeting==n }" ng-repeat="n in results.docs" ng-click="$parent.meeting = n" style="cursor:pointer" >
-          <div class="panel-heading">
-            <h3 class="panel-title">{{n.symbol_s}} </h3>
+        <div class="card" ng-repeat="n in results.docs" ng-click="$parent.meeting = n" style="cursor:pointer" >
+          <div class="card-header" ng-class="{ 'bg-primary' : meeting==n }">
+            <h3 class="card-title">{{n.symbol_s}} </h3>
           </div>
-          <div class="panel-body">
+          <div class="card-body">
             {{n.title_EN_t}}<br>
             <em>{{n.startDate_dt|moment:'format':'D MMM'}} - {{n.endDate_dt|moment:'format':'D MMMM YYYY'}}, {{n.eventCity_EN_t}}, {{n.eventCountry_EN_t}}</em>
           </div>

@@ -4,13 +4,14 @@ BODY {
 	-webkit-font-smoothing:antialiased;
 }
 </style>
-<div>
-
-	<ol class="breadcrumb">
-		<li><a href="/" target="_self">Home</a></li>
-		<li><a href="/decisions" target="_self">Decisions</a></li>
-		<li class="active">{{body|uppercase}}-{{session}}</li>
-	</ol>
+<div class="decision-tracking">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="/" target="_self">Home</a></li>
+			<li class="breadcrumb-item"><a href="/decisions" target="_self">Decisions</a></li>
+			<li class="breadcrumb-item active">{{body|uppercase}}-{{session}}</li>
+		</ol>
+	</nav>
 		<h1>{{body|uppercase}}-{{session}} Decisions</h1>
 
 	<div class="row">

@@ -1,44 +1,38 @@
-<div class="container" style="width:100%;">
-    <div class="row" ng-show="count">
-
-        <div class="col-xs-4 text-no-wrap" style="color:#333;font-size:14px;padding-left:10px;">
-            <div class="text-no-wrap" >
+<div  style="width:100%;">
+    <div class="row1" ng-show="count">
+            <div class="text-no-wrap float-left" style="color:#333;font-size:16px;padding-left:10px;">
                 <span class="text-nowrap">
-                  <span class="badge" >{{((currentPage*itemsPerPage)+1)}}</span>
-                  <span ng-if="((currentPage+1)*(filtered.length))===((currentPage+1)*(itemsPerPage)) && (filtered.length===itemsPerPage)">  -  <span class="badge" >{{(currentPage+1)*(filtered.length)}} </span></span>
-                  <span ng-if="loading && !((currentPage+1)*(filtered.length))">  -  <span class="badge" ><i class="fa fa-spinner fa-spin"></i></span></span>
-                  <span ng-if="((currentPage+1)*(filtered.length))!==((currentPage+1)*(itemsPerPage)) && !loading && (filtered.length===itemsPerPage)">  -  <span class="badge" >{{filtered.length}} </span></span>
-                  <span ng-if="filtered.length!==itemsPerPage && !loading">  -  <span class="badge" >{{count}} </span></span>
+                  <span class="badge badge-secondary rounded-pill" >{{((currentPage*itemsPerPage)+1)}}</span>
+                  <span ng-if="((currentPage+1)*(filtered.length))===((currentPage+1)*(itemsPerPage)) && (filtered.length===itemsPerPage)">  -  <span class="badge badge-secondary rounded-pill" >{{(currentPage+1)*(filtered.length)}} </span></span>
+                  <span ng-if="loading && !((currentPage+1)*(filtered.length))">  -  <span class="badge badge-secondary rounded-pill" ><i class="fa fa-spinner fa-spin"></i></span></span>
+                  <span ng-if="((currentPage+1)*(filtered.length))!==((currentPage+1)*(itemsPerPage)) && !loading && (filtered.length===itemsPerPage)">  -  <span class="badge badge-secondary rounded-pill" >{{filtered.length}} </span></span>
+                  <span ng-if="filtered.length!==itemsPerPage && !loading">  -  <span class="badge badge-secondary rounded-pill" >{{count}} </span></span>
                   of
-                  <span class="badge">{{count}} </span>
+                  <span class="badge badge-secondary rounded-pill">{{count}} </span>
                   <span ng-if="search"> for <span style="color:#009B48;">"{{search}}"</span></span>
                 </span>
                 <div ng-show="loading" style="display:inline;">
                     <i class="fa fa-spinner fa-spin"></i> Loading...
                 </div>
             </div>
-        </div>
-
-        <div class="col-xs-8">
-            <nav class="pull-right" ng-show="pages.length>1">
-                <ul class="pagination pagination-sm" style="margin: 0 0 0 0;">
-                    <li>
-                        <a ng-click="onPage({pageIndex:currentPage-1})" href="#" aria-label="Previous" ng-if="(currentPage!==0)">
+            <nav ng-show="pages.length>1">
+                <ul class="pagination pagination-sm justify-content-end" style="margin: 0 0 0 0;">
+                    <li class="page-item" ng-class="{disabled:(currentPage<=1)}">
+                        <a class="page-link" ng-click="onPage({pageIndex:currentPage-1})" href="#" aria-label="Previous" >
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
 
-                    <li ng-repeat="page in pages track by $index" ng-class="{ active : currentPage==page.index }" >
-                        <a href="#" ng-click="onPage({pageIndex:page.index})">{{page.text}} </a>
+                    <li class="page-item" ng-repeat="page in pages track by $index" ng-class="{ active : currentPage==page.index }" >
+                        <a class="page-link" href="#" ng-click="onPage({pageIndex:page.index})">{{page.text}} </a>
                     </li>
-                    <li ng-diabled="true">
-                        <a ng-click="onPage({pageIndex:currentPage+1})" href="#" aria-label="Next" ng-if="(currentPage+1<getPageCount())">
+                    <li class="page-item" ng-class="{disabled:(currentPage+1>=getPageCount())}">
+                        <a class="page-link" ng-click="onPage({pageIndex:currentPage+1})" href="#" aria-label="Next" >
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
                 </ul>
             </nav>
-        </div>
 
     </div>
 </div>
