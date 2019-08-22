@@ -47,7 +47,7 @@
         display: table !important;
     }
 }
-.dropdown-toggle::after {
+.meeting-documents .dropdown-toggle::after {
     display: inline-block;
     width: 0;
     height: 0;
