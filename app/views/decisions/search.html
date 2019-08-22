@@ -1,4 +1,4 @@
-﻿<div>
+﻿<div class="decision-tracking">
     <style>
         .chip {
             display: inline-block;
@@ -32,24 +32,25 @@
             width:98.8%;
         }
     </style>
-    <ol class="breadcrumb">
-        <li class="pull-right">
-            <a href="#" ng-click="edit()">
-                <i class="fa" ng-class="{ 'fa-comment-o' : !hasComments, 'fa-comments-o' : hasComments }" aria-hidden="true"></i>
-            </a>
-            <a ng-if="::canEdit" href="#" ng-click="edit()">
-                <i class="fa fa-edit" aria-hidden="true"></i>
-            </a>
-        </li>
-
-        <li>
-            <a href="/" target="_self">Home</a>
-        </li>
-        <li>
-            <a href="/decisions" target="_self">Decisions</a>
-        </li>
-        <li class="active">Search</li>
-    </ol>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">   
+            <li class="breadcrumb-item">
+                <a href="/" target="_self">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/decisions" target="_self">Decisions</a>
+            </li>
+            <li class="breadcrumb-item active">Search</li>
+            <li  style="padding-left:50%">
+                <a href="#" ng-click="edit()">
+                    <i class="fa" ng-class="{ 'fa-comment-o' : !hasComments, 'fa-comments-o' : hasComments }" aria-hidden="true"></i>
+                </a>
+                <a ng-if="::canEdit" href="#" ng-click="edit()">
+                    <i class="fa fa-edit" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ol>
+    </nav>
 
     <h1>Search Decisions</h1>
 
@@ -57,16 +58,16 @@
     <div class="row">
         <div class="col-md-12">
 
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card">
+                <div class="card-header">
                     Filters
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
 
                     <div class="row" ng-if="selectedFilter" style="border-bottom:1px solid #eee; padding-bottom:10px">
                         <div class="col-md-12">
                             <span ng-repeat="(key, filters) in selectedFilter">
-                                <span class="label label-primary chip" ng-repeat="value in filters" ng-click="removeFilter(value, key)">
+                                <span class="badge badge-primary chip" ng-repeat="value in filters" ng-click="removeFilter(value, key)">
                                     {{value.title|lstring}}
                                     <i class="fa fa-minus-circle"></i>
                                 </span>
@@ -137,7 +138,7 @@
 
                         <div class="col-md-12">
                             <br/>
-                            <button class="btn btn-primary  pull-right" ng-click="search()">
+                            <button class="btn btn-primary  float-right" ng-click="search()">
                                 Search</button>
                         </div>
                     </div>
@@ -151,15 +152,15 @@
     </br>
     <div class="row" id="searchResult">
         <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card">
+                <div class="card-header">
 
                     <div class="row" style="margin:0 1px">
-                        <span class="pull-left">
+                        <span class="float-left">
                             <i class="fa fa-clone" ng-class="icon"></i> Search results
                         </span>
-                        <span class="pull-right">
-                            <div class="pull-right" style="margin:0 5px">
+                        <span class="float-right">
+                            <div class="float-right" style="margin:0 5px">
                                 Items per page:
                                 <select ng-model="itemsPerPage" ng-change="currentPage=0;search(undefined, undefined, undefined,searchCount);updateQueryString();">
                                     <option value="10">10</option>
@@ -170,7 +171,7 @@
                                     <option value="300">300</option>
                                 </select>
                             </div>
-                            <div class="pull-right">
+                            <div class="float-right">
                                 Sort by:
                                 <select ng-model="pageSort" ng-change="currentPage=0;search();updateQueryString();">
                                     <option value="">Relevance</option>
@@ -185,13 +186,13 @@
                         </span>
                     </div>
                 </div>
-                <div class="panel-body view-decision" id="searchResultSection">
+                <div class="card-body view-decision" id="searchResultSection">
 
                     <div>
                         <pagination pages="pages" current-page="currentPage" items-per-page="itemsPerPage" filtered="searchResult" on-page="onPage(pageIndex)"
                             count="searchCount" pagination-size="6"> </pagination>
                         <div ng-show="isLoading" style="margin-left:50%">
-                            <i class="fa fa-spin fa-spinner" /> Loading...
+                            <i class="fa fa-spin fa-spinner" ></i> Loading...
                         </div>
                         <div ng-show="!isLoading && (!searchResult || searchResult.length ==0)" style="margin-left:50%">
                             No records found
@@ -202,7 +203,7 @@
                                
                                 <div>
                                     <p ng-if="::result.elementType=='decision'">
-                                            <a type="button" class="btn btn-primary btn-xs" ng-href="/decisions/cop/{{::result.session}}/{{::result.decision}}">
+                                            <a  class="btn btn-primary btn-sm" ng-href="/decisions/cop/{{::result.session}}/{{::result.decision}}">
                                                 <i class="fa fa-search" aria-hidden="true"></i> decision UNEP/CBD/COP/DEC/{{romanize(result.session)}}/{{result.decision}}
                                             </a>
                                     </p>
@@ -214,7 +215,7 @@
                                 <span class="chip-sm" ng-repeat="aichiTarget in result.aichiTargets | orderBy:aichiTarget" ng-if="::result.aichiTargets">
                                     <img title="{{aichiTarget}}" ng-src="/app/images/aichi-targets/abt-{{::aichiTarget.replace('AICHI-TARGET-','')}}-96.png" width="25" style="margin: 1px 1px 1px 1px;">
                                 </span>
-                                <span class="label label-default chip-sm" ng-repeat="subject in result.subjects" ng-if="::result.subjects">
+                                <span class="badge badge-secondary text-white chip-sm" ng-repeat="subject in result.subjects" ng-if="::result.subjects">
                                     {{::term(subject)}}
                                 </span>
                             </div>

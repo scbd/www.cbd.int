@@ -4,32 +4,33 @@
     @media (min-width: 1200px) { #decision-meta.affix { position: fixed    !important; width:460px; top:20px; } }
 </style>
 
-<div>
+<div class="decision-tracking">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="/" target="_self">Home</a></li>
+			<li class="breadcrumb-item"><a href="/decisions" target="_self">Decisions</a></li>
+			<li class="breadcrumb-item"><a href="/decisions/{{::decision.body|lowercase}}/{{::decision.session}}">{{::decision.body|uppercase}}-{{::decision.session}}</a></li>
+			<li class="breadcrumb-item active">Decision {{romanize(decision.session)}}/{{::decision.decision}}</li>
+			<li style="padding-left:50%">
+				<a href="#" ng-click="edit()"><i class="fa" ng-class="{ 'fa-comment-o' : !hasComments, 'fa-comments-o' : hasComments }" aria-hidden="true"></i></a>
+				<a ng-if="::canEdit"    href="#" ng-click="edit()"><i class="fa fa-edit" aria-hidden="true"></i></a>
+			</li>
 
-	<ol class="breadcrumb">
-		<li class="pull-right">
-            <a href="#" ng-click="edit()"><i class="fa" ng-class="{ 'fa-comment-o' : !hasComments, 'fa-comments-o' : hasComments }" aria-hidden="true"></i></a>
-            <a ng-if="::canEdit"    href="#" ng-click="edit()"><i class="fa fa-edit" aria-hidden="true"></i></a>
-		</li>
-
-		<li><a href="/" target="_self">Home</a></li>
-		<li><a href="/decisions" target="_self">Decisions</a></li>
-		<li><a href="/decisions/{{::decision.body|lowercase}}/{{::decision.session}}">{{::decision.body|uppercase}}-{{::decision.session}}</a></li>
-		<li class="active">Decision {{romanize(decision.session)}}/{{::decision.decision}}</li>
-	</ol>
+		</ol>
+	</nav>
 
 	<h1>Decision {{::decision.body|uppercase}} {{romanize(decision.session)}}/{{::decision.decision}}</h1>
 
 	<div class="view-decision row">
 		<div class="col-md-7">
-            <div class="document panel panel-primary">
-    			<div class="panel-heading">
+            <div class="document card border-primary">
+    			<div class="card-header bg-primary text-white">
     				<span ng-if="decision">UNEP/CBD/COP/DEC/{{::decision.session}}/{{::decision.decision}}</span>
-    				<a ng-show="filters" class="pull-right label label-info" ng-click="filter(null)" style="margin-top:2px">
+    				<a href="#" ng-show="filters" class="float-right badge badge-info" ng-click="filter(null)" style="margin-top:2px">
     					<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> filtered <i class="fa fa-times" aria-hidden="true"></i>
     				</a>
     			</div>
-    			<div class="panel-body">
+    			<div class="card-body">
     				<div id='content' class='decision'></div>
     			</div>
             </div>
@@ -52,29 +53,29 @@
 
 				<dt>Elements of decision</dt>
 				<dd>
-					<a class="label label-default text-nowrap" ng-click="toggleFilters({ types: null })"              ng-class="{ disabled : filters &&   filters.types }">{{sumValues(typeCounts)}}</a>
-					<a class="label label-default text-nowrap" ng-click="toggleFilters({ types: ['informational'] })" ng-class="{ disabled : filters && (!filters.types || filters.types.indexOf('informational')<0) }">{{typeCounts.informational}} informational <i class="fa fa-filter" aria-hidden="true"></i></a>
-					<a class="label label-info    text-nowrap" ng-click="toggleFilters({ types: ['operational'  ] })" ng-class="{ disabled : filters && (!filters.types || filters.types.indexOf('operational'  )<0) }">{{typeCounts.operational}} operational <i class="fa fa-filter" aria-hidden="true"></i></a>
+					<a href="#" class="badge badge-secondary text-nowrap" ng-click="toggleFilters({ types: null })"              ng-class="{ disabled : filters &&   filters.types }">{{sumValues(typeCounts)}}</a>
+					<a href="#" class="badge badge-secondary text-nowrap" ng-click="toggleFilters({ types: ['informational'] })" ng-class="{ disabled : filters && (!filters.types || filters.types.indexOf('informational')<0) }">{{typeCounts.informational}} informational <i class="fa fa-filter" aria-hidden="true"></i></a>
+					<a href="#" class="badge badge-info    text-nowrap" ng-click="toggleFilters({ types: ['operational'  ] })" ng-class="{ disabled : filters && (!filters.types || filters.types.indexOf('operational'  )<0) }">{{typeCounts.operational}} operational <i class="fa fa-filter" aria-hidden="true"></i></a>
 				</dd>
 				<dd>
-					<a class="label label-default text-nowrap" ng-click="toggleFilters({ statuses : null })"            ng-class="{ disabled : filters &&  filters.statuses }">{{sumValues(statusCounts)}}</a>
-					<a class="label label-default text-nowrap" ng-click="toggleFilters({ statuses : ['implemented'] })" ng-class="{ disabled : filters && (!filters.statuses || filters.statuses.indexOf('implemented')<0) }" >{{statusCounts.implemented}} implemented <i class="fa fa-filter" aria-hidden="true"></i></a>
-					<a class="label label-default text-nowrap" ng-click="toggleFilters({ statuses : ['superseded']  })" ng-class="{ disabled : filters && (!filters.statuses || filters.statuses.indexOf('superseded' )<0) }" >{{statusCounts.superseded}} superseded <i class="fa fa-filter" aria-hidden="true"></i></a>
-					<a class="label label-default text-nowrap" ng-click="toggleFilters({ statuses : ['elapsed']     })" ng-class="{ disabled : filters && (!filters.statuses || filters.statuses.indexOf('elapsed'    )<0) }" >{{statusCounts.elapsed}} elapsed <i class="fa fa-filter" aria-hidden="true"></i></a>
-					<a class="label label-success text-nowrap" ng-click="toggleFilters({ statuses : ['active']      })" ng-class="{ disabled : filters && (!filters.statuses || filters.statuses.indexOf('active'     )<0) }" >{{statusCounts.active}} active <i class="fa fa-filter" aria-hidden="true"></i></a>
+					<a href="#" class="badge badge-secondary text-nowrap" ng-click="toggleFilters({ statuses : null })"            ng-class="{ disabled : filters &&  filters.statuses }">{{sumValues(statusCounts)}}</a>
+					<a href="#" class="badge badge-secondary text-nowrap" ng-click="toggleFilters({ statuses : ['implemented'] })" ng-class="{ disabled : filters && (!filters.statuses || filters.statuses.indexOf('implemented')<0) }" >{{statusCounts.implemented}} implemented <i class="fa fa-filter" aria-hidden="true"></i></a>
+					<a href="#" class="badge badge-secondary text-nowrap" ng-click="toggleFilters({ statuses : ['superseded']  })" ng-class="{ disabled : filters && (!filters.statuses || filters.statuses.indexOf('superseded' )<0) }" >{{statusCounts.superseded}} superseded <i class="fa fa-filter" aria-hidden="true"></i></a>
+					<a href="#" class="badge badge-secondary text-nowrap" ng-click="toggleFilters({ statuses : ['elapsed']     })" ng-class="{ disabled : filters && (!filters.statuses || filters.statuses.indexOf('elapsed'    )<0) }" >{{statusCounts.elapsed}} elapsed <i class="fa fa-filter" aria-hidden="true"></i></a>
+					<a href="#" class="badge badge-success text-nowrap" ng-click="toggleFilters({ statuses : ['active']      })" ng-class="{ disabled : filters && (!filters.statuses || filters.statuses.indexOf('active'     )<0) }" >{{statusCounts.active}} active <i class="fa fa-filter" aria-hidden="true"></i></a>
 				</dd>
 				<br>
 
 				<dt>Actors</dt>
 				<dd>
-                    <a class="label label-default text-nowrap" ng-click="toggleFilters({ actors : null })" ng-class="{ disabled : filters &&  filters.actors }">{{sumValues(actorCounts)}}</a>
-					<span ng-repeat="item in decision.actors"><a class="label label-default text-nowrap" ng-click="toggleFilters({ actors : [item] })" ng-class="{ disabled : filters && (!filters.actors || filters.actors.indexOf(item)<0) }">{{actorCounts[item]}} {{item}} <i class="fa fa-filter" aria-hidden="true"></i>&nbsp;</a> </span>
+                    <a href="#" class="badge badge-secondary text-nowrap" ng-click="toggleFilters({ actors : null })" ng-class="{ disabled : filters &&  filters.actors }">{{sumValues(actorCounts)}}</a>
+					<span ng-repeat="item in decision.actors"><a href="#" class="badge badge-secondary text-nowrap" ng-click="toggleFilters({ actors : [item] })" ng-class="{ disabled : filters && (!filters.actors || filters.actors.indexOf(item)<0) }">{{actorCounts[item]}} {{item}} <i class="fa fa-filter" aria-hidden="true"></i>&nbsp;</a> </span>
 				</dd>
 				<br>
 
 				<dt>AICHI targets</dt>
 				<dd>
-					<a class="label label-default text-nowrap" ng-click="toggleFilters({ aichiTargets : null })" 
+					<a href="#" class="badge badge-secondary text-nowrap" ng-click="toggleFilters({ aichiTargets : null })" 
 					ng-class="{ disabled : filters &&  filters.aichiTargets }">{{aichiTargetsToShow.length}}</a>
 						<span class="chip-sm" ng-repeat="aichiTarget in aichiTargetsToShow | orderBy" ng-if="::aichiTargetsToShow"
 						ng-class="{ disabled : filters && (!filters.aichiTargets || filters.aichiTargets.indexOf(item)<0) }">
@@ -86,8 +87,8 @@
 
 				<dt>Subjects</dt>
 				<dd>
-					<a class="label label-default text-nowrap" ng-click="toggleFilters({ subjects : null })" ng-class="{ disabled : filters &&  filters.subjects }">{{subjectsToShow.length}}</a>
-					<span style="margin-right:3px;" ng-repeat="item in subjectsToShow"><a class="label label-default text-nowrap" 
+					<a href="#" class="badge badge-secondary text-nowrap" ng-click="toggleFilters({ subjects : null })" ng-class="{ disabled : filters &&  filters.subjects }">{{subjectsToShow.length}}</a>
+					<span style="margin-right:3px;" ng-repeat="item in subjectsToShow"><a href="#" class="badge badge-secondary text-nowrap" 
 						 ng-class="{ disabled : filters && (!filters.subjects || filters.subjects.indexOf(item)<0) }">
 							 {{::term(item)}}
 						</a> </span>
@@ -96,8 +97,8 @@
 				<dt ng-if="documents.length">Document</dt>
                 <span ng-repeat="d in documents">
     				<dd>
-                        <div class="panel panel-default" style="margin-bottom:4px">
-                            <div class="panel-body" style="padding:12px;font-size:0.9em">
+                        <div class="card" style="margin-bottom:4px">
+                            <div class="card-body" style="padding:12px;font-size:0.9em">
                                 <document-files ng-if="documents.length" class="visible-xs pull-right"  files="d.files"></document-files>
                                 <b>{{d.symbol}}</b>
                                 <div>{{decision.title|lstring}}</div>
@@ -110,8 +111,8 @@
                 <span ng-if="decision.decisions.length">
     				<dt>Related decisions</dt>
     				<dd ng-repeat="item in decision.decisions | orderBy">
-                        <div class="panel panel-default" style="margin-bottom:4px">
-                            <div class="panel-body" style="padding:12px;font-size:0.9em">
+                        <div class="card" style="margin-bottom:4px">
+                            <div class="card-body" style="padding:12px;font-size:0.9em">
                                 <decision-reference symbol="item"></decision-reference>
                             </div>
                         </div>

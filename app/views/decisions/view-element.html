@@ -1,8 +1,8 @@
 <div>
     <a name="{{info.data.code.split('/').join('-')}}"></a>
 
-	<span ng-if="::info.data.type" class="pull-right label label-default" style="opacity:0.5;margin-right:6px"
-        ng-class="::{ 'label-info' : info.data.type=='operational' }">
+	<span ng-if="::info.data.type" class="pull-right badge" style="opacity:0.5;margin-right:6px"
+        ng-class="::{ 'badge-info' : info.data.type=='operational', 'badge-secondary': info.data.type!='operational' }">
         <span ng-switch="::info.data.type|lowercase">
             <span ng-switch-when="operational"><i class="fa fa-cog"></i> operational</span>
             <span ng-switch-when="informational"><i class="fa fa-info-circle"></i> informational</span>
@@ -10,8 +10,8 @@
         </span>
 	</span>
 
-	<span ng-repeat="status in ::info.data.statuses" class="pull-right label label-default" style="opacity:0.5;margin-right:6px"
-        ng-class="::{ 'label-success' : status=='active' }">
+	<span ng-repeat="status in ::info.data.statuses" class="pull-right badge" style="opacity:0.5;margin-right:6px"
+        ng-class="::{ 'badge-success' : status=='active', 'badge-secondary':status!='active' }">
         <i class="fa fa-info-circle"></i>
         <span ng-switch="::status|lowercase">
             <span ng-switch-when="active">active</span>
@@ -23,7 +23,7 @@
         </span>
 	</span>
 
-	<span ng-repeat="actor in ::info.data.actors" class="pull-right label label-default" style="opacity:0.5;margin-right:6px">
+	<span ng-repeat="actor in ::info.data.actors" class="pull-right badge badge-secondary" style="opacity:0.5;margin-right:6px">
 		<i class="fa fa-user" aria-hidden="true"></i>
         <span ng-switch="::actor|lowercase">
             <span ng-switch-when="executive-secretary">es</span>
@@ -35,11 +35,11 @@
 	</span>
     
 	<p ng-if="::info.type=='paragraph'">
-        <a type="button" class="btn btn-primary btn-xs" ng-if="::showDecision"
+        <a class="btn btn-primary btn-sm" role="button" ng-if="::showDecision"
          ng-href="/decisions/cop/{{::info.data.session}}/{{::info.data.decision}}">
             <i class="fa fa-search" aria-hidden="true"></i> UNEP/CBD/COP/DEC/{{romanize(info.data.session)}}/{{info.data.decision}}
         </a>
-		<a type="button" class="btn btn-primary btn-xs" ng-href="/decisions/cop/{{::info.data.session}}/{{::info.data.decision}}/{{::info.data.section|lowercase}}{{::info.paragraph}}{{::info.item && ('.'+info.item)}}" ng-click="$root.hiddenHash='view'">
+		<a class="btn btn-primary btn-sm" role="button" ng-href="/decisions/cop/{{::info.data.session}}/{{::info.data.decision}}/{{::info.data.section|lowercase}}{{::info.paragraph}}{{::info.item && ('.'+info.item)}}" ng-click="$root.hiddenHash='view'">
             <i class="fa fa-search" aria-hidden="true"></i> 
             paragraph 
             <span ng-if="::info.data.section">{{::info.data.section}}.</span> {{::info.paragraph}} <span ng-if="::info.item">item ({{::info.item}})</span>

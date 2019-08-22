@@ -1,12 +1,13 @@
-<div>
-
-	<ol class="breadcrumb">
-		<li><a href="/" target="_self">Home</a></li>
-		<li><a href="/decisions" target="_self">Decisions</a></li>
-		<li><a href="/decisions/{{::decision.body|lowercase}}/{{::decision.session}}">{{::decision.body|uppercase}}-{{::decision.session}}</a></li>
-		<li><a href="/decisions/{{::decision.body|lowercase}}/{{::decision.session}}/{{::decision.decision}}">Decision {{romanize(decision.session)}}/{{decision.decision}}</a></li>
-		<li class="active">Paragraph {{paragraph}}</li>
-	</ol>
+<div class="decision-tracking">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="/" target="_self">Home</a></li>
+			<li class="breadcrumb-item"><a href="/decisions" target="_self">Decisions</a></li>
+			<li class="breadcrumb-item"><a href="/decisions/{{::decision.body|lowercase}}/{{::decision.session}}">{{::decision.body|uppercase}}-{{::decision.session}}</a></li>
+			<li class="breadcrumb-item"><a href="/decisions/{{::decision.body|lowercase}}/{{::decision.session}}/{{::decision.decision}}">Decision {{romanize(decision.session)}}/{{decision.decision}}</a></li>
+			<li class="breadcrumb-item active">Paragraph {{paragraph}}</li>
+		</ol>
+	</nav>
 
 	<h1>Decision {{romanize(decision.session)}}/{{decision.decision}}
         <span ng-if="section"> section {{section}}</span>
@@ -16,14 +17,14 @@
 
 	<div class="row">
 		<div class="col-md-7">
-            <div class="view-decision document panel panel-primary">
-    			<div class="panel-heading">
+            <div class="view-decision document card">
+    			<div class="card-header bg-primary text-white">
     				UNEP/CBD/COP/DEC/{{romanize(decision.session)}}/{{decision.decision}}
-    				<a href="/decisions/cop/{{decision.session}}/{{decision.decision}}" ng-click="$root.hiddenHash=current.data.code.split('/').join('-');" class="pull-right label label-info" style="margin-top:2px">
+    				<a href="/decisions/cop/{{decision.session}}/{{decision.decision}}" ng-click="$root.hiddenHash=current.data.code.split('/').join('-');" class="pull-right badge badge-info" style="margin-top:2px">
     					up <i class="fa fa-level-up" aria-hidden="true"></i></i>
     				</a>
     			</div>
-    			<div class=" panel-body">
+    			<div class=" card-body">
     				<div id='content' class='decision'></div>
     			</div>
             </div>
@@ -44,18 +45,18 @@
 				<br ng-if="::decision.meeting">
 				<span ng-if="current.data.type">
 				<dt>Type</dt>
-				<dd><span class="label label-default" ng-class="{ 'label-info' : current.data.type=='operational'}">{{current.data.type}}</span></dd>
+				<dd><span class="badge" ng-class="{ 'badge-info' : current.data.type=='operational', 'badge-secondary': current.data.type!='operational'}">{{current.data.type}}</span></dd>
 				<br>
 				</span>
 				<span ng-if="current.data.statuses.length">
 				<dt>Status</dt>
-				<dd ng-repeat="item in current.data.statuses"><span class="label label-default" ng-class="{ 'label-success' : item=='active' }">{{item}}</span></dd>
+				<dd ng-repeat="item in current.data.statuses"><span class="badge" ng-class="{ 'badge-success' : item=='active', 'badge-secondary': item!='active' }">{{item}}</span></dd>
 				<dd ng-if="current.data.statusInfo||current.elementStatusDetails"><i>{{current.data.statusInfo||current.elementStatusDetails}}</i></dd>
 				<br>
 				</span>
                 <span ng-if="current.data.actors.length">
     				<dt>Actors</dt>
-    				<dd ng-repeat="item in current.data.actors"><span class="label label-default">{{item}}</span></dd>
+    				<dd ng-repeat="item in current.data.actors"><span class="badge badge-secondary">{{item}}</span></dd>
     				<dd ng-if="current.data.actorsInfo"><i>{{current.data.actorsInfo}}</i></dd>
     				<br>
 				</span>
@@ -72,7 +73,7 @@
 					<br>
 					<dt>Subjects</dt>
 					<dd>
-						<span class="label label-default" style="margin-right:3px;" 
+						<span class="badge badge-secondary" style="margin-right:3px;" 
 						ng-repeat="item in current.data.subjects">
 							{{::term(item)}}
 						</span>
@@ -82,8 +83,8 @@
                 <span ng-if="current.data.notifications.length">
     				<dt>Notifications</dt>
                     <dd ng-repeat="item in current.data.notifications|orderBy">
-                        <div class="panel panel-default" style="margin-bottom:4px">
-                            <div class="panel-body" style="padding:12px;font-size:0.9em">
+                        <div class="card" style="margin-bottom:4px">
+                            <div class="card-body" style="padding:12px;font-size:0.9em">
                                 <decision-notification symbol="item"></decision-notification>
                             </div>
                         </div>
@@ -94,8 +95,8 @@
                 <span ng-if="(current.data.documents|filter:isPublicMeetingDocument).length">
     				<dt>Documents</dt>
                     <dd ng-repeat="item in current.data.documents|filter:isPublicMeetingDocument|orderBy">
-                        <div class="panel panel-default" style="margin-bottom:4px">
-                            <div class="panel-body" style="padding:12px;font-size:0.9em">
+                        <div class="card" style="margin-bottom:4px">
+                            <div class="card-body" style="padding:12px;font-size:0.9em">
                                 <decision-meeting-document symbol="item"></decision-meeting-document>
                             </div>
                         </div>
@@ -106,8 +107,8 @@
                 <span ng-if="current.data.meetings.length">
     				<dt>Activities / outcomes</dt>
                     <dd ng-repeat="item in current.data.meetings|orderBy">
-                        <div class="panel panel-default" style="margin-bottom:4px">
-                            <div class="panel-body" style="padding:12px;font-size:0.9em">
+                        <div class="card" style="margin-bottom:4px">
+                            <div class="card-body" style="padding:12px;font-size:0.9em">
                                 <decision-meeting symbol="item"></decision-meeting>
                             </div>
                         </div>
@@ -118,8 +119,8 @@
                 <span ng-if="current.data.decisions.length">
     				<dt>Related decisions</dt>
     				<dd ng-repeat="item in current.data.decisions | orderBy">
-                        <div class="panel panel-default" style="margin-bottom:4px">
-                            <div class="panel-body" style="padding:12px;font-size:0.9em">
+                        <div class="card" style="margin-bottom:4px">
+                            <div class="card-body" style="padding:12px;font-size:0.9em">
                                 <decision-reference symbol="item"></decision-reference>
                             </div>
                         </div>

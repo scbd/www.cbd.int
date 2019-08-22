@@ -65,4 +65,20 @@ header .navbar-wrapper.mobile-only {
 
 
 /* ^^^ Top nav scrollable ^^^ */
+/* 
+.btn-group-sm > .btn, .btn-xs {
+	padding: .15rem .3rem;
+	font-size: .775rem;
+	line-height: 0.5;
+	-webkit-border-radius: .2rem;
+	border-radius: .2rem;
+} */
 
+.decision-tracking .badge-secondary {
+    color: #fff;
+    background-color: #6c757d;
+}
+.decision-tracking .badge-secondary[href]:focus, .decision-tracking .badge-secondary[href]:hover {
+    color: #fff;
+    background-color:#6c757d;
+}
