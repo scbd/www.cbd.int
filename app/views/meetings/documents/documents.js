@@ -49,7 +49,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //
         //==============================
         function load() {
-
+            _ctrl.inSessionEnabled = false; //to adjust the height for non insession case
             var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1 }, cache:true } }).then(function(res){
 
                 meeting = _.defaults(res.data, {
@@ -59,7 +59,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                     isMontreal : /montr.al.*canada/i.test((res.data.venueText||{}).en||'')
                 });
 
-                // meeting.insession=true;
+                meeting.insession=true;
 
                 _ctrl.noTabs  = meeting.EVT_STY_CD=='BAR';
                 _ctrl.meeting = meeting;
@@ -69,6 +69,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                     groups['in-session']    .position = 110;
                     groups['in-session/wg1'].position = 120;
                     groups['in-session/wg2'].position = 130;
+                    _ctrl.inSessionEnabled = true;
                 }
 
                 return meeting;

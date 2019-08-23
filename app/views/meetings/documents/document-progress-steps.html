@@ -15,12 +15,12 @@
                   <i class="fa fa-plus-circle"></i>
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a href="#" ng-click="createStep({ type: 'draft',     dueDate: 0 })">Draft</a></li>
-                <li><a href="#" ng-click="createStep({ type: 'peer',      dueDate: 0 })">Peer Review</a></li>
-                <li><a href="#" ng-click="createStep({ type: 'expert',    dueDate: 0 })">Expert Review</a></li>
-                <li><a href="#" ng-click="createStep({ type: 'directors', dueDate: 0, assignedTo: ['ScbdDirectors']    })">Directors</a></li>
-                <li><a href="#" ng-click="createStep({ type: 'es',        dueDate: 0, assignedTo: ['ES-Review']        })">Executive Secretary</a></li>
-                <li><a href="#" ng-click="createStep({ type: 'edit',      dueDate: 0, assignedTo: ['EditorialService'] })">Editors</a></li>
+                <li><a  class="dropdown-item" href="#" ng-click="createStep({ type: 'draft',     dueDate: 0 })">Draft</a></li>
+                <li><a  class="dropdown-item" href="#" ng-click="createStep({ type: 'peer',      dueDate: 0 })">Peer Review</a></li>
+                <li><a  class="dropdown-item" href="#" ng-click="createStep({ type: 'expert',    dueDate: 0 })">Expert Review</a></li>
+                <li><a  class="dropdown-item" href="#" ng-click="createStep({ type: 'directors', dueDate: 0, assignedTo: ['ScbdDirectors']    })">Directors</a></li>
+                <li><a  class="dropdown-item" href="#" ng-click="createStep({ type: 'es',        dueDate: 0, assignedTo: ['ES-Review']        })">Executive Secretary</a></li>
+                <li><a  class="dropdown-item" href="#" ng-click="createStep({ type: 'edit',      dueDate: 0, assignedTo: ['EditorialService'] })">Editors</a></li>
 
                 <li role="separator" class="divider"></li>
                 <li>
@@ -101,7 +101,7 @@
                       <i class="fa fa-minus-circle"></i>
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li><a href="#" ng-click="deleteStep(s._id)">Delete step</a></li>
+                    <li><a  class="dropdown-item" href="#" ng-click="deleteStep(s._id)">Delete step</a></li>
                   </ul>
                 </div>
               
@@ -116,7 +116,7 @@
                 Initilize workflow for this documment <span class="caret"></span>
               </button>
               <ul class="dropdown-menu">
-                <li ng-repeat="t in workflowTemplates"><a href="#" ng-click="initializeWorkflow(t)">{{t.title}}</a></li>
+                <li ng-repeat="t in workflowTemplates"><a  class="dropdown-item" href="#" ng-click="initializeWorkflow(t)">{{t.title}}</a></li>
               </ul>
             </div>
         </td>
