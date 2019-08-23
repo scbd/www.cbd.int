@@ -66,7 +66,8 @@
     <!-- Nav tabs -->
 
     <style>
-        .meeting-documents .nav-tabs> .nav-item  {  margin-top:30px }
+        .meeting-documents .inSessionEnabled > .nav-item  {  margin-top:30px; }
+        .meeting-documents .nav-tabs > .nav-item > .nav-link  {  padding:.5rem 0.5rem; }
         .meeting-documents .nav-tabs>li                  > div.in-session-label { display: none }
         .meeting-documents .nav-tabs>li.in-session.first > div.in-session-label { display: block }
         .meeting-documents .nav-tabs>li.in-session.first          { margin-top:unset!important;padding-top:15px}
@@ -80,7 +81,7 @@
         No documents have yet been posted.
     </p>
     <nav>
-        <ul ng-if="!documentsCtrl.noTabs" class="nav nav-tabs nowrap hidden-print doc-tabs" role="tablist">
+        <ul ng-if="!documentsCtrl.noTabs" class="nav nav-tabs nowrap hidden-print doc-tabs" role="tablist" ng-class="::{'inSessionEnabled':documentsCtrl.inSessionEnabled}">
             <li code="{{type.code}}" class="nav-item" 
                 ng-repeat="type in documentsCtrl.tabs|limitTo:documentsCtrl.maxTabCount"  
                 ng-class="{'active': documentsCtrl.currentTab==type.code, 'in-session': type.insession, 'first': type.insessionFirst, 'last': type.insessionLast }" >
@@ -91,12 +92,12 @@
                 </a>
             </li>
             <li class="nav-item"  ng-class="{active:!!documentsCtrl.currentExtraTab}" ng-if="(documentsCtrl.tabs|limitTo:999:documentsCtrl.maxTabCount).length">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" ng-class="{'active': !!documentsCtrl.currentExtraTab}">
-                    <span>{{documentsCtrl.currentExtraTab||'More'}}</span>
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" ng-class="{'active': !!documentsCtrl.currentExtraTab}">
+                    <span>{{(documentsCtrl.currentExtraTab||'More')|limitTo:13}}</span>
                 </a>
                 <ul class="dropdown-menu">
                     <li ng-repeat="type in documentsCtrl.tabs|limitTo:999:documentsCtrl.maxTabCount" code="{{type.code}}">
-                        <a href="#" ng-click="documentsCtrl.switchTab(type, true)">
+                        <a class="dropdown-item" href="#" ng-click="documentsCtrl.switchTab(type, true)">
                             {{::type.title}} ({{type.length}})
                         </a>
                     </li>

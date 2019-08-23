@@ -358,9 +358,9 @@
                                                     <span class="caret"></span> {{user.name}}
                                                     </button>
                                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuL" style="padding: 5px;">
-                                                        <li><a ng-href="{{templateCtrl.accountsUrl+'/profile?returnUrl=' +templateCtrl.getEncodedReturnUrl()}}"><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
-                                                        <li><a ng-href="{{templateCtrl.accountsUrl+'/password?returnUrl='+templateCtrl.getEncodedReturnUrl()}}"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
-                                                        <li><a ng-click="templateCtrl.signOut()"  href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
+                                                        <li><a  class="dropdown-item" ng-href="{{templateCtrl.accountsUrl+'/profile?returnUrl=' +templateCtrl.getEncodedReturnUrl()}}"><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
+                                                        <li><a  class="dropdown-item" ng-href="{{templateCtrl.accountsUrl+'/password?returnUrl='+templateCtrl.getEncodedReturnUrl()}}"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
+                                                        <li><a  class="dropdown-item" ng-click="templateCtrl.signOut()"  href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
                                                     </ul>
                                                 </div>
                                             </div> <!--  end sign in-->
