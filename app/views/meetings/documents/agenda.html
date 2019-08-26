@@ -1,8 +1,19 @@
 <div class="meeting-agenda">
     <div class="btn btn-link hidden-print" style="color:inherit;cursor:inherit;text-decoration:none;position:absolute;top:0px;right:0px;" ng-if="agendaCtrl.now">
-        <span ng-if="::(agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'H:mm:ss') != '0:00:00'"><em>Time at venue:</em> <b>{{agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'H:mm'}}</b> | </span>
-        Schedule as on <select ng-model="agendaCtrl.scheduleDate" 
-           ng-options="l.value as l.text for l in agendaCtrl.scheduleDates | orderBy:'-value'" ng-change="agendaCtrl.scheduleDateChanged()"></select>                  
+        
+        <span ng-if="::(agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'H:mm:ss') != '0:00:00'">
+
+            <em class="hidden-xs">Time at venue:</em>
+            <em class="visible-xs-inline fa fa-clock-o"></em>
+            <b ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'H:mm'"></b>
+
+            <span class="hidden"> |
+                Schedule as on 
+                <select ng-model="agendaCtrl.scheduleDate" 
+                    ng-options="l.value as l.text for l in agendaCtrl.scheduleDates | orderBy:'-value'" ng-change="agendaCtrl.scheduleDateChanged()">
+                </select>
+            </span>
+        </span>
     </div>
 
     <!-- Nav tabs -->
@@ -66,17 +77,13 @@
                                             <span ng-switch-when="evening">Evening</span>
                                             <span ng-switch-default>{{::part}}</span>
                                         </span>
-
-                                        <span class="visible-xs small" style="color:#777">
-                                            {{::(reservations|limitTo:1: 0)[0].start|moment:'tz':agendaCtrl.event.timezone|moment:'format':'HH:mm'}}
-                                        </span>
                                     </div>
                                 </th>
                             </tr>
                         </thead>
                         <tr ng-repeat="res in reservations">
 
-                            <td class="hidden-xs text-center text-nowrap text-primary" style="width:1px;border-right:solid 1px #ddd">
+                            <td class="text-center text-nowrap text-primary" style="width:1px;border-right:solid 1px #ddd">
                                 <b>{{::res.start|moment:'tz':agendaCtrl.event.timezone|moment:'format':'HH:mm'}}</b>
                                 <!-- <i>to</i><br>
                                 {{::res.end  |moment:'tz':agendaCtrl.event.timezone|moment:'format':'HH:mm'}}<br> -->

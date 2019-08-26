@@ -1,5 +1,5 @@
 define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/moment', 'directives/view-injector',
-'directives/print-smart/print-smart-checkout', './meeting-document', 'services/conference-service', 'css!./agenda.css'],
+'directives/print-smart/print-smart-checkout', './meeting-document', 'services/conference-service', 'css!./agenda.css', 'css!./meeting-documents.css'],
  function(_, moment, ng) {
     //'css!./agenda.css' // moved to template
 
