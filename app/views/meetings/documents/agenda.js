@@ -409,6 +409,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                 dates.push(dateOption)
             }
 
+            _ctrl.scheduleDate  = _ctrl.scheduleDate || "";
             _ctrl.scheduleDates = dates;
         };
 
