@@ -30,7 +30,7 @@ BODY {
 		                <div>{{d.title}}</div>
 					</td>
 		            <td style="width=1px;">
-                        <a href="#" ng-click="edit(d)"><i class="fa" ng-class="{ 'fa-comment-o' : !d.hasComments, 'fa-comments-o' : d.hasComments }" aria-hidden="true"></i></a>
+                        <a ng-if="::canComment" href="#" ng-click="edit(d)"><i class="fa" ng-class="{ 'fa-comment-o' : !d.hasComments, 'fa-comments-o' : d.hasComments }" aria-hidden="true"></i></a>
                     </td>
 				</tr>
 			</table>

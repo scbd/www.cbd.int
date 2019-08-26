@@ -20,6 +20,7 @@ define(['app','./directives/meeting'], function() { 'use strict';
         $scope.edit = edit;
         $scope.body = body;
         $scope.session = session;
+        $scope.canComment = canComment();
         $scope.$root.page = { title: body+'-'+session+' Decisions' };
 
         //=================================
