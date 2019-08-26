@@ -70,9 +70,6 @@
                                         <span class="visible-xs small" style="color:#777">
                                             {{::(reservations|limitTo:1: 0)[0].start|moment:'tz':agendaCtrl.event.timezone|moment:'format':'HH:mm'}}
                                         </span>
-                                        <span ng-if="::(reservations|limitTo:1: 0)[0].video" class="pull-right"> 
-                                            <a title="video stream" target="_blank" ng-href="{{::(((reservations|limitTo:1: 0)[0].videoUrl) || ((reservations|limitTo:1: 0)[0].room.videoUrl))}}"><i  class="fa fa-video-camera"></i></a>
-                                        </span>
                                     </div>
                                 </th>
                             </tr>
@@ -83,6 +80,15 @@
                                 <b>{{::res.start|moment:'tz':agendaCtrl.event.timezone|moment:'format':'HH:mm'}}</b>
                                 <!-- <i>to</i><br>
                                 {{::res.end  |moment:'tz':agendaCtrl.event.timezone|moment:'format':'HH:mm'}}<br> -->
+
+                                <div ng-if="res.videoUrl">
+                                    <a class="badge badge-dark"  title="video stream" target="_blank" ng-href="{{res.videoUrl}}">
+                                        Watch <i  class="fa fa-video-camera"></i>
+                                    </a> <br>
+                                    <a  class="badge badge-danger" ng-if="res.start <= agendaCtrl.now.toISOString()" target="_blank" ng-href="{{res.videoUrl}}">
+                                        Live
+                                    </a> 
+                                </div>
                             </td>
 
                             <td style="padding:0px;">
