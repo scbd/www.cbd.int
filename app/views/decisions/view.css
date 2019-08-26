@@ -77,7 +77,7 @@
 		font-weight: bold
 	}
 
-    .view-decision .label.disabled {
+    .view-decision .badge.disabled {
         opacity: 0.5;
     }
 
