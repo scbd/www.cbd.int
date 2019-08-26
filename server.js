@@ -64,6 +64,7 @@ app.get('/meetings',      function(req, res) { res.render('template-phoenix', { 
 app.get('/meetings/*',    function(req, res) { res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
 app.get('/conferences',   function(req, res) { res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
 app.get('/conferences/*', function(req, res) { res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
+app.get('/decisions/*',   function(req, res) { res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
 
 app.use(require('./libs/prerender')); // set env PRERENDER_SERVICE_URL
 
