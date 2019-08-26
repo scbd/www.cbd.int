@@ -66,15 +66,33 @@
     <!-- Nav tabs -->
 
     <style>
-        .meeting-documents .inSessionEnabled > .nav-item  {  margin-top:30px; }
-        .meeting-documents .nav-tabs > .nav-item > .nav-link  {  padding:.5rem 0.5rem; }
-        .meeting-documents .nav-tabs>li                  > div.in-session-label { display: none }
-        .meeting-documents .nav-tabs>li.in-session.first > div.in-session-label { display: block }
-        .meeting-documents .nav-tabs>li.in-session.first          { margin-top:unset!important;padding-top:15px}
+        .meeting-documents .inSessionEnabled > .nav-item       { margin-top:30px; }
+        .meeting-documents .nav-tabs > .nav-item > .nav-link   { padding:.5rem 0.5rem; }
+        .meeting-documents .nav-tabs>li                        { position: relative; } 
+        .meeting-documents .nav-tabs>li            > div.in-session-label { display: none }
+        .meeting-documents .nav-tabs>li.in-session::before {
+            content: "In-Session";
+            font-size:10px;
+            font-weight:bold;
+            color:rgba(0,0,0,.05);;
+            font-variant: small-caps;
+            display: block;
+            position: absolute;
+            top:-18px;
+            left:0px;
+            right:0px;
+            padding: 2px;
+            background-color:rgba(0,0,0,.05);
+        }
+        .meeting-documents .nav-tabs>li.in-session.first::before { 
+            color:#444;
+        }
+
+        /*       .meeting-documents .nav-tabs>li.in-session.first          { margin-top:unset!important;padding-top:15px}
         .meeting-documents .nav-tabs>li.in-session                { padding-left:4px; background:#eee;padding-right:4px;padding-top:5px;margin-top:25px }
         .meeting-documents .nav-tabs>li.in-session       >div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0   4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
         .meeting-documents .nav-tabs>li.in-session.first >div.bg  { position:absolute;top:-21px;left:0px; right:-2px;height:62px;background-color:#eee;border-radius: 4px 4px 0 0;border-top:1px solid #ddd;border-left:1px  solid #ddd;border-right:1px solid #ddd;}
-        .meeting-documents .nav-tabs>li.in-session.last  >div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0   4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;}
+        .meeting-documents .nav-tabs>li.in-session.last  >div.bg  { position:absolute;top:-21px;left:-2px;right:-2px;height:62px;background-color:#eee;border-radius: 0   4px 0 0;border-top:1px solid #ddd;border-right:1px solid #ddd;} */
     </style>
 
     <p ng-if="!documentsCtrl.error && documentsCtrl.loaded && !documentsCtrl.tabs.length">
@@ -86,7 +104,6 @@
                 ng-repeat="type in documentsCtrl.tabs|limitTo:documentsCtrl.maxTabCount"  
                 ng-class="{'active': documentsCtrl.currentTab==type.code, 'in-session': type.insession, 'first': type.insessionFirst, 'last': type.insessionLast }" >
                 
-                <div class="in-session-label" style="top:-18px;left:0px;right:2px;height:15px;font-size:10px;font-weight:bold;color:#444">&nbsp;&nbsp;&nbsp;IN-SESSION</div>
                 <a class="nav-link" href="#" ng-click="documentsCtrl.switchTab(type)" role="tab" data-toggle="tab" ng-class="{'active': documentsCtrl.currentTab==type.code}">
                     {{::type.title}} ({{type.length}})
                 </a>
