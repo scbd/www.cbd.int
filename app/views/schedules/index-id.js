@@ -15,6 +15,7 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
 
         var _ctrl = $scope.scheduleCtrl =  this;
 
+        _ctrl.now = now;
         _ctrl.CALENDAR = CALENDAR_SETTINGS;
 
         $scope.$on("refresh",  load);
@@ -28,7 +29,6 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
 
             var streamId = $route.current.params.streamId || defaultStreamId;
             var options  = { params : { cache:true } };
-            var now = new Date();
          
             $q.when($route.current.params.code).then(function(code){
 
@@ -38,11 +38,10 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
 
             }).then(function(conf){
 
+                _ctrl.timezone = conf.timezone;
+
                 if($route.current.params.datetime) // only add if set. avoid cache busting
-                {
-                    now = moment.tz($route.current.params.datetime, conf.timezone).toDate();
-                    options.params.datetime = now;
-                }
+                    options.params.datetime = now();
                 
             }).then(function(){
                 
@@ -64,7 +63,7 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
                 var types = _.reduce(res[0].data, function(ret, r){ ret[r._id] = r; return ret; }, {});
                 var rooms = _.reduce(res[1].data, function(ret, r){ ret[r._id] = r; return ret; }, {});
 
-                _ctrl.now    = moment(now).tz(_streamData.eventGroup.timezone);
+                _ctrl.timezone = _streamData.eventGroup.timezone;
                 _ctrl.event  = _streamData.eventGroup;
                 _ctrl.frames = _streamData.frames;
                 _ctrl.frames.forEach(function(f){
@@ -76,6 +75,7 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
 
                         r.type = types[r.type];
                         r.room = rooms[(r.location||{}).room];
+                        r.videoUrl = r.video && (r.videoUrl || r.room.videoUrl)
 
                         return _.defaults(r, { open : !(types[r.type]||{}).closed });
 
@@ -93,11 +93,21 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
 
                 var typePriority =  ((r.type.priority || 999999)+1000000).toString().substr(1);
                 var roomPriority =  r.room.title+' ';
-                var timePriority =  moment.tz(r.start, _ctrl.event.timezone).format("HH:mm");
+                var timePriority =  moment.tz(r.start, _ctrl.timezone).format("HH:mm");
 
                 return (timePriority + '-' + typePriority + '-' + roomPriority + '-' + (r.title||'')).toLowerCase();
             }
+        }
 
+        function now() {
+
+            if(!_ctrl.timezone)
+                return;
+
+            if($route.current.params.datetime)
+                return now = moment.tz($route.current.params.datetime, _ctrl.timezone).toDate();
+
+            return new Date();
         }
 	}];
 });

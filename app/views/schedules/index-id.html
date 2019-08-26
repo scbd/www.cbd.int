@@ -46,7 +46,7 @@
     <div>
 
         <div class="col-xs-12" ng-if="scheduleCtrl.frames.length==0">
-            <h3>{{::scheduleCtrl.now|moment:'tz':scheduleCtrl.event.timezone|moment:'calendar':(undefined|moment):scheduleCtrl.CALENDAR}}</h3>
+            <h3>{{::scheduleCtrl.now()|moment:'tz':scheduleCtrl.timezone|moment:'calendar':(undefined|moment):scheduleCtrl.CALENDAR}}</h3>
             No more activities scheduled for the day
         </div>
 
@@ -56,7 +56,7 @@
                 <!-- <div class="pull-right hidden-xs" style="margin:15px;margin-top:24px">
                     <input type="text" class="form-control" ng-model="search" placeholder="Search...">
                 </div> -->
-                <h2 class="pull-right"><small ng-if=":: false && scheduleCtrl.now"><em>Time at venue:</em> <b>{{scheduleCtrl.now | moment:'tz':scheduleCtrl.event.timezone | moment:'format':'H:mm'}}</b></small></h2>
+                <h2 class="pull-right"><small ng-if=":: false && scheduleCtrl.now()"><em>Time at venue:</em> <b>{{scheduleCtrl.now() | moment:'tz':scheduleCtrl.timezone | moment:'format':'H:mm'}}</b></small></h2>
                 <h3>{{frame.content.title}}</h3>
                 <p class="alert alert-info mobile-app-hidden" ng-if="(frame.reservations | filter:{ type : { _id: '570fd0a52e3fa5cfa61d90ee' } }).length">
                     <a href='/side-events'  style="color:inherit">For a detailed and complete list of side-events, please click here to visit the CBD Side-Events page</a>.
@@ -67,14 +67,14 @@
                             <table class="table">
                                 <tr>
                                     <td class="schedule-item-time text-right" class="text-nowrap" style="width:55px">
-                                        <div class="text-primary"><b>{{r.start | moment:'tz':scheduleCtrl.event.timezone | moment:'format':'H:mm'}}</b></div>
+                                        <div class="text-primary"><b>{{r.start | moment:'tz':scheduleCtrl.timezone | moment:'format':'H:mm'}}</b></div>
                                         <div class="small text-muted">
                                             <span ng-show="r.open">Open</span>
                                             <span ng-hide="r.open">Closed</span>
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="schedule-item-type pull-right" style="text-align:center">
+                                        <div class="schedule-item-type pull-right text-right" style="text-align:center">
 
                                             <span ng-switch="r.type._id">
 
@@ -105,10 +105,15 @@
                                                         <em>#{{r.sideEvent.id}}</em>
                                                     </a>
                                             </div>
-                                            <div ng-if="r.room.videoUrl">
-                                                <a title="video stream" target="_blank" ng-href="{{r.room.videoUrl}}"><i  class="fa fa-video-camera"></i></a>
+
+                                            <div ng-if="r.videoUrl">
+                                                <a  class="badge badge-danger" ng-if="r.start <= scheduleCtrl.now().toISOString()" target="_blank" ng-href="{{r.videoUrl}}">
+                                                    Live
+                                                </a> 
+                                                <a class="badge badge-dark"  title="video stream" target="_blank" ng-href="{{r.videoUrl}}">
+                                                    Watch <i  class="fa fa-video-camera"></i>
+                                                </a>
                                             </div>
-                                            
                                         </div>
 
                                         <div class="schedule-item-title" style="font-weight:bold">

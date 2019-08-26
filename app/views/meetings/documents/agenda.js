@@ -113,17 +113,6 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                     return reservations;
                 });
 
-            }).then(function(res){ //load rooms for reservations
-                
-                return $http.get('/api/v2016/venue-rooms', { cache : true, params: { q: { venue : _ctrl.event.venueId },        f: { title: 1, location: 1, videoUrl:1 }, cache:true } })
-                    .then(function(roomsResult){
-                        
-                        var rooms = _.reduce(roomsResult.data, function(ret, r){ ret[r._id] = r; return ret; }, {});
-                        _.each(res, function(r){
-                            r.room = rooms[(r.location||{}).room];
-                        });
-                        return res;
-                    })
             }).then(function(res){
                 
                 reservations = res;
@@ -303,9 +292,37 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
                 ]
             };
 
-            return $http.get('/api/v2016/reservations', { params: { q : query, f : fields, s: sort, cache: true } }).then(function(res){
-                return res.data;
+            var rooms = loadRooms();
+            var reservations = $http.get('/api/v2016/reservations', { params: { q : query, f : fields, s: sort, cache: true } }).then(resData);
+            
+            return $q.all([reservations, rooms]).then(function(res){
+
+                reservations = res[0];
+                rooms        = res[1];
+                
+                return _.map(reservations, function(r){
+                    
+                    r.room     = rooms[(r.location||{}).room];
+                    r.videoUrl = r.video && (r.videoUrl || r.room.videoUrl);
+
+                    return r;
+                })
             });
+        }
+
+        //==============================
+        //
+        //==============================
+        var rooms;
+        function loadRooms() {
+
+            return rooms || $http.get('/api/v2016/venue-rooms', { cache : true, params: { q: { venue : _ctrl.event.venueId },        f: { title: 1, location: 1, videoUrl:1 }, cache:true } }).then(function(res){
+                
+                return _.reduce(res.data, function(ret, r){ 
+                    ret[r._id] = r; 
+                    return ret; 
+                }, {});
+            })
         }
 
         //==============================
@@ -422,6 +439,10 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             
             $timeout(function(){load();_ctrl.currentTab = tab;}, 100)
 
+        }
+
+        function resData(res) {
+            return res.data;
         }
 	}];
 });
