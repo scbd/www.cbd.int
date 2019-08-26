@@ -47,7 +47,7 @@ app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiUrl, sec
 
 app.get('/robots.txt', function (req, res) {
 
-    var isValidHost = ['www.cbd.int'].includes(req.headers['hosts']);
+    var isValidHost = ['www.cbd.int'].includes(req.headers['host']);
 
     var text = isValidHost ? 'Allow: /' : 'Disallow: /';
 
@@ -69,7 +69,7 @@ app.use(require('./libs/prerender')); // set env PRERENDER_SERVICE_URL
 
 app.get('/*',            function(req, res) {
     let template = 'template'
-    if(req.headers['x-wpt']=='phonenix')
+    if(req.headers['x-wpt']=='phoenix')
         template =  'template-phoenix';
     res.render(template, { gitVersion: gitVersion, cdnUrl: cdnUrl }); 
 });
