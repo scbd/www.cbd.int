@@ -1,5 +1,7 @@
 define([], function(){
 
+    return [];
+/*
     return [{
         code: 'capital',
         title: 'Capital Hall',
@@ -11,5 +13,5 @@ define([], function(){
         description: 'WG-2',
         location: 'Building 1'
     }]
-
+*/
 })
