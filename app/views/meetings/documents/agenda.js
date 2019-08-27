@@ -19,8 +19,8 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         { code: 'evening',   end : '24:00'}
     ];
 
-	return ["$scope", "$route", "$http", '$q', '$interval', 'conferenceService', '$location', '$timeout',
-     function ($scope, $route, $http, $q, $interval, conferenceService, $location, $timeout) {
+	return ["$scope", "$route", "$http", '$q', '$interval', 'conferenceService', '$location', '$timeout', '$rootScope',
+     function ($scope, $route, $http, $q, $interval, conferenceService, $location, $timeout, $rootScope) {
 
         var eventId;
         var streamId;
@@ -35,7 +35,8 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         _ctrl.hasTab    = hasTab;
         _ctrl.resolveLiteral = function(value) { return function() { return value; }; };
         _ctrl.scheduleDateChanged = scheduleDateChanged;
-
+        _ctrl.deviceSize          = $rootScope.deviceSize;
+        
         $q.when(conferenceService.getActiveConference())
         .then(function(meeting){
             eventId     = meeting._id;
@@ -66,8 +67,9 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         //
         //==============================
         function updateTime() {
-            if(_ctrl.event){                
-                _ctrl.now = moment.tz($route.current.params.datetime || new Date() , _ctrl.event.timezone).toDate();
+            if(_ctrl.event){              
+                // BF not sure why we use $route.current.params.datetime instead of $location for reading qs
+                _ctrl.now = moment.tz($location.search().datetime || $route.current.params.datetime || new Date() , _ctrl.event.timezone).toDate();
             }
             return _ctrl.now;
         }
@@ -405,7 +407,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             if(end > now){
                 end = now;
             }
-
+            updateTime(); //update time in now to reflect the UI
             var difference = end.diff(start, 'days')+1;
             var dates = []
             for(var i=0; i < difference; i++){
@@ -430,7 +432,8 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             _ctrl.scheduleDates = dates;
         };
 
-        function scheduleDateChanged(){ 
+        function scheduleDateChanged(date){ 
+            _ctrl.scheduleDate = date;
             var tab = _ctrl.currentTab;     
             _ctrl.types[0].loaded = false;
             _ctrl.currentTab = undefined;
