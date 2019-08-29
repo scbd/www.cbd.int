@@ -131,7 +131,10 @@
 
             <div ng-if="type.loaded || documentsCtrl.currentTab==type.code || documentsCtrl.noTabs">
 
-                <h3 ng-if="::documentsCtrl.noTabs">{{::type.title}}</h3>
+                <h3 ng-if="::documentsCtrl.noTabs">
+                    <span ng-bind="::type.title"></span>
+                    <small class="text-muted" ng-if="::type.insession" style="font-variant: small-caps">(In-Session)</small>
+                </h3>
 
                 <div class="clearfix"></div>
 

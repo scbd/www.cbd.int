@@ -16,12 +16,12 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
             'outcome'        : { position: 100 , title : 'Outcomes'      },
             'official'       : { position: 200 , title : 'Official'      },
             'information'    : { position: 300 , title : 'Information'   },
-            'statement'      : { position: 400 , title : 'Statements'    },
+            'statement'      : { position: 400 , title : 'Statements',   insession: true },
             'notification'   : { position: 500 , title : 'Notifications' },
             'other'          : { position: 600 , title : 'Other'         },
-            'in-session'     : { position: 700 , title : 'Plenary'       },
-            'in-session/wg1' : { position: 800 , title : 'WG I'          },
-            'in-session/wg2' : { position: 900 , title : 'WG II'         }
+            'in-session'     : { position: 700 , title : 'Plenary',      insession: true },
+            'in-session/wg1' : { position: 800 , title : 'WG I',         insession: true },
+            'in-session/wg2' : { position: 900 , title : 'WG II',        insession: true }
         };
 
         var sections = {
@@ -319,8 +319,9 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
                 tab = {
                     code : code,
-                    title: (groups[code]||{}).title||code.toUpperCase(),
-                    sections : []
+                    title:     (groups[code]||{}).title||code.toUpperCase(),
+                    insession: (groups[code]||{}).insession,
+                    sections : [] 
                 };
 
                 _ctrl.tabs.push(tab);
