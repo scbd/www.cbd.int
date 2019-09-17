@@ -75,7 +75,7 @@
                                 <strong class="text-nowrap">{{::$index+1}}.</strong>
                             </td>
                             <td>
-                                <div class="pull-right"><i class="fa fa-calendar-check-o fa-fw"></i> {{submission.submittedDate | date:'yyyy-MM-dd'}}</div>
+                                <div class="pull-right"><i class="fa fa-calendar-check-o fa-fw"></i> {{submission.submittedDate | date:'yyyy-MM-dd':'UTC'}}</div>
                                 <strong>{{::submission.title | lstring}}</strong> <a ng-href="{{::submission.url_ss[0]}}"><i class="fa fa-external-link" aria-hidden="true"></i></a>
                                 <div class="text-muted">{{::submission.government|term}}</div>
                             </td>
