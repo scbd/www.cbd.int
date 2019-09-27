@@ -70,12 +70,16 @@
                                 isSelected = code == event.code && $scope.meetingNavCtrl.isSelected('/conferences/'+$scope.meeting.code+'/'+event.menus[j].code, true)
                                 if(isSelected){
                                     selectedMenu = event.menus[j];
+                                    if(!event.isExpanded)
+                                        $scope.meetingNavCtrl.expandMenu(event)
                                     break;
                                 }
                                 
                                 isSelected = code == event.code && $scope.meetingNavCtrl.isSelected('/conferences/'+$scope.meeting.code+'/'+event.menus[j].code)
                                 if(isSelected){
                                     selectedMenu = event.menus[j];
+                                    if(!event.isExpanded)
+                                        $scope.meetingNavCtrl.expandMenu(event)
                                     break;
                                 }
                             }
