@@ -1,5 +1,5 @@
 ﻿define(['angular', 'lodash', './data/actors', './data/statuses', './data/sessions', 'filters/lodash', 'filters/lstring', './view-element',
- 'css!./view.css', 'directives/aichi-targets/pagination','filters/term'], 
+ 'css!./view.css', 'directives/aichi-targets/pagination','filters/term','./directives/header-decisions'], 
 function(ng, _, actorList, statusesList, sessionList){
     
 

@@ -1,19 +1,12 @@
 <div class="decision-tracking">
-	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb">
-			<li class="breadcrumb-item"><a href="/" target="_self">Home</a></li>
-			<li class="breadcrumb-item"><a href="/decisions" target="_self">Decisions</a></li>
-			<li class="breadcrumb-item"><a href="/decisions/{{::decision.body|lowercase}}/{{::decision.session}}">{{::decision.body|uppercase}}-{{::decision.session}}</a></li>
-			<li class="breadcrumb-item"><a href="/decisions/{{::decision.body|lowercase}}/{{::decision.session}}/{{::decision.decision}}">Decision {{romanize(decision.session)}}/{{decision.decision}}</a></li>
-			<li class="breadcrumb-item active">Paragraph {{paragraph}}</li>
-		</ol>
-	</nav>
 
-	<h1>Decision {{romanize(decision.session)}}/{{decision.decision}}
-        <span ng-if="section"> section {{section}}</span>
-        <span ng-if="paragraph"> paragraph {{paragraph}}</span>
-        <span ng-if="item"> item ({{item}})</span>
-    </h1>
+	<header-decisions>
+		<h1>Decision {{romanize(decision.session)}}/{{decision.decision}}
+			<span ng-if="section"> section {{section}}</span>
+			<span ng-if="paragraph"> paragraph {{paragraph}}</span>
+			<span ng-if="item"> item ({{item}})</span>
+		</h1>
+	</header-decisions>
 
 	<div class="row">
 		<div class="col-md-7">
