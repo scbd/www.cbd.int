@@ -32,28 +32,10 @@
             width:98.8%;
         }
     </style>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">   
-            <li class="breadcrumb-item">
-                <a href="/" target="_self">Home</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="/decisions" target="_self">Decisions</a>
-            </li>
-            <li class="breadcrumb-item active">Search</li>
-            <li  style="padding-left:50%">
-                <a href="#" ng-click="edit()">
-                    <i class="fa" ng-class="{ 'fa-comment-o' : !hasComments, 'fa-comments-o' : hasComments }" aria-hidden="true"></i>
-                </a>
-                <a ng-if="::canEdit" href="#" ng-click="edit()">
-                    <i class="fa fa-edit" aria-hidden="true"></i>
-                </a>
-            </li>
-        </ol>
-    </nav>
 
-    <h1>Search Decisions</h1>
-
+    <header-decisions>
+        <h1>Search Decisions</h1>
+    </header-decisions>
 
     <div class="row">
         <div class="col-md-12">
@@ -227,6 +209,7 @@
 
                 </div>
             </div>
+
         </div>
     </div>
 </div>

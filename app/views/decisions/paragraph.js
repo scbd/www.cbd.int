@@ -1,4 +1,4 @@
-define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view-element', 'filters/moment', 'filters/lodash', './directives/notification', './directives/meeting-document', './directives/meeting', './directives/decision-reference','filters/term'], function(ng, _) { 'use strict';
+define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view-element', 'filters/moment', 'filters/lodash', './directives/notification', './directives/meeting-document', './directives/meeting', './directives/decision-reference','filters/term','./directives/header-decisions'], function(ng, _) { 'use strict';
 
     return ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', '$filter',
     function($scope, $http, $route, $location, $compile, $anchorScroll, $filter) {

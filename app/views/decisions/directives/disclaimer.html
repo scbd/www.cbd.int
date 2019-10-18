@@ -1,0 +1,22 @@
+<section>
+  <style>
+    .card { transition: display 2.2s ease-out; }
+  </style>
+  <div ng-show="state.hidden" style="float: right; text-align: right;">
+    <a href="#" ng-click="toggle()">Disclaimer</a>
+  </div>
+  <div class="card" style="margin-bottom: 3e" ng-show="!state.hidden">
+    <div class="card-body" >
+      <h5 class="card-title">
+        Disclaimer
+        <button type="button" class="close" aria-label="Close" ng-click="toggle()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+      </h5>
+
+      <p class="card-text"> This webpage presents Decision-tracking Tool.  It contains the text of the decisions of the Conference of the Parties to the Convention on Biological Diversity, and information developed by the Secretariat of the Convention on Biological Diversity (SCBD) resulting from reviewing the nature and the status of implementation of each of the elements of the decisions in accordance with the criteria agreed by the Conference of the Parties in the Annex to decision XII/28 of the Conference of the Parties. The information is provided without warranty of any kind, either express or implied, including, without limitation, warranties of merchantability, fitness for a particular purpose and non-infringement. The SCBD specifically does not make any warranties or representations as to the accuracy or completeness of any of the information on this webpage. SCBD periodically adds, changes, improves or updates the information on this webpage without notice. Under no circumstances shall the SCBD be liable for any loss, damage, liability or expense incurred or suffered that is claimed to have resulted from the use of this webpage, including, without limitation, any fault, error, omission, interruption or delay with respect thereto.</p>
+      <p class="card-text"> SCBD welcomes any comments or views from users regarding the review of the elements of the decisions and the features and functionalities of the Decision-Tracking Tool.</p>
+    </div>
+  </div>
+  <br/>
+</section>
