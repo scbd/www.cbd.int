@@ -13,9 +13,8 @@ define(['app', 'text!./disclaimer.html'], function(app, template) { 'use strict'
                 $scope.toggle = toggle
 
                 function toggle(){
-                    console.log($scope.state)
                     $scope.state.hidden = !$scope.state.hidden
-                    $cookies.putObject('decisionTrackingDisclaimer', $scope.state, [{path:'/decisions/search', secure: true, samesite:true}]);
+                    $cookies.putObject('decisionTrackingDisclaimer', $scope.state, [{path:'/decisions', secure: true, samesite:true}]);
                 }
             }
         }

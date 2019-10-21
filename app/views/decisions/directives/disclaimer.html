@@ -1,11 +1,8 @@
 <section>
-  <style>
-    .card { transition: display 2.2s ease-out; }
-  </style>
-  <div ng-show="state.hidden" style="float: right; text-align: right;">
+  <div ng-if="state.hidden" style="float: right; text-align: right;">
     <a href="#" ng-click="toggle()">Disclaimer</a>
   </div>
-  <div class="card" style="margin-bottom: 3e" ng-show="!state.hidden">
+  <div class="card" style="margin-bottom: 3e" ng-if="!state.hidden">
     <div class="card-body" >
       <h5 class="card-title">
         Disclaimer
