@@ -1,5 +1,5 @@
 define(['app', 'angular','text!./toast.html',
-'lodash', 'providers/realm'], function(app, ng, toastTemplate, _) {
+'lodash', 'providers/realm','./directives/bread-crumbs'], function(app, ng, toastTemplate, _) {
     'use strict';
 
     app.controller('TemplateController', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$location', 

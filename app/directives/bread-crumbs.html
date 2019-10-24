@@ -1,0 +1,50 @@
+<section>
+
+  <style>
+    .article-category {
+      position: relative;
+      font-weight: 400;
+    }
+
+    ul.bc {
+      padding: 0 0 0 0;
+      list-style: none;
+    }
+
+    /* Display list items side by side */
+    ul.bc li {
+      display: inline;
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 400;
+      letter-spacing: .025em;
+      line-height: 1.5;
+    }
+
+    /* Add a slash symbol (/) before/behind each list item */
+    ul.bc li+li:before {
+      padding: 0 3px 0 0;
+      color: #aaa;
+      content: "/\00a0/\00a0";
+      letter-spacing: -1.0px;
+    }
+
+    /* Add a color to all links inside the list */
+    ul.bc li a {
+      color: #aaa;
+      text-decoration: none;
+    }
+
+    /* Add a color on mouse-over */
+    ul.bc li a:hover {
+      color: #777;
+      text-decoration: underline;
+    }
+  </style>
+
+  <ul class="bc">
+    <li><a href="#">CBD</a></li>
+    <li ng-repeat="crumb in crumbs"><a ng-href="{{crumb.href}}">{{crumb.name}} </a></li>
+  </ul>
+  
+</section>
