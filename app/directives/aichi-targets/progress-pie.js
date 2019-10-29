@@ -15,58 +15,31 @@ define(['app', 'lodash','text!./progress-pie.html',
             require: ['^progressPie','^legend42'],
             scope: {
                 aichiTarget: '=aichiTarget',
-                itemColor:'='
+                itemColor:'=',
+                documents:'='
             },
             link: function($scope, $elem, $attrs, ctrls) {
 
-                ctrls[0].init();
+                
+                var initWatch = $scope.$watch('documents',function(newVal){
+                   
+                    if(!newVal || !newVal.length) return
+                    initWatch();
+
+                    ctrls[0].init();
+    
+                  },true);
 
             },
             controller: ['$scope', '$timeout', '$http', function($scope, $timeout, $http) {
                 $scope.showAllFlag=true;
-                $scope.leggends = {
-                    aichiTarget: [{
-                        id: 0,
-                        title: 'No Data',
-                        visible: true,
-                        color: '#dddddd'
-                    }, {
-                        id: 1,
-                        title: 'Moving Away',
-                        visible: true,
-                        color: '#6c1c67'
-                    }, {
-                        id: 2,
-                        title: 'No Progress',
-                        visible: true,
-                        color: '#ee1d23'
-                    }, {
-                        id: 3,
-                        title: 'Insufficient Rate',
-                        visible: true,
-                        color: '#fec210'
-                    }, {
-                        id: 4,
-                        title: 'Met Target',
-                        visible: true,
-                        color: '#109e49'
-                    }, {
-                        id: 5,
-                        title: 'Exceeded Target',
-                        visible: true,
-                        color: '#1074bc'
-                    }, ]
-                };
 
+                function init() { 
 
-                //============================================================
-                //
-                //============================================================
-                function init() { //jshint ignore:line
-                    query().then(buildPie);
+                    progressCounts($scope.documents,$scope.showAllFlag);
+                    buildPie();
                 }
                 this.init = init;
-
 
                 //============================================================
                 //
@@ -74,17 +47,10 @@ define(['app', 'lodash','text!./progress-pie.html',
                 function buildPie() {
 
                     var radius = 100;
-                    var legend ={
-                      "position":"right",
-                      "marginRight":20,
-                      "autoMargins":false,
-                      "fontSize":12
-                    };
 
                     if($window.screen.width<= 750){
                         radius = 75;
                         legend ={
-                          // "position":"bottom",
                           "marginRight":20,
                           "autoMargins":false,
                           "fontSize":14
@@ -99,7 +65,7 @@ define(['app', 'lodash','text!./progress-pie.html',
                             "legend": {
                               "divId": "legend-div",
                               "spacing":10,
-                              "valueText":" ([[value]]/196)"
+                              "valueText":" ([[value]]/"+$scope.total()+")"
                             },
                             "pieX":'50%',
                             "innerRadius": "30%",
@@ -120,7 +86,8 @@ define(['app', 'lodash','text!./progress-pie.html',
                         _.each($scope.chartPie.dataProvider, function(slice, index) {
                             slice.color = $scope.chartData[index].color;
                         });
-
+                    });
+                    $timeout(function() {
                         $scope.chartPie.legend.addListener('hideItem', function(e){
                              $timeout(function(){  $scope.itemColor.color=false;});
                              $timeout(function(){
@@ -141,9 +108,10 @@ define(['app', 'lodash','text!./progress-pie.html',
                               }
                             });
                         });
-                    });
+                    },2000);
 
                 }
+
                 //============================================================
                 //
                 //============================================================
@@ -159,6 +127,7 @@ define(['app', 'lodash','text!./progress-pie.html',
                     return total;
                 }
                 $scope.total=total;
+
                 //============================================================
                 //
                 //============================================================
@@ -172,33 +141,6 @@ define(['app', 'lodash','text!./progress-pie.html',
                     var query = 'NOT version_s:* AND realm_ss:chm AND schema_s:nationalAssessment AND (nationalTarget_s:"' + targetText + '" OR nationalTargetAichiTargets_ss:"' + targetText + '") AND _latest_s:true AND _state_s:public';
                     return query;
                 }
-
-
-                //=======================================================================
-                //
-                //=======================================================================
-                function query() {
-
-                    var queryParameters = {
-                        'q': queryText(),
-                        'sort': 'createdDate_dt desc, title_t asc',
-                        'fl': 'identifier_s,progress_EN_t,nationalTarget_EN_t,government_s',
-                        'wt': 'json',
-                        'start': 0,
-                        'rows': 1000000,
-                    };
-
-                    return $http.get('https://api.cbd.int/api/v2013/index/select', {
-                        params: queryParameters,
-
-                    }).success(function(data) {
-
-                        $scope.count = data.response.numFound;
-                        $scope.documents = data.response.docs;
-                        progressCounts($scope.documents,$scope.showAllFlag);
-                    });
-                } // query
-
 
                 //=======================================================================
                 //
@@ -221,86 +163,48 @@ define(['app', 'lodash','text!./progress-pie.html',
                     $scope.chartData[4] = {
                         title: 'Moving Away',
                         count: 0,
-                        color: progressToColor(0)
+                        color:'#6c1c67'
                     };
                     $scope.chartData[3] = {
                         title: 'No Change',
                         count: 0,
-                        color: progressToColor(1)
+                        color: '#ee1d23'
                     };
                     $scope.chartData[2] = {
                         title: 'Insufficient Rate',
                         count: 0,
-                        color: progressToColor(2)
+                        color: '#fec210'
                     };
                     $scope.chartData[1] = {
                         title: 'Meeting Target',
                         count: 0,
-                        color: progressToColor(3)
+                        color: '#109e49'
                     };
                     $scope.chartData[0] = {
                         title: 'Exceeding Target',
                         count: 0,
-                        color: progressToColor(4)
+                        color: '#1074bc'
                     };
-                    _.each(docs, function(doc) {
-                        if (!progressToNum(doc.progress_EN_t)) return 
-
-                        $scope.chartData[progressToNum(doc.progress_EN_t)].count++;
-                        total++;
-                        $scope.nothingReported = false;
-                    });
-                    if($scope.nothingReported)
-                      showAll = true;
                     if(showAll)
-                    $scope.chartData[5] = {
-                        title: 'No Data',
-                        count: 196-total,
-                        color: '#bbbbbb'
-                    };
-                } //
+                        $scope.chartData[5] = {
+                            title: 'No Data',
+                            count: 0,
+                            color: '#bbbbbb'
+                        };
+                    _.each(docs, function(doc) {
+                        var noData = (!doc.docs || !doc.docs.length) || !Number.isInteger(doc.progressNumber)
+                        if (!showAll && !Number.isInteger(doc.progressNumber) )
+                            return 
+                            
+                        if(noData)
+                            $scope.chartData[5].count++
+                        else
+                            $scope.chartData[Math.abs(doc.progressNumber-5)].count++;
+                        total++;
 
+                    });
 
-
-                //=======================================================================
-                //
-                //=======================================================================
-                function progressToColor(progress) {
-
-                    switch (progress) {
-                        case 4:
-                            return '#1074bc';
-                        case 3:
-                            return '#109e49';
-                        case 2:
-                            return '#fec210';
-                        case 1:
-                            return '#ee1d23';
-                        case 0:
-                            return '#6c1c67';
-                    }
-                }
-
-
-                //=======================================================================
-                //
-                //=======================================================================
-                function progressToNum(progress) {
-
-                    switch (progress.trim()) {
-                        case "On track to exceed target":
-                            return 4;
-                        case "On track to achieve target":
-                            return 3;
-                        case "Progress towards target but at an  insufficient rate":
-                            return 2;
-                        case "No significant change":
-                            return 1;
-                        case "Moving away from target":
-                            return 0;
-                    }
-                } //
-
+                } 
 
             }]
         };
