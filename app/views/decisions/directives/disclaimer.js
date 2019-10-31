@@ -25,11 +25,11 @@ define(['app', 'text!./disclaimer.html'], function(app, template) { 'use strict'
         if(!cookie) {
             var state = { hidden: false }
     
-            $cookies.putObject('decisionTrackingDisclaimer', state, [{path:'/decisions/search', secure: true, samesite:true}]);
+            $cookies.putObject('decisionTrackingDisclaimer', state, [{path:'/decisions', secure: true, samesite:true}]);
             return state;
         }
         
         return JSON.parse(cookie)
     }
-    
+
 });
