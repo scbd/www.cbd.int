@@ -19,18 +19,17 @@ define(['app', 'text!./disclaimer.html'], function(app, template) { 'use strict'
             }
         }
     }]);
-});
 
-
-
-function initCookie($cookies){
-    var cookie = $cookies.get('decisionTrackingDisclaimer')
-    if(!cookie) {
-        var state = { hidden: false }
-
-        $cookies.putObject('decisionTrackingDisclaimer', state, [{path:'/decisions/search', secure: true, samesite:true}]);
-        return state;
+    function initCookie($cookies){
+        var cookie = $cookies.get('decisionTrackingDisclaimer')
+        if(!cookie) {
+            var state = { hidden: false }
+    
+            $cookies.putObject('decisionTrackingDisclaimer', state, [{path:'/decisions/search', secure: true, samesite:true}]);
+            return state;
+        }
+        
+        return JSON.parse(cookie)
     }
     
-    return JSON.parse(cookie)
-}
+});
