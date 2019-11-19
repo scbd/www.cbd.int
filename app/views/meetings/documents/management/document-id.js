@@ -1,4 +1,4 @@
-define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'directives/file', 'filters/initials', './change-case-button', '../meeting-document'], function(_) {
+define(['lodash', 'moment', 'filters/lstring', 'filters/moment', 'filters/truncate', 'directives/file', 'filters/initials', './change-case-button', '../meeting-document'], function(_, moment) {
 
     var MIMES = {
         'application/pdf':                                                            { title: 'PDF',               color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
@@ -22,7 +22,8 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'dire
          zh : "Chinese"
      };
 
-	return ["$scope", "$route", "$http", '$location', '$q', '$window', 'user', '$filter', function ($scope, $route, $http, $location, $q, $window, user, $filter) {
+    return ["$scope", "$route", "$http", '$location', '$q', '$window', 'user', '$filter', 'conferenceService', 
+    function ($scope, $route, $http, $location, $q, $window, user, $filter, conferenceService) {
 
         $scope.FILETYPES  = MIMES;
         $scope.LANGUAGES  = LANGUAGES;
@@ -55,6 +56,8 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'dire
         _ctrl.saveLogEntry = saveLogEntry;
         _ctrl.autoGenerateNextSymbol = autoGenerateNextSymbol;
         _ctrl.onSupersede = onSupersede;
+        _ctrl.autoGenerateStatementTitle = autoGenerateStatementTitle;
+        _ctrl.computeStatementDate       = computeStatementDate;
 
         $scope.$watch('editCtrl.document.type_nature', applyTypeNature);
         $scope.$watch('editCtrl.document.symbol',      function(symbol){
@@ -81,6 +84,15 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'dire
 
             var symbol    = _ctrl.document.symbol;
             var documents = _ctrl.meetingDocuments;
+
+            if(source == 'type'){
+                if(_ctrl.document.type_nature=='in-session/statement') {
+                    loadStatementData();
+                }
+                else{
+                    _ctrl.document.statementSource = undefined;
+                }
+            } 
 
             if(source == 'type' && (!symbol || /\/$/.test(symbol))) {
 
@@ -125,6 +137,41 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'dire
             _ctrl.document.symbol = symbol;
         }
 
+        function autoGenerateStatementTitle(){
+            var source = _ctrl.document.statementSource.organization;
+            if(_ctrl.document.statementSource.country){
+                source = _.find(_ctrl.countries, {code:_ctrl.document.statementSource.country}).name.en
+            }
+            _ctrl.document.title = { en : 'Statement from ' + source||''}
+        }
+
+        function loadStatementData(){
+
+            if(!_ctrl.countries){
+                $http.get('/api/v2015/countries/', {params:{f:{code:1, 'name.en':1}, s:{'name.en':1}}}).then(function(res) {
+                    _ctrl.countries = res.data;
+                });
+            }
+
+            if(!_ctrl.conferenceDates){
+                $q.when(conferenceService.getActiveConference(_ctrl.code))
+                .then(function(conference){
+                    var start = moment.tz(conference.schedule.start,   conference.timezone);
+                    var end   = moment.tz(conference.schedule.end,     conference.timezone);
+                    var difference = end.diff(start, 'days')+1;
+                    _ctrl.conferenceDates = []
+
+                    for(var i=0; i < difference; i++){
+                        var date = moment.tz(conference.schedule.start, conference.timezone).add(i, 'd');
+                        var dateOption = {
+                            value : date.format('YYYY-MM-DD'),
+                            text : date.format('DD MMM YYYY')
+                        }
+                        _ctrl.conferenceDates.push(dateOption)
+                    }
+                })
+            }
+        }
         //==============================
         //
         //==============================
@@ -158,6 +205,7 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'dire
                 forceUpdate = document.files.length && !((document.metadata||{}).patterns||[]).length;
 
                 initFiles();
+                initStatementSource(document)
 
                 return loadSupersede();
 
@@ -205,6 +253,11 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'dire
 
             var oldDoc = prepareData(document_bak);
             var newDoc = prepareData(_ctrl.document);
+
+            _ctrl.error = undefined;
+            //validate statement
+            if(_ctrl.document.type_nature == 'in-session/statement' && !validateStatement())
+                return;
 
             var fileIds       = _(_ctrl.document.files).map('_id').compact().uniq().value();
 
@@ -282,6 +335,46 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'dire
             });
         }
 
+        function validateStatement(){
+            
+            var errors = []
+            if(!_ctrl.document.statementSource || (!_ctrl.document.statementSource.country && !_ctrl.document.statementSource.organization)){
+                errors.push({
+                    field: 'Country/Organization',
+                    message: 'Please select country or enter organization name who submitted the statement.'
+                })
+            }
+            // if(!_ctrl.statementSource || (!_ctrl.statementSource.date || !_ctrl.statementSource.hour
+            //     || !_ctrl.statementSource.minute)){
+            //     errors.push({
+            //         field: 'Date/Hour/Minute',
+            //         message: 'Please select the date hour and minute when the statement was submitted.'
+            //     })
+            // }
+
+            if(errors.length){
+                _ctrl.error = errors;
+                return false;
+            }
+
+            return true;
+        }
+
+        function computeStatementDate(){
+
+            if((_ctrl.statementSource||{}).date){
+
+                var date = _ctrl.statementSource.date;
+
+                if(_ctrl.statementSource.hour){
+                    date += 'T'+_ctrl.statementSource.hour;
+                        date += ':'+(_ctrl.statementSource.minute||'00');
+                }
+                if(!_ctrl.document.statementSource)
+                    _ctrl.document.statementSource = {};
+                _ctrl.document.statementSource.date = date
+            }
+        }
         //==============================
         //
         //==============================
@@ -351,14 +444,12 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'dire
         //==============================
         var prev = {};
         function onSupersede() {
-            console.log(_ctrl.supersede);
 
             if(_ctrl.document._id) return;
             if(!_ctrl.supersede)   return;
 
             var supersede = _.find(_ctrl.meetingDocuments, { _id: _ctrl.supersede });
 
-            console.log(supersede);
 
             if(isEmptyOrSame(_ctrl.document.title      , prev.title      )) _ctrl.document.title       = _.cloneDeep(supersede.title);
             if(isEmptyOrSame(_ctrl.document.description, prev.description)) _ctrl.document.description = _.cloneDeep(supersede.description);
@@ -497,6 +588,9 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'dire
 
             if(doc.linkedToId)
                 delete doc.metadata.patterns;
+            
+            if(document.type_nature == 'in-session/statement')
+                doc.statementSource = document.statementSource;
 
             return doc;
         }
@@ -928,5 +1022,21 @@ define(['lodash', 'filters/lstring', 'filters/moment', 'filters/truncate', 'dire
         //
         //====================================
         function resData(res) { return res.data; }
+
+        function initStatementSource(document){
+            if(document.nature == 'statement' && document.type=="in-session"){
+                _ctrl.statementSource = {};
+                if((document.statementSource||{}).date){
+                    let validDatetime   = /^([0-9]{4}-[0-9]{2}-[0-9]{2})(?:(?:T)([0-9]{2}):([0-9]{2}))?/
+                    let matches         = document.statementSource.date.match(validDatetime)
+                    if(matches.length){
+                        _ctrl.statementSource.date   = matches[1]
+                        _ctrl.statementSource.hour   = matches[2]
+                        _ctrl.statementSource.minute = matches[3]
+                    }
+                }
+                return loadStatementData();
+            }
+        }
 	}];
 });
