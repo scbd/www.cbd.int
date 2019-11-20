@@ -27,7 +27,7 @@
                     </div>
                     <div>
                         {{::document.title|lstring}}
-                        <span ng-if="document.nature=='statement' && document.statementSource.date" class="badge badge-primary" 
+                        <span ng-if="document.nature=='statement' && document.statementSource.date" class="badge" 
                             ng-bind="document.statementSource.date | moment:'format':'DD MMM YYYY HH:mm'"></span>
                     </div>
                     <div>{{::document.description|lstring}}</div>

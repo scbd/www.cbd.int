@@ -1,4 +1,4 @@
-<div>
+<div style="background: #eee;padding: 15px;">
 
     <div class="pull-right" role="group" aria-label="...">
       <button ng-disabled="uploading || !editCtrl.document._id" type="button" class="btn btn-danger"  ng-click="editCtrl.del()">Delete</button>
@@ -60,7 +60,7 @@
                     <div class="input-group">
                         <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" id="symbol" placeholder="Type a symbol eg: {{editCtrl.meeting.EVT_UN_CD||'CBD/XYZ/X'}}/..."  ng-change="editCtrl.autoGenerateNextSymbol('symbol')" 
                                ng-model="editCtrl.document.symbol" ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 250, 'blur': 0 } }">
-                        <span class="input-group-btn">
+                        <span class="input-group-append">
                             <button  class="btn btn-default" ng-click="editCtrl.document.symbol=editCtrl.normalizeSymbol(editCtrl.document.symbol||'')" type="button"
                                     ng-class="{ 'btn-warning' : editCtrl.document.symbol && editCtrl.document.symbol != editCtrl.normalizeSymbol(editCtrl.document.symbol||'') }"
                             ><i class="fa fa-check" aria-hidden="true"></i></button>
@@ -256,7 +256,7 @@
                             <option value="59">59</option>
                             <option value="60">60</option>
                         </select>
-                        <span class="badge badge-primary" ng-bind="editCtrl.document.statementSource.date| moment:'format':'DD MMM YYYY HH:mm'"></span>
+                        <span class="badge" ng-bind="editCtrl.document.statementSource.date| moment:'format':'DD MMM YYYY HH:mm'"></span>
                     </div>
                     </div>
                 </div>
@@ -268,42 +268,54 @@
             <label class="control-label" for="title_en">Title</label>
 
             <div class="input-group">
-                <span class="input-group-addon" style="min-width:45px">EN</span>
+                <div class="input-group-prepend">   
+                    <span class="input-group-text">EN</span>
+                </div>
                 <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr" id="title_en" ng-model="editCtrl.document.title.en" placeholder="{{::LANGUAGES['en']}}">
-                <span class="input-group-btn">
+                <span class="input-group-append">
                     <button ng-disabled="uploading" class="btn btn-default" ng-click="showTitleLang=!showTitleLang" type="button"><i class="fa fa-caret-{{showTitleLang?'up':'down'}}" aria-hidden="true"></i></button>
                     <change-case-button ng-model="editCtrl.document.title.en"></change-case-button>
                 </span>
             </div>
 
             <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
-                <span class="input-group-addon" style="min-width:45px">ES</span>
+                <div class="input-group-prepend">   
+                    <span class="input-group-text">ES</span>
+                </div>
                 <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="title_es" ng-model="editCtrl.document.title.es"  placeholder="{{::LANGUAGES['es']}}">
-                <span class="input-group-btn">
+                <span class="input-group-append">
                     <change-case-button ng-model="editCtrl.document.title.es"></change-case-button>
                 </span>
             </div>
 
             <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
-                <span class="input-group-addon" style="min-width:45px">FR</span>
+                <div class="input-group-prepend">   
+                    <span class="input-group-text">FR</span>
+                </div>
                 <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="title_fr" ng-model="editCtrl.document.title.fr"  placeholder="{{::LANGUAGES['fr']}}">
-                <span class="input-group-btn">
+                <span class="input-group-append">
                     <change-case-button ng-model="editCtrl.document.title.fr"></change-case-button>
                 </span>
             </div>
 
             <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
-                <span class="input-group-addon" style="min-width:45px">AR</span>
+                <div class="input-group-prepend">   
+                    <span class="input-group-text">AR</span>
+                </div>
                 <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:rtl"  id="title_ar" ng-model="editCtrl.document.title.ar"  placeholder="{{::LANGUAGES['ar']}}">
             </div>
 
             <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
-                <span class="input-group-addon" style="min-width:45px">RU</span>
+                <div class="input-group-prepend">   
+                    <span class="input-group-text">RU</span>
+                </div>
                 <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="title_ru" ng-model="editCtrl.document.title.ru"  placeholder="{{::LANGUAGES['ru']}}">
             </div>
 
             <div class="input-group" ng-if="showTitleLang" style="margin-top:5px">
-                <span class="input-group-addon" style="min-width:45px">ZH</span>
+                <div class="input-group-prepend">   
+                    <span class="input-group-text">ZH</span>
+                </div>
                 <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="title_zh" ng-model="editCtrl.document.title.zh"  placeholder="{{::LANGUAGES['zh']}}">
             </div>
         </div>
@@ -313,42 +325,54 @@
             <label class="control-label" for="description_en">Description</label>
 
             <div class="input-group">
-                <span class="input-group-addon" style="min-width:45px">EN</span>
+                <div class="input-group-prepend">   
+                    <span class="input-group-text">EN</span>
+                </div>
                 <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr" id="description_en" ng-model="editCtrl.document.description.en" placeholder="{{::LANGUAGES['en']}}">
-                <span class="input-group-btn">
+                <span class="input-group-append">
                     <button ng-disabled="uploading" class="btn btn-default" ng-click="showDescriptionLang=!showDescriptionLang" type="button"><i class="fa fa-caret-{{showDescriptionLang?'up':'down'}}" aria-hidden="true"></i></button>
                     <change-case-button ng-model="editCtrl.document.description.en"></change-case-button>
                 </span>
             </div>
 
             <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
-                <span class="input-group-addon" style="min-width:45px">ES</span>
+                <div class="input-group-prepend">   
+                    <span class="input-group-text">ES</span>
+                </div>
                 <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="description_es" ng-model="editCtrl.document.description.es"  placeholder="{{::LANGUAGES['es']}}">
-                <span class="input-group-btn">
+                <span class="input-group-append">
                     <change-case-button ng-model="editCtrl.document.description.es"></change-case-button>
                 </span>
             </div>
 
             <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
-                <span class="input-group-addon" style="min-width:45px">FR</span>
+                <div class="input-group-prepend">   
+                    <span class="input-group-text">FR</span>
+                </div>
                 <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="description_fr" ng-model="editCtrl.document.description.fr"  placeholder="{{::LANGUAGES['fr']}}">
-                <span class="input-group-btn">
+                <span class="input-group-append">
                     <change-case-button ng-model="editCtrl.document.description.fr"></change-case-button>
                 </span>
             </div>
 
             <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
-                <span class="input-group-addon" style="min-width:45px">AR</span>
+                <div class="input-group-prepend">   
+                    <span class="input-group-text">AR</span>
+                </div>
                 <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:rtl"  id="description_ar" ng-model="editCtrl.document.description.ar"  placeholder="{{::LANGUAGES['ar']}}">
             </div>
 
             <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
-                <span class="input-group-addon" style="min-width:45px">RU</span>
+                <div class="input-group-prepend">   
+                    <span class="input-group-text">RU</span>
+                </div>
                 <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="description_ru" ng-model="editCtrl.document.description.ru"  placeholder="{{::LANGUAGES['ru']}}">
             </div>
 
             <div class="input-group" ng-if="showDescriptionLang" style="margin-top:5px">
-                <span class="input-group-addon" style="min-width:45px">ZH</span>
+                <div class="input-group-prepend">   
+                    <span class="input-group-text">ZH</span>
+                </div>
                 <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr"  id="description_zh" ng-model="editCtrl.document.description.zh"  placeholder="{{::LANGUAGES['zh']}}">
             </div>
         </div>
@@ -396,7 +420,7 @@
                     <label class="control-label" for="symbol">Message</label>
                     <!-- <div class="input-group"> -->
                         <input ng-disabled="uploading" type="text" class="form-control level-{{editCtrl.document.metadata.message.level}}" id="symbol" ng-model="editCtrl.document.metadata.message.text" placeholder=""/>
-                        <!-- <span class="input-group-btn">
+                        <!-- <span class="input-group-append">
                             <button ng-disabled="true" class="btn btn-default" ng-click="validateSymbol()" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
                         </span> -->
                     <!-- </div> -->
@@ -430,11 +454,12 @@
 
 
             <div class="input-group" ng-repeat="item in editCtrl.document.agendaItems|orderBy:item" style="margin-top:5px">
-                <span class="input-group-addon" style="min-width:75px">
+
+                <div class="input-group-prepend" style="min-width:75px">   
                     <span class="label agenda {{::editCtrl.meeting.agenda.prefix}}">{{::editCtrl.meeting.agenda.prefix}} {{::item}}</span>
-                </span>
+                </div>
                 <span class="form-control" style="overflow:auto;background-color:#eeeeee" >{{(editCtrl.meeting.agenda.items|filter:{item:item}:true)[0].title}}</span>
-                <span class="input-group-btn">
+                <span class="input-group-append">
                     <button ng-disabled="uploading" class="btn btn-default" ng-click="editCtrl.removeItem(item)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
                 </span>
             </div>
@@ -591,7 +616,7 @@
                 <td style="width:99%">
                     <div class="input-group">
                         <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr" id="log" ng-model="editCtrl.log" placeholder="Type a new comment to log">
-                        <span class="input-group-btn">
+                        <span class="input-group-append">
                             <button ng-disabled="uploading || !editCtrl.document._id" class="btn btn-default" ng-click="editCtrl.saveLogEntry()" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
                         </span>
                     </div>

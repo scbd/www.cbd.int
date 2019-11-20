@@ -1,9 +1,13 @@
-<div class="btn-group" style="z-index:inherit">
-  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aa <span class="caret"></span></button>
-  <ul class="dropdown-menu dropdown-menu-right">
-    <li><a href="#" ng-click="setCase('sentence')">Sentence case</a></li>
-    <li><a href="#" ng-click="setCase('title')">Title Case</a></li>
-    <li><a href="#" ng-click="setCase('lower')">lowercase</a></li>
-    <li><a href="#" ng-click="setCase('upper')">UPPERCASE</a></li>
-  </ul>
+<div class="input-group" style="z-index:inherit">
+  <div class="input-group-append">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" 
+      aria-haspopup="true" aria-expanded="false">Aa <span class="fa fa-caret-down"></span></button>
+ 
+    <ul class="dropdown-menu dropdown-menu-right">
+      <li class="dropdown-item"><a href="#" ng-click="setCase('sentence')">Sentence case</a></li>
+      <li class="dropdown-item"><a href="#" ng-click="setCase('title')">Title Case</a></li>
+      <li class="dropdown-item"><a href="#" ng-click="setCase('lower')">lowercase</a></li>
+      <li class="dropdown-item"><a href="#" ng-click="setCase('upper')">UPPERCASE</a></li>
+    </ul>
+  </div>
 </div>
