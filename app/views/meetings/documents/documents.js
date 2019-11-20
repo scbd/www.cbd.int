@@ -89,7 +89,9 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
                 return meeting; // force resolve
 
-            }).then(function(meeting) {
+            })
+            .then(initSecurity)
+            .then(function(meeting) {
 
                 if(!meeting)
                     return;
@@ -155,7 +157,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
             d.metadata = _.defaults(d.metadata||{}, { 
                 printable: ['crp', 'limited', 'non-paper'].indexOf(d.nature)>=0,
-                visible : d.status=='public' && !!(d.files||[]).length
+                visible : (d.status=='public' || (_ctrl.isStaff && d.status == 'staff')) && !!(d.files||[]).length
             });
             
             if(d.status!='public')
@@ -512,7 +514,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function initSecurity() {
 
-            $q.when(currentUser || authentication.getUser()).then(function(user){
+            currentUser = $q.when(currentUser || authentication.getUser()).then(function(user){
 
                 currentUser = user;
 
@@ -532,6 +534,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                     });
                 }
             });
+            return currentUser;
         }
 
 
