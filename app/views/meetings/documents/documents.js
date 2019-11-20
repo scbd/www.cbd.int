@@ -83,15 +83,17 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
                 return $http.get('/api/v2016/meetings/'+encodeURIComponent(meetingCode)+'/documents', { cache: httpCache, params: { cache:!_ctrl.isEditor } });
 
+            }).then(function(res){
+
+                return initSecurity().then(function(){ return res; });
+
             }).then(function(res) {
 
                 _ctrl.documents = documents = _(res.data).map(normalizeDocument).filter(isDocumentVisible).sortBy(sortKey).value();
 
                 return meeting; // force resolve
 
-            })
-            .then(initSecurity)
-            .then(function(meeting) {
+            }).then(function(meeting) {
 
                 if(!meeting)
                     return;
@@ -160,7 +162,8 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                 visible : (d.status=='public' || (_ctrl.isStaff && d.status == 'staff')) && !!(d.files||[]).length
             });
             
-            if(d.status!='public')
+            // TO REVIEW
+            if(d.status!='public' && !(_ctrl.isStaff && d.status == 'staff'))
                 delete d.metadata.visible;
 
             return d;
@@ -514,7 +517,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //==============================
         function initSecurity() {
 
-            currentUser = $q.when(currentUser || authentication.getUser()).then(function(user){
+            currentUser = currentUser || $q.when(authentication.getUser()).then(function(user){
 
                 currentUser = user;
 
@@ -534,7 +537,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
                     });
                 }
             });
-            return currentUser;
+            return $q.when(currentUser);
         }
 
 
