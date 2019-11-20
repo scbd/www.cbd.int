@@ -26,10 +26,10 @@
                         </a>
                     </div>
                     <div>
-                        {{::document.title|lstring}}
-                        <span ng-if="document.nature=='statement' && document.statementSource.date" class="badge" 
+                        <span ng-if="document.nature=='statement' && document.statementSource.date" class="pull-right badge" 
                             ng-bind="document.statementSource.date | moment:'format':'DD MMM YYYY HH:mm'"></span>
-                    </div>
+                            {{::document.title|lstring}}
+                        </div>
                     <div>{{::document.description|lstring}}</div>
                 </div>
             </div>
