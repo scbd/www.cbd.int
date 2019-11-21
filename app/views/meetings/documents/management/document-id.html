@@ -163,6 +163,7 @@
                         <label class="control-label" for="statement_hour">Hour</label>
                         <select ng-disabled="uploading" id="statement_hour"  ng-change="editCtrl.computeStatementDate()" class="form-control" ng-model="editCtrl.statementSource.hour">
                             <option value="">Select hour......</option>
+                            <option value="00">01</option>
                             <option value="01">01</option>
                             <option value="02">02</option>
                             <option value="03">03</option>
@@ -186,7 +187,6 @@
                             <option value="21">21</option>
                             <option value="22">22</option>
                             <option value="23">23</option>
-                            <option value="24">24</option>
                         </select>
                     </div>
                     </div><div class="col-xs-12 col-sm-4">
@@ -255,7 +255,6 @@
                             <option value="57">57</option>
                             <option value="58">58</option>
                             <option value="59">59</option>
-                            <option value="60">60</option>
                         </select>
                         <span class="badge" ng-bind="editCtrl.document.statementSource.date| moment:'format':'DD MMM YYYY HH:mm'"></span>
                     </div>
