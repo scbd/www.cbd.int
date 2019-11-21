@@ -458,10 +458,19 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         //
         //==============================
         function sortKey(d) {
-            return ("000000000" + (d.displayPosition||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
-                   (d.symbol||"").replace(/\b(\d)\b/g, '0$1')
-                                 .replace(/(\/REV)/gi, '0$1')
-                                 .replace(/(\/ADD)/gi, '1$1');
+
+            var parts = [];
+
+            if(d.nature=='statement')    
+                parts.push(((d.statementSource||{}).date||'9999-12-31')+"T99:99")
+
+
+            parts.push(("000000000" + (d.displayPosition||9999)).slice(-9))
+            parts.push((d.symbol||"").replace(/\b(\d)\b/g, '0$1')
+                                     .replace(/(\/REV)/gi, '0$1')
+                                     .replace(/(\/ADD)/gi, '1$1'));
+
+            return parts.join('_');
         }
 
         //==============================
