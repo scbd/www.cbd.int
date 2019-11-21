@@ -58,6 +58,8 @@ define(['lodash', 'moment', 'filters/lstring', 'filters/moment', 'filters/trunca
         _ctrl.onSupersede = onSupersede;
         _ctrl.autoGenerateStatementTitle = autoGenerateStatementTitle;
         _ctrl.computeStatementDate       = computeStatementDate;
+        _ctrl.addLink                    = addLink;
+        _ctrl.documentLink = { language: 'en' }
 
         $scope.$watch('editCtrl.document.type_nature', applyTypeNature);
         $scope.$watch('editCtrl.document.symbol',      function(symbol){
@@ -314,7 +316,7 @@ define(['lodash', 'moment', 'filters/lstring', 'filters/moment', 'filters/trunca
                 });
 
                 var newQ = _.map(filesToCreate, function(f){
-                    return $http.post('/api/v2016/documents/'+docId+'/files', { url : f.url, generatePdf: true });
+                    return $http.post('/api/v2016/documents/'+docId+'/files', { url : f.url, generatePdf: true, language:f.language });
                 });
 
                 return $q.all(delQ.concat(newQ));
@@ -601,7 +603,7 @@ define(['lodash', 'moment', 'filters/lstring', 'filters/moment', 'filters/trunca
             if(!doc)
                 return [];
 
-            var patterns = _(doc.files).map('name').map(parseFilename).map('prefix').uniq().sort().value();
+            var patterns = _(doc.files).map('name').map(parseFilename).map('prefix').uniq().compact().sort().value();
 
             if(patterns.length)
                 return patterns;
@@ -778,6 +780,8 @@ define(['lodash', 'moment', 'filters/lstring', 'filters/moment', 'filters/trunca
         //==============================
         function parseFilename(filename) {
 
+            if(!filename) return {};
+
             filename = filename.toLowerCase();
 
             var matches = filename.match(/-([a-z]{2})\.[a-z]+$/i);
@@ -797,10 +801,10 @@ define(['lodash', 'moment', 'filters/lstring', 'filters/moment', 'filters/trunca
             var files = _ctrl.document.files;
 
             _ctrl.fileCache = {
-                languages : _(files).map('language').uniq().sort().value(),
-                types     : _(files).map('type'    ).uniq().sort().value(),
-                names     : _(files).map('name'    ).uniq().sort().value(),
-                prefixes  : _(files).map('name'    ).map(parseFilename).map('prefix').uniq().sort().value()
+                languages : _(files).map('language').uniq().compact().sort().value(),
+                types     : _(files).map('type'    ).uniq().compact().sort().value(),
+                names     : _(files).map('name'    ).uniq().compact().sort().value(),
+                prefixes  : _(files).map('name'    ).map(parseFilename).map('prefix').uniq().compact().sort().value()
             };
 
             _.forEach(files, function(f){
@@ -1035,6 +1039,44 @@ define(['lodash', 'moment', 'filters/lstring', 'filters/moment', 'filters/trunca
                 }
                 return loadStatementData();
             }
+        }
+
+        function addLink(link){
+            _ctrl.clearErrors()
+            var linkUrl = /^((http|https|ftp):\/\/)?(www\.)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i
+
+            if(!/^(http|https|ftp):\/\//i.test(link.url)) {
+                _ctrl.error = {
+                    code: "GENERAL",
+                    message: 'Please enter a valid URL'
+                };
+                return;
+            }
+
+            if(!link.language){
+                _ctrl.error = {
+                    code: "GENERAL",
+                    message: 'Please select url language'
+                };
+                return;
+            }
+            
+            var languageExists  = _.find(_ctrl.document.files, {language:link.language, type: 'text/html'})
+            if(languageExists){
+                _ctrl.error = {
+                    code: "GENERAL",
+                    message: 'A URL for ' + LANGUAGES[link.language] + ' language exists'
+                };
+                return;
+            }
+
+            if(!_ctrl.document.files){
+                _ctrl.document.files = [];
+            }
+
+            _ctrl.document.files.push({url: link.url, language:link.language, type:'text/html'});
+            initFiles();
+            _ctrl.documentLink = { language: 'en' }
         }
 	}];
 });

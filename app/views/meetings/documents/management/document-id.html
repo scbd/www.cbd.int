@@ -4,7 +4,7 @@
       <button ng-disabled="uploading || !editCtrl.document._id" type="button" class="btn btn-danger"  ng-click="editCtrl.del()">Delete</button>
       &nbsp;&nbsp;
       <button ng-disabled="uploading || editCtrl.duplicates.length" type="button" class="btn btn-primary" ng-click="editCtrl.save()">Save</button>
-      <button ng-disabled="uploading" type="button" class="btn btn-default" ng-click="editCtrl.close()">Close</button>
+      <button ng-disabled="uploading" type="button" class="btn btn-light" ng-click="editCtrl.close()">Close</button>
     </div>
 
 
@@ -25,16 +25,16 @@
     <!-- ERROR -->
     <pre ng-if="editCtrl.error" class="alert alert-danger">{{editCtrl.error|json}}</pre>
 
-    <div ng-if="editCtrl.duplicates.length" class="panel panel-default">
-        <div class="panel-heading">
+    <div ng-if="editCtrl.duplicates.length" class="card">
+        <div class="card-header">
             <button type="button" class="close" aria-label="Close" ng-click="editCtrl.duplicates=null">&times;</button>
 
             <b>Document with same symbol already exists in the database</b>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div ng-repeat="dup in editCtrl.duplicates" class="alert" ng-class="{ 'alert-warning' : dup.meetingDuplicate, 'alert-info': !dup.meetingDuplicate }" >
 
-                    <button ng-if="editCtrl.canBeLinked(dup)" class="btn btn-default btn-xs pull-right" type="button" ng-click="editCtrl.linkTo(dup)">Link <i class="fa fa-clone" aria-hidden="true"></i></button>
+                    <button ng-if="editCtrl.canBeLinked(dup)" class="btn btn-light btn-xs pull-right" type="button" ng-click="editCtrl.linkTo(dup)">Link <i class="fa fa-clone" aria-hidden="true"></i></button>
 
                     <b ng-if="::dup.meetingDuplicate">This symbol is already used by a document in this meeting!</b>
             
@@ -61,7 +61,7 @@
                         <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" id="symbol" placeholder="Type a symbol eg: {{editCtrl.meeting.EVT_UN_CD||'CBD/XYZ/X'}}/..."  ng-change="editCtrl.autoGenerateNextSymbol('symbol')" 
                                ng-model="editCtrl.document.symbol" ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 250, 'blur': 0 } }">
                         <span class="input-group-append">
-                            <button  class="btn btn-default" ng-click="editCtrl.document.symbol=editCtrl.normalizeSymbol(editCtrl.document.symbol||'')" type="button"
+                            <button  class="btn btn-light" ng-click="editCtrl.document.symbol=editCtrl.normalizeSymbol(editCtrl.document.symbol||'')" type="button"
                                     ng-class="{ 'btn-warning' : editCtrl.document.symbol && editCtrl.document.symbol != editCtrl.normalizeSymbol(editCtrl.document.symbol||'') }"
                             ><i class="fa fa-check" aria-hidden="true"></i></button>
                         </span>
@@ -273,7 +273,7 @@
                 </div>
                 <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr" id="title_en" ng-model="editCtrl.document.title.en" placeholder="{{::LANGUAGES['en']}}">
                 <span class="input-group-append">
-                    <button ng-disabled="uploading" class="btn btn-default" ng-click="showTitleLang=!showTitleLang" type="button"><i class="fa fa-caret-{{showTitleLang?'up':'down'}}" aria-hidden="true"></i></button>
+                    <button ng-disabled="uploading" class="btn btn-light" ng-click="showTitleLang=!showTitleLang" type="button"><i class="fa fa-caret-{{showTitleLang?'up':'down'}}" aria-hidden="true"></i></button>
                     <change-case-button ng-model="editCtrl.document.title.en"></change-case-button>
                 </span>
             </div>
@@ -330,7 +330,7 @@
                 </div>
                 <input ng-disabled="uploading" type="text" autocomplete="off" class="form-control" style="direction:ltr" id="description_en" ng-model="editCtrl.document.description.en" placeholder="{{::LANGUAGES['en']}}">
                 <span class="input-group-append">
-                    <button ng-disabled="uploading" class="btn btn-default" ng-click="showDescriptionLang=!showDescriptionLang" type="button"><i class="fa fa-caret-{{showDescriptionLang?'up':'down'}}" aria-hidden="true"></i></button>
+                    <button ng-disabled="uploading" class="btn btn-light" ng-click="showDescriptionLang=!showDescriptionLang" type="button"><i class="fa fa-caret-{{showDescriptionLang?'up':'down'}}" aria-hidden="true"></i></button>
                     <change-case-button ng-model="editCtrl.document.description.en"></change-case-button>
                 </span>
             </div>
@@ -421,7 +421,7 @@
                     <!-- <div class="input-group"> -->
                         <input ng-disabled="uploading" type="text" class="form-control level-{{editCtrl.document.metadata.message.level}}" id="symbol" ng-model="editCtrl.document.metadata.message.text" placeholder=""/>
                         <!-- <span class="input-group-append">
-                            <button ng-disabled="true" class="btn btn-default" ng-click="validateSymbol()" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                            <button ng-disabled="true" class="btn btn-light" ng-click="validateSymbol()" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
                         </span> -->
                     <!-- </div> -->
                 </div>
@@ -460,7 +460,7 @@
                 </div>
                 <span class="form-control" style="overflow:auto;background-color:#eeeeee" >{{(editCtrl.meeting.agenda.items|filter:{item:item}:true)[0].title}}</span>
                 <span class="input-group-append">
-                    <button ng-disabled="uploading" class="btn btn-default" ng-click="editCtrl.removeItem(item)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
+                    <button ng-disabled="uploading" class="btn btn-light" ng-click="editCtrl.removeItem(item)" type="button"><i class="fa fa-times" aria-hidden="true"></i></button>
                 </span>
             </div>
 
@@ -471,17 +471,22 @@
     <input ng-disabled="uploading" type="file" auto-reset="true" id="fileUpload" ng-model="editCtrl.fileToUpload" ng-change="editCtrl.upload(editCtrl.fileToUpload);" style="display:none">
 
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <label ng-if="!editCtrl.document.linkedToId" class="btn btn-default pull-right" for="fileUpload">
-                <span ng-hide="uploading">
-                    <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                    Upload
-                </span>
-                <span ng-show="uploading">
-                    <i class="fa fa-cog fa-spin" aria-hidden="true"></i>
-                    Uploading {{uploadProgress}}%
-                </span>
-            </label>
+        <div class="card-header">
+            <div class="bntn-group" role="group">
+
+                    <button type="button" class="btn btn-info pull-right" ng-click="editCtrl.showLinkOptions=!editCtrl.showLinkOptions;">
+                        <i class="fa fa-link" aria-hidden="true"></i> Link</button>
+                    <label ng-if="!editCtrl.document.linkedToId" class="btn btn-light pull-right" for="fileUpload">
+                        <span ng-hide="uploading">
+                            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                            Upload
+                        </span>
+                        <span ng-show="uploading">
+                            <i class="fa fa-cog fa-spin" aria-hidden="true"></i>
+                            Uploading {{uploadProgress}}%
+                        </span>
+                    </label>
+            </div>
             <h4 style="color:inherit">
                 Files
                 <small ng-if="!editCtrl.document.linkedToId && getFilePatterns().length">(
@@ -501,10 +506,10 @@
             </h4>
 
         </div>
-        <div class="panel-body">
+        <div class="card-body">
 
             <div class="alert alert-info" role="alert" ng-if="!editCtrl.document.files.length">
-                <label class="btn btn-default" for="fileUpload" style="width:100%">
+                <label class="btn btn-light" for="fileUpload" style="width:100%">
                     <span ng-hide="uploading">
                         <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                         Please upload your first file
@@ -534,8 +539,8 @@
                 {{LANGUAGES[editCtrl.fileError.new.language]||(editCtrl.fileError.new.language|uppercase)}} - {{editCtrl.fileError.new.name}} <em>{{FILETYPES[editCtrl.fileError.new.type].title||editCtrl.fileError.new.type}}</em><br/><br/>
 
                 Do you want to replace the existing file?
-                <button class="btn btn-default" type="button" ng-click="editCtrl.clearErrors(); editCtrl.upload(editCtrl.fileToUpload, true);">Yes</button>
-                <button class="btn btn-default" type="button" ng-click="editCtrl.clearErrors(); editCtrl.fileToUpload=null;">No</button>
+                <button class="btn btn-light" type="button" ng-click="editCtrl.clearErrors(); editCtrl.upload(editCtrl.fileToUpload, true);">Yes</button>
+                <button class="btn btn-light" type="button" ng-click="editCtrl.clearErrors(); editCtrl.fileToUpload=null;">No</button>
             </div>
 
             <!-- ERROR LANGUAGE -->
@@ -569,17 +574,46 @@
                 </ul>
             </div>
 
+            <div class="alert alert-warning" role="alert" ng-if="editCtrl.error.code == 'GENERAL'">
+                <button type="button" class="close" data-dismiss="alert" ng-click="editCtrl.clearErrors();" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                <b>{{editCtrl.error.message}}</b><br/><br/>
+                
+            </div>
+
+            <!--LINKS-->
+            <div ng-if="editCtrl.showLinkOptions">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Link</label>
+                    </div>
+                    <input type="url" style="width:70%" class="form-control" ng-model="editCtrl.documentLink.url" placeholder="link eg: https://cbd.int/meetings/cop-14/documents/crp-12-en.pdf">
+                    <select class="custom-select" ng-model="editCtrl.documentLink.language">
+                        <option value="ar">Arabic</option>
+                        <option value="en" selected>English</option>
+                        <option value="fr">French</option>
+                        <option value="ru">Russian</option>
+                        <option value="es">Spanish</option>
+                        <option value="zh">Chinese</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" ng-click="editCtrl.addLink(editCtrl.documentLink)">Add</button>
+                    </div>
+                </div>
+            </div>
             <!-- FILES -->
-
+            
             <div ng-repeat="type in editCtrl.fileCache.types track by type" >
-                <div class="btn-group" style="margin:5px" ng-repeat="language in editCtrl.fileCache.languages track by language" ng-style="{visibility:(editCtrl.fileCache[type][language] ? 'visible' : 'hidden')}">
+                <div class="btn-group" style="margin:5px" ng-repeat="language in editCtrl.fileCache.languages track by language" 
+                ng-style="{visibility:(editCtrl.fileCache[type][language] ? 'visible' : 'hidden')}">
 
-                  <a ng-disabled="uploading" href="{{editCtrl.fileCache[type][language].url}}" target="_blank" type="button" title="{{editCtrl.fileCache[type][language].name}} ({{FILETYPES[type].title||type}})" class="btn btn-default">
+                  <a ng-disabled="uploading" href="{{editCtrl.fileCache[type][language].url}}" target="_blank" role="group" type="button"
+                    title="{{editCtrl.fileCache[type][language].name}} ({{FILETYPES[type].title||type}})" class="btn btn-light">
                     <i style="color:{{(FILETYPES[type]||FILETYPES.default).color}}" class="fa {{(FILETYPES[type]||FILETYPES.default).icon}}"></i>
                     {{LANGUAGES[language]||(language|uppercase)}}
                   </a>
 
-                  <button ng-if="!editCtrl.document.linkedToId" ng-disabled="editCtrl.document.linkedToId || uploading" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button ng-if="!editCtrl.document.linkedToId" ng-disabled="editCtrl.document.linkedToId || uploading" role="group" type="button" class="btn btn-info btn-append dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-fw fa-times" aria-hidden="true"></i>
                   </button>
 
@@ -588,11 +622,12 @@
                     <li role="separator" class="divider"></li> -->
                     <li><a  class="dropdown-item" href="#" ng-click="editCtrl.removeFile(editCtrl.fileCache[type][language])"><i class="fa fa-fw fa-times" aria-hidden="true"></i> Delete</a></li>
                   </ul>
-                </div>
-                  <span class="btn" style="cursor:default">
+                  <span class="btn btn-light btn-append" style="cursor:default">
                       {{FILETYPES[type].title||type}}
                   </span>
+                </div>
             </div>
+
         </div>
     </div>
 
@@ -603,7 +638,7 @@
       <button ng-disabled="uploading || !editCtrl.document._id" type="button" class="btn btn-danger"  ng-click="editCtrl.del()">Delete</button>
       &nbsp;&nbsp;
       <button ng-disabled="uploading || editCtrl.duplicates.length" type="button" class="btn btn-primary" ng-click="editCtrl.save()">Save</button>
-      <button ng-disabled="uploading" type="button" class="btn btn-default" ng-click="editCtrl.close()">Close</button>
+      <button ng-disabled="uploading" type="button" class="btn btn-light" ng-click="editCtrl.close()">Close</button>
     </div>
 
 
@@ -617,7 +652,7 @@
                     <div class="input-group">
                         <input ng-disabled="uploading" type="text" class="form-control" style="direction:ltr" id="log" ng-model="editCtrl.log" placeholder="Type a new comment to log">
                         <span class="input-group-append">
-                            <button ng-disabled="uploading || !editCtrl.document._id" class="btn btn-default" ng-click="editCtrl.saveLogEntry()" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
+                            <button ng-disabled="uploading || !editCtrl.document._id" class="btn btn-light" ng-click="editCtrl.saveLogEntry()" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
                         </span>
                     </div>
                 </td>
