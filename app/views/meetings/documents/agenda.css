@@ -38,20 +38,14 @@
 
 .superseded { text-decoration: line-through; color:#888; }
 
+
 #print-smart-checkout  {
     display: inline;
+    z-index:1    
 }
-#print-smart-checkout.affix  {
-    top:0px;
-    right:0px;
-    z-index: 999;
-    padding: 5px 15px;
-    background-color: white;
-    border-bottom: solid 1px #c0c0c0;
-    text-align: right;
-    width: 100%;
-    margin-top:0px !important;
-}
+                            #print-smart-checkout { top: 53px; position: sticky }
+@media (max-width: 991px) { #print-smart-checkout { top: 65px; } }
+@media (max-width: 749px) { #print-smart-checkout { top: 35px; } }
 
 .documents a:hover       { text-decoration:none; }
 .documents a[href]:hover { text-decoration:underline; }
