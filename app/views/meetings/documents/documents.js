@@ -2,7 +2,6 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         'css!./meeting-documents.css', 'angular-cache', 'css!./agenda.css', 'filters/moment'
 ], function(_, ng) {
     //'css!./agenda.css' // moved to template
-    var currentUser;
     var STATISTICS = {}; 
 
 	return ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting, CacheFactory) {
@@ -11,6 +10,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
         var meetingCode = $route.current.params.meeting.toUpperCase();
         var hardTab = false;
         var httpCache = initCache();
+        var currentUser;
 
         var groups = {
             'outcome'        : { position: 100 , title : 'Outcomes'      },
