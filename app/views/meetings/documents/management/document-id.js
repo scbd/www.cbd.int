@@ -22,8 +22,8 @@ define(['lodash', 'moment', 'filters/lstring', 'filters/moment', 'filters/trunca
          zh : "Chinese"
      };
 
-    return ["$scope", "$route", "$http", '$location', '$q', '$window', 'user', '$filter', 'conferenceService', 
-    function ($scope, $route, $http, $location, $q, $window, user, $filter, conferenceService) {
+    return ["$scope", "$route", "$http", '$location', '$q', '$window', 'user', '$filter', 
+    function ($scope, $route, $http, $location, $q, $window, user, $filter) {
 
         $scope.FILETYPES  = MIMES;
         $scope.LANGUAGES  = LANGUAGES;
@@ -153,23 +153,21 @@ define(['lodash', 'moment', 'filters/lstring', 'filters/moment', 'filters/trunca
                 });
             }
 
-            if(!_ctrl.conferenceDates){
-                $q.when(conferenceService.getActiveConference(_ctrl.code))
-                .then(function(conference){
-                    var start = moment.tz(conference.schedule.start,   conference.timezone);
-                    var end   = moment.tz(conference.schedule.end,     conference.timezone);
+            if(!_ctrl.conferenceDates) {
+
+                    var start = moment.tz(_ctrl.meeting.EVT_FROM_DT, 'UTC'); //UTC as Patch, Datetime should be at offset and meeting have timezone
+                    var end   = moment.tz(_ctrl.meeting.EVT_TO_DT,   'UTC');
                     var difference = end.diff(start, 'days')+1;
                     _ctrl.conferenceDates = []
 
                     for(var i=0; i < difference; i++){
-                        var date = moment.tz(conference.schedule.start, conference.timezone).add(i, 'd');
+                        var date = moment.tz(_ctrl.meeting.EVT_FROM_DT, 'UTC').add(i, 'd');
                         var dateOption = {
                             value : date.format('YYYY-MM-DD'),
                             text : date.format('DD MMM YYYY')
                         }
                         _ctrl.conferenceDates.push(dateOption)
                     }
-                })
             }
         }
         //==============================
