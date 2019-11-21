@@ -47,6 +47,7 @@
                         <span class="badge badge-primary" style="display:inline-block;" ng-switch-when="edited"  ><i class="fa fa-file-text-o" aria-hidden="true"></i> Edited </span>
                         <span class="badge badge-warning" style="display:inline-block;" ng-switch-when="held"    ><i class="fa fa-hand-paper-o" aria-hidden="true"></i> On Hold </span>
                         <span class="badge badge-success" style="display:inline-block;" ng-switch-when="archived"><i class="fa fa-archive" aria-hidden="true"></i> Archived </span>
+                        <span class="text-muted"          style="display:inline-block;" ng-switch-when="staff"   title="Visible to SCBD Staff only"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
                         <span class="badge badge-danger"  style="display:inline-block;" ng-switch-default>{{::document.status|uppercase}}</span>
                     </span>
                 </span>
