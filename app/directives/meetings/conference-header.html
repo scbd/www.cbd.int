@@ -203,6 +203,14 @@
         .conference-header .menu .hidden{
             display: none;
         }
+
+        .webcast .menu-title{
+            background-color:#ee4242;
+            font-size:12px;
+            font-weight:bold;
+            padding-top:6px;
+            padding-bottom:6px;
+        }
    </style>
    <!-- NAVIGATION BAR -->
    <div ng-cloak ng-if="meeting && meetingNavCtrl.isSelected()" class="meetingnav hidden-print">
@@ -326,11 +334,11 @@
                     <table class="meetingnav-table">
                         <tr>
                            
-                            <td class="meetingnav-buttongroup menu {{::(cssClass(mainMenu.code) + ' ' + mainMenu.style)}}" ng-repeat="mainMenu in meeting.conference.menus" 
+                            <td class="meetingnav-buttongroup menu {{::(cssClass(mainMenu.code) + ' ' + mainMenu.cssClass)}}" ng-repeat="mainMenu in meeting.conference.menus" 
                                 ng-class="{'single-menu' : (!(mainMenu.menus||[]).length || (mainMenu.isExpandable && !mainMenu.isExpanded)), 
                                     'no-left-border':$index==0, 'hidden': mainMenu.isHidden,
                                     selected:meetingNavCtrl.isSelected('{{::mainMenu.url}}', {{::mainMenu.exactSelection}}) }" 
-                                style="vertical-align:middle" >
+                                style="vertical-align:middle"  ng-style="subMenu.style">
                                 
                                 <div ng-if="(!mainMenu.menus.length && (mainMenu.title || mainMenu.icon)) || (mainMenu.isExpandable && !mainMenu.isExpanded)" 
                                 ng-include="'menu'"  onload="menu=mainMenu" ng-click="meetingNavCtrl.expandMenu(mainMenu)"> </div>
@@ -345,7 +353,7 @@
                                     </tr>
                                     <tr style="height:90%" ng-if="mainMenu.menus.length" class="hidden-xs">
                                         <td width="{{::(100/mainMenu.menus.length)}}%" ng-repeat="subMenu in mainMenu.menus"
-                                        class="{{::(cssClass(subMenu.code) + ' ' + subMenu.style)}}" 
+                                        class="{{::(cssClass(subMenu.code) + ' ' + subMenu.cssClass)}}" ng-style="subMenu.style"
                                         ng-class="{selected:meetingNavCtrl.isSelected('{{::subMenu.url}}', false), 'menu-border':$index>0,
                                         'hidden': subMenu.isHidden }" 
                                         style="position:relative;padding:0 6px" align="center" >
@@ -360,8 +368,8 @@
                     <table class="meetings visible-xs" style="width:100%;height:35px;"  ng-repeat="mobileMenu in meeting.conference.menus"
                         ng-if="meetingNavCtrl.isMajorEventSelected(mobileMenu.code) && mobileMenu.menus.length > 0">
                         <tr>
-                            <td width="{{::100/(mobileMenu.menus.length)}}%" class="notselected meeting {{::(cssClass(subMenu.code) + ' ' + subMenu.style)}}"
-                             ng-class="{selected:meetingNavCtrl.isSelected('{{::subMenu.url}}'), 'hidden': menu.isHidden}" 
+                            <td width="{{::100/(mobileMenu.menus.length)}}%" class="notselected meeting {{::(cssClass(subMenu.code) + ' ' + subMenu.cssClass)}}"
+                             ng-class="{selected:meetingNavCtrl.isSelected('{{::subMenu.url}}'), 'hidden': menu.isHidden}"  ng-style="subMenu.style"
                             ng-repeat="subMenu in mobileMenu.menus">
                                 <div ng-include="'menu'" onload="menu=subMenu"> </div>
                             </td>
@@ -376,7 +384,7 @@
             <div class="menu-title">                    
                 <a  data-toggle="{{::(menu.links ? 'dropdown' : '')}}" ng-if="::menu.xsUrl||menu.url" ng-href="{{::menu.xsUrl||menu.url}}#{{meetingNavCtrl.hash()}}" class="link" target="{{::menu.target}}"></a>
                 <a  data-toggle="{{::(menu.links ? 'dropdown' : '')}}" ng-if="::menu.xsUrl||menu.url" ng-href="{{::menu.xsUrl||menu.url}}#{{meetingNavCtrl.hash()}}" class="hover-link" target="{{::menu.target}}">                   
-                    <div ng-if="::menu.title">
+                    <div ng-if="::menu.title" class="menu-title">
                         <div class="visible-md visible-lg">
                             <div style="font-weight:bold" ng-bind-html="::menu.title|lstring"></div>
                         </div> 
