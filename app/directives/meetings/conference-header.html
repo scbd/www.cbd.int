@@ -338,7 +338,7 @@
                                 ng-class="{'single-menu' : (!(mainMenu.menus||[]).length || (mainMenu.isExpandable && !mainMenu.isExpanded)), 
                                     'no-left-border':$index==0, 'hidden': mainMenu.isHidden,
                                     selected:meetingNavCtrl.isSelected('{{::mainMenu.url}}', {{::mainMenu.exactSelection}}) }" 
-                                style="vertical-align:middle"  ng-style="subMenu.style">
+                                style="vertical-align:middle"  ng-style="mainMenu.style">
                                 
                                 <div ng-if="(!mainMenu.menus.length && (mainMenu.title || mainMenu.icon)) || (mainMenu.isExpandable && !mainMenu.isExpanded)" 
                                 ng-include="'menu'"  onload="menu=mainMenu" ng-click="meetingNavCtrl.expandMenu(mainMenu)"> </div>
