@@ -413,8 +413,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             for(var i=0; i < difference; i++){
                 var date = moment.tz(schedule.start, _ctrl.event.timezone).add(i, 'd');
                 var dateOption = {
-                    value : date.format('YYYY-MM-DD'),
-                    text : date.format('DD MMM YYYY')
+                    value : date.format('YYYY-MM-DD')
                 }
                 dates.push(dateOption)
             }

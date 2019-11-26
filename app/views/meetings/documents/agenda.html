@@ -21,8 +21,8 @@
                 </a>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="#" ng-repeat="item in agendaCtrl.scheduleDates" ng-click="agendaCtrl.scheduleDateChanged(item.value)" style="border-bottom:1px solid #eee">
-                        <span class="hidden-xs hidden-sm"  ng-bind="item.text" ></span>
-                        <span class="visible-xs visible-sm" ng-bind="item.text| moment:'format':'ddd Do'" ></span>
+                        <span class="hidden-xs hidden-sm"   ng-bind="item.text || (item.value|moment:'format':'DD MMM YYYY (ddd)')" ></span>
+                        <span class="visible-xs visible-sm" ng-bind="item.text || (item.value|moment:'format':'ddd Do')" ></span>
                     </a>                      
                 </div>
             </span>
