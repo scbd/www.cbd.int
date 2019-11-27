@@ -50,10 +50,6 @@
 .documents a:hover       { text-decoration:none; }
 .documents a[href]:hover { text-decoration:underline; }
 
-body.phoenix .meeting-documents {
-    padding-top: 10px;
-}
-
 body.phoenix .printsmart .help-block {
     font-style: italic;
     font-size: 75%;
