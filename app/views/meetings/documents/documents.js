@@ -1,6 +1,6 @@
-define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
+define(['lodash', 'angular', 'moment', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
         'css!./meeting-documents.css', 'angular-cache', 'css!./agenda.css', 'filters/moment'
-], function(_, ng) {
+], function(_, ng, moment) {
     //'css!./agenda.css' // moved to template
     var STATISTICS = {}; 
 
@@ -165,6 +165,20 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
             // TO REVIEW
             if(d.status!='public' && !(_ctrl.isStaff && d.status == 'staff'))
                 delete d.metadata.visible;
+            
+            if(d.nature=='statement' && (d.statementSource||{}).date){
+                var currentTime         = moment.tz(d.statementSource.date, 'UTC');
+                var formatedDate        = currentTime.format('HH:mm')
+                
+                if(formatedDate < '09:00')
+                    d.statementSource.session = 'Evening'
+                else if(formatedDate < '15:00')
+                    d.statementSource.session = 'Morning'
+                else if(formatedDate < '20:30')
+                    d.statementSource.session = 'Afternoon'
+                else
+                    d.statementSource.session = 'Evening'
+            }
 
             return d;
         }
