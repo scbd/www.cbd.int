@@ -26,10 +26,12 @@
                         </a>
                     </div>
                     <div>
-                        <span ng-if="document.nature=='statement' && document.statementSource.date" class="pull-right badge" 
-                            ng-bind="document.statementSource.date | moment:'format':'ddd DD MMM HH:mm'"></span>
+                        <span ng-if="document.nature=='statement' && document.statementSource.date" class="pull-right badge">
+                            <span  ng-bind="document.statementSource.date | moment:'format':'ddd DD'"></span>
+                            <span  ng-bind="document.statementSource.session"></span>
+                        </span>
                             {{::document.title|lstring}}
-                        </div>
+                    </div>
                     <div>{{::document.description|lstring}}</div>
                 </div>
             </div>
