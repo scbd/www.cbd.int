@@ -1,34 +1,4 @@
 <div class="meeting-agenda">
-<style>
-.meeting-agenda nav.nav-xl,
-.meeting-agenda nav.nav-lg{
-        margin-top:-35px
-}
-.meeting-agenda nav.nav-md{
-        margin-top:-15px
-}
-</style>
-    <div class="btn btn-link hidden-print col-sm-12" style="color:inherit;cursor:inherit;text-decoration:none;" ng-if="agendaCtrl.now">
-        
-        <span class="float-right">
-            <!-- position:absolute;top:0px;right:0px;
-                 ng-if="::(agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'H:mm:ss') != '0:00:00'">             -->
-            <span class="dropdown">
-                <a class="btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-href="#" style="border:1px solid #f5efef">
-                    <em class="visible-xs-inline1 fa fa-clock-o"></em> 
-                    <b ng-if="agendaCtrl.scheduleDate==''" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'H:mm'"></b>
-                    <b ng-if="agendaCtrl.scheduleDate!=''" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'MMM Do'"></b>
-                </a>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#" ng-repeat="item in agendaCtrl.scheduleDates" ng-click="agendaCtrl.scheduleDateChanged(item.value)" style="border-bottom:1px solid #eee">
-                        <span class="hidden-xs hidden-sm"   ng-bind="item.text || (item.value|moment:'format':'DD MMM YYYY (ddd)')" ></span>
-                        <span class="visible-xs visible-sm" ng-bind="item.text || (item.value|moment:'format':'ddd Do')" ></span>
-                    </a>                      
-                </div>
-            </span>
-        </span>
-    </div>
-
     <!-- Nav tabs -->
     <nav class="nav-{{::deviceSize}}">
         <ul class="nav nav-tabs hidden-print" role="tablist" style="margin-top:5px">
@@ -49,6 +19,21 @@
                 </a>
             </li>
             <li ng-hide="agendaCtrl.loaded" ><a><h3  style="color: #777;margin: 0px"><i class="fa fa-circle-o-notch fa-spin"></i></h3></a></li>
+            <li class="nav-item ml-auto" ng-if="agendaCtrl.now">
+                <li class="nav-item dropdown ml-auto">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-href="#" style="border:1px solid #f5efef">
+                        <em class="visible-xs-inline1 fa fa-clock-o"></em> 
+                        <b ng-if="agendaCtrl.scheduleDate==''" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'H:mm'"></b>
+                        <b ng-if="agendaCtrl.scheduleDate!=''" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'MMM Do'"></b>
+                    </a>
+            		<div class="dropdown-menu dropdown-menu-right">
+            			<a class="text-nowrap dropdown-item" href="#" ng-repeat="item in agendaCtrl.scheduleDates" ng-click="agendaCtrl.scheduleDateChanged(item.value)">
+                            <span class="hidden-xs hidden-sm"   ng-bind="item.text || (item.value|moment:'format':'DD MMM YYYY (ddd)')" ></span>
+                            <span class="visible-xs visible-sm" ng-bind="item.text || (item.value|moment:'format':'ddd Do')" ></span>
+                        </a>
+            		</div>
+            	</li>
+            </li>
         </ul>
     </nav>
 
