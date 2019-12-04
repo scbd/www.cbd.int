@@ -35,10 +35,6 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
             registerRoutes_idbCelebrations($routeProvider);
 
         //es/*
-        if(/^\/executive-secretary($|\/.*)/.test(locationPath))
-            registerRoutes_esPages($routeProvider);
-
-        //es/*
         if(/^\/participation($|\/.*)/.test(locationPath))
             registerRoutes_participation($routeProvider);
 
@@ -145,30 +141,6 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         .when('/:year/celebrations',       { templateUrl: 'views/idb-celebrations/idb-cel-index.html',  controllerAs: 'idbCelIndexCtrl',  resolveController: true, resolve : { user : currentUser() }})
         .when('/:year/celebrations/:gov',  { templateUrl: 'views/idb-celebrations/idb-profile.html',    controllerAs: 'idbProfileCtrl',   resolveController: true, resolveController: true , resolve : { user : currentUser() }})
         .otherwise({redirectTo: function(){ window.location.href= window.location}});
-  }
-
-  //============================================================
-  //
-  //
-  //============================================================
-  function registerRoutes_esPages(routeProvider) {
-
-      $("base").attr('href', '/executive-secretary/');
-
-      routeProvider
-        .when('/',          { templateUrl: 'views/es-pages/home.html',      resolveController: true, controllerAs: 'esHomeCtrl' })
-        .when('/bio',       { templateUrl: 'views/es-pages/bio.html',       resolveController: true, controllerAs: 'esBioCtrl'  })
-        .when('/work',      { templateUrl: 'views/es-pages/work.html',      resolveController: true, controllerAs: 'esWorkCtrl', resolve : { user : currentUser() }  })
-        .when('/media',     { templateUrl: 'views/es-pages/media.html',     resolveController: true, controllerAs: 'esMediaCtrl' })
-        .when('/contact',   { templateUrl: 'views/es-pages/contact.html',   resolveController: true, controllerAs: 'esContactCtrl'  })
-        
-        .when('/video/:id',   { templateUrl: 'views/es-pages/youtube-video.html',resolveController: true, controllerAs: 'esVideoCtrl'  })
-        .when('/event/:id',   { templateUrl: 'views/es-pages/event.html',resolveController: true, controllerAs: 'esEventCtrl', resolve : { user : currentUser() }  })
-
-        .when('/statement/:id', { templateUrl: 'views/es-pages/statement.html',resolveController: true, controllerAs: 'esStatementCtrl' })
-        .when('/report/:id'   , { templateUrl: 'views/es-pages/report.html'   ,resolveController: true, controllerAs: 'esReportCtrl'    })
-
-        .otherwise({redirectTo: '/404'});
   }
 
   //============================================================
