@@ -49,7 +49,7 @@ app.get('/robots.txt', async function (req, res) {
 
     const isValidHost = ['www.cbd.int'].includes(req.headers['host']);
 
-    var text = isValidHost ? 'Allow: /' : 'Disallow: /';
+    var text = isValidHost ? await getRobots() : 'Disallow: /';
 
     res.contentType('text/plain');
     res.end('User-agent: *\n' + text);
@@ -101,4 +101,8 @@ function setCustomCacheControl(res, path) {
         return res.setHeader('Cache-Control', 'public, max-age=86400000'); // one day
 
     res.setHeader('Cache-Control', 'public, max-age=0');
+}
+
+function getRobots(){
+  return axios.get('https://prod.drupal.www.infra.cbd.int/robots.txt').then(({ data }) => data)
 }
