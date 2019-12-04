@@ -47,7 +47,7 @@ app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiUrl, sec
 
 app.get('/robots.txt', async function (req, res) {
 
-    var isValidHost = ['www.cbd.int'].includes(req.headers['host']);
+    var isValidHost = true//['www.cbd.int'].includes(req.headers['host']);
 
     var text = isValidHost ? await getRobots() : 'Disallow: /';
 
