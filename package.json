@@ -13,8 +13,12 @@
   },
   "devDependencies": {
     "@scbd/conference-cal": "0.1.2",
-    "vue": "2.5.17",
-    "ngVue": "1.6.0"
+    "@scbd/page-footer": "^0.0.1",
+    "@scbd/page-header": "^0.0.1",
+    "@scbd/page-header-fixed": "^0.0.1",
+    "@scbd/sso-vue-plugin-scbd": "^0.0.1",
+    "ngVue": "1.6.0",
+    "vue": "2.5.17"
   },
   "license": "MIT",
   "private": true,
