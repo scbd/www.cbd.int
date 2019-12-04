@@ -1,7 +1,6 @@
 'use strict'; // jshint node: true, browser: false, esnext: true
 const express     = require('express');
 const httpProxy   = require('http-proxy');
-const axios       = require('axios')
 // Create server & proxy
 const app         = express();
 const proxy       = httpProxy.createProxyServer({});
