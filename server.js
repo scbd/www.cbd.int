@@ -49,7 +49,7 @@ app.get('/robots.txt', async function (req, res) {
 
     const isValidHost = ['www.cbd.int'].includes(req.headers['host']);
 
-    const text = isValidHost ? robotsTxt : 'Disallow: /';
+    var text = isValidHost ? 'Allow: /' : 'Disallow: /';
 
     res.contentType('text/plain');
     res.end('User-agent: *\n' + text);
