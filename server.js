@@ -1,10 +1,11 @@
 'use strict'; // jshint node: true, browser: false, esnext: true
-var express     = require('express');
-var httpProxy   = require('http-proxy');
-var axios       = require('axios')
+const express     = require('express');
+const httpProxy   = require('http-proxy');
+const axios       = require('axios')
 // Create server & proxy
-var app    = express();
-var proxy  = httpProxy.createProxyServer({});
+const app         = express();
+const proxy       = httpProxy.createProxyServer({});
+const robotsTxt   = require('./robots');
 
 if(!process.env.API_URL) {
     console.warn('warning: evironment API_URL not set. USING default (https://api.cbd.int:443)');
@@ -47,9 +48,9 @@ app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiUrl, sec
 
 app.get('/robots.txt', async function (req, res) {
 
-    var isValidHost = ['www.cbd.int'].includes(req.headers['host']);
+    const isValidHost = ['www.cbd.int'].includes(req.headers['host']);
 
-    var text = isValidHost ? await getRobots() : 'Disallow: /';
+    const text = isValidHost ? robotsTxt : 'Disallow: /';
 
     res.contentType('text/plain');
     res.end('User-agent: *\n' + text);
@@ -101,8 +102,4 @@ function setCustomCacheControl(res, path) {
         return res.setHeader('Cache-Control', 'public, max-age=86400000'); // one day
 
     res.setHeader('Cache-Control', 'public, max-age=0');
-}
-
-function getRobots(){
-  return axios.get('https://prod.drupal.www.infra.cbd.int/robots.txt').then(({ data }) => data)
 }
