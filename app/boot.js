@@ -45,11 +45,12 @@ require.config({
         'ngMeta'          : 'libs/ngMeta/dist/ngMeta.min',
         'facebook'        : '//connect.facebook.net/en_US/sdk',
         'gmapsapi'        : 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places',
-        'vue'             : cdnHost + 'vue@2.5.17/dist/vue.min',
         'ngVue'           : cdnHost + 'ngVue@1.6.0/build/index.min',
         'conferenceCal'   : cdnHost + '@scbd/conference-cal@0.1.2/dist/lib/ConferenceCal.umd.min',
-        'angular-cache'   : cdnHost + 'angular-cache@4.6.0/dist/angular-cache.min'
-
+        'angular-cache'   : cdnHost + 'angular-cache@4.6.0/dist/angular-cache.min',
+        'PageHeaderFixed' : cdnHost + '@scbd/page-header-fixed@0.0.1/dist/PageHeaderFixed.umd.min',
+        'PageHeader'      : cdnHost + '@scbd/page-header@0.0.1/dist/PageHeader.umd.min',
+        'PageFooter'      : cdnHost + '@scbd/page-footer@0.0.1/dist/PageFooter.umd.min'
     },
     shim: {
         'angular'              : { deps : ['jquery'], exports: 'angular' },
@@ -74,7 +75,10 @@ require.config({
         'facebook'             : { exports: 'FB'},
         'ngVue'                : { deps : ['vue'] },
         'conferenceCal'        : { deps : ['ngVue','css!'+ cdnHost + '@scbd/conference-cal@0.1.2/dist/lib/ConferenceCal.css'] },
-        'angular-cache'        : { deps : ['angular-flex'] }
+        'angular-cache'        : { deps : ['angular-flex'] },
+        'PageHeaderFixed'      : { deps : ['ngVue'] },
+        'PageFooter'           : { deps : ['ngVue','css!https://cdn.cbd.int/@scbd/page-footer@0.0.1/dist/PageFooter.css'] },
+        'PageHeader'           : { deps : ['ngVue','css!https://cdn.cbd.int/@scbd/page-header@0.0.1/dist/PageHeader.css'] },    
     },
     packages: [
         { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },
@@ -82,6 +86,26 @@ require.config({
     ],
     urlArgs: 'v=' + gitVersion
 });
+
+define('vue', ['https://cdn.cbd.int/vue/dist/vue.min','https://cdn.cbd.int/vue-i18n/dist/vue-i18n.min','https://cdn.cbd.int/@scbd/sso-vue-plugin-scbd'], function(Vue, i18n, ssoSCBD){
+    window.Vue     = Vue;
+    window.VueI18n = i18n;
+    window.ssoSCBD = ssoSCBD;
+
+    window.Vue.use(window.VueI18n);
+    window.Vue.use(window.ssoSCBD);
+    return Vue;
+})
+
+define('vue', ['https://cdn.cbd.int/vue/dist/vue.min','https://cdn.cbd.int/vue-i18n/dist/vue-i18n.min','https://scbd-components.s3.amazonaws.com/%40ecosystem/sso-vue-plugin-scbd/sso-vue-plugin-scbd.umd.min.js'], function(Vue, i18n, ssoSCBD){
+    window.Vue     = Vue;
+    window.VueI18n = i18n;
+    window.ssoSCBD = ssoSCBD;
+
+    window.Vue.use(window.VueI18n);
+    window.Vue.use(window.ssoSCBD);
+    return Vue;
+})
 
 define('cdn', {
     load: function (name, req, onload, config) {

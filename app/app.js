@@ -3,6 +3,17 @@ define(['angular', 'ngSanitize','toastr','ngMeta'], function(angular) { 'use str
      var app = angular.module('app', angular.defineModules(
          ['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','ngMeta','ngVue', 'angular-cache']));
 
+
+    app.provider('$ngVue', $ngVueProvider) // create own ngVue provider as theirs was broken
+    app.config(['$ngVueProvider',function($ngVueProvider) {
+      var i18n = new window.VueI18n({
+        locale        : 'en',
+        fallbackLocale: 'en',
+        messages      : { en:{} }
+      })
+      $ngVueProvider.setRootVueInstanceProps({ i18n: i18n })
+    }])
+    
     app.config(['$httpProvider','toastrConfig', function($httpProvider,toastrConfig) {
         angular.extend(toastrConfig, {
           autoDismiss: true,
@@ -77,6 +88,20 @@ define(['angular', 'ngSanitize','toastr','ngMeta'], function(angular) { 'use str
             };
         }];
     }]);
+
+    function $ngVueProvider() {
+      var inQuirkMode = false
+      var rootProps = {}
+      this.setRootVueInstanceProps = function (props) {
+        _.assign(rootProps, props)
+      }
+      this.$get=function(){
+        return {
+          getRootProps: function(){ return rootProps},
+          inQuirkMode: function(){ return inQuirkMode}
+        }
+      }
+    }
 
     return app;
 });
