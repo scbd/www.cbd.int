@@ -1,7 +1,7 @@
 'use strict'; // jshint node: true, browser: false, esnext: true
 var express     = require('express');
 var httpProxy   = require('http-proxy');
-
+var axios       = require('axios')
 // Create server & proxy
 var app    = express();
 var proxy  = httpProxy.createProxyServer({});
@@ -45,11 +45,11 @@ app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiUrl, sec
 
 // Configure robots.txt
 
-app.get('/robots.txt', function (req, res) {
+app.get('/robots.txt', async function (req, res) {
 
     var isValidHost = ['www.cbd.int'].includes(req.headers['host']);
 
-    var text = isValidHost ? 'Allow: /' : 'Disallow: /';
+    var text = isValidHost ? await getRobots() : 'Disallow: /';
 
     res.contentType('text/plain');
     res.end('User-agent: *\n' + text);
@@ -101,4 +101,8 @@ function setCustomCacheControl(res, path) {
         return res.setHeader('Cache-Control', 'public, max-age=86400000'); // one day
 
     res.setHeader('Cache-Control', 'public, max-age=0');
+}
+
+function getRobots(){
+  return axios.get('https://prod.drupal.www.infra.cbd.int/robots.txt').then(({ data }) => data)
 }
