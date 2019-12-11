@@ -15,10 +15,10 @@
     "@scbd/conference-cal": "0.1.2",
     "@scbd/page-footer": "^0.0.1",
     "@scbd/page-header": "^0.0.1",
-    "@scbd/page-header-fixed": "^0.0.1",
+    "@scbd/page-header-fixed": "0.0.5",
     "@scbd/sso-vue-plugin-scbd": "^0.0.1",
-    "ngVue": "1.6.0",
-    "vue": "2.5.17"
+    "ngVue": "1.7.7",
+    "vue": "2.6.10"
   },
   "license": "MIT",
   "private": true,
