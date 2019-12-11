@@ -69,6 +69,9 @@ app.get('/decisions/*',   function(req, res) { res.render('template-phoenix', { 
 app.use(require('./libs/prerender')); // set env PRERENDER_SERVICE_URL
 
 app.get('/*',            function(req, res) {
+
+    res.setHeader('Cache-Control', 'public, max-age=0, proxy-revalidate');
+
     let template = 'template'
     if(req.headers['x-wpt']=='phoenix')
         template =  'template-phoenix';
