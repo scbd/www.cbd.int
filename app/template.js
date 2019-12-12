@@ -2,14 +2,7 @@ define(['app', 'angular','text!./toast.html',
 'lodash', 'PageHeaderFixed','PageHeader','PageFooter','ngVue','providers/realm','./directives/bread-crumbs'], function(app, ng, toastTemplate, _, PageHeaderFixedComp, PageHeaderComp, PageFooterComp) {
     'use strict';
 
-    var PageHeaderFixed  = window.Vue.component('page-header-fixed', PageHeaderFixedComp);
-    var PageHeader       = window.Vue.component('page-header',       PageHeaderComp);
-    var PageFooter       = window.Vue.component('page-footer',       PageFooterComp);
-
-
-    app.value('PageHeaderFixed', PageHeaderFixed );
-    app.value('PageHeader',      PageHeader);
-    app.value('PageFooter',      PageFooter);
+    loadIfPhoenix()
 
     app.controller('TemplateController', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$location', 
                                   function($rootScope,   $window,   $browser,   $document,   authentication,   $q,  toastr,  $templateCache,   $location) {
@@ -147,4 +140,16 @@ define(['app', 'angular','text!./toast.html',
         }
 
     }]);
+
+    function loadIfPhoenix(){
+        if(!document.getElementById("phoenix")) return
+
+        var PageHeaderFixed  = window.Vue.component('page-header-fixed', PageHeaderFixedComp);
+        var PageHeader       = window.Vue.component('page-header',       PageHeaderComp);
+        var PageFooter       = window.Vue.component('page-footer',       PageFooterComp);
+    
+        app.value('PageHeaderFixed', PageHeaderFixed );
+        app.value('PageHeader',      PageHeader);
+        app.value('PageFooter',      PageFooter);
+    }
 });
