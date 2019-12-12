@@ -142,7 +142,9 @@ define(['app', 'angular','text!./toast.html',
     }]);
 
     function loadIfPhoenix(){
-        if(!document.getElementById("phoenix")) return
+        var phoenixElm =  document.getElementById("phoenix")
+
+        if(!phoenixElm || phoenixElm.tagName !== 'BODY') return
 
         var PageHeaderFixed  = window.Vue.component('page-header-fixed', PageHeaderFixedComp);
         var PageHeader       = window.Vue.component('page-header',       PageHeaderComp);
