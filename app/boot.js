@@ -45,12 +45,12 @@ require.config({
         'ngMeta'          : 'libs/ngMeta/dist/ngMeta.min',
         'facebook'        : '//connect.facebook.net/en_US/sdk',
         'gmapsapi'        : 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places',
-        'ngVue'           : cdnHost + 'ngVue@1.6.0/build/index.min',
+        'ngVue'           : cdnHost + 'ngVue@1.7.7/build/index.min',
         'conferenceCal'   : cdnHost + '@scbd/conference-cal@0.1.2/dist/lib/ConferenceCal.umd.min',
         'angular-cache'   : cdnHost + 'angular-cache@4.6.0/dist/angular-cache.min',
-        'PageHeaderFixed' : cdnHost + '@scbd/page-header-fixed@0.0.5/dist/PageHeaderFixed.umd.min',
-        'PageHeader'      : cdnHost + '@scbd/page-header@0.0.1/dist/PageHeader.umd.min',
-        'PageFooter'      : cdnHost + '@scbd/page-footer@0.0.1/dist/PageFooter.umd.min'
+        'PageHeaderFixed' : cdnHost + '@scbd/page-header-fixed@0.0.9/dist/PageHeaderFixed.umd.min',
+        'PageHeader'      : cdnHost + '@scbd/page-header@0.0.9/dist/PageHeader.umd.min',
+        'PageFooter'      : cdnHost + '@scbd/page-footer@0.0.9/dist/PageFooter.umd.min'
     },
     shim: {
         'angular'              : { deps : ['jquery'], exports: 'angular' },
@@ -77,8 +77,8 @@ require.config({
         'conferenceCal'        : { deps : ['ngVue','css!'+ cdnHost + '@scbd/conference-cal@0.1.2/dist/lib/ConferenceCal.css'] },
         'angular-cache'        : { deps : ['angular-flex'] },
         'PageHeaderFixed'      : { deps : ['ngVue'] },
-        'PageFooter'           : { deps : ['ngVue','css!'+ cdnHost +'@scbd/page-footer@0.0.1/dist/PageFooter.css'] },
-        'PageHeader'           : { deps : ['ngVue','css!'+ cdnHost +'@scbd/page-header@0.0.1/dist/PageHeader.css'] },    
+        'PageFooter'           : { deps : ['ngVue'] },
+        'PageHeader'           : { deps : ['ngVue'] },    
     },
     packages: [
         { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },
