@@ -40,6 +40,14 @@ define(['angular', 'ngSanitize','toastr','ngMeta'], function(angular) { 'use str
         app.$httpProvider = $httpProvider;
     }]);
 
+  app.config(['$sceDelegateProvider', function($sceDelegateProvider){
+
+    $sceDelegateProvider.resourceUrlWhitelist([
+      'self', // Allow same origin resource loads.
+      'https://*.cbd.int/**' // Allow loading from cbd.int domain;
+    ]);
+  }])
+
 	app.factory('apiRebase', ["$location", function($location) {
 
 		return {
