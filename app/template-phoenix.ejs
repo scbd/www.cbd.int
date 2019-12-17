@@ -128,6 +128,8 @@
     <style>
         @import url("/app/template-phoenix-overrides.css?v=<%=gitVersion%>");
 
+        .page-content{ margin-top: 2em;}
+
         #block-loginlinkblock ul.dropdown-menu { background-color: #01463a; }
         .meetingnav-table a, .meetingnav-table b { font-size: 1.04rem; }
 
@@ -169,8 +171,10 @@
         .header .navbar-wrapper.desktop-only > nav.sub-nav{
           margin-top: 0;
         }
+        @media (min-width:767px){ .page-content{ margin-top: 4em;} }
+        @media (min-width:992px){ .page-content{ margin-top: 10.5em;} }
+
     </style>
-   
 </head>
 
     <body id="phoenix" class="layout-no-sidebars phoenix bootstrap4">
@@ -197,7 +201,7 @@
                 <div id="page">
                     <vue-component name="PageHeaderFixed" ></vue-component>                  
                     <vue-component name="PageHeader" ></vue-component>
-                    <div class="page-content pt-0">
+                    <div class="page-content">
                         <div id="conferenceHeader"></div>
                         <div class="container">
                             <bread-crumbs></bread-crumbs>
