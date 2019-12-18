@@ -64,9 +64,6 @@ define(['app', 'angular','text!./toast.html',
         //=====================
         function updateSize() {
 
-            $rootScope.bootstrapVersion = 4;
-            $rootScope.templateVersion  = "cbd";
-
             $rootScope.$applyAsync(function(){
                 $rootScope.deviceSize = $('.device-size:visible').attr('size');
             });
