@@ -28,10 +28,10 @@ app.use(function(req, res, next) {  if(req.url.indexOf(".geojson")>0) res.conten
 
 // Configure static files to serve
 
-app.use('/app/images/p03qv92p.jpg', express.static(__dirname + '/app/images/p03qv92p.jpg',{ maxAge: 365*24*60*60*1000 }));
+app.use('/app/images/p03qv92p.jpg', express.static(__dirname + '/app/images/p03qv92p.jpg',{ maxAge: 365*24*60*60 }));
 
-app.use('/favicon.png',   express.static(__dirname + '/app/images/favicon.png', { maxAge: 24*60*60*1000 }));
-app.use('/app',           express.static(__dirname + '/app',                    { setHeaders: setCustomCacheControl }));
+app.use('/favicon.png',     express.static(__dirname + '/app/images/favicon.png',     { maxAge: 24*60*60 }));
+app.use('/app',             express.static(__dirname + '/app',                        { setHeaders: setCustomCacheControl }));
 app.use('/app/libs/vue',    express.static(__dirname + '/node_modules/vue/dist',      { setHeaders: setCustomCacheControl }));
 app.use('/app/libs/ngVue',  express.static(__dirname + '/node_modules/ngVue/build',   { setHeaders: setCustomCacheControl }));
 app.use('/app/libs/@scbd',  express.static(__dirname + '/node_modules/@scbd',         { setHeaders: setCustomCacheControl }));
@@ -63,8 +63,7 @@ app.get('/insession/*',  function(req, res) { res.redirect('/conferences/2016/co
 app.use(require('./libs/prerender')); // set env PRERENDER_SERVICE_URL
 
 app.get('/*',            function(req, res) {
-
-    res.setHeader('Cache-Control', 'public, max-age=0, proxy-revalidate');
+    res.setHeader('Cache-Control', 'public'); //No max-age let cloudfront decide
     res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); 
 });
 app.all('/*',            function(req, res) { res.status(404).send(); } );
@@ -91,9 +90,9 @@ process.on('SIGTERM', ()=>process.exit());
 function setCustomCacheControl(res, path) {
 
 	if(res.req.query && res.req.query.v && res.req.query.v==gitVersion && gitVersion!='UNKNOWN')
-        return res.setHeader('Cache-Control', 'public, max-age=86400000'); // one day
+        return res.setHeader('Cache-Control', 'public, max-age=86400'); // one day
 
-    res.setHeader('Cache-Control', 'public, max-age=0');
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate'); // Force revalidate 
 }
 
 function getRobots(){
