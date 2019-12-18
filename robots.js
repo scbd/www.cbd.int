@@ -1,7 +1,4 @@
-module.exports = `
-
-User-agent: *
-# CSS, JS, Images
+module.exports = `User-agent: *
 Allow: /core/*.css$
 Allow: /core/*.css?
 Allow: /core/*.js$
@@ -45,5 +42,4 @@ Disallow: /index.php/search/
 Disallow: /index.php/user/password/
 Disallow: /index.php/user/register/
 Disallow: /index.php/user/login/
-Disallow: /index.php/user/logout/
-`
+Disallow: /index.php/user/logout/`

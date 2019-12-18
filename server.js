@@ -44,15 +44,13 @@ app.all('/doc/*', function(req, res) { res.status(404).send(); } );
 app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiUrl, secure: false, changeOrigin:true } ); } );
 
 // Configure robots.txt
-
-app.get('/robots.txt', async function (req, res) {
+app.get('/robots.txt', (req, res) => {
 
     const isValidHost = ['www.cbd.int'].includes(req.headers['host']);
-
-    var text = isValidHost ? await getRobots() : 'Disallow: /';
+    const text        = isValidHost ? robotsTxt : 'User-agent: *\nDisallow: /';
 
     res.contentType('text/plain');
-    res.end('User-agent: *\n' + text);
+    res.end(text);
 });
 
 app.get('/reports/map*', function(req, res) { res.cookie('VERSION', process.env.COMMIT||''); res.sendFile(__dirname + '/app/views/reports/template.html', { maxAge : 5*60 }); });
@@ -96,8 +94,4 @@ function setCustomCacheControl(res, path) {
         return res.setHeader('Cache-Control', 'public, max-age=86400'); // one day
 
     res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
-}
-
-function getRobots(){
-  return axios.get('https://prod.drupal.www.infra.cbd.int/robots.txt').then(({ data }) => data)
 }
