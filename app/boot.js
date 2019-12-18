@@ -11,6 +11,7 @@ require.config({
     paths: {
         'authentication'  : 'services/authentication',
         'angular'         : cdnHost + 'angular@1.5.6/angular.min',
+        'bs4'             : cdnHost + 'bootstrap@4.1.3/dist/js/bootstrap',
         'ngRoute'         : cdnHost + 'angular-route@1.5.6/angular-route.min',
         'ngCookies'       : cdnHost + 'angular-cookies@1.5.6/angular-cookies.min',
         'ngAnimate'       : cdnHost + 'angular-animate@1.5.6/angular-animate.min',
@@ -78,7 +79,8 @@ require.config({
         'angular-cache'        : { deps : ['angular-flex'] },
         'PageHeaderFixed'      : { deps : ['ngVue'] },
         'PageFooter'           : { deps : ['ngVue'] },
-        'PageHeader'           : { deps : ['ngVue'] },    
+        'PageHeader'           : { deps : ['ngVue'] },
+        'bs4'                  : { deps : ['jquery', 'popper.js'] },
     },
     packages: [
         { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },
@@ -86,6 +88,11 @@ require.config({
     ],
     urlArgs: 'v=' + gitVersion
 });
+
+define ('popper.js', [ cdnHost + 'popper.js@1.16.0/dist/umd/popper.min'], function(popper){
+  window.Popper = popper
+  return popper
+})
 
 define('vue', [cdnHost +'vue/dist/vue.min',cdnHost +'vue-i18n/dist/vue-i18n.min',cdnHost +'@scbd/sso-vue-plugin-scbd'], function(Vue, i18n, ssoSCBD){
     window.Vue     = Vue;
@@ -96,6 +103,7 @@ define('vue', [cdnHost +'vue/dist/vue.min',cdnHost +'vue-i18n/dist/vue-i18n.min'
     window.Vue.use(window.ssoSCBD);
     return Vue;
 })
+
 
 define('cdn', {
     load: function (name, req, onload, config) {
