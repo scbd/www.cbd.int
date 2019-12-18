@@ -1,9 +1,8 @@
 define(['app', 'angular','text!./toast.html',
-'lodash', 'PageHeaderFixed','PageHeader','PageFooter','ngVue','providers/realm','./directives/bread-crumbs'], function(app, ng, toastTemplate, _, PageHeaderFixedComp, PageHeaderComp, PageFooterComp) {
+'lodash', 'PageHeaderFixed','PageHeader','PageFooter', 'bs4', 'ngVue','providers/realm','./directives/bread-crumbs'], function(app, ng, toastTemplate, _, PageHeaderFixedComp, PageHeaderComp, PageFooterComp) {
     'use strict';
 
-    loadIfPhoenix()
-
+    loadHeaderFooter()
     app.controller('TemplateController', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$location', 
                                   function($rootScope,   $window,   $browser,   $document,   authentication,   $q,  toastr,  $templateCache,   $location) {
 
@@ -65,8 +64,8 @@ define(['app', 'angular','text!./toast.html',
         //=====================
         function updateSize() {
 
-            if(!$rootScope.bootstrapVersion) $rootScope.bootstrapVersion = ng.element("body").hasClass("bootstrap4") ? 4 : 3;
-            if(!$rootScope.templateVersion)  $rootScope.templateVersion  = ng.element("body").hasClass("phoenix") ? "phoenix" : "cbd";
+            $rootScope.bootstrapVersion = 4;
+            $rootScope.templateVersion  = "cbd";
 
             $rootScope.$applyAsync(function(){
                 $rootScope.deviceSize = $('.device-size:visible').attr('size');
@@ -141,10 +140,7 @@ define(['app', 'angular','text!./toast.html',
 
     }]);
 
-    function loadIfPhoenix(){
-        var phoenixElm =  document.getElementById("phoenix")
-
-        if(!phoenixElm || phoenixElm.tagName !== 'BODY') return
+    function loadHeaderFooter(){
 
         var PageHeaderFixed  = window.Vue.component('page-header-fixed', PageHeaderFixedComp);
         var PageHeader       = window.Vue.component('page-header',       PageHeaderComp);
