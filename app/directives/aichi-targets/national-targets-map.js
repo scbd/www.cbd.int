@@ -159,6 +159,8 @@ define(['app', 'lodash',
                       return 2;
                     case "Moving away from target":
                       return 1;
+                    case "Unknown":
+                        return 0;
                   }
                 } //progressToNumber(progress)
                 //============================================================
@@ -171,7 +173,7 @@ define(['app', 'lodash',
                     else
                         targetText = 'AICHI-TARGET-' + $scope.aichiTarget;
 
-                    var query = 'NOT version_s:* AND realm_ss:chm AND schema_s:nationalAssessment AND (nationalTarget_s:"' + targetText + '" OR nationalTargetAichiTargets_ss:"' + targetText + '") AND _latest_s:true AND _state_s:public';
+                    var query = 'NOT version_s:* AND realm_ss:chm AND schema_s:nationalAssessment AND (nationalTarget_s:"' + targetText + '" OR nationalTargetMainAichiTargets_ss:"' + targetText + '") AND _latest_s:true AND _state_s:public';
                     return query;
                 }
 
@@ -184,7 +186,7 @@ define(['app', 'lodash',
                     var queryParameters = {
                         'q': queryText(),
                         'sort': 'createdDate_dt desc, title_t asc',
-                        'fl': 'reportType_s,documentID,identifier_s,id,title_t,description_t,url_ss,schema_EN_t,date_dt,government_EN_t,schema_s,number_d,aichiTarget_ss,reference_s,sender_s,meeting_ss,recipient_ss,symbol_s,eventCity_EN_t,eventCountry_EN_t,startDate_s,endDate_s,body_s,code_s,meeting_s,group_s,function_t,department_t,organization_t,summary_EN_t,reportType_EN_t,completion_EN_t,jurisdiction_EN_t,development_EN_t,_latest_s,nationalTarget_EN_t,progress_EN_t,year_i,text_EN_txt,nationalTarget_EN_t,government_s,nationalTargetAichiTargets_ss,nationalTarget_s',
+                        'fl': 'reportType_s,documentID,identifier_s,id,title_t,description_t,url_ss,schema_EN_t,date_dt,government_EN_t,schema_s,number_d,aichiTarget_ss,reference_s,sender_s,meeting_ss,recipient_ss,symbol_s,eventCity_EN_t,eventCountry_EN_t,startDate_s,endDate_s,body_s,code_s,meeting_s,group_s,function_t,department_t,organization_t,summary_EN_t,reportType_EN_t,completion_EN_t,jurisdiction_EN_t,development_EN_t,_latest_s,nationalTarget_EN_t,progress_EN_t,year_i,text_EN_txt,nationalTarget_EN_t,government_s,nationalTargetMainAichiTargets_ss,nationalTarget_s',
                         'wt': 'json',
                         'start': 0,
                         'rows': 1000000,
@@ -248,15 +250,33 @@ define(['app', 'lodash',
 
 
                   if(!_.isEmpty(country.docs)){
-                      changeAreaColor(country.code, progressToColor(progressToNumber(country.docs[0].progress_EN_t)));
+                      changeAreaColor(country.code, progressToColor(averageAssessmentProgress(country.docs)));
                   }
                   if(!_.isEmpty(country.targets)){
                       buildTargetBaloon(country);
                   }
-                  // buildProgressBaloon(country, progressToNumber(country.docs[0].progress_EN_t), country.docs[0].nationalTarget_EN_t);
+                  // buildProgressBaloon(country, averageAssessmentProgress(country.docs), country.docs[0].nationalTarget_EN_t);
                   // legendTitle(country);
                   // restLegend($scope.leggends.aichiTarget);
                 } // aichiMap
+
+                function averageAssessmentProgress(docs){
+                  if(docs.length == 1)
+                    return progressToNumber(docs[0].progress_EN_t);
+        
+                  var progressCount = { 0:0,1:0,2:0,3:0,4:0,5:0 }
+                  _.each(docs, function(d){
+                    var num = progressToNumber(d.progress_EN_t);
+                    progressCount[num]++;
+                  });
+                  var count = _.reduce(progressCount, function(count, n, k){
+                                return count += (n * parseInt(k));
+                              }, 0);
+        
+                  return Math.round(count/docs.length);
+        
+                }
+
                 //=======================================================================
                 function legendTitle(country) {
                     $scope.legendTitle = aichiTargetReadable(country.docs[0].nationalTarget_EN_t) + "Progress";
@@ -312,6 +332,8 @@ define(['app', 'lodash',
                       return 2;
                     case "Moving away from target":
                       return 1;
+                    case "Unknown":
+                        return 0;
                   }
                 } //
 
@@ -409,15 +431,17 @@ define(['app', 'lodash',
 
                   switch (progress) {
                     case 5:
-                      return '#1074bc';
+                        return '#1074bc';
                     case 4:
-                      return '#109e49';
+                        return '#109e49';
                     case 3:
-                      return '#fec210';
+                        return '#fec210';
                     case 2:
-                      return '#ee1d23';
+                        return '#ee1d23';
                     case 1:
-                      return '#6c1c67';
+                        return '#6c1c67';
+                    case 0:
+                        return '#eee';
                   }
                 } //readQueryString
 
@@ -427,6 +451,8 @@ define(['app', 'lodash',
                 function getProgressText(progress, target) {
 
                   switch (progress) {
+                    case 0:
+                      return 'Unknon ' + aichiTargetReadable(target);
                     case 1:
                       return 'Moving away from ' + aichiTargetReadable(target) + ' (things are getting worse rather than better).';
                     case 2:
