@@ -60,22 +60,12 @@ app.get('/reports/map*', function(req, res) { res.cookie('VERSION', process.env.
 app.get('/insession',    function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
 app.get('/insession/*',  function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
 
-app.get('/meetings',      function(req, res) { res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
-app.get('/meetings/*',    function(req, res) { res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
-app.get('/conferences',   function(req, res) { res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
-app.get('/conferences/*', function(req, res) { res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
-app.get('/decisions/*',   function(req, res) { res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
-
 app.use(require('./libs/prerender')); // set env PRERENDER_SERVICE_URL
 
 app.get('/*',            function(req, res) {
 
     res.setHeader('Cache-Control', 'public, max-age=0, proxy-revalidate');
-
-    let template = 'template'
-    if(req.headers['x-wpt']=='phoenix')
-        template =  'template-phoenix';
-    res.render(template, { gitVersion: gitVersion, cdnUrl: cdnUrl }); 
+    res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); 
 });
 app.all('/*',            function(req, res) { res.status(404).send(); } );
 
