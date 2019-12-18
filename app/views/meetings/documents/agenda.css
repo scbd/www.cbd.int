@@ -43,9 +43,9 @@
     display: inline;
     z-index:1    
 }
-                            #print-smart-checkout { top: 53px; position: sticky }
+                            #print-smart-checkout { top: 165px; position: sticky }
 @media (max-width: 991px) { #print-smart-checkout { top: 65px; } }
-@media (max-width: 749px) { #print-smart-checkout { top: 35px; } }
+@media (max-width: 749px) { #print-smart-checkout { top: 33px; } }
 
 .documents a:hover       { text-decoration:none; }
 .documents a[href]:hover { text-decoration:underline; }

@@ -70,6 +70,7 @@
     <link rel="stylesheet" href="<%=cdnUrl%>ng-dialog@0.6.1/css/ngDialog-theme-default.min.css">
     <link rel="stylesheet" href="/app/views/meetings/documents/agenda.css?v=<%=gitVersion%>">
     <link rel="stylesheet" href="/app/libs/bootstrap-datepicker/css/datepicker.css?v=<%=gitVersion%>">
+    <link rel="stylesheet" href="/app/template-phoenix-overrides.css?v=<%=gitVersion%>">
 
     <style>
 
@@ -142,8 +143,58 @@
     }
     #page{padding-bottom: 0px;}
     </style>
+
+        <style>
+
+        .page-content{ margin-top: 2em;}
+
+        #block-loginlinkblock ul.dropdown-menu { background-color: #01463a; }
+        .meetingnav-table a, .meetingnav-table b { font-size: 1.04rem; }
+
+        .meeting-documents .table td, .meeting-documents .table th {
+            padding: .20rem!important;
+            vertical-align: top;
+        }
+        .meeting-documents div > table > tbody > tr > td:first-child { padding-top: 6px!important; }
+
+
+        .ngdialog.printsmart > .ngdialog-content > .modal-content > .modal-header {
+            display:block
+        }
+
+        .ngdialog.printsmart > .ngdialog-content > .modal-content .text,
+        .ngdialog.printsmart > .ngdialog-content > .modal-content .text * {
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif!important;
+        }
+
+        .printsmart .language,
+        .document-files .language
+        {
+            font-size: 14px;
+        }
+
+        .printsmart a.language:not([href]),
+        .document-files a.language:not([href]) {
+            color: inherit;
+        }
+
+        .ngdialog.printsmart .help-block {
+            font-style: italic;
+            font-size: 85%;
+            opacity: 0.75;
+        }
+        .ngdialog.printsmart .close {
+            font-size: 35px;
+        }
+        .header .navbar-wrapper.desktop-only > nav.sub-nav{
+        margin-top: 0;
+        }
+        @media (min-width:767px){ .page-content{ margin-top: 4em;} }
+        @media (min-width:992px){ .page-content{ margin-top: 10.5em;} }
+
+    </style>    
 </head>
-<body class="ltr bootstrap3" ng-class="::{ 'mobile-app' : templateCtrl.viewOnly }">
+<body class="ltr bootstrap4 phoenix" ng-class="::{ 'mobile-app' : templateCtrl.viewOnly }">
 
   <div id="page-wrapper">
       <div id="page">
