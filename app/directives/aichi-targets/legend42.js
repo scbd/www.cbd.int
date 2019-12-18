@@ -22,11 +22,17 @@ define(['app', 'text!./legend42.html','directives/aichi-targets/progress-pie','d
               $scope.showMap=true;
               $scope.leggends = {
                 aichiTarget: [{
-                  id: 0,
+                  id: -1,
                   title: 'No Data',
                   visible: true,
                   color: '#aaaaaa'
-                }, {
+                }, 
+                {
+                  id: 0,
+                  title: 'Unknow',
+                  visible: true,
+                  color: '#eee'
+                },{
                   id: 1,
                   title: 'Moving Away',
                   visible: true,
