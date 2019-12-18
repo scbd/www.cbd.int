@@ -58,14 +58,14 @@ app.get('/reports/map*', function(req, res) { res.cookie('VERSION', process.env.
 app.get('/insession',    function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
 app.get('/insession/*',  function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
 
-app.get('/biobridge/*',     function(req, res) { res.render('template', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
-app.get('/aichi-targets/*', function(req, res) { res.render('template', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
+app.get('/biobridge*',     function(req, res) { res.render('template-2011', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
+app.get('/aichi-targets*', function(req, res) { res.render('template-2011', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
 
 app.use(require('./libs/prerender')); // set env PRERENDER_SERVICE_URL
 
 app.get('/*',            function(req, res) {
     res.setHeader('Cache-Control', 'public');
-    res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); 
+    res.render('template', { gitVersion: gitVersion, cdnUrl: cdnUrl }); 
 });
 app.all('/*',            function(req, res) { res.status(404).send(); } );
 

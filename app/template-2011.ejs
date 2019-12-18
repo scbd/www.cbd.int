@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" ng-controller="TemplateController as templateCtrl" git-version="<%=gitVersion%>" cdn-url="<%=cdnUrl%>">
+<head>
+    <base href="/">
+    <script> //Analytics
+        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+
+        if(~document.location.hostname.indexOf('cbd.int')){
+            ga('create', 'UA-1996573-1', 'auto');
+            ga('set',    'hostname', window.location.hostname);
+            ga('set',    'location', undefined);
+
+            //tag manager
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-NL82D37');
+        }
+    </script>
+    
+    <script src="<%=cdnUrl%>requirejs@2.2.0/require.js"></script>
+    <script src="<%=cdnUrl%>jquery@2.2.4/dist/jquery.min.js"></script>
+    <script src="<%=cdnUrl%>bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
+    <script async src="/app/boot.js?v=<%=gitVersion%>"></script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+    <title ng-bind="$root.page.title">Convention on Biological Diversity</title>
+    <meta name="description" content="{{$root.page.description || ngMeta['og:description']}}" ng-if="$root.page.description || ngMeta['og:description']">
+    <meta property="og:title" content="{{ngMeta['og:title']}}" />
+    <meta property="og:type" content="{{ngMeta['og:type']}}" ng-if="ngMeta['og:type']"/>
+    <meta property="og:locale" content="{{ngMeta['og:locale']}}" ng-if="ngMeta['og:locale']"/>
+    <meta property="og:description" content="{{ngMeta['og:description']}}" />
+    <meta property="fb:app_id"   content="{{ngMeta['fb:app_id']}}" ng-if="ngMeta['fb:app_id']">
+    <meta property="og:url" content="{{ngMeta['og:url']}}" ng-if="ngMeta['og:url']">
+    <meta property="og:image" content="{{ngMeta['og:image']}}" ng-if="ngMeta['og:image']">
+    <meta property="og:image:height" content="{{ngMeta['og:image:height']}}" ng-if="ngMeta['og:image:height']">
+    <meta property="og:image:width" content="{{ngMeta['og:image:width']}}" ng-if="ngMeta['og:image:width']">
+
+    <meta property="og:profile:first_name" content="{{ngMeta['og:profile:first_name']}}" ng-if="ngMeta['og:profile:first_name']">
+    <meta property="og:profile:last_name" content="{{ngMeta['og:profile:last_name']}}" ng-if="ngMeta['og:profile:last_name']">
+    <meta property="og:profile:gender" content="{{ngMeta['og:profile:gender']}}" ng-if="ngMeta['og:profile:gender']">
+    <meta property="fb:profile_id" content="{{ngMeta['fb:profile_id']}}" ng-if="ngMeta['fb:profile_id']">
+    <meta property="og:see_also" content="{{ngMeta['og:see_also']}}" ng-if="ngMeta['og:see_also']">
+
+    <meta property="article:author" content="{{ngMeta['article:author']}}" ng-if="ngMeta['article:author']">
+    <meta property="article:published_time" content="{{ngMeta['article:published_time']}}" ng-if="ngMeta['article:published_time']">
+    <meta property="article:publisher" content="{{ngMeta['article:publisher']}}" ng-if="ngMeta['article:publisher']">
+    <meta property="article:section" content="{{ngMeta['article:section']}}" ng-if="ngMeta['article:section']">
+
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@CBDNews">
+    <meta name="twitter:creator" content="{{ngMeta['twitter:creator'] || '@CBDNews'}}"  >
+    <meta name="twitter:title" content="{{ngMeta['twitter:title']}}" ng-if="ngMeta['twitter:title']">
+    <meta name="twitter:description" content="{{ngMeta['twitter:description']}}" ng-if="ngMeta['twitter:description']">
+    <meta name="twitter:image" content="{{ngMeta['twitter:image']}}" ng-if="ngMeta['twitter:image']">
+    <meta name="twitter:image:src" content="{{ngMeta['twitter:image']}}" ng-if="ngMeta['twitter:image']">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="<%=cdnUrl%>bootstrap@3.4.1/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="<%=cdnUrl%>font-awesome@4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="/app/libs/animate.css/animate.min.css?v=<%=gitVersion%>">
+    <link rel="stylesheet" href="/app/libs/magnific-popup/dist/magnific-popup.css?v=<%=gitVersion%>">
+    <link rel="stylesheet" href="/app/libs/flag-icon-css/css/flag-icon.css?v=<%=gitVersion%>" >
+    <link rel="stylesheet" href="app/libs/angular-toastr/dist/angular-toastr.min.css?v=<%=gitVersion%>" >
+    <link rel="stylesheet" href="<%=cdnUrl%>ng-dialog@0.6.1/css/ngDialog.min.css">
+    <link rel="stylesheet" href="<%=cdnUrl%>ng-dialog@0.6.1/css/ngDialog-theme-default.min.css">
+    <link rel="stylesheet" href="/app/views/meetings/documents/agenda.css?v=<%=gitVersion%>">
+    <link rel="stylesheet" href="/app/libs/bootstrap-datepicker/css/datepicker.css?v=<%=gitVersion%>">
+
+    <style>
+
+    [ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }
+
+                .mobile-app-visbile,
+                .mobile-app-visbile-inline,
+    .mobile-app .mobile-app-hidden         { display: none    }
+    .mobile-app .mobile-app-visbile        { display: block;  }
+    .mobile-app .mobile-app-visbile-inline { display: inline; }
+
+    body, .greybg { background: #f4f4f4; }
+    .whitebg      { background: #FFFFFF; }
+
+    header.mobile.navbar              { color:#009B48; background-color:white; margin-bottom: 1px; }
+    header.mobile.navbar a            { color:#009B48; }
+    header.mobile .navbar-nav a:hover { color:white;background-color:#009B48 }
+    header.mobile .navbar-header      { font-weight:semi-bold; }
+    header.mobile .navbar-header img.logo {
+        height:55px;
+        vertical-align:middle;
+        margin-left:3px;
+    }
+
+    header.large > div.container > div { border-bottom:solid 1px #f4f4f4; }
+    header.large   img.logo          { height:70px }
+    header.large .navbar-nav a       { color:#009B48; }
+    header.large .navbar-nav a:hover { color:white; background-color:#009B48; }
+
+
+    footer {  display: block; padding: 15px 20px; }
+    footer ul { list-style-type: none; padding:0px; }
+    footer ul li a { font-size: 14px; color: #666; }
+    footer ul li a:hover { color: #000; }
+    footer h4 {
+      font-size: 14px;
+      color: #666;
+      font-weight: bold;
+    }
+
+    footer.standard ul.list-inline > li { padding: 0px 5px; border-right:solid 1px #666;font-size: 14px;}
+    footer.standard ul.list-inline > li:last-child { border-right: none; }
+
+    h1 { font-size: 30px; }
+    h2 { font-size: 26px; }
+    h3 { font-size: 22px; }
+    h4 { font-size: 18px; }
+    h5 { font-size: 16px; }
+    h6 { font-size: 15px; }
+
+    .view h1, .view h2, .view h3, .view h4, .view h5, .view h6, .view .h1, .view .h2, .view .h3, .view .h4, .view .h5, .view .h6 {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color:#009B48;
+    }
+
+    @media (min-width: 768px) {
+        button.hidden-xs { display: inline-block !important; }
+        span.hidden-xs   { display: inline !important; }
+    }
+
+    @media (max-width: 767px) {
+        button.visible-xs { display: inline-block !important; }
+        span.visible-xs   { display: inline !important; }
+    }
+
+    @media print {
+      a[href]:after {
+        content: none !important;
+      }
+    }
+
+    </style>
+</head>
+<body class="ltr bootstrap3" ng-class="::{ 'mobile-app' : templateCtrl.viewOnly }">
+    <!-- HEADER -->
+    <div ng-if="!templateCtrl.viewOnly">
+        <!-- HEADER -->
+        <header class="mobile navbar visible-xs" role="banner">
+            <div class="container">
+
+                <div class="navbar-header">
+                    <button class="navbar-toggle collapsed hidden-print" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                        <i class="fa fa-bars" style="font-size:1.66em;"></i>
+                    </button>
+
+                    <div ng-cloak ng-show="user" class="pull-right hidden-print">
+
+                        <a ng-hide="user.isAuthenticated" ng-href="{{templateCtrl.accountsUrl+'/signin?returnUrl='+templateCtrl.getEncodedReturnUrl()}}" class="navbar-toggle collapsed" style="text-decoration:none;color:#009B48" style="color: black">
+                            <i  class="fa fa-power-off" style="font-size:1.66em;"></i>
+                        </a>
+
+                        <div ng-show="user.isAuthenticated" class="dropdown">
+
+                            <button class="navbar-toggle collapsed" title="{{user.name}}" style="text-decoration:none;color:#009B48" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <i class="fa fa-user" style="font-size:1.66em;"></i>
+                            </button>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
+                                <li><a ng-href="{{templateCtrl.accountsUrl+'/profile?returnUrl=' +templateCtrl.getEncodedReturnUrl()}}"><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
+                                <li><a ng-href="{{templateCtrl.accountsUrl+'/password?returnUrl='+templateCtrl.getEncodedReturnUrl()}}"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
+                                <li><a ng-click="templateCtrlsignOut()"  href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
+                            </ul>
+                        </div>
+
+                </div> <!--  end sign in-->
+
+                    <a href="/" target="_self">
+                        <a href="/"><img class="logo" src="https://attachments.cbd.int/cbd-logo-en.svg?v=<%=gitVersion%>" style="padding-top:4px;padding-left:2px"/></a>
+                    </a>
+
+                </div>
+
+                <nav class="collapse navbar-collapse hidden-print" role="navigation">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a target="_self" href="/convention">The Convention</a></li>
+                        <li class="active"><a target="_self" href="/biosafety">Cartagena Protocol</a></li>
+                        <li class="active"><a target="_self" href="/abs">Nagoya Protocol</a></li>
+                        <li class="active"><a target="_self" href="/programmes">Programmes</a></li>
+                        <li class="active"><a target="_self" href="/information">Information</a></li>
+                        <li class="active"><a target="_self" href="/secretariat">Secretariat</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- LARGE -->
+        <header class="large hidden-xs">
+            <div class="container whitebg">
+                <div>
+
+                    <div class="pull-left" style="margin:5px 0px">
+                        <a href="/"><img class="logo" src="https://attachments.cbd.int/cbd-logo-en.svg?v=<%=gitVersion%>"/></a>
+                    </div>
+
+                    <div  class="pull-right hidden-print">
+
+                        <a class="btn btn-link" ng-href="{{templateCtrl.accountsUrl+'/signin?returnUrl='+templateCtrl.getEncodedReturnUrl()}}"  style="text-decoration:none;color:#009B48" ng-hide="user.isAuthenticated" style="color: black">
+                            <i  class="fa fa-power-off"></i> <span ng-cloak ng-show="user && !user.isAuthenticated">Sign in</span>
+                        </a>
+
+                        <div ng-cloak ng-show="user.isAuthenticated" class="dropdown">
+                            <button class="btn btn-link dropdown-toggle" style="text-decoration:none;color:#009B48" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <span class="caret"></span> {{user.name}}
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
+                                <li><a ng-href="{{templateCtrl.accountsUrl+'/profile?returnUrl=' +templateCtrl.getEncodedReturnUrl()}}"><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
+                                <li><a ng-href="{{templateCtrl.accountsUrl+'/password?returnUrl='+templateCtrl.getEncodedReturnUrl()}}"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
+                                <li><a ng-click="templateCtrl.signOut()"  href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
+                            </ul>
+                        </div>
+
+                </div> <!--  end sign in-->
+
+                    <div style="clear:right;" class="pull-right hidden-print">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="/convention">The Convention</a></li>
+                            <li class="active"><a href="/biosafety">Cartagena Protocol</a></li>
+                            <li class="active"><a href="/abs">Nagoya Protocol</a></li>
+                            <li class="active"><a href="/programmes">Programmes</a></li>
+                            <li class="active"><a href="/information">Information</a></li>
+                            <li class="active hidden-sm"><a href="/secretariat">Secretariat</a></li>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </header>
+
+        <div id="conferenceHeader" style="display:none;"></div>
+    </div>
+
+    <!-- CONTENT -->
+    <a name="view"></a>
+    <div class="container whitebg view" >
+        <ng-view></ng-view>
+    </div>
+
+    <!-- FOOTER -->
+    <div ng-if="!templateCtrl.viewOnly">
+      <footer class="container whitebg hidden-print">
+        <div class="greybg">
+            <div class="col-sm-4 fleft">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a target="_self" href="/decisions">Decisions</a></li>
+                    <li><a target="_self" href="/meetings">Meetings</a></li>
+                    <li><a target="_self" href="/notifications">Notifications</a></li>
+                    <li><a target="_self" href="/news">News Headlines</a></li>
+                    <li><a target="_self" href="/publications">Publications</a></li>
+                    <li><a target="_self" href="/chm">CHM</a></li>
+                    <li><a target="_self" href="http://bch.cbd.int/">BCH</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-4 fleft">
+                <h4 class="hidden-xs">&nbsp;</h4>
+                <ul>
+                    <li><a target="_self" href="/parties">Parties</a></li>
+                    <li><a target="_self" href="/countries">Country Profiles</a></li>
+                    <li><a target="_self" href="/nfp">National Focal Point</a></li>
+                    <li><a target="_self" href="/nbsap">National Strategies (NBSAPs)</a></li>
+                    <li><a target="_self" href="/reports">National Reports</a></li>
+                    <li><a target="_self" href="/contributions">Contributions</a></li>
+                    <li><a target="_self" href="/cooperation">Cooperation & Partnerships</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-4 fleft">
+                <h4>Follow us</h4>
+                <ul>
+                  <li><img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/ic-rss.png">&nbsp;&nbsp;<a href="https://www.cbd.int/rss">RSS</a></li>
+                  <li><img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/ic-twitter.png">&nbsp;&nbsp;<a href="https://twitter.com/unbiodiversity">Twitter</a></li>
+                  <li><img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/ic-facebook.png">&nbsp;&nbsp;<a href="https://www.facebook.com/UNBiodiversity">Facebook</a></li>
+                  <li><img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/ic-youtube.png">&nbsp;&nbsp;<a href="https://www.youtube.com/user/chmcbd">YouTube</a></li>
+                  <li><img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/ic-instagram.png">&nbsp;&nbsp;<a href="https://instagram.com/unbiodiversity">Instagram</a></li>
+                  <li><img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/ic-linkedin.png">&nbsp;&nbsp;<a href="https://www.linkedin.com/company/unbiodiversity">LinkedIn</a></li>
+                </ul>
+
+            </div>
+
+            <div class="clearfix"></div>
+
+        </div>
+      </footer>
+
+      <footer class="container standard whitebg">
+          <div class="col-md-9 hidden-print">
+              <ul class="list-inline">
+                  <li><a target="_self" href="/feedback">Feedback</a></li>
+                  <li><a target="_self" href="/map">Site Map</a></li>
+                  <li><a target="_self" href="/contact">Contact Us</a></li>
+                  <li><a target="_self" href="/terms">Terms of Use</a></li>
+                  <li><a target="_self" href="/privacy">Privacy Policy</a></li>
+                  <li><a target="_self" href="/credits">Credits</a></li>
+                  <li><a target="_self" href="/copyright">&copy; CBD Secretariat</a></li>
+              </ul>
+          </div>
+          <div class="col-md-3 pull-right">
+              <a href="http://www.un.org/" target="_blank"><img src="/app/images/un-logo-white.gif?v=<%=gitVersion%>" alt="UN logo" /></a>
+              <a href="http://unep.org/"   target="_blank"><img src="/app/images/unep-logo-white-en.png?v=<%=gitVersion%>" alt="UNEP logo" /></a>
+          </div>
+      </footer>
+    </div>
+
+    <!-- JS screen-size detector -->
+    <div class="device-size visible-xs" size="xs"></div>
+    <div class="device-size visible-sm" size="sm"></div>
+    <div class="device-size visible-md" size="md"></div>
+    <div class="device-size visible-lg" size="lg"></div>
+</body>
+</html>
+<!-- -->
