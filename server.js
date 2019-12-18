@@ -28,9 +28,9 @@ app.use(function(req, res, next) {  if(req.url.indexOf(".geojson")>0) res.conten
 
 // Configure static files to serve
 
-app.use('/app/images/p03qv92p.jpg', express.static(__dirname + '/app/images/p03qv92p.jpg',{ maxAge: 365*24*60*60*1000 }));
+app.use('/app/images/p03qv92p.jpg', express.static(__dirname + '/app/images/p03qv92p.jpg',{ maxAge: 365*24*60*60 }));
 
-app.use('/favicon.png',   express.static(__dirname + '/app/images/favicon.png', { maxAge: 24*60*60*1000 }));
+app.use('/favicon.png',   express.static(__dirname + '/app/images/favicon.png', { maxAge: 24*60*60 }));
 app.use('/app',           express.static(__dirname + '/app',                    { setHeaders: setCustomCacheControl }));
 app.use('/app/libs/vue',    express.static(__dirname + '/node_modules/vue/dist',      { setHeaders: setCustomCacheControl }));
 app.use('/app/libs/ngVue',  express.static(__dirname + '/node_modules/ngVue/build',   { setHeaders: setCustomCacheControl }));
@@ -55,27 +55,19 @@ app.get('/robots.txt', async function (req, res) {
     res.end('User-agent: *\n' + text);
 });
 
-app.get('/reports/map*', function(req, res) { res.cookie('VERSION', process.env.COMMIT||''); res.sendFile(__dirname + '/app/views/reports/template.html', { maxAge : 5*60*1000 }); });
+app.get('/reports/map*', function(req, res) { res.cookie('VERSION', process.env.COMMIT||''); res.sendFile(__dirname + '/app/views/reports/template.html', { maxAge : 5*60 }); });
 
 app.get('/insession',    function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
 app.get('/insession/*',  function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
 
-app.get('/meetings',      function(req, res) { res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
-app.get('/meetings/*',    function(req, res) { res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
-app.get('/conferences',   function(req, res) { res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
-app.get('/conferences/*', function(req, res) { res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
-app.get('/decisions/*',   function(req, res) { res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
+app.get('/bbi/*',           function(req, res) { res.render('template', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
+app.get('/aichi-targets/*', function(req, res) { res.render('template', { gitVersion: gitVersion, cdnUrl: cdnUrl }); });
 
 app.use(require('./libs/prerender')); // set env PRERENDER_SERVICE_URL
 
 app.get('/*',            function(req, res) {
-
-    res.setHeader('Cache-Control', 'public, max-age=0, proxy-revalidate');
-
-    let template = 'template'
-    if(req.headers['x-wpt']=='phoenix')
-        template =  'template-phoenix';
-    res.render(template, { gitVersion: gitVersion, cdnUrl: cdnUrl }); 
+    res.setHeader('Cache-Control', 'public');
+    res.render('template-phoenix', { gitVersion: gitVersion, cdnUrl: cdnUrl }); 
 });
 app.all('/*',            function(req, res) { res.status(404).send(); } );
 
@@ -101,9 +93,9 @@ process.on('SIGTERM', ()=>process.exit());
 function setCustomCacheControl(res, path) {
 
 	if(res.req.query && res.req.query.v && res.req.query.v==gitVersion && gitVersion!='UNKNOWN')
-        return res.setHeader('Cache-Control', 'public, max-age=86400000'); // one day
+        return res.setHeader('Cache-Control', 'public, max-age=86400'); // one day
 
-    res.setHeader('Cache-Control', 'public, max-age=0');
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
 }
 
 function getRobots(){
