@@ -94,7 +94,7 @@ define ('popper.js', [ cdnHost + 'popper.js@1.16.0/dist/umd/popper.min'], functi
   return popper
 })
 
-define('vue', [cdnHost +'vue/dist/vue.min',cdnHost +'vue-i18n/dist/vue-i18n.min',cdnHost +'@scbd/sso-vue-plugin-scbd'], function(Vue, i18n, ssoSCBD){
+define('vue', [cdnHost +'vue/dist/vue.min',cdnHost +'vue-i18n/dist/vue-i18n.min',cdnHost +'@scbd/sso-vue-plugin-scbd@0.0.1'], function(Vue, i18n, ssoSCBD){
     window.Vue     = Vue;
     window.VueI18n = i18n;
     window.ssoSCBD = ssoSCBD;
