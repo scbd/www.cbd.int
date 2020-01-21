@@ -59,7 +59,8 @@ define(['app', 'text!./mongo-form-std-buttons.html','lodash'], function(app,  te
 					$scope.saveDialogDefered.push(defered);
 
 					qSaveDialog.modal(visible ? "show" : "hide");
-
+          if(visible) qSaveDialog.addClass( "in" );
+          
 					return defered.promise;
 				};
 
