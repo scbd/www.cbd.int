@@ -47,7 +47,10 @@ define(['app', 'angular', 'text!./km-form-std-buttons.html','jquery'], function(
 
 					$scope.saveDialogDefered.push(defered);
 
-					qSaveDialog.modal(visible ? "show" : "hide");
+
+          qSaveDialog.modal(visible ? "show" : "hide");
+
+          if(visible) qSaveDialog.addClass( "in" );
 
 					return defered.promise;
 				};
