@@ -503,7 +503,7 @@ app.directive("forumPost", [function() {
                     $scope.errorMsg = '';
                     $scope.operation = 'new'
 
-                    modalEdit.modal("show");
+                    modalEdit.modal("show").addClass('in');
                 }
 
                 function createThread() {
@@ -537,7 +537,7 @@ app.directive("forumPost", [function() {
                     $scope.operation = 'new'
                     $scope.unsafePost.subject = $scope.post.subject;
 
-                    modalEdit.modal("show");
+                    modalEdit.modal("show").addClass('in');
                 }
 
                 $scope.createPost = function() {
@@ -582,7 +582,7 @@ app.directive("forumPost", [function() {
                     $scope.unsafePost = _.clone($scope.post);
                     $scope.unsafePost.message = $scope.post.message.replace(/<br\s*\/?>/mg, "\n");
 
-                    modalEdit.modal("show");
+                    modalEdit.modal("show").addClass('in');
                 }
                 $scope.updatePost = function() {
                     $scope.errorMsg = '';
@@ -616,7 +616,7 @@ app.directive("forumPost", [function() {
                 }
                 $scope.askApprove = function() {
                     $scope.errorMsg = '';
-                    modalApprove.modal("show");
+                    modalApprove.modal("show").addClass('in');
                 }
 
                 $scope.approvePost = function() {
@@ -892,7 +892,7 @@ app.directive("forumThreads", [function() {
                 }
                 $scope.askDelete = function(thread) {
                     $scope.threadtodelete = thread;
-                    modalDelete.modal("show");
+                    modalDelete.modal("show").addClass('in');
                 }
                 $scope.deleteThread = function() {
 

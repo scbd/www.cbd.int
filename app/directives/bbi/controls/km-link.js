@@ -77,8 +77,8 @@ app.directive('kmLink', function() {
 
 						$scope.editor.show = function(visibility) {
 								if (visibility) {
-										$element.find($scope.editor.type == "file" ? "#editLink" : "#editFile").modal("hide");
-										$element.find($scope.editor.type == "file" ? "#editFile" : "#editLink").modal("show");
+										$element.find($scope.editor.type == "file" ? "#editLink" : "#editFile").modal("hide").addClass('in');
+										$element.find($scope.editor.type == "file" ? "#editFile" : "#editLink").modal("show").addClass('in');
 								} else {
 										$element.find("#editFile,#editLink").modal("hide");
 								}
