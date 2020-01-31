@@ -1,10 +1,10 @@
 define(['lodash', 'angular', 'moment', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
-        'css!./meeting-documents.css', 'angular-cache', 'css!./agenda.css', 'filters/moment'
+        'css!./meeting-documents.css', 'angular-cache', 'css!./agenda.css', 'filters/moment', 'ngCookies'
 ], function(_, ng, moment) {
     //'css!./agenda.css' // moved to template
     var STATISTICS = {}; 
 
-	return ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting, CacheFactory) {
+	return ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', '$cookies', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting, CacheFactory, $cookies) {
 
         var _ctrl = $scope.documentsCtrl = this;
         var meetingCode = $route.current.params.meeting.toUpperCase();
@@ -34,6 +34,7 @@ define(['lodash', 'angular', 'moment', 'filters/lstring', 'directives/print-smar
         _ctrl.sort = $location.hash() == 'agenda' ? 'agenda' : 'document';
         _ctrl.tabs = [];
         _ctrl.switchTab  = switchTab;
+        _ctrl.hideAlert  = hideAlert;
 
         $scope.$watch('documentsCtrl.sort', function(s){
             $location.hash(s=='agenda' ? 'agenda' : null);
@@ -50,7 +51,7 @@ define(['lodash', 'angular', 'moment', 'filters/lstring', 'directives/print-smar
         //==============================
         function load() {
             _ctrl.inSessionEnabled = false; //to adjust the height for non insession case
-            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1 }, cache:true } }).then(function(res){
+            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, alerts:1 }, cache:true } }).then(function(res){
 
                 meeting = _.defaults(res.data, {
                     code: res.data.EVT_CD,
@@ -59,6 +60,8 @@ define(['lodash', 'angular', 'moment', 'filters/lstring', 'directives/print-smar
                     isMontreal : /montr.al.*canada/i.test((res.data.venueText||{}).en||'')
                 });
 
+                meeting.alerts = _(meeting.alerts||[]).map(fixAlertHash).filter(isAlertVisible).value();
+              
                 _ctrl.noTabs  = meeting.EVT_STY_CD=='BAR';
                 _ctrl.meeting = meeting;
                 _ctrl.agenda  = meeting.agenda;
@@ -620,5 +623,79 @@ define(['lodash', 'angular', 'moment', 'filters/lstring', 'directives/print-smar
 
             return cache;
         }
+
+        //==============================
+        //
+        //==============================
+        function fixAlertHash(alert) {
+
+            alert = _.omit(alert, '_hash');
+            alert._hash = getObjectHash(alert).toString();
+
+            return alert;
+        } 
+
+        //==============================
+        //
+        //==============================
+        function isAlertVisible(alert) {
+            return loadPref().alerts[alert._hash]!==false;
+        }
+
+        //==============================
+        //
+        //==============================
+        function hideAlert(alert) {
+
+            if(!alert || !alert._hash)
+                return;
+
+            var pref = loadPref();
+
+            pref.alerts[alert._hash] = false;
+
+            savePref(pref);
+        }
+        
+        //==============================
+        //
+        //==============================
+		function savePref(pref) {
+
+			var expires = new Date();
+			expires.setDate(expires.getDate()+14); //in 14 days;
+
+			$cookies.put("meetingPref", JSON.stringify(pref, null, ''), { path:location.pathname, expires: expires });
+		}
+
+        //==============================
+        //
+        //==============================
+		function loadPref() {
+
+            var pref = {};
+			try {
+				pref = JSON.parse($cookies.get("meetingPref")||'{}')
+			}
+			catch(e){ }
+            
+            pref.alerts = pref.alerts || {};
+
+            return pref;
+		}        
+
+        function getObjectHash(obj) {
+
+            var objString = JSON.stringify(obj, null, "");
+
+            var hash = 0, i, chr;
+            if (objString.length === 0) return hash;
+            for (i = 0; i < objString.length; i++) {
+              chr   = objString.charCodeAt(i);
+              hash  = ((hash << 5) - hash) + chr;
+              hash |= 0; // Convert to 32bit integer
+            }
+            return hash;
+          };        
 	}];
 });
