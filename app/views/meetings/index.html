@@ -1,4 +1,4 @@
-﻿<div>
+<div>
         <div>
             <h3 ng-show="isLoading" style="color: #777"><i class="fa fa-circle-o-notch fa-spin"></i></h3>
         </div>
@@ -8,7 +8,7 @@
                 <div class="img cover-image"></div>
             </div>
             <div class="col-lg-8 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
-                <cbd-article query="articleQuery" ng-if="articleQuery" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article>
+                <cbd-article query="articleQuery" ng-if="articleQuery" on-load="onArticleLoad(article)" hide-cover-image="true" append-unsafe-html="unsafeCode"></cbd-article>
                 <vue-component ng-if="::meeting.conference.overViewCalendar.events.length" name="ConferenceCal" v-props-code="code" v-props-options="{target:'self'}"></vue-component>
             </div>
             <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="padding-top:15px;" ng-if="article">

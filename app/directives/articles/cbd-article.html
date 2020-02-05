@@ -92,5 +92,7 @@
         <br/>    
     </div>
     <div ng-bind-html="trustedHtml(article.content.en)" class="content"></div>
+    <div ng-bind-html="trustedHtml(article[appendUnsafeHtml])" class="content" ng-if="appendUnsafeHtml"></div>
 
+    
 </div>

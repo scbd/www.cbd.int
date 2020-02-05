@@ -15,10 +15,12 @@ define(['app', 'text!./cbd-article.html','lodash', 'require', 'services/article-
 			},
 			link: function ($scope, $element, $attr)
 			{
-				$scope.hideCoverImage = $attr.hideCoverImage||false;
-				$scope.returnUrl	  = $location.absUrl();
+				$scope.hideCoverImage 	= $attr.hideCoverImage||false;
+				$scope.appendUnsafeHtml = $attr.appendUnsafeHtml;
+				$scope.returnUrl	  	= $location.absUrl();
 
 				$scope.trustedHtml = function (plainText) {
+					console.log(plainText)
 					return $sce.trustAsHtml(plainText);
 				}
 				
@@ -42,7 +44,7 @@ define(['app', 'text!./cbd-article.html','lodash', 'require', 'services/article-
 						if(($scope.article.coverImage||{}).url)
 							$scope.article.coverImage.url_1200  = $scope.article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/')
 						
-						$scope.onLoad({article: article[0]});
+						$scope.article = $scope.onLoad({article: article[0]}) || $scope.article;
 						
 						$q.when(authentication.getUser())
 						.then(function(user){

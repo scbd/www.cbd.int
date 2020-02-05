@@ -29,7 +29,7 @@ return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', 
                     var match = { "_id" : { $oid : meeting.conference.articleId}};
     
                     ag.push({"$match"   : match });
-                    ag.push({"$project" : { title:1, content:1, coverImage:1}});
+                    ag.push({"$project" : { title:1, content:1, coverImage:1, timeline_code:1}});
                     ag.push({"$sort"    : { "meta.updatedOn":-1}});
                     ag.push({"$limit"   : 1 });
     
@@ -41,8 +41,12 @@ return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', 
 
             $scope.onArticleLoad = function(article){               
                 
+                if(article.timeline_code)
+                    article.unsafeCode = article.timeline_code;
                 $scope.article = article;
                 $scope.isLoading = false;
+
+                return $scope.article;
             } 
     }];
 });
