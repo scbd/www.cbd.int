@@ -3,7 +3,7 @@ define(['app', 'text!./cbd-article.html','lodash', 'require', 'services/article-
 	
 	require(['css!https://www.cbd.int/management/app/dist/ckeditor5/style.css']);
 
-	app.directive('cbdArticle', ['$sce', '$q', 'articleService', 'authentication', '$location',  function ($sce, $q, articleService, authentication, $location)
+	app.directive('cbdArticle', ['$sce', '$q', 'articleService', 'authentication', '$location', '$timeout', '$http',  function ($sce, $q, articleService, authentication, $location, $timeout, $http)
 	{
 		return {
 			restrict: 'E',
@@ -35,9 +35,7 @@ define(['app', 'text!./cbd-article.html','lodash', 'require', 'services/article-
 						else
 							$scope.article = article[0];
 
-						for(var locale in $scope.article.content) {
-							$scope.article.content[locale] = preprocessHtml($scope.article.content[locale]);
-						}
+						preprocessOEmbedl();
 
 						if(($scope.article.coverImage||{}).url)
 							$scope.article.coverImage.url_1200  = $scope.article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/')
@@ -55,28 +53,44 @@ define(['app', 'text!./cbd-article.html','lodash', 'require', 'services/article-
 				//============================================
 				//
 				//============================================
-				function preprocessHtml(html) {
+				function preprocessOEmbedl(html) {
 
-					var holder = $('<div>'+html+'</div>');
+					$timeout(function(){
+                        var getLocation = function(href) {
+                            var l = document.createElement("a");
+                            l.href = href;
+                            return l;
+                        };
+                        function parseQuery(queryString) {
+                            var query = {};
+                            var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+                            for (var i = 0; i < pairs.length; i++) {
+                                var pair = pairs[i].split('=');
+                                query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+                            }
+                            return query;
+                        }
 
-					$(holder).find('figure.media > oembed').each(function(){
-						var oembed = $(this);
-						var src = oembed.attr('url');
+                        document.querySelectorAll( 'oembed[url]' ).forEach( element => {
+                            var url = element.attributes.url.value;
+                            // var urlDetails = getLocation(url);
+                            // var qs = parseQuery(urlDetails.search);
+                            var params = {
+                                url : encodeURI(url),
+                                // maxheight:qs.height||qs.maxheight||'450',
+                                // maxwidth:qs.width||qs.maxwidth||'100%'
+                            }
+                            $http.get('/api/v2020/oembed', {params:params})
+                            .then(function(response){
+                                var embedHtml = '<div class="ck-media__wrapper" style="width:100%">' + response.data.html +'</div>'
+                                element.insertAdjacentHTML("afterend", embedHtml);
+                            })
+                        });
 
-						if(src) {
-							src = src.replace(/www\.youtube\.com\/watch\?v\=/, "youtube.com/embed/" );
-							src = src.replace(/youtube\.com\/watch\?v\=/,      "youtube.com/embed/" );
-							src = src.replace(/youtu\.be\//,                   "youtube.com/embed/" );
-							src = src.replace(/vimeo\.com\//, "player.vimeo.com/video/" );
-	
-							oembed.after('<iframe src="'+src+'" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width: 100%; height: 450px;"></iframe>')
-							oembed.remove();
-						}
-
-					})
-
-					return holder.html();
+                    }, 200)
 				}
+
+
 			}
 		};
 	}]);
