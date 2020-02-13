@@ -366,7 +366,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             var commonAncestor = $(range.commonAncestorContainer);
 
-            if(!commonAncestor.is("#content") && !commonAncestor.parents('#content').size()) {
+            if(!commonAncestor.is("#content") && !commonAncestor.parents('#content').length) {
                 alert('Please select text from the decision');
                 return;
             }
@@ -784,7 +784,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
             var commonAncestor = $(sel.getRangeAt(r).commonAncestorContainer);
 
-            if(!commonAncestor.is("#content") && !commonAncestor.parents('#content').size()) {
+            if(!commonAncestor.is("#content") && !commonAncestor.parents('#content').length) {
                 alert('Please select text only from the decision');
                 return;
             }
