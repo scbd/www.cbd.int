@@ -1,5 +1,22 @@
 <div class="decision-tracking">
 <style>
+    .decision-tracking {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        left: 0px;
+        z-index: 3;
+    }
+    
+    .decision-tracking > div > .container {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        left: 0px;
+        padding: 10px;
+    }
     .ngdialog-content { background: transparent !important };
 
     H1 {
@@ -173,7 +190,7 @@
 
 <div ng-hide="paramError" style="position:fixed;top:0px;left:0px;right:0px;bottom:0px;z-index:4000;background-color:white">
 
-    <div class="container" style="margin-left:0;margin-right:0;width:100%;height:100%">
+    <div class="container" style="">
 
         <div style="position:fixed;top:0px;left:0px;right:0px;background-color:#ddd;z-index:1000;padding:6px">&nbsp;
             <button class="btn btn-default pull-right" ng-click="close()">Close</button>
@@ -192,11 +209,13 @@
 
                         <div class="form-group">
             		    	<label for="elementSubject">CBD Subjects</label><br>
-                            <div ng-repeat="item in self.subjects" class="form-control" style="margin-bottom:2px;overflow-y:hidden" title="">
-                                <button ng-if="::canEdit" class="btn btn-danger btn-xs pull-right" ng-click="removeFrom(item, self.subjects)"><i class="fa fa-minus-circle"></i></button>
-                                 {{(collections.subjectsMap[item].title|lstring)||item}}
-                             </div>
-            		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedSubject" ng-options="subject.identifier as (subject.title|lstring) group by collections.subjectsMap[subject.broaderTerms[0]].name for subject in collections.subjects|filter:noNarrower" ng-change="addTo(selectedSubject, self.subjects); selectedSubject=''">
+                            <div ng-repeat="item in self.subjects" class="input-group" style="margin-bottom:2px;overflow-y:hidden" title="">
+                                 <span class="form-control">{{(collections.subjectsMap[item].title|lstring)||item}}</span>
+                                 <div class="input-group-append">
+                                    <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, self.subjects)"><i class="fa fa-minus-circle"></i></button>
+                                </div>
+                            </div>
+            		    	<select ng-if="::canEdit" class="btn btn-primary btn-sm" id="elementDirectedTo" ng-model="selectedSubject" ng-options="subject.identifier as (subject.title|lstring) group by collections.subjectsMap[subject.broaderTerms[0]].name for subject in collections.subjects|filter:noNarrower" ng-change="addTo(selectedSubject, self.subjects); selectedSubject=''">
                                 <option value="">add a subject</option>
             				</select>
             		  	</div>
@@ -206,9 +225,11 @@
                         <div class="form-group">
             		    	<label for="elementSubject">Aichi Targets</label><br>
 
-                            <div ng-repeat="item in self.aichiTargets" class="form-control" style="margin-bottom:2px;overflow-y:hidden">
-                                <button ng-if="::canEdit" class="btn btn-danger btn-xs pull-right" ng-click="removeFrom(item, self.aichiTargets)"><i class="fa fa-minus-circle"></i></button>
-                                 {{(collections.aichiTargetsMap[item].title|lstring)||item}}
+                            <div ng-repeat="item in self.aichiTargets" class="input-group" style="margin-bottom:2px;overflow-y:hidden">
+                                <span class="form-control"> {{(collections.aichiTargetsMap[item].title|lstring)||item}}</span>
+                                <div class="input-group-append">
+                                   <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, self.aichiTargets)"><i class="fa fa-minus-circle"></i></button>
+                               </div>
                              </div>
             		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedTarget" ng-options="target.identifier as (target.title|lstring) group by collections.aichiTargetsMap[target.broaderTerms[0]].name for target in collections.aichiTargets|filter:noNarrower" ng-change="addTo(selectedTarget, self.aichiTargets); selectedTarget=''">
                                 <option value="">add a target</option>
@@ -294,9 +315,11 @@
                 <div class="form-group">
     		    	<label for="elementDirectedTo">Status of the decision</label><br>
 
-                    <div ng-repeat="item in element.data.statuses" class="form-control" style="margin-bottom:2px" ng-disabled="element.type!='paragraph'">
-                        <button ng-if="::canEdit" class="btn btn-danger btn-xs pull-right" ng-click="removeFrom(item, element.data.statuses)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
-                         {{collections.statusesMap[item].title||item}}
+                    <div ng-repeat="item in element.data.statuses" class="input-group" style="margin-bottom:2px" ng-disabled="element.type!='paragraph'">
+                        <span class="form-control">{{collections.statusesMap[item].title||item}}</span>
+                        <div class="input-group-append">
+                           <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.data.statuses)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                       </div>
                      </div>
 
     		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedStatus" ng-options="status.code as status.title for status in collections.statusesMap" ng-change="addTo(selectedStatus, element.data.statuses); selectedStatus=''" ng-disabled="element.type!='paragraph'">
@@ -329,9 +352,11 @@
                 <div class="form-group">
     		    	<label for="elementDirectedTo">Directed to</label><br>
 
-                    <div ng-repeat="item in element.data.actors" class="form-control" style="margin-bottom:2px;" title="{{collections.actorsMap[item].title||item}}" ng-disabled="element.type!='paragraph'">
-                        <button ng-if="::canEdit" class="btn btn-danger btn-xs pull-right" ng-click="removeFrom(item, element.data.actors)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
-                         {{collections.actorsMap[item].code||item}}
+                    <div ng-repeat="item in element.data.actors" class="input-group" style="margin-bottom:2px;" title="{{collections.actorsMap[item].title||item}}" ng-disabled="element.type!='paragraph'">
+                        <span class="form-control">{{collections.actorsMap[item].code||item}}</span>
+                        <div class="input-group-append">
+                            <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.data.actors)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                        </div>
                      </div>
 
     		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedActor" ng-options="actor.code as actor.title group by actor.group for actor in collections.actorsMap" ng-change="addTo(selectedActor, element.data.actors)"  ng-disabled="element.type!='paragraph'">
@@ -355,10 +380,11 @@
 
                 <div class="form-group">
     		    	<label for="elementSubject">CBD Subjects</label><br>
-
-                    <div ng-repeat="item in element.data.subjects" class="form-control" style="margin-bottom:2px;overflow-y:hidden" title="" ng-disabled="element.type!='paragraph'">
-                        <button ng-if="::canEdit" class="btn btn-danger btn-xs pull-right" ng-click="removeFrom(item, element.data.subjects)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
-                         {{(collections.subjectsMap[item].title|lstring)||item}}
+                    <div ng-repeat="item in element.data.subjects" class="input-group" style="margin-bottom:2px;overflow-y:hidden" title="" ng-disabled="element.type!='paragraph'">
+                         <span class="form-control">{{(collections.subjectsMap[item].title|lstring)||item}}</span>
+                         <div class="input-group-append">
+                            <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.data.subjects)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                        </div>
                      </div>
     		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedSubject" ng-options="subject.identifier as (subject.title|lstring) group by collections.subjectsMap[subject.broaderTerms[0]].name for subject in collections.subjects|filter:noNarrower" ng-change="addTo(selectedSubject, element.data.subjects); selectedSubject=''" ng-disabled="element.type!='paragraph'">
                         <option value="">add a subject</option>
@@ -370,9 +396,11 @@
                 <div class="form-group">
     		    	<label for="elementSubject">Aichi Targets</label><br>
 
-                    <div ng-repeat="item in element.data.aichiTargets" class="form-control" style="margin-bottom:2px;overflow-y:hidden" ng-disabled="element.type!='paragraph'">
-                        <button ng-if="::canEdit" class="btn btn-danger btn-xs pull-right" ng-click="removeFrom(item, element.data.aichiTargets)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
-                         {{(collections.aichiTargetsMap[item].title|lstring)||item}}
+                    <div ng-repeat="item in element.data.aichiTargets" class="input-group" style="margin-bottom:2px;overflow-y:hidden" ng-disabled="element.type!='paragraph'">
+                        <span class="form-control">{{(collections.aichiTargetsMap[item].title|lstring)||item}}</span>
+                        <div class="input-group-append">
+                           <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.data.aichiTargets)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                       </div>
                      </div>
     		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedTarget" ng-options="target.identifier as (target.title|lstring) group by collections.aichiTargetsMap[target.broaderTerms[0]].name for target in collections.aichiTargets|filter:noNarrower" ng-change="addTo(selectedTarget, element.data.aichiTargets); selectedTarget=''" ng-disabled="element.type!='paragraph'">
                         <option value="">add a target</option>
@@ -388,7 +416,7 @@
     				<label>Related decisions / recommendations</label><br>
     				<div class="panel panel-default" style="margin-top:4px;margin-bottom:4px" ng-repeat="item in element.data.decisions">
     		  			<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button ng-if="::canEdit" class="btn btn-danger btn-xs pull-right" ng-click="removeFrom(item, element.data.decisions)"><i class="fa fa-minus-circle"></i></button>
+    						<button ng-if="::canEdit" class="btn btn-outline-danger pull-right" style="margin: -9px;" ng-click="removeFrom(item, element.data.decisions)"><i class="fa fa-minus-circle"></i></button>
                             <decision-reference symbol="item"></decision-reference>
     					</div>
     				</div>
@@ -400,7 +428,7 @@
 
     				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.documents|orderBy">
     					<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button ng-if="::canEdit" class="btn btn-danger btn-xs pull-right" ng-click="removeFrom(item, element.data.documents)"><i class="fa fa-minus-circle"></i></button>
+    						<button ng-if="::canEdit" class="btn btn-outline-danger btn-xs pull-right" style="margin: -9px;" ng-click="removeFrom(item, element.data.documents)"><i class="fa fa-minus-circle"></i></button>
                             <decision-meeting-document symbol="item"></decision-meeting-document>
     					</div>
     				</div>
@@ -413,7 +441,7 @@
     				<label for="exampleInputEmail1">Notifications issued</label><br>
     				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.notifications|orderBy">
     		  			<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button ng-if="::canEdit" class="btn btn-danger btn-xs pull-right" ng-click="removeFrom(item, element.data.notifications)"><i class="fa fa-minus-circle"></i></button>
+    						<button ng-if="::canEdit" class="btn btn-outline-danger btn-xs pull-right" style="margin: -9px;" ng-click="removeFrom(item, element.data.notifications)"><i class="fa fa-minus-circle"></i></button>
                             <decision-notification symbol="item"></decision-notification>
     					</div>
     				</div>
@@ -424,7 +452,7 @@
                     <label for="exampleInputEmail1">Related activities / outcomes</label><br>
                     <div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.meetings|orderBy">
                           <div class="panel-body" style="padding:12px;font-size:0.9em">
-                            <button class="btn btn-danger btn-xs pull-right" ng-click="removeFrom(item.symbol_s||item, element.data.meetings)"><i class="fa fa-minus-circle"></i></button>
+                            <button class="btn btn-outline-danger btn-xs pull-right" style="margin: -9px;" ng-click="removeFrom(item.symbol_s||item, element.data.meetings)"><i class="fa fa-minus-circle"></i></button>
                             <decision-meeting symbol="item"></decision-meeting>
                         </div>
                     </div>
@@ -440,16 +468,18 @@
     	<div ng-if="element.type=='paragraph'">
     		<div class="form-group">
 
-                <div ng-repeat="item in element.data.files" class="form-control" style="margin-bottom:2px">
-                    <button ng-if="::canEdit" class="btn btn-danger btn-xs pull-right" ng-click="removeFrom(item, element.data.files)"><i class="fa fa-minus-circle"></i></button>
-                     <i class="fa fa-file-pdf-o" style="color:red"></i> <a ng-href="{{buildFileUrl(item)}}" target="_blank">{{item.filename}}</a> <i>({{item.size/1024 | number:1}} kB)</i>
+                <div ng-repeat="item in element.data.files" class="input-group" style="margin-bottom:2px">
+                    <span class="form-control">
+                        <i class="fa fa-file-pdf-o" style="color:red"></i> <a ng-href="{{buildFileUrl(item)}}" target="_blank">{{item.filename}}</a> <i>({{item.size/1024 | number:1}} kB)</i>
+                    </span>
+                    <div class="input-group-append">
+                       <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.data.files)"><i class="fa fa-minus-circle"></i></button>
+                   </div>
                  </div>
-
     		</div>
 
-    		<div ng-repeat="item in uploads" ng-class="{ 'has-error' : item.error }" class="form-group">
-                <div class="form-control" style="margin-bottom:2px">
-                    <button ng-if=" item.error" class="btn btn-danger  btn-xs pull-right" ng-click="uploads.splice($index, 1)"><i class="fa fa-minus-circle"></i></button>
+    		<div ng-repeat="item in uploads" ng-class="{ 'has-error' : item.error }" class="input-group"  style="margin-bottom:2px">
+                <div span class="form-control">
 
                     <span ng-if="!item.error">
                         <button class="btn btn-default btn-xs pull-right"><i class="fa fa-cog fa-spin"></i></button>
@@ -462,9 +492,13 @@
                         <span class="text-danger"> Error occured while uploading file: </span>
                         {{item.filename}} <i>({{item.size/1024 | number:1}} kB)</i>
                     </span>
-
                  </div>
-    		</div>
+
+                 <div ng-if="item.error" class="input-group-append">
+                    <button class="btn btn-outline-danger  btn-xs pull-right" ng-click="uploads.splice($index, 1)"><i class="fa fa-minus-circle"></i></button>
+                </div>
+            </div>
+
             <button ng-if="::canEdit" class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="upload()"><i class="fa fa-plus-circle"></i> upload document(s)</button>
     	</div>
 
