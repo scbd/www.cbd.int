@@ -7,6 +7,14 @@
 <div class="decision-tracking">
 
 	<header-decisions>
+		<span class="float-right">
+			<a href="#" ng-if="canComment" class="btn btn-default" ng-click="edit('comment')" style="margin-top:2px;color:inherit">
+				<i class="fa fa-comment-o" aria-hidden="true"></i>
+			</a>
+			<a href="#" ng-if="canEdit" class="btn btn-default" ng-click="edit()" style="margin-top:2px;color:inherit">
+				<i class="fa fa-edit" aria-hidden="true"></i>
+			</a>
+		</span>						
 		<h1>Decision {{::decision.body|uppercase}} {{romanize(decision.session)}}/{{::decision.decision}}</h1>
 	</header-decisions>
 
@@ -14,7 +22,7 @@
 		<div class="col-md-7">
             <div class="document card border-primary">
     			<div class="card-header bg-primary text-white">
-    				<span ng-if="decision">UNEP/CBD/COP/DEC/{{::decision.session}}/{{::decision.decision}}</span>
+    				<b ng-if="decision">UNEP/CBD/COP/DEC/{{::decision.session}}/{{::decision.decision}}</b>
     				<a href="#" ng-show="filters" class="float-right badge badge-info" ng-click="filter(null)" style="margin-top:2px">
     					<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> filtered <i class="fa fa-times" aria-hidden="true"></i>
     				</a>
