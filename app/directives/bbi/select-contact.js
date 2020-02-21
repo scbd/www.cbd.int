@@ -193,7 +193,7 @@ function(template,app,_) {
                             currentPage=0;
 
                         var queryListParameters = {
-                            'q'     : q + 'schema_s:' + $scope.schema,
+                            'q'     : q + 'schema_s:' + $scope.schema + ' AND realm_ss:CHM',
                             'sort'  : 'updatedDate_dt desc',
                             'fl'    : fields,
                             'wt'    : 'json',
