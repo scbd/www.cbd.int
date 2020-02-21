@@ -406,7 +406,8 @@ define(['lodash',
                     schema: $scope.schema,
                     status: $scope.status,
                     latest: true,
-                    freetext: $scope.freetext
+                    freetext: $scope.freetext,
+
                 }, options || {});
 
                 var query = [];
@@ -414,7 +415,7 @@ define(['lodash',
                 // Add Schema
 
                 query.push("schema_s:" + escape(options.schema));
-
+                query.push("realm_ss:chm");
 
                 // Apply ownership/contributor
 
