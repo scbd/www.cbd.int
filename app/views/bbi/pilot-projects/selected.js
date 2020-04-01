@@ -2,10 +2,10 @@ define(['data/bbi/links', 'directives/bbi/bbi-project-row', 'directives/bbi/menu
 
 function loadGlobalModules(links) { 
 	this.links = links
-	return ['$scope','$http', controller.bind(this)]
+	return ['$scope','$http','$filter', controller.bind(this)]
 }
 
-function controller($scope,$http) {
+function controller($scope,$http, $filter) {
 
     var _ctrl = this
     _ctrl.links=links.links
@@ -13,6 +13,7 @@ function controller($scope,$http) {
 
     $scope.$root.page={}
     $scope.$root.page.title = "Selected Projects: Bio Bridge Initiative";
+    $scope.orderByCountry = orderByCountry
 
     getRounds()
       .then(getLatestRound)
@@ -60,5 +61,9 @@ function controller($scope,$http) {
                     _ctrl.loading = false;
                   })
 
+    }
+
+    function orderByCountry(project){
+      return $filter('term')(project.country)
     }
 }

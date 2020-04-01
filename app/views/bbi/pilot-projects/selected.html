@@ -27,10 +27,10 @@
 <div class="row">
   <div class="col-xs-12">
     <h1>Demonstration Projects</h1>
-    <h3 ng-if="selectedCtrl.round==2">Second Round</h3>
-    <h3 ng-if="selectedCtrl.round==3">Third Round</h3>
-    <h3 ng-if="selectedCtrl.round==4">Fourth Round</h3>
-    <h3 ng-if="selectedCtrl.round==5">Fifth Round</h3>
+    <h3 ng-if="selectedCtrl.round==2">First Round</h3>
+    <h3 ng-if="selectedCtrl.round==3">Second Round</h3>
+    <h3 ng-if="selectedCtrl.round==4">Third Round</h3>
+    <h3 ng-if="selectedCtrl.round==5">Fourth Round</h3>
 
     <h3>
       <span ng-if="selectedCtrl.loading" style="margin:auto">
@@ -38,7 +38,7 @@
       </span>
     </h3>
     
-    <div ng-repeat="prt in selectedCtrl.projects track by $index">
+    <div ng-repeat="prt in selectedCtrl.projects | orderBy : orderByCountry track by $index">
       <bbi-project-row project="prt"></bbi-project-row>
     </div>
     <br>

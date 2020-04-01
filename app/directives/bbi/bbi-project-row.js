@@ -1,9 +1,9 @@
-define(['app','text!./bbi-project-row.html','filters/term' ], function(app,templateHtml) { 'use strict';
+define(['app','text!./bbi-project-row.html','filters/term', 'filters/title-case'], function(app, templateHtml) { 'use strict';
 
     //============================================================
     //
     //============================================================
-    app.directive('bbiProjectRow',['$filter',  function($filter) {
+    app.directive('bbiProjectRow',['$filter', function($filter) {
         return {
             restrict: 'E',
             template : templateHtml,
@@ -11,6 +11,7 @@ define(['app','text!./bbi-project-row.html','filters/term' ], function(app,templ
                 project: '='
             },
             link: function ($scope) {
+
               function formatCollaborator(col){
                 if(col && col.length==2) return formatCountry(col)
                 else return col
