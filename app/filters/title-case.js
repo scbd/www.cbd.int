@@ -1,27 +1,16 @@
-define(['app'], function (app) { 'use strict';
+define(['app', 'nlp'], function (app, nlp) {
 
-    //##################################################################
-      app.filter('titleCase',[function () {
-          return function (url) {
-                if(!url) return;
-                var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
+  app.filter('titleCase',[function () {
+    return function (text) {
+      var doc = nlp(text).all().toTitleCase()
 
-                return url.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function(match, index, title){
-                  if (index > 0 && index + match.length !== title.length &&
-                    match.search(smallWords) > -1 && title.charAt(index - 2) !== ":" &&
-                    (title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') &&
-                    title.charAt(index - 1).search(/[^\s-]/) < 0)
-                    return match.toLowerCase();
+      doc.prepositions().toLowerCase()
+      doc.conjunctions().toLowerCase()
 
+      doc.match('#Determiner').toLowerCase()
+      doc.match('#Article').toLowerCase()
 
-                  if (match.substr(1).search(/[A-Z]|\../) > -1)
-                    return match;
-
-
-                  return match.charAt(0).toUpperCase() + match.substr(1);
-              });
-          };
-      }]);
-
-
+      return doc.all().text()
+    };
+  }]); //app.filter
 }); //define

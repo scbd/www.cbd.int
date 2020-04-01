@@ -51,7 +51,8 @@ require.config({
         'angular-cache'   : cdnHost + 'angular-cache@4.6.0/dist/angular-cache.min',
         'PageHeaderFixed' : cdnHost + '@scbd/page-header-fixed/dist/PageHeaderFixed.umd.min',
         'PageHeader'      : cdnHost + '@scbd/page-header/dist/PageHeader.umd.min',
-        'PageFooter'      : cdnHost + '@scbd/page-footer/dist/PageFooter.umd.min'
+        'PageFooter'      : cdnHost + '@scbd/page-footer/dist/PageFooter.umd.min',
+        'nlp'             : cdnHost + 'compromise/builds/compromise.min',
     },
     shim: {
         'angular'              : { deps : ['jquery'], exports: 'angular' },
