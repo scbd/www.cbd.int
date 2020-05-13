@@ -231,14 +231,14 @@ define(['app', 'lodash','text!./progress-pie.html',
                         $scope.nothingReported = true;
                         var total =0;
                         $scope.chartData[5] = {
-                            title: 'Moving Away',
+                            title: 'Exceeding Target',
                             count: 0,
-                            color: progressToColor('Moving Away')
+                            color: progressToColor('Exceeding Target')
                         };
                         $scope.chartData[4] = {
-                            title: 'No Progress',
+                            title: 'Meeting Target',
                             count: 0,
-                            color: progressToColor('No Progress')
+                            color: progressToColor('Meeting Target')
                         };
                         $scope.chartData[3] = {
                             title: 'Insufficient Rate',
@@ -246,14 +246,14 @@ define(['app', 'lodash','text!./progress-pie.html',
                             color: progressToColor('Insufficient Rate')
                         };
                         $scope.chartData[2] = {
-                            title: 'Meeting Target',
+                            title: 'No Progress',
                             count: 0,
-                            color: progressToColor('Meeting Target')
+                            color: progressToColor('No Progress')
                         };
                         $scope.chartData[1] = {
-                            title: 'Exceeding Target',
+                            title: 'Moving Away',
                             count: 0,
-                            color: progressToColor('Exceeding Target')
+                            color: progressToColor('Moving Away')
                         };
                         $scope.chartData[0] = {
                             title: 'Unknow',

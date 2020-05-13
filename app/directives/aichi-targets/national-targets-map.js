@@ -1,17 +1,17 @@
 define(['app', 'lodash',
 'text!./national-targets-map.html',
 'text!./target.html',
-'text!./target-row.html',
+'text!./target-row.html', 
 'ammap',
 'shim!directives/reporting-display/worldEUHigh[ammap]',
 'shim!ammap/themes/light[ammap]',
-'providers/locale'
+'providers/locale', 'directives/common/export-directive'
 ], function(app,_,template,targetTemplate,row) { 'use strict';
 
     //============================================================
     //
     //============================================================
-    app.directive('nationalTargetsMap',['$http','$q','locale','$interpolate','$timeout',  function($http,$q,locale,$interpolate,$timeout) {
+    app.directive('nationalTargetsMap',['$http','$q','locale','$interpolate','$timeout', '$filter',  function($http,$q,locale,$interpolate,$timeout, $filter) {
         return {
             restrict: 'E',
             require:'nationalTargetsMap',
@@ -67,7 +67,7 @@ define(['app', 'lodash',
             },
             controller: function ($scope, $location) {
 
-
+                $scope.getExportData = getExportData;
                 //============================================================
                 //
                 //============================================================
@@ -212,7 +212,7 @@ define(['app', 'lodash',
                         targetText = 'AICHI-TARGET-' + $scope.aichiTarget;
 
                     var queryParameters = {
-                        'q': 'schema_s:nationalTarget AND (aichiTargets_ss:"' + targetText+ '")',// OR otherAichiTargets_ss:'+ targetText+ '")',
+                        'q'    : 'realm_ss:chm AND schema_s:nationalTarget AND (aichiTargets_ss:"' + targetText+ '")',   // OR otherAichiTargets_ss:'+ targetText+ '")',
                         'sort': 'createdDate_dt desc, title_t asc',
                         'fl':'isAichiTarget_b,government_s,isAichiTarget_b,title_s,description_s',
                         'wt': 'json',
@@ -576,6 +576,50 @@ define(['app', 'lodash',
                         $location.path('/target/' + targetId);
                     }
                 };
+
+                function getExportData(){
+
+                  var headers = {
+                    "government_EN_t"    : { title : 'Government' },
+                    "title_t"            : { title : 'Title' },
+                    "nationalTarget_EN_t": { title : 'National Target' },
+                    "aichiTarget"        : { title : 'Aichi Target' },
+                    "assessmentFor"      : { title : 'Assessment For' },
+                    "progress_EN_t"      : { title : 'Progress' },
+                    "date_dt"            : { title : 'Submission Date' },
+                    "date_dt"            : { title : 'Submission Date' },
+                    "url_ss"             : { title : 'Url', type:'url' },
+                    "schema_EN_t"        : { title : 'Schema' },
+                  }
+
+                  // "nationalTargetAichiTargets_ss" : { title : 'Other Aichi targets related to national target' },
+                  var data = _($scope.documents)
+                  .sortBy('government_EN_t')
+                  .map(function(document){
+                    var row = {};
+                    _.each(headers, function(header, key){
+                      if(key == 'url_ss')
+                        row[header.title] = document[key][0];
+                      else if(key == 'date_dt')
+                        row[header.title] = $filter('moment')(document[key], 'format', 'DD MMMM YYYY');
+                      else if(key == 'aichiTarget')
+                        row[header.title] = 'Aichi Target ' + $scope.aichiTarget;
+                      else if(key == 'assessmentFor')
+                        row[header.title] = document['nationalTargetMainAichiTargets_ss'] ? 'National Target' : 'Global Target';
+                      else if(_.isArray(document[key]))
+                        row[header.title] = document[key].join(', ');
+                      else
+                        row[header.title] = document[key];
+
+                    })
+                    return row;
+                  }).value()
+                  return {
+                    headers: _.values(headers),
+                    data   : data
+                  }
+
+                }
             }
         };
     }]);
