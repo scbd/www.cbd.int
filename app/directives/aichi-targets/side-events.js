@@ -221,7 +221,7 @@ define(['app','lodash', 'text!./side-events.html','data/aichi-targets/targets','
                 if($scope.target.length===1)$scope.target2='0'+$scope.target;
                 if($scope.schema==='nationalTarget' && $scope.country) countryQ = ' AND government_s:'+$scope.country.toLowerCase();
 
-                var q = 'schema_s:'+$scope.schema + countryQ+' AND (aichiTargets_ss:"AICHI-TARGET-'+$scope.target2 +'" OR aichiTarget_ss:"AICHI-TARGET-'+$scope.target2 +'") AND _state_s:public';
+                var q = 'realm_ss:chm AND schema_s:'+$scope.schema + countryQ+' AND (aichiTargets_ss:"AICHI-TARGET-'+$scope.target2 +'" OR aichiTarget_ss:"AICHI-TARGET-'+$scope.target2 +'") AND _state_s:public';
 
                 $scope.loading=true;
 

@@ -36,6 +36,11 @@ require.config({
         'js-xlsx'         : 'libs/js-xlsx/dist/xlsx.min',
         'js-zip'          : 'libs/js-xlsx/dist/jszip',
         'ods'             : 'libs/js-xlsx/dist/ods',
+        'tableexport'     : cdnHost + 'tableexport@4.0.10/dist/js/tableexport',
+        'blobjs'          : cdnHost + 'blobjs@1.1.1/Blob.min',
+        'file-saverjs'    : cdnHost + 'file-saverjs@1.3.6/FileSaver.min',
+        'xlsx'            : cdnHost + 'xlsx@0.13.4/dist/xlsx',
+        'jszip'           : cdnHost + 'xlsx@0.13.4/dist/jszip',  
         'linqjs'          : 'libs/linqjs/linq',
         'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll',
         'ngSmoothScroll'  : 'libs/ngSmoothScroll/lib/angular-smooth-scroll',
@@ -82,6 +87,8 @@ require.config({
         'PageFooter'           : { deps : ['ngVue'] },
         'PageHeader'           : { deps : ['ngVue'] },
         'bs4'                  : { deps : ['jquery', 'popper.js'] },
+        'xlsx'                 : { 'deps': ['jszip'],'exports': 'XLSX'},
+        
     },
     packages: [
         { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },
@@ -112,10 +119,12 @@ define('cdn', {
     }
 });
 
-define('xlsx', ['js-zip', 'ods'], function (jszip, ods) {
-    window.JSZip = jszip;
-    window.ODS   = ods;
-});
+if(window.location.pathname == '/kronos/list-of-participants'){
+    define('xlsx', ['js-zip', 'ods'], function (jszip, ods) {
+        window.JSZip = jszip;
+        window.ODS   = ods;
+    });
+}
 
 define('underscore', ['lodash'], function(_) { console.log('Deprecated: use lodash'); return _; });
 

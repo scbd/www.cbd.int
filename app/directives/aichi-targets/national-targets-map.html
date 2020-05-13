@@ -32,6 +32,7 @@
 
   <div id="mapdiv" style="width:98%;height: 250px;background-color:#a3ccff;" ng-show="showMap"></div>
   <div class="disclaimer tooltip" data-toggle="modal" href="#dialogDisclaimer" ng-show="showMap">Disclaimer</div>
+  <export export-data="getExportData()"></export>
   <!-- <select id="langselect" onchange="setLanguage(this.options[this.selectedIndex].value);">
     <option value="en" selected="selected">English (default)</option>
     <option value="ar" >Arabic</option>

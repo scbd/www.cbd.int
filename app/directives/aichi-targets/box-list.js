@@ -155,7 +155,7 @@ define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','dir
                 if($scope.target.length===1)$scope.target='0'+$scope.target;
                 if($scope.schema==='nationalTarget' && $scope.country) countryQ = ' AND government_s:'+$scope.country.toLowerCase();
 
-                var q = 'schema_s:'+$scope.schema + countryQ+' AND (aichiTargets_ss:"AICHI-TARGET-'+$scope.target +'" OR aichiTarget_ss:"AICHI-TARGET-'+$scope.target +'") AND _state_s:public';
+                var q = 'realm_ss:chm AND schema_s:'+$scope.schema + countryQ+' AND (aichiTargets_ss:"AICHI-TARGET-'+$scope.target +'" OR aichiTarget_ss:"AICHI-TARGET-'+$scope.target +'") AND _state_s:public';
 
                 $scope.loading=true;
 
