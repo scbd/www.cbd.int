@@ -587,7 +587,6 @@ define(['app', 'lodash',
                     "assessmentFor"      : { title : 'Assessment For' },
                     "progress_EN_t"      : { title : 'Progress' },
                     "date_dt"            : { title : 'Submission Date' },
-                    "date_dt"            : { title : 'Submission Date' },
                     "url_ss"             : { title : 'Url', type:'url' },
                     "schema_EN_t"        : { title : 'Schema' },
                   }
