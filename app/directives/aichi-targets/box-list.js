@@ -182,10 +182,10 @@ define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','dir
                     $scope.docs  = data.response.docs;
 
                     if($scope.schema ==='measures'){
+                          var targetNumber = Number($scope.target)-1;
+                          if($scope.targets[targetNumber] && $scope.targets[targetNumber].activities){
 
-                          if($scope.targets[Number($scope.target)+1] && $scope.targets[Number($scope.target)+1].activities){
-
-                            _.each($scope.targets[Number($scope.target)+1].activities,function(meas){
+                            _.each($scope.targets[targetNumber].activities,function(meas){
 
                                 meas.countryObj=_.find($scope.countries,{'name':meas.country});
 
@@ -193,8 +193,8 @@ define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','dir
                                 meas.sourceUri ="https://www.cbd.int/nbsap/targets/default.shtml";
                             });
 
-                            $scope.count =  $scope.count+$scope.targets[Number($scope.target)+1].activities.length;
-                            $scope.docs  =  $scope.docs.concat($scope.targets[Number($scope.target)+1].activities);
+                            $scope.count =  $scope.count+$scope.targets[targetNumber].activities.length;
+                            $scope.docs  =  $scope.docs.concat($scope.targets[targetNumber].activities);
                           }
                     }
 

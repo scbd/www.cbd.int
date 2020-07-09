@@ -54,9 +54,9 @@
      <tr>
        <td  colspan="2" style="border-top-width:3px">
          <span class="small" ng-if="searchText" >Search for <span style="color:#009B48;">"{{searchText}}"</span></span>
-            <span class="small pull-right" ng-if="schema==='nationalTarget'"><a ng-href="https://chm.cbd.int/database?schema_s={{schema}}&governtment_s={{row.government_s}}"><i class="fa fa-search"></i> Advanced Search </a></span>
-            <span class="small pull-right" ng-if="schema==='resource'"><a ng-href="https://chm.cbd.int/database?schema_s={{schema}}&aichiTarget_ss=AICHI-TARGET-{{target2}}"><i class="fa fa-search"></i> Advanced Search </a></span>
-            <span class="small pull-right" ng-if="schema==='measures'"><a ng-href="https://chm.cbd.int/database?aichiTarget_ss=AICHI-TARGET-{{target2}}"><i class="fa fa-search"></i> Advanced Search </a></span>
+            <span class="small pull-right" ng-if="schema==='nationalTarget'"><a target="_blank" ng-href="https://chm.cbd.int/database?schema_s={{schema}}&governtment_s={{docs[0].government_s}}"><i class="fa fa-search"></i> Advanced Search </a></span>
+            <span class="small pull-right" ng-if="schema==='resource'"><a target="_blank" ng-href="https://chm.cbd.int/database?schema_s={{schema}}&aichiTarget_ss=AICHI-TARGET-{{target}}"><i class="fa fa-search"></i> Advanced Search </a></span>
+            <span class="small pull-right" ng-if="schema==='measures'"><a target="_blank" ng-href="https://chm.cbd.int/database?aichiTarget_ss=AICHI-TARGET-{{target}}"><i class="fa fa-search"></i> Advanced Search </a></span>
 
        </td>
      </tr>
