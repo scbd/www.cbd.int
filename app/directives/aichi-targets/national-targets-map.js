@@ -113,7 +113,6 @@ define(['app', 'lodash',
                     "areasSettings": {
 
                       "autoZoom": true,
-                      "selectedColor": "#4eba7d",
                       "rollOverColor": "#423f3f",
                       "selectable": true,
                       "color": "#aaaaaa",
@@ -270,7 +269,7 @@ define(['app', 'lodash',
                     progressCount[num]++;
                   });
                   var count = _.reduce(progressCount, function(count, n, k){
-                                return count += (n * parseInt(k));
+                                return count += (n * (parseInt(k)+1));
                               }, 0);
         
                   return Math.round(count/docs.length);
