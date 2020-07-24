@@ -189,8 +189,6 @@ define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','dir
 
                                 meas.countryObj=_.find($scope.countries,{'name':meas.country});
 
-                                meas.source ="NBSAPS";
-                                meas.sourceUri ="https://www.cbd.int/nbsap/targets/default.shtml";
                             });
 
                             $scope.count =  $scope.count+$scope.targets[targetNumber].activities.length;
