@@ -5,10 +5,10 @@ define(['app', 'text!./bread-crumbs.html'], function(app, template) { 'use stric
             restrict : "E",
             template : template,
             link: function ($scope){
-                console.log($window.location)
                 $scope.crumbs = getPaths($location)
                 $scope.$on('$routeChangeSuccess', function(){
                     $scope.crumbs = getPaths($location)
+                    $scope.host   = getHost($location)
                 })
             }
         }
@@ -31,6 +31,15 @@ function getPaths($location){
     });
 
     return crumbs
+}
+
+function getHost($location){
+
+  var crumbs = [] 
+  var port   = ($location.port() == 443 || $location.port() == 80)? '/' : ':' +$location.port() + '/'
+  var host   = $location.protocol() + '://' + $location.host() + port
+
+  return host 
 }
 
 function getPathFromCrumb(crumbs, crumbName){
