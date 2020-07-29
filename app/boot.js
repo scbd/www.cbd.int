@@ -55,7 +55,7 @@ require.config({
         'conferenceCal'   : cdnHost + '@scbd/conference-cal@0.1.2/dist/lib/ConferenceCal.umd.min',
         'angular-cache'   : cdnHost + 'angular-cache@4.6.0/dist/angular-cache.min',
         'PageHeaderFixed' : cdnHost + '@scbd/page-header-fixed/dist/PageHeaderFixed.umd.min',
-        'PageHeader'      : cdnHost + '@scbd/page-header/dist/PageHeader.umd.min',
+        'PageHeader'      : cdnHost + '@scbd/page-header@0.0.70/dist/PageHeader.umd.min',
         'PageFooter'      : cdnHost + '@scbd/page-footer/dist/PageFooter.umd.min',
         'nlp'             : cdnHost + 'compromise/builds/compromise.min',
     },
