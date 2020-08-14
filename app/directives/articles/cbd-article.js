@@ -1,4 +1,4 @@
-define(['app', 'text!./cbd-article.html','lodash', 'require', 'services/article-service', 'authentication'], function(app, template, _, require) {
+define(['app', 'text!./cbd-article.html','lodash', 'require', './cbd-article-cover-image', 'services/article-service', 'authentication'], function(app, template, _, require) {
 	 'use strict';
 	
 	require(['css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@21.0.0-1/build/ckeditor.css']);
