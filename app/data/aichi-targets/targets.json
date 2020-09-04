@@ -119,10 +119,7 @@
             "link": "https://www.cbd.int/doc/strategic-plan/targets/T1-quick-guide-fr.pdf"
           }
         ],
-        "nbsapForum": {
-          "title": "NBSAP Forum",
-          "url": "http://nbsapforum.net/forums/biodiversity-awareness"
-        },
+        "nbsapForum": "http://nbsapforum.net/forums/biodiversity-awareness",
         "programs": [
           {
             "title": "Programme of Work on CEPA",
@@ -299,7 +296,7 @@
             "link": ""
           }
         ],
-        "nbsapForum": "https://nbsapforum.net/forums/biodiversity-mainstreaming",
+        "nbsapForum": "http://nbsapforum.net/forums/biodiversity-mainstreaming",
         "programs": [
           {
             "title": "Programme of Work on Economics, Trade and Incentive Measures",
@@ -435,7 +432,7 @@
         },
         {
           "country": "Switzerland",
-          "title_s": "– The country is on track to achieve Strategic Goal 5 (evaluation of financial incentives) contained in the Biodiversity Strategy (2012) and regularly evaluates the impacts of incentives on biodiversity.  For example, during the development of the Biodiversity Action Plan (2017), FOEN commissioned a study on existing financial incentives with negative impacts on biodiversity which identified at national level a set of incentives with potentially negative impacts and recommended further work on specific issues, such as tourism infrastructure.  Another example relates to the agricultural sector where some progress in reforming incentives (e.g. direct payments for husbandry have been phased out) has been achieved over the last years. The Confederation will present an overall evaluation of the impacts of federal subsidies and other incentives with consequences for biodiversity at the end of Implementation Phase I (2023).  (6NR)"
+          "title_s": "The country is on track to achieve Strategic Goal 5 (evaluation of financial incentives) contained in the Biodiversity Strategy (2012) and regularly evaluates the impacts of incentives on biodiversity.  For example, during the development of the Biodiversity Action Plan (2017), FOEN commissioned a study on existing financial incentives with negative impacts on biodiversity which identified at national level a set of incentives with potentially negative impacts and recommended further work on specific issues, such as tourism infrastructure.  Another example relates to the agricultural sector where some progress in reforming incentives (e.g. direct payments for husbandry have been phased out) has been achieved over the last years. The Confederation will present an overall evaluation of the impacts of federal subsidies and other incentives with consequences for biodiversity at the end of Implementation Phase I (2023).  (6NR)"
         }
       ],
       "links": {
@@ -776,7 +773,7 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "hhttps://www.cbd.int/nbsap/training/quick-guides/"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
             "title": "Forest Ecosystem Restoration Initiative (FERI)",
@@ -1061,7 +1058,7 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "hhttps://www.cbd.int/nbsap/training/quick-guides/"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
             "title": "Sustainable Forest Management (SFM) Toolbox",
@@ -1093,11 +1090,11 @@
           }, 
           {
             "title": "FAO Global Forest Resources Assessment (FRA)",
-            "url": "http://www.fao.org/forest-resources-assessment/en/"
+            "link": "http://www.fao.org/forest-resources-assessment/en/"
           },
           {
             "title": "Forest Resources Assessment (Regional Contribution to the Global FRA)",
-            "url": "https://www.unece.org/forests/fra/welcome.html"  
+            "link": "https://www.unece.org/forests/fra/welcome.html"  
           }
         ],
         "techGuides": [
@@ -1414,7 +1411,7 @@
           },
           {
           "title": "Global Invasive Species Database",
-            "url": "http://www.issg.org/database/welcome/ "
+            "link": "http://www.issg.org/database/welcome/"
           } 
         ],
         "techGuides": [
@@ -1860,7 +1857,7 @@
           },
           {
             "title": "IUCN Red List",
-            "url": "https://www.iucnredlist.org/"
+            "link": "https://www.iucnredlist.org/"
           }
           ],
         "techGuides": [
@@ -2038,15 +2035,15 @@
             "link": ""
           }
         ],
-        "nbsapForum": "hhttp://nbsapforum.net/forums/genetic-diversity",
+        "nbsapForum": "http://nbsapforum.net/forums/genetic-diversity",
         "programs": [
           {
-            "title": " Programme of Work on Agricultural Biodiversity ",
+            "title": "Programme of Work on Agricultural Biodiversity",
             "url": "https://www.cbd.int/agro/"
           },
           {
             "title": "Global Strategy for Plant Conservation",
-            "url": "www.cbd.int/gspc/"
+            "link": "www.cbd.int/gspc/"
           }
         ],
         "undb": {
@@ -2452,7 +2449,7 @@
           },
           {
           "title": "Awareness-raising material on access and benefit-sharing (ABS)",
-            "url": "https://www.cbd.int/abs/awareness-raising/default.shtml"
+            "link": "https://www.cbd.int/abs/awareness-raising/default.shtml"
           },
           {
             "title": "ABS Information Kit",
@@ -2586,7 +2583,7 @@
             "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
-            "title": "CBD Capacity Building Modules",
+            "title": "CBD NBSAP Capacity-Building Modules",
             "link": "https://www.cbd.int/nbsap/training/"
           },
           {
@@ -2946,7 +2943,7 @@
         "keyResources": [
           {
             "title": "CBD Clearing-House Mechanism (CHM)",
-            "url": "https://chm.cbd.int/"
+            "link": "https://chm.cbd.int/"
           },
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
@@ -2966,16 +2963,15 @@
           },
           {
           "title": "CHM Network",
-            "url": "https://www.cbd.int/chm/network/"
+            "link": "https://www.cbd.int/chm/network/"
           },
           {
             "title": "BIP Dashboard",
-            "url": "https://www.bipindicators.net/"
+            "link": "https://www.bipindicators.net/"
           },
           {
             "title": "UNBiodiversity Lab",
-            "url": "https://unbiodiversitylab.org/" 
-          },
+            "link": "https://unbiodiversitylab.org/" },
           { 
               "title": "Bioland Tool (demonstration website)",
             "link": "https://demo.chm-cbd.net"
@@ -2994,7 +2990,7 @@
         "nbsapForum": "http://nbsapforum.net/forums/science-and-research",
         "programs": [
           {
-            "title": "Cross-cutting issue on Identification, Monitoring, Indicators and Assessments",
+            "title": "Cross-cutting Issue on Identification, Monitoring, Indicators and Assessments",
             "url": "https://www.cbd.int/indicators/"
           },
           {
