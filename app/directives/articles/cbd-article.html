@@ -1,16 +1,12 @@
 <div class="ck-editor__editable" style="border:none">
     <style>
-        .content {
+        .ck-content {
             padding-top: 15px;
         }
 
-        .content p {
-            text-align: justify;
-        }
-
-        .content img{
-            max-width: 100%;
-            margin :5px;
+        .ck-content p {
+            margin-top: inherit!important;
+            margin-bottom: inherit!important;
         }
     </style>
     <div ng-if="!hideCoverImage && article.coverImage">
@@ -23,6 +19,6 @@
             <i class="fa fa-edit"></i> Add content</a>    
         <br/>    
     </div>
-    <div ng-bind-html="trustedHtml(article.content.en)" class="content"></div>
+    <div ng-bind-html="trustedHtml(article.content.en)" class="ck-content"></div>
 
 </div>
