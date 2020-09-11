@@ -90,15 +90,15 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
-          },
-          {
-            "title": "E-learning Module 12: Education and awareness",
-            "link": "https://chm.cbd.int/database/record/200748"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
             "title": "Communication, Education and Public Awareness (CEPA): A Toolkit for National Focal Points and NBSAP Coordinators",
             "link": "https://chm.cbd.int/database/record/200690"
+        },
+        {
+            "title": "E-learning Module 12: Education and Awareness (Programme of Work on Protected Areas)",
+            "link": "https://chm.cbd.int/database/record/200748"
         },
         {
             "title": "Bioland Tool (demonstration website)",
@@ -119,10 +119,7 @@
             "link": "https://www.cbd.int/doc/strategic-plan/targets/T1-quick-guide-fr.pdf"
           }
         ],
-        "nbsapForum": {
-          "title": "NBSAP Forum",
-          "url": "http://nbsapforum.net/"
-        },
+        "nbsapForum": "http://nbsapforum.net/forums/biodiversity-awareness",
         "programs": [
           {
             "title": "Programme of Work on CEPA",
@@ -250,15 +247,19 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
-            "title": "Biodiversity Mainstreaming. Integrating Biodiversity, development and poverty eradication : a rapid diagnostic",
+            "title": "Biodiversity Mainstreaming - integrating biodiversity, development and poverty eradication (a rapid diagnostic)",
             "link": "https://chm.cbd.int/database/record/200710"
           },
           {
             "title": "Toolbox on Biodiversity for Development",
             "link": "https://chm.cbd.int/database/record/200697"
+          },
+          {
+            "title": "Good Practice Guides for Development Sectors",
+            "link": "https://www.cbd.int/development/training/guides/"
           },
           {
             "title": "System of Environmental-Economic Accounting (SEEA)",
@@ -267,8 +268,20 @@
           {
             "title": "TEEB  - Ecological and Economic Foundations",
             "link": "http://www.teebweb.org/our-publications/teeb-study-reports/ecological-and-economic-foundations/"
+          },
+          {
+            "title": "CBD Technical Series No. 28",
+            "link": "https://www.cbd.int/doc/publications/cbd-ts-28.pdf"
+          },
+          {
+            "title": "CBD Technical Series No. 27",
+            "link": "https://www.cbd.int/doc/publications/cbd-ts-27.pdf"
+          }, 
+          {
+          "title": "CBD Poster on Options for the Application of Tools for Valuation of Biodiversity and Biodiversity Resources and Functions",
+            "link": "https://www.cbd.int/doc/publications/cbd-2007-poster-en.pdf"
           }
-        ],
+          ],
         "techGuides": [
           {
             "lang": "EN",
@@ -283,15 +296,11 @@
             "link": ""
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/271",
+        "nbsapForum": "http://nbsapforum.net/forums/biodiversity-mainstreaming",
         "programs": [
           {
-            "title": "Mainstreaming biodiversity into national sectoral and cross-sectoral strategies, polices, plans and programs ",
-            "url": "https://chm.cbd.int/database/record/200765"
-          },
-          {
-            "title": "Programme of work on Economics, Trade and Incentive Measures",
-            "url": "https://www.cbd.int/incentives/valuation.shtml"
+            "title": "Programme of Work on Economics, Trade and Incentive Measures",
+            "url": "https://www.cbd.int/incentives/"
           }
         ],
         "undb": {
@@ -307,7 +316,7 @@
       ],
       "partners": [
         {
-          "name": "UNDP-UNEP Poverty - Environment Initiative",
+          "name": "UNDP-UNEP Poverty-Environment Initiative",
           "websites": [
             {
               "name": "website",
@@ -423,25 +432,25 @@
         },
         {
           "country": "Switzerland",
-          "title_s": "– The country is on track to achieve Strategic Goal 5 (evaluation of financial incentives) contained in the Biodiversity Strategy (2012) and regularly evaluates the impacts of incentives on biodiversity.  For example, during the development of the Biodiversity Action Plan (2017), FOEN commissioned a study on existing financial incentives with negative impacts on biodiversity which identified at national level a set of incentives with potentially negative impacts and recommended further work on specific issues, such as tourism infrastructure.  Another example relates to the agricultural sector where some progress in reforming incentives (e.g. direct payments for husbandry have been phased out) has been achieved over the last years. The Confederation will present an overall evaluation of the impacts of federal subsidies and other incentives with consequences for biodiversity at the end of Implementation Phase I (2023).  (6NR)"
+          "title_s": "The country is on track to achieve Strategic Goal 5 (evaluation of financial incentives) contained in the Biodiversity Strategy (2012) and regularly evaluates the impacts of incentives on biodiversity.  For example, during the development of the Biodiversity Action Plan (2017), FOEN commissioned a study on existing financial incentives with negative impacts on biodiversity which identified at national level a set of incentives with potentially negative impacts and recommended further work on specific issues, such as tourism infrastructure.  Another example relates to the agricultural sector where some progress in reforming incentives (e.g. direct payments for husbandry have been phased out) has been achieved over the last years. The Confederation will present an overall evaluation of the impacts of federal subsidies and other incentives with consequences for biodiversity at the end of Implementation Phase I (2023).  (6NR)"
         }
       ],
       "links": {
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
             "title": "CBD Technical Series No. 56",
             "link": "https://www.cbd.int/doc/publications/cbd-ts-56-en.pdf"
           },
           {
-            "title": "Milestones for the full implementation of Aichi Biodiversity Target 3 (annex I)",
+            "title": "Milestones for the full implementation of Aichi Biodiversity Target 3 (Annex I)",
             "link": "https://www.cbd.int/doc/decisions/cop-12/cop-12-dec-03-en.pdf"
           },
           {
-            "title": "TEEB for Policy Makers",
+            "title": "TEEB for Policy Makers: Responding to the Value of Nature",
             "link": "http://www.cbd.int/doc/meetings/wgri/wgri-03/information/wgri-03-inf-11-en.pdf"
           }
         ],
@@ -459,18 +468,18 @@
             "link": ""
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/272",
+        "nbsapForum": "http://nbsapforum.net/forums/incentives-and-subsidies",
         "programs": [
           {
-            "title": "Programme of work on Economics, Trade and Incentive Measures",
+            "title": "Programme of Work on Economics, Trade and Incentive Measures",
             "url": "https://www.cbd.int/incentives/"
           },
           {
-            "title": "Incentive measures database, Trade and Incentive Measures",
+            "title": "Information Database on Incentive Measures",
             "url": " https://www.cbd.int/programmes/socio-eco/incentives/case-studies.aspx"
           },
           {
-            "title": "Tools and guidance on Economics, Trade and Incentive Measures",
+            "title": "Tools and Guidance on Economics, Trade and Incentive Measures",
             "url": "https://www.cbd.int/incentives/tools.shtml"
           }
         ],
@@ -582,19 +591,31 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
             "title": "Addis Ababa Principles and Guidelines for the Sustainable Use of Biodiversity",
             "link": "https://www.cbd.int/doc/publications/addis-gdl-en.pdf"
           },
           {
+            "title": "CBD Technical Series No. 60",
+            "link": "https://www.cbd.int/doc/publications/cbd-ts-60-en.pdf"
+          },
+           {
+            "title": "CBD Technical Series No. 56",
+            "link": "https://www.cbd.int/doc/publications/cbd-ts-56-en.pdf"
+          },
+                    {
             "title": "CBD Technical Series No. 52",
             "link": "https://www.cbd.int/doc/publications/cbd-ts-52-en.pdf"
           },
           {
             "title": "CBD Technical Series No. 39",
             "link": "https://www.cbd.int/doc/publications/cbd-ts-39-en.pdf"
+          },
+          {
+            "title": "CBD Technical Series No. 12",
+            "link": "https://www.cbd.int/doc/publications/cbd-ts-12.pdf"
           },
           {
             "title": "CBD Technical Series No. 9",
@@ -615,10 +636,10 @@
             "link": ""
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/273",
+        "nbsapForum": "http://nbsapforum.net/forums/sustainable-production-and-consumption",
         "programs": [
           {
-            "title": "Cross-cutting thematic issue on Sustainable Use of Biodiversity",
+            "title": "Programme of Work on the Cross-cutting Thematic Issue on Sustainable Use of Biodiversity",
             "url": "https://www.cbd.int/sustainable/"
           },
           {
@@ -650,7 +671,7 @@
           ]
         },
         {
-          "name": "International Union for Conservation of Nature",
+          "name": "International Union for Conservation of Nature (IUCN)",
           "websites": [
             {
               "name": "website",
@@ -752,18 +773,18 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
             "title": "Forest Ecosystem Restoration Initiative (FERI)",
             "link": "https://www.cbd.int/restoration/feri/"
           },
           {
-            "title": "Sustainable Forest Management, Biodiversity and Livelihoods - Good Practice Guides",
+            "title": "Sustainable Forest Management, Biodiversity and Livelihoods (Good Practice Guides)",
             "link": "https://www.cbd.int/development/training/guides/"
           },
           {
-            "title": "Technical Series No. 60.",
+            "title": "Technical Series No. 60",
             "link": "https://www.cbd.int/doc/publications/cbd-ts-60-en.pdf"
           },
           {
@@ -785,10 +806,10 @@
             "link": "https://www.cbd.int/doc/strategic-plan/targets/T5-quick-guide-fr.pdf"
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/274",
+        "nbsapForum": "http://nbsapforum.net/forums/habitat-fragmentation-and-degradation",
         "programs": [
           {
-            "title": "Programme of Work on Forests",
+            "title": "Programme of Work on Forest Biodiversity",
             "url": "https://www.cbd.int/forest/"
           }
         ],
@@ -890,15 +911,19 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
-          },
-          {
-            "title": "CBD Technical Series No. 14",
-            "link": "https://www.cbd.int/doc/publications/cbd-ts-14.pdf "
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
             "title": "CBD Technical Series No. 75",
             "link": "https://www.cbd.int/doc/publications/cbd-ts-75-executive-summary-en.pdf"
+          },
+           {
+            "title": "CBD Technical Series No. 27",
+            "link": "https://www.cbd.int/doc/publications/cbd-ts-27.pdf"
+          },
+          {
+            "title": "CBD Technical Series No. 14",
+            "link": "https://www.cbd.int/doc/publications/cbd-ts-14.pdf "
           },
           {
             "title": "FAO Technical Guidelines for Responsible Fisheries",
@@ -919,7 +944,7 @@
             "link": ""
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/275",
+        "nbsapForum": "http://nbsapforum.net/forums/sustainable-fisheries",
         "programs": [
                    {
             "title": "Programme of Work on Marine and Coastal Biodiversity",
@@ -1033,11 +1058,15 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
             "title": "Sustainable Forest Management (SFM) Toolbox",
             "link": "http://www.fao.org/sustainable-forest-management/toolbox/sfm-home/en/"
+          },
+          {
+          "title": "Addis Ababa Principles and Guidelines for the Sustainable Use of Biodiversity",
+            "link": "https://www.cbd.int/doc/publications/addis-gdl-en.pdf"
           },
           {
             "title": "CBD Technical Series No. 60 ",
@@ -1050,6 +1079,22 @@
           {
             "title": "CBD Technical Series No. 39",
             "link": "https://www.cbd.int/doc/publications/cbd-ts-39-en.pdf"
+          }, 
+          {
+            "title": "CBD Technical Series No. 12",
+            "link": "https://www.cbd.int/doc/publications/cbd-ts-12.pdf"
+          }, 
+          {
+            "title": "CBD Technical Series No. 3",
+            "link": "https://www.cbd.int/doc/publications/cbd-ts-03.pdf"
+          }, 
+          {
+            "title": "FAO Global Forest Resources Assessment (FRA)",
+            "link": "http://www.fao.org/forest-resources-assessment/en/"
+          },
+          {
+            "title": "Forest Resources Assessment (Regional Contribution to the Global FRA)",
+            "link": "https://www.unece.org/forests/fra/welcome.html"  
           }
         ],
         "techGuides": [
@@ -1066,37 +1111,21 @@
             "link": ""
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/276",
+        "nbsapForum": "http://nbsapforum.net/forums/sustainable-resource-management",
         "programs": [
           {
             "title": "Programme of Work on Agricultural Biodiversity",
             "url": "https://www.cbd.int/agro/"
           },
           {
-            "title": "Programme of Work on Inland Waters",
+            "title": "Programme of Work on Inland Waters Biodiversity",
             "url": "https://www.cbd.int/waters/"
           },
           {
-              "title": "Programme of Work on Forests",
+              "title": "Programme of Work on Forest Biodiversity",
             "url": "https://www.cbd.int/forest/"
-          },
-          {
-            "title": "Global Forest Resources Assessments Website",
-            "url": "http://www.fao.org/forest-resources-assessment/en/"
-          },
-          {
-            "title": "Global Forest Watch",
-            "url": "https://www.globalforestwatch.org/"
-          },
-          {
-            "title": "Forest Resources Association",
-            "url": "https://www.forestresources.org/"
-          },
-        {
-            "title": "Forest Resources Assessment (Regional Contribution to the Global FRA)",
-            "url": "https://www.unece.org/forests/fra/welcome.html"
           }
-        ],
+          ],
         "undb": {
           "title": "United Nations Decade on Biodiversity",
           "url": "https://www.cbd.int/undb-new/"
@@ -1117,16 +1146,24 @@
           ]
         },
         {
-          "name": "World Resource Institute",
+          "name": "World Resources Institute",
           "websites": [
             {
               "name": "website",
               "url": "http://www.wri.org/our-work/topics/forests"
-            }
+            },
+             {
+            "title": "Global Forest Watch",
+            "url": "https://www.globalforestwatch.org/"
+          },
+          {
+            "title": "Forest Resources Association",
+            "url": "https://www.forestresources.org/"
+          }
           ]
         },
         {
-          "name": "Inland Waters Biodiversity partners",
+          "name": "Inland Waters Biodiversity Partners",
           "websites": [
             {
               "name": "website",
@@ -1218,7 +1255,7 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
             "title": "Voluntary Guidelines on Biodiversity-Inclusive Impact Assessment",
@@ -1239,10 +1276,10 @@
             "link": ""
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/277",
+        "nbsapForum": "http://nbsapforum.net/forums/pollution",
         "programs": [
           {
-            "title": "Programme of Work on Inland Waters",
+            "title": "Programme of Work on Inland Waters Biodiversity",
             "url": "https://www.cbd.int/waters/"
           },
           {
@@ -1366,12 +1403,16 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
-            "title": "Toolkit to facilitate achievement by Parties of Aichi Biodiversity Target 9 on invasive alien species",
+            "title": "Toolkit to facilitate achievement by Parties of Aichi Biodiversity Target 9",
             "link": "https://www.cbd.int/invasive/cbdtoolkit/"
-          }
+          },
+          {
+          "title": "Global Invasive Species Database",
+            "link": "http://www.issg.org/database/welcome/"
+          } 
         ],
         "techGuides": [
           {
@@ -1387,19 +1428,11 @@
             "link": ""
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/278",
+        "nbsapForum": "http://nbsapforum.net/forums/invasive-alien-species",
         "programs": [
           {
-            "title": "Programme of Work on Invasive Alien Species",
+            "title": "Programme of Work on Invasive Alien Species (IAS)",
             "url": "https://www.cbd.int/invasive/"
-          },
-          {
-            "title": "Global Invasive Species Database",
-            "url": "http://www.issg.org/database/welcome/ "
-          },
-          {
-            "title": "IUCN’s Invasive Species Specialist Group",
-            "url": "http://www.issg.org"
           }
         ],
         "undb": {
@@ -1427,9 +1460,13 @@
             {
               "name": "website",
               "url": "https://www.cbd.int/invasive/giasipartnership/"
-            }
+          }
           ]
-        }
+          },
+          {
+            "title": "IUCN’s Invasive Species Specialist Group",
+            "url": "http://www.issg.org"
+          } 
       ]
     },
     {
@@ -1522,7 +1559,11 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
+          },
+          {
+            "title": "Addis Ababa Principles and Guidelines for the Sustainable Use of Biodiversity",
+            "link": "https://www.cbd.int/doc/publications/addis-gdl-en.pdf"
           },
           {
             "title": "CBD Technical Series No. 46",
@@ -1535,6 +1576,10 @@
           {
             "title": "CBD Technical Series No. 42",
             "link": "https://www.cbd.int/doc/publications/cbd-ts-42-en.pdf"
+          },
+          {
+            "title": "CBD Technical Series No. 41",
+            "link": "https://www.cbd.int/doc/publications/cbd-ts-41-en.pdf"
           },
           {
             "title": "CBD Technical Series No. 25",
@@ -1559,7 +1604,7 @@
             "link": ""
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/279",
+        "nbsapForum": "http://nbsapforum.net/forums/vulnerable-ecosystems",
         "programs": [
          {
             "title": "Programme of Work on Climate Change and Biodiversity",
@@ -1669,23 +1714,11 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
-            "title": "E-learning Module 1 - Protected area network design",
-            "link": "https://chm.cbd.int/database/record/200739"
-          },
-          {
-            "title": "E-learning Module 2: Protected area integration",
-            "link": "https://chm.cbd.int/database/record/200740"
-          },
-          {
-            "title": "E-learning Module 3: Transboundary protected areas and regional networks",
-            "link": "https://chm.cbd.int/database/record/200741"
-          },
-          {
-            "title": "E-learning Module 4: Management planning",
-            "link": "https://chm.cbd.int/database/record/200742"
+            "title": "E-learning Modules for the Programme of Work on Protected Areas (PoWPA)",
+            "link": "https://www.cbd.int/protected/e-learning/"
           }
         ],
         "techGuides": [
@@ -1702,7 +1735,7 @@
             "link": ""
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/280",
+        "nbsapForum": "http://nbsapforum.net/forums/protected-areas",
         "programs": [
           {
             "title": "Programme of work on Protected Areas",
@@ -1812,7 +1845,7 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
             "title": "Addis Ababa Principles and Guidelines for the Sustainable Use of Biodiversity",
@@ -1821,8 +1854,12 @@
           {
             "title": "Global Strategy for Plant Conservation (GSPC)",
             "link": "https://www.cbd.int/gspc/"
+          },
+          {
+            "title": "IUCN Red List",
+            "link": "https://www.iucnredlist.org/"
           }
-        ],
+          ],
         "techGuides": [
           {
             "lang": "EN",
@@ -1837,14 +1874,10 @@
             "link": "https://www.cbd.int/doc/strategic-plan/targets/T12-quick-guide-fr.pdf"
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/282",
+        "nbsapForum": "http://nbsapforum.net/forums/species-and-extinctions",
         "programs": [
           {
-            "title": "Global Strategy for Plant Conservation (GSPC)",
-            "url": "https://www.cbd.int/gspc/"
-          },
-          {
-            "title": "Global Taxonomy Initiative",
+            "title": "Global Taxonomy Initiative (GTI)",
             "url": "https://www.cbd.int/gti/ "
           },
           {
@@ -1856,10 +1889,10 @@
             "url": "http://www.cites.org/"
           },
           {
-            "title": "IUCN Red List",
-            "url": "https://www.iucnredlist.org/"
+            "title": "Convention on the Conservation of Migratory Species of Wild Animals (CMS)",
+            "url": "https://www.cms.int/"
           }
-        ],
+          ],
         "undb": {
           "title": "United Nations Decade on Biodiversity",
           "url": "https://www.cbd.int/undb-new/"
@@ -1977,7 +2010,7 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
             "title": "Global Plan of Action for the Conservation and Sustainable Utilization of Plant Genetic Resources for Food and Agriculture ",
@@ -2002,15 +2035,15 @@
             "link": ""
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/282",
+        "nbsapForum": "http://nbsapforum.net/forums/genetic-diversity",
         "programs": [
           {
-            "title": " Programme of Work on Agricultural Biodiversity ",
+            "title": "Programme of Work on Agricultural Biodiversity",
             "url": "https://www.cbd.int/agro/"
           },
           {
             "title": "Global Strategy for Plant Conservation",
-            "url": "www.cbd.int/gspc/"
+            "link": "www.cbd.int/gspc/"
           }
         ],
         "undb": {
@@ -2108,7 +2141,7 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
             "title": "Addis Ababa Principles and Guidelines for the Sustainable Use of Biodiversity",
@@ -2133,7 +2166,7 @@
             "link": ""
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/283",
+        "nbsapForum": "http://nbsapforum.net/forums/ecosystem-services",
         "programs": [
           {
             "title": "Programme of Work on Protected Areas",
@@ -2146,11 +2179,7 @@
           {
             "title": "Programme of Work on Biodiversity for Development",
             "url": "https://www.cbd.int/development/"
-          },
-          {
-            "title": "Society for Ecological Restoration",
-            "url": "https://www.ser.org"
-          }
+                }
         ],
         "undb": {
           "title": "United Nations Decade on Biodiversity",
@@ -2168,6 +2197,15 @@
             {
               "name": "website",
               "url": "https://www.cbd.int/protected/friends/default.shtml"
+            }
+          ]
+        },
+        {
+          "name": "Society for Ecological Restoration (SER)",
+          "websites": [
+            {
+              "name": "website",
+              "url": "https://www.ser.org"
             }
           ]
         }
@@ -2255,19 +2293,19 @@
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
-            "title": "CBD Technical Series No. 10",
-            "link": "https://www.cbd.int/doc/publications/cbd-ts-10.pdf"
+            "title": "CBD Technical Series No. 42",
+            "link": "https://www.cbd.int/doc/publications/cbd-ts-42-en.pdf"
           },
           {
             "title": "CBD Technical Series No. 25",
             "link": "https://www.cbd.int/doc/publications/cbd-ts-25.pdf"
           },
           {
-            "title": "CBD Technical Series No. 42",
-            "link": "https://www.cbd.int/doc/publications/cbd-ts-42-en.pdf"
+            "title": "CBD Technical Series No. 10",
+            "link": "https://www.cbd.int/doc/publications/cbd-ts-10.pdf"
           }
         ],
         "techGuides": [
@@ -2284,19 +2322,11 @@
             "link": "https://www.cbd.int/doc/strategic-plan/targets/T15-quick-guide-fr.pdf"
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/284",
+        "nbsapForum": "http://nbsapforum.net/forums/climate-resilience",
         "programs": [
           {
             "title": "Programme of Work on Climate Change and Biodiversity",
             "url": "https://www.cbd.int/climate/"
-          },
-          {
-            "title": "Society for Ecological Restoration",
-            "url": "https://www.ser.org/"
-          },
-          {
-            "title": "Global Partnership on Forest and Landscape Restoration",
-            "url": "https://www.forestlandscaperestoration.org/"
           }
         ],
         "undb": {
@@ -2315,7 +2345,25 @@
             {
               "name": "website",
               "url": " https://www.cbd.int/climate/partners.shtml"
-          }
+            }
+          ]
+        },
+        {
+               "name": "Society for Ecological Restoration (SER)",
+          "websites": [
+            {
+              "name": "website",
+              "url": " https://www.ser.org/"
+            }
+          ]
+        },
+        {
+          "name": "Global Partnership on Forest and Landscape Restoration",
+          "websites": [
+            {
+              "name": "website",
+              "url": " https://www.forestlandscaperestoration.org/"
+            }
           ]
         }
       ]
@@ -2388,27 +2436,46 @@
           "country": "Republic of Korea",
           "title_s": "The country became a Party to the Nagoya Protocol on ABS in 2017 and adopted the National Act on Access and Benefit Sharing of Genetic Resources the same year. There are plans to revise this Act at an unspecified time. Competent National Authorities (persons authorized to grant users access to genetic resources and represent providers on a local or national level) and checkpoints (persons authorized to collect or receive information provided by users on the use of genetic resources) have been designated. An Integrated Reporting Service for Genetic Resources has been launched. The registration of genetic resources for national management and the designation of biological resources subject to out-of-the-country transportation permit has expanded. The Ministry of Science and ICT (MSIT) has published and distributed guidelines for researchers, including the ABS Guide and ABS Brief. (6NR)"
         }
-
       ],
       "links": {
         "keyResources": [
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
             "title": "ABS Simply Explained (Video)",
             "link": "https://absch.cbd.int/database/VLR/ABSCH-VLR-SCBD-200798"
           },
           {
-            "title": "Nagoya Protocol on Access and Benefit-Sharing: Towards Early Ratification (Factsheet)",
-            "link": "https://absch.cbd.int/database/VLR/ABSCH-VLR-SCBD-200679"
+          "title": "Awareness-raising material on access and benefit-sharing (ABS)",
+            "link": "https://www.cbd.int/abs/awareness-raising/default.shtml"
+          },
+          {
+            "title": "ABS Information Kit",
+            "link": "https://www.cbd.int/abs/information-kit-en/"
+           },
+          {
+            "title": "Nagoya Protocol on Access and Benefit-Sharing (Factsheets)",
+            "link": "https://www.cbd.int/abs/doc/protocol/factsheets/all-factsheets-en.pdf"
           },
           {
             "title": "An Explanatory Guide to the Nagoya Protocol on Access and Benefit-sharing",
             "link": "https://absch.cbd.int/database/VLR/ABSCH-VLR-SCBD-200641"
-          }
-        ],
+          },
+         {
+            "title": "Bonn Guidelines on Access to Genetic Resources and Fair and Equitable Sharing of the Benefits Arising out of their Utilization",
+            "link": "https://www.cbd.int/doc/publications/cbd-bonn-gdls-en.pdf"
+         },
+         {
+            "title": "Parties to the Nagoya Protocol on Access and Benefit-sharing",
+            "link": "https://www.cbd.int/abs/nagoya-protocol/signatories/"
+         },
+         {
+            "title": "United Nations Treaty Handbook",
+            "link": "https://www.cbd.int/abs/doc/treatyhandbook_en.pdf"
+         }
+         ],
         "techGuides": [
           {
             "lang": "EN",
@@ -2423,23 +2490,15 @@
             "link": ""
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/285",
+        "nbsapForum": "http://nbsapforum.net/forums/access-and-benefits-sharing",
         "programs": [
           {
             "title": "Nagoya Protocol on Access and Benefit-sharing",
             "url": "https://www.cbd.int/abs/"
           },
           {
-            "title": "Nagoya Protocol on Access and Benefit-sharing (Text)",
-            "url": "https://www.cbd.int/abs/doc/protocol/nagoya-protocol-en.pdf"
-          },
-          {
             "title": "Access and Benefit-sharing Clearing-House (ABSCH)",
             "url": "https://absch.cbd.int/"
-          },
-          {
-            "title": "Awareness-raising material on access and benefit-sharing (ABS)",
-            "url": "https://www.cbd.int/abs/awareness-raising/default.shtml"
           }
         ],
         "undb": {
@@ -2453,7 +2512,7 @@
       ],
       "partners": [
         {
-          "name": "The ABS Capacity Development Initiative",
+          "name": "ABS Capacity Development Initiative",
           "websites": [
             {
               "name": "website",
@@ -2498,40 +2557,34 @@
         ],
       "activities": [
         {
-          "country": "See 'Links' below."
-        },
-        {
-         }
-      ],
+          "country": "See 'Links' below"
+        }
+        ],
       "links": {
         "keyResources": [
           {
           "title": "'Latest NBSAPs' on the CBD website",
             "link": "https://www.cbd.int/nbsap/about/latest" 
-                    },
-          {
-            "title": "'Update on progress in revising/updating and implementing national biodiversity strategies and action plans, including national targets’ submitted to SBI3",
-            "link": "https://www.cbd.int/doc/c/d2b9/ebf9/5e0c96b85bc233a413a433bd/sbi-03-02-add1-en.pdf" 
           },
           {
-            "title": "NBSAPs homepage",
-            "link": "hhttps://www.cbd.int/nbsap/"
+            "title": "Update on progress in revising/updating and implementing national biodiversity strategies and action plans, including national targets,  submitted to SBI3",
+            "link": "https://www.cbd.int/doc/c/d2b9/ebf9/5e0c96b85bc233a413a433bd/sbi-03-02-add1-en.pdf" 
           },
           {
             "title": "National Targets database",
             "link": "https://www.cbd.int/nbsap/targets/"
           },
           {
-            "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
-          },
-          {
-            "title": "CBD Capacity Building Modules",
-            "link": "https://www.cbd.int/nbsap/training/"
-          },
-          {
             "title": "COP Guidance on NBSAPs",
             "link": "https://www.cbd.int/nbsap/guidance.shtml"
+          },
+          {
+            "title": "Quick Guides to the Aichi Biodiversity Targets",
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
+          },
+          {
+            "title": "CBD NBSAP Capacity-Building Modules",
+            "link": "https://www.cbd.int/nbsap/training/"
           },
           {
             "title": "Interim Assessment of Revised NBSAPs (UNEP, 2015)",
@@ -2544,6 +2597,10 @@
           {
             "title": "Subnational and Local BSAPs",
             "link": "https://www.cbd.int/nbsap/related-info/sbsap/"
+          },
+          {
+            "title": "National Reports",
+            "link": "https://www.cbd.int/reports/"
           }
         ],
         "techGuides": [
@@ -2560,13 +2617,12 @@
             "link": ""
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/286",
+        "nbsapForum": "http://nbsapforum.net/forums/nbsaps",
         "programs": [
           {
-            "title": "National Reports homepage",
-            "url": "https://www.cbd.int/reports/"
+            "title": "NBSAPs",
+            "url": "https://www.cbd.int/nbsap/"
           }
-          
         ],
         "undb": {
           "title": "United Nations Decade on Biodiversity",
@@ -2578,15 +2634,6 @@
         200725
       ],
       "partners": [
-        {
-          "name": "NBSAP Forum",
-          "websites": [
-            {
-              "name": "website",
-              "url": "http://nbsapforum.net/"
-            }
-          ]
-        },
         {
           "name": "UNDP",
           "websites": [
@@ -2622,6 +2669,15 @@
               "url": "http://www.birdlife.org"
             }
           ]
+        },
+        {
+          "name": "Biodiversity Indicators Partnership (BIP)",
+          "websites": [
+            {
+              "name": "website",
+              "url": "https://www.bipindicators.net/"
+            }
+            ]
         }
       ]
     },
@@ -2703,22 +2759,22 @@
       "links": {
         "keyResources": [
           {
-            "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
-          },
-          {
-            "title": "The Tkarihwaié:ri Code of Ethical Conduct to Ensure Respect for the Cultural and Intellectual Heritage of India",
-            "link": "https://chm.cbd.int/database/record/200754"
-          },
-          {
             "title": "Akwé: Kon Voluntary Guidelines for the Conduct of Cultural, Environmental and Social Impact Assessment",
-            "link": "https://chm.cbd.int/database/record/200753"
+            "link": "https://www.cbd.int/doc/publications/akwe-brochure-en.pdf"
           },
           {
-            "title": "Application of Akwé: Kon Guidelines in the Management and Land Use Plan for the Hammastunturi. Final Report",
-            "link": "https://chm.cbd.int/database/record/200540"
+            "title": "The Tkarihwaié:ri Code of Ethical Conduct to Ensure Respect for the Cultural and Intellectual Heritage of Indigenous and Local Communities Relevant to the Conservation and Sustainable Use of Biological Diversity",
+            "link": "https://www.cbd.int/traditional/code.shtml"
+          },
+          {
+            "title": "Traditional Knowledge Information Portal",
+            "link": "https://www.cbd.int/tk/"
+          },
+          {
+            "title": "Quick Guides to the Aichi Biodiversity Targets",
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           }
-        ],
+         ],
         "techGuides": [
           {
             "lang": "EN",
@@ -2733,10 +2789,10 @@
             "link": ""
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/287",
+        "nbsapForum": "http://nbsapforum.net/forums/traditional-knowledge",
         "programs": [
           {
-            "title": "Programme of Work on Traditional Knowledge, Innovations and Practices",
+            "title": "Programme of Work on Article 8(j) - Traditional Knowledge, Innovations and Practices",
             "url": "https://www.cbd.int/traditional/"
           }
         ],
@@ -2887,14 +2943,37 @@
         "keyResources": [
           {
             "title": "CBD Clearing-House Mechanism (CHM)",
-            "url": "https://chm.cbd.int/"
+            "link": "https://chm.cbd.int/"
           },
           {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
-            "title": "Bioland Tool (demonstration website)",
+            "title": "Indicators for the Strategic Plan for Biodiversity 2011-2020",
+            "link": "https://www.cbd.int/sp/indicators/"
+          },
+          {
+            "title": "CBD Technical Series No. 58",
+            "link": "https://www.cbd.int/doc/publications/cbd-ts-58-en.pdf"
+          },
+          {
+            "title": "CBD Technical Series No. 53",
+            "link": "https://www.cbd.int/doc/publications/cbd-ts-53-en.pdf"
+          },
+          {
+          "title": "CHM Network",
+            "link": "https://www.cbd.int/chm/network/"
+          },
+          {
+            "title": "BIP Dashboard",
+            "link": "https://www.bipindicators.net/"
+          },
+          {
+            "title": "UNBiodiversity Lab",
+            "link": "https://unbiodiversitylab.org/" },
+          { 
+              "title": "Bioland Tool (demonstration website)",
             "link": "https://demo.chm-cbd.net"
           },
           {
@@ -2908,11 +2987,15 @@
             "link": "https://www.cbd.int/doc/strategic-plan/targets/T19-quick-guide-en.pdf"
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/288",
+        "nbsapForum": "http://nbsapforum.net/forums/science-and-research",
         "programs": [
           {
-            "title": "CHM Network",
-            "url": "https://www.cbd.int/chm/network/"
+            "title": "Cross-cutting Issue on Identification, Monitoring, Indicators and Assessments",
+            "url": "https://www.cbd.int/indicators/"
+          },
+          {
+            "title": "Global Taxonomy Initiative",
+            "url": "https://www.cbd.int/gti/"
           }
           ],
         "undb": {
@@ -2933,9 +3016,45 @@
               "url": "https://www.informea.org/en"
             }
           ]
-        }
-      ]
-    },
+        },
+        {
+    "name": "UNEP-WCMC",
+          "websites": [
+            {
+              "name": "website",
+              "url": "https://www.unep-wcmc.org"
+            }
+          ]
+        },
+        {   
+         "name": "Intergovernmental Science-Policy Platform on Biodiversity and Ecosystem Services (IPBES)",
+          "websites": [
+            {
+              "name": "website",
+              "url": "https://ipbes.net/"     
+            }
+          ]
+        },
+        {     
+          "name": "Consortium of Scientific Partners on Biodiversity",
+          "websites": [
+            {
+              "name": "website",
+              "url": "https://www.cbd.int/cooperation/csp/"       
+         }
+         ]
+         },
+         {     
+          "name": "Biodiversity Indicators Partnership (BIP)",
+          "websites": [
+            {
+              "name": "website",
+              "url": "https://www.bipindicators.net/"       
+          }
+          ]
+          }    
+          ]
+      },
     {
       "id": 20,
       "title": {
@@ -2962,29 +3081,27 @@
       ],
       "activities": [
         {
-          "country": "See 'Links' below."
-        },
-        {
+          "country": "See 'Links' below"
          }
       ],
       "links": {
 
         "keyResources": [
         {
-            "title": "Financial Reporting Frameworks on the CBD Clearing-House Mechanism",
+            "title": "Financial Reporting Frameworks on the CBD Clearing-House Mechanism (CHM)",
             "link": "https://chm.cbd.int/"
           },
           {
-            "title": "‘Evaluation and review of the strategy for resource mobilization and Aichi Biodiversity Target 20: Summary of the first report of the panel of experts on resource mobilization', submitted to SBI3",
+            "title": "Evaluation and review of the strategy for resource mobilization and Aichi Biodiversity Target 20: Summary of the first report of the panel of experts on resource mobilization, submitted to SBI3",
             "link": "https://www.cbd.int/doc/c/4c88/dbb1/e264eaae72b86747416e0d8c/sbi-03-05-add1-en.pdf"
           },
           {
-            "title": "‘Evaluation and review of the strategy for resource mobilization and Aichi Biodiversity Target 20: First report of the Panel of Experts on Resource Mobilization’, submitted to SBI3",
+            "title": "Evaluation and review of the strategy for resource mobilization and Aichi Biodiversity Target 20: First report of the Panel of Experts on Resource Mobilization, submitted to SBI3",
             "link": "https://www.cbd.int/doc/c/7d05/ed2f/156920ef027d2436635b05db/sbi-03-inf-02-en.pdf"
           },
-                    {
+          {
             "title": "Quick Guides to the Aichi Biodiversity Targets",
-            "link": "https://chm.cbd.int/database/record/200765"
+            "link": "https://www.cbd.int/nbsap/training/quick-guides/"
           },
           {
             "title": "UNDP Biodiversity Finance Initiative (BIOFIN)",
@@ -3001,8 +3118,16 @@
           {
             "title": "CBD Technical Series No. 28",
             "link": "https://www.cbd.int/doc/publications/cbd-ts-28.pdf"
+          },
+          {
+            "title": "System of Environmental-Economic Accounting (SEEA)",
+            "link": "http://unstats.un.org/unsd/envaccounting/seea.asp"
+          },
+          {
+            "title": "Economics of Ecosystems and Biodiversity Initiative (TEEB)",
+            "link": "http://www.teebweb.org/"
           }
-        ],
+          ],
         "techGuides": [
           {
             "lang": "EN",
@@ -3017,19 +3142,15 @@
             "link": ""
           }
         ],
-        "nbsapForum": "http://nbsapforum.net/#categories/289",
+        "nbsapForum": "http://nbsapforum.net/forums/resource-mobilization",
         "programs": [
           {
             "title": "Programme of Work on Economics, Trade and Incentive Measures",
             "url": "https://www.cbd.int/incentives/"
           },
           {
-            "title": "Phase three of the Economics of Ecosystems and Biodiversity initiative (TEEB) ",
-            "url": "http://www.teebweb.org/"
-          },
-          {
-            "title": "System of Environmental-Economic Accounting (SEEA)",
-            "url": "http://unstats.un.org/unsd/envaccounting/seea.asp"
+            "title": "Financial Mechanism and Resources",
+            "url": "https://www.cbd.int/financial/"
           }
         ],
         "undb": {
