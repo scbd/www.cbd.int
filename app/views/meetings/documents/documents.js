@@ -173,7 +173,7 @@ define(['lodash', 'angular', 'moment', 'filters/lstring', 'directives/print-smar
                 var currentTime         = moment.tz(d.statementSource.date, 'UTC');
                 var formatedDate        = currentTime.format('HH:mm')
                 
-                if(formatedDate < '09:00')
+                if(formatedDate < '05:00')
                     d.statementSource.session = 'Evening'
                 else if(formatedDate < '15:00')
                     d.statementSource.session = 'Morning'
