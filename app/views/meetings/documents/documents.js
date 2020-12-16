@@ -16,9 +16,9 @@ define(['lodash', 'angular', 'moment', 'filters/lstring', 'directives/print-smar
             'outcome'        : { position: 100 , title : 'Outcomes'      },
             'official'       : { position: 200 , title : 'Official'      },
             'information'    : { position: 300 , title : 'Information'   },
-            'statement'      : { position: 400 , title : 'Statements',   insession: true },
             'notification'   : { position: 500 , title : 'Notifications' },
             'other'          : { position: 600 , title : 'Other'         },
+            'statement'      : { position: 650 , title : 'Statements',   insession: true },
             'in-session'     : { position: 700 , title : 'Plenary',      insession: true },
             'in-session/wg1' : { position: 800 , title : 'WG I',         insession: true },
             'in-session/wg2' : { position: 900 , title : 'WG II',        insession: true }
@@ -70,6 +70,7 @@ define(['lodash', 'angular', 'moment', 'filters/lstring', 'directives/print-smar
                     groups['in-session']    .position = 110;
                     groups['in-session/wg1'].position = 120;
                     groups['in-session/wg2'].position = 130;
+                    groups['statement'     ].position = 140;
                     _ctrl.inSessionEnabled = true;
                 }
 
