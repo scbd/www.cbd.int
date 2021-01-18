@@ -1,5 +1,5 @@
 define(['app', 'angular','text!./toast.html',
-'lodash', 'PageHeaderFixed','PageHeader','PageFooter', 'bs4', 'ngVue','providers/realm','./directives/bread-crumbs'], function(app, ng, toastTemplate, _, PageHeaderFixedComp, PageHeaderComp, PageFooterComp) {
+'lodash', 'PageHeaderFixed','PageHeader','PageFooter', 'ngVue','providers/realm','./directives/bread-crumbs'], function(app, ng, toastTemplate, _, PageHeaderFixedComp, PageHeaderComp, PageFooterComp) {
     'use strict';
 
     loadHeaderFooter()
