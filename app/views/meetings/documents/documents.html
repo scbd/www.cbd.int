@@ -1,7 +1,7 @@
 <div class="meeting-documents">
 
-    <xxx ng-vue="{ components : documentsCtrl.myVueLocallyDefinedComponents }"></xxx>
-    <zzz ng-vue="{ components : documentsCtrl.myVueLocallyDefinedComponents }"></zzz>
+    <sessions ng-vue="documentsCtrl.vueOptions"></sessions>
+    <uploads ng-vue="documentsCtrl.vueOptions"></uploads>
 
     <div ng-repeat="alert in ::documentsCtrl.meeting.alerts" class="alert" ng-class="{ ['alert-'+(alert.level||'primary')]:true }" role="alert">
         <strong><a href="{{alert.url}}" ng-bind="alert.title | lstring" target="_self" style="color:inherit;"></a></strong>
