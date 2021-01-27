@@ -12,10 +12,11 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions', 'componen
         var httpCache = initCache();
         var currentUser;
 
-        _ctrl.myVueLocallyDefinedComponents = {
-            xxx: sessions,
-            zzz: uploads
-        }        
+        _ctrl.vueOptions = {
+          components: { sessions: sessions, uploads: uploads },
+          i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
+        };
+
 
         var groups = {
             'outcome'        : { position: 100 , title : 'Outcomes'      },
