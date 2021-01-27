@@ -31,6 +31,7 @@ app.use(function(req, res, next) {  if(req.url.indexOf(".geojson")>0) res.conten
 app.use('/app/images/p03qv92p.jpg', express.static(__dirname + '/app/images/p03qv92p.jpg',{ maxAge: 365*24*60*60 }));
 
 app.use('/favicon.png',   express.static(__dirname + '/app/images/favicon.png', { maxAge: 24*60*60 }));
+app.use('/app',           express.static(__dirname + '/dist',                   { setHeaders: setCustomCacheControl }));
 app.use('/app',           express.static(__dirname + '/app',                    { setHeaders: setCustomCacheControl }));
 app.use('/app/libs/vue',    express.static(__dirname + '/node_modules/vue/dist',      { setHeaders: setCustomCacheControl }));
 app.use('/app/libs/ngVue',  express.static(__dirname + '/node_modules/ngVue/build',   { setHeaders: setCustomCacheControl }));

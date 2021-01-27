@@ -1,6 +1,6 @@
-define(['lodash', 'angular', 'moment', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
+define(['lodash', 'angular', 'moment', 'components/meetings/sessions', 'components/meetings/uploads', 'angular-vue', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
         'css!./meeting-documents.css', 'angular-cache', 'css!./agenda.css', 'filters/moment', 'ngCookies'
-], function(_, ng, moment) {
+], function(_, ng, moment, sessions, uploads) {
     //'css!./agenda.css' // moved to template
     var STATISTICS = {}; 
 
@@ -11,6 +11,11 @@ define(['lodash', 'angular', 'moment', 'filters/lstring', 'directives/print-smar
         var hardTab = false;
         var httpCache = initCache();
         var currentUser;
+
+        _ctrl.myVueLocallyDefinedComponents = {
+            xxx: sessions,
+            zzz: uploads
+        }        
 
         var groups = {
             'outcome'        : { position: 100 , title : 'Outcomes'      },

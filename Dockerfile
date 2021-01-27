@@ -15,6 +15,8 @@ RUN npm install -q
 
 COPY . ./
 
+RUN npm run build
+
 ENV PORT 8000
 
 EXPOSE 8000

@@ -52,16 +52,19 @@ require.config({
         'facebook'        : '//connect.facebook.net/en_US/sdk',
         'gmapsapi'        : 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places',
         'ngVue'           : cdnHost + 'ngVue@1.7.7/build/index.min',
+        'angular-vue'     : cdnHost + '@scbd/angular-vue@2.0.0/dist/angular-vue.min',
         'conferenceCal'   : cdnHost + '@scbd/conference-cal@0.1.2/dist/lib/ConferenceCal.umd.min',
         'angular-cache'   : cdnHost + 'angular-cache@4.6.0/dist/angular-cache.min',
         'PageHeaderFixed' : cdnHost + '@scbd/page-header-fixed/dist/PageHeaderFixed.umd.min',
         'PageHeader'      : cdnHost + '@scbd/page-header@0.0.70/dist/PageHeader.umd.min',
         'PageFooter'      : cdnHost + '@scbd/page-footer/dist/PageFooter.umd.min',
         'nlp'             : cdnHost + 'compromise/builds/compromise.min',
+        'ky'              : 'libs/globals/ky',
     },
     shim: {
         'angular'              : { deps : ['jquery'], exports: 'angular' },
         'angular-flex'         : { deps : ['angular', 'jquery'] },
+        'angular-vue'          : { deps : ['angular-flex', 'vue'] },
         'ngRoute'              : { deps : ['angular-flex'] },
         'ngCookies'            : { deps : ['angular-flex'] },
         'ngAnimate'            : { deps : ['angular-flex'] },
@@ -102,6 +105,7 @@ define ('popper.js', [ cdnHost + 'popper.js@1.16.0/dist/umd/popper.min'], functi
   return popper
 })
 
+define('Vue', ['vue'], function(vue) { return vue; })
 define('vue', [cdnHost +'vue@2.6.12/dist/vue.min',cdnHost +'vue-i18n@8.21.1/dist/vue-i18n.min',cdnHost +'@scbd/sso-vue-plugin-scbd@0.0.1'], function(Vue, i18n, ssoSCBD){
     window.Vue     = Vue;
     window.VueI18n = i18n;

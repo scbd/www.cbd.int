@@ -1,5 +1,8 @@
 <div class="meeting-documents">
 
+    <xxx ng-vue="{ components : documentsCtrl.myVueLocallyDefinedComponents }"></xxx>
+    <zzz ng-vue="{ components : documentsCtrl.myVueLocallyDefinedComponents }"></zzz>
+
     <div ng-repeat="alert in ::documentsCtrl.meeting.alerts" class="alert" ng-class="{ ['alert-'+(alert.level||'primary')]:true }" role="alert">
         <strong><a href="{{alert.url}}" ng-bind="alert.title | lstring" target="_self" style="color:inherit;"></a></strong>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="documentsCtrl.hideAlert(alert)">
