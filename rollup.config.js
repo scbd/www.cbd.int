@@ -2,7 +2,8 @@
 import { terser } from 'rollup-plugin-terser';
 import path from 'path'
 import vue  from 'rollup-plugin-vue'
-//import nodeResolve from '@rollup/plugin-node-resolve'
+import nodeResolve from '@rollup/plugin-node-resolve'
+import commonjs from 'rollup-plugin-commonjs';
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 
 const outputDir = 'dist';
@@ -12,12 +13,14 @@ const globals = {
   Vue    : 'Vue',
   vue    : 'Vue',
   ky     : 'ky',
+  // luxon  : 'luxon'
 };
-
 
 export default [
   exposeGlobal('node_modules/ky/index.js', 'ky'),
-  exposeVueComponent('meetings/sessions'),
+  // exposeGlobal('node_modules/luxon/build/amd/luxon.js', 'luxon'),
+  exposeVueComponent('meetings/sessions/view'),
+  exposeVueComponent('meetings/sessions/edit'),
   exposeVueComponent('meetings/uploads')
 ];
 
@@ -39,6 +42,8 @@ function exposeVueComponent(relativePath) {
       external: [ ...Object.keys(globals) ],
       plugins : [
         vue(),
+        commonjs(),
+        nodeResolve({ browser: true, mainFields: [ 'browser', 'module', 'main' ] }),
         terser(),
       ],
     }

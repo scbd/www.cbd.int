@@ -60,6 +60,7 @@ require.config({
         'PageFooter'      : cdnHost + '@scbd/page-footer/dist/PageFooter.umd.min',
         'nlp'             : cdnHost + 'compromise/builds/compromise.min',
         'ky'              : 'libs/globals/ky',
+        'luxon'           : 'libs/globals/luxon',
     },
     shim: {
         'angular'              : { deps : ['jquery'], exports: 'angular' },
