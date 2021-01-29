@@ -1,6 +1,6 @@
-define(['lodash', 'angular', 'moment', 'components/meetings/sessions', 'components/meetings/uploads', 'angular-vue', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
+define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'components/meetings/sessions/edit','components/meetings/uploads', 'angular-vue', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
         'css!./meeting-documents.css', 'angular-cache', 'css!./agenda.css', 'filters/moment', 'ngCookies'
-], function(_, ng, moment, sessions, uploads) {
+], function(_, ng, moment, sessionsView, sessionsEdit, uploads) {
     //'css!./agenda.css' // moved to template
     var STATISTICS = {}; 
 
@@ -13,7 +13,7 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions', 'componen
         var currentUser;
 
         _ctrl.vueOptions = {
-          components: { sessions: sessions, uploads: uploads },
+          components: { sessions: sessionsView, uploads: uploads },
           i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
         };
 
@@ -104,7 +104,7 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions', 'componen
                 return meeting; // force resolve
 
             }).then(function(meeting) {
-
+          
                 if(!meeting)
                     return;
 
@@ -122,11 +122,9 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions', 'componen
                     });
                 });
 
-
                 for(var group in groups) {
-
-                    var docs =  _.where(documents, { displayGroup : group });
-
+                    var docs =  _.where(documents, { displayGroup : group === 'statement'? 'official' :group });
+console.log(group)
                     if(!docs.length)
                         continue;
 
@@ -150,11 +148,12 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions', 'componen
                         };
                     }
                 }
-
+                
                 updateMaxTabCount();
                 loadReport();
                 loadDecisions();
                 loadNotifications();
+
             }).then(function(){
                 switchTab();
             }).catch(console.error).finally(function(){ _ctrl.loaded = true; });
