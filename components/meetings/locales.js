@@ -1,5 +1,9 @@
-export default {
+export default { messages: {
   en:{
-    hello:'world'
+    hello:'world',
+    CBD: 'CBD',
+    NP: 'NP',
+    CP: 'CP'
   }
+}
 }
