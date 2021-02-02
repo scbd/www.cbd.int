@@ -1,33 +1,33 @@
 
 <template >
   <div>
-
     <Accordion :length="sessionsLength">
 
-      <template v-for="(session, index) in sessions"  v-slot:[`header-${index}`]="">
-        Date {{index}} 
+      <template v-for="({ startDate, title}, index) in sessions"  v-slot:[`header-${index}`]="">
+        {{startDate | dateTimeFilter }} - {{ title.en }}
       </template>
 
-      <template v-for="(session, index) in sessions"  v-slot:[`body-${index}`]="">
-        <table class="table table-striped table-hover no-border-first-row sessions">
-          <!-- <col id="index-col" class="index-col d-none d-md-table-cell"/> -->
-          <!-- <col id="agenda-items-col" class="agenda-items-col"/>
-          <col id="time-col" class="time-col"/>
-          <col id="organization-col" /> -->
-          <!-- <col id="files-col" class="files-col"/>
-          <col id="permissions-col" class="d-none d-md-table-cell"/> -->
+      <template v-for="({ statements }, index) in sessions"  v-slot:[`body-${index}`]="" >
+        <table class="table table-striped table-hover no-border-first-row sessions" v-bind:key="index">
           <tbody>
-            <tr>
-              <th scope="row" class="index-col d-none d-md-table-cell">1.</th>
-              <td class="agenda-items-col"><span class="badge label agenda NP">NP 16</span></td>
-              <td class="time-col">{{ session.startDate | timeFilter }}</td>
-              <td >Canada</td>
-              <td class="files-col">
-                <button type="button" class="btn btn-default btn-lg dropdown-toggle">
-                  <i class="fa fa-arrow-circle-down" style="font-size:1.25em"></i>
-                </button>
+            <tr v-for="({ agendaItems, time, organization, public: publicVisible }, index) in statements" v-bind:key="index">
+
+              <th scope="row" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">{{index+1}}.</th>
+
+              <td class="agenda-items-col" style="text-align: center; vertical-align: middle;">
+                <AgendaItem v-for="(item, index) in agendaItems" v-bind:key="index" v-bind="item"/>
               </td>
-              <td class="files-col d-none d-md-table-cell ">Not Public</td>
+
+              <td class="time-col" style="text-align: center; vertical-align: middle;">{{ time | timeFilter }}</td>
+
+              <td style="vertical-align: middle;">{{ organization.title }} <span>{{ organization.type }}</span> </td>
+
+              <td class="files-col" style="text-align: center; vertical-align: middle;">
+
+              </td>
+              <td class="d-none d-md-table-cell files-col" style="text-align: center; vertical-align: middle;"> 
+                <i v-if="publicVisible" class="fa fa-eye-slash" style="font-size:1.25em"/> 
+              </td>
             </tr>
           </tbody>
         </table>
@@ -39,17 +39,24 @@
 
 
 <script>
- import { DateTime } from 'luxon'
-import Accordion from './accordion.vue'
+import Accordion  from './accordion.vue'
+import AgendaItem from './agenda-item.vue'
+import i18n       from '../locales.js'
+
+import { DateTime } from 'luxon'
 import { getSessions } from '../api.js'
 import { isConference, isMeeting, getMeetingCode } from '../util'
-import   i18n                                      from '../locales.js'
+
 
 export default {
   name: 'SessionsView',
-  components:{ Accordion },
+  props:{
+    token: { type: String, required: false },
+    user: { type: Object, required: false },
+  },
+  components:{ Accordion, AgendaItem },
   computed:{ sessionsLength },
-  filters: { timeFilter },
+  filters: { timeFilter, dateTimeFilter },
   i18n,
   mounted,
   data
@@ -66,6 +73,7 @@ function sessionsLength(){
 async function mounted(){
 
   this.sessions = await getSessions()
+
   console.log('isConference'  , isConference  ())
   console.log('isMeeting'     , isMeeting     ())
   console.log('getMeetingCode', getMeetingCode())
@@ -74,6 +82,11 @@ async function mounted(){
 function timeFilter (isoDateString)  {
   return DateTime.fromISO(isoDateString).toFormat('T')
 }
+
+function dateTimeFilter (isoDateString) {
+  return DateTime.fromISO(isoDateString).toFormat('T  - cccc, d MMMM yyyy')
+}
+
 </script>
 
 <style scoped>
@@ -104,60 +117,5 @@ table.sessions {
 .time-col{
   width:65px;
   text-align: center;
-}
-
-table.sessions > tbody > tr > td {
-  border: 1px solid red;
-}
-/*  */
-
-.label.agenda.CBD {
-    color: #fff;
-    background: #009B48;
-}
-
-.label.agenda.CBD {
-    color: #fff;
-    background: #009B48;
-}
-.label.agenda.CP {
-    color: #fff;
-    background: #A05800;
-}
-
-.label.agenda.CP {
-    color: #fff;
-    background: #A05800;
-}
-.label.agenda.NP {
-    color: #fff;
-    background: #0086B7;
-}
-.label.agenda.NP {
-    color: #fff;
-    background: #0086B7;
-}
-.label.agenda {
-    color: #fff;
-    background: #777;
-    display: inline-block;
-    min-width: 55px;
-}
-.label.agenda {
-    color: #fff;
-    background: #777;
-    display: inline-block;
-    min-width: 55px;
-}
-.badge {
-    display: inline-block;
-    padding: .25em .4em;
-    font-size: 75%;
-    font-weight: 700;
-    line-height: 1;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: .25rem;
 }
 </style>
