@@ -1,6 +1,6 @@
 
 <template >
-  <div>
+  <div >
     <Accordion :length="sessionsLength">
 
       <template v-for="({ startDate, title}, index) in sessions"  v-slot:[`header-${index}`]="">
@@ -10,7 +10,7 @@
       <template v-for="({ statements }, index) in sessions"  v-slot:[`body-${index}`]="" >
         <table class="table table-striped table-hover no-border-first-row sessions" v-bind:key="index">
           <tbody>
-            <tr v-for="({ agendaItems, time, organization, public: publicVisible }, index) in statements" v-bind:key="index">
+            <tr v-for="({ agendaItems, time, organization, public: publicVisible, files }, index) in statements" v-bind:key="index">
 
               <th scope="row" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">{{index+1}}.</th>
 
@@ -20,12 +20,12 @@
 
               <td class="time-col" style="text-align: center; vertical-align: middle;">{{ time | timeFilter }}</td>
 
-              <td style="vertical-align: middle;">{{ organization.title }} <span>{{ organization.type }}</span> </td>
+              <td style="vertical-align: middle;">{{ organization.title }} <span class="float-right type">{{ organization.type }}</span> </td>
 
               <td class="files-col" style="text-align: center; vertical-align: middle;">
-
+                <FilesView :files="files"/>
               </td>
-              <td class="d-none d-md-table-cell files-col" style="text-align: center; vertical-align: middle;"> 
+              <td class="d-none d-md-table-cell private-col" style="text-align: center; vertical-align: middle;"> 
                 <i v-if="publicVisible" class="fa fa-eye-slash" style="font-size:1.25em"/> 
               </td>
             </tr>
@@ -41,6 +41,7 @@
 <script>
 import Accordion  from './accordion.vue'
 import AgendaItem from './agenda-item.vue'
+import FilesView from './files-view.vue'
 import i18n       from '../locales.js'
 
 import { DateTime } from 'luxon'
@@ -54,7 +55,7 @@ export default {
     token: { type: String, required: false },
     user: { type: Object, required: false },
   },
-  components:{ Accordion, AgendaItem },
+  components:{ Accordion, AgendaItem, FilesView},
   computed:{ sessionsLength },
   filters: { timeFilter, dateTimeFilter },
   i18n,
@@ -90,6 +91,10 @@ function dateTimeFilter (isoDateString) {
 </script>
 
 <style scoped>
+.type{
+  font-weight: lighter;
+  text-transform: uppercase;
+}
 table.sessions {
   table-layout: fixed;
   width: 100%;
@@ -109,13 +114,25 @@ table.sessions {
 
 
 .files-col{
+  width:340px;
+  text-align: center;
+  vertical-align: middle;
+}
+.private-col{
   width:65px;
   text-align: center;
   vertical-align: middle;
 }
-
 .time-col{
   width:65px;
   text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+  .files-col{
+    width:65px;
+    text-align: center;
+    vertical-align: middle;
+  }
 }
 </style>
