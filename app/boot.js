@@ -60,7 +60,8 @@ require.config({
         'PageFooter'      : cdnHost + '@scbd/page-footer/dist/PageFooter.umd.min',
         'nlp'             : cdnHost + 'compromise/builds/compromise.min',
         'ky'              : 'libs/globals/ky',
-        'luxon'           : 'libs/globals/luxon',
+        'luxon'           : cdnHost + 'luxon@1.25.0/build/amd/luxon',
+        'vue-multiselect' : cdnHost + 'vue-multiselect@2.1.6/dist/vue-multiselect.min.js'
     },
     shim: {
         'angular'              : { deps : ['jquery'], exports: 'angular' },
