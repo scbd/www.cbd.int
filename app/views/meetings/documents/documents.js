@@ -4,13 +4,16 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
     //'css!./agenda.css' // moved to template
     var STATISTICS = {}; 
 
-	return ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', '$cookies', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting, CacheFactory, $cookies) {
+	return ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', '$cookies', 'apiToken', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting, CacheFactory, $cookies, apiToken) {
 
         var _ctrl = $scope.documentsCtrl = this;
         var meetingCode = $route.current.params.meeting.toUpperCase();
         var hardTab = false;
         var httpCache = initCache();
         var currentUser;
+
+
+        $scope.tokenReader = function(){ console.log('tokenReader clled'); return apiToken.get()}
 
         _ctrl.vueOptions = {
           components: { sessions: sessionsView, uploads: uploads },
@@ -124,7 +127,7 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
 
                 for(var group in groups) {
                     var docs =  _.where(documents, { displayGroup : group === 'statement'? 'official' :group });
-console.log(group)
+
                     if(!docs.length)
                         continue;
 

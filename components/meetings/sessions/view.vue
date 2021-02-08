@@ -4,29 +4,29 @@
     <Accordion :length="sessionsLength">
 
       <template v-for="({ startDate, title}, index) in sessions"  v-slot:[`header-${index}`]="">
-        {{startDate | dateTimeFilter }} - {{ title.en }}
+        {{ header({ title, startDate })}}
       </template>
 
-      <template v-for="({ statements }, index) in sessions"  v-slot:[`body-${index}`]="" >
+      <template v-for="({ interventions }, index) in sessions"  v-slot:[`body-${index}`]="" >
         <table class="table table-striped table-hover no-border-first-row sessions" v-bind:key="index">
           <tbody>
-            <tr v-for="({ agendaItems, time, organization, public: publicVisible, files }, index) in statements" v-bind:key="index">
+            <tr v-for="({ agendaItem, datetime, title, organizationType, status, files }, index) in interventions" v-bind:key="index">
 
               <th scope="row" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">{{index+1}}.</th>
 
               <td class="agenda-items-col" style="text-align: center; vertical-align: middle;">
-                <AgendaItem v-for="(item, index) in agendaItems" v-bind:key="index" v-bind="item"/>
+                <AgendaItem  :item="agendaItem"/>
               </td>
 
-              <td class="time-col" style="text-align: center; vertical-align: middle;">{{ time | timeFilter }}</td>
+              <td class="time-col" style="text-align: center; vertical-align: middle;">{{ datetime | timeFilter }}</td>
 
-              <td style="vertical-align: middle;">{{ organization.title }} <span class="float-right type">{{ organization.type }}</span> </td>
+              <td style="vertical-align: middle;">{{title}}<span class="float-right type">{{organizationType}}</span> </td>
 
               <td class="files-col" style="text-align: center; vertical-align: middle;">
                 <FilesView :files="files"/>
               </td>
-              <td class="d-none d-md-table-cell private-col" style="text-align: center; vertical-align: middle;"> 
-                <i v-if="publicVisible" class="fa fa-eye-slash" style="font-size:1.25em"/> 
+              <td class="d-none d-md-table-cell private-col" style="text-align: center; vertical-align: middle;">
+                <i v-if="status==='hidden'" class="fa fa-eye-slash" style="font-size:1.25em"/>
               </td>
             </tr>
           </tbody>
@@ -41,26 +41,31 @@
 <script>
 import Accordion  from './accordion.vue'
 import AgendaItem from './agenda-item.vue'
-import FilesView from './files-view.vue'
+import FilesView  from './files-view.vue'
 import i18n       from '../locales.js'
 
-import { DateTime } from 'luxon'
-import { getSessions } from '../api.js'
-import { isConference, isMeeting, getMeetingCode } from '../util'
+import { DateTime                    } from 'luxon'
+import { addApiOptions , getSessions } from '../api.js'
+import { getMeetingCode              } from '../util'
 
 
 export default {
   name: 'SessionsView',
   props:{
-    token: { type: String, required: false },
-    user: { type: Object, required: false },
+    tokenReader: { type: Function, required: false },
   },
   components:{ Accordion, AgendaItem, FilesView},
   computed:{ sessionsLength },
-  filters: { timeFilter, dateTimeFilter },
+  methods: { header },
+  filters: { timeFilter },
   i18n,
   mounted,
-  data
+  data,
+  watch: { 
+    tokenReader: function(tokenReader) {  
+      if(tokenReader) addApiOptions({ tokenReader }) 
+    }
+  }
 }
 
 function data(){
@@ -73,11 +78,8 @@ function sessionsLength(){
 
 async function mounted(){
 
-  this.sessions = await getSessions()
+  this.sessions = await getSessions(getMeetingCode())
 
-  console.log('isConference'  , isConference  ())
-  console.log('isMeeting'     , isMeeting     ())
-  console.log('getMeetingCode', getMeetingCode())
 }
 
 function timeFilter (isoDateString)  {
@@ -88,6 +90,9 @@ function dateTimeFilter (isoDateString) {
   return DateTime.fromISO(isoDateString).toFormat('T  - cccc, d MMMM yyyy')
 }
 
+function header({title, startDate }){
+  return title? title : dateTimeFilter(startDate)
+}
 </script>
 
 <style scoped>

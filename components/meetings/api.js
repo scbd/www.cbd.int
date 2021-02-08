@@ -1,8 +1,73 @@
 
+import ky from 'ky'
+//
 
-export const getSessions = async (conferenceId='5f626862cabfb1fd7d67eac2') => {
-  console.log(`getSessions: ${conferenceId}`)
-  return sessions
+const globals = { http: undefined }
+const defaultOptions = { prefixUrl: 'https://api.cbddev.xyz', timeout  : 30 * 1000 } //https://api.cbd.int 'https://api.cbddev.xyz' 'http://localhost:8000'
+export const addApiOptions = (options = {}) => {
+  const { tokenReader, prefixUrl, timeout } = { ...defaultOptions, ...options }
+  const   hooks                             = tokenReader? { beforeRequest: [ async (request) => { request.headers.set('Authorization', `Token ${await tokenReader()}`); }, ], } : ''
+  const   kyOptions                         = hooks? { prefixUrl, timeout, hooks } : { prefixUrl, timeout }
+
+  globals.http    = ky.create(kyOptions)
+
+  return globals.http
+}
+
+export const getSessions = async (code) => {
+  const q            = code? { 'meetings.symbol': code } : {}
+  const f            = { startDate: 1 , title: 1 }
+  const s            = { startDate: 1 }
+  const searchParams = toURLSearchParams({ q, f, s });
+  const data         = await globals.http.get('api/v2021/meeting-sessions', { searchParams }).json();
+
+  const interventionsPromises = []
+
+  if(!code) return data
+
+  for (const [ index, row ] of data.entries())
+    interventionsPromises[index] = getInterventions(row._id)
+
+  const interventions = await Promise.all(interventionsPromises)
+
+  for (const [ index, row ] of data.entries())
+    data[index] = { ...row, interventions: interventions[index] }
+
+  return data
+}
+
+export const getSession = async (_id) => {
+  const data          = await globals.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(_id)}`).json();
+  const interventions =  await getInterventions(data._id)
+
+  return { ...data, interventions }
+}
+
+export const getInterventions = async (meetingSessionId) => {
+  const searchParams = toURLSearchParams({ s: { startDate: 1 }, f: { } });
+  const data         = await globals.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(meetingSessionId)}/interventions`, { searchParams }).json();
+
+  return data
+}
+
+addApiOptions()
+
+function toURLSearchParams(params) {
+  if (!params) return undefined;
+
+  const urlEncodedUrlParams = {};
+  const paramKeys           = Object.keys(params);
+
+  paramKeys.forEach((key) => {
+    let value = params[key];
+
+    if (value instanceof Object) value = JSON.stringify(value, null, '');
+    else if (value instanceof Date) value = value.toISOString();
+
+    urlEncodedUrlParams[key] = value;
+  });
+
+  return new URLSearchParams(urlEncodedUrlParams);
 }
 
 

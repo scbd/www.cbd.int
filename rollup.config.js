@@ -13,7 +13,7 @@ const globals = {
   Vue    : 'Vue',
   vue    : 'Vue',
   ky     : 'ky',
-  // luxon  : 'luxon'
+  luxon  : 'luxon'
 };
 
 export default [

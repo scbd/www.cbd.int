@@ -17,9 +17,16 @@ export const getMeetingCode = () => {
   const { pathname } = window.location
 
   if(isMeeting())
-    return pathname.replace('/meetings/', '')
+    return (pathname.split('/') || [])[2]
   if(isConference())
     return (pathname.split('/') || [])[3]
   else return ''
   //else throw new Error('Sessoins component not used on conference or meeting page')
+}
+
+export const getSessionId= () => {
+  const { pathname } = window.location
+
+  return (pathname.split('/') || [])[4]
+
 }

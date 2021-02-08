@@ -1,40 +1,33 @@
 
 <template >
   <div class="position-relative">
+    <!-- mobile view to medium -->
     <button v-on:click="toggleDropdown($event)" type="button" class="d-md-none btn btn-default btn-lg">
       <i class="fa fa-arrow-circle-down" style="font-size:1.25em"/>
     </button>
+
     <ul ref="dropDown" :class="{ show: this.show }" class="dropdown-menu dropdown-menu-right"  >
 
       <li  class="dropdown-header">Select a file to download</li>
 
-      <li class="dropdown-item ng-scope" ng-repeat="(language,types) in byLanguages track by language" style="font-size:16px;margin:4px 0px;white-space:nowrap;">
-
-          <a role="menuitem" tabindex="-1" style="display:inline-block;width:120px;font-size:inherit;" class="language ng-binding">
-              العربية
+      <li v-for="{language, type, url} in files" v-bind:key="url"  class="dropdown-item ng-scope"  style="font-size:16px;margin:4px 0px;white-space:nowrap;">
+          <a :href="url" role="menuitem" tabindex="-1"  class="language ng-binding">
+            {{ language| langTextFilter }}
+            <i :class="getIconClass(type)" class="fa ml-5"/>
           </a>
-
-          <span>
-              <a ng-repeat="(type, file) in ::types track by type" class="btn btn-sm btn-danger" style="margin-right:5px;font-size:16px;" target="_blank" href="https://www.cbd.int/doc/c/a270/2272/08837a5d085d01ff4c2adb17/excop-02-l-01-ar.pdf">
-                  <i class="fa fa-file-pdf-o"></i>
-              </a>
-              <a ng-repeat="(type, file) in ::types track by type" class="btn btn-sm btn-primary" style="margin-right:5px;font-size:16px;" target="_blank" href="https://www.cbd.int/doc/c/a7e4/f7d9/03b82c86d8713a2e6f6a8150/excop-02-l-01-ar.docx">
-                  <i class="fa fa-file-word-o"></i>
-              </a>
-          </span>
       </li>
     </ul>
-    <div class="d-md-block document-files">
-        <div v-for="( languages, mimeType ) in files" v-bind:key="mimeType" class="d-none d-md-block" >
-            <i :class="getIconClass(mimeType)" class="fa"/>
-            <span v-for=" ({ url }, lang) in languages"  v-bind:key="lang" >
-                <a target="_blank" :href="url" >
-                    <span class="d-none d-md-inline language">
-                        {{ lang| langTextFilter }}
-                    </span>
-                </a>
-            </span>
 
+    <!-- Medium view and above -->
+    <div class="d-md-block document-files">
+        <div v-for=" {language, type, url} in files" v-bind:key="url" class="d-none d-md-block" >
+            
+            <a target="_blank" :href="url" >
+              <i :class="getIconClass(type)" class="fa"/>
+                <span class="d-none d-md-inline language">
+                    {{ language| langTextFilter }}
+                </span>
+            </a>
         </div>
     </div>
   </div>
@@ -83,7 +76,7 @@ function toggleDropdown(e){
 }
 
 function langTextFilter(langCode){ 
-  return langMap.get(langCode) || '' 
+  return langMap.get(langCode) || 'Not Specified' 
 }
 
 function getIconClass(mimeType){
@@ -97,9 +90,6 @@ function outSideClick(e){
   this.show = false
   e.stopPropagation()
 }
-
-
-
 </script>
 
 <style scoped>
@@ -115,5 +105,5 @@ function outSideClick(e){
   top: 0px; 
   left: 0px; 
   transform: translate3d(-216px, 48px, 0px);
-  }
+}
 </style>
