@@ -13,7 +13,7 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
         var currentUser;
 
 
-        $scope.tokenReader = function(){ console.log('tokenReader clled'); return apiToken.get()}
+        $scope.tokenReader = function(){ return apiToken.get()}
 
         _ctrl.vueOptions = {
           components: { sessions: sessionsView, uploads: uploads },

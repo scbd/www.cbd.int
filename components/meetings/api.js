@@ -26,7 +26,7 @@ export const getSessions = async (code) => {
   if(!code) return data
 
   for (const [ index, row ] of data.entries())
-    interventionsPromises[index] = getInterventions(row._id)
+    interventionsPromises[index] = getInterventionsBySession(row._id)
 
   const interventions = await Promise.all(interventionsPromises)
 
@@ -38,16 +38,51 @@ export const getSessions = async (code) => {
 
 export const getSession = async (_id) => {
   const data          = await globals.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(_id)}`).json();
-  const interventions =  await getInterventions(data._id)
+  const interventions = await getInterventionsBySession(data._id)
 
   return { ...data, interventions }
 }
 
-export const getInterventions = async (meetingSessionId) => {
-  const searchParams = toURLSearchParams({ s: { startDate: 1 }, f: { } });
+export const getInterventionsBySession = async (meetingSessionId) => {
+  const searchParams = toURLSearchParams({ s: { datetime: 1 },  f: { datetime:1, agendaItem:1, datetime:1, title:1, organizationType:1, status:1, files:1 } });
   const data         = await globals.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(meetingSessionId)}/interventions`, { searchParams }).json();
 
   return data
+}
+
+export const getInterventions = async (symbol) => {
+  //q: { 'meeting.symbol': symbol },
+  const searchParams = toURLSearchParams({  s: { datetime: 1, _id: 1} }); //,  f: { datetime:1, agendaItem:1, datetime:1, title:1, organizationType:1, status:1, files:1 }
+  const data         = await globals.http.get(`api/v2021/meeting-interventions`, { searchParams }).json(); //, { searchParams }
+
+  
+
+  return groupBySession(data)
+}
+
+function groupBySession(interventions){
+  const sessions = []
+
+  for (const key of getAllSessions(interventions)){
+    const session       = interventions.filter(({ sessionId })=> sessionId === key)
+    const sessionGroups = groupSessionByPending(interventions)
+
+    sessions.push(sessionGroups)
+  }
+
+  return sessions
+}
+
+function groupSessionByPending(interventions){
+  const pending    = interventions.filter(({ status }) => status === 'pending')
+  const notPending = interventions.filter(({ status }) => status !== 'pending')
+
+
+  return pending.length? [ pending, notPending ] : interventions
+}
+
+function getAllSessions(interventions){
+  return Array.from(new Set(interventions.map(({ sessionId }) => sessionId)))
 }
 
 addApiOptions()

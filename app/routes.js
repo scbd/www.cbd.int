@@ -76,7 +76,8 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         .when('/:meeting/documents/status',   { templateUrl : 'views/meetings/documents/documents-progress.html',      resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService", "ScbdStaff"]) } })
         .when('/:meeting/documents/:id',      { templateUrl : 'views/meetings/documents/management/document-id.html',  resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService"]) } })
         .when('/:meeting/documents',          { redirectTo  : '/:meeting'} )
-        .when('/:meeting/sessions/:sessionId', { templateUrl   : 'views/meetings/documents/session-prep.html', resolveController : true,  reloadOnSearch:false })
+        .when('/:meeting/sessions/:sessionId', { templateUrl   : 'views/meetings/documents/statements/session-prep.html', resolveController : true,  reloadOnSearch:false })
+        .when('/:meeting/interpreter-panel', { templateUrl   : 'views/meetings/documents/statements/interpreter.html', resolveController : true,  reloadOnSearch:false })
         .when('/:meeting',                    { templateUrl : 'views/meetings/documents/documents.html',               resolveController : true, reloadOnSearch:false, resolve : { showMeeting : resolveLiteral(true) } } )
         .otherwise({redirectTo: '/404'});
     }

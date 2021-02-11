@@ -1,6 +1,6 @@
 
 <template >
-  <span class="badge label agenda" :class="[styleClass]">{{name? $t(name) : ''}} {{item}} </span>
+  <span v-if="item " class="badge label agenda" :class="[styleClass]">{{name? $t(name) : ''}} {{item}} </span>
 </template>
 
 
