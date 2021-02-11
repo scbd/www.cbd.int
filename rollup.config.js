@@ -21,6 +21,7 @@ export default [
   // exposeGlobal('node_modules/luxon/build/amd/luxon.js', 'luxon'),
   exposeVueComponent('meetings/sessions/view'),
   exposeVueComponent('meetings/sessions/edit'),
+  exposeVueComponent('meetings/sessions/interpreters-view'),
   exposeVueComponent('meetings/uploads')
 ];
 
