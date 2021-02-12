@@ -25,7 +25,7 @@ function name(){
   if(this?.meeting.toLowerCase().includes('cbd')) return 'CBD'
   if(this?.meeting.toLowerCase().includes('cp')) return 'CP'
   if(this?.meeting.toLowerCase().includes('np')) return 'NP'
-
+  if(this?.meeting.toLowerCase().includes('SBSTTA')) return 'SBSTTA'
   return ''
 }
 
