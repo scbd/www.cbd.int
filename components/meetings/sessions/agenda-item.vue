@@ -1,6 +1,6 @@
 
 <template >
-  <span class="badge label agenda" :class="[styleClass]">{{name? $t(name) : ''}} {{item}} </span>
+  <span v-if="item " class="badge label agenda" :class="[styleClass]">{{name? $t(name) : ''}} {{item}} </span>
 </template>
 
 
@@ -25,7 +25,7 @@ function name(){
   if(this?.meeting.toLowerCase().includes('cbd')) return 'CBD'
   if(this?.meeting.toLowerCase().includes('cp')) return 'CP'
   if(this?.meeting.toLowerCase().includes('np')) return 'NP'
-
+  if(this?.meeting.toLowerCase().includes('SBSTTA')) return 'SBSTTA'
   return ''
 }
 
