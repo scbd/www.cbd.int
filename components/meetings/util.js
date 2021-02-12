@@ -30,3 +30,12 @@ export const getSessionId= () => {
   return (pathname.split('/') || [])[4]
 
 }
+
+export const getConferenceCode = () => {
+  const { pathname } = window.location
+  const parts        = pathname.split('/');
+
+  if(isConference() && parts.length > 2)
+    return parts[2]
+  else return ''
+}
