@@ -18,7 +18,7 @@ import Session        from './session.vue'
 import SearchControls from './search-controls.vue'
 
 import { addApiOptions  , getInterventions } from '../api.js'
-import { getMeetingCode                    } from '../util'
+import { getMeetingCode ,                    } from '../util'
 
 export default {
   name      : 'InterpretersView',
@@ -35,5 +35,8 @@ async function created(){
   if(this.tokenReader) addApiOptions({ tokenReader: this.tokenReader })
 
   this.sessionGroups = await getInterventions(getMeetingCode())
+
 }
+
+
 </script>
