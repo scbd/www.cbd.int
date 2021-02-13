@@ -4,9 +4,9 @@
     <tbody v-for="(interventions, i) in getRows()" v-bind:key="i">
       <tr v-for="({ agendaItem, datetime, title, organizationType, status, files }, index) in interventions" v-bind:key="index">
 
-        <th scope="row" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
+        <td scope="row" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
           <span v-if="!isPending(status)">{{index+1}}.</span>
-        </th>
+        </td>
 
         <td class="agenda-items-col" style="text-align: center; vertical-align: middle;">
           <AgendaItem  :item="agendaItem"/>
@@ -19,17 +19,13 @@
 
         <td class="time-col" style="text-align: center; vertical-align: middle;">
           <span v-if="!isPending(status)">{{ datetime | timeFilter('T') }}</span>
-          <small v-if="isPending(status) && !showStatus" class="text-muted lighter">{{$t('Pending')}}...</small>
+          <small v-if="isPending(status) && !showStatus" class="text-muted">{{$t('Pending')}}...</small>
         </td>
 
-        <td style="vertical-align: middle;">{{ title }}<span class="float-right type">{{getOrgType({ organizationType }) }}</span> </td>
+        <td style="vertical-align: middle;"><span class="float-right text-muted">{{getOrgType({ organizationType }) }} </span>  {{ title }} </td>
 
         <td class="files-col" style="text-align: center; vertical-align: middle;">
           <FilesView :files="files"/>
-        </td>
-
-        <td class="d-none d-md-table-cell private-col" style="text-align: center; vertical-align: middle;">
-          <i v-if="status==='hidden'" class="fa fa-eye-slash" style="font-size:1.25em"/>
         </td>
 
       </tr>
@@ -61,11 +57,7 @@ function timeFilter (isoDateString, format='T')  {
 }
 
 function getOrgType({ organizationType }){
-  return isPlainObject(organizationType)? organizationType.acronym : organizationType
-}
-
-function isPlainObject(o) {
-  return Object.prototype.toString.call(o) === '[object Object]' && o?.constructor?.name === 'Object';
+  return (organizationType||{}).acronym || organizationType;
 }
 
 function pendingOrDate({ status, datetime }){
@@ -86,6 +78,10 @@ function getRows(){
 </script>
 
 <style scoped>
+
+table.sessions > tbody > tr > td {
+  padding: 50px;
+}
 .type{
   font-weight: lighter;
   text-transform: uppercase;
@@ -108,9 +104,10 @@ table.sessions {
   vertical-align: middle;
 }
 .files-col{
-  width:340px;
+  width:200px;
   text-align: center;
   vertical-align: middle;
+  white-space: nowrap;
 }
 .private-col{
   width:65px;

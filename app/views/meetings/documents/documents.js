@@ -14,8 +14,8 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
 
 
         $scope.tokenReader = function(){ return apiToken.get()}
-
-        _ctrl.vueOptions = {
+        $scope.route       = { params : $route.current.params }
+        $scope.vueOptions  = {
           components: { sessions: sessionsView, uploads: uploads },
           i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
         };

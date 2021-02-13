@@ -1,8 +1,7 @@
 <div class="meeting-documents">
 
-    <sessions ng-vue="documentsCtrl.vueOptions" :token-reader="tokenReader" ></sessions>
-
-    <uploads ng-vue="documentsCtrl.vueOptions"></uploads>
+    <sessions ng-vue="vueOptions" :route="route" :token-reader="tokenReader" ></sessions>
+    <uploads  ng-vue="vueOptions" :route="route"></uploads>
 
     <div ng-repeat="alert in ::documentsCtrl.meeting.alerts" class="alert" ng-class="{ ['alert-'+(alert.level||'primary')]:true }" role="alert">
         <strong><a href="{{alert.url}}" ng-bind="alert.title | lstring" target="_self" style="color:inherit;"></a></strong>

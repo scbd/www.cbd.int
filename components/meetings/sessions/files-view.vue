@@ -10,22 +10,22 @@
 
       <li  class="dropdown-header">Select a file to download</li>
 
-      <li v-for="{language, type, url} in files" v-bind:key="url"  class="dropdown-item ng-scope"  style="font-size:16px;margin:4px 0px;white-space:nowrap;">
+      <li v-for="{language, contentType, url} in files" v-bind:key="url"  class="dropdown-item ng-scope"  style="font-size:16px;margin:4px 0px;white-space:nowrap;">
           <a :href="url" role="menuitem" tabindex="-1"  class="language ng-binding">
             {{ language| langTextFilter }}
-            <i :class="getIconClass(type)" class="fa ml-5"/>
+            <i :class="getIconClass(contentType)" class="fa ml-5"/>
           </a>
       </li>
     </ul>
 
     <!-- Medium view and above -->
     <div class="d-md-block document-files">
-        <div v-for=" {language, type, url} in files" v-bind:key="url" class="d-none d-md-block" >
-            
+        <div v-for=" {language, contentType, url, public: isPublic} in files" v-bind:key="url" class="d-none d-md-block" >
             <a target="_blank" :href="url" >
-              <i :class="getIconClass(type)" class="fa"/>
+              <i :class="getIconClass(contentType)" class="fa"/>
                 <span class="d-none d-md-inline language">
                     {{ language| langTextFilter }}
+                    <i v-if="!isPublic" class="fa fa-eye-slash" style="font-size:1.25em"/>
                 </span>
             </a>
         </div>
@@ -106,4 +106,9 @@ function outSideClick(e){
   left: 0px; 
   transform: translate3d(-216px, 48px, 0px);
 }
+
+.document-files {
+  text-align: left;
+  padding-left: 25px;
+} 
 </style>
