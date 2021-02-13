@@ -2,7 +2,7 @@
 <template >
   <div class="position-relative">
     <!-- mobile view to medium -->
-    <button v-on:click="toggleDropdown($event)" type="button" class="d-md-none btn btn-default btn-lg">
+    <button v-if="files.length" @click="toggleDropdown($event)" type="button" class="d-md-none btn btn-default btn-lg">
       <i class="fa fa-arrow-circle-down" style="font-size:1.25em"/>
     </button>
 

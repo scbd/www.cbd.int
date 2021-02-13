@@ -2,14 +2,14 @@
 <template >
   <table v-if="getRows().length" class="table table-striped table-hover no-border-first-row sessions" v-bind:key="index">
     <tbody v-for="(interventions, i) in getRows()" v-bind:key="i">
-      <tr v-for="({ agendaItem, datetime, title, organizationType, status, files }, index) in interventions" v-bind:key="index">
+      <tr v-for="({ agenda, agendaItem, datetime, title, organizationType, status, files }, index) in interventions" v-bind:key="index">
 
         <td scope="row" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
           <span v-if="!isPending(status)">{{index+1}}.</span>
         </td>
 
         <td class="agenda-items-col" style="text-align: center; vertical-align: middle;">
-          <AgendaItem  :item="agendaItem"/>
+          <AgendaItem :item="agenda || ( agendaItem && { item: agendaItem})"/>
         </td>
 
         <td v-if="showStatus" class="status-col" style="text-align: center; vertical-align: middle;">
@@ -79,9 +79,6 @@ function getRows(){
 
 <style scoped>
 
-table.sessions > tbody > tr > td {
-  padding: 50px;
-}
 .type{
   font-weight: lighter;
   text-transform: uppercase;

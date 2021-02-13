@@ -13,10 +13,15 @@
       <SearchControls v-if="meetings.length" :meetings="meetings" @query="query"/>
     </keep-alive>
 
+    <div class="text-right text-muted">
+      <span v-if="interventions.length>=maxResultCount">More than {{interventions.length}} records </span>
+      <span v-if="interventions.length <maxResultCount">{{interventions.length}} records </span>
+    </div>
+
     <div class="card mb-3" v-if="interventions.length">
       <Session :interventions="interventions"  :show-status="true"/>
     </div>
-    {{interventions.length}} records
+   
   </div>
 </template>
 
@@ -38,7 +43,11 @@ export default {
 }
 
 function data(){
-  return { interventions: [], meetings : [] }
+  return { 
+    interventions: [], 
+    meetings : [],
+    maxResultCount : 50,
+    }
 }
 
 async function created(){
@@ -52,12 +61,14 @@ async function created(){
 async function query(queryArgs){
 
   const { query, freeText }  = queryArgs;
-  const status = { status: 'pending' };
+  const isPending = { status: 'pending' };
+  const hasFiles  = { 'files.0': {$exists: true} }; // has at least one file
 
-  const q = mergeQueries(query, status);
+  const q = mergeQueries(query, isPending, hasFiles);
   const t = freeText;
+  const l = this.maxResultCount;
 
-  this.interventions = await this.api.queryInterventions({ q, t, l:50 })
+  this.interventions = await this.api.queryInterventions({ q, t, l })
 }
 
 </script>
