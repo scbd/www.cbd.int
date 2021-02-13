@@ -5,8 +5,9 @@ import { deleteFalsyKey } from './util.js'
 
 let sitePrefixUrl = 'https://api.cbddev.xyz';
 
-if(/\.cbd\.int$/   .test(window.location.hostname)) sitePrefixUrl= 'https://api.cbd.int';
-if(/\.cbddev\.xyz$/.test(window.location.hostname)) sitePrefixUrl= 'https://api.cbddev.xyz';
+if(/\.cbd\.int$/i   .test(window.location.hostname)) sitePrefixUrl= 'https://api.cbd.int';
+if(/\.cbddev\.xyz$/i.test(window.location.hostname)) sitePrefixUrl= 'https://api.cbddev.xyz';
+if(/\localhost$/i   .test(window.location.hostname)) sitePrefixUrl= 'http://localhost:8000';
 
 const defaultOptions = { prefixUrl: sitePrefixUrl, timeout  : 30 * 1000 }
 
@@ -37,7 +38,7 @@ export default class Api
   async queryMeetings({q,f,t,s,l,sk})  {
 
     const searchParams = toURLSearchParams({q,f,t,s,l,sk})
-    const meeting      = await this.http.get(`api/v2016/meetings`, { searchParams }).json(); //, { searchParams }
+    const meeting      = await this.http.get(`api/v2016/meetings`, { searchParams }).json().catch(tryCastToApiError); //, { searchParams }
 
     return meeting;
   }
@@ -72,7 +73,7 @@ export default class Api
     const q = { code };
 
     const searchParams  = toURLSearchParams({ q, fo: 1});
-    const conference = await this.http.get(`api/v2016/conferences`, { searchParams }).json();
+    const conference = await this.http.get(`api/v2016/conferences`, { searchParams }).json().catch(tryCastToApiError);
 
     return conference
   }
@@ -84,7 +85,7 @@ export default class Api
   async queryInterventions({q,f,t,s,l,sk}) {
 
     const searchParams  = toURLSearchParams({q,f,t,s,l,sk});
-    const interventions = await this.http.get(`api/v2021/meeting-interventions`, { searchParams }).json();
+    const interventions = await this.http.get(`api/v2021/meeting-interventions`, { searchParams }).json().catch(tryCastToApiError);
 
     return interventions
   }
@@ -94,17 +95,60 @@ export default class Api
     const {q,f,t,s,l,sk} = options;
 
     const searchParams  = toURLSearchParams({q,f,t,s,l,sk});
-    const interventions = await this.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}/interventions`, { searchParams }).json();
+    const interventions = await this.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}/interventions`, { searchParams }).json().catch(tryCastToApiError);
 
     return interventions
   }
 
   async getInterventionById (interventionId) {
 
-    const interventions = await this.http.get(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}`).json();
+    const interventions = await this.http.get(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}`).json().catch(tryCastToApiError);
 
     return interventions
   }
+
+  //////////////////////////
+  // Interventions Files
+  ////////////////////////
+
+  async createInterventionFileSlot(pass, data){
+    const headers = new Headers();
+
+    headers.append("Authorization", "Pass "+pass);
+    headers.append("Content-Type", "application/json");
+    
+    const requestOptions = {
+      method  : 'POST',
+      headers : headers,
+      body    : JSON.stringify(data)
+    };
+
+    const slot = await this.http("api/v2021/meeting-interventions/slot", requestOptions).json().catch(tryCastToApiError);
+
+    return slot;
+}
+
+  async commitInterventionFileSlot(slotId, passCode, meetingId){
+    if(!slotId) throw new Error("slotId is empty")
+
+    const headers = new Headers();
+
+    headers.append("Authorization", "Pass "+passCode);
+    headers.append("Content-Type", "application/json");
+    
+    const data = { meetingId:  meetingId };
+
+    let requestOptions = {
+        method  : 'PUT',
+        headers : headers,
+        body    : JSON.stringify(data)
+    };
+
+    const intervention = await this.http(`api/v2021/meeting-interventions/slot/${encodeURIComponent(slotId)}/commit`, requestOptions).catch(tryCastToApiError);
+
+    return intervention;
+  }
+
 
   //////////////////////////
   // Sessions
@@ -113,14 +157,14 @@ export default class Api
   async querySessions({q,t,s,l,sk}) {
 
     const searchParams = toURLSearchParams({q,t,s,l,sk});
-    const sessions     = await this.http.get(`api/v2021/meeting-sessions`, { searchParams }).json();
+    const sessions     = await this.http.get(`api/v2021/meeting-sessions`, { searchParams }).json().catch(tryCastToApiError);
 
     return sessions
   }
 
   async getSessionById(sessionId, includeInterventions=false) {
 
-    let session       = this.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}`).json();
+    let session       = this.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}`).json().catch(tryCastToApiError);
     let interventions = null;
 
     if(includeInterventions) {
@@ -144,7 +188,7 @@ export default class Api
     const f            = { startDate: 1 , title: 1 }
     const s            = { startDate: 1 }
     const searchParams = toURLSearchParams({ q, f, s });
-    const data         = await this.http.get('api/v2021/meeting-sessions', { searchParams }).json();
+    const data         = await this.http.get('api/v2021/meeting-sessions', { searchParams }).json().catch(tryCastToApiError);
 
     const interventionsPromises = []
 
@@ -207,6 +251,17 @@ function getAllSessions(interventions){
 //////////////////////////
 // Helpers
 ////////////////////////
+
+export async function tryCastToApiError(error) {
+
+  if(error && error.response) {
+      const apiError = await error.response.json().catch(e=>{console.log(e); return null});
+
+      if(apiError) throw apiError;
+  }
+
+  throw error
+}
 
 export function mapObjectId(id){
   return isObjectId(id)? { $oid: id } : id

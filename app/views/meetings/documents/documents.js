@@ -40,10 +40,14 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
         };
 
         _ctrl.showMeeting = showMeeting===undefined ? true : !!showMeeting;
+        _ctrl.uploadStatement = false;
         _ctrl.sort = $location.hash() == 'agenda' ? 'agenda' : 'document';
         _ctrl.tabs = [];
         _ctrl.switchTab  = switchTab;
         _ctrl.hideAlert  = hideAlert;
+        _ctrl.notify = function(msg) {
+            $scope.$emit("showInfo", msg);
+        }
 
         $scope.$watch('documentsCtrl.sort', function(s){
             $location.hash(s=='agenda' ? 'agenda' : null);
