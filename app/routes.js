@@ -104,6 +104,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       .when('/:code/media/:articleTag',             { templateUrl   : 'views/articles/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'media'] }) }, reloadOnSearch:false })
       .when('/:code/information/:articleTag',       { templateUrl   : 'views/articles/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'information'] }) }, reloadOnSearch:false })
       
+      .when('/:code/interpreter-panel',             { templateUrl   : 'views/meetings/documents/statements/interpreter.html', resolveController : true,  reloadOnSearch:false })
       .when('/:code/schedules',                     { templateUrl   : 'views/meetings/documents/agenda.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/insession',                     { templateUrl   : 'views/meetings/documents/in-session-documents.html', resolveController : true, resolve: { }, reloadOnSearch:false })
       .when('/:code/:meeting',                      { templateUrl   : 'views/meetings/introduction.html', resolveController : true, resolve: { routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })

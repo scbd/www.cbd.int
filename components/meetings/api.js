@@ -1,6 +1,6 @@
 
 import ky from 'ky'
-//
+import { deleteFalsyKey } from './util.js'
 
 const globals = { http: undefined }
 const defaultOptions = { prefixUrl: 'https://api.cbddev.xyz', timeout  : 30 * 1000 } //https://api.cbd.int 'https://api.cbddev.xyz' 'http://localhost:8000'
@@ -50,10 +50,11 @@ export const getInterventionsBySession = async (meetingSessionId) => {
   return data
 }
 
-export const getInterventions = async (code) => {
-  const q = makeMeetingConferenceQuery (code)
+export const getInterventions = async (code, t) => {
 
-  const searchParams = toURLSearchParams({ q, s: { datetime: 1, _id: 1} }); //,  f: { datetime:1, agendaItem:1, datetime:1, title:1, organizationType:1, status:1, files:1 }
+  const q = isPlainObject(code)? code : makeMeetingConferenceQuery (code)
+
+  const searchParams = toURLSearchParams({ t, q, s: { datetime: 1, _id: 1} }); //,  f: { datetime:1, agendaItem:1, datetime:1, title:1, organizationType:1, status:1, files:1 }
   const data         = await globals.http.get(`api/v2021/meeting-interventions`, { searchParams }).json(); //, { searchParams }
 
   return groupBySession(data)
@@ -69,10 +70,34 @@ export const getAgendaItemsByMeeting = async (code) => {
   const identifier   = (Array.isArray(code)? code : [code]).map(mapObjectId)
   const q            = { $or: [ { EVT_CD: { $in: identifier } }, { _id: { $in: identifier } } ] }
   const searchParams = toURLSearchParams({ q, f: { agenda: 1, EVT_CD: 1 } }); 
-  const data         = await globals.http.get(`api/v2016/meetings`, { searchParams }).json(); //, { searchParams }
+  const data         = await globals.http.get(`api/v2016/meetings`, { searchParams }).json(); 
 
   return data.map(mapRawAgendaItems)
 }
+
+export const getDatesByMeeting = async (code) => {
+  const identifier   = (Array.isArray(code)? code : [code]).map(mapObjectId)
+  const q            = { $or: [ { EVT_CD: { $in: identifier } }, { _id: { $in: identifier } } ] }
+  const searchParams = toURLSearchParams({ q, f: { EVT_FROM_DT: 1, EVT_TO_DT: 1 }, s:{EVT_HOME_BEG_DT:1} }); 
+  const data         = await globals.http.get(`api/v2016/meetings`, { searchParams }).json(); 
+
+  return getDates(data)
+}
+
+function getDates(data){
+  const lastIndex = data.length? data.length-1: 0
+  const start = new Date(data[0].EVT_FROM_DT)
+  const end   = new Date(data[lastIndex].EVT_TO_DT)
+  const dates =[]
+
+  while(start<=end){
+    dates.push((new Date(start)).toISOString())
+    start.setDate(start.getDate()+1)
+  }
+  return dates
+}
+// EVT_HOME_BEG_DT: "2020-11-17T00:00:00.000Z"
+// EVT_HOME_END_DT: "2021-02-26T00:00:00.000Z"
 //getAgendaItemsByConference('sbstta24-sbi3')
 function mapRawAgendaItems({ EVT_CD, agenda }){
   return { name: EVT_CD, items: agenda.items.map(mapAgendaItems(EVT_CD))}
@@ -80,11 +105,11 @@ function mapRawAgendaItems({ EVT_CD, agenda }){
 
 export const getMeetingCodes = async (code) => {
   const q            = { $or : [ { code }, { _id: mapObjectId(code) }] }
-  const searchParams = toURLSearchParams({ q, f: { MajorEventIDs: 1 } })
+  const searchParams = toURLSearchParams({ q, f: { MajorEventIDs: 1, MinorEventIDs: 1 } })
   const data         = await globals.http.get(`api/v2016/conferences`, { searchParams }).json(); //, { searchParams }
 
 
-  return data.length? data[0].MajorEventIDs : undefined
+  return data.length? [...data[0].MajorEventIDs, ...data[0].MinorEventIDs ] : undefined
 }
 
 function makeMeetingConferenceQuery (code){
@@ -125,6 +150,8 @@ function getAllSessions(interventions){
 function toURLSearchParams(params) {
   if (!params) return undefined;
 
+  params=deleteFalsyKey(params)
+
   const urlEncodedUrlParams = {};
   const paramKeys           = Object.keys(params);
 
@@ -138,6 +165,10 @@ function toURLSearchParams(params) {
   });
 
   return new URLSearchParams(urlEncodedUrlParams);
+}
+
+function isPlainObject(o) {
+  return Object.prototype.toString.call(o) === '[object Object]' && o?.constructor?.name === 'Object';
 }
 
 function mapObjectId(id){
@@ -162,6 +193,6 @@ function mapAgendaItems(meeting){
   return ({ item })=>{
     const acronym = getMeetingAcronym(meeting)
 
-    return { item, name: `${acronym}${item}`}
+    return { identifier:`${meeting}~${item}`, meeting, item, name: `${acronym}${item}`}
   }
 }
