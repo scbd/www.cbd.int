@@ -3,7 +3,12 @@ import ky from 'ky'
 import { isFunction } from 'lodash'
 import { deleteFalsyKey } from './util.js'
 
-const defaultOptions = { prefixUrl: 'https://api.cbddev.xyz', timeout  : 30 * 1000 } //https://api.cbd.int 'https://api.cbddev.xyz' 'http://localhost:8000'
+let sitePrefixUrl = 'https://api.cbddev.xyz';
+
+if(/\.cbd\.int$/   .test(window.location.hostname)) sitePrefixUrl= 'https://api.cbd.int';
+if(/\.cbddev\.xyz$/.test(window.location.hostname)) sitePrefixUrl= 'https://api.cbddev.xyz';
+
+const defaultOptions = { prefixUrl: sitePrefixUrl, timeout  : 30 * 1000 }
 
 export default class Api
 {
@@ -18,12 +23,7 @@ export default class Api
       const kyOptions = { prefixUrl, timeout };
 
       if(tokenReader) {
-        const hooks = { 
-          beforeRequest: [ 
-            async (request) => request.headers.set('Authorization', `Token ${await tokenReader()}`) 
-          ]
-        }
-
+        const hooks = { beforeRequest: [ async (request) => request.headers.set('Authorization', `Token ${await tokenReader()}`) ] }
         kyOptions.hooks = hooks; 
       }
 
