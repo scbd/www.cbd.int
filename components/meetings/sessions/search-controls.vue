@@ -1,21 +1,24 @@
 
 <template >
-  <div class="row">
+  <div class="row mb-3">
     <div class="col-3 pr-0">
       <multiselect
-        v-if="agendaItems && agendaItems.length"
+        v-if="agendaItems"
         id="xxx"
         v-model="selectedAgendaItems"
         deselect-label="remove this value"
-        placeholder="Agenda Item"
+        :placeholder="$t('Agenda Item')"
         :options="agendaItems"
         :searchable="false"
         :multiple="true"
         group-values="items"
         group-label="name"
         :hide-selected="true"
-        track-by="name"
+        track-by="identifier"
         label="name"
+        @select="onChange"
+        @remove="onChange"
+        class="agenda"
         >
         <template  slot="option" slot-scope="props" >
           <div class="row" v-if="props.option.$groupLabel">
@@ -32,15 +35,29 @@
       </multiselect>
     </div>
     <div class="col-6 px-0">
-      <div class="form-group">
-        <input v-model="t" type="text" class="form-control" id="text-search" ref="textSearch"/>
+      <div class="input-group">
+        <input  :placeholder="$t('Text Search')" v-model="t" v-on:input="onChange" type="text" class="form-control text-search" id="text-search" ref="textSearch"/>
+          <div class="input-group-append">
+            <button v-on:click="clearText" class="btn btn-outline-secondary clear-t" type="button"><i class="fa fa-close" /></button>
+          </div>
       </div>
     </div>
     <div class="col-3 pl-0">
-      <!-- {{selectedDate}}
-      <multiselect v-model="selectedDate" deselect-label="Can't remove this value"  placeholder="" :options="options" :searchable="false" >
-        <template slot="singleLabel" slot-scope="{option}"><AgendaItem  :item="option"/></template>
-      </multiselect> -->
+      <multiselect 
+        v-model="selectedDate" 
+        :placeholder="$t('Date')"
+        :options="dates"
+        :searchable="false"
+        @select="onChange"
+        @remove="onChange"
+        class="dates">
+        <template slot="singleLabel" slot-scope="{option}">
+          {{ option | dateTimeFilter('yyyy-MM-dd')}}
+        </template>
+        <template slot="option" slot-scope="{option}">
+          {{ option | dateTimeFilter('yyyy-MM-dd')}}
+        </template>
+      </multiselect>
     </div>
   </div>
 </template>
@@ -50,18 +67,18 @@ import Multiselect from 'vue-multiselect'
 import i18n        from '../locales.js'
 
 import { getAgendaItems } from '../api.js'
-import { getMeetingCode } from '../util'
-
+import { getMeetingCode, deleteFalsyKey } from '../util'
+import { dateTimeFilter } from '../filters.js'
 
 export default {
   name      : 'SearchControls',
   components: { Multiselect },
   props     : { 
-                dates: { type: Date, required: false },
-                agendaItems: { type: Date, required: false },
+                dates: { type: Array, required: false },
+                agendaItems: { type: Array, required: false },
               },
-
-  computed: { hasMultipleMeetings },
+  methods   : {onChange,  updateSearchQuery, buildQuery, clearText},
+  filters   : {dateTimeFilter},
   i18n,
   data,
   created
@@ -72,34 +89,55 @@ function   data(){
     t: '',
     selectedDate: undefined,
     selectedAgendaItems: [],
-    agendaItems:[]
   }
 }
 
-async function created(){
-  this.agendaItems = await getAgendaItems(getMeetingCode())
+function clearText(){
+  this.t=''
+  this.onChange()
 }
 
-function hasMultipleMeetings(){
-  const meetingSet = new Set (this.options.map(({ meeting }) => meeting))
+function created(){
+  const allItems = []
+  const { identifiers, t } = readSearchParams()
 
-  return meetingSet.size > 1
+  for (const { items } of this.agendaItems) {
+    allItems.push(...items)
+  }
+  if(identifiers.length) this.selectedAgendaItems = allItems.filter(({ identifier }) => identifiers.includes(identifier))
+  if(t) this.t = t
+  console.log('--------',t )
+  if(t || identifiers.length) setTimeout(()=>this.$emit('query',this.buildQuery()), 100)
 }
 
-// function getAgendaItems(){
-//   return this.options.map(this.mapAgendaItems)
-// }
-
-
-function onClose(){
-  this.t =''
+function onChange(){
+  setTimeout(this.updateSearchQuery, 100)
+  setTimeout(()=>this.$emit('query',this.buildQuery()), 200)
 }
 
-function readSearchParams(){
-  const params  = (new URL(document.location)).searchParams
-  const filters = params.getAll('filter')
+function buildQuery(){
+  const q   = {}
+  const $or = []
 
-  filters.forEach(identifier => this.addFilter(identifier))
+  for (const { meeting, item } of this.selectedAgendaItems)
+    $or.push({ 'meeting.symbol': meeting, agendaItem: item })
+  
+  if($or.length) q.$or = $or
+
+  if(this.selectedDate) q.datetime = { $gte: { '$date' : this.selectedDate } }
+
+  const t = this.t? this.t : ''
+
+  return deleteFalsyKey([Object.keys(q).length? q : getMeetingCode(), t])
+}
+
+
+
+function updateSearchQuery(){
+  resetSearchParams()
+  this.selectedAgendaItems.forEach(({ identifier }) => addParam(identifier))
+  if(this.selectedDate) addParam(this.selectedDate)
+  if(this.t) addParam(this.t, true)
 }
 
 function resetSearchParams(){
@@ -109,18 +147,68 @@ function resetSearchParams(){
   window.history.pushState({ path: newUrl }, '', newUrl)
 }
 
-function addParam(value){
+function readSearchParams(){
+  const params      = (new URL(document.location)).searchParams
+  const identifiers = params.getAll('filter')
+  const t           = params.get('t')
+
+  return { identifiers, t }
+}
+
+function addParam(value, isText=false){
   const { origin, search, pathname } = new URL(window.location)
-  const newSearchParam              = `filter=${encodeURIComponent(value)}`
+  const newSearchParam              = isText? `t=${encodeURIComponent(value)}` : `filter=${encodeURIComponent(value)}`
   const newSearch                   = !search? `?${newSearchParam}` : `${search}&${newSearchParam}`
   const newUrl                      = `${origin}${pathname}${newSearch}`
   
   window.history.pushState({ path: newUrl }, '', newUrl)
 }
-
-
 </script>
+<style >
+.agenda > .multiselect__tags{
+  border-radius: 5px 0px 0px 5px !important;
+}
+.dates > .multiselect__tags{
+  border-radius: 0px 5px 5px 0px !important;
+}
+.input-group-append > .clear-t {
+  border-radius: 0px !important;
+}
+::-webkit-input-placeholder { /* Edge */
+      color: #adadad !important;
+    display: inline-block;
+    margin-bottom: 10px;
+    padding-top: 2px;
+    font-size: 14px;
+        font-family: inherit;
+    font-weight:300;
+}
 
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+      color: #adadad !important;
+    display: inline-block;
+    margin-bottom: 10px;
+    padding-top: 2px;
+    font-size: 14px;
+    font-family: inherit;
+    font-weight:300;
+}
+
+::placeholder {
+      color: #adadad !important;
+    display: inline-block;
+    margin-bottom: 10px;
+    padding-top: 2px;
+    font-size: 14px;
+        font-family: inherit;
+    font-weight:300;
+}
+</style>
 <style scoped>
+.text-search{
+  height:43px;
+  border: 1px solid #e8e8e8;
+  border-radius:0px;
+}
 
 </style>
