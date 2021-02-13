@@ -3,7 +3,7 @@
   <div class="row mb-3">
     <div class="col-3 pr-0">
       <multiselect
-        v-if="agendaItems"
+        v-if="meetings.length"
         id="xxx"
         v-model="selectedAgendaItems"
         deselect-label="remove this value"
@@ -12,10 +12,10 @@
         :searchable="false"
         :multiple="true"
         group-values="items"
-        group-label="name"
+        group-label="normalizedSymbol"
         :hide-selected="true"
-        track-by="identifier"
-        label="name"
+        track-by="item"
+        label="display"
         @select="onChange"
         @remove="onChange"
         class="agenda"
@@ -28,21 +28,21 @@
           </div>
           <div class="row" v-if="!props.option.$groupLabel">
             <div class="col-12">
-              <span  >{{props.option.name}}</span>
+              <span  >{{props.option.display}}</span>
             </div>
           </div>
         </template>
       </multiselect>
     </div>
-    <div class="col-6 px-0">
+    <div class="col-9 px-0">
       <div class="input-group">
-        <input  :placeholder="$t('Text Search')" v-model="t" v-on:input="onChange" type="text" class="form-control text-search" id="text-search" ref="textSearch"/>
+        <input  :placeholder="$t('Text Search')" v-model="freeText" v-on:input="onChange" type="text" class="form-control text-search" id="text-search" ref="textSearch"/>
           <div class="input-group-append">
             <button v-on:click="clearText" class="btn btn-outline-secondary clear-t" type="button"><i class="fa fa-close" /></button>
           </div>
       </div>
     </div>
-    <div class="col-3 pl-0">
+    <div v-if="false" class="col-3 pl-0">
       <multiselect 
         v-model="selectedDate" 
         :placeholder="$t('Date')"
@@ -63,41 +63,86 @@
 </template>
 
 <script>
-import Multiselect from 'vue-multiselect'
-import i18n        from '../locales.js'
-
-import { getAgendaItems } from '../api.js'
-import { getMeetingCode, deleteFalsyKey } from '../util'
+import { debounce }       from 'lodash'
+import Multiselect        from 'vue-multiselect'
+import i18n               from '../locales.js'
+import { mapObjectId }    from '../api.js'
 import { dateTimeFilter } from '../filters.js'
 
 export default {
   name      : 'SearchControls',
   components: { Multiselect },
   props     : { 
-                dates: { type: Array, required: false },
-                agendaItems: { type: Array, required: false },
-              },
-  methods   : {onChange,  updateSearchQuery, buildQuery, clearText},
-  filters   : {dateTimeFilter},
-  i18n,
+    meetings: { type: Array, required: true },
+  },
+  methods   : { onChange : debounce(onChange, 400), buildQuery, clearText},
+  filters   : { dateTimeFilter },
+  computed  : { agendaItems },
   data,
-  created
+  i18n,
+  created() { this.onChange() },
 }
 
-function   data(){
+function data(){
   return {
-    t: '',
+    freeText: '',
     selectedDate: undefined,
     selectedAgendaItems: [],
   }
 }
 
 function clearText(){
-  this.t=''
+  this.freeText=''
   this.onChange()
 }
 
+function agendaItems() {
+  return this.meetings.map(m=>({
+    normalizedSymbol : m.normalizedSymbol,
+    items : m.agenda.items.map(i=>({ ...i, 
+      meetingId: m._id, 
+      display:   `${i.item} - ${i.shortTitle}`,
+    }))
+  }));
+}
+
+function onChange(){
+  this.$emit('query',this.buildQuery());
+//setTimeout(this.updateSearchQuery, 100)
+}
+
+function buildQuery(){
+
+  const freeText = this.freeText;
+  const queries  = []
+
+  // Limit to current meetings
+  queries.push({ $or: this.meetings.map(m=>({ meetingId : mapObjectId(m._id)})) });
+
+  if(this.selectedAgendaItems.length) {
+    const $or = this.selectedAgendaItems.map(i=>({ 
+      meetingId : mapObjectId(i.meetingId),
+      agendaItem : i.item
+    }));
+
+    queries.push({ $or });
+  }
+
+  const query = { $and : queries };
+  return { query, freeText };
+}
+
+// DISABLED //
+// DISABLED //
+// DISABLED //
+// DISABLED //
+// DISABLED //
+/*
 function created(){
+
+  this.onChange();
+
+
   const allItems = []
   const { identifiers, t } = readSearchParams()
 
@@ -108,29 +153,8 @@ function created(){
   if(t) this.t = t
   console.log('--------',t )
   if(t || identifiers.length) setTimeout(()=>this.$emit('query',this.buildQuery()), 100)
-}
-
-function onChange(){
-  setTimeout(this.updateSearchQuery, 100)
-  setTimeout(()=>this.$emit('query',this.buildQuery()), 200)
-}
-
-function buildQuery(){
-  const q   = {}
-  const $or = []
-
-  for (const { meeting, item } of this.selectedAgendaItems)
-    $or.push({ 'meeting.symbol': meeting, agendaItem: item })
   
-  if($or.length) q.$or = $or
-
-  if(this.selectedDate) q.datetime = { $gte: { '$date' : this.selectedDate } }
-
-  const t = this.t? this.t : ''
-
-  return deleteFalsyKey([Object.keys(q).length? q : getMeetingCode(), t])
 }
-
 
 
 function updateSearchQuery(){
@@ -163,6 +187,7 @@ function addParam(value, isText=false){
   
   window.history.pushState({ path: newUrl }, '', newUrl)
 }
+*/
 </script>
 <style >
 .agenda > .multiselect__tags{

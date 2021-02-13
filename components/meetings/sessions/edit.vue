@@ -44,19 +44,18 @@
 
 <script>
 
-import Multiselect from 'vue-multiselect'
-import AgendaItem from './agenda-item.vue'
-import FilesView  from './files-view.vue'
-import i18n       from '../locales.js'
-
-import { DateTime                    } from 'luxon'
-import { addApiOptions , getSession } from '../api.js'
-import { getSessionId              } from '../util'
+import Multiselect  from 'vue-multiselect'
+import AgendaItem   from './agenda-item.vue'
+import FilesView    from './files-view.vue'
+import i18n         from '../locales.js'
+import Api          from '../api.js'
+import { DateTime } from 'luxon'
 
 
 export default {
   name: 'SessionsView',
   props:{
+    route      : { type: Object, required: false },
     tokenReader: { type: Function, required: false },
   },
   components:{ Multiselect, AgendaItem, FilesView},
@@ -64,12 +63,8 @@ export default {
   filters: { timeFilter },
   i18n,
   mounted,
+  created,
   data,
-  watch: { 
-    tokenReader: function(tokenReader) {  
-      if(tokenReader) addApiOptions({ tokenReader }) 
-    }
-  }
 }
 
 function data(){
@@ -80,10 +75,12 @@ function data(){
     }
 }
 
+function created(){
+  this.api = new Api(this.tokenReader);
+}
 
 async function mounted(){
-
-  this.session = await getSession(getSessionId())
+  this.session = await this.api.getSessionById(this.route.params.sessionId);
 
 }
 

@@ -15,14 +15,15 @@
 import Session   from './session.vue'
 import Accordion from './accordion.vue'
 
-import { DateTime                    } from 'luxon'
-import { addApiOptions , getSessions } from '../api.js'
-import { getMeetingCode              } from '../util'
+import { DateTime } from 'luxon'
+import Api from '../api.js'
 
 export default {
   name       : 'SessionsView',
   components : { Session, Accordion },
-  props      : { tokenReader: { type: Function, required: false } },
+  props      : { 
+    route:       { type: Object, required: false },
+    tokenReader: { type: Function, required: false } },
   computed   : { sessionsLength },
   methods    : { header },
   filters    : { timeFilter },
@@ -30,7 +31,7 @@ export default {
 }
 
 function data(){
-  return { sessions: [] }
+  return { sessions: [], _api : null }
 }
 
 function sessionsLength(){
@@ -38,9 +39,8 @@ function sessionsLength(){
 }
 
 async function created(){
-  if(this.tokenReader) addApiOptions({ tokenReader: this.tokenReader })
-
-  this.sessions = await getSessions(getMeetingCode())
+  this.api      = new Api(this.tokenReader);
+  this.sessions = await this.api.getSessions(this.route.params.meeting)
 }
 
 function timeFilter (isoDateString)  {
