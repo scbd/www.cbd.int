@@ -61,6 +61,7 @@ require.config({
         'nlp'             : cdnHost + 'compromise/builds/compromise.min',
         'ky'              : 'libs/globals/ky',
         'luxon'           : cdnHost + 'luxon@1.25.0/build/amd/luxon',
+        'axios'           : cdnHost + 'axios@0.21.1/dist/axios.min',
         'vue-multiselect' : cdnHost + 'vue-multiselect@2.1.6/dist/vue-multiselect.min.js'
     },
     shim: {

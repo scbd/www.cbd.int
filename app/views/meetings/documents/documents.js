@@ -64,7 +64,7 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
         //==============================
         function load() {
             _ctrl.inSessionEnabled = false; //to adjust the height for non insession case
-            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, alerts:1 }, cache:true } }).then(function(res){
+            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, uploadStatement:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, alerts:1 }, cache:true } }).then(function(res){
 
                 meeting = _.defaults(res.data, {
                     code: res.data.EVT_CD,
