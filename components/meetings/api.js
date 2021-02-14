@@ -1,7 +1,7 @@
 
 import ky from 'ky'
-import { isFunction } from 'lodash'
-import { deleteFalsyKey } from './util.js'
+import axios from 'axios'
+import { isFunction, isString, isDate } from 'lodash'
 
 let sitePrefixUrl = 'https://api.cbddev.xyz';
 
@@ -19,12 +19,12 @@ export default class Api
 
       if(isFunction(options)) options = { tokenReader : options }
 
-      const { tokenReader, prefixUrl, timeout } = { ...defaultOptions, ...options }
+      const { tokenReader, prefixUrl, timeout, tokenType } = { ...defaultOptions, ...options }
 
       const kyOptions = { prefixUrl, timeout };
 
       if(tokenReader) {
-        const hooks = { beforeRequest: [ async (request) => request.headers.set('Authorization', `Token ${await tokenReader()}`) ] }
+        const hooks = { beforeRequest: [ async (request) => request.headers.set('Authorization', `${tokenType||'Token'} ${await tokenReader()}`) ] }
         kyOptions.hooks = hooks; 
       }
 
@@ -177,6 +177,25 @@ export default class Api
     return { ...session, interventions }
   }
 
+  //////////////////////////
+  // Temporary Files
+  ////////////////////////
+  async uploadTemporaryFile(url, file, options={}) {
+
+    const { headers, timeout, contentType, onUploadProgress, onDownloadProgress }= { ...(options||{}) };
+
+    const config = {
+      headers: headers ||{},
+      timeout: timeout || 60 * 60 * 1000,
+      onUploadProgress, 
+      onDownloadProgress
+    };
+    
+    if(options.contentType) config.headers['Content-Type'] = options.contentType;
+
+    await axios.put(url, file, config);
+  }
+
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   //             TO REVIEW
@@ -282,20 +301,22 @@ export function mergeQueries(...args) {
 
 function toURLSearchParams(params) {
   if (!params) return undefined;
+console.log(params)
+  const qsParams  = new URLSearchParams();
+  const paramKeys = Object.keys(params);
 
-  params=deleteFalsyKey(params)
+  Object.keys(params).forEach((key) => {
 
-  const urlEncodedUrlParams = {};
-  const paramKeys           = Object.keys(params);
+    let value = params[key]
 
-  paramKeys.forEach((key) => {
-    let value = params[key];
+    if(value===undefined) return;
+    
+         if (isDate(value))   value.toISOString();
+    else if (isString(value)) value = value;
+    else                      value = JSON.stringify(value, null, '');
 
-    if (value instanceof Object) value = JSON.stringify(value, null, '');
-    else if (value instanceof Date) value = value.toISOString();
-
-    urlEncodedUrlParams[key] = value;
+    qsParams.set(key, value);
   });
 
-  return new URLSearchParams(urlEncodedUrlParams);
+  return qsParams
 }

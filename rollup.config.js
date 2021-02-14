@@ -13,6 +13,7 @@ const globals = {
   Vue    : 'Vue',
   vue    : 'Vue',
   ky     : 'ky',
+  axios  : 'axios',
   luxon  : 'luxon',
   jquery : 'jquery',
 };
