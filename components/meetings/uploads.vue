@@ -16,17 +16,17 @@
                     </div>
                     <div class="modal-body">
                         
-                        <p>TODO Instructions....</p>
+                        <p v-if="false">TODO Instructions....</p>
 
                         <form  id="statement-submission-form" @submit.prevent="submitForm" enctype="multipart/form-data" ref="form" novalidate :class="{ 'was-validated': wasValidated }">
 
                             <div class="form-group row">
-                                <label for="participantIdentity" class="col-sm-3 col-form-label">Participant Identity</label>
+                                <label for="participantIdentity" class="col-sm-3 col-form-label">Priority-Pass Code</label>
                                 <div class="col-sm-9">
                                     <div class="input-group">
                                         <input :disabled="!!progress" type="text" class="form-control" id="participantIdentity" ref="participantIdentity" placeholder="ABCDE-12345" v-model.trim="participantIdentity" required>
                                         <div class="input-group-append">
-                                            <span class="input-group-text" data-toggle="tooltip" data-placement="auto" title="Enter your PriorityPass code or Badge code."><i class="fa fa-question-circle"></i></span>
+                                            <span class="input-group-text" data-toggle="tooltip" data-placement="auto" title="Priority-Pass code is included in your registration email (eg: ABCDE-12345)"><i class="fa fa-question-circle"></i></span>
                                         </div>      
                                         <div class="invalid-feedback">Please enter a valid Identity code.</div>
                                                                         
@@ -76,14 +76,14 @@
                             </div>       
                             
                             <div class="form-group row">
-                                <label for="allowPublic" class="col-sm-3 col-form-label">Public on website?</label>
+                                <label for="allowPublic" class="col-sm-3 col-form-label">Do you allow public access?</label>
                                 <div class="col-sm-9">
                                     <div class="input-group">
                                         <select :disabled="!!progress" class="form-control" id="allowPublic" v-model="allowPublic" required> 
                                             <optgroup>
-                                            <option value="true">Yes - I allow publication of this file on the CBD website (publicly available upon avlidation)</option>
-                                            <option value="false">No  - Do not publish this file on CBD website (Secretariat and interpreters access only)</option>
-                                            </option>
+                                                <option value="true">Yes - I allow publication of this file on the CBD website (publicly available upon validation)</option>
+                                                <option value="false">No  - Do not publish this file on CBD website (Secretariat and interpreters access only)</option>
+                                            </optgroup>
                                         </select>                                    
                                         <div class="input-group-append">
                                             <span class="input-group-text" data-toggle="tooltip" data-placement="auto" title="If you select `yes` you grant permission to the Secretariat to publish this document publicly on its website"><i class="fa fa-question-circle"></i></span>
@@ -212,6 +212,8 @@ export default {
             else {
                 error = { message : "Invalid status: No Meeting or Conference"}
             }
+
+            console.log(this.meetings)
         },
 
         open() { this.$emit("update:show", true) },
