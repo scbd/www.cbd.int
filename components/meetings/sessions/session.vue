@@ -14,7 +14,10 @@
 
         <td v-if="showStatus" class="status-col" style="text-align: center; vertical-align: middle;">
           <span v-if="!isPending(status)">{{ datetime | timeFilter('EEE, MMM d') }}</span>
-          <small v-if="isPending(status)" class="text-muted lighter">{{$t('Pending')}}...</small>
+          <small v-if="isPending(status)" class="text-muted lighter">{{$t('Pending')}}...<br>
+            {{ datetime | timeFilter('EEE, MMM d T') }}
+          </small>
+          
         </td>
 
         <td class="time-col" style="text-align: center; vertical-align: middle;">
