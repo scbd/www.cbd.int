@@ -134,7 +134,7 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
                 });
 
                 for(var group in groups) {
-                    var docs =  _.where(documents, { displayGroup : group === 'statement'? 'official' :group });
+                    var docs =  _.where(documents, { displayGroup : group });
 
                     if(!docs.length)
                         continue;

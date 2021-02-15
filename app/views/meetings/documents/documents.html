@@ -141,7 +141,7 @@
 
         <div ng-repeat="type in documentsCtrl.tabs track by type.code" ng-class="{ active: (documentsCtrl.currentTab==type.code || documentsCtrl.noTabs) }" role="tabpanel" class="tab-pane" id="{{::type.code}}">
 
-            <div ng-if="'statement' !== type.code && ( type.loaded || documentsCtrl.currentTab==type.code || documentsCtrl.noTabs )">
+            <div ng-if="type.loaded || documentsCtrl.currentTab==type.code || documentsCtrl.noTabs"></div>
 
                 <h3 ng-if="::documentsCtrl.noTabs">
                     <span ng-bind="::type.title"></span>
