@@ -155,12 +155,6 @@ export default {
         this.api = new Api() //anonymous 
     },
     mounted(){
-
-        if(localStorage.participantIdentity) {
-            this.participantIdentity = localStorage.participantIdentity;
-            this.rememberMe = !!this.participantIdentity;
-        }
-
         $('[data-toggle="tooltip"]').tooltip();
     },
     watch: {
@@ -282,6 +276,16 @@ export default {
             this.selectedLanguage    = "en",
             this.allowPublic         = null;
             this.persistIdentity(); 
+
+            if(localStorage.participantIdentity) {
+                this.participantIdentity = localStorage.participantIdentity;
+                this.rememberMe = !!this.participantIdentity;
+            }
+
+            if(this.route.query.uploadStatementBy) {
+                this.participantIdentity = this.route.query.uploadStatementBy;
+            }
+
         },
 
         persistIdentity() {

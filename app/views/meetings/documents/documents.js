@@ -14,7 +14,7 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
 
 
         $scope.tokenReader = function(){ return apiToken.get()}
-        $scope.route       = { params : $route.current.params }
+        $scope.route       = { params : $route.current.params, query: $location.search() }
         $scope.vueOptions  = {
           components: { sessions: sessionsView, uploads: uploads },
           i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
@@ -72,6 +72,10 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
                     printSmart : false,
                     isMontreal : /montr.al.*canada/i.test((res.data.venueText||{}).en||'')
                 });
+
+                if(meeting.uploadStatement && $location.search().uploadStatementBy) {
+                    _ctrl.uploadStatement = true;
+                }
 
                 meeting.alerts = _(meeting.alerts||[]).map(fixAlertHash).filter(isAlertVisible).value();
               
