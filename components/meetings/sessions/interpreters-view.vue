@@ -46,7 +46,7 @@ function data(){
   return { 
     interventions: [], 
     meetings : [],
-    maxResultCount : 50,
+    maxResultCount : 250,
     }
 }
 
