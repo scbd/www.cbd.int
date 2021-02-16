@@ -5,27 +5,27 @@
       <tr v-for="({ agenda, agendaItem, datetime, title, organizationType, status, files }, index) in interventions" v-bind:key="index">
 
         <td scope="row" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
-          <span v-if="!isPending(status)">{{index+1}}.</span>
+          <span  v-if="!isPending(status)">{{index+1}}.</span>
+          <small v-if="isPending(status)" class="text-muted lighter">{{$t('Pending')}}</small>
         </td>
 
         <td class="agenda-items-col" style="text-align: center; vertical-align: middle;">
           <AgendaItem :item="agenda || ( agendaItem && { item: agendaItem})"/>
         </td>
 
-        <td v-if="showStatus" class="status-col" style="text-align: center; vertical-align: middle;">
-          <span v-if="!isPending(status)">{{ datetime | timeFilter('EEE, MMM d') }}</span>
-          <small v-if="isPending(status)" class="text-muted lighter">{{$t('Pending')}}...<br>
-            {{ datetime | timeFilter('EEE, MMM d T') }}
-          </small>
-          
+        <td v-if="showStatus" class="date-col" style="text-align: center; vertical-align: middle;">
+          <span>{{ datetime | timeFilter('MMM d') }}</span>
         </td>
 
         <td class="time-col" style="text-align: center; vertical-align: middle;">
-          <span v-if="!isPending(status)">{{ datetime | timeFilter('T') }}</span>
-          <small v-if="isPending(status) && !showStatus" class="text-muted">{{$t('Pending')}}...</small>
+          <span>{{ datetime | timeFilter('T') }}</span>
         </td>
 
-        <td style="vertical-align: middle;"><span class="float-right text-muted">{{getOrgType({ organizationType }) }} </span>  {{ title }} </td>
+        <td style="vertical-align: middle;"> 
+          <span class="float-right text-muted">{{getOrgType({ organizationType }) }} </span>  
+          {{ title }}
+          <div class="text-muted small" style="max-height:45px;overflow:hidden">{{summary || files[0].text}}</div>
+        </td>
 
         <td class="files-col" style="text-align: center; vertical-align: middle;">
           <FilesView :files="files"/>
@@ -50,7 +50,7 @@ export default {
                 interventions: { type: Array,   required: false },
                 showStatus   : { type: Boolean, required: false, default: false },
               },
-  methods   : { getOrgType, pendingOrDate, getRows, isPending },
+  methods   : { getOrgType, getRows, isPending },
   filters   : { timeFilter },
   i18n
 }
@@ -61,10 +61,6 @@ function timeFilter (isoDateString, format='T')  {
 
 function getOrgType({ organizationType }){
   return (organizationType||{}).acronym || organizationType;
-}
-
-function pendingOrDate({ status, datetime }){
-  return this.isPending(status)? 'penging...' : timeFilter(datetime, 'EEE, MMM d')
 }
 
 function isPending (status){
@@ -90,13 +86,12 @@ function getRows(){
   font-weight: light;
 }
 table.sessions {
-  table-layout: fixed;
   width: 100%;
 }
 .index-col{
   width: 2em;
-  max-width: 3em;
   text-align: center;
+  white-space: nowrap;
 }
 .agenda-items-col{
   width:65px;
@@ -116,11 +111,13 @@ table.sessions {
 }
 .time-col{
   width:70px;
-  text-align: center;
+  text-align: right;
+  white-space: nowrap;
 }
-.status-col{
+.date-col{
   width:90px;
   text-align: center;
+  white-space: nowrap;
 }
 @media screen and (max-width: 768px) {
   .files-col{
