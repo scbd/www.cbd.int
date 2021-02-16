@@ -5,8 +5,8 @@
       <tr v-for="(row, index) in interventions" v-bind:key="index" @dblclick="edit(row)"  v-on:click.prevent="select(row)" :class="{'table-info': isSelectedRow(row), 'table-warning':isSelectedEditRow(row) }" >
 
         <td scope="row" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
-          <span  v-if="!isPending(status)">{{index+1}}.</span>
-          <small v-if="isPending(status)" class="text-muted lighter">{{$t('Pending')}}</small>
+          <span  v-if="!isPending(row.status)">{{index+1}}.</span>
+          <small v-if="isPending(row.status)" class="text-muted lighter">{{$t('Pending')}}</small>
         </td>
 
         <td class="agenda-items-col" style="text-align: center; vertical-align: middle;">
@@ -14,21 +14,21 @@
         </td>
 
         <td v-if="showStatus" class="date-col" style="text-align: center; vertical-align: middle;">
-          <span>{{ datetime | timeFilter('MMM d') }}</span>
+          <span>{{ row.datetime | timeFilter('MMM d') }}</span>
         </td>
 
         <td class="time-col" style="text-align: center; vertical-align: middle;">
-          <span>{{ datetime | timeFilter('T') }}</span>
+          <span>{{ row.datetime | timeFilter('T') }}</span>
         </td>
 
         <td style="vertical-align: middle;"> 
-          <span class="float-right text-muted">{{getOrgType({ organizationType }) }} </span>  
-          {{ title }}
-          <div class="summary text-muted small">{{summary || files[0].text}}</div>
+          <span class="float-right text-muted">{{getOrgType(row) }} </span>  
+          {{ row.title }}
+          <div class="summary text-muted small">{{row.summary || (row.files[0] || {}).text}}</div>
         </td>
 
           <div v-if="showStatus && isPending(status)">
-            <div v-for="{filename, url, text, _id } in files" :key="_id">
+            <div v-for="{filename, url, text, _id } in row.files" :key="_id">
               <b><a style="color:inherit" :href="url" target="_blank">{{filename}}</a></b>
               <div v-if="text" class="text-muted small summary">{{text}}</div>
             </div>
@@ -59,7 +59,7 @@ export default {
                 showStatus   : { type: Boolean, required: false, default: false },
                 selectLimit: { type: Number, required: false, default: 1 }
               },
-  methods   : { getOrgType, getRows, isPending },
+  methods   : { getOrgType, getRows, isPending, edit, select, isSelectedRow, isSelectedEditRow },
   filters   : { timeFilter },
   i18n,
   data
@@ -75,11 +75,10 @@ function data(){
 function edit(row){
   const { _id } = row
 
-  console.log('this.selectedEdit', this.isSelectedEditRow(row))
   if(this.isSelectedEditRow(row)) this.selectedEdit = undefined
   else this.selectedEdit = _id
   
-  console.log('this.selectedEdit', this.selectedEdit)
+
   this.$forceUpdate()
 }
 
