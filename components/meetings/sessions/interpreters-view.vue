@@ -22,7 +22,7 @@
     <div class="card mb-3" v-if="interventions.length">
       <Session :interventions="interventions"  :show-status="true"/>
     </div>
-   
+  
   </div>
 </template>
 

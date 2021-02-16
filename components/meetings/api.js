@@ -128,7 +128,7 @@ export default class Api
     const headers = {
       Authorization : `Pass ${passCode}`
     };
-console.log(headers);
+
     const slot = await this.http.post("api/v2021/meeting-interventions/slot", data, { headers }).then(res => res.data).catch(tryCastToApiError);
 
     return slot;

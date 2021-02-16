@@ -34,7 +34,7 @@
         </template>
       </multiselect>
     </div>
-    <div class="col-9 px-0">
+    <div class="col-9">
       <div class="input-group">
         <input  :placeholder="$t('Text Search')" v-model="freeText" v-on:input="onChange" type="text" class="form-control text-search" id="text-search" ref="textSearch"/>
           <div class="input-group-append">

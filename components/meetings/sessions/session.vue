@@ -1,8 +1,8 @@
 
 <template >
   <table v-if="getRows().length" class="table table-striped table-hover no-border-first-row sessions" v-bind:key="index">
-    <tbody v-for="(interventions, i) in getRows()" v-bind:key="i">
-      <tr v-for="({ agenda, agendaItem, datetime, title, organizationType, status, files }, index) in interventions" v-bind:key="index">
+    <tbody  v-for="(interventions, i) in getRows()" v-bind:key="i">
+      <tr v-for="(row, index) in interventions" v-bind:key="index" @dblclick="edit(row)"  v-on:click.prevent="select(row)" :class="{'table-info': isSelectedRow(row), 'table-warning':isSelectedEditRow(row) }" >
 
         <td scope="row" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
           <span  v-if="!isPending(status)">{{index+1}}.</span>
@@ -10,7 +10,7 @@
         </td>
 
         <td class="agenda-items-col" style="text-align: center; vertical-align: middle;">
-          <AgendaItem :item="agenda || ( agendaItem && { item: agendaItem})"/>
+          <AgendaItem :item="row.agenda || ( row.agendaItem && { item: row.agendaItem})"/>
         </td>
 
         <td class="date-col" style="text-align: center; vertical-align: middle;">
@@ -36,7 +36,7 @@
         </td>
 
         <td class="files-col" style="text-align: center; vertical-align: middle;">
-          <FilesView :files="files"/>
+          <FilesView :files="row.files"/>
         </td>
 
       </tr>
@@ -61,9 +61,50 @@ export default {
               },
   methods   : { getOrgType, getRows, isPending },
   filters   : { timeFilter },
-  i18n
+  i18n,
+  data
 }
 
+function data(){
+  return{
+    selected: [],
+    selectedEdit:undefined
+  }
+}
+
+function edit(row){
+  const { _id } = row
+
+  console.log('this.selectedEdit', this.isSelectedEditRow(row))
+  if(this.isSelectedEditRow(row)) this.selectedEdit = undefined
+  else this.selectedEdit = _id
+  
+  console.log('this.selectedEdit', this.selectedEdit)
+  this.$forceUpdate()
+}
+
+function select(row){
+  const { _id } = row
+
+  if(!this.selected)this.selected=[]
+
+  if(this.selected.includes(_id))
+    this.selected = this.selected.filter((x)=> x !== _id)
+  else this.selectLimit===1? this.selected = [_id] : this.selected.push(_id)
+
+  this.$forceUpdate()
+}
+
+function isSelectedRow(row){
+  const { _id } = row
+
+  return !!this?.selected?.includes(_id)
+}
+function isSelectedEditRow(row){
+  const { _id } = row
+
+  return this.selectedEdit === _id
+}
 function timeFilter (isoDateString, format='T')  {
   return DateTime.fromISO(isoDateString).toFormat(format)
 }
