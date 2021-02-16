@@ -71,7 +71,7 @@ define(['app', 'text!./cbd-article.html','lodash', 'require', './cbd-article-cov
                             return query;
                         }
 
-                        document.querySelectorAll( 'oembed[url]' ).forEach( element => {
+                        document.querySelectorAll( 'oembed[url]' ).forEach(function(element) {
                             var url = element.attributes.url.value;
                             // var urlDetails = getLocation(url);
                             // var qs = parseQuery(urlDetails.search);
