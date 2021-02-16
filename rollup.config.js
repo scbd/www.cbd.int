@@ -6,6 +6,7 @@ import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs';
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 
+const isWatchOn = process.argv.includes('--watch');
 const outputDir = 'dist';
 
 const globals = {
@@ -48,7 +49,7 @@ function exposeVueComponent(relativePath) {
           presets: [['@babel/preset-env', { targets: "> 0.25%, IE 10, not dead"}]],
           allowAllFormats: true
         }),
-        terser()
+        isWatchOn ? null : terser() // DISABLE IN DEV
       ],
     }
 }
@@ -67,7 +68,7 @@ function exposeGlobal(source, name) {
           presets: ['@babel/preset-env'],
           allowAllFormats: true
         }),
-        terser()
+        isWatchOn ? null : terser() // DISABLE IN DEV
       ]
     }],
   }
