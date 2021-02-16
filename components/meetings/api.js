@@ -44,23 +44,19 @@ export default class Api
     }
 
   ////////////////////////
-  // Meetings
+  // Meetings {q,f,t,s,l,sk}
   ////////////////////////
 
-  async queryMeetings({q,f,t,s,l,sk})  {
-
-    const searchParams = {q,f,t,s,l,sk}
-    const meeting      = await this.http.get(`api/v2016/meetings`, { params: searchParams }).then(res => res.data).catch(tryCastToApiError); //, { params: searchParams }
-
-    return meeting;
+  async queryMeetings(param)  {
+    return this.http.get(`api/v2016/meetings`, { param }).then(res => res.data).catch(tryCastToApiError);
   }
 
   async getMeetingById(id, options={})  {
 
-    const q = { _id: mapObjectId(codeOrId) }
-    const f = (options||{})
+    const q = Array.isArray(id)? { _id: { $in: id.map(aId => mapObjectId(aId)) } } : { _id: mapObjectId(id) }
 
-    const  meetings = await this.queryMeetings({q, f, l:1})
+
+    const  meetings = await this.queryMeetings({q, ...options})
     const [meeting] = meetings;
 
     return meeting;
@@ -94,30 +90,26 @@ export default class Api
   // Interventions
   ////////////////////////
 
-  async queryInterventions({q,f,t,s,l,sk}) {
+  queryInterventions(params) {
 
-    const searchParams  = {q,f,t,s,l,sk};
-    const interventions = await this.http.get(`api/v2021/meeting-interventions`, { params: searchParams }).then(res => res.data).catch(tryCastToApiError);
-
-    return interventions
+    return this.http.get(`api/v2021/meeting-interventions`, { params }).then(res => res.data).catch(tryCastToApiError);
   }
 
-  async getInterventionsBySessionId (sessionId, options={}) {
+  getInterventionsBySessionId (sessionId, params={}) {
 
-    const {q,f,t,s,l,sk} = options;
-
-    const searchParams  = {q,f,t,s,l,sk};
-    const interventions = await this.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}/interventions`, { params: searchParams }).then(res => res.data).catch(tryCastToApiError);
-
-    return interventions
+    return this.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}/interventions`, { params }).then(res => res.data).catch(tryCastToApiError);
   }
 
-  async getInterventionById (interventionId) {
+  getInterventionById (interventionId) {
 
-    const interventions = await this.http.get(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}`).then(res => res.data).catch(tryCastToApiError);
-
-    return interventions
+    return this.http.get(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}`).then(res => res.data).catch(tryCastToApiError);
   }
+
+  async getInterventionOrganizations (params = { t:'s' }) {
+
+    return this.http.get(`api/v2021/meeting-interventions/organizations`, { params }).then(res => res.data).catch(tryCastToApiError);
+  }
+
 
   //////////////////////////
   // Interventions Files
@@ -153,10 +145,10 @@ export default class Api
   // Sessions
   ////////////////////////
 
-  async querySessions({q,t,s,l,sk}) {
+  async querySessions(params) {
 
-    const searchParams = {q,t,s,l,sk};
-    const sessions     = await this.http.get(`api/v2021/meeting-sessions`, { params: searchParams }).then(res => res.data).catch(tryCastToApiError);
+
+    const sessions     = await this.http.get(`api/v2021/meeting-sessions`, { params }).then(res => res.data).catch(tryCastToApiError);
 
     return sessions
   }

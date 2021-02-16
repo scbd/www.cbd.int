@@ -6,14 +6,14 @@
 
         <td scope="row" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
           <span  v-if="!isPending(status)">{{index+1}}.</span>
-          <small v-if="showStatus && isPending(status)" class="text-muted lighter">{{$t('Pending')}}</small>
+          <small v-if="isPending(status)" class="text-muted lighter">{{$t('Pending')}}</small>
         </td>
 
         <td class="agenda-items-col" style="text-align: center; vertical-align: middle;">
           <AgendaItem :item="row.agenda || ( row.agendaItem && { item: row.agendaItem})"/>
         </td>
 
-        <td class="date-col" style="text-align: center; vertical-align: middle;">
+        <td v-if="showStatus" class="date-col" style="text-align: center; vertical-align: middle;">
           <span>{{ datetime | timeFilter('MMM d') }}</span>
         </td>
 
@@ -23,9 +23,9 @@
 
         <td style="vertical-align: middle;"> 
           <span class="float-right text-muted">{{getOrgType({ organizationType }) }} </span>  
-          
           {{ title }}
-          <div v-if="summary" class="text-muted small summary">{{summary}}</div>
+          <div class="summary text-muted small">{{summary || files[0].text}}</div>
+        </td>
 
           <div v-if="showStatus && isPending(status)">
             <div v-for="{filename, url, text, _id } in files" :key="_id">
@@ -57,7 +57,7 @@ export default {
   props     : { 
                 interventions: { type: Array,   required: false },
                 showStatus   : { type: Boolean, required: false, default: false },
-                showStatus   : { type: Boolean, required: false, default: false },
+                selectLimit: { type: Number, required: false, default: 1 }
               },
   methods   : { getOrgType, getRows, isPending },
   filters   : { timeFilter },
