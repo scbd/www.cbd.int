@@ -16,6 +16,8 @@
         track-by="item"
         label="display"
         class="agenda"
+        @select="onChange"
+        @remove="onChange"
         >
         <template  slot="option" slot-scope="props" >
           <div class="row" v-if="props.option.$groupLabel">
@@ -37,12 +39,39 @@
       </div>
     </div>
     <div class="col-8">
-      <div class="input-group">
-        <input  :placeholder="$t('Organization Search')" v-model="organization" type="text" class="form-control " />
-          <div class="input-group-append">
-            <button v-on:click="clearText" class="btn btn-outline-secondary clear-t" type="button"><i class="fa fa-close" /></button>
-          </div>
-      </div>
+      <multiselect 
+      v-model="organization"
+      track-by="name" 
+      label="name"
+      placeholder="Type to search" 
+      open-direction="top" 
+      :options="allOrganizations" 
+      :multiple="true"
+      :loading="isLoading" 
+      :internal-search="false" 
+      :options-limit="300" 
+      :limit="3" 
+      :max-height="600" 
+      :taggable="true"
+      @tag="addOrg"
+      @close="organization? '' :onChange({t:''})"
+      @select="onChange"
+      @remove="onChange({t:''})"
+      @search-change="getOrgs">
+
+        <!-- <template slot="tag" slot-scope="{ option, remove }">
+          <span class="custom__tag">
+            <span>{{ option.name }}</span>
+            <span class="custom__remove" @click="remove(option)">❌</span>
+          </span>
+          </template> -->
+        
+        <!-- <template slot="clear" slot-scope="props">
+          <div class="multiselect__clear" v-if="organization" @mousedown.prevent.stop="organization=undefined"></div>
+        </template> -->
+        <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
+      </multiselect>
+      <pre>{{organization}}</pre>
     </div>
   </div>
 </template>
@@ -54,7 +83,7 @@ import Multiselect  from 'vue-multiselect'
 import AgendaItem   from './agenda-item.vue'
 import FilesView    from './files-view.vue'
 import i18n         from '../locales.js'
-import Api          from '../api.js'
+import Api, { mapObjectId }          from '../api.js'
 
 export default {
   name: 'EditRow',
@@ -65,7 +94,7 @@ export default {
   },
   components:{ Multiselect, AgendaItem, FilesView},
   computed   : { agendaItems },
-  methods   :{clearText},
+  methods   :{clearText, getOrgs, addOrg, getQ, onChange},
   i18n,
   mounted,
   created,
@@ -75,33 +104,72 @@ export default {
 
 function data(){
   return {
-    freeText: '',
     selectedDate: undefined,
     selectedAgendaItems: [],
     time: '01:01',
-    organization: ''
-    
+    organization: '',
+    allOrganizations:[],
+    isLoading: false, 
+    meetingId:''
   }
+}
+
+function onChange(element){
+
+
+  this.$forceUpdate()
+  setTimeout(()=>{
+  const { $or } = this.getQ() || {}
+  const {t, meetingId, organizationId, government } = element
+  this.$emit('penging-query', {$or, t, meetingId, organizationId:organizationId?{$oid:organizationId}:'', government})
+  }, 100)
+
 }
 
 function created(){
   this.api = new Api(this.tokenReader);
 }
 
-async function mounted(){
-  const promises = [
-                      this.api.getSessionById(this.route.params.sessionId),
-                      this.api.getInterventionsBySessionId(this.route.params.sessionId)
-                    ]
-  const [ session, interventions ] = await Promise.all(promises);
 
-  this.session               = session;
-  this.session.interventions = interventions;
+function addOrg(name){
+
+
+  this.organization = {name}
+  this.allOrganizations = []
+}
+
+async function mounted(){
+  await this.getOrgs()
+}
+
+async function getOrgs(t){
+  
+  if(!t) return 
+  
+  this.isLoading= true
+  const { meeting } = this.route.params
+
+  const { _id:meetingId } = await this.api.getMeetingByCode(meeting)
+  
+  
+  this.onChange({ meetingId,  t })
+
+  this.allOrganizations = await this.api.getInterventionOrganizations({ meetingId , t } )
+  this.isLoading= false
 }
 
 function clearText(){
   this.freeText=''
   this.onChange()
+}
+
+function getQ(){
+  if(!this.selectedAgendaItems.length) return
+
+  return { $or: this.selectedAgendaItems.map(i=>({ 
+                                            meetingId : mapObjectId(i.meetingId),
+                                            agendaItem : i.item
+                                          }))};
 }
 
 function agendaItems() {

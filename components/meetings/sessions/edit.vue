@@ -12,7 +12,7 @@
     <Session v-if="session" :interventions="session.interventions"/>
     <hr/>
 
-    <EditRow :route="route" :meetings="meetings"/>
+    <EditRow v-on:penging-query="getPending" v-bind="$props" :meetings="meetings"/>
 
     <hr/>
     <Session v-if="pending" :interventions="pending"/>
@@ -23,7 +23,7 @@
 <script>
 import Session                   from './session.vue'
 import EditRow                   from './edit-row.vue'
-import Api    , { mergeQueries } from '../api.js'
+import Api    , { mergeQueries, mapObjectId } from '../api.js'
 
 export default {
   name: 'SessionEdit',
@@ -33,7 +33,7 @@ export default {
   },
   components:{ Session, EditRow },
   computed  : { agendaItems },
-  methods: {getPending},
+  methods: {getPending, loadEventIds},
   mounted,
   created,
   data,
@@ -45,23 +45,23 @@ function data(){
     meetings : [],
     session: undefined,
     maxResultCount : 250,
-    pending: []
+    pending: [],
+    eventQuery: ''
   }
 }
 
 async function created(){
   this.api = new Api(this.tokenReader);
   
-  const meeting = await this.api.getMeetingByCode(this.route.params.meeting);
-  
-  this.meetings = [meeting];
+  await this.loadEventIds()
 }
 
 async function mounted(){
+  const { sessionId } = this.route.params
   const promises = [
-                      this.api.getSessionById(this.route.params.sessionId),
-                      this.api.getInterventionsBySessionId(this.route.params.sessionId),
-                      this.getPending(this.route.params.sessionId)
+                      this.api.getSessionById(sessionId),
+                      this.api.getInterventionsBySessionId(sessionId),
+                      this.getPending()//{ theSession: { sessionId } }
                     ]
   const [ session, interventions, pending ] = await Promise.all(promises);
 
@@ -70,14 +70,20 @@ async function mounted(){
   this.pending               = pending;
 }
 
-function getPending(id){
-  const isPending = { status: 'pending' };
-  const hasFiles  = { 'files.0': {$exists: true} }; // has at least one file
+async function getPending(args={}){
+  const { $or, theSession, t, government, organizationId  } = args
 
-  const q = mergeQueries(isPending, hasFiles);
+
+  const isPending = { status: 'pending' };
+  const hasFiles  = { 'files.0': {$exists: true} }; 
+
+
+  const q = mergeQueries(isPending, hasFiles, theSession, $or?{$or}:'', government?{government:government.toLowerCase()}:'', organizationId? {organizationId}:'', this.eventQuery );
   const l = this.maxResultCount;
 
-  return this.api.queryInterventions({ q, l })
+  this.pending = await this.api.queryInterventions({ q, l, t, ...this.eventQuery })
+
+  return this.pending
 }
 
 function agendaItems() {
@@ -88,5 +94,17 @@ function agendaItems() {
       display:   `${i.item} - ${i.shortTitle}`,
     }))
   }));
+}
+
+async function loadEventIds(){
+  const { meeting, code } = this.route.params
+
+  const event = code? await this.api.getConference(code) : await this.api.getMeetingByCode(meeting) 
+
+  const { _id } = event
+
+  this.eventQuery = code? { conferenceId: mapObjectId(_id) } : { meetingId: mapObjectId(_id) }
+
+  this.meetings = !code? [event] : await this.api.getMeetingById([ ...event.MajorEventIDs, ...event.MinorEventIDs ])
 }
 </script>
