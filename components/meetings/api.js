@@ -30,12 +30,15 @@ export default class Api
       const http = async function (...args) {
         return (await loadAsyncHeaders(baseConfig))(...args);
       }
-      
-      http.get    = async (...args)=> (await loadAsyncHeaders(baseConfig)).get   (...args);
-      http.head   = async (...args)=> (await loadAsyncHeaders(baseConfig)).head  (...args);
-      http.post   = async (...args)=> (await loadAsyncHeaders(baseConfig)).post  (...args);
-      http.put    = async (...args)=> (await loadAsyncHeaders(baseConfig)).put   (...args);
-      http.delete = async (...args)=> (await loadAsyncHeaders(baseConfig)).delete(...args);
+
+      http.get     = async (...args)=> (await loadAsyncHeaders(baseConfig)).get    (...args);
+      http.head    = async (...args)=> (await loadAsyncHeaders(baseConfig)).head   (...args);
+      http.post    = async (...args)=> (await loadAsyncHeaders(baseConfig)).post   (...args);
+      http.put     = async (...args)=> (await loadAsyncHeaders(baseConfig)).put    (...args);
+      http.patch   = async (...args)=> (await loadAsyncHeaders(baseConfig)).patch  (...args);
+      http.delete  = async (...args)=> (await loadAsyncHeaders(baseConfig)).delete (...args);
+      http.options = async (...args)=> (await loadAsyncHeaders(baseConfig)).options(...args);
+      http.request = async (...args)=> (await loadAsyncHeaders(baseConfig)).request(...args);
 
       this.http = http;
     }
