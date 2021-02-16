@@ -59,7 +59,6 @@ require.config({
         'PageHeader'      : cdnHost + '@scbd/page-header@0.0.70/dist/PageHeader.umd.min',
         'PageFooter'      : cdnHost + '@scbd/page-footer/dist/PageFooter.umd.min',
         'nlp'             : cdnHost + 'compromise/builds/compromise.min',
-        'ky'              : 'libs/globals/ky',
         'luxon'           : cdnHost + 'luxon@1.25.0/build/amd/luxon',
         'axios'           : cdnHost + 'axios@0.21.1/dist/axios.min',
         'vue-multiselect' : cdnHost + 'vue-multiselect@2.1.6/dist/vue-multiselect.min.js'

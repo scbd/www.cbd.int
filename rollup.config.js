@@ -12,15 +12,12 @@ const globals = {
   lodash : '_',
   Vue    : 'Vue',
   vue    : 'Vue',
-  ky     : 'ky',
   axios  : 'axios',
   luxon  : 'luxon',
   jquery : 'jquery',
 };
 
 export default [
-  exposeGlobal('node_modules/ky/index.js', 'ky'),
-  // exposeGlobal('node_modules/luxon/build/amd/luxon.js', 'luxon'),
   exposeVueComponent('meetings/sessions/view'),
   exposeVueComponent('meetings/sessions/edit'),
   exposeVueComponent('meetings/sessions/interpreters-view'),
@@ -47,7 +44,11 @@ function exposeVueComponent(relativePath) {
         vue(),
         commonjs(),
         nodeResolve({ browser: true, mainFields: [ 'browser', 'module', 'main' ] }),
-        terser(),
+        getBabelOutputPlugin({
+          presets: [['@babel/preset-env', { targets: "> 0.25%, IE 10, not dead"}]],
+          allowAllFormats: true
+        }),
+        terser()
       ],
     }
 }

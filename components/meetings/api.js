@@ -1,13 +1,12 @@
 
-import ky from 'ky'
 import axios from 'axios'
-import { isFunction, isString, isDate } from 'lodash'
+import { isFunction } from 'lodash'
 
-let sitePrefixUrl = 'https://api.cbddev.xyz';
+let sitePrefixUrl = 'https://api.cbd.int';
 
 if(/\.cbd\.int$/i   .test(window.location.hostname)) sitePrefixUrl= 'https://api.cbd.int';
 if(/\.cbddev\.xyz$/i.test(window.location.hostname)) sitePrefixUrl= 'https://api.cbddev.xyz';
-if(/\localhost$/i   .test(window.location.hostname)) sitePrefixUrl= 'http://localhost:8000';
+if(/\localhost$/i   .test(window.location.hostname)) sitePrefixUrl= '/';
 
 const defaultOptions = { prefixUrl: sitePrefixUrl, timeout  : 30 * 1000 }
 
@@ -21,24 +20,34 @@ export default class Api
 
       const { tokenReader, prefixUrl, timeout, tokenType } = { ...defaultOptions, ...options }
 
-      const kyOptions = { prefixUrl, timeout };
 
-      if(tokenReader) {
-        const hooks = { beforeRequest: [ async (request) => request.headers.set('Authorization', `${tokenType||'Token'} ${await tokenReader()}`) ] }
-        kyOptions.hooks = hooks; 
+      const baseConfig = {
+        baseURL : prefixUrl,
+        timeout,
+        tokenReader
       }
 
-      this.http = ky.create(kyOptions)  
+      const http = async function (...args) {
+        return (await loadAsyncHeaders(baseConfig))(...args);
+      }
+      
+      http.get    = async (...args)=> (await loadAsyncHeaders(baseConfig)).get   (...args);
+      http.head   = async (...args)=> (await loadAsyncHeaders(baseConfig)).head  (...args);
+      http.post   = async (...args)=> (await loadAsyncHeaders(baseConfig)).post  (...args);
+      http.put    = async (...args)=> (await loadAsyncHeaders(baseConfig)).put   (...args);
+      http.delete = async (...args)=> (await loadAsyncHeaders(baseConfig)).delete(...args);
+
+      this.http = http;
     }
 
-  //////////////////////////
+  ////////////////////////
   // Meetings
   ////////////////////////
 
   async queryMeetings({q,f,t,s,l,sk})  {
 
-    const searchParams = toURLSearchParams({q,f,t,s,l,sk})
-    const meeting      = await this.http.get(`api/v2016/meetings`, { searchParams }).json().catch(tryCastToApiError); //, { searchParams }
+    const searchParams = {q,f,t,s,l,sk}
+    const meeting      = await this.http.get(`api/v2016/meetings`, { params: searchParams }).then(res => res.data).catch(tryCastToApiError); //, { params: searchParams }
 
     return meeting;
   }
@@ -72,8 +81,8 @@ export default class Api
 
     const q = { code };
 
-    const searchParams  = toURLSearchParams({ q, fo: 1});
-    const conference = await this.http.get(`api/v2016/conferences`, { searchParams }).json().catch(tryCastToApiError);
+    const searchParams  = { q, fo: 1};
+    const conference = await this.http.get(`api/v2016/conferences`, { params: searchParams }).then(res => res.data).catch(tryCastToApiError);
 
     return conference
   }
@@ -84,8 +93,8 @@ export default class Api
 
   async queryInterventions({q,f,t,s,l,sk}) {
 
-    const searchParams  = toURLSearchParams({q,f,t,s,l,sk});
-    const interventions = await this.http.get(`api/v2021/meeting-interventions`, { searchParams }).json().catch(tryCastToApiError);
+    const searchParams  = {q,f,t,s,l,sk};
+    const interventions = await this.http.get(`api/v2021/meeting-interventions`, { params: searchParams }).then(res => res.data).catch(tryCastToApiError);
 
     return interventions
   }
@@ -94,15 +103,15 @@ export default class Api
 
     const {q,f,t,s,l,sk} = options;
 
-    const searchParams  = toURLSearchParams({q,f,t,s,l,sk});
-    const interventions = await this.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}/interventions`, { searchParams }).json().catch(tryCastToApiError);
+    const searchParams  = {q,f,t,s,l,sk};
+    const interventions = await this.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}/interventions`, { params: searchParams }).then(res => res.data).catch(tryCastToApiError);
 
     return interventions
   }
 
   async getInterventionById (interventionId) {
 
-    const interventions = await this.http.get(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}`).json().catch(tryCastToApiError);
+    const interventions = await this.http.get(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}`).then(res => res.data).catch(tryCastToApiError);
 
     return interventions
   }
@@ -111,19 +120,13 @@ export default class Api
   // Interventions Files
   ////////////////////////
 
-  async createInterventionFileSlot(pass, data){
-    const headers = new Headers();
-
-    headers.append("Authorization", "Pass "+pass);
-    headers.append("Content-Type", "application/json");
+  async createInterventionFileSlot(passCode, data){
     
-    const requestOptions = {
-      method  : 'POST',
-      headers : headers,
-      body    : JSON.stringify(data)
+    const headers = {
+      Authorization : `Pass ${passCode}`
     };
-
-    const slot = await this.http("api/v2021/meeting-interventions/slot", requestOptions).json().catch(tryCastToApiError);
+console.log(headers);
+    const slot = await this.http.post("api/v2021/meeting-interventions/slot", data, { headers }).then(res => res.data).catch(tryCastToApiError);
 
     return slot;
 }
@@ -131,20 +134,13 @@ export default class Api
   async commitInterventionFileSlot(slotId, passCode, meetingId){
     if(!slotId) throw new Error("slotId is empty")
 
-    const headers = new Headers();
+    const headers = {
+      Authorization : `Pass ${passCode}`
+    }
 
-    headers.append("Authorization", "Pass "+passCode);
-    headers.append("Content-Type", "application/json");
-    
     const data = { meetingId:  meetingId };
 
-    let requestOptions = {
-        method  : 'PUT',
-        headers : headers,
-        body    : JSON.stringify(data)
-    };
-
-    const intervention = await this.http(`api/v2021/meeting-interventions/slot/${encodeURIComponent(slotId)}/commit`, requestOptions).catch(tryCastToApiError);
+    const intervention = await this.http.put(`api/v2021/meeting-interventions/slot/${encodeURIComponent(slotId)}/commit`, data, { headers }).catch(tryCastToApiError);
 
     return intervention;
   }
@@ -156,15 +152,15 @@ export default class Api
 
   async querySessions({q,t,s,l,sk}) {
 
-    const searchParams = toURLSearchParams({q,t,s,l,sk});
-    const sessions     = await this.http.get(`api/v2021/meeting-sessions`, { searchParams }).json().catch(tryCastToApiError);
+    const searchParams = {q,t,s,l,sk};
+    const sessions     = await this.http.get(`api/v2021/meeting-sessions`, { params: searchParams }).then(res => res.data).catch(tryCastToApiError);
 
     return sessions
   }
 
   async getSessionById(sessionId, includeInterventions=false) {
 
-    let session       = this.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}`).json().catch(tryCastToApiError);
+    let session       = this.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}`).then(res => res.data).catch(tryCastToApiError);
     let interventions = null;
 
     if(includeInterventions) {
@@ -206,8 +202,8 @@ export default class Api
     const q            = makeMeetingConferenceQuery (code) // code? { 'meetings.symbol': { $in:[code]} } : {}
     const f            = { startDate: 1 , title: 1 }
     const s            = { startDate: 1 }
-    const searchParams = toURLSearchParams({ q, f, s });
-    const data         = await this.http.get('api/v2021/meeting-sessions', { searchParams }).json().catch(tryCastToApiError);
+    const searchParams = { q, f, s };
+    const data         = await this.http.get('api/v2021/meeting-sessions', { params: searchParams }).then(res => res.data).catch(tryCastToApiError);
 
     const interventionsPromises = []
 
@@ -223,6 +219,20 @@ export default class Api
 
     return data
   }
+}
+
+async function loadAsyncHeaders(baseConfig) {
+
+  const { tokenReader, tokenType, ...config } = { ...baseConfig };
+
+  const headers = { ...(config.headers || {}) };
+
+  if(tokenReader) {
+    const token = await tokenReader();
+    headers.Authorization = `${tokenType||'Token'} ${token}`;
+  }
+
+  return axios.create({ ...config, headers } );
 }
 
 function makeMeetingConferenceQuery (code){
@@ -271,12 +281,11 @@ function getAllSessions(interventions){
 // Helpers
 ////////////////////////
 
-export async function tryCastToApiError(error) {
+export function tryCastToApiError(error) {
 
-  if(error && error.response) {
-      const apiError = await error.response.json().catch(e=>{console.log(e); return null});
-
-      if(apiError) throw apiError;
+  if(error && error.response && error.response.data && error.response.data.code) {
+      const apiError = error.response.data
+      throw error.response.data;
   }
 
   throw error
@@ -297,26 +306,4 @@ export function mergeQueries(...args) {
   if (matches.length === 1) return matches[0];
 
   return { $and: matches };
-}
-
-function toURLSearchParams(params) {
-  if (!params) return undefined;
-console.log(params)
-  const qsParams  = new URLSearchParams();
-  const paramKeys = Object.keys(params);
-
-  Object.keys(params).forEach((key) => {
-
-    let value = params[key]
-
-    if(value===undefined) return;
-    
-         if (isDate(value))   value.toISOString();
-    else if (isString(value)) value = value;
-    else                      value = JSON.stringify(value, null, '');
-
-    qsParams.set(key, value);
-  });
-
-  return qsParams
 }
