@@ -24,7 +24,7 @@
         <td style="vertical-align: middle;"> 
           <span class="float-right text-muted">{{getOrgType({ organizationType }) }} </span>  
           {{ title }}
-          <div class="text-muted small" style="max-height:45px;overflow:hidden">{{summary || files[0].text}}</div>
+          <div class="summary text-muted small">{{summary || files[0].text}}</div>
         </td>
 
         <td class="files-col" style="text-align: center; vertical-align: middle;">
@@ -118,6 +118,18 @@ table.sessions {
   width:90px;
   text-align: center;
   white-space: nowrap;
+}
+
+.summary { 
+  max-height:40px;
+  overflow:hidden;
+  overflow: hidden;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  block-overflow: ellipsis;
+  max-lines: 2;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;  
 }
 @media screen and (max-width: 768px) {
   .files-col{
