@@ -109,6 +109,11 @@ export default class Api
     return this.http.put(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}`, data).then(res => res.data).catch(tryCastToApiError);
   }
 
+  deleteIntervention(interventionId, data) {
+
+    return this.http.delete(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}`).then(res => res.data).catch(tryCastToApiError);
+  }  
+
 
   async getInterventionOrganizations (params = { t:'s' }) {
 
