@@ -39,6 +39,7 @@
       </div>
     </div>
     <div class="col-8 px-0">
+      <div class="input-group d-inline-block">
       <multiselect 
       class="org-search"
       v-model="organization"
@@ -59,13 +60,16 @@
       @select="onChange"
       @remove="onChange({t:''})"
       @search-change="getOrgs">
+      >
         <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
+
       </multiselect>
-    </div>
-    <div class="col-1 pl-0">
-      <div class="input-group">
-        <button class="btn">+</button>
       </div>
+    </div>
+    <div class="col-1 pl-0 text-center">
+  
+        <button class="btn btn-secondary"><i class="fa fa-plus" /></button>
+
     </div>
   </div>
 </template>
@@ -125,6 +129,7 @@ function onChange(element){
 
 function created(){
   this.api = new Api(this.tokenReader);
+  this.getOrgs()
 }
 
 
@@ -271,5 +276,8 @@ table.sessions {
   height:43px;
   border: 1px solid #e8e8e8;
   border-radius:0px;
+}
+.debug{
+  border: 1px solid red !important;
 }
 </style>
