@@ -44,37 +44,24 @@ export default class Api
     }
 
   ////////////////////////
-  // Meetings
+  // Meetings {q,f,t,s,l,sk}
   ////////////////////////
 
-  async queryMeetings({q,f,t,s,l,sk})  {
-
-    const searchParams = {q,f,t,s,l,sk}
-    const meeting      = await this.http.get(`api/v2016/meetings`, { params: searchParams }).then(res => res.data).catch(tryCastToApiError); //, { params: searchParams }
-
-    return meeting;
+  async queryMeetings(params)  {
+    return this.http.get(`api/v2016/meetings`, { params }).then(res => res.data).catch(tryCastToApiError);
   }
 
   async getMeetingById(id, options={})  {
 
-    const q = { _id: mapObjectId(codeOrId) }
-    const f = (options||{})
+    const q = { _id : mapObjectId(id) };
 
-    const  meetings = await this.queryMeetings({q, f, l:1})
-    const [meeting] = meetings;
-
-    return meeting;
+    return this.queryMeetings({...options, q, fo: 1 });
   }
 
-  async getMeetingByCode(code, options={})  {
-
+  getMeetingByCode(code, options={ fo:1 })  {
     const q = { normalizedSymbol: `${code}`.toUpperCase() }
-    const f = (options||{})
 
-    const  meetings = await this.queryMeetings({q, f, l:1})
-    const [meeting] = meetings;
-
-    return meeting;
+    return this.queryMeetings({q, ...options})
   }
 
   //////////////////////////
@@ -94,30 +81,47 @@ export default class Api
   // Interventions
   ////////////////////////
 
-  async queryInterventions({q,f,t,s,l,sk}) {
+  queryInterventions(params) {
 
-    const searchParams  = {q,f,t,s,l,sk};
-    const interventions = await this.http.get(`api/v2021/meeting-interventions`, { params: searchParams }).then(res => res.data).catch(tryCastToApiError);
-
-    return interventions
+    return this.http.get(`api/v2021/meeting-interventions`, { params }).then(res => res.data).catch(tryCastToApiError);
   }
 
-  async getInterventionsBySessionId (sessionId, options={}) {
+  getInterventionsBySessionId (sessionId, params={}) {
 
-    const {q,f,t,s,l,sk} = options;
-
-    const searchParams  = {q,f,t,s,l,sk};
-    const interventions = await this.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}/interventions`, { params: searchParams }).then(res => res.data).catch(tryCastToApiError);
-
-    return interventions
+    return this.http.get(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}/interventions`, { params }).then(res => res.data).catch(tryCastToApiError);
   }
 
-  async getInterventionById (interventionId) {
+  getInterventionById (interventionId) {
 
-    const interventions = await this.http.get(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}`).then(res => res.data).catch(tryCastToApiError);
-
-    return interventions
+    return this.http.get(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}`).then(res => res.data).catch(tryCastToApiError);
   }
+
+  createPendingIntervention(data) {
+
+    delete data.sessionId;
+    data.status = 'pending';
+
+    return this.http.post(`api/v2021/meeting-interventions`, data).then(res => res.data).catch(tryCastToApiError);
+  }
+
+  updateIntervention(interventionId, data) {
+
+    return this.http.put(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}`, data).then(res => res.data).catch(tryCastToApiError);
+  }
+
+
+  async getInterventionOrganizations (params = { t:'s' }) {
+
+    return this.http.get(`api/v2021/meeting-interventions/organizations`, { params }).then(res => res.data).catch(tryCastToApiError);
+  }
+
+  async getInterventionOrganizationTypes(){
+
+    const types = await this.http.get(`api/v2021/meeting-interventions/organization-types`).then(res => res.data).catch(tryCastToApiError);
+
+    return types;
+  }
+
 
   //////////////////////////
   // Interventions Files
@@ -128,11 +132,11 @@ export default class Api
     const headers = {
       Authorization : `Pass ${passCode}`
     };
-console.log(headers);
+
     const slot = await this.http.post("api/v2021/meeting-interventions/slot", data, { headers }).then(res => res.data).catch(tryCastToApiError);
 
     return slot;
-}
+  }
 
   async commitInterventionFileSlot(slotId, passCode, meetingId){
     if(!slotId) throw new Error("slotId is empty")
@@ -148,17 +152,44 @@ console.log(headers);
     return intervention;
   }
 
+  async uploadInterventionFile(interventionId, fileInfo, fileData) {
+
+
+    const tempFile = {
+        filename : fileData.name,
+        metadata : fileData
+    };
+
+    const slot = await this.createTemporaryFile(tempFile);
+    
+    const { contentType }  = slot;
+
+    await this.uploadTemporaryFile(slot.url, fileData, { contentType });
+
+    var data = { ...fileInfo, url: `upload://${slot.uid}` };
+
+    const file = await this.http.post(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}/files`, data).then(res => res.data).catch(tryCastToApiError);
+
+    return file;
+  }
+
+
+  async updateInterventionFile(interventionId, fileId, data){
+    
+    const file = await this.http.put(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}/files/${encodeURIComponent(fileId)}`, data).then(res => res.data).catch(tryCastToApiError);
+
+    return file;
+  }   
 
   //////////////////////////
   // Sessions
   ////////////////////////
 
-  async querySessions({q,t,s,l,sk}) {
+  async querySessions(params) {
 
-    const searchParams = {q,t,s,l,sk};
-    const sessions     = await this.http.get(`api/v2021/meeting-sessions`, { params: searchParams }).then(res => res.data).catch(tryCastToApiError);
+    const sessions = await this.http.get(`api/v2021/meeting-sessions`, { params }).then(res => res.data).catch(tryCastToApiError);
 
-    return sessions
+    return sessions;
   }
 
   async getSessionById(sessionId, includeInterventions=false) {
@@ -179,6 +210,13 @@ console.log(headers);
   //////////////////////////
   // Temporary Files
   ////////////////////////
+  async createTemporaryFile(fileInfo) {
+
+    const slot = await this.http.post(`api/v2015/temporary-files`, fileInfo).then(res => res.data).catch(tryCastToApiError);
+
+    return slot;
+  }
+
   async uploadTemporaryFile(url, file, options={}) {
 
     const { headers, timeout, contentType, onUploadProgress, onDownloadProgress }= { ...(options||{}) };

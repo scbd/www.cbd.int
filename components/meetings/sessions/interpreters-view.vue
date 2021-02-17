@@ -14,15 +14,18 @@
     </keep-alive>
 
     <div class="text-right text-muted">
+      <button @click="refresh" class="btn btn-link"><i class="fa fa-refresh"></i></button>
       <i v-if="lastUpdated" class="text-muted"> Last refresh on {{ lastUpdated | timeFilter('T')}} - </i>
       <b v-if="interventions.length>=maxResultCount">More than {{interventions.length}} records </b>
       <b v-if="interventions.length <maxResultCount">{{interventions.length}} records </b>
     </div>
 
     <div class="card mb-3" v-if="interventions.length">
-      <Session :interventions="interventions"  :show-status="true"/>
+      <Session>
+        <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention, index}" v-bind:key="intervention._id"/>
+      </Session>
     </div>
-   
+  
   </div>
 </template>
 
@@ -30,17 +33,18 @@
 import { DateTime }    from 'luxon'
 import Session         from './session.vue'
 import SearchControls  from './search-controls.vue'
+import InterventionRow from './intervention-row.vue'
 import Api, { mergeQueries } from '../api'
 
 export default {
   name      : 'InterpretersView',
-  components: { Session, SearchControls },
+  components: { Session, SearchControls, InterventionRow },
   filters   : { timeFilter },
   props     : { 
     route:       { type: Object, required: false },
     tokenReader: { type: Function, required: false } 
   },
-  methods: { query },
+  methods: { query, refresh },
   created, 
   mounted, 
   beforeDestroy, 
@@ -65,7 +69,11 @@ async function created(){
 }
 
 async function mounted(){
-  this.refreshTimer = setInterval(() => this.query(this.lastQueryArg), 60 * 1000);
+  this.refreshTimer = setInterval(() => this.refresh(), 60 * 1000);
+}
+
+function refresh() {
+  this.query(this.lastQueryArg);
 }
 
 function beforeDestroy(){
@@ -94,3 +102,18 @@ async function query(queryArgs){
 }
 
 </script>
+
+<style scoped>
+
+.summary { 
+  max-height:40px;
+  overflow:hidden;
+  overflow: hidden;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  block-overflow: ellipsis;
+  max-lines: 2;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;  
+}
+</style>

@@ -34,7 +34,7 @@
         </template>
       </multiselect>
     </div>
-    <div class="col-9 px-0">
+    <div class="col-9">
       <div class="input-group">
         <input  :placeholder="$t('Text Search')" v-model="freeText" v-on:input="onChange" type="text" class="form-control text-search" id="text-search" ref="textSearch"/>
           <div class="input-group-append">
@@ -52,10 +52,10 @@
         @remove="onChange"
         class="dates">
         <template slot="singleLabel" slot-scope="{option}">
-          {{ option | dateTimeFilter('yyyy-MM-dd')}}
+          {{ option | dateTimeFilterUTC('yyyy-MM-dd')}}
         </template>
         <template slot="option" slot-scope="{option}">
-          {{ option | dateTimeFilter('yyyy-MM-dd')}}
+          {{ option | dateTimeFilterUTC('yyyy-MM-dd')}}
         </template>
       </multiselect>
     </div>
@@ -67,7 +67,7 @@ import { debounce }       from 'lodash'
 import Multiselect        from 'vue-multiselect'
 import i18n               from '../locales.js'
 import { mapObjectId }    from '../api.js'
-import { dateTimeFilter } from '../filters.js'
+import { dateTimeFilterUTC } from '../filters.js'
 
 export default {
   name      : 'SearchControls',
@@ -76,7 +76,7 @@ export default {
     meetings: { type: Array, required: true },
   },
   methods   : { onChange : debounce(onChange, 400), buildQuery, clearText},
-  filters   : { dateTimeFilter },
+  filters   : { dateTimeFilterUTC },
   computed  : { agendaItems },
   data,
   i18n,
