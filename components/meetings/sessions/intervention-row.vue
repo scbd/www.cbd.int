@@ -1,5 +1,5 @@
 <template >
-  <tr>
+  <tr  @click="$parent.$emit('select')">
     <td scope="row" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
         <span  v-if="!isPending(intervention.status)">{{index}}.</span>
         <small v-if="isPending(intervention.status)" class="text-muted lighter">{{$t('Pending')}}</small>
