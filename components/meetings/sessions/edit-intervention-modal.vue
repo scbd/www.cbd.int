@@ -7,7 +7,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title" id="uploadModalLabel">
-                            <i class="fa fa-arrow-circle-up"></i> Edit Intervention 
+                            <i class="fa fa-edit"></i> Edit Intervention 
                         </h4>
                         <button  type="button" class="close" aria-label="Close" @click="close">
                             <span aria-hidden="true">&times;</span>
@@ -17,11 +17,17 @@
                         
                         <form  id="statement-submission-form" @submit.prevent="submitForm" ref="form" novalidate :class="{ 'was-validated': wasValidated }">
 
-                            <div class="form-group row">
-                                <label for="participantIdentity" class="col-sm-3 col-form-label">Country / Org</label>
+                            <div class="form-group row" v-if="!intervention._id">
+                                <label for="participantIdentity" class="col-sm-3 col-form-label">Search</label>
                                 <div class="col-sm-9">
-                                    <input type="text"  v-if=" intervention._id" class="form-control" id="title" ref="title" v-model.trim="title" required>
-                                    <OrganizationSearch v-if="!intervention._id" :meetings="meetings" :tokenReader="tokenReader" @change="onOrganizationChange"/>
+                                    <OrganizationSearch :meetings="meetings" :tokenReader="tokenReader" @change="onOrganizationChange"/>
+                                </div>
+                            </div> 
+
+                            <div class="form-group row">
+                                <label for="participantIdentity" class="col-sm-3 col-form-label">Country / Organization </label>
+                                <div class="col-sm-9">
+                                    <input type="text"  class="form-control" id="title" ref="title" v-model.trim="title" required>
                                 </div>
                             </div> 
 
@@ -48,10 +54,10 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="status" class="col-sm-3 col-form-label">Satus</label>
+                                <label for="status" class="col-sm-3 col-form-label">Status</label>
                                 <div class="col-sm-9">
                                     <select :disabled="true || intervention._id" class="form-control" id="types" v-model="status">
-                                        <option value="public">Spoken/Delivery</option>
+                                        <option value="public">Spoken / Delivered</option>
                                         <option value="pending" selected>Uploaded / Pending</option>
                                     </select>
                                 </div>        
@@ -63,9 +69,9 @@
                             <div v-for="file in files" :key="file" class="form-group row">
 
                                 <label v-if=" file._id" for="allowPublic" class="col-sm-3 col-form-label">{{file.filename}}</label>
-                                <input v-if="!file._id" type="file" class="col-sm-3 col-form-label" @change="onFileChange($event.target.files)" ref="file">
+                                <input v-if="!file._id" type="file" class="col-sm-3 col-form-label" @change="file.htmlFile = $event.target.files[0]" ref="file">
 
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
                                     <div class="input-group">
                                         <select  class="form-control" id="fileLanguage" v-model="file.language">
                                             <option value="ar">العربية</option>
@@ -78,10 +84,16 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-4">
+                                <div class="col-sm-5">
                                     <div class="input-group">
-                                        <input :disabled="!!file._id"  type="checkbox" id="allowPublic" v-model="file.allowPublic" class=" col-sm-3 col-form-label">
-                                        <label class="form-check-label" for="allowPublic">Allow Public</label>
+                                        <div class="form-check">
+                                            <input :disabled="!file.allowPublic"  type="checkbox" class="form-check-input" id="public" v-model="file.public" >
+                                            <label class="form-check-label" for="public">Visible on website</label>
+                                        </div>                                        
+                                        <div class="form-check">
+                                            <input :disabled="!!file._id"  type="checkbox" class="form-check-input" id="allowPublic" v-model="file.allowPublic" >
+                                            <label class="form-check-label" for="allowPublic">Participant allowed publication</label>
+                                        </div>                                        
                                     </div>
                                 </div>
 
@@ -141,7 +153,7 @@ export default {
             error : null,
         }
     },
-    methods: { open, close, clearError, save, onOrganizationChange, onFileChange},
+    methods: { open, close, clearError, save, onOrganizationChange},
     created,
     mounted, 
 }
@@ -178,10 +190,6 @@ function onOrganizationChange(o) {
     this.title              = `${o.name} ${(o.acronym||'') && `(${o.acronym})`}`;
 }
 
-function onFileChange (files) {
-    this.file = files[0];
-}
-
 async function save(){
   try {
 
@@ -193,13 +201,12 @@ async function save(){
     const meetingId          = this.agendaItem.meetingId;
     const agendaItem         = this.agendaItem.item;
     const government         = (this.government||'').toLowerCase() || undefined;
+    const filesToAdd         = this.files.filter(o=> !o._id);
+    const filesToUpdate      = this.files.filter(o=>!!o._id);
 
-    const htmlFile      = this.file;
-    const filesToAdd    = this.files.filter(o=> !o._id);
-    const filesToUpdate = this.files.filter(o=>!!o._id);
-
-    if(filesToAdd.length>1) throw new Error("Only one file to add is supported")
-    if(filesToAdd.length && !htmlFile) throw new Error("Must select a file to upload")
+    const validUploads = filesToAdd.every(o=>!!o.htmlFile);
+    
+    if(!validUploads) throw new Error("Must select a file to upload")
 
     const updates = { 
         ...this.intervention, 
@@ -212,7 +219,6 @@ async function save(){
         organizationTypeId 
     };
 
-
     const updatedIntervention = interventionId  ? await this.api.updateIntervention(interventionId, updates)   
                                                 : await this.api.createPendingIntervention(updates);
 
@@ -220,18 +226,17 @@ async function save(){
     this.interventionId = updatedIntervention._id;
 
     //TODO Optimize 
-    const updatedFiles = await Promise.all(filesToUpdate.map(f=> this.api.updateInterventionFile(interventionId, f._id, f)));
-    const addedFiles   = await Promise.all(filesToAdd   .map(f=> { 
-        const { language, allowPublic } = f;
-        const data = {
+    const updatedFiles = await Promise.all(filesToUpdate.map(f=> {
+        const data = mapFileData(f);
+        return this.api.updateInterventionFile(interventionId, f._id, data);
+      }));
+
+    const addedFiles   = await Promise.all(filesToAdd.map(f=> { 
+        const { htmlFile } = f;
+        const data = { ...mapFileData(f),
             filename    : htmlFile.name,
             contentType : htmlFile.type,
-            allowPublic : allowPublic || false,
-            language,
-            meetingId,
-            agendaItem,
         }
-
         return this.api.uploadInterventionFile(interventionId, data, htmlFile);
     }));
 
@@ -246,6 +251,21 @@ async function save(){
   }
 }
 
+function mapFileData(file) {
+    let { allowPublic, public: isPublic } = file;
+
+    allowPublic = allowPublic || false;
+    isPublic    = isPublic    && allowPublic;
+
+    const data = {
+        ...file,
+        allowPublic,
+        public : isPublic,
+        htmlFile: undefined,
+    }
+
+    return data;
+}
 
 function clearError() {
   this.error    = null;

@@ -18,7 +18,10 @@
     <Session v-if="session" >
       <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention, index}" v-bind:key="intervention._id">
         <template slot="controls">
-          <button class="btn" @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
+          <div class="btn-group" role="group">
+            <button class="btn btn-sm btn-outline-dark" @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-sm btn-outline-danger" @click="askDelete(intervention)"><i class="fa fa-trash"></i></button>
+          </div>
         </template>
       </InterventionRow>
     </Session>
@@ -36,7 +39,10 @@
     <Session v-if="pendingInterventions.length" >
       <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" v-bind:key="intervention._id" @dblclick="edit(intervention)" >
         <template slot="controls">
-          <button class="btn" @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
+          <div class="btn-group" role="group">
+            <button class="btn btn-sm btn-outline-dark" @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-sm btn-outline-danger" @click="askDelete(intervention)"><i class="fa fa-trash"></i></button>
+          </div>
         </template>
       </InterventionRow>
     </Session>
@@ -75,6 +81,8 @@ export default {
     edit, 
     editId, 
     editClose,
+    askDelete,
+    replace,
     queryPendingInterventions,
     onSearch : debounce(onSearch, 400)
   },
@@ -121,19 +129,18 @@ async function mounted(){
     this.pendingInterventions  = await this.queryPendingInterventions();
 }
 
-async function editId(interventionId){
-
-  const intervention = await this.api.getInterventionById(interventionId)
-
-  this.edit(intervention)
-}
-
-
 function create(){
 
   this.editedIntervention = { 
     status: 'pending',
     files: [{ language: 'en'} ] };
+}
+
+async function editId(interventionId){
+
+  const intervention = await this.api.getInterventionById(interventionId)
+
+  this.edit(intervention)
 }
 
 function edit(intervention){
@@ -143,19 +150,37 @@ function edit(intervention){
 function editClose(intervention){
   this.editedIntervention = null
 
-  if(!intervention) return;
-
-  const i  = this.interventions       .findIndex(o=>o._id === intervention._id );
-  const pi = this.pendingInterventions.findIndex(o=>o._id === intervention._id );
-
-  if(i>=0)  this.interventions       .splice(i, 1, intervention);
-  if(pi>=0) this.pendingInterventions.splice(pi,1, intervention);
-
-  if(pi < 0 && intervention.status=='pending') {
-    this.pendingInterventions.splice(0,0, intervention);
+  if(intervention) {
+    const { _id } = intervention;
+    this.replace(_id, intervention);
   }
 }
 
+async function askDelete(intervention){
+
+  if(!confirm(`Delete "${intervention.title}?`)) return;
+
+  const { _id } = intervention;
+  await this.api.deleteIntervention(_id)
+
+  this.replace(_id, null);
+}
+
+function replace(_id, intervention) {
+  const  i = this.interventions       .findIndex(o=>o._id === _id );
+  const pi = this.pendingInterventions.findIndex(o=>o._id === _id );
+
+  if( i>=0) this.interventions       .splice( i, 1);
+  if(pi>=0) this.pendingInterventions.splice(pi, 1);
+
+  if(intervention) {
+    if( i>=0) this.interventions       .splice( i, 0, intervention);
+    if(pi>=0) this.pendingInterventions.splice(pi, 0, intervention);
+
+    if( i < 0 && intervention.status=='public')  this.interventions       .push(intervention);
+    if(pi < 0 && intervention.status=='pending') this.pendingInterventions.unshift(intervention);
+  }
+}
 
 function onSearch() {
   this.queryPendingInterventions({t : this.freeText});
