@@ -16,8 +16,13 @@
     </slot> -->
 
     <Session v-if="session" >
-      <InterventionRow v-for="(intervention, index) in session.interventions" v-bind="{intervention, index}" v-bind:key="index" />
+      <InterventionRow v-for="(intervention, index) in session.interventions" v-bind="{intervention, index}" v-bind:key="intervention._id">
+        <template slot="controls">
+          <button class="btn" @click="edit(intervention)"><i class="fa fa-edit"></i></button>
+        </template>
+      </InterventionRow>
     </Session>
+
     <hr/>
 
     <EditRow v-on:penging-query="getPending" v-bind="$props" :meetings="meetings"/>
@@ -26,8 +31,20 @@
     
     <caption class="text-nowrap float-right"> <small>{{pending.length}} {{$t('Pending statements uploaded')}}</small></caption>
     <Session v-if="pending" >
-      <InterventionRow v-for="(intervention, index) in pending" v-bind="{intervention, index}" v-bind:key="index" />
+      <InterventionRow v-for="intervention in pending" v-bind="{intervention}" v-bind:key="intervention._id" @dblclick="edit(intervention)" >
+        <template slot="controls">
+          <button class="btn" @click="edit(intervention)"><i class="fa fa-edit"></i></button>
+        </template>
+      </InterventionRow>
     </Session>
+
+    <EditInterventionModal v-if="!!editedIntervention"
+      :sessionId="sessionId" 
+      :intervention="editedIntervention" 
+      :route="route"
+      :tokenReader="tokenReader"
+      @close="editClose"
+    ></EditInterventionModal>    
   </div>
 </template>
 
@@ -46,10 +63,10 @@ export default {
   },
   components:{ Session, EditRow, InterventionRow },
   computed  : { agendaItems },
-  methods: {getPending, loadEventIds},
-  mounted,
-  created,
+  methods: {getPending, loadEventIds, edit, editClose },
   data,
+  created,
+  mounted
 }
 
 function data(){
@@ -60,14 +77,13 @@ function data(){
     maxResultCount : 250,
     pending: [],
     eventQuery: '',
-    eventQueryMappedObjectId: ''
+    eventQueryMappedObjectId: '',
+    editedIntervention: null
   }
 }
 
 async function created(){
   this.api = new Api(this.tokenReader);
-  
-  
 }
 
 async function mounted(){
@@ -84,6 +100,13 @@ async function mounted(){
   this.session               = session;
   this.session.interventions = interventions;
   this.pending               = pending;
+}
+
+function edit(intervention){
+  this.editedIntervention = intervention;
+}
+function editClose(intervention){
+  this.editedIntervention = null
 }
 
 async function getPending(args={}){

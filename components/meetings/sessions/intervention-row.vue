@@ -21,11 +21,16 @@
         <span class="float-right text-muted">{{ getOrgType(intervention) }} </span>  
         {{ intervention.title }}
         <div v-if="summary" class="text-muted small summary">{{intervention.title}}</div>
-        <slot/>
+        <slot>
+            <FilesPreview v-if="isPending(intervention.status)" :files="intervention.files" />
+        </slot>
     </td>
 
     <td class="files-col" style="text-align: center; vertical-align: middle;">
         <FilesView :files="intervention.files"/>
+    </td>
+    <td>
+        <slot name="controls"/>
     </td>
   </tr>
 </template>
@@ -35,11 +40,12 @@
 import   AgendaItem   from './agenda-item.vue'
 import   FilesView    from './files-view.vue'
 import   i18n         from '../locales.js'
+import   FilesPreview from './files-preview.vue'
 import { DateTime   } from 'luxon'
 
 export default {
   name      : 'InterventionLine',
-  components: { AgendaItem, FilesView },
+  components: { AgendaItem, FilesView, FilesPreview },
   props     : { 
     index:        { type: Number,  required: false, default:null },
     intervention: { type: Object,  required: true },
@@ -48,11 +54,6 @@ export default {
   methods   : { getOrgType, isPending },
   filters   : { timeFilter },
   i18n, 
-  mounted
-}
-
-function mounted(){
-  console.log('this.$props', this.$props)
 }
 
 function timeFilter (isoDateString, format='T')  {

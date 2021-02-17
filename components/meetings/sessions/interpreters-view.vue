@@ -21,14 +21,7 @@
 
     <div class="card mb-3" v-if="interventions.length">
       <Session>
-        <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention, index}" v-bind:key="intervention._id">
-          <template>
-            <div v-for="{filename, url, text, _id } in intervention.files" :key="_id">
-              <b><a style="color:inherit" :href="url" target="_blank">{{filename}}</a></b>
-              <div v-if="text" class="text-muted small summary">{{text}}</div>
-            </div>
-          </template>
-        </InterventionRow>
+        <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention, index}" v-bind:key="intervention._id"/>
       </Session>
     </div>
   
@@ -39,7 +32,7 @@
 import { DateTime }    from 'luxon'
 import Session         from './session.vue'
 import SearchControls  from './search-controls.vue'
-import InterventionRow  from './intervention-row.vue'
+import InterventionRow from './intervention-row.vue'
 import Api, { mergeQueries } from '../api'
 
 export default {
