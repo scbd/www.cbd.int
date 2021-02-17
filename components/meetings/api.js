@@ -47,30 +47,23 @@ export default class Api
   // Meetings {q,f,t,s,l,sk}
   ////////////////////////
 
-  async queryMeetings(param)  {
-    return this.http.get(`api/v2016/meetings`, { param }).then(res => res.data).catch(tryCastToApiError);
+  async queryMeetings(params)  {
+    return this.http.get(`api/v2016/meetings`, { params }).then(res => res.data).catch(tryCastToApiError);
   }
 
   async getMeetingById(id, options={})  {
 
     const q = Array.isArray(id)? { _id: { $in: id.map(aId => mapObjectId(aId)) } } : { _id: mapObjectId(id) }
 
+    if(!Array.isArray(id)) options.fo=1
 
-    const  meetings = await this.queryMeetings({q, ...options})
-    const [meeting] = meetings;
-
-    return meeting;
+    return this.queryMeetings({q, ...options})
   }
 
-  async getMeetingByCode(code, options={})  {
-
+  getMeetingByCode(code, options={ fo:1 })  {
     const q = { normalizedSymbol: `${code}`.toUpperCase() }
-    const f = (options||{})
 
-    const  meetings = await this.queryMeetings({q, f, l:1})
-    const [meeting] = meetings;
-
-    return meeting;
+    return this.queryMeetings({q, ...options})
   }
 
   //////////////////////////

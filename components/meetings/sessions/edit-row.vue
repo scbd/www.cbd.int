@@ -1,7 +1,7 @@
 
 <template >
   <div class="row">
-    <div class="col-2">
+    <div class="col-2 pr-0">
       <multiselect
         v-if="meetings.length"
         v-model="selectedAgendaItems"
@@ -33,13 +33,14 @@
         </template>
       </multiselect>
     </div>
-    <div class="col-2">
+    <div class="col-1 px-0">
       <div class="input-group">
         <input   v-model="time" type="text" class="form-control "/>
       </div>
     </div>
-    <div class="col-8">
+    <div class="col-8 px-0">
       <multiselect 
+      class="org-search"
       v-model="organization"
       track-by="name" 
       label="name"
@@ -58,20 +59,13 @@
       @select="onChange"
       @remove="onChange({t:''})"
       @search-change="getOrgs">
-
-        <!-- <template slot="tag" slot-scope="{ option, remove }">
-          <span class="custom__tag">
-            <span>{{ option.name }}</span>
-            <span class="custom__remove" @click="remove(option)">❌</span>
-          </span>
-          </template> -->
-        
-        <!-- <template slot="clear" slot-scope="props">
-          <div class="multiselect__clear" v-if="organization" @mousedown.prevent.stop="organization=undefined"></div>
-        </template> -->
         <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
       </multiselect>
-      <pre>{{organization}}</pre>
+    </div>
+    <div class="col-1 pl-0">
+      <div class="input-group">
+        <button class="btn">+</button>
+      </div>
     </div>
   </div>
 </template>
@@ -183,6 +177,45 @@ function agendaItems() {
 }
 </script>
 
+<style >
+.agenda > .multiselect__tags{
+  border-radius: 5px 0px 0px 5px !important;
+}
+
+.org-search > .multiselect__tags{
+  border-radius: 0px 5px 5px 0px !important;
+}
+
+::-webkit-input-placeholder { /* Edge */
+      color: #adadad !important;
+    display: inline-block;
+    margin-bottom: 10px;
+    padding-top: 2px;
+    font-size: 14px;
+        font-family: inherit;
+    font-weight:300;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+      color: #adadad !important;
+    display: inline-block;
+    margin-bottom: 10px;
+    padding-top: 2px;
+    font-size: 14px;
+    font-family: inherit;
+    font-weight:300;
+}
+
+::placeholder {
+      color: #adadad !important;
+    display: inline-block;
+    margin-bottom: 10px;
+    padding-top: 2px;
+    font-size: 14px;
+        font-family: inherit;
+    font-weight:300;
+}
+</style>
 
 <style scoped>
 .type{
@@ -230,4 +263,11 @@ table.sessions {
   }
 }
 </style>
+<style scoped>
+.time{
+  height:43px;
+  border: 1px solid #e8e8e8;
+  border-radius:0px;
+}
 
+</style>

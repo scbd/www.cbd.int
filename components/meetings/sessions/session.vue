@@ -22,7 +22,7 @@
         </td>
 
         <td style="vertical-align: middle;"> 
-          <span class="float-right text-muted">{{getOrgType(row) }} </span>  
+          <span class="float-right text-muted">{{ getOrgType(row) }} </span>  
           {{ row.title }}
           <div class="summary text-muted small">{{row.summary || (row.files[0] || {}).text}}</div>
         </td>
