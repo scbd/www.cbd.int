@@ -108,8 +108,6 @@ async function created(){
   this.api = new Api(this.tokenReader);
   this.getOrgs('e')
   this.organizationTypes = await this.api.getInterventionOrganizationTypes();
-
-  console.log(this.organizationTypes)
 }
 
 async function createLine(){

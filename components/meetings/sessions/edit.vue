@@ -16,7 +16,7 @@
     </slot> -->
 
     <Session v-if="session" >
-      <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention, index}" v-bind:key="intervention._id">
+      <InterventionRow v-for="(intervention, index) in interventions" :index="index+1" v-bind="{intervention}" v-bind:key="intervention._id">
         <template slot="controls">
           <div class="btn-group" role="group">
             <button class="btn btn-sm btn-outline-dark" @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
@@ -39,9 +39,14 @@
     <Session v-if="pendingInterventions.length" >
       <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" v-bind:key="intervention._id" @dblclick="edit(intervention)" >
         <template slot="controls">
+          <div class="text-nowrap">
+            
+            <button class="btn btn-sm btn-outline-success" @click="askPublish(intervention)"><i class="fa fa-microphone"></i></button>
+
           <div class="btn-group" role="group">
-            <button class="btn btn-sm btn-outline-dark" @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-sm btn-outline-danger" @click="askDelete(intervention)"><i class="fa fa-trash"></i></button>
+            <button class="btn btn-sm btn-outline-dark"    @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-sm btn-outline-danger"  @click="askDelete(intervention)"><i class="fa fa-trash"></i></button>
+          </div>
           </div>
         </template>
       </InterventionRow>
@@ -61,7 +66,7 @@
 
 
 <script>
-import { debounce }              from 'lodash'
+import { sortBy, debounce }              from 'lodash'
 import EditInterventionModal     from './edit-intervention-modal.vue'
 import InterventionRow           from './intervention-row.vue'
 import Session                   from './session.vue'
@@ -75,13 +80,16 @@ export default {
     tokenReader: { type: Function, required: false }
   },
   components: { Session, EditRow, InterventionRow, EditInterventionModal },
-  computed  : { agendaItems },
+  computed  : { 
+    agendaItems, 
+    sessionId() { return this.session._id } },
   methods:    { 
     create, 
     edit, 
     editId, 
     editClose,
     askDelete,
+    askPublish,
     replace,
     queryPendingInterventions,
     onSearch : debounce(onSearch, 400)
@@ -114,7 +122,7 @@ async function mounted(){
     const promises = [
       this.api.getMeetingByCode(meetingCode),
       this.api.getSessionById(sessionId),
-      this.api.getInterventionsBySessionId(sessionId),
+      this.api.getInterventionsBySessionId(sessionId, { s:{datetime:1}}),
     ]
 
     const [ meeting, session, interventions ] = await Promise.all(promises);
@@ -166,20 +174,46 @@ async function askDelete(intervention){
   this.replace(_id, null);
 }
 
+async function askPublish(intervention){
+
+  var datetime = new Date();
+
+  if(!confirm(`Publish "${intervention.title}?`)) return;
+
+  const { sessionId }          = this;
+  const { _id:interventionId } = intervention;
+  const filePublic             = true;
+
+  const updatedInterventions = await this.api.assignInterventionToSession(sessionId,  interventionId, { datetime, filePublic })
+
+  this.replace(interventionId, updatedInterventions);
+}
+
 function replace(_id, intervention) {
-  const  i = this.interventions       .findIndex(o=>o._id === _id );
-  const pi = this.pendingInterventions.findIndex(o=>o._id === _id );
+  console.log(1)
+  let  i = this.interventions       .findIndex(o=>o._id === _id );
+  let pi = this.pendingInterventions.findIndex(o=>o._id === _id );
 
   if( i>=0) this.interventions       .splice( i, 1);
   if(pi>=0) this.pendingInterventions.splice(pi, 1);
 
   if(intervention) {
+
+  console.log( i, pi, intervention.status)
+
+
+    if( i>=0 && intervention.status=='pending')  i=-1;
+    if(pi>=0 && intervention.status=='public' ) pi=-1;
+
+
     if( i>=0) this.interventions       .splice( i, 0, intervention);
     if(pi>=0) this.pendingInterventions.splice(pi, 0, intervention);
 
     if( i < 0 && intervention.status=='public')  this.interventions       .push(intervention);
     if(pi < 0 && intervention.status=='pending') this.pendingInterventions.unshift(intervention);
   }
+
+  this.interventions = sortBy(this.interventions, o=>o.datetime);
 }
 
 function onSearch() {
