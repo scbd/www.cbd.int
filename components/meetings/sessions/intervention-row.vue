@@ -9,7 +9,7 @@
         <AgendaItem :item="intervention.agenda || ( intervention.agendaItem && { item: intervention.agendaItem})"/>
     </td>
 
-    <td v-if="showStatus" class="date-col" style="text-align: center; vertical-align: middle;">
+    <td class="date-col" style="text-align: center; vertical-align: middle;">
         <span>{{ intervention.datetime | timeFilter('MMM d') }}</span>
     </td>
 
@@ -21,11 +21,7 @@
         <span class="float-right text-muted">{{ getOrgType(intervention) }} </span>  
         {{ intervention.title }}
         <div v-if="summary" class="text-muted small summary">{{intervention.title}}</div>
-
-        <div v-for="{filename, url, text, _id } in intervention.files" :key="_id">
-            <b><a style="color:inherit" :href="url" target="_blank">{{filename}}</a></b>
-            <div v-if="text" class="text-muted small summary">{{text}}</div>
-        </div>
+        <slot/>
     </td>
 
     <td class="files-col" style="text-align: center; vertical-align: middle;">
@@ -45,8 +41,8 @@ export default {
   name      : 'InterventionLine',
   components: { AgendaItem, FilesView },
   props     : { 
-    index:        { type: Number,   required: false, default:null },
-    intervention: { type: Object,   required: true },
+    index:        { type: Number,  required: false, default:null },
+    intervention: { type: Object,  required: true },
     showStatus:   { type: Boolean, required: false, default: false },
 },
   methods   : { getOrgType, isPending },
