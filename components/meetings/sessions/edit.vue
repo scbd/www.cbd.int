@@ -188,15 +188,19 @@ function onSearch() {
 
 async function queryPendingInterventions(args={}){
 
+  if(!this.meetings[0]) return []
+
   const { t, agendaItem } = args
   const isPending  = { status: 'pending' };
   const hasFiles   = { 'files.0': {$exists: true} }; 
   const meetingIds = { meetingId : { $in: this.meetings.map(m=>mapObjectId(m._id)) } }; 
-
+  const meetingId  = this.meetings[0]._id
   const q = mergeQueries(isPending, hasFiles, meetingIds, agendaItem);
   const l = this.maxResultCount;
 
-  this.pendingInterventions = await this.api.queryInterventions({ q, l, t })
+  const textSearch = t? { t, meetingId } : {}
+  
+  this.pendingInterventions = await this.api.queryInterventions({ q, l, ...textSearch  })
 
   return this.pendingInterventions
 }

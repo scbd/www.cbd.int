@@ -2,11 +2,7 @@
   <div class="row">
     <div class="col-2 pr-0">
       <div class="input-group">
-        <select class="form-control" id="agendaItem"  v-model="selectedAgendaItem" required>
-          <optgroup v-for="{ _id: meetingId, agenda, normalizedSymbol } in meetings" :key="meetingId" :label="normalizedSymbol">
-            <option v-for="{ item, shortTitle, title } in agenda.items" :key="item" :value="{ meetingId, item }">{{item }} - {{ shortTitle || title }} </option>
-          </optgroup>
-        </select>
+        <AgendaSelect v-model="selectedAgendaItem" :meetings="meetings" @change="onChange"/>
       </div>
     </div>
     <div class="col-1 px-0">
@@ -19,7 +15,7 @@
       <multiselect 
       class="org-search"
       v-model="organization"
-      track-by="name" 
+      track-by="display" 
       label="display"
       placeholder="Type to search" 
       open-direction="top" 
@@ -30,6 +26,7 @@
       :options-limit="300" 
       :limit="3" 
       :max-height="600" 
+      :taggable="true"
       @tag="addOrg"
       @close="organization? '' :onChange({t:''})"
       @select="onChange"
@@ -43,7 +40,7 @@
     </div>
     <div class="col-1 pl-0 text-center">
   
-        <button class="btn btn-secondary"><i class="fa fa-plus" /></button>
+        <button v-on:click="createLine" class="btn btn-secondary"><i class="fa fa-plus" /></button>
 
     </div>
   </div>
@@ -52,9 +49,10 @@
 
 <script>
 
-import { debounce } from 'lodash'
+import { debounce, omitBy, isNill, cloneDeep } from 'lodash'
+import AgendaSelect from './agenda-item-select.vue'
 import Multiselect  from 'vue-multiselect'
-import AgendaItem   from './agenda-item.vue'
+
 import FilesView    from './files-view.vue'
 import i18n         from '../locales.js'
 import { dateTimeFilter } from '../filters.js'
@@ -67,11 +65,10 @@ export default {
     route      : { type: Object, required: false },
     tokenReader: { type: Function, required: false },
   },
-  components : { Multiselect, AgendaItem, FilesView},
-  methods    : {clearText, getOrgs, addOrg, getQ, 
-  onChange: debounce(onChange, 100)},
+  components : { Multiselect, FilesView, AgendaSelect},
+  computed   : {meetingId},
+  methods    : { clearText, getOrgs, addOrg, getQ, onChange: debounce(onChange, 100), createLine, mapOrganizationNames },
   i18n,
-  mounted,
   created,
   data,
   
@@ -86,9 +83,16 @@ function data(){
     timeText: dateTimeFilter(now.toISOString()),
     organization: '',
     allOrganizations:[],
-    isLoading: false, 
-    meetingId:''
+    createdOrganizations:[],
+    isLoading: false,
+    organizationTypes:[]
   }
+}
+
+function meetingId(){
+  const  { _id }  = this.meetings[0] || {}
+  
+  return _id 
 }
 
 function onChange(element){
@@ -96,46 +100,78 @@ function onChange(element){
   this.$forceUpdate()
 
   const agendaItem = this.getQ() || {}
-  const {t, meetingId, organizationId, government } = element
-  this.$emit('penging-query', {agendaItem, t, organizationId, government})
+  const { t  } = element
+  this.$emit('penging-query', { agendaItem, t })
 }
 
-function created(){
+async function created(){
   this.api = new Api(this.tokenReader);
-  this.getOrgs()
+  this.getOrgs('e')
+  this.organizationTypes = await this.api.getInterventionOrganizationTypes();
+
+  console.log(this.organizationTypes)
+}
+
+async function createLine(){
+
+  const { sessionId } = this.route.params
+  const { item:agendaItem, meetingId     } = this.selectedAgendaItem
+  const { display:title } = this.organization[0]
+
+
+  const organization = cloneDeep(this.organization[0])
+  const datetime = new Date()
+
+  delete organization.display
+
+console.log('organization', organization)
+  //this.timeText
+
+  //agenda, agendaItem, conferenceId, datetime, government, meeting, meetingId, organizationType, organizationTypeName, sessionId, status, title
+
+  const line = { title, ...organization, agendaItem, meetingId: { $oid: meetingId }, datetime }
+
+  await this.api.createIntervention(sessionId, line)
 }
 
 
 function addOrg(name){
-
-
-  this.organization = {name}
-  this.allOrganizations = []
+  this.organization = { name, display: `${name} `}
+  this.createdOrganizations.push(this.organization)
+  this.allOrganizations.push(this.organization)
 }
 
-async function mounted(){
-  await this.getOrgs()
-}
 
 async function getOrgs(t){
   
-  if(!t) return 
+  if(!t || !this.meetingId) return 
   
   this.isLoading= true
-  const { meeting } = this.route.params
 
-  const { _id:meetingId } = await this.api.getMeetingByCode(meeting) // should hget from parent objects
-  
-  
-  this.onChange({ meetingId,  t })
+  const meetingId = this.meetingId
+  this.onChange({ meetingId, t })
 
-  const organizations = await this.api.getInterventionOrganizations({ meetingId , t } )
+  const organizations = (await this.api.getInterventionOrganizations({ meetingId , t } )).map(this.mapOrganizationNames)
 
-  organizations.forEach(o=> o.display = `${o.name} ${(o.acronym||'') && `(${o.acronym})`}`)
+  this.allOrganizations = [ ...organizations, ...this.createdOrganizations ];
 
-  this.allOrganizations = organizations;
+  this.isLoading = false
+}
 
-  this.isLoading= false
+function mapOrganizationNames(organizationDetails){
+  delete organizationDetails.score
+
+  const { name:governmentName, acronym, government:governmentUpperCase, organizationTypeId, organizationId } = organizationDetails
+
+  const organizationType = cloneDeep((this.organizationTypes.find(({ _id }) => _id === organizationTypeId)))
+  const display          = `${governmentName}` + (!acronym? '' : `(${acronym})`)
+  const government       = governmentUpperCase? governmentUpperCase.toLowerCase() : ''
+
+
+  if(organizationType) delete organizationType._id
+
+//organizationType, organizationId: { $oid: organizationId },
+  return { display, government, governmentName,  organizationTypeId: { $oid: organizationTypeId } }
 }
 
 function clearText(){
@@ -146,10 +182,12 @@ function clearText(){
 function getQ(){
   if(!this.selectedAgendaItem) return
 
-  const { meetingId, item: agendaItem } = this.selectedAgendaItem;
+  const {  item: agendaItem } = this.selectedAgendaItem;
 
-  return { meetingId, agendaItem }
+  return agendaItem? { agendaItem } : undefined
 }
+
+//omitBy(, isNil)
 </script>
 
 <style >

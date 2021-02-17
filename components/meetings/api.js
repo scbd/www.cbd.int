@@ -1,6 +1,6 @@
 
 import axios from 'axios'
-import { isFunction } from 'lodash'
+import { isFunction, isEmpty } from 'lodash'
 
 let sitePrefixUrl = 'https://api.cbd.int';
 
@@ -8,6 +8,7 @@ if(/\.cbd\.int$/i   .test(window.location.hostname)) sitePrefixUrl= 'https://api
 if(/\.cbddev\.xyz$/i.test(window.location.hostname)) sitePrefixUrl= 'https://api.cbddev.xyz';
 if(/\localhost$/i   .test(window.location.hostname)) sitePrefixUrl= '/';
 
+const cache          = new Map()
 const defaultOptions = { prefixUrl: sitePrefixUrl, timeout  : 30 * 1000 }
 
 export default class Api
@@ -104,6 +105,12 @@ export default class Api
     return this.http.post(`api/v2021/meeting-interventions`, data).then(res => res.data).catch(tryCastToApiError);
   }
 
+  createIntervention(sessionId, data) {
+
+
+    return this.http.post(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}/interventions`, data).then(res => res.data).catch(tryCastToApiError);
+  }
+
   updateIntervention(interventionId, data) {
 
     return this.http.put(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}`, data).then(res => res.data).catch(tryCastToApiError);
@@ -121,8 +128,13 @@ export default class Api
   }
 
   async getInterventionOrganizationTypes(){
+    const url = `api/v2021/meeting-interventions/organization-types`
 
-    const types = await this.http.get(`api/v2021/meeting-interventions/organization-types`).then(res => res.data).catch(tryCastToApiError);
+    if(cache.has(url)) return cache.get(url)
+
+    const types = await this.http.get(url).then(res => res.data).catch(tryCastToApiError);
+
+    cache.set(url, types)
 
     return types;
   }
@@ -346,7 +358,7 @@ export function isObjectId(id){
 }
 
 export function mergeQueries(...args) {
-  const matches = [ ...args ].filter((m) => !!m);
+  const matches = [ ...args ].filter((m) => !!m && !isEmpty(m));
 
   if (!matches.length)      return null;
   if (matches.length === 1) return matches[0];
