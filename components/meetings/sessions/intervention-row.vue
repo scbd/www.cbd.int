@@ -1,37 +1,38 @@
 <template >
-<tr>
-    <td scope="intervention" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
-        <span  v-if="!isPending(intervention.status)">{{index}}.</span>
-        <small v-if="isPending(intervention.status)" class="text-muted lighter">{{$t('Pending')}}</small>
+  <tr>
+    <td scope="row" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
+      ---{{intervention}}
+        <!-- <span  v-if="!isPending(intervention.status)">{{index}}.</span>
+        <small v-if="isPending(intervention.status)" class="text-muted lighter">{{$t('Pending')}}</small> -->
     </td>
 
     <td class="agenda-items-col" style="text-align: center; vertical-align: middle;">
-        <AgendaItem :item="intervention.agenda || ( intervention.agendaItem && { item: intervention.agendaItem})"/>
+        <!-- <AgendaItem :item="intervention.agenda || ( intervention.agendaItem && { item: intervention.agendaItem})"/> -->
     </td>
 
     <td v-if="showStatus" class="date-col" style="text-align: center; vertical-align: middle;">
-        <span>{{ intervention.datetime | timeFilter('MMM d') }}</span>
+        <!-- <span>{{ intervention.datetime | timeFilter('MMM d') }}</span> -->
     </td>
 
     <td class="time-col" style="text-align: center; vertical-align: middle;">
-        <span>{{ intervention.datetime | timeFilter('T') }}</span>
+        <!-- <span>{{ intervention.datetime | timeFilter('T') }}</span> -->
     </td>
 
     <td style="vertical-align: middle;"> 
-        <span class="float-right text-muted">{{ getOrgType(intervention) }} </span>  
+        <!-- <span class="float-right text-muted">{{ getOrgType(intervention) }} </span>  
         {{ intervention.title }}
         <div v-if="summary" class="text-muted small summary">{{intervention.title}}</div>
 
         <div v-for="{filename, url, text, _id } in intervention.files" :key="_id">
             <b><a style="color:inherit" :href="url" target="_blank">{{filename}}</a></b>
             <div v-if="text" class="text-muted small summary">{{text}}</div>
-        </div>
+        </div> -->
     </td>
 
     <td class="files-col" style="text-align: center; vertical-align: middle;">
-        <FilesView :files="row.files"/>
+        <!-- <FilesView :files="row.files"/> -->
     </td>
-</tr>
+  </tr>
 </template>
 
 
@@ -49,10 +50,14 @@ export default {
     intervention: { type: Object,   required: true },
     showStatus:   { type: Boolean, required: false, default: false },
 },
-  methods   : { getOrgType, getRows, isPending, edit, select, isSelectedRow, isSelectedEditRow },
+  methods   : { getOrgType, isPending },
   filters   : { timeFilter },
-  i18n,
-  data
+  i18n, 
+  mounted
+}
+
+function mounted(){
+  console.log('this.$props', this.$props)
 }
 
 function timeFilter (isoDateString, format='T')  {

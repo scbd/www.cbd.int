@@ -9,19 +9,24 @@
       </small>
     </h1>
 
-    <Session v-if="session" :interventions="session.interventions"/>
+    <Session v-if="session" :interventions="session.interventions">
+      <InterventionRow />
+    </Session>
     <hr/>
 
     <EditRow v-on:penging-query="getPending" v-bind="$props" :meetings="meetings"/>
 
     <hr/>
     <caption class="text-nowrap float-right"> <small>{{pending.length}} {{$t('Pending statements uploaded')}}</small></caption>
-    <Session v-if="pending" :interventions="pending"/>
+    <Session v-if="pending" :interventions="pending">
+        
+    </Session>
   </div>
 </template>
 
 
 <script>
+import InterventionRow           from './intervention-row.vue'
 import Session                   from './session.vue'
 import EditRow                   from './edit-row.vue'
 import Api    , { mergeQueries, mapObjectId } from '../api.js'
@@ -32,7 +37,7 @@ export default {
     route      : { type: Object, required: false },
     tokenReader: { type: Function, required: false }
   },
-  components:{ Session, EditRow },
+  components:{ Session, EditRow, InterventionRow },
   computed  : { agendaItems },
   methods: {getPending, loadEventIds},
   mounted,
