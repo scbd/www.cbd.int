@@ -28,7 +28,7 @@
                     {{ language| langTextFilter }}
                 </span>
             </a>
-            <i v-if="!isPublic" class="fa fa-eye-slash" :class="{ 'text-muted' : !allowPublic }"/>
+            <i v-if="!isPublic" class="fa fa-eye-slash" :class="{ 'text-danger' : !allowPublic, 'text-success' : allowPublic, }"/>
         </div>
     </div>
 
