@@ -1,11 +1,9 @@
 
 <template >
-  <table v-if="interventions.length" class="table table-striped table-hover no-border-first-row sessions" v-bind:key="index">
-    <slot v-for="(intervention, index) in interventions" v-bind="{ intervention, index }">
-      <tbody v-bind:key="index" >
-
-      </tbody>
-    </slot>
+  <table  class="table table-striped table-hover no-border-first-row sessions" v-bind:key="index">
+    <tbody >
+      <slot  />
+    </tbody>
   </table>
 </template>
 
@@ -15,7 +13,7 @@
 export default {
   name      : 'SessionsView',
   props     : { 
-                interventions: { type: Array,   required: false },
+                // interventions: { type: Array,   required: false },
                 showStatus   : { type: Boolean, required: false, default: false },
                 selectLimit: { type: Number, required: false, default: 1 }
               },

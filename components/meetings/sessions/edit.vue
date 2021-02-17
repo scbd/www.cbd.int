@@ -9,17 +9,24 @@
       </small>
     </h1>
 
-    <Session v-if="session" :interventions="session.interventions">
-      <InterventionRow />
+    <!-- <slot v-for="(intervention, index) in interventions" v-bind="{ intervention }">
+      <tbody v-bind:key="index" >
+
+      </tbody>
+    </slot> -->
+
+    <Session v-if="session" >
+      <InterventionRow v-for="(intervention, index) in session.interventions" v-bind="{intervention, index}" v-bind:key="index" />
     </Session>
     <hr/>
 
     <EditRow v-on:penging-query="getPending" v-bind="$props" :meetings="meetings"/>
 
     <hr/>
+    
     <caption class="text-nowrap float-right"> <small>{{pending.length}} {{$t('Pending statements uploaded')}}</small></caption>
-    <Session v-if="pending" :interventions="pending">
-        
+    <Session v-if="pending" >
+      <InterventionRow v-for="(intervention, index) in pending" v-bind="{intervention, index}" v-bind:key="index" />
     </Session>
   </div>
 </template>
