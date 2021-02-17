@@ -10,7 +10,7 @@
 
       <li  class="dropdown-header">Select a file to download</li>
 
-      <li v-for="{language, contentType, url} in files" v-bind:key="url"  class="dropdown-item ng-scope"  style="font-size:16px;margin:4px 0px;white-space:nowrap;">
+      <li v-for="{language, contentType, url, _id} in files" v-bind:key="_id"  class="dropdown-item ng-scope"  style="font-size:16px;margin:4px 0px;white-space:nowrap;">
           <a :href="url" role="menuitem" tabindex="-1"  class="language ng-binding">
             {{ language| langTextFilter }}
             <i :class="getIconClass(contentType)" class="fa ml-5"/>
@@ -20,7 +20,7 @@
 
     <!-- Medium view and above -->
     <div class="d-md-block document-files">
-        <div v-for=" {language, text, contentType, url, public: isPublic, allowPublic} in files" v-bind:key="url" class="d-none d-md-block" >
+        <div v-for=" {language, text, contentType, url, public: isPublic, allowPublic, _id} in files" v-bind:key="_id" class="d-none d-md-block" >
             <i :style="{ visibility: (text?'visible':'hidden') }" class="fa fa-file-text-o" aria-hidden="true" @click="showPreview(text)"></i>
             <a target="_blank" :href="url" >
               <i :class="getIconClass(contentType)" class="fa"/>

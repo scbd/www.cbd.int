@@ -1,36 +1,13 @@
 <template >
   <div class="row">
     <div class="col-2 pr-0">
-      <multiselect
-        v-if="meetings.length"
-        v-model="selectedAgendaItems"
-        deselect-label="remove this value"
-        :placeholder="$t('Agenda Item')"
-        :options="agendaItems"
-        :searchable="false"
-        :multiple="true"
-        group-values="items"
-        group-label="normalizedSymbol"
-        :hide-selected="true"
-        track-by="item"
-        label="display"
-        class="agenda"
-        @select="onChange"
-        @remove="onChange"
-        >
-        <template  slot="option" slot-scope="props" >
-          <div class="row" v-if="props.option.$groupLabel">
-            <div class="col-12">
-              <span class="filter-label">{{ props.option.$groupLabel}}</span>
-            </div>
-          </div>
-          <div class="row" v-if="!props.option.$groupLabel">
-            <div class="col-12">
-              <span  >{{props.option.display}}</span>
-            </div>
-          </div>
-        </template>
-      </multiselect>
+      <div class="input-group">
+        <select class="form-control" id="agendaItem"  v-model="selectedAgendaItem" required>
+          <optgroup v-for="{ _id: meetingId, agenda, normalizedSymbol } in meetings" :key="meetingId" :label="normalizedSymbol">
+            <option v-for="{ item, shortTitle, title } in agenda.items" :key="item" :value="{ meetingId, item }">{{item }} - {{ shortTitle || title }} </option>
+          </optgroup>
+        </select>
+      </div>
     </div>
     <div class="col-1 px-0">
       <div class="input-group">
@@ -43,7 +20,7 @@
       class="org-search"
       v-model="organization"
       track-by="name" 
-      label="name"
+      label="display"
       placeholder="Type to search" 
       open-direction="top" 
       :options="allOrganizations" 
@@ -53,7 +30,6 @@
       :options-limit="300" 
       :limit="3" 
       :max-height="600" 
-      :taggable="true"
       @tag="addOrg"
       @close="organization? '' :onChange({t:''})"
       @select="onChange"
@@ -76,6 +52,7 @@
 
 <script>
 
+import { debounce } from 'lodash'
 import Multiselect  from 'vue-multiselect'
 import AgendaItem   from './agenda-item.vue'
 import FilesView    from './files-view.vue'
@@ -91,8 +68,8 @@ export default {
     tokenReader: { type: Function, required: false },
   },
   components : { Multiselect, AgendaItem, FilesView},
-  computed   : { agendaItems },
-  methods    : {clearText, getOrgs, addOrg, getQ, onChange},
+  methods    : {clearText, getOrgs, addOrg, getQ, 
+  onChange: debounce(onChange, 100)},
   i18n,
   mounted,
   created,
@@ -105,7 +82,7 @@ function data(){
 
   return {
     selectedDate: undefined,
-    selectedAgendaItems: [],
+    selectedAgendaItem: null,
     timeText: dateTimeFilter(now.toISOString()),
     organization: '',
     allOrganizations:[],
@@ -116,14 +93,11 @@ function data(){
 
 function onChange(element){
 
-
   this.$forceUpdate()
-  setTimeout(()=>{
-  const { $or } = this.getQ() || {}
-  const {t, meetingId, organizationId, government } = element
-  this.$emit('penging-query', {$or, t, meetingId, organizationId:organizationId?{$oid:organizationId}:'', government})
-  }, 100)
 
+  const agendaItem = this.getQ() || {}
+  const {t, meetingId, organizationId, government } = element
+  this.$emit('penging-query', {agendaItem, t, organizationId, government})
 }
 
 function created(){
@@ -150,12 +124,17 @@ async function getOrgs(t){
   this.isLoading= true
   const { meeting } = this.route.params
 
-  const { _id:meetingId } = await this.api.getMeetingByCode(meeting)
+  const { _id:meetingId } = await this.api.getMeetingByCode(meeting) // should hget from parent objects
   
   
   this.onChange({ meetingId,  t })
 
-  this.allOrganizations = await this.api.getInterventionOrganizations({ meetingId , t } )
+  const organizations = await this.api.getInterventionOrganizations({ meetingId , t } )
+
+  organizations.forEach(o=> o.display = `${o.name} ${(o.acronym||'') && `(${o.acronym})`}`)
+
+  this.allOrganizations = organizations;
+
   this.isLoading= false
 }
 
@@ -165,22 +144,11 @@ function clearText(){
 }
 
 function getQ(){
-  if(!this.selectedAgendaItems.length) return
+  if(!this.selectedAgendaItem) return
 
-  return { $or: this.selectedAgendaItems.map(i=>({ 
-                                            meetingId : mapObjectId(i.meetingId),
-                                            agendaItem : i.item
-                                          }))};
-}
+  const { meetingId, item: agendaItem } = this.selectedAgendaItem;
 
-function agendaItems() {
-  return this.meetings.map(m=>({
-    normalizedSymbol : m.normalizedSymbol,
-    items : m.agenda.items.map(i=>({ ...i, 
-      meetingId: m._id, 
-      display:   `${i.item} - ${i.shortTitle}`,
-    }))
-  }));
+  return { meetingId, agendaItem }
 }
 </script>
 

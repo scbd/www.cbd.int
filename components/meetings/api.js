@@ -53,11 +53,9 @@ export default class Api
 
   async getMeetingById(id, options={})  {
 
-    const q = Array.isArray(id)? { _id: { $in: id.map(aId => mapObjectId(aId)) } } : { _id: mapObjectId(id) }
+    const q = { _id : mapObjectId(id) };
 
-    if(!Array.isArray(id)) options.fo=1
-
-    return this.queryMeetings({q, ...options})
+    return this.queryMeetings({...options, q, fo: 1 });
   }
 
   getMeetingByCode(code, options={ fo:1 })  {
@@ -98,9 +96,30 @@ export default class Api
     return this.http.get(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}`).then(res => res.data).catch(tryCastToApiError);
   }
 
+  createPendingIntervention(data) {
+
+    delete data.sessionId;
+    data.status = 'pending';
+
+    return this.http.post(`api/v2021/meeting-interventions`, data).then(res => res.data).catch(tryCastToApiError);
+  }
+
+  updateIntervention(interventionId, data) {
+
+    return this.http.put(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}`, data).then(res => res.data).catch(tryCastToApiError);
+  }
+
+
   async getInterventionOrganizations (params = { t:'s' }) {
 
     return this.http.get(`api/v2021/meeting-interventions/organizations`, { params }).then(res => res.data).catch(tryCastToApiError);
+  }
+
+  async getInterventionOrganizationTypes(){
+
+    const types = await this.http.get(`api/v2021/meeting-interventions/organization-types`).then(res => res.data).catch(tryCastToApiError);
+
+    return types;
   }
 
 
@@ -117,7 +136,7 @@ export default class Api
     const slot = await this.http.post("api/v2021/meeting-interventions/slot", data, { headers }).then(res => res.data).catch(tryCastToApiError);
 
     return slot;
-}
+  }
 
   async commitInterventionFileSlot(slotId, passCode, meetingId){
     if(!slotId) throw new Error("slotId is empty")
@@ -133,6 +152,34 @@ export default class Api
     return intervention;
   }
 
+  async uploadInterventionFile(interventionId, fileInfo, fileData) {
+
+
+    const tempFile = {
+        filename : fileData.name,
+        metadata : fileData
+    };
+
+    const slot = await this.createTemporaryFile(tempFile);
+    
+    const { contentType }  = slot;
+
+    await this.uploadTemporaryFile(slot.url, fileData, { contentType });
+
+    var data = { ...fileInfo, url: `upload://${slot.uid}` };
+
+    const file = await this.http.post(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}/files`, data).then(res => res.data).catch(tryCastToApiError);
+
+    return file;
+  }
+
+
+  async updateInterventionFile(interventionId, fileId, data){
+    
+    const file = await this.http.put(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}/files/${encodeURIComponent(fileId)}`, data).then(res => res.data).catch(tryCastToApiError);
+
+    return file;
+  }   
 
   //////////////////////////
   // Sessions
@@ -140,10 +187,9 @@ export default class Api
 
   async querySessions(params) {
 
+    const sessions = await this.http.get(`api/v2021/meeting-sessions`, { params }).then(res => res.data).catch(tryCastToApiError);
 
-    const sessions     = await this.http.get(`api/v2021/meeting-sessions`, { params }).then(res => res.data).catch(tryCastToApiError);
-
-    return sessions
+    return sessions;
   }
 
   async getSessionById(sessionId, includeInterventions=false) {
@@ -164,6 +210,13 @@ export default class Api
   //////////////////////////
   // Temporary Files
   ////////////////////////
+  async createTemporaryFile(fileInfo) {
+
+    const slot = await this.http.post(`api/v2015/temporary-files`, fileInfo).then(res => res.data).catch(tryCastToApiError);
+
+    return slot;
+  }
+
   async uploadTemporaryFile(url, file, options={}) {
 
     const { headers, timeout, contentType, onUploadProgress, onDownloadProgress }= { ...(options||{}) };

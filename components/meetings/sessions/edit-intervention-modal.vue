@@ -20,43 +20,52 @@
                             <div class="form-group row">
                                 <label for="participantIdentity" class="col-sm-3 col-form-label">Country / Org</label>
                                 <div class="col-sm-9">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="title" ref="title" v-model.trim="title" required>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text" data-toggle="tooltip" data-placement="auto" title="Priority-Pass code is included in your registration email (eg: ABCDE-12345)"><i class="fa fa-question-circle"></i></span>
-                                        </div>      
-                                    </div>
+                                    <input type="text"  v-if=" intervention._id" class="form-control" id="title" ref="title" v-model.trim="title" required>
+                                    <OrganizationSearch v-if="!intervention._id" :meetings="meetings" :tokenReader="tokenReader" @change="onOrganizationChange"/>
                                 </div>
                             </div> 
 
                             <div class="form-group row">
-                                <label for="agendaItem" class="col-sm-3 col-form-label">Type</label>
+                                <label for="organizationTypeId" class="col-sm-3 col-form-label">Type</label>
                                 <div class="col-sm-9">
-                                    <select  class="form-control" id="agendaItem"  v-model="organizationTypeId" required>
-                                        <optgroup v-for="{ _id: meetingId, agenda, normalizedSymbol } in meetings" :key="meetingId" :label="normalizedSymbol">
-                                            <option v-for="{ item, shortTitle, title } in agenda.items" :key="item" :value="{ meetingId, item }">{{item }} - {{ shortTitle || title }} </option>
-                                        </optgroup>
+                                    <select  class="form-control" id="organizationTypeId"  v-model="organizationTypeId" required>
+                                        <option v-for="{ _id, acronym, title } in organizationTypes" :key="_id" :value="_id">{{acronym}} - {{ title }} </option>
                                     </select>
                                     <div class="invalid-feedback">Please select a an organization type.</div>
                                 </div>
                             </div>
 
+                            <div class="form-group row">
+                                <label for="agendaItem" class="col-sm-3 col-form-label">Agenda Item</label>
+                                <div class="col-sm-9">
+                                    <select :disabled="!!progress" class="form-control" id="agendaItem"  v-model="agendaItem" required>
+                                        <optgroup v-for="{ _id: meetingId, agenda, normalizedSymbol } in meetings" :key="meetingId" :label="normalizedSymbol">
+                                            <option v-for="{ item, shortTitle, title } in agenda.items" :key="item" :value="{ meetingId, item }">{{item }} - {{ shortTitle || title }} </option>
+                                        </optgroup>
+                                    </select>
+                                    <div class="invalid-feedback">Please select a an agenda item.</div>
+                                </div>
+                            </div>
 
                             <div class="form-group row">
-                                <label for="fileLanguage" class="col-sm-3 col-form-label">Satus</label>
+                                <label for="status" class="col-sm-3 col-form-label">Satus</label>
                                 <div class="col-sm-9">
-                                    <select  class="form-control" id="fileLanguage" v-model="status">
+                                    <select :disabled="true || intervention._id" class="form-control" id="types" v-model="status">
                                         <option value="public">Spoken/Delivery</option>
-                                        <option value="pending">Uploaded / Pending</option>
+                                        <option value="pending" selected>Uploaded / Pending</option>
                                     </select>
                                 </div>        
                             </div>       
 
                             <h5>Files</h5>
+                            <hr>
 
                             <div v-for="file in files" :key="file" class="form-group row">
-                                <label for="allowPublic" class="col-sm-3 col-form-label">{file.filename}}</label>
-                                <div class="col-sm-9">
+
+                                <label v-if=" file._id" for="allowPublic" class="col-sm-3 col-form-label">{{file.filename}}</label>
+                                <input v-if="!file._id" type="file" class="col-sm-3 col-form-label" @change="onFileChange($event.target.files)" ref="file">
+
+                                <div class="col-sm-4">
                                     <div class="input-group">
                                         <select  class="form-control" id="fileLanguage" v-model="file.language">
                                             <option value="ar">العربية</option>
@@ -68,6 +77,16 @@
                                         </select>
                                     </div>
                                 </div>
+
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <input :disabled="!!file._id"  type="checkbox" id="allowPublic" v-model="file.allowPublic" class=" col-sm-3 col-form-label">
+                                        <label class="form-check-label" for="allowPublic">Allow Public</label>
+                                    </div>
+                                </div>
+
+
+
                             </div>  
 
                             <div class="alert alert-warning" role="alert" v-if="error">
@@ -89,37 +108,57 @@
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
 import $    from 'jquery';
 import Api  from '../api.js'
+import OrganizationSearch from './organization-search.vue'
+
+let organizationTypesCache = null
 
 export default {
     name: 'uploadStatement',
+    components: { OrganizationSearch },
     props: { 
         tokenReader  : { type: Function, required: false },
         route        : { type: Object,   required: false },
         intervention : { type: Object,   required: true  },
         sessionId    : { type: String,   required: false },
+        meetings     : { type: Array,    required: false },
         show         : { type: Boolean,  required: false }
     },
     data:  function(){
         return {
+            interventionId :     this.intervention._id,
             title :              this.intervention.title,
             organizationTypeId : this.intervention.organizationTypeId,
             status:              this.intervention.status,
-            files:               this.intervention.files,
+            organizationId:      this.intervention.organizationId,
+            government:          this.intervention.government,
+            files:               cloneDeep(this.intervention.files||[]),
+            agendaItem:          { meetingId : this.intervention.meetingId, item: this.intervention.agendaItem },
+            organizationTypes  : [],
+            organization : null,
             error : null,
         }
     },
-    created() {
-        this.api = new Api() //anonymous 
-    },
-    mounted(){
-        $('[data-toggle="tooltip"]').tooltip();
-        this.open();
-    },
-    methods: {
-        open, close, clearError, save,
-    }
+    methods: { open, close, clearError, save, onOrganizationChange, onFileChange},
+    created,
+    mounted, 
+}
+
+async function created() {
+  this.api = new Api(this.tokenReader)
+
+  const types = organizationTypesCache || await this.api.getInterventionOrganizationTypes();
+
+  organizationTypesCache = types;
+
+  this.organizationTypes = types
+}
+
+function mounted(){
+  $('[data-toggle="tooltip"]').tooltip();
+  this.open();
 }
 
 function open() { 
@@ -131,46 +170,76 @@ function close(intervention){
   this.$emit('close', intervention) 
 }
 
+function onOrganizationChange(o) {
+    this.organization       = o;
+    this.government         = o.government;
+    this.organizationId     = o.organizationTypeId;
+    this.organizationTypeId = o.organizationTypeId;
+    this.title              = `${o.name} ${(o.acronym||'') && `(${o.acronym})`}`;
+}
+
+function onFileChange (files) {
+    this.file = files[0];
+}
+
 async function save(){
   try {
-    this.clearError();
-    this.wasValidated = true;
 
-    if(!this.isFormValid)
-        return e.stopPropagation();
+    let   interventionId     = this.interventionId;
+    const title              = this.title;
+    const status             = this.status;
+    const organizationId     = this.organizationId;
+    const organizationTypeId = this.organizationTypeId;
+    const meetingId          = this.agendaItem.meetingId;
+    const agendaItem         = this.agendaItem.item;
+    const government         = (this.government||'').toLowerCase() || undefined;
 
-    const passCode = this.cleanParticipantIdentity;
-    const data = {
-        meetingId   : this.selectedAgendaItem.meetingId,
-        filename    : this.file.name,
-        contentType : this.file.type,
-        agendaItem  : ((this.selectedAgendaItem.item || "").toString() || undefined),
-        language    : this.selectedLanguage,
-        allowPublic : this.allowPublic,
-    }
+    const htmlFile      = this.file;
+    const filesToAdd    = this.files.filter(o=> !o._id);
+    const filesToUpdate = this.files.filter(o=>!!o._id);
+
+    if(filesToAdd.length>1) throw new Error("Only one file to add is supported")
+    if(filesToAdd.length && !htmlFile) throw new Error("Must select a file to upload")
+
+    const updates = { 
+        ...this.intervention, 
+        meetingId, 
+        agendaItem, 
+        title, 
+        status, 
+        government, 
+        organizationId,
+        organizationTypeId 
+    };
 
 
-    this.progress = { message: "Preparing..." };
+    const updatedIntervention = interventionId  ? await this.api.updateIntervention(interventionId, updates)   
+                                                : await this.api.createPendingIntervention(updates);
 
-    const slot    = await this.api.createInterventionFileSlot(passCode, data)
+    interventionId      = updatedIntervention._id;
+    this.interventionId = updatedIntervention._id;
 
-    this.progress = { message: "Uploading...", percent: 0 };
+    //TODO Optimize 
+    const updatedFiles = await Promise.all(filesToUpdate.map(f=> this.api.updateInterventionFile(interventionId, f._id, f)));
+    const addedFiles   = await Promise.all(filesToAdd   .map(f=> { 
+        const { language, allowPublic } = f;
+        const data = {
+            filename    : htmlFile.name,
+            contentType : htmlFile.type,
+            allowPublic : allowPublic || false,
+            language,
+            meetingId,
+            agendaItem,
+        }
 
-    const { contentType } = slot;
-    const onUploadProgress = (...args)=> this.onUploadProgress(...args);
+        return this.api.uploadInterventionFile(interventionId, data, htmlFile);
+    }));
 
-    await this.api.uploadTemporaryFile(slot.url, this.file, { contentType, onUploadProgress });
+    updatedIntervention.files = addedFiles.concat(updatedFiles);
 
-    this.progress = { message: "Saving...", percent: 100 };
-
-    const intervention = await this.api.commitInterventionFileSlot(slot.uid, passCode, data.meetingId);
-
-    this.$emit("notify", `Your file "${slot.metadata.filename}" has been submitted successfully`);
-
-    this.close();
+    this.close(updatedIntervention);
 
   } catch(err) {
-    if(err.code=='forbidden') this.$refs.participantIdentity.setCustomValidity("Invalid badge or priority-pass number")
     this.error = err
   } finally {
     this.progress = null;

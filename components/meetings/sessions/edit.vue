@@ -1,6 +1,6 @@
 
 <template >
-  <div>
+  <div style="padding-bottom:300px">
     <h1>Session Preparation
       <small class="text-muted">
         <span v-for="{normalizedSymbol} in meetings" :key="normalizedSymbol">
@@ -16,24 +16,27 @@
     </slot> -->
 
     <Session v-if="session" >
-      <InterventionRow v-for="(intervention, index) in session.interventions" v-bind="{intervention, index}" v-bind:key="intervention._id">
+      <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention, index}" v-bind:key="intervention._id">
         <template slot="controls">
-          <button class="btn" @click="edit(intervention)"><i class="fa fa-edit"></i></button>
+          <button class="btn" @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
         </template>
       </InterventionRow>
     </Session>
 
     <hr/>
 
-    <EditRow v-on:penging-query="getPending" v-bind="$props" :meetings="meetings"/>
+    <EditRow v-on:penging-query="queryPendingInterventions" v-bind="$props" :meetings="meetings"/>
 
     <hr/>
     
-    <caption class="text-nowrap float-right"> <small>{{pending.length}} {{$t('Pending statements uploaded')}}</small></caption>
-    <Session v-if="pending" >
-      <InterventionRow v-for="intervention in pending" v-bind="{intervention}" v-bind:key="intervention._id" @dblclick="edit(intervention)" >
+    <input type="text" @input="onSearch" v-model="freeText">
+    <button class="btn" @click="create()"><i class="fa fa-upload"></i></button>
+
+    <caption class="text-nowrap float-right"> <small>{{pendingInterventions.length}} {{$t('Pending statements uploaded')}}</small></caption>
+    <Session v-if="pendingInterventions.length" >
+      <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" v-bind:key="intervention._id" @dblclick="edit(intervention)" >
         <template slot="controls">
-          <button class="btn" @click="edit(intervention)"><i class="fa fa-edit"></i></button>
+          <button class="btn" @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
         </template>
       </InterventionRow>
     </Session>
@@ -41,8 +44,10 @@
     <EditInterventionModal v-if="!!editedIntervention"
       :sessionId="sessionId" 
       :intervention="editedIntervention" 
+      :agendaItems="agendaItems" 
       :route="route"
       :tokenReader="tokenReader"
+      :meetings="meetings"
       @close="editClose"
     ></EditInterventionModal>    
   </div>
@@ -50,10 +55,12 @@
 
 
 <script>
+import { debounce }              from 'lodash'
+import EditInterventionModal     from './edit-intervention-modal.vue'
 import InterventionRow           from './intervention-row.vue'
 import Session                   from './session.vue'
 import EditRow                   from './edit-row.vue'
-import Api    , { mergeQueries, mapObjectId } from '../api.js'
+import Api, { mergeQueries, mapObjectId } from '../api.js'
 
 export default {
   name: 'SessionEdit',
@@ -61,9 +68,16 @@ export default {
     route      : { type: Object, required: false },
     tokenReader: { type: Function, required: false }
   },
-  components:{ Session, EditRow, InterventionRow },
+  components: { Session, EditRow, InterventionRow, EditInterventionModal },
   computed  : { agendaItems },
-  methods: {getPending, loadEventIds, edit, editClose },
+  methods:    { 
+    create, 
+    edit, 
+    editId, 
+    editClose,
+    queryPendingInterventions,
+    onSearch : debounce(onSearch, 400)
+  },
   data,
   created,
   mounted
@@ -71,14 +85,13 @@ export default {
 
 function data(){
   return { 
-    interventions: [], 
-    meetings : [],
     session: undefined,
+    interventions: [], 
+    pendingInterventions: [], 
+    meetings : [],
     maxResultCount : 250,
-    pending: [],
-    eventQuery: '',
-    eventQueryMappedObjectId: '',
-    editedIntervention: null
+    editedIntervention: null,
+    freeText: ''
   }
 }
 
@@ -87,46 +100,80 @@ async function created(){
 }
 
 async function mounted(){
-  await this.loadEventIds()
 
-  const { sessionId } = this.route.params
-  const promises = [
-                      this.api.getSessionById(sessionId),
-                      this.api.getInterventionsBySessionId(sessionId),
-                      this.getPending()//{ theSession: { sessionId } }
-                    ]
-  const [ session, interventions, pending ] = await Promise.all(promises);
+    const { sessionId, meeting: meetingCode } = this.route.params
 
-  this.session               = session;
-  this.session.interventions = interventions;
-  this.pending               = pending;
+    const promises = [
+      this.api.getMeetingByCode(meetingCode),
+      this.api.getSessionById(sessionId),
+      this.api.getInterventionsBySessionId(sessionId),
+    ]
+
+    const [ meeting, session, interventions ] = await Promise.all(promises);
+
+    if(!meeting) throw Error("Meeting not found")
+    if(!session) throw Error("Session not found")
+    if(!session.meetingIds.includes(meeting._id)) throw Error("Meeting & Session do not match")
+
+    this.meetings              = [meeting]
+    this.session               = session;
+    this.interventions         = interventions;
+    this.pendingInterventions  = await this.queryPendingInterventions();
+}
+
+async function editId(interventionId){
+
+  const intervention = await this.api.getInterventionById(interventionId)
+
+  this.edit(intervention)
+}
+
+
+function create(){
+
+  this.editedIntervention = { 
+    status: 'pending',
+    files: [{ language: 'en'} ] };
 }
 
 function edit(intervention){
   this.editedIntervention = intervention;
 }
+
 function editClose(intervention){
   this.editedIntervention = null
+
+  if(!intervention) return;
+
+  const i  = this.interventions       .findIndex(o=>o._id === intervention._id );
+  const pi = this.pendingInterventions.findIndex(o=>o._id === intervention._id );
+
+  if(i>=0)  this.interventions       .splice(i, 1, intervention);
+  if(pi>=0) this.pendingInterventions.splice(pi,1, intervention);
+
+  if(pi < 0 && intervention.status=='pending') {
+    this.pendingInterventions.splice(0,0, intervention);
+  }
 }
 
-async function getPending(args={}){
-  const { $or, theSession, t, government, organizationId  } = args
 
-  const isPending = { status: 'pending' };
-  const hasFiles  = { 'files.0': {$exists: true} }; 
-  const hasOrg    = organizationId? { organizationId } : ''
-  const hasGov    = government?{government:government.toLowerCase()}:''
-  const has$or    = $or ? { $or } : ''
+function onSearch() {
+  this.queryPendingInterventions({t : this.freeText});
+}
 
-  const q = mergeQueries(isPending, hasFiles, theSession, has$or ,hasGov , hasOrg, this.eventQueryMappedObjectId );
-  
+async function queryPendingInterventions(args={}){
+
+  const { t, agendaItem } = args
+  const isPending  = { status: 'pending' };
+  const hasFiles   = { 'files.0': {$exists: true} }; 
+  const meetingIds = { meetingId : { $in: this.meetings.map(m=>mapObjectId(m._id)) } }; 
+
+  const q = mergeQueries(isPending, hasFiles, meetingIds, agendaItem);
   const l = this.maxResultCount;
 
-  const eventQuery = t? this.eventQuery: {}
+  this.pendingInterventions = await this.api.queryInterventions({ q, l, t })
 
-  this.pending = await this.api.queryInterventions({ q, l, t, ...eventQuery })
-
-  return this.pending
+  return this.pendingInterventions
 }
 
 function agendaItems() {
@@ -139,19 +186,4 @@ function agendaItems() {
   }));
 }
 
-async function loadEventIds(){
-  const { meeting, code } = this.route.params
-
-  const event = code? await this.api.getConference(code) : await this.api.getMeetingByCode(meeting) 
-
-
-  const { _id } = event
-
-  this.eventQuery               = code? { conferenceId: m_id } : { meetingId: _id }
-  this.eventQueryMappedObjectId = code? { conferenceId: mapObjectId(_id) } : { meetingId: mapObjectId(_id) }
-
-  this.meetings = !code? [event] : await this.api.getMeetingById([ ...event.MajorEventIDs, ...event.MinorEventIDs ])
-
-  console.log('this.meetings',this.meetings)
-}
 </script>
