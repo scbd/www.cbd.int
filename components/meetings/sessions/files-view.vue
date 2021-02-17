@@ -44,7 +44,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <p>{{preview}}</p>
+            <p style="white-space: pre-wrap;">{{preview}}</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn" data-dismiss="modal">Close</button>
