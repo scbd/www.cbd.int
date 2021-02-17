@@ -14,6 +14,7 @@
     </keep-alive>
 
     <div class="text-right text-muted">
+      <button @click="refresh" class="btn btn-link"><i class="fa fa-refresh"></i></button>
       <i v-if="lastUpdated" class="text-muted"> Last refresh on {{ lastUpdated | timeFilter('T')}} - </i>
       <b v-if="interventions.length>=maxResultCount">More than {{interventions.length}} records </b>
       <b v-if="interventions.length <maxResultCount">{{interventions.length}} records </b>
@@ -43,7 +44,7 @@ export default {
     route:       { type: Object, required: false },
     tokenReader: { type: Function, required: false } 
   },
-  methods: { query },
+  methods: { query, refresh },
   created, 
   mounted, 
   beforeDestroy, 
@@ -68,7 +69,11 @@ async function created(){
 }
 
 async function mounted(){
-  this.refreshTimer = setInterval(() => this.query(this.lastQueryArg), 60 * 1000);
+  this.refreshTimer = setInterval(() => this.refresh(), 60 * 1000);
+}
+
+function refresh() {
+  this.query(this.lastQueryArg);
 }
 
 function beforeDestroy(){
