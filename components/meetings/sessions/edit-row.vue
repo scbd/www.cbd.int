@@ -35,7 +35,7 @@
     </div>
     <div class="col-1 px-0">
       <div class="input-group">
-        <input   v-model="time" type="text" class="form-control "/>
+        <input   v-model="timeText" type="text" class="form-control time"/>
       </div>
     </div>
     <div class="col-8 px-0">
@@ -77,6 +77,7 @@ import Multiselect  from 'vue-multiselect'
 import AgendaItem   from './agenda-item.vue'
 import FilesView    from './files-view.vue'
 import i18n         from '../locales.js'
+import { dateTimeFilter } from '../filters.js'
 import Api, { mapObjectId }          from '../api.js'
 
 export default {
@@ -86,9 +87,9 @@ export default {
     route      : { type: Object, required: false },
     tokenReader: { type: Function, required: false },
   },
-  components:{ Multiselect, AgendaItem, FilesView},
+  components : { Multiselect, AgendaItem, FilesView},
   computed   : { agendaItems },
-  methods   :{clearText, getOrgs, addOrg, getQ, onChange},
+  methods    : {clearText, getOrgs, addOrg, getQ, onChange},
   i18n,
   mounted,
   created,
@@ -97,10 +98,12 @@ export default {
 }
 
 function data(){
+  const now = new Date()
+
   return {
     selectedDate: undefined,
     selectedAgendaItems: [],
-    time: '01:01',
+    timeText: dateTimeFilter(now.toISOString()),
     organization: '',
     allOrganizations:[],
     isLoading: false, 
@@ -269,5 +272,4 @@ table.sessions {
   border: 1px solid #e8e8e8;
   border-radius:0px;
 }
-
 </style>
