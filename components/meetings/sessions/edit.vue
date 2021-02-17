@@ -19,8 +19,8 @@
       <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention, index}" v-bind:key="intervention._id">
         <template slot="controls">
           <div class="btn-group" role="group">
-            <button class="btn" @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-danger" @click="askDelete(intervention)"><i class="fa fa-trash"></i></button>
+            <button class="btn btn-sm btn-outline-dark" @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-sm btn-outline-danger" @click="askDelete(intervention)"><i class="fa fa-trash"></i></button>
           </div>
         </template>
       </InterventionRow>
@@ -40,8 +40,8 @@
       <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" v-bind:key="intervention._id" @dblclick="edit(intervention)" >
         <template slot="controls">
           <div class="btn-group" role="group">
-            <button class="btn" @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-danger" @click="askDelete(intervention)"><i class="fa fa-trash"></i></button>
+            <button class="btn btn-sm btn-outline-dark" @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-sm btn-outline-danger" @click="askDelete(intervention)"><i class="fa fa-trash"></i></button>
           </div>
         </template>
       </InterventionRow>
