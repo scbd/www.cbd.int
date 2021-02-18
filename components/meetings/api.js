@@ -294,7 +294,8 @@ async function loadAsyncHeaders(baseConfig) {
 }
 
 function makeMeetingConferenceQuery (code){
-  const meetingOrConferenceIdentifier = Array.isArray(code)? code : [code]
+  const codeClone                     = cloneDeep(code)
+  const meetingOrConferenceIdentifier = Array.isArray(codeClone)? codeClone.map( x => x.toUpperCase()) : [codeClone.toUpperCase()]
   const isMeeting                     = { 'meeting.symbol': { $in: meetingOrConferenceIdentifier } }
   const isMeetings                    = { 'meetings.symbol': { $in: meetingOrConferenceIdentifier } }
   const isConference                  = { conferenceId: { $in: meetingOrConferenceIdentifier } }
