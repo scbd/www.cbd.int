@@ -63,18 +63,20 @@
 </template>
 
 <script>
-import { debounce }       from 'lodash'
+import { debounce          } from 'lodash'
+import { mapObjectId       } from '../api.js'
+import { dateTimeFilterUTC } from '../filters.js'
+
 import Multiselect        from 'vue-multiselect'
 import i18n               from '../locales.js'
-import { mapObjectId }    from '../api.js'
-import { dateTimeFilterUTC } from '../filters.js'
+
 
 export default {
   name      : 'SearchControls',
   components: { Multiselect },
   props     : { 
-    meetings: { type: Array, required: true },
-  },
+                meetings: { type: Array, required: true },
+              },
   methods   : { onChange : debounce(onChange, 400), buildQuery, clearText},
   filters   : { dateTimeFilterUTC },
   computed  : { agendaItems },
@@ -108,7 +110,6 @@ function agendaItems() {
 
 function onChange(){
   this.$emit('query',this.buildQuery());
-//setTimeout(this.updateSearchQuery, 100)
 }
 
 function buildQuery(){

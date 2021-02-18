@@ -9,6 +9,6 @@
 
 <script>
 export default {
-  name      : 'SessionsView'
+  name : 'SessionsView'
 }
 </script>

@@ -30,10 +30,6 @@
 </template>
 
 <script>
-import { DateTime }    from 'luxon'
-import Session         from './session.vue'
-import SearchControls  from './search-controls.vue'
-import InterventionRow from './intervention-row.vue'
 import Api, { mergeQueries } from '../api'
 
 import { dateTimeFilter  } from '../filters.js'
@@ -86,10 +82,6 @@ function beforeDestroy(){
   if(this.refreshTimer) clearInterval(this.refreshTimer)
 }
 
-function timeFilter (jsDate, format='T')  {
-  return jsDate ? DateTime.fromJSDate(jsDate).toFormat(format) : '';
-}
-
 async function query(queryArgs){
 
   this.lastQueryArg = { ...queryArgs }
@@ -106,11 +98,9 @@ async function query(queryArgs){
   this.interventions = await this.api.queryInterventions({ q, t, l, s })
   this.lastUpdated   = new Date();
 }
-
 </script>
 
 <style scoped>
-
 .summary { 
   max-height:40px;
   overflow:hidden;
