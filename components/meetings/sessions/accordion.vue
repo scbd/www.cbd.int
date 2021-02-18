@@ -24,14 +24,11 @@
 
 <script>
   export default {
-    name: 'Accordion',
-    props:{
-      length: { type: Number, required: false, default: 1 },
-    },
-    computed:{size},
-    methods:{ open, start, end },
-    mounted,
-    data
+    name    : 'Accordion',
+    props   : { length: { type: Number, required: false, default: 1 }, },
+    computed: {size},
+    methods : { open, start, end },
+    mounted, data
   }
 
   function data(){ return { visible: [true] } }
@@ -42,8 +39,13 @@
   }
 
   function open(index) {
-    this.visible        = new Array(this.length).fill(false)
-    this.visible[index] = true
+    const isOpen = this.visible[index]
+
+    this.visible = new Array(this.length).fill(false)
+
+    if(!isOpen) this.visible[index] = true
+    else if(this.visible[index+1] !== undefined) this.visible[index+1] = true
+    else if(this.visible[index-1] !== undefined) this.visible[index-1] = true
   }
 
   function start( { style, scrollHeight }) { style.height = `${scrollHeight}px` }
