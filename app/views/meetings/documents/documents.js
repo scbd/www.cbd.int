@@ -164,6 +164,7 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
                 loadReport();
                 loadDecisions();
                 loadNotifications();
+                loadSessions();
 
             }).then(function(){
                 switchTab();
@@ -248,6 +249,25 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
         //==============================
         //
         //==============================
+        function loadSessions() {
+
+            $http.get('/api/v2021/meeting-sessions', { params: { c: 1, q : { meetingIds: { $in :[ { $oid:_ctrl.meeting._id }] } } } }).then(function(res){
+
+                var count = res.data[0].count;
+
+                if(!count) return;
+
+                var fakeDocs = []; 
+                fakeDocs.length = count;
+
+                injectTab('statement', fakeDocs, { component:'sessions' });
+
+            }).catch(console.error);
+        }
+
+        //==============================
+        //
+        //==============================
         function loadNotifications() {
 
             $http.get('/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'id,symbol:symbol_s,reference:reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
@@ -270,7 +290,7 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
                 switchTab();
 
             }).catch(console.error);
-        }
+        }        
 
         //==============================
         //
@@ -349,7 +369,8 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
                 return;
 
             options = _.defaults(options||{}, {
-                section: null
+                section: null,
+                component: null
             });
 
             var tab = findTab(code);
@@ -360,7 +381,7 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
                     code : code,
                     title:     (groups[code]||{}).title||code.toUpperCase(),
                     insession: (groups[code]||{}).insession,
-                    sections : [] 
+                    sections : []
                 };
 
                 _ctrl.tabs.push(tab);
@@ -377,6 +398,7 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
                 section = {
                     code : options.section,
                     title: (sections[tab.code+'/'+options.section]||{}).title,
+                    component: options.component
                 };
 
                 tab.sections.push(section);

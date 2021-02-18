@@ -156,6 +156,12 @@
 
                     <h4 ng-if="::section.title" style="margin-left:5px">{{::section.title}}</h4>
 
+                    <div ng-if="section.component && type.loaded">
+                        <div ng-vue="vueOptions" :is="section.component" :route="route" :token-reader="tokenReader"></div>
+                    </div>
+
+                    <div ng-if="!section.component">
+
                     <!-- Document List view -->
 
                     <table ng-if="documentsCtrl.sort=='document' || !type.agenda.items.length" class="table table-striped table-hover no-border-first-row">
@@ -254,6 +260,7 @@
                             </td>
                         </tr>
                     </table>
+                    </div>
                 </div>
             </div>
         </div>
