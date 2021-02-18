@@ -1,5 +1,6 @@
 <template >
   <tr  @click="$parent.$emit('select')">
+
     <td scope="row" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
         <span  v-if="!isPending(intervention.status)">{{index}}.</span>
         <small v-if="isPending(intervention.status)" class="text-muted lighter">{{$t('Pending')}}</small>
@@ -29,19 +30,19 @@
     <td class="files-col" style="text-align: center; vertical-align: middle;">
         <FilesView :files="intervention.files"/>
     </td>
+
     <td>
         <slot name="controls"/>
     </td>
+    
   </tr>
 </template>
-
 
 <script>
 import   AgendaItem   from './agenda-item.vue'
 import   FilesView    from './files-view.vue'
 import   i18n         from '../locales.js'
 import   FilesPreview from './files-preview.vue'
-import { DateTime   } from 'luxon'
 
 import { dateTimeFilter } from '../filters.js'
 
@@ -49,17 +50,13 @@ export default {
   name      : 'InterventionLine',
   components: { AgendaItem, FilesView, FilesPreview },
   props     : { 
-    index:        { type: Number,  required: false, default:null },
-    intervention: { type: Object,  required: true },
-    showStatus:   { type: Boolean, required: false, default: false },
-},
+                  index       : { type: Number,  required: false, default:null },
+                  intervention: { type: Object,  required: true },
+                  showStatus  : { type: Boolean, required: false, default: false },
+              },
   methods   : { getOrgType, isPending },
   filters   : { dateTimeFilter },
   i18n, 
-}
-
-function timeFilter (isoDateString, format='T')  {
-  return DateTime.fromISO(isoDateString).toFormat(format)
 }
 
 function getOrgType({ organizationType }){
@@ -69,7 +66,6 @@ function getOrgType({ organizationType }){
 function isPending (status){
   return status === 'pending'
 }
-
 </script>
 
 <style scoped>
