@@ -14,6 +14,7 @@
 <script>
 import Session   from './session.vue'
 import Accordion from './accordion.vue'
+import { dateTimeFilter  } from '../filters.js'
 
 import { DateTime } from 'luxon'
 import Api from '../api.js'
@@ -26,7 +27,7 @@ export default {
     tokenReader: { type: Function, required: false } },
   computed   : { sessionsLength },
   methods    : { header },
-  filters    : { timeFilter },
+  filters    : { dateTimeFilter },
   created, data
 }
 
@@ -52,6 +53,6 @@ function dateTimeFilter (isoDateString) {
 }
 
 function header({title, startDate }){
-  return title? title : dateTimeFilter(startDate)
+  return title? title : dateTimeFilter(startDate, 'T  - cccc, d MMMM yyyy')
 }
 </script>

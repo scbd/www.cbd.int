@@ -10,11 +10,11 @@
     </td>
 
     <td class="date-col" style="text-align: center; vertical-align: middle;">
-        <span>{{ intervention.datetime | timeFilter('MMM d') }}</span>
+        <span>{{ intervention.datetime | dateTimeFilter('MMM d') }}</span>
     </td>
 
     <td class="time-col" style="text-align: center; vertical-align: middle;">
-        <span>{{ intervention.datetime | timeFilter('T') }}</span>
+        <span>{{ intervention.datetime | dateTimeFilter('T') }}</span>
     </td>
 
     <td style="vertical-align: middle;"> 
@@ -43,6 +43,8 @@ import   i18n         from '../locales.js'
 import   FilesPreview from './files-preview.vue'
 import { DateTime   } from 'luxon'
 
+import { dateTimeFilter } from '../filters.js'
+
 export default {
   name      : 'InterventionLine',
   components: { AgendaItem, FilesView, FilesPreview },
@@ -52,7 +54,7 @@ export default {
     showStatus:   { type: Boolean, required: false, default: false },
 },
   methods   : { getOrgType, isPending },
-  filters   : { timeFilter },
+  filters   : { dateTimeFilter },
   i18n, 
 }
 
