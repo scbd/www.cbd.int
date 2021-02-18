@@ -1,12 +1,14 @@
 
 <template >
-  <section>
+  <section v-if="length">
     <div v-for="i in size" :key="i" class="card">
 
-      <div @click.stop="open(i)" class="card-header" >
-        <h5 class="mb-0" >
+      <div @click.stop="toggle(i)" class="card-header" >
+        <h5 class="mb-0 position-relative" >
             <slot :name="`header-${i}`"/>
+            <i  class="carret fa fa-caret-up fa-2x" :class="{'open': visible[i]}"/>
         </h5>
+        
       </div>
 
       <transition  name="body" @enter="start" @after-enter="end" @before-leave="start" @after-leave="end">
@@ -23,29 +25,32 @@
 
 
 <script>
+  import { cloneDeep } from 'lodash'
+
   export default {
     name    : 'Accordion',
-    props   : { length: { type: Number, required: false, default: 1 }, },
-    computed: {size},
-    methods : { open, start, end },
+    props   : { length: { type: Number, required: false, default: 0 }, },
+    computed: { size },
+    methods : { toggle, start, end, initVisibleFlags },
     mounted, data
   }
 
-  function data(){ return { visible: [true] } }
+  function data(){ return { visible: [false] } }
 
   function mounted(){
-    this.visible = new Array(this.length).fill(false)
-    this.visible[0] = true
+    this.initVisibleFlags()
   }
 
-  function open(index) {
-    const isOpen = this.visible[index]
+  function toggle(index) {
+    this.initVisibleFlags()
 
-    this.visible = new Array(this.length).fill(false)
+    this.visible[index] = !this.visible[index]
+    this.visible        = cloneDeep(this.visible) // reactivity
+  }
 
-    if(!isOpen) this.visible[index] = true
-    else if(this.visible[index+1] !== undefined) this.visible[index+1] = true
-    else if(this.visible[index-1] !== undefined) this.visible[index-1] = true
+  function initVisibleFlags(){
+    if(this.visible.length !== this.length)
+      this.visible = new Array(this.length).fill(false)
   }
 
   function start( { style, scrollHeight }) { style.height = `${scrollHeight}px` }
@@ -55,7 +60,21 @@
   function size(){ return [ ...Array(this.length).keys() ] }
 </script>
 
+<style >
+  .fa-caret-up{
+    transform: rotate(0deg);
+    transition: all 0.75s 0.25s;
+  }
+
+  .fa-caret-up.open{
+    transform: rotate(180deg);
+    transition: all 0.75s 0.25s;
+  }
+</style>
+
 <style scoped>
+  .carret { position:absolute; left: 50%; top: -8px; }
+
   h5 { color: #009b48;}
   
   .card { border:none }
