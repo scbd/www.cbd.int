@@ -131,64 +131,8 @@ function buildQuery(){
   const query = { $and : queries };
   return { query, freeText };
 }
-
-// DISABLED //
-// DISABLED //
-// DISABLED //
-// DISABLED //
-// DISABLED //
-/*
-function created(){
-
-  this.onChange();
-
-
-  const allItems = []
-  const { identifiers, t } = readSearchParams()
-
-  for (const { items } of this.agendaItems) {
-    allItems.push(...items)
-  }
-  if(identifiers.length) this.selectedAgendaItems = allItems.filter(({ identifier }) => identifiers.includes(identifier))
-  if(t) this.t = t
-  console.log('--------',t )
-  if(t || identifiers.length) setTimeout(()=>this.$emit('query',this.buildQuery()), 100)
-  
-}
-
-
-function updateSearchQuery(){
-  resetSearchParams()
-  this.selectedAgendaItems.forEach(({ identifier }) => addParam(identifier))
-  if(this.selectedDate) addParam(this.selectedDate)
-  if(this.t) addParam(this.t, true)
-}
-
-function resetSearchParams(){
-  const { href, search } = window.location
-  const newUrl           = href.replace(search, '')
-
-  window.history.pushState({ path: newUrl }, '', newUrl)
-}
-
-function readSearchParams(){
-  const params      = (new URL(document.location)).searchParams
-  const identifiers = params.getAll('filter')
-  const t           = params.get('t')
-
-  return { identifiers, t }
-}
-
-function addParam(value, isText=false){
-  const { origin, search, pathname } = new URL(window.location)
-  const newSearchParam              = isText? `t=${encodeURIComponent(value)}` : `filter=${encodeURIComponent(value)}`
-  const newSearch                   = !search? `?${newSearchParam}` : `${search}&${newSearchParam}`
-  const newUrl                      = `${origin}${pathname}${newSearch}`
-  
-  window.history.pushState({ path: newUrl }, '', newUrl)
-}
-*/
 </script>
+
 <style >
 .agenda > .multiselect__tags{
   border-radius: 5px 0px 0px 5px !important;

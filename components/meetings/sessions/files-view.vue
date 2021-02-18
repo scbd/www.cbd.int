@@ -28,13 +28,13 @@
                     {{ language| langTextFilter }}
                 </span>
             </a>
-            <i v-if="!isPublic" class="fa fa-eye-slash" :class="{ 'text-muted' : !allowPublic }"/>
+            <i v-if="!isPublic" class="fa fa-eye-slash" :class="{ 'text-success' : allowPublic, }"/>
         </div>
     </div>
 
 
     <div style="white-space: normal; text-align: left" class="modal fade bd-example-modal-lg" ref="preview" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
 
           <div class="modal-header">
@@ -44,7 +44,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <p style="white-space: pre-wrap;">{{preview}}</p>
+            <p class="preview">{{cleanUpText(preview)}}</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn" data-dismiss="modal">Close</button>
@@ -77,7 +77,7 @@ export default {
   props   : {
               files: { type: Object, required: false }
             },
-  methods : { getIconClass, toggleDropdown, outSideClick, showPreview },
+  methods : { getIconClass, toggleDropdown, outSideClick, showPreview, cleanUpText },
   filters : { langTextFilter },
   data
 }
@@ -121,6 +121,11 @@ function outSideClick(e){
   this.show = false
   e.stopPropagation()
 }
+
+function cleanUpText(text) {
+  return (text||'').replace(/\n+/g, '\n').trim();
+}
+
 </script>
 
 <style scoped>
@@ -142,4 +147,15 @@ function outSideClick(e){
   text-align: left;
   padding-left: 25px;
 } 
+
+.preview {
+  white-space: pre-wrap;
+  font-size:15pt;
+  line-height:25pt;
+  font-family:Arial;
+}
+
+.modal-xl {
+  max-width: 80%;
+}
 </style>
