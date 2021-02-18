@@ -20,21 +20,21 @@
                             <div class="form-group row" v-if="!intervention._id">
                                 <label for="participantIdentity" class="col-sm-3 col-form-label">Search</label>
                                 <div class="col-sm-9">
-                                    <OrganizationSearch :meetings="meetings" :tokenReader="tokenReader" @change="onOrganizationChange"/>
+                                    <OrganizationSearch :disabled="!!progress" :meetings="meetings" :tokenReader="tokenReader" @change="onOrganizationChange"/>
                                 </div>
                             </div> 
 
                             <div class="form-group row">
                                 <label for="participantIdentity" class="col-sm-3 col-form-label">Country / Organization </label>
                                 <div class="col-sm-9">
-                                    <input type="text"  class="form-control" id="title" ref="title" v-model.trim="title" required>
+                                    <input :disabled="!!progress" type="text"  class="form-control" id="title" ref="title" v-model.trim="title" required>
                                 </div>
                             </div> 
 
                             <div class="form-group row">
                                 <label for="organizationTypeId" class="col-sm-3 col-form-label">Type</label>
                                 <div class="col-sm-9">
-                                    <select  class="form-control" id="organizationTypeId"  v-model="organizationTypeId" required>
+                                    <select :disabled="!!progress" class="form-control" id="organizationTypeId"  v-model="organizationTypeId" required>
                                         <option v-for="{ _id, acronym, title } in organizationTypes" :key="_id" :value="_id">{{acronym}} - {{ title }} </option>
                                     </select>
                                     <div class="invalid-feedback">Please select a an organization type.</div>
@@ -56,7 +56,7 @@
                             <div class="form-group row">
                                 <label for="status" class="col-sm-3 col-form-label">Status</label>
                                 <div class="col-sm-9">
-                                    <select :disabled="true || intervention._id" class="form-control" id="types" v-model="status">
+                                    <select :disabled="!!progress || (true || intervention._id)" class="form-control" id="types" v-model="status">
                                         <option value="public">Spoken / Delivered</option>
                                         <option value="pending" selected>Uploaded / Pending</option>
                                     </select>
@@ -69,7 +69,7 @@
                             <div v-for="file in files" :key="file" class="form-group row">
 
                                 <label v-if=" file._id" for="allowPublic" class="col-sm-3 col-form-label">{{file.filename}}</label>
-                                <input v-if="!file._id" type="file" class="col-sm-3 col-form-label" @change="file.htmlFile = $event.target.files[0]" ref="file">
+                                <input :disabled="!!progress" v-if="!file._id" type="file" class="col-sm-3 col-form-label" @change="file.htmlFile = $event.target.files[0]" ref="file">
 
                                 <div class="col-sm-3">
                                     <div class="input-group">
@@ -87,11 +87,11 @@
                                 <div class="col-sm-5">
                                     <div class="input-group">
                                         <div class="form-check">
-                                            <input :disabled="!file.allowPublic"  type="checkbox" class="form-check-input" id="public" v-model="file.public" >
+                                            <input :disabled="!!progress && !file.allowPublic"  type="checkbox" class="form-check-input" id="public" v-model="file.public" >
                                             <label class="form-check-label" for="public">Visible on website</label>
                                         </div>                                        
                                         <div class="form-check">
-                                            <input :disabled="!!file._id"  type="checkbox" class="form-check-input" id="allowPublic" v-model="file.allowPublic" >
+                                            <input :disabled="!!progress && !!file._id"  type="checkbox" class="form-check-input" id="allowPublic" v-model="file.allowPublic" >
                                             <label class="form-check-label" for="allowPublic">Participant allowed publication</label>
                                         </div>                                        
                                     </div>
@@ -109,8 +109,9 @@
                     </div>
                 
                     <div class="modal-footer">
-                        <button  type="submit" class="btn btn-primary" @click="save()"><i class="fa fa-save"></i> <span>Save</span></button>
-                        <button  type="button" class="btn btn-default" @click="close()"><i class="fa fa-power-off"></i> <span>Close</span></button>
+                        <i v-if="!!progress" class="fa fa-cog fa-spin"></i>
+                        <button :disabled="!!progress" type="submit" class="btn btn-primary" @click="save()"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button :disabled="!!progress" type="button" class="btn btn-default" @click="close()"><i class="fa fa-power-off"></i> <span>Close</span></button>
                     </div>
                 </div>
             </div>
@@ -148,6 +149,7 @@ export default {
             agendaItem:          { meetingId : this.intervention.meetingId, item: this.intervention.agendaItem },
             organizationTypes  : [],
             organization : null,
+            progress: null,
             error : null,
         }
     },
@@ -186,6 +188,8 @@ function onOrganizationChange(o) {
 
 async function save(){
   try {
+
+      this.progress = true;
 
     let   interventionId     = this.interventionId;
     const title              = this.title;
