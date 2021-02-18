@@ -1,6 +1,6 @@
 
 import axios from 'axios'
-import { isFunction, isEmpty } from 'lodash'
+import { isFunction, isEmpty, cloneDeep } from 'lodash'
 
 let sitePrefixUrl = 'https://api.cbd.int';
 
@@ -130,13 +130,16 @@ export default class Api
   async getInterventionOrganizationTypes(){
     const url = `api/v2021/meeting-interventions/organization-types`
 
-    if(cache.has(url)) return cache.get(url)
+    let types = null;
 
-    const types = await this.http.get(url).then(res => res.data).catch(tryCastToApiError);
+    if(cache.has(url)) types = cache.get(url)
 
-    cache.set(url, types)
+    if(!types) {
+      types = await this.http.get(url).then(res => res.data).catch(tryCastToApiError);
+      cache.set(url, types)
+    }
 
-    return types;
+    return  cloneDeep(types);
   }
 
 

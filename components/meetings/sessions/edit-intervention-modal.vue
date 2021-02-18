@@ -125,8 +125,6 @@ import $    from 'jquery';
 import Api  from '../api.js'
 import OrganizationSearch from './organization-search.vue'
 
-let organizationTypesCache = null
-
 export default {
     name: 'uploadStatement',
     components: { OrganizationSearch },
@@ -162,10 +160,6 @@ async function created() {
   this.api = new Api(this.tokenReader)
 
   this.organizationTypes = await this.api.getInterventionOrganizationTypes();
-
-  organizationTypesCache = types;
-
-  this.organizationTypes = types
 }
 
 function mounted(){
