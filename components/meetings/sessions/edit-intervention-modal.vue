@@ -63,12 +63,19 @@
                                 </div>        
                             </div>       
 
+                            <div class="form-group row">
+                                <label for="status" class="col-sm-3 col-form-label">Date / Time</label>
+                                <div class="col-sm-9">
+                                    <DateTimeSelector :disabled="!!progress" v-model="datetime"/>
+                                </div>        
+                            </div>       
+
                             <h5>Files</h5>
                             <hr>
 
                             <div v-for="file in files" :key="file" class="form-group row">
 
-                                <label v-if=" file._id" for="allowPublic" class="col-sm-3 col-form-label">{{file.filename}}</label>
+                                <label v-if=" file._id" for="allowPublic" class="col-sm-3 col-form-label" :title="file.filename">{{file.filename}}</label>
                                 <input :disabled="!!progress" v-if="!file._id" type="file" class="col-sm-3 col-form-label" @change="file.htmlFile = $event.target.files[0]" ref="file">
 
                                 <div class="col-sm-3">
@@ -122,10 +129,11 @@ import { cloneDeep } from 'lodash'
 import $    from 'jquery';
 import Api  from '../api.js'
 import OrganizationSearch from './organization-search.vue'
+import DateTimeSelector   from './datetime-selector.vue'
 
 export default {
     name: 'uploadStatement',
-    components: { OrganizationSearch },
+    components: { OrganizationSearch, DateTimeSelector },
     props: { 
         tokenReader  : { type: Function, required: false },
         route        : { type: Object,   required: false },
@@ -142,6 +150,7 @@ export default {
             status:              this.intervention.status,
             organizationId:      this.intervention.organizationId,
             government:          this.intervention.government,
+            datetime:            this.intervention.datetime,
             files:               cloneDeep(this.intervention.files||[]),
             agendaItem:          { meetingId : this.intervention.meetingId, item: this.intervention.agendaItem },
             organizationTypes  : [],
@@ -195,6 +204,7 @@ async function save(){
     const organizationTypeId = this.organizationTypeId;
     const meetingId          = this.agendaItem.meetingId;
     const agendaItem         = this.agendaItem.item;
+    const datetime           = this.datetime;
     const government         = (this.government||'').toLowerCase() || undefined;
     const filesToAdd         = this.files.filter(o=> !o._id);
     const filesToUpdate      = this.files.filter(o=>!!o._id);
@@ -209,6 +219,7 @@ async function save(){
         agendaItem, 
         title, 
         status, 
+        datetime,
         government, 
         organizationId,
         organizationTypeId 
