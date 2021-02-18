@@ -1,53 +1,55 @@
 <template >
-        <multiselect 
-          v-if="meetings.length"
-          class  ="org-search"
-          v-model="organization"
-          tag-placeholder="Press enter to create an organization"
-          track-by="display" 
-          label="display"
-          placeholder="Type to search" 
-          open-direction="top" 
-          :options="organizationOptions" 
-          :multiple="true"
-          :loading="isLoading" 
-          :internal-search="false" 
-          :options-limit="300" 
-          :limit="3" 
-          :max="1"
-          :max-height="600" 
-          :taggable="true"
-          :preserveSearch="true"
-          :hide-selected="multiple? true : false"
-          @tag="createNewOrganization"
-          @close="onChange($event)"
-          @select="onChange($event)"
-          @remove="onChange($event)"
-          @search-change="onChange($event); getOrganizationOptions($event)"
-          @input="onInput"
-          >
+  <multiselect 
+    v-if="meetings.length"
+    v-model="organization"
+    
+    class="org-search"
+    track-by="display" 
+    label="display"
+    open-direction="top"
 
-            <template slot="noResult">
-              <small class="text-warn"> {{$t('>Oops! No elements found. Consider changing the search query.')}}</small>
-            </template>
+    :tag-placeholder="$t('Press enter to create an organization')"
+    :placeholder="$t(placeholder)"
+    :options="organizationOptions"
+    :multiple="true"
+    :loading="isLoading" 
+    :internal-search="false" 
+    :options-limit="300" 
+    :limit="3" 
+    :max="1"
+    :max-height="600" 
+    :taggable="true"
+    :preserveSearch="true"
+    :hide-selected="multiple? true : false"
 
-            <template slot="maxElements">
-              <small class="text-danger"> {{$t('Maximum 1 selection')}}</small>
-            </template>
+    @tag="createNewOrganization"
+    @close="organization? '' :onChange({t:''})"
+    @select="onChange"
+    @remove="onChange({t:''})"
+    @search-change="getOrganizationOptions"
+    @input="onInput"
+    >
 
-        </multiselect>
+      <template slot="noResult">
+        <small class="text-warn"> {{$t('>Oops! No elements found. Consider changing the search query.')}}</small>
+      </template>
+
+      <template slot="maxElements">
+        <small class="text-danger"> {{$t('Maximum 1 selection')}}</small>
+      </template>
+
+  </multiselect>
 </template>
 
 <script>
-import Api , { mapObjectId } from '../api.js'
-
-import { debounce, cloneDeep    } from 'lodash'
-import   Multiselect   from 'vue-multiselect'
-import { dateTimeFilter } from '../filters.js'
+import   Api                      from '../api.js'
+import   Multiselect              from 'vue-multiselect'
+import { debounce   , cloneDeep } from 'lodash'
 
 export default {
   name       : 'OrganizationSearch',
   props      : {
+                  placeholder : { type:   String         , required: false, default: 'Type to search' },
                   taggable    : { type:   Boolean        , required: false, default: false },
                   max         : { type:   Number         , required: false, default: 1 },
                   meetings    : { type:   Array          , required: true },
@@ -86,19 +88,8 @@ async function mounted(){
 //  await this.getOrganizationOptions('e'); // preload with most popular leter search
 }
 
-function onChange(evt){
-
-  let text = evt || undefined;
-  const [ organization ] = this.organization;
-
-  if(organization) text = organization.name;
-
-  if(text === this.lastText)
-    return;
-
-  this.lastText = text;
-
-  this.$emit('t', { t: text })
+function onChange({ t, meetingId }){
+  if(t?.length > 2) this.$emit('t', { t, meetingId })
 }
 
 function meetingId(){ return (this.meetings[0] || {})._id }
