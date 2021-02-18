@@ -15,13 +15,22 @@
 
     <div class="col-7 px-0">
       <div class="input-group d-inline-block">
-        <OrganizationSearch v-model="organization" v-bind="$props" @t="onChange" :taggable="false"/>
+        <OrganizationSearch v-model="organization" v-bind="$props" @t="onChange" :taggable="true" placeholder="Type to search then select or Type and press enter to create"/>
       </div>
     </div>
 
-    <div class="col-2 pl-0 text-center">
-        <button v-on:click="createSessionIntervention" class="btn btn-secondary"><i class="fa fa-plus" /></button>
-        <slot name="controls"/>
+    <div class="col-1 pl-0 text-center">
+        <div class="d-inline-block" @mouseover.prevent="toolTipShow" @mouseout.prevent="toolTipHide">
+          <button v-on:click="createSessionIntervention"  :disabled="isCreateSessionInterventionDisabled" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" :title="$t('Create fileless intervention')" >
+            <i class="fa fa-plus" />
+          </button>
+        </div>
+
+        <div class="d-inline-block" @mouseover.prevent="toolTipShow" @mouseout.prevent="toolTipHide">
+          <button class="btn" @click="createPendingIntervention()" data-toggle="tooltip" data-placement="top" :title="$t('Upload pending file')">
+            <i class="fa fa-upload"></i>
+          </button>
+        </div>
     </div>
 
   </div>
@@ -45,13 +54,15 @@ export default {
                     tokenReader              : { type: Function, required: true },
                   },
   components : { AgendaSelect, OrganizationSearch },
-  computed   : { meetingId },
+  computed   : { meetingId, isCreateSessionInterventionDisabled },
   methods    : { 
                   onChange, 
                   getAgendaQuery,
                   createSessionIntervention,
                   clearForm,
-                  resetTime
+                  resetTime,
+                  toolTipShow,
+                  toolTipHide
                 },
   i18n, data, created, beforeDestroy
 }
@@ -122,6 +133,17 @@ function resetTime () {
   this.timeText = dateTimeFilter((new Date()).toISOString());
 }
 
+function isCreateSessionInterventionDisabled(){
+  return !this.selectedAgendaItem?.length || !this.organization?.length
+}
+
+function toolTipShow({ fromElement }){
+  $(fromElement).tooltip('show')
+  setTimeout(()=>$(fromElement).tooltip('hide'), 3000)
+}
+function toolTipHide({ toElement }){
+  $(toElement).tooltip('hide')
+}
 </script>
 
 <style >
