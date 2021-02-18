@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div class="col-1 pl-0 text-center">
+    <div class="col-2 pl-0 text-right text-nowrap">
         <div class="d-inline-block" @mouseover.prevent="toolTipShow" @mouseout.prevent="toolTipHide">
           <button v-on:click="createSessionIntervention"  :disabled="isCreateSessionInterventionDisabled" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" :title="$t('Create fileless intervention')" >
             <i class="fa fa-plus" />
