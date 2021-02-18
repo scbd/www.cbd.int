@@ -9,6 +9,8 @@
       </small>
     </h1>
 
+    <h3> {{ (session || {}).startDate  | dateTimeFilter('T  - cccc, d MMMM yyyy') }} </h3>
+
     <Session v-if="session">
       <InterventionRow v-for="(intervention, index) in interventions" :index="index+1" v-bind="{intervention}" v-bind:key="intervention._id">
         <template slot="controls">
@@ -30,12 +32,13 @@
 
     <hr/>
 
-    <caption class="text-nowrap float-right"> <small>{{pendingInterventions.length}} {{$t('Pending statements uploaded')}}</small></caption>
+    <caption class="text-nowrap float-right">
+      <small>{{pendingInterventions.length}} {{$t('Pending statements uploaded')}}</small>
+    </caption>
     <Session v-if="pendingInterventions.length" >
       <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" v-bind:key="intervention._id" @dblclick="edit(intervention)" >
         <template slot="controls">
           <div class="text-nowrap">
-            
             <button class="btn btn-sm btn-outline-success" @click="askPublish(intervention)"><i class="fa fa-microphone"></i></button>
 
             <div class="btn-group" role="group">
@@ -62,23 +65,25 @@
 <script>
 import Api, { mergeQueries, mapObjectId } from '../api.js'
 
-import { sortBy               , debounce } from 'lodash'
-import   EditInterventionModal             from './edit-intervention-modal.vue'
-import   InterventionRow                   from './intervention-row.vue'
-import   Session                           from './session.vue'
-import   EditRow                           from './edit-row.vue'
+import { sortBy                , debounce } from 'lodash'
+import { dateTimeFilter        }            from '../filters.js'
+import   EditInterventionModal              from './edit-intervention-modal.vue'
+import   InterventionRow                    from './intervention-row.vue'
+import   Session                            from './session.vue'
+import   EditRow                            from './edit-row.vue'
 
 export default {
   name      : 'SessionEdit',
   props     : {
-              route      : { type: Object,   required: false },
-              tokenReader: { type: Function, required: false }
+                route      : { type: Object,   required: false },
+                tokenReader: { type: Function, required: false }
               },
   components: { Session, EditRow, InterventionRow, EditInterventionModal },
   computed  : { 
                 agendaItems, 
                 sessionId() { return this.session._id } 
               },
+  filters   : { dateTimeFilter },
   methods   : {
                 init,
                 createPendingIntervention, 
@@ -190,7 +195,6 @@ async function askPublish(intervention){
 }
 
 function replace(_id, intervention) {
-  console.log(1)
   let  i = this.interventions       .findIndex(o=>o._id === _id );
   let pi = this.pendingInterventions.findIndex(o=>o._id === _id );
 
@@ -200,7 +204,6 @@ function replace(_id, intervention) {
   if(intervention) {
     if( i>=0 && intervention.status=='pending')  i=-1;
     if(pi>=0 && intervention.status=='public' ) pi=-1;
-
 
     if( i>=0) this.interventions       .splice( i, 0, intervention);
     if(pi>=0) this.pendingInterventions.splice(pi, 0, intervention);
@@ -243,5 +246,4 @@ function agendaItems() {
     }))
   }));
 }
-
 </script>
