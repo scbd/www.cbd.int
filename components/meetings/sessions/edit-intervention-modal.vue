@@ -87,18 +87,15 @@
                                 <div class="col-sm-5">
                                     <div class="input-group">
                                         <div class="form-check">
-                                            <input :disabled="!!progress && !file.allowPublic"  type="checkbox" class="form-check-input" id="public" v-model="file.public" >
+                                            <input :disabled="!!progress || !file.allowPublic"  type="checkbox" class="form-check-input" id="public" v-model="file.public" >
                                             <label class="form-check-label" for="public">Visible on website</label>
                                         </div>                                        
                                         <div class="form-check">
-                                            <input :disabled="!!progress && !!file._id"  type="checkbox" class="form-check-input" id="allowPublic" v-model="file.allowPublic" >
+                                            <input :disabled="!!progress || !!file._id"  type="checkbox" class="form-check-input" id="allowPublic" v-model="file.allowPublic" >
                                             <label class="form-check-label" for="allowPublic">Participant allowed publication</label>
                                         </div>                                        
                                     </div>
                                 </div>
-
-
-
                             </div>  
 
                             <div class="alert alert-warning" role="alert" v-if="error">
