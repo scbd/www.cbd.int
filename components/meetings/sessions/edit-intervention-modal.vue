@@ -161,7 +161,7 @@ export default {
 async function created() {
   this.api = new Api(this.tokenReader)
 
-  const types = organizationTypesCache || await this.api.getInterventionOrganizationTypes();
+  this.organizationTypes = await this.api.getInterventionOrganizationTypes();
 
   organizationTypesCache = types;
 
