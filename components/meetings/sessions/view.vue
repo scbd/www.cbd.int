@@ -1,8 +1,8 @@
 <template >
   <div>
     <Accordion :length="sessions.length">
-      <template v-for="({ startDate, title}, index) in sessions"  v-slot:[`header-${index}`]="">
-        {{ header({ title, startDate })}}
+      <template v-for="({ startDate, title, interventions }, index) in sessions"  v-slot:[`header-${index}`]="">
+        <span v-bind:key="index"> {{ header({ title, startDate })}} <small>({{interventions.length}})</small> </span>
       </template>
 
       <template v-for="({ interventions }, index) in sessions"  v-slot:[`body-${index}`]="" >
@@ -34,7 +34,7 @@ export default {
 
 function data(){
   return { 
-    sessions: [], 
+    sessions: [],
   }
 }
 
