@@ -27,9 +27,7 @@
         </div>
 
         <div class="d-inline-block" @mouseover.prevent="toolTipShow" @mouseout.prevent="toolTipHide">
-          <button class="btn" @click="createPendingIntervention()" data-toggle="tooltip" data-placement="top" :title="$t('Upload pending file')">
-            <i class="fa fa-upload"></i>
-          </button>
+          <slot name="controls"/>
         </div>
     </div>
 

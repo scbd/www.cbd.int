@@ -102,6 +102,7 @@ async function getOrganizationOptions(t){
   
   this.isLoading = true
 
+  this.onChange({ t, meetingId })
   const organizations = (await this.api.getInterventionOrganizations({ meetingId , t } )).map(this.mapOrganizationNames)
 
   this.organizationOptions = [ ...organizations, ...this.createdOrganizations ];
