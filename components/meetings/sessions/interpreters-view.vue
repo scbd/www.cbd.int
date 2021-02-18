@@ -22,7 +22,7 @@
 
     <div class="card mb-3" v-if="interventions.length">
       <Session>
-        <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention, index}" v-bind:key="intervention._id"/>
+        <InterventionRow class="interpreter-view" :class="{ 'table-secondary': intervention.files[0].language!=='en' }" v-for="(intervention, index) in interventions" v-bind="{intervention, index}" v-bind:key="intervention._id"/>
       </Session>
     </div>
   
@@ -115,5 +115,11 @@ async function query(queryArgs){
   max-lines: 2;
   -webkit-line-clamp: 2; /* number of lines to show */
   -webkit-box-orient: vertical;  
+}
+</style>
+
+<style>
+tr.interpreter-view > td > .title {
+  font-weight: bold;
 }
 </style>

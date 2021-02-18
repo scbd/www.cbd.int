@@ -19,7 +19,7 @@
 
     <td style="vertical-align: middle;"> 
         <span class="float-right text-muted">{{ getOrgType(intervention) }} </span>  
-        {{ intervention.title }}
+        <span class="title">{{ intervention.title }}</span>
         <div v-if="summary" class="text-muted small summary">{{intervention.title}}</div>
         <slot>
             <FilesPreview v-if="isPending(intervention.status)" :files="intervention.files" />
