@@ -28,10 +28,10 @@
 
     <hr/>
 
-    <EditRow v-on:penging-query="queryPendingInterventions" v-bind="$props" :meetings="meetings"/>
+    <EditRow v-if="session || pendingInterventions.length" v-on:penging-query="queryPendingInterventions" v-bind="$props" :meetings="meetings" @new-intervention="init" :createPendingIntervention="createPendingIntervention"/>
 
     <hr/>
-    
+
     <input type="text" @input="onSearch" v-model="freeText">
     <button class="btn" @click="create()"><i class="fa fa-upload"></i></button>
 
@@ -86,6 +86,8 @@ export default {
   methods:    { 
     create, 
     edit, 
+                init,
+                createPendingIntervention, 
     editId, 
     editClose,
     askDelete,
@@ -115,8 +117,11 @@ async function created(){
   this.api = new Api(this.tokenReader);
 }
 
-async function mounted(){
+function mounted(){
+  this.init()
+}
 
+async function init(){
     const { sessionId, meeting: meetingCode } = this.route.params
 
     const promises = [
@@ -127,21 +132,22 @@ async function mounted(){
 
     const [ meeting, session, interventions ] = await Promise.all(promises);
 
-    if(!meeting) throw Error("Meeting not found")
-    if(!session) throw Error("Session not found")
-    if(!session.meetingIds.includes(meeting._id)) throw Error("Meeting & Session do not match")
+    if(!meeting) throw Error("Meeting not found");
+    if(!session) throw Error("Session not found");
+    if(!session.meetingIds.includes(meeting._id)) throw Error("Meeting & Session do not match");
 
-    this.meetings              = [meeting]
+    this.meetings              = [ meeting ];
     this.session               = session;
     this.interventions         = interventions;
     this.pendingInterventions  = await this.queryPendingInterventions();
 }
 
-function create(){
+function createPendingIntervention(){
 
   this.editedIntervention = { 
-    status: 'pending',
-    files: [{ language: 'en'} ] };
+                              status: 'pending',
+                              files : [ { language: 'en'} ]
+                            };
 }
 
 async function editId(interventionId){

@@ -107,7 +107,7 @@ export default class Api
 
   createIntervention(sessionId, data) {
 
-
+    data.status = 'public';
     return this.http.post(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}/interventions`, data).then(res => res.data).catch(tryCastToApiError);
   }
 

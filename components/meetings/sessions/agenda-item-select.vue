@@ -1,45 +1,52 @@
 
 <template >
-  <multiselect
+  <multiselect 
     v-if="meetings.length"
-    id="xxx"
     v-model="selectedAgendaItems"
-    deselect-label="remove this value"
+    deselect-label="remove this agenda item"
     :placeholder="$t('Agenda Item')"
     :options="agendaItems"
     :searchable="false"
     :multiple="multiple"
-    group-values="items"
-    group-label="normalizedSymbol"
+    :max="max" 
     :hide-selected="multiple? true : false"
-    track-by="item"
-    label="display"
+    :preserveSearch="true"
     @select="onChange"
     @remove="onChange"
     @input="onInput"
     class="agenda"
-    />
+    group-values="items"
+    group-label="normalizedSymbol"
+    track-by="item"
+    label="display"
+    >
+
+    <template slot="maxElements">
+      <small class="text-danger"> {{$t('Maximum 1 selection')}}</small>
+    </template>
+
+  </multiselect>
 </template>
 
 <script>
-import Multiselect        from 'vue-multiselect'
-import i18n               from '../locales.js'
+import   Multiselect         from 'vue-multiselect'
+import   i18n                from '../locales.js'
 import { dateTimeFilterUTC } from '../filters.js'
 
 export default {
   name      : 'AgendaItemSelect',
   components: { Multiselect },
   props     : { 
-    meetings: { type: Array, required: true },
-    value   : { type: [Object, Array], required: false },
-    multiple: { type: Boolean, required: false, default: false },
-  },
+                meetings: { type:   Array          , required: true },
+                multiple: { type:   Boolean        , required: false, default: true },
+                max     : { type:   Number         , required: false, default: 1     },
+                value   : { type: [ Object, Array ], required: false }
+              },
+  watch     : { value },
   methods   : { onInput, onChange },
   filters   : { dateTimeFilterUTC },
   computed  : { agendaItems },
-  data,
-  i18n,
-  created
+  data, i18n, created
 }
 
 function created() { 
@@ -60,11 +67,16 @@ function data(){
 }
 
 function onChange(data){
-  this.$emit('change',data )
+  // this.$forceUpdate()
+  // this.$emit('change', [data] )
+  console.log('agenda-item0select-data', data)
+  console.log('agenda-item0select-data this.selectedAgendaItems', this.selectedAgendaItems)
 }
 
 function onInput(){
   this.$emit('input',this.selectedAgendaItems )
+  this.$emit('change', this.selectedAgendaItems )
+console.log('@input this.selectedAgendaItems ', this.selectedAgendaItems )
 }
 
 function agendaItems() {
@@ -77,6 +89,7 @@ function agendaItems() {
   }));
 }
 
-
-
+function value(newValue){
+  this.selectedAgendaItems = newValue? newValue : []
+}
 </script>
