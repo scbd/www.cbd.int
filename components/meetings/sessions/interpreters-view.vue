@@ -15,7 +15,7 @@
 
     <div class="text-right text-muted">
       <button @click="refresh" class="btn btn-link"><i class="fa fa-refresh"></i></button>
-      <i v-if="lastUpdated" class="text-muted"> Last refresh on {{ lastUpdated | timeFilter('T')}} - </i>
+      <i v-if="lastUpdated" class="text-muted"> Last refresh on {{ lastUpdated | dateTimeFilter('T')}} - </i>
       <b v-if="interventions.length>=maxResultCount">More than {{interventions.length}} records </b>
       <b v-if="interventions.length <maxResultCount">{{interventions.length}} records </b>
     </div>
@@ -36,10 +36,16 @@ import SearchControls  from './search-controls.vue'
 import InterventionRow from './intervention-row.vue'
 import Api, { mergeQueries } from '../api'
 
+import { dateTimeFilter  } from '../filters.js'
+import   Session           from './session.vue'
+import   SearchControls    from './search-controls.vue'
+import   InterventionRow   from './intervention-row.vue'
+
+
 export default {
   name      : 'InterpretersView',
   components: { Session, SearchControls, InterventionRow },
-  filters   : { timeFilter },
+  filters   : { dateTimeFilter },
   props     : { 
     route:       { type: Object, required: false },
     tokenReader: { type: Function, required: false } 
