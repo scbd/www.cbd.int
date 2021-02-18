@@ -1,4 +1,3 @@
-
 <template >
   <multiselect 
     v-if="meetings.length"
@@ -11,8 +10,6 @@
     :max="max" 
     :hide-selected="multiple? true : false"
     :preserveSearch="true"
-    @select="onChange"
-    @remove="onChange"
     @input="onInput"
     class="agenda"
     group-values="items"
@@ -43,7 +40,7 @@ export default {
                 value   : { type: [ Object, Array ], required: false }
               },
   watch     : { value },
-  methods   : { onInput, onChange },
+  methods   : { onInput },
   filters   : { dateTimeFilterUTC },
   computed  : { agendaItems },
   data, i18n, created
@@ -66,17 +63,9 @@ function data(){
   }
 }
 
-function onChange(data){
-  // this.$forceUpdate()
-  // this.$emit('change', [data] )
-  console.log('agenda-item0select-data', data)
-  console.log('agenda-item0select-data this.selectedAgendaItems', this.selectedAgendaItems)
-}
-
 function onInput(){
   this.$emit('input',this.selectedAgendaItems )
   this.$emit('change', this.selectedAgendaItems )
-console.log('@input this.selectedAgendaItems ', this.selectedAgendaItems )
 }
 
 function agendaItems() {
