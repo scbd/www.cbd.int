@@ -20,10 +20,10 @@
           :preserveSearch="true"
           :hide-selected="multiple? true : false"
           @tag="createNewOrganization"
-          @close="organization? '' :onChange({t:''})"
-          @select="onChange"
-          @remove="onChange({t:''})"
-          @search-change="getOrganizationOptions"
+          @close="onChange($event)"
+          @select="onChange($event)"
+          @remove="onChange($event)"
+          @search-change="onChange($event); getOrganizationOptions($event)"
           @input="onInput"
           >
 
@@ -58,7 +58,7 @@ export default {
   computed   : { meetingId },
   watch      : { value },
   methods    : { 
-                  onChange: debounce(onChange, 100),
+                  onChange: debounce(onChange, 400),
                   getOrganizationOptions,
                   mapOrganizationNames,
                   createNewOrganization,
@@ -71,7 +71,8 @@ export default {
       organizationOptions  : [],
       createdOrganizations : [],
       organizationTypes    : [],
-      isLoading            : false
+      isLoading            : false,
+      lastText             : null
     }
   }
 }
@@ -82,24 +83,33 @@ async function created(){
 }
 
 async function mounted(){
-  await this.getOrganizationOptions('e'); // preload with most popular leter search
+//  await this.getOrganizationOptions('e'); // preload with most popular leter search
 }
 
-function onChange({ t, meetingId }){
-  if(t?.length > 2) this.$emit('t', { t, meetingId })
-  // this.$emit('change', this.organization)
+function onChange(evt){
+
+  let text = evt || undefined;
+  const [ organization ] = this.organization;
+
+  if(organization) text = organization.name;
+
+  if(text === this.lastText)
+    return;
+
+  this.lastText = text;
+
+  this.$emit('t', { t: text })
 }
 
 function meetingId(){ return (this.meetings[0] || {})._id }
 
 async function getOrganizationOptions(t){
+  
   const meetingId = this.meetingId
 
   if(!t || !meetingId) return 
   
   this.isLoading = true
-
-  this.onChange({ meetingId, t }) // send search back to edit to filter pending
 
   const organizations = (await this.api.getInterventionOrganizations({ meetingId , t } )).map(this.mapOrganizationNames)
 
@@ -112,15 +122,15 @@ async function getOrganizationOptions(t){
 function mapOrganizationNames(organizationDetails){
   delete organizationDetails.score
 
-  const { name: governmentName, acronym, government: governmentUpperCase, organizationTypeId, organizationId } = organizationDetails
+  const { name, acronym, governmentName, government: governmentUpperCase, organizationTypeId, organizationId } = organizationDetails
 
   const organizationType = cloneDeep((this.organizationTypes.find(({ _id }) => _id === organizationTypeId)))
-  const display          = `${governmentName}` + (!acronym? '' : `(${acronym})`)
+  const display          = `${name}` + (!acronym? '' : `(${acronym})`)
   const government       = governmentUpperCase? governmentUpperCase.toLowerCase() : ''
 
   if(organizationType) delete organizationType._id
 
-  return { display, government, governmentName,  organizationTypeId, organizationId }
+  return { display, name, government, governmentName,  organizationTypeId, organizationId }
 }
 
 function createNewOrganization(name){
@@ -136,11 +146,7 @@ function createNewOrganization(name){
 
 function onInput(){
   this.$emit('input', this.organization)
-
-  const   meetingId    = this.meetingId
-  const { display: t } = this.organization[0] || {}
-
-  this.$emit('t', { t, meetingId })
+  this.onChange();
 }
 
 function value(newValue){

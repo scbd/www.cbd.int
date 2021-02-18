@@ -22,7 +22,11 @@
 
     <hr/>
 
-    <EditRow v-if="session || pendingInterventions.length" v-on:penging-query="queryPendingInterventions" v-bind="$props" :meetings="meetings" @new-intervention="init" :createPendingIntervention="createPendingIntervention"/>
+    <EditRow v-if="session || pendingInterventions.length" v-on:penging-query="queryPendingInterventions" v-bind="$props" :meetings="meetings" @new-intervention="init">
+      <template slot="controls">
+        <button class="btn" @click="createPendingIntervention()"><i class="fa fa-upload"></i></button>
+      </template>
+    </EditRow>
 
     <hr/>
 

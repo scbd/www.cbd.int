@@ -13,15 +13,15 @@
       </div>
     </div>
 
-    <div class="col-8 px-0">
+    <div class="col-7 px-0">
       <div class="input-group d-inline-block">
-        <OrganizationSearch v-model="organization" v-bind="$props" @t="onChange" :taggable="true"/>
+        <OrganizationSearch v-model="organization" v-bind="$props" @t="onChange" :taggable="false"/>
       </div>
     </div>
 
-    <div class="col-1 pl-0 text-center">
+    <div class="col-2 pl-0 text-center">
         <button v-on:click="createSessionIntervention" class="btn btn-secondary"><i class="fa fa-plus" /></button>
-        <button class="btn" @click="createPendingIntervention()"><i class="fa fa-upload"></i></button>
+        <slot name="controls"/>
     </div>
 
   </div>
@@ -43,7 +43,6 @@ export default {
                     meetings                 : { type: Array,    required: true },
                     route                    : { type: Object,   required: true },
                     tokenReader              : { type: Function, required: true },
-                    createPendingIntervention: { type: Function, required: true }
                   },
   components : { AgendaSelect, OrganizationSearch },
   computed   : { meetingId },
