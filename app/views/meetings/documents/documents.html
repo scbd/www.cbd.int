@@ -156,7 +156,7 @@
 
                     <h4 ng-if="::section.title" style="margin-left:5px">{{::section.title}}</h4>
 
-                    <div ng-if="section.component && type.loaded">
+                    <div ng-if="section.component">
                         <div ng-vue="vueOptions" :is="section.component" :route="route" :token-reader="tokenReader"></div>
                     </div>
 

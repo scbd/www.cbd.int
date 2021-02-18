@@ -268,25 +268,14 @@ export default class Api
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
   async getSessions(code) {
-    const q            = makeMeetingConferenceQuery (code) // code? { 'meetings.symbol': { $in:[code]} } : {}
-    const f            = { startDate: 1 , title: 1 }
-    const s            = { startDate: 1 }
-    const searchParams = { q, f, s };
-    const data         = await this.http.get('api/v2021/meeting-sessions', { params: searchParams }).then(res => res.data).catch(tryCastToApiError);
 
-    const interventionsPromises = []
-
-    if(!code) return data
-
-    for (const [ index, row ] of data.entries())
-      interventionsPromises[index] = this.getInterventionsBySessionId(row._id)
-
-    const interventions = await Promise.all(interventionsPromises)
-
-    for (const [ index, row ] of data.entries())
-      data[index] = { ...row, interventions: interventions[index] }
-
-    return data
+    const sessions      =  await this.querySessions     ({ s: { startDate: -1 }, q: makeMeetingConferenceQuery (code) });
+    const interventions =  await this.queryInterventions({ s: { datetime:   1 }, q: { sessionId:  { $in: sessions.map(({_id})=> mapObjectId(_id)) }, status:"public" } });
+  
+    return sessions.map(session=>({
+      ...session,
+      interventions: interventions.filter(o=>o.sessionId === session._id)
+    }));
   }
 }
 

@@ -56,6 +56,9 @@
 </script>
 
 <style scoped>
+  h5 { color: #009b48;}
+  
+  .card { border:none }
   .card-header { cursor  : pointer; }
   .item        { position: relative; } 
   .start       { display : flex; }

@@ -2,7 +2,7 @@
   <tr  @click="$parent.$emit('select')">
 
     <td scope="row" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
-        <span  v-if="!isPending(intervention.status)">{{index}}.</span>
+        <b  v-if="!isPending(intervention.status)">{{index}}.</b>
         <small v-if="isPending(intervention.status)" class="text-muted lighter">{{$t('Pending')}}</small>
     </td>
 
@@ -10,11 +10,11 @@
         <AgendaItem :item="intervention.agenda || ( intervention.agendaItem && { item: intervention.agendaItem})"/>
     </td>
 
-    <td class="date-col" style="text-align: center; vertical-align: middle;">
+    <td v-if="showDate" class="date-col" style="text-align: center; vertical-align: middle;">
         <span>{{ intervention.datetime | dateTimeFilter('MMM d') }}</span>
     </td>
 
-    <td class="time-col" style="text-align: center; vertical-align: middle;">
+    <td v-if="showTime"  class="time-col" style="text-align: center; vertical-align: middle;">
         <span>{{ intervention.datetime | dateTimeFilter('T') }}</span>
     </td>
 
@@ -52,7 +52,8 @@ export default {
   props     : { 
                   index       : { type: Number,  required: false, default:null },
                   intervention: { type: Object,  required: true },
-                  showStatus  : { type: Boolean, required: false, default: false },
+                  showDate    : { type: Boolean, required: false, default: true },
+                  showTime    : { type: Boolean, required: false, default: true },
               },
   methods   : { getOrgType, isPending },
   filters   : { dateTimeFilter },
