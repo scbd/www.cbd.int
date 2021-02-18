@@ -9,13 +9,7 @@
       </small>
     </h1>
 
-    <!-- <slot v-for="(intervention, index) in interventions" v-bind="{ intervention }">
-      <tbody v-bind:key="index" >
-
-      </tbody>
-    </slot> -->
-
-    <Session v-if="session" >
+    <Session v-if="session">
       <InterventionRow v-for="(intervention, index) in interventions" :index="index+1" v-bind="{intervention}" v-bind:key="intervention._id">
         <template slot="controls">
           <div class="btn-group" role="group">
@@ -32,9 +26,6 @@
 
     <hr/>
 
-    <input type="text" @input="onSearch" v-model="freeText">
-    <button class="btn" @click="create()"><i class="fa fa-upload"></i></button>
-
     <caption class="text-nowrap float-right"> <small>{{pendingInterventions.length}} {{$t('Pending statements uploaded')}}</small></caption>
     <Session v-if="pendingInterventions.length" >
       <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" v-bind:key="intervention._id" @dblclick="edit(intervention)" >
@@ -43,10 +34,10 @@
             
             <button class="btn btn-sm btn-outline-success" @click="askPublish(intervention)"><i class="fa fa-microphone"></i></button>
 
-          <div class="btn-group" role="group">
-            <button class="btn btn-sm btn-outline-dark"    @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-sm btn-outline-danger"  @click="askDelete(intervention)"><i class="fa fa-trash"></i></button>
-          </div>
+            <div class="btn-group" role="group">
+              <button class="btn btn-sm btn-outline-dark"    @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
+              <button class="btn btn-sm btn-outline-danger"  @click="askDelete(intervention)"><i class="fa fa-trash"></i></button>
+            </div>
           </div>
         </template>
       </InterventionRow>
@@ -60,56 +51,54 @@
       :tokenReader="tokenReader"
       :meetings="meetings"
       @close="editClose"
-    ></EditInterventionModal>    
+    ></EditInterventionModal>
   </div>
 </template>
 
-
 <script>
-import { sortBy, debounce }              from 'lodash'
-import EditInterventionModal     from './edit-intervention-modal.vue'
-import InterventionRow           from './intervention-row.vue'
-import Session                   from './session.vue'
-import EditRow                   from './edit-row.vue'
 import Api, { mergeQueries, mapObjectId } from '../api.js'
 
+import { sortBy               , debounce } from 'lodash'
+import   EditInterventionModal             from './edit-intervention-modal.vue'
+import   InterventionRow                   from './intervention-row.vue'
+import   Session                           from './session.vue'
+import   EditRow                           from './edit-row.vue'
+
 export default {
-  name: 'SessionEdit',
-  props:{
-    route      : { type: Object, required: false },
-    tokenReader: { type: Function, required: false }
-  },
+  name      : 'SessionEdit',
+  props     : {
+              route      : { type: Object,   required: false },
+              tokenReader: { type: Function, required: false }
+              },
   components: { Session, EditRow, InterventionRow, EditInterventionModal },
   computed  : { 
-    agendaItems, 
-    sessionId() { return this.session._id } },
-  methods:    { 
-    create, 
-    edit, 
+                agendaItems, 
+                sessionId() { return this.session._id } 
+              },
+  methods   : {
                 init,
                 createPendingIntervention, 
-    editId, 
-    editClose,
-    askDelete,
-    askPublish,
-    replace,
-    queryPendingInterventions,
-    onSearch : debounce(onSearch, 400)
-  },
-  data,
-  created,
-  mounted
+                edit, 
+                editId, 
+                editClose,
+                askDelete,
+                askPublish,
+                replace,
+                queryPendingInterventions,
+                onSearch : debounce(onSearch, 400)
+              },
+  data, created, mounted
 }
 
 function data(){
   return { 
-    session: undefined,
-    interventions: [], 
-    pendingInterventions: [], 
-    meetings : [],
-    maxResultCount : 250,
-    editedIntervention: null,
-    freeText: ''
+    session             : undefined,
+    interventions       : [],
+    pendingInterventions: [],
+    meetings            : [],
+    maxResultCount      : 250,
+    editedIntervention  : null,
+    freeText            : ''
   }
 }
 
@@ -151,7 +140,6 @@ function createPendingIntervention(){
 }
 
 async function editId(interventionId){
-
   const intervention = await this.api.getInterventionById(interventionId)
 
   this.edit(intervention)
@@ -164,10 +152,11 @@ function edit(intervention){
 function editClose(intervention){
   this.editedIntervention = null
 
-  if(intervention) {
-    const { _id } = intervention;
-    this.replace(_id, intervention);
-  }
+  if(!intervention) return
+
+  const { _id } = intervention;
+
+  this.replace(_id, intervention);
 }
 
 async function askDelete(intervention){
@@ -175,7 +164,8 @@ async function askDelete(intervention){
   if(!confirm(`Delete "${intervention.title}?`)) return;
 
   const { _id } = intervention;
-  await this.api.deleteIntervention(_id)
+
+  await this.api.deleteIntervention(_id);
 
   this.replace(_id, null);
 }
@@ -204,10 +194,6 @@ function replace(_id, intervention) {
   if(pi>=0) this.pendingInterventions.splice(pi, 1);
 
   if(intervention) {
-
-  console.log( i, pi, intervention.status)
-
-
     if( i>=0 && intervention.status=='pending')  i=-1;
     if(pi>=0 && intervention.status=='public' ) pi=-1;
 
@@ -227,22 +213,21 @@ function onSearch() {
 }
 
 async function queryPendingInterventions(args={}){
-
   if(!this.meetings[0]) return []
 
-  const { t, agendaItem } = args
-  const isPending  = { status: 'pending' };
-  const hasFiles   = { 'files.0': {$exists: true} }; 
-  const meetingIds = { meetingId : { $in: this.meetings.map(m=>mapObjectId(m._id)) } }; 
-  const meetingId  = this.meetings[0]._id
-  const q = mergeQueries(isPending, hasFiles, meetingIds, agendaItem);
-  const l = this.maxResultCount;
+  const { t, agendaItem } = args;
+  const   isPending       = { status: 'pending' };
+  const   hasFiles        = { 'files.0': {$exists: true} }; 
+  const   meetingIds      = { meetingId : { $in: this.meetings.map(m=>mapObjectId(m._id)) } }; 
+  const   meetingId       = this.meetings[0]._id;
+  const   q               = mergeQueries(isPending, hasFiles, meetingIds, agendaItem);
+  const   l               = this.maxResultCount;
 
-  const textSearch = t? { t, meetingId } : {}
+  const textSearch = t? { t, meetingId } : {};
   
-  this.pendingInterventions = await this.api.queryInterventions({ q, l, ...textSearch  })
+  this.pendingInterventions = await this.api.queryInterventions({ q, l, ...textSearch  });
 
-  return this.pendingInterventions
+  return this.pendingInterventions;
 }
 
 function agendaItems() {
