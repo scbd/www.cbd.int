@@ -11,10 +11,11 @@
           <h5> 
             {{ title }}
             <span v-if="!title" >{{ startDate | dateTimeFilter('cccc, d MMMM yyyy - T') }}</span>
-            <small>({{interventions.length}})</small> </span>
+            ({{interventions.length}})
 
             <i class="text-muted fa fa-caret-up"/>
             <i class="text-muted fa fa-caret-down"/>
+            <i class="text-muted help">click to expand</i>
           </h5>
         </div>
 
@@ -65,6 +66,9 @@ async function created(){
 
   .card-header           .fa-caret-up   { display: none; }
   .card-header.collapsed .fa-caret-up   { display: inline; }
+
+  .card-header           .help          { display: none; font-weight: lighter; font-size: 80%; }
+  .card-header.collapsed .help          { display: inline; }
 
   .card-header           .fa-caret-down { display: inline; }
   .card-header.collapsed .fa-caret-down { display: none; }
