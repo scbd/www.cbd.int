@@ -269,8 +269,8 @@ export default class Api
 
   async getSessions(code) {
 
-    const sessions      =  await this.querySessions     ({ s: { startDate: -1 }, q: makeMeetingConferenceQuery (code) });
-    const interventions =  await this.queryInterventions({ s: { datetime:   1 }, q: { sessionId:  { $in: sessions.map(({_id})=> mapObjectId(_id)) }, status:"public" } });
+    const sessions      =  await this.querySessions     ({ s: { startDate: 1 }, q: makeMeetingConferenceQuery (code) });
+    const interventions =  await this.queryInterventions({ s: { datetime:  1 }, q: { sessionId:  { $in: sessions.map(({_id})=> mapObjectId(_id)) }, status:"public" } });
   
     return sessions.map(session=>({
       ...session,
