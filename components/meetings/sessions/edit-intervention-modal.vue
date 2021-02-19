@@ -222,7 +222,8 @@ async function save(){
         datetime,
         government, 
         organizationId,
-        organizationTypeId 
+        organizationTypeId,
+        files: undefined, // avoid sending back
     };
 
     const updatedIntervention = interventionId  ? await this.api.updateIntervention(interventionId, updates)   
@@ -268,6 +269,7 @@ function mapFileData(file) {
         allowPublic,
         public : isPublic,
         htmlFile: undefined,
+        text: undefined
     }
 
     return data;
