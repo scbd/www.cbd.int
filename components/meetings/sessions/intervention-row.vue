@@ -10,11 +10,11 @@
         <AgendaItem :item="intervention.agenda || ( intervention.agendaItem && { item: intervention.agendaItem})"/>
     </td>
 
-    <td v-if="showDate" class="date-col" style="text-align: center; vertical-align: middle;">
+    <td v-if="showDate" class="date-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
         <span>{{ intervention.datetime | dateTimeFilter('MMM d') }}</span>
     </td>
 
-    <td v-if="showTime"  class="time-col" style="text-align: center; vertical-align: middle;">
+    <td v-if="showTime"  class="time-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
         <span>{{ intervention.datetime | dateTimeFilter('T') }}</span>
     </td>
 
@@ -22,6 +22,13 @@
         <span class="float-right text-muted">{{ getOrgType(intervention) }} </span>  
         <span class="title">{{ intervention.title }}</span>
         <div v-if="summary" class="text-muted small summary">{{intervention.title}}</div>
+
+        <div class="d-md-none small">
+          <span v-if="showDate" >{{ intervention.datetime | dateTimeFilter('MMM d') }}</span>
+          <span v-if="showTime" class="d-md-none">{{ intervention.datetime | dateTimeFilter('T') }}</span>
+        </div>
+
+
         <slot>
             <FilesPreview v-if="isPending(intervention.status)" :files="intervention.files" />
         </slot>

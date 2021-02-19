@@ -1,34 +1,20 @@
 
 <template >
   <div class="position-relative">
-    <!-- mobile view to medium -->
-    <button v-if="files.length" @click="toggleDropdown($event)" type="button" class="d-md-none btn btn-default btn-lg">
-      <i class="fa fa-arrow-circle-down" style="font-size:1.25em"/>
-    </button>
-
-    <ul ref="dropDown" :class="{ show: this.show }" class="dropdown-menu dropdown-menu-right"  >
-
-      <li  class="dropdown-header">Select a file to download</li>
-
-      <li v-for="{language, contentType, url, _id} in files" v-bind:key="_id"  class="dropdown-item ng-scope"  style="font-size:16px;margin:4px 0px;white-space:nowrap;">
-          <a :href="url" role="menuitem" tabindex="-1"  class="language ng-binding">
-            {{ language| langTextFilter }}
-            <i :class="getIconClass(contentType)" class="fa ml-5"/>
-          </a>
-      </li>
-    </ul>
-
     <!-- Medium view and above -->
-    <div class="d-md-block document-files">
-        <div v-for=" {language, text, contentType, url, public: isPublic, allowPublic, _id} in files" v-bind:key="_id" class="d-none d-md-block" >
+    <div class="document-files">
+        <div v-for=" {language, text, contentType, url, public: isPublic, allowPublic, _id} in files" v-bind:key="_id" >
             <i :style="{ visibility: (text?'visible':'hidden') }" class="fa fa-file-text-o" aria-hidden="true" @click="showPreview(text)"></i>
             <a target="_blank" :href="url" >
               <i :class="getIconClass(contentType)" class="fa"/>
                 <span class="d-none d-md-inline language">
                     {{ language| langTextFilter }}
                 </span>
+                <span class="d-md-none language">
+                    {{ language | uppercase }}
+                </span>
             </a>
-            <i v-if="!isPublic" class="fa fa-eye-slash" :class="{ 'text-success' : allowPublic, }"/>
+            <i v-if="!isPublic" class="fa fa-eye-slash" :class="{ 'text-success' : allowPublic, 'text-muted': !allowPublic}"/>
         </div>
     </div>
 
@@ -78,7 +64,7 @@ export default {
               files: { type: Object, required: false }
             },
   methods : { getIconClass, toggleDropdown, outSideClick, showPreview, cleanUpText },
-  filters : { langTextFilter },
+  filters : { langTextFilter, uppercase },
   data
 }
 
@@ -124,6 +110,10 @@ function outSideClick(e){
 
 function cleanUpText(text) {
   return (text||'').replace(/\n+/g, '\n').trim();
+}
+
+function uppercase(t) {
+  return (t||'').toUpperCase();
 }
 
 </script>
