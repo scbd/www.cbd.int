@@ -1,31 +1,33 @@
 <template >
-  <tr  @click="$parent.$emit('select')">
+  <tr :_id="intervention._id" @click="$parent.$emit('select')">
 
-    <td scope="row" class="index-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
+    <td scope="row" class="index-col d-none d-lg-table-cell" style="text-align: center; vertical-align: middle;">
         <b  v-if="!isPending(intervention.status)">{{index}}.</b>
         <small v-if="isPending(intervention.status)" class="text-muted lighter">{{$t('Pending')}}</small>
     </td>
 
-    <td class="agenda-items-col" style="text-align: center; vertical-align: middle;">
+    <td class="agenda-items-col d-none d-lg-table-cell" style="text-align: center; vertical-align: middle;">
         <AgendaItem :item="intervention.agenda || ( intervention.agendaItem && { item: intervention.agendaItem})"/>
     </td>
 
-    <td v-if="showDate" class="date-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
+    <td v-if="showDate" class="date-col d-none d-lg-table-cell" style="text-align: center; vertical-align: middle;">
         <span>{{ intervention.datetime | dateTimeFilter('MMM d') }}</span>
     </td>
 
-    <td v-if="showTime"  class="time-col d-none d-md-table-cell" style="text-align: center; vertical-align: middle;">
+    <td v-if="showTime"  class="time-col d-none d-lg-table-cell" style="text-align: center; vertical-align: middle;">
         <span>{{ intervention.datetime | dateTimeFilter('T') }}</span>
     </td>
 
     <td style="vertical-align: middle;"> 
         <span class="float-right text-muted">{{ getOrgType(intervention) }} </span>  
-        <span class="title">{{ intervention.title }}</span>
-        <div v-if="summary" class="text-muted small summary">{{intervention.title}}</div>
 
-        <div class="d-md-none small">
+        <span class="title">{{ intervention.title }}</span>
+        <div v-if="intervention.summary" class="text-muted small summary">{{intervention.summary}}</div>
+
+        <div class="d-lg-none small">
+          <AgendaItem :item="intervention.agenda || ( intervention.agendaItem && { item: intervention.agendaItem})"/>
           <span v-if="showDate" >{{ intervention.datetime | dateTimeFilter('MMM d') }}</span>
-          <span v-if="showTime" class="d-md-none">{{ intervention.datetime | dateTimeFilter('T') }}</span>
+          <span v-if="showTime">{{ intervention.datetime | dateTimeFilter('T') }}</span>
         </div>
 
 
@@ -38,7 +40,7 @@
         <FilesView :files="intervention.files"/>
     </td>
 
-    <td>
+    <td class="controls-col" >
         <slot name="controls"/>
     </td>
     
@@ -77,7 +79,6 @@ function isPending (status){
 </script>
 
 <style scoped>
-
 .type{
   font-weight: lighter;
   text-transform: uppercase;
@@ -118,6 +119,15 @@ table.sessions {
   width:90px;
   text-align: center;
   white-space: nowrap;
+}
+
+.controls-col {
+  text-align: right;
+  vertical-align: middle;
+}
+
+.title {
+  font-weight: bold;
 }
 
 .summary { 

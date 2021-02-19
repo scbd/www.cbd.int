@@ -118,4 +118,8 @@ async function query(queryArgs){
 tr.interpreter-view > td > .title {
   font-weight: bold;
 }
+tr.interpreter-view > td.index-col {
+  display: none !important;
+}
+
 </style>
