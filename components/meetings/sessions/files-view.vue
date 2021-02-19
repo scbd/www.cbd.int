@@ -4,17 +4,30 @@
     <!-- Medium view and above -->
     <div class="document-files">
         <div v-for=" {language, text, contentType, url, public: isPublic, allowPublic, _id} in files" v-bind:key="_id" >
+
+          <span class="d-none d-md-inline">
             <i :style="{ visibility: (text?'visible':'hidden') }" class="fa fa-file-text-o" aria-hidden="true" @click="showPreview(text)"></i>
-            <a target="_blank" :href="url" >
-              <i :class="getIconClass(contentType)" class="fa"/>
-                <span class="d-none d-md-inline language">
+            <a target="_blank" :href="url">
+              <i :class="[getMimeConfig(contentType).icon, getMimeConfig(contentType).color]" class="fa"/>
+                <span class="language">
                     {{ language| langTextFilter }}
                 </span>
-                <span class="d-md-none language">
-                    {{ language | uppercase }}
-                </span>
             </a>
-            <i v-if="!isPublic" class="fa fa-eye-slash" :class="{ 'text-success' : allowPublic, 'text-muted': !allowPublic}"/>
+          </span>
+
+          <span class="d-md-none">
+            <button class="btn" :class="getMimeConfig('default').btn" :style="{ visibility: (text?'visible':'hidden') }" @click="showPreview(text)">
+              <i class="fa fa-file-text-o" aria-hidden="true"></i>
+            </button>
+            <a target="_blank" :href="url" class="btn" :class="getMimeConfig(contentType).btn">
+              <i :class="getMimeConfig(contentType).icon" class="fa"/>
+            </a>
+            <span class="language">
+                {{ language }}
+            </span>
+          </span>
+
+          <i v-if="!isPublic" class="fa fa-eye-slash" :class="{ 'text-success' : allowPublic, 'text-muted': !allowPublic}"/>
         </div>
     </div>
 
@@ -44,18 +57,20 @@
 
 
 <script>
-const langMap = new Map([ ['ar','العربية'], ['en','English'], ['es','Español'], ['fr','Français'], ['ru','Русский'], ['zh','中文'] ])
+
+import languages from '../../languages.js';
+
 const   MIMES = {
-  'application/pdf':                                                            { priority: 10,  btn: 'btn-danger',  iconClasses: [ 'fa-file-pdf-o',        'red'   ] },
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document' :   { priority: 20,  btn: 'btn-primary', iconClasses: [ 'fa-file-word-o',       'blue'  ] },
-  'application/msword':                                                         { priority: 30,  btn: 'btn-primary', iconClasses: [ 'fa-file-word-o',       'blue'  ] },
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' :         { priority: 40,  btn: 'btn-success', iconClasses: [ 'fa-file-excel-o',      'green' ] },
-  'application/vnd.ms-excel':                                                   { priority: 50,  btn: 'btn-success', iconClasses: [ 'fa-file-excel-o',      'green' ] },
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation' : { priority: 60,  btn: 'btn-warning', iconClasses: [ 'fa-file-powerpoint-o', 'orange'] },
-  'application/vnd.ms-powerpoint':                                              { priority: 70,  btn: 'btn-warning', iconClasses: [ 'fa-file-powerpoint-o', 'orange'] },
-  'application/zip':                                                            { priority: 80,  btn: 'btn-default', iconClasses: [ 'fa-file-archive-o'             ] },
-  'text/html':                                                                  { priority: 80,  btn: 'btn-default', iconClasses: [ 'fa-link'                       ] },
-  'default':                                                                    { priority:999,  btn: 'btn-default', iconClasses: [ 'fa-file-o',            'orange'] }
+  'application/pdf':                                                            { priority: 10,  btn: 'btn-danger' , icon: 'fa-file-pdf-o'        , color: 'red'    },
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document' :   { priority: 20,  btn: 'btn-primary', icon: 'fa-file-word-o'       , color: 'blue'   },
+  'application/msword':                                                         { priority: 30,  btn: 'btn-primary', icon: 'fa-file-word-o'       , color: 'blue'   },
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' :         { priority: 40,  btn: 'btn-success', icon: 'fa-file-excel-o'      , color: 'green'  },
+  'application/vnd.ms-excel':                                                   { priority: 50,  btn: 'btn-success', icon: 'fa-file-excel-o'      , color: 'green'  },
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation' : { priority: 60,  btn: 'btn-warning', icon: 'fa-file-powerpoint-o' , color: 'orange' },
+  'application/vnd.ms-powerpoint':                                              { priority: 70,  btn: 'btn-warning', icon: 'fa-file-powerpoint-o' , color: 'orange' },
+  'application/zip':                                                            { priority: 80,  btn: 'btn-default', icon: 'fa-file-archive-o'    , color: ''       },
+  'text/html':                                                                  { priority: 80,  btn: 'btn-default', icon: 'fa-link'              , color: ''       },
+  'default':                                                                    { priority:999,  btn: 'btn-default', icon: 'fa-file-o'            , color: 'orange' }
 }
 
 export default {
@@ -63,8 +78,8 @@ export default {
   props   : {
               files: { type: Object, required: false }
             },
-  methods : { getIconClass, toggleDropdown, outSideClick, showPreview, cleanUpText },
-  filters : { langTextFilter, uppercase },
+  methods : { getMimeConfig, showPreview, cleanUpText },
+  filters : { langTextFilter },
   data
 }
 
@@ -78,42 +93,16 @@ function showPreview(text) {
     $(this.$refs.preview).modal('show');
 }
 
-function toggleDropdown(e){
-
-  this.show = !this.show;
-  e.stopPropagation()
-
-  if(this.show){
-    document.addEventListener('click', this.outSideClick)
-    document.addEventListener('touchstart', this.outSideClick)
-  } else {
-    document.removeEventListener('click', this.outSideClick)
-    document.removeEventListener('touchstart', this.outSideClick)
-  }
-}
-
 function langTextFilter(langCode){ 
-  return langMap.get(langCode) || 'Not Specified' 
+  return languages[langCode] || 'Not Specified' 
 }
 
-function getIconClass(mimeType){
-  const { iconClasses } = MIMES[ mimeType ] || MIMES[ 'default' ]
-
-  return iconClasses
-}
-
-function outSideClick(e){
-  if(this.$refs.dropDown.contains(e.target)) return e.stopPropagation()
-  this.show = false
-  e.stopPropagation()
+function getMimeConfig(mimeType){
+  return MIMES[ mimeType ] || MIMES[ 'default' ]
 }
 
 function cleanUpText(text) {
   return (text||'').replace(/\n+/g, '\n').trim();
-}
-
-function uppercase(t) {
-  return (t||'').toUpperCase();
 }
 
 </script>
@@ -132,7 +121,9 @@ function uppercase(t) {
   left: 0px; 
   transform: translate3d(-216px, 48px, 0px);
 }
-
+.d-md-none > .language {
+  text-transform:uppercase;
+}
 .document-files {
   text-align: left;
   padding-left: 25px;

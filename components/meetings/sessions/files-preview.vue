@@ -1,7 +1,7 @@
 <template >
   <div>
     <div v-for="{filename, url, text, _id } in files" :key="_id">
-      <b><a style="color:inherit" :href="url" target="_blank">{{filename}}</a></b>
+      <a class="filename" :href="url" target="_blank">{{filename}}</a>
       <div v-if="text" class="text-muted small summary">{{text}}</div>
     </div>
   </div>
@@ -21,7 +21,11 @@ export default {
 </script>
 
 <style scoped>
-
+.filename {
+  color:inherit;
+  font-weight: bold;
+  word-break:break-word;
+}
 .summary { 
   max-height:40px;
   overflow:hidden;

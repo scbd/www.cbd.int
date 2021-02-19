@@ -1,11 +1,11 @@
 <template >
   <div>
-    <Session class="card" 
+    <Session :_id="_id" class="card" 
       :body-class="{'collapse':true, 'show': sessions.length==1 }" 
       :body-id="`sid${_id}`" 
-      v-for="{ title, _id, interventions, startDate } in sessions" :interventions="interventions" :key="_id">
+      v-for="{ title, _id, interventions, startDate, videos } in sessions" :key="_id">
 
-      <template slot="header">
+      <template v-slot:header>
 
         <div class="card-header" data-toggle="collapse" :data-target="`#sid${_id}`" :class="{ collapsed: sessions.length>1 }" >
           <h5> 
@@ -16,10 +16,23 @@
             <i class="text-muted fa fa-caret-up"/>
             <i class="text-muted fa fa-caret-down"/>
             <i class="text-muted help">click to expand</i>
-          </h5>
-        </div>
 
+            <span class="video" v-if="videos.length">
+              <VideoLink class="pull-right" :videos="videos" title="Full session webcast"/>
+            </span>
+
+          </h5>
+
+        </div>
       </template>
+
+      <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention}" :index="index+1" v-bind:key="intervention._id">
+        <template v-slot:controls>
+          <div class="video">
+            <VideoLink :videos="videos" :star-at="delayInSecondes(startDate, intervention.datetime)" :title="`Start at intervention of ${intervention.title}`"/>
+          </div>
+        </template>
+      </InterventionRow>
 
     </Session>
 
@@ -27,18 +40,21 @@
 </template>
 
 <script>
-import   Api               from '../api.js'
-import   Session           from './session.vue'
-import { dateTimeFilter  } from '../filters.js'
+import   Api     from '../api.js'
+import   Session from './session.vue'
+import   InterventionRow   from './intervention-row.vue'
+import   VideoLink, {delayInSecondes} from './video-link.vue'
+import { dateTimeFilter } from '../filters.js'
 
 export default {
   name       : 'SessionsView',
-  components : { Session },
+  components : { Session, InterventionRow, VideoLink },
   props      : { 
                   route:       { type: Object, required: false },
                   tokenReader: { type: Function, required: false }
                 },
   filters : { dateTimeFilter },
+  methods : { delayInSecondes },
   created, data
 }
 
@@ -59,6 +75,10 @@ async function created(){
 </script>
 
 <style scoped>
+
+  .video ,
+  .card-header .video { float: right; color: #404040; }
+  .card-header .video { margin-right: -7px; }
 
   h5 { color: #009b48;}
 
