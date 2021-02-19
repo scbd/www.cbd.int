@@ -1,34 +1,43 @@
 <template >
   <div>
-    <Accordion :length="sessions.length">
-      <template v-for="({ startDate, title, interventions }, index) in sessions"  v-slot:[`header-${index}`]="">
-        <span v-bind:key="index"> {{ header({ title, startDate })}} <small>({{interventions.length}})</small> </span>
+    <Session class="card" 
+      :body-class="{'collapse':true, 'show': sessions.length==1 }" 
+      :body-id="`sid${_id}`" 
+      v-for="{ title, _id, interventions, startDate } in sessions" :interventions="interventions" :key="_id">
+
+      <template slot="header">
+
+        <div class="card-header" data-toggle="collapse" :data-target="`#sid${_id}`" :class="{ collapsed: sessions.length>1 }" >
+          <h5> 
+            {{ title }}
+            <span v-if="!title" >{{ startDate | dateTimeFilter('cccc, d MMMM yyyy - T') }}</span>
+            <small>({{interventions.length}})</small> </span>
+
+            <i class="text-muted fa fa-caret-up"/>
+            <i class="text-muted fa fa-caret-down"/>
+          </h5>
+        </div>
+
       </template>
 
-      <template v-for="({ interventions }, index) in sessions"  v-slot:[`body-${index}`]="" >
-        <Session v-bind:key="index">
-          <InterventionRow :show-time="false" :show-date="false" v-for="(intervention, index) in interventions" :index="index+1" v-bind="{intervention}" :key="intervention._id"/>
-        </Session>
-      </template>
-    </Accordion >
+    </Session>
+
   </div>
 </template>
 
 <script>
 import   Api               from '../api.js'
-import   InterventionRow   from './intervention-row.vue'
 import   Session           from './session.vue'
-import   Accordion         from './accordion.vue'
 import { dateTimeFilter  } from '../filters.js'
 
 export default {
   name       : 'SessionsView',
-  components : { Session, Accordion, InterventionRow },
+  components : { Session },
   props      : { 
                   route:       { type: Object, required: false },
                   tokenReader: { type: Function, required: false }
                 },
-  methods    : { header },
+  filters : { dateTimeFilter },
   created, data
 }
 
@@ -40,10 +49,23 @@ function data(){
 
 async function created(){
   this.api = new Api(this.tokenReader);
-  this.sessions = await this.api.getSessions(this.route.params.meeting);
+
+  const sessions = await this.api.getSessions(this.route.params.meeting);
+
+  this.sessions = sessions.filter(o=>!!o.interventions.length);
 }
 
-function header({title, startDate }){
-  return title? title : dateTimeFilter(startDate, 'T  - cccc, d MMMM yyyy')
-}
 </script>
+
+<style scoped>
+
+  h5 { color: #009b48;}
+
+  .card-header { cursor: default; }
+
+  .card-header           .fa-caret-up   { display: none; }
+  .card-header.collapsed .fa-caret-up   { display: inline; }
+
+  .card-header           .fa-caret-down { display: inline; }
+  .card-header.collapsed .fa-caret-down { display: none; }
+</style>
