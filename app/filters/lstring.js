@@ -1,4 +1,4 @@
-define(['app'], function(app) { 'use strict';
+import app from 'app'
 
 app.filter("lstring", function() {
 	return function(ltext, locale) {
@@ -27,5 +27,4 @@ app.filter("lstring", function() {
 
 		return sText;
 	};
-});
 });

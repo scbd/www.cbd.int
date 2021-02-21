@@ -1,10 +1,23 @@
-define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'components/meetings/sessions/edit','components/meetings/uploads', 'angular-vue', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
-        'css!./meeting-documents.css', 'angular-cache', 'css!./agenda.css', 'filters/moment', 'ngCookies'
-], function(_, ng, moment, sessionsView, sessionsEdit, uploads) {
+import 'ngCookies'
+import 'angular-vue'
+import 'directives/print-smart/print-smart-checkout'
+import 'views/meetings/documents/meeting-document'
+import 'authentication'
+import 'angular-cache'
+import '~/filters/lstring'
+import '~/filters/moment'
+import 'css!./meeting-documents.css'
+import 'css!./agenda.css'
+import _ from 'lodash'
+import ng from 'angular'
+import moment from 'moment'
+import sessionsView from '~/components/meetings/sessions/view.vue'
+import uploads from '~/components/meetings/uploads.vue'
+
     //'css!./agenda.css' // moved to template
     var STATISTICS = {}; 
 
-	return ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', '$cookies', 'apiToken', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting, CacheFactory, $cookies, apiToken) {
+	export default ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', '$cookies', 'apiToken', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting, CacheFactory, $cookies, apiToken) {
 
         var _ctrl = $scope.documentsCtrl = this;
         var meetingCode = $route.current.params.meeting.toUpperCase();
@@ -63,6 +76,7 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
         //
         //==============================
         function load() {
+            let documents = null;
             _ctrl.inSessionEnabled = false; //to adjust the height for non insession case
             var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, uploadStatement:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, alerts:1 }, cache:true } }).then(function(res){
 
@@ -253,7 +267,7 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
 
             $http.get('/api/v2021/meeting-sessions', { params: { c: 1, q : { meetingIds: { $in :[ { $oid:_ctrl.meeting._id }] } } } }).then(function(res){
 
-                var count = res.data[0].count;
+                var count = (res.data[0]||{}).count;
 
                 if(!count) return;
 
@@ -737,4 +751,3 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
             return hash;
           };        
 	}];
-});

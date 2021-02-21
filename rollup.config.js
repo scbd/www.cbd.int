@@ -1,30 +1,83 @@
 // rollup.config.js (building more than one bundle)
-import { terser } from 'rollup-plugin-terser';
+import util from 'util'
 import path from 'path'
+import { terser } from 'rollup-plugin-terser';
+import alias from '@rollup/plugin-alias';
 import vue  from 'rollup-plugin-vue'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs';
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
+import glob from 'glob';
+
+const asyncGlob = util.promisify(glob);
 
 const isWatchOn = process.argv.includes('--watch');
 const outputDir = 'dist';
+let externals = [ 
+  // TODO: Load Boot.js paths!
+  'lodash',
+  'Vue',
+  'vue',
+  'axios',
+  'luxon',
+  'jquery',
+  'angular', 
+  'moment',
+  'authentication',
+  'ngCookies',
+  'angular-cache',
+  'angular-vue',
+  'moment-timezone', 
+]
 
-const globals = {
-  lodash : '_',
-  Vue    : 'Vue',
-  vue    : 'Vue',
-  axios  : 'axios',
-  luxon  : 'luxon',
-  jquery : 'jquery',
-};
+export default async function(){
+ 
+  const appFiles = (await asyncGlob('**/*.js', { cwd: path.join(process.cwd(), 'app')})).map(o=>o.replace(/\.js$/, ''));
 
-export default [
-  exposeVueComponent('meetings/sessions/view'),
-  exposeVueComponent('meetings/sessions/edit'),
-  exposeVueComponent('meetings/sessions/interpreters-view'),
-  exposeVueComponent('meetings/uploads')
-];
+  appFiles.forEach(m=>externals.push(m));
 
+  return [
+      bundle('components/meetings/sessions/view.vue'),
+      bundle('components/meetings/sessions/edit.vue'),
+      bundle('components/meetings/sessions/interpreters-view.vue'),
+      bundle('components/meetings/uploads.vue'),
+      bundle('views/notifications/index-id.js'),
+      bundle('views/meetings/documents/documents.js'),
+
+      //TMP  for transition transpile
+      bundle('filters/lstring'),
+      bundle('filters/moment'),
+    ];
+}
+
+
+//Transpile and Expose Vue component to angularJS as AMD module
+function bundle(relativePath, baseDir='app') {
+
+  const ext = path.extname(relativePath);
+  return {
+    input : path.join(baseDir||'', relativePath),
+    output: [{
+      format   : 'amd',
+      sourcemap: true,
+      file : path.join(outputDir, changeExtension(relativePath, '.js')),
+      name : relativePath.replace(/[^a-z0-9]/ig, "_"),
+    }],
+    external: externals,
+    plugins : [
+      alias({ entries : [{ find: /^~\/(.*)/, replacement:`${process.cwd()}/app/$1` }] }),
+      injectCssToDom(),
+      vue(),
+      commonjs(),
+      nodeResolve({ browser: true, mainFields: [ 'browser', 'module', 'main' ] }),
+      isWatchOn ? null : getBabelOutputPlugin({
+         presets: [['@babel/preset-env', { targets: "> 0.25%, IE 10, not dead"}]],
+         allowAllFormats: true
+       }),
+      isWatchOn ? null : terser() // DISABLE IN DEV
+    ],
+  }
+}
 
 //Transpile and Expose Vue component to angularJS as AMD module
 function exposeVueComponent(relativePath) {
@@ -75,3 +128,68 @@ function exposeGlobal(source, name) {
 }
 
 
+function changeExtension(file, extension) {
+  const basename = path.basename(file, path.extname(file))
+  return path.join(path.dirname(file), basename + extension)
+}
+
+
+
+//////////////////
+// Custom Plugin
+//////////////////
+
+function injectCssToDom(options = {}) {
+
+  const injectable = ['a']
+  const cssPluginTag = /^css!/; 
+
+  return {
+    name: 'injectCss',
+
+    resolveId(importeeId, importer) {
+
+      if(!cssPluginTag.test(importeeId)) return null;
+
+      const updatedId = importeeId.replace(cssPluginTag, '');
+
+      return this.resolve(updatedId, importer, { skipSelf: true }).then((resolved) => {
+        if(!resolved)         return { id: updatedId }
+        if(resolved.external) return null;
+        
+        injectable.push(resolved.id)
+
+        return resolved;
+      });      
+    },
+
+    transform(css, id) {
+      if (!injectable.includes(id)) return null;
+
+      try {
+        const parsed = JSON.stringify(css);
+        return {
+          code: generateCode(css),
+          map: { mappings: '' }
+        };
+      } catch (err) {
+        const message = 'Error generating CSS injection code';
+        this.warn({ message });
+        return null;
+      }
+    }
+  };
+
+  function generateCode(css) {
+    var code = `
+    ((document)=>{
+      const head  = document.getElementsByTagName('head')[0];
+      const style = document.createElement('style'); 
+      style.innerHTML = ${JSON.stringify(css)}
+      head.appendChild(style)
+    })(document);`.trim();
+
+    return code;
+  }
+}
+ 
