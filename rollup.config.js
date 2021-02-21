@@ -37,10 +37,6 @@ export default async function(){
   appFiles.forEach(m=>externals.push(m));
 
   return [
-      bundle('components/meetings/sessions/view.vue'),
-      bundle('components/meetings/sessions/edit.vue'),
-      bundle('components/meetings/sessions/interpreters-view.vue'),
-      bundle('components/meetings/uploads.vue'),
       bundle('views/notifications/index-id.js'),
       bundle('views/meetings/documents/documents.js'),
 
