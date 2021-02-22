@@ -3,14 +3,14 @@
     <Session :_id="_id" class="card" 
       :body-class="{'collapse':true, 'show': sessions.length==1 }" 
       :body-id="`sid${_id}`" 
-      v-for="{ title, _id, interventions, startDate, videos } in sessions" :key="_id">
+      v-for="{ title, _id, interventions, date, videos } in sessions" :key="_id">
 
       <template v-slot:header>
 
         <div class="card-header" data-toggle="collapse" :data-target="`#sid${_id}`" :class="{ collapsed: sessions.length>1 }" >
           <h5> 
             {{ title }}
-            <span v-if="!title" >{{ startDate | dateTimeFilter('cccc, d MMMM yyyy - T') }}</span>
+            <span v-if="!title" >{{ date | dateTimeFilter('cccc, d MMMM yyyy - T') }}</span>
             ({{interventions.length}})
 
             <i class="text-muted fa fa-caret-up"/>
