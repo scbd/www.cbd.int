@@ -9,7 +9,7 @@
       </small>
     </h1>
 
-    <h3> {{ (session || {}).startDate  | dateTimeFilter('T  - cccc, d MMMM yyyy') }} </h3>
+    <h3> {{ (session || {}).date  | dateTimeFilter('T  - cccc, d MMMM yyyy') }} </h3>
 
     <Session v-if="session">
       <InterventionRow v-for="(intervention, index) in interventions" :index="index+1" v-bind="{intervention}" v-bind:key="intervention._id">
