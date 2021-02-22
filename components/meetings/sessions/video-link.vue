@@ -3,13 +3,13 @@
 
     <!-- Single Video -->
     <a v-if="entries.length==1" :href="entries[0].url" class="btn btn-link">
-      <i class="fa fa-play-circle" aria-hidden="true"></i>
+      <i class="fa fa-video-camera" aria-hidden="true"></i>
     </a>
 
     <!-- Mutiple Videos -->
     <div v-if="entries.length>1" class="btn-group dropleft" role="group">
       <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-        <i class="fa fa-play-circle" aria-hidden="true"></i>
+        <i class="fa fa-video-camera" aria-hidden="true"></i>
       </button>
       <div class="dropdown-menu">
         <a class="dropdown-item text-nowrap" :href="url" v-for="{ language, url } in entries" :key="url" target="video">
