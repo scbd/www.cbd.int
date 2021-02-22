@@ -6,14 +6,14 @@
       <i class="fa fa-play-circle" aria-hidden="true"></i>
     </a>
 
-    <!-- Mutiple Videoa -->
-    <div v-if="entries.length>1" class="btn-group" role="group">
+    <!-- Mutiple Videos -->
+    <div v-if="entries.length>1" class="btn-group dropleft" role="group">
       <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown">
         <i class="fa fa-play-circle" aria-hidden="true"></i>
       </button>
       <div class="dropdown-menu">
-        <a class="dropdown-item" :href="url" v-for="{ language, url } in entries" :key="url" target="video">
-          <i class="fa fa-play-circle" aria-hidden="true"></i> {{language | languageName}}
+        <a class="dropdown-item text-nowrap" :href="url" v-for="{ language, url } in entries" :key="url" target="video">
+          <i class="fa fa-play-circle" aria-hidden="true"></i> {{language | languageName }}
         </a>
       </div>
     </div>    
@@ -34,8 +34,8 @@ const Types = {
 export default {
   name      : 'VideoLink',
   props     : { 
-    videos: { type: Array,   required: true, default:[] },
-    starAt: { type: Number,  required: false },
+    videos  : { type: Array,         required: true, default:[] },
+    startAt : { type: [String,Date], required: false },
   },
   filters : { languageName: (l)=>languages[l] || l },
   computed: {
@@ -44,19 +44,23 @@ export default {
 }
 
 function entries() {
-  if(!this.starAt) return this.videos.filter(o=>!!o.url);
+  if(!this.startAt) return this.videos.filter(o=>!!o.url);
 
-  const seekable = this.videos.filter(o=>canSeek(o.type));
+  const seekable = this.videos.filter(o=>canSeek(o));
 
-  return seekable.map(v=>({...v, url : seekedUrl(v, this.starAt) }));
+  return seekable.map(v=>({...v, url : seekedUrl(v, this.startAt) }));
 }
 
-function canSeek(type) {
-  return !!Types[type];
+function canSeek(entry) {
+  const { startDate, type } = entry
+  return !!startDate && !!Types[type];
 }
 
-function seekedUrl(v, seconds) {
+function seekedUrl(v, startAt) {
+  const { startDate }     = v;
   const { param, format } = Types[v.type];
+
+  const seconds = delayInSecondes(startDate, startAt)
 
   const seekTo  = Duration.fromObject({ seconds }).toFormat(format);
   const url     = new URL(v.url);
@@ -66,18 +70,21 @@ function seekedUrl(v, seconds) {
   return url.toString();
 }
 
-export function delayInSecondes(a, b) {
+export function delayInSecondes(from, to) {
 
-  a = asDateTime(a);
-  b = asDateTime(b);
+  from = asDateTime(from);
+  to   = asDateTime(to);
 
-  const diff =  a.diff(b, 'seconds');
+  const diff =  to.diff(from, 'seconds');
 
   return Math.abs(diff.seconds);
 }
 </script>
 
 <style scoped>
+.dropleft > .dropdown-toggle::before {
+  content:none;
+}
 .btn-link {
   color: inherit;
 }

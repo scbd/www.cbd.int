@@ -29,7 +29,7 @@
       <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention}" :index="index+1" v-bind:key="intervention._id">
         <template v-slot:controls>
           <div class="video">
-            <VideoLink :videos="videos" :star-at="delayInSecondes(startDate, intervention.datetime)" :title="`Start at intervention of ${intervention.title}`"/>
+            <VideoLink :videos="videos" :start-at="intervention.datetime" :title="`Start at intervention of ${intervention.title}`"/>
           </div>
         </template>
       </InterventionRow>
@@ -43,7 +43,7 @@
 import   Api     from '../api.js'
 import   Session from './session.vue'
 import   InterventionRow   from './intervention-row.vue'
-import   VideoLink, {delayInSecondes} from './video-link.vue'
+import   VideoLink from './video-link.vue'
 import { dateTimeFilter } from '../filters.js'
 
 export default {
@@ -54,7 +54,6 @@ export default {
                   tokenReader: { type: Function, required: false }
                 },
   filters : { dateTimeFilter },
-  methods : { delayInSecondes },
   created, data
 }
 
@@ -68,6 +67,11 @@ async function created(){
   this.api = new Api(this.tokenReader);
 
   const sessions = await this.api.getSessions(this.route.params.meeting);
+
+  sessions.forEach(s=>{
+    const { date: startDate } = s;
+    if(s.videos) s.videos = s.videos.map(v=>({ startDate, ...v })) // Set video startDate to session.date if not already set 
+  });
 
   this.sessions = sessions.filter(o=>!!o.interventions.length);
 }
