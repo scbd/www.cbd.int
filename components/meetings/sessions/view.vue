@@ -1,13 +1,13 @@
 <template >
   <div>
     <Session :_id="_id" class="card" 
-      :body-class="{'collapse':true, 'show': sessions.length==1 }" 
+      :body-class="{'collapse':true, 'show': numberOfSessions==1 }" 
       :body-id="`sid${_id}`" 
       v-for="{ title, _id, interventions, date, videos } in sessions" :key="_id">
 
       <template v-slot:header>
 
-        <div class="card-header" data-toggle="collapse" :data-target="`#sid${_id}`" :class="{ collapsed: sessions.length>1 }" >
+        <div class="card-header" data-toggle="collapse" :data-target="`#sid${_id}`" :class="{ collapsed: numberOfSessions>1 }" >
           <h5> 
             {{ title }}
             <span v-if="!title" >{{ date | dateTimeFilter('cccc, d MMMM yyyy - T') }}</span>
@@ -40,11 +40,11 @@
 </template>
 
 <script>
-import   Api     from '../api.js'
-import   Session from './session.vue'
+import   Api               from '../api.js'
+import   Session           from './session.vue'
 import   InterventionRow   from './intervention-row.vue'
-import   VideoLink from './video-link.vue'
-import { dateTimeFilter } from '../filters.js'
+import   VideoLink         from './video-link.vue'
+import { dateTimeFilter  } from '../filters.js'
 
 export default {
   name       : 'SessionsView',
@@ -53,7 +53,8 @@ export default {
                   route:       { type: Object, required: false },
                   tokenReader: { type: Function, required: false }
                 },
-  filters : { dateTimeFilter },
+  computed   : { numberOfSessions },
+  filters    : { dateTimeFilter },
   created, data
 }
 
@@ -73,9 +74,12 @@ async function created(){
     if(s.videos) s.videos = s.videos.map(v=>({ startDate, ...v })) // Set video startDate to session.date if not already set 
   });
 
-  this.sessions = sessions.filter(o=>!!o.interventions.length);
+  this.sessions = sessions.filter(o=>!!o.interventions?.length);
 }
 
+function numberOfSessions(){
+  return this.sessions?.length || 0
+}
 </script>
 
 <style scoped>
