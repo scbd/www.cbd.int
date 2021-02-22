@@ -12,7 +12,7 @@
         <i class="fa fa-video-camera" aria-hidden="true"></i>
       </button>
       <div class="dropdown-menu">
-        <a class="dropdown-item text-nowrap" :href="url" v-for="{ language, url } in entries" :key="url" target="video">
+        <a class="fix dropdown-item text-nowrap" :href="url" v-for="{ language, url } in entries" :key="url" target="video">
           <i class="fa fa-play-circle" aria-hidden="true"></i> {{language | languageName }}
         </a>
       </div>
@@ -98,5 +98,15 @@ export function delayInSecondes(from, to) {
   max-lines: 2;
   -webkit-line-clamp: 2; /* number of lines to show */
   -webkit-box-orient: vertical;  
+}
+
+</style>
+
+<style >
+@media (max-width: 991px){
+  .fix.dropdown-item {
+      font-size: 1rem !important;
+      white-space: normal;
+  }
 }
 </style>
