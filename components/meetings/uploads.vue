@@ -236,7 +236,7 @@ export default {
                 contentType : this.file.type,
                 agendaItem  : ((this.selectedAgendaItem.item || "").toString() || undefined),
                 language    : this.selectedLanguage,
-                allowPublic : this.allowPublic,
+                allowPublic : this.allowPublic===true || this.allowPublic==='true',
             }
 
 
