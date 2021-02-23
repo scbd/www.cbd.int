@@ -62,6 +62,33 @@
                             </div>
 
                             <div class="form-group row">
+                                <label for="agendaItem" class="col-sm-3 col-form-label"></label>
+                                <div class="col-sm-9">
+                                    <div class="form-check">
+                                        <div class="text-muted">
+                                            <input :disabled="!!progress" class="form-check-input" type="checkbox" id="isRegional" v-model="isRegional">
+                                            <label class="form-check-label" for="isRegional">This is a regional statement</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div  class="form-group row">
+                                <label for="agendaItem" class="col-sm-3 col-form-label">Region</label>
+                                <div class="col-sm-9">
+                                    <select :disabled="!!progress || !isRegional" class="form-control" id="region"  v-model="selectedRegion" aria-placeholder="" :required="isRegional">
+                                        <option value="AFRICA">African Group</option>
+                                        <option value="AP">Asia and the Pacific Group</option>
+                                        <option value="CEE">Central and Eastern Europe Group</option>
+                                        <option value="EU">European Union</option>
+                                        <option value="GRULAC">Latin America and the Caribbean Group</option>
+                                        <option value="JUSCANZ">JUSCANZ</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select a region.</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
                                 <label for="fileLanguage" class="col-sm-3 col-form-label">Language</label>
                                 <div class="col-sm-9">
                                     <select :disabled="!!progress" class="form-control" id="fileLanguage" v-model="selectedLanguage">
@@ -143,6 +170,8 @@ export default {
             meetings           : [],
             selectedAgendaItem : null,
             selectedLanguage   : "en",
+            selectedRegion     : null,
+            isRegional         : false,
             allowPublic        : null,
             participantIdentity: '',
             rememberMe         : false,
@@ -165,6 +194,9 @@ export default {
 
             if(visible) this.init();            
          },
+         isRegional(checked) {
+             if(!checked) this.selectedRegion = null;
+         }
     },
 
     computed: {
@@ -178,6 +210,7 @@ export default {
                 && !!this.cleanParticipantIdentity
                 && !!this.selectedAgendaItem
                 && !!this.selectedLanguage
+                && (!this.isRegional || !!this.selectedRegion)
                 &&   this.allowPublic!==null;
         },
         cleanParticipantIdentity(){ 
@@ -237,8 +270,8 @@ export default {
                 agendaItem  : ((this.selectedAgendaItem.item || "").toString() || undefined),
                 language    : this.selectedLanguage,
                 allowPublic : this.allowPublic===true || this.allowPublic==='true',
+                region      : this.isRegional ? this.selectedRegion : null
             }
-
 
             this.progress = { message: "Preparing..." };
 
@@ -274,6 +307,8 @@ export default {
             this.file                = null;
             this.selectedAgendaItem  = null;
             this.selectedLanguage    = "en",
+            this.selectedRegion      = null;
+            this.isRegional          = false;
             this.allowPublic         = null;
             this.persistIdentity(); 
 
