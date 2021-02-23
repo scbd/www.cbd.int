@@ -1,6 +1,8 @@
-﻿define(['app', 'directives/social-media', 'directives/articles/cbd-article'], function(app) { 'use strict';
+﻿import 'app'
+import 'directives/social-media'
+import '~/directives/articles/cbd-article'
 
-return ['$scope', '$route', function ($scope,  $route) {
+export default ['$scope', '$route', function ($scope,  $route) {
        
 			var _ctrl = this;
 
@@ -35,4 +37,3 @@ return ['$scope', '$route', function ($scope,  $route) {
             buildQuery();
 
     }];
-});

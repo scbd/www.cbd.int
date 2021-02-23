@@ -7,6 +7,7 @@ import vue  from 'rollup-plugin-vue'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs';
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
+import { string } from "rollup-plugin-string";
 import glob from 'glob';
 
 const asyncGlob = util.promisify(glob);
@@ -28,6 +29,12 @@ let externals = [
   'angular-cache',
   'angular-vue',
   'moment-timezone', 
+  'ngDialog',
+  'ngRoute',
+  'conferenceCal',
+  'require',
+  'authentication',
+  'app',
 ]
 
 export default async function(){
@@ -37,12 +44,19 @@ export default async function(){
   appFiles.forEach(m=>externals.push(m));
 
   return [
-      bundle('views/notifications/index-id.js'),
-      bundle('views/meetings/documents/documents.js'),
+      bundle('entry-points/conferences.js'),
+      bundle('entry-points/meetings.js'),
+      bundle('entry-points/notifications.js'),
 
       //TMP  for transition transpile
+      //bundle('routes.js'),
+
       bundle('filters/lstring'),
       bundle('filters/moment'),
+      bundle('filters/term'),
+      bundle('services/article-service'),
+      bundle('services/conference-service'),
+      
     ];
 }
 
@@ -63,14 +77,15 @@ function bundle(relativePath, baseDir='app') {
     plugins : [
       alias({ entries : [{ find: /^~\/(.*)/, replacement:`${process.cwd()}/app/$1` }] }),
       injectCssToDom(),
+      string({ include: "**/*.html" }),
       vue(),
       commonjs(),
       nodeResolve({ browser: true, mainFields: [ 'browser', 'module', 'main' ] }),
-      isWatchOn ? null : getBabelOutputPlugin({
+      getBabelOutputPlugin({
          presets: [['@babel/preset-env', { targets: "> 0.25%, IE 10, not dead"}]],
          allowAllFormats: true
        }),
-      isWatchOn ? null : terser() // DISABLE IN DEV
+      terser() // DISABLE IN DEV
     ],
   }
 }
@@ -149,6 +164,9 @@ function injectCssToDom(options = {}) {
 
       const updatedId = importeeId.replace(cssPluginTag, '');
 
+      if(!isUrl(updatedId)) // link to URL => let RequireJS handle it for now
+        return {id: importeeId, external: true};
+
       return this.resolve(updatedId, importer, { skipSelf: true }).then((resolved) => {
         if(!resolved)         return { id: updatedId }
         if(resolved.external) return null;
@@ -175,6 +193,15 @@ function injectCssToDom(options = {}) {
       }
     }
   };
+
+  function isUrl(url) {
+    try { 
+      return !!(new URL(url)); // valid if we can parse it
+    }
+    catch {
+      return false;
+    }
+  }
 
   function generateCode(css) {
     var code = `

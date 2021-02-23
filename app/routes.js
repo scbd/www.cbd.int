@@ -89,6 +89,8 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
   function registerRoutes_conferences(routeProvider) {
 
       $("base").attr('href', '/conferences/'); // allow full page reload outside of  /insession/*
+      
+      const bundle = importQ('entry-points/conferences');
 
       routeProvider
       //legacy redirect
@@ -96,19 +98,19 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       .when('/2016/cp-mop-08/documents',    { redirectTo    : '/2016/mop-08/documents'})
       .when('/2016/cp-mop-8/documents',     { redirectTo    : '/2016/mop-08/documents'})
 
-      .when('/',                                    { templateUrl   : 'views/meetings/conferences.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
-      .when('/:code',                               { templateUrl   : 'views/meetings/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/',                                    { templateUrl   : 'views/meetings/conferences.html', controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.conferences),  showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/:code',                               { templateUrl   : 'views/meetings/index.html',       controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.conferenceId), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/parallel-meetings',             { templateUrl   : 'views/meetings/parallel-meetings.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings', 'introduction'] })             }, reloadOnSearch:false })
-      .when('/:code/parallel-meetings/:articleTag', { templateUrl   : 'views/articles/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings'] }) }, reloadOnSearch:false })
-      .when('/:code/media',                         { templateUrl   : 'views/articles/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'media', 'introduction'] }) }, reloadOnSearch:false })
-      .when('/:code/media/:articleTag',             { templateUrl   : 'views/articles/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'media'] }) }, reloadOnSearch:false })
-      .when('/:code/information/:articleTag',       { templateUrl   : 'views/articles/index.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'information'] }) }, reloadOnSearch:false })
+      .when('/:code/parallel-meetings/:articleTag', { templateUrl   : 'views/articles/index.html',       controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.articles), showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings'] }) }, reloadOnSearch:false })
+      .when('/:code/media',                         { templateUrl   : 'views/articles/index.html',       controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.articles), showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'media', 'introduction'] }) }, reloadOnSearch:false })
+      .when('/:code/media/:articleTag',             { templateUrl   : 'views/articles/index.html',       controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.articles), showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'media'] }) }, reloadOnSearch:false })
+      .when('/:code/information/:articleTag',       { templateUrl   : 'views/articles/index.html',       controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.articles), showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'information'] }) }, reloadOnSearch:false })
       
       .when('/:code/interpreter-panel',             { templateUrl   : 'views/meetings/documents/statements/interpreter.html', resolveController : true,  reloadOnSearch:false })
       .when('/:code/schedules',                     { templateUrl   : 'views/meetings/documents/agenda.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/insession',                     { templateUrl   : 'views/meetings/documents/in-session-documents.html', resolveController : true, resolve: { }, reloadOnSearch:false })
-      .when('/:code/:meeting',                      { templateUrl   : 'views/meetings/introduction.html', resolveController : true, resolve: { routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
-      .when('/:code/:meeting/documents',            { templateUrl   : 'views/meetings/documents/documents.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/:code/:meeting',                      { templateUrl   : 'views/meetings/introduction.html',        controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.meetingIntroduction), routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/:code/:meeting/documents',            { templateUrl   : 'views/meetings/documents/documents.html', controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.documents),           routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting/documents/:id',        { templateUrl   : 'views/meetings/documents/management/document-id.html',  resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService"]) } })
 
       .when('/:code/submissions/:symbol',           { templateUrl   : 'views/notifications/index-id.html', resolveController : true })
@@ -252,20 +254,47 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         .otherwise({redirectTo: '/404'});
     }
 
-  //============================================================
-  //
-  //
-  //============================================================
-  function registerRoutes_notifications(routeProvider) {
+    //============================================================
+    //
+    //
+    //============================================================
+    function registerRoutes_notifications(routeProvider) {
 
-    $("base").attr('href', '/notifications/'); // allow full page reload outside of  /notifications/*
+        $("base").attr('href', '/notifications/'); // allow full page reload outside of  /notifications/*
 
-    routeProvider
-        .when('/:symbol', { templateUrl : 'views/notifications/index-id.html', resolveController : true })
+        const bundle = importQ('entry-points/notifications');
 
+        routeProvider
+        .when('/:symbol', { templateUrl : 'views/notifications/index-id.html', controller: proxy, resolve : { controller: ()=>bundle.then(o=>o.notificationId) } })
         .otherwise({redirectTo: '/404'});
-}
+    }
 
+    function importQ(bundle) {
+        return new Promise((resolve, reject) => {
+            require([bundle], (module)=>{
+                console.log('bundle', module), 
+                resolve(module)
+            }, (err) =>{
+                console.error('bundle', err);
+                reject(err);
+            });
+        });
+    }
+
+    //============================================================
+    //
+    //
+    //============================================================
+    function proxy($injector, $scope, $route, controller) {
+
+        if(!controller)
+            return;
+
+        var locals = angular.extend($route.current.locals, { $scope: $scope });
+
+        return $injector.instantiate(controller, locals);
+    }
+    proxy.$inject = ['$injector', '$scope', '$route', 'controller'];    
 
     //============================================================
     //
