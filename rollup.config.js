@@ -19,6 +19,7 @@ const globals = {
 };
 
 export default [
+  exposeVueComponent('meetings/sessions/session-list'),
   exposeVueComponent('meetings/sessions/view'),
   exposeVueComponent('meetings/sessions/edit'),
   exposeVueComponent('meetings/sessions/interpreters-view'),
