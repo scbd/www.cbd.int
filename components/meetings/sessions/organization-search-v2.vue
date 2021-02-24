@@ -23,9 +23,9 @@
     :hide-selected="multiple? true : false"
 
     @tag="createNewOrganization"
-    @close="organization? '' :onChange({t:''})"
-    @select="onChange"
-    @remove="onChange({t:''})"
+    @close="onChange((organization[0]||{}).name)"
+    @select="onChange($event)"
+    @remove="onChange('')"
     @search-change="getOrganizationOptions"
     @input="onInput"
     >
@@ -61,7 +61,7 @@ export default {
   watch      : { value },
   methods    : { 
                   onChange: debounce(onChange, 400),
-                  getOrganizationOptions,
+                  getOrganizationOptions: debounce(getOrganizationOptions, 400),
                   mapOrganizationNames,
                   createNewOrganization,
                   onInput
@@ -88,8 +88,9 @@ async function mounted(){
 //  await this.getOrganizationOptions('e'); // preload with most popular leter search
 }
 
-function onChange({ t, meetingId }){
-  if(t?.length > 2) this.$emit('t', { t, meetingId })
+function onChange(text, source){
+  console.log(source, text);
+  this.$emit('t', { t: text});
 }
 
 function meetingId(){ return (this.meetings[0] || {})._id }
@@ -102,7 +103,7 @@ async function getOrganizationOptions(t){
   
   this.isLoading = true
 
-  this.onChange({ t, meetingId })
+  this.onChange(t, 'getOrganizationOptions')
   const organizations = (await this.api.getInterventionOrganizations({ meetingId , t } )).map(this.mapOrganizationNames)
 
   this.organizationOptions = [ ...organizations, ...this.createdOrganizations ];
@@ -138,7 +139,7 @@ function createNewOrganization(name){
 
 function onInput(){
   this.$emit('input', this.organization)
-  this.onChange();
+  //this.onChange(this.organization[0].name);
 }
 
 function value(newValue){
