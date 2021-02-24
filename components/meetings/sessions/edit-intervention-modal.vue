@@ -151,7 +151,7 @@ export default {
             status:              this.intervention.status,
             organizationId:      this.intervention.organizationId,
             government:          this.intervention.government,
-            datetime:            this.datetime || this.intervention.datetime,
+            datetime:            this.datetime || this.intervention.datetime || new Date(),
             files:               cloneDeep(this.intervention.files||[]),
             agendaItem:          { meetingId : this.intervention.meetingId, item: this.intervention.agendaItem },
             organizationTypes  : [],
