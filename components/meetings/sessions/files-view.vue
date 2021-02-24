@@ -6,7 +6,7 @@
         <div v-for=" {language, text, contentType, url, public: isPublic, allowPublic, _id} in files" v-bind:key="_id" >
 
           <span class="d-none d-md-inline">
-            <i :style="{ visibility: (text?'visible':'hidden') }" class="fa fa-file-text-o" aria-hidden="true" @click="showPreview(text)"></i>
+            <i :style="{ visibility: (text?'visible':'hidden') }" class="fa fa-file-text-o" aria-hidden="true" @click="showPreview(text, language)"></i>
             <a target="_blank" :href="url">
               <i :class="[getMimeConfig(contentType).icon, getMimeConfig(contentType).color]" class="fa"/>
                 <span class="language">
@@ -16,7 +16,7 @@
           </span>
 
           <span class="d-md-none">
-            <button class="btn" :class="getMimeConfig('default').btn" :style="{ visibility: (text?'visible':'hidden') }" @click="showPreview(text)">
+            <button class="btn" :class="getMimeConfig('default').btn" :style="{ visibility: (text?'visible':'hidden') }" @click="showPreview(text, language)">
               <i class="fa fa-file-text-o" aria-hidden="true"></i>
             </button>
             <a target="_blank" :href="url" class="btn" :class="getMimeConfig(contentType).btn">
@@ -43,7 +43,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <p class="preview">{{cleanUpText(preview)}}</p>
+            <p class="preview" :lang="previewLanguage">{{cleanUpText(preview)}}</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn" data-dismiss="modal">Close</button>
@@ -83,11 +83,12 @@ export default {
   data
 }
 
-function data(){ return { show: false, preview:null} } 
+function data(){ return { show: false, preview:null, previewLanguage: null } } 
 
-function showPreview(text) {
+function showPreview(text, language) {
 
   this.preview = text;
+  this.previewLanguage = language;
 
   if(this.preview)
     $(this.$refs.preview).modal('show');
@@ -134,6 +135,11 @@ function cleanUpText(text) {
   font-size:15pt;
   line-height:25pt;
   font-family:Arial;
+}
+
+p[lang="ar"] {
+  direction:rtl;
+  text-align: right;
 }
 
 .modal-xl {
