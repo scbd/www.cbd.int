@@ -12,7 +12,7 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
     return  ["$scope", "$route", "$http", '$q', '$location', 'authentication', 'conferenceService', '$filter', 'CacheFactory', function(
               $scope,   $route,   $http,   $q,   $location,   authentication,   conferenceService,   $filter,   CacheFactory) {
         
-        var $ctrl = this;
+        var $ctrl = $scope.$ctrl = this;
         var lstring  = $filter('lstring');
         var conferenceCode = $route.current.params.code;
         var httpCache = initCache();
