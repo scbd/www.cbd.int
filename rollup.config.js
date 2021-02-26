@@ -6,65 +6,40 @@ import alias from '@rollup/plugin-alias';
 import vue  from 'rollup-plugin-vue'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs';
+import amd from 'rollup-plugin-amd';
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 import { string } from "rollup-plugin-string";
 import glob from 'glob';
+import json from '@rollup/plugin-json';
+import bootWebApp from './app/boot.js';
 
 const asyncGlob = util.promisify(glob);
 
 const isWatchOn = process.argv.includes('--watch');
+const cwd       = path.join(process.cwd(), 'app');
 const outputDir = 'dist';
-let externals = [ 
-  // TODO: Load Boot.js paths!
-  'lodash',
-  'Vue',
-  'vue',
-  'axios',
-  'luxon',
-  'jquery',
-  'angular', 
-  'moment',
-  'authentication',
-  'ngCookies',
-  'angular-cache',
-  'angular-vue',
-  'moment-timezone', 
-  'ngDialog',
-  'ngRoute',
-  'conferenceCal',
-  'require',
-  'authentication',
-  'app',
-]
+
+let externals = []
 
 export default async function(){
- 
-  const appFiles = (await asyncGlob('**/*.js', { cwd: path.join(process.cwd(), 'app')})).map(o=>o.replace(/\.js$/, ''));
+  
+  externals = [...externals, ...await loadExternals()];
 
-  appFiles.forEach(m=>externals.push(m));
+  const toBundle = [
+    ...await asyncGlob('*.js', { cwd }),
+    ...await asyncGlob('{data,directives,entry-points,filters,providers,services,util,views}/**/*.{js,json}', { cwd }),
+  ];
 
   return [
-      bundle('entry-points/conferences.js'),
-      bundle('entry-points/meetings.js'),
-      bundle('entry-points/notifications.js'),
-
-      //TMP  for transition transpile
-      //bundle('routes.js'),
-
-      bundle('filters/lstring'),
-      bundle('filters/moment'),
-      bundle('filters/term'),
-      bundle('services/article-service'),
-      bundle('services/conference-service'),
-      
-    ];
+    ...toBundle.map((o)=>bundle(o)),
+  ];
 }
-
 
 //Transpile and Expose Vue component to angularJS as AMD module
 function bundle(relativePath, baseDir='app') {
 
   const ext = path.extname(relativePath);
+
   return {
     input : path.join(baseDir||'', relativePath),
     output: [{
@@ -75,67 +50,47 @@ function bundle(relativePath, baseDir='app') {
     }],
     external: externals,
     plugins : [
-      alias({ entries : [{ find: /^~\/(.*)/, replacement:`${process.cwd()}/app/$1` }] }),
-      injectCssToDom(),
+      alias({ entries : [
+        { find: /^~\/(.*)/,   replacement:`${process.cwd()}/app/$1` },
+        { find: /^text!(.*)/, replacement:`$1` },
+      ]}),
       string({ include: "**/*.html" }),
+      json({ namedExports: true }),
+      injectCssToDom(),
       vue(),
-      commonjs(),
+      amd({ include: 'app/**/*.js'}),
+      commonjs({ include: 'node_modules/**/*.js'}),
       nodeResolve({ browser: true, mainFields: [ 'browser', 'module', 'main' ] }),
-      getBabelOutputPlugin({
+      isWatchOn ? null : getBabelOutputPlugin({
          presets: [['@babel/preset-env', { targets: "> 0.25%, IE 10, not dead"}]],
          allowAllFormats: true
        }),
-      terser() // DISABLE IN DEV
+       isWatchOn ? null : terser() // DISABLE IN DEV
     ],
   }
 }
 
-//Transpile and Expose Vue component to angularJS as AMD module
-function exposeVueComponent(relativePath) {
 
-    const vueSourceDir = 'components';
+async function loadExternals() {
 
-    return {
-      input : path.join(vueSourceDir, relativePath+'.vue'),
-      output: [{
-        format   : 'umd',
-        sourcemap: true,
-        globals,
-        file : path.join(outputDir, 'components', relativePath+'.js'),
-        name : relativePath.replace(/[^a-z0-9]/ig, "_"),
-      }],
-      external: [ ...Object.keys(globals) ],
-      plugins : [
-        vue(),
-        commonjs(),
-        nodeResolve({ browser: true, mainFields: [ 'browser', 'module', 'main' ] }),
-        getBabelOutputPlugin({
-          presets: [['@babel/preset-env', { targets: "> 0.25%, IE 10, not dead"}]],
-          allowAllFormats: true
-        }),
-        isWatchOn ? null : terser() // DISABLE IN DEV
-      ],
-    }
-}
+  const externals = [];
 
-//Transpile and Expose as UMD non-umd library.
-function exposeGlobal(source, name) {
+  //Define requireJS configuration (define() + config.paths ) as externals
 
-  return {
-    input: source,
-    output: [{
-      file: path.join(outputDir, 'libs/globals', `${name}.js`),
-      format : 'umd',
-      name: name,
-      plugins : [
-        getBabelOutputPlugin({
-          presets: ['@babel/preset-env'],
-          allowAllFormats: true
-        }),
-        isWatchOn ? null : terser() // DISABLE IN DEV
-      ]
-    }],
-  }
+  // Shim dependancies 
+  const window     = { }; 
+  const defineJs   = (module) => { if(typeof(module)==='string') externals.push(module) };
+  const requireJs  = ( )      => { };
+  requireJs.config = (config) => { Object.keys(config.paths).forEach(defineJs); }
+
+  bootWebApp(window, requireJs, defineJs);
+
+  //Define all app file as Externals
+  const appFiles = (await asyncGlob('**/*.js', { cwd })).map(o=>o.replace(/\.js$/, ''));
+
+  appFiles.forEach(m=>externals.push(m));
+
+  return externals;
 }
 
 
@@ -164,8 +119,9 @@ function injectCssToDom(options = {}) {
 
       const updatedId = importeeId.replace(cssPluginTag, '');
 
-      if(!isUrl(updatedId)) // link to URL => let RequireJS handle it for now
+      if(isUrl(updatedId)) {// link to URL => let RequireJS handle it for now
         return {id: importeeId, external: true};
+      }
 
       return this.resolve(updatedId, importer, { skipSelf: true }).then((resolved) => {
         if(!resolved)         return { id: updatedId }

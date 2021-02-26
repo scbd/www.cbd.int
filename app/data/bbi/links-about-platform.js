@@ -24,13 +24,5 @@ define(['text!./links-about-platform.json'], function(rawData) {
   //     },
   //     "source": "info-avail"
   // }
-    try
-    {
-        return JSON.parse(rawData);
-    }
-    catch(e)
-    {
-        console.error("Errro parsing links.json: "+e);
-
-    }
+    return JSON.parse(rawData);
 });

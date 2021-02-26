@@ -1,4 +1,4 @@
-define(['app', 'text!./bread-crumbs.html'], function(app, template) { 'use strict';
+define(['app', 'text!./bread-crumbs.html'], function(app, template) {
 
 	return app.directive('breadCrumbs', ['$location', '$window','$route',   function($location, $window, $route) {
 		return {
@@ -13,7 +13,6 @@ define(['app', 'text!./bread-crumbs.html'], function(app, template) { 'use stric
             }
         }
     }]);
-});
 
 function getPaths($location){
 
@@ -57,3 +56,5 @@ function getPathFromCrumb(crumbs, crumbName){
     fromPath.push(crumbName)
     return fromPath.join('/')
 }
+
+});

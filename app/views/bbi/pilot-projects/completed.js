@@ -1,11 +1,6 @@
-define(['data/bbi/links', 'directives/bbi/bbi-project-row', 'directives/bbi/menu'], loadGlobalModules )
+define(['data/bbi/links', 'directives/bbi/bbi-project-row', 'directives/bbi/menu'], function (links) { 
 
-function loadGlobalModules(links) { 
-	this.links = links
-	return ['$scope','$http','$filter', controller.bind(this)]
-}
-
-function controller ($scope, $http, $filter) {
+  return ['$scope','$http','$filter', function ($scope, $http, $filter) {
 	var _ctrl 	= this
 	_ctrl.links	= links.links
 
@@ -72,5 +67,6 @@ function controller ($scope, $http, $filter) {
   function orderByCountry(project){
     return $filter('term')(project.country)
   }
-}
+}]
+});
 

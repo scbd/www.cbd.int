@@ -1,2 +1,2 @@
-export { default as documents } from '~/views/meetings/documents/documents.js'
+export { default as documentId } from '~/views/meetings/documents/documents.js'
 

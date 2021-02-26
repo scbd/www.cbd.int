@@ -19,11 +19,15 @@
         }
     </script>
     
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=Object.assign"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=Object.assign%2Cconsole"></script>
     <script src="<%=cdnUrl%>regenerator-runtime@0.13.7/runtime.js"></script>
     <script src="<%=cdnUrl%>requirejs@2.2.0/require.js"></script>
     <script src="<%=cdnUrl%>jquery@3.4.1/dist/jquery.slim.min.js"  crossorigin="anonymous"></script>
-    <script async src="/app/boot.js?v=<%=gitVersion%>"></script>
+    <script>
+        require(["app/boot.js?v=<%=gitVersion%>"], function(boot){
+            boot(window, require, define);
+        });
+    </script>
 
     <link rel="stylesheet" href="/app/css/bootstrap-migrate-3-to-4.css?v=<%=gitVersion%>">
     <script async src='https://www.google-analytics.com/analytics.js'></script>

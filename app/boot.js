@@ -1,9 +1,9 @@
-(function(document) { 'use strict';
+export default function bootApp(window, require, defineX) {
 
-if(/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) { console.log = function(){}; }
+const { document } = window;
 
-var gitVersion = document.documentElement.attributes['git-version'].value;
-var cdnHost    = document.documentElement.attributes['cdn-url'    ].value || 'https://cdn.cbd.int/';
+var gitVersion = (document && document.documentElement.attributes['git-version'].value);
+var cdnHost    = (document && document.documentElement.attributes['cdn-url'    ].value) || 'https://cdn.cbd.int/';
 
 require.config({
     waitSeconds: 30,
@@ -102,13 +102,13 @@ require.config({
     urlArgs: 'v=' + gitVersion
 });
 
-define ('popper.js', [ cdnHost + 'popper.js@1.16.0/dist/umd/popper.min'], function(popper){
+defineX ('popper.js', [ cdnHost + 'popper.js@1.16.0/dist/umd/popper.min'], function(popper){
   window.Popper = popper
   return popper
 })
 
-define('Vue', ['vue'], function(vue) { return vue; })
-define('vue', [cdnHost +'vue@2.6.12/dist/vue.min',cdnHost +'vue-i18n@8.21.1/dist/vue-i18n.min',cdnHost +'@scbd/sso-vue-plugin-scbd@0.0.1'], function(Vue, i18n, ssoSCBD){
+defineX('Vue', ['vue'], function(vue) { return vue; })
+defineX('vue', [cdnHost +'vue@2.6.12/dist/vue.min',cdnHost +'vue-i18n@8.21.1/dist/vue-i18n.min',cdnHost +'@scbd/sso-vue-plugin-scbd@0.0.1'], function(Vue, i18n, ssoSCBD){
     window.Vue     = Vue;
     window.VueI18n = i18n;
     window.ssoSCBD = ssoSCBD;
@@ -119,28 +119,26 @@ define('vue', [cdnHost +'vue@2.6.12/dist/vue.min',cdnHost +'vue-i18n@8.21.1/dist
 })
 
 
-define('cdn', {
+defineX('cdn', {
     load: function (name, req, onload, config) {
         req([cdnHost + name], onload);
     }
 });
 
-if(window.location.pathname == '/kronos/list-of-participants'){
-    define('xlsx', ['js-zip', 'ods'], function (jszip, ods) {
-        window.JSZip = jszip;
-        window.ODS   = ods;
-    });
-}
+defineX('xlsx', ['js-zip', 'ods'], function (jszip, ods) {
+    window.JSZip = jszip;
+    window.ODS   = ods;
+});
 
-define('underscore', ['lodash'], function(_) { console.log('Deprecated: use lodash'); return _; });
+defineX('underscore', ['lodash'], function(_) { console.log('Deprecated: use lodash'); return _; });
 
-define('dropbox-dropins', ['https://www.dropbox.com/static/api/2/dropins.js'], function(){
+defineX('dropbox-dropins', ['https://www.dropbox.com/static/api/2/dropins.js'], function(){
     if(window.Dropbox)
         window.Dropbox.appKey = "uvo7kuhmckw68pl"; //registration@cbd.int
     return window.Dropbox;
 });
 
-define('jquery', function(){ if(window.jQuery) { return window.jQuery; }});
+defineX('jquery', function(){ if(window.jQuery) { return window.jQuery; }});
 
 // BOOT
 require(['angular', 'app', 'routes', 'template', 'ngSanitize', 'ngRoute', 'providers/extended-route'], function(ng, app) {
@@ -149,25 +147,4 @@ require(['angular', 'app', 'routes', 'template', 'ngSanitize', 'ngRoute', 'provi
     });
 });
 
-})(document);
-
-// MISC
-
-//==================================================
-// Protect window.console method calls, e.g. console is not defined on IE
-// unless dev tools are open, and IE doesn't define console.debug
-//==================================================
-(function fixIEConsole() { 'use strict';
-
-    if (!window.console) {
-        window.console = {};
-    }
-
-    var methods = ["log", "info", "warn", "error", "debug", "trace", "dir", "group","groupCollapsed", "groupEnd", "time", "timeEnd", "profile", "profileEnd", "dirxml", "assert", "count", "markTimeline", "timeStamp", "clear"];
-    var noop    = function() {};
-
-    for(var i = 0; i < methods.length; i++) {
-        if (!window.console[methods[i]])
-            window.console[methods[i]] = noop;
-    }
-})();
+}

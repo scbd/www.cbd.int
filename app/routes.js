@@ -71,6 +71,8 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
         $("base").attr('href', '/meetings/'); // allow full page reload outside of  /insession/*
 
+        const bundle = importBundle('entry-points/meetings');
+
         routeProvider
         .when('/import-translations',         { templateUrl : 'views/meetings/documents/management/translations.html', resolveController : true,                       resolve : { user : securize(["Administrator","EditorialService"]) } })
         .when('/:meeting/documents/status',   { templateUrl : 'views/meetings/documents/documents-progress.html',      resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService", "ScbdStaff"]) } })
@@ -78,7 +80,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         .when('/:meeting/documents',          { redirectTo  : '/:meeting'} )
         .when('/:meeting/sessions/:sessionId',{ templateUrl : 'views/meetings/documents/statements/session-prep.html', resolveController : true,  reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService", "StatementAdmin"]) } })
         .when('/:meeting/interpreter-panel',  { templateUrl : 'views/meetings/documents/statements/interpreter.html',  resolveController : true,  reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService", "StatementAdmin", "ScbdStaff", "Interpreters"]) } })
-        .when('/:meeting',                    { templateUrl : 'views/meetings/documents/documents.html',               resolveController : true,  reloadOnSearch:false, resolve : { showMeeting : resolveLiteral(true) } } )
+        .when('/:meeting',                    { templateUrl : 'views/meetings/documents/documents.html',               controller: proxy,         reloadOnSearch:false, resolve : { controller: ()=>bundle.then(o=>o.documentId), showMeeting : resolveLiteral(true) } } )
         .otherwise({redirectTo: '/404'});
     }
 
@@ -90,7 +92,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
       $("base").attr('href', '/conferences/'); // allow full page reload outside of  /insession/*
       
-      const bundle = importQ('entry-points/conferences');
+      const bundle = importBundle('entry-points/conferences');
 
       routeProvider
       //legacy redirect
@@ -98,19 +100,19 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       .when('/2016/cp-mop-08/documents',    { redirectTo    : '/2016/mop-08/documents'})
       .when('/2016/cp-mop-8/documents',     { redirectTo    : '/2016/mop-08/documents'})
 
-      .when('/',                                    { templateUrl   : 'views/meetings/conferences.html', controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.conferences),  showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
-      .when('/:code',                               { templateUrl   : 'views/meetings/index.html',       controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.conferenceId), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
-      .when('/:code/parallel-meetings',             { templateUrl   : 'views/meetings/parallel-meetings.html', resolveController : true, resolve: { showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings', 'introduction'] })             }, reloadOnSearch:false })
-      .when('/:code/parallel-meetings/:articleTag', { templateUrl   : 'views/articles/index.html',       controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.articles), showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings'] }) }, reloadOnSearch:false })
-      .when('/:code/media',                         { templateUrl   : 'views/articles/index.html',       controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.articles), showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'media', 'introduction'] }) }, reloadOnSearch:false })
-      .when('/:code/media/:articleTag',             { templateUrl   : 'views/articles/index.html',       controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.articles), showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'media'] }) }, reloadOnSearch:false })
-      .when('/:code/information/:articleTag',       { templateUrl   : 'views/articles/index.html',       controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.articles), showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'information'] }) }, reloadOnSearch:false })
+      .when('/',                                    { templateUrl   : 'views/meetings/conferences.html',       resolveController : true })
+      .when('/:code',                               { templateUrl   : 'views/meetings/index.html',             controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.conferenceId),     showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/:code/parallel-meetings',             { templateUrl   : 'views/meetings/parallel-meetings.html', controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.parallelMeetings), showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings', 'introduction'] })             }, reloadOnSearch:false })
+      .when('/:code/parallel-meetings/:articleTag', { templateUrl   : 'views/articles/index.html',             controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.articles),         showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings'] }) }, reloadOnSearch:false })
+      .when('/:code/media',                         { templateUrl   : 'views/articles/index.html',             controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.articles),         showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'media', 'introduction'] }) }, reloadOnSearch:false })
+      .when('/:code/media/:articleTag',             { templateUrl   : 'views/articles/index.html',             controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.articles),         showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'media'] }) }, reloadOnSearch:false })
+      .when('/:code/information/:articleTag',       { templateUrl   : 'views/articles/index.html',             controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.articles),         showMeeting : resolveLiteral(false), routePrams: injectRouteParams({urlTag: ['conferences', 'information'] }) }, reloadOnSearch:false })
       
-      .when('/:code/interpreter-panel',             { templateUrl   : 'views/meetings/documents/statements/interpreter.html', resolveController : true,  reloadOnSearch:false })
-      .when('/:code/schedules',                     { templateUrl   : 'views/meetings/documents/agenda.html', resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
-      .when('/:code/insession',                     { templateUrl   : 'views/meetings/documents/in-session-documents.html', resolveController : true, resolve: { }, reloadOnSearch:false })
-      .when('/:code/:meeting',                      { templateUrl   : 'views/meetings/introduction.html',        controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.meetingIntroduction), routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
-      .when('/:code/:meeting/documents',            { templateUrl   : 'views/meetings/documents/documents.html', controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.documents),           routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/:code/interpreter-panel',             { templateUrl   : 'views/meetings/documents/statements/interpreter.html',  resolveController : true,  reloadOnSearch:false })
+      .when('/:code/schedules',                     { templateUrl   : 'views/meetings/documents/agenda.html',                  resolveController : true, resolve: { routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/:code/insession',                     { templateUrl   : 'views/meetings/documents/in-session-documents.html',    controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.documentsInSession) }, reloadOnSearch:false })
+      .when('/:code/:meeting',                      { templateUrl   : 'views/meetings/introduction.html',                      controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.meetingIntroduction), routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+      .when('/:code/:meeting/documents',            { templateUrl   : 'views/meetings/documents/documents.html',               controller: proxy, resolve: { controller: ()=>bundle.then(o=>o.documents),           routePrams: injectRouteParams({ }), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
       .when('/:code/:meeting/documents/:id',        { templateUrl   : 'views/meetings/documents/management/document-id.html',  resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService"]) } })
 
       .when('/:code/submissions/:symbol',           { templateUrl   : 'views/notifications/index-id.html', resolveController : true })
@@ -262,24 +264,23 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
         $("base").attr('href', '/notifications/'); // allow full page reload outside of  /notifications/*
 
-        const bundle = importQ('entry-points/notifications');
+        const bundle = importBundle('entry-points/notifications');
 
         routeProvider
         .when('/:symbol', { templateUrl : 'views/notifications/index-id.html', controller: proxy, resolve : { controller: ()=>bundle.then(o=>o.notificationId) } })
         .otherwise({redirectTo: '/404'});
     }
 
-    function importQ(bundle) {
-        return new Promise((resolve, reject) => {
-            require([bundle], (module)=>{
-                console.log('bundle', module), 
-                resolve(module)
-            }, (err) =>{
-                console.error('bundle', err);
-                reject(err);
-            });
-        });
+    async function importBundle(bundle) {
+        try {
+            return await import(bundle)
+        }
+        catch (err) {
+            console.error('bundle', bundle, err);
+            throw err;
+        }
     }
+
 
     //============================================================
     //
@@ -368,7 +369,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
 
 
     function runTheRun(){
-        require(['directives/meetings/conference-header']);
+        require(['directives/meetings/conference-header'], ()=>{});
 
         app.run(['$compile', '$rootScope','$location', function($compile, $rootScope,$location){
           if(!$location.search().viewOnly){

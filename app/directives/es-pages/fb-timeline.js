@@ -12,7 +12,7 @@ define(['app', 'text!./fb-timeline.html', 'services/fb'], function(app, html) {
         require(['services/fb'], function() {
           if (window.FB && window.FB.XFBML)
             window.FB.XFBML.parse();
-        ));
+        });
       }
     };
   }]);

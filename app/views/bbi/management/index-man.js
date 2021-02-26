@@ -1,4 +1,4 @@
-define(['app', 'lodash','data/bbi/links-platform','text!directives/bbi/forms/bbi-records-dialog.html','text!./first-dash-dialog.html','services/user-settings', 'directives/bbi/menu',"util/solr", 'providers/realm','directives/bbi/auto-linker','ngDialog'], function(app, _,links,recordsDialog,dashDialog) { 'use strict';
+define(['app', 'lodash','data/bbi/links-platform','text!~/directives/bbi/forms/bbi-records-dialog.html','text!./first-dash-dialog.html','services/user-settings', 'directives/bbi/menu',"util/solr", 'providers/realm','directives/bbi/auto-linker','ngDialog'], function(app, _,links,recordsDialog,dashDialog) {
 
 	return ['$scope','$location','user','solr','realm','$http','$q','userSettings','$timeout','ngDialog', function ($scope,$location,user,solr,realm,$http,$q,userSettings,$timeout,ngDialog) {
 
