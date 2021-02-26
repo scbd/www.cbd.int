@@ -7,6 +7,7 @@ export { default as meetingIntroduction } from '~/views/meetings/introduction.js
 export { default as parallelMeetings }    from '~/views/meetings/parallel-meetings.js'
 export { default as documentsInSession }  from '~/views/meetings/documents/in-session-documents.js'
 
+export { default as agenda }              from '~/views/meetings/documents/agenda.js'
 
-export { default as articles }      from '~/views/articles/index.js'
+export { default as articles }            from '~/views/articles/index.js'
 

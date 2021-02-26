@@ -1,16 +1,16 @@
 // rollup.config.js (building more than one bundle)
-import util from 'util'
-import path from 'path'
-import { terser } from 'rollup-plugin-terser';
-import alias from '@rollup/plugin-alias';
-import vue  from 'rollup-plugin-vue'
-import nodeResolve from '@rollup/plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs';
-import amd from 'rollup-plugin-amd';
+import util                     from 'util'
+import path                     from 'path'
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
-import { string } from "rollup-plugin-string";
-import glob from 'glob';
-import json from '@rollup/plugin-json';
+import alias                    from '@rollup/plugin-alias';
+import nodeResolve              from '@rollup/plugin-node-resolve'
+import json                     from '@rollup/plugin-json';
+import commonjs                 from 'rollup-plugin-commonjs';
+import amd                      from 'rollup-plugin-amd';
+import vue                      from 'rollup-plugin-vue'
+import { string }               from "rollup-plugin-string";
+import { terser }               from 'rollup-plugin-terser';
+import glob                     from 'glob';
 import bootWebApp from './app/boot.js';
 
 const asyncGlob = util.promisify(glob);
