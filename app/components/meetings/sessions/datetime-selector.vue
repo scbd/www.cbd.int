@@ -12,6 +12,9 @@
     <select :disabled="disabled" class="form-control" id="minutePart" v-model="minutePart" @change="onChange">
         <option v-for="item in minutes" :key="item" :value="item">{{item}}</option>
     </select>
+      <button type="button" class="form-control text-muted" @click="addMinutes(-1)">-</button>
+      <button type="button" class="form-control text-muted" @click="addMinutes( 1)">+</button>
+    </div>
   </div>
 </template>
 
@@ -44,6 +47,7 @@ export default {
     setHourPart,
     setMinutePart,
     emitUpdate,
+    addMinutes,
   }
 }
 
@@ -52,7 +56,6 @@ function getPart(format) {
 }
 
 function onChange() {
-  console.log('onChange', this.value)
   this.$emit('change', this.value);
 }
 
@@ -88,6 +91,14 @@ function setMinutePart(value) {
   let date = asDateTime(this.value);
 
   date = date.set({ minute:  parseInt(value,  10) });
+
+  this.emitUpdate(date)
+}
+
+function addMinutes(offset) {
+  let date = asDateTime(this.value);
+
+  date = date.plus({ minutes: offset });
 
   this.emitUpdate(date)
 }

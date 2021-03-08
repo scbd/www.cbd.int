@@ -78,6 +78,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         .when('/:meeting/documents/status',   { templateUrl : 'views/meetings/documents/documents-progress.html',      resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService", "ScbdStaff"]) } })
         .when('/:meeting/documents/:id',      { templateUrl : 'views/meetings/documents/management/document-id.html',  resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService"]) } })
         .when('/:meeting/documents',          { redirectTo  : '/:meeting'} )
+        .when('/:meeting/sessions',           { templateUrl : 'views/vue.html',                                        resolveController : true,  reloadOnSearch:false, resolve : { component: importQ('components/meetings/sessions/session-list'), user : securize(["Administrator","EditorialService", "StatementAdmin"]) } })
         .when('/:meeting/sessions/:sessionId',{ templateUrl : 'views/meetings/documents/statements/session-prep.html', resolveController : true,  reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService", "StatementAdmin"]) } })
         .when('/:meeting/interpreter-panel',  { templateUrl : 'views/meetings/documents/statements/interpreter.html',  resolveController : true,  reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService", "StatementAdmin", "ScbdStaff", "Interpreters"]) } })
         .when('/:meeting',                    { templateUrl : 'views/meetings/documents/documents.html',               resolveController : true,  reloadOnSearch:false, resolve : { showMeeting : resolveLiteral(false) } })
@@ -171,6 +172,27 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
     //============================================================
     function resolveLiteral(value) {
         return function() { return value; };
+    }
+
+    //============================================================
+    //
+    //
+    //============================================================
+    function importQ(module) {
+        return ['$q', function($q) {
+
+            var deferred = $q.defer();
+
+            require([module], function (m) {
+                deferred.resolve(m);
+            }, function(error){
+                console.error  (error);
+                console.error  ("module not found: " + module);
+                deferred.reject("module not found: " + module);
+            });
+
+            return deferred.promise;
+        }];
     }
 
     //============================================================

@@ -20,13 +20,13 @@
     </div>
 
     <div class="col-2 pl-0 text-right text-nowrap">
-        <div class="d-inline-block" @mouseover.prevent="toolTipShow" @mouseout.prevent="toolTipHide">
+        <div class="d-inline-block">
           <button v-on:click="createSessionIntervention"  :disabled="isCreateSessionInterventionDisabled" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" :title="$t('Create fileless intervention')" >
             <i class="fa fa-plus" />
           </button>
         </div>
 
-        <div class="d-inline-block" @mouseover.prevent="toolTipShow" @mouseout.prevent="toolTipHide">
+        <div class="d-inline-block">
           <slot name="controls"/>
         </div>
     </div>
@@ -59,8 +59,6 @@ export default {
                   createSessionIntervention,
                   clearForm,
                   resetTime,
-                  toolTipShow,
-                  toolTipHide
                 },
   i18n, data, created, beforeDestroy
 }
@@ -135,13 +133,6 @@ function isCreateSessionInterventionDisabled(){
   return !this.selectedAgendaItem?.length || !this.organization?.length
 }
 
-function toolTipShow({ fromElement }){
-  $(fromElement).tooltip('show')
-  setTimeout(()=>$(fromElement).tooltip('hide'), 3000)
-}
-function toolTipHide({ toElement }){
-  $(toElement).tooltip('hide')
-}
 </script>
 
 <style >

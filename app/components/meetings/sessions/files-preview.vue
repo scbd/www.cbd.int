@@ -2,7 +2,7 @@
   <div>
     <div v-for="{filename, url, text, _id } in files" :key="_id">
       <a class="filename" :href="url" target="_blank">{{filename}}</a>
-      <div v-if="text" class="text-muted small summary">{{text}}</div>
+      <div v-if="text" class="text-muted small summary">{{text.substr(0,350)}}</div>
     </div>
   </div>
 

@@ -56,8 +56,8 @@
                             <div class="form-group row">
                                 <label for="status" class="col-sm-3 col-form-label">Status</label>
                                 <div class="col-sm-9">
-                                    <select :disabled="!!progress || (true || intervention._id)" class="form-control" id="types" v-model="status">
-                                        <option value="public">Spoken / Delivered</option>
+                                    <select :disabled="!!progress || !canUpdateStatus" class="form-control" id="types" v-model="status">
+                                        <option value="public">Delivered</option>
                                         <option value="pending" selected>Uploaded / Pending</option>
                                     </select>
                                 </div>        
@@ -114,7 +114,8 @@
                 
                     <div class="modal-footer">
                         <i v-if="!!progress" class="fa fa-cog fa-spin"></i>
-                        <button :disabled="!!progress" type="submit" class="btn btn-primary" @click="save()"><i class="fa fa-save"></i> <span>Save</span></button>
+                        <button v-if=" canPublish" :disabled="!!progress" type="submit" class="btn btn-success" @click="save(true)"><i class="fa fa-microphone"></i> <span>Publish</span></button>
+                        <button v-if="!canPublish" :disabled="!!progress" type="submit" class="btn btn-primary" @click="save()"><i class="fa fa-save"></i> <span>Save</span></button>
                         <button :disabled="!!progress" type="button" class="btn btn-default" @click="close()"><i class="fa fa-power-off"></i> <span>Close</span></button>
                     </div>
                 </div>
@@ -140,7 +141,7 @@ export default {
         intervention : { type: Object,   required: true  },
         sessionId    : { type: String,   required: false },
         meetings     : { type: Array,    required: false },
-        show         : { type: Boolean,  required: false }
+        action       : { type: String,   required: false, default: "edit" },
     },
     data:  function(){
         return {
@@ -150,7 +151,7 @@ export default {
             status:              this.intervention.status,
             organizationId:      this.intervention.organizationId,
             government:          this.intervention.government,
-            datetime:            this.intervention.datetime,
+            datetime:            this.datetime || this.intervention.datetime || new Date(),
             files:               cloneDeep(this.intervention.files||[]),
             agendaItem:          { meetingId : this.intervention.meetingId, item: this.intervention.agendaItem },
             organizationTypes  : [],
@@ -159,6 +160,7 @@ export default {
             error : null,
         }
     },
+    computed: { canUpdateStatus, canPublish },
     methods: { open, close, clearError, save, onOrganizationChange},
     created,
     mounted, 
@@ -166,6 +168,14 @@ export default {
 
 async function created() {
   this.api = new Api(this.tokenReader)
+
+  if(this.action=='publish') {
+      this.datetime = new Date();
+      this.status   = 'public';
+      this.files.forEach(f => {
+          f.public = !!f.allowPublic;
+      });
+  }
 
   this.organizationTypes = await this.api.getInterventionOrganizationTypes();
 }
@@ -184,6 +194,16 @@ function close(intervention){
   this.$emit('close', intervention) 
 }
 
+function canUpdateStatus() { 
+    return this.sessionId &&
+         (!this.intervention._id || this.intervention.status=='pending');
+}
+
+function canPublish() { 
+    return this.status=='public' &&  
+           this.status!=this.intervention.status;
+}
+
 function onOrganizationChange(o) {
     this.organization       = o;
     this.government         = o.government;
@@ -192,7 +212,7 @@ function onOrganizationChange(o) {
     this.title              = `${o.name} ${(o.acronym||'') && `(${o.acronym})`}`;
 }
 
-async function save(){
+async function save(publish=false){
   try {
 
       this.progress = true;
@@ -226,7 +246,7 @@ async function save(){
         files: undefined, // avoid sending back
     };
 
-    const updatedIntervention = interventionId  ? await this.api.updateIntervention(interventionId, updates)   
+    let updatedIntervention = interventionId  ? await this.api.updateIntervention(interventionId, updates)   
                                                 : await this.api.createPendingIntervention(updates);
 
     interventionId      = updatedIntervention._id;
@@ -248,6 +268,12 @@ async function save(){
     }));
 
     updatedIntervention.files = addedFiles.concat(updatedFiles);
+
+    if(publish) {
+        const { sessionId } = this;
+
+        updatedIntervention = await this.api.assignInterventionToSession(sessionId,  interventionId, { datetime })
+    }
 
     this.close(updatedIntervention);
 

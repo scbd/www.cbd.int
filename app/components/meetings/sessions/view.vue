@@ -1,16 +1,16 @@
 <template >
   <div>
     <Session :_id="_id" class="card" 
-      :body-class="{'collapse':true, 'show': sessions.length==1 }" 
+      :body-class="{'collapse':true, 'show': numberOfSessions==1 }" 
       :body-id="`sid${_id}`" 
-      v-for="{ title, _id, interventions, startDate, videos } in sessions" :key="_id">
+      v-for="{ title, _id, interventions, date, videos } in sessions" :key="_id">
 
       <template v-slot:header>
 
-        <div class="card-header" data-toggle="collapse" :data-target="`#sid${_id}`" :class="{ collapsed: sessions.length>1 }" >
+        <div class="card-header" data-toggle="collapse" :data-target="`#sid${_id}`" :class="{ collapsed: numberOfSessions>1 }" >
           <h5> 
             {{ title }}
-            <span v-if="!title" >{{ startDate | dateTimeFilter('cccc, d MMMM yyyy - T') }}</span>
+            <span v-if="!title" >{{ date | dateTimeFilter('cccc, d MMMM yyyy - T') }}</span>
             ({{interventions.length}})
 
             <i class="text-muted fa fa-caret-up"/>
@@ -29,7 +29,7 @@
       <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention}" :index="index+1" v-bind:key="intervention._id">
         <template v-slot:controls>
           <div class="video">
-            <VideoLink :videos="videos" :star-at="delayInSecondes(startDate, intervention.datetime)" :title="`Start at intervention of ${intervention.title}`"/>
+            <VideoLink :videos="videos" :start-at="intervention.datetime" :title="`Start at intervention of ${intervention.title}`"/>
           </div>
         </template>
       </InterventionRow>
@@ -40,11 +40,11 @@
 </template>
 
 <script>
-import   Api     from '../api.js'
-import   Session from './session.vue'
+import   Api               from '../api.js'
+import   Session           from './session.vue'
 import   InterventionRow   from './intervention-row.vue'
-import   VideoLink, {delayInSecondes} from './video-link.vue'
-import { dateTimeFilter } from '../filters.js'
+import   VideoLink         from './video-link.vue'
+import { dateTimeFilter  } from '../filters.js'
 
 export default {
   name       : 'SessionsView',
@@ -53,8 +53,8 @@ export default {
                   route:       { type: Object, required: false },
                   tokenReader: { type: Function, required: false }
                 },
-  filters : { dateTimeFilter },
-  methods : { delayInSecondes },
+  computed   : { numberOfSessions },
+  filters    : { dateTimeFilter },
   created, data
 }
 
@@ -69,9 +69,17 @@ async function created(){
 
   const sessions = await this.api.getSessions(this.route.params.meeting);
 
-  this.sessions = sessions.filter(o=>!!o.interventions.length);
+  sessions.forEach(s=>{
+    const { date: startDate } = s;
+    if(s.videos) s.videos = s.videos.map(v=>({ startDate, ...v })) // Set video startDate to session.date if not already set 
+  });
+
+  this.sessions = sessions.filter(o=>!!o.interventions?.length);
 }
 
+function numberOfSessions(){
+  return this.sessions?.length || 0
+}
 </script>
 
 <style scoped>
