@@ -14,7 +14,7 @@ import moment from 'moment'
 import sessionsView from '~/components/meetings/sessions/view.vue'
 import uploads from '~/components/meetings/uploads.vue'
 
-//export { default as template } from './documents.html';
+export { default as template } from './documents.html';
 
     //'css!./agenda.css' // moved to template
     var STATISTICS = {}; 

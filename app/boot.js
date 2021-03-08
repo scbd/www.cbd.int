@@ -1,6 +1,9 @@
 export default function bootApp(window, require, defineX) {
 
-const { document } = window;
+const basePathPattern = /\/([-a-z0-9]*)($|\/.*|\?.*)/i;
+
+const { document, location } = window;
+const basePath = location.pathname.replace(basePathPattern, '$1');
 
 var gitVersion = (document && document.documentElement.attributes['git-version'].value);
 var cdnHost    = (document && document.documentElement.attributes['cdn-url'    ].value) || 'https://cdn.cbd.int/';
@@ -101,6 +104,13 @@ require.config({
     ],
     urlArgs: 'v=' + gitVersion
 });
+
+
+console.log('basePath', basePath)
+
+defineX('routes', ['jquery', `routes/${basePath}`], function($){
+    $("base").attr('href', `/${basePath}/`); // allow full page reload outside of  /basePath/*
+})
 
 defineX ('popper.js', [ cdnHost + 'popper.js@1.16.0/dist/umd/popper.min'], function(popper){
   window.Popper = popper

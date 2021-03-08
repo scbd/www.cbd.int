@@ -27,7 +27,7 @@ export default async function(){
 
   const toBundle = [
     ...await asyncGlob('*.js', { cwd }),
-    ...await asyncGlob('{data,directives,entry-points,filters,providers,services,util,views}/**/*.{js,json}', { cwd }),
+    ...await asyncGlob('{data,directives,routes,filters,providers,services,util,views}/**/*.{js,json}', { cwd }),
   ];
 
   return [
@@ -78,7 +78,7 @@ async function loadExternals() {
   //Define requireJS configuration (define() + config.paths ) as externals
 
   // Shim dependancies 
-  const window     = { }; 
+  const window     = { location : { pathname: '/' } }; 
   const defineJs   = (module) => { if(typeof(module)==='string') externals.push(module) };
   const requireJs  = ( )      => { };
   requireJs.config = (config) => { Object.keys(config.paths).forEach(defineJs); }
