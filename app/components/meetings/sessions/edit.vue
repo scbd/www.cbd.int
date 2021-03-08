@@ -1,6 +1,6 @@
 
 <template >
-  <div style="padding-bottom:300px">
+  <div>
     <h1>Session Preparation
       <small class="text-muted">
         <span v-for="{normalizedSymbol} in meetings" :key="normalizedSymbol">
@@ -9,13 +9,13 @@
       </small>
     </h1>
 
-    <h3> {{ (session || {}).startDate  | dateTimeFilter('T  - cccc, d MMMM yyyy') }} </h3>
+    <h3> {{ (session || {}).date  | dateTimeFilter('T  - cccc, d MMMM yyyy') }} </h3>
 
     <Session v-if="session">
       <InterventionRow v-for="(intervention, index) in interventions" :index="index+1" v-bind="{intervention}" v-bind:key="intervention._id">
         <template slot="controls">
           <div class="btn-group" role="group">
-            <button class="btn btn-sm btn-outline-dark" @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-sm btn-outline-dark" @click="editId(intervention._id, 'edit')"><i class="fa fa-edit"></i></button>
             <button class="btn btn-sm btn-outline-danger" @click="askDelete(intervention)"><i class="fa fa-trash"></i></button>
           </div>
         </template>
@@ -39,7 +39,7 @@
       <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" v-bind:key="intervention._id" @dblclick="edit(intervention)" >
         <template slot="controls">
           <div class="text-nowrap">
-            <button class="btn btn-sm btn-outline-success" @click="askPublish(intervention)"><i class="fa fa-microphone"></i></button>
+            <button class="btn btn-sm btn-outline-success" @click="editId(intervention._id, 'publish')"><i class="fa fa-microphone"></i></button>
 
             <div class="btn-group" role="group">
               <button class="btn btn-sm btn-outline-dark"    @click="editId(intervention._id)"><i class="fa fa-edit"></i></button>
@@ -53,7 +53,7 @@
     <EditInterventionModal v-if="!!editedIntervention"
       :sessionId="sessionId" 
       :intervention="editedIntervention" 
-      :agendaItems="agendaItems" 
+      :action="editAction"
       :route="route"
       :tokenReader="tokenReader"
       :meetings="meetings"
@@ -91,7 +91,6 @@ export default {
                 editId, 
                 editClose,
                 askDelete,
-                askPublish,
                 replace,
                 queryPendingInterventions,
                 onSearch : debounce(onSearch, 400)
@@ -107,6 +106,7 @@ function data(){
     meetings            : [],
     maxResultCount      : 250,
     editedIntervention  : null,
+    editAction          : null,
     freeText            : ''
   }
 }
@@ -141,24 +141,26 @@ async function init(){
 }
 
 function createPendingIntervention(){
-
-  this.editedIntervention = { 
-                              status: 'pending',
-                              files : [ { language: 'en'} ]
-                            };
+  this.edit({ 
+    status: 'pending',
+    files : [ { language: 'en', allowPublic: false} ]
+  });
 }
 
-async function editId(interventionId){
+async function editId(interventionId, editAction){
   const intervention = await this.api.getInterventionById(interventionId)
 
-  this.edit(intervention)
+  this.edit(intervention, editAction)
 }
 
-function edit(intervention){
+function edit(intervention, editAction){
+
+  this.editAction = editAction;
   this.editedIntervention = intervention;
 }
 
 function editClose(intervention){
+  this.editAction = null
   this.editedIntervention = null
 
   if(!intervention) return
@@ -179,20 +181,7 @@ async function askDelete(intervention){
   this.replace(_id, null);
 }
 
-async function askPublish(intervention){
 
-  var datetime = new Date();
-
-  if(!confirm(`Publish "${intervention.title}?`)) return;
-
-  const { sessionId }          = this;
-  const { _id:interventionId } = intervention;
-  const filePublic             = true;
-
-  const updatedInterventions = await this.api.assignInterventionToSession(sessionId,  interventionId, { datetime, filePublic })
-
-  this.replace(interventionId, updatedInterventions);
-}
 
 function replace(_id, intervention) {
   let  i = this.interventions       .findIndex(o=>o._id === _id );
