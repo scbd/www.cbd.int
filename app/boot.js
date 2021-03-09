@@ -64,7 +64,9 @@ require.config({
         'nlp'             : cdnHost + 'compromise/builds/compromise.min',
         'luxon'           : cdnHost + 'luxon@1.25.0/build/amd/luxon',
         'axios'           : cdnHost + 'axios@0.21.1/dist/axios.min',
-        'vue-multiselect' : cdnHost + 'vue-multiselect@2.1.6/dist/vue-multiselect.min'
+        'vue-multiselect' : cdnHost + 'vue-multiselect@2.1.6/dist/vue-multiselect.min',
+        'vue-i18n'        : cdnHost + 'vue-i18n@8.21.1/dist/vue-i18n.min',
+        
     },
     shim: {
         'angular'              : { deps : ['jquery'], exports: 'angular' },
@@ -95,8 +97,8 @@ require.config({
         'PageFooter'           : { deps : ['ngVue'] },
         'PageHeader'           : { deps : ['ngVue'] },
         'bs4'                  : { deps : ['jquery', 'popper.js'] },
-        'xlsx'                 : { 'deps': ['jszip'],'exports': 'XLSX'},
-        
+        'xlsx'                 : { deps : ['jszip'],'exports': 'XLSX'},
+        'vue-multiselect'      : { deps : ['css!https://cdn.cbd.int/vue-multiselect@2.1.6/dist/vue-multiselect.min.css'] },
     },
     packages: [
         { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },
@@ -118,7 +120,7 @@ defineX ('popper.js', [ cdnHost + 'popper.js@1.16.0/dist/umd/popper.min'], funct
 })
 
 defineX('Vue', ['vue'], function(vue) { return vue; })
-defineX('vue', [cdnHost +'vue@2.6.12/dist/vue.min',cdnHost +'vue-i18n@8.21.1/dist/vue-i18n.min',cdnHost +'@scbd/sso-vue-plugin-scbd@0.0.1'], function(Vue, i18n, ssoSCBD){
+defineX('vue', [cdnHost +'vue@2.6.12/dist/vue.min', 'vue-i18n', cdnHost +'@scbd/sso-vue-plugin-scbd@0.0.1'], function(Vue, i18n, ssoSCBD){
     window.Vue     = Vue;
     window.VueI18n = i18n;
     window.ssoSCBD = ssoSCBD;

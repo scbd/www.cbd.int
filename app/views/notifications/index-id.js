@@ -6,6 +6,8 @@ import 'directives/meetings/documents/document-files'
 import '~/filters/lstring'
 import '~/filters/term'
 
+export { default as template } from './index-id.html'
+
     var MIMES = {
         'application/pdf':                                                            { priority: 10,  color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document' :   { priority: 20,  color: 'blue',   btn: 'btn-primary', icon: 'fa-file-word-o'  },

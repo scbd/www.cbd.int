@@ -1,15 +1,20 @@
-define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
-        //'css!./meeting-documents.css',
-         'angular-cache', 'services/conference-service', 
-         //'css!./agenda.css'
-], function(_, ng) {
+import '~/filters/lstring'
+import 'directives/print-smart/print-smart-checkout'
+import './meeting-document'
+import 'authentication'
+import 'angular-cache'
+import 'services/conference-service'
+import _  from 'lodash'
+import ng from 'angular'
 
-    var CRP = /.*\/CRP(\d+)(?:$|\/[A-Z]+\d+$)/i
-    var REV = /.*\/REV(\d+)$/i
-    var ADD = /.*\/ADD(\d+)$/i
-    var STATISTICS = {}; 
+export { default as template }  from './in-session-documents.html'
 
-    return  ["$scope", "$route", "$http", '$q', '$location', 'authentication', 'conferenceService', '$filter', 'CacheFactory', function(
+var CRP = /.*\/CRP(\d+)(?:$|\/[A-Z]+\d+$)/i
+var REV = /.*\/REV(\d+)$/i
+var ADD = /.*\/ADD(\d+)$/i
+var STATISTICS = {}; 
+
+export default ["$scope", "$route", "$http", '$q', '$location', 'authentication', 'conferenceService', '$filter', 'CacheFactory', function(
               $scope,   $route,   $http,   $q,   $location,   authentication,   conferenceService,   $filter,   CacheFactory) {
         
         var $ctrl = $scope.$ctrl = this;
@@ -285,5 +290,4 @@ define(['lodash', 'angular', 'filters/lstring', 'directives/print-smart/print-sm
 
             return cache;
         }
-    }]
-});
+    }];

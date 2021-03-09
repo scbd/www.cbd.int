@@ -1,7 +1,9 @@
-﻿import app from 'app'
-import 'directives/social-media'
-import '~/directives/articles/cbd-article'
-import '~/services/conference-service'
+﻿import 'directives/social-media';
+import '~/directives/articles/cbd-article';
+import '~/services/conference-service';
+import app from 'app'
+
+export { default as template } from './introduction.html';
 
 export default ['$scope', '$route', '$location', '$http', '$rootScope',
  function ($scope,  $route, $location, $http, $rootScope) {

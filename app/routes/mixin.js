@@ -10,6 +10,16 @@ import redirectDialog from '../redirect-dialog.html'
 //============================================================
 //
 //============================================================
+export function mapView(comp) {
+
+    const template   = comp.template;
+    const controller = comp.default;
+
+    return { template, controller }
+}
+//============================================================
+//
+//============================================================
 export function resolveLiteral(value) {
     return function () { return value; };
 }

@@ -2,6 +2,8 @@
 import 'directives/social-media'
 import '~/directives/articles/cbd-article'
 
+export { default as template } from './index.html'
+
 export default ['$scope', '$route', function ($scope,  $route) {
        
 			var _ctrl = this;

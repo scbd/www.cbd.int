@@ -1,7 +1,7 @@
 import 'ngCookies'
 import 'angular-vue'
 import 'directives/print-smart/print-smart-checkout'
-import 'views/meetings/documents/meeting-document'
+import './meeting-document'
 import 'authentication'
 import 'angular-cache'
 import '~/filters/lstring'
@@ -11,8 +11,8 @@ import 'css!./agenda.css'
 import _ from 'lodash'
 import ng from 'angular'
 import moment from 'moment'
-import sessionsView from '~/components/meetings/sessions/view.vue'
-import uploads from '~/components/meetings/uploads.vue'
+// import sessionsView from '~/components/meetings/sessions/view.vue'
+// import uploads from '~/components/meetings/uploads.vue'
 
 export { default as template } from './documents.html';
 
@@ -31,9 +31,17 @@ export { default as template } from './documents.html';
         $scope.tokenReader = function(){ return apiToken.get()}
         $scope.route       = { params : $route.current.params, query: $location.search() }
         $scope.vueOptions  = {
-          components: { sessions: sessionsView, uploads: uploads },
+          components: { },
           i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
         };
+
+        function registerComponents(components) {
+
+            Object.keys(components).forEach((name) => {
+                const component = components[name].default || components[name];
+                $scope.vueOptions.components[name] = component;
+            });
+        }
 
 
         var groups = {
@@ -80,7 +88,7 @@ export { default as template } from './documents.html';
         function load() {
             let documents = null;
             _ctrl.inSessionEnabled = false; //to adjust the height for non insession case
-            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, uploadStatement:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, alerts:1 }, cache:true } }).then(function(res){
+            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, uploadStatement:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, alerts:1 }, cache:true } }).then(async function(res){
 
                 meeting = _.defaults(res.data, {
                     code: res.data.EVT_CD,
@@ -88,6 +96,10 @@ export { default as template } from './documents.html';
                     printSmart : false,
                     isMontreal : /montr.al.*canada/i.test((res.data.venueText||{}).en||'')
                 });
+
+                if(meeting.uploadStatement) {
+                    registerComponents({uploads : await import('~/components/meetings/uploads.vue') });
+                }
 
                 if(meeting.uploadStatement && $location.search().uploadStatementBy) {
                     _ctrl.uploadStatement = true;
@@ -267,7 +279,7 @@ export { default as template } from './documents.html';
         //==============================
         function loadSessions() {
 
-            $http.get('/api/v2021/meeting-sessions', { params: { c: 1, q : { meetingIds: { $in :[ { $oid:_ctrl.meeting._id }] } } } }).then(function(res){
+            $http.get('/api/v2021/meeting-sessions', { params: { c: 1, q : { meetingIds: { $in :[ { $oid:_ctrl.meeting._id }] } } } }).then(async function(res){
 
                 var count = (res.data[0]||{}).count;
 
@@ -275,6 +287,8 @@ export { default as template } from './documents.html';
 
                 var fakeDocs = []; 
                 fakeDocs.length = count;
+
+                registerComponents({ sessions : await import('~/components/meetings/sessions/view.vue') });
 
                 injectTab('statement', fakeDocs, { component:'sessions' });
 

@@ -9,8 +9,11 @@ import '~/services/article-service'
 import 'directives/social-media'
 import '~/directives/articles/cbd-article'
 
+export { default as template } from './index.html'
+
 var VueComponent = Vue.component('conference-cal', ConferenceCalComp)
 app.value('ConferenceCal',VueComponent)
+
 
 export default ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', '$q',
         function ($location,$scope,$timeout,  $route, $sce, conferenceService, $q) {

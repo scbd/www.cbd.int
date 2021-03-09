@@ -6,6 +6,7 @@ import 'directives/social-media'
 import '~/filters/lstring'
 import '~/filters/moment' 
 
+export { default as template } from './conferences.html'
 
 export default ['$location','$scope', '$rootScope', 'conferenceService', '$q', '$compile', 'articleService',
         function ($location,$scope, $rootScope, conferenceService, $q, $compile, articleService) {

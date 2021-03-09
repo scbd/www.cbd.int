@@ -28,6 +28,7 @@ export default async function(){
   const toBundle = [
     ...await asyncGlob('*.js', { cwd }),
     ...await asyncGlob('{data,directives,routes,filters,providers,services,util,views}/**/*.{js,json}', { cwd }),
+    //'components/meetings/sessions/session-list.vue'
   ];
 
   return [
@@ -45,7 +46,7 @@ function bundle(relativePath, baseDir='app') {
     output: [{
       format   : 'amd',
       sourcemap: true,
-      file : path.join(outputDir, changeExtension(relativePath, '.js')),
+      dir : path.join(outputDir, path.dirname(relativePath)),
       name : relativePath.replace(/[^a-z0-9]/ig, "_"),
     }],
     external: externals,
