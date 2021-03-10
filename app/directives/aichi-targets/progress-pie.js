@@ -1,9 +1,9 @@
-define(['app', 'lodash','text!./progress-pie.html',
-    'amchart',
-    'shim!amchart/pie[amchart]',
-    'shim!amchart/themes/light[amchart]'
-], function(app, _,template) {
-    'use strict';
+import 'amchart'
+import 'shim!amchart/pie[amchart]'
+import 'shim!amchart/themes/light[amchart]'
+import app from 'app'
+import _ from 'lodash'
+import template from './progress-pie.html'
 
     //============================================================
     //
@@ -349,5 +349,3 @@ define(['app', 'lodash','text!./progress-pie.html',
             }]
         };
     }]);
-
-});

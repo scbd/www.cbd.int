@@ -18,11 +18,17 @@
             })(window,document,'script','dataLayer','GTM-NL82D37');
         }
     </script>
-    
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=Object.assign%2Cconsole"></script>
+    <script src="<%=cdnUrl%>regenerator-runtime@0.13.7/runtime.js"></script>
     <script src="<%=cdnUrl%>requirejs@2.2.0/require.js"></script>
     <script src="<%=cdnUrl%>jquery@2.2.4/dist/jquery.min.js"></script>
     <script src="<%=cdnUrl%>bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
-    <script async src="/app/boot.js?v=<%=gitVersion%>"></script>
+    <script>
+        require(["app/boot.js?v=<%=gitVersion%>"], function(boot){
+            boot(window, require, define);
+        });
+    </script>
     <script async src='https://www.google-analytics.com/analytics.js'></script>
     <title ng-bind="$root.page.title">Convention on Biological Diversity</title>
     <meta name="description" content="{{$root.page.description || ngMeta['og:description']}}" ng-if="$root.page.description || ngMeta['og:description']">

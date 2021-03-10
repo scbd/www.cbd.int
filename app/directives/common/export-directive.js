@@ -23,7 +23,6 @@ define(['app','text!./export-directive.html', 'lodash', 'ngDialog','moment','fil
                         controller : ['$scope', '$element', function($scope, $element){
                     
                                 $scope.downloadFormat = 'xlsx';
-                                $scope.downloadFormat = downloadFormat = 'xlsx';
                                 $scope.downloadData =  function(skipDownload){
 
                                     var dowloadButton = $element.find('.' + $scope.downloadFormat)

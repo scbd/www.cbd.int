@@ -1,5 +1,6 @@
-define(['app', 'text!./fisheye.html', 'angular', 'interface'], function(app, templateHtml) {
-    'use strict';
+import 'interface'
+import app from 'app'
+import templateHtml from './fisheye.html'
 
     //============================================================
     //
@@ -69,5 +70,3 @@ define(['app', 'text!./fisheye.html', 'angular', 'interface'], function(app, tem
             }
         };
     }]);
-
-});

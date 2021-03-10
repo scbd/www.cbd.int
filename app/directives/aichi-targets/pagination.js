@@ -1,5 +1,6 @@
-define(['text!./pagination.html', 'app'], function(template, app) {
-    'use strict';
+import app from 'app'
+import template from './pagination.html'
+     
     app.directive('pagination', [function() {
         return {
             restrict: 'E',
@@ -23,4 +24,3 @@ define(['text!./pagination.html', 'app'], function(template, app) {
             }],
         }; // return
     }]);
-}); // define

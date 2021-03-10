@@ -1,4 +1,5 @@
-define(['app', 'magnific-popup'], function(app) { 'use strict';
+import 'magnific-popup'
+import app from 'app'
 
     app.directive('videosLoaded', function() {
         return {
@@ -34,4 +35,3 @@ define(['app', 'magnific-popup'], function(app) { 'use strict';
 
         };
     });
-});

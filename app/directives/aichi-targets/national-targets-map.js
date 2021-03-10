@@ -1,12 +1,13 @@
-define(['app', 'lodash',
-'text!./national-targets-map.html',
-'text!./target.html',
-'text!./target-row.html', 
-'ammap',
-'shim!directives/reporting-display/worldEUHigh[ammap]',
-'shim!ammap/themes/light[ammap]',
-'providers/locale', 'directives/common/export-directive'
-], function(app,_,template,targetTemplate,row) { 'use strict';
+import 'ammap'
+import 'shim!directives/reporting-display/worldEUHigh[ammap]'
+import 'shim!ammap/themes/light[ammap]'
+import '~/providers/locale'
+import '~/directives/common/export-directive'
+import app from 'app'
+import _ from 'lodash'
+import template from './national-targets-map.html'
+import targetTemplate from './target.html'
+import row from './target-row.html' 
 
     //============================================================
     //
@@ -621,5 +622,3 @@ define(['app', 'lodash',
             }
         };
     }]);
-
-});

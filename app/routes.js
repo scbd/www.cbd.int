@@ -7,14 +7,6 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         $locationProvider.html5Mode(true);
         $locationProvider.hashPrefix('!');
 
-        // /decisions/cop/*
-        if(/^\/decisions($|\/.*)/.test(locationPath))
-            registerRoutes_CopDecisions($routeProvider);
-
-        // /aichi-targets/*
-        if(/^\/aichi-targets($|\/.*)/.test(locationPath))
-            registerRoutes_aichiTargets($routeProvider);
-
         // /kronos/*
         if(/^\/kronos($|\/.*)/.test(locationPath))
             registerRoutes_kronos($routeProvider);
@@ -38,31 +30,6 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         $routeProvider.when('/404', { templateUrl: '/app/views/404.html' });
     }
   ]);
-
-  //============================================================
-  //
-  //
-  //============================================================
-  function registerRoutes_CopDecisions(routeProvider) {
-
-      $('base').attr('href', '/decisions/'); // allow full page reload outside of  /decisions/*
-
-      const bundle = ()=>importBundle('entry-points/decision-tracking');
-
-  }
-  //============================================================
-  //
-  //
-  //============================================================
-  function registerRoutes_aichiTargets(routeProvider) {
-
-      $("base").attr('href', '/aichi-targets/'); // allow full page reload outside of  /insession/*
-
-      routeProvider
-        .when('/',                  { templateUrl: 'views/aichi-targets/index.html',    controllerAs: 'indexCtrl',   resolveController: true })
-        .when('/target/:targetId',  { templateUrl: 'views/aichi-targets/index-id.html', controllerAs: 'indexIdCtrl', resolveController: true })
-        .otherwise({redirectTo: '/404'});
-  }
 
   //============================================================
   //

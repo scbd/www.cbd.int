@@ -1,5 +1,7 @@
-define(['app', 'text!./legend42.html','directives/aichi-targets/progress-pie','directives/aichi-targets/national-targets-map'], function(app, templateHtml) {
-    'use strict';
+import app from 'app'
+import templateHtml from 'text!./legend42.html'
+import '~/directives/aichi-targets/progress-pie'
+import '~/directives/aichi-targets/national-targets-map'
 
     //============================================================
     //
@@ -62,5 +64,3 @@ define(['app', 'text!./legend42.html','directives/aichi-targets/progress-pie','d
             }
         };
     }]);
-
-});
