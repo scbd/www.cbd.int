@@ -1,6 +1,7 @@
-define(['app', 'text!./view-element.html'], function(app, html) { 'use strict';
+import app from 'app'
+import html from './view-element.html'
 
-	return app.directive('info', [function() {
+	app.directive('info', [function() {
 		return {
 			restrict : "A",
 			template : html,
@@ -33,4 +34,3 @@ define(['app', 'text!./view-element.html'], function(app, html) { 'use strict';
 			}
 		};
 	}]);
-});

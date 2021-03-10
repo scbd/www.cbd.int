@@ -1,7 +1,28 @@
-define(['lodash', 'angular', 'require', 'rangy', 'jquery', './data/romans', './data/sections', './data/paragraphes', './data/items', './data/sub-items', './data/actors', './data/statuses', 'ngDialog', 'authentication', 'filters/moment', 'filters/lodash', 'filters/lstring', 'directives/comments/internal-comments', './directives/notification', './directives/meeting-document', './directives/meeting', './directives/decision-reference'],
-function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, subItemList, actorList, statusesList) { 'use strict';
+import 'ngDialog'
+import 'authentication'
+import '~/filters/moment'
+import '~/filters/lodash'
+import '~/filters/lstring'
+import '~/directives/comments/internal-comments'
+import './directives/notification'
+import './directives/meeting-document'
+import './directives/meeting'
+import './directives/decision-reference'
+import _       from 'lodash'
+import ng      from 'angular'
+import rangy   from 'rangy'
+import $       from 'jquery'
+import roman         from './data/romans'
+import sectionList   from './data/sections'
+import paragraphList from './data/paragraphes'
+import itemList      from './data/items'
+import subItemList   from './data/sub-items'
+import actorList     from './data/actors'
+import statusesList  from './data/statuses'
 
-    return ['$scope', '$http', '$route', '$location', '$filter', '$q', '$compile', 'ngDialog', 'user', '$anchorScroll', function($scope, $http, $route, $location, $filter, $q, $compile, ngDialog, user, $anchorScroll) {
+export { default as template } from './edit.html'
+
+export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$compile', 'ngDialog', 'user', '$anchorScroll', function($scope, $http, $route, $location, $filter, $q, $compile, ngDialog, user, $anchorScroll) {
 
         var treaty        = null;
         var body          = $route.current.params.body.toUpperCase();
@@ -647,7 +668,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function selectMeetingDocument() {
 
-            openDialog('./select-document-dialog', { showClose: false }).then(function(dialog){
+            openDialog(import('./select-document-dialog'), { showClose: false }).then(function(dialog){
 
                 dialog.closePromise.then(function(res){
 
@@ -664,7 +685,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function selectDecision() {
 
-            openDialog('./select-decision-dialog', { showClose: false }).then(function(dialog){
+            openDialog(import('./select-decision-dialog'), { showClose: false }).then(function(dialog){
 
                 dialog.closePromise.then(function(res){
 
@@ -681,7 +702,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function selectNotification() {
 
-            openDialog('./select-notification-dialog', { showClose: false }).then(function(dialog){
+            openDialog(import('./select-notification-dialog'), { showClose: false }).then(function(dialog){
 
                 dialog.closePromise.then(function(res){
 
@@ -698,7 +719,7 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         function selectMeeting() {
 
-            openDialog('./select-meeting-dialog', { showClose: false }).then(function(dialog){
+            openDialog(import('./select-meeting-dialog'), { showClose: false }).then(function(dialog){
 
                 dialog.closePromise.then(function(res){
 
@@ -713,32 +734,27 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
         //===========================
         //
         //===========================
-        function openDialog(dialog, options) {
+        async function openDialog(dialog, options) {
 
             options = options || {};
 
-            return $q(function(resolve, reject) {
+            return $q.when(dialog).then(({ template, default: controller })=>{
+                options.plain = true;
+                options.template = template;
+                options.controller = controller;
 
-                require(['text!'+dialog+'.html', dialog], function(template, controller) {
+                var dialog = ngDialog.open(options);
 
-                    options.plain = true;
-                    options.template = template;
-                    options.controller = controller;
+                dialog.closePromise.then(function(res){
 
-                    var dialog = ngDialog.open(options);
+                    if(res.value=="$escape")      delete res.value;
+                    if(res.value=="$document")    delete res.value;
+                    if(res.value=="$closeButton") delete res.value;
 
-                    dialog.closePromise.then(function(res){
+                    return res;
+                });
 
-                        if(res.value=="$escape")      delete res.value;
-                        if(res.value=="$document")    delete res.value;
-                        if(res.value=="$closeButton") delete res.value;
-
-                        return res;
-                    });
-
-                    resolve(dialog);
-
-                }, reject);
+                return dialog;
             });
         }
 
@@ -854,4 +870,3 @@ function(_, ng, require, rangy, $, roman, sectionList, paragraphList, itemList, 
 
         return value;
     }
-});

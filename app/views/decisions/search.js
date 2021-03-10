@@ -1,9 +1,19 @@
-﻿define(['angular', 'lodash', './data/actors', './data/statuses', './data/sessions', 'filters/lodash', 'filters/lstring', './view-element',
- 'css!./view.css', 'directives/aichi-targets/pagination','filters/term','./directives/header-decisions'], 
-function(ng, _, actorList, statusesList, sessionList){
-    
+﻿import '~/filters/lodash'
+import '~/filters/lstring'
+import '~/filters/term'
+import './view-element'
+import 'css!./view.css'
+import 'directives/aichi-targets/pagination'
+import './directives/header-decisions'
+import ng from 'angular'
+import _ from 'lodash'
+import actorList from './data/actors'
+import statusesList from './data/statuses'
+import sessionList from './data/sessions'
 
-    return ['$scope', '$http', '$q', '$location', '$compile', '$timeout', '$sce', '$filter',
+export { default as template } from './search.html';
+
+export default ['$scope', '$http', '$q', '$location', '$compile', '$timeout', '$sce', '$filter',
       function($scope, $http, $q, $location, $compile, $timeout, $sce, $filter){
 
         $scope.pageSort     = ''
@@ -316,5 +326,4 @@ function(ng, _, actorList, statusesList, sessionList){
         }
 
         init();
-    }]
-})
+    }];

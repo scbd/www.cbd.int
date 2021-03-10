@@ -1,6 +1,20 @@
-define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view-element', 'filters/moment', 'filters/lodash', './directives/notification', './directives/meeting-document', './directives/meeting', './directives/decision-reference','filters/term','./directives/header-decisions'], function(ng, _) { 'use strict';
+import '~/filters/lstring'
+import '~/filters/moment'
+import '~/filters/lodash'
+import 'css!./view.css'
+import './view-element'
+import './directives/notification'
+import './directives/meeting-document'
+import './directives/meeting'
+import './directives/decision-reference'
+import 'filters/term'
+import './directives/header-decisions'
+import ng from 'angular'
+import _ from 'lodash'
 
-    return ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', '$filter',
+export { default as template } from './paragraph.html'
+
+export default ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', '$filter',
     function($scope, $http, $route, $location, $compile, $anchorScroll, $filter) {
 
         var treaty    = null ;
@@ -220,5 +234,3 @@ define(['angular', 'lodash', 'app', 'filters/lstring', 'css!./view.css', './view
 
         return value;
     }
-
-});

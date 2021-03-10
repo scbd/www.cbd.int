@@ -1,7 +1,11 @@
-define(['./data/sections', './data/paragraphes', './data/items', './data/sub-items'],
-function(sectionList,       paragraphList,        itemList,       subItemList) {
+import sectionList   from './data/sections'
+import paragraphList from './data/paragraphes'
+import itemList      from './data/items'
+import subItemList   from './data/sub-items'
 
-    return ['$scope', function ($scope) {
+export { default as template } from './select-decision-dialog.html'
+
+export default ['$scope', function ($scope) {
 
         $scope.collections = {
             bodies : [
@@ -68,4 +72,3 @@ function(sectionList,       paragraphList,        itemList,       subItemList) {
         }
 
 	}];
-});

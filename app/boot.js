@@ -3,10 +3,10 @@ export default function bootApp(window, require, defineX) {
 const basePathPattern = /\/([-a-z0-9]*)($|\/.*|\?.*)/i;
 
 const { document, location } = window;
-const basePath = location.pathname.replace(basePathPattern, '$1');
 
-var gitVersion = (document && document.documentElement.attributes['git-version'].value);
-var cdnHost    = (document && document.documentElement.attributes['cdn-url'    ].value) || 'https://cdn.cbd.int/';
+const basePath   = location.pathname.replace(basePathPattern, '$1');
+const gitVersion = (document && document.documentElement.attributes['git-version'].value);
+const cdnHost    = (document && document.documentElement.attributes['cdn-url'    ].value) || 'https://cdn.cbd.int/';
 
 require.config({
     waitSeconds: 30,

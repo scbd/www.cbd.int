@@ -1,6 +1,7 @@
-define(['app', 'text!./disclaimer.html'], function(app, template) { 'use strict';
+import app from 'app'
+import template from './disclaimer.html'
 
-	return app.directive('disclaimer', ['$cookies', function( $cookies) {
+app.directive('disclaimer', ['$cookies', function( $cookies) {
         
         var state = initCookie($cookies)
 
@@ -31,5 +32,3 @@ define(['app', 'text!./disclaimer.html'], function(app, template) { 'use strict'
         
         return JSON.parse(cookie)
     }
-
-});

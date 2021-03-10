@@ -1,8 +1,18 @@
-define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css', 
-'./view-element', 'directives/meetings/documents/document-files', './directives/decision-reference', 
-'./directives/meeting','filters/term', './directives/header-decisions'], function(app, _, ng) { 'use strict';
+import '~/filters/lstring'
+import '~/filters/term'
+import 'css!./view.css'
+import './view-element'
+import '~/directives/meetings/documents/document-files'
+import './directives/decision-reference'
+import './directives/meeting'
+import './directives/header-decisions'
+import app from 'app'
+import _   from 'lodash'
+import ng  from 'angular'
 
-    return ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', 'user', '$filter',
+export { default as template } from './view.html'
+
+export default ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', 'user', '$filter',
     function($scope, $http, $route, $location, $compile, $anchorScroll, user, $filter) {
 
         var treaty    = null ;
@@ -364,4 +374,3 @@ define(['app', 'lodash', 'angular', 'filters/lstring', 'css!./view.css',
             return $filter("term")(termCode);
         }
     }];
-});
