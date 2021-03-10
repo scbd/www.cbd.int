@@ -1,7 +1,7 @@
 import app from 'app';
 import { securize, resolveLiteral, mapView } from './mixin';
-import * as vueViewLoader     from '~/views/vue'
-import * as angularViewLoader from '~/views/vue' // TO IMPLEMENT: '~/views/angular'
+import * as vueViewWrapper     from '~/views/vue-view-wrapper'
+import * as angularViewWrapper from '~/views/angular-view-wrapper'
 
 // Static views
 import * as documentsView from '~/views/meetings/documents/documents'
@@ -22,12 +22,12 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     
     $routeProvider
 //  .when('/:meeting/documents/status',    { templateUrl : 'views/meetings/documents/documents-progress.html',      resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService", "ScbdStaff"]) } })
-    .when('/import-translations',          { ...mapView(angularViewLoader),   resolve : { ...importTranslationsView, user : securize(["Administrator","EditorialService"]) } })
-    .when('/:meeting/documents/:id',       { ...mapView(angularViewLoader),   resolve : { ...editDocumentIdView,     user : securize(["Administrator","EditorialService"]) },  reloadOnSearch:false })
-    .when('/:meeting/sessions',            { ...mapView(vueViewLoader),       resolve : { ...sessionListView,        user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
-    .when('/:meeting/sessions/:sessionId', { ...mapView(vueViewLoader),       resolve : { ...sessionIdView,          user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
-    .when('/:meeting/interpreter-panel',   { ...mapView(vueViewLoader),       resolve : { ...interpretersPanelView,  user : securize(["Administrator","EditorialService", "StatementAdmin", "ScbdStaff", "Interpreters"]) }, reloadOnSearch:false })
+    .when('/import-translations',          { ...mapView(angularViewWrapper),   resolve : { ...importTranslationsView, user : securize(["Administrator","EditorialService"]) } })
+    .when('/:meeting/documents/:id',       { ...mapView(angularViewWrapper),   resolve : { ...editDocumentIdView,     user : securize(["Administrator","EditorialService"]) },  reloadOnSearch:false })
+    .when('/:meeting/sessions',            { ...mapView(vueViewWrapper),       resolve : { ...sessionListView,        user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
+    .when('/:meeting/sessions/:sessionId', { ...mapView(vueViewWrapper),       resolve : { ...sessionIdView,          user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
+    .when('/:meeting/interpreter-panel',   { ...mapView(vueViewWrapper),       resolve : { ...interpretersPanelView,  user : securize(["Administrator","EditorialService", "StatementAdmin", "ScbdStaff", "Interpreters"]) }, reloadOnSearch:false })
     .when('/:meeting/documents',           { redirectTo  : '/:meeting'} )
-    .when('/:meeting',                     { ...mapView(documentsView),           resolve : { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+    .when('/:meeting',                     { ...mapView(documentsView),        resolve : { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
     .otherwise({redirectTo: '/404'});
 }]);

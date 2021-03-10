@@ -1,7 +1,7 @@
-import 'directives/meetings/conference-header';
+import '~/directives/meetings/conference-header'
 import app from 'app';
 import { securize, resolveLiteral, injectRouteParams, mapView } from './mixin';
-import * as angularViewLoader from '~/views/vue' // TO IMPLEMENT: '~/views/angular'
+import * as angularViewWrapper from '~/views/angular-view-wrapper'
 
 // Static views
 import * as conferencesView       from '~/views/meetings/conferences'
@@ -29,30 +29,29 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/2016/cp-mop-8/documents',     { redirectTo    : '/2016/mop-08/documents'})
 
     .when('/',                                    { ...mapView(conferencesView) })
-    .when('/:code',                               { ...mapView(conferencesIdView),       resolve: { }, reloadOnSearch:false })
-    .when('/:code/parallel-meetings',             { ...mapView(angularViewLoader),       resolve: { ...parallelMeetingsView, routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings', 'introduction'] }) }, reloadOnSearch:false })
-    .when('/:code/parallel-meetings/:articleTag', { ...mapView(articleView),             resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings'] }) },     reloadOnSearch:false })
-    .when('/:code/media',                         { ...mapView(articleView),             resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'media', 'introduction'] }) }, reloadOnSearch:false })
-    .when('/:code/media/:articleTag',             { ...mapView(articleView),             resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'media'] }) },                 reloadOnSearch:false })
-    .when('/:code/information/:articleTag',       { ...mapView(articleView),             resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'information'] }) },           reloadOnSearch:false })
-    .when('/:code/schedules',                     { ...mapView(angularViewLoader),       resolve: { ...scheduleView }, reloadOnSearch:false })
-    .when('/:code/insession',                     { ...mapView(angularViewLoader),       resolve: { ...inSessionView }, reloadOnSearch:false })
-    .when('/:code/:meeting',                      { ...mapView(introductionView),        resolve: { routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) } })
-    .when('/:code/:meeting/documents',            { ...mapView(documentsView),           resolve: { showMeeting : resolveLiteral(false) },                    reloadOnSearch:false })
-    .when('/:code/:meeting/documents/:id',        { ...mapView(angularViewLoader),       resolve: { ...documentIdView, user : securize(["Administrator","EditorialService"]) },  reloadOnSearch:false })
-    .when('/:code/submissions/:symbol',           { ...mapView(angularViewLoader),       resolve: { ...notificationIdView } })
+    .when('/:code',                               { ...mapView(conferencesIdView),   resolve: { }, reloadOnSearch:false })
+    .when('/:code/parallel-meetings',             { ...mapView(angularViewWrapper),  resolve: { ...parallelMeetingsView, routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings', 'introduction'] }) }, reloadOnSearch:false })
+    .when('/:code/parallel-meetings/:articleTag', { ...mapView(articleView),         resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings'] }) },     reloadOnSearch:false })
+    .when('/:code/media',                         { ...mapView(articleView),         resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'media', 'introduction'] }) }, reloadOnSearch:false })
+    .when('/:code/media/:articleTag',             { ...mapView(articleView),         resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'media'] }) },                 reloadOnSearch:false })
+    .when('/:code/information/:articleTag',       { ...mapView(articleView),         resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'information'] }) },           reloadOnSearch:false })
+    .when('/:code/schedules',                     { ...mapView(angularViewWrapper),  resolve: { ...scheduleView }, reloadOnSearch:false })
+    .when('/:code/insession',                     { ...mapView(angularViewWrapper),  resolve: { ...inSessionView }, reloadOnSearch:false })
+    .when('/:code/:meeting',                      { ...mapView(introductionView),    resolve: { routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) } })
+    .when('/:code/:meeting/documents',            { ...mapView(documentsView),       resolve: { showMeeting : resolveLiteral(false) },                    reloadOnSearch:false })
+    .when('/:code/:meeting/documents/:id',        { ...mapView(angularViewWrapper),  resolve: { ...documentIdView, user : securize(["Administrator","EditorialService"]) },  reloadOnSearch:false })
+    .when('/:code/submissions/:symbol',           { ...mapView(angularViewWrapper),  resolve: { ...notificationIdView, showMeeting : resolveLiteral(false) } })
 
     .otherwise({redirectTo: '/404'});
 }]);
 
+app.run(['$compile', '$rootScope','$location', async function($compile, $rootScope, $location){
 
-app.run(['$compile', '$rootScope','$location', function($compile, $rootScope,$location){
-    if(!$location.search().viewOnly){
-    require(['directives/meetings/conference-header'], function(){
-        var conferenceHeader = angular.element("#conferenceHeader");
-        conferenceHeader.css('display', 'block');
-        conferenceHeader.html('').append('<conference-header><conference-header>')
-        $compile(conferenceHeader.contents())($rootScope);
-    })
-    }
+    if($location.search().viewOnly) return;
+    if($location.path()=='/')       return;
+
+    var conferenceHeader = angular.element("#conferenceHeader");
+    conferenceHeader.css('display', 'block');
+    conferenceHeader.html('').append('<conference-header><conference-header>')
+    $compile(conferenceHeader.contents())($rootScope);
 }]);
