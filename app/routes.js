@@ -23,9 +23,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         if(/^\/participation($|\/.*)/.test(locationPath))
             registerRoutes_participation($routeProvider);
 
-        if(/^\/notifications\/.+/.test(locationPath))
-            registerRoutes_notifications($routeProvider);
-
+            
         $routeProvider.when('/403', { templateUrl: '/app/views/403.html' });
         $routeProvider.when('/404', { templateUrl: '/app/views/404.html' });
     }
@@ -173,28 +171,6 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         .otherwise({redirectTo: '/404'});
     }
 
-    //============================================================
-    //
-    //
-    //============================================================
-    function registerRoutes_notifications(routeProvider) {
-
-        $("base").attr('href', '/notifications/'); // allow full page reload outside of  /notifications/*
-
-        routeProvider
-        .when('/:symbol', { templateUrl : 'views/notifications/index-id.html', resolveController : true, resolve : { } })
-        .otherwise({redirectTo: '/404'});
-    }
-
-    async function importBundle(bundle) {
-        try {
-            return await import(bundle)
-        }
-        catch (err) {
-            console.error('bundle', bundle, err);
-            throw err;
-        }
-    }
 
 
     //============================================================
