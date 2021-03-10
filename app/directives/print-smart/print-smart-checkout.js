@@ -1,4 +1,10 @@
-define(['./locations','app', 'text!./print-smart-checkout.html', 'require', 'lodash', 'angular', 'ngDialog', 'filters/lstring'], function(locations, app, templateHtml, require, _, ng) {
+import 'ngDialog'
+import '~/filters/lstring'
+import locations from './locations'
+import app from 'app'
+import templateHtml from './print-smart-checkout.html'
+import _ from 'lodash'
+import ng from 'angular'
 
     var PDF    = 'application/pdf';
     var ONLINE = 'text/html';
@@ -94,7 +100,7 @@ define(['./locations','app', 'text!./print-smart-checkout.html', 'require', 'lod
 
                     if(canPrint() && canDownload())
                     {
-                        return openDialog('./checkout-dialog', { resolve : {
+                        return openDialog(import('./checkout-dialog'), { resolve : {
                             allowPrint : resolver($scope.allowPrint),
                             documents: resolver({
                                 printable : printableDocuments(),
@@ -125,7 +131,7 @@ define(['./locations','app', 'text!./print-smart-checkout.html', 'require', 'lod
                     if(!$scope.documents()  .length) return help(true);
                     if(!printableDocuments().length) return;
 
-					openDialog('./print-location-dialog', { resolve : { } }).then(function(dialog){
+					openDialog(import('./print-location-dialog'), { resolve : { } }).then(function(dialog){
                         dialog.closePromise.then(function(res) {
                             var val = res.value || {};
 
@@ -148,7 +154,7 @@ define(['./locations','app', 'text!./print-smart-checkout.html', 'require', 'lod
                     if(locations && locations.length && !location)
                         return setLocation();
 
-					openDialog('./print-dialog', { 
+                        openDialog(import('./print-dialog'), { 
                         resolve : { 
                             documents: resolver(printableDocuments()), 
                             allowBack: resolver(canDownload()), 
@@ -170,7 +176,7 @@ define(['./locations','app', 'text!./print-smart-checkout.html', 'require', 'lod
                     if(!$scope.documents()     .length) return help(true);
                     if(!downloadableDocuments().length) return;
 
-					openDialog('./download-dialog', { resolve : { documents: resolver(downloadableDocuments()), allowBack: resolver(canPrint()) } }).then(function(dialog){
+					openDialog(import('./download-dialog'), { resolve : { documents: resolver(downloadableDocuments()), allowBack: resolver(canPrint()) } }).then(function(dialog){
                         dialog.closePromise.then(function(res) {
                             onCloseDialog(res.value, 'download');
                         });
@@ -224,36 +230,32 @@ define(['./locations','app', 'text!./print-smart-checkout.html', 'require', 'lod
         //===========================
         //
         //===========================
-        function openDialog(dialog, options) {
+        async function openDialog(dialog, options) {
 
             options = options || {};
 
-            return $q(function(resolve, reject) {
+            return $q.when(dialog).then(({ template, default: controller })=>{
 
-                require(['text!'+dialog+'.html', dialog], function(template, controller) {
+                options.plain = true;
+                options.template = template;
+                options.controller = controller;
 
-                    options.plain = true;
-                    options.template = template;
-                    options.controller = controller;
+                if(options.showClose      ===undefined) options.showClose       = false;
+                if(options.closeByDocument===undefined) options.closeByDocument = false;
+                if(options.className      ===undefined) options.className       = 'ngdialog-theme-default printsmart';
 
-                    if(options.showClose      ===undefined) options.showClose       = false;
-                    if(options.closeByDocument===undefined) options.closeByDocument = false;
-                    if(options.className      ===undefined) options.className       = 'ngdialog-theme-default printsmart';
+                var dialog = ngDialog.open(options);
 
-                    var dialog = ngDialog.open(options);
+                dialog.closePromise.then(function(res){
 
-                    dialog.closePromise.then(function(res){
+                    if(res.value=="$escape")      throw res; //cancel
+                    if(res.value=="$document")    throw res; //cancel
+                    if(res.value=="$closeButton") throw res; //cancel
 
-                        if(res.value=="$escape")      throw res; //cancel
-                        if(res.value=="$document")    throw res; //cancel
-                        if(res.value=="$closeButton") throw res; //cancel
+                    return res;
+                });
 
-                        return res;
-                    });
-
-                    resolve(dialog);
-
-                }, reject);
+                return dialog;
             });
         }
 
@@ -265,4 +267,3 @@ define(['./locations','app', 'text!./print-smart-checkout.html', 'require', 'lod
         }
 
 	}]);
-});

@@ -1,8 +1,15 @@
-define(['./locations', 'angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'directives/checkbox', 'filters/lstring', 'css!./location-button.css'], function(locations, angular, _, Dropbox) {'use strict';
+import 'ngCookies'
+import '~/directives/checkbox'
+import '~/filters/lstring'
+import 'css!./location-button.css'
+import locations from './locations'
+import angular from 'angular'
+import _ from 'lodash'
 
-    var PDF = 'application/pdf';
+export { default as template } from './print-dialog.html';
 
-	return  ['$scope', '$http', '$cookies', 'documents', '$filter', 'allowBack', 'location',
+var PDF = 'application/pdf';
+export default  ['$scope', '$http', '$cookies', 'documents', '$filter', 'allowBack', 'location',
 	function ($scope,   $http,   $cookies,   documents,   $filter,   allowBack,   location) {
 
         var _ctrl = $scope.printCtrl = this;
@@ -193,4 +200,3 @@ define(['./locations', 'angular', 'lodash', 'dropbox-dropins', 'ngCookies', 'dir
 		}
 
 	}];
-});
