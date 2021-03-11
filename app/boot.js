@@ -13,7 +13,6 @@ require.config({
     baseUrl : '/app/',
     paths: {
         'authentication'  : 'services/authentication',
-        'angular'         : cdnHost + 'angular@1.5.6/angular.min',
         'bs4'             : cdnHost + 'bootstrap@4.1.3/dist/js/bootstrap',
         'ngRoute'         : cdnHost + 'angular-route@1.5.6/angular-route.min',
         'ngCookies'       : cdnHost + 'angular-cookies@1.5.6/angular-cookies.min',
@@ -69,8 +68,7 @@ require.config({
         
     },
     shim: {
-        'angular'              : { deps : ['jquery'], exports: 'angular' },
-        'angular-flex'         : { deps : ['angular', 'jquery'] },
+        'angular-flex'         : { deps : [cdnHost + 'angular@1.5.6/angular.min', 'jquery'] },
         'angular-vue'          : { deps : ['angular-flex', 'vue'] },
         'ngRoute'              : { deps : ['angular-flex'] },
         'ngCookies'            : { deps : ['angular-flex'] },
@@ -104,11 +102,14 @@ require.config({
         { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },
         { name: 'ammap'  , main: 'ammap'   , location : 'libs/ammap3/ammap' }
     ],
-    urlArgs: 'v=' + gitVersion
 });
 
 
 console.log('basePath', basePath)
+
+defineX('angular', ['angular-flex'], function(ng) {
+    return ng
+})
 
 defineX('routes', ['jquery', `routes/${basePath}`], function($){
     $("base").attr('href', `/${basePath}/`); // allow full page reload outside of  /basePath/*

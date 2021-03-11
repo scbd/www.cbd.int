@@ -258,23 +258,4 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         }];//return array
     }//securize
 
-
-    function runTheRun(){
-        require(['directives/meetings/conference-header'], ()=>{});
-
-        app.run(['$compile', '$rootScope','$location', function($compile, $rootScope,$location){
-          if(!$location.search().viewOnly){
-            require(['directives/meetings/conference-header'], function(){
-                var conferenceHeader = angular.element("#conferenceHeader");
-                conferenceHeader.css('display', 'block');
-                conferenceHeader.html('').append('<conference-header><conference-header>')
-                $compile(conferenceHeader.contents())($rootScope);
-            })
-          }
-        }]);
-    }
-
-    // /conferences/**
-    if(/^\/conferences\/[a-zA-Z0-9]+(.*)/.test(locationPath) )
-        runTheRun();
 });

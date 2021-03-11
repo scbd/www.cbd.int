@@ -1,4 +1,6 @@
-define(['app', 'text!./crumbs.html','json!https://attachments.cbd.int/bbi-platform-carousel.json'], function(app, templateHtml, slider) { 'use strict';
+import app from 'app'
+import templateHtml from './crumbs.html'
+import slider       from '~/data/bbi/bbi-platform-carousel.json'
 
     //============================================================
     //
@@ -20,5 +22,3 @@ define(['app', 'text!./crumbs.html','json!https://attachments.cbd.int/bbi-platfo
             }
         };
     });
-
-});

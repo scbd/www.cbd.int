@@ -1,4 +1,4 @@
-define(['angular', 'ngSanitize','toastr','ngMeta'], function(angular) { 'use strict';
+define(['angular-flex', 'ngSanitize','toastr','ngMeta'], function(angular) { 'use strict';
 
      var app = angular.module('app', angular.defineModules(
          ['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','ngMeta','ngVue', 'angular-cache', 'angularVue']));

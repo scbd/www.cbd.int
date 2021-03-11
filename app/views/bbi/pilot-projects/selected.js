@@ -1,6 +1,10 @@
-define(['data/bbi/links', 'directives/bbi/bbi-project-row', 'directives/bbi/menu'], function (links) { 
+import links from '~/data/bbi/links.json'
+import '~/directives/bbi/bbi-project-row'
+import '~/directives/bbi/menu'
 
-  return ['$scope','$http','$filter', function($scope,$http, $filter) {
+export { default as template } from './selected.html'
+
+export default ['$scope','$http','$filter', function($scope,$http, $filter) {
 
     var _ctrl = this
     _ctrl.links=links.links
@@ -62,4 +66,3 @@ define(['data/bbi/links', 'directives/bbi/bbi-project-row', 'directives/bbi/menu
       return $filter('term')(project.country)
     }
 }]
-})

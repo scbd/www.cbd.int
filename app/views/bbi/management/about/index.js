@@ -1,6 +1,12 @@
-define(['app', 'data/bbi/links-platform', 'data/bbi/links-about-platform',  'directives/bbi/menu','directives/bbi/menu-vert','directives/bbi/auto-linker'], function(app,links,linksAbout) { 'use strict';
+import links from '~/data/bbi/links-platform.json'
+import linksAbout from '~/data/bbi/links-about-platform.json'
+import '~/directives/bbi/menu'
+import '~/directives/bbi/menu-vert'
+import '~/directives/bbi/auto-linker'
 
-	return ['$location','$scope', function ($location,$scope) {
+export { default as template } from './index.html'
+
+export default ['$location','$scope', function ($location,$scope) {
 
         var _ctrl = this;
 				_ctrl.links=links.links;
@@ -17,4 +23,3 @@ define(['app', 'data/bbi/links-platform', 'data/bbi/links-about-platform',  'dir
 								$location.path(url);
 				}
     }];
-});

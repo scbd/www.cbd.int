@@ -1,6 +1,17 @@
-define(['app', 'lodash','data/bbi/links-platform','text!~/directives/bbi/forms/bbi-records-dialog.html','text!./first-dash-dialog.html','services/user-settings', 'directives/bbi/menu',"util/solr", 'providers/realm','directives/bbi/auto-linker','ngDialog'], function(app, _,links,recordsDialog,dashDialog) {
+import 'ngDialog'
+import _ from 'lodash'
+import links from '~/data/bbi/links-platform.json'
+import recordsDialog from '~/directives/bbi/forms/bbi-records-dialog.html'
+import dashDialog from './first-dash-dialog.html'
+import '~/services/user-settings'
+import '~/directives/bbi/menu'
+import "~/util/solr"
+import '~/providers/realm'
+import '~/directives/bbi/auto-linker'
+		
+export { default as template } from './index-man.html'
 
-	return ['$scope','$location','user','solr','realm','$http','$q','userSettings','$timeout','ngDialog', function ($scope,$location,user,solr,realm,$http,$q,userSettings,$timeout,ngDialog) {
+export default['$scope','$location','user','solr','realm','$http','$q','userSettings','$timeout','ngDialog', function ($scope,$location,user,solr,realm,$http,$q,userSettings,$timeout,ngDialog) {
 
         var _ctrl = this;
 				_ctrl.links=links.links;
@@ -256,4 +267,3 @@ define(['app', 'lodash','data/bbi/links-platform','text!~/directives/bbi/forms/b
 				}
 
     }];
-});

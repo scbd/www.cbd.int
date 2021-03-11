@@ -1,20 +1,20 @@
-define(['lodash',
-    'text!./del-dial.html',
-    'data/bbi/links-platform',
-    'app',
-    'directives/bbi/crumbs',
-    'directives/bbi/menu',
-    'ngDialog',
-    'authentication',
-    'services/storage',
-    'filters/moment',
-    'filters/lstring',
-    'filters/truncate',
-    'providers/realm',
-    'services/mongo-storage',
-], function(_, delDial, links) {
-    'use strict';
-    return ['$scope', '$route', '$http', '$location', '$q', 'user', 'IStorage', 'ngDialog', 'realm','$timeout','mongoStorage','$interval',
+import _ from 'lodash'
+import delDial from 'text!./del-dial.html'
+import links from 'data/bbi/links-platform'
+import 'ngDialog'
+import 'authentication'
+import '~/directives/bbi/crumbs'
+import '~/directives/bbi/menu'
+import '~/services/storage'
+import '~/filters/moment'
+import '~/filters/lstring'
+import '~/filters/truncate'
+import '~/providers/realm'
+import '~/services/mongo-storage'
+
+export { default as template } from './record-list.html'
+
+export default ['$scope', '$route', '$http', '$location', '$q', 'user', 'IStorage', 'ngDialog', 'realm','$timeout','mongoStorage','$interval',
         function($scope, $route, $http, $location, $q, user, storage, ngDialog, realm,$timeout,mongoStorage,$interval) {
 
             $scope.pageSize = 15;
@@ -688,4 +688,3 @@ define(['lodash',
             }
         }
     ];
-});

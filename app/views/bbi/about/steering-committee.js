@@ -1,6 +1,11 @@
-define(['app', 'lodash','data/bbi/links', 'directives/bbi/crumbs', 'directives/bbi/menu', 'directives/bbi/auto-linker'], function(app, _,links) { 'use strict';
+import '~/directives/bbi/crumbs'
+import '~/directives/bbi/menu'
+import '~/directives/bbi/auto-linker'
+import links from 'data/bbi/links'
 
-	return ['$location','$scope', function ($location,$scope) {
+export { default as template } from './steering-committee.html'
+
+export default ['$location','$scope', function ($location,$scope) {
 
         var _ctrl = this;
 				_ctrl.links=links.links;
@@ -15,4 +20,3 @@ define(['app', 'lodash','data/bbi/links', 'directives/bbi/crumbs', 'directives/b
 								$location.path(url);
 				}
     }];
-});

@@ -1,9 +1,12 @@
-define(['app', 'text!./menu.html','lodash','providers/locale'], function(app, templateHtml,_) { 'use strict';
+import app from 'app'
+import templateHtml from './menu.html'
+import _ from 'lodash'
+import '~/providers/locale'
 
     //============================================================
     //
     //============================================================
-    app.directive('menu',["locale","$window",  function(locale,$window) {
+    app.directive('menu',["locale","$window", '$location',  function(locale,$window, $location) {
         return {
             restrict: 'E',
             template : templateHtml,
@@ -23,9 +26,6 @@ define(['app', 'text!./menu.html','lodash','providers/locale'], function(app, te
                       }
                   });
 
-
-            },
-            controller: function ($scope, $location) {
                 // ============================================================
                 //
                 // ============================================================
@@ -59,5 +59,3 @@ define(['app', 'text!./menu.html','lodash','providers/locale'], function(app, te
             }
         };
     }]);
-
-});

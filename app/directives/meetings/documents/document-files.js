@@ -1,6 +1,6 @@
 import app  from 'app'
 import _    from 'lodash'
-import html from 'text!./document-files.html'
+import html from './document-files.html'
 
 	var LANGUAGES = { ar : "العربية", en : "English", es : "Español", fr : "Français", ru : "Русский", zh : "中文" };
     var MIMES = {
