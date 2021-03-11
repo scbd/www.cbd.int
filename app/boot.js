@@ -14,10 +14,10 @@ require.config({
     paths: {
         'authentication'  : 'services/authentication',
         'bs4'             : cdnHost + 'bootstrap@4.1.3/dist/js/bootstrap',
-        'ngRoute'         : cdnHost + 'angular-route@1.5.6/angular-route.min',
-        'ngCookies'       : cdnHost + 'angular-cookies@1.5.6/angular-cookies.min',
-        'ngAnimate'       : cdnHost + 'angular-animate@1.5.6/angular-animate.min',
-        'ngSanitize'      : cdnHost + 'angular-sanitize@1.5.6/angular-sanitize.min',
+        'ngRoute'         : cdnHost + 'angular-route@1.8.2/angular-route.min',
+        'ngCookies'       : cdnHost + 'angular-cookies@1.8.2/angular-cookies.min',
+        'ngAnimate'       : cdnHost + 'angular-animate@1.8.2/angular-animate.min',
+        'ngSanitize'      : cdnHost + 'angular-sanitize@1.8.2/angular-sanitize.min',
         'angular-flex'    : 'libs/angular-flex/angular-flex',
         'ngDialog'        : cdnHost + 'ng-dialog@0.6.1/js/ngDialog.min',
         'text'            : 'libs/requirejs-text/text',
@@ -68,7 +68,7 @@ require.config({
         
     },
     shim: {
-        'angular-flex'         : { deps : [cdnHost + 'angular@1.5.6/angular.min', 'jquery'] },
+        'angular-flex'         : { deps : [cdnHost + 'angular@1.8.2/angular.min', 'jquery'] },
         'angular-vue'          : { deps : ['angular-flex', 'vue'] },
         'ngRoute'              : { deps : ['angular-flex'] },
         'ngCookies'            : { deps : ['angular-flex'] },
