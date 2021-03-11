@@ -1,6 +1,6 @@
 import 'ngCookies'
 import 'angular-vue'
-import 'directives/print-smart/print-smart-checkout'
+import '~/directives/print-smart/print-smart-checkout'
 import './meeting-document'
 import 'authentication'
 import 'angular-cache'

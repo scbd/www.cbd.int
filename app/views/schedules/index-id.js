@@ -1,4 +1,10 @@
-define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sanitizer', 'services/conference-service'], function(app, _, moment) { "use strict";
+import _ from 'lodash'
+import moment from 'moment-timezone'
+import '~/filters/moment'
+import '~/filters/html-sanitizer'
+import '~/services/conference-service'
+
+export { default as template } from './index-id.html';
 
     var CALENDAR_SETTINGS = {
         lastDay: '[Yesterday] - dddd D',
@@ -9,7 +15,7 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
         sameElse: 'dddd, D MMMM YYYY'
     };
 
-	return ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService', function($scope, $http, $route, $q, defaultStreamId, conferenceService) {
+export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService', function($scope, $http, $route, $q, defaultStreamId, conferenceService) {
 
         var _streamData;
 
@@ -110,4 +116,3 @@ define(['app', 'lodash', 'moment-timezone', 'filters/moment', 'filters/html-sani
             return new Date();
         }
 	}];
-});
