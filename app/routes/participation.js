@@ -1,3 +1,4 @@
+import 'ngRoute'
 import app from 'app';
 import { mapView, currentUser, securize, injectRouteParams } from './mixin';
 

@@ -1,3 +1,4 @@
+import 'ngRoute'
 import 'app'
 import 'jquery'
 import 'ngRoute'
