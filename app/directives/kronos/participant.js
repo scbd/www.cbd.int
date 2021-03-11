@@ -1,6 +1,11 @@
-define(['app', 'text!./participant.html','./address','services/conference-service','directives/kronos/user-messages','directives/file'], function(app, html) { 'use strict';
+import app from 'app'
+import html from './participant.html'
+import './address'
+import '~/services/conference-service'
+import '~/directives/kronos/user-messages'
+import '~/directives/file'
 
-	return app.directive('participant', ['$http','$timeout','conferenceService','$filter','$q',function($http,$timeout,conferenceService,$filter,$q) {
+app.directive('participant', ['$http','$timeout','conferenceService','$filter','$q',function($http,$timeout,conferenceService,$filter,$q) {
 
     return {
 			restrict : "E",
@@ -296,4 +301,3 @@ define(['app', 'text!./participant.html','./address','services/conference-servic
 			}
 		};
 	}]);
-});

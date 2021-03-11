@@ -1,6 +1,18 @@
-define(['app','json!https://s3.amazonaws.com/cbddocumentspublic-imagebucket-15w2zyxk3prl8/idb-data/menu.json','lodash','directives/idb-celebrations/menu-vertical','filters/lstring','filters/truncate','services/storage','directives/idb-celebrations/zoom-map','filters/term','filters/moment','filters/trust-as-resource-url'], function(app,links,_) { 'use strict';
+import _ from 'lodash'
+import links from '~/data/idb/menu.json'
+import '~/directives/idb-celebrations/menu-vertical'
+import '~/filters/lstring'
+import '~/providers/locale'
+import '~/filters/truncate'
+import '~/services/storage'
+import '~/directives/idb-celebrations/zoom-map'
+import '~/filters/term'
+import '~/filters/moment'
+import '~/filters/trust-as-resource-url'
 
-	return ['$location', '$routeParams','$http','$filter','$q','IStorage','locale','$timeout','user', '$scope',  function( $location, $routeParams,$http,$filter,$q,storage,locale,$timeout, user, $scope) {
+export { default as template } from './idb-profile.html'
+
+export default ['$location', '$routeParams','$http','$filter','$q','IStorage','locale','$timeout','user', '$scope',  function( $location, $routeParams,$http,$filter,$q,storage,locale,$timeout, user, $scope) {
 
 		var _ctrl 		= this;
 		var canceler = null;
@@ -296,4 +308,3 @@ define(['app','json!https://s3.amazonaws.com/cbddocumentspublic-imagebucket-15w2
 					return pagePromise;
 			}// query
 	}];
-});

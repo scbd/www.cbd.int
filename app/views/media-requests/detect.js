@@ -1,10 +1,11 @@
 import _ from 'lodash'
-import 'app'
 import '~/filters/lstring'
 import '~/services/conference-service'
 import '~/directives/articles/cbd-article'
- 
-	export default ['$scope', '$http', '$route', '$location', '$window', 'conferenceService', 'authentication', 'user', function($scope, $http, $route, $location, $window, conferenceService, authentication, user) {
+
+export { default as template } from './detect.html'
+
+export default ['$scope', '$http', '$route', '$location', '$window', 'conferenceService', 'authentication', 'user', function($scope, $http, $route, $location, $window, conferenceService, authentication, user) {
 
     $scope.isAuthenticated = user.isAuthenticated;
     $scope.signIn = signIn;

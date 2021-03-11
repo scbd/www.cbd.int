@@ -1,6 +1,12 @@
-define(['app', 'underscore', 'alasql', 'xlsx', 'moment', 'authentication'], function(app, _, alasql, xlsx, moment) { "use strict";
+import _ from 'lodash'
+import alasql from 'alasql'
+import moment from 'moment'
+import 'xlsx'
+import 'authentication'
 
-	return ['$scope', '$http', '$q', function($scope, $http, $q) {
+export { default as template } from './index.html'
+
+export default ['$scope', '$http', '$q', function($scope, $http, $q) {
 
 		$q.all([getMeetings(),getCountries()]).then(function (results) {
 			$scope.meetings  = results[0];
@@ -294,4 +300,3 @@ define(['app', 'underscore', 'alasql', 'xlsx', 'moment', 'authentication'], func
 		}
 
 	}];
-});
