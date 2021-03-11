@@ -1,6 +1,6 @@
 import '~/filters/lstring'
 import _   from 'lodash'
-import app from 'app'
+import app from '~/app'
 import template from './decision-reference.html'
 
 

@@ -1,5 +1,5 @@
 import 'ngRoute'
-import app from 'app';
+import app from '~/app';
 import { securize, currentUser, mapView } from './mixin';
 import * as angularViewWrapper from '~/views/angular-view-wrapper'
 import * as indexView          from '~/views/bbi/index-bbi';

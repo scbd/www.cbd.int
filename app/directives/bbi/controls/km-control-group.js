@@ -1,4 +1,4 @@
-define(['app', 'text!./km-control-group.html', 'jquery','lodash'], function(app, template,$, _) { 'use strict';
+define(['~/app', 'text!./km-control-group.html', 'jquery','lodash'], function(app, template,$, _) { 'use strict';
 
 	app.directive('kmControlGroup', [function ()
 	{

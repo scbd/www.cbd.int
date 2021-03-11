@@ -1,4 +1,4 @@
-define(['app', 'text!./carousel.html','moment','filters/moment'], function(app, html,moment) { 'use strict';
+define(['~/app', 'text!./carousel.html','moment','~/filters/moment'], function(app, html,moment) { 'use strict';
 
 	return app.directive('carousel', ['$timeout','$location', function($timeout,$location) {
 		return {

@@ -1,6 +1,6 @@
 import '~/directives/bbi/ani-scroll'
 import _ from 'lodash'
-import app from 'app'
+import app from '~/app'
 import templateHtml from './slider.html'
 import bbiSlider from '~/data/bbi/bbi-slider.json'
 

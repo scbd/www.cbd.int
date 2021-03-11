@@ -1,4 +1,4 @@
-define(['app','require', 'angular'], function(app, require, ng) { 'use strict';
+define(['~/app','require', 'angular'], function(app, require, ng) { 'use strict';
 
 	return app.directive('viewInjector', ['$injector', '$compile', '$q', function($injector, $compile, $q) {
 		return {

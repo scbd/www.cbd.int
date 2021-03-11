@@ -1,5 +1,5 @@
 import _   from 'lodash'
-import app from 'app'
+import app from '~/app'
 import 'angular-cache'
 
     app.factory("articleService", ['$http', 'CacheFactory', function ($http, CacheFactory) {

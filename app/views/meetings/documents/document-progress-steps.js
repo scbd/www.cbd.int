@@ -1,4 +1,4 @@
-define(['app', 'require', 'lodash','text!./document-progress-steps.html', 'filters/moment', 'filters/initials', 'ngDialog', 'directives/select-user'], function(app, require, _, template) { 'use strict';
+define(['~/app', 'require', 'lodash','text!./document-progress-steps.html', '~/filters/moment', '~/filters/initials', 'ngDialog', 'directives/select-user'], function(app, require, _, template) { 'use strict';
 
     app.directive('documentProgressSteps', ['ngDialog', '$q',"$http", function(ngDialog, $q, $http) {
         return {

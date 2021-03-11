@@ -1,4 +1,4 @@
-import app from 'app'
+import app from '~/app'
 import template from './disclaimer.html'
 
 app.directive('disclaimer', ['$cookies', function( $cookies) {

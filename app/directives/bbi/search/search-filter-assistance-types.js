@@ -1,4 +1,4 @@
-define(['text!./search-filter-assistance-types.html', 'app', 'lodash','angular'], function(template, app, _,angular) { 'use strict';
+define(['text!./search-filter-assistance-types.html', '~/app', 'lodash','angular'], function(template, app, _,angular) { 'use strict';
 
 	//==============================================
 	//

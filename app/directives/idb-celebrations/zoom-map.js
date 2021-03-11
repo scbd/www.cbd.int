@@ -1,4 +1,4 @@
-define(['text!./zoom-map.html', 'app', 'lodash',
+define(['text!./zoom-map.html', '~/app', 'lodash',
     'ammap',
     'shim!ammap3WorldHigh[ammap]',
     'shim!ammap-theme[ammap]',

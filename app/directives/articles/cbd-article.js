@@ -1,10 +1,10 @@
-import app from 'app'
+import app from '~/app'
 import template from './cbd-article.html'
 import _ from 'lodash'
 import require from 'require'
 import './cbd-article-cover-image'
 import '~/services/article-service'
-import 'authentication'
+import '~/authentication'
 
 	require(['css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@22.0.0/build/ckeditor.css']);
 

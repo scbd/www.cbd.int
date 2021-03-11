@@ -1,8 +1,8 @@
-define(['text!./select-contact.html','app','lodash','ngDialog',
-// 'directives/bbi/forms/edit-bbi-contact',
-// 'directives/bbi/forms/edit-organization',
-'providers/locale',
-'filters/term',
+define(['text!./select-contact.html','~/app','lodash','ngDialog',
+// '~/directives/bbi/forms/edit-bbi-contact',
+// '~/directives/bbi/forms/edit-organization',
+'~/providers/locale',
+'~/filters/term',
 'ngInfiniteScroll'
 ],
 function(template,app,_) {

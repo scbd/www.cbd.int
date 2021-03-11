@@ -1,4 +1,4 @@
-define(['app','data/bbi/auto-links'], function(app,autoLinks) {
+define(['~/app','~/data/bbi/auto-links.json'], function(app,autoLinks) {
   'use strict';
 
   app.directive('autoLinker',['$timeout','$compile','$location', function($timeout,$compile,$location) {

@@ -1,4 +1,4 @@
-﻿define(['app', 'lodash'], function(app, _) {
+﻿define(['~/app', 'lodash'], function(app, _) {
     'use strict';
 
     app.factory("IStorage", ["$http", "$q", "authentication",  function($http, $q, authentication) {

@@ -1,4 +1,4 @@
-define(['app', 'text!./menu-vertical.html','providers/locale','ngSmoothScroll'], function(app, templateHtml) { 'use strict';
+define(['~/app', 'text!./menu-vertical.html','~/providers/locale','ngSmoothScroll'], function(app, templateHtml) { 'use strict';
 
     //============================================================
     //

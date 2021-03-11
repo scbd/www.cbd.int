@@ -1,7 +1,7 @@
 import '~/directives/bbi/crumbs'
 import '~/directives/bbi/menu'
 import '~/directives/bbi/auto-linker'
-import links from 'data/bbi/links'
+import links from '~/data/bbi/links.json'
 
 export { default as template } from './steering-committee.html'
 

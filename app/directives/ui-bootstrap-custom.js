@@ -465,7 +465,7 @@ define(['angular'], function(angular) {
      * `options({})` allows global configuration of all tooltips in the
      * application.
      *
-     *   var app = angular.module( 'App', ['ui.bootstrap.tooltip'], function( $tooltipProvider ) {
+     *   var app = angular.module( '~/app', ['ui.bootstrap.tooltip'], function( $tooltipProvider ) {
      *     // place tooltips left instead of top by default
      *     $tooltipProvider.options( { placement: 'left' } );
      *   });

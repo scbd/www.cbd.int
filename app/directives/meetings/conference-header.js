@@ -1,4 +1,4 @@
-﻿define(['app', 'angular', 'text!./conference-header.html', 'services/conference-service', 'filters/lstring'], function(app, ng, html){
+﻿define(['~/app', 'angular', 'text!./conference-header.html', '~/services/conference-service', '~/filters/lstring'], function(app, ng, html){
 
     return app.directive('conferenceHeader', ['$location', 'conferenceService', '$q', '$rootScope',
      function($location, conferenceService, $q, $rootScope){

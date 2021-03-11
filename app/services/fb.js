@@ -1,5 +1,7 @@
-define(['app','ngMeta'], function(app) {'use strict';
-        require(['facebook'], function(FB) {
+import app from '~/app'
+import 'ngMeta'
+
+        import('facebook').then(function(FB) {
           if (FB && FB.AppEvents && FB.init) {
             FB.init({
               appId: '168158870409056',
@@ -147,4 +149,3 @@ define(['app','ngMeta'], function(app) {'use strict';
 
 
         }]);
-});

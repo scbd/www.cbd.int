@@ -1,5 +1,5 @@
 import './disclaimer'
-import app from 'app'
+import app from '~/app'
 import template from './header-decisions.html'
 
 	app.directive('headerDecisions', [function() {

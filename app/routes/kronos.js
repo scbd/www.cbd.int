@@ -1,5 +1,5 @@
 import 'ngRoute'
-import app from 'app';
+import app from '~/app';
 import { mapView, securize, currentUser } from './mixin';
 
 // Static views

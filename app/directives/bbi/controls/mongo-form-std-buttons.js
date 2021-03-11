@@ -1,4 +1,4 @@
-define(['app', 'text!./mongo-form-std-buttons.html','lodash'], function(app,  template,_) { 'use strict';
+define(['~/app', 'text!./mongo-form-std-buttons.html','lodash'], function(app,  template,_) { 'use strict';
 
 	app.directive('mongoFormStdButtons', ["$q","mongoStorage", function ($q,mongoStorage)
 	{

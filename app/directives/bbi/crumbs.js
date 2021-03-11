@@ -1,4 +1,4 @@
-import app from 'app'
+import app from '~/app'
 import templateHtml from './crumbs.html'
 import slider       from '~/data/bbi/bbi-platform-carousel.json'
 

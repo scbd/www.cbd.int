@@ -1,4 +1,4 @@
-define(['app'], function(app) {
+define(['~/app'], function(app) {
 
     app.factory("userSettings", ['$http','$q','authentication','$interval','$timeout', function($http,$q,authentication,$interval,$timeout) {
 

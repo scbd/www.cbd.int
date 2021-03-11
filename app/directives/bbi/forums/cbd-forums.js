@@ -1,4 +1,4 @@
-define(['app', 'text!./forum-details-directive.html',
+define(['~/app', 'text!./forum-details-directive.html',
     'text!./forum-post-directive.html', 'text!./file-upload-directive.html',
     'text!./thread-list-directive.html', 'text!./post-list-directive.html',
     'lodash',

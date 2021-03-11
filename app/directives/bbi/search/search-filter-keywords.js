@@ -1,4 +1,4 @@
-define(['text!./search-filter-keywords.html', 'app','lodash'], function(template, app,_) { 'use strict';
+define(['text!./search-filter-keywords.html', '~/app','lodash'], function(template, app,_) { 'use strict';
 
     app.directive('searchFilterKeywords', ['$location', function ($location) {
 

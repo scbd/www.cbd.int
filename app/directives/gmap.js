@@ -1,4 +1,4 @@
-define(['app', 'underscore', 'util/colors'],
+define(['~/app', 'underscore', 'util/colors'],
   function(module, _, colors) {
     return module.directive('gmap', ['$window', 'reports', '$rootScope', '$http', '$q',
       function($window, reports, $rootScope, $http, $q) {

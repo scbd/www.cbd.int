@@ -1,4 +1,4 @@
-define(['app', 'lodash'], function(app, _) { 'use strict';
+define(['~/app', 'lodash'], function(app, _) { 'use strict';
 
 	var _exports = {
 		escape : solrEscape,

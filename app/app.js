@@ -1,6 +1,10 @@
-define(['angular-flex', 'ngSanitize','toastr','ngMeta'], function(angular) { 'use strict';
+import angular from 'angular-flex'
+import 'ngSanitize'
+import 'toastr'
+import 'ngMeta'
 
-     var app = angular.module('app', angular.defineModules(
+
+const app = angular.module('app', angular.defineModules(
          ['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','ngMeta','ngVue', 'angular-cache', 'angularVue']));
 
 
@@ -111,5 +115,4 @@ define(['angular-flex', 'ngSanitize','toastr','ngMeta'], function(angular) { 'us
       }
     }
 
-    return app;
-});
+export default app;

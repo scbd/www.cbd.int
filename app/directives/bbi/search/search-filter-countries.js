@@ -1,4 +1,4 @@
-define(['text!./search-filter-countries.html','app','lodash','filters/byLetter'], function(template, app,_) { 'use strict';
+define(['text!./search-filter-countries.html','~/app','lodash','~/filters/byLetter'], function(template, app,_) { 'use strict';
 
     app.directive('searchFilterCountries', ["$http",'$timeout', function ($http,  $timeout) {
     return {

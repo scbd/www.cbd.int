@@ -1,8 +1,8 @@
 ﻿import _   from 'lodash'
-import app from 'app'
+import app from '~/app'
 import '~/services/article-service'
 import '~/services/conference-service'
-import 'directives/social-media'
+import '~/directives/social-media'
 import '~/filters/lstring'
 import '~/filters/moment' 
 

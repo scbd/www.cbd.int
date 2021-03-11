@@ -12,7 +12,6 @@ require.config({
     waitSeconds: 30,
     baseUrl : '/app/',
     paths: {
-        'authentication'  : 'services/authentication',
         'bs4'             : cdnHost + 'bootstrap@4.1.3/dist/js/bootstrap',
         'ngRoute'         : cdnHost + 'angular-route@1.8.2/angular-route.min',
         'ngCookies'       : cdnHost + 'angular-cookies@1.8.2/angular-cookies.min',
@@ -111,10 +110,6 @@ defineX('angular', ['angular-flex'], function(ng) {
     return ng
 })
 
-defineX('routes', ['jquery', `routes/${basePath}`], function($){
-    $("base").attr('href', `/${basePath}/`); // allow full page reload outside of  /basePath/*
-})
-
 defineX ('popper.js', [ cdnHost + 'popper.js@1.16.0/dist/umd/popper.min'], function(popper){
   window.Popper = popper
   return popper
@@ -153,11 +148,20 @@ defineX('dropbox-dropins', ['https://www.dropbox.com/static/api/2/dropins.js'], 
 
 defineX('jquery', function(){ if(window.jQuery) { return window.jQuery; }});
 
-// BOOT
-require(['angular', 'app', 'routes', 'template', 'ngSanitize', 'ngRoute', 'providers/extended-route'], function(ng, app) {
-    ng.element(document).ready(function(){
-        ng.bootstrap(document, [app.name]);
-    });
-});
+  if(document) { // BOOT App
+    const deps = [
+      import('angular'),
+      import('~/app'),
+      import('ngSanitize'),
+      import('ngRoute'),
+      import('~/template'),
+      import(`./routes/${basePath}.js`).then(()=>{ $("base").attr('href', `/${basePath}/`) }),// set route base-path to allow full page reload outside of  /basePath/*
+    ];
 
+    Promise.all(deps).then(([ng, { default: app }]) => {
+      ng.element(document).ready(function () {
+        ng.bootstrap(document, [app.name]);
+      });
+    }).catch((e)=>{ console.error('Error bootstrapping the app:', e) });
+  } 
 }

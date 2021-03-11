@@ -6,12 +6,13 @@ import alias                    from '@rollup/plugin-alias';
 import nodeResolve              from '@rollup/plugin-node-resolve'
 import json                     from '@rollup/plugin-json';
 import commonjs                 from 'rollup-plugin-commonjs';
+import dynamicImportVariables   from 'rollup-plugin-dynamic-import-variables';
 import amd                      from 'rollup-plugin-amd';
 import vue                      from 'rollup-plugin-vue'
 import { string }               from "rollup-plugin-string";
 import { terser }               from 'rollup-plugin-terser';
 import glob                     from 'glob';
-import bootWebApp from './app/boot.js';
+import bootWebApp               from './app/boot.js';
 
 const asyncGlob = util.promisify(glob);
 
@@ -19,24 +20,17 @@ const isWatchOn = process.argv.includes('--watch');
 const cwd       = path.join(process.cwd(), 'app');
 const outputDir = 'dist';
 
-let externals = []
+let externals = ['require']
 
 export default async function(){
   
   externals = [...externals, ...await loadExternals()];
 
-  const toBundle = [
-    ...await asyncGlob('*.js', { cwd }),
-    ...await asyncGlob('{data,directives,routes,filters,providers,services,util,views}/**/*.{js,json}', { cwd }),
-    //'components/meetings/sessions/session-list.vue'
-  ];
-
   return [
-    ...toBundle.map((o)=>bundle(o)),
+    bundle('boot.js')
   ];
 }
 
-//Transpile and Expose Vue component to angularJS as AMD module
 function bundle(relativePath, baseDir='app') {
 
   const ext = path.extname(relativePath);
@@ -55,11 +49,13 @@ function bundle(relativePath, baseDir='app') {
         { find: /^~\/(.*)/,   replacement:`${process.cwd()}/app/$1` },
         { find: /^text!(.*)/, replacement:`$1` },
       ]}),
+      shimAsExternal(),
       string({ include: "**/*.html" }),
       json({ namedExports: true }),
       injectCssToDom(),
       vue(),
       amd({ include: 'app/**/*.js'}),
+      dynamicImportVariables({ }),
       commonjs({ include: 'node_modules/**/*.js'}),
       nodeResolve({ browser: true, mainFields: [ 'browser', 'module', 'main' ] }),
       isWatchOn ? null : getBabelOutputPlugin({
@@ -82,14 +78,15 @@ async function loadExternals() {
   const window     = { location : { pathname: '/' } }; 
   const defineJs   = (module) => { if(typeof(module)==='string') externals.push(module) };
   const requireJs  = ( )      => { };
-  requireJs.config = (config) => { Object.keys(config.paths).forEach(defineJs); }
+  requireJs.config = (config) => { 
+    const modules = [
+      ...Object.keys(config.paths),
+      ...config.packages.map(p=>p.name)
+    ]
+    modules.forEach(defineJs)
+  }
 
   bootWebApp(window, requireJs, defineJs);
-
-  //Define all app file as Externals
-  const appFiles = (await asyncGlob('**/*.js', { cwd })).map(o=>o.replace(/\.js$/, ''));
-
-  appFiles.forEach(m=>externals.push(m));
 
   return externals;
 }
@@ -105,6 +102,20 @@ function changeExtension(file, extension) {
 //////////////////
 // Custom Plugin
 //////////////////
+function shimAsExternal(options = {}) {
+
+  const shimTag = /^shim!/; 
+
+  return {
+    name: 'shimAsExternal',
+    resolveId(importeeId, importer) {  
+
+      if(!shimTag.test(importeeId)) return null;
+
+      return {id: importeeId, external: true};
+    }
+  }
+}
 
 function injectCssToDom(options = {}) {
 

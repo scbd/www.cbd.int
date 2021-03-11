@@ -1,4 +1,4 @@
-define(['app', 'lodash'], function(app, _) {
+define(['~/app', 'lodash'], function(app, _) {
 
     app.factory("mongoStorage", ['$http','$rootScope','$q','$timeout','$filter', function($http,$rootScope,$q,$timeout,$filter) {
 

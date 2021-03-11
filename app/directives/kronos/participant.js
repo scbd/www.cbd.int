@@ -1,4 +1,4 @@
-import app from 'app'
+import app from '~/app'
 import html from './participant.html'
 import './address'
 import '~/services/conference-service'

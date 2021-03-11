@@ -2,7 +2,7 @@ import _ from 'lodash'
 import alasql from 'alasql'
 import moment from 'moment'
 import 'xlsx'
-import 'authentication'
+import '~/authentication'
 
 export { default as template } from './index.html'
 

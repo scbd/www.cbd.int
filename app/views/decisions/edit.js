@@ -1,5 +1,5 @@
 import 'ngDialog'
-import 'authentication'
+import '~/authentication'
 import '~/filters/moment'
 import '~/filters/lodash'
 import '~/filters/lstring'

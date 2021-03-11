@@ -1,4 +1,4 @@
-define(['text!./search-filter-aichi.html', 'app', 'lodash','angular','directives/bbi/toggle'], function(template, app, _,angular) { 'use strict';
+define(['text!./search-filter-aichi.html', '~/app', 'lodash','angular','~/directives/bbi/toggle'], function(template, app, _,angular) { 'use strict';
 
 app.directive('searchFilterAichi',['$http','Thesaurus','$timeout', function ($http,thesaurus,$timeout) {
     return {

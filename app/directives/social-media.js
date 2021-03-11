@@ -1,6 +1,8 @@
-﻿define(['app', 'text!./social-media.html', 'require'], function(app, html, require) { 'use strict';
+﻿import app from '~/app'
+import html from './social-media.html'
+import 'require'
 
-	return app.directive('socialMedia', ['$window', function($window) {
+	app.directive('socialMedia', ['$window', function($window) {
 		return {
 			restrict : "E",
 			template : html,
@@ -13,7 +15,7 @@
 					setServiceReady('twitter');
 				})
 
-				require(['services/fb'], function(){
+				import('~/services/fb').then(function(){
 					if ($window.FB && $window.FB.XFBML){
 						$window.FB.XFBML.parse();
 						setServiceReady('facebook');
@@ -28,4 +30,3 @@
 			}
 		};
 	}]);
-});

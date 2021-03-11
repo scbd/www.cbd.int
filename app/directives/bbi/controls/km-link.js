@@ -1,4 +1,4 @@
-define(['app', 'angular', 'jquery', 'text!./km-link.html','lodash'], function(app, angular, $, template,_) { 'use strict';
+define(['~/app', 'angular', 'jquery', 'text!./km-link.html','lodash'], function(app, angular, $, template,_) { 'use strict';
 //============================================================
 //
 //

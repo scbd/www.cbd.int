@@ -1,4 +1,4 @@
-import app from 'app'
+import app from '~/app'
 
   app.directive('sorterMongo',['$timeout', function($timeout) {
   return {

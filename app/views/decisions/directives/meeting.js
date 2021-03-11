@@ -1,6 +1,6 @@
 import '~/filters/lstring'
 import '~/filters/moment'
-import app from 'app'
+import app from '~/app'
 import template from './meeting.html'
 import _ from 'lodash'
 

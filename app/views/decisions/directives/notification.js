@@ -2,7 +2,7 @@ import 'moment'
 import '~/filters/lstring'
 import '~/directives/meetings/documents/document-files'
 import _ from 'lodash'
-import app from 'app'
+import app from '~/app'
 import template from 'text!./notification.html'
 
 	app.directive('decisionNotification', ['$http', '$q', function($http, $q) {

@@ -6,7 +6,7 @@ import '~/directives/meetings/documents/document-files'
 import './directives/decision-reference'
 import './directives/meeting'
 import './directives/header-decisions'
-import app from 'app'
+import app from '~/app'
 import _   from 'lodash'
 import ng  from 'angular'
 

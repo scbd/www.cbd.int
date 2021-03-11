@@ -1,4 +1,4 @@
-define(['app', 'text!./internal-comments.html', 'lodash', 'filters/initials', 'filters/moment'], function(app, html, _) { 'use strict';
+define(['~/app', 'text!./internal-comments.html', 'lodash', '~/filters/initials', '~/filters/moment'], function(app, html, _) { 'use strict';
 
 	return app.directive('internalComments', ['$http', '$rootScope', function($http, $rootScope) {
 		return {

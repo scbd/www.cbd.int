@@ -1,7 +1,7 @@
 import '~/filters/lstring'
 import '~/directives/print-smart/print-smart-checkout'
 import './meeting-document'
-import 'authentication'
+import '~/authentication'
 import 'angular-cache'
 import '~/services/conference-service'
 import _  from 'lodash'

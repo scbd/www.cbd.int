@@ -1,4 +1,4 @@
-define(['text!./search-filter-themes.html', 'app', 'lodash','angular'], function(template, app, _,angular) { 'use strict';
+define(['text!./search-filter-themes.html', '~/app', 'lodash','angular'], function(template, app, _,angular) { 'use strict';
 
 	//==============================================
 	//

@@ -1,5 +1,5 @@
 import 'magnific-popup'
-import app from 'app'
+import app from '~/app'
 
     app.directive('videosLoaded', function() {
         return {

@@ -1,7 +1,7 @@
 import '~/directives/aichi-targets/sorter'
 import '~/directives/aichi-targets/pagination'
 import '~/providers/locale'
-import app from 'app'
+import app from '~/app'
 import _ from 'lodash'
 import templateHtml from './box-list.html'
 import targetsData from '~/data/aichi-targets/targets.json'

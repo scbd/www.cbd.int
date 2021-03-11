@@ -1,4 +1,4 @@
-define(['app', 'text!./select-user.html', 'lodash'], function(app, html, _) { 'use strict';
+define(['~/app', 'text!./select-user.html', 'lodash'], function(app, html, _) { 'use strict';
 
 	return app.directive('selectUser', ['$http', function($http) {
 		return {

@@ -1,7 +1,7 @@
 import 'ngDialog'
 import '~/filters/lstring'
 import locations from './locations'
-import app from 'app'
+import app from '~/app'
 import templateHtml from './print-smart-checkout.html'
 import _ from 'lodash'
 import ng from 'angular'

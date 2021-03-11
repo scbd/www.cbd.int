@@ -1,4 +1,4 @@
-define(['text!./search-filter-dates.html', 'app', 'directives/bbi/controls/km-date'], function(template, app) { 'use strict';
+define(['text!./search-filter-dates.html', '~/app', '~/directives/bbi/controls/km-date'], function(template, app) { 'use strict';
 
     app.directive('searchFilterDates', ["$location", function ($location) {
         return {

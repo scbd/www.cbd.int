@@ -24,7 +24,11 @@
     <script src="<%=cdnUrl%>requirejs@2.2.0/require.js"></script>
     <script src="<%=cdnUrl%>jquery@3.4.1/dist/jquery.slim.min.js"  crossorigin="anonymous"></script>
     <script>
-        require(["app/boot.js?v=<%=gitVersion%>"], function(boot){
+        require.config({
+            waitSeconds: 30,
+            baseUrl : '/app/',
+        });
+        require(["boot"], function(boot){
             boot(window, require, define);
         });
     </script>

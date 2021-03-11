@@ -1,4 +1,4 @@
-define(['app','text!./km-inputtext-ml.html','angular'], function(app,template,angular) {
+define(['~/app','text!./km-inputtext-ml.html','angular'], function(app,template,angular) {
   //============================================================
   //
   //

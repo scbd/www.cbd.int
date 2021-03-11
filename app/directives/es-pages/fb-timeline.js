@@ -1,4 +1,4 @@
-define(['app', 'text!./fb-timeline.html', 'services/fb'], function(app, html) {
+define(['~/app', 'text!./fb-timeline.html'], function(app, html) {
   'use strict';
   var _savedHtml;
 
@@ -9,7 +9,7 @@ define(['app', 'text!./fb-timeline.html', 'services/fb'], function(app, html) {
       replace: true,
       scope: {},
       compile: function($elm) {
-        require(['services/fb'], function() {
+        import('~/services/fb').then(function() {
           if (window.FB && window.FB.XFBML)
             window.FB.XFBML.parse();
         });

@@ -1,4 +1,4 @@
-define(['text!./view-bbi-profile.html', 'app', 'angular', 'lodash', 'services/storage'
+define(['text!./view-bbi-profile.html', '~/app', 'angular', 'lodash', '~/services/storage'
 ], function(template, app, angular, _) {
 	'use strict';
 

@@ -1,4 +1,4 @@
-define(['app', 'text!./checkbox.html'], function(app, html) { 'use strict';
+define(['~/app', 'text!./checkbox.html'], function(app, html) { 'use strict';
 
 	return app.directive('checkbox', [function() {
 		return {

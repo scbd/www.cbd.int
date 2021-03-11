@@ -1,7 +1,15 @@
-define(['app', 'angular','text!./toast.html',
-'lodash', 'PageHeaderFixed','PageHeader','PageFooter', 'bs4', 'ngVue','providers/realm','./directives/bread-crumbs'], function(app, ng, toastTemplate, _, PageHeaderFixedComp, PageHeaderComp, PageFooterComp) {
-    'use strict';
-
+import _ from 'lodash'
+import app from '~/app'
+import ng from 'angular'
+import toastTemplate from './toast.html'
+import PageHeaderFixedComp from 'PageHeaderFixed'
+import PageHeaderComp from 'PageHeader'
+import PageFooterComp from 'PageFooter'
+import 'bs4'
+import 'ngVue'
+import '~/providers/realm'
+import './directives/bread-crumbs'
+              
     loadHeaderFooter()
     app.controller('TemplateController', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$location', 
                                   function($rootScope,   $window,   $browser,   $document,   authentication,   $q,  toastr,  $templateCache,   $location) {
@@ -147,4 +155,3 @@ define(['app', 'angular','text!./toast.html',
         app.value('PageHeader',      PageHeader);
         app.value('PageFooter',      PageFooter);
     }
-});

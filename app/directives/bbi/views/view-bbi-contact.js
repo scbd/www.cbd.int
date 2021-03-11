@@ -1,9 +1,9 @@
-define(['text!./view-bbi-contact.html', 'app', 'angular', 'lodash', 'authentication',
-	'services/editFormUtility',
-	'services/storage',
-	'services/workflows',
-	'providers/locale',
-	'filters/term',
+define(['text!./view-bbi-contact.html', '~/app', 'angular', 'lodash', '~/authentication',
+	'~/services/editFormUtility',
+	'~/services/storage',
+	'~/services/workflows',
+	'~/providers/locale',
+	'~/filters/term',
 ], function(template, app, angular, _) {
 	'use strict';
 

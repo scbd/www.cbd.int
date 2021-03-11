@@ -1,4 +1,4 @@
-define(['app', 'text!./change-case-button.html'], function(app, html) { 'use strict';
+define(['~/app', 'text!./change-case-button.html'], function(app, html) { 'use strict';
 
 	 return app.directive('changeCaseButton', [function() {
 		return {

@@ -1,4 +1,4 @@
-define(['app', 'text!./user-messages.html'], function(app, html) { 'use strict';
+define(['~/app', 'text!./user-messages.html'], function(app, html) { 'use strict';
 
 	return app.directive('userMessage', ['$interpolate',function($interpolate) {
 		return {

@@ -1,4 +1,4 @@
-define(['text!./view-bbi-request.html', 'app', 'lodash',  'services/storage','services/mongo-storage',
+define(['text!./view-bbi-request.html', '~/app', 'lodash',  '~/services/storage','~/services/mongo-storage',
 ], function(template, app, _) {
 	'use strict';
 

@@ -1,5 +1,5 @@
-﻿import 'app'
-import 'directives/social-media'
+﻿import '~/app'
+import '~/directives/social-media'
 import '~/directives/articles/cbd-article'
 
 export { default as template } from './index.html'

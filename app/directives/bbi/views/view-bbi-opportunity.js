@@ -1,4 +1,4 @@
-define(['text!./view-bbi-opportunity.html', 'app', 'lodash',  'services/storage'
+define(['text!./view-bbi-opportunity.html', '~/app', 'lodash',  '~/services/storage'
 ], function(template, app, _) {
 	'use strict';
 

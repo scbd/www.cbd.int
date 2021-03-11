@@ -1,4 +1,4 @@
-define(['app'], function (app) {
+define(['~/app'], function (app) {
     app.factory('googleSheetService', ['$http', function factory($http) {
 
 

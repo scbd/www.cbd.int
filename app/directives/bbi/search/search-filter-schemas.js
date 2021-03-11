@@ -1,4 +1,4 @@
-define(['text!./search-filter-schemas.html', 'app', 'lodash'], function(template, app, _) { 'use strict';
+define(['text!./search-filter-schemas.html', '~/app', 'lodash'], function(template, app, _) { 'use strict';
 
     app.directive('searchFilterSchemas',[ "$timeout", function ($timeout) {
     return {

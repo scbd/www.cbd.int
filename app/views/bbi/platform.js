@@ -1,6 +1,6 @@
 import '~/directives/bbi/crumbs'
 import '~/directives/bbi/menu'
-import links from 'data/bbi/links-platform'
+import links from '~/data/bbi/links-platform.json'
 
 export { default as template } from './platform.html'
 

@@ -1,4 +1,4 @@
-define(['app', 'text!./address.html'], function(app, html) { 'use strict';
+define(['~/app', 'text!./address.html'], function(app, html) { 'use strict';
 
 	return app.directive('address', ['$http','$filter',function($http,$filter) {
 		return {

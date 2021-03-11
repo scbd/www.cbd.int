@@ -1,4 +1,5 @@
-define(['app','lodash', ], function (app,_) { 'use strict';
+import app from '~/app'
+import _ from 'lodash'
 
     //##################################################################
       app.filter('filterByLetter',['locale', function (locale) {
@@ -15,6 +16,3 @@ define(['app','lodash', ], function (app,_) { 'use strict';
               });
           };
       }]);
-
-
-}); //define

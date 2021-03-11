@@ -1,4 +1,4 @@
-define(['app','text!./bbi-project-row.html','filters/term', 'filters/title-case'], function(app, templateHtml) { 'use strict';
+define(['~/app','text!./bbi-project-row.html','~/filters/term', '~/filters/title-case'], function(app, templateHtml) { 'use strict';
 
     //============================================================
     //

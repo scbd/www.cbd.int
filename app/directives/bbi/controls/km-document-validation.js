@@ -1,4 +1,4 @@
-define(['app', 'text!./km-document-validation.html','jquery'], function(app, template,$) { 'use strict';
+define(['~/app', 'text!./km-document-validation.html','jquery'], function(app, template,$) { 'use strict';
 
     //============================================================
     //

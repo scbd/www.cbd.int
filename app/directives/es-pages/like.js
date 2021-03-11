@@ -1,4 +1,4 @@
-define(['app', 'require'], function(app, require) {'use strict';
+define(['~/app'], function(app) {'use strict';
   return app.directive('fbLike', [function() {
     return {
       restrict: "E",
@@ -6,7 +6,7 @@ define(['app', 'require'], function(app, require) {'use strict';
       replace: true,
       scope: {},
       link: function($scope) {
-        require(['services/fb'], function() {
+        import('~/services/fb').then(function() {
           if (window.FB && window.FB.XFBML)
             window.FB.XFBML.parse();
         });

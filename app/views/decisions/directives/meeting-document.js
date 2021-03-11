@@ -1,7 +1,7 @@
 import '~/filters/lstring'
 import '~/directives/meetings/documents/document-files'
 
-import app from 'app';
+import app from '~/app';
 import template from './meeting-document.html'
 
 	app.directive('decisionMeetingDocument', ['$http', '$q', function($http, $q) {

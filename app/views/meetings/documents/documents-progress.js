@@ -1,4 +1,4 @@
-define(['lodash', 'require', 'moment', 'angular', 'moment-timezone', 'filters/lstring', 'filters/moment', 'filters/initials', 'directives/file','ngDialog',
+define(['lodash', 'require', 'moment', 'angular', 'moment-timezone', '~/filters/lstring', '~/filters/moment', '~/filters/initials', 'directives/file','ngDialog',
         '~/directives/meetings/documents/document-files','./document-progress-steps', 'directives/comments/internal-comments', 
 ], function(_,require, moment) {
 

@@ -1,5 +1,5 @@
-define(['app', 'angular', 'lodash', 'text!./view-organization.html',
-	'filters/mark-down', 'services/storage','filters/trust-as-resource-url'], function(app, angular, _, template){
+define(['~/app', 'angular', 'lodash', 'text!./view-organization.html',
+	'~/filters/mark-down', '~/services/storage','~/filters/trust-as-resource-url'], function(app, angular, _, template){
 
 app.directive('viewOrganization', ["IStorage","$location","locale","$sce", function (storage,$location,locale,$sce) {
 	return {

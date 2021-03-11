@@ -1,4 +1,4 @@
-import app from 'app'
+import app from '~/app'
 import html from './view-element.html'
 
 	app.directive('info', [function() {

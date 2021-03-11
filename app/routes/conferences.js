@@ -1,6 +1,6 @@
 import 'ngRoute'
 import '~/directives/meetings/conference-header'
-import app from 'app';
+import app from '~/app';
 import { securize, resolveLiteral, injectRouteParams, mapView } from './mixin';
 import * as angularViewWrapper from '~/views/angular-view-wrapper'
 

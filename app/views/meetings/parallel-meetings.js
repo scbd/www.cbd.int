@@ -1,5 +1,5 @@
-﻿import 'directives/social-media'
-import 'services/conference-service'
+﻿import '~/directives/social-media'
+import '~/services/conference-service'
 
 export { default as template } from './parallel-meetings.html'
 

@@ -1,4 +1,5 @@
-define(['app', 'lodash'], function(app, _) { 'use strict';
+import app from '~/app'
+import _ from 'lodash'
 
 app.filter("initials", function() {
 	return function(val) {
@@ -11,5 +12,4 @@ app.filter("initials", function() {
 
 		return val;
 	};
-});
 });
