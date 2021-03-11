@@ -1,22 +1,27 @@
-define(['text!./edit-bbi-opportunity.html', 'text!./bbi-records-dialog.html', 'text!./first-opportunity-dialog.html', '~/app', 'angular', 'lodash', 'moment', '~/authentication',
-	'~/services/editFormUtility',
-	'~/services/storage',
-	'~/services/workflows',
-	'~/directives/bbi/controls/km-select',
-	'~/directives/bbi/controls/km-link',
-	'~/directives/bbi/controls/km-inputtext-ml',
-	'~/directives/bbi/controls/km-inputtext-list',
-	'~/directives/bbi/controls/km-terms-check',
-	'~/providers/locale',
-	'~/directives/bbi/controls/km-date',
-	'~/directives/bbi/controls/km-document-validation',
-	'~/directives/bbi/views/view-bbi-opportunity',
-	'~/directives/bbi/controls/km-form-languages',
-	'~/directives/bbi/controls/km-form-std-buttons',
-	'~/directives/bbi/controls/km-control-group',
-
-], function(template, bbiRecordsDialog, firstOpportunityDialog, app, angular, _, moment) {
-	'use strict';
+import template from './edit-bbi-opportunity.html';
+import bbiRecordsDialog from './bbi-records-dialog.html';
+import firstOpportunityDialog from './first-opportunity-dialog.html';
+import app from '~/app';
+import angular from 'angular';
+import _ from 'lodash';
+import moment from 'moment';
+import '~/authentication';
+import '~/services/editFormUtility';
+import '~/services/storage';
+import '~/services/workflows';
+import '~/directives/bbi/controls/km-select';
+import '~/directives/bbi/controls/km-link';
+import '~/directives/bbi/controls/km-inputtext-ml';
+import '~/directives/bbi/controls/km-inputtext-list';
+import '~/directives/bbi/controls/km-terms-check';
+import '~/providers/locale';
+import '~/directives/bbi/controls/km-date';
+import '~/directives/bbi/controls/km-document-validation';
+import '~/directives/bbi/views/view-bbi-opportunity';
+import '~/directives/bbi/controls/km-form-languages';
+import '~/directives/bbi/controls/km-form-std-buttons';
+import '~/directives/bbi/controls/km-control-group';
+	
 
 	app.directive('editBbiOpportunity', ['$http', "$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility', 'IStorage', '$route', '$timeout', 'userSettings', 'ngDialog', function($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route, $timeout, userSettings, ngDialog) {
 		return {
@@ -554,4 +559,3 @@ define(['text!./edit-bbi-opportunity.html', 'text!./bbi-records-dialog.html', 't
 			}
 		};
 	}]);
-});

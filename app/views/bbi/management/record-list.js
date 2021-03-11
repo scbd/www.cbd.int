@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import delDial from 'text!./del-dial.html'
+import delDial from './del-dial.html'
 import links from '~/data/bbi/links-platform.json'
 import 'ngDialog'
 import '~/authentication'

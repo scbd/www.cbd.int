@@ -510,7 +510,7 @@ export { default as template } from './documents.html';
         function initDragdrop() {
 
             setTimeout(function() {
-            require(['dragula'], function(dragula) {
+            import('dragula').then(function(dragula) {
 
                 ng.element("tbody.documents:not(.drag-ready)").each(function(i,element){
 

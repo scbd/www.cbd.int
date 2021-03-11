@@ -1,4 +1,4 @@
-define(['~/app', 'text!./fb-timeline.html'], function(app, html) {
+define(['~/app', './fb-timeline.html'], function(app, html) {
   'use strict';
   var _savedHtml;
 

@@ -1,4 +1,8 @@
-define(['text!./search-filter-aichi.html', '~/app', 'lodash','angular','~/directives/bbi/toggle'], function(template, app, _,angular) { 'use strict';
+import template from './search-filter-aichi.html';
+import app from '~/app';
+import _ from 'lodash';
+import angular from 'angular';
+import '~/directives/bbi/toggle'; 
 
 app.directive('searchFilterAichi',['$http','Thesaurus','$timeout', function ($http,thesaurus,$timeout) {
     return {
@@ -132,4 +136,4 @@ app.directive('searchFilterAichi',['$http','Thesaurus','$timeout', function ($ht
         }//link
     }; // return
   }]);  //app.directive('searchFilterCountries
-});// define
+// define

@@ -6,7 +6,7 @@ import './cbd-article-cover-image'
 import '~/services/article-service'
 import '~/authentication'
 
-	require(['css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@22.0.0/build/ckeditor.css']);
+import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@22.0.0/build/ckeditor.css');
 
 	app.directive('cbdArticle', ['$sce', '$q', 'articleService', 'authentication', '$location', '$timeout', '$http',  function ($sce, $q, articleService, authentication, $location, $timeout, $http)
 	{

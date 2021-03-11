@@ -1,6 +1,7 @@
-define(['~/app', 'text!./checkbox.html'], function(app, html) { 'use strict';
+import app from '~/app';
+import html from './checkbox.html'; 
 
-	return app.directive('checkbox', [function() {
+	export default app.directive('checkbox', [function() {
 		return {
             require: 'ngModel',
 			restrict : "E",
@@ -23,4 +24,4 @@ define(['~/app', 'text!./checkbox.html'], function(app, html) { 'use strict';
 			}
 		};
 	}]);
-});
+

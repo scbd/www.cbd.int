@@ -1,6 +1,7 @@
-define(['~/app', 'text!./address.html'], function(app, html) { 'use strict';
+import app from '~/app';
+import html from './address.html'; 
 
-	return app.directive('address', ['$http','$filter',function($http,$filter) {
+	export default app.directive('address', ['$http','$filter',function($http,$filter) {
 		return {
 			restrict : "E",
 			template : html,
@@ -28,4 +29,4 @@ define(['~/app', 'text!./address.html'], function(app, html) { 'use strict';
 			}
 		};
 	}]);
-});
+

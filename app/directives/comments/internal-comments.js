@@ -1,6 +1,10 @@
-define(['~/app', 'text!./internal-comments.html', 'lodash', '~/filters/initials', '~/filters/moment'], function(app, html, _) { 'use strict';
+import app from '~/app';
+import html from './internal-comments.html';
+import _ from 'lodash';
+import '~/filters/initials';
+import '~/filters/moment'; 
 
-	return app.directive('internalComments', ['$http', '$rootScope', function($http, $rootScope) {
+	export default app.directive('internalComments', ['$http', '$rootScope', function($http, $rootScope) {
 		return {
 			restrict : "E",
 			template : html,
@@ -97,4 +101,4 @@ define(['~/app', 'text!./internal-comments.html', 'lodash', '~/filters/initials'
 			}
 		};
 	}]);
-});
+

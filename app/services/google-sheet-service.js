@@ -1,4 +1,4 @@
-define(['~/app'], function (app) {
+import app from '~/app';
     app.factory('googleSheetService', ['$http', function factory($http) {
 
 
@@ -37,4 +37,3 @@ function cleanGoogleSheet(entry, schema, numProps) {
             get: get.bind(this)
         }
     }])
-})

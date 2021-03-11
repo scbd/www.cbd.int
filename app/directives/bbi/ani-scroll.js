@@ -1,5 +1,5 @@
-define(['~/app'], function(app) {
-  'use strict';
+import app from '~/app';
+  
   app.directive('aniScroll', function($window) {
         return {
             restrict: 'A',
@@ -69,4 +69,4 @@ define(['~/app'], function(app) {
             }
         };
     }); //app.directive('searchFilterCountries
-}); // define
+ // define

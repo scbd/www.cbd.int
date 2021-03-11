@@ -1,4 +1,7 @@
-define(['text!./search-filter-countries.html','~/app','lodash','~/filters/byLetter'], function(template, app,_) { 'use strict';
+import template from './search-filter-countries.html';
+import app from '~/app';
+import _ from 'lodash';
+import '~/filters/byLetter'; 
 
     app.directive('searchFilterCountries', ["$http",'$timeout', function ($http,  $timeout) {
     return {
@@ -117,4 +120,4 @@ define(['text!./search-filter-countries.html','~/app','lodash','~/filters/byLett
         }//link
     }; // return
   }]);  //app.directive('searchFilterCountries
-});// define
+// define

@@ -26,7 +26,8 @@ THE SOFTWARE.
 
 
 
-define(['util/querystring', 'util/format'], function(querystring, format) {
+import querystring from 'util/querystring';
+import format from 'util/format';
 
   /**
    * Create a new `Query`
@@ -687,6 +688,6 @@ define(['util/querystring', 'util/format'], function(querystring, format) {
     return this.parameters.join('&');
   }
 
-  return Query;
+  export default Query;
 
-});
+

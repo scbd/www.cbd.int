@@ -1,20 +1,19 @@
-define(['text!./search.html',
-		'~/app',
-		'jquery',
-		'lodash',
-		'~/services/editFormUtility',
-		'~/filters/byLetter',
-		"./search-result",
-		"./search-filter-keywords",
-		"./search-filter-schemas",
-		"./search-filter-countries",
-		"./search-filter-regions",
-		"./search-filter-aichi",
-		"./search-filter-themes",
-		"./search-filter-dates",
-    "./search-filter-assistance-types",
-		'ngInfiniteScroll'
-	], function(template, app, $, _) { 'use strict';
+import template from './search.html';
+import app from '~/app';
+import $ from 'jquery';
+import _ from 'lodash';
+import '~/services/editFormUtility';
+import '~/filters/byLetter';
+import "./search-result";
+import "./search-filter-keywords";
+import "./search-filter-schemas";
+import "./search-filter-countries";
+import "./search-filter-regions";
+import "./search-filter-aichi";
+import "./search-filter-themes";
+import "./search-filter-dates";
+import "./search-filter-assistance-types";
+import 'ngInfiniteScroll'; 
 
 	app.directive('search', ['$http', 'realm', '$q', '$timeout', '$location','locale', function ($http, realm, $q, $timeout, $location,locale) {
 	    return {
@@ -654,4 +653,4 @@ define(['text!./search.html',
 	  };
 	});
 
-});//define
+//define

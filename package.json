@@ -31,7 +31,6 @@
     "glob-promise": "^4.0.1",
     "ngVue": "1.7.7",
     "rollup": "^2.33.1",
-    "rollup-plugin-amd": "^4.0.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-dynamic-import-variables": "^1.1.0",
     "rollup-plugin-string": "^3.0.0",

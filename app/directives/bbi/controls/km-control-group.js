@@ -1,4 +1,7 @@
-define(['~/app', 'text!./km-control-group.html', 'jquery','lodash'], function(app, template,$, _) { 'use strict';
+import app from '~/app';
+import template from './km-control-group.html';
+import $ from 'jquery';
+import _ from 'lodash'; 
 
 	app.directive('kmControlGroup', [function ()
 	{
@@ -54,5 +57,5 @@ define(['~/app', 'text!./km-control-group.html', 'jquery','lodash'], function(ap
 			}
 		};
 	}]);
-});
+
 

@@ -1,4 +1,7 @@
-define(['text!./search-filter-themes.html', '~/app', 'lodash','angular'], function(template, app, _,angular) { 'use strict';
+import template from './search-filter-themes.html';
+import app from '~/app';
+import _ from 'lodash';
+import angular from 'angular'; 
 
 	//==============================================
 	//
@@ -164,4 +167,4 @@ define(['text!./search-filter-themes.html', '~/app', 'lodash','angular'], functi
 				}//link
     }; // return
   }]);  //app.directive('searchFilterCountries
-});// define
+// define

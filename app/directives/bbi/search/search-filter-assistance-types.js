@@ -1,4 +1,7 @@
-define(['text!./search-filter-assistance-types.html', '~/app', 'lodash','angular'], function(template, app, _,angular) { 'use strict';
+import template from './search-filter-assistance-types.html';
+import app from '~/app';
+import _ from 'lodash';
+import angular from 'angular'; 
 
 	//==============================================
 	//
@@ -125,4 +128,4 @@ define(['text!./search-filter-assistance-types.html', '~/app', 'lodash','angular
 				}//link
     }; // return
   }]);  //app.directive('searchFilterCountries
-});// define
+// define

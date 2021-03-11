@@ -1,5 +1,12 @@
-define(['text!./search-result.html', '~/app', 'lodash', 'moment', 'lodash', '~/authentication','~/providers/realm','~/filters/term',    '~/filters/moment'], function(template, app, _, moment, authentication) {
-    'use strict';
+import template from './search-result.html';
+import app from '~/app';
+import authentication from 'lodash';
+import moment from 'moment';
+import '~/authentication';
+import '~/providers/realm';
+import '~/filters/term';
+import '~/filters/moment';
+    
 
     app.directive('searchResult', ['$location', function($location) {
         return {
@@ -139,4 +146,4 @@ define(['text!./search-result.html', '~/app', 'lodash', 'moment', 'lodash', '~/a
                 return stripped.length > 2 ? stripped + '.' : '';
             };
         });
-});
+

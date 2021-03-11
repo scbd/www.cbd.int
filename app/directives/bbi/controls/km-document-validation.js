@@ -1,4 +1,6 @@
-define(['~/app', 'text!./km-document-validation.html','jquery'], function(app, template,$) { 'use strict';
+import app from '~/app';
+import template from './km-document-validation.html';
+import $ from 'jquery'; 
 
     //============================================================
     //
@@ -112,4 +114,4 @@ define(['~/app', 'text!./km-document-validation.html','jquery'], function(app, t
             }]
         };
     }]);
-	});
+	

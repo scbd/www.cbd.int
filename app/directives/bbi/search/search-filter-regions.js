@@ -1,4 +1,7 @@
-define(['text!./search-filter-regions.html', '~/app', 'lodash','angular'], function(template, app, _,angular) { 'use strict';
+import template from './search-filter-regions.html';
+import app from '~/app';
+import _ from 'lodash';
+import angular from 'angular'; 
     app.directive('searchFilterRegions', ['$http','Thesaurus','$timeout', function ($http,thesaurus,$timeout) {
     return {
         restrict: 'EAC',
@@ -180,4 +183,4 @@ define(['text!./search-filter-regions.html', '~/app', 'lodash','angular'], funct
         }//link
     }; // return
   }]);  //app.directive('searchFilterRegions
-});// define
+// define

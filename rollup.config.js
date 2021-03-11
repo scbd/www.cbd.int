@@ -7,7 +7,6 @@ import nodeResolve              from '@rollup/plugin-node-resolve'
 import json                     from '@rollup/plugin-json';
 import commonjs                 from 'rollup-plugin-commonjs';
 import dynamicImportVariables   from 'rollup-plugin-dynamic-import-variables';
-import amd                      from 'rollup-plugin-amd';
 import vue                      from 'rollup-plugin-vue'
 import { string }               from "rollup-plugin-string";
 import { terser }               from 'rollup-plugin-terser';
@@ -54,7 +53,6 @@ function bundle(relativePath, baseDir='app') {
       json({ namedExports: true }),
       injectCssToDom(),
       vue(),
-      amd({ include: 'app/**/*.js'}),
       dynamicImportVariables({ }),
       commonjs({ include: 'node_modules/**/*.js'}),
       nodeResolve({ browser: true, mainFields: [ 'browser', 'module', 'main' ] }),

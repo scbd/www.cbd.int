@@ -1,25 +1,30 @@
-define(['text!./edit-bbi-assistance.html', 'text!./bbi-records-dialog.html', 'text!./first-request-dialog.html', '~/app', 'angular', 'lodash', '~/authentication', 'ngSmoothScroll',
-	'~/services/editFormUtility',
-	'~/services/mongo-storage',
-	'~/services/storage',
-	'~/services/workflows',
-	'~/services/user-settings',
-	'~/directives/bbi/controls/km-form-languages',
-	'~/directives/bbi/controls/km-form-std-buttons',
-	'~/directives/bbi/controls/km-control-group',
-	'~/directives/bbi/select-contact',
-	'~/directives/bbi/controls/km-select',
-	'~/directives/bbi/controls/km-link',
-	'~/directives/bbi/controls/km-date',
-	'~/directives/bbi/controls/km-inputtext-ml',
-	'~/directives/bbi/controls/km-inputtext-list',
-	'~/directives/bbi/controls/mongo-form-std-buttons',
-	'~/directives/bbi/controls/km-document-validation',
-	'~/providers/locale',
-	'../views/view-bbi-request',
-	'~/services/user-settings'
-], function(template, bbiRecordsDialog, bbiFirstRequestDialog, app, angular, _) {
-	'use strict';
+import template from './edit-bbi-assistance.html';
+import bbiRecordsDialog from './bbi-records-dialog.html';
+import bbiFirstRequestDialog from './first-request-dialog.html';
+import app from '~/app';
+import angular from 'angular';
+import _ from 'lodash';
+import '~/authentication';
+import 'ngSmoothScroll';
+import '~/services/editFormUtility';
+import '~/services/mongo-storage';
+import '~/services/storage';
+import '~/services/workflows';
+import '~/services/user-settings';
+import '~/directives/bbi/controls/km-form-languages';
+import '~/directives/bbi/controls/km-form-std-buttons';
+import '~/directives/bbi/controls/km-control-group';
+import '~/directives/bbi/select-contact';
+import '~/directives/bbi/controls/km-select';
+import '~/directives/bbi/controls/km-link';
+import '~/directives/bbi/controls/km-date';
+import '~/directives/bbi/controls/km-inputtext-ml';
+import '~/directives/bbi/controls/km-inputtext-list';
+import '~/directives/bbi/controls/mongo-form-std-buttons';
+import '~/directives/bbi/controls/km-document-validation';
+import '~/providers/locale';
+import '../views/view-bbi-request';
+	
 
 	app.directive('editBbiAssistance', ['$http', "$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', '$route', '$timeout', 'locale', 'mongoStorage', 'smoothScroll', 'IStorage', 'ngDialog', 'userSettings', function($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, $route, $timeout, locale, mongoStorage, smoothScroll, storage, ngDialog, userSettings) {
 		return {
@@ -651,4 +656,3 @@ define(['text!./edit-bbi-assistance.html', 'text!./bbi-records-dialog.html', 'te
 			}
 		};
 	}]);
-});

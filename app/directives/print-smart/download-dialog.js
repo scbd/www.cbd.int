@@ -9,7 +9,7 @@ var Dropbox;
 export default ['$scope', '$http', 'documents','$rootScope', 'allowBack','$window', function ($scope, $http, documents,$rootScope, allowBack,$window) {
 
     if(!$scope.viewOnly)
-      require(['dropbox-dropins'],function(val){
+      import('dropbox-dropins').then(function(val){
         Dropbox = val;
       })
 		var publicComputer    = true; // TODO

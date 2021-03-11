@@ -1,6 +1,9 @@
-define(['~/app', 'text!./carousel.html','moment','~/filters/moment'], function(app, html,moment) { 'use strict';
+import app from '~/app';
+import html from './carousel.html';
+import moment from 'moment';
+import '~/filters/moment'; 
 
-	return app.directive('carousel', ['$timeout','$location', function($timeout,$location) {
+	export default app.directive('carousel', ['$timeout','$location', function($timeout,$location) {
 		return {
             //require: 'ngModel',
 			restrict : "E",
@@ -80,4 +83,4 @@ define(['~/app', 'text!./carousel.html','moment','~/filters/moment'], function(a
 			}
 		};
 	}]);
-});
+

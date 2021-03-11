@@ -1,9 +1,10 @@
-define(['~/app', 'text!./forum-details-directive.html',
-    'text!./forum-post-directive.html', 'text!./file-upload-directive.html',
-    'text!./thread-list-directive.html', 'text!./post-list-directive.html',
-    'lodash',
-],
-function(app, details, forumPostTemplate, kmUploadTemplate, forumThreadsTemplate, postsTemplate, _) { 'use strict';
+import app from '~/app';
+import details from './forum-details-directive.html';
+import forumPostTemplate from './forum-post-directive.html';
+import kmUploadTemplate from './file-upload-directive.html';
+import forumThreadsTemplate from './thread-list-directive.html';
+import postsTemplate from './post-list-directive.html';
+import _ from 'lodash'; 
 
 app.factory('forumUtil', ['$rootScope', '$browser', function($rootScope, $browser) {
 
@@ -927,4 +928,3 @@ app.directive("forumThreads", [function() {
         ]
     };
 }]);
-});

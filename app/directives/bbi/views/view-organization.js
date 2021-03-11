@@ -1,5 +1,10 @@
-define(['~/app', 'angular', 'lodash', 'text!./view-organization.html',
-	'~/filters/mark-down', '~/services/storage','~/filters/trust-as-resource-url'], function(app, angular, _, template){
+import app from '~/app';
+import angular from 'angular';
+import _ from 'lodash';
+import template from './view-organization.html';
+import '~/filters/mark-down';
+import '~/services/storage';
+import '~/filters/trust-as-resource-url';
 
 app.directive('viewOrganization', ["IStorage","$location","locale","$sce", function (storage,$location,locale,$sce) {
 	return {
@@ -162,4 +167,4 @@ app.directive('viewOrganization', ["IStorage","$location","locale","$sce", funct
 	};
 }]);
 
-});
+

@@ -1,5 +1,5 @@
 import app from '~/app'
-import templateHtml from 'text!./legend42.html'
+import templateHtml from './legend42.html'
 import '~/directives/aichi-targets/progress-pie'
 import '~/directives/aichi-targets/national-targets-map'
 

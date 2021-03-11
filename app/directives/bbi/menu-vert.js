@@ -1,4 +1,7 @@
-define(['~/app', 'text!./menu-vert.html','~/providers/locale','ngSmoothScroll'], function(app, templateHtml) { 'use strict';
+import app from '~/app';
+import templateHtml from './menu-vert.html';
+import '~/providers/locale';
+import 'ngSmoothScroll'; 
 
     //============================================================
     //
@@ -50,4 +53,4 @@ define(['~/app', 'text!./menu-vert.html','~/providers/locale','ngSmoothScroll'],
         };
     }]);
 
-});
+

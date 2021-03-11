@@ -1,19 +1,24 @@
-define(['text!./edit-bbi-profile.html', 'text!./bbi-records-dialog.html', 'text!./first-provider-dialog.html', '~/app', 'angular', 'lodash', '~/authentication',
-	'~/services/editFormUtility',
-	'~/services/storage',
-	'~/services/workflows',
-	'~/directives/bbi/controls/km-select',
-	'~/directives/bbi/controls/km-link',
-	'~/directives/bbi/controls/km-inputtext-ml',
-	'~/directives/bbi/controls/km-inputtext-list',
-	'~/directives/bbi/select-contact',
-	'~/directives/bbi/controls/km-terms-check',
-	'~/directives/bbi/controls/km-form-languages',
-	'~/directives/bbi/controls/km-form-std-buttons',
-	'~/providers/locale',
-	'~/directives/bbi/views/view-bbi-profile',
-], function(template, bbiRecordsDialog, firstProviderDialog, app, angular, _) {
-	'use strict';
+import template from './edit-bbi-profile.html';
+import bbiRecordsDialog from './bbi-records-dialog.html';
+import firstProviderDialog from './first-provider-dialog.html';
+import app from '~/app';
+import angular from 'angular';
+import _ from 'lodash';
+import '~/authentication';
+import '~/services/editFormUtility';
+import '~/services/storage';
+import '~/services/workflows';
+import '~/directives/bbi/controls/km-select';
+import '~/directives/bbi/controls/km-link';
+import '~/directives/bbi/controls/km-inputtext-ml';
+import '~/directives/bbi/controls/km-inputtext-list';
+import '~/directives/bbi/select-contact';
+import '~/directives/bbi/controls/km-terms-check';
+import '~/directives/bbi/controls/km-form-languages';
+import '~/directives/bbi/controls/km-form-std-buttons';
+import '~/providers/locale';
+import '~/directives/bbi/views/view-bbi-profile';
+	
 
 	app.directive('editBbiProfile', ['$http', "$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility', 'IStorage', '$route', '$timeout', 'locale', 'userSettings', 'ngDialog', function($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route, $timeout, locale, userSettings, ngDialog) {
 		return {
@@ -543,4 +548,3 @@ define(['text!./edit-bbi-profile.html', 'text!./bbi-records-dialog.html', 'text!
 			}
 		};
 	}]);
-});

@@ -1,5 +1,8 @@
-define(['~/app', './solrQuery', 'underscore', 'angular'], function(module, Query, _, angular) {
-  return module.factory('reports', ['$http', '$locale', '$q',
+import module from '~/app';
+import Query from './solrQuery';
+import _ from 'underscore';
+import angular from 'angular';
+  export default module.factory('reports', ['$http', '$locale', '$q',
     function($http, $locale, $q) {
 
       var baseUrl = '/api/v2013/index',
@@ -234,4 +237,4 @@ define(['~/app', './solrQuery', 'underscore', 'angular'], function(module, Query
       return reports;
     }
   ]);
-});
+

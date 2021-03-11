@@ -1,4 +1,6 @@
-define(['~/app', 'text!./header-nav.html','directives/es-pages/like'], function(app, html) { 'use strict';
+import app from '~/app';
+import html from './header-nav.html';
+import 'directives/es-pages/like'; 
 	window.twttr = (function(d, s, id) {
 	var js, fjs = d.getElementsByTagName(s)[0],
 	t = window.twttr || {};
@@ -17,7 +19,7 @@ return t;
 }(document, "script", "twitter-wjs"));
 
 
-	return app.directive('headerNav',['$location',function($location) {
+	export default app.directive('headerNav',['$location',function($location) {
 		return {
 
 			restrict : "E",
@@ -42,4 +44,4 @@ return t;
 			}
 		};
 	}]);
-});
+

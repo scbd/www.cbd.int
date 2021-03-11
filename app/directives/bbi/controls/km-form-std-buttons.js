@@ -1,4 +1,7 @@
-define(['~/app', 'angular', 'text!./km-form-std-buttons.html','jquery'], function(app, angular, template) { 'use strict';
+import app from '~/app';
+import angular from 'angular';
+import template from './km-form-std-buttons.html';
+import 'jquery'; 
 
 	app.directive('kmFormStdButtons', ["$q", function ($q)
 	{
@@ -328,4 +331,4 @@ define(['~/app', 'angular', 'text!./km-form-std-buttons.html','jquery'], functio
 			}]
 		};
 	}]);
-});
+

@@ -1,4 +1,6 @@
-define(['~/app', 'angular', 'text!./file.html'], function(app, ng, fileDropTemplate) { 'use strict';
+import app from '~/app';
+import ng from 'angular';
+import fileDropTemplate from './file.html'; 
 
 	app.directive('type', ['$http', '$parse', function($http, $parse) {
 	    return {
@@ -203,4 +205,4 @@ define(['~/app', 'angular', 'text!./file.html'], function(app, ng, fileDropTempl
 	    };
 	}]);
     
-});
+

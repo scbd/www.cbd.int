@@ -1,5 +1,6 @@
-define(['~/app','~/data/bbi/auto-links.json'], function(app,autoLinks) {
-  'use strict';
+import app from '~/app';
+import autoLinks from '~/data/bbi/auto-links.json';
+  
 
   app.directive('autoLinker',['$timeout','$compile','$location', function($timeout,$compile,$location) {
   return {
@@ -25,4 +26,4 @@ define(['~/app','~/data/bbi/auto-links.json'], function(app,autoLinks) {
      }
     };
   }]);
-}); // define
+ // define

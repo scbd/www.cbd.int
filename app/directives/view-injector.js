@@ -15,7 +15,7 @@ define(['~/app','require', 'angular'], function(app, require, ng) { 'use strict'
 
                 $q.all(resolve).then(function (locals) {
 
-                    require(['text!'+options.module+'.html', options.module], function(html, controllerCtr) {
+                    require([''+options.module+'.html', options.module], function(html, controllerCtr) {
 
                         element.html($compile(html)($scope));
 

@@ -1,4 +1,4 @@
-define([], function() {
+
 
     var items = [];
     var seed  = 'a'.charCodeAt(0);
@@ -11,5 +11,5 @@ define([], function() {
         });
     }
 
-    return items;
-});
+    export default items;
+

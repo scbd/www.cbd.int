@@ -1,6 +1,11 @@
-define(['~/app', 'angular', 'jquery', 'lodash', 'text!./km-select.html',
-       '~/providers/locale','~/filters/truncate','~/filters/lstring'],
-function(app, angular, $, _, template) {
+import app from '~/app';
+import angular from 'angular';
+import $ from 'jquery';
+import _ from 'lodash';
+import template from './km-select.html';
+import '~/providers/locale';
+import '~/filters/truncate';
+import '~/filters/lstring';
   //============================================================
   //
   //
@@ -430,4 +435,4 @@ $scope.searchFil = function(item){
       }]
     };
   });
-});
+

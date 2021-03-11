@@ -1,4 +1,6 @@
-define(['text!./search-filter-dates.html', '~/app', '~/directives/bbi/controls/km-date'], function(template, app) { 'use strict';
+import template from './search-filter-dates.html';
+import app from '~/app';
+import '~/directives/bbi/controls/km-date'; 
 
     app.directive('searchFilterDates', ["$location", function ($location) {
         return {
@@ -64,4 +66,4 @@ define(['text!./search-filter-dates.html', '~/app', '~/directives/bbi/controls/k
           }//link
     }; // return
   }]);  //app.directive('
-});// define
+// define

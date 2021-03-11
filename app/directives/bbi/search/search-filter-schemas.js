@@ -1,4 +1,6 @@
-define(['text!./search-filter-schemas.html', '~/app', 'lodash'], function(template, app, _) { 'use strict';
+import template from './search-filter-schemas.html';
+import app from '~/app';
+import _ from 'lodash'; 
 
     app.directive('searchFilterSchemas',[ "$timeout", function ($timeout) {
     return {
@@ -149,4 +151,4 @@ define(['text!./search-filter-schemas.html', '~/app', 'lodash'], function(templa
           }//link
       }; // return
     }]);  //app.directive('searchFilterCountries
-  });// define;
+  // define;

@@ -1,11 +1,10 @@
-define(['text!./select-contact.html','~/app','lodash','ngDialog',
-// '~/directives/bbi/forms/edit-bbi-contact',
-// '~/directives/bbi/forms/edit-organization',
-'~/providers/locale',
-'~/filters/term',
-'ngInfiniteScroll'
-],
-function(template,app,_) {
+import template from './select-contact.html';
+import app from '~/app';
+import _ from 'lodash';
+import 'ngDialog';
+import '~/providers/locale';
+import '~/filters/term';
+import 'ngInfiniteScroll';
 
     app.directive("selectContact", [function() {
 
@@ -391,4 +390,4 @@ function(template,app,_) {
         };
     }]);
 
-});
+

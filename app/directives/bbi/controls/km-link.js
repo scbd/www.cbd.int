@@ -1,4 +1,8 @@
-define(['~/app', 'angular', 'jquery', 'text!./km-link.html','lodash'], function(app, angular, $, template,_) { 'use strict';
+import app from '~/app';
+import angular from 'angular';
+import $ from 'jquery';
+import template from './km-link.html';
+import _ from 'lodash'; 
 //============================================================
 //
 //
@@ -411,4 +415,3 @@ app.directive('kmLink', function() {
 				}]
 		};
 	});
-});

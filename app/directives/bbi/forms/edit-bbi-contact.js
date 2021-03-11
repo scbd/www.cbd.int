@@ -1,19 +1,24 @@
-define(['text!./edit-bbi-contact.html','text!./bbi-records-dialog.html','text!./first-contact-dialog.html', '~/app', 'angular', 'lodash', '~/authentication',
-	'~/services/editFormUtility',
-	'~/services/storage',
-	'~/services/workflows',
-	'~/directives/bbi/controls/km-control-group',
-	'~/directives/bbi/controls/km-select',
-	'~/directives/bbi/controls/km-link',
-	'~/directives/bbi/controls/km-inputtext-ml',
-	'~/directives/bbi/controls/km-inputtext-list',
-	'~/directives/bbi/controls/km-document-validation',
-	'~/directives/bbi/controls/km-form-languages',
-	'~/directives/bbi/controls/km-form-std-buttons',
-	'~/providers/locale',
-	'../views/view-bbi-contact'
-], function(template, bbiRecordsDialog,bbiFirstContactDialog,app, angular, _) {
-	'use strict';
+import template from './edit-bbi-contact.html';
+import bbiRecordsDialog from './bbi-records-dialog.html';
+import bbiFirstContactDialog from './first-contact-dialog.html';
+import app from '~/app';
+import angular from 'angular';
+import _ from 'lodash';
+import '~/authentication';
+import '~/services/editFormUtility';
+import '~/services/storage';
+import '~/services/workflows';
+import '~/directives/bbi/controls/km-control-group';
+import '~/directives/bbi/controls/km-select';
+import '~/directives/bbi/controls/km-link';
+import '~/directives/bbi/controls/km-inputtext-ml';
+import '~/directives/bbi/controls/km-inputtext-list';
+import '~/directives/bbi/controls/km-document-validation';
+import '~/directives/bbi/controls/km-form-languages';
+import '~/directives/bbi/controls/km-form-std-buttons';
+import '~/providers/locale';
+import '../views/view-bbi-contact';
+	
 
 	app.directive('editBbiContact', ['$http', "$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility', 'IStorage', '$route', 'locale','userSettings','ngDialog','$timeout', function($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route,locale,userSettings,ngDialog,$timeout) {
 		return {
@@ -569,4 +574,3 @@ define(['text!./edit-bbi-contact.html','text!./bbi-records-dialog.html','text!./
 			}
 		};
 	}]);
-});

@@ -122,7 +122,7 @@ import './directives/bread-crumbs'
 
                 $rootScope.user = user;
 
-                require(["js/slaask"], function(_slaask) {
+                import("~/js/slaask").then(function({default: _slaask }) {
 
                     if (user.isAuthenticated) {
                         _slaask.identify(user.name, {
