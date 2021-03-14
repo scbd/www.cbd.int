@@ -5,7 +5,7 @@ import app from '~/app'
 import _ from 'lodash'
 import templateHtml from './box-list.html'
 import targetsData from '~/data/aichi-targets/targets.json'
-
+import 'css!cdn!npm/flag-icon-css@2.3.0/css/flag-icon.min.css';
 
     //============================================================
     //

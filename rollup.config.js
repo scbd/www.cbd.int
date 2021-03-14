@@ -26,7 +26,7 @@ export default async function(){
   externals = [...externals, ...await loadExternals()];
 
   return [
-    bundle('boot.js')
+    bundle('boot.js') 
   ];
 }
 
@@ -47,6 +47,7 @@ function bundle(relativePath, baseDir='app') {
       alias({ entries : [
         { find: /^~\/(.*)/,   replacement:`${process.cwd()}/app/$1` },
         { find: /^text!(.*)/, replacement:`$1` },
+        { find: /^cdn!(.*)/,  replacement:`https://cdn.jsdelivr.net/$1` },
       ]}),
       shimAsExternal(),
       string({ include: "**/*.html" }),
@@ -134,8 +135,12 @@ function injectCssToDom(options = {}) {
       }
 
       return this.resolve(updatedId, importer, { skipSelf: true }).then((resolved) => {
-        if(!resolved)         return { id: updatedId }
-        if(resolved.external) return null;
+
+        console.log(importeeId, resolved.id, isUrl(resolved.id))
+
+        if(!resolved)          return { id: updatedId }
+        if(resolved.external)  return null;
+        if(isUrl(resolved.id)) return { id: `css!${resolved.id}`, external: true}
         
         injectable.push(resolved.id)
 
@@ -168,6 +173,11 @@ function injectCssToDom(options = {}) {
       return false;
     }
   }
+
+  function isUsePlugin(url) {
+    return /^[a-z]+!/i.test(url);
+  }
+
 
   function generateCode(css) {
     var code = `

@@ -1,4 +1,3 @@
-import 'ngCookies'
 import 'angular-vue'
 import '~/directives/print-smart/print-smart-checkout'
 import './meeting-document'
@@ -510,7 +509,7 @@ export { default as template } from './documents.html';
         function initDragdrop() {
 
             setTimeout(function() {
-            import('dragula').then(function(dragula) {
+            import('dragula').then(function({ default: dragula }) {
 
                 ng.element("tbody.documents:not(.drag-ready)").each(function(i,element){
 

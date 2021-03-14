@@ -1,5 +1,4 @@
-import angular from 'angular-flex'
-import 'ngSanitize'
+import angular from 'angular'
 import 'toastr'
 import 'ngMeta'
 

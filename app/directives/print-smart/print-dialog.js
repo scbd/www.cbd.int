@@ -1,4 +1,3 @@
-import 'ngCookies'
 import '~/directives/checkbox'
 import '~/filters/lstring'
 import 'css!./location-button.css'

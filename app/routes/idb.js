@@ -1,4 +1,3 @@
-import 'ngRoute'
 import app from '~/app';
 import { mapView, currentUser } from './mixin';
 

@@ -1,4 +1,3 @@
-import 'ngRoute'
 import app from '~/app';
 import { securize, currentUser, mapView } from './mixin';
 import * as angularViewWrapper from '~/views/angular-view-wrapper'

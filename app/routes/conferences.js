@@ -1,4 +1,3 @@
-import 'ngRoute'
 import '~/directives/meetings/conference-header'
 import app from '~/app';
 import { securize, resolveLiteral, injectRouteParams, mapView } from './mixin';

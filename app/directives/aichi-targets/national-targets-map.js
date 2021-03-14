@@ -3,6 +3,7 @@ import 'shim!directives/reporting-display/worldEUHigh[ammap]'
 import 'shim!ammap/themes/light[ammap]'
 import '~/providers/locale'
 import '~/directives/common/export-directive'
+import 'css!cdn!npm/flag-icon-css@2.3.0/css/flag-icon.min.css';
 import app from '~/app'
 import _ from 'lodash'
 import template from './national-targets-map.html'

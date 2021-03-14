@@ -1,7 +1,5 @@
-import 'ngRoute'
 import '~/authentication'
 import 'ngDialog'
-import 'ngCookies'
 import _ from 'lodash'
 import redirectDialog from '../redirect-dialog.html'
 

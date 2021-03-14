@@ -1,4 +1,3 @@
-import 'ngRoute'
 import app from '~/app';
 import { securize, resolveLiteral, mapView } from './mixin';
 import * as vueViewWrapper     from '~/views/vue-view-wrapper'

@@ -1,4 +1,3 @@
-import 'ngCookies'
 import 'css!./location-button.css'
 import locations from './locations'
 
