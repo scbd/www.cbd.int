@@ -1,4 +1,9 @@
-define(['~/app','./export-directive.html', 'lodash', 'ngDialog','moment','~/filters/moment'], function (app, template, _) {
+import app from '~/app';
+import template from './export-directive.html';
+import _ from 'lodash';
+import 'ngDialog';
+import 'moment';
+import '~/filters/moment';
     app.directive('export', ['$timeout', '$q', 'ngDialog',function ($timeout, $q,ngDialog) {
         return {
             restrict: 'EAC',
@@ -67,5 +72,5 @@ define(['~/app','./export-directive.html', 'lodash', 'ngDialog','moment','~/filt
             }
         };
     }]);
-});
+
 

@@ -19,7 +19,7 @@ const isWatchOn = process.argv.includes('--watch');
 const cwd       = path.join(process.cwd(), 'app');
 const outputDir = 'dist';
 
-let externals = ['require']
+let externals = ['require', 'https://cdn.slaask.com/chat.js']
 
 export default async function(){
   
@@ -135,9 +135,6 @@ function injectCssToDom(options = {}) {
       }
 
       return this.resolve(updatedId, importer, { skipSelf: true }).then((resolved) => {
-
-        console.log(importeeId, resolved.id, isUrl(resolved.id))
-
         if(!resolved)          return { id: updatedId }
         if(resolved.external)  return null;
         if(isUrl(resolved.id)) return { id: `css!${resolved.id}`, external: true}

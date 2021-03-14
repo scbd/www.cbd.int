@@ -1,6 +1,8 @@
-define(['~/app','require', 'angular'], function(app, require, ng) { 'use strict';
+import app from '~/app';
+import require from 'require';
+import ng from 'angular'; 
 
-	return app.directive('viewInjector', ['$injector', '$compile', '$q', function($injector, $compile, $q) {
+	export default app.directive('viewInjector', ['$injector', '$compile', '$q', function($injector, $compile, $q) {
 		return {
 			restrict : "EA",
             scope: true,
@@ -30,4 +32,4 @@ define(['~/app','require', 'angular'], function(app, require, ng) { 'use strict'
             }
         };
 	}]);
-});
+

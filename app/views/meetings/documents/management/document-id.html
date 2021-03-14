@@ -419,7 +419,7 @@
                 <div class="form-group text-{{editCtrl.document.metadata.message.level}}">
                     <label class="control-label" for="symbol">Message</label>
                     <!-- <div class="input-group"> -->
-                        <input ng-disabled="uploading" type="text" class="form-control level-{{editCtrl.document.metadata.message.level}}" id="symbol" ng-model="editCtrl.document.metadata.message.text" placeholder=""/>
+                        <input ng-disabled="uploading" type="text" class="form-control level-{{editCtrl.document.metadata.message.level}}" ng-model="editCtrl.document.metadata.message.text" placeholder=""/>
                         <!-- <span class="input-group-append">
                             <button ng-disabled="true" class="btn btn-light" ng-click="validateSymbol()" type="button"><i class="fa fa-check" aria-hidden="true"></i></button>
                         </span> -->

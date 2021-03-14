@@ -1,7 +1,4 @@
 export const baseLibs = [
-    'npm/jquery@3.4.1/dist/jquery.slim.min.js',
-    'npm/popper.js@1.16.0/dist/umd/popper.min.js',
-    'npm/bootstrap@4.1.3/dist/js/bootstrap.js',
     'npm/angular@1.8.2/angular.min.js',
     'gh/scbd/angular-flex@2.2.2/angular-flex.min.js',
     'npm/angular-route@1.8.2/angular-route.min.js',
@@ -10,7 +7,6 @@ export const baseLibs = [
     'npm/angular-sanitize@1.8.2/angular-sanitize.min.js',
     'npm/lodash@3.10.1/index.min.js',
     'npm/vue@2.6.12/dist/vue.min.js',
-    'npm/requirejs@2.2.0/require.min.js'
 ];
 
 export default function bootApp(window, require, defineX) {
@@ -28,15 +24,12 @@ require.config({
     baseUrl : '/app/',
     paths: {
         'ngDialog'        : cdnHost + 'npm/ng-dialog@0.6.1/js/ngDialog.min',
-        'text'            : 'libs/requirejs-text/text',
-        'css'             : 'libs/require-css/css.min',
-        'json'            : 'libs/requirejs-plugins/src/json',
-        'dragula'         : 'libs/dragula.js/dist/dragula',
-        //'bootstrap-notify': cdnHost + 'libs/remarkable-bootstrap-notify/bootstrap-notify.min',
+        'css'             : cdnHost + 'npm/require-css@0.1.10/css.min',
+        'dragula'         : cdnHost + 'npm/dragula@3.7.3/dist/dragula.min',
         'moment'          : cdnHost + 'npm/moment@2.22.2/min/moment.min',
         'moment-timezone' : cdnHost + 'npm/moment-timezone@0.5.21/builds/moment-timezone-with-data-2012-2022.min',
-        'rangy'           : 'libs/rangy-release/rangy-core.min',
-        'shim'            : 'libs/require-shim/src/shim',
+        'rangy'           : cdnHost + 'rangy@1.3.0/lib/rangy-core.min.js',
+        'shim'            : cdnHost + 'gh/zetlen/require-shim/src/shim',
         'interface'       : 'js/interface',
         'magnific-popup'  : cdnHost + 'npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min',
         'ammap3WorldHigh' : 'directives/reporting-display/worldEUHigh',
@@ -51,9 +44,9 @@ require.config({
         'jszip'           : cdnHost + 'npm/xlsx@0.13.4/dist/jszip',  
         'linqjs'          : 'libs/linqjs/linq',
         'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll',
-        'ngSmoothScroll'  : 'libs/ngSmoothScroll/lib/angular-smooth-scroll',
+        'ngSmoothScroll'  : cdnHost + 'npm/ngSmoothScroll@2.0.0/dist/angular-smooth-scroll.min',
         'bootstrap-datepicker': cdnHost +'npm/bootstrap-datepicker@1.4.0/js/bootstrap-datepicker.min',
-        'toastr'          : 'libs/angular-toastr/dist/angular-toastr.tpls.min',
+        'toastr'          : cdnHost + 'npm/angular-toastr@1.7.0/dist/angular-toastr.min',
         'ammap3'          : 'libs/ammap3/ammap/ammap',
         'ammap-theme'     : 'libs/ammap3/ammap/themes/light',
         'ngMeta'          : 'libs/ngMeta/dist/ngMeta.min',
@@ -77,7 +70,7 @@ require.config({
         'ngDialog'             : { deps : ['angular', `css!${cdnHost}combine/npm/ng-dialog@0.6.1/css/ngDialog.min.css,npm/ng-dialog@0.6.1/css/ngDialog-theme-default.min.css`] },
         'bootstrap-notify'     : { deps : ['jquery'] },
         'moment-timezone'      : { deps : ['moment'] },
-        'interface'            : { deps : ['jquery-migrate']},
+        'interface'            : { deps : []},
         'magnific-popup'       : { deps : ['jquery', `css!${cdnHost}npm/magnific-popup@1.1.0/dist/magnific-popup.css` ]},
         'dragula'              : { deps : ['css!libs/dragula.js/dist/dragula.css']},
         'alasql'               : { deps : ['js-xlsx']},

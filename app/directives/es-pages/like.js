@@ -1,5 +1,5 @@
-define(['~/app'], function(app) {'use strict';
-  return app.directive('fbLike', [function() {
+import app from '~/app';
+  export default app.directive('fbLike', [function() {
     return {
       restrict: "E",
       template: '<a class="fb-like" data-href="https://www.facebook.com/CristianaPascaPalmer/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="false" data-share="false"></a>',
@@ -13,4 +13,4 @@ define(['~/app'], function(app) {'use strict';
       }
     };
   }]);
-});
+

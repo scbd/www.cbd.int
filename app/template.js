@@ -122,7 +122,7 @@ import './directives/bread-crumbs'
 
                 $rootScope.user = user;
 
-                import("~/js/slaask").then(function({default: _slaask }) {
+                import("~/js/slaask").then(function({ default: _slaask }) {
 
                     if (user.isAuthenticated) {
                         _slaask.identify(user.name, {
@@ -131,7 +131,7 @@ import './directives/bread-crumbs'
                             'email' : user.email,
                         });
 
-                        if(_slaask.initialized) {
+                        if(_slaask.initialized && _slaask.slaaskSendUserInfos) {
                             _slaask.slaaskSendUserInfos();
                         }
                     }

@@ -19,7 +19,7 @@ import '~/providers/locale'
             link: function ($scope) {
               $scope.locale=locale;
 
-                  require(["js/slaask"], function(_slaask) {
+                  import("~/js/slaask").then(function({default: _slaask }) {
 
                       if(!_slaask.initialized) {
                           _slaask.init('d611635fe9b46e439afb79833e255443');
