@@ -28,7 +28,7 @@ require.config({
         'dragula'         : cdnHost + 'npm/dragula@3.7.3/dist/dragula.min',
         'moment'          : cdnHost + 'npm/moment@2.22.2/min/moment.min',
         'moment-timezone' : cdnHost + 'npm/moment-timezone@0.5.21/builds/moment-timezone-with-data-2012-2022.min',
-        'rangy'           : cdnHost + 'rangy@1.3.0/lib/rangy-core.min.js',
+        'rangy'           : cdnHost + 'npm/rangy@1.3.0/lib/rangy-core.min.js',
         'shim'            : cdnHost + 'gh/zetlen/require-shim/src/shim',
         'interface'       : 'js/interface',
         'magnific-popup'  : cdnHost + 'npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min',
