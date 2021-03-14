@@ -1,4 +1,5 @@
 import app from '~/app';
+import _ from 'lodash';
 import Enumerable from 'linqjs';
 import '~/providers/realm';
 import '~/services/storage';

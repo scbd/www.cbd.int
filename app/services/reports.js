@@ -1,6 +1,6 @@
 import module from '~/app';
 import Query from './solrQuery';
-import _ from 'underscore';
+import _ from 'lodash';
 import angular from 'angular';
   export default module.factory('reports', ['$http', '$locale', '$q',
     function($http, $locale, $q) {

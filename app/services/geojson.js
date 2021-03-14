@@ -1,5 +1,5 @@
 import module from '~/app';
-import _ from 'underscore';
+import _ from 'lodash';
   export default module.factory('geojson', ['$http', '$locale',
     function($http, $locale) {
       var geojson = {};

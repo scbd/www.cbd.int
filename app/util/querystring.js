@@ -23,7 +23,7 @@
 // Modified version of NodeJS' querystring.js module made to work in the browser
 // with RequireJS and underscore instead of the native Node util module.
 
-import _ from 'underscore';
+import _ from 'lodash';
 
   var QueryString = {};
 
