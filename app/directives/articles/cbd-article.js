@@ -1,7 +1,6 @@
 import app from '~/app'
 import template from './cbd-article.html'
 import _ from 'lodash'
-import require from 'require'
 import './cbd-article-cover-image'
 import '~/services/article-service'
 import '~/authentication'

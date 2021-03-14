@@ -1,7 +1,7 @@
 import _    from 'lodash'
 import solr from '~/util/solr'
 import '~/app'
-import '~/services/article-service'
+import '~/directives/articles/cbd-article'
 import '~/directives/meetings/documents/document-files'
 import '~/filters/lstring'
 import '~/filters/term'
