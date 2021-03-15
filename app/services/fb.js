@@ -1,5 +1,5 @@
 import app from '~/app'
-import 'ngMeta'
+import * as meta from '~/services/meta'
 
         import('facebook').then(function(FB) {
           if (FB && FB.AppEvents && FB.init) {
@@ -16,12 +16,12 @@ import 'ngMeta'
           window.FB = {};
         });
 
-        app.factory('fb', ['ngMeta',function(ngMeta) {
+        app.factory('fb', [function() {
           var domain = 'www.cbd.int';
-          ngMeta.init();
+
           if(window.location.hostname==='localhost' || window.location.hostname==='www.cbddev.xyz') domain = 'www.cbddev.xyz';
 
-          ngMeta.setTag('fb:app_id','168158870409056');
+          meta.meta('fb:app_id','168158870409056');
 
           var types= ['apps.saves',
           'article',
@@ -80,25 +80,18 @@ import 'ngMeta'
               setImage:setImage,
               setOgType:setOgType
           };
-          // //============================================================
-          // //
-          // //============================================================
-          // function setTitle(title,titleSuffix){
-          //   if(!title) return;
-          //   ngMeta.setTitle(title, titleSuffix + ' | Circus Living');
-          // }
 
           //============================================================
           //
           //============================================================
           function setTitle(title,titleSuffix){
             if(!title) return;
-            // ngMeta.setTitle(title, titleSuffix + ' | Circus Living');
+
             if(titleSuffix)
               title = title + titleSuffix;
             else
               title = title + ' | Convention on Biological Diversity';
-            ngMeta.setTag('og:title',title );
+            meta.title(title);
           }
           //============================================================
           //
@@ -108,7 +101,7 @@ import 'ngMeta'
               uri='https://'+domain+uri;
 
             setDemensions(uri);
-            ngMeta.setTag('og:image',uri);
+            meta.image(uri);
           }
           //============================================================
           //
@@ -118,8 +111,8 @@ import 'ngMeta'
 
             img.src = uri;
             img.onload = function() {
-              ngMeta.setTag('og:image:height',this.height);
-              ngMeta.setTag('og:image:width',this.width);
+              meta.meta('og:image:height',this.height);
+              meta.meta('og:image:width',this.width);
             }
           }
           //============================================================
@@ -131,7 +124,7 @@ import 'ngMeta'
           //============================================================
           function set(name,value){
             if(!value) return;
-            ngMeta.setTag(name, value);
+            meta.meta(name, value);
           }
 
           //============================================================
@@ -139,7 +132,7 @@ import 'ngMeta'
           //============================================================
           function setOgType(type){
             if(!validateType(type,types))return;
-            ngMeta.setTag('og:type',type);
+            meta.meta('og:type',type);
           }
 
 

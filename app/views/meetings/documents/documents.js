@@ -10,6 +10,7 @@ import 'css!./agenda.css'
 import _ from 'lodash'
 import ng from 'angular'
 import moment from 'moment'
+import * as meta from '~/services/meta'
 // import sessionsView from '~/components/meetings/sessions/view.vue'
 // import uploads from '~/components/meetings/uploads.vue'
 
@@ -95,6 +96,8 @@ export { default as template } from './documents.html';
                     printSmart : false,
                     isMontreal : /montr.al.*canada/i.test((res.data.venueText||{}).en||'')
                 });
+
+                meta.title(`${meeting.code} - Documents`);
 
                 if(meeting.uploadStatement) {
                     registerComponents({uploads : await import('~/components/meetings/uploads.vue') });

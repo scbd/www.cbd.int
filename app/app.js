@@ -1,10 +1,8 @@
 import angular from 'angular'
 import 'toastr'
-import 'ngMeta'
-
 
 const app = angular.module('app', angular.defineModules(
-         ['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','ngMeta','ngVue', 'angular-cache', 'angularVue']));
+         ['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','ngVue', 'angular-cache', 'angularVue']));
 
 
     app.provider('$ngVue', $ngVueProvider) // create own ngVue provider as theirs was broken

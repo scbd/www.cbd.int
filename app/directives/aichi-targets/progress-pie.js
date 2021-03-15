@@ -1,6 +1,6 @@
 import 'amchart'
-import 'shim!amchart/pie[amchart]'
-import 'shim!amchart/themes/light[amchart]'
+import 'amchart/pie'
+import 'amchart/themes/light'
 import app from '~/app'
 import _ from 'lodash'
 import template from './progress-pie.html'

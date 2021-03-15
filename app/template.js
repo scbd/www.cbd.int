@@ -5,6 +5,7 @@ import PageHeaderFixedComp from 'PageHeaderFixed'
 import PageHeaderComp from 'PageHeader'
 import PageFooterComp from 'PageFooter'
 import toastTemplate from './toast.html'
+import * as meta from '~/services/meta'
 import 'css!cdn!npm/angular-toastr@1.3.0/dist/angular-toastr.css'
 import 'ngVue'
 import '~/providers/realm'
@@ -33,6 +34,9 @@ import './directives/bread-crumbs'
         //=====================
         //=====================
         //=====================
+
+        $rootScope.$watch('page.title',       function(value) { meta.title(value) });
+        $rootScope.$watch('page.description', function(value) { meta.description(value) });
 
         //=====================
         //

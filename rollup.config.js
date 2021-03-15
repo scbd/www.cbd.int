@@ -11,7 +11,7 @@ import vue                      from 'rollup-plugin-vue'
 import { string }               from "rollup-plugin-string";
 import { terser }               from 'rollup-plugin-terser';
 import glob                     from 'glob';
-import bootWebApp               from './app/boot.js';
+import bootWebApp, { cdnUrl }   from './app/boot.js';
 
 const asyncGlob = util.promisify(glob);
 
@@ -19,7 +19,13 @@ const isWatchOn = process.argv.includes('--watch');
 const cwd       = path.join(process.cwd(), 'app');
 const outputDir = 'dist';
 
-let externals = ['require', 'https://cdn.slaask.com/chat.js']
+let externals = [
+  'require', 
+  'https://cdn.slaask.com/chat.js',
+  'amchart/pie',
+  'ammap/themes/light',
+  'amchart/themes/light', 
+];
 
 export default async function(){
   
@@ -41,15 +47,15 @@ function bundle(relativePath, baseDir='app') {
       sourcemap: true,
       dir : path.join(outputDir, path.dirname(relativePath)),
       name : relativePath.replace(/[^a-z0-9]/ig, "_"),
+      exports: 'named'
     }],
     external: externals,
     plugins : [
       alias({ entries : [
         { find: /^~\/(.*)/,   replacement:`${process.cwd()}/app/$1` },
         { find: /^text!(.*)/, replacement:`$1` },
-        { find: /^cdn!(.*)/,  replacement:`https://cdn.jsdelivr.net/$1` },
+        { find: /^cdn!(.*)/,  replacement:`${cdnUrl}$1` },
       ]}),
-      shimAsExternal(),
       string({ include: "**/*.html" }),
       json({ namedExports: true }),
       injectCssToDom(),
@@ -73,7 +79,7 @@ async function loadExternals() {
 
   //Define requireJS configuration (define() + config.paths ) as externals
 
-  // Shim dependancies 
+  // Shim dependencies 
   const window     = { location : { pathname: '/' } }; 
   const defineJs   = (module) => { if(typeof(module)==='string') externals.push(module) };
   const requireJs  = ( )      => { };
@@ -101,20 +107,6 @@ function changeExtension(file, extension) {
 //////////////////
 // Custom Plugin
 //////////////////
-function shimAsExternal(options = {}) {
-
-  const shimTag = /^shim!/; 
-
-  return {
-    name: 'shimAsExternal',
-    resolveId(importeeId, importer) {  
-
-      if(!shimTag.test(importeeId)) return null;
-
-      return {id: importeeId, external: true};
-    }
-  }
-}
 
 function injectCssToDom(options = {}) {
 

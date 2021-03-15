@@ -1,3 +1,4 @@
+export const cdnUrl   = 'https://cdn.jsdelivr.net/';
 export const baseLibs = [
     'npm/angular@1.8.2/angular.min.js',
     'gh/scbd/angular-flex@2.2.2/angular-flex.min.js',
@@ -17,103 +18,95 @@ export default function bootApp(window, require, defineX) {
 
   const basePath   = location.pathname.replace(basePathPattern, '$1');
   const gitVersion = (document && document.documentElement.attributes['git-version'].value);
-  const cdnHost    = (document && document.documentElement.attributes['cdn-url'    ].value) || 'https://cdn.jsdelivr.net/';
+
+  defineX('cdn', { // cdn Plugin
+    load: function (name, req, onload, config) {
+      console.log('cdn!: ', name);
+        req([cdnUrl + name], onload);
+    }
+  });
+
 
   require.config({
       waitSeconds: 30,
       baseUrl : '/app/',
       paths: {
-          'ngDialog'        : cdnHost + 'npm/ng-dialog@0.6.1/js/ngDialog.min',
-          'css'             : cdnHost + 'npm/require-css@0.1.10/css.min',
-          'dragula'         : cdnHost + 'npm/dragula@3.7.3/dist/dragula.min',
-          'moment'          : cdnHost + 'npm/moment@2.22.2/min/moment.min',
-          'moment-timezone' : cdnHost + 'npm/moment-timezone@0.5.21/builds/moment-timezone-with-data-2012-2022.min',
-          'rangy'           : cdnHost + 'npm/rangy@1.3.0/lib/rangy-core.min.js',
-          'shim'            : cdnHost + 'gh/zetlen/require-shim/src/shim',
-          'interface'       : 'js/interface',
-          'magnific-popup'  : cdnHost + 'npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min',
-          'ammap3WorldHigh' : 'directives/reporting-display/worldEUHigh',
-          'alasql'          : 'libs/alasql/dist/alasql.min',
-          'js-xlsx'         : 'libs/js-xlsx/dist/xlsx.min',
-          'js-zip'          : 'libs/js-xlsx/dist/jszip',
-          'ods'             : 'libs/js-xlsx/dist/ods',
-          'tableexport'     : cdnHost + 'npm/tableexport@4.0.10/dist/js/tableexport',
-          'blobjs'          : cdnHost + 'npm/blobjs@1.1.1/Blob.min',
-          'file-saverjs'    : cdnHost + 'npm/file-saverjs@1.3.6/FileSaver.min',
-          'xlsx'            : cdnHost + 'npm/xlsx@0.13.4/dist/xlsx',
-          'jszip'           : cdnHost + 'npm/xlsx@0.13.4/dist/jszip',  
-          'linqjs'          : 'libs/linqjs/linq',
+          'css'             : cdnUrl + 'npm/require-css@0.1.10/css.min',
+          'ngDialog'        : cdnUrl + 'npm/ng-dialog@0.6.1/js/ngDialog.min',
+          'dragula'         : cdnUrl + 'npm/dragula@3.7.3/dist/dragula.min',
+          'moment'          : cdnUrl + 'npm/moment@2.22.2/min/moment.min',
+          'moment-timezone' : cdnUrl + 'npm/moment-timezone@0.5.21/builds/moment-timezone-with-data-2012-2022.min',
+          'rangy'           : cdnUrl + 'npm/rangy@1.3.0/lib/rangy-core.min.js',
+          'magnific-popup'  : cdnUrl + 'npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min',
+          'alasql'          : cdnUrl + 'npm/alasql@1.7.2/dist/alasql.min',
+          'tableexport'     : cdnUrl + 'npm/tableexport@4.0.10/dist/js/tableexport',
+          'blobjs'          : cdnUrl + 'npm/blobjs@1.1.1/Blob.min',
+          'file-saverjs'    : cdnUrl + 'npm/file-saverjs@1.3.6/FileSaver.min',
+          'linqjs'          : cdnUrl + 'npm/linq@3.2.3/linq.min',
           'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll',
-          'ngSmoothScroll'  : cdnHost + 'npm/ngSmoothScroll@2.0.0/dist/angular-smooth-scroll.min',
-          'bootstrap-datepicker': cdnHost +'npm/bootstrap-datepicker@1.4.0/js/bootstrap-datepicker.min',
-          'toastr'          : cdnHost + 'npm/angular-toastr@1.7.0/dist/angular-toastr.min',
-          'ammap3'          : 'libs/ammap3/ammap/ammap',
-          'ammap-theme'     : 'libs/ammap3/ammap/themes/light',
-          'ngMeta'          : 'libs/ngMeta/dist/ngMeta.min',
+          'ngSmoothScroll'  : cdnUrl + 'npm/ngSmoothScroll@2.0.0/dist/angular-smooth-scroll.min',
+          'bootstrap-datepicker': cdnUrl +'npm/bootstrap-datepicker@1.4.0/js/bootstrap-datepicker.min',
+          'toastr'          : cdnUrl + 'npm/angular-toastr@1.7.0/dist/angular-toastr.min',
           'facebook'        : '//connect.facebook.net/en_US/sdk',
           'gmapsapi'        : 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places',
-          'ngVue'           : cdnHost + 'npm/ngVue@1.7.7/build/index.min',
-          'angular-vue'     : cdnHost + 'npm/@scbd/angular-vue@2.0.0/dist/angular-vue.min',
-          'conferenceCal'   : cdnHost + 'npm/@scbd/conference-cal@0.1.2/dist/lib/ConferenceCal.umd.min',
-          'angular-cache'   : cdnHost + 'npm/angular-cache@4.6.0/dist/angular-cache.min',
-          'PageHeaderFixed' : cdnHost + 'npm/@scbd/page-header-fixed/dist/PageHeaderFixed.umd.min',
-          'PageHeader'      : cdnHost + 'npm/@scbd/page-header@0.0.70/dist/PageHeader.umd.min',
-          'PageFooter'      : cdnHost + 'npm/@scbd/page-footer/dist/PageFooter.umd.min',
-          'nlp'             : cdnHost + 'npm/compromise/builds/compromise.min',
-          'luxon'           : cdnHost + 'npm/luxon@1.25.0/build/amd/luxon',
-          'axios'           : cdnHost + 'npm/axios@0.21.1/dist/axios.min',
-          'vue-multiselect' : cdnHost + 'npm/vue-multiselect@2.1.6/dist/vue-multiselect.min',
-          'vue-i18n'        : cdnHost + 'npm/vue-i18n@8.21.1/dist/vue-i18n.min',
+          'ngVue'           : cdnUrl + 'npm/ngVue@1.7.7/build/index.min',
+          'angular-vue'     : cdnUrl + 'npm/@scbd/angular-vue@2.0.0/dist/angular-vue.min',
+          'conferenceCal'   : cdnUrl + 'npm/@scbd/conference-cal@0.1.2/dist/lib/ConferenceCal.umd.min',
+          'angular-cache'   : cdnUrl + 'npm/angular-cache@4.6.0/dist/angular-cache.min',
+          'PageHeaderFixed' : cdnUrl + 'npm/@scbd/page-header-fixed/dist/PageHeaderFixed.umd.min',
+          'PageHeader'      : cdnUrl + 'npm/@scbd/page-header@0.0.70/dist/PageHeader.umd.min',
+          'PageFooter'      : cdnUrl + 'npm/@scbd/page-footer/dist/PageFooter.umd.min',
+          'nlp'             : cdnUrl + 'npm/compromise/builds/compromise.min',
+          'luxon'           : cdnUrl + 'npm/luxon@1.25.0/build/amd/luxon',
+          'axios'           : cdnUrl + 'npm/axios@0.21.1/dist/axios.min',
+          'vue-multiselect' : cdnUrl + 'npm/vue-multiselect@2.1.6/dist/vue-multiselect.min',
+          'vue-i18n'        : cdnUrl + 'npm/vue-i18n@8.21.1/dist/vue-i18n.min',
           
       },
       shim: {
-          'ngDialog'             : { deps : ['angular', `css!${cdnHost}combine/npm/ng-dialog@0.6.1/css/ngDialog.min.css,npm/ng-dialog@0.6.1/css/ngDialog-theme-default.min.css`] },
+          'ngDialog'             : { deps : ['angular', `css!${cdnUrl}combine/npm/ng-dialog@0.6.1/css/ngDialog.min.css,npm/ng-dialog@0.6.1/css/ngDialog-theme-default.min.css`] },
           'moment-timezone'      : { deps : ['moment'] },
           'interface'            : { deps : []},
-          'magnific-popup'       : { deps : ['jquery', `css!${cdnHost}npm/magnific-popup@1.1.0/dist/magnific-popup.css` ]},
-          'dragula'              : { deps : [`css!${cdnHost}npm/dragula@3.7.3/dist/dragula.min.css`]},
-          'alasql'               : { deps : ['js-xlsx']},
-          'js-xlsx'              : { deps : ['js-zip', 'ods']},
+          'magnific-popup'       : { deps : ['jquery', `css!${cdnUrl}npm/magnific-popup@1.1.0/dist/magnific-popup.css` ]},
+          'dragula'              : { deps : [`css!${cdnUrl}npm/dragula@3.7.3/dist/dragula.min.css`]},
+          'alasql'               : { deps : ['xlsx']},
           'gmapsapi'             : { exports: 'google'},
           'facebook'             : { exports: 'FB'},
           'ngVue'                : { deps : ['vue'] },
-          'conferenceCal'        : { deps : ['ngVue',`css!${cdnHost}npm/@scbd/conference-cal@0.1.2/dist/lib/ConferenceCal.css`] },
+          'conferenceCal'        : { deps : ['ngVue',`css!${cdnUrl}npm/@scbd/conference-cal@0.1.2/dist/lib/ConferenceCal.css`] },
           'angular-cache'        : { deps : ['angular'] },
           'PageHeaderFixed'      : { deps : ['ngVue'] },
           'PageFooter'           : { deps : ['ngVue'] },
           'PageHeader'           : { deps : ['ngVue'] },
-          'xlsx'                 : { deps : ['jszip'],'exports': 'XLSX'},
-          'vue-multiselect'      : { deps : [`css!${cdnHost}npm/vue-multiselect@2.1.6/dist/vue-multiselect.min.css`] },
+          'vue-multiselect'      : { deps : [`css!${cdnUrl}npm/vue-multiselect@2.1.6/dist/vue-multiselect.min.css`] },
+          //
+          'ammap/themes/light'   : { deps : ['ammap'] },
+          'amchart/themes/light' : { deps : ['amchart'] },
+          'amchart/pie'          : { deps : ['amchart'] },
       },
       packages: [
-          { name: 'amchart', main: 'amcharts', location : 'libs/amcharts3/amcharts/' },
-          { name: 'ammap'  , main: 'ammap'   , location : 'libs/ammap3/ammap' }
+          { name: 'amchart', main: 'amcharts.min', location : cdnUrl+'npm/amcharts3@3.21.15/amcharts' },
+          { name: 'ammap'  , main: 'ammap.min'   , location : cdnUrl+'npm/ammap3@3.21.15/ammap' }
       ],
   });
 
   defineX('jquery',       [],  ()=>window.$);
   defineX('lodash',       [],  ()=>window._);
   defineX('angular',      [],  ()=>window.angular);
-  defineX('vue',          ['vue-i18n', 'https://cdn.cbd.int/@scbd/sso-vue-plugin-scbd@0.0.1'],  (i18n, ssoSCBD)=>{
+  defineX('vue',          ['vue-i18n', 'cdn!npm/@scbd/sso-vue-plugin-scbd@0.0.1/dist/sso-vue-plugin-scbd.umd.min.js'],  (i18n, ssoSCBD)=>{
       window.VueI18n = i18n;
       window.ssoSCBD = ssoSCBD;
       window.Vue.use(window.VueI18n);
       window.Vue.use(window.ssoSCBD);
       return window.Vue;
   });
-
   defineX('Vue', ['vue'], function(vue) { return vue; })
-  defineX('cdn', {
-      load: function (name, req, onload, config) {
-          req([cdnHost + name], onload);
-      }
-  });
 
-  defineX('xlsx', ['js-zip', 'ods'], function (jszip, ods) {
+  defineX('xlsx', ['cdn!npm/xlsx@0.13.4/dist/xlsx.min.js', 'cdn!npm/xlsx@0.13.4/dist/jszip.js'], function (xlsx, jszip) {
+      window.XLSX  = xlsx;
       window.JSZip = jszip;
-      window.ODS   = ods;
+      return xlsx;
   });
-
 
   defineX('dropbox-dropins', ['https://www.dropbox.com/static/api/2/dropins.js'], function(){
       if(window.Dropbox)
