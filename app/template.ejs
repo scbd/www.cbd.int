@@ -27,7 +27,7 @@
         'npm/requirejs@2.3.6/require.min.js'
     ]).join(',')}`%>"></script>
     <script>
-        require.config({ waitSeconds: 30, baseUrl : '/app/' });
+        require.config({ waitSeconds: 30, baseUrl : '/app/', urlArgs: 'v=<%=gitVersion%>' });
         require(["boot"], function(boot){
             var bootFn = boot.default || boot;
             bootFn(window, require, define);

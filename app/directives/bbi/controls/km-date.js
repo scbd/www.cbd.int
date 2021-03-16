@@ -1,6 +1,6 @@
 import app from '~/app';
 import template from './km-date.html';
-import 'bootstrap-datepicker';
+import 'datepicker';
   
   //============================================================
   //

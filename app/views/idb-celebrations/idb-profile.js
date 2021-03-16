@@ -222,14 +222,14 @@ export default ['$location', '$routeParams','$http','$filter','$q','IStorage','l
 			function loadReference (ref) {
 
 					return storage.documents.get(ref.identifier, { cache : true})
-						.success(function(data){
+						.then(function({data}){
 							ref= data;
 							return ref;
 						}).error(function(error, code){
 							if (code == 404 ) {
 
 								return storage.drafts.get(ref.identifier, { cache : true})
-									.success(function(data){
+									.then(function({data}){
 										ref= data;
 										return ref;
 									}).error(function(draftError, draftCode){

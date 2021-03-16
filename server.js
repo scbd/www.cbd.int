@@ -12,11 +12,11 @@ const oneDay  = 60*60*24;
 const oneYear = oneDay*365;
 
 if(!process.env.API_URL) {
-    console.warn('warning: evironment API_URL not set. USING default (https://api.cbd.int:443)');
+    console.warn('warning: environment API_URL not set. USING default (https://api.cbd.int:443)');
 }
 
 const apiUrl     =  process.env.API_URL || 'https://api.cbddev.xyz';
-const gitVersion = (process.env.COMMIT  || 'UNKNOWN').substr(0, 7);
+const gitVersion = (process.env.COMMIT  || 'UNKNOWN').substr(0, 8);
 
 console.info(`info: www.cbd.int`);
 console.info(`info: Git version: ${gitVersion}`);
@@ -31,12 +31,9 @@ app.use(require('morgan')('dev'));
 app.use(function(req, res, next) {  if(req.url.indexOf(".geojson")>0) res.contentType('application/json'); next(); } ); // override contentType for geojson files
 
 // Configure static files to serve
-app.use('/favicon.png',     express.static(__dirname + '/app/images/favicon.png',   { maxAge: 24*60*60 }));
-app.use('/app',             express.static(__dirname + '/dist',                     { setHeaders: setChunkCacheControl  }));
-app.use('/app',             express.static(__dirname + '/app',                      { setHeaders: setCustomCacheControl }));
-app.use('/app/libs/vue',    express.static(__dirname + '/node_modules/vue/dist',    { setHeaders: setCustomCacheControl }));
-app.use('/app/libs/ngVue',  express.static(__dirname + '/node_modules/ngVue/build', { setHeaders: setCustomCacheControl }));
-app.use('/app/libs/@scbd',  express.static(__dirname + '/node_modules/@scbd',       { setHeaders: setCustomCacheControl }));
+app.use('/favicon.png',  express.static(__dirname + '/app/images/favicon.png',   { maxAge: oneDay }));
+app.use('/app',          express.static(__dirname + '/dist',                     { setHeaders: setChunkCacheControl  }));
+app.use('/app',          express.static(__dirname + '/app',                      { setHeaders: setCustomCacheControl }));
 app.all('/app/*', send404);
 
 app.get('/doc/*', function(req, res) { proxy.web(req, res, { target: "https://www.cbd.int:443", secure: false } ); } );
@@ -54,8 +51,6 @@ app.get('/robots.txt', (req, res) => {
     res.contentType('text/plain');
     res.end(text);
 });
-
-app.get('/reports/map*', function(req, res) { res.cookie('VERSION', process.env.COMMIT||''); res.sendFile(__dirname + '/app/views/reports/template.html', { maxAge : 5*60 }); });
 
 app.get('/insession',    function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
 app.get('/insession/*',  function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });

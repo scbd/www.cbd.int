@@ -248,7 +248,7 @@ import targetsData from '~/data/aichi-targets/targets.json'
                   $http.get('/api/v2013/index/select', {
                     params: queryParameters,
                     // cache: true
-                  }).success(function(data) {
+                  }).then(function({data}) {
 
 
                     $scope.count = data.response.numFound;

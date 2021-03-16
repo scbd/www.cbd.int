@@ -1,5 +1,4 @@
 import 'angular-vue'
-import require from 'require'
 import VueI18n from 'vue-i18n'
 
 export { default as template } from './vue-view-wrapper.html';

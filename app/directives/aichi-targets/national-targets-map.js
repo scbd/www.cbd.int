@@ -196,7 +196,7 @@ import row from './target-row.html'
                     return $http.get('/api/v2013/index/select', {
                         params: queryParameters,
                         cache:true
-                    }).success(function(data) {
+                    }).then(function({data}) {
                         $scope.count = data.response.numFound;
                         $scope.documents = data.response.docs;
                     });
@@ -224,7 +224,7 @@ import row from './target-row.html'
                     return $http.get('/api/v2013/index/select', {
                         params: queryParameters,
                         cache:true
-                    }).success(function(data) {
+                    }).then(function({data}) {
                         $scope.tcount = data.response.numFound;
                         $scope.tdocuments = data.response.docs;
                     });

@@ -1,3 +1,4 @@
+import '~/js/interface'
 import app from '~/app'
 import templateHtml from './fisheye.html'
 

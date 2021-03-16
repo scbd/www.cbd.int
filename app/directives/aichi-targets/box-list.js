@@ -181,7 +181,7 @@ import 'css!cdn!npm/flag-icon-css@2.3.0/css/flag-icon.min.css';
                   $http.get('/api/v2013/index/select', {
                     params: queryParameters,
                     // cache: true
-                  }).success(function(data) {
+                  }).then(function({data}) {
 
 
                     $scope.count = data.response.numFound;

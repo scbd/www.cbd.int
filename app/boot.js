@@ -7,61 +7,56 @@ export const baseLibs = [
     'npm/angular-animate@1.8.2/angular-animate.min.js',
     'npm/angular-sanitize@1.8.2/angular-sanitize.min.js',
     'npm/lodash@3.10.1/index.min.js',
+    'npm/moment@2.29.1/min/moment.min.js',
+    `npm/moment-timezone@0.5.33/builds/moment-timezone-with-data-2012-2022.min.js`,
     'npm/vue@2.6.12/dist/vue.min.js',
 ];
 
 export default function bootApp(window, require, defineX) {
 
-  const basePathPattern = /\/([-a-z0-9]*)($|\/.*|\?.*)/i;
-
   const { document, location } = window;
-
-  const basePath   = location.pathname.replace(basePathPattern, '$1');
-  const gitVersion = (document && document.documentElement.attributes['git-version'].value);
+  const basePathPattern        = /\/([-a-z0-9]*)($|\/.*|\?.*)/i;
+  const basePath               = location.pathname.replace(basePathPattern, '$1');
+  const gitVersion             = (document && document.documentElement.attributes['git-version'].value);
 
   defineX('cdn', { // cdn Plugin
     load: function (name, req, onload, config) {
-      console.log('cdn!: ', name);
-        req([cdnUrl + name], onload);
+      req([`${cdnUrl}${name}`], onload);
     }
   });
-
 
   require.config({
       waitSeconds: 30,
       baseUrl : '/app/',
       paths: {
-          'css'             : cdnUrl + 'npm/require-css@0.1.10/css.min',
-          'ngDialog'        : cdnUrl + 'npm/ng-dialog@0.6.1/js/ngDialog.min',
-          'dragula'         : cdnUrl + 'npm/dragula@3.7.3/dist/dragula.min',
-          'moment'          : cdnUrl + 'npm/moment@2.22.2/min/moment.min',
-          'moment-timezone' : cdnUrl + 'npm/moment-timezone@0.5.21/builds/moment-timezone-with-data-2012-2022.min',
-          'rangy'           : cdnUrl + 'npm/rangy@1.3.0/lib/rangy-core.min.js',
-          'magnific-popup'  : cdnUrl + 'npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min',
-          'alasql'          : cdnUrl + 'npm/alasql@1.7.2/dist/alasql.min',
-          'tableexport'     : cdnUrl + 'npm/tableexport@4.0.10/dist/js/tableexport',
-          'blobjs'          : cdnUrl + 'npm/blobjs@1.1.1/Blob.min',
-          'file-saverjs'    : cdnUrl + 'npm/file-saverjs@1.3.6/FileSaver.min',
-          'linqjs'          : cdnUrl + 'npm/linq@3.2.3/linq.min',
-          'ngInfiniteScroll': 'libs/ngInfiniteScroll/build/ng-infinite-scroll',
-          'ngSmoothScroll'  : cdnUrl + 'npm/ngSmoothScroll@2.0.0/dist/angular-smooth-scroll.min',
-          'bootstrap-datepicker': cdnUrl +'npm/bootstrap-datepicker@1.4.0/js/bootstrap-datepicker.min',
-          'toastr'          : cdnUrl + 'npm/angular-toastr@1.7.0/dist/angular-toastr.min',
-          'facebook'        : '//connect.facebook.net/en_US/sdk',
-          'gmapsapi'        : 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places',
-          'ngVue'           : cdnUrl + 'npm/ngVue@1.7.7/build/index.min',
-          'angular-vue'     : cdnUrl + 'npm/@scbd/angular-vue@2.0.0/dist/angular-vue.min',
-          'conferenceCal'   : cdnUrl + 'npm/@scbd/conference-cal@0.1.2/dist/lib/ConferenceCal.umd.min',
-          'angular-cache'   : cdnUrl + 'npm/angular-cache@4.6.0/dist/angular-cache.min',
-          'PageHeaderFixed' : cdnUrl + 'npm/@scbd/page-header-fixed/dist/PageHeaderFixed.umd.min',
-          'PageHeader'      : cdnUrl + 'npm/@scbd/page-header@0.0.70/dist/PageHeader.umd.min',
-          'PageFooter'      : cdnUrl + 'npm/@scbd/page-footer/dist/PageFooter.umd.min',
-          'nlp'             : cdnUrl + 'npm/compromise/builds/compromise.min',
-          'luxon'           : cdnUrl + 'npm/luxon@1.25.0/build/amd/luxon',
-          'axios'           : cdnUrl + 'npm/axios@0.21.1/dist/axios.min',
-          'vue-multiselect' : cdnUrl + 'npm/vue-multiselect@2.1.6/dist/vue-multiselect.min',
-          'vue-i18n'        : cdnUrl + 'npm/vue-i18n@8.21.1/dist/vue-i18n.min',
-          
+          'css'               : `${cdnUrl}npm/require-css@0.1.10/css.min`,
+          'ngDialog'          : `${cdnUrl}npm/ng-dialog@0.6.1/js/ngDialog.min`,
+          'dragula'           : `${cdnUrl}npm/dragula@3.7.3/dist/dragula.min`,
+          'rangy'             : `${cdnUrl}npm/rangy@1.3.0/lib/rangy-core.min.js`,
+          'magnific-popup'    : `${cdnUrl}npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min`,
+          'alasql'            : `${cdnUrl}npm/alasql@1.7.2/dist/alasql.min`,
+          'tableexport'       : `${cdnUrl}npm/tableexport@4.0.10/dist/js/tableexport`,
+          'blobjs'            : `${cdnUrl}npm/blobjs@1.1.1/Blob.min`,
+          'file-saverjs'      : `${cdnUrl}npm/file-saverjs@1.3.6/FileSaver.min`,
+          'linqjs'            : `${cdnUrl}npm/linq@3.2.3/linq.min`,
+          'ngInfiniteScroll'  : `${cdnUrl}npm/ng-infinite-scroll@1.3.0/build/ng-infinite-scroll.min`,
+          'ngSmoothScroll'    : `${cdnUrl}npm/ngSmoothScroll@2.0.0/dist/angular-smooth-scroll.min`,
+          'datepicker'        : `${cdnUrl}npm/bootstrap-datepicker@1.4.0/js/bootstrap-datepicker.min`,
+          'toastr'            : `${cdnUrl}npm/angular-toastr@1.7.0/dist/angular-toastr.min`,
+          'ngVue'             : `${cdnUrl}npm/ngVue@1.7.7/build/index.min`,
+          'angular-vue'       : `${cdnUrl}npm/@scbd/angular-vue@2.0.0/dist/angular-vue.min`,
+          'conferenceCal'     : `${cdnUrl}npm/@scbd/conference-cal@0.1.2/dist/lib/ConferenceCal.umd.min`,
+          'angular-cache'     : `${cdnUrl}npm/angular-cache@4.6.0/dist/angular-cache.min`,
+          'PageHeaderFixed'   : `${cdnUrl}npm/@scbd/page-header-fixed/dist/PageHeaderFixed.umd.min`,
+          'PageHeader'        : `${cdnUrl}npm/@scbd/page-header@0.0.70/dist/PageHeader.umd.min`,
+          'PageFooter'        : `${cdnUrl}npm/@scbd/page-footer/dist/PageFooter.umd.min`,
+          'nlp'               : `${cdnUrl}npm/compromise/builds/compromise.min`,
+          'luxon'             : `${cdnUrl}npm/luxon@1.25.0/build/amd/luxon`,
+          'axios'             : `${cdnUrl}npm/axios@0.21.1/dist/axios.min`,
+          'vue-multiselect'   : `${cdnUrl}npm/vue-multiselect@2.1.6/dist/vue-multiselect.min`,
+          'vue-i18n'          : `${cdnUrl}npm/vue-i18n@8.21.1/dist/vue-i18n.min`,
+          'facebook'          : '//connect.facebook.net/en_US/sdk',
+          'gmapsapi'          : 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places',
       },
       shim: {
           'ngDialog'             : { deps : ['angular', `css!${cdnUrl}combine/npm/ng-dialog@0.6.1/css/ngDialog.min.css,npm/ng-dialog@0.6.1/css/ngDialog-theme-default.min.css`] },
@@ -88,12 +83,24 @@ export default function bootApp(window, require, defineX) {
           { name: 'amchart', main: 'amcharts.min', location : cdnUrl+'npm/amcharts3@3.21.15/amcharts' },
           { name: 'ammap'  , main: 'ammap.min'   , location : cdnUrl+'npm/ammap3@3.21.15/ammap' }
       ],
+      urlArgs: function(id, url) {
+
+        const hasHash    = /-[a-f0-9]{8}/i.test(id);
+        const isAbsolute = /^https?:/.test(url);
+
+        if(isAbsolute) return '';
+        if(hasHash   ) return '';
+
+        return 'v=' + gitVersion;
+      }
   });
 
-  defineX('jquery',       [],  ()=>window.$);
-  defineX('lodash',       [],  ()=>window._);
-  defineX('angular',      [],  ()=>window.angular);
-  defineX('vue',          ['vue-i18n', 'cdn!npm/@scbd/sso-vue-plugin-scbd@0.0.1/dist/sso-vue-plugin-scbd.umd.min.js'],  (i18n, ssoSCBD)=>{
+  defineX('jquery',  [],         ()=>window.$);
+  defineX('lodash',  [],         ()=>window._);
+  defineX('angular', [],         ()=>window.angular);
+  defineX('moment',  [],         ()=>window.moment);
+  defineX('moment-timezone', [], ()=>window.moment);
+  defineX('vue',     ['vue-i18n', 'cdn!npm/@scbd/sso-vue-plugin-scbd@0.0.1/dist/sso-vue-plugin-scbd.umd.min.js'],  (i18n, ssoSCBD)=>{
       window.VueI18n = i18n;
       window.ssoSCBD = ssoSCBD;
       window.Vue.use(window.VueI18n);

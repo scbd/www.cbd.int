@@ -1,5 +1,4 @@
 // rollup.config.js (building more than one bundle)
-import util                     from 'util'
 import path                     from 'path'
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 import alias                    from '@rollup/plugin-alias';
@@ -10,21 +9,17 @@ import dynamicImportVariables   from 'rollup-plugin-dynamic-import-variables';
 import vue                      from 'rollup-plugin-vue'
 import { string }               from "rollup-plugin-string";
 import { terser }               from 'rollup-plugin-terser';
-import glob                     from 'glob';
 import bootWebApp, { cdnUrl }   from './app/boot.js';
 
-const asyncGlob = util.promisify(glob);
-
 const isWatchOn = process.argv.includes('--watch');
-const cwd       = path.join(process.cwd(), 'app');
 const outputDir = 'dist';
 
 let externals = [
   'require', 
-  'https://cdn.slaask.com/chat.js',
   'amchart/pie',
   'ammap/themes/light',
   'amchart/themes/light', 
+  'https://cdn.slaask.com/chat.js',
 ];
 
 export default async function(){
@@ -64,11 +59,15 @@ function bundle(relativePath, baseDir='app') {
       commonjs({ include: 'node_modules/**/*.js'}),
       nodeResolve({ browser: true, mainFields: [ 'browser', 'module', 'main' ] }),
       isWatchOn ? null : getBabelOutputPlugin({
-         presets: [['@babel/preset-env', { targets: "> 0.25%, IE 10, not dead"}]],
-         allowAllFormats: true
-       }),
-       isWatchOn ? null : terser() // DISABLE IN DEV
+        presets: [['@babel/preset-env', { targets: "> 0.25%, IE 10, not dead"}]],
+        allowAllFormats: true
+      }),
+      isWatchOn ? null : terser() // DISABLE IN DEV
     ],
+    onwarn(warning, warn) {
+      if(warning.code=='EVAL' && warning.id.endsWith('js/interface.js')) return; //disable eval 
+      warn(warning);
+    }
   }
 }
 

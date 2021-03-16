@@ -266,7 +266,7 @@ import 'ngInfiniteScroll';
                     function loadSelectedContact(identifier,selectedContacts) {
                           $scope.loadingDocuments=true;
                           return $http.get('/api/v2013/documents/'+identifier, {
-                          }).success(function(doc) {
+                          }).then(function({data: doc}) {
                               selectedContacts.push(doc);
                               $scope.loadingDocuments=false;
                               if(doc.organization && doc.organization.identifier)
@@ -274,7 +274,7 @@ import 'ngInfiniteScroll';
                           }).catch(function(){
 
                             return $http.get('/api/v2013/documents/'+identifier+'/versions/draft', {
-                            }).success(function(doc) {
+                            }).then(function({data:doc}) {
                                 doc.header.version='draft';
                                 selectedContacts.push(doc);
                                 $scope.loadingDocuments=false;
@@ -294,13 +294,13 @@ import 'ngInfiniteScroll';
                     function loadOrgData(identifier,doc) {
                           $scope.loadingDocuments=true;
                           $http.get('/api/v2013/documents/'+identifier, {
-                          }).success(function(responceDoc) {
+                          }).then(function({data: responceDoc}) {
                                delete(responceDoc.header);
                                Object.assign(doc,responceDoc);
                                $scope.loadingDocuments=false;
                           }).catch(function(){
                               $http.get('/api/v2013/documents/'+identifier+'/versions/draft', {
-                              }).success(function(responceDoc) {
+                              }).then(function({data:responceDoc}) {
                                delete(responceDoc.header);
                                Object.assign(doc,responceDoc);
                                $scope.loadingDocuments=false;

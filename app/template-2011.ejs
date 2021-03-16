@@ -29,7 +29,7 @@
         'npm/requirejs@2.3.6/require.min.js'
     ]).join(',')}`%>"></script>
     <script>
-        require.config({ waitSeconds: 30, baseUrl : '/app/' });
+        require.config({ waitSeconds: 30, baseUrl : '/app/', urlArgs: 'v=<%=gitVersion%>' });
         require(["boot"], function(boot){
             var bootFn = boot.default || boot;
             bootFn(window, require, define);
@@ -44,10 +44,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="<%=`${cdnUrl}npm/font-awesome@4.7.0/css/font-awesome.css`%>">
-    <link rel="stylesheet" href="<%=`${cdnUrl}combine/${[
-        'npm/bootstrap@3.4.1/dist/css/bootstrap.css',
-        'npm/animate.css@3.5.2/animate.min.css',
-        ].join(',')}`%>">
+    <link rel="stylesheet" href="<%=`${cdnUrl}npm/bootstrap@3.4.1/dist/css/bootstrap.css`%>">
+    <link rel="stylesheet" href="<%=`${cdnUrl}npm/animate.css@3.5.2/animate.min.css`%>">
     <style>
 
     [ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }

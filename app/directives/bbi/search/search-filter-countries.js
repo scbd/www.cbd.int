@@ -84,7 +84,7 @@ import '~/filters/byLetter';
             function buildTermsAndQuery() {
 
                     if(!rawCountries){
-                        $http.get('/api/v2013/thesaurus/domains/countries/terms').success(function (data) {
+                        $http.get('/api/v2013/thesaurus/domains/countries/terms').then(function({data}) {
 
                             rawCountries = data;
                             _.each(rawCountries,function(country){
