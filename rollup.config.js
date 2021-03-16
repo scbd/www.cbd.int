@@ -5,7 +5,7 @@ import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 import alias                    from '@rollup/plugin-alias';
 import nodeResolve              from '@rollup/plugin-node-resolve'
 import json                     from '@rollup/plugin-json';
-import commonjs                 from 'rollup-plugin-commonjs';
+import commonjs                 from '@rollup/plugin-commonjs';
 import dynamicImportVariables   from 'rollup-plugin-dynamic-import-variables';
 import vue                      from 'rollup-plugin-vue'
 import { string }               from "rollup-plugin-string";
