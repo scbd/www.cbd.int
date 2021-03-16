@@ -33,7 +33,6 @@
     "dev": "rm -rf ./dist && npx rollup -c --watch",
     "server": "node server",
     "eslint": "npx eslint . --fix",
-    "clean-reinstall": "rm -rf ./node_modules && rm -rf ./app/libs && rm -rf ./package-lock.json rm -rf ./yarn.lock && npm install",
-    "postinstall": "npm run build"
+    "clean-reinstall": "rm -rf ./node_modules && rm -rf ./app/libs && rm -rf ./package-lock.json rm -rf ./yarn.lock && npm install"
   }
 }

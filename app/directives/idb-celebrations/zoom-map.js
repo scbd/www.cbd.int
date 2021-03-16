@@ -3,7 +3,7 @@ import app from '~/app';
 import _ from 'lodash';
 import 'ammap';
 import 'ammap/themes/light';
-import '~/directives/reporting-display/worldeuhigh';
+import '~/directives/reporting-display/worldEUHigh';
   
 
   app.directive('zoomMap', ['$location','$timeout', function($location,$timeout) {
