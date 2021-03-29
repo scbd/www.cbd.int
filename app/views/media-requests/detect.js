@@ -25,7 +25,7 @@ define(['lodash', 'app', 'filters/lstring', 'services/conference-service', 'dire
       if(!user.isAuthenticated) {
 
         $scope.articleQuery= [
-          {"$match"   : { "adminTags.title.en" : { $all: ['accounts', 'Sign-in', 'Sign-up'] }} },
+          {"$match"   : { "adminTags" : { $all: ['accounts', 'Sign-in', 'Sign-up'] }} },
           {"$sort"    : { "meta.updatedOn":-1}},
           {"$project" : { title:1, content:1, coverImage:1}},
           {"$limit"   : 1 }

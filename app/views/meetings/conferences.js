@@ -29,8 +29,8 @@ return ['$location','$scope', '$rootScope', 'conferenceService', '$q', '$compile
                     tags.push(conference.code);
                 });
                 
-                ag.push({"$match":{ "$and" : [{"adminTags.title.en":{"$all":['conferences', 'introduction', 'home-page']}}, 
-                                              { "adminTags.title.en" : { $in: tags}}]}});
+                ag.push({"$match":{ "$and" : [{"adminTags":{"$all":['conferences', 'introduction', 'home-page']}}, 
+                                              { "adminTags" : { $in: tags}}]}});
                 ag.push({"$project" : { coverImage:1, adminTags:1, title:1}});
 
                 articleService.query({ "ag" : JSON.stringify(ag) }).then(function(articles){                    

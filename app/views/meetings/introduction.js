@@ -18,7 +18,7 @@ return ['$scope', '$route', '$location', '$http', '$rootScope',
                 if((($route.current||{}).params||{}).urlTag)
                     tags = tags.concat($route.current.params.urlTag);
 
-                var match = { "adminTags.title.en" : { $all: tags}};
+                var match = { "adminTags" : { $all: tags}};
 
                 ag.push({"$match"   : match });
                 ag.push({"$project" : { title:1, content:1, coverImage:1}});
