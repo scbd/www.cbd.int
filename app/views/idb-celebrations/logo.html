@@ -1,0 +1,211 @@
+<!-- REF ======
+http://jsfiddle.net/6FZkk/1/
+-->
+
+
+<div class="container" ng-app="app" class="app" >
+    <link href="https://www.wfonts.com/download/data/2014/05/29/impact/impact.ttf" rel="stylesheet"/>
+    <style>
+        @font-face{
+            font-family: "Impact";
+            src: url("https://www.wfonts.com/download/data/2014/05/29/impact/impact.ttf") format("truetype");
+        }
+        .boxGenerate{
+            border:2px solid #222;
+            /* width: 800px; */
+            /* height: 320px; */
+            padding: 0px;
+        }
+
+        .boxIncon img{
+            /* height: 300px; */
+        }    
+        .impact-font{
+            font-family: Impact
+        }
+        .margin-nve-25{
+            margin-top: -25px;
+        }   
+        
+        .margin-nve-20{
+            margin-top: -20px;
+        }  
+        .margin-nve-15{
+            margin-top: -15px;
+        }    
+
+        .margin-nve-10{
+            margin-top: -10px;
+        }  
+        .font-size{
+            font-size: 65px!important;
+        }
+        .margin-pve-10{
+            margin-top: 10px;
+        }
+
+        .color-blue{
+            color: rgb(0, 134, 183);
+        }
+        .color-green{
+            color: rgb(0, 155, 72)
+        }
+
+        .dynamic-text-none{
+            position: absolute;
+            bottom: -25px;
+        }
+
+        .dynamic-text-3{
+            position: absolute;
+            bottom: -10px;
+        }
+
+        /* .border-green{
+            border:1px solid green;
+        }
+        .border-blue{
+            border:1px solid blue;
+        }
+        .border-orange{
+            border:1px solid orange;
+        }
+        .border-red{
+            border:1px solid red;
+        } */
+
+        @media (max-width: 1440px){
+            .margin-nve-25{
+                margin-top: -15px;
+            }   
+            
+            .margin-nve-20{
+                margin-top: -10px;
+            }  
+            .margin-nve-15{
+                margin-top: -15px;
+            }    
+
+            .margin-nve-10{
+                margin-top: -10px;
+            }  
+            .margin-pve-10{
+                margin-top: 10px;
+            }
+        }
+        
+    </style>
+
+
+
+    <div class="row">
+        
+        <div  class="col-lg-12">
+            <h2>INTERNATIONAL BIODIVERSITY DAY LOGO</h2>
+        </div>
+        <div  class="col-lg-7 hidden-md-down">
+            
+            <div class="boxGenerate ">
+                <div class="boxIncon" id="imgGenerator" style="padding:10px">
+                    <div class="row" style="border: 1px solid black;">
+                        <div class="col-lg-5">
+                            <img src="/app/images/idb-2021-logo.png" class="img-fluid idb-logo pull-right" id="logoImg"/>
+                        </div>
+                        <div class="impact-font col-lg-7" style="padding-left: 0px;max-height: 288px;" ng-if="language" >   
+                            <div id="bigtext" style="width:100%;max-height: 288px;">                                
+                                <div class="color-green border-green" id="logoDate" >
+                                   <span class="color-blue"> {{text[language].date}}</span>
+                                </div>
+                                <div id="logoDay" class="border-blue">
+                                    <span class="color-blue">{{text[language].day}}</span>
+                                </div>
+                                <div  id="logoTagline" class="border-orange" >
+                                    <span class="color-green"ng-if="logoType=='collective'">{{text[language].collectiveTagline}}</span>
+                                    <span class="color-green"ng-if="logoType=='individual'">{{text[language].individualTagline}}</span>
+                                </div>
+                                <div class="color-green border-red" id="logoName" >
+                                    {{name}} {{text[language].hashTag}}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="impact-font col-lg-7" style="padding-left: 0px;" ng-if="language" >                            
+                            <div  style="color: rgb(0, 134, 183);">
+                                    {{text[language].date}}</br>
+                                    {{text[language].day}}
+                            </div>
+                            <div style="color: rgb(0, 155, 72); ">
+                                <div>
+                                    <span ng-if="logoType=='collective'">{{text[language].collectiveTagline}}</span>
+                                    <span ng-if="logoType=='individual'">{{text[language].individualTagline}}</span>
+                                </div>
+                                <div ng-class="{'font-size':(name||'').length<3}">
+                                    {{name}} {{text[language].hashTag}}
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                    
+                </div>
+            </div>
+        </div>    
+        <div class="col-lg-5">
+            <label for="name">Select logo language</label>
+            <select class="form-control" ng-model="language" ng-change="fitText()">
+                <option value="ar">Arabic</option>
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="ru">Russian</option>
+                <option value="zh">Chinese</option>
+            </select>
+            <br/>
+            <label for="name">Logo type</label>
+            <select class="form-control" ng-model="logoType" ng-change="fitText()">
+                <option value="collective">Collective</option>
+                <option value="individual" selected>Individual</option>
+            </select>
+            <br/>
+            <label for="name">Enter your name</label>
+            <input type="text" class="form-control" id="name" placeholder="Name" ng-model="name" ng-change="fitText()">
+            <br/>
+            <input type="button" class=" btn btn-primary" id="btnSave" value="Generate" ng-click="saveImage()"/>            
+        </div>
+        <div class="col-lg-12">
+            <div id="myimage"></div>
+        </div>
+    </div>
+    
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+  
+  
+  </div>
+
+  <!-- <div class="impact-font col-lg-7" style="padding-left: 0px;" ng-if="language" >   
+    <div id="bigtext" style="width:100%;height: 100%;">                                
+        <div class="color-green"   ng-class="{'margin-nve-20':language=='en'}" id="logoDate">
+           <span class="color-blue"> {{text[language].date}}</span>
+        </div>
+        <div  ng-class="{'margin-nve-20':language=='en'}" id="logoDay">
+            <span class="color-blue">{{text[language].day}}</span>
+        </div>
+        <div  ng-class="{'margin-nve-10':language=='en'}" id="logoTagline">
+            <span class="color-green"ng-if="logoType=='collective'">{{text[language].collectiveTagline}}</span>
+            <span class="color-green"ng-if="logoType=='individual'">{{text[language].individualTagline}}</span>
+        </div>
+        <div class="color-green" ng-class="{
+            'margin-nve-10': language=='1en' && (name||'').length<=3,
+            'dynamic-text-none': language=='en' && (name||'').length<=0,
+            'dynamic-text-3': language=='en' && (name||'').length>0,
+            }" id="logoName">
+            {{name}} {{text[language].hashTag}}
+        </div>
+    </div>
+</div> -->

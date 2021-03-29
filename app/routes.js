@@ -143,6 +143,7 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       routeProvider
 
         .when('/:year/celebrations',       { templateUrl: 'views/idb-celebrations/idb-cel-index.html',  controllerAs: 'idbCelIndexCtrl',  resolveController: true, resolve : { user : currentUser() }})
+        .when('/:year/celebrations/logo',  { templateUrl: 'views/idb-celebrations/logo.html',           controllerAs: 'idbLogoCtrl',  resolveController: true, resolve : { user : currentUser() }})
         .when('/:year/celebrations/:gov',  { templateUrl: 'views/idb-celebrations/idb-profile.html',    controllerAs: 'idbProfileCtrl',   resolveController: true, resolveController: true , resolve : { user : currentUser() }})
         .otherwise({redirectTo: function(){ window.location.href= window.location}});
   }
