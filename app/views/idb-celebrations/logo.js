@@ -6,7 +6,7 @@ define(['app',
 
     
       
-	return ['$location', '$routeParams','$http','$scope', '$rootScope',  function( $location, $routeParams,$http, $scope,  $rootScope) {
+	return ['$location', '$routeParams','$http','$scope', '$rootScope', '$window',  function( $location, $routeParams,$http, $scope,  $rootScope, $window) {
         $scope.text = {
             en : {
                 date                : '22 MAY 2021',
@@ -66,26 +66,14 @@ define(['app',
         $scope.name = '';
         $scope.logoType = 'individual';
         $scope.language = 'en'
-        $scope.saveImage = function() { 
+        $scope.saveImage = function(generateOnly) { 
            
-            // $scope.fitText();
-            console.log( screen.width, $rootScope.deviceSize);
-
-            var classToAdd = ''
-            // if(screen.width > 1440)
-                classToAdd= 'margin-nve-10';
-            // else
-            //     classToAdd = 'margin-pve-10';
-
-            if(classToAdd!='')
-                $('.impact-font').addClass(classToAdd);
             html2canvas($("#imgGenerator"), {
                 onrendered: function(canvas) {
-                    $('#myimage').empty().append(canvas);
+                    $('#newImage').empty().append(canvas);
                     canvas.toBlob(function(blob) {
-                        // saveAs(blob, "logo.jpg"); 
-                        if(classToAdd!='')
-                           $('.impact-font').removeClass(classToAdd);
+                        if(!generateOnly)
+                            saveAs(blob, "logo.jpg");                        
                     });
                 }
             });
@@ -104,12 +92,36 @@ define(['app',
                 console.log( $scope.text[$scope.language].maxfontsize)
                 $('#bigtext').bigtext();
                 // $('#bigtext').textFit({multiLine:true, reProcess:true})
-                getSize();
+                // getSize();
+                html2canvas($("#bigtext"), {
+                    onrendered: function(canvas) {
+                        var myImg       = $('.boxIncon #logoImg');
+                        var myImgHeight     = myImg.height();
+                        var margin = '-20px'
+                        if(myImgHeight > 250){
+                            myImgHeight += 20
+                        }
+                        if(myImgHeight > 200){
+                            margin = '-15px';
+                            myImgHeight += 15                            
+                        }
+                        else if(myImgHeight < 200){
+                            margin = '-10px';
+                            myImgHeight += 15
+                        }
+                        myImgHeight = 300
+                        $(canvas).css('height', myImgHeight+'px')
+                        $(canvas).css('margin-top',margin)
+                        $('#textImage').empty().append(canvas);
+                        $scope.saveImage(true);
+                    }
+                });
                 // $('.boxIncon #logoImg').css('height', $('#bigtext').height()+'px')
             }, 200)
         }
         setTimeout(function(){
             $scope.fitText();
+           
         }, 200)
         
        function getSize() {
@@ -176,27 +188,53 @@ define(['app',
             var margin_logoTagline = ((logoTaglineHeight - logoTaglinefontSize)/2) 
             var margin_logoName    = ((logoNameHeight    - logoNamefontSize   )/2) 
             var isPositive = false;
+            console.log('margin:', margin_logoDate,   
+            margin_logoDay    ,
+            margin_logoTagline,
+            margin_logoName   ,
 
-            if($scope.name.length>0){
-                if($scope.name.length==1)
-                    margin_logoName -= 10;                
-                else if($scope.name.length==2)
-                    margin_logoName -= 15;                
-                else if($scope.name.length==3)
-                    margin_logoName -= 20;
-                else{
-                    var namePosition = $('.boxIncon #logoName').position()
-                    margin_logoName = (logoNameHeight-logoNamefontSize)/2
-                    isPositive=true
-                }
-            }
+            margin_logoDate   +
+            margin_logoDay    +
+            margin_logoTagline+
+            margin_logoName   )
+
+            var totalMargin =  ( margin_logoDate   +
+                                margin_logoDay    +
+                                margin_logoTagline+
+                                margin_logoName   )/4
+            // if($scope.name.length>0){
+            //     if($scope.name.length==1)
+            //         margin_logoName -= 10;                
+            //     else if($scope.name.length==2)
+            //         margin_logoName -= 15;                
+            //     else if($scope.name.length==3)
+            //         margin_logoName -= 20;
+            //     else{
+            //         var namePosition = $('.boxIncon #logoName').position()
+            //         margin_logoName = (logoNameHeight-logoNamefontSize)/2
+            //         isPositive=true
+            //     }
+            // }
             
-            logoDate   .css('margin-top', '-' + (margin_logoDate   ) + 'px')
-            logoDay    .css('margin-top', '-' + (margin_logoDay     + (margin_logoDate)) + 'px')
-            logoTagline.css('margin-top', '-' + (margin_logoTagline + (margin_logoDay)) + 'px')
-            logoName   .css('margin-top', (isPositive ? '' : '-') + (margin_logoName    + (0)) + 'px')
+            // logoDate   .css('margin-top', '-' + (margin_logoDate   ) + 'px')
+            // logoDay    .css('margin-top', '-' + (margin_logoDay     + (margin_logoDate)) + 'px')
+            // logoTagline.css('margin-top', '-' + (margin_logoTagline + (margin_logoDay)) + 'px')
+            // logoName   .css('margin-top', (isPositive ? '' : '-') + (margin_logoName    + (0)) + 'px')
+
+            // logoDate   .css('margin-top', '-' + (totalMargin  ) + 'px')
+            // logoDay    .css('margin-top', '-' + (totalMargin*2) + 'px')
+            // logoTagline.css('margin-top', '-' + (totalMargin*2) + 'px')
+            // logoName   .css('margin-top', '-' + (totalMargin*2) + 'px')
 
         }
         
+
+        function onResize() {
+            $scope.fitText();
+        }
+        angular.element($window).on('resize', onResize);
+        $scope.$on('$destroy', function(){
+            angular.element($window).off('resize', onResize);
+        });
     }]
 });

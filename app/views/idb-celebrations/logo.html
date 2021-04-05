@@ -11,7 +11,7 @@ http://jsfiddle.net/6FZkk/1/
             src: url("https://www.wfonts.com/download/data/2014/05/29/impact/impact.ttf") format("truetype");
         }
         .boxGenerate{
-            border:2px solid #222;
+            /* border:2px solid #222; */
             /* width: 800px; */
             /* height: 320px; */
             padding: 0px;
@@ -45,10 +45,10 @@ http://jsfiddle.net/6FZkk/1/
         }
 
         .color-blue{
-            color: rgb(0, 134, 183);
+            color: rgb(0, 134, 183)!important;
         }
         .color-green{
-            color: rgb(0, 155, 72)
+            color: rgb(0, 155, 72)!important
         }
 
         .dynamic-text-none{
@@ -61,7 +61,7 @@ http://jsfiddle.net/6FZkk/1/
             bottom: -10px;
         }
 
-        /* .border-green{
+        .border-green{
             border:1px solid green;
         }
         .border-blue{
@@ -72,8 +72,12 @@ http://jsfiddle.net/6FZkk/1/
         }
         .border-red{
             border:1px solid red;
-        } */
-
+        }
+        #newImage canvas{
+            width: 100%;
+            height: 100%;
+            /* margin-top: -20px; */
+        }
         @media (max-width: 1440px){
             .margin-nve-25{
                 margin-top: -15px;
@@ -93,6 +97,10 @@ http://jsfiddle.net/6FZkk/1/
                 margin-top: 10px;
             }
         }
+
+        .padding{
+            padding: 5px;
+        }
         
     </style>
 
@@ -103,74 +111,39 @@ http://jsfiddle.net/6FZkk/1/
         <div  class="col-lg-12">
             <h2>INTERNATIONAL BIODIVERSITY DAY LOGO</h2>
         </div>
-        <div  class="col-lg-7 hidden-md-down">
-            
-            <div class="boxGenerate ">
-                <div class="boxIncon" id="imgGenerator" style="padding:10px">
-                    <div class="row" style="border: 1px solid black;">
-                        <div class="col-lg-5">
-                            <img src="/app/images/idb-2021-logo.png" class="img-fluid idb-logo pull-right" id="logoImg"/>
-                        </div>
-                        <div class="impact-font col-lg-7" style="padding-left: 0px;max-height: 288px;" ng-if="language" >   
-                            <div id="bigtext" style="width:100%;max-height: 288px;">                                
-                                <div class="color-green border-green" id="logoDate" >
-                                   <span class="color-blue"> {{text[language].date}}</span>
-                                </div>
-                                <div id="logoDay" class="border-blue">
-                                    <span class="color-blue">{{text[language].day}}</span>
-                                </div>
-                                <div  id="logoTagline" class="border-orange" >
-                                    <span class="color-green"ng-if="logoType=='collective'">{{text[language].collectiveTagline}}</span>
-                                    <span class="color-green"ng-if="logoType=='individual'">{{text[language].individualTagline}}</span>
-                                </div>
-                                <div class="color-green border-red" id="logoName" >
-                                    {{name}} {{text[language].hashTag}}
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <div class="impact-font col-lg-7" style="padding-left: 0px;" ng-if="language" >                            
-                            <div  style="color: rgb(0, 134, 183);">
-                                    {{text[language].date}}</br>
-                                    {{text[language].day}}
-                            </div>
-                            <div style="color: rgb(0, 155, 72); ">
-                                <div>
-                                    <span ng-if="logoType=='collective'">{{text[language].collectiveTagline}}</span>
-                                    <span ng-if="logoType=='individual'">{{text[language].individualTagline}}</span>
-                                </div>
-                                <div ng-class="{'font-size':(name||'').length<3}">
-                                    {{name}} {{text[language].hashTag}}
-                                </div>
-                            </div>
-                        </div> -->
-                    </div>
-                    
-                </div>
-            </div>
+        <div  class="col-lg-7">
+            <div id="newImage"></div>
         </div>    
         <div class="col-lg-5">
-            <label for="name">Select logo language</label>
-            <select class="form-control" ng-model="language" ng-change="fitText()">
-                <option value="ar">Arabic</option>
-                <option value="en">English</option>
-                <option value="es">Spanish</option>
-                <option value="fr">French</option>
-                <option value="ru">Russian</option>
-                <option value="zh">Chinese</option>
-            </select>
-            <br/>
-            <label for="name">Logo type</label>
-            <select class="form-control" ng-model="logoType" ng-change="fitText()">
-                <option value="collective">Collective</option>
-                <option value="individual" selected>Individual</option>
-            </select>
-            <br/>
-            <label for="name">Enter your name</label>
-            <input type="text" class="form-control" id="name" placeholder="Name" ng-model="name" ng-change="fitText()">
-            <br/>
-            <input type="button" class=" btn btn-primary" id="btnSave" value="Generate" ng-click="saveImage()"/>            
+            <div class="row">
+                <div class="col-lg-12 col-md-6 col-sm-6 padding">
+                    <label for="name">Select logo language</label>
+                    <select class="form-control" ng-model="language" ng-change="fitText()">
+                        <option value="ar">Arabic</option>
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="ru">Russian</option>
+                        <option value="zh">Chinese</option>
+                    </select>
+                </div>
+                <div class="col-lg-12 col-md-6  col-sm-6 padding">
+                    <label for="name">Logo type</label>
+                    <select class="form-control" ng-model="logoType" ng-change="fitText()">
+                        <option value="collective">Collective</option>
+                        <option value="individual" selected>Individual</option>
+                    </select>            
+                </div>
+                <div class="col-lg-12 padding">
+                    <label for="name">Enter your name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Name" ng-model="name" ng-change="fitText()">
+                </div>
+                <div class="col-lg-12 padding">
+                    <input type="button" class=" btn btn-primary" id="btnSave" value="Generate" ng-click="saveImage()"/>            
+                </div>
+            </div>
         </div>
-        <div class="col-lg-12">
+        <div class="col-lg-12" style="display: none;">
             <div id="myimage"></div>
         </div>
     </div>
@@ -184,8 +157,37 @@ http://jsfiddle.net/6FZkk/1/
     <br/>
     <br/>
     <br/>
-  
-  
+  <div style="opacity: 0;">
+    <div class="boxGenerate " style="width:753.484px;height:308px;">
+        <div class="boxIncon" id="imgGenerator" style="padding:10px;width:753.484px;height:308px;">
+            <div class="row" style="width:753.484px;height:308px;">
+                <div class="col-lg-51" style="width: 286.438px;">
+                    <img src="/app/images/idb-2021-logo.png" class="img-fluid idb-logo pull-right" id="logoImg"/>
+                </div>
+                <div class="impact-font col-lg-71" style="padding-left: 5px;max-height: 288px;width: 428.016px;" ng-if="language" >   
+                    <div id="textImage" style="width:100%;max-height: 288px;border1: 1px dotted purple;">           
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div id="bigtext" class="impact-font " style="max-width: 400px;">                                
+        <div class="border-green1 color-blue" id="logoDate" >
+            {{text[language].date}}
+        </div>
+        <div id="logoDay" class="border-blue1 color-blue">
+            {{text[language].day}}
+        </div>
+        <div  id="logoTagline" class="border-orange1" >
+            <span class="color-green"ng-if="logoType=='collective'">{{text[language].collectiveTagline}}</span>
+            <span class="color-green"ng-if="logoType=='individual'">{{text[language].individualTagline}}</span>
+        </div>
+        <div class="color-green border-red1" id="logoName" >
+            {{name}} {{text[language].hashTag}}
+        </div>
+    </div>
+</div>
   </div>
 
   <!-- <div class="impact-font col-lg-7" style="padding-left: 0px;" ng-if="language" >   
