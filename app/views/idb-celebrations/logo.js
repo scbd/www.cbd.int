@@ -65,8 +65,15 @@ define(['app',
         $scope.name = 'CBD';
         $scope.logoType = 'individual';
         $scope.language = 'en'
+
+
+        var basePath  = (angular.element('base').attr('href')||'').replace(/\/+$/g, '');
+
         $scope.saveImage = function(generateOnly) { 
            
+            $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.name);
+            $window.ga('send', 'pageview');
+
             html2canvas($("#imgGenerator"), {
                 onrendered: function(canvas) {
                     $('#newImage').empty().append(canvas);
@@ -91,12 +98,9 @@ define(['app',
                 getSize();
                 $scope.saveImage(true);
             }, 200)
-        }
-        setTimeout(function(){
-            $scope.fitText();           
-        }, 200)
+        }        
         
-       function getSize() {
+        function getSize() {
             var myImg       = $('.boxGenerate #logoImg');
             var logoDate    = $('#bigtext #logoDate');
             var logoDay     = $('#bigtext #logoDay')
@@ -137,8 +141,7 @@ define(['app',
             logoName   .css('margin-top', '' + (equalMargin ) + 'px')
 
 
-        }
-        
+        }        
 
         function onResize() {
             $scope.fitText();
@@ -147,5 +150,9 @@ define(['app',
         $scope.$on('$destroy', function(){
             angular.element($window).off('resize', onResize);
         });
+
+        setTimeout(function(){
+            $scope.fitText();           
+        }, 200)
     }]
 });
