@@ -4,11 +4,10 @@ http://jsfiddle.net/6FZkk/1/
 
 
 <div class="container" ng-app="app" class="app" >
-    <link href="https://www.wfonts.com/download/data/2014/05/29/impact/impact.ttf" rel="stylesheet"/>
     <style>
         @font-face{
             font-family: "Impact";
-            src: url("https://www.wfonts.com/download/data/2014/05/29/impact/impact.ttf") format("truetype");
+            src: url("app/fonts/impact.ttf") format("truetype");
         }
         .boxGenerate{
             /* border:2px solid #222; */
@@ -18,7 +17,7 @@ http://jsfiddle.net/6FZkk/1/
         }
 
         .boxIncon img{
-            /* height: 300px; */
+            height: 290px;
         }    
         .impact-font{
             font-family: Impact
@@ -104,9 +103,7 @@ http://jsfiddle.net/6FZkk/1/
         
     </style>
 
-
-
-    <div class="row">
+    <div class="row" id="idb2020Logo">
         
         <div  class="col-lg-12">
             <h2>INTERNATIONAL BIODIVERSITY DAY LOGO</h2>
@@ -150,64 +147,33 @@ http://jsfiddle.net/6FZkk/1/
     
     <br/>
     <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-  <div style="opacity: 0;">
-    <div class="boxGenerate " style="width:753.484px;height:308px;">
-        <div class="boxIncon" id="imgGenerator" style="padding:10px;width:753.484px;height:308px;">
-            <div class="row" style="width:753.484px;height:308px;">
+    <div style="opacity: 000;">
+    <div class="boxGenerate " style="width:716.484px;height:308px;">
+        <div class="boxIncon" id="imgGenerator" style="padding:10px;width:716.484px;height:308px;">
+            <div class="row" style="width:716.484px;height:291px;">
                 <div class="col-lg-51" style="width: 286.438px;">
                     <img src="/app/images/idb-2021-logo.png" class="img-fluid idb-logo pull-right" id="logoImg"/>
                 </div>
                 <div class="impact-font col-lg-71" style="padding-left: 5px;max-height: 288px;width: 428.016px;" ng-if="language" >   
-                    <div id="textImage" style="width:100%;max-height: 288px;border1: 1px dotted purple;">           
+                    <div id="bigtext" class="impact-font " style="max-width: 100%;">                                
+                        <div class="border-green1 color-blue" id="logoDate" >
+                            {{text[language].date}}
+                        </div>
+                        <div id="logoDay" class="border-blue1 color-blue">
+                            {{text[language].day}}
+                        </div>
+                        <div  id="logoTagline" class="border-orange1" ng-if="language!='zh'">
+                            <span class="color-green"ng-if="logoType=='collective'">{{text[language].collectiveTagline}}</span>
+                            <span class="color-green"ng-if="logoType=='individual'">{{text[language].individualTagline}}</span>
+                        </div>
+                        <div class="color-green border-red1" id="logoName" >
+                            <span ng-if="language=='zh'">{{text[language].collectiveTagline}}</span>{{name}} {{text[language].hashTag}}
+                        </div>
                     </div>
                 </div>
             </div>
             
         </div>
     </div>
-    <div id="bigtext" class="impact-font " style="max-width: 400px;">                                
-        <div class="border-green1 color-blue" id="logoDate" >
-            {{text[language].date}}
-        </div>
-        <div id="logoDay" class="border-blue1 color-blue">
-            {{text[language].day}}
-        </div>
-        <div  id="logoTagline" class="border-orange1" >
-            <span class="color-green"ng-if="logoType=='collective'">{{text[language].collectiveTagline}}</span>
-            <span class="color-green"ng-if="logoType=='individual'">{{text[language].individualTagline}}</span>
-        </div>
-        <div class="color-green border-red1" id="logoName" >
-            {{name}} {{text[language].hashTag}}
-        </div>
     </div>
 </div>
-  </div>
-
-  <!-- <div class="impact-font col-lg-7" style="padding-left: 0px;" ng-if="language" >   
-    <div id="bigtext" style="width:100%;height: 100%;">                                
-        <div class="color-green"   ng-class="{'margin-nve-20':language=='en'}" id="logoDate">
-           <span class="color-blue"> {{text[language].date}}</span>
-        </div>
-        <div  ng-class="{'margin-nve-20':language=='en'}" id="logoDay">
-            <span class="color-blue">{{text[language].day}}</span>
-        </div>
-        <div  ng-class="{'margin-nve-10':language=='en'}" id="logoTagline">
-            <span class="color-green"ng-if="logoType=='collective'">{{text[language].collectiveTagline}}</span>
-            <span class="color-green"ng-if="logoType=='individual'">{{text[language].individualTagline}}</span>
-        </div>
-        <div class="color-green" ng-class="{
-            'margin-nve-10': language=='1en' && (name||'').length<=3,
-            'dynamic-text-none': language=='en' && (name||'').length<=0,
-            'dynamic-text-3': language=='en' && (name||'').length>0,
-            }" id="logoName">
-            {{name}} {{text[language].hashTag}}
-        </div>
-    </div>
-</div> -->
