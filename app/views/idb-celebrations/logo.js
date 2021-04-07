@@ -57,7 +57,7 @@ define(['app',
                 day                 : 'يوم التنوع البيولوجي',
                 tagline             : 'نحن جزء من الحل',
                 individualTagline   : 'أنا جزء من الحل',
-                hashTag             : '#من_أجل_الطبيعة',
+                hashTag             : 'من#_أجل_الطبيعة',
                 colletive           : 'نحن جزء من الحل# من_أجل_الطبيعة',
                 maxfontsize         : 60 
             }            
