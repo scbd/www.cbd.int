@@ -18,6 +18,8 @@ http://jsfiddle.net/6FZkk/1/
 
         .boxIncon img{
             height: 290px;
+            padding-right: 5px;
+            padding-left: 5px;
         }    
         .impact-font{
             font-family: Impact
@@ -101,6 +103,35 @@ http://jsfiddle.net/6FZkk/1/
             padding: 5px;
         }
         
+        .boxGenerate .box-size{
+            width:716.484px;
+            height:308px;
+        }
+        .boxGenerate .text-box-width{
+            width: 428.016px;
+        }
+
+        .zh .boxGenerate .box-size,
+        .ru .boxGenerate .box-size,
+        .fr .boxGenerate .box-size,
+        .es .boxGenerate .box-size{
+            width:816.484px;
+            height:308px;
+        }
+
+        .zh .boxGenerate .text-box-width,
+        .ru .boxGenerate .text-box-width,
+        .fr .boxGenerate .text-box-width,
+        .es .boxGenerate .text-box-width{
+            width: 528.016px;
+        }
+
+        .impact-font{
+            padding-left: 5px;
+        }
+        .ar .impact-font{
+            padding-right: 5px;
+        }
     </style>
 
     <div class="row" id="idb2020Logo">
@@ -147,14 +178,14 @@ http://jsfiddle.net/6FZkk/1/
     
     <br/>
     <br/>
-    <div style="opacity: 000;">
-    <div class="boxGenerate " style="width:716.484px;height:308px;">
-        <div class="boxIncon" id="imgGenerator" style="padding:10px;width:716.484px;height:308px;">
-            <div class="row" style="width:716.484px;height:291px;">
+    <div style="opacity: 000;" class="{{language}}">
+    <div class="boxGenerate box-size">
+        <div class="boxIncon box-size" id="imgGenerator" style="padding:10px;">
+            <div class="row box-size" >
                 <div class="col-lg-51" style="width: 286.438px;">
                     <img src="/app/images/idb-2021-logo.png" class="img-fluid idb-logo pull-right" id="logoImg"/>
                 </div>
-                <div class="impact-font col-lg-71" style="padding-left: 5px;max-height: 288px;width: 428.016px;" ng-if="language" >   
+                <div class="impact-font col-lg-71 text-box-width" style="padding-left: 5px;max-height: 288px;" ng-if="language" >   
                     <div id="bigtext" class="impact-font " style="max-width: 100%;">                                
                         <div class="border-green1 color-blue" id="logoDate" >
                             {{text[language].date}}

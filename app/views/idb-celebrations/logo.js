@@ -53,7 +53,7 @@ define(['app',
                 maxfontsize         : 60 
             },
             ar:{
-                date                : '22 أيار/مايو 2021',
+                date                : '٢٢ أيار/مايو ٢٠٢١',
                 day                 : 'يوم التنوع البيولوجي',
                 tagline             : 'نحن جزء من الحل',
                 individualTagline   : 'أنا جزء من الحل',
@@ -134,11 +134,14 @@ define(['app',
             var equalMargin = (myImgHeight-totalFontSize)/3;
             var margin_logoDate    = ((logoDateHeight    - logoDatefontSize   )/2)
 
-            if($scope.language!= 'zh')
+            // if($scope.language!= 'zh')
                 logoDate   .css('margin-top', '-' + (margin_logoDate   ) + 'px')
             logoDay    .css('margin-top', '' + (equalMargin ) + 'px')
             logoTagline.css('margin-top', '' + (equalMargin ) + 'px')
-            logoName   .css('margin-top', '' + (equalMargin ) + 'px')
+            if($scope.language== 'zh')
+                logoName   .css('margin-top', '' + (equalMargin +10) + 'px')
+            else
+                logoName   .css('margin-top', '' + (equalMargin ) + 'px')
 
 
         }        
