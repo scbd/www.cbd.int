@@ -30,13 +30,13 @@ return ['$location','$scope', '$rootScope', 'conferenceService', '$q', '$compile
                 });
                 
                 ag.push({"$match":{ "$and" : [{"adminTags":{"$all":['conferences', 'introduction', 'home-page']}}, 
-                                              { "adminTags" : { $in: tags}}]}});
+                                              { "adminTags" : { $in: _(tags).map(_.kebabCase).value()}}]}});
                 ag.push({"$project" : { coverImage:1, adminTags:1, title:1}});
 
                 articleService.query({ "ag" : JSON.stringify(ag) }).then(function(articles){                    
                     _.each(articles, function(article){
                         var conference = _.find(conferences.data, function(conf){
-                            var tags = _(article.adminTags).map('title').map('en').value()
+                            var tags = _(article.adminTags).map('title').map('en').map(_.kebabCase).value()
                             return _.includes(tags, conf.code)
                         })
                         if(conference){

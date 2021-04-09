@@ -1,4 +1,4 @@
-﻿define(['app', 'directives/social-media', 'directives/articles/cbd-article'], function(app) { 'use strict';
+﻿define(['app', 'lodash', 'directives/social-media', 'directives/articles/cbd-article'], function(app, _) { 'use strict';
 
 return ['$scope', '$route', function ($scope,  $route) {
        
@@ -17,7 +17,7 @@ return ['$scope', '$route', function ($scope,  $route) {
                 if((($route.current||{}).params||{}).urlTag)
                     tags = tags.concat($route.current.params.urlTag);
 
-                var match = { "adminTags" : { $all: tags}};
+                var match = { "adminTags" : { $all: _(tags).map(_.kebabCase).value() }};
 
                 ag.push({"$match"   : match });
                 ag.push({"$project" : { title:1, content:1, coverImage:1}});
