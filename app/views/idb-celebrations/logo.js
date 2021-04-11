@@ -10,7 +10,7 @@ define(['app',
             en : {
                 date                : '22 MAY 2021',
                 day                 : 'BIODIVERSITY DAY',
-                collectiveTagline    : 'We’re part of the solution',
+                collectiveTagline   : 'We’re part of the solution',
                 individualTagline   : 'I’m part of the solution',
                 hashTag             : '#ForNature',
                 colletive           : 'We’re part of the solution',
@@ -60,7 +60,15 @@ define(['app',
                 hashTag             : 'من#_أجل_الطبيعة',
                 colletive           : 'نحن جزء من الحل# من_أجل_الطبيعة',
                 maxfontsize         : 60 
-            }            
+            },
+            mr:{
+                date                : '22 मे 2021',
+                day                 : 'जीवदिन दिवस',
+                tagline             : 'मी समाधानाचा एक भाग आहे',
+                individualTagline   : 'मी समाधानाचा एक भाग आहे',
+                hashTag             : '#निसर्गासाठी'
+            }
+            
         }
         $scope.name = 'CBD';
         $scope.logoType = 'individual';
@@ -71,7 +79,7 @@ define(['app',
 
         $scope.saveImage = function(generateOnly) { 
            
-            $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.name);
+            $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.name+'&language='+$scope.language+'&logoType='+$scope.logoType);
             $window.ga('send', 'pageview');
 
             html2canvas($("#imgGenerator"), {
@@ -136,8 +144,17 @@ define(['app',
 
             // if($scope.language!= 'zh')
                 logoDate   .css('margin-top', '-' + (margin_logoDate   ) + 'px')
-            logoDay    .css('margin-top', '' + (equalMargin ) + 'px')
+
+            if($scope.language== 'fr'){
+                logoDay    .css('margin-top', '' + (equalMargin +10) + 'px');
+                $('.impact-font.text-box-width').css('margin-top', '-10px');
+            }
+            else{
+                logoDay    .css('margin-top', '' + (equalMargin ) + 'px')
+                $('.impact-font.text-box-width').css('margin-top', '0px');
+            }
             logoTagline.css('margin-top', '' + (equalMargin ) + 'px')
+
             if($scope.language== 'zh')
                 logoName   .css('margin-top', '' + (equalMargin +10) + 'px')
             else
@@ -159,3 +176,5 @@ define(['app',
         }, 200)
     }]
 });
+
+
