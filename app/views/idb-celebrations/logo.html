@@ -1,9 +1,4 @@
-<!-- REF ======
-http://jsfiddle.net/6FZkk/1/
--->
-
-
-<div class="container" ng-app="app" class="app" >
+<div class="container" class="app" >
     <style>
         @font-face{
             font-family: "Impact";
@@ -137,7 +132,16 @@ http://jsfiddle.net/6FZkk/1/
     <div class="row" id="idb2020Logo">
         
         <div  class="col-lg-12">
-            <h2>INTERNATIONAL BIODIVERSITY DAY LOGO</h2>
+            <h2>INTERNATIONAL BIODIVERSITY DAY LOGO
+                <a class="pull-right btn btn-primary" ng-href="{{basePath}}/2018/celebrations/logos">View Published Logos</a>
+                <a class="pull-right btn btn-primary" ng-href="{{basePath}}/2018/celebrations/logos/draft" ng-if="isAdmin" style="margin-right: 5px;">Approve Logos</a>
+            </h2>
+            <hr/>
+        </div>
+        <div  class="col-lg-12" ng-if="showSuccessMessage">
+            <div class="alert alert-success" role="alert">
+                The custom logo was uploaded to CBD database, if approved the log will appear on the published logo link.
+              </div>
         </div>
         <div  class="col-lg-7">
             <div id="newImage"></div>
@@ -168,7 +172,7 @@ http://jsfiddle.net/6FZkk/1/
                     <input type="text" class="form-control" id="name" placeholder="Name" ng-model="name" ng-change="fitText()">
                 </div>
                 <div class="col-lg-12 padding">
-                    <input type="button" class=" btn btn-primary" id="btnSave" value="Generate" ng-click="saveImage()"/>            
+                    <input type="button" class=" btn btn-primary" id="btnSave" value="Download" ng-click="saveImage()" ng-disabled="uploading"/>            
                 </div>
             </div>
         </div>

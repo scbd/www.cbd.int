@@ -5,7 +5,7 @@ define(['app',
 
     
       
-	return ['$location', '$routeParams','$http','$scope', '$rootScope', '$window',  function( $location, $routeParams,$http, $scope,  $rootScope, $window) {
+	return ['$location', 'user','$http','$scope', '$rootScope', '$window',  function( $location, user,$http, $scope,  $rootScope, $window) {
         $scope.text = {
             en : {
                 date                : '22 MAY 2021',
@@ -73,12 +73,14 @@ define(['app',
         $scope.name = 'CBD';
         $scope.logoType = 'individual';
         $scope.language = 'en'
+        $scope.isAdmin = _.intersection(['Administrator', 'idb-logo-administrator'], user.roles).length
 
 
-        var basePath  = (angular.element('base').attr('href')||'').replace(/\/+$/g, '');
+        var basePath  = $scope.basePath = (angular.element('base').attr('href')||'').replace(/\/+$/g, '');
 
         $scope.saveImage = function(generateOnly) { 
-           
+            $scope.showSuccessMessage = false;
+
             $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.name+'&language='+$scope.language+'&logoType='+$scope.logoType);
             $window.ga('send', 'pageview');
 
@@ -86,8 +88,11 @@ define(['app',
                 onrendered: function(canvas) {
                     $('#newImage').empty().append(canvas);
                     canvas.toBlob(function(blob) {
-                        if(!generateOnly)
+                        if(!generateOnly){  
+                            uploadImage(canvas.toDataURL());                        
                             saveAs(blob, "22-May-Biodiversity-Day.jpg");                        
+                            
+                        }
                     });
                 }
             });
@@ -174,6 +179,26 @@ define(['app',
         setTimeout(function(){
             $scope.fitText();           
         }, 200)
+
+
+        function uploadImage(blob){
+           $scope.uploading = true;
+            var data = {
+                'file': blob,
+                'name': $scope.name,
+                'logoType': $scope.logoType,
+                'language': $scope.language
+            }
+
+            return $http.post('/api/v2021/idb-logos', data)
+            .then(function(success) {
+                $scope.showSuccessMessage = true;
+                return success.data;
+            })
+            .finally(function(){
+                $scope.uploading = false;
+            });
+        }
     }]
 });
 
