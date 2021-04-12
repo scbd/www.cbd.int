@@ -1,0 +1,215 @@
+<div class="container" class="app" >
+    <style>
+        @font-face{
+            font-family: "Impact";
+            src: url("app/fonts/impact.ttf") format("truetype");
+        }
+        .boxGenerate{
+            /* border:2px solid #222; */
+            /* width: 800px; */
+            /* height: 320px; */
+            padding: 0px;
+        }
+
+        .boxIncon img{
+            height: 290px;
+            padding-right: 5px;
+            padding-left: 5px;
+        }    
+        .impact-font{
+            font-family: Impact
+        }
+        .margin-nve-25{
+            margin-top: -25px;
+        }   
+        
+        .margin-nve-20{
+            margin-top: -20px;
+        }  
+        .margin-nve-15{
+            margin-top: -15px;
+        }    
+
+        .margin-nve-10{
+            margin-top: -10px;
+        }  
+        .font-size{
+            font-size: 65px!important;
+        }
+        .margin-pve-10{
+            margin-top: 10px;
+        }
+
+        .color-blue{
+            color: rgb(0, 134, 183)!important;
+        }
+        .color-green{
+            color: rgb(0, 155, 72)!important
+        }
+
+        .dynamic-text-none{
+            position: absolute;
+            bottom: -25px;
+        }
+
+        .dynamic-text-3{
+            position: absolute;
+            bottom: -10px;
+        }
+
+        .border-green{
+            border:1px solid green;
+        }
+        .border-blue{
+            border:1px solid blue;
+        }
+        .border-orange{
+            border:1px solid orange;
+        }
+        .border-red{
+            border:1px solid red;
+        }
+        #newImage canvas{
+            width: 100%;
+            height: 100%;
+            /* margin-top: -20px; */
+        }
+        @media (max-width: 1440px){
+            .margin-nve-25{
+                margin-top: -15px;
+            }   
+            
+            .margin-nve-20{
+                margin-top: -10px;
+            }  
+            .margin-nve-15{
+                margin-top: -15px;
+            }    
+
+            .margin-nve-10{
+                margin-top: -10px;
+            }  
+            .margin-pve-10{
+                margin-top: 10px;
+            }
+        }
+
+        .padding{
+            padding: 5px;
+        }
+        
+        .boxGenerate .box-size{
+            width:716.484px;
+            height:308px;
+        }
+        .boxGenerate .text-box-width{
+            width: 428.016px;
+        }
+
+        .zh .boxGenerate .box-size,
+        .ru .boxGenerate .box-size,
+        .fr .boxGenerate .box-size,
+        .es .boxGenerate .box-size{
+            width:816.484px;
+            height:308px;
+        }
+
+        .zh .boxGenerate .text-box-width,
+        .ru .boxGenerate .text-box-width,
+        .fr .boxGenerate .text-box-width,
+        .es .boxGenerate .text-box-width{
+            width: 528.016px;
+        }
+
+        .impact-font{
+            padding-left: 5px;
+        }
+        .ar .impact-font{
+            padding-right: 5px;
+        }
+    </style>
+
+    <div class="row" id="idb2020Logo">
+        
+        <div  class="col-lg-12">
+            <h2>INTERNATIONAL BIODIVERSITY DAY LOGO
+                <a class="pull-right btn btn-primary" ng-href="{{basePath}}/2018/celebrations/logos">View Published Logos</a>
+                <a class="pull-right btn btn-primary" ng-href="{{basePath}}/2018/celebrations/logos/draft" ng-if="isAdmin" style="margin-right: 5px;">Approve Logos</a>
+            </h2>
+            <hr/>
+        </div>
+        <div  class="col-lg-12" ng-if="showSuccessMessage">
+            <div class="alert alert-success" role="alert">
+                The custom logo was uploaded to CBD database, if approved the log will appear on the published logo link.
+              </div>
+        </div>
+        <div  class="col-lg-7">
+            <div id="newImage"></div>
+        </div>    
+        <div class="col-lg-5">
+            <div class="row">
+                <div class="col-lg-12 col-md-6 col-sm-6 padding">
+                    <label for="name">Select logo language</label>
+                    <select class="form-control" ng-model="language" ng-change="fitText()">
+                        <option value="ar">Arabic</option>
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="ru">Russian</option>
+                        <option value="zh">Chinese</option>
+                        <!-- <option value="mr">Marathi</option> -->
+                    </select>
+                </div>
+                <div class="col-lg-12 col-md-6  col-sm-6 padding">
+                    <label for="name">Logo type</label>
+                    <select class="form-control" ng-model="logoType" ng-change="fitText()">
+                        <option value="collective">Collective</option>
+                        <option value="individual" selected>Individual</option>
+                    </select>            
+                </div>
+                <div class="col-lg-12 padding">
+                    <label for="name">Enter your name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Name" ng-model="name" ng-change="fitText()">
+                </div>
+                <div class="col-lg-12 padding">
+                    <input type="button" class=" btn btn-primary" id="btnSave" value="Download" ng-click="saveImage()" ng-disabled="uploading"/>            
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12" style="display: none;">
+            <div id="myimage"></div>
+        </div>
+    </div>
+    
+    <br/>
+    <br/>
+    <div style="opacity: 000;" class="{{language}}">
+    <div class="boxGenerate box-size">
+        <div class="boxIncon box-size" id="imgGenerator" style="padding:10px;">
+            <div class="row box-size" >
+                <div class="col-lg-51" style="width: 286.438px;">
+                    <img src="/app/images/idb-2021-logo.png" class="img-fluid idb-logo pull-right" id="logoImg"/>
+                </div>
+                <div class="impact-font col-lg-71 text-box-width" style="padding-left: 5px;max-height: 288px;" ng-if="language" >   
+                    <div id="bigtext" class="impact-font " style="max-width: 100%;">                                
+                        <div class="border-green1 color-blue" id="logoDate" >
+                            {{text[language].date}}
+                        </div>
+                        <div id="logoDay" class="border-blue1 color-blue">
+                            {{text[language].day}}
+                        </div>
+                        <div  id="logoTagline" class="border-orange1" ng-if="language!='zh'">
+                            <span class="color-green"ng-if="logoType=='collective'">{{text[language].collectiveTagline}}</span>
+                            <span class="color-green"ng-if="logoType=='individual'">{{text[language].individualTagline}}</span>
+                        </div>
+                        <div class="color-green border-red1" id="logoName" >
+                            <span ng-if="language=='zh'">{{text[language].collectiveTagline}}</span> {{name}} {{text[language].hashTag}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    </div>
+</div>
