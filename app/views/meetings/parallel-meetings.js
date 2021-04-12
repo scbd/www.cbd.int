@@ -1,4 +1,4 @@
-﻿define(['app', 'directives/social-media',  'services/conference-service'], function(app) { 'use strict';
+﻿define(['app', 'lodash', 'directives/social-media',  'services/conference-service'], function(app, _) { 'use strict';
 
 return ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope',
  function ($scope,  $route, $location, conferenceService, $q, $rootScope) {
@@ -18,7 +18,7 @@ return ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope'
                 if((($route.current||{}).params||{}).urlTag)
                     tags = tags.concat($route.current.params.urlTag);
 
-                var match = { "adminTags" : { $all: tags}};
+                var match = { "adminTags" : { $all: _(tags).map(_.kebabCase).value()}};
 
                 ag.push({"$match"   : match });
                 ag.push({"$project" : { title:1, content:1, coverImage:1}});
