@@ -47,39 +47,54 @@ define(['app','json!https://s3.amazonaws.com/cbddocumentspublic-imagebucket-15w2
         //============================================================
         function getArticle() {
 
-          var params = {
-              q: {
-									'tags.title.en'				: 'International Day for Biodiversity',//IDB
-                  'customTags.title.en'	: _ctrl.year.toString()
-              }, fo:1
-          };
-          return $http.get("https://api.cbd.int/api/v2017/articles",{params:params}).then(
-            function(o){
-              if(o.data){
-                _ctrl.article = o.data
-                _ctrl.articleContent = o.data.content[locale]
-              }
-          });
+			var queries =	[	$http.get("/api/v2017/article-tags",{params:{q:{'title.en':'International Day for Biodiversity'}}}), 
+								$http.get("/api/v2017/article-custom-tags",{params:{q:{'title.en':_ctrl.year.toString()}}})]
+			return $q.all(queries)
+				.then(function(result){
+
+					var params = {
+						q: {
+							'tags'			: { $oid: result[0].data[0]._id},
+							'customTags'	: { $oid: result[1].data[0]._id}
+						}, 
+						fo:1
+					};
+					return $http.get("/api/v2017/articles",{params:params}).then(
+						function(o){
+						if(o.data){
+							_ctrl.article = o.data
+							_ctrl.articleContent = o.data.content[locale]
+						}
+					});
+
+				});
         }
         //============================================================
         //
         //============================================================
         function getOtherCelebrations() {
 
-          var params = {
-              q: {
-									'tags.title.en'				: 'International Day for Biodiversity',//IDB
-                  'customTags.title.en'	: { $all : [_ctrl.year.toString(), 'other-celebrations']}
-              }, fo:1
-          };
-          return $http.get("https://api.cbd.int/api/v2017/articles",{params:params}).then(
-            function(o){
-              if(o.data){
-                _ctrl.otherCelebrations = o.data
-                _ctrl.otherCelebrationsContent = o.data.content[locale]
-              }
-          });
+
+			var queries =	[	$http.get("/api/v2017/article-tags",{params:{q:{'title.en':'International Day for Biodiversity'}}}), 
+								$http.get("/api/v2017/article-custom-tags",{params:{q:{'title.en':{ $in : [_ctrl.year.toString(), 'other-celebrations']}}}})]
+			return $q.all(queries)
+				.then(function(result){
+					var params = {
+						q: {
+							'tags'			: { $oid: result[0].data[0]._id},
+							'customTags'	: { $all : _.map(result[1].data, function(tag){return { $oid: tag._id}})}
+						}, fo:1
+					};
+					return $http.get("/api/v2017/articles",{params:params}).then(
+						function(o){
+						if(o.data){
+							_ctrl.otherCelebrations = o.data
+							_ctrl.otherCelebrationsContent = o.data.content[locale]
+						}
+					});
+				});
         }
+		
 ///management/articles/5acb8b88bf653b00011f5112/IDB-Celebrations-Around-the-World
 				//============================================================
 				//

@@ -135,7 +135,7 @@ define(['lodash', 'util/solr', 'app', 'services/article-service','filters/lstrin
         //===========================
         function loadArticle(code){
             
-            var match = { "adminTags.title.en" : { $all: ['notification', code]}};     
+            var match = { "adminTags" : { $all: ['notification', _.kebabCase(code)]}};     
 
             _ctrl.articleQuery = [
                 {"$match"   : match },
