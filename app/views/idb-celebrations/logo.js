@@ -1,11 +1,12 @@
 define(['app',
+'https://cdn.jsdelivr.net/combine/npm/blueimp-canvas-to-blob',
 'https://zachleat.github.io/BigText/dist/bigtext.js',
 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js',
 'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js'], function(app) { 'use strict';
 
     
       
-	return ['$location', 'user','$http','$scope', '$rootScope', '$window',  function( $location, user,$http, $scope,  $rootScope, $window) {
+	return ['$location', 'user','$http','$scope', '$timeout', '$window',  function( $location, user,$http, $scope,  $timeout, $window) {
         $scope.text = {
             en : {
                 date                : '22 MAY 2021',
@@ -80,9 +81,11 @@ define(['app',
 
         $scope.saveImage = function(generateOnly) { 
             $scope.showSuccessMessage = false;
-
-            $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.name+'&language='+$scope.language+'&logoType='+$scope.logoType);
-            $window.ga('send', 'pageview');
+            
+            if(~document.location.hostname.indexOf('cbd.int')){
+                $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.name+'&language='+$scope.language+'&logoType='+$scope.logoType);
+                $window.ga('send', 'pageview');
+            }
 
             html2canvas($("#imgGenerator"), {
                 onrendered: function(canvas) {
@@ -100,13 +103,17 @@ define(['app',
 
         $scope.fitText = function(selector){
 
+            $scope.isReady = false;
+
             if($scope.language == 'ar')
                 $('.boxIncon').css('direction', 'rtl')
             else
                 $('.boxIncon').css('direction', 'ltr')
 
             selector = selector||'.fit'
-            setTimeout(function(){
+            $timeout(function(){
+                console.log($scope.name)
+                $scope.isReady = true;
                 $('#bigtext').bigtext();
                 getSize();
                 $scope.saveImage(true);
@@ -176,7 +183,7 @@ define(['app',
             angular.element($window).off('resize', onResize);
         });
 
-        setTimeout(function(){
+        $timeout(function(){
             $scope.fitText();           
         }, 200)
 
