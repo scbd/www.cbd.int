@@ -2,7 +2,7 @@
     <style>
         @font-face{
             font-family: "Impact";
-            src: url("app/fonts/impact.ttf") format("truetype");
+            src: url("/app/fonts/impact.ttf") format("truetype");
         }
         .boxGenerate{
             /* border:2px solid #222; */
@@ -127,20 +127,25 @@
         .ar .impact-font{
             padding-right: 5px;
         }
+
+        /* .container .container{
+            padding: 0px 10px;
+        } */
     </style>
 
     <div class="row" id="idb2020Logo">
         
         <div  class="col-lg-12">
             <h2>INTERNATIONAL BIODIVERSITY DAY LOGO
-                <a class="pull-right btn btn-primary" ng-href="{{basePath}}/2018/celebrations/logos">View Published Logos</a>
-                <a class="pull-right btn btn-primary" ng-href="{{basePath}}/2018/celebrations/logos/draft" ng-if="isAdmin" style="margin-right: 5px;">Approve Logos</a>
             </h2>
             <hr/>
+            <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos">View Published Logos</a>
+            <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos/draft" ng-if="isAdmin" style="margin-right: 5px;">Approve Logos</a>
         </div>
         <div  class="col-lg-12" ng-if="showSuccessMessage">
             <div class="alert alert-success" role="alert">
-                The custom logo was uploaded to CBD database, if approved the log will appear on the published logo link.
+                Your custom logo was uploaded to CBD database, if approved the logo will appear on the published logos 
+                <a ng-href="{{basePath}}/2018/celebrations/logos">link</a>.
               </div>
         </div>
         <div  class="col-lg-7">
@@ -191,19 +196,24 @@
                     <img src="/app/images/idb-2021-logo.png" class="img-fluid idb-logo pull-right" id="logoImg"/>
                 </div>
                 <div class="impact-font col-lg-71 text-box-width" style="padding-left: 5px;max-height: 288px;" ng-if="language" >   
+                    
                     <div id="bigtext" class="impact-font " style="max-width: 100%;">                                
                         <div class="border-green1 color-blue" id="logoDate" >
-                            {{text[language].date}}
+                            <span  ng-if="language!='ar'" ng-bind="text[language].date"></span>
+                            <span  ng-if="language=='ar'" style="font-family: auto;">٢٢ أيار<span>/</span>مايو ٢٠٢١</span>
+                            
                         </div>
                         <div id="logoDay" class="border-blue1 color-blue">
-                            {{text[language].day}}
+                            <span ng-bind="text[language].day"></span>
                         </div>
                         <div  id="logoTagline" class="border-orange1" ng-if="language!='zh'">
-                            <span class="color-green"ng-if="logoType=='collective'">{{text[language].collectiveTagline}}</span>
-                            <span class="color-green"ng-if="logoType=='individual'">{{text[language].individualTagline}}</span>
+                            <span class="color-green"ng-if="logoType=='collective'" ng-bind="text[language].collectiveTagline"></span>
+                            <span class="color-green"ng-if="logoType=='individual'" ng-bind="text[language].individualTagline"></span>
                         </div>
                         <div class="color-green border-red1" id="logoName" >
-                            <span ng-if="language=='zh'">{{text[language].collectiveTagline}}</span> {{name}} {{text[language].hashTag}}
+                            <span ng-if="language=='zh'" ng-bind="text[language].collectiveTagline"></span> 
+                            <span ng-bind="name"></span> 
+                            <span ng-bind="text[language].hashTag"></span>
                         </div>
                     </div>
                 </div>

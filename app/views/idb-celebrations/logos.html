@@ -17,12 +17,16 @@
             }
 
             div.gallery:hover {
-            border: 1px solid #777;
+                /* border: 1px solid #777; */
             }
 
             div.gallery img {
-            width: 100%;
-            height: auto;
+                width: 100%;
+                height: auto;
+                display: block;
+                position: relative;
+                -webkit-transition: -webkit-transform 0.35s;
+                transition: transform 0.35s;
             }
 
             div.desc {
@@ -70,19 +74,30 @@
                 display: flex;
                 justify-content: center;
             }
+
+            .container .container{
+                padding: 0px 10px;
+            }
+            .hovereffect:hover img {
+                -webkit-transform: translate3d(0,-10%,0);
+                transform: translate3d(0,-10%,0);
+                /* box-shadow: 0 0 5px #fff; */
+            }
         </style>
         <div class="row">
             <div  class="col-lg-12">
                 <h2>INTERNATIONAL BIODIVERSITY DAY LOGO
-                    <a class="pull-right btn btn-primary" ng-href="{{basePath}}/2018/celebrations/logos/new">Add your logo</a>
-                    <a class="pull-right btn btn-primary" ng-href="{{basePath}}/2018/celebrations/logos/draft" ng-if="isAdmin" style="margin-right: 5px;">Approve Logos</a>
                 </h2>
                 <hr/>
+
+                <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos/new">Add your logo</a>
+                <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos" ng-if="isAdmin" style="margin-right: 5px;">Published Logos</a>
+                <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos/draft" ng-if="isAdmin" style="margin-right: 5px;">Approve Logos</a>
             </div>
             <div class="col-xs-12">
                 <div class="alert alert-info"  role="alert" ng-if="!logos.length">No more logos to validate</div>
             </div>
-            <div class="responsive" ng-repeat="logo in logos" ng-class="{'rejected':logo.status=='rejected'}">
+            <div class="responsive hovereffect" ng-repeat="logo in logos" ng-class="{'rejected':logo.status=='rejected'}">
                 <strong class="overlay-text">REJECTED</strong>
                 <div class="gallery idb-logos">
                     <img src="{{logo.image.url}}" />
