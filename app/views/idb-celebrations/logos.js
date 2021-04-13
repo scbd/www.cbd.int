@@ -29,7 +29,7 @@ define(['app', 'lodash',
         $scope.isAdmin = _.intersection(['Administrator', 'idb-logo-administrator'], user.roles).length
         $scope.updateStatus = function(logo, status){
             logo.updating = true;
-            $http.put('/api/v2021/idb-logo/'+logo._id+'/'+status)
+            $http.put('/api/v2021/idb-logos/'+logo._id+'/'+status)
             .then(function(result) {
                 logo.status = status;
             })

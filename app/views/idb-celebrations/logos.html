@@ -101,8 +101,7 @@
                 <strong class="overlay-text">REJECTED</strong>
                 <div class="gallery idb-logos">
                     <img src="{{logo.image.url}}" />
-                    <div class="pull-right1" ng-if="logo.status == 'draft'">                        
-                        </br>
+                    <div class="pull-right1" ng-if="logo.status == 'draft'">  
                         <button ng-disabled="logo.updating" ng-click="updateStatus(logo, 'approved')" class="btn btn-success btn-xs btn-sm">Approve</button>
                         <button ng-disabled="logo.updating" ng-click="updateStatus(logo, 'rejected')" class="btn btn-danger btn-xs btn-sm">Reject</button>
                     </div>
