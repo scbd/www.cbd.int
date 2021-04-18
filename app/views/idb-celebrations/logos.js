@@ -16,14 +16,6 @@ define(['app', 'lodash',
         $http.get('/api/v2021/idb-logos', {params:query})
         .then(function(result) {
             $scope.logos = result.data;
-
-            if(status=='draft'){
-                var promises = _.map($scope.logos, function(logo){
-                    return $http.get('')
-                })
-
-
-            }
         })
 
         $scope.isAdmin = _.intersection(['Administrator', 'idb-logo-administrator'], user.roles).length

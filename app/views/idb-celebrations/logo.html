@@ -128,6 +128,11 @@
             padding-right: 5px;
         }
 
+        .zh #logoDate{
+            font-weight: bold;
+            font-family: 'Hiragino Kaku Gothic Pro', 'WenQuanYi Zen Hei', '微軟正黑體', '蘋果儷中黑', Helvetica, Arial, sans-serif;
+        }
+
         /* .container .container{
             padding: 0px 10px;
         } */
@@ -136,12 +141,16 @@
     <div class="row" id="idb2020Logo">
         
         <div  class="col-lg-12">
-            <h2>INTERNATIONAL BIODIVERSITY DAY LOGO
+            <h2>Customize your Biodiversity Day logo!
             </h2>
             <hr/>
-            <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos">View Published Logos</a>
-            <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos/draft" ng-if="isAdmin" style="margin-right: 5px;">Approve Logos</a>
         </div>
+        <div class="col-lg-12">
+            You can show support for biodiversity by customizing the Biodiversity Day logo with your name (country, city, organization, business, individual, etc.). To make a bigger impact, share your unique logo on social media, videos, virtual backgrounds, email signature, and more!
+            <br/><br/>
+            Hint: if your language is not in the list or if the name is too long see the <a href="http://www.cbd.int/biodiversity-day/logo/guidelines">logo guidelines</a> for solutions.<br/><br/>
+        </div>
+        
         <div  class="col-lg-12" ng-if="showSuccessMessage">
             <div class="alert alert-success" role="alert">
                 Your custom logo was uploaded to CBD database, if approved the logo will appear on the published logos 
@@ -166,18 +175,20 @@
                     </select>
                 </div>
                 <div class="col-lg-12 col-md-6  col-sm-6 padding">
-                    <label for="name">Logo type</label>
+                    <label for="name">Is your logo for an individual or a collective?</label>
                     <select class="form-control" ng-model="logoType" ng-change="fitText()">
                         <option value="collective">Collective</option>
                         <option value="individual" selected>Individual</option>
                     </select>            
                 </div>
                 <div class="col-lg-12 padding">
-                    <label for="name">Enter your name</label>
+                    <label for="name">Name to appear in the logo</label>
                     <input type="text" class="form-control" id="name" placeholder="Name" ng-model="name" ng-change="fitText()">
                 </div>
                 <div class="col-lg-12 padding">
-                    <input type="button" class=" btn btn-primary" id="btnSave" value="Download" ng-click="saveImage()" ng-disabled="uploading"/>            
+                    <input type="button" class=" btn btn-primary btn-xs  btn-sm" id="btnSave" value="Download" ng-click="saveImage()" ng-disabled="uploading"/>                       
+                    <a class="btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos">View published logos</a>
+                    <a class="btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos/draft" ng-if="isAdmin">Approve logos</a>         
                 </div>
             </div>
         </div>
@@ -188,7 +199,7 @@
     
     <br/>
     <br/>
-    <div style="opacity: 000;" class="{{language}}">
+    <div style="opacity: 1000;" class="{{language}}">
     <div class="boxGenerate box-size">
         <div class="boxIncon box-size" id="imgGenerator" style="padding:10px;">
             <div class="row box-size" >
@@ -200,7 +211,7 @@
                     <div id="bigtext" class="impact-font " style="max-width: 100%;">                                
                         <div class="border-green1 color-blue" id="logoDate" >
                             <span  ng-if="language!='ar'" ng-bind="text[language].date"></span>
-                            <span  ng-if="language=='ar'" style="font-family: auto;">٢٢ أيار<span>/</span>مايو ٢٠٢١</span>
+                            <span  ng-if="language=='ar'">٢٢ أيار<span style="font-family: auto;">/</span>مايو ٢٠٢١</span>
                             
                         </div>
                         <div id="logoDay" class="border-blue1 color-blue">
