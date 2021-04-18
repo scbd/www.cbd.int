@@ -132,10 +132,16 @@
             font-weight: bold;
             font-family: 'Hiragino Kaku Gothic Pro', 'WenQuanYi Zen Hei', '微軟正黑體', '蘋果儷中黑', Helvetica, Arial, sans-serif;
         }
-
+        .ru .impact-font{
+            margin-top: -20px;
+        }
         /* .container .container{
             padding: 0px 10px;
         } */
+        .ngdialog.ngdialog-theme-default .ngdialog-content {
+            background-color: #fff;
+            width: 70%;
+        }
     </style>
 
     <div class="row" id="idb2020Logo">
@@ -163,20 +169,25 @@
         <div class="col-lg-5">
             <div class="row">
                 <div class="col-lg-12 col-md-6 col-sm-6 padding">
-                    <label for="name">Select logo language</label>
-                    <select class="form-control" ng-model="language" ng-change="fitText()">
-                        <option value="ar">Arabic</option>
-                        <option value="en">English</option>
-                        <option value="es">Spanish</option>
-                        <option value="fr">French</option>
-                        <option value="ru">Russian</option>
-                        <option value="zh">Chinese</option>
-                        <!-- <option value="mr">Marathi</option> -->
-                    </select>
+                        <label for="name">Select logo language</label>
+                    <div class="input-group">
+                        <select class="form-control" ng-model="language" ng-change="fitText();">
+                            <option value="ar">Arabic</option>
+                            <option value="en">English</option>
+                            <option value="es">Spanish</option>
+                            <option value="fr">French</option>
+                            <option value="ru">Russian</option>
+                            <option value="zh">Chinese</option>
+                            <!-- <option value="mr">Marathi</option> -->
+                        </select>      
+                        <div class="input-group-append">
+                            <input type="button" class=" btn btn-primary btn-xs  btn-sm" id="btnCustomLang" value="My language" ng-click="customLanguage(text[language].isCustomLanguage ? language:undefined)" ng-disabled="uploading"/>   
+                        </div>
+                    </div> 
                 </div>
                 <div class="col-lg-12 col-md-6  col-sm-6 padding">
                     <label for="name">Is your logo for an individual or a collective?</label>
-                    <select class="form-control" ng-model="logoType" ng-change="fitText()">
+                    <select class="form-control" ng-model="logoType" ng-change="fitText()" ng-disabled="text[language].isCustomLanguage">
                         <option value="collective">Collective</option>
                         <option value="individual" selected>Individual</option>
                     </select>            
@@ -186,7 +197,7 @@
                     <input type="text" class="form-control" id="name" placeholder="Name" ng-model="name" ng-change="fitText()">
                 </div>
                 <div class="col-lg-12 padding">
-                    <input type="button" class=" btn btn-primary btn-xs  btn-sm" id="btnSave" value="Download" ng-click="saveImage()" ng-disabled="uploading"/>                       
+                    <input type="button" class=" btn btn-primary btn-xs  btn-sm" id="btnSave" value="Download" ng-click="saveImage()" ng-disabled="uploading"/>                    
                     <a class="btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos">View published logos</a>
                     <a class="btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos/draft" ng-if="isAdmin">Approve logos</a>         
                 </div>
@@ -200,37 +211,68 @@
     <br/>
     <br/>
     <div style="opacity: 1000;" class="{{language}}">
-    <div class="boxGenerate box-size">
-        <div class="boxIncon box-size" id="imgGenerator" style="padding:10px;">
-            <div class="row box-size" >
-                <div class="col-lg-51" style="width: 286.438px;">
-                    <img src="/app/images/idb-2021-logo.png" class="img-fluid idb-logo pull-right" id="logoImg"/>
-                </div>
-                <div class="impact-font col-lg-71 text-box-width" style="padding-left: 5px;max-height: 288px;" ng-if="language" >   
-                    
-                    <div id="bigtext" class="impact-font " style="max-width: 100%;">                                
-                        <div class="border-green1 color-blue" id="logoDate" >
-                            <span  ng-if="language!='ar'" ng-bind="text[language].date"></span>
-                            <span  ng-if="language=='ar'">٢٢ أيار<span style="font-family: auto;">/</span>مايو ٢٠٢١</span>
-                            
-                        </div>
-                        <div id="logoDay" class="border-blue1 color-blue">
-                            <span ng-bind="text[language].day"></span>
-                        </div>
-                        <div  id="logoTagline" class="border-orange1" ng-if="language!='zh'">
-                            <span class="color-green"ng-if="logoType=='collective'" ng-bind="text[language].collectiveTagline"></span>
-                            <span class="color-green"ng-if="logoType=='individual'" ng-bind="text[language].individualTagline"></span>
-                        </div>
-                        <div class="color-green border-red1" id="logoName" >
-                            <span ng-if="language=='zh'" ng-bind="text[language].collectiveTagline"></span> 
-                            <span ng-bind="name"></span> 
-                            <span ng-bind="text[language].hashTag"></span>
+        <div class="boxGenerate box-size">
+            <div class="boxIncon box-size" id="imgGenerator" style="padding:10px;">
+                <div class="row box-size" >
+                    <div class="col-lg-51" style="width: 286.438px;">
+                        <img src="/app/images/idb-2021-logo.png" class="img-fluid idb-logo pull-right" id="logoImg"/>
+                    </div>
+                    <div class="impact-font col-lg-71 text-box-width" style="padding-left: 5px;max-height: 288px;" ng-if="language" >   
+                        
+                        <div id="bigtext" class="impact-font " style="max-width: 100%;">                                
+                            <div class="border-green1 color-blue" id="logoDate" >
+                                <span  ng-if="language!='ar'" ng-bind="text[language].date"></span>
+                                <span  ng-if="language=='ar'">٢٢ أيار<span style="font-family: auto;">/</span>مايو ٢٠٢١</span>
+                                
+                            </div>
+                            <div id="logoDay" class="border-blue1 color-blue">
+                                <span ng-bind="text[language].day"></span>
+                            </div>
+                            <div  id="logoTagline" class="border-orange1" ng-if="language!='zh'">
+                                <span class="color-green"ng-if="logoType=='collective'" ng-bind="text[language].collectiveTagline"></span>
+                                <span class="color-green"ng-if="logoType=='individual'" ng-bind="text[language].individualTagline"></span>
+                            </div>
+                            <div class="color-green border-red1" id="logoName" >
+                                <span ng-if="language=='zh'" ng-bind="text[language].collectiveTagline"></span> 
+                                <span ng-bind="name"></span> 
+                                <span ng-bind="text[language].hashTag"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
+                
             </div>
-            
         </div>
     </div>
-    </div>
+    <script type="text/ng-template" id="customLanguage">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                Logo in your language
+            </h3>
+        </div>
+        <div class="modal-body">	
+            <div class="row">
+                <div class="col-lg-6 padding">
+                        <label>Language</label>
+                        <label ng-if="customText.missingLanguage" style="color:red;font-size:small;">Please enter your language</label>
+                        <input type="text" class="form-control" id="name" placeholder="Language" ng-model="customText.language">
+                </div>
+                <div class="col-lg-6 padding">
+                        <label>Date</label>
+                        <input type="text" class="form-control" id="name" placeholder="date" ng-model="customText.date"></div>
+                <div class="col-lg-6 padding">
+                        <label>Biodiversity day</label><input type="text" class="form-control" id="name" placeholder="dat" ng-model="customText.day"></div>
+                <div class="col-lg-6 padding">
+                        <label>Tag line</label><input type="text" class="form-control" id="name" placeholder="tag line" ng-model="customText.collectiveTagline"></div>
+                <div class="col-lg-6 padding"><label>Hashtag</label>
+                        <input type="text" class="form-control" id="name" placeholder="Name" ng-model="customText.hashTag"></div>
+                <div class="col-lg-6 padding"><label>Name to appear in the logo</label>
+                    <input type="text" class="form-control" id="name" placeholder="Name" ng-model="customText.name"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class=" btn btn-primary btn-xs  btn-sm" id="btnSave" ng-click="applyTranslation(customText)">Apply</button>
+            <button type="button" class="btn btn-default" aria-label="Close" ng-click="closeDialog()" >Cancel</button>
+        </div>      
+    </script>
 </div>

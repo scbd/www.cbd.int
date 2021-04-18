@@ -2,11 +2,11 @@ define(['app',
 'https://cdn.jsdelivr.net/combine/npm/blueimp-canvas-to-blob',
 'https://zachleat.github.io/BigText/dist/bigtext.js',
 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js',
-'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js'], function(app) { 'use strict';
+'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js', 'ngDialog'], function(app) { 'use strict';
 
     
       
-	return ['$location', 'user','$http','$scope', '$timeout', '$window',  function( $location, user,$http, $scope,  $timeout, $window) {
+	return ['$location', 'user','$http','$scope', '$timeout', '$window', 'ngDialog',  function( $location, user,$http, $scope,  $timeout, $window, ngDialog) {
         $scope.text = {
             en : {
                 date                : '22 MAY 2021',
@@ -103,8 +103,6 @@ define(['app',
 
         $scope.fitText = function(selector){
 
-            $scope.isReady = false;
-
             if($scope.language == 'ar')
                 $('.boxIncon').css('direction', 'rtl')
             else
@@ -112,13 +110,44 @@ define(['app',
 
             selector = selector||'.fit'
             $timeout(function(){
-                console.log($scope.name)
-                $scope.isReady = true;
                 $('#bigtext').bigtext();
                 getSize();
                 $scope.saveImage(true);
             }, 200)
-        }        
+        }
+        
+        $scope.customLanguage = function(lang){
+            lang = lang || 'en'
+            $scope.customText = _.clone($scope.text[lang])
+            ngDialog.open({
+                template: 'customLanguage',
+                closeByDocument: false,
+                scope: $scope,
+                // width: '60%'
+            });
+        };
+        $scope.closeDialog = function(){
+            $scope.customText = undefined;
+            ngDialog.close();
+        }
+        $scope.applyTranslation = function(translation){
+
+            if((translation.language||'') == ''){
+                translation.missingLanguage = true;
+                return 
+            }
+            else{
+                translation.missingLanguage = undefined;
+            }
+                        translation.isCustomLanguage  = true;
+                        translation.individualTagline = translation.collectiveTagline;
+            $scope.text[translation.language]         = translation;
+                        $scope.name                   = translation.name;
+                        $scope.language               = translation.language;
+                        $scope.customText             = undefined;
+            $scope.fitText();
+            ngDialog.close();
+        }
         
         function getSize() {
             var myImg       = $('.boxGenerate #logoImg');
