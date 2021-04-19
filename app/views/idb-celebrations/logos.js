@@ -11,7 +11,7 @@ define(['app', 'lodash',
 
         var query = {
             q: { status:status },
-            s: { createdOn:-1 }
+            s: { updatedOn:-1 }
         };
         $http.get('/api/v2021/idb-logos', {params:query})
         .then(function(result) {
