@@ -142,6 +142,19 @@
             background-color: #fff;
             width: 70%;
         }
+
+        #idb2020Logo .ar input, 
+        .custom-language-text .ar input,
+        .custom-language-text .dv input,
+        .custom-language-text .fa input,
+        .custom-language-text .ha input,
+        .custom-language-text .iw input,
+        .custom-language-text .ks input,
+        .custom-language-text .ps input,
+        .custom-language-text .ur input,
+        .custom-language-text .ji input{
+            direction: rtl;
+        }
     </style>
 
     <div class="row" id="idb2020Logo">
@@ -173,13 +186,6 @@
                     <div class="input-group">
                         <select class="form-control" ng-model="language" ng-change="fitText();" 
                             ng-options="option.language for option in defaultLanguages track by option.code">
-                            <!-- <option value="ar">Arabic</option> -->
-                            <!-- <option value="en">English</option>
-                            <option value="es">Spanish</option>
-                            <option value="fr">French</option>
-                            <option value="ru">Russian</option>
-                            <option value="zh">Chinese</option> -->
-                            <!-- <option value="mr">Marathi</option> -->
                         </select>      
                         <div class="input-group-append">
                             <input type="button" class=" btn btn-primary btn-xs  btn-sm" id="btnCustomLang" value="My language" ng-click="customLanguage(text[language.code].isCustomLanguage ? language.code:undefined)" ng-disabled="uploading"/>   
@@ -197,7 +203,7 @@
                     <label for="name">Name to appear in the logo</label>
                     <input type="text" class="form-control" id="name" placeholder="Name" ng-model="name" ng-change="fitText()">
                 </div>
-                <div class="col-lg-12 padding">
+                <div class="col-lg-12 padding btn-group">
                     <input type="button" class=" btn btn-primary btn-xs  btn-sm" id="btnSave" value="Download" ng-click="saveImage()" ng-disabled="uploading"/>                    
                     <a class="btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos">View published logos</a>
                     <a class="btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos/draft" ng-if="isAdmin">Approve logos</a>         
@@ -251,8 +257,8 @@
                 Logo in your language
             </h3>
         </div>
-        <div class="modal-body">	
-            <div class="row">
+        <div class="modal-body custom-language-text">	
+            <div class="row {{customText.language.code}}">
                 <div class="col-lg-6 padding">
                         <label>Language</label>
                         <label ng-if="customText.missingLanguage" style="color:red;font-size:small;">Please select your language</label>

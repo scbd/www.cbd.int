@@ -1,27 +1,46 @@
 define(['app', 'lodash',
 'https://zachleat.github.io/BigText/dist/bigtext.js',
 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js',
-'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js'], function(app, _) { 'use strict';
+'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js',
+'ngInfiniteScroll'], function(app, _) { 'use strict';
 
     
       
 	return ['$q', 'user','$http','$scope', '$rootScope', '$window', 'status',  function( $q, user,$http, $scope,  $rootScope, $window, status) {
 
 
-        console.log(user)
-
+        $scope.status = status;
         var basePath  = $scope.basePath = (angular.element('base').attr('href')||'').replace(/\/+$/g, '');
-
-        var query = {
-            q: { status:status },
-            s: { updatedOn:-1 }
-        };
-        $http.get('/api/v2021/idb-logos', {params:query})
-        .then(function(result) {
-            $scope.logos = result.data;
-        })
-
         $scope.isAdmin = _.intersection(['Administrator', 'idb-logo-administrator'], user.roles).length
+        var currentPage = 0
+
+        $scope.loadLogs = function(){
+
+            if(!$scope.loading && ($scope.logos||[]).length < $scope.logoCount){
+
+                var query = {
+                    q: { status:status },
+                    s: { updatedOn:-1 },
+                    sk: currentPage,
+                    l:10
+
+                };
+                $scope.loading = true;
+                $http.get('/api/v2021/idb-logos', {params:query})
+                .then(function(result) {
+                    if(!$scope.logos)
+                        $scope.logos = [];
+                    _.each(result.data, function(logo){
+                        $scope.logos.push(logo)
+                    });
+                    currentPage += 10;
+                })
+                .finally(function(){
+                    $scope.loading = false;
+                })
+            }
+        }
+
         $scope.updateStatus = function(logo, status){
             logo.updating = true;
             $http.put('/api/v2021/idb-logos/'+logo._id+'/'+status)
@@ -46,6 +65,25 @@ define(['app', 'lodash',
                     $scope.updateStatus(logo, 'approved')
             });
         }
+
+        function loadLogoCounts(){
+            var query = {
+                q: { status:status },
+                c: 1
+            };
+            $scope.loading = true;
+            return $http.get('/api/v2021/idb-logos', {params:query})
+            .then(function(result) {
+                $scope.logoCount = result.data.count;
+            })
+            .finally(function(){
+                $scope.loading = false;
+            })
+        }
+
+        loadLogoCounts().then(function(){
+            $scope.loadLogs();
+        });
     }]
 });
 

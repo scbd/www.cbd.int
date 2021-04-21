@@ -68,6 +68,18 @@ define(['app',
             }
             
         }
+        $scope.rtlLanguages = {
+            ar	: 'Arabic',
+            dv	: 'Divehi',
+            fa	: 'Persian',
+            ha	: 'Hausa',
+            iw	: 'Hebrew',
+            ks	: 'Kashmiri',
+            ps	: 'Pashto',
+            ur	: 'Urdu',
+            ji	: 'Yiddish',
+        }
+        
         $scope.name     = 'Biodiversity';
         $scope.logoType = 'individual';
         $scope.language = { code : 'en' }
@@ -99,7 +111,7 @@ define(['app',
 
         $scope.fitText = function(selector){
 
-            if($scope.language.code == 'ar')
+            if($scope.rtlLanguages[$scope.language.code])
                 $('.boxIncon').css('direction', 'rtl')
             else
                 $('.boxIncon').css('direction', 'ltr')
@@ -245,12 +257,15 @@ define(['app',
 
         function loadLanguages(){
             $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms', {cache:true}).then(function(data){
-                $scope.languages = _.map(data.data, function(lang){
-                    return {
-                        code: lang.identifier.replace('lang-', ''),
-                        language: lang.title.en
+                $scope.languages = _(data.data).map(function(lang){
+                    var code = lang.identifier.replace('lang-', '')
+                    if(!_.find($scope.defaultLanguages, {code : code})){
+                        return {
+                            code: code,
+                            language: lang.title.en
+                        }
                     }
-                });
+                }).compact().uniq().value();
                 console.log($scope.languages)
             })
         }
