@@ -93,6 +93,9 @@
                 <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos/new">Add your logo</a>
                 <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos" ng-if="isAdmin" style="margin-right: 5px;">Published logos</a>
                 <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos/draft" ng-if="isAdmin" style="margin-right: 5px;">Approve logos</a>
+
+                <button class="pull-left btn btn-primary btn-xs btn-sm" ng-if="isAdmin" style="margin-right: 5px;" ng-click="selectAll()">Select all</button>
+                <button class="pull-left btn btn-primary btn-xs btn-sm" ng-if="isAdmin" style="margin-right: 5px;" ng-click="updateSelectedStatus()">Approve selected</button>
             </div>
             <div class="col-xs-12">
                 <div class="alert alert-info"  role="alert" ng-if="!logos.length">No more logos to validate</div>
@@ -101,7 +104,8 @@
                 <strong class="overlay-text">REJECTED</strong>
                 <div class="gallery idb-logos">
                     <img src="{{logo.image.url}}" />
-                    <div class="pull-right1" ng-if="logo.status == 'draft'">  
+                    <div class="pull-right1" ng-if="logo.status == 'draft'"> 
+                        <input type="checkbox" ng-model="logo.selected" /> 
                         <button ng-disabled="logo.updating" ng-click="updateStatus(logo, 'approved')" class="btn btn-success btn-xs btn-sm">Approve</button>
                         <button ng-disabled="logo.updating" ng-click="updateStatus(logo, 'rejected')" class="btn btn-danger btn-xs btn-sm">Reject</button>
                     </div>

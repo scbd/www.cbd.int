@@ -7,6 +7,9 @@ define(['app', 'lodash',
       
 	return ['$q', 'user','$http','$scope', '$rootScope', '$window', 'status',  function( $q, user,$http, $scope,  $rootScope, $window, status) {
 
+
+        console.log(user)
+
         var basePath  = $scope.basePath = (angular.element('base').attr('href')||'').replace(/\/+$/g, '');
 
         var query = {
@@ -28,6 +31,20 @@ define(['app', 'lodash',
             .finally(function(){
                logo.updating = false;
             })
+        }
+
+        $scope.selectAll = function(){
+            _.each($scope.logos, function(logo){
+                if(logo.status == 'draft')
+                    logo.selected = true;
+            })
+        }
+
+        $scope.updateSelectedStatus = function(){
+            _.each($scope.logos, function(logo){
+                if(logo.status == 'draft' && logo.selected)
+                    $scope.updateStatus(logo, 'approved')
+            });
         }
     }]
 });

@@ -7,74 +7,71 @@ define(['app',
     
       
 	return ['$location', 'user','$http','$scope', '$timeout', '$window', 'ngDialog',  function( $location, user,$http, $scope,  $timeout, $window, ngDialog) {
+        $scope.defaultLanguages = [
+            {code:'ar', language            : 'Arabic'  },
+            {code:'en', language            : 'English' },
+            {code:'fr', language            : 'French'  },
+            {code:'ru', language            : 'Russian' },
+            {code:'es', language            : 'Spanish' },
+            {code:'zh', language            : 'Chinese' },
+        ]
         $scope.text = {
             en : {
                 date                : '22 MAY 2021',
                 day                 : 'BIODIVERSITY DAY',
                 collectiveTagline   : 'We’re part of the solution',
                 individualTagline   : 'I’m part of the solution',
-                hashTag             : '#ForNature',
-                colletive           : 'We’re part of the solution',
-                maxfontsize         : 60 
+                hashTag             : '#ForNature'
             },
             es:{
                 date                : '22 DE MAYO DE 2021',
                 day                 : 'DÍA DE LA BIODIVERSIDAD',
                 collectiveTagline    : 'Somos parte de la solución',
                 individualTagline   : 'Soy parte de la solución',
-                hashTag             : '#PorLaNaturaleza',
-                colletive           : 'Somos parte de la solución #PorLaNaturaleza',
-                maxfontsize         : 55 
+                hashTag             : '#PorLaNaturaleza'
             },
             fr:{
                 date                : '22 MAI 2021',
                 day                 : 'JOURNÉE DE LA BIODIVERSITÉ',
                 collectiveTagline    : 'Nous faisons partie de la solution',
                 individualTagline   : 'Je fais partie de la solution',
-                hashTag             : '#PourLaNature',
-                colletive           : 'Nous faisons partie de la solution #PourLaNature',
-                maxfontsize         : 60 
+                hashTag             : '#PourLaNature'
             },
             ru:{
                 date                : '22 МАЯ 2021 ГОДА',
                 day                 : 'ДЕНЬ БИОРАЗНООБРАЗИЯ',
                 collectiveTagline    : 'Мы часть решения',
                 individualTagline   : 'Я часть решения',
-                hashTag             : '#ЗаПрироду',
-                colletive           : 'Мы часть решения #ЗаПрироду',
-                maxfontsize         : 60 
+                hashTag             : '#ЗаПрироду'
             },
             zh:{
                 date                : '2021年5月22日',
                 day                 : '生物多样性日',
                 collectiveTagline    : '呵护自然，',
                 individualTagline   : '呵护自然，',
-                hashTag             : '有份',
-                colletive           : '呵护自然，',
-                maxfontsize         : 60 
+                hashTag             : '有份'
             },
             ar:{
                 date                : '٢٢ أيار/مايو ٢٠٢١',
                 day                 : 'يوم التنوع البيولوجي',
                 tagline             : 'نحن جزء من الحل',
                 individualTagline   : 'أنا جزء من الحل',
-                hashTag             : 'من#_أجل_الطبيعة',
-                colletive           : 'نحن جزء من الحل# من_أجل_الطبيعة',
-                maxfontsize         : 60 
+                hashTag             : 'من#_أجل_الطبيعة'
             },
             mr:{
                 date                : '22 मे 2021',
                 day                 : 'जीवदिन दिवस',
                 tagline             : 'मी समाधानाचा एक भाग आहे',
                 individualTagline   : 'मी समाधानाचा एक भाग आहे',
-                hashTag             : '#निसर्गासाठी'
+                hashTag             : '#निसर्गासाठी',
+                language            : 'Marathi'
             }
             
         }
-        $scope.name = 'CBD';
+        $scope.name     = 'Biodiversity';
         $scope.logoType = 'individual';
-        $scope.language = 'en'
-        $scope.isAdmin = _.intersection(['Administrator', 'idb-logo-administrator'], user.roles).length
+        $scope.language = { code : 'en' }
+        $scope.isAdmin  = _.intersection(['Administrator', 'idb-logo-administrator'], user.roles).length
 
 
         var basePath  = $scope.basePath = (angular.element('base').attr('href')||'').replace(/\/+$/g, '');
@@ -83,7 +80,7 @@ define(['app',
             $scope.showSuccessMessage = false;
             
             if(~document.location.hostname.indexOf('cbd.int')){
-                $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.name+'&language='+$scope.language+'&logoType='+$scope.logoType);
+                $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.name+'&language='+$scope.language.code+'&logoType='+$scope.logoType);
                 $window.ga('send', 'pageview');
             }
 
@@ -93,8 +90,7 @@ define(['app',
                     canvas.toBlob(function(blob) {
                         if(!generateOnly){  
                             uploadImage(canvas.toDataURL());                        
-                            saveAs(blob, "22-May-Biodiversity-Day.jpg");                        
-                            
+                            saveAs(blob, "22-May-Biodiversity-Day.jpg");                            
                         }
                     });
                 }
@@ -103,7 +99,7 @@ define(['app',
 
         $scope.fitText = function(selector){
 
-            if($scope.language == 'ar')
+            if($scope.language.code == 'ar')
                 $('.boxIncon').css('direction', 'rtl')
             else
                 $('.boxIncon').css('direction', 'ltr')
@@ -119,6 +115,7 @@ define(['app',
         $scope.customLanguage = function(lang){
             lang = lang || 'en'
             $scope.customText = _.clone($scope.text[lang])
+            $scope.customText.logoType = $scope.customText.logoType || 'individual'
             ngDialog.open({
                 template: 'customLanguage',
                 closeByDocument: false,
@@ -132,7 +129,7 @@ define(['app',
         }
         $scope.applyTranslation = function(translation){
 
-            if((translation.language||'') == ''){
+            if(!translation.language){
                 translation.missingLanguage = true;
                 return 
             }
@@ -140,13 +137,31 @@ define(['app',
                 translation.missingLanguage = undefined;
             }
                         translation.isCustomLanguage  = true;
-                        translation.individualTagline = translation.collectiveTagline;
-            $scope.text[translation.language]         = translation;
+                        // translation.individualTagline = translation.collectiveTagline;
+            $scope.text[translation.language.code]    = translation;
                         $scope.name                   = translation.name;
-                        $scope.language               = translation.language;
+                        $scope.language               = translation.language ;
                         $scope.customText             = undefined;
+                        $scope.logoType               = translation.logoType;
+
+            if(!_.find($scope.defaultLanguages, translation.language ))
+                $scope.defaultLanguages.push(translation.language);
+
             $scope.fitText();
             ngDialog.close();
+        }
+
+        $scope.capitalize = function(){
+            $scope.customText.date = ($scope.customText.date||'').toUpperCase()
+            $scope.customText.day = ($scope.customText.day||'').toUpperCase()
+
+            var collectiveTagline = ($scope.customText.collectiveTagline||'')
+            var individualTagline = ($scope.customText.individualTagline||'')
+            if(collectiveTagline.length)
+                $scope.customText.collectiveTagline = collectiveTagline[0].toUpperCase() + (collectiveTagline.length > 1 ? collectiveTagline.substr(1) : '')
+
+            if(individualTagline.length)
+                $scope.customText.individualTagline = individualTagline[0].toUpperCase() + (individualTagline.length > 1 ? individualTagline.substr(1) : '')
         }
         
         function getSize() {
@@ -186,7 +201,7 @@ define(['app',
             // if($scope.language!= 'zh')
                 logoDate   .css('margin-top', '-' + (margin_logoDate   ) + 'px')
 
-            if($scope.language== 'fr'){
+            if($scope.language.code== 'fr'){
                 logoDay    .css('margin-top', '' + (equalMargin +10) + 'px');
                 $('.impact-font.text-box-width').css('margin-top', '-10px');
             }
@@ -196,7 +211,7 @@ define(['app',
             }
             logoTagline.css('margin-top', '' + (equalMargin ) + 'px')
 
-            if($scope.language== 'zh')
+            if($scope.language.code== 'zh')
                 logoName   .css('margin-top', '' + (equalMargin +10) + 'px')
             else
                 logoName   .css('margin-top', '' + (equalMargin ) + 'px')
@@ -207,15 +222,6 @@ define(['app',
         function onResize() {
             $scope.fitText();
         }
-        angular.element($window).on('resize', onResize);
-        $scope.$on('$destroy', function(){
-            angular.element($window).off('resize', onResize);
-        });
-
-        $timeout(function(){
-            $scope.fitText();           
-        }, 200)
-
 
         function uploadImage(blob){
            $scope.uploading = true;
@@ -223,7 +229,8 @@ define(['app',
                 'file': blob,
                 'name': $scope.name,
                 'logoType': $scope.logoType,
-                'language': $scope.language
+                'language': $scope.language.code,
+                ...$scope.text[$scope.language.code]
             }
 
             return $http.post('/api/v2021/idb-logos', data)
@@ -235,6 +242,28 @@ define(['app',
                 $scope.uploading = false;
             });
         }
+
+        function loadLanguages(){
+            $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms', {cache:true}).then(function(data){
+                $scope.languages = _.map(data.data, function(lang){
+                    return {
+                        code: lang.identifier.replace('lang-', ''),
+                        language: lang.title.en
+                    }
+                });
+                console.log($scope.languages)
+            })
+        }
+        angular.element($window).on('resize', onResize);
+        $scope.$on('$destroy', function(){
+            angular.element($window).off('resize', onResize);
+        });
+
+        $timeout(function(){
+            $scope.fitText();           
+        }, 200);
+
+        loadLanguages();
     }]
 });
 
