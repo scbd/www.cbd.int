@@ -144,6 +144,9 @@ define(['lodash', 'util/solr', 'app', 'services/article-service','filters/lstrin
             ];
         }
 
+        function kebabCase(val){
+            return val.toLowerCase().replace(/\s/g, '-')
+        }
         //===========================
         //
         //===========================
