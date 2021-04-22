@@ -1,0 +1,125 @@
+<div class="container" class="app" >
+   
+    <div class="row" id="idb2020Logo">
+        <style>
+            .idb-logos {
+                /* border: 1px solid #eee; */
+                /* padding: 5px;
+                margin: 5px; */
+            }
+            .idb-logos img {
+                max-width:  400px;
+                max-height: 200px;
+            }
+
+            div.gallery {
+                /* border: 1px solid #ccc; */
+            }
+
+            div.gallery:hover {
+                /* border: 1px solid #777; */
+            }
+
+            div.gallery img {
+                width: 100%;
+                height: auto;
+                display: block;
+                position: relative;
+                -webkit-transition: -webkit-transform 0.35s;
+                transition: transform 0.35s;
+            }
+
+            div.desc {
+            padding: 15px;
+            text-align: center;
+            }
+
+            * {
+            box-sizing: border-box;
+            }
+
+            .responsive {
+            padding: 0 6px;
+            float: left;
+            width: 24.99999%;
+            }
+
+            @media only screen and (max-width: 700px) {
+            .responsive {
+                width: 49.99999%;
+                margin: 6px 0;
+            }
+            }
+
+            @media only screen and (max-width: 500px) {
+            .responsive {
+                width: 100%;
+            }
+            }
+
+            .clearfix:after {
+            content: "";
+            display: table;
+            clear: both;
+            }
+
+
+            .rejected{
+                border: 1px solid red;
+            }
+            .overlay-text{
+                display: none;
+            }
+            .rejected .overlay-text{
+                display: flex;
+                justify-content: center;
+            }
+
+            .container .container{
+                padding: 0px 10px;
+            }
+            .hovereffect:hover img {
+                -webkit-transform: translate3d(0,-10%,0);
+                transform: translate3d(0,-10%,0);
+                /* box-shadow: 0 0 5px #fff; */
+            }
+        </style>
+        <div class="row"infinite-scroll='loadLogs()' infinite-scroll-distance='1' infinite-scroll-disabled='loading'>
+            <div  class="col-lg-12">
+                <h2>
+                    International Biodiversity Day logo
+                    <span class="pull-right">({{logoCount}})</span>
+                </h2>
+                <hr/>
+
+                <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/logo/customize">Add your logo</a>
+                <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/logo/collage" ng-if="isAdmin && status != 'approved'" style="margin-right: 5px;">Published logos</a>
+                <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/logo/collage/draft" ng-if="isAdmin && status == 'approved'" style="margin-right: 5px;">Approve logos</a>
+
+                <button class="pull-left btn btn-primary btn-xs btn-sm" ng-if="isAdmin && status == 'draft'" style="margin-right: 5px;" ng-click="selectAll()">Select all</button>
+                <button class="pull-left btn btn-primary btn-xs btn-sm" ng-if="isAdmin && status == 'draft'" style="margin-right: 5px;" ng-click="updateSelectedStatus('approved')">Approve selected</button>
+                <button class="pull-left btn btn-primary btn-xs btn-sm" ng-if="isAdmin && status == 'draft'" style="margin-right: 5px;" ng-click="updateSelectedStatus('rejected')">Reject selected</button>
+            </div>
+            <div class="col-xs-12">
+                <div class="alert alert-info"  role="alert" ng-if="!logos.length">No more logos to validate</div>
+            </div>
+
+            <div class="responsive hovereffect" ng-repeat="logo in logos" ng-class="{'rejected':logo.status=='rejected'}">
+                <strong class="overlay-text">REJECTED</strong>
+                <div class="gallery idb-logos">
+                    <img src="{{logo.image.url}}" />
+                    <div class="pull-right1" ng-if="logo.status == 'draft'"> 
+                        <input type="checkbox" ng-model="logo.selected" /> 
+                        <button ng-disabled="logo.updating" ng-click="updateStatus(logo, 'approved')" class="btn btn-success btn-xs btn-sm">Approve</button>
+                        <button ng-disabled="logo.updating" ng-click="updateStatus(logo, 'rejected')" class="btn btn-danger btn-xs btn-sm">Reject</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/></br>
+
+        <span id="logo-description" style="display: none;">
+            You can show support for biodiversity by customizing the Biodiversity Day logo with your name (country, city, organization, business, individual, etc.). To make a bigger impact, share your unique logo on social media, videos, virtual backgrounds, email signature, and more!
+        </span>
+    </div>
+</div>
