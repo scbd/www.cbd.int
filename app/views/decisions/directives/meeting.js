@@ -1,6 +1,10 @@
-define(['app', 'text!./meeting.html', 'lodash', 'filters/lstring', 'filters/moment'], function(app, template, _) { 'use strict';
+import '~/filters/lstring'
+import '~/filters/moment'
+import app from '~/app'
+import template from './meeting.html'
+import _ from 'lodash'
 
-	return app.directive('decisionMeeting', ['$http', function($http) {
+	app.directive('decisionMeeting', ['$http', function($http) {
 		return {
 			restrict : "E",
 			template : template,
@@ -48,4 +52,3 @@ define(['app', 'text!./meeting.html', 'lodash', 'filters/lstring', 'filters/mome
             }
         };
     }]);
-});

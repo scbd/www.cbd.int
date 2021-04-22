@@ -1,10 +1,6 @@
-define(['lodash', 'app'], function(_) {
+export { default as template } from './index.html'
 
-	return ['user', function(user) {
-        
-        var _ctrl = this;
-        
-        _ctrl.isAuthenticated = user.isAuthenticated;
-        _ctrl.isKronosUser    = user.institution=='CBD' && !!_.intersection(user.roles, ['Kronos-FullAccess' /*'Kronos-User', 'Kronos-ReadOnly', 'Kronos-Meeting-Nominator', 'Kronos-PriorityPassOnly'*/]).length;
-    }];
-});
+export default ['user', function(user) {
+  this.isAuthenticated = user.isAuthenticated;
+  this.isKronosUser    = user.institution=='CBD' && user.roles.includes('Kronos-FullAccess');
+}];

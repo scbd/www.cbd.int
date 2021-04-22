@@ -1,5 +1,5 @@
 //http://www.sitepoint.com/javascript-generate-lighter-darker-color/
-define([], function() {
+
 
   function randomHexColor(start, end) {
     start = start || 0;
@@ -28,8 +28,8 @@ define([], function() {
     return rgb;
   }
 
-  return {
+  export default {
     changeLum: changeLum,
     randomHexColor: randomHexColor
   };
-});
+

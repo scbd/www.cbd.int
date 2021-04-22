@@ -1,4 +1,12 @@
-define(['lodash', 'util/solr', 'app', 'services/article-service','filters/lstring', 'directives/meetings/documents/document-files', 'filters/term'], function(_, solr) { 'use strict';
+import _    from 'lodash'
+import solr from '~/util/solr'
+import '~/app'
+import '~/directives/articles/cbd-article'
+import '~/directives/meetings/documents/document-files'
+import '~/filters/lstring'
+import '~/filters/term'
+
+export { default as template } from './index-id.html'
 
     var MIMES = {
         'application/pdf':                                                            { priority: 10,  color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
@@ -12,7 +20,7 @@ define(['lodash', 'util/solr', 'app', 'services/article-service','filters/lstrin
         'text/html':                                                                  { priority: 80,  color: '',       btn: 'btn-default', icon: 'fa-link' },
         'default':                                                                    { priority:999,  color: 'orange', btn: 'btn-default', icon: 'fa-file-o' }
     };
-    return ['$scope', '$route','$http', '$q','$sce', 'articleService', function ($scope, $route, $http, $q, $sce, articleService) {
+    export default ['$scope', '$route','$http', '$q','$sce', 'articleService', function ($scope, $route, $http, $q, $sce, articleService) {
 
         var code   = $route.current.params.symbol;
         var _ctrl  = $scope.notifCtrl = this;
@@ -196,4 +204,4 @@ define(['lodash', 'util/solr', 'app', 'services/article-service','filters/lstrin
             return 'observer';
         }
     }];
-});
+

@@ -1,6 +1,17 @@
-define(['app', 'lodash', 'data/aichi-targets/targets', 'data/aichi-targets/goals', 'directives/aichi-targets/fisheye', 'directives/aichi-targets/videos', 'directives/aichi-targets/legend42','directives/aichi-targets/box-list','directives/aichi-targets/side-events'], function(app, _, targetsData, goalsData) { 'use strict';
+import '~/directives/aichi-targets/fisheye'
+import '~/directives/aichi-targets/videos'
+import '~/directives/aichi-targets/legend42'
+import '~/directives/aichi-targets/box-list'
+import '~/directives/aichi-targets/side-events'
+import _ from 'lodash'
+import targetsData from '~/data/aichi-targets/targets.json'
+import goalsData from '~/data/aichi-targets/goals.json'
 
-	return ['$location', '$routeParams', function( $location, $routeParams) {
+
+export { default as template } from './index-id.html';
+
+
+export default ['$location', '$routeParams', function( $location, $routeParams) {
 
 		var _ctrl = this;
 
@@ -29,4 +40,3 @@ define(['app', 'lodash', 'data/aichi-targets/targets', 'data/aichi-targets/goals
 
 
 	}];
-});

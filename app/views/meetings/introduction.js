@@ -1,6 +1,11 @@
-﻿define(['app', 'lodash', 'directives/social-media', 'directives/articles/cbd-article', 'services/conference-service'], function(app, _) { 'use strict';
+﻿import '~/directives/social-media';
+import '~/directives/articles/cbd-article';
+import '~/services/conference-service';
+import app from '~/app'
 
-return ['$scope', '$route', '$location', '$http', '$rootScope',
+export { default as template } from './introduction.html';
+
+export default ['$scope', '$route', '$location', '$http', '$rootScope',
  function ($scope,  $route, $location, $http, $rootScope) {
        
             $scope.isLoading = true;
@@ -55,4 +60,3 @@ return ['$scope', '$route', '$location', '$http', '$rootScope',
 
             buildQuery();
     }];
-});

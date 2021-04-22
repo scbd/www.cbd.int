@@ -1,4 +1,5 @@
-define(['app', 'lodash'], function(app, _) { 'use strict';
+import app from '~/app';
+import _ from 'lodash'; 
 
 	var _exports = {
 		escape : solrEscape,
@@ -8,7 +9,7 @@ define(['app', 'lodash'], function(app, _) { 'use strict';
 
 	app.factory('solr', [function() { return _exports; }])
 
-	return _exports;
+	export default _exports;
 	
 	function solrEscape(value) {
 
@@ -84,4 +85,3 @@ define(['app', 'lodash'], function(app, _) { 'use strict';
 
 		}, {});
 	}
-});

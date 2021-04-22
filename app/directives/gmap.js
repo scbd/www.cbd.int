@@ -1,6 +1,7 @@
-define(['app', 'underscore', 'util/colors'],
-  function(module, _, colors) {
-    return module.directive('gmap', ['$window', 'reports', '$rootScope', '$http', '$q',
+import module from '~/app';
+import _ from 'lodash';
+import colors from '~/util/colors';
+    export default module.directive('gmap', ['$window', 'reports', '$rootScope', '$http', '$q',
       function($window, reports, $rootScope, $http, $q) {
         var map,
           infowindow,
@@ -162,4 +163,4 @@ define(['app', 'underscore', 'util/colors'],
 
       }
     ]);
-  });
+  

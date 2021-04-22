@@ -1,6 +1,11 @@
-define(['app', 'lodash','data/bbi/links', 'directives/bbi/crumbs', 'directives/bbi/menu', 'directives/bbi/auto-linker'], function(app, _,links) { 'use strict';
+import links from '~/data/bbi/links.json'
+import '~/directives/bbi/crumbs'
+import '~/directives/bbi/menu'
+import '~/directives/bbi/auto-linker'
 
-return ['$location','$scope', function ($location,$scope) {
+export {default as template }  from  './request.html'
+
+export default ['$location','$scope', function ($location,$scope) {
 
 			var _ctrl = this;
 			_ctrl.links=links.links;
@@ -14,4 +19,3 @@ return ['$location','$scope', function ($location,$scope) {
 								$location.path(url);
 				}
     }];
-});

@@ -1,6 +1,8 @@
-define(['app','./directives/meeting','./directives/header-decisions'], function() { 'use strict';
+import '~/app';
+import './directives/meeting';
+import './directives/header-decisions'; 
 
-    return ['$scope', '$http', '$route', '$location', 'user', function($scope, $http, $route, $location, user) {
+    export default ['$scope', '$http', '$route', '$location', 'user', function($scope, $http, $route, $location, user) {
 
         var treaty        = null;
         var body          = $route.current.params.body.toUpperCase();
@@ -76,4 +78,4 @@ define(['app','./directives/meeting','./directives/header-decisions'], function(
 
         }
     }];
-});
+

@@ -1,6 +1,6 @@
-define(['angular'], function(ng) {
+import ng from 'angular';
 
-    return ['$scope', function ($scope) {
+    export default ['$scope', function ($scope) {
 
 	}];
-});
+

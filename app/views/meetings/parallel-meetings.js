@@ -1,6 +1,9 @@
-﻿define(['app', 'lodash', 'directives/social-media',  'services/conference-service'], function(app, _) { 'use strict';
+﻿import '~/directives/social-media'
+import '~/services/conference-service'
 
-return ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope',
+export { default as template } from './parallel-meetings.html'
+
+export default ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope',
  function ($scope,  $route, $location, conferenceService, $q, $rootScope) {
        
             $scope.isLoading = true;
@@ -55,4 +58,3 @@ return ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope'
             buildQuery()
             
     }];
-});

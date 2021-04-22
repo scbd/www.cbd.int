@@ -1,7 +1,4 @@
-
-
-define(['app'],
-function (app) {
+import app from '~/app'
 
   //============================================================
   //
@@ -26,6 +23,3 @@ function (app) {
       return text;
     };
   });
-
-
-});

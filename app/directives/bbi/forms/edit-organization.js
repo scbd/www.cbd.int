@@ -1,21 +1,26 @@
-define(['text!./edit-organization.html', 'text!./bbi-records-dialog.html','app', 'angular', 'lodash', 'gmapsapi', 'authentication',
-'services/editFormUtility',
-'services/storage',
-'services/workflows',
-'directives/bbi/file',
-'directives/bbi/on-focus-helper',
-'directives/bbi/controls/km-document-validation',
-'directives/bbi/controls/km-form-languages',
-'directives/bbi/controls/km-form-std-buttons',
-'directives/bbi/controls/km-select',
-'directives/bbi/controls/km-link',
-'directives/bbi/controls/km-inputtext-ml',
-'directives/bbi/controls/km-inputtext-list',
-'directives/bbi/controls/scbd-tab',
-'directives/bbi/controls/km-terms-check',
-'providers/locale',
-'directives/bbi/views/view-organization'
-], function(template,bbiRecordsDialog, app, angular, _, google) { 'use strict';
+import template from './edit-organization.html';
+import bbiRecordsDialog from './bbi-records-dialog.html';
+import app from '~/app';
+import angular from 'angular';
+import _ from 'lodash';
+import google from 'gmapsapi';
+import '~/authentication';
+import '~/services/editFormUtility';
+import '~/services/storage';
+import '~/services/workflows';
+import '~/directives/bbi/file';
+import '~/directives/bbi/on-focus-helper';
+import '~/directives/bbi/controls/km-document-validation';
+import '~/directives/bbi/controls/km-form-languages';
+import '~/directives/bbi/controls/km-form-std-buttons';
+import '~/directives/bbi/controls/km-select';
+import '~/directives/bbi/controls/km-link';
+import '~/directives/bbi/controls/km-inputtext-ml';
+import '~/directives/bbi/controls/km-inputtext-list';
+import '~/directives/bbi/controls/scbd-tab';
+import '~/directives/bbi/controls/km-terms-check';
+import '~/providers/locale';
+import '~/directives/bbi/views/view-organization'; 
 
 app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility',  'IStorage', '$route','$timeout','locale','userSettings','ngDialog',  function ($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route,$timeout,locale,userSettings,ngDialog) {
 	return {
@@ -745,4 +750,4 @@ app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter"
 		}
 	};
 }]);
-});
+

@@ -1,5 +1,6 @@
-define(['app', 'angular'], function(app, ng) {
-    'use strict';
+import app from '~/app';
+import ng from 'angular';
+    
 
 	app.factory('kronosHttpIntercepter', ["$q", "apiToken", "kronos", function($q, apiToken, kronos) {
 
@@ -49,4 +50,3 @@ define(['app', 'angular'], function(app, ng) {
             }
         }];
     }]);
-});

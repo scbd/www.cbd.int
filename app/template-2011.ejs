@@ -18,57 +18,34 @@
             })(window,document,'script','dataLayer','GTM-NL82D37');
         }
     </script>
-    
-    <script src="<%=cdnUrl%>requirejs@2.2.0/require.js"></script>
-    <script src="<%=cdnUrl%>jquery@2.2.4/dist/jquery.min.js"></script>
-    <script src="<%=cdnUrl%>bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
-    <script async src="/app/boot.js?v=<%=gitVersion%>"></script>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=Object.assign%2Cconsole"></script>
+    <script src="<%=`${cdnUrl}combine/${[
+        'npm/jquery@2.2.4/dist/jquery.min.js',
+        'npm/jquery-migrate@1.2.1/dist/jquery-migrate.min.js',
+        ].concat(baseLibs).concat([
+        'npm/popper.js@1.16.0/dist/umd/popper.min.js',
+        'npm/bootstrap@3.4.1/dist/js/bootstrap.min.js',
+        'npm/requirejs@2.3.6/require.min.js'
+    ]).join(',')}`%>"></script>
+    <script>
+        require.config({ waitSeconds: 30, baseUrl : '/app/', urlArgs: 'v=<%=gitVersion%>' });
+        require(["boot"], function(boot){
+            var bootFn = boot.default || boot;
+            bootFn(window, require, define);
+        });
+    </script>
+
     <script async src='https://www.google-analytics.com/analytics.js'></script>
-    <title ng-bind="$root.page.title">Convention on Biological Diversity</title>
-    <meta name="description" content="{{$root.page.description || ngMeta['og:description']}}" ng-if="$root.page.description || ngMeta['og:description']">
-    <meta property="og:title" content="{{ngMeta['og:title']}}" />
-    <meta property="og:type" content="{{ngMeta['og:type']}}" ng-if="ngMeta['og:type']"/>
-    <meta property="og:locale" content="{{ngMeta['og:locale']}}" ng-if="ngMeta['og:locale']"/>
-    <meta property="og:description" content="{{ngMeta['og:description']}}" />
-    <meta property="fb:app_id"   content="{{ngMeta['fb:app_id']}}" ng-if="ngMeta['fb:app_id']">
-    <meta property="og:url" content="{{ngMeta['og:url']}}" ng-if="ngMeta['og:url']">
-    <meta property="og:image" content="{{ngMeta['og:image']}}" ng-if="ngMeta['og:image']">
-    <meta property="og:image:height" content="{{ngMeta['og:image:height']}}" ng-if="ngMeta['og:image:height']">
-    <meta property="og:image:width" content="{{ngMeta['og:image:width']}}" ng-if="ngMeta['og:image:width']">
-
-    <meta property="og:profile:first_name" content="{{ngMeta['og:profile:first_name']}}" ng-if="ngMeta['og:profile:first_name']">
-    <meta property="og:profile:last_name" content="{{ngMeta['og:profile:last_name']}}" ng-if="ngMeta['og:profile:last_name']">
-    <meta property="og:profile:gender" content="{{ngMeta['og:profile:gender']}}" ng-if="ngMeta['og:profile:gender']">
-    <meta property="fb:profile_id" content="{{ngMeta['fb:profile_id']}}" ng-if="ngMeta['fb:profile_id']">
-    <meta property="og:see_also" content="{{ngMeta['og:see_also']}}" ng-if="ngMeta['og:see_also']">
-
-    <meta property="article:author" content="{{ngMeta['article:author']}}" ng-if="ngMeta['article:author']">
-    <meta property="article:published_time" content="{{ngMeta['article:published_time']}}" ng-if="ngMeta['article:published_time']">
-    <meta property="article:publisher" content="{{ngMeta['article:publisher']}}" ng-if="ngMeta['article:publisher']">
-    <meta property="article:section" content="{{ngMeta['article:section']}}" ng-if="ngMeta['article:section']">
-
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@CBDNews">
-    <meta name="twitter:creator" content="{{ngMeta['twitter:creator'] || '@CBDNews'}}"  >
-    <meta name="twitter:title" content="{{ngMeta['twitter:title']}}" ng-if="ngMeta['twitter:title']">
-    <meta name="twitter:description" content="{{ngMeta['twitter:description']}}" ng-if="ngMeta['twitter:description']">
-    <meta name="twitter:image" content="{{ngMeta['twitter:image']}}" ng-if="ngMeta['twitter:image']">
-    <meta name="twitter:image:src" content="{{ngMeta['twitter:image']}}" ng-if="ngMeta['twitter:image']">
+    <title>Convention on Biological Diversity</title>
+    <meta property="og:site_name" content="Convention on Biological Diversity" />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="<%=cdnUrl%>bootstrap@3.4.1/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="<%=cdnUrl%>font-awesome@4.7.0/css/font-awesome.css">
-    <link rel="stylesheet" href="/app/libs/animate.css/animate.min.css?v=<%=gitVersion%>">
-    <link rel="stylesheet" href="/app/libs/magnific-popup/dist/magnific-popup.css?v=<%=gitVersion%>">
-    <link rel="stylesheet" href="/app/libs/flag-icon-css/css/flag-icon.css?v=<%=gitVersion%>" >
-    <link rel="stylesheet" href="app/libs/angular-toastr/dist/angular-toastr.min.css?v=<%=gitVersion%>" >
-    <link rel="stylesheet" href="<%=cdnUrl%>ng-dialog@0.6.1/css/ngDialog.min.css">
-    <link rel="stylesheet" href="<%=cdnUrl%>ng-dialog@0.6.1/css/ngDialog-theme-default.min.css">
-    <link rel="stylesheet" href="/app/views/meetings/documents/agenda.css?v=<%=gitVersion%>">
-    <link rel="stylesheet" href="/app/libs/bootstrap-datepicker/css/datepicker.css?v=<%=gitVersion%>">
 
+    <link rel="stylesheet" href="<%=`${cdnUrl}npm/font-awesome@4.7.0/css/font-awesome.css`%>">
+    <link rel="stylesheet" href="<%=`${cdnUrl}npm/bootstrap@3.4.1/dist/css/bootstrap.css`%>">
+    <link rel="stylesheet" href="<%=`${cdnUrl}npm/animate.css@3.5.2/animate.min.css`%>">
     <style>
 
     [ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }

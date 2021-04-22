@@ -1,11 +1,14 @@
-define(['text!./view-bbi-contact.html', 'app', 'angular', 'lodash', 'authentication',
-	'services/editFormUtility',
-	'services/storage',
-	'services/workflows',
-	'providers/locale',
-	'filters/term',
-], function(template, app, angular, _) {
-	'use strict';
+import template from './view-bbi-contact.html';
+import app from '~/app';
+import angular from 'angular';
+import _ from 'lodash';
+import '~/authentication';
+import '~/services/editFormUtility';
+import '~/services/storage';
+import '~/services/workflows';
+import '~/providers/locale';
+import '~/filters/term';
+	
 
 	app.directive('viewBbiContact', ['$http', "$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility', 'IStorage', '$route', '$timeout', 'locale', function($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route, $timeout, locale) {
 		return {
@@ -114,4 +117,3 @@ define(['text!./view-bbi-contact.html', 'app', 'angular', 'lodash', 'authenticat
 			}
 		};
 	}]);
-});

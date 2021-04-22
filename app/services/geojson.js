@@ -1,5 +1,6 @@
-define(['app', 'underscore'], function(module, _) {
-  return module.factory('geojson', ['$http', '$locale',
+import module from '~/app';
+import _ from 'lodash';
+  export default module.factory('geojson', ['$http', '$locale',
     function($http, $locale) {
       var geojson = {};
 
@@ -13,4 +14,4 @@ define(['app', 'underscore'], function(module, _) {
       return geojson;
     }
   ]);
-});
+

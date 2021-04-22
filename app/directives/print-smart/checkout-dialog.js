@@ -1,7 +1,9 @@
 /* global -close */
-define(['lodash'], function(_) {
+import _ from 'lodash'
 
-	return ["$scope", "documents", "allowPrint", function ($scope, documents, allowPrint) {
+export { default as template } from './checkout-dialog.html';
+
+export default ["$scope", "documents", "allowPrint", function ($scope, documents, allowPrint) {
 
 		$scope.allowPrint            = allowPrint;
 		$scope.printableDocuments    = documents.printable;
@@ -12,4 +14,3 @@ define(['lodash'], function(_) {
 		$scope.print    = function() { $scope.closeThisDialog('print');    };
 		$scope.close    = function() { $scope.closeThisDialog();           };
 	}];
-});

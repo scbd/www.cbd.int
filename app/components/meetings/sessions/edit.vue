@@ -1,6 +1,6 @@
 
 <template >
-  <div style="padding-bottom:300px">
+  <div>
     <h1>Session Preparation
       <small class="text-muted">
         <span v-for="{normalizedSymbol} in meetings" :key="normalizedSymbol">

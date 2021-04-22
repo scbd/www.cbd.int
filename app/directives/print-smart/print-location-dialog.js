@@ -1,7 +1,9 @@
-/* global -close */
-define(['./locations', 'css!./location-button.css', 'ngCookies'], function(locations) {
+import 'css!./location-button.css'
+import locations from './locations'
 
-	return ["$scope", "$cookies", function ($scope, $cookies) {
+export { default as template } from './print-location-dialog.html';
+
+export default ["$scope", "$cookies", function ($scope, $cookies) {
 
 		$scope.locations = locations;
 
@@ -32,4 +34,3 @@ define(['./locations', 'css!./location-button.css', 'ngCookies'], function(locat
 			}
 		}
 	}];
-});

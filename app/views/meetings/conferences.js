@@ -1,9 +1,14 @@
-﻿define(['app', 'lodash', 'services/conference-service', 'directives/social-media', 'filters/lstring',
-'filters/moment', 'services/article-service'],
- function(app, _) { 'use strict';
+﻿import _   from 'lodash'
+import app from '~/app'
+import '~/services/article-service'
+import '~/services/conference-service'
+import '~/directives/social-media'
+import '~/filters/lstring'
+import '~/filters/moment' 
 
+export { default as template } from './conferences.html'
 
-return ['$location','$scope', '$rootScope', 'conferenceService', '$q', '$compile', 'articleService',
+export default ['$location','$scope', '$rootScope', 'conferenceService', '$q', '$compile', 'articleService',
         function ($location,$scope, $rootScope, conferenceService, $q, $compile, articleService) {
        
             var conferenceHeader = angular.element("#conferenceHeader");
@@ -73,4 +78,3 @@ return ['$location','$scope', '$rootScope', 'conferenceService', '$q', '$compile
                 return val.toLowerCase().replace(/\s/g, '-')
             }
     }];
-});

@@ -1,6 +1,13 @@
-define(['app','lodash', 'text!./side-events.html','data/aichi-targets/targets','directives/aichi-targets/sorter-mongo','directives/aichi-targets/pagination','providers/locale','services/mongo-storage','filters/moment'], function(app,_, templateHtml,targetsData) {
-    'use strict';
-
+import '~/directives/aichi-targets/sorter-mongo'
+import '~/directives/aichi-targets/pagination'
+import '~/providers/locale'
+import '~/services/mongo-storage'
+import '~/filters/moment'
+import app from '~/app'
+import _ from 'lodash'
+import templateHtml from './side-events.html'
+import targetsData from '~/data/aichi-targets/targets.json'
+      
     //============================================================
     //
     //============================================================
@@ -241,7 +248,7 @@ define(['app','lodash', 'text!./side-events.html','data/aichi-targets/targets','
                   $http.get('/api/v2013/index/select', {
                     params: queryParameters,
                     // cache: true
-                  }).success(function(data) {
+                  }).then(function({data}) {
 
 
                     $scope.count = data.response.numFound;
@@ -274,5 +281,3 @@ define(['app','lodash', 'text!./side-events.html','data/aichi-targets/targets','
             }
         };
     }]);
-
-});

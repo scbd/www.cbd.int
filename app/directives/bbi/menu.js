@@ -1,9 +1,12 @@
-define(['app', 'text!./menu.html','lodash','providers/locale'], function(app, templateHtml,_) { 'use strict';
+import app from '~/app'
+import templateHtml from './menu.html'
+import _ from 'lodash'
+import '~/providers/locale'
 
     //============================================================
     //
     //============================================================
-    app.directive('menu',["locale","$window",  function(locale,$window) {
+    app.directive('menu',["locale","$window", '$location',  function(locale,$window, $location) {
         return {
             restrict: 'E',
             template : templateHtml,
@@ -16,16 +19,13 @@ define(['app', 'text!./menu.html','lodash','providers/locale'], function(app, te
             link: function ($scope) {
               $scope.locale=locale;
 
-                  require(["js/slaask"], function(_slaask) {
+                  import("~/js/slaask").then(function({default: _slaask }) {
 
                       if(!_slaask.initialized) {
                           _slaask.init('d611635fe9b46e439afb79833e255443');
                       }
                   });
 
-
-            },
-            controller: function ($scope, $location) {
                 // ============================================================
                 //
                 // ============================================================
@@ -59,5 +59,3 @@ define(['app', 'text!./menu.html','lodash','providers/locale'], function(app, te
             }
         };
     }]);
-
-});

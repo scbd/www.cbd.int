@@ -1,4 +1,6 @@
-define(['app', 'lodash', 'text!./document-files.html'], function(app, _, html) { 'use strict';
+import app  from '~/app'
+import _    from 'lodash'
+import html from './document-files.html'
 
 	var LANGUAGES = { ar : "العربية", en : "English", es : "Español", fr : "Français", ru : "Русский", zh : "中文" };
     var MIMES = {
@@ -14,7 +16,7 @@ define(['app', 'lodash', 'text!./document-files.html'], function(app, _, html) {
         'default':                                                                    { priority:999,  color: 'orange', btn: 'btn-default', icon: 'fa-file-o' }
     };
 
-	 return app.directive('documentFiles', [function() {
+    app.directive('documentFiles', [function() {
 		return {
 			restrict : "E",
 			template : html,
@@ -114,4 +116,3 @@ define(['app', 'lodash', 'text!./document-files.html'], function(app, _, html) {
 			}
 		};
 	}]);
-});

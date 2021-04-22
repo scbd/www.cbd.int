@@ -1,6 +1,11 @@
-define(['lodash', 'app', 'filters/lstring', 'services/conference-service', 'directives/articles/cbd-article'], function(_) {
- 
-	return ['$scope', '$http', '$route', '$location', '$window', 'conferenceService', 'authentication', 'user', function($scope, $http, $route, $location, $window, conferenceService, authentication, user) {
+import _ from 'lodash'
+import '~/filters/lstring'
+import '~/services/conference-service'
+import '~/directives/articles/cbd-article'
+
+export { default as template } from './detect.html'
+
+export default ['$scope', '$http', '$route', '$location', '$window', 'conferenceService', 'authentication', 'user', function($scope, $http, $route, $location, $window, conferenceService, authentication, user) {
 
     $scope.isAuthenticated = user.isAuthenticated;
     $scope.signIn = signIn;
@@ -73,4 +78,3 @@ define(['lodash', 'app', 'filters/lstring', 'services/conference-service', 'dire
     function resData(res) { return res.data; } 
 
   }];
-});

@@ -1,4 +1,4 @@
-define(['./romans'], function(romans) {
+import romans from './romans';
 
     var items = [];
 
@@ -10,5 +10,5 @@ define(['./romans'], function(romans) {
         });
     }
 
-    return items;
-});
+    export default items;
+

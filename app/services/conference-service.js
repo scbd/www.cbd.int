@@ -1,4 +1,8 @@
-define(['app', 'lodash', 'moment-timezone', 'angular-cache'], function (app, _, moment) {
+import app    from '~/app'
+import _      from 'lodash'
+import moment from 'moment-timezone'
+
+import 'angular-cache'
 
     app.factory("conferenceService", ['$http', '$rootScope', '$q', '$timeout', '$filter', '$route', 'CacheFactory',
     function ($http, $rootScope, $q, $timeout, $filter, $route, CacheFactory) {
@@ -154,5 +158,3 @@ define(['app', 'lodash', 'moment-timezone', 'angular-cache'], function (app, _, 
             }
 
     }]);
-
-});
