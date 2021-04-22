@@ -143,7 +143,7 @@ export { default as template } from './index-id.html'
         //===========================
         function loadArticle(code){
             
-            var match = { "adminTags.title.en" : { $all: ['notification', code]}};     
+            var match = { "adminTags" : { $all: ['notification', kebabCase(code)]}};     
 
             _ctrl.articleQuery = [
                 {"$match"   : match },
@@ -152,6 +152,9 @@ export { default as template } from './index-id.html'
             ];
         }
 
+        function kebabCase(val){
+            return val.toLowerCase().replace(/\s/g, '-')
+        }
         //===========================
         //
         //===========================

@@ -35,25 +35,31 @@ export default ['$location', '$routeParams','$http','$filter','$q','IStorage','l
 				getArticle();
       });
       
-      //============================================================
-      //
-      //============================================================
-      function getArticle() {
+	//============================================================
+	//
+	//============================================================
+	function getArticle() {
 
-        var params = {
-            q: {
-                'tags.title.en': { $all : [getNameEnglish(_ctrl.gov), 'International Day for Biodiversity']},//IDB
-                'customTags.title.en': _ctrl.year.toString()
-            }, fo:1
-        };
-        return $http.get("/api/v2017/articles",{params:params}).then(
-          function(o){
-            if(o.data){
-              _ctrl.article = o.data
-              _ctrl.articleContent = o.data.content[locale]
-            }
-        });
-			}
+		var promises = [getTagIds([getNameEnglish(_ctrl.gov), 'International Day for Biodiversity']), 
+						$http.get("/api/v2017/article-custom-tags",{params:{q:{'title.en':_ctrl.year.toString()}}})]
+		$q.all(promises).then(function(result){
+			
+			var params = {
+				q: {
+					'tags': { $all : _.map(result[0], function(tag){return { $oid: tag}})},
+					'customTags': { $oid:result[1].data[0]._id}
+				}, 
+				fo:1
+			};
+			return $http.get("/api/v2017/articles",{params:params}).then(
+			function(o){
+				if(o.data){
+				_ctrl.article = o.data
+				_ctrl.articleContent = o.data.content[locale]
+				}
+			});
+		})
+	}
 			//============================================================
       //
       //============================================================

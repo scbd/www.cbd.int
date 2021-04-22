@@ -34,14 +34,15 @@ export default ['$location','$scope', '$rootScope', 'conferenceService', '$q', '
                     tags.push(conference.code);
                 });
                 
-                ag.push({"$match":{ "$and" : [{"adminTags.title.en":{"$all":['conferences', 'introduction', 'home-page']}}, 
-                                              { "adminTags.title.en" : { $in: tags}}]}});
+                ag.push({"$match":{ "$and" : [{"adminTags":{"$all":['conferences', 'introduction', 'home-page']}}, 
+                                              { "adminTags" : { $in: _(tags).map(kebabCase).value()}}]}});
                 ag.push({"$project" : { coverImage:1, adminTags:1, title:1}});
 
-                articleService.query({ "ag" : JSON.stringify(ag) }).then(function(articles){                    
+                articleService.query({ "ag" : JSON.stringify(ag) })
+                .then(function(articles){                    
                     _.each(articles, function(article){
                         var conference = _.find(conferences.data, function(conf){
-                            var tags = _(article.adminTags).map('title').map('en').value()
+                            var tags = _(article.adminTags).map(kebabCase).value()
                             return _.includes(tags, conf.code)
                         })
                         if(conference){
@@ -70,5 +71,10 @@ export default ['$location','$scope', '$rootScope', 'conferenceService', '$q', '
                 //     });
                 
                 // })
+            }
+
+            
+            function kebabCase(val){
+                return val.toLowerCase().replace(/\s/g, '-')
             }
     }];

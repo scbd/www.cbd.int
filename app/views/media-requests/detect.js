@@ -30,7 +30,7 @@ export default ['$scope', '$http', '$route', '$location', '$window', 'conference
       if(!user.isAuthenticated) {
 
         $scope.articleQuery= [
-          {"$match"   : { "adminTags.title.en" : { $all: ['accounts', 'Sign-in', 'Sign-up'] }} },
+          {"$match"   : { "adminTags" : { $all: ['accounts', 'sign-in', 'sign-up'] }} },
           {"$sort"    : { "meta.updatedOn":-1}},
           {"$project" : { title:1, content:1, coverImage:1}},
           {"$limit"   : 1 }

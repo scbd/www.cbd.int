@@ -21,7 +21,7 @@ export default ['$scope', '$route', function ($scope,  $route) {
                 if((($route.current||{}).params||{}).urlTag)
                     tags = tags.concat($route.current.params.urlTag);
 
-                var match = { "adminTags.title.en" : { $all: tags}};
+                var match = { "adminTags" : { $all: _(tags).map(kebabCase).value() }};
 
                 ag.push({"$match"   : match });
                 ag.push({"$project" : { title:1, content:1, coverImage:1}});
@@ -34,6 +34,10 @@ export default ['$scope', '$route', function ($scope,  $route) {
 
                 $scope.article = article;
                 $scope.isLoading = false;
+            }
+
+            function kebabCase(val){
+                return val.toLowerCase().replace(/\s/g, '-')
             }
 
             buildQuery();
