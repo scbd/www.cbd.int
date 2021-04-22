@@ -97,7 +97,8 @@
                 <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos/draft" ng-if="isAdmin && status == 'approved'" style="margin-right: 5px;">Approve logos</a>
 
                 <button class="pull-left btn btn-primary btn-xs btn-sm" ng-if="isAdmin && status == 'draft'" style="margin-right: 5px;" ng-click="selectAll()">Select all</button>
-                <button class="pull-left btn btn-primary btn-xs btn-sm" ng-if="isAdmin && status == 'draft'" style="margin-right: 5px;" ng-click="updateSelectedStatus()">Approve selected</button>
+                <button class="pull-left btn btn-primary btn-xs btn-sm" ng-if="isAdmin && status == 'draft'" style="margin-right: 5px;" ng-click="updateSelectedStatus('approved')">Approve selected</button>
+                <button class="pull-left btn btn-primary btn-xs btn-sm" ng-if="isAdmin && status == 'draft'" style="margin-right: 5px;" ng-click="updateSelectedStatus('rejected')">Reject selected</button>
             </div>
             <div class="col-xs-12">
                 <div class="alert alert-info"  role="alert" ng-if="!logos.length">No more logos to validate</div>
