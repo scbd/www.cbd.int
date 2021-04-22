@@ -7,6 +7,12 @@ define(['app',
     
       
 	return ['$location', 'user','$http','$scope', '$timeout', '$window', 'ngDialog',  function( $location, user,$http, $scope,  $timeout, $window, ngDialog) {
+        
+        $scope.$root.page={
+            title : "International Biodiversity Day logo : customize",
+            description : $('#logo-description').text()
+        };
+
         $scope.defaultLanguages = [
             {code:'ar', language            : 'Arabic'  },
             {code:'en', language            : 'English' },

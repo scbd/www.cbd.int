@@ -9,6 +9,11 @@ define(['app', 'lodash',
 	return ['$q', 'user','$http','$scope', '$rootScope', '$window', 'status',  function( $q, user,$http, $scope,  $rootScope, $window, status) {
 
 
+        $scope.$root.page={
+            title : "International Biodiversity Day logo : collage",
+            description : $('#logo-description').text()
+        };
+
         $scope.status = status;
         var basePath  = $scope.basePath = (angular.element('base').attr('href')||'').replace(/\/+$/g, '');
         $scope.isAdmin = _.intersection(['Administrator', 'idb-logo-administrator'], user.roles).length
