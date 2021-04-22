@@ -1,12 +1,13 @@
-define(['app',
-'https://cdn.jsdelivr.net/combine/npm/blueimp-canvas-to-blob',
-'https://zachleat.github.io/BigText/dist/bigtext.js',
-'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js',
-'https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.3/FileSaver.min.js', 'ngDialog'], function(app) { 'use strict';
 
-    
+import 'file-saverjs';
+import 'bigText';
+import 'html2canvas';
+import _ from 'lodash';
+import ngDialog from 'ngDialog';
       
-	return ['$location', 'user','$http','$scope', '$timeout', '$window', 'ngDialog',  function( $location, user,$http, $scope,  $timeout, $window, ngDialog) {
+export { default as template  } from './customize.html';
+
+export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ngDialog',  function( $location, user,$http, $scope,  $timeout, $window, ngDialog) {
         
         $scope.$root.page={
             title : "International Biodiversity Day logo : customize",
@@ -289,7 +290,4 @@ define(['app',
         }, 200);
 
         loadLanguages();
-    }]
-});
-
-
+}]

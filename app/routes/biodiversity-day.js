@@ -1,9 +1,9 @@
 import app from '~/app';
-import { mapView, currentUser } from './mixin';
+import { mapView, currentUser, resolveLiteral, securize } from './mixin';
 
-// Static views
-import * as collage from '~/views/idb-celebrations/logos.html';
-import * as customLogo from '~/views/idb-celebrations/logo.html';
+import * as angularViewWrapper from '~/views/angular-view-wrapper'
+const collage           = { component: ()=>import('~/views/biodiversity-day/collage') }
+const customLogo        = { component: ()=>import('~/views/biodiversity-day/customize') }
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
@@ -11,9 +11,9 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     $locationProvider.hashPrefix('!');
 
     $routeProvider
-        .when('/logo/collage',          { ...mapView(collage),          controllerAs: 'idbLogosCtrl',       resolveController: true, resolve : { status:resolveLiteral('approved'), user : currentUser() }})
-        .when('/logo/collage/draft',    { ...mapView(collage),          controllerAs: 'idbDraftLogosCtrl',  resolveController: true, resolve : { status:resolveLiteral('draft'), user : securize(["Administrator","idb-logo-administrator"]) }})
-        .when('/logo/collage/rejected', { ...mapView(collage),          controllerAs: 'idbRejectLogosCtrl', resolveController: true, resolve : { status:resolveLiteral('rejected'), user : securize(["Administrator","idb-logo-administrator"]) }})
-        .when('/logo/customize',        { ...mapView(customLogo),       controllerAs: 'idbLogoCtrl',        resolveController: true, resolve : { user : currentUser() }})
+        .when('/logo/collage',          { ...mapView(angularViewWrapper),          resolve : { ...collage,   status:resolveLiteral('approved'), user : currentUser() }})
+        .when('/logo/collage/draft',    { ...mapView(angularViewWrapper),          resolve : { ...collage,   status:resolveLiteral('draft'),    user : securize(["Administrator","idb-logo-administrator"]) }})
+        .when('/logo/collage/rejected', { ...mapView(angularViewWrapper),          resolve : { ...collage,   status:resolveLiteral('rejected'), user : securize(["Administrator","idb-logo-administrator"]) }})
+        .when('/logo/customize',        { ...mapView(angularViewWrapper),          resolve : { ...customLogo,user : currentUser() }})
         .otherwise({redirectTo: function(){ window.location.href= window.location}});
 }]);
