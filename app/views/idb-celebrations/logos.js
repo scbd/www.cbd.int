@@ -64,10 +64,10 @@ define(['app', 'lodash',
             })
         }
 
-        $scope.updateSelectedStatus = function(){
+        $scope.updateSelectedStatus = function(status){
             _.each($scope.logos, function(logo){
                 if(logo.status == 'draft' && logo.selected)
-                    $scope.updateStatus(logo, 'approved')
+                    $scope.updateStatus(logo, status)
             });
         }
 

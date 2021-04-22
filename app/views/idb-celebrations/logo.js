@@ -271,7 +271,11 @@ define(['app',
                             language: lang.title.en
                         }
                     }
-                }).compact().uniq().value();
+                }).compact().uniq().sort(function(a,b){
+                    if(a.language<b.language) return -1;
+                    if(a.language>b.language) return  1;
+                    return 0;
+                }).value();
                 console.log($scope.languages)
             })
         }
