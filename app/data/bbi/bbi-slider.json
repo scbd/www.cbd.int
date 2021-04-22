@@ -1,0 +1,31 @@
+[
+  {
+      "title": "Francophone African ABS Legal Network",
+      "description": "Establishing an Access and Benefit-Sharing Legal Network for French Speaking African Countries",
+      "imageUrl": "https://attachments.cbd.int/940x400/Morocco-ABS.JPG",
+      "targetUrl": "https://spark.adobe.com/page/15OBzU4CUD1pX/",
+      "target" : "_blank"
+  }, {
+      "title": "Protecting Traditional Knowledge Through Cooperation",
+      "description": "Promoting Cooperation to Protect Traditional Knowledge in China and Other Countries in Asia",
+      "imageUrl": "https://attachments.cbd.int/940x400/china-tk.JPG",
+      "targetUrl": "https://spark.adobe.com/page/4SoVn62mzUE60/",
+      "target" : "_blank"
+  }, {
+      "title": "Protecting Asian Big Cats",
+      "description": "Search technical and scientific cooperation records on the Platform",
+      "imageUrl": "https://attachments.cbd.int/940x400/inda-tiger.jpg",
+      "targetUrl": "https://spark.adobe.com/page/TgI5Z7JkgHtqB/",
+      "target" : "_blank"
+  }, {
+      "title": "Participation in the Bio-Bridge Initiative",
+      "description": "Learn more about ways in which one can participate in the Initiative",
+      "imageUrl": "/app/images/bbi/pic_3_opt.jpg",
+      "targetUrl": "participation"
+  }, {
+      "title": "The Bio-Bridge projects",
+      "description": "Learn more about technical and scientific cooperation projects facilitated through the Initiative",
+      "imageUrl": "/app/images/bbi/pic_2_opt.jpg",
+      "targetUrl": "projects"
+  }
+]

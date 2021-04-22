@@ -1,4 +1,6 @@
-define(['app', 'jquery', 'lodash'], function(app, $, _) { 'use strict';
+import app from '~/app'
+import _ from 'lodash'
+import $ from 'jquery'
 
     var inlineTextClasses = [
         'text-lowercase',
@@ -124,4 +126,3 @@ define(['app', 'jquery', 'lodash'], function(app, $, _) { 'use strict';
             return $('<div/>').text(html).html();
         };
     }]);
-});

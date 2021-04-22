@@ -1,6 +1,10 @@
-define(['app', 'text!./decision-reference.html', 'lodash', 'filters/lstring'], function(app, template, _) { 'use strict';
+import '~/filters/lstring'
+import _   from 'lodash'
+import app from '~/app'
+import template from './decision-reference.html'
 
-	return app.directive('decisionReference', ['$http', function($http) {
+
+	app.directive('decisionReference', ['$http', function($http) {
 		return {
 			restrict : "E",
 			template : template,
@@ -64,4 +68,3 @@ define(['app', 'text!./decision-reference.html', 'lodash', 'filters/lstring'], f
             }
         };
     }]);
-});

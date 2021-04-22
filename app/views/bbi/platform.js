@@ -1,6 +1,10 @@
-define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/crumbs', 'directives/bbi/menu'], function(app, _,links) { 'use strict';
+import '~/directives/bbi/crumbs'
+import '~/directives/bbi/menu'
+import links from '~/data/bbi/links-platform.json'
 
-	return ['$location','$scope','user', function ($location,$scope,user) {
+export { default as template } from './platform.html'
+
+export default ['$location','$scope','user', function ($location,$scope,user) {
 
         var _ctrl = this;
 				_ctrl.links=links.links;
@@ -15,4 +19,3 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/crumbs', 'dir
 								$location.path(url);
 				}
     }];
-});

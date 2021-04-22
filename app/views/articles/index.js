@@ -1,6 +1,10 @@
-﻿define(['app', 'directives/social-media', 'directives/articles/cbd-article'], function(app) { 'use strict';
+﻿import '~/app'
+import '~/directives/social-media'
+import '~/directives/articles/cbd-article'
 
-return ['$scope', '$route', function ($scope,  $route) {
+export { default as template } from './index.html'
+
+export default ['$scope', '$route', function ($scope,  $route) {
        
 			var _ctrl = this;
 
@@ -17,7 +21,7 @@ return ['$scope', '$route', function ($scope,  $route) {
                 if((($route.current||{}).params||{}).urlTag)
                     tags = tags.concat($route.current.params.urlTag);
 
-                var match = { "adminTags.title.en" : { $all: tags}};
+                var match = { "adminTags" : { $all: _(tags).map(kebabCase).value() }};
 
                 ag.push({"$match"   : match });
                 ag.push({"$project" : { title:1, content:1, coverImage:1}});
@@ -32,7 +36,10 @@ return ['$scope', '$route', function ($scope,  $route) {
                 $scope.isLoading = false;
             }
 
+            function kebabCase(val){
+                return val.toLowerCase().replace(/\s/g, '-')
+            }
+
             buildQuery();
 
     }];
-});

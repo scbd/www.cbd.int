@@ -1,6 +1,11 @@
-define(['app', 'text!./notification.html', 'lodash', 'moment', 'filters/lstring', 'directives/meetings/documents/document-files'], function(app, template, _) { 'use strict';
+import 'moment'
+import '~/filters/lstring'
+import '~/directives/meetings/documents/document-files'
+import _ from 'lodash'
+import app from '~/app'
+import template from './notification.html'
 
-	return app.directive('decisionNotification', ['$http', '$q', function($http, $q) {
+	app.directive('decisionNotification', ['$http', '$q', function($http, $q) {
 		return {
 			restrict : "E",
 			template : template,
@@ -125,4 +130,3 @@ define(['app', 'text!./notification.html', 'lodash', 'moment', 'filters/lstring'
             }
         };
     }]);
-});

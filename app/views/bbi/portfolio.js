@@ -1,7 +1,9 @@
+import links from '~/data/bbi/links.json'
+import '~/directives/bbi/menu'
 
-define(['app', 'lodash','data/bbi/links', 'directives/bbi/menu'], function(app, _,links) { 'use strict';
+export { default as template } from './portfolio.html'
 
-	return ['$location','$scope', function ($location,$scope) {
+export default ['$location','$scope', function ($location,$scope) {
 
         var _ctrl = this;
 				_ctrl.links=links.links;
@@ -14,4 +16,3 @@ define(['app', 'lodash','data/bbi/links', 'directives/bbi/menu'], function(app, 
 					$location.path(url);
 				}
     }];
-});

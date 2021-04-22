@@ -1,5 +1,5 @@
-define(['app'], function(app) {
-  'use strict';
+import app from '~/app';
+  
 
   app.directive('onFile', [function() {
     return {
@@ -20,4 +20,4 @@ define(['app'], function(app) {
       }
     }; // return
   }]); //app.directive('searchFilterCountries
-}); // define
+ // define

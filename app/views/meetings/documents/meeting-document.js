@@ -1,4 +1,9 @@
-define(['app', 'lodash', 'text!./meeting-document.html', 'directives/meetings/documents/document-files', 'directives/checkbox', 'filters/html-sanitizer'], function(app, _, html) { 'use strict';
+import app  from '~/app'
+import _    from 'lodash'
+import html from './meeting-document.html'
+import '~/directives/meetings/documents/document-files'
+import '~/directives/checkbox'
+import '~/filters/html-sanitizer'
 
     var LANGUAGES = { ar : "العربية", en : "English", es : "Español", fr : "Français", ru : "Русский", zh : "中文" };
     var ONLINE = 'text/html';
@@ -15,7 +20,7 @@ define(['app', 'lodash', 'text!./meeting-document.html', 'directives/meetings/do
         'default':                                                                    { priority:999,  color: 'orange', btn: 'btn-default', icon: 'fa-file-o' }
     };
 
-	 return app.directive('meetingDocument', ['$rootScope',function($rootScope) {
+	app.directive('meetingDocument', ['$rootScope',function($rootScope) {
 		return {
 			restrict : "E",
 			template : html,
@@ -48,4 +53,3 @@ define(['app', 'lodash', 'text!./meeting-document.html', 'directives/meetings/do
 			}
 		};
 	}]);
-});

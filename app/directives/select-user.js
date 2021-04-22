@@ -1,6 +1,8 @@
-define(['app', 'text!./select-user.html', 'lodash'], function(app, html, _) { 'use strict';
+import app from '~/app';
+import html from './select-user.html';
+import _ from 'lodash'; 
 
-	return app.directive('selectUser', ['$http', function($http) {
+	export default app.directive('selectUser', ['$http', function($http) {
 		return {
             require: 'ngModel',
 			restrict : "E",
@@ -62,4 +64,4 @@ define(['app', 'text!./select-user.html', 'lodash'], function(app, html, _) { 'u
 			}
 		};
 	}]);
-});
+

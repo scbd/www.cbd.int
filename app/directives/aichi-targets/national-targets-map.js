@@ -1,12 +1,14 @@
-define(['app', 'lodash',
-'text!./national-targets-map.html',
-'text!./target.html',
-'text!./target-row.html', 
-'ammap',
-'shim!directives/reporting-display/worldEUHigh[ammap]',
-'shim!ammap/themes/light[ammap]',
-'providers/locale', 'directives/common/export-directive'
-], function(app,_,template,targetTemplate,row) { 'use strict';
+import 'ammap'
+import 'ammap/themes/light'
+import '~/directives/reporting-display/worldEUHigh'
+import '~/providers/locale'
+import '~/directives/common/export-directive'
+import 'css!cdn!npm/flag-icon-css@2.3.0/css/flag-icon.min.css';
+import app from '~/app'
+import _ from 'lodash'
+import template from './national-targets-map.html'
+import targetTemplate from './target.html'
+import row from './target-row.html' 
 
     //============================================================
     //
@@ -194,7 +196,7 @@ define(['app', 'lodash',
                     return $http.get('/api/v2013/index/select', {
                         params: queryParameters,
                         cache:true
-                    }).success(function(data) {
+                    }).then(function({data}) {
                         $scope.count = data.response.numFound;
                         $scope.documents = data.response.docs;
                     });
@@ -222,7 +224,7 @@ define(['app', 'lodash',
                     return $http.get('/api/v2013/index/select', {
                         params: queryParameters,
                         cache:true
-                    }).success(function(data) {
+                    }).then(function({data}) {
                         $scope.tcount = data.response.numFound;
                         $scope.tdocuments = data.response.docs;
                     });
@@ -621,5 +623,3 @@ define(['app', 'lodash',
             }
         };
     }]);
-
-});

@@ -1,5 +1,6 @@
-define(['app', 'nlp'], function (app, nlp) {
-
+import app from '~/app'
+import nlp from 'nlp'
+  
   app.filter('titleCase',[function () {
     return function (text) {
       var doc = nlp(text).all().toTitleCase()
@@ -13,4 +14,3 @@ define(['app', 'nlp'], function (app, nlp) {
       return doc.all().text()
     };
   }]); //app.filter
-}); //define

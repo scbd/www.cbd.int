@@ -1,10 +1,25 @@
-define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'components/meetings/sessions/edit','components/meetings/uploads', 'angular-vue', 'filters/lstring', 'directives/print-smart/print-smart-checkout', './meeting-document', 'authentication',
-        'css!./meeting-documents.css', 'angular-cache', 'css!./agenda.css', 'filters/moment', 'ngCookies'
-], function(_, ng, moment, sessionsView, sessionsEdit, uploads) {
+import 'angular-vue'
+import '~/directives/print-smart/print-smart-checkout'
+import './meeting-document'
+import '~/authentication'
+import 'angular-cache'
+import '~/filters/lstring'
+import '~/filters/moment'
+import 'css!./meeting-documents.css'
+import 'css!./agenda.css'
+import _ from 'lodash'
+import ng from 'angular'
+import moment from 'moment'
+import * as meta from '~/services/meta'
+// import sessionsView from '~/components/meetings/sessions/view.vue'
+// import uploads from '~/components/meetings/uploads.vue'
+
+export { default as template } from './documents.html';
+
     //'css!./agenda.css' // moved to template
     var STATISTICS = {}; 
 
-	return ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', '$cookies', 'apiToken', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting, CacheFactory, $cookies, apiToken) {
+	export default ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', '$cookies', 'apiToken', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting, CacheFactory, $cookies, apiToken) {
 
         var _ctrl = $scope.documentsCtrl = this;
         var meetingCode = $route.current.params.meeting.toUpperCase();
@@ -16,9 +31,17 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
         $scope.tokenReader = function(){ return apiToken.get()}
         $scope.route       = { params : $route.current.params, query: $location.search() }
         $scope.vueOptions  = {
-          components: { sessions: sessionsView, uploads: uploads },
+          components: { },
           i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
         };
+
+        function registerComponents(components) {
+
+            Object.keys(components).forEach((name) => {
+                const component = components[name].default || components[name];
+                $scope.vueOptions.components[name] = component;
+            });
+        }
 
 
         var groups = {
@@ -63,15 +86,22 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
         //
         //==============================
         function load() {
+            let documents = null;
             _ctrl.inSessionEnabled = false; //to adjust the height for non insession case
-            var meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, uploadStatement:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, alerts:1 }, cache:true } }).then(function(res){
+            const meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, uploadStatement:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, alerts:1 }, cache:true } }).then(async function(res){
 
-                meeting = _.defaults(res.data, {
+                const meeting = _.defaults(res.data, {
                     code: res.data.EVT_CD,
                     agenda: { items: [] },
                     printSmart : false,
                     isMontreal : /montr.al.*canada/i.test((res.data.venueText||{}).en||'')
                 });
+
+                meta.title(`${meeting.code} - Documents`);
+
+                if(meeting.uploadStatement) {
+                    registerComponents({uploads : await import('~/components/meetings/uploads.vue') });
+                }
 
                 if(meeting.uploadStatement && $location.search().uploadStatementBy) {
                     _ctrl.uploadStatement = true;
@@ -232,11 +262,11 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
                 _ctrl.maxTabCount = 999;
             }
 
-            if(_ctrl.tabs && _ctrl.tabs.length && !_ctrl.meeting.insession && _.findIndex(_ctrl.tabs, isInSessionTab)>0) {
+            const { insession }  =  _ctrl.meeting||{};
+
+            if(_ctrl.tabs && _ctrl.tabs.length && !insession && _.findIndex(_ctrl.tabs, isInSessionTab)>0) {
                 _ctrl.maxTabCount = Math.min(_ctrl.maxTabCount, _.findIndex(_ctrl.tabs, isInSessionTab));
             }
-
-
         }
 
         //==============================
@@ -251,14 +281,16 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
         //==============================
         function loadSessions() {
 
-            $http.get('/api/v2021/meeting-sessions', { params: { c: 1, q : { meetingIds: { $in :[ { $oid:_ctrl.meeting._id }] } } } }).then(function(res){
+            $http.get('/api/v2021/meeting-sessions', { params: { c: 1, q : { meetingIds: { $in :[ { $oid:_ctrl.meeting._id }] } } } }).then(async function(res){
 
-                var count = res.data[0].count;
+                var count = (res.data[0]||{}).count;
 
                 if(!count) return;
 
                 var fakeDocs = []; 
                 fakeDocs.length = count;
+
+                registerComponents({ sessions : await import('~/components/meetings/sessions/view.vue') });
 
                 injectTab('statement', fakeDocs, { component:'sessions' });
 
@@ -480,7 +512,7 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
         function initDragdrop() {
 
             setTimeout(function() {
-            require(['dragula'], function(dragula) {
+            import('dragula').then(function({ default: dragula }) {
 
                 ng.element("tbody.documents:not(.drag-ready)").each(function(i,element){
 
@@ -737,4 +769,3 @@ define(['lodash', 'angular', 'moment', 'components/meetings/sessions/view', 'com
             return hash;
           };        
 	}];
-});

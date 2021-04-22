@@ -1,6 +1,8 @@
-define(['app', 'text!./header-decisions.html', './disclaimer'], function(app, template) { 'use strict';
+import './disclaimer'
+import app from '~/app'
+import template from './header-decisions.html'
 
-	return app.directive('headerDecisions', [function() {
+	app.directive('headerDecisions', [function() {
 		return {
 			restrict : "E",
 			template : template,
@@ -10,4 +12,3 @@ define(['app', 'text!./header-decisions.html', './disclaimer'], function(app, te
 			link: function () {}
         }
     }]);
-});

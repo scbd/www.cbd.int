@@ -1,4 +1,8 @@
-define(['app', 'text!./slider.html','lodash','json!https://attachments.cbd.int/bbi-slider.json','directives/bbi/ani-scroll'], function(app, templateHtml,_,bbiSlider) { 'use strict';
+import '~/directives/bbi/ani-scroll'
+import _ from 'lodash'
+import app from '~/app'
+import templateHtml from './slider.html'
+import bbiSlider from '~/data/bbi/bbi-slider.json'
 
     //============================================================
     //
@@ -80,5 +84,3 @@ define(['app', 'text!./slider.html','lodash','json!https://attachments.cbd.int/b
             }
         };
     }]);
-
-});

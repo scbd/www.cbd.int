@@ -1,8 +1,14 @@
-define(['app', 'lodash', 'moment', 'services/kronos', 'filters/term'], function(app, _, moment) {
+import app from '~/app'
+import _ from 'lodash'
+import moment from 'moment'
+import '~/services/kronos'
+import '~/filters/term';
+
+export { default as template } from './index.html'
 
     var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
 
-	return ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $q) {
+export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $q) {
         var _ctrl = this;
 
         _ctrl.selectRequest         = selectRequest;
@@ -511,4 +517,3 @@ define(['app', 'lodash', 'moment', 'services/kronos', 'filters/term'], function(
         //===================================
         function resData(res) {  return res.data; }
 	}]; 
-});

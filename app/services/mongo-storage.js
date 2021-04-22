@@ -1,4 +1,5 @@
-define(['app', 'lodash'], function(app, _) {
+import app from '~/app';
+import _ from 'lodash';
 
     app.factory("mongoStorage", ['$http','$rootScope','$q','$timeout','$filter', function($http,$rootScope,$q,$timeout,$filter) {
 
@@ -78,4 +79,4 @@ define(['app', 'lodash'], function(app, _) {
             loadDocs:loadDocs
         }; //return
     }]); //factory
-}); //require
+ //require

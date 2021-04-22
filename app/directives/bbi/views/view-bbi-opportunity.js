@@ -1,6 +1,8 @@
-define(['text!./view-bbi-opportunity.html', 'app', 'lodash',  'services/storage'
-], function(template, app, _) {
-	'use strict';
+import template from './view-bbi-opportunity.html';
+import app from '~/app';
+import _ from 'lodash';
+import '~/services/storage';
+	
 
 	app.directive('viewBbiOpportunity', ["IStorage","$location", function (storage,$location) {
 		return {
@@ -139,4 +141,3 @@ define(['text!./view-bbi-opportunity.html', 'app', 'lodash',  'services/storage'
 			}
 		};
 	}]);
-});

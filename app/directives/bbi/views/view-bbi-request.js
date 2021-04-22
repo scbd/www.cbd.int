@@ -1,6 +1,9 @@
-define(['text!./view-bbi-request.html', 'app', 'lodash',  'services/storage','services/mongo-storage',
-], function(template, app, _) {
-	'use strict';
+import template from './view-bbi-request.html';
+import app from '~/app';
+import _ from 'lodash';
+import '~/services/storage';
+import '~/services/mongo-storage';
+	
 
 	app.directive('viewBbiRequest', ["IStorage","$location", function (storage,$location) {
 		return {
@@ -124,4 +127,3 @@ define(['text!./view-bbi-request.html', 'app', 'lodash',  'services/storage','se
 			}
 		};
 	}]);
-});

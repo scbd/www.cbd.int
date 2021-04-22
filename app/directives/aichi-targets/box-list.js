@@ -1,5 +1,11 @@
-define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','directives/aichi-targets/sorter','directives/aichi-targets/pagination','providers/locale'], function(app,_, templateHtml,targetsData) {
-    'use strict';
+import '~/directives/aichi-targets/sorter'
+import '~/directives/aichi-targets/pagination'
+import '~/providers/locale'
+import app from '~/app'
+import _ from 'lodash'
+import templateHtml from './box-list.html'
+import targetsData from '~/data/aichi-targets/targets.json'
+import 'css!cdn!npm/flag-icon-css@2.3.0/css/flag-icon.min.css';
 
     //============================================================
     //
@@ -175,7 +181,7 @@ define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','dir
                   $http.get('/api/v2013/index/select', {
                     params: queryParameters,
                     // cache: true
-                  }).success(function(data) {
+                  }).then(function({data}) {
 
 
                     $scope.count = data.response.numFound;
@@ -206,5 +212,3 @@ define(['app','lodash', 'text!./box-list.html','data/aichi-targets/targets','dir
             }
         };
     }]);
-
-});

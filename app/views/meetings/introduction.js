@@ -1,6 +1,11 @@
-﻿define(['app', 'directives/social-media', 'directives/articles/cbd-article', 'services/conference-service'], function(app) { 'use strict';
+﻿import '~/directives/social-media';
+import '~/directives/articles/cbd-article';
+import '~/services/conference-service';
+import app from '~/app'
 
-return ['$scope', '$route', '$location', '$http', '$rootScope',
+export { default as template } from './introduction.html';
+
+export default ['$scope', '$route', '$location', '$http', '$rootScope',
  function ($scope,  $route, $location, $http, $rootScope) {
        
             $scope.isLoading = true;
@@ -18,7 +23,7 @@ return ['$scope', '$route', '$location', '$http', '$rootScope',
                 if((($route.current||{}).params||{}).urlTag)
                     tags = tags.concat($route.current.params.urlTag);
 
-                var match = { "adminTags.title.en" : { $all: tags}};
+                var match = { "adminTags" : { $all: _(tags).map(kebabCase).value()}};
 
                 ag.push({"$match"   : match });
                 ag.push({"$project" : { title:1, content:1, coverImage:1}});
@@ -49,6 +54,9 @@ return ['$scope', '$route', '$location', '$http', '$rootScope',
                 }
             }
             
+            function kebabCase(val){
+                return val.toLowerCase().replace(/\s/g, '-')
+            }
+
             buildQuery();
     }];
-});

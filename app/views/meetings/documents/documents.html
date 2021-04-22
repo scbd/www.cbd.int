@@ -1,6 +1,6 @@
 <div class="meeting-documents">
 
-    <uploads ng-vue="vueOptions" :show.sync="documentsCtrl.uploadStatement" :route="route" @notify="documentsCtrl.notify"></uploads>
+    <span ng-if="documentsCtrl.meeting.uploadStatement"><uploads ng-vue="vueOptions" :show.sync="documentsCtrl.uploadStatement" :route="route" @notify="documentsCtrl.notify"></uploads></span>
 
     <div ng-repeat="alert in ::documentsCtrl.meeting.alerts" class="alert" ng-class="{ ['alert-'+(alert.level||'primary')]:true }" role="alert">
         <strong><a href="{{alert.url}}" ng-bind="alert.title | lstring" target="_self" style="color:inherit;"></a></strong>

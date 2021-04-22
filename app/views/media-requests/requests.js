@@ -1,6 +1,11 @@
-define(['lodash', 'app', 'filters/lstring', 'filters/moment', 'services/conference-service'], function(_) {
- 
-	return ['$http', '$route', '$location', 'conferenceService', 'user', function($http, $route, $location, conferenceService, user) {
+import _ from  'lodash'
+import '~/filters/lstring'
+import '~/filters/moment'
+import '~/services/conference-service'
+
+export { default as template } from './requests.html'
+
+export default ['$http', '$route', '$location', 'conferenceService', 'user', function($http, $route, $location, conferenceService, user) {
 
     var _ctrl = this;
 
@@ -85,4 +90,3 @@ define(['lodash', 'app', 'filters/lstring', 'filters/moment', 'services/conferen
     function resData(res) { return res.data; } 
 
   }];
-});
