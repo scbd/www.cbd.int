@@ -203,7 +203,7 @@ left: 0;
         <br>
         <i class="fa fa-spinner fa-pulse fa-2x fa-fwt"></i>
       </div>
-      <a translation-url ng-repeat="doc in indexCtrl.outReachRecords.news.data" ng-if="doc.title_t && $index <3" ng-href="https://www.cbd.int/doc/press/{{doc.url_ss[0].substring(3,7)}}/{{doc.url_ss[0]}}" target="_blank" style="padding-bottom:5px;text-decoration: none;color:#333;">
+      <a translation-url ng-repeat="doc in indexCtrl.outReachRecords.news.data" ng-if="doc.title_t && $index < 3" ng-href="{{doc.url_ss[0]}}" target="_blank" style="padding-bottom:5px;text-decoration: none;color:#333;">
 
         <div class="out-reach-row" ng-show="doc.title_t && $index < 5" class="link1">
           <!-- <div id="communityProtocol" ng-include="home-list.html"> -->
