@@ -30,6 +30,10 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
         if(/^\/biobridge($|\/.*)/.test(locationPath))
             registerRoutes_bbi($routeProvider);
 
+        //Biodiversity day logo/*
+        if(/^\/biodiversity-day($|\/.*)/.test(locationPath))
+            registerRoutes_biodiversityDayLogo($routeProvider);
+
         //idb/celebrations/* \/20(?!0[0-9]|1[0-7])\d\d\/celebrations
         if(/^\/idb\/20(?!0[0-9]|1[0-7])\d\d\/celebrations($|\/.*)/.test(locationPath))
             registerRoutes_idbCelebrations($routeProvider);
@@ -141,16 +145,27 @@ define(['app', 'jquery', 'lodash', 'text!./redirect-dialog.html','providers/exte
       $("base").attr('href', '/idb/'); // allow full page reload outside of  /insession/*
 
       routeProvider
-
         .when('/:year/celebrations',            { templateUrl: 'views/idb-celebrations/idb-cel-index.html',  controllerAs: 'idbCelIndexCtrl',   resolveController: true, resolve : { user : currentUser() }})
-        .when('/:year/celebrations/logos',      { templateUrl: 'views/idb-celebrations/logos.html',          controllerAs: 'idbLogosCtrl',      resolveController: true, resolve : { status:resolveLiteral('approved'), user : currentUser() }})
-        .when('/:year/celebrations/logos/draft',{ templateUrl: 'views/idb-celebrations/logos.html',          controllerAs: 'idbDraftLogosCtrl', resolveController: true, resolve : { status:resolveLiteral('draft'), user : securize(["Administrator","idb-logo-administrator"]) }})
-        .when('/:year/celebrations/logos/rejected',{ templateUrl: 'views/idb-celebrations/logos.html',          controllerAs: 'idbDraftLogosCtrl', resolveController: true, resolve : { status:resolveLiteral('rejected'), user : securize(["Administrator","idb-logo-administrator"]) }})
-        .when('/:year/celebrations/logos/new',  { templateUrl: 'views/idb-celebrations/logo.html',           controllerAs: 'idbLogoCtrl',       resolveController: true, resolve : { user : currentUser() }})
         .when('/:year/celebrations/:gov',  { templateUrl: 'views/idb-celebrations/idb-profile.html',         controllerAs: 'idbProfileCtrl',    resolveController: true, resolveController: true , resolve : { user : currentUser() }})
         .otherwise({redirectTo: function(){ window.location.href= window.location}});
   }
 
+  //============================================================
+  //
+  //
+  //============================================================
+  function registerRoutes_biodiversityDayLogo(routeProvider) {
+
+    $("base").attr('href', '/biodiversity-day/'); // allow full page reload outside of  /biodiversity-day/*
+
+    routeProvider
+        .when('/logo/collage',          { templateUrl: 'views/idb-celebrations/logos.html',          controllerAs: 'idbLogosCtrl',      resolveController: true, resolve : { status:resolveLiteral('approved'), user : currentUser() }})
+        .when('/logo/collage/draft',    { templateUrl: 'views/idb-celebrations/logos.html',          controllerAs: 'idbDraftLogosCtrl', resolveController: true, resolve : { status:resolveLiteral('draft'), user : securize(["Administrator","idb-logo-administrator"]) }})
+        .when('/logo/collage/rejected', { templateUrl: 'views/idb-celebrations/logos.html',          controllerAs: 'idbDraftLogosCtrl', resolveController: true, resolve : { status:resolveLiteral('rejected'), user : securize(["Administrator","idb-logo-administrator"]) }})
+        .when('/logo/customize',        { templateUrl: 'views/idb-celebrations/logo.html',           controllerAs: 'idbLogoCtrl',       resolveController: true, resolve : { user : currentUser() }})
+        .otherwise({redirectTo: function(){ window.location.href= window.location}});
+}
+  
   //============================================================
   //
   //s

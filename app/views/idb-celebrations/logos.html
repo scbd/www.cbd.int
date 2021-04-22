@@ -92,9 +92,9 @@
                 </h2>
                 <hr/>
 
-                <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos/new">Add your logo</a>
-                <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos" ng-if="isAdmin && status != 'approved'" style="margin-right: 5px;">Published logos</a>
-                <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/2018/celebrations/logos/draft" ng-if="isAdmin && status == 'approved'" style="margin-right: 5px;">Approve logos</a>
+                <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/logo/customize">Add your logo</a>
+                <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/logo/collage" ng-if="isAdmin && status != 'approved'" style="margin-right: 5px;">Published logos</a>
+                <a class="pull-right btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/logo/collage/draft" ng-if="isAdmin && status == 'approved'" style="margin-right: 5px;">Approve logos</a>
 
                 <button class="pull-left btn btn-primary btn-xs btn-sm" ng-if="isAdmin && status == 'draft'" style="margin-right: 5px;" ng-click="selectAll()">Select all</button>
                 <button class="pull-left btn btn-primary btn-xs btn-sm" ng-if="isAdmin && status == 'draft'" style="margin-right: 5px;" ng-click="updateSelectedStatus('approved')">Approve selected</button>
