@@ -4,7 +4,8 @@ import '~/services/article-service'
 import '~/services/conference-service'
 import '~/directives/social-media'
 import '~/filters/lstring'
-import '~/filters/moment' 
+import '~/filters/moment'
+import '~/directives/articles/cbd-article-cover-image' 
 
 export { default as template } from './conferences.html'
 
@@ -48,7 +49,8 @@ export default ['$location','$scope', '$rootScope', 'conferenceService', '$q', '
                         if(conference){
 
                             article.url_300 = article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&500x300/')
-
+                            article.url_1200 = article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/')
+                            
                             conference.article = article;
                         }
                     });
