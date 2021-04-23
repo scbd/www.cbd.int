@@ -32,7 +32,7 @@ export default function bootApp(window, require, defineX) {
           'css'               : `${cdnUrl}npm/require-css@0.1.10/css.min`,
           'ngDialog'          : `${cdnUrl}npm/ng-dialog@0.6.1/js/ngDialog.min`,
           'dragula'           : `${cdnUrl}npm/dragula@3.7.3/dist/dragula.min`,
-          'rangy'             : `${cdnUrl}npm/rangy@1.3.0/lib/rangy-core.min.js`,
+          'rangy'             : `${cdnUrl}npm/rangy@1.3.0/lib/rangy-core.min`,
           'magnific-popup'    : `${cdnUrl}npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min`,
           'alasql'            : `${cdnUrl}npm/alasql@1.7.2/dist/alasql.min`,
           'tableexport'       : `${cdnUrl}npm/tableexport@4.0.10/dist/js/tableexport`,

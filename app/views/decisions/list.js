@@ -2,8 +2,10 @@ import '~/app';
 import './directives/meeting';
 import './directives/header-decisions'; 
 
+    export { default as template } from './list.html'
     export default ['$scope', '$http', '$route', '$location', 'user', function($scope, $http, $route, $location, user) {
 
+        console.log('hello')
         var treaty        = null;
         var body          = $route.current.params.body.toUpperCase();
         var session       = parseInt($route.current.params.session);
