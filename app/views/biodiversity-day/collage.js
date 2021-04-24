@@ -3,6 +3,7 @@ import 'file-saverjs';
 import 'bigText';
 import 'html2canvas';
 import _ from 'lodash';
+import 'ngInfiniteScroll'
       
 export { default as template  } from './collage.html';
 
