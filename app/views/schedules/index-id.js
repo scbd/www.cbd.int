@@ -32,6 +32,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 		//
 		//========================================
         function load() {
+            const { all } = $route.current.params
 
             var streamId = $route.current.params.streamId || defaultStreamId;
             var options  = { params : { cache:true } };
@@ -50,8 +51,10 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                     options.params.datetime = now();
                 
             }).then(function(){
-                
-                return $http.get('/api/v2016/cctv-streams/'+streamId, options);
+                const url = all?  `/api/v2016/cctv-streams/${streamId}/all` : 
+                                  `/api/v2016/cctv-streams/${streamId}`
+
+                return $http.get(url, options);
 
             }).then(function(res) {
 
@@ -99,7 +102,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 
                 var typePriority =  ((r.type.priority || 999999)+1000000).toString().substr(1);
                 var roomPriority =  r.room.title+' ';
-                var timePriority =  moment.tz(r.start, _ctrl.timezone).format("HH:mm");
+                var timePriority =  moment.tz(r.start, _ctrl.timezone).format("MM:DD:HH:mm");
 
                 return (timePriority + '-' + typePriority + '-' + roomPriority + '-' + (r.title||'')).toLowerCase();
             }
