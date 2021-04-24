@@ -1,172 +1,168 @@
 <div>
-    <style>
-        .announcement h1,
-        .announcement h2,
-        .announcement h3,
-        .announcement h4,
-        .announcement h5,
-        .announcement h6 {
-            color: inherit;
-            font-size: 14px;
-            font-weight: normal;
-        }
+  <style>
+      .announcement h1,
+      .announcement h2,
+      .announcement h3,
+      .announcement h4,
+      .announcement h5,
+      .announcement h6 {
+          color: inherit;
+          font-size: 14px;
+          font-weight: normal;
+      }
 
-        .announcement h1 { font-size:125% }
-        .announcement h2 { font-size:120% }
-        .announcement h3 { font-size:115% }
-        .announcement h4 { font-size:110% }
-        .announcement h5 { font-size:105% }
-        .announcement h6 { font-size:100% }
+      .announcement h1 { font-size:125% }
+      .announcement h2 { font-size:120% }
+      .announcement h3 { font-size:115% }
+      .announcement h4 { font-size:110% }
+      .announcement h5 { font-size:105% }
+      .announcement h6 { font-size:100% }
 
-        .schedule .schedule-item  > td > table {
-            margin-bottom: 0px;
-        }
+      .schedule .schedule-item  > td > table {
+          margin-bottom: 0px;
+      }
 
-        .schedule .schedule-item > td > table > tbody > tr > td {
-            border: none !important;
-        }
+      .schedule .schedule-item > td > table > tbody > tr > td {
+          border: none !important;
+      }
 
-        .schedule .schedule-item:not(.warning):not(.alert)  > td > table {
-            background-color: inherit;
-        }
+      .schedule .schedule-item:not(.warning):not(.alert)  > td > table {
+          background-color: inherit;
+      }
 
-        .schedule .schedule-item  .schedule-item-message {
-            text-align: center;
-            font-weight: bold;
-            margin-top: 7px;
-            color:#555;
-        }
+      .schedule .schedule-item  .schedule-item-message {
+          text-align: center;
+          font-weight: bold;
+          margin-top: 7px;
+          color:#555;
+      }
 
-        .schedule .schedule-item.warning > td { background-color:#F7ECB5; }
-        .schedule .schedule-item.alert   > td { background-color:#F7B6B6; }
+      .schedule .schedule-item.warning > td { background-color:#F7ECB5; }
+      .schedule .schedule-item.alert   > td { background-color:#F7B6B6; }
 
 
-    </style>
+  </style>
 
-    <div>
+  <div>
 
-        <div class="col-xs-12" ng-if="scheduleCtrl.frames.length==0">
-            <h3>{{::scheduleCtrl.now()|moment:'tz':scheduleCtrl.timezone|moment:'calendar':(undefined|moment):scheduleCtrl.CALENDAR}}</h3>
-            No more activities scheduled for the day
+      <div class="col-xs-12" ng-if="scheduleCtrl.frames.length==0">
+          <h3>{{::scheduleCtrl.now()|moment:'tz':scheduleCtrl.timezone|moment:'calendar':(undefined|moment):scheduleCtrl.CALENDAR}}</h3>
+          No more activities scheduled for the day
+      </div>
+
+      <div ng-if="(scheduleCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } }).length">
+
+        <div class="col-xs-12 schedule" ng-repeat="frame in (scheduleCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } })">
+
+              <h2 class="pull-right"><small ng-if=":: false && scheduleCtrl.now()"><em>Time at venue:</em> <b>{{scheduleCtrl.now() | moment:'tz':scheduleCtrl.timezone | moment:'format':'H:mm'}}</b></small></h2>
+              <h3>{{frame.content.title}}</h3>
+              <p class="alert alert-info mobile-app-hidden" ng-if="(frame.reservations | filter:{ type : { _id: '570fd0a52e3fa5cfa61d90ee' } }).length">
+                  <a href='/side-events'  style="color:inherit">For a detailed and complete list of side-events, please click here to visit the CBD Side-Events page</a>.
+              </p>
+
+              <table class="table table-striped table-bordered">
+                  <tr class="schedule-item {{r.message.level}}" ng-repeat="r in frame.reservations | filter:search">
+                      <td>
+                          <table class="table">
+                              <tr>
+                                  <td class="schedule-item-time text-right" class="text-nowrap" style="width:55px">
+                                      <div class="text-primary"><b>{{r.start | moment:'tz':scheduleCtrl.timezone | moment:'format':'H:mm'}}</b></div>
+                                      <div class="small text-muted">
+                                          <span ng-show="r.open">Open</span>
+                                          <span ng-hide="r.open">Closed</span>
+                                      </div>
+                                  </td>
+                                  <td>
+                                      <div class="schedule-item-type pull-right text-right" style="text-align:center">
+
+                                          <span ng-switch="r.type._id">
+
+                                              <span ng-switch-when="570fd0a52e3fa5cfa61d90ee"> 
+                                                  <!-- Side Event -->
+                                                  <a href="https://www.cbd.int/side-events/" target="sideEvent" style="color:inherit">
+                                                      <span class="text-{{r.type.style}}" >
+                                                          {{r.type.title}}
+                                                      </span>
+                                                  </a>
+                                              </span>
+
+                                              <span ng-switch-default="*"> 
+                                                  <!-- Clickable -->
+                                                  <a ng-if="::agendaCtrl.hasTab(r.type._id)" class="text-{{r.type.style}}" ng-click="agendaCtrl.selectTab(r.type._id)" href="#">
+                                                      <span class="text-{{r.type.style}}">{{r.type.title}}</span>
+                                                  </a>
+
+                                                  <!-- Non-Clickable -->
+                                                  <span ng-if="::!agendaCtrl.hasTab(r.type._id)" class="text-{{r.type.style}}" >
+                                                      {{r.type.title}}
+                                                  </span>
+                                              </span>
+                                          </span>
+
+                                          <div  ng-if="::r.sideEvent" class="side-event-id hidden-xs text-muted text-right">
+                                                  <a ng-href="https://www.cbd.int/side-events/{{::r.sideEvent.id}}" target="sideEvent" style="color:inherit">
+                                                      <em>#{{r.sideEvent.id}}</em>
+                                                  </a>
+                                          </div>
+
+                                          <div ng-if="r.videoUrl">
+                                              <a  class="badge badge-danger" ng-if="r.start <= scheduleCtrl.now().toISOString()" target="_blank" ng-href="{{r.videoUrl}}">
+                                                  Live
+                                              </a> 
+                                              <a class="badge badge-dark"  title="video stream" target="_blank" ng-href="{{r.videoUrl}}">
+                                                  Watch <i  class="fa fa-video-camera"></i>
+                                              </a>
+                                          </div>
+                                      </div>
+
+                                      <div class="schedule-item-title" style="font-weight:bold">
+                                          <span ng-if="::!r.sideEvent && !agendaCtrl.hasTab(r.type._id)">{{r.title}}</span>
+                                          <a    ng-if="::!r.sideEvent &&  agendaCtrl.hasTab(r.type._id)" ng-click="agendaCtrl.selectTab(r.type._id)" href="#" style="color:inherit">{{r.title}}</a>
+                                          <a    ng-if=":: r.sideEvent" ng-href="https://www.cbd.int/side-events/{{::r.sideEvent.id}}" target="sideEvent" style="color:inherit">{{r.sideEvent.title || r.title}}</a>
+                                      </div>
+
+                                      <div class="schedule-item-location">
+                                          <em>{{r.room.title}}</em>
+                                          <em ng-if="r.room.location">- {{r.room.location}}</em>
+                                      </div>
+
+                                      <div ng-if="r.agenda.visible && r.agenda.items.length">
+                                          <span ng-repeat="item in r.agenda.items">
+                                              <span class="badge label agenda {{item.prefix}}" title="{{item.title}}" style="width:51px">{{item.prefix}} {{item.item}}</span>
+                                              <span ng-if="(item.title+item.text) != (r.agenda.items[$index+1].title+r.agenda.items[$index+1].text)">
+                                                  {{item.title}} <span ng-if="::item.text"> - <b>{{item.text}}</b></span> <br>
+                                              </span>
+
+                                      </div>
+                                  </td>
+                              </tr>
+                          </table>
+
+                          <div ng-if="r.message.text" class="schedule-item-message">{{r.message.text}}</div>
+
+                      </td>
+                  </tr>
+                  <tr><td></td></tr>
+              </table>
         </div>
+      </div>
 
-        <div ng-if="(scheduleCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } }).length">
+      <div ng-if="(scheduleCtrl.frames | filter: { 'content' : { 'type':'announcement', html : search } }).length">
 
-            <div class="col-xs-12 schedule" ng-repeat="frame in (scheduleCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } })">
-                <!-- <div class="pull-right hidden-xs" style="margin:15px;margin-top:24px">
-                    <input type="text" class="form-control" ng-model="search" placeholder="Search...">
-                </div> -->
-                <h2 class="pull-right"><small ng-if=":: false && scheduleCtrl.now()"><em>Time at venue:</em> <b>{{scheduleCtrl.now() | moment:'tz':scheduleCtrl.timezone | moment:'format':'H:mm'}}</b></small></h2>
-                <h3>{{frame.content.title}}</h3>
-                <p class="alert alert-info mobile-app-hidden" ng-if="(frame.reservations | filter:{ type : { _id: '570fd0a52e3fa5cfa61d90ee' } }).length">
-                    <a href='/side-events'  style="color:inherit">For a detailed and complete list of side-events, please click here to visit the CBD Side-Events page</a>.
-                </p>
-                <table class="table table-striped table-bordered">
-                    <tr class="schedule-item {{r.message.level}}" ng-repeat="r in frame.reservations | filter:search">
-                        <td>
-                            <table class="table">
-                                <tr>
-                                    <td class="schedule-item-time text-right" class="text-nowrap" style="width:55px">
-                                        <div class="text-primary"><b>{{r.start | moment:'tz':scheduleCtrl.timezone | moment:'format':'H:mm'}}</b></div>
-                                        <div class="small text-muted">
-                                            <span ng-show="r.open">Open</span>
-                                            <span ng-hide="r.open">Closed</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="schedule-item-type pull-right text-right" style="text-align:center">
+          <div class="col-sm-8 col-xs-12">
+              <h1>Announcements</h1>
+          </div>
+      </div>
 
-                                            <span ng-switch="r.type._id">
+      <div>
+          <div class="col-xs-12 announcement" ng-repeat="frame in (scheduleCtrl.frames | filter: { 'content' : { 'type':'announcement', html : search} })">
+              <div class="panel panel-default">
+                  <div class="panel-body text-center">
+                      <div ng-bind-html="frame.content.html | sanitizeHtml | safeHtml"></div>
+                  </div>
+              </div>
+          </div>
+      </div>
 
-                                                <span ng-switch-when="570fd0a52e3fa5cfa61d90ee"> 
-                                                    <!-- Side Event -->
-                                                    <a href="https://www.cbd.int/side-events/" target="sideEvent" style="color:inherit">
-                                                        <span class="text-{{r.type.style}}" >
-                                                            {{r.type.title}}
-                                                        </span>
-                                                    </a>
-                                                </span>
-
-                                                <span ng-switch-default="*"> 
-                                                    <!-- Clickable -->
-                                                    <a ng-if="::agendaCtrl.hasTab(r.type._id)" class="text-{{r.type.style}}" ng-click="agendaCtrl.selectTab(r.type._id)" href="#">
-                                                        <span class="text-{{r.type.style}}">{{r.type.title}}</span>
-                                                    </a>
-
-                                                    <!-- Non-Clickable -->
-                                                    <span ng-if="::!agendaCtrl.hasTab(r.type._id)" class="text-{{r.type.style}}" >
-                                                        {{r.type.title}}
-                                                    </span>
-                                                </span>
-                                            </span>
-
-                                            <div  ng-if="::r.sideEvent" class="side-event-id hidden-xs text-muted text-right">
-                                                    <a ng-href="https://www.cbd.int/side-events/{{::r.sideEvent.id}}" target="sideEvent" style="color:inherit">
-                                                        <em>#{{r.sideEvent.id}}</em>
-                                                    </a>
-                                            </div>
-
-                                            <div ng-if="r.videoUrl">
-                                                <a  class="badge badge-danger" ng-if="r.start <= scheduleCtrl.now().toISOString()" target="_blank" ng-href="{{r.videoUrl}}">
-                                                    Live
-                                                </a> 
-                                                <a class="badge badge-dark"  title="video stream" target="_blank" ng-href="{{r.videoUrl}}">
-                                                    Watch <i  class="fa fa-video-camera"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                        <div class="schedule-item-title" style="font-weight:bold">
-                                            <span ng-if="::!r.sideEvent && !agendaCtrl.hasTab(r.type._id)">{{r.title}}</span>
-                                            <a    ng-if="::!r.sideEvent &&  agendaCtrl.hasTab(r.type._id)" ng-click="agendaCtrl.selectTab(r.type._id)" href="#" style="color:inherit">{{r.title}}</a>
-                                            <a    ng-if=":: r.sideEvent" ng-href="https://www.cbd.int/side-events/{{::r.sideEvent.id}}" target="sideEvent" style="color:inherit">{{r.sideEvent.title || r.title}}</a>
-                                        </div>
-
-                                        <div class="schedule-item-location">
-                                            <em>{{r.room.title}}</em>
-                                            <em ng-if="r.room.location">- {{r.room.location}}</em>
-                                        </div>
-
-                                        <div ng-if="r.agenda.visible && r.agenda.items.length">
-                                            <span ng-repeat="item in r.agenda.items">
-                                                <span class="badge label agenda {{item.prefix}}" title="{{item.title}}" style="width:51px">{{item.prefix}} {{item.item}}</span>
-                                                <span ng-if="(item.title+item.text) != (r.agenda.items[$index+1].title+r.agenda.items[$index+1].text)">
-                                                    {{item.title}} <span ng-if="::item.text"> - <b>{{item.text}}</b></span> <br>
-                                                </span>
-
-                                            </div>
-                                        </div>
-
-                                    </td>
-                                </tr>
-                            </table>
-
-                            <div ng-if="r.message.text" class="schedule-item-message">{{r.message.text}}</div>
-
-                        </td>
-                    </tr>
-                    <tr><td></td></tr>
-                </table>
-            </div>
-        </div>
-
-
-        <div ng-if="(scheduleCtrl.frames | filter: { 'content' : { 'type':'announcement', html : search } }).length">
-
-            <div class="col-sm-8 col-xs-12">
-                <h1>Announcements</h1>
-            </div>
-        </div>
-
-        <div>
-            <div class="col-xs-12 announcement" ng-repeat="frame in (scheduleCtrl.frames | filter: { 'content' : { 'type':'announcement', html : search} })">
-                <div class="panel panel-default">
-                    <div class="panel-body text-center">
-                        <div ng-bind-html="frame.content.html | sanitizeHtml | safeHtml"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
+  </div>
 </div>
