@@ -1,5 +1,7 @@
-define(['app'], function(module) {
-  module.filter('orderObjectBy', function() {
+import app from '~/app'
+import _ from 'lodash'
+
+  app.filter('orderObjectBy', function() {
     return function(items, field, reverse) {
       var filtered = [];
       angular.forEach(items, function(item) {
@@ -13,4 +15,3 @@ define(['app'], function(module) {
     };
   });
 
-});

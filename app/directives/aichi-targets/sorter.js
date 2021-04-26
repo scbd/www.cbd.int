@@ -1,5 +1,4 @@
-define(['app'], function(app) {
-  'use strict';
+import app from '~/app'
 
   app.directive('sorter',[function() {
   return {
@@ -47,4 +46,3 @@ define(['app'], function(app) {
      }
     };
   }]);
-}); // define

@@ -1,4 +1,4 @@
-define([], function() {
+
 
     var items = [];
 
@@ -10,5 +10,5 @@ define([], function() {
         });
     }
 
-    return items;
-});
+    export default items;
+

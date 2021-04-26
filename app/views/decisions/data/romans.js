@@ -1,6 +1,6 @@
-define([], function() {
 
-    return [
+
+    export default [
         undefined,
         'I',
         'II',
@@ -33,4 +33,4 @@ define([], function() {
         'XXIX',
         'XXX'
     ];
-});
+

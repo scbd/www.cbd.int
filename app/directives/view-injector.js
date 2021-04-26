@@ -1,6 +1,7 @@
-define(['app','require', 'angular'], function(app, require, ng) { 'use strict';
+import app from '~/app';
+import ng from 'angular'; 
 
-	return app.directive('viewInjector', ['$injector', '$compile', '$q', function($injector, $compile, $q) {
+	export default app.directive('viewInjector', ['$injector', '$compile', '$q', function($injector, $compile, $q) {
 		return {
 			restrict : "EA",
             scope: true,
@@ -13,21 +14,28 @@ define(['app','require', 'angular'], function(app, require, ng) { 'use strict';
                     resolve[key] = ng.isString(value) ? $injector.get(value) : $injector.invoke(value, null, null, key);
                 });
 
-                $q.all(resolve).then(function (locals) {
+                $q.all(resolve).then(async function (locals) {
 
-                    require(['text!'+options.module+'.html', options.module], function(html, controllerCtr) {
+                    let view = null;
 
-                        element.html($compile(html)($scope));
+                    if(options.module === 'views/schedules/index-id') view = await import('~/views/schedules/index-id');
+                    if(view === null) throw new Error('Unknown module');
 
-                        var ctrl = $injector.instantiate(controllerCtr, ng.extend(locals, {
-                            $scope: $scope
-                        }));
+                    const {
+                        template : html,
+                        default :  controllerCtr
+                    } = view
 
-                        if(options.controllerAs)
-                            $scope[options.controllerAs] = ctrl;
-                    });
+                    const $template = $compile(html)($scope);
+
+                    element.html($template);
+
+                    var ctrl = $injector.instantiate(controllerCtr, {...locals, $scope, $template });
+
+                    if(options.controllerAs)
+                        $scope[options.controllerAs] = ctrl;
                 });
             }
         };
 	}]);
-});
+

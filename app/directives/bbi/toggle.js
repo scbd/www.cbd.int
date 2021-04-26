@@ -1,6 +1,6 @@
 
-define(['app'], function(app) {
-  'use strict';
+import app from '~/app';
+  
 
 app.directive('toggle', function(){
   return {
@@ -20,4 +20,4 @@ app.directive('toggle', function(){
     }
   };
 });
-}); // define
+ // define

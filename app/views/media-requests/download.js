@@ -1,6 +1,6 @@
-define(['app'], function() {
+export { default as template } from './download.html'
  
-	return ['$http','$route', '$timeout', function( $http,$route) {
+export default ['$http','$route', '$timeout', function( $http,$route) {
 
     var _ctrl = this;
 
@@ -23,4 +23,3 @@ define(['app'], function() {
       delete _ctrl.loading;
     });
 	}];
-});

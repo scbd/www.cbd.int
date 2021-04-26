@@ -1,6 +1,7 @@
-/* jshint sub:true */
-
-define(['app', 'angular', 'jquery', 'lodash'], function (app, ng, $, _) { 'use strict';
+import app from '~/app'
+import ng from 'angular'
+import $ from 'jquery'
+import _ from 'lodash'
 
     var accountsBaseUrl = (function(){
 
@@ -359,4 +360,3 @@ define(['app', 'angular', 'jquery', 'lodash'], function (app, ng, $, _) { 'use s
 
         return false;
     }
-});

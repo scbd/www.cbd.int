@@ -1,6 +1,7 @@
-define(['app', 'text!./change-case-button.html'], function(app, html) { 'use strict';
+import app from '~/app';
+import html from './change-case-button.html'; 
 
-	 return app.directive('changeCaseButton', [function() {
+	 export default app.directive('changeCaseButton', [function() {
 		return {
 			restrict : "E",
 			template : html,
@@ -53,4 +54,4 @@ define(['app', 'text!./change-case-button.html'], function(app, html) { 'use str
             }
         };
 	}]);
-});
+

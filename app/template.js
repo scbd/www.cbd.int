@@ -1,7 +1,16 @@
-define(['app', 'angular','text!./toast.html',
-'lodash', 'PageHeaderFixed','PageHeader','PageFooter', 'bs4', 'ngVue','providers/realm','./directives/bread-crumbs'], function(app, ng, toastTemplate, _, PageHeaderFixedComp, PageHeaderComp, PageFooterComp) {
-    'use strict';
-
+import _ from 'lodash'
+import app from '~/app'
+import ng from 'angular'
+import PageHeaderFixedComp from 'PageHeaderFixed'
+import PageHeaderComp from 'PageHeader'
+import PageFooterComp from 'PageFooter'
+import toastTemplate from './toast.html'
+import * as meta from '~/services/meta'
+import 'css!cdn!npm/angular-toastr@1.3.0/dist/angular-toastr.css'
+import 'ngVue'
+import '~/providers/realm'
+import './directives/bread-crumbs'
+              
     loadHeaderFooter()
     app.controller('TemplateController', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$location', 
                                   function($rootScope,   $window,   $browser,   $document,   authentication,   $q,  toastr,  $templateCache,   $location) {
@@ -25,6 +34,9 @@ define(['app', 'angular','text!./toast.html',
         //=====================
         //=====================
         //=====================
+
+        $rootScope.$watch('page.title',       function(value) { meta.title(value) });
+        $rootScope.$watch('page.description', function(value) { meta.description(value) });
 
         //=====================
         //
@@ -114,7 +126,7 @@ define(['app', 'angular','text!./toast.html',
 
                 $rootScope.user = user;
 
-                require(["js/slaask"], function(_slaask) {
+                import("~/js/slaask").then(function({ default: _slaask }) {
 
                     if (user.isAuthenticated) {
                         _slaask.identify(user.name, {
@@ -123,7 +135,7 @@ define(['app', 'angular','text!./toast.html',
                             'email' : user.email,
                         });
 
-                        if(_slaask.initialized) {
+                        if(_slaask.initialized && _slaask.slaaskSendUserInfos) {
                             _slaask.slaaskSendUserInfos();
                         }
                     }
@@ -147,4 +159,3 @@ define(['app', 'angular','text!./toast.html',
         app.value('PageHeader',      PageHeader);
         app.value('PageFooter',      PageFooter);
     }
-});

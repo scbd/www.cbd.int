@@ -1,11 +1,15 @@
-define(['angular', 'lodash',  'directives/checkbox'], function(angular, _ ) {'use strict'; 
-    var Dropbox;
-    
+import '~/directives/checkbox'
+import _ from 'lodash'
+import angular from 'angular'
 
-    return ['$scope', '$http', 'documents','$rootScope', 'allowBack','$window', function ($scope, $http, documents,$rootScope, allowBack,$window) {
+export { default as template } from './download-dialog.html';
+
+var Dropbox;
+
+export default ['$scope', '$http', 'documents','$rootScope', 'allowBack','$window', function ($scope, $http, documents,$rootScope, allowBack,$window) {
 
     if(!$scope.viewOnly)
-      require(['dropbox-dropins'],function(val){
+      import('dropbox-dropins').then(function({ default : val }){
         Dropbox = val;
       })
 		var publicComputer    = true; // TODO
@@ -199,4 +203,3 @@ define(['angular', 'lodash',  'directives/checkbox'], function(angular, _ ) {'us
             $scope.closeThisDialog(target);
 		}
 	}];
-});

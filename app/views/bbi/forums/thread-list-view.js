@@ -1,7 +1,12 @@
-define(['app','lodash','data/bbi/links-platform', 'directives/bbi/forums/cbd-forums','services/user-settings', 'directives/bbi/menu'], function(app,_,links) {
+import links from '~/data/bbi/links-platform.json'
+import '~/directives/bbi/forums/cbd-forums'
+import '~/services/user-settings'
+import '~/directives/bbi/menu'
 
+    
+export { default as template } from './post-list-view.html'
 
-    return ["$scope", "$http", "$q", "$filter", "$timeout", "$location", "$route","user","$rootScope",
+export default ["$scope", "$http", "$q", "$filter", "$timeout", "$location", "$route","user","$rootScope",
         function($scope, $http, $q, $filter, $timeout, $location, $route,user,$rootScope) {
             $scope.links=links.links;
             $scope.$root.page={};
@@ -38,4 +43,3 @@ define(['app','lodash','data/bbi/links-platform', 'directives/bbi/forums/cbd-for
 
         }
     ];
-});

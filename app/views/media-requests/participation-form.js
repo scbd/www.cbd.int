@@ -1,8 +1,16 @@
-define(['app', 'services/conference-service','providers/locale','directives/kronos/participant','directives/kronos/user-messages','filters/term','directives/file','ngSmoothScroll'], function(app) { 'use strict';
+import 'ngSmoothScroll'
+import '~/services/conference-service'
+import '~/providers/locale'
+import '~/directives/kronos/participant'
+import '~/directives/kronos/user-messages'
+import '~/filters/term'
+import '~/directives/file'
 
-	return ['$scope','$http','conferenceService','$filter','$route','$location','locale','user','$timeout','$document','$q','smoothScroll', function( $scope,$http,conferenceService,$filter,$route,$location,locale,user,$timeout,$document,$q,smoothScroll) {
+export { default as template } from './participation-form.html'
 
-		var _ctrl 		           = this
+export default ['$scope','$http','conferenceService','$filter','$route','$location','locale','user','$timeout','$document','$q','smoothScroll', function( $scope,$http,conferenceService,$filter,$route,$location,locale,user,$timeout,$document,$q,smoothScroll) {
+
+		var _ctrl = this
 
     var orgTypes = {media:[
       {'identifier':'Educational/Public', 'title':'Educational/Public'},
@@ -761,6 +769,3 @@ define(['app', 'services/conference-service','providers/locale','directives/kron
     }
 
 	}];
-});
-
-//   })

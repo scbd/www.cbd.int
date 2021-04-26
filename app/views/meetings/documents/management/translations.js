@@ -1,4 +1,8 @@
-define(['lodash', 'filters/lstring', 'directives/file'], function(_) {
+import '~/filters/lstring';
+import '~/directives/file';
+import _ from 'lodash';
+
+export { default as template } from './translations.html';
 
     var MIMES = {
         'application/pdf':                                                            { title: 'PDF',               color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
@@ -21,7 +25,7 @@ define(['lodash', 'filters/lstring', 'directives/file'], function(_) {
         zh : "Chinese"
     };
 
-	return ["$scope", "$http", '$q', function ($scope, $http, $q) {
+	export default ["$scope", "$http", '$q', function ($scope, $http, $q) {
 
         $scope.FILETYPES  = MIMES;
         $scope.LANGUAGES  = LANGUAGES;
@@ -250,4 +254,3 @@ define(['lodash', 'filters/lstring', 'directives/file'], function(_) {
         function resData(res) { return res.data; }
 
 	}];
-});

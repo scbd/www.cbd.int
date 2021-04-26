@@ -1,3 +1,3 @@
-﻿define(['https://cdn.slaask.com/chat.js'], function() {
-    return window._slaask;
-});
+﻿import 'https://cdn.slaask.com/chat.js';
+    export default window._slaask;
+

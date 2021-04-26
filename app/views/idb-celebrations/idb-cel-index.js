@@ -1,6 +1,11 @@
-define(['app','json!https://s3.amazonaws.com/cbddocumentspublic-imagebucket-15w2zyxk3prl8/idb-data/menu.json','directives/idb-celebrations/menu-vertical','filters/lstring','providers/locale'], function(app,links) { 'use strict';
+import links from '~/data/idb/menu.json'
+import '~/directives/idb-celebrations/menu-vertical'
+import '~/filters/lstring'
+import '~/providers/locale'
 
-	return ['$scope','$routeParams','$q','$http','$filter','$location','locale','user', function ($scope,$routeParams,$q,$http,$filter,$location,locale, user) {
+export { default as template } from './idb-cel-index.html'
+
+export default ['$scope','$routeParams','$q','$http','$filter','$location','locale','user', function ($scope,$routeParams,$q,$http,$filter,$location,locale, user) {
 
         var _ctrl   = this;
 				var canceler = null;
@@ -178,4 +183,3 @@ define(['app','json!https://s3.amazonaws.com/cbddocumentspublic-imagebucket-15w2
 
 
     }];
-});

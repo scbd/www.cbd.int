@@ -1,4 +1,14 @@
-define(['lodash', 'moment', 'filters/lstring', 'filters/moment', 'filters/truncate', 'directives/file', 'filters/initials', './change-case-button', '../meeting-document'], function(_, moment) {
+import '~/filters/lstring';
+import '~/filters/moment';
+import '~/filters/truncate';
+import '~/directives/file';
+import '~/filters/initials';
+import './change-case-button';
+import '../meeting-document';
+import _ from 'lodash';
+import moment from 'moment';
+
+export { default as template } from './document-id.html';
 
     var MIMES = {
         'application/pdf':                                                            { title: 'PDF',               color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
@@ -22,7 +32,7 @@ define(['lodash', 'moment', 'filters/lstring', 'filters/moment', 'filters/trunca
          zh : "Chinese"
      };
 
-    return ["$scope", "$route", "$http", '$location', '$q', '$window', 'user', '$filter', 
+    export default ["$scope", "$route", "$http", '$location', '$q', '$window', 'user', '$filter', 
     function ($scope, $route, $http, $location, $q, $window, user, $filter) {
 
         $scope.FILETYPES  = MIMES;
@@ -1079,4 +1089,3 @@ define(['lodash', 'moment', 'filters/lstring', 'filters/moment', 'filters/trunca
             _ctrl.documentLink = { language: 'en' }
         }
 	}];
-});

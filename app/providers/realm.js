@@ -1,4 +1,4 @@
-define(['app', 'angular'], function (app, angular) { 'use strict';
+import app from '~/app'
 
     app.provider("realm", {
 
@@ -11,4 +11,3 @@ define(['app', 'angular'], function (app, angular) { 'use strict';
         }]
     });
 
-}); //define

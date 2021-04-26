@@ -1,6 +1,10 @@
-define(['app', 'text!./meeting-document.html', 'filters/lstring', 'directives/meetings/documents/document-files'], function(app, template) { 'use strict';
+import '~/filters/lstring'
+import '~/directives/meetings/documents/document-files'
 
-	return app.directive('decisionMeetingDocument', ['$http', '$q', function($http, $q) {
+import app from '~/app';
+import template from './meeting-document.html'
+
+	app.directive('decisionMeetingDocument', ['$http', '$q', function($http, $q) {
 		return {
 			restrict : "E",
 			template : template,
@@ -44,4 +48,3 @@ define(['app', 'text!./meeting-document.html', 'filters/lstring', 'directives/me
             }
         };
     }]);
-});

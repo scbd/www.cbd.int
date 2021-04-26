@@ -6,7 +6,7 @@
  * License: MIT
  */
 
-define(['angular'], function(angular) {
+import angular from 'angular';
 
   angular.module("ui.bootstrap", ["ui.bootstrap.tpls", "ui.bootstrap.transition", "ui.bootstrap.collapse", "ui.bootstrap.accordion", "ui.bootstrap.position", "ui.bootstrap.bindHtml", "ui.bootstrap.tooltip", "ui.bootstrap.popover"]);
   angular.module("ui.bootstrap.tpls", ["template/accordion/accordion-group.html", "template/accordion/accordion.html", "template/tooltip/tooltip-html-unsafe-popup.html", "template/tooltip/tooltip-popup.html", "template/popover/popover.html"]);
@@ -465,7 +465,7 @@ define(['angular'], function(angular) {
      * `options({})` allows global configuration of all tooltips in the
      * application.
      *
-     *   var app = angular.module( 'App', ['ui.bootstrap.tooltip'], function( $tooltipProvider ) {
+     *   var app = angular.module( '~/app', ['ui.bootstrap.tooltip'], function( $tooltipProvider ) {
      *     // place tooltips left instead of top by default
      *     $tooltipProvider.options( { placement: 'left' } );
      *   });
@@ -929,4 +929,4 @@ define(['angular'], function(angular) {
       }
     ]);
 
-});
+

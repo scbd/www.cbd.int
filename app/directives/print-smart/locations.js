@@ -1,6 +1,6 @@
-define([], function(){
 
-    return [];
+
+    export default [];
 /*
     return [{
         code: 'capital',
@@ -14,4 +14,3 @@ define([], function(){
         location: 'Building 1'
     }]
 */
-})

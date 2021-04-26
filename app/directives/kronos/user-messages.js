@@ -1,6 +1,7 @@
-define(['app', 'text!./user-messages.html'], function(app, html) { 'use strict';
+import app from '~/app';
+import html from './user-messages.html'; 
 
-	return app.directive('userMessage', ['$interpolate',function($interpolate) {
+	export default app.directive('userMessage', ['$interpolate',function($interpolate) {
 		return {
 			restrict : "E",
 			template : html,
@@ -46,4 +47,4 @@ define(['app', 'text!./user-messages.html'], function(app, html) { 'use strict';
 			}
 		};
 	}]);
-});
+

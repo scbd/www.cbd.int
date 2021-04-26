@@ -1,7 +1,11 @@
-define(['app','./directives/meeting','./directives/header-decisions'], function() { 'use strict';
+import '~/app';
+import './directives/meeting';
+import './directives/header-decisions'; 
 
-    return ['$scope', '$http', '$route', '$location', 'user', function($scope, $http, $route, $location, user) {
+    export { default as template } from './list.html'
+    export default ['$scope', '$http', '$route', '$location', 'user', function($scope, $http, $route, $location, user) {
 
+        console.log('hello')
         var treaty        = null;
         var body          = $route.current.params.body.toUpperCase();
         var session       = parseInt($route.current.params.session);
@@ -76,4 +80,4 @@ define(['app','./directives/meeting','./directives/header-decisions'], function(
 
         }
     }];
-});
+

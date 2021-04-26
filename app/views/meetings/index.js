@@ -1,9 +1,21 @@
-﻿ define(['app', 'lodash','vue','conferenceCal', 'ngVue', 'services/conference-service', 'services/article-service', 'directives/social-media', 'directives/articles/cbd-article'], function(app, _,Vue,ConferenceCalComp) { 'use strict';
+﻿import app from '~/app' 
+import _ from 'lodash'
+import Vue from 'vue'
+import ConferenceCalComp from 'conferenceCal'
+
+import 'ngVue'
+import '~/services/conference-service'
+import '~/services/article-service'
+import '~/directives/social-media'
+import '~/directives/articles/cbd-article'
+
+export { default as template } from './index.html'
 
 var VueComponent = Vue.component('conference-cal', ConferenceCalComp)
 app.value('ConferenceCal',VueComponent)
 
-return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', '$q',
+
+export default ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', '$q',
         function ($location,$scope,$timeout,  $route, $sce, conferenceService, $q) {
        
 			var _ctrl = this;
@@ -45,4 +57,3 @@ return ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', 
                 $scope.isLoading = false;
             } 
     }];
-});

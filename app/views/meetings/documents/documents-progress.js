@@ -1,8 +1,18 @@
-define(['lodash', 'require', 'moment', 'angular', 'moment-timezone', 'filters/lstring', 'filters/moment', 'filters/initials', 'directives/file','ngDialog',
-        'directives/meetings/documents/document-files','./document-progress-steps', 'directives/comments/internal-comments', 
-], function(_,require, moment) {
+import _ from 'lodash';
+import require from 'require';
+import moment from 'moment';
+import 'angular';
+import 'moment-timezone';
+import '~/filters/lstring';
+import '~/filters/moment';
+import '~/filters/initials';
+import 'directives/file';
+import 'ngDialog';
+import '~/directives/meetings/documents/document-files';
+import './document-progress-steps';
+import 'directives/comments/internal-comments';
 
-	return ["$scope", "$route", "$http", '$location', '$q', 'user', 'ngDialog', function ($scope, $route, $http, $location, $q, user, ngDialog) {
+	export default ["$scope", "$route", "$http", '$location', '$q', 'user', 'ngDialog', function ($scope, $route, $http, $location, $q, user, ngDialog) {
         
         var meetingCode = $route.current.params.meeting.toUpperCase();
         var _ctrl       = $scope.statusCtrl = this;
@@ -264,7 +274,7 @@ define(['lodash', 'require', 'moment', 'angular', 'moment-timezone', 'filters/ls
 
             return $q(function(resolve, reject) {
 
-                require(['text!'+dialog+'.html', dialog], function(template, controller) {
+                require([''+dialog+'.html', dialog], function(template, controller) {
 
                     options.plain = true;
                     options.template = template;
@@ -350,4 +360,4 @@ define(['lodash', 'require', 'moment', 'angular', 'moment-timezone', 'filters/ls
             return d.status == _ctrl.filters.status;
         }
 	}];
-});
+

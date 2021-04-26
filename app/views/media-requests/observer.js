@@ -1,9 +1,10 @@
-define(['app', 'services/conference-service'], function(app) {
+import app from '~/app';
+import '~/services/conference-service';
 
-	return ['$http','conferenceService','$location', function( $http,conferenceService,$location) {
+	export default ['$http','conferenceService','$location', function( $http,conferenceService,$location) {
 
 		var _ctrl 		= this;
 
 
 	}];
-});
+

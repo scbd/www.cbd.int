@@ -1,4 +1,4 @@
-define(['app'], function(app) {
+import app from '~/app';
 
     app.factory("userSettings", ['$http','$q','authentication','$interval','$timeout', function($http,$q,authentication,$interval,$timeout) {
 
@@ -143,4 +143,4 @@ define(['app'], function(app) {
         }; //return
 
     }]); //factory
-}); //require
+ //require

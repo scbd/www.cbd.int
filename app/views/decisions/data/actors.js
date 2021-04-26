@@ -1,6 +1,6 @@
-define([], function() {
 
-    return [
+
+    export default [
         { code : 'parties' ,              title: 'Parties' },
         { code : 'governments' ,          title: 'Government(s)' },
         { code : 'other-governments' ,    title: 'Other Government(s)' },
@@ -39,4 +39,4 @@ define([], function() {
         { code : 'Others' ,                  title: 'Stakeholder(s)' ,                             group : 'Others' },
 
     ];
-});
+

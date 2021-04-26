@@ -1,4 +1,7 @@
-define(['text!./search-filter-assistance-types.html', 'app', 'lodash','angular'], function(template, app, _,angular) { 'use strict';
+import template from './search-filter-assistance-types.html';
+import app from '~/app';
+import _ from 'lodash';
+import angular from 'angular'; 
 
 	//==============================================
 	//
@@ -37,7 +40,7 @@ define(['text!./search-filter-assistance-types.html', 'app', 'lodash','angular']
             function buildTermsAndQuery() {
                     if(_.isEmpty(termsMap)){ // get terms once and save
 
-												$http.get('/api/v2013/thesaurus/domains/441381DA-856A-4E89-8568-9EBE7145FA50/terms').success(function (data) {
+												$http.get('/api/v2013/thesaurus/domains/441381DA-856A-4E89-8568-9EBE7145FA50/terms').then(function({data}) {
 
 														$scope.terms = thesaurus.buildTree(data);
 
@@ -125,4 +128,4 @@ define(['text!./search-filter-assistance-types.html', 'app', 'lodash','angular']
 				}//link
     }; // return
   }]);  //app.directive('searchFilterCountries
-});// define
+// define

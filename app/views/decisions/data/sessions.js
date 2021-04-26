@@ -1,6 +1,6 @@
-﻿define([], function() {
+﻿
 
-    return [
+    export default [
         { code : 'COP-1',      title: '1',               group: 'COP'     },
         { code : 'COP-2',      title: '2',               group: 'COP'     },
         { code : 'COP-3',      title: '3',               group: 'COP'     },
@@ -18,4 +18,4 @@
     ];
         // { code : 'SBSTTA',  title: '',              group: 'SBSTTA'     },
         // { code : 'SBI',     title: '',              group: 'SBI'        }
-});
+

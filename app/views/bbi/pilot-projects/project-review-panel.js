@@ -1,6 +1,8 @@
-define(['app', 'data/bbi/links',], function(app,links) { 'use strict';
+import links from '~/data/bbi/links.json'
 
-return ['$location','$scope', function ($location,$scope) {
+export { default as template } from './project-review-panel.html'
+
+export default ['$location','$scope', function ($location,$scope) {
 
 			var _ctrl = this;
 			_ctrl.links=links.links;
@@ -15,4 +17,3 @@ return ['$location','$scope', function ($location,$scope) {
 								$location.path(url);
 				}
     }];
-});

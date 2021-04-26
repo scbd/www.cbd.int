@@ -1,4 +1,11 @@
-define(['app', 'require', 'lodash','text!./document-progress-steps.html', 'filters/moment', 'filters/initials', 'ngDialog', 'directives/select-user'], function(app, require, _, template) { 'use strict';
+import app from '~/app';
+import require from 'require';
+import _ from 'lodash';
+import template from './document-progress-steps.html';
+import '~/filters/moment';
+import '~/filters/initials';
+import 'ngDialog';
+import 'directives/select-user'; 
 
     app.directive('documentProgressSteps', ['ngDialog', '$q',"$http", function(ngDialog, $q, $http) {
         return {
@@ -69,7 +76,7 @@ define(['app', 'require', 'lodash','text!./document-progress-steps.html', 'filte
 
                     return $q(function(resolve, reject) {
 
-                        require(['text!'+dialog+'.html', dialog], function(template, controller) {
+                        require([''+dialog+'.html', dialog], function(template, controller) {
 
                             options.plain = true;
                             options.template = template;
@@ -233,4 +240,4 @@ define(['app', 'require', 'lodash','text!./document-progress-steps.html', 'filte
             }
         };
     }]);
-});
+

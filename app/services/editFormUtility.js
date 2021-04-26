@@ -1,5 +1,10 @@
-define(['app','linqjs', 'providers/realm','services/storage','services/workflows'], function(app,Enumerable) {
-  'use strict';
+import app from '~/app';
+import _ from 'lodash';
+import Enumerable from 'linqjs';
+import '~/providers/realm';
+import '~/services/storage';
+import '~/services/workflows';
+  
   app.factory('guid', function() {
   	function S4() {
   		return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -390,4 +395,4 @@ define(['app','linqjs', 'providers/realm','services/storage','services/workflows
 
   }]);
 
-});
+

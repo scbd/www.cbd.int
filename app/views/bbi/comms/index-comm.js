@@ -1,6 +1,12 @@
-define(['app', 'data/bbi/links','moment-timezone',  'directives/bbi/menu','directives/bbi/auto-linker','filters/moment'], function(app,links,moment) { 'use strict';
+import links from '~/data/bbi/links.json'
+import moment from 'moment-timezone'
+import '~/directives/bbi/menu'
+import '~/directives/bbi/auto-linker'
+import '~/filters/moment'
 
-	return ['$location','$scope','locale','$q','$http','$timeout', function ($location,$scope,locale,$q,$http,$timeout) {
+export { default as template } from './index-comm.html'
+
+export default ['$location','$scope','locale','$q','$http','$timeout', function ($location,$scope,locale,$q,$http,$timeout) {
 
         var _ctrl = this;
 				_ctrl.links=links.links;
@@ -84,4 +90,3 @@ define(['app', 'data/bbi/links','moment-timezone',  'directives/bbi/menu','direc
             return pagePromise;
         }// query
     }];
-});

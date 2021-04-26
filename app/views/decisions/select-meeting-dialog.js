@@ -1,6 +1,8 @@
-define(['jquery'], function($) {
+import $ from 'jquery'
 
-    return ['$scope', '$http', '$timeout', '$q', function ($scope, $http, $timeout, $q) {
+export { default as template }  from './select-meeting-dialog.html'
+
+export default ['$scope', '$http', '$timeout', '$q', function ($scope, $http, $timeout, $q) {
 
         $timeout(function(){ $('form #symbol').focus(); }, 100);
 
@@ -124,4 +126,3 @@ define(['jquery'], function($) {
 			return value;
 		}
 	}];
-});

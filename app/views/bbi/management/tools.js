@@ -1,6 +1,11 @@
-define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','directives/bbi/search/search-result','directives/bbi/forums/cbd-forums'], function(app, _,links) { 'use strict';
+import links from '~/data/bbi/links-platform.json'
+import '~/directives/bbi/menu'
+import '~/directives/bbi/search/search-result'
+import '~/directives/bbi/forums/cbd-forums'
 
-	return ['$location','$route','$q','$http','$scope','user',function ($location,$route,$q,$http,$scope,user) {
+export { default as template } from './tools.html' 
+
+export default ['$location','$route','$q','$http','$scope','user',function ($location,$route,$q,$http,$scope,user) {
 
         var _ctrl = this;
 				var canceler = null;
@@ -125,4 +130,3 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','direct
 						 });
 				}
     }];
-});

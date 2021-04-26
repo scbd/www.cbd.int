@@ -1,7 +1,7 @@
 /* global -close */
-define(['lodash'], function(_) {
+import _ from 'lodash';
 
-	return ["$scope", "$http", "data", function ($scope, $http, data) {
+	export default ["$scope", "$http", "data", function ($scope, $http, data) {
         
         $scope._self = $scope;
         $scope.data = data;
@@ -155,4 +155,4 @@ define(['lodash'], function(_) {
             return (symbol||"").toUpperCase().replace(/[^A-Z0-9\/\-\*]/gi, '').replace(/\/$/g, '');
         }
 	}];
-});
+

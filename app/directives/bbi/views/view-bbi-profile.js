@@ -1,6 +1,9 @@
-define(['text!./view-bbi-profile.html', 'app', 'angular', 'lodash', 'services/storage'
-], function(template, app, angular, _) {
-	'use strict';
+import template from './view-bbi-profile.html';
+import app from '~/app';
+import angular from 'angular';
+import _ from 'lodash';
+import '~/services/storage';
+	
 
 	app.directive('viewBbiProfile', ["IStorage","$location", function (storage,$location) {
 		return {
@@ -99,4 +102,3 @@ define(['text!./view-bbi-profile.html', 'app', 'angular', 'lodash', 'services/st
 			}
 		};
 	}]);
-});

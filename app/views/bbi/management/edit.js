@@ -1,12 +1,16 @@
-define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/crumbs', 'directives/bbi/menu',
-'directives/bbi/forms/edit-organization',
-'directives/bbi/forms/edit-bbi-contact',
-'directives/bbi/forms/edit-bbi-profile',
-'directives/bbi/forms/edit-bbi-opportunity',
-'directives/bbi/forms/edit-bbi-assistance',
-], function(app, _,links) { 'use strict';
+import _ from 'lodash'
+import links from '~/data/bbi/links-platform.json'
+import '~/directives/bbi/crumbs'
+import '~/directives/bbi/menu'
+import '~/directives/bbi/forms/edit-organization'
+import '~/directives/bbi/forms/edit-bbi-contact'
+import '~/directives/bbi/forms/edit-bbi-profile'
+import '~/directives/bbi/forms/edit-bbi-opportunity'
+import '~/directives/bbi/forms/edit-bbi-assistance'
 
-	return ['$scope','$routeParams','user', function ($scope,$routeParams,user) {
+export { default as template } from './edit.html'
+
+export default ['$scope','$routeParams','user', function ($scope,$routeParams,user) {
 
 
         var _ctrl = this;
@@ -20,4 +24,3 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/crumbs', 'dir
 				// console.log('schema',schema);
 				// console.log('id',id);
     }];
-});

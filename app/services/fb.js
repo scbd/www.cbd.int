@@ -1,5 +1,7 @@
-define(['app','ngMeta'], function(app) {'use strict';
-        require(['facebook'], function(FB) {
+import app from '~/app'
+import * as meta from '~/services/meta'
+
+        import('facebook').then(function(FB) {
           if (FB && FB.AppEvents && FB.init) {
             FB.init({
               appId: '168158870409056',
@@ -14,12 +16,12 @@ define(['app','ngMeta'], function(app) {'use strict';
           window.FB = {};
         });
 
-        app.factory('fb', ['ngMeta',function(ngMeta) {
+        app.factory('fb', [function() {
           var domain = 'www.cbd.int';
-          ngMeta.init();
+
           if(window.location.hostname==='localhost' || window.location.hostname==='www.cbddev.xyz') domain = 'www.cbddev.xyz';
 
-          ngMeta.setTag('fb:app_id','168158870409056');
+          meta.meta('fb:app_id','168158870409056');
 
           var types= ['apps.saves',
           'article',
@@ -78,25 +80,18 @@ define(['app','ngMeta'], function(app) {'use strict';
               setImage:setImage,
               setOgType:setOgType
           };
-          // //============================================================
-          // //
-          // //============================================================
-          // function setTitle(title,titleSuffix){
-          //   if(!title) return;
-          //   ngMeta.setTitle(title, titleSuffix + ' | Circus Living');
-          // }
 
           //============================================================
           //
           //============================================================
           function setTitle(title,titleSuffix){
             if(!title) return;
-            // ngMeta.setTitle(title, titleSuffix + ' | Circus Living');
+
             if(titleSuffix)
               title = title + titleSuffix;
             else
               title = title + ' | Convention on Biological Diversity';
-            ngMeta.setTag('og:title',title );
+            meta.title(title);
           }
           //============================================================
           //
@@ -106,7 +101,7 @@ define(['app','ngMeta'], function(app) {'use strict';
               uri='https://'+domain+uri;
 
             setDemensions(uri);
-            ngMeta.setTag('og:image',uri);
+            meta.image(uri);
           }
           //============================================================
           //
@@ -116,8 +111,8 @@ define(['app','ngMeta'], function(app) {'use strict';
 
             img.src = uri;
             img.onload = function() {
-              ngMeta.setTag('og:image:height',this.height);
-              ngMeta.setTag('og:image:width',this.width);
+              meta.meta('og:image:height',this.height);
+              meta.meta('og:image:width',this.width);
             }
           }
           //============================================================
@@ -129,7 +124,7 @@ define(['app','ngMeta'], function(app) {'use strict';
           //============================================================
           function set(name,value){
             if(!value) return;
-            ngMeta.setTag(name, value);
+            meta.meta(name, value);
           }
 
           //============================================================
@@ -137,7 +132,7 @@ define(['app','ngMeta'], function(app) {'use strict';
           //============================================================
           function setOgType(type){
             if(!validateType(type,types))return;
-            ngMeta.setTag('og:type',type);
+            meta.meta('og:type',type);
           }
 
 
@@ -147,4 +142,3 @@ define(['app','ngMeta'], function(app) {'use strict';
 
 
         }]);
-});

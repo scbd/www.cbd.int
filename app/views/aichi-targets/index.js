@@ -1,9 +1,13 @@
-define(['app', 'lodash', 'data/aichi-targets/targets', 'data/aichi-targets/goals'], function(app, _, targetsData, goalsData) { 'use strict';
+import _ from 'lodash'
+import targetsData from '~/data/aichi-targets/targets.json'
+import goalsData   from '~/data/aichi-targets/goals.json'
+console.log('aa')
 
-	return ['$scope', function ($scope) {
+export { default as template } from './index.html';
+
+export default ['$scope', function ($scope) {
 
         var _ctrl = this;
-
 		_ctrl.targets = _.sortBy(_.cloneDeep(targetsData.targets), 'id');
 
 		//============================================================
@@ -14,4 +18,3 @@ define(['app', 'lodash', 'data/aichi-targets/targets', 'data/aichi-targets/goals
 		};
 
     }];
-});

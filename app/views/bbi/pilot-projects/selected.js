@@ -1,11 +1,10 @@
-define(['data/bbi/links', 'directives/bbi/bbi-project-row', 'directives/bbi/menu'], loadGlobalModules)
+import links from '~/data/bbi/links.json'
+import '~/directives/bbi/bbi-project-row'
+import '~/directives/bbi/menu'
 
-function loadGlobalModules(links) { 
-	this.links = links
-	return ['$scope','$http','$filter', controller.bind(this)]
-}
+export { default as template } from './selected.html'
 
-function controller($scope,$http, $filter) {
+export default ['$scope','$http','$filter', function($scope,$http, $filter) {
 
     var _ctrl = this
     _ctrl.links=links.links
@@ -66,4 +65,4 @@ function controller($scope,$http, $filter) {
     function orderByCountry(project){
       return $filter('term')(project.country)
     }
-}
+}]

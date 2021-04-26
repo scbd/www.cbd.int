@@ -1,9 +1,10 @@
-define(['text!./zoom-map.html', 'app', 'lodash',
-    'ammap',
-    'shim!ammap3WorldHigh[ammap]',
-    'shim!ammap-theme[ammap]',
-], function(template, app, _) {
-  'use strict';
+import template from './zoom-map.html';
+import app from '~/app';
+import _ from 'lodash';
+import 'ammap';
+import 'ammap/themes/light';
+import '~/directives/reporting-display/worldEUHigh';
+  
 
   app.directive('zoomMap', ['$location','$timeout', function($location,$timeout) {
     return {
@@ -193,4 +194,4 @@ define(['text!./zoom-map.html', 'app', 'lodash',
       }],
     }; // return
   }]); //app.directive('searchFilterCountries
-}); // define
+ // define

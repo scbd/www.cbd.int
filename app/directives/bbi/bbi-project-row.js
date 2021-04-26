@@ -1,4 +1,7 @@
-define(['app','text!./bbi-project-row.html','filters/term', 'filters/title-case'], function(app, templateHtml) { 'use strict';
+import app from '~/app';
+import templateHtml from './bbi-project-row.html';
+import '~/filters/term';
+import '~/filters/title-case'; 
 
     //============================================================
     //
@@ -27,4 +30,4 @@ define(['app','text!./bbi-project-row.html','filters/term', 'filters/title-case'
         };
     }]);
 
-});
+

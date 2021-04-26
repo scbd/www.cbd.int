@@ -1,7 +1,8 @@
-define(['angular', 'ngSanitize','toastr','ngMeta'], function(angular) { 'use strict';
+import angular from 'angular'
+import 'toastr'
 
-     var app = angular.module('app', angular.defineModules(
-         ['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','ngMeta','ngVue', 'angular-cache', 'angularVue']));
+const app = angular.module('app', angular.defineModules(
+         ['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','ngVue', 'angular-cache', 'angularVue']));
 
 
     app.provider('$ngVue', $ngVueProvider) // create own ngVue provider as theirs was broken
@@ -111,5 +112,4 @@ define(['angular', 'ngSanitize','toastr','ngMeta'], function(angular) { 'use str
       }
     }
 
-    return app;
-});
+export default app;

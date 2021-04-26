@@ -1,4 +1,4 @@
-  define(['app'], function(app) { 'use strict';
+import app from '~/app'
   
   app.filter("markdown", ["$window", "htmlUtility", function ($window, html) {
     return function (srcText) {
@@ -10,5 +10,3 @@
       });
     };
   }]);
-
-  });

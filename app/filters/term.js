@@ -1,5 +1,5 @@
-define(['app','filters/lstring'],
-function (app) {
+import app from '~/app'
+import './lstring'
 
   //============================================================
   //
@@ -44,4 +44,3 @@ function (app) {
       });
     };
   }]);
-});

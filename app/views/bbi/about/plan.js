@@ -1,6 +1,10 @@
-define(['app','data/bbi/links','directives/bbi/menu', 'directives/bbi/auto-linker'], function(app,links) { 'use strict';
+import links from '~/data/bbi/links.json'
+import '~/directives/bbi/menu'
+import '~/directives/bbi/auto-linker'
 
-	return ['$location','$scope', function ($location,$scope) {
+export { default as template } from './plan.html'
+
+export default ['$location','$scope', function ($location,$scope) {
 
         var _ctrl = this;
 				_ctrl.links=links.links;
@@ -14,4 +18,3 @@ define(['app','data/bbi/links','directives/bbi/menu', 'directives/bbi/auto-linke
 								$location.path(url);
 				}
     }];
-});

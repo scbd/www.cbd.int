@@ -1,4 +1,8 @@
-define(['text!./search-filter-aichi.html', 'app', 'lodash','angular','directives/bbi/toggle'], function(template, app, _,angular) { 'use strict';
+import template from './search-filter-aichi.html';
+import app from '~/app';
+import _ from 'lodash';
+import angular from 'angular';
+import '~/directives/bbi/toggle'; 
 
 app.directive('searchFilterAichi',['$http','Thesaurus','$timeout', function ($http,thesaurus,$timeout) {
     return {
@@ -87,7 +91,7 @@ app.directive('searchFilterAichi',['$http','Thesaurus','$timeout', function ($ht
             function buildTermsAndQuery() {
 
                     if(_.isEmpty(termsMap)){ // get terms once and save
-                        $http.get('/api/v2013/thesaurus/domains/0BB90152-BE5D-4A51-B090-D29906F65247/terms').success(function (data) {
+                        $http.get('/api/v2013/thesaurus/domains/0BB90152-BE5D-4A51-B090-D29906F65247/terms').then(function({data}) {
 
                               $scope.terms = thesaurus.buildTree(data);
                               termsMap   = flatten($scope.terms, {});
@@ -132,4 +136,4 @@ app.directive('searchFilterAichi',['$http','Thesaurus','$timeout', function ($ht
         }//link
     }; // return
   }]);  //app.directive('searchFilterCountries
-});// define
+// define

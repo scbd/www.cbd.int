@@ -1,19 +1,6 @@
-define(['app'], loadGlobalModules)
+import app from '~/app';
+    app.factory('googleSheetService', ['$http', function factory($http) {
 
-
-// requirejs global modules
-function loadGlobalModules(app) {
-    app.factory('googleSheetService', ['$http', factory.bind(this)])
-}
-
-// angularJS factory definition
-function factory($http) {
-    this.$http = $http
-
-    return {
-        get: get.bind(this)
-    }
-}
 
 function get(url, schemaName, numProps) {
     return $http.get(url).then(function(res) {
@@ -45,3 +32,8 @@ function cleanGoogleSheet(entry, schema, numProps) {
 
     return dataRows
 }
+
+        return {
+            get: get.bind(this)
+        }
+    }])

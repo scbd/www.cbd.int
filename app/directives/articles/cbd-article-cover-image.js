@@ -1,4 +1,5 @@
-define(['app', 'text!./cbd-article-cover-image.html'], function(app, template) { 'use strict';
+import app from '~/app'
+import template from './cbd-article-cover-image.html'
 
 	app.directive('cbdArticleCoverImage', [function ()
 	{
@@ -12,4 +13,3 @@ define(['app', 'text!./cbd-article-cover-image.html'], function(app, template) {
 			}
 		};
 	}]);
-});

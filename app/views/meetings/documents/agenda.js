@@ -1,7 +1,15 @@
-define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/moment', 'directives/view-injector',
-'directives/print-smart/print-smart-checkout', './meeting-document', 'services/conference-service', 'css!./agenda.css', 'css!./meeting-documents.css'],
- function(_, moment, ng) {
-    //'css!./agenda.css' // moved to template
+import '~/filters/lstring'
+import '~/filters/moment'
+import '~/directives/view-injector'
+import '~/directives/print-smart/print-smart-checkout'
+import './meeting-document'
+import '~/services/conference-service'
+import 'css!./agenda.css' 
+import _ from 'lodash'
+import moment from 'moment-timezone'
+import ng from 'angular'
+
+export { default as template } from './agenda.html'
 
     var CALENDAR_SETTINGS = {
         lastDay: '[Yesterday] - dddd D',
@@ -19,7 +27,7 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
         { code: 'evening',   end : '24:00'}
     ];
 
-	return ["$scope", "$route", "$http", '$q', '$interval', 'conferenceService', '$location', '$timeout', '$rootScope',
+export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceService', '$location', '$timeout', '$rootScope',
      function ($scope, $route, $http, $q, $interval, conferenceService, $location, $timeout, $rootScope) {
 
         var eventId;
@@ -447,4 +455,3 @@ define(['lodash', 'moment-timezone', 'angular', 'filters/lstring', 'filters/mome
             return res.data;
         }
 	}];
-});

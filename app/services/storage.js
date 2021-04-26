@@ -1,5 +1,6 @@
-﻿define(['app', 'lodash'], function(app, _) {
-    'use strict';
+﻿import app from '~/app';
+import _ from 'lodash';
+    
 
     app.factory("IStorage", ["$http", "$q", "authentication",  function($http, $q, authentication) {
         //		return new function()
@@ -665,4 +666,4 @@
         //		}();
     }]);
 
-});
+

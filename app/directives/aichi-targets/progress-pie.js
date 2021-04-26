@@ -1,9 +1,9 @@
-define(['app', 'lodash','text!./progress-pie.html',
-    'amchart',
-    'shim!amchart/pie[amchart]',
-    'shim!amchart/themes/light[amchart]'
-], function(app, _,template) {
-    'use strict';
+import 'amchart'
+import 'amchart/pie'
+import 'amchart/themes/light'
+import app from '~/app'
+import _ from 'lodash'
+import template from './progress-pie.html'
 
     //============================================================
     //
@@ -196,7 +196,7 @@ define(['app', 'lodash','text!./progress-pie.html',
                     return $http.get('https://api.cbd.int/api/v2013/index/select', {
                         params: queryParameters,
 
-                    }).success(function(data) {
+                    }).then(function({data}) {
 
                         $scope.count = data.response.numFound;
                         $scope.documents = data.response.docs;
@@ -349,5 +349,3 @@ define(['app', 'lodash','text!./progress-pie.html',
             }]
         };
     }]);
-
-});

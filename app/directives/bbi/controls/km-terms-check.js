@@ -1,4 +1,8 @@
-define(['app', 'angular', 'jquery', 'text!./km-terms-check.html', 'linqjs'], function(app, angular, $, template, Enumerable) { 'use strict';
+import app from '~/app';
+import angular from 'angular';
+import $ from 'jquery';
+import template from './km-terms-check.html';
+import Enumerable from 'linqjs'; 
 
     //============================================================
     //
@@ -158,4 +162,4 @@ define(['app', 'angular', 'jquery', 'text!./km-terms-check.html', 'linqjs'], fun
             }]
         };
     });
-});
+

@@ -1,6 +1,10 @@
-﻿define(['app', 'angular', 'text!./conference-header.html', 'services/conference-service', 'filters/lstring'], function(app, ng, html){
+﻿import app from '~/app';
+import ng from 'angular';
+import html from './conference-header.html';
+import '~/services/conference-service';
+import '~/filters/lstring';
 
-    return app.directive('conferenceHeader', ['$location', 'conferenceService', '$q', '$rootScope',
+    export default app.directive('conferenceHeader', ['$location', 'conferenceService', '$q', '$rootScope',
      function($location, conferenceService, $q, $rootScope){
         return {
 			restrict : "E",
@@ -115,4 +119,4 @@
             }
         }
     }])
-})
+

@@ -1,4 +1,6 @@
-define(['text!./search-filter-keywords.html', 'app','lodash'], function(template, app,_) { 'use strict';
+import template from './search-filter-keywords.html';
+import app from '~/app';
+import _ from 'lodash'; 
 
     app.directive('searchFilterKeywords', ['$location', function ($location) {
 
@@ -78,4 +80,4 @@ define(['text!./search-filter-keywords.html', 'app','lodash'], function(template
       }//link
     }; // return
   }]);  //app.directive('
-});// define
+// define

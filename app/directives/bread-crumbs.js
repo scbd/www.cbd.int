@@ -1,6 +1,7 @@
-define(['app', 'text!./bread-crumbs.html'], function(app, template) { 'use strict';
+import app from '~/app'
+import template from './bread-crumbs.html'
 
-	return app.directive('breadCrumbs', ['$location', '$window','$route',   function($location, $window, $route) {
+	app.directive('breadCrumbs', ['$location', '$window','$route',   function($location, $window, $route) {
 		return {
             restrict : "E",
             template : template,
@@ -13,7 +14,6 @@ define(['app', 'text!./bread-crumbs.html'], function(app, template) { 'use stric
             }
         }
     }]);
-});
 
 function getPaths($location){
 

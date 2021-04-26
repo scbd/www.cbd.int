@@ -24,7 +24,7 @@ THE SOFTWARE.
 // Modified version of node-solr-client https://github.com/lbdremy/solr-node-client/blob/master/lib/utils/format.js
 // format module. Changed to work in the browser with RequireJS
 
-define([], function() {
+
   /**
    * ISOify `Date` objects (possibly in collections)
    *
@@ -127,9 +127,9 @@ define([], function() {
     }
   };
 
-  return {
+  export default {
     dateISOify: dateISOify,
     stringify: stringify,
     toISOString: toISOString
   };
-});
+

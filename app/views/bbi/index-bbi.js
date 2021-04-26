@@ -1,6 +1,13 @@
-define(['app', 'lodash','data/bbi/links', 'directives/bbi/slider', 'directives/bbi/menu','directives/bbi/auto-linker','filters/moment'], function(app, _,links) { 'use strict';
+import _ from 'lodash'
+import links from '~/data/bbi/links.json'
+import '~/directives/bbi/slider'
+import '~/directives/bbi/menu'
+import '~/directives/bbi/auto-linker'
+import '~/filters/moment'
 
-	return ['$location','$http','$q','$scope','locale', function ($location,$http,$q,$scope,locale) {
+export { default as template } from './index-bbi.html'
+
+export default ['$location','$http','$q','$scope','locale', function ($location,$http,$q,$scope,locale) {
 
         var _ctrl = this;
 				_ctrl.links=links.links;
@@ -103,4 +110,3 @@ define(['app', 'lodash','data/bbi/links', 'directives/bbi/slider', 'directives/b
 				}// query
 
     }];
-});

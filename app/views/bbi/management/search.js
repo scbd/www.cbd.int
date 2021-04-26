@@ -1,6 +1,10 @@
-define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','directives/bbi/search/search'], function(app, _,links) { 'use strict';
+import links from '~/data/bbi/links-platform.json'
+import '~/directives/bbi/menu'
+import '~/directives/bbi/search/search'
+  
+export { default as template } from './search.html'
 
-	return ['$location','$route','$scope','user', function ($location,$route,$scope,user) {
+export default ['$location','$route','$scope','user', function ($location,$route,$scope,user) {
 
         var _ctrl = this;
 				_ctrl.links=links.links;
@@ -33,4 +37,3 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/menu','direct
 								$location.path(url);
 				}
     }];
-});

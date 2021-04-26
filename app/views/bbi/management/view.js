@@ -1,17 +1,19 @@
-define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/crumbs', 'directives/bbi/menu',
-    'services/editFormUtility',
-    'directives/bbi/views/view-bbi-contact',
-    'directives/bbi/views/view-organization',
-    'directives/bbi/views/view-bbi-profile',
-    'directives/bbi/views/view-bbi-opportunity',
-    'directives/bbi/views/view-bbi-request',
-    'services/mongo-storage',
-    'services/storage'
-], function(app, _, links) {
-    'use strict';
+import _ from 'lodash'
+import links from '~/data/bbi/links-platform.json'
+import '~/directives/bbi/crumbs'
+import '~/directives/bbi/menu'
+import '~/services/editFormUtility'
+import '~/directives/bbi/views/view-bbi-contact'
+import '~/directives/bbi/views/view-organization'
+import '~/directives/bbi/views/view-bbi-profile'
+import '~/directives/bbi/views/view-bbi-opportunity'
+import '~/directives/bbi/views/view-bbi-request'
+import '~/services/mongo-storage'
+import '~/services/storage'
 
+export { default as template } from './view.html'
 
-    return ['$scope', '$routeParams',  '$route', 'IStorage','mongoStorage','locale','user', function($scope, $routeParams,  $route, storage,mongoStorage,locale,user) {
+export default ['$scope', '$routeParams',  '$route', 'IStorage','mongoStorage','locale','user', function($scope, $routeParams,  $route, storage,mongoStorage,locale,user) {
 
 
         var _ctrl = this;
@@ -91,4 +93,3 @@ define(['app', 'lodash','data/bbi/links-platform', 'directives/bbi/crumbs', 'dir
         };
         init();
     }];
-});

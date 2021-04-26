@@ -9,7 +9,7 @@ RUN apk add --update curl && \
 
 WORKDIR /usr/src/app
 
-COPY package.json bower.json .bowerrc .npmrc ./
+COPY package.json .npmrc ./
 
 RUN npm install -q
 
