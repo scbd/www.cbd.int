@@ -4,7 +4,6 @@ import 'bigText';
 import 'html2canvas';
 import _ from 'lodash';
 import ngDialog from 'ngDialog';
-// import 'reCaptcha';
       
 export { default as template  } from './customize.html';
 
@@ -121,6 +120,9 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                             .catch(function(e){
                                 if(e.data.code == "INVALID_CAPTCHA"){
                                     $scope.error = 'There was a problem with captcha validation, please try again';
+                                }
+                                else{
+                                    $scope.error = 'There was a problem connecting to our server, please try again';
                                 }
                                 console.log(e)
                             });
