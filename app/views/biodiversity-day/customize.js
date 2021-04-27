@@ -300,6 +300,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         function recaptchaCallback(token){
             $scope.$applyAsync(function(){
                 $scope.grecaptchaToken = token;
+                $scope.error = undefined;
             })
         }
 
