@@ -121,6 +121,9 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                                 if(e.data.code == "INVALID_CAPTCHA"){
                                     $scope.error = 'There was a problem with captcha validation, please try again';
                                 }
+                                if(e.data.code == "INVALID_CAPTCHA_SCORE"){
+                                    $scope.error = e.data.message;
+                                }
                                 else{
                                     $scope.error = 'There was a problem connecting to our server, please try again';
                                 }
@@ -269,7 +272,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 ...$scope.text[$scope.language.code]
             }
 
-            return $http.post('/api/v2021/idb-logos', data, {headers: {'x-captcha-token':$scope.grecaptchaToken}})
+            return $http.post('/api/v2021/idb-logos', data, {headers: {'x-captcha-v2-token':$scope.grecaptchaToken}})
             .then(function(success) {
                 $scope.showSuccessMessage = true;
                 return success.data;
