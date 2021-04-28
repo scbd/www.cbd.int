@@ -529,8 +529,9 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         _ctrl.canConnect = canConnect
 
         function minutesBefore({ type }) {
+          const isTypeString   = typeof type === 'string'
           const types          = ['570fd1ac2e3fa5cfa61d90f5', '58379a233456cf0001550cac', '58379a293456cf0001550cad']
-          const isLongType     = types.includes(type)
+          const isLongType     = types.includes(isTypeString? type : type._id)
           
           return isLongType? 90 : 60
         }
