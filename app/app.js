@@ -98,18 +98,21 @@ const app = angular.module('app', angular.defineModules(
         }];
     }]);
 
-    function $ngVueProvider() {
-      var inQuirkMode = false
-      var rootProps = {}
-      this.setRootVueInstanceProps = function (props) {
-        _.assign(rootProps, props)
-      }
-      this.$get=function(){
-        return {
-          getRootProps: function(){ return rootProps},
-          inQuirkMode: function(){ return inQuirkMode}
-        }
+  app.value("captchaSiteKeyV2", $('element').attr('captcha-site-key-2'));
+  app.value("captchaSiteKeyV3", $('element').attr('captcha-site-key-3'));
+  
+  function $ngVueProvider() {
+    var inQuirkMode = false
+    var rootProps = {}
+    this.setRootVueInstanceProps = function (props) {
+      _.assign(rootProps, props)
+    }
+    this.$get=function(){
+      return {
+        getRootProps: function(){ return rootProps},
+        inQuirkMode: function(){ return inQuirkMode}
       }
     }
+  }
 
 export default app;

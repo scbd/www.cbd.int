@@ -7,7 +7,7 @@ import ngDialog from 'ngDialog';
       
 export { default as template  } from './customize.html';
 
-export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ngDialog',  function( $location, user,$http, $scope,  $timeout, $window, ngDialog) {
+export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ngDialog', 'captchaSiteKeyV2',  function( $location, user,$http, $scope,  $timeout, $window, ngDialog, captchaSiteKeyV2) {
         var recaptchaWidgetId;
 
         $scope.$root.page={
@@ -318,7 +318,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             $scope.fitText();           
 
             recaptchaWidgetId = grecaptcha.render('g-recaptcha', {
-                'sitekey' : '6LfM7rYaAAAAAB8Xc3Y0RQbnMb8zCerG7MKFi8Ep',
+                'sitekey' : captchaSiteKeyV2,
                 'callback' : recaptchaCallback,
             });
 

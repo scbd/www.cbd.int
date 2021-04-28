@@ -35,7 +35,7 @@
             bootFn(window, require, define);
         });
     </script>
-    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script src="https://www.recaptcha.net/recaptcha/api.js"></script>
     <script async src='https://www.google-analytics.com/analytics.js'></script>
     <title>Convention on Biological Diversity</title>
     <meta property="og:site_name" content="Convention on Biological Diversity" />
@@ -119,6 +119,7 @@
     </style>
 </head>
 <body class="ltr bootstrap3" ng-class="::{ 'mobile-app' : templateCtrl.viewOnly }">
+    <element captcha-site-key-2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>"> </element>
     <!-- HEADER -->
     <div ng-if="!templateCtrl.viewOnly">
         <!-- HEADER -->

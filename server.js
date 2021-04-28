@@ -8,6 +8,9 @@ const proxy       = httpProxy.createProxyServer({});
 const robotsTxt   = require('./robots');
 const { baseLibs, cdnUrl } = require('./app/boot');
 
+const captchaV2key  = process.env.CAPTCHA_V2_KEY;
+const captchaV3key  = process.env.CAPTCHA_V3_KEY;
+
 const oneDay  = 60*60*24;
 const oneYear = oneDay*365;
 
@@ -55,17 +58,17 @@ app.get('/robots.txt', (req, res) => {
 app.get('/insession',    function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
 app.get('/insession/*',  function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
 
-app.get('/idb/*',                  function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs }); });
-app.get('/biobridge*',             function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs }); });
-app.get('/aichi-targets*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs }); });
-app.get('/kronos/media-requests*', function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs }); });
-app.get('/participation*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs }); });
+app.get('/idb/*',                  function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); });
+app.get('/biobridge*',             function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); });
+app.get('/aichi-targets*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); });
+app.get('/kronos/media-requests*', function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); });
+app.get('/participation*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); });
 
 app.use(require('./libs/prerender')); // set env PRERENDER_SERVICE_URL
 
 app.get('/*', function(req, res) {
     res.setHeader('Cache-Control', 'public');
-    res.render('template', { gitVersion, cdnUrl, baseLibs }); 
+    res.render('template', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); 
 });
 app.all('/*', send404);
 
