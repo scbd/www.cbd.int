@@ -247,9 +247,10 @@ import 'ngInfiniteScroll';
 
                           $scope.selectedContacts=[];
 
-                          loadSelectedContact(contact.identifier_s ||contact.identifier,$scope.selectedContacts).then(function(res){
 
-                              $scope.model = {identifier:contact.identifier_s||contact.identifier, version:res.data.header.version};//+ '@' + (contact.revision||'1')};
+                          loadSelectedContact(contact.identifier_s ||contact.identifier,$scope.selectedContacts).then(function(data){
+
+                              $scope.model = {identifier:contact.identifier_s||contact.identifier, version:data.header.version};//+ '@' + (contact.revision||'1')};
                           });
                         }
                         closeDialog();
@@ -266,22 +267,25 @@ import 'ngInfiniteScroll';
                     function loadSelectedContact(identifier,selectedContacts) {
                           $scope.loadingDocuments=true;
                           return $http.get('/api/v2013/documents/'+identifier, {
-                          }).then(function({data: doc}) {
-                              selectedContacts.push(doc);
+                          }).then(function({ data }) {
+
+                              selectedContacts.push(data);
                               $scope.loadingDocuments=false;
-                              if(doc.organization && doc.organization.identifier)
-                                return loadOrgData(doc.organization.identifier,doc);
+
+                              if(data.contactOrganization && data.contactOrganization.identifier)
+                                return loadOrgData(data.contactOrganization.identifier,data);
+                              return data
                           }).catch(function(){
 
                             return $http.get('/api/v2013/documents/'+identifier+'/versions/draft', {
-                            }).then(function({data:doc}) {
-                                doc.header.version='draft';
-                                selectedContacts.push(doc);
+                            }).then(function({ data }) {
+                                data.header.version='draft';
+                                selectedContacts.push(data);
                                 $scope.loadingDocuments=false;
-                                if(doc.organization && doc.organization.identifier)
-                                  return loadOrgData(doc.organization.identifier,doc);
+                                if(data.contactOrganization && data.contactOrganization,identifier)
+                                  return loadOrgData(data.contactOrganization.identifier,data);
                                 else
-                                  return 'draft';
+                                  return data;
                             }).catch(function(err){throw err;});
                           });
 
@@ -293,17 +297,19 @@ import 'ngInfiniteScroll';
                     //============================================================
                     function loadOrgData(identifier,doc) {
                           $scope.loadingDocuments=true;
-                          $http.get('/api/v2013/documents/'+identifier, {
-                          }).then(function({data: responceDoc}) {
-                               delete(responceDoc.header);
-                               Object.assign(doc,responceDoc);
+                          return $http.get('/api/v2013/documents/'+identifier, {
+                          }).then(function({ data }) {
+                               delete(data.header);
+                               Object.assign(doc,data);
                                $scope.loadingDocuments=false;
+                               return doc
                           }).catch(function(){
                               $http.get('/api/v2013/documents/'+identifier+'/versions/draft', {
-                              }).then(function({data:responceDoc}) {
-                               delete(responceDoc.header);
-                               Object.assign(doc,responceDoc);
+                              }).then(function({ data }) {
+                               delete(data.header);
+                               Object.assign(doc,data);
                                $scope.loadingDocuments=false;
+                               return doc
                               }).catch(function(err){throw err;});
                           });
 
