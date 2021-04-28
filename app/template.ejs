@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" ng-controller="TemplateController as templateCtrl" git-version="<%=gitVersion%>" cdn-url="<%=cdnUrl%>">
+<html lang="en" ng-controller="TemplateController as templateCtrl" git-version="<%=gitVersion%>" cdn-url="<%=cdnUrl%>"
+captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
 <head>
     <base href="/">
     <script> //Analytics
@@ -176,9 +177,7 @@
     </style>    
 </head>
 <body class="ltr bootstrap4 phoenix" ng-class="::{ 'mobile-app' : templateCtrl.viewOnly }">
-
-  <element captcha-site-key-2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>"> </element>
-  <div id="page-wrapper">
+ <div id="page-wrapper">
       <div id="page">
         <!-- HEADER -->
           <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeaderFixed" ></vue-component>                  

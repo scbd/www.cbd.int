@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" ng-controller="TemplateController as templateCtrl" git-version="<%=gitVersion%>" cdn-url="<%=cdnUrl%>">
+<html lang="en" ng-controller="TemplateController as templateCtrl" git-version="<%=gitVersion%>" cdn-url="<%=cdnUrl%>"
+captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
 <head>
     <base href="/">
     <script> //Analytics
@@ -119,7 +120,6 @@
     </style>
 </head>
 <body class="ltr bootstrap3" ng-class="::{ 'mobile-app' : templateCtrl.viewOnly }">
-    <element captcha-site-key-2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>"> </element>
     <!-- HEADER -->
     <div ng-if="!templateCtrl.viewOnly">
         <!-- HEADER -->

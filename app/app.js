@@ -98,8 +98,8 @@ const app = angular.module('app', angular.defineModules(
         }];
     }]);
 
-  app.value("captchaSiteKeyV2", $('element').attr('captcha-site-key-2'));
-  app.value("captchaSiteKeyV3", $('element').attr('captcha-site-key-3'));
+  app.value("captchaSiteKeyV2", (document && document.documentElement.attributes['captcha-site-key-v2'].value));
+  app.value("captchaSiteKeyV3", (document && document.documentElement.attributes['captcha-site-key-v3'].value));
   
   function $ngVueProvider() {
     var inQuirkMode = false
