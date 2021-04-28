@@ -29,6 +29,9 @@
       .schedule .schedule-item:not(.warning):not(.alert)  > td > table {
           background-color: inherit;
       }
+      .schedule .schedule-item > td > table > tbody > tr > .schedule-item-time {
+        width: 65px;
+      }
 
       .schedule .schedule-item  .schedule-item-message {
           text-align: center;
@@ -40,13 +43,11 @@
       .schedule .schedule-item.warning > td { background-color:#F7ECB5; }
       .schedule .schedule-item.alert   > td { background-color:#F7B6B6; }
 
-
   </style>
 
   <div>
-
       <div class="col-xs-12" ng-if="scheduleCtrl.frames.length==0">
-          <h3>{{::scheduleCtrl.now()|moment:'tz':scheduleCtrl.timezone|moment:'calendar':(undefined|moment):scheduleCtrl.CALENDAR}}</h3>
+          <h3 ng-if="scheduleCtrl.getTimezone()">{{::scheduleCtrl.now()|moment:'tz':scheduleCtrl.getTimezone()|moment:'calendar':(undefined|moment):scheduleCtrl.CALENDAR}}</h3>
           No more activities scheduled for the day
       </div>
 
@@ -54,7 +55,7 @@
 
         <div class="col-xs-12 schedule" ng-repeat="frame in (scheduleCtrl.frames | filter: { 'content' : { 'type':'schedule'}, reservations: { $ : search } })">
 
-              <h2 class="pull-right"><small ng-if=":: false && scheduleCtrl.now()"><em>Time at venue:</em> <b>{{scheduleCtrl.now() | moment:'tz':scheduleCtrl.timezone | moment:'format':'H:mm'}}</b></small></h2>
+              <h2 class="pull-right"><small ng-if=":: false && scheduleCtrl.now()"><em>Time at venue:</em> <b>{{scheduleCtrl.now() | moment:'tz':scheduleCtrl.getTimezone() | moment:'format':'H:mm'}}</b></small></h2>
               <h3>{{frame.content.title}}</h3>
               <p class="alert alert-info mobile-app-hidden" ng-if="(frame.reservations | filter:{ type : { _id: '570fd0a52e3fa5cfa61d90ee' } }).length">
                   <a href='/side-events'  style="color:inherit">For a detailed and complete list of side-events, please click here to visit the CBD Side-Events page</a>.
@@ -65,8 +66,10 @@
                       <td>
                           <table class="table">
                               <tr>
-                                  <td class="schedule-item-time text-right" class="text-nowrap" style="width:55px">
-                                      <div class="text-primary"><b>{{r.start | moment:'tz':scheduleCtrl.timezone | moment:'format':'H:mm'}}</b></div>
+                                  <td class="schedule-item-time text-right" class="text-nowrap" >
+                                      
+                                      <div ng-if="scheduleCtrl.all" class="text-primary text-nowrap"><b>{{r.start | moment:'tz':scheduleCtrl.getTimezone() | moment:'format':'MMM DD'}}</b></div>
+                                      <div  class="text-primary"><b>{{r.start | moment:'tz':scheduleCtrl.getTimezone() | moment:'format':'H:mm'}}</b></div>
                                       <div class="small text-muted">
                                           <span ng-show="r.open">Open</span>
                                           <span ng-hide="r.open">Closed</span>
@@ -106,34 +109,53 @@
                                           </div>
 
                                           <div ng-if="r.videoUrl">
-                                              <a  class="badge badge-danger" ng-if="r.start <= scheduleCtrl.now().toISOString()" target="_blank" ng-href="{{r.videoUrl}}">
-                                                  Live
+                                              <a ng-if="!scheduleCtrl.all" class="badge badge-dark"  title="video stream" target="_blank" ng-href="{{r.videoUrl}}">
+                                                Watch <i  class="fa fa-video-camera"></i>
+                                              </a>
+                                              <a class="badge badge-danger" ng-if="!scheduleCtrl.all && r.start <= scheduleCtrl.now().toISOString()" target="_blank" ng-href="{{r.videoUrl}}">
+                                                Live
                                               </a> 
-                                              <a class="badge badge-dark"  title="video stream" target="_blank" ng-href="{{r.videoUrl}}">
-                                                  Watch <i  class="fa fa-video-camera"></i>
+                                              <a ng-if="agendaCtrl.all && !agendaCtrl.canConnect(r)"  href="javascript:void(0)" class="btn btn-dark" data-toggle="tooltip" data-html="true"  data-title="This meeting will be accessible {{agendaCtrl.minutesBefore(r)}} minutes before the scheduled start." style="cursor: not-allowed;">
+                                                Connect <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48" style="fill: white;"> <title>laptop</title> <path d="M43 30v-24c0-2.21-1.79-4-4-4h-30c-2.21 0-4 1.79-4 4v24l-5 10v2c0 2.21 1.79 4 4 4h40c2.21 0 4-1.79 4-4v-2l-5-10zM12.2 7h23.6c1.22 0 2.2 0.98 2.2 2.2v15.6c0 1.22-0.98 2.2-2.2 2.2h-23.6c-1.22 0-2.2-0.98-2.2-2.2l0-15.6c0-1.22 0.98-2.2 2.2-2.2zM18 36h12l1 4h-14l1-4z"></path> </svg>
+                                              </a>
+                                              <a ng-if="agendaCtrl.all && agendaCtrl.canConnect(r)"  class="btn btn-danger"  title="video stream" target="_blank" ng-href="{{r.videoUrl}}">
+                                                <div>Connect  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 48 48" style="fill: white;"> <title>laptop</title> <path d="M43 30v-24c0-2.21-1.79-4-4-4h-30c-2.21 0-4 1.79-4 4v24l-5 10v2c0 2.21 1.79 4 4 4h40c2.21 0 4-1.79 4-4v-2l-5-10zM12.2 7h23.6c1.22 0 2.2 0.98 2.2 2.2v15.6c0 1.22-0.98 2.2-2.2 2.2h-23.6c-1.22 0-2.2-0.98-2.2-2.2l0-15.6c0-1.22 0.98-2.2 2.2-2.2zM18 36h12l1 4h-14l1-4z"></path> </svg> </div>
+                                                <div ><small style="font-size: 10px;" ng-if="agendaCtrl.isInProgress(r)">(In Progress)</small></div>
                                               </a>
                                           </div>
                                       </div>
 
                                       <div class="schedule-item-title" style="font-weight:bold">
-                                          <span ng-if="::!r.sideEvent && !agendaCtrl.hasTab(r.type._id)">{{r.title}}</span>
-                                          <a    ng-if="::!r.sideEvent &&  agendaCtrl.hasTab(r.type._id)" ng-click="agendaCtrl.selectTab(r.type._id)" href="#" style="color:inherit">{{r.title}}</a>
-                                          <a    ng-if=":: r.sideEvent" ng-href="https://www.cbd.int/side-events/{{::r.sideEvent.id}}" target="sideEvent" style="color:inherit">{{r.sideEvent.title || r.title}}</a>
+                                          <span ng-if="::!r.sideEvent && !agendaCtrl.hasTab(r.type._id)">
+                                            <span ng-if="!scheduleCtrl.all"> {{r.title}} </span>
+                                            <span ng-if="scheduleCtrl.all"> {{r.type.title}}<span ng-if="r.title">{{r.title}} </span></span>
+                                          </span>
+                                          <a ng-if="::!r.sideEvent &&  agendaCtrl.hasTab(r.type._id)" ng-click="agendaCtrl.selectTab(r.type._id)" href="#" style="color:inherit">
+                                            <span ng-if="!scheduleCtrl.all"> {{r.title}} <br></span> 
+                                            <span ng-if="scheduleCtrl.all"> {{r.type.title}}<span ng-if="r.title">{{r.title}} </span></span>
+                                          </a>
+                                          <a ng-if=":: r.sideEvent" ng-href="https://www.cbd.int/side-events/{{::r.sideEvent.id}}" target="sideEvent" style="color:inherit">{{r.sideEvent.title || r.title}}</a>
                                       </div>
 
-                                      <div class="schedule-item-location">
+                                      <div ng-if="!scheduleCtrl.all" class="schedule-item-location">
                                           <em>{{r.room.title}}</em>
                                           <em ng-if="r.room.location">- {{r.room.location}}</em>
                                       </div>
 
                                       <div ng-if="r.agenda.visible && r.agenda.items.length">
                                           <span ng-repeat="item in r.agenda.items">
-                                              <span class="badge label agenda {{item.prefix}}" title="{{item.title}}" style="width:51px">{{item.prefix}} {{item.item}}</span>
+                                              <span ng-style="{ 'background-color' : item.color}" class="badge label agenda {{item.prefix}}" title="{{item.title}}" style="min-width:51px">{{item.prefix}} {{item.item}}</span>
                                               <span ng-if="(item.title+item.text) != (r.agenda.items[$index+1].title+r.agenda.items[$index+1].text)">
                                                   {{item.title}} <span ng-if="::item.text"> - <b>{{item.text}}</b></span> <br>
                                               </span>
-
+                                          </span>
                                       </div>
+                                      <div ng-if="!r.agenda.visible || !r.agenda.items || !r.agenda.items.length">
+                                        <span ng-repeat="(key, value) in r.agenda.meetings">
+                                          <span ng-if="value" ng-style="{ 'background-color' : agendaCtrl.getColor(key)}" class="badge label agenda {{item.prefix}}" style="min-width:51px">{{key}}</span>
+                                        </span>
+                                      </div>
+
                                   </td>
                               </tr>
                           </table>

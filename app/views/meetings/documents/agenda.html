@@ -1,4 +1,10 @@
 <div class="meeting-agenda">
+    <style>
+      a.disabled {
+        cursor: not-allowed;
+        color: white important!;
+      }
+    </style>
     <time-zone-feature-alert/>
     <!-- Nav tabs -->
     <nav class="nav-{{::deviceSize}}">
@@ -20,12 +26,28 @@
                 </a>
             </li>
             <li ng-hide="agendaCtrl.loaded" ><a><h3  style="color: #777;margin: 0px"><i class="fa fa-circle-o-notch fa-spin"></i></h3></a></li>
+
             <li class="nav-item ml-auto" ng-if="agendaCtrl.now">
-                <li class="nav-item dropdown ml-auto">
+              <li ng-if="agendaCtrl.all"   class="nav-item dropdown ml-auto">
+                <a  ng-if="agendaCtrl.getTimezones().length" ng-class="{'dropdown-toggle': agendaCtrl.getTimezones().length }"  class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-href="#" style="border:1px solid #f5efef">
+                    <i class="fa fa-globe"></i>
+                    <span class="small">{{agendaCtrl.getTimezone()}}</span>
+                </a>
+                <span  ng-if="!agendaCtrl.getTimezones().length" class="nav-link" style="border:1px solid #f5efef">
+                  <i class="fa fa-globe"></i>
+                  <span class="small">{{agendaCtrl.getTimezone()}}</span>
+                </span>
+                <div ng-show="agendaCtrl.getTimezones().length" class="dropdown-menu dropdown-menu-right">
+                  <a class="text-nowrap dropdown-item" href="#" ng-repeat="item in agendaCtrl.getTimezones()" ng-click="agendaCtrl.timezoneChanged(item)">
+                    <i class="fa fa-globe"></i> <span class="small">{{item}}</span>
+                  </a>
+                </div>
+            </li>
+                <li class="nav-item dropdown ml-0">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-href="#" style="border:1px solid #f5efef">
                         <em class="visible-xs-inline1 fa fa-clock-o"></em> 
-                        <b ng-if="agendaCtrl.scheduleDate==''" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'H:mm'"></b>
-                        <b ng-if="agendaCtrl.scheduleDate!=''" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.event.timezone | moment:'format':'MMM Do'"></b>
+                        <b ng-if="agendaCtrl.scheduleDate==''" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':'H:mm'"></b>
+                        <b ng-if="agendaCtrl.scheduleDate!=''" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':'MMM Do'"></b>
                     </a>
             		<div class="dropdown-menu dropdown-menu-right">
             			<a class="text-nowrap dropdown-item" href="#" ng-repeat="item in agendaCtrl.scheduleDates" ng-click="agendaCtrl.scheduleDateChanged(item.value)">
@@ -54,12 +76,12 @@
 
             <div ng-repeat="(day, dayParts) in type.days">
                 <div ng-if="type.loaded || agendaCtrl.currentTab==type._id">
-                    <h3 style="padding-top: 5px;">{{::day|moment:'tz':agendaCtrl.event.timezone|moment:'calendar':(undefined|moment):agendaCtrl.CALENDAR}}</h3>
+                    <h3 style="padding-top: 5px;">{{::day|moment:'tz':agendaCtrl.getTimezone()|moment:'calendar':(undefined|moment):agendaCtrl.CALENDAR}}</h3>
                     <table class="table table-sm table-bordered" ng-repeat="(dayPart, reservations) in dayParts">
                         <thead class="thead-light">
                             <tr>
                                 <th colspan="2">
-                                        <a class="hidden small text-muted pull-right" style="margin-left:5px" style="text-decoration:none" ng-click="agendaCtrl.expandAll(reservations)" href="#">
+                                    <a class="hidden small text-muted pull-right" style="margin-left:5px" style="text-decoration:none" ng-click="agendaCtrl.expandAll(reservations)" href="#">
                                         show documents
                                     </a>
 
@@ -83,27 +105,37 @@
                         <tr ng-repeat="res in reservations">
 
                             <td class="text-center text-nowrap text-primary" style="width:1px;border-right:solid 1px #ddd">
-                                <b>{{::res.start|moment:'tz':agendaCtrl.event.timezone|moment:'format':'HH:mm'}}</b>
+                                <b>{{::res.start|moment:'tz':agendaCtrl.getTimezone()|moment:'format':'HH:mm'}}</b>
                                 <!-- <i>to</i><br>
-                                {{::res.end  |moment:'tz':agendaCtrl.event.timezone|moment:'format':'HH:mm'}}<br> -->
+                                {{::res.end  |moment:'tz':agendaCtrl.getTimezone()|moment:'format':'HH:mm'}}<br> -->
 
-                                <div ng-if="res.videoUrl">
-                                    <a class="badge badge-dark"  title="video stream" target="_blank" ng-href="{{res.videoUrl}}">
+                                <div ng-show="res.videoUrl">
+                                
+                                    <a ng-if="agendaCtrl.all && !agendaCtrl.canConnect(res)"  href="javascript:void(0)" class="badge badge-dark disabled" data-toggle="tooltip" data-html="true"  data-title="This meeting will be accessible {{agendaCtrl.minutesBefore(res)}} minutes before the scheduled start." >
+                                      Connect <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48" style="fill: white;"> <title>laptop</title> <path d="M43 30v-24c0-2.21-1.79-4-4-4h-30c-2.21 0-4 1.79-4 4v24l-5 10v2c0 2.21 1.79 4 4 4h40c2.21 0 4-1.79 4-4v-2l-5-10zM12.2 7h23.6c1.22 0 2.2 0.98 2.2 2.2v15.6c0 1.22-0.98 2.2-2.2 2.2h-23.6c-1.22 0-2.2-0.98-2.2-2.2l0-15.6c0-1.22 0.98-2.2 2.2-2.2zM18 36h12l1 4h-14l1-4z"></path> </svg>
+                                    </a>
+                              
+                                    <a ng-if="agendaCtrl.all && agendaCtrl.canConnect(res)"  class="badge badge-danger"  title="video stream" target="_blank" ng-href="{{res.videoUrl}}">
+                                      <div>Connect  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48" style="fill: white;"> <title>laptop</title> <path d="M43 30v-24c0-2.21-1.79-4-4-4h-30c-2.21 0-4 1.79-4 4v24l-5 10v2c0 2.21 1.79 4 4 4h40c2.21 0 4-1.79 4-4v-2l-5-10zM12.2 7h23.6c1.22 0 2.2 0.98 2.2 2.2v15.6c0 1.22-0.98 2.2-2.2 2.2h-23.6c-1.22 0-2.2-0.98-2.2-2.2l0-15.6c0-1.22 0.98-2.2 2.2-2.2zM18 36h12l1 4h-14l1-4z"></path> </svg> </div>
+                                      <div><small ng-if="agendaCtrl.isInProgress(res)">(In Progress)</small></div>
+                                    </a>
+                                    <a ng-if="!agendaCtrl.all" class="badge badge-dark"  title="video stream" target="_blank" ng-href="{{res.videoUrl}}">
                                         Watch <i  class="fa fa-video-camera"></i>
                                     </a> <br>
-                                    <a  class="badge badge-danger" ng-if="res.start <= agendaCtrl.now.toISOString()" target="_blank" ng-href="{{res.videoUrl}}">
+                                    
+                                    <a  ng-if="!agendaCtrl.all" class="badge badge-danger" ng-if="res.start <= agendaCtrl.now.toISOString()" target="_blank" ng-href="{{res.videoUrl}}">
                                         Live
                                     </a> 
                                 </div>
                             </td>
 
-                            <td style="padding:0px;">
+                            <td style="padding:0px;" >
 
-                                <table class="table no-border-first-row no-border-first-row" style="margin:0px">
+                                <table ng-if="res.agenda.visible && res.agenda.items && res.agenda.items.length" class="table no-border-first-row no-border-first-row" style="margin:0px">
 
-                                    <tr ng-repeat="agendaItem in res.agenda.items" style="cursor:default">
+                                    <tr  ng-repeat="agendaItem in res.agenda.items" style="cursor:default">
                                         <td class="hidden-xs" style="width:55px" ng-click="agendaItem.expanded=!agendaItem.expanded">
-                                            <span class="badge label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::agendaItem.item}}</span>
+                                            <span ng-style="{ 'background-color' : agendaItem.color}" class="badge label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::agendaItem.item}}</span>
                                         </td>
                                         <td>
                                             <div ng-click="agendaItem.expanded=!agendaItem.expanded" >
@@ -134,7 +166,8 @@
                                                 <span class="visible-xs-inline-block badge label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::agendaItem.item}}</span>
                                                 <span class="title agenda">
                                                     <div class="hidden-xs" ng-if="::type._id=='570fd1552e3fa5cfa61d90f0'" style="font-weight:bold">
-                                                        {{::res.title}}
+                                                        <span ng-if="!agendaCtrl.all"> {{::res.title}} <br></span> 
+                                                        <span ng-if="agendaCtrl.all" class="text-uppercase font-weight-bold"> {{agendaCtrl.getReservationTypeName(res.type)}}<span ng-if="res.title">{{::res.title}} </span></span>
                                                     </div>
                                                     <span ng-if="::!agendaItem.text">
                                                         <span class="hidden-xs" >{{::agendaItem.title}}</span>
@@ -156,6 +189,14 @@
                                         </td>
                                     </tr>
                                 </table>
+                                <div class="p-1" ng-if="!res.agenda.visible || !res.agenda.items || !res.agenda.items.length">
+                                  <span ng-if="!agendaCtrl.all"> {{::res.title}} <br></span> 
+                                  <span ng-if="agendaCtrl.all" class="font-weight-bold"> {{agendaCtrl.getReservationTypeName(res.type)}}<span ng-if="res.title">{{::res.title}} </span></span>
+                                  <br>
+                                  <span ng-repeat="(key, value) in res.agenda.meetings">
+                                    <span ng-if="value" ng-style="{ 'background-color' : agendaCtrl.getColor(key)}" class="badge label agenda {{item.prefix}}" style="min-width:51px">{{::key}}</span>
+                                  </span>
+                                </div>
                             </td>
                         </tr>
                     </table>

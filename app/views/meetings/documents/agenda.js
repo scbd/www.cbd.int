@@ -29,7 +29,9 @@ export { default as template } from './agenda.html'
     ];
 
 export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceService', '$location', '$timeout', '$rootScope',
-     function ($scope, $route, $http, $q, $interval, conferenceService, $location, $timeout, $rootScope) {
+    function ($scope, $route, $http, $q, $interval, conferenceService, $location, $timeout, $rootScope) {
+
+        const { all } = $route.current.params
 
         var eventId;
         var streamId;
@@ -38,7 +40,8 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
 
         var _ctrl = $scope.agendaCtrl = this;
 
-        _ctrl.CALENDAR = CALENDAR_SETTINGS;
+        _ctrl.all       = all
+        _ctrl.CALENDAR  = CALENDAR_SETTINGS;
         _ctrl.expandAll = expandAll;
         _ctrl.selectTab = selectTab;
         _ctrl.hasTab    = hasTab;
@@ -78,7 +81,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         function updateTime() {
             if(_ctrl.event){              
                 // BF not sure why we use $route.current.params.datetime instead of $location for reading qs
-                _ctrl.now = moment.tz($location.search().datetime || $route.current.params.datetime || new Date() , _ctrl.event.timezone).toDate();
+                _ctrl.now = moment.tz($location.search().datetime || $route.current.params.datetime || new Date() , getTimezone()).toDate();
             }
             return _ctrl.now;
         }
@@ -99,9 +102,17 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             var reservations, now;
             var event = conferenceService.getConference(eventId).then(function(conf) {
 
-                _ctrl.event = event = conf; 
+                _ctrl.event = event = conf;
+                _ctrl.conferenceTimezone = event.timezone
                 processScheduleDates();               
+                return conferenceService.getAgendas(conf.MajorEventIDs)
+            }).then(function(agendas){
+                const colorMap = {}
 
+                for (const { EVT_CD:code, agenda } of agendas)
+                  colorMap[code] = agenda.color
+                
+                _ctrl.colorMap = colorMap
             }).then(function(){
 
                 now = updateTime();
@@ -171,14 +182,14 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
 
             }).then(function(res){
 
-                var meetings  = res[0];
+                var meetings         = res[0];
                 var meetingDocuments = res[1];
                 var reservationTypes = res[2];
 
                 reservations.forEach(function(r) {
 
-                    var startOfDay = moment(r.start).tz(event.timezone).startOf('day').toISOString();
-                    var startTime  = moment(r.start).tz(event.timezone).format("HH:mm");
+                    var startOfDay = moment(r.start).tz(getTimezone()).startOf('day').toISOString();
+                    var startTime  = moment(r.start).tz(getTimezone()).format("HH:mm");
 
                     r.day     = startOfDay;
                     r.dayPart = _(DAY_PARTS).find(function(p) { return startTime < p.end; }).code;
@@ -217,6 +228,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                             }).value();
                         }
 
+                        rItem.color     = (mAgenda||{}).color;
                         rItem.prefix    = (mAgenda||{}).prefix;
                         rItem.title     = (mItem||{}).title;
                         rItem.shortTitle= (mItem||{}).shortTitle;
@@ -273,6 +285,8 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             _ctrl.currentTab = type._id;
 
             type.loaded = true;
+
+            $timeout(() => $('[data-toggle="tooltip"]').tooltip(),250);
         }
 
         //========================================
@@ -287,8 +301,11 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         //==============================
         function loadReservations(now) {
 
-            var start = moment(now).startOf('minute').toDate(); // start of minute to avois cache busting
-            var end   = moment(now).tz(_ctrl.event.timezone).startOf('day').add(2, 'days').toDate(); // to tomorrow
+            const { schedule } = _ctrl.event
+            const   tomorrow   = moment(now).tz(getTimezone()).startOf('day').add(2, 'days').toDate();
+            const   eventEnd   = moment(schedule.end).tz(getTimezone()).startOf('day').add(2, 'days').toDate();
+            const   start      = moment(now).startOf('minute').toDate(); // start of minute to avois cache busting
+            const   end        = all?  eventEnd : tomorrow// to tomorrow
 
             var fields = { start : 1, end : 1, agenda :1, type: 1, title: 1, video:1, videoUrl:1,location: 1 };
             var sort   = { start : 1, end : 1 };
@@ -391,36 +408,37 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         }
 
         function processScheduleDates(){
-            var schedule = _ctrl.event.schedule;
-            if(!schedule.start)
-                return;
+            const { schedule } = _ctrl.event;
 
-            var start = moment.tz(schedule.start, _ctrl.event.timezone);
+            if(!schedule.start) return;
+
+            var start = moment.tz(schedule.start, getTimezone());
             var end;
-            var now = moment.tz(new Date(), _ctrl.event.timezone);
+            var now = moment.tz(new Date(), getTimezone());
 
             if(schedule.end)
-               end = moment.tz(schedule.end, _ctrl.event.timezone);
+                end = moment.tz(schedule.end, getTimezone());
             else
-                end = moment.tz(schedule.start, _ctrl.event.timezone).add(30, 'd')
+                end = moment.tz(schedule.start, getTimezone()).add(30, 'd')
 
 
             if($route.current.params.datetime)
-                _ctrl.scheduleDate =  moment.tz($route.current.params.datetime, _ctrl.event.timezone).format('YYYY-MM-DD');
+                _ctrl.scheduleDate =  moment.tz($route.current.params.datetime, getTimezone()).format('YYYY-MM-DD');
             else if(now > end){
-                _ctrl.scheduleDate =  moment.tz(end, _ctrl.event.timezone).format('YYYY-MM-DD');
+                _ctrl.scheduleDate =  moment.tz(end, getTimezone()).format('YYYY-MM-DD');
                  //update querystring so that schedule directive can load appropriate date/ this if for plain shedule url where the date 
                  //is not specidied the default to end date
                  $location.search({datetime:moment.tz(end, _ctrl.event.timezone).format('YYYY-MM-DD')});
             }
-            if(end > now){
+            if(!all && end > now){
                 end = now;
             }
+
             updateTime(); //update time in now to reflect the UI
             var difference = end.diff(start, 'days')+1;
             var dates = []
             for(var i=0; i < difference; i++){
-                var date = moment.tz(schedule.start, _ctrl.event.timezone).add(i, 'd');
+                var date = moment.tz(schedule.start, getTimezone()).add(i, 'd');
                 var dateOption = {
                     value : date.format('YYYY-MM-DD')
                 }
@@ -428,7 +446,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             }
 
             if(end == now){
-                var date = moment.tz(new Date(), _ctrl.event.timezone).add(i, 'd');
+                var date = moment.tz(new Date(), getTimezone()).add(i, 'd');
                 var dateOption = {
                     value : '',
                     text : 'Now'
@@ -446,8 +464,8 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             _ctrl.types[0].loaded = false;
             _ctrl.currentTab = undefined;
 
-            $location.search({datetime:_ctrl.scheduleDate||undefined});
-            
+            $location.search({ all, datetime: _ctrl.scheduleDate||undefined});
+             
             $timeout(function(){load();_ctrl.currentTab = tab;}, 100)
 
         }
@@ -455,4 +473,74 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         function resData(res) {
             return res.data;
         }
+
+        function getTimezone() {
+          if(!_ctrl.all) return _ctrl.conferenceTimezone
+
+
+          return  localStorage.getItem('timezone') || Intl.DateTimeFormat().resolvedOptions().timeZone
+        }
+        _ctrl.getTimezone = getTimezone
+
+        function getTimezones() {
+          const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+          if(_ctrl.conferenceTimezone === browserTimezone) {
+            if(localStorage.getItem('timezone') !== _ctrl.conferenceTimezone){
+              localStorage.setItem('timezone', _ctrl.conferenceTimezone)
+              $timeout(function(){load()}, 100)
+            }
+            return [] 
+          }
+
+          if(getTimezone() === _ctrl.conferenceTimezone) return [browserTimezone]
+
+          return [_ctrl.conferenceTimezone]
+        }
+        _ctrl.getTimezones = getTimezones
+
+        function timezoneChanged(zone) {
+          const tz = localStorage.getItem('timezone')
+
+          const selectedTz = zone || tz || Intl.DateTimeFormat().resolvedOptions().timeZone
+
+          localStorage.setItem('timezone', selectedTz )
+
+          $timeout(function(){load()}, 100)
+        }
+        _ctrl.timezoneChanged = timezoneChanged
+
+        function getColor(code) {
+          return  _ctrl.colorMap[code]
+        }
+        _ctrl.getColor = getColor
+
+        function getReservationTypeName(code) {
+          return  (_ctrl.types.find(({ _id }) => code === _id)).title
+        }
+        _ctrl.getReservationTypeName = getReservationTypeName
+
+        function canConnect({ type, start }) {
+          const minutes        = minutesBefore({ type })
+          const canConnectTime = moment(start).subtract(minutes, 'm').toDate();
+
+          return _ctrl.now >= canConnectTime
+        }
+        _ctrl.canConnect = canConnect
+
+        function minutesBefore({ type }) {
+          const types          = ['570fd1ac2e3fa5cfa61d90f5', '58379a233456cf0001550cac', '58379a293456cf0001550cad']
+          const isLongType     = types.includes(type)
+          
+          return isLongType? 90 : 60
+        }
+        _ctrl.minutesBefore = minutesBefore
+
+        function isInProgress({ start, end }) {
+          const startDate = moment.tz(start, getTimezone()).toDate();
+          const endDate   = moment.tz(end, getTimezone()).toDate();
+
+          return startDate <= _ctrl.now && _ctrl.now <= endDate
+        }
+        _ctrl.isInProgress = isInProgress
 	}];
