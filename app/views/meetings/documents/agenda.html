@@ -5,7 +5,7 @@
         color: white important!;
       }
     </style>
-    <time-zone-feature-alert/>
+    <time-zone-feature-alert ng-if="agendaCtrl.getTimezones().length"/>
     <!-- Nav tabs -->
     <nav class="nav-{{::deviceSize}}">
         <ul class="nav nav-tabs hidden-print" role="tablist" style="margin-top:5px">
