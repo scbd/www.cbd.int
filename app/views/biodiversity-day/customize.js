@@ -7,13 +7,13 @@ import ngDialog from 'ngDialog';
       
 export { default as template  } from './customize.html';
 
-export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ngDialog',  function( $location, user,$http, $scope,  $timeout, $window, ngDialog) {
-        
+export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ngDialog', 'captchaSiteKeyV2',  function( $location, user,$http, $scope,  $timeout, $window, ngDialog, captchaSiteKeyV2) {
+        var recaptchaWidgetId;
+
         $scope.$root.page={
             title : "International Biodiversity Day logo : customize",
             description : $('#logo-description').text()
         };
-
         $scope.defaultLanguages = [
             {code:'ar', language            : 'Arabic'  },
             {code:'en', language            : 'English' },
@@ -92,24 +92,43 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         $scope.language = { code : 'en' }
         $scope.isAdmin  = _.intersection(['Administrator', 'idb-logo-administrator'], user.roles).length
 
-
         var basePath  = $scope.basePath = (angular.element('base').attr('href')||'').replace(/\/+$/g, '');
 
         $scope.saveImage = function(generateOnly) { 
             $scope.showSuccessMessage = false;
             
-            if(~document.location.hostname.indexOf('cbd.int')){
-                $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.name+'&language='+$scope.language.code+'&logoType='+$scope.logoType);
-                $window.ga('send', 'pageview');
-            }
 
             html2canvas($("#imgGenerator"), {
+                
                 onrendered: function(canvas) {
+
+                    $scope.error = undefined;
+
                     $('#newImage').empty().append(canvas);
                     canvas.toBlob(function(blob) {
                         if(!generateOnly){  
-                            uploadImage(canvas.toDataURL());                        
-                            saveAs(blob, "22-May-Biodiversity-Day.jpg");                            
+
+                            if(~document.location.hostname.indexOf('cbd.int')){
+                                $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.name+'&language='+$scope.language.code+'&logoType='+$scope.logoType);
+                                $window.ga('send', 'pageview');
+                            }
+
+                            uploadImage(canvas.toDataURL())
+                            .then(function(){
+                                saveAs(blob, "22-May-Biodiversity-Day.jpg");  
+                            })
+                            .catch(function(e){
+                                if(e.data.code == "INVALID_CAPTCHA"){
+                                    $scope.error = 'There was a problem with captcha validation, please try again';
+                                }
+                                if(e.data.code == "INVALID_CAPTCHA_SCORE"){
+                                    $scope.error = e.data.message;
+                                }
+                                else{
+                                    $scope.error = 'There was a problem connecting to our server, please try again';
+                                }
+                                console.log(e)
+                            });
                         }
                     });
                 }
@@ -243,7 +262,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         }
 
         function uploadImage(blob){
-           $scope.uploading = true;
+
+            $scope.uploading = true;
             var data = {
                 'file': blob,
                 'name': $scope.name,
@@ -252,13 +272,15 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 ...$scope.text[$scope.language.code]
             }
 
-            return $http.post('/api/v2021/idb-logos', data)
+            return $http.post('/api/v2021/idb-logos', data, {headers: {'x-captcha-v2-token':$scope.grecaptchaToken}})
             .then(function(success) {
                 $scope.showSuccessMessage = true;
                 return success.data;
             })
             .finally(function(){
                 $scope.uploading = false;
+                $scope.grecaptchaToken = undefined;
+                grecaptcha.reset(recaptchaWidgetId);
             });
         }
 
@@ -277,9 +299,16 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                     if(a.language>b.language) return  1;
                     return 0;
                 }).value();
-                console.log($scope.languages)
             })
         }
+
+        function recaptchaCallback(token){
+            $scope.$applyAsync(function(){
+                $scope.grecaptchaToken = token;
+                $scope.error = undefined;
+            })
+        }
+
         angular.element($window).on('resize', onResize);
         $scope.$on('$destroy', function(){
             angular.element($window).off('resize', onResize);
@@ -287,7 +316,15 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
 
         $timeout(function(){
             $scope.fitText();           
+
+            recaptchaWidgetId = grecaptcha.render('g-recaptcha', {
+                'sitekey' : captchaSiteKeyV2,
+                'callback' : recaptchaCallback,
+            });
+
         }, 200);
 
+
         loadLanguages();
+
 }]

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" ng-controller="TemplateController as templateCtrl" git-version="<%=gitVersion%>" cdn-url="<%=cdnUrl%>">
+<html lang="en" ng-controller="TemplateController as templateCtrl" git-version="<%=gitVersion%>" cdn-url="<%=cdnUrl%>"
+captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
 <head>
     <base href="/">
     <script> //Analytics
@@ -35,7 +36,7 @@
             bootFn(window, require, define);
         });
     </script>
-
+    <script src="https://www.recaptcha.net/recaptcha/api.js"></script>
     <script async src='https://www.google-analytics.com/analytics.js'></script>
     <title>Convention on Biological Diversity</title>
     <meta property="og:site_name" content="Convention on Biological Diversity" />
