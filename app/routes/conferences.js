@@ -36,7 +36,6 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:code/media/:articleTag',             { ...mapView(articleView),         resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'media'] }) },                 reloadOnSearch:false })
     .when('/:code/information/:articleTag',       { ...mapView(articleView),         resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'information'] }) },           reloadOnSearch:false })
     .when('/:code/schedules',                     { ...mapView(angularViewWrapper),  resolve: { ...scheduleView }, reloadOnSearch:false })
-    .when('/:code/schedules/all',                 { ...mapView(angularViewWrapper),  resolve: { ...scheduleView, routePrams: injectRouteParams({ all: true }) }, reloadOnSearch:false })
     .when('/:code/insession',                     { ...mapView(angularViewWrapper),  resolve: { ...inSessionView }, reloadOnSearch:false })
     .when('/:code/:meeting',                      { ...mapView(introductionView),    resolve: { routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) } })
     .when('/:code/:meeting/documents',            { ...mapView(documentsView),       resolve: { showMeeting : resolveLiteral(false) },                    reloadOnSearch:false })

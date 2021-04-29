@@ -1,5 +1,4 @@
-import app from '~/app';
-import ng from 'angular';
+import app      from '~/app'                         ;
 import template from './time-zone-feature-alert.html';
 
 export default app.directive('timeZoneFeatureAlert', [ '$timeout', main ])
@@ -17,7 +16,7 @@ function main ($timeout){
 
     $(element).removeClass('show')
 
-    $timeout(() => $(element).remove(), 100)
+    $(element).remove()
 
     localStorage.setItem('hideTimeZoneFeatureAlert', true)
   }

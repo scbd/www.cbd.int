@@ -16,25 +16,21 @@ export { default as template } from './index-id.html';
     };
 
 export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService', function($scope, $http, $route, $q, defaultStreamId, conferenceService) {
-        const { all } = $route.current.params
-
         const _ctrl = $scope.scheduleCtrl =  this;
 
         let _streamData;
 
-
-        _ctrl.all         = all;
         _ctrl.CALENDAR    = CALENDAR_SETTINGS;
         _ctrl.now         = now;
         _ctrl.getTimezone = getTimezone;
         
-        $scope.$on('refresh', () => load(all) );
-        load(all);
+        $scope.$on('refresh', load );
+        load();
 
 		//========================================
 		//
 		//========================================
-        function load(all) {
+        function load() {
 
             var streamId = $route.current.params.streamId || defaultStreamId;
             var options  = { params : { cache:true } };
@@ -47,12 +43,13 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 
             }).then(function(conf){
                 _ctrl.conferenceTimezone = conf.timezone;
+                _ctrl.all = conf.schedule.all
 
                 if($route.current.params.datetime) // only add if set. avoid cache busting
                     options.params.datetime = now();
                 
             }).then(function(){
-                const url = all?  `/api/v2016/cctv-streams/${streamId}/all` : 
+                const url = _ctrl.all?  `/api/v2016/cctv-streams/${streamId}/all` : 
                                   `/api/v2016/cctv-streams/${streamId}`
 
                 return $http.get(url, options);

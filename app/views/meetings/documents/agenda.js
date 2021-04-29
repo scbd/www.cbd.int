@@ -31,8 +31,6 @@ export { default as template } from './agenda.html'
 export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceService', '$location', '$timeout', '$rootScope',
     function ($scope, $route, $http, $q, $interval, conferenceService, $location, $timeout, $rootScope) {
 
-        const { all } = $route.current.params
-
         var eventId;
         var streamId;
         var timeTimer;
@@ -40,7 +38,6 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
 
         var _ctrl = $scope.agendaCtrl = this;
 
-        _ctrl.all       = all
         _ctrl.CALENDAR  = CALENDAR_SETTINGS;
         _ctrl.expandAll = expandAll;
         _ctrl.selectTab = selectTab;
@@ -51,6 +48,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         
         $q.when(conferenceService.getActiveConference())
         .then(function(meeting){
+            _ctrl.all   = meeting.schedule.all
             eventId     = meeting._id;
             streamId    = meeting.conference.streamId;
             _ctrl.streamId = streamId;
@@ -305,7 +303,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             const   tomorrow   = moment(now).tz(getTimezone()).startOf('day').add(2, 'days').toDate();
             const   eventEnd   = moment(schedule.end).tz(getTimezone()).startOf('day').add(2, 'days').toDate();
             const   start      = moment(now).startOf('minute').toDate(); // start of minute to avois cache busting
-            const   end        = all?  eventEnd : tomorrow// to tomorrow
+            const   end        = _ctrl.all?  eventEnd : tomorrow// to tomorrow
 
             var fields = { start : 1, end : 1, agenda :1, type: 1, title: 1, video:1, videoUrl:1,location: 1 };
             var sort   = { start : 1, end : 1 };
@@ -430,7 +428,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                  //is not specidied the default to end date
                  $location.search({datetime:moment.tz(end, _ctrl.event.timezone).format('YYYY-MM-DD')});
             }
-            if(!all && end > now){
+            if(!_ctrl.all && end > now){
                 end = now;
             }
 
@@ -464,10 +462,10 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             _ctrl.types[0].loaded = false;
             _ctrl.currentTab = undefined;
 
-            $location.search({ all, datetime: _ctrl.scheduleDate||undefined});
-             
-            $timeout(function(){load();_ctrl.currentTab = tab;}, 100)
+            $location.search({ datetime: _ctrl.scheduleDate||undefined });
 
+            load();
+            _ctrl.currentTab = tab;
         }
 
         function resData(res) {
@@ -488,7 +486,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
           if(_ctrl.conferenceTimezone === browserTimezone) {
             if(localStorage.getItem('timezone') !== _ctrl.conferenceTimezone){
               localStorage.setItem('timezone', _ctrl.conferenceTimezone)
-              $timeout(function(){load()}, 100)
+              load()
             }
             return [] 
           }
@@ -500,13 +498,12 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         _ctrl.getTimezones = getTimezones
 
         function timezoneChanged(zone) {
-          const tz = localStorage.getItem('timezone')
-
+          const tz         = localStorage.getItem('timezone')
           const selectedTz = zone || tz || Intl.DateTimeFormat().resolvedOptions().timeZone
 
           localStorage.setItem('timezone', selectedTz )
 
-          $timeout(function(){load()}, 100)
+          load()
         }
         _ctrl.timezoneChanged = timezoneChanged
 

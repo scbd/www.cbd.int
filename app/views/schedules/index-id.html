@@ -68,8 +68,8 @@
                               <tr>
                                   <td class="schedule-item-time text-right" class="text-nowrap" >
                                       
-                                      <div ng-if="scheduleCtrl.all" class="text-primary text-nowrap"><b>{{r.start | moment:'tz':scheduleCtrl.getTimezone() | moment:'format':'MMM DD'}}</b></div>
-                                      <div  class="text-primary"><b>{{r.start | moment:'tz':scheduleCtrl.getTimezone() | moment:'format':'H:mm'}}</b></div>
+                                      <div ng-if="scheduleCtrl.all" class="text-primary text-nowrap" title="{{agendaCtrl.getTimezone()}}"><b>{{r.start | moment:'tz':scheduleCtrl.getTimezone() | moment:'format':'MMM DD'}}</b></div>
+                                      <div  class="text-primary" title="{{agendaCtrl.getTimezone()}}"><b>{{r.start | moment:'tz':scheduleCtrl.getTimezone() | moment:'format':'H:mm'}}</b></div>
                                       <div class="small text-muted">
                                           <span ng-show="r.open">Open</span>
                                           <span ng-hide="r.open">Closed</span>

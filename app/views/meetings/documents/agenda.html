@@ -105,9 +105,8 @@
                         <tr ng-repeat="res in reservations">
 
                             <td class="text-center text-nowrap text-primary" style="width:1px;border-right:solid 1px #ddd">
-                                <b>{{::res.start|moment:'tz':agendaCtrl.getTimezone()|moment:'format':'HH:mm'}}</b>
-                                <!-- <i>to</i><br>
-                                {{::res.end  |moment:'tz':agendaCtrl.getTimezone()|moment:'format':'HH:mm'}}<br> -->
+                                <b title="{{agendaCtrl.getTimezone()}}">{{::res.start|moment:'tz':agendaCtrl.getTimezone()|moment:'format':'HH:mm'}}</b>
+
 
                                 <div ng-show="res.videoUrl">
                                 
