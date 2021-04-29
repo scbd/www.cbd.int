@@ -48,11 +48,13 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         
         $q.when(conferenceService.getActiveConference())
         .then(function(meeting){
-            _ctrl.all   = meeting.schedule.all
-            eventId     = meeting._id;
-            streamId    = meeting.conference.streamId;
-            _ctrl.streamId = streamId;
-            _ctrl.meeting = meeting;
+            _ctrl.all            = meeting.schedule.all
+            _ctrl.connectionInit = meeting.schedule.connectionInit
+            eventId              = meeting._id;
+            streamId             = meeting.conference.streamId;
+            _ctrl.streamId       = streamId;
+            _ctrl.meeting        = meeting;
+            
             load();
             timeTimer    = $interval(updateTime, 30*1000);
             refreshTimer = $interval(refresh, 10*60*1000);
@@ -273,7 +275,6 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         //
         //==============================
         function selectTab(type) {
-
             if(_.isString(type))
                 type = _.findWhere(_ctrl.types, { _id: type});
 
@@ -527,10 +528,11 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
 
         function minutesBefore({ type }) {
           const isTypeString   = typeof type === 'string'
-          const types          = ['570fd1ac2e3fa5cfa61d90f5', '58379a233456cf0001550cac', '58379a293456cf0001550cad']
-          const isLongType     = types.includes(isTypeString? type : type._id)
+          const types          = Object.keys(_ctrl.connectionInit)
+          const typeIdentifier = isTypeString? type : type._id
+          const isInTypes      = types.includes(typeIdentifier)
           
-          return isLongType? 90 : 60
+          return isInTypes? _ctrl.connectionInit[typeIdentifier] : _ctrl.connectionInit.default
         }
         _ctrl.minutesBefore = minutesBefore
 
