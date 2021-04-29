@@ -185,15 +185,11 @@ export default {
     },
     mounted(){
         $('[data-toggle="tooltip"]').tooltip();
+        this.openDialog(this.show);
     },
     watch: {
-        show(visible) { 
-            this.resetForm()
-            $(this.$refs.uploadModal).modal(visible ? 'show' : 'hide')
-            this.$emit("update:show", visible);
+        show(visible) { this.openDialog(visible) },
 
-            if(visible) this.init();            
-         },
          isRegional(checked) {
              if(!checked) this.selectedRegion = null;
          }
@@ -239,12 +235,22 @@ export default {
             else {
                 error = { message : "Invalid status: No Meeting or Conference"}
             }
-
-            console.log(this.meetings)
         },
 
-        open() { this.$emit("update:show", true) },
-        close(){ this.$emit("update:show", false) },
+        open()  { this.openDialog(true) },
+        close() { this.openDialog(false) },
+        
+        openDialog(visible) {
+
+            this.resetForm()
+
+            $(this.$refs.uploadModal).modal(visible ? 'show' : 'hide')
+
+            if(this.show!=visible)
+                this.$emit("update:show", visible);
+
+            if(visible) this.init();            
+        },
   
         onFileChange(files) {
             this.file = files[0]
