@@ -128,11 +128,11 @@
                                       <div class="schedule-item-title" style="font-weight:bold">
                                           <span ng-if=":: !r.sideEvent && !agendaCtrl.hasTab(r.type._id)">
                                             <span ng-if=":: !scheduleCtrl.all"> {{::r.title}} </span>
-                                            <span ng-if=":: scheduleCtrl.all"> {{::r.type.title}}<span ng-if="r.title">{{::r.title}} </span></span>
+                                            <span ng-if=":: scheduleCtrl.all"> {{::r.type.title}}: <span ng-if="r.title">{{::r.title | tempTitleFilterToRemove}} </span></span>
                                           </span>
                                           <a ng-if="::! r.sideEvent &&  agendaCtrl.hasTab(r.type._id)" ng-click="agendaCtrl.selectTab(r.type._id)" href="#" style="color:inherit">
                                             <span ng-if=":: !scheduleCtrl.all"> {{::r.title}} <br></span> 
-                                            <span ng-if=":: scheduleCtrl.all"> {{::r.type.title}}<span ng-if="r.title">{{::r.title}} </span></span>
+                                            <span ng-if=":: scheduleCtrl.all"> {{::r.type.title}}: <span ng-if="r.title">{{::r.title | tempTitleFilterToRemove}} </span></span>
                                           </a>
                                           <a ng-if=":: r.sideEvent" ng-href="https://www.cbd.int/side-events/{{::r.sideEvent.id}}" target="sideEvent" style="color:inherit">{{r.sideEvent.title || r.title}}</a>
                                       </div>
