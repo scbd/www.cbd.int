@@ -1,5 +1,6 @@
 import '~/filters/lstring'
 import '~/filters/moment'
+import '~/filters/temp-title-filter'
 import '~/directives/view-injector'
 import '~/directives/print-smart/print-smart-checkout'
 import './meeting-document'
