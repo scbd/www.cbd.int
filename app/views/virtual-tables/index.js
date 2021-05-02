@@ -72,7 +72,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
             template:'articleDetails',
             name     : 'articleDetails',
             controller : ['$scope', function($scope){
-                    $scope.article = article;
+                    $scope.virtualArticleQuery = [{"$match"   : {_id: { $oid: article._id}} }];
                     $scope.closeDialog = function(){
                         ngDialog.close();                                            
                     }
