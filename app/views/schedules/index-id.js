@@ -15,7 +15,7 @@ export { default as template } from './index-id.html';
         sameElse: 'dddd, D MMMM YYYY'
     };
 
-export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService', function($scope, $http, $route, $q, defaultStreamId, conferenceService) {
+export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService', '$rootScope', function($scope, $http, $route, $q, defaultStreamId, conferenceService, $rootScope) {
         const _ctrl = $scope.scheduleCtrl =  this;
 
         let _streamData;
@@ -24,7 +24,6 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
         _ctrl.now         = now;
         _ctrl.getTimezone = getTimezone;
         
-        $scope.$on('refresh', load );
         load();
 
 		//========================================
@@ -43,14 +42,14 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 
             }).then(function(conf){
                 _ctrl.conferenceTimezone = conf.timezone;
+                _ctrl.code = conf.code
                 _ctrl.all = conf.schedule.all
 
-                if($route.current.params.datetime) // only add if set. avoid cache busting
-                    options.params.datetime = now();
+                options.params.datetime = _ctrl.now();
                 
             }).then(function(){
                 const url = _ctrl.all?  `/api/v2016/cctv-streams/${streamId}/all` : 
-                                  `/api/v2016/cctv-streams/${streamId}`
+                                        `/api/v2016/cctv-streams/${streamId}`
 
                 return $http.get(url, options);
 
@@ -74,6 +73,8 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                 _ctrl.event              = _streamData.eventGroup;
                 _ctrl.frames             = _streamData.frames;
 
+                const hasRole = isAdmin()
+
                 _ctrl.frames.forEach(function(f){
 
                     if(!f.reservations)
@@ -85,11 +86,19 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                         r.room = rooms[(r.location||{}).room];
                         r.videoUrl = r.video && (r.videoUrl || r.room.videoUrl)
 
+                        if(hasRole) r.editUrl = `https://eunomia.cbd.int/schedule/${encodeURIComponent(_ctrl.code)}?day=${encodeURIComponent(r.start)}&edit=${encodeURIComponent(r._id)}`
+
                         return _.defaults(r, { open : !(types[r.type]||{}).closed });
 
                     }).sortBy(sortKey).value();
                 });
             });
+
+            function isAdmin(){
+              if(!$rootScope.user) return false
+
+              return _.intersection($rootScope.user.roles, [ 'EunoAdministrator']).length > 0;
+            }
 
             //========================================
             //
