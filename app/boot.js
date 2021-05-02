@@ -58,7 +58,8 @@ export default function bootApp(window, require, defineX) {
           'facebook'          : '//connect.facebook.net/en_US/sdk',
           'gmapsapi'          : 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places',
           'bigText'           : `${cdnUrl}npm/bigtext@1.0.1/dist/bigtext`,
-          'html2canvas'       :  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min'
+          'html2canvas'       :  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min',
+          'angular-grid'      : `${cdnUrl}npm/angulargrid@0.6.5/angulargrid.min`
       },
       shim: {
           'ngDialog'             : { deps : ['angular', `css!${cdnUrl}combine/npm/ng-dialog@0.6.1/css/ngDialog.min.css,npm/ng-dialog@0.6.1/css/ngDialog-theme-default.min.css`] },
@@ -79,7 +80,8 @@ export default function bootApp(window, require, defineX) {
           //
           'ammap/themes/light'   : { deps : ['ammap'] },
           'amchart/themes/light' : { deps : ['amchart'] },
-          'amchart/pie'          : { deps : ['amchart'] }
+          'amchart/pie'          : { deps : ['amchart'] },
+          'angular-grid'         : { deps : ['angular'] },
       },
       packages: [
           { name: 'amchart', main: 'amcharts.min', location : cdnUrl+'npm/amcharts3@3.21.15/amcharts' },

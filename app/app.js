@@ -2,7 +2,7 @@ import angular from 'angular'
 import 'toastr'
 
 const app = angular.module('app', angular.defineModules(
-         ['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','ngVue', 'angular-cache', 'angularVue']));
+         ['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','ngVue', 'angular-cache', 'angularVue', 'angularGrid']));
 
 
     app.provider('$ngVue', $ngVueProvider) // create own ngVue provider as theirs was broken
@@ -98,18 +98,21 @@ const app = angular.module('app', angular.defineModules(
         }];
     }]);
 
-    function $ngVueProvider() {
-      var inQuirkMode = false
-      var rootProps = {}
-      this.setRootVueInstanceProps = function (props) {
-        _.assign(rootProps, props)
-      }
-      this.$get=function(){
-        return {
-          getRootProps: function(){ return rootProps},
-          inQuirkMode: function(){ return inQuirkMode}
-        }
+  app.value("captchaSiteKeyV2", (document && document.documentElement.attributes['captcha-site-key-v2'].value));
+  app.value("captchaSiteKeyV3", (document && document.documentElement.attributes['captcha-site-key-v3'].value));
+  
+  function $ngVueProvider() {
+    var inQuirkMode = false
+    var rootProps = {}
+    this.setRootVueInstanceProps = function (props) {
+      _.assign(rootProps, props)
+    }
+    this.$get=function(){
+      return {
+        getRootProps: function(){ return rootProps},
+        inQuirkMode: function(){ return inQuirkMode}
       }
     }
+  }
 
 export default app;

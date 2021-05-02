@@ -149,7 +149,19 @@ import 'angular-cache'
               )
             }
 
+            function getAgendas(ids){
+              const oidArray= ids.map(id => ({ '$oid': id }) );
+              var query = {
+                            _id:{$in:oidArray}
+                          }
+              return  $http.get('/api/v2016/meetings', { cache:httpCache, params: { q : query,f : { EVT_CD:1, agenda: 1 }  } })
+              .then(function(res){
+                  return res.data
+                }
+              )
+            }
             return {
+                getAgendas,
                 getMeetings             : getMeetings,
                 getFuture               : getFuture,
                 getConference           : getConference,

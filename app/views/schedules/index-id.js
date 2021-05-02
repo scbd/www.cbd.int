@@ -16,16 +16,15 @@ export { default as template } from './index-id.html';
     };
 
 export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService', function($scope, $http, $route, $q, defaultStreamId, conferenceService) {
+        const _ctrl = $scope.scheduleCtrl =  this;
 
-        var _streamData;
+        let _streamData;
 
-        var _ctrl = $scope.scheduleCtrl =  this;
-
-        _ctrl.now = now;
-        _ctrl.CALENDAR = CALENDAR_SETTINGS;
-
-        $scope.$on("refresh",  load);
-
+        _ctrl.CALENDAR    = CALENDAR_SETTINGS;
+        _ctrl.now         = now;
+        _ctrl.getTimezone = getTimezone;
+        
+        $scope.$on('refresh', load );
         load();
 
 		//========================================
@@ -43,15 +42,17 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                 return conferenceService.getActiveConference(code);
 
             }).then(function(conf){
-
-                _ctrl.timezone = conf.timezone;
+                _ctrl.conferenceTimezone = conf.timezone;
+                _ctrl.all = conf.schedule.all
 
                 if($route.current.params.datetime) // only add if set. avoid cache busting
                     options.params.datetime = now();
                 
             }).then(function(){
-                
-                return $http.get('/api/v2016/cctv-streams/'+streamId, options);
+                const url = _ctrl.all?  `/api/v2016/cctv-streams/${streamId}/all` : 
+                                  `/api/v2016/cctv-streams/${streamId}`
+
+                return $http.get(url, options);
 
             }).then(function(res) {
 
@@ -69,9 +70,10 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                 var types = _.reduce(res[0].data, function(ret, r){ ret[r._id] = r; return ret; }, {});
                 var rooms = _.reduce(res[1].data, function(ret, r){ ret[r._id] = r; return ret; }, {});
 
-                _ctrl.timezone = _streamData.eventGroup.timezone;
-                _ctrl.event  = _streamData.eventGroup;
-                _ctrl.frames = _streamData.frames;
+                _ctrl.conferenceTimezone = _streamData.eventGroup.timezone;
+                _ctrl.event              = _streamData.eventGroup;
+                _ctrl.frames             = _streamData.frames;
+
                 _ctrl.frames.forEach(function(f){
 
                     if(!f.reservations)
@@ -99,7 +101,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 
                 var typePriority =  ((r.type.priority || 999999)+1000000).toString().substr(1);
                 var roomPriority =  r.room.title+' ';
-                var timePriority =  moment.tz(r.start, _ctrl.timezone).format("HH:mm");
+                var timePriority =  moment.tz(r.start, getTimezone()).format("MM:DD:HH:mm");
 
                 return (timePriority + '-' + typePriority + '-' + roomPriority + '-' + (r.title||'')).toLowerCase();
             }
@@ -107,12 +109,31 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 
         function now() {
 
-            if(!_ctrl.timezone)
-                return;
+            if(!getTimezone())
+                  return;
 
             if($route.current.params.datetime)
-                return now = moment.tz($route.current.params.datetime, _ctrl.timezone).toDate();
+                return now = moment.tz($route.current.params.datetime, getTimezone()).toDate();
+
 
             return new Date();
         }
+
+        function getTimezone() {
+          return  _ctrl.all? localStorage.getItem('timezone') || Intl.DateTimeFormat().resolvedOptions().timeZone : _ctrl.conferenceTimezone 
+        }
+        _ctrl.getTimezone = getTimezone
+
+        function getMeetingNames(meetings){
+          const names = []
+          for (const name in meetings) {
+            if(meetings[name]) names.push(name)
+          }
+
+          return names.join(', ')
+        }
+        _ctrl.getMeetingNames = getMeetingNames
+
+
+
 	}];

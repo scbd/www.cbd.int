@@ -62,7 +62,7 @@ function bundle(relativePath, baseDir='app') {
         presets: [['@babel/preset-env', { targets: "> 0.25%, IE 10, not dead"}]],
         allowAllFormats: true
       }),
-      isWatchOn ? null : terser() // DISABLE IN DEV
+      isWatchOn ? null : terser({ mangle: false }) // DISABLE IN DEV
     ],
     onwarn(warning, warn) {
       if(warning.code=='EVAL' && warning.id.endsWith('js/interface.js')) return; //disable eval 

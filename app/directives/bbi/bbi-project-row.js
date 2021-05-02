@@ -23,9 +23,6 @@ import '~/filters/title-case';
               function formatCountry(term){
                   return $filter("term")(term);
               }
-            },
-            controller: function ($scope) {
-
             }
         };
     }]);

@@ -1,6 +1,6 @@
 import '~/directives/meetings/conference-header'
 import app from '~/app';
-import { securize, resolveLiteral, injectRouteParams, mapView } from './mixin';
+import { securize, resolveLiteral, injectRouteParams, mapView, currentUser } from './mixin';
 import * as angularViewWrapper from '~/views/angular-view-wrapper'
 
 // Static views
@@ -16,6 +16,7 @@ const inSessionView         = { component: ()=>import('~/views/meetings/document
 const scheduleView          = { component: ()=>import('~/views/meetings/documents/agenda') }
 const parallelMeetingsView  = { component: ()=>import('~/views/meetings/parallel-meetings') }
 const notificationIdView    = { component: ()=>import('~/views/notifications/index-id') }
+const virtualTableView      = { component: ()=>import('~/views/virtual-tables/index') }
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
@@ -34,7 +35,10 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:code/parallel-meetings/:articleTag', { ...mapView(articleView),         resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings'] }) },     reloadOnSearch:false })
     .when('/:code/media',                         { ...mapView(articleView),         resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'media', 'introduction'] }) }, reloadOnSearch:false })
     .when('/:code/media/:articleTag',             { ...mapView(articleView),         resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'media'] }) },                 reloadOnSearch:false })
-    .when('/:code/information/:articleTag',       { ...mapView(articleView),         resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'information'] }) },           reloadOnSearch:false })
+    .when('/:code/information/:articleTag',       { ...mapView(articleView),         resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'information'] }) },           reloadOnSearch:false })    
+    .when('/:code/virtual-tables',                { ...mapView(angularViewWrapper),  resolve: { ...virtualTableView, user:currentUser(), routePrams: injectRouteParams({type:'publication'}) }, reloadOnSearch:false})
+    .when('/:code/virtual-tables/publications',   { ...mapView(angularViewWrapper),  resolve: { ...virtualTableView, user:currentUser(), routePrams: injectRouteParams({type:'publication'}) }, reloadOnSearch:false})
+    .when('/:code/virtual-tables/events',         { ...mapView(angularViewWrapper),  resolve: { ...virtualTableView, user:currentUser(), routePrams: injectRouteParams({type:'event'}) }, reloadOnSearch:false})
     .when('/:code/schedules',                     { ...mapView(angularViewWrapper),  resolve: { ...scheduleView }, reloadOnSearch:false })
     .when('/:code/insession',                     { ...mapView(angularViewWrapper),  resolve: { ...inSessionView }, reloadOnSearch:false })
     .when('/:code/:meeting',                      { ...mapView(introductionView),    resolve: { routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) } })
