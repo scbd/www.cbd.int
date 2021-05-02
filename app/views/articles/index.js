@@ -23,6 +23,9 @@ export default ['$scope', '$route', function ($scope,  $route) {
 
                 var match = { "adminTags" : { $all: _(tags).map(kebabCase).value() }};
 
+                if($route.current.params.articleId)
+                    match = {_id: { $oid: $route.current.params.articleId}}
+
                 ag.push({"$match"   : match });
                 ag.push({"$project" : { title:1, content:1, coverImage:1}});
                 ag.push({"$sort"    : { "meta.updatedOn":-1}});

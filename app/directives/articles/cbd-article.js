@@ -15,7 +15,8 @@ import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@22.0.0/build/c
 			replace: true,
 			scope: {
 				query : '=query',
-				onLoad: '&onLoad'
+				onLoad: '&onLoad',
+				article: '=?'
 			},
 			link: function ($scope, $element, $attr)
 			{
@@ -26,12 +27,14 @@ import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@22.0.0/build/c
 					return $sce.trustAsHtml(plainText);
 				}
 				
-				loadArticle();
-				
 				function loadArticle(){
-					
-					$q.when(articleService.query({ "ag" : JSON.stringify($scope.query) }))
-					.then(function(article){
+					var promiseQ = articleService.query({ "ag" : JSON.stringify($scope.query) })
+					if($scope.article){
+						var q = $q.defer();
+                        q.resolve([$scope.article]);
+                        promiseQ = q.promise;
+					}
+					$q.when(promiseQ).then(function(article){
 						if(article.length ==0 )
 							$scope.article = {
 								content : { en : 'No information is available for this link'}
@@ -94,7 +97,7 @@ import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@22.0.0/build/c
                     }, 200)
 				}
 
-
+				loadArticle();
 			}
 		};
 	}]);

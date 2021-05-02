@@ -16,7 +16,7 @@ import 'angular-cache'
             
             function query(qs){
                 
-                qs = _.defaults({}, qs||{}, { cache: true });
+                qs = _.defaults({}, qs||{});
                 
                 return $http.get('/api/v2017/articles', { params: qs, cache:httpCache})
                         .then(function(data){
@@ -26,7 +26,7 @@ import 'angular-cache'
             }
             function get(articleId){
                 
-                return $http.get('/api/v2017/articles/' + encodeURIComponent(articleId), {cache:httpCache, params: { cache: true }})
+                return $http.get('/api/v2017/articles/' + encodeURIComponent(articleId), {cache:httpCache})
                         .then(function(data){
                             return data.data;
                         });                
