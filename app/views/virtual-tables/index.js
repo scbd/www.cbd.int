@@ -16,7 +16,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     var basePath  = $scope.basePath = (angular.element('base').attr('href')||'').replace(/\/+$/g, '');
 
     $scope.$root.page={
-        title : "Virtual poster tool",
+        title : "Virtual display table : " + ($route.current.params.type||'').toUpperCase(),
         description : $('#poster-description').text()
     };
     $scope.filterByType = 'all';
@@ -24,18 +24,14 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     $scope.filterByEventType = 'all';
 
     $scope.publicationType = {
-        'all':'All type',
-        'newsletter'  : 'Newsletter',
-        'flyer-brochure-booklet': 'Flyer / Brochure / Booklet',
-        'policy-brief': 'Policy brief',
-        'position-paper': 'Position paper',
+        'all'                              : 'All type',
+        'newsletter'                       : 'Newsletter',
+        'flyer-brochure-booklet'           : 'Flyer / Brochure / Booklet',
+        'policy-brief'                     : 'Policy brief',
+        'position-paper'                   : 'Position paper',
         'specialized-technical-publication': 'Specialized or technical publication',
-        'report': 'Report',
-
-        'post2020':'post2020',
-        '2018':'2018',
-        'parallel-meetings':'parallel-meetings',
-        'introduction':'introduction'
+        'report'                           : 'Report',
+        'other'                            : 'Other'
     }
     $scope.meetingType = {
         'all':'All meetings',
@@ -43,11 +39,11 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         'sb-3': 'SBI-3'
     }
     $scope.eventType = {
-        'all':'All types',
-        'open-webinar-or-online-training'  : 'Open webinar or online training',
+        'all'                                     : 'All types',
+        'open-webinar-or-online-training'         : 'Open webinar or online training',
         'on-invitation-webinar-or-online-training': 'On-invitation webinar or online training',
-        'in-person-event-meeting-or-activity':'In-person event, meeting or activity',
-        'other': 'Other'
+        'in-person-event-meeting-or-activity'     : 'In-person event, meeting or activity',
+        'other'                                   : 'Other'
     }
 
     $scope.isEvent = $route.current.params.type == 'event';
@@ -91,7 +87,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         $scope.loading = true;
         var ag = [];
         var sortBy = {$sort : { 'meta.modifiedOn': -1 }};
-        ag.push({"$match":{ "$and" : [{"adminTags":{"$all":["virtual-table", $route.current.params.type]}}]}});
+        ag.push({"$match":{ "$and" : [{"adminTags":{"$all":["virtual-table", encodeURIComponent($route.current.params.type), encodeURIComponent($route.current.params.code)]}}]}});
         
         if($scope.isEvent){
             if(!$scope.includePastEvents)
@@ -102,7 +98,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         }
         
         ag.push(sortBy);
-        ag.push({"$project" : { coverImage:1, adminTags:1, title:1, summary:1, content:1, eventData:1}});
+        ag.push({"$project" : { coverImage:1, adminTags:1, title:1, summary:1,eventData:1}});
         ag.push({"$limit":1000});
 
         articleService.query({ "ag" : JSON.stringify(ag) })
@@ -111,8 +107,6 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
                 if(article.coverImage && article.coverImage.url){
                     article.url_600 = article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&600x400/');                    
                 }
-                if(article.content)
-                    article.contentText = $(article.content.en).text();
 
                 if(article.adminTags){
                     article.adminTags.forEach(t=>{
@@ -134,6 +128,35 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
             $scope.loading = false;
         })
     }
+
+    function buildQuery(){
+        var ag   = [];
+        var tags = ['virtual-table', 'introduction', encodeURIComponent($route.current.params.code)];
+        
+        
+        var match = { "adminTags" : { $all: _(tags).map(kebabCase).value() }};
+
+        if($route.current.params.articleId)
+            match = {_id: { $oid: $route.current.params.articleId}}
+
+        ag.push({"$match"   : match });
+        ag.push({"$project" : { title:1, content:1, coverImage:1}});
+        ag.push({"$sort"    : { "meta.updatedOn":-1}});
+        ag.push({"$limit"   : 1 });
+
+        $scope.articleQuery = ag;
+    }
+    $scope.onArticleLoad = function(article){
+
+        $scope.article = article;
+        $scope.isLoading = false;
+    }
+
+    function kebabCase(val){
+        return val.toLowerCase().replace(/\s/g, '-')
+    }
+
+    buildQuery();
 
     fetchPosterArticles();
 

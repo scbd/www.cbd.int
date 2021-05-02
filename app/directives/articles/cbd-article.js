@@ -16,7 +16,7 @@ import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@22.0.0/build/c
 			scope: {
 				query : '=query',
 				onLoad: '&onLoad',
-				article: '='
+				article: '=?'
 			},
 			link: function ($scope, $element, $attr)
 			{
