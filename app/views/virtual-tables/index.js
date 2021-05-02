@@ -49,6 +49,8 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     $scope.isEvent = $route.current.params.type == 'event';
     $scope.isPublication = $route.current.params.type == 'publication';
 
+    $scope.isAdmin = (user.roles||[]).find(r=>['administrator', 'oasisArticleEditor'].includes(r))!=undefined;
+
     $scope.setFilterByField = function(key, type){
 
         $scope[type] = key;

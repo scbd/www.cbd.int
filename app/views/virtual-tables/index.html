@@ -176,13 +176,10 @@
                             <h3>{{::article.title|lstring}}</h3>
                             <div class="description" ng-bind-html="::article.summary |lstring | limitTo:100|unsafe"></div>
                         </div>
-                        <div ng-if="isAuthorizedForActions" style="border-top: 1px solid #eee">
+                        <div ng-if="isAdmin" style="border-top: 1px solid #eee">
                             <div>&nbsp; updated on {{article.meta.modifiedOn|formatDate}}</div>
                             <div class="btn-group pull-right">
-                                <a class="btn" href="#" ng-click="delete(article)">
-                                    <i class="fa fa-remove"></i>
-                                </a>
-                                <a class="btn" href="articles/{{article._id}}/edit">
+                                <a class="btn" href="https://www.cbd.int/management/articles/{{article._id}}/edit">
                                     <i class="fa fa-edit"></i>
                                 </a>
                             </div>
