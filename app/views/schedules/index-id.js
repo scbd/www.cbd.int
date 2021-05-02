@@ -24,7 +24,6 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
         _ctrl.now         = now;
         _ctrl.getTimezone = getTimezone;
         
-        $scope.$on('refresh', load );
         load();
 
 		//========================================
@@ -45,12 +44,11 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                 _ctrl.conferenceTimezone = conf.timezone;
                 _ctrl.all = conf.schedule.all
 
-                if($route.current.params.datetime) // only add if set. avoid cache busting
-                    options.params.datetime = now();
+                options.params.datetime = _ctrl.now();
                 
             }).then(function(){
                 const url = _ctrl.all?  `/api/v2016/cctv-streams/${streamId}/all` : 
-                                  `/api/v2016/cctv-streams/${streamId}`
+                                        `/api/v2016/cctv-streams/${streamId}`
 
                 return $http.get(url, options);
 
