@@ -50,7 +50,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         $q.when(conferenceService.getActiveConference())
         .then(function(meeting){
             _ctrl.all            = meeting.schedule.all
-            _ctrl.connectionInit = meeting.schedule.connectionInit
+            _ctrl.connectionInit = meeting.schedule.connection.initTimes
             eventId              = meeting._id;
             streamId             = meeting.conference.streamId;
             _ctrl.streamId       = streamId;
@@ -548,8 +548,10 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         _ctrl.isInProgress = isInProgress
 
         function isConnectionDone({ end }) {
-          const now       = moment.tz(new Date(), getTimezone()).toDate();
-          const endDate   = moment.tz(end, getTimezone()).add(45, 'minutes').toDate();
+          const { closeAccessDelayTime }  = _ctrl.event?.schedule?.connection
+
+          const   now                    = moment.tz(new Date(), getTimezone()).toDate();
+          const   endDate                = moment.tz(end, getTimezone()).add(closeAccessDelayTime || 15, 'minutes').toDate();
 
           return now > endDate
         }
