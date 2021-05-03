@@ -17,7 +17,7 @@
             <i class="text-muted fa fa-caret-down"/>
             <i class="text-muted help">click to expand</i>
 
-            <span class="video" v-if="videos.length">
+            <span class="video" v-if="videos && videos.length">
               <VideoLink class="pull-right" :videos="videos" title="Full session webcast"/>
             </span>
 
