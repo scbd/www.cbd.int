@@ -177,11 +177,11 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>" 
     </style>    
 </head>
 <body class="ltr bootstrap4 phoenix" ng-class="::{ 'mobile-app' : templateCtrl.viewOnly }">
- <div id="page-wrapper">
+  <!-- HEADER -->
+  <page-header-fixed ng-vue="templateCtrl.vueOptions" :options="headerOptions" :me="user"></page-header-fixed>
+  <page-header ng-vue="templateCtrl.vueOptions" ></page-header>
+  <div id="page-wrapper">
       <div id="page">
-        <!-- HEADER -->
-          <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeaderFixed" ></vue-component>                  
-          <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeader" ></vue-component>
           <!-- CONTENT -->
           <div class="page-content">
               <div id="conferenceHeader"></div>
@@ -191,10 +191,11 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>" 
               </div>                                
               <a href="#" class="go-to-top-btn"></a>
           </div>
-          <!-- FOOTER -->
-          <vue-component ng-if="!templateCtrl.viewOnly" name="PageFooter" ></vue-component>
+       
       </div>
   </div>
+  <!-- FOOTER -->
+  <page-footer ng-vue="templateCtrl.vueOptions" ></page-footer>
 
   <!-- JS screen-size detector -->
   <div class="device-size visible-xs" size="xs"></div>

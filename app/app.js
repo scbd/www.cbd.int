@@ -2,18 +2,18 @@ import angular from 'angular'
 import 'toastr'
 
 const app = angular.module('app', angular.defineModules(
-         ['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','ngVue', 'angular-cache', 'angularVue', 'angularGrid']));
+         ['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','angular-cache', 'angularVue', 'angularGrid']));
 
 
-    app.provider('$ngVue', $ngVueProvider) // create own ngVue provider as theirs was broken
-    app.config(['$ngVueProvider',function($ngVueProvider) {
-      var i18n = new window.VueI18n({
-        locale        : 'en',
-        fallbackLocale: 'en',
-        messages      : { en:{} }
-      })
-      $ngVueProvider.setRootVueInstanceProps({ i18n: i18n })
-    }])
+    // app.provider('$ngVue', $ngVueProvider) // create own ngVue provider as theirs was broken
+    // app.config(['$ngVueProvider',function($ngVueProvider) {
+    //   var i18n = new window.VueI18n({
+    //     locale        : 'en',
+    //     fallbackLocale: 'en',
+    //     messages      : { en:{} }
+    //   })
+    //   $ngVueProvider.setRootVueInstanceProps({ i18n: i18n })
+    // }])
     
     app.config(['$httpProvider','toastrConfig', function($httpProvider,toastrConfig) {
         angular.extend(toastrConfig, {
@@ -101,19 +101,20 @@ const app = angular.module('app', angular.defineModules(
   app.value("accountsUrl"     , (document && document.documentElement.attributes['accounts-url'].value));
   app.value("captchaSiteKeyV2", (document && document.documentElement.attributes['captcha-site-key-v2'].value));
   app.value("captchaSiteKeyV3", (document && document.documentElement.attributes['captcha-site-key-v3'].value));
-  
-  function $ngVueProvider() {
-    var inQuirkMode = false
-    var rootProps = {}
-    this.setRootVueInstanceProps = function (props) {
-      _.assign(rootProps, props)
-    }
-    this.$get=function(){
-      return {
-        getRootProps: function(){ return rootProps},
-        inQuirkMode: function(){ return inQuirkMode}
-      }
-    }
-  }
+
+
+  // function $ngVueProvider() {
+  //   var inQuirkMode = false
+  //   var rootProps = {}
+  //   this.setRootVueInstanceProps = function (props) {
+  //     _.assign(rootProps, props)
+  //   }
+  //   this.$get=function(){
+  //     return {
+  //       getRootProps: function(){ return rootProps},
+  //       inQuirkMode: function(){ return inQuirkMode}
+  //     }
+  //   }
+  // }
 
 export default app;

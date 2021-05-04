@@ -1,19 +1,27 @@
 import _ from 'lodash'
 import app from '~/app'
 import ng from 'angular'
-import PageHeaderFixedComp from 'PageHeaderFixed'
-import PageHeaderComp from 'PageHeader'
-import PageFooterComp from 'PageFooter'
+import 'angular-vue'
+import PageHeaderFixed from '~/components/page-header-fixed/index.vue';
+import PageHeader      from '~/components/page-header/index.vue';
+import PageFooter      from '~/components/page-footer/index.vue';
 import toastTemplate from './toast.html'
 import * as meta from '~/services/meta'
 import 'css!cdn!npm/angular-toastr@1.3.0/dist/angular-toastr.css'
-import 'ngVue'
 import '~/providers/realm'
 import './directives/bread-crumbs'
               
-    loadHeaderFooter()
-    app.controller('TemplateController', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$location', 
-                                  function($rootScope,   $window,   $browser,   $document,   authentication,   $q,  toastr,  $templateCache,   $location) {
+
+    app.controller('TemplateController', ['$rootScope', '$window', 'authentication', '$q','toastr','$templateCache', '$location', '$scope',
+                                  function($rootScope,   $window, authentication, $q,  toastr,  $templateCache,   $location, $scope) {
+
+        $scope.headerOptions = { accountsUrl:   authentication.accountsBaseUrl(), signOut }                      
+        $scope.user          = { userID: 1, name: 'anonymous', email: 'anonymous@domain', government: null, userGroups: null, isAuthenticated: false, isOffline: true, roles: [] }
+
+        this.vueOptions  = {
+          components: { PageHeaderFixed, PageHeader, PageFooter },
+          i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
+        };
 
         $templateCache.put("directives/toast/toast.html", toastTemplate);
 
@@ -125,7 +133,7 @@ import './directives/bread-crumbs'
             $q.when(authentication.getUser()).then(function(user){
 
                 $rootScope.user = user;
-
+                $scope.user = user;
                 import("~/js/slaask").then(function({ default: _slaask }) {
 
                     if (user.isAuthenticated) {
@@ -148,14 +156,3 @@ import './directives/bread-crumbs'
         }
 
     }]);
-
-    function loadHeaderFooter(){
-
-        var PageHeaderFixed  = window.Vue.component('page-header-fixed', PageHeaderFixedComp);
-        var PageHeader       = window.Vue.component('page-header',       PageHeaderComp);
-        var PageFooter       = window.Vue.component('page-footer',       PageFooterComp);
-    
-        app.value('PageHeaderFixed', PageHeaderFixed );
-        app.value('PageHeader',      PageHeader);
-        app.value('PageFooter',      PageFooter);
-    }
