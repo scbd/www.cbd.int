@@ -98,6 +98,7 @@ const app = angular.module('app', angular.defineModules(
         }];
     }]);
 
+  app.value("accountsUrl"     , (document && document.documentElement.attributes['accounts-url'].value));
   app.value("captchaSiteKeyV2", (document && document.documentElement.attributes['captcha-site-key-v2'].value));
   app.value("captchaSiteKeyV3", (document && document.documentElement.attributes['captcha-site-key-v3'].value));
   
