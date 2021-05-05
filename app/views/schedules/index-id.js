@@ -1,5 +1,8 @@
-import _ from 'lodash'
-import moment from 'moment-timezone'
+import _                     from 'lodash'
+import moment                from 'moment-timezone'
+import ScheduleConnectButton from '~/components/meetings/schedule-connect-button.vue'
+
+import 'angular-vue'
 import '~/filters/moment'
 import '~/filters/html-sanitizer'
 import '~/services/conference-service'
@@ -17,6 +20,10 @@ export { default as template } from './index-id.html';
 
 export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService', '$rootScope', function($scope, $http, $route, $q, defaultStreamId, conferenceService, $rootScope) {
         const _ctrl = $scope.scheduleCtrl =  this;
+
+        $scope.vueOptions  = {
+          components: { scb: ScheduleConnectButton }
+        }
 
         let _streamData;
 

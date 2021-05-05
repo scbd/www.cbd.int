@@ -45,7 +45,16 @@
 
   </style>
 
-  <div>
+  <div> 
+    <!-- <ScheduleConnectButton ng-vue="vueOptions" :reservation="r" :schedule="agendaCtrl.event.schedule"></ScheduleConnectButton> -->
+
+    <hr/>
+    {{vueOptions | json}}
+    <scb ng-vue="vueOptions" :schedule="agendaCtrl.event.schedule">
+      sdssds
+    </scb>
+    <hr/>
+
       <div class="col-xs-12" ng-if="scheduleCtrl.frames.length==0">
           <h3 ng-if="scheduleCtrl.getTimezone()">{{::scheduleCtrl.now()|moment:'tz':scheduleCtrl.getTimezone()|moment:'calendar':(undefined|moment):scheduleCtrl.CALENDAR}}</h3>
           No more activities scheduled for the day
