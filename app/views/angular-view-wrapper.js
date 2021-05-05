@@ -7,18 +7,19 @@ export default ['$scope', '$injector', '$compile', '$route', 'component', functi
 
   const templateHtml = component.template;
   const bindFn       = $compile(templateHtml);
-  const element      = bindFn($scope);
-
-  ng.element('ng-view').html(element);
 
   // init controller
 
-  const { component:drop, ...locals } = { ...$route.current.locals, $template: templateHtml } ;
+  const { component:drop, ...locals } = { ...$route.current.locals } ;
 
   const controllerFn   = component.default ;
   const controllerAs   = $route.current.$$route.controllerAs || '$ctrl';
   const controller     = $injector.instantiate(controllerFn,locals);
   $scope[controllerAs] = controller;  
+
+  const element = bindFn($scope);
+
+  ng.element('ng-view').html(element);
 
   return controller;
 }];
