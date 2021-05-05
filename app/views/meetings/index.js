@@ -1,9 +1,9 @@
-﻿import app from '~/app' 
-import _ from 'lodash'
-import Vue from 'vue'
-import ConferenceCalComp from 'conferenceCal'
+﻿
+import app           from '~/app'
+import _             from 'lodash'
+import ConferenceCal from 'conferenceCal'
 
-import 'ngVue'
+import 'angular-vue'
 import '~/services/conference-service'
 import '~/services/article-service'
 import '~/directives/social-media'
@@ -11,16 +11,17 @@ import '~/directives/articles/cbd-article'
 
 export { default as template } from './index.html'
 
-var VueComponent = Vue.component('conference-cal', ConferenceCalComp)
-app.value('ConferenceCal',VueComponent)
-
-
 export default ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', '$q',
         function ($location,$scope,$timeout,  $route, $sce, conferenceService, $q) {
-       
-			var _ctrl = this;
 
-             $scope.code = $route.current.params.code
+			      const _ctrl = this;
+
+            $scope.vueOptions  = {
+              components: { ConferenceCal },
+              i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
+            };
+
+            $scope.code = $route.current.params.code
             $scope.trustedHtml = function (plainText) {
                 return $sce.trustAsHtml(plainText);
             }

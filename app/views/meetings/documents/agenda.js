@@ -50,7 +50,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         $q.when(conferenceService.getActiveConference())
         .then(function(meeting){
             _ctrl.all            = meeting.schedule.all
-            _ctrl.connectionInit = meeting.schedule.connection.initTimes
+            _ctrl.connectionInit = meeting?.schedule?.connection?.initTimes
             eventId              = meeting._id;
             streamId             = meeting.conference.streamId;
             _ctrl.streamId       = streamId;
