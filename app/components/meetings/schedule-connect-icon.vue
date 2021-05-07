@@ -1,0 +1,10 @@
+<template>
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" :width="size" :height="size" viewBox="0 0 48 48" style="fill: white;"> <title>laptop</title> <path d="M43 30v-24c0-2.21-1.79-4-4-4h-30c-2.21 0-4 1.79-4 4v24l-5 10v2c0 2.21 1.79 4 4 4h40c2.21 0 4-1.79 4-4v-2l-5-10zM12.2 7h23.6c1.22 0 2.2 0.98 2.2 2.2v15.6c0 1.22-0.98 2.2-2.2 2.2h-23.6c-1.22 0-2.2-0.98-2.2-2.2l0-15.6c0-1.22 0.98-2.2 2.2-2.2zM18 36h12l1 4h-14l1-4z"></path></svg>
+</template>
+
+<script>
+export default { 
+  name : 'ScheduleConnectIcon', 
+  props: { size: { type: String, default: 22 } }
+} 
+</script>

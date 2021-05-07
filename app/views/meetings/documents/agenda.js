@@ -10,6 +10,9 @@ import 'css!./agenda.css'
 import _ from 'lodash'
 import moment from 'moment-timezone'
 import ng from 'angular'
+import ScheduleAgendaDynamicConnectButton from '~/components/meetings/schedule-agenda-dynamic-connect-button.vue'
+import Vue from 'vue'
+import 'angular-vue'
 
 export { default as template } from './agenda.html'
 
@@ -32,6 +35,8 @@ export { default as template } from './agenda.html'
 export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceService', '$location', '$timeout', '$rootScope',
     function ($scope, $route, $http, $q, $interval, conferenceService, $location, $timeout, $rootScope) {
 
+        Vue.component('ScheduleAgendaDynamicConnectButton', ScheduleAgendaDynamicConnectButton)
+
         var eventId;
         var streamId;
         var timeTimer;
@@ -49,6 +54,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         
         $q.when(conferenceService.getActiveConference())
         .then(function(meeting){
+            $scope.schedule      = meeting.schedule
             _ctrl.all            = meeting.schedule.all
             _ctrl.connectionInit = meeting.schedule.connection.initTimes
             eventId              = meeting._id;

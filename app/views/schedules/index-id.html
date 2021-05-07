@@ -115,16 +115,8 @@
                                               <a class="badge badge-danger" ng-if="!scheduleCtrl.all && r.start <= scheduleCtrl.now().toISOString()" target="_blank" ng-href="{{::r.videoUrl}}">
                                                 Live
                                               </a> 
-                                              <section ng-if="agendaCtrl.all && !agendaCtrl.isConnectionDone(r)">
-                                                <a ng-if="::(agendaCtrl.all && !agendaCtrl.canConnect(r))"  href="javascript:void(0)" class="btn btn-dark" data-toggle="tooltip" data-html="true"  data-title="This meeting will be accessible {{agendaCtrl.minutesBefore(r)}} minutes before the scheduled start." style="cursor: not-allowed;">
-                                                  Connect <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48" style="fill: white;"> <title>laptop</title> <path d="M43 30v-24c0-2.21-1.79-4-4-4h-30c-2.21 0-4 1.79-4 4v24l-5 10v2c0 2.21 1.79 4 4 4h40c2.21 0 4-1.79 4-4v-2l-5-10zM12.2 7h23.6c1.22 0 2.2 0.98 2.2 2.2v15.6c0 1.22-0.98 2.2-2.2 2.2h-23.6c-1.22 0-2.2-0.98-2.2-2.2l0-15.6c0-1.22 0.98-2.2 2.2-2.2zM18 36h12l1 4h-14l1-4z"></path> </svg>
-                                                </a>
-                                                <a ng-if="::(agendaCtrl.all && agendaCtrl.canConnect(r))"  class="btn btn-danger"  title="video stream" target="_blank" ng-href="{{::r.videoUrl}}">
-                                                  <div>Connect  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 48 48" style="fill: white;"> <title>laptop</title> <path d="M43 30v-24c0-2.21-1.79-4-4-4h-30c-2.21 0-4 1.79-4 4v24l-5 10v2c0 2.21 1.79 4 4 4h40c2.21 0 4-1.79 4-4v-2l-5-10zM12.2 7h23.6c1.22 0 2.2 0.98 2.2 2.2v15.6c0 1.22-0.98 2.2-2.2 2.2h-23.6c-1.22 0-2.2-0.98-2.2-2.2l0-15.6c0-1.22 0.98-2.2 2.2-2.2zM18 36h12l1 4h-14l1-4z"></path> </svg> </div>
-                                                  <div ><small style="font-size: 10px;" ng-if="::agendaCtrl.isInProgress(r)">(In Progress)</small></div>
-                                                </a>
-                                              </section>
                                           </div>
+                                          <schedule-agenda-dynamic-connect-button  :reservation="r" :schedule="schedule" ng-vue/>
                                       </div>
 
                                       <div class="schedule-item-title" style="font-weight:bold">
