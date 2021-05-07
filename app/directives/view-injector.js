@@ -26,14 +26,14 @@ import ng from 'angular';
                         default :  controllerCtr
                     } = view
 
-                    const $template = $compile(html)($scope);
-
-                    element.html($template);
-
-                    var ctrl = $injector.instantiate(controllerCtr, {...locals, $scope, $template });
+                    var ctrl = $injector.instantiate(controllerCtr, {...locals, $scope });
 
                     if(options.controllerAs)
                         $scope[options.controllerAs] = ctrl;
+
+                    const $template = $compile(html)($scope);
+
+                    element.html($template);
                 });
             }
         };

@@ -149,7 +149,7 @@
                 <hr/>
             </div>
             <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
-                <cbd-article query="articleQuery" ng-if="articleQuery" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article>
+                <cbd-article query="articleQuery" ng-if="articleQuery" hide-cover-image="true"></cbd-article>
             </div>
             <div class="col-md-12">
                 <div ng-include="'filterButtons'"></div>  
@@ -189,9 +189,16 @@
 
             </div>
             <script type="text/ng-template" id="articleDetails">
-                <div class="modal-body">		
+                <div class="modal-body">	
+                    <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">
+                        <cbd-article-cover-image cover-image="virtualArticle.coverImage"></cbd-article-cover-image>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">               
+                        <h3>{{virtualArticle.title.en}}</h3>
+                        <hr/>
+                    </div>
                     <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
-                        <cbd-article query="virtualArticleQuery" ng-if="virtualArticleQuery" on-load="onArticleLoad(article)"></cbd-article>
+                        <cbd-article query="virtualArticleQuery" ng-if="virtualArticleQuery" on-load="onArticleLoad(article)"  hide-cover-image="true"></cbd-article>
                     </div>
                 </div>
                 <div class="modal-footer">

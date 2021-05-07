@@ -50,7 +50,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         $q.when(conferenceService.getActiveConference())
         .then(function(meeting){
             _ctrl.all            = meeting.schedule.all
-            _ctrl.connectionInit = meeting.schedule.connectionInit
+            _ctrl.connectionInit = meeting.schedule.connection.initTimes
             eventId              = meeting._id;
             streamId             = meeting.conference.streamId;
             _ctrl.streamId       = streamId;
@@ -520,10 +520,11 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         _ctrl.getReservationTypeName = getReservationTypeName
 
         function canConnect({ type, start }) {
+          const now            = moment.tz(new Date(), getTimezone()).toDate();
           const minutes        = minutesBefore({ type })
           const canConnectTime = moment(start).subtract(minutes, 'm').toDate();
 
-          return _ctrl.now >= canConnectTime
+          return now >= canConnectTime
         }
         _ctrl.canConnect = canConnect
 
@@ -538,10 +539,21 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         _ctrl.minutesBefore = minutesBefore
 
         function isInProgress({ start, end }) {
+          const now       = moment.tz(new Date(), getTimezone()).toDate();
           const startDate = moment.tz(start, getTimezone()).toDate();
           const endDate   = moment.tz(end, getTimezone()).toDate();
 
-          return startDate <= _ctrl.now && _ctrl.now <= endDate
+          return startDate <= now  && now  <= endDate
         }
         _ctrl.isInProgress = isInProgress
+
+        function isConnectionDone({ end }) {
+          const { closeAccessDelayTime }  = _ctrl.event?.schedule?.connection
+
+          const   now                    = moment.tz(new Date(), getTimezone()).toDate();
+          const   endDate                = moment.tz(end, getTimezone()).add(closeAccessDelayTime || 15, 'minutes').toDate();
+
+          return now > endDate
+        }
+        _ctrl.isConnectionDone = isConnectionDone
 	}];

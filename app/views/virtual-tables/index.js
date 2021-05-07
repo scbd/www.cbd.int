@@ -36,7 +36,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     $scope.meetingType = {
         'all':'All meetings',
         'sbstta-24'  : 'SBSTTA-24',
-        'sb-3': 'SBI-3'
+        'sbi-3': 'SBI-3'
     }
     $scope.eventType = {
         'all'                                     : 'All types',
@@ -76,6 +76,11 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
                     $scope.closeDialog = function(){
                         ngDialog.close();                                            
                     }
+
+                    $scope.onArticleLoad = function(article){
+                        $scope.virtualArticle = article;
+                        $scope.isLoading = false;
+                    }
             }]
         })
     }
@@ -88,7 +93,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     function fetchPosterArticles(){
         $scope.loading = true;
         var ag = [];
-        var sortBy = {$sort : { 'meta.modifiedOn': -1 }};
+        var sortBy = {$sort : { 'meta.createdOn': -1 }};
         ag.push({"$match":{ "$and" : [{"adminTags":{"$all":["virtual-table", encodeURIComponent($route.current.params.type), encodeURIComponent($route.current.params.code)]}}]}});
         
         if($scope.isEvent){
@@ -147,11 +152,6 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         ag.push({"$limit"   : 1 });
 
         $scope.articleQuery = ag;
-    }
-    $scope.onArticleLoad = function(article){
-
-        $scope.article = article;
-        $scope.isLoading = false;
     }
 
     function kebabCase(val){
