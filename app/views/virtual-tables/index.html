@@ -135,10 +135,44 @@
                 }
                 .ngdialog.ngdialog-theme-default .ngdialog-content {
                     background-color: #fff;
-                    width: 70%;
+                    width: 75%;
+                    padding:0px!important
                 }
                 .ngdialog.ngdialog-theme-default {
                     padding-top: 10px;
+                }
+
+                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body,
+                .dialog-article-cover, .dialog-article-cover .image-credit-wrapper{
+                    margin: 0px!important;
+                    padding: 0px!important;
+                }
+                @media (max-width: 767px){
+                    .dialog-article-cover .image-credit-wrapper {
+                        height: 250px;
+                    }
+                    .ngdialog.ngdialog-theme-default .ngdialog-content {
+                        width: 95%;
+                    }
+                }
+
+                .dialog-article-cover .image-credit-wrapper .cover-image {
+                    border-radius: 4px 4px 0 0;
+                }
+
+                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body h1 {
+                    font-size: 2.6rem;
+                    color: #303336;
+                    letter-spacing: 1px;
+                    margin: 2vh 4vw;
+                }
+
+                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body hr {
+                    width: 20%;
+                    margin-top: 3vh;
+                    margin-bottom: 3vh;
+                    border: 0;
+                    border-bottom: 1px solid #E6E9EC;
                 }
             </style>
             <div  class="col-lg-12">
@@ -190,10 +224,12 @@
             </div>
             <script type="text/ng-template" id="articleDetails">
                 <div class="modal-body">	
-                    <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">
-                        <cbd-article-cover-image cover-image="virtualArticle.coverImage"></cbd-article-cover-image>
+                    <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12 dialog-article-cover" style="margin-top:5px;">
+                        <a ng-href="{{virtualArticle.coverImage.url}}" target="_blank">                            
+                            <cbd-article-cover-image cover-image="virtualArticle.coverImage"></cbd-article-cover-image>
+                        </a>
                     </div>
-                    <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">               
+                    <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;text-align: center;">               
                         <h3>{{virtualArticle.title.en}}</h3>
                         <hr/>
                     </div>

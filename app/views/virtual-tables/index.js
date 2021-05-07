@@ -99,7 +99,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         if($scope.isEvent){
             if(!$scope.includePastEvents)
                 ag.push({
-                            $match : { 'customProperties.eventDate' : { $gte : { $date : moment()}} }
+                            $match : { 'customProperties.eventDate' : { $gte : { $date : moment().add(-1, 'day')}} }
                         })
             sortBy = {$sort : { 'customProperties.eventDate': -1 }};
         }
