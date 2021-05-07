@@ -201,18 +201,18 @@
             </div>
             <div class="row">
                 <div class="col-lg-12 col-md-6 col-sm-6 padding">
-                        <label for="name">Select logo language</label>
+                        <label for="language">Select logo language</label>
                     <div class="input-group">
-                        <select class="form-control" ng-model="language" ng-change="fitText();" 
-                            ng-options="option.language for option in defaultLanguages track by option.code">
+                        <select class="form-control" ng-model="language" ng-change="onLanguageChange();" 
+                            ng-options="option.language group by option.group for option in defaultLanguages track by option.code">
                         </select>      
                         <div class="input-group-append">
-                            <input type="button" class=" btn btn-primary btn-xs  btn-sm" id="btnCustomLang" value="My language" ng-click="customLanguage(text[language.code].isCustomLanguage ? language.code:undefined)" ng-disabled="uploading"/>   
+                            <input type="button" class=" btn btn-primary btn-xs  btn-sm" style="z-index: auto;" id="btnCustomLang" value="Edit" ng-click="customLanguage(language.code)" ng-disabled="uploading || text[language.code].isUNLanguage"/>   
                         </div>
                     </div> 
                 </div>
                 <div class="col-lg-12 col-md-6  col-sm-6 padding">
-                    <label for="name">Is your logo for an individual or a collective?</label>
+                    <label for="lototype">Is your logo for an individual or a collective?</label>
                     <select class="form-control" ng-model="logoType" ng-change="fitText()" ng-disabled="text[language.code].isCustomLanguage">
                         <option value="collective">Collective</option>
                         <option value="individual" selected>Individual</option>
@@ -220,7 +220,7 @@
                 </div>
                 <div class="col-lg-12 padding">
                     <label for="name">Name to appear in the logo</label>
-                    <input type="text" class="form-control" id="name" placeholder="Name" ng-model="name" ng-change="fitText()">
+                    <input type="text" class="form-control" id="name" placeholder="Name" ng-model="text[language.code].name" ng-change="fitText()">
                 </div>
                 <div class="col-lg-12 padding">
                     <div id="g-recaptcha"></div>
@@ -267,7 +267,7 @@
                             </div>
                             <div class="color-green border-red1" id="logoName" >
                                 <span ng-if="language.code=='zh'" ng-bind="text[language.code].collectiveTagline"></span> 
-                                <span ng-bind="name"></span> 
+                                <span ng-bind="text[language.code].name"></span> 
                                 <span ng-bind="text[language.code].hashTag"></span>
                             </div>
                         </div>
@@ -287,24 +287,24 @@
             <div class="row {{customText.language.code}}">
                 <div class="col-lg-6 padding">
                         <label>Language</label>
-                        <label ng-if="customText.missingLanguage" style="color:red;font-size:small;">Please select your language</label>
-                        <select class="form-control" id="name" placeholder="Language" ng-model="customText.language"
-                            ng-options="option.language for option in languages track by option.code">
-                            <!-- <option ng-repeat="lang in languages" ng-value="lang.code">{{lang.language}}</option> -->
-                        </select>
+                        <!-- <label ng-if="customText.missingLanguage" style="color:red;font-size:small;">Please select your language</label>
+                        <select class="form-control" id="language" placeholder="Language" ng-model="customText.language"
+                            ng-options="option.language group by option.group for option in languages track by option.code">
+                        </select> -->
+                        <input type="text" class="form-control disabled" disabled id="language" ng-value="customText.language.language" ng-blur="capitalize()">
                 </div>
                 <div class="col-lg-6 padding">
                         <label>22 MAY 2021</label>
-                        <input type="text" class="form-control" id="name" placeholder="date" ng-model="customText.date" ng-blur="capitalize()">
+                        <input type="text" class="form-control" id="date" placeholder="date" ng-model="customText.date" ng-blur="capitalize()">
                 </div>
                 <div class="col-lg-6 padding">
-                        <label>Biodiversity Day</label><input type="text" class="form-control" id="name" placeholder="dat" ng-model="customText.day" ng-blur="capitalize()">
+                        <label>Biodiversity Day</label><input type="text" class="form-control" id="day" placeholder="day" ng-model="customText.day" ng-blur="capitalize()">
                 </div>
                 <div class="col-lg-6 padding">
-                    <label for="name">Is your logo for an individual or a collective?</label>
+                    <label for="logotype">Is your logo for an individual or a collective?</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="name" placeholder="tag line" ng-if="customText.logoType=='collective'" ng-model="customText.collectiveTagline"  ng-blur="capitalize()">
-                        <input type="text" class="form-control" id="name" placeholder="tag line" ng-if="customText.logoType=='individual'" ng-model="customText.individualTagline"  ng-blur="capitalize()">                           
+                        <input type="text" class="form-control" id="logotype" placeholder="tag line" ng-if="customText.logoType=='collective'" ng-model="customText.collectiveTagline"  ng-blur="capitalize()">
+                        <input type="text" class="form-control" id="logotype" placeholder="tag line" ng-if="customText.logoType=='individual'" ng-model="customText.individualTagline"  ng-blur="capitalize()">                           
                         <div class="input-group-append">  
                              <select class="form-control" ng-model="customText.logoType"  ng-blur="capitalize()">
                                 <option value="collective">Collective</option>
@@ -314,7 +314,7 @@
                     </div> 
                 </div>
                 <div class="col-lg-6 padding"><label>#ForNature</label>
-                        <input type="text" class="form-control" id="name" placeholder="Name" ng-model="customText.hashTag">
+                        <input type="text" class="form-control" id="hashtag" placeholder="hashtag" ng-model="customText.hashTag">
                 </div>
                 <div class="col-lg-6 padding"><label>Name to appear in the logo</label>
                     <input type="text" class="form-control" id="name" placeholder="Name" ng-model="customText.name">

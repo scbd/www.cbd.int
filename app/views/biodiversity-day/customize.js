@@ -4,6 +4,7 @@ import 'bigText';
 import 'html2canvas';
 import _ from 'lodash';
 import ngDialog from 'ngDialog';
+import languageTranslation from './other-langugages.json';
       
 export { default as template  } from './customize.html';
 
@@ -15,12 +16,12 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             description : $('#logo-description').text()
         };
         $scope.defaultLanguages = [
-            {code:'ar', language            : 'Arabic'  },
-            {code:'en', language            : 'English' },
-            {code:'fr', language            : 'French'  },
-            {code:'ru', language            : 'Russian' },
-            {code:'es', language            : 'Spanish' },
-            {code:'zh', language            : 'Chinese' },
+            {code:'ar', language            : 'Arabic'  , group:'UN languages'},
+            {code:'en', language            : 'English' , group:'UN languages'},
+            {code:'fr', language            : 'French'  , group:'UN languages'},
+            {code:'ru', language            : 'Russian' , group:'UN languages'},
+            {code:'es', language            : 'Spanish' , group:'UN languages'},
+            {code:'zh', language            : 'Chinese' , group:'UN languages'},
         ]
         $scope.text = {
             en : {
@@ -28,52 +29,44 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 day                 : 'BIODIVERSITY DAY',
                 collectiveTagline   : 'We’re part of the solution',
                 individualTagline   : 'I’m part of the solution',
-                hashTag             : '#ForNature'
+                hashTag             : '#ForNature', name:'Biodiversity', isUNLanguage:true
             },
             es:{
                 date                : '22 DE MAYO DE 2021',
                 day                 : 'DÍA DE LA BIODIVERSIDAD',
                 collectiveTagline    : 'Somos parte de la solución',
                 individualTagline   : 'Soy parte de la solución',
-                hashTag             : '#PorLaNaturaleza'
+                hashTag             : '#PorLaNaturaleza', name:'La biodiversidad', isUNLanguage:true
             },
             fr:{
                 date                : '22 MAI 2021',
                 day                 : 'JOURNÉE DE LA BIODIVERSITÉ',
                 collectiveTagline    : 'Nous faisons partie de la solution',
                 individualTagline   : 'Je fais partie de la solution',
-                hashTag             : '#PourLaNature'
+                hashTag             : '#PourLaNature', name:'Biodiversité', isUNLanguage:true
             },
             ru:{
                 date                : '22 МАЯ 2021 ГОДА',
                 day                 : 'ДЕНЬ БИОРАЗНООБРАЗИЯ',
                 collectiveTagline    : 'Мы часть решения',
                 individualTagline   : 'Я часть решения',
-                hashTag             : '#ЗаПрироду'
+                hashTag             : '#ЗаПрироду', name:'Биоразнообразие', isUNLanguage:true
             },
             zh:{
                 date                : '2021年5月22日',
                 day                 : '生物多样性日',
                 collectiveTagline    : '呵护自然，',
                 individualTagline   : '呵护自然，',
-                hashTag             : '有份'
+                hashTag             : '有份', name:'生物多样性', isUNLanguage:true
             },
             ar:{
                 date                : '٢٢ أيار/مايو ٢٠٢١',
                 day                 : 'يوم التنوع البيولوجي',
                 tagline             : 'نحن جزء من الحل',
                 individualTagline   : 'أنا جزء من الحل',
-                hashTag             : 'من#_أجل_الطبيعة'
+                hashTag             : 'من#_أجل_الطبيعة', name:'التنوع البيولوجي', isUNLanguage:true
             },
-            mr:{
-                date                : '22 मे 2021',
-                day                 : 'जीवदिन दिवस',
-                tagline             : 'मी समाधानाचा एक भाग आहे',
-                individualTagline   : 'मी समाधानाचा एक भाग आहे',
-                hashTag             : '#निसर्गासाठी',
-                language            : 'Marathi'
-            }
-            
+            ...languageTranslation            
         }
         $scope.rtlLanguages = {
             ar	: 'Arabic',
@@ -87,7 +80,6 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             ji	: 'Yiddish',
         }
         
-        $scope.name     = 'Biodiversity';
         $scope.logoType = 'individual';
         $scope.language = { code : 'en' }
         $scope.isAdmin  = _.intersection(['Administrator', 'idb-logo-administrator'], user.roles).length
@@ -109,7 +101,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                         if(!generateOnly){  
 
                             if(~document.location.hostname.indexOf('cbd.int')){
-                                $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.name+'&language='+$scope.language.code+'&logoType='+$scope.logoType);
+                                $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.text[$scope.language.code].name+'&language='+$scope.language.code+'&logoType='+$scope.logoType);
                                 $window.ga('send', 'pageview');
                             }
 
@@ -135,6 +127,12 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             });
         };
 
+        $scope.onLanguageChange = function(){
+            $scope.fitText();
+            if(!['ar', 'en', 'fr', 'ru', 'es', 'zh',].includes($scope.language.code))
+                $scope.customLanguage($scope.language.code);
+        }
+
         $scope.fitText = function(selector){
 
             if($scope.rtlLanguages[$scope.language.code])
@@ -151,14 +149,18 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         }
         
         $scope.customLanguage = function(lang){
-            lang = lang || 'en'
-            $scope.customText = _.clone($scope.text[lang])
+            $scope.customText = _.clone($scope.text[lang]);
+            if(! $scope.customText){
+                $scope.customText = $scope.text[lang] = _.clone($scope.text['en']);
+                $scope.fitText();
+            }
+
+            $scope.customText.language = _.find($scope.defaultLanguages, {code:lang});
             $scope.customText.logoType = $scope.customText.logoType || 'individual'
             ngDialog.open({
                 template: 'customLanguage',
                 closeByDocument: false,
                 scope: $scope,
-                // width: '60%'
             });
         };
         $scope.closeDialog = function(){
@@ -175,9 +177,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 translation.missingLanguage = undefined;
             }
                         translation.isCustomLanguage  = true;
-                        // translation.individualTagline = translation.collectiveTagline;
             $scope.text[translation.language.code]    = translation;
-                        $scope.name                   = translation.name;
                         $scope.language               = translation.language ;
                         $scope.customText             = undefined;
                         $scope.logoType               = translation.logoType;
@@ -266,7 +266,6 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             $scope.uploading = true;
             var data = {
                 'file': blob,
-                'name': $scope.name,
                 'logoType': $scope.logoType,
                 'language': $scope.language.code,
                 ...$scope.text[$scope.language.code]
@@ -289,10 +288,13 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 $scope.languages = _(data.data).map(function(lang){
                     var code = lang.identifier.replace('lang-', '')
                     if(!_.find($scope.defaultLanguages, {code : code})){
-                        return {
+                        var lang = {
                             code: code,
-                            language: lang.title.en
+                            language: lang.title.en,
+                            group:'Other Languages',
                         }
+                        $scope.defaultLanguages.push(lang)
+                        return lang;
                     }
                 }).compact().uniq().sort(function(a,b){
                     if(a.language<b.language) return -1;
