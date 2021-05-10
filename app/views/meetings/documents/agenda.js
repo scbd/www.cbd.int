@@ -55,11 +55,14 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         
         $q.when(conferenceService.getActiveConference())
         .then(function(meeting){
-            $scope.schedule      = meeting.schedule
-            _ctrl.all            = meeting.schedule.all
-            _ctrl.connectionInit = meeting.schedule.connection.initTimes
+            const { schedule }        = meeting || {};
+            const { all, connection } = schedule;
+
+            $scope.schedule      = schedule;
+            _ctrl.all            = all;
+            _ctrl.connectionInit = connection?.initTimes
             eventId              = meeting._id;
-            streamId             = meeting.conference.streamId;
+            streamId             = meeting?.conference?.streamId;
             _ctrl.streamId       = streamId;
             _ctrl.meeting        = meeting;
             
