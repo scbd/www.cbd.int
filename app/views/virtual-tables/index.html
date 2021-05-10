@@ -135,10 +135,91 @@
                 }
                 .ngdialog.ngdialog-theme-default .ngdialog-content {
                     background-color: #fff;
-                    width: 70%;
+                    width: 75%;
+                    padding:0px!important
                 }
                 .ngdialog.ngdialog-theme-default {
                     padding-top: 10px;
+                }
+
+                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body,
+                .dialog-article-cover, .dialog-article-cover .image-credit-wrapper{
+                    margin: 0px!important;
+                    padding: 0px!important;
+                }
+                @media (max-width: 767px){
+                    .dialog-article-cover .image-credit-wrapper {
+                        height: 250px;
+                    }
+                    .ngdialog.ngdialog-theme-default .ngdialog-content {
+                        width: 95%;
+                    }
+                }
+
+                .dialog-article-cover .image-credit-wrapper .cover-image {
+                    border-radius: 4px 4px 0 0;
+                }
+
+                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body h1 {
+                    font-size: 2.6rem;
+                    color: #303336;
+                    letter-spacing: 1px;
+                    margin: 2vh 4vw;
+                }
+
+                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body hr {
+                    width: 20%;
+                    margin-top: 3vh;
+                    margin-bottom: 3vh;
+                    border: 0;
+                    border-bottom: 1px solid #E6E9EC;
+                }
+
+                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .content{
+                    margin: 0 auto;
+                    max-width: 90%;
+                    width: 720px;
+                }
+                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body main{
+                    padding: 1% 0;
+                    position: relative;
+                    box-shadow: 0px -10px 60px rgba(0,0,0,0.25);
+                    height: 100%;
+                }
+                
+                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .zoom{
+                    overflow: hidden;
+                    padding-bottom: 41%;
+                    max-height: 600px;
+                }
+                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .zoom img{
+                    position: relative;
+                    top: 0%;
+                    left: 50%;
+                    max-width: 100%;
+                    width: 100%;
+                    transform: translateX(-50%);
+                }
+                @media (max-width: 667px) {
+                    
+                    .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .content{
+                        margin: 0 auto;
+                        max-width: 90%;
+                        width: 100%;
+                        height: 100%;
+                        text-align: justify;
+                    }
+                    .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .zoom{
+                        overflow: hidden;
+                        padding-bottom: 0%;
+                        max-height: 500px;
+                    }
+                }
+                @media (min-width: 992px){
+
+                    .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .zoom{                        
+                        max-height: 500px;
+                    }
                 }
             </style>
             <div  class="col-lg-12">
@@ -166,7 +247,7 @@
                 </div>
             </div>
             <div class="col-md-12" >  
-                <div class="cards-wrap" angular-grid="posters" ag-grid-width="200"
+                <div class="cards-wrap" angular-grid="posters" ag-grid-width="300"
                     ag-gutter-size="10" ag-id="gallery"  ag-infinite-scroll="updateScrollPage()"
                     ag-infinite-scroll-distance="100" id="articlesBody">
                     <article class="card white-panel" ng-repeat="article in filterPosters = (posters | filter:filterBy)"
@@ -189,17 +270,21 @@
 
             </div>
             <script type="text/ng-template" id="articleDetails">
-                <div class="modal-body">	
-                    <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">
-                        <cbd-article-cover-image cover-image="virtualArticle.coverImage"></cbd-article-cover-image>
-                    </div>
-                    <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">               
-                        <h3>{{virtualArticle.title.en}}</h3>
-                        <hr/>
-                    </div>
-                    <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
-                        <cbd-article query="virtualArticleQuery" ng-if="virtualArticleQuery" on-load="onArticleLoad(article)"  hide-cover-image="true"></cbd-article>
-                    </div>
+                <div class="modal-body">	                   
+
+                    <header class="zoom">
+                        <img src="{{virtualArticle.coverImage.url}}">
+                    </header>
+                    <main role="main">
+                        <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;text-align: center;">               
+                            <h3>{{virtualArticle.title.en}}</h3>
+                            <hr/>
+                        </div>
+                        <div class="content">
+                            <cbd-article query="virtualArticleQuery" ng-if="virtualArticleQuery" on-load="onArticleLoad(article)"  hide-cover-image="true"></cbd-article>
+                        </div>                        
+                    </main>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" aria-label="Close" ng-click="closeDialog()">Close</button>

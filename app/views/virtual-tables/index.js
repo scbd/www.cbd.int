@@ -71,7 +71,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         ngDialog.open({
             template:'articleDetails',
             name     : 'articleDetails',
-            controller : ['$scope', function($scope){
+            controller : ['$scope', '$element', function($scope, $element){
                     $scope.virtualArticleQuery = [{"$match"   : {_id: { $oid: article._id}} }];
                     $scope.closeDialog = function(){
                         ngDialog.close();                                            
@@ -80,6 +80,17 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
                     $scope.onArticleLoad = function(article){
                         $scope.virtualArticle = article;
                         $scope.isLoading = false;
+                    }
+
+                    $($element).scroll(onScroll);
+
+                    $scope.$on('$destroy', ()=>{$($element).off('scroll', onScroll)})
+
+                    function onScroll(){
+                        var scroll = $($element).scrollTop();
+                          $element.find(".zoom img").css({
+                              transform: 'translate3d(-50%, -'+(scroll/100)+'%, 0) scale('+(100 + scroll/5)/100+')',
+                          });
                     }
             }]
         })
@@ -93,15 +104,18 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     function fetchPosterArticles(){
         $scope.loading = true;
         var ag = [];
-        var sortBy = {$sort : { 'meta.createdOn': -1 }};
+        var sortBy = {$sort : {'customProperties.sortOrder':-1 }};
         ag.push({"$match":{ "$and" : [{"adminTags":{"$all":["virtual-table", encodeURIComponent($route.current.params.type), encodeURIComponent($route.current.params.code)]}}]}});
         
         if($scope.isEvent){
             if(!$scope.includePastEvents)
                 ag.push({
-                            $match : { 'customProperties.eventDate' : { $gte : { $date : moment()}} }
+                            $match : { 'customProperties.eventDate' : { $gte : { $date : moment().add(-1, 'day')}} }
                         })
-            sortBy = {$sort : { 'customProperties.eventDate': -1 }};
+            sortBy.$sort['customProperties.eventDate'] = -1;
+        }
+        else{
+            sortBy.$sort['meta.createdOn'] = -1
         }
         
         ag.push(sortBy);
