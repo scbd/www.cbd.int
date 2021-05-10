@@ -174,6 +174,53 @@
                     border: 0;
                     border-bottom: 1px solid #E6E9EC;
                 }
+
+                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .content{
+                    margin: 0 auto;
+                    max-width: 90%;
+                    width: 720px;
+                }
+                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body main{
+                    padding: 1% 0;
+                    position: relative;
+                    box-shadow: 0px -10px 60px rgba(0,0,0,0.25);
+                    height: 100%;
+                }
+                
+                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .zoom{
+                    overflow: hidden;
+                    padding-bottom: 41%;
+                    max-height: 600px;
+                }
+                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .zoom img{
+                    position: relative;
+                    top: 0%;
+                    left: 50%;
+                    max-width: 100%;
+                    width: 100%;
+                    transform: translateX(-50%);
+                }
+                @media (max-width: 667px) {
+                    
+                    .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .content{
+                        margin: 0 auto;
+                        max-width: 90%;
+                        width: 100%;
+                        height: 100%;
+                        text-align: justify;
+                    }
+                    .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .zoom{
+                        overflow: hidden;
+                        padding-bottom: 0%;
+                        max-height: 500px;
+                    }
+                }
+                @media (min-width: 992px){
+
+                    .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .zoom{                        
+                        max-height: 500px;
+                    }
+                }
             </style>
             <div  class="col-lg-12">
                 <h2>
@@ -223,19 +270,21 @@
 
             </div>
             <script type="text/ng-template" id="articleDetails">
-                <div class="modal-body">	
-                    <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12 dialog-article-cover" style="margin-top:5px;">
-                        <a ng-href="{{virtualArticle.coverImage.url}}" target="_blank">                            
-                            <cbd-article-cover-image cover-image="virtualArticle.coverImage"></cbd-article-cover-image>
-                        </a>
-                    </div>
-                    <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;text-align: center;">               
-                        <h3>{{virtualArticle.title.en}}</h3>
-                        <hr/>
-                    </div>
-                    <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
-                        <cbd-article query="virtualArticleQuery" ng-if="virtualArticleQuery" on-load="onArticleLoad(article)"  hide-cover-image="true"></cbd-article>
-                    </div>
+                <div class="modal-body">	                   
+
+                    <header class="zoom">
+                        <img src="{{virtualArticle.coverImage.url}}">
+                    </header>
+                    <main role="main">
+                        <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;text-align: center;">               
+                            <h3>{{virtualArticle.title.en}}</h3>
+                            <hr/>
+                        </div>
+                        <div class="content">
+                            <cbd-article query="virtualArticleQuery" ng-if="virtualArticleQuery" on-load="onArticleLoad(article)"  hide-cover-image="true"></cbd-article>
+                        </div>                        
+                    </main>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" aria-label="Close" ng-click="closeDialog()">Close</button>
