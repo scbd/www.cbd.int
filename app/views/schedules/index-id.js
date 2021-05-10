@@ -1,6 +1,7 @@
 import _                     from 'lodash'
 import moment                from 'moment-timezone'
 import ScheduleAgendaDynamicConnectButton from '~/components/meetings/schedule-agenda-dynamic-connect-button.vue'
+import ReservationLinks from '~/components/meetings/reservation-links.vue'
 import Vue from 'vue'
 import 'angular-vue'
 import '~/filters/moment'
@@ -22,7 +23,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
         const _ctrl = $scope.scheduleCtrl =  this;
 
         Vue.component('ScheduleAgendaDynamicConnectButton', ScheduleAgendaDynamicConnectButton)
-
+        Vue.component('ReservationLinks',ReservationLinks);
         let _streamData;
 
         _ctrl.CALENDAR    = CALENDAR_SETTINGS;
