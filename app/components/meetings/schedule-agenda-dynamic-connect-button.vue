@@ -24,7 +24,7 @@
   Vue.use(VueTippy)
 
   export default {
-    name      : 'ScheduleAgendaDynamicConnectButton ',
+    name      : 'ScheduleAgendaDynamicConnectButton',
     components: { ScheduleConnectIcon, TippyComponent },
     props     : {  
                   reservation: { type: Object, required: true },
@@ -50,8 +50,8 @@
             } 
   }
 
-  function created(){ this.refresher() }
-  function mounted(){ this.refresherInterval = setInterval(this.refresher, 30000) }
+  function created(){ if(!this.isDailySchedule) this.refresher()  }
+  function mounted(){ if(!this.isDailySchedule) this.refresherInterval = setInterval(this.refresher, 30000) }
   function beforeDestroy (){ this.clearRefresher() }
 
 
@@ -59,6 +59,8 @@
   /* vue methods
   /****************/
   function refresher(){
+    if(this.isDailySchedule) return
+
     this.isConnectionTestingInProgress = ResService.isConnectionTestingInProgress(this.reservation, this.schedule)
     this.isInProgress                  = ResService.isInProgress(this.reservation) && !this.isConnectionTestingInProgress
     this.canConnect                    = ResService.canConnect(this.reservation, this.schedule)
@@ -66,8 +68,6 @@
     this.hasConnection                 = ResService.hasConnection(this.reservation)
     this.isConnectionDone              = ResService.isConnectionDone(this.reservation, this.schedule)
     this.progressDuration              = ResService.getNowToStartDuration(this.reservation, this.schedule)
-
-    this.$forceUpdate()
   }
 
   function clearRefresher(){
@@ -84,7 +84,10 @@
     return !this.isDailySchedule && this.hasConnection && !this.isConnectionDone
   }
 
-  function isDailySchedule(){ return !this?.schedule?.all }
+  function isDailySchedule(){
+    const { all } = this.schedule
+    return !all 
+  }
 
   function canConnectMsg(){
     const { days, hours, minutes } = this.canConnectIn
