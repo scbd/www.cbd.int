@@ -448,6 +448,12 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                 var dateOption = {
                     value : date.format('YYYY-MM-DD')
                 }
+         
+                if(isToday(date)) { 
+                  dateOption.text  = `Today: ${date.format('ddd Do')}`
+                  dateOption.today = true
+                }
+
                 dates.push(dateOption)
             }
 
@@ -464,7 +470,28 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             _ctrl.scheduleDates = dates;
         };
 
-        function scheduleDateChanged(date){ 
+        function isToday(testDateTime){
+          const test = ensureMoment(testDateTime).startOf('day');
+          const now  = moment.tz(new Date(), getTimezone()).startOf('day');
+
+          return test.format('X') === now.format('X')
+        }
+
+        function ensureMoment(testDateTime, tz = true){
+          const isMoment = moment.isMoment(testDateTime)
+
+          if(isMoment) return testDateTime
+
+          const { timezone } = getTimezone()
+          const   aMoment    = tz? moment.tz(testDateTime, timezone) : moment(testDateTime)
+
+          if(!aMoment.isValid()) throw new Error(`ensureMoment: ${testDateTime} not a valid datetime`)
+
+          return aMoment
+        }
+
+        function scheduleDateChanged(date, disabled=false){
+            if(disabled) return
             _ctrl.scheduleDate = date;
             var tab = _ctrl.currentTab;     
             _ctrl.types[0].loaded = false;

@@ -4,6 +4,10 @@
         cursor: not-allowed;
         color: white important!;
       }
+      .today {
+        font-weight: bold !important;
+        background: #f5c0c0 !important;
+      }
     </style>
     <time-zone-feature-alert ng-if="agendaCtrl.all && agendaCtrl.loaded && agendaCtrl.getTimezones().length" ng-cloak/>
     <!-- Nav tabs -->
@@ -50,9 +54,9 @@
                         <b ng-if="agendaCtrl.scheduleDate!=''" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':'MMM Do'"></b>
                     </a>
             		<div class="dropdown-menu dropdown-menu-right">
-            			<a class="text-nowrap dropdown-item" href="#" ng-repeat="item in agendaCtrl.scheduleDates" ng-click="agendaCtrl.scheduleDateChanged(item.value)">
-                            <span class="hidden-xs hidden-sm"   ng-bind="item.text || (item.value|moment:'format':'DD MMM YYYY (ddd)')" ></span>
-                            <span class="visible-xs visible-sm" ng-bind="item.text || (item.value|moment:'format':'ddd Do')" ></span>
+            			<a ng-class="{ 'disabled': item.today}" class="text-nowrap dropdown-item" href="#" ng-repeat="item in agendaCtrl.scheduleDates" ng-click="agendaCtrl.scheduleDateChanged(item.value, item.today)">
+                            <span ng-class="{ 'today': item.today}" class="hidden-xs hidden-sm"   ng-bind="item.text || (item.value|moment:'format':'DD MMM YYYY (ddd)')" ></span>
+                            <span ng-class="{ 'today': item.today}" class="visible-xs visible-sm" ng-bind="item.text || (item.value|moment:'format':'ddd Do')" ></span>
                         </a>
             		</div>
             	</li>
