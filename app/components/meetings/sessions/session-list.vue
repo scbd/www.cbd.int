@@ -61,7 +61,7 @@ function data(){
 }
 
 function getUrl(id) {
-  return `/meetings/${encodeURIComponent(this.route.params.meeting)}/sessions/${encodeURIComponent(id)}`
+  return `/meetings/${encodeURIComponent(this.route.params.meeting)}/sessions/${encodeURIComponent(id)}/manage`
 }
 
 async function created(){
