@@ -292,7 +292,9 @@
             </script>
 
             <script type="text/ng-template" id="filterButtons">
-                <cbd-add-new-article ng-vue="vueOptions" v-if="filterAdminTags" :admin-tags="filterAdminTags" button-text="Add Publication/Events" class="pull-right" css-class="btn btn-default"></cbd-add-new-article> 
+                <cbd-add-new-article ng-vue="vueOptions" v-if="filterAdminTags" :admin-tags="filterAdminTags" class="pull-right btn btn-default" target="_self">
+                    Add Publication/Events
+                </cbd-add-new-article> 
                 <div class="btn-group pull-right" ng-if="isPublication">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-filter"></i> {{publicationType[filterByType]}}

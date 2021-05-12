@@ -1,6 +1,6 @@
 <template>
      <a :href="newArticleUrl" :target="target" :class="cssClass">
-        {{buttonText||'Add article'}}
+        <slot>Add Article</slot>
     </a>
 </template>
 
@@ -11,9 +11,6 @@
             tags 		: { type: Array  , required: false, default:[]           }, // [] of tag id's
             customTags 	: { type: Array  , required: false, default:[]           }, // [] of customTag id's
             adminTags 	: { type: Array  , required: false, default:[]           }, // [] of adminTag text
-            target		: { type: String , required: false, default:'_self'      },
-            buttonText	: { type: String , required: false, default:'Add Article'},
-            cssClass	: { type: String , required: false, default:''           },
         },
         computed: {
             newArticleUrl : function(){
@@ -24,9 +21,9 @@
 				if(domain=='localhost' || domain == 'cbddev.xyz')
             		baseUrl = 'https://oasis.cbddev.xyz';
 
-				const queryString = 'tags='		+ (this.tags||[]).join(',') +
-									 '&customTags='	+ (this.customTags||[]).join(',') +
-									 '&adminTags='	+ (this.adminTags||[]).join(',');
+				const queryString = 'tags='		+ (this.tags||[]).map(encodeURIComponent).join(',') +
+									 '&customTags='	+ (this.customTags||[]).map(encodeURIComponent).join(',') +
+									 '&adminTags='	+ (this.adminTags||[]).map(encodeURIComponent).join(',');
 
                 return `${baseUrl}/articles/new?${queryString}`
             }
