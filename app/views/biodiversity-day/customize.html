@@ -178,20 +178,10 @@
             </h2>
             <hr/>
         </div>
-        <div class="col-lg-12">
-            <span id="logo-description">
-                You can show support for biodiversity by customizing the Biodiversity Day logo with your name (country, city, organization, business, individual, etc.). To make a bigger impact, share your unique logo on social media, videos, virtual backgrounds, email signature, and more!
-            </span>
-            <br/><br/>
-            Hint: if your language is not in the list or if the name is too long see the <a href="http://www.cbd.int/biodiversity-day/logo/guidelines">logo guidelines</a> for solutions.<br/><br/>
+        <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
+            <cbd-article query="articleQuery" ng-if="articleQuery" hide-cover-image="true"></cbd-article>
         </div>
-        
-        <div  class="col-lg-12" ng-if="showSuccessMessage">
-            <div class="alert alert-success" role="alert">
-                Your custom logo was uploaded to CBD database, if approved the logo will appear on the published logos 
-                <a ng-href="{{basePath}}/logo/collage">link</a>.
-              </div>
-        </div>
+       
         <div  class="col-lg-7">
             <div id="newImage"></div>
         </div>    
