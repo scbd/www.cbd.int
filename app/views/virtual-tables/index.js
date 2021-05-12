@@ -5,8 +5,10 @@ import '~/services/article-service'
 import 'ngInfiniteScroll'
 import '~/directives/articles/cbd-article';
 import 'ngDialog';
-import articles from '../articles';
+import '../articles';
 import moment from 'moment';
+import cbdAddNewArticle from '~/directives/articles/cbd-add-new-article.vue'
+import 'angular-vue';
       
 export { default as template  } from './index.html';
 
@@ -50,7 +52,9 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     $scope.isPublication = $route.current.params.type == 'publication';
 
     $scope.isAdmin = (user.roles||[]).find(r=>['administrator', 'oasisArticleEditor'].includes(r))!=undefined;
-
+    $scope.vueOptions = {
+        components : {cbdAddNewArticle}
+    }
     $scope.setFilterByField = function(key, type){
 
         $scope[type] = key;
@@ -102,10 +106,11 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     }
 
     function fetchPosterArticles(){
+        $scope.filterAdminTags = ["virtual-table", encodeURIComponent($route.current.params.type), encodeURIComponent($route.current.params.code)]
         $scope.loading = true;
         var ag = [];
         var sortBy = {$sort : {'customProperties.sortOrder':-1 }};
-        ag.push({"$match":{ "$and" : [{"adminTags":{"$all":["virtual-table", encodeURIComponent($route.current.params.type), encodeURIComponent($route.current.params.code)]}}]}});
+        ag.push({"$match":{ "$and" : [{"adminTags":{"$all":$scope.filterAdminTags}}]}});
         
         if($scope.isEvent){
             if(!$scope.includePastEvents)
