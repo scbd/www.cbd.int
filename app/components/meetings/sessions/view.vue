@@ -26,7 +26,7 @@
         </div>
       </template>
 
-      <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention}" :index="index+1" v-bind:key="intervention._id">
+      <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention}" :index="index+1" v-bind:key="intervention._id" :public-view="true">
         <template v-slot:controls>
           <div class="video">
             <VideoLink :videos="videos" :start-at="intervention.datetime" :title="`Start at intervention of ${intervention.title}`"/>
