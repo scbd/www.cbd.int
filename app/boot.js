@@ -59,7 +59,8 @@ export default function bootApp(window, require, defineX) {
           'gmapsapi'          : 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places',
           'bigText'           : `${cdnUrl}npm/bigtext@1.0.1/dist/bigtext`,
           'html2canvas'       :  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min',
-          'angular-grid'      : `${cdnUrl}npm/angulargrid@0.6.5/angulargrid.min`
+          'angular-grid'      : `${cdnUrl}npm/angulargrid@0.6.5/angulargrid.min`,
+          'vue-tippy'         : `${cdnUrl}npm/vue-tippy@4.10.0/dist/vue-tippy.umd`
       },
       shim: {
           'ngDialog'             : { deps : ['angular', `css!${cdnUrl}combine/npm/ng-dialog@0.6.1/css/ngDialog.min.css,npm/ng-dialog@0.6.1/css/ngDialog-theme-default.min.css`] },
@@ -77,7 +78,6 @@ export default function bootApp(window, require, defineX) {
           'PageFooter'           : { deps : ['ngVue'] },
           'PageHeader'           : { deps : ['ngVue'] },
           'vue-multiselect'      : { deps : [`css!${cdnUrl}npm/vue-multiselect@2.1.6/dist/vue-multiselect.min.css`] },
-          //
           'ammap/themes/light'   : { deps : ['ammap'] },
           'amchart/themes/light' : { deps : ['amchart'] },
           'amchart/pie'          : { deps : ['amchart'] },
