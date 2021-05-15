@@ -1,5 +1,5 @@
 <template>
-     <a :href="newArticleUrl" :target="target" :class="cssClass">
+     <a :href="newArticleUrl" :target="target">
         <slot>Add Article</slot>
     </a>
 </template>
