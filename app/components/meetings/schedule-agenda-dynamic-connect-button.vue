@@ -9,7 +9,7 @@
       <div v-if="isInProgress"><small> (Meeting In Progress) </small></div>
       <div v-if="isInProgress && !isBadge" class="progress-text"><small> {{progressText}} </small></div>
 
-      <div v-if="isConnectionTestingInProgress"><small> (Connection Testing In Progress) </small></div>
+      <div v-if="isConnectionTestingInProgress"><small> Meeting will start in </small></div>
       <div v-if="isConnectionTestingInProgress && !isBadge" class="progress-text"><small> {{testProgressText}} </small></div>
     </a>
   </div>
@@ -64,7 +64,7 @@
     this.isConnectionTestingInProgress = ResService.isConnectionTestingInProgress(this.reservation, this.schedule)
     this.isInProgress                  = ResService.isInProgress(this.reservation) && !this.isConnectionTestingInProgress
     this.canConnect                    = ResService.canConnect(this.reservation, this.schedule)
-    this.canConnectIn                  = ResService.getNowToConnectInitDuration(this.reservation, this.schedule)
+    this.canConnectIn                  = ResService.getNowToStartDuration(this.reservation, this.schedule)
     this.hasConnection                 = ResService.hasConnection(this.reservation)
     this.isConnectionDone              = ResService.isConnectionDone(this.reservation, this.schedule)
     this.progressDuration              = ResService.getNowToStartDuration(this.reservation, this.schedule)
@@ -115,7 +115,7 @@
   }
 
   function progressHoursMinutesText({ hours, minutes }){
-    return `${padDigit(hours)}:${padDigit(minutes)}`
+    return `${hours}:${padDigit(minutes)}`
   }
 
   function padDigit(digit){

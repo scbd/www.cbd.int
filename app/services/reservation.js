@@ -81,9 +81,9 @@ function getDurationPlainObject(dateTimeDifference){ // moment difference
 
   const dateTimeDifferenceDuration = moment.duration(dateTimeDifference)
 
-  const days    = dateTimeDifferenceDuration.days()
-  const hours   = dateTimeDifferenceDuration.hours()
-  const minutes = dateTimeDifferenceDuration.minutes()
+  const days    = Math.abs(dateTimeDifferenceDuration.days());
+  const hours   = Math.abs(dateTimeDifferenceDuration.hours());
+  const minutes = Math.abs(dateTimeDifferenceDuration.minutes());
 
   return { days, hours, minutes }
 }
