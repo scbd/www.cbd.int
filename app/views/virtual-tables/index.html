@@ -229,7 +229,7 @@
                 </h2>
                 <hr/>
             </div>
-            <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
+            <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">    
                 <cbd-article query="articleQuery" ng-if="articleQuery" hide-cover-image="true"></cbd-article>
             </div>
             <div class="col-md-12">
@@ -292,6 +292,9 @@
             </script>
 
             <script type="text/ng-template" id="filterButtons">
+                <cbd-add-new-article ng-vue="vueOptions" v-if="filterAdminTags" :admin-tags="filterAdminTags" class="pull-right btn btn-default" target="_self">
+                    Add Publication/Events
+                </cbd-add-new-article> 
                 <div class="btn-group pull-right" ng-if="isPublication">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-filter"></i> {{publicationType[filterByType]}}

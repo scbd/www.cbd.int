@@ -5,6 +5,7 @@ import 'html2canvas';
 import _ from 'lodash';
 import ngDialog from 'ngDialog';
 import languageTranslation from './other-langugages.json';
+import '~/directives/articles/cbd-article';
       
 export { default as template  } from './customize.html';
 
@@ -311,6 +312,21 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             })
         }
 
+        function buildQuery(){
+            var ag   = [];
+            var tags = ['biodiversity-day', 'logo', 'customize', 'introduction'];
+            
+            
+            var match = { "adminTags" : { $all: tags }};
+
+            ag.push({"$match"   : match });
+            ag.push({"$project" : { title:1, content:1}});
+            ag.push({"$sort"    : { "meta.updatedOn":-1}});
+            ag.push({"$limit"   : 1 });
+
+            $scope.articleQuery = ag;
+        }
+
         angular.element($window).on('resize', onResize);
         $scope.$on('$destroy', function(){
             angular.element($window).off('resize', onResize);
@@ -328,5 +344,5 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
 
 
         loadLanguages();
-
+        buildQuery();
 }]
