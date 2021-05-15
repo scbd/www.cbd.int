@@ -14,6 +14,7 @@
     <Session v-if="session">
       <InterventionRow v-for="(intervention, index) in interventions" :index="index+1" v-bind="{intervention}" v-bind:key="intervention._id">
         <template slot="controls">
+          <TagSelector :selectedTags="intervention.tags" @tag="toggleTag(intervention, $event)"/>
           <div class="btn-group" role="group">
             <button class="btn btn-sm btn-outline-dark" @click="editId(intervention._id, 'edit')"><i class="fa fa-edit"></i></button>
             <button class="btn btn-sm btn-outline-danger" @click="askDelete(intervention)"><i class="fa fa-trash"></i></button>
@@ -39,6 +40,7 @@
       <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" v-bind:key="intervention._id" @dblclick="edit(intervention)" >
         <template slot="controls">
           <div class="text-nowrap">
+            <TagSelector :selectedTags="intervention.tags" @tag="toggleTag(intervention, $event)"/>
             <button class="btn btn-sm btn-outline-success" @click="editId(intervention._id, 'publish')"><i class="fa fa-microphone"></i></button>
 
             <div class="btn-group" role="group">
@@ -71,6 +73,7 @@ import   EditInterventionModal              from './edit-intervention-modal.vue'
 import   InterventionRow                    from './intervention-row.vue'
 import   Session                            from './session.vue'
 import   EditRow                            from './edit-row.vue'
+import   TagSelector                        from './tag-selector.vue'
 
 export default {
   name      : 'SessionEdit',
@@ -78,7 +81,7 @@ export default {
                 route      : { type: Object,   required: false },
                 tokenReader: { type: Function, required: false }
               },
-  components: { Session, EditRow, InterventionRow, EditInterventionModal },
+  components: { Session, EditRow, InterventionRow, EditInterventionModal, TagSelector },
   computed  : { 
                 agendaItems, 
                 sessionId() { return this.session._id } 
@@ -92,6 +95,7 @@ export default {
                 editClose,
                 askDelete,
                 replace,
+                toggleTag,
                 queryPendingInterventions,
                 onSearch : debounce(onSearch, 400)
               },
@@ -181,8 +185,6 @@ async function askDelete(intervention){
   this.replace(_id, null);
 }
 
-
-
 function replace(_id, intervention) {
   let  i = this.interventions       .findIndex(o=>o._id === _id );
   let pi = this.pendingInterventions.findIndex(o=>o._id === _id );
@@ -202,6 +204,17 @@ function replace(_id, intervention) {
   }
 
   this.interventions = sortBy(this.interventions, o=>o.datetime);
+}
+
+async function toggleTag(intervention, tag) {
+
+  let tags = intervention.tags || [];
+
+  tags = !tags.includes(tag)
+       ? await this.api.addInterventionTag   (intervention._id, tag)
+       : await this.api.deleteInterventionTag(intervention._id, tag);
+
+  intervention.tags = tags;
 }
 
 function onSearch() {

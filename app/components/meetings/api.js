@@ -121,6 +121,16 @@ export default class Api
     return this.http.delete(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}`).then(res => res.data).catch(tryCastToApiError);
   }  
 
+  addInterventionTag(interventionId, tag) {
+
+    return this.http.put(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}/tags/${encodeURIComponent(tag)}`).then(res => res.data).catch(tryCastToApiError);
+  }  
+
+  deleteInterventionTag(interventionId, tag) {
+
+    return this.http.delete(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}/tags/${encodeURIComponent(tag)}`).then(res => res.data).catch(tryCastToApiError);
+  }  
+
 
   async getInterventionOrganizations (params = { t:'s' }) {
 
