@@ -5,7 +5,11 @@
     </a>
 
     <a v-if="canConnect" :href="reservation.videoUrl" :class="{ 'badge': isBadge , 'badge-danger': isBadge, 'btn': !isBadge, 'btn-danger': !isBadge }" class="btn" target="_blank" >
-      <div> Connect  <ScheduleConnectIcon :size="iconSize"/> </div>
+      <div> 
+        Connect
+        <span v-if="isConnectionTestingInProgress">now</span>
+        <ScheduleConnectIcon :size="iconSize"/> 
+      </div>
       <div v-if="isInProgress"><small> (Meeting In Progress) </small></div>
       <div v-if="isInProgress && !isBadge" class="progress-text"><small> {{progressText}} </small></div>
 
