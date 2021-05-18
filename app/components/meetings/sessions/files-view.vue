@@ -30,28 +30,6 @@
           <i v-if="!isPublic" class="fa fa-eye-slash" :class="{ 'text-success' : allowPublic, 'text-muted': !allowPublic}"/>
         </div>
     </div>
-
-
-    <div style="white-space: normal; text-align: left" class="modal fade bd-example-modal-lg" ref="preview" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-
-          <div class="modal-header">
-            <h5 class="modal-title">Preview</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p class="preview" :lang="previewLanguage">{{cleanUpText(preview)}}</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn" data-dismiss="modal">Close</button>
-          </div>
-
-        </div>
-      </div>
-    </div>    
   </div>
 </template>
 
@@ -59,6 +37,7 @@
 <script>
 
 import languages from '../../languages.js';
+import { showPreview } from './text-preview-dialog.vue'; 
 
 const   MIMES = {
   'application/pdf':                                                            { priority: 10,  btn: 'btn-danger' , icon: 'fa-file-pdf-o'        , color: 'red'    },
@@ -78,21 +57,13 @@ export default {
   props   : {
               files: { type: Object, required: false }
             },
-  methods : { getMimeConfig, showPreview, cleanUpText },
+  methods : { getMimeConfig, showPreview },
   filters : { langTextFilter },
   data
 }
 
 function data(){ return { show: false, preview:null, previewLanguage: null } } 
 
-function showPreview(text, language) {
-
-  this.preview = text;
-  this.previewLanguage = language;
-
-  if(this.preview)
-    $(this.$refs.preview).modal('show');
-}
 
 function langTextFilter(langCode){ 
   return languages[langCode] || 'Not Specified' 
@@ -100,10 +71,6 @@ function langTextFilter(langCode){
 
 function getMimeConfig(mimeType){
   return MIMES[ mimeType ] || MIMES[ 'default' ]
-}
-
-function cleanUpText(text) {
-  return (text||'').replace(/\n+/g, '\n').trim();
 }
 
 </script>
@@ -130,19 +97,4 @@ function cleanUpText(text) {
   padding-left: 25px;
 } 
 
-.preview {
-  white-space: pre-wrap;
-  font-size:15pt;
-  line-height:25pt;
-  font-family:Arial;
-}
-
-p[lang="ar"] {
-  direction:rtl;
-  text-align: right;
-}
-
-.modal-xl {
-  max-width: 80%;
-}
 </style>

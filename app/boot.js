@@ -60,6 +60,7 @@ export default function bootApp(window, require, defineX) {
           'bigText'           : `${cdnUrl}npm/bigtext@1.0.1/dist/bigtext`,
           'html2canvas'       :  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min',
           'angular-grid'      : `${cdnUrl}npm/angulargrid@0.6.5/angulargrid.min`,
+          'mark'              : `${cdnUrl}npm/mark.js@8.11.1/dist/mark.min`,
           'vue-tippy'         : `${cdnUrl}npm/vue-tippy@4.10.0/dist/vue-tippy.umd`
       },
       shim: {
