@@ -20,7 +20,7 @@
 
 <script>
   import Vue                          from 'vue'
-  import VueTippy, { TippyComponent } from 'vue-tippy';
+  import VueTippy                     from 'vue-tippy'
   import * as ResService              from '~/services/reservation'
   import ScheduleConnectIcon          from '~/components/meetings/schedule-connect-icon.vue'
 
@@ -28,7 +28,7 @@
 
   export default {
     name      : 'ScheduleAgendaDynamicConnectButton',
-    components: { ScheduleConnectIcon, TippyComponent },
+    components: { ScheduleConnectIcon },
     props     : {  
                   reservation: { type: Object, required: true },
                   schedule   : { type: Object, required: true },
