@@ -11,7 +11,6 @@
         <ScheduleConnectIcon :size="iconSize"/> 
       </div>
       <div v-if="isInProgress"><small> (Meeting In Progress) </small></div>
-      <div v-if="isInProgress && !isBadge" class="progress-text"><small> {{progressText}} </small></div>
 
       <div v-if="isConnectionTestingInProgress"><small> Meeting will start in </small></div>
       <div v-if="isConnectionTestingInProgress && !isBadge" class="progress-text"><small> {{willStartTimeText}} </small></div>
@@ -48,8 +47,11 @@
               refresherInterval            : undefined,
               canConnect                   : false,
               canConnectIn                 : undefined,
-              progressDuration             : undefined,
-              willStartDuration            : undefined
+              isInProgress                 : false,
+              isConnectionTestingInProgress: false,
+              isConnectionDone             : false,
+              hasConnection                : false,
+              willStartDuration            : undefined,
             } 
   }
 
@@ -64,6 +66,7 @@
   function refresher(){
     if(this.isDailySchedule) return
 
+    this.isInProgress                  = ResService.isInProgress(this.reservation) && !this.isConnectionTestingInProgress
     this.isConnectionTestingInProgress = ResService.isConnectionTestingInProgress(this.reservation, this.schedule)
 
     this.canConnect                    = ResService.canConnect(this.reservation, this.schedule)
