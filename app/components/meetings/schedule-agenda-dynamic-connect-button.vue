@@ -12,8 +12,11 @@
       </div>
       <div v-if="isInProgress"><small> (Meeting In Progress) </small></div>
 
-      <div v-if="isConnectionTestingInProgress"><small> Meeting will start in </small></div>
-      <div v-if="isConnectionTestingInProgress && !isBadge" class="progress-text"><small> {{willStartTimeText}} </small></div>
+      <div v-if="isConnectionTestingInProgress">
+        <small> Meeting will start in </small>
+        <small v-if="isBadge"><br> {{willStartTimeText}} </small>
+      </div>
+      <div v-if="!isBadge && isConnectionTestingInProgress" class="progress-text"><small> {{willStartTimeText}} </small></div>
     </a>
   </div>
 </template>
