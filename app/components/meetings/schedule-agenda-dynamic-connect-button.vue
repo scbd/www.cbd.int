@@ -11,17 +11,19 @@
         <ScheduleConnectIcon :size="iconSize"/> 
       </div>
       <div v-if="isInProgress"><small> (Meeting In Progress) </small></div>
-      <div v-if="isInProgress && !isBadge" class="progress-text"><small> {{progressText}} </small></div>
 
-      <div v-if="isConnectionTestingInProgress"><small> Meeting will start in </small></div>
-      <div v-if="isConnectionTestingInProgress && !isBadge" class="progress-text"><small> {{testProgressText}} </small></div>
+      <div v-if="isConnectionTestingInProgress">
+        <small> Meeting will start in </small>
+        <small v-if="isBadge"><br> {{willStartTimeText}} </small>
+      </div>
+      <div v-if="!isBadge && isConnectionTestingInProgress" class="progress-text"><small> {{willStartTimeText}} </small></div>
     </a>
   </div>
 </template>
 
 <script>
   import Vue                          from 'vue'
-  import VueTippy, { TippyComponent } from 'vue-tippy';
+  import VueTippy                     from 'vue-tippy'
   import * as ResService              from '~/services/reservation'
   import ScheduleConnectIcon          from '~/components/meetings/schedule-connect-icon.vue'
 
@@ -29,13 +31,13 @@
 
   export default {
     name      : 'ScheduleAgendaDynamicConnectButton',
-    components: { ScheduleConnectIcon, TippyComponent },
+    components: { ScheduleConnectIcon },
     props     : {  
                   reservation: { type: Object, required: true },
                   schedule   : { type: Object, required: true },
                   isBadge    : { type: Boolean, required: false, default: false },
                 },
-    computed  : { isDailySchedule, canConnectMsg, isVisible, testProgressText, progressText, iconSize },
+    computed  : { isDailySchedule, canConnectMsg, isVisible, willStartTimeText, iconSize },
     methods   : { refresher, clearRefresher },
     data, created, mounted, beforeDestroy
   }
@@ -46,11 +48,13 @@
   function data () { 
     return { 
               refresherInterval            : undefined,
-              isConnectionTestingInProgress: false,
-              isInProgress                 : false,
               canConnect                   : false,
               canConnectIn                 : undefined,
-              progressDuration             : undefined
+              isInProgress                 : false,
+              isConnectionTestingInProgress: false,
+              isConnectionDone             : false,
+              hasConnection                : false,
+              willStartDuration            : undefined,
             } 
   }
 
@@ -65,13 +69,14 @@
   function refresher(){
     if(this.isDailySchedule) return
 
-    this.isConnectionTestingInProgress = ResService.isConnectionTestingInProgress(this.reservation, this.schedule)
     this.isInProgress                  = ResService.isInProgress(this.reservation) && !this.isConnectionTestingInProgress
+    this.isConnectionTestingInProgress = ResService.isConnectionTestingInProgress(this.reservation, this.schedule)
+
     this.canConnect                    = ResService.canConnect(this.reservation, this.schedule)
-    this.canConnectIn                  = ResService.getNowToStartDuration(this.reservation, this.schedule)
+    this.canConnectIn                  = ResService.getNowToConnectInitDuration (this.reservation, this.schedule)
     this.hasConnection                 = ResService.hasConnection(this.reservation)
     this.isConnectionDone              = ResService.isConnectionDone(this.reservation, this.schedule)
-    this.progressDuration              = ResService.getNowToStartDuration(this.reservation, this.schedule)
+    this.willStartDuration             = ResService.getNowToStartDuration(this.reservation, this.schedule)
   }
 
   function clearRefresher(){
@@ -110,15 +115,10 @@
     return`<h6 class="connect-tip text-nowrap"> This meeting will be accessible in: </h6> <h4 class="connect-tip text-nowrap"> ${timeText} </h4>`
   }
 
-  function testProgressText(){
-    return progressHoursMinutesText(this.canConnectIn)
-  }
 
-  function progressText(){
-    return progressHoursMinutesText(this.progressDuration)
-  }
+  function willStartTimeText(){
+    const { hours, minutes } = this.willStartDuration
 
-  function progressHoursMinutesText({ hours, minutes }){
     return `${hours}:${padDigit(minutes)}`
   }
 
