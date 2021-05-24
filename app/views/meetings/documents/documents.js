@@ -281,9 +281,16 @@ export { default as template } from './documents.html';
         //==============================
         function loadSessions() {
 
-            $http.get('/api/v2021/meeting-sessions', { params: { c: 1, q : { meetingIds: { $in :[ { $oid:_ctrl.meeting._id }] } } } }).then(async function(res){
+            const f = { count: 1 };
+            const q = { 
+                meetingIds: { $in :[ { $oid: _ctrl.meeting._id }] }, 
+                count:      { $gt: 0 } 
+            };
 
-                var count = (res.data[0]||{}).count;
+            $http.get('/api/v2021/meeting-sessions', { params: { q, f } }).then(async function(res){
+
+                const sessions = res.data;
+                const count    = sessions.reduce((a,s)=>a+s.count, 0);
 
                 if(!count) return;
 
