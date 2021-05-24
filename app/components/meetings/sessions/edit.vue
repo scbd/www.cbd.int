@@ -1,6 +1,6 @@
 
 <template >
-  <div>
+  <div class="position-relative">
     <h1>Session Preparation
       <small class="text-muted">
         <span v-for="{normalizedSymbol} in meetings" :key="normalizedSymbol">
@@ -9,7 +9,9 @@
       </small>
     </h1>
 
-    <h3> {{ (session || {}).date  | dateTimeFilter('T  - cccc, d MMMM yyyy') }} </h3>
+    <h3 :class="{ 'bg-warning': isInPast(session), 'text-dark': isInPast(session), 'p-1': isInPast(session) || isInFuture(session), 'bg-danger': isInFuture(session), 'text-white': isInFuture(session)}" class="position-sticky sticky-date"> 
+        {{ (session || {}).date  | dateTimeFilter('T  - cccc, d MMMM yyyy') }}
+    </h3>
 
     <Session v-if="session">
       <InterventionRow v-for="(intervention, index) in interventions" :index="index+1" v-bind="{intervention}" v-bind:key="intervention._id">
@@ -74,6 +76,7 @@ import   InterventionRow                    from './intervention-row.vue'
 import   Session                            from './session.vue'
 import   EditRow                            from './edit-row.vue'
 import   TagSelector                        from './tag-selector.vue'
+import   moment                             from 'moment'
 
 export default {
   name      : 'SessionEdit',
@@ -97,7 +100,9 @@ export default {
                 replace,
                 toggleTag,
                 queryPendingInterventions,
-                onSearch : debounce(onSearch, 400)
+                onSearch : debounce(onSearch, 400),
+                isInPast, 
+                isInFuture
               },
   data, created, mounted
 }
@@ -248,4 +253,25 @@ function agendaItems() {
     }))
   }));
 }
+function isInPast({ date } ={}){
+  if(!date) return false
+
+  return moment().isAfter(moment(date).add(8, 'hours'))
+}
+
+function isInFuture({ date } ={}){
+  if(!date) return false
+
+  const isWithin8HoursToStart = moment().isAfter(moment(date).subtract(8, 'hours'))
+  const isWithin8HoursToEnd   = moment().isBefore(moment(date).add(8, 'hours'))
+
+  return moment().isBefore(moment(date).subtract(8, 'hours'))
+}
+
 </script>
+<style scoped>
+  .sticky-date { top: 155px; background-color: white; z-index:55; }
+  @media screen and (max-width: 768px) {
+    .sticky-date { top: 30px; }
+  }
+</style>
