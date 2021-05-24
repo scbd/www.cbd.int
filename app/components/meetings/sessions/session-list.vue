@@ -19,13 +19,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="({ _id, date, title }, index) in sessions" :key="_id">
-          <th scope="row">{{index+1}}</th>
+        <tr v-for="({ _id, date, title, meetings }, index) in sessions" :key="_id" :class="{ 'table-success': isInProgress(date)}">
+          <th scope="row">{{ sessionNumber(index) }}</th>
           <td>{{ date | dateTimeFilter('cccc, d MMMM yyyy - T') }}</td>
           <td>{{title}}</td>
           <td>
             <div class="btn-group" role="group">
-              <a class="btn btn-sm btn-outline-dark" :href="getUrl(_id)"><i class="fa fa-list"></i></a>
+              <a class="btn btn-sm btn-outline-dark" :href="getUrl({ _id, meetings })"><i class="fa fa-list"></i></a>
             </div>
             
           </td>
@@ -38,8 +38,9 @@
 
 <script>
 
-import   Api, {mapObjectId}from '../api.js'
-import { dateTimeFilter  } from '../filters.js'
+import   Api           , { mapObjectId }from '../api.js'
+import { dateTimeFilter }               from '../filters.js'
+import   moment                         from 'moment'
 
 export default {
   name       : 'SessionsList',
@@ -47,33 +48,73 @@ export default {
                   route:       { type: Object, required: false },
                   tokenReader: { type: Function, required: false }
                 },
+  methods    : { getUrl, meetingQuery,conferenceQuery, sessionNumber, isInProgress, now },
+  computed   : { now },
   filters    : { dateTimeFilter },
-  created, 
-  data,
-  methods: { getUrl} 
+  created, data
 }
 
 function data(){
   return { 
     sessions: [],
-    meetings: []
+    meetings: [], 
+    api: undefined
   }
 }
 
-function getUrl(id) {
-  return `/meetings/${encodeURIComponent(this.route.params.meeting)}/sessions/${encodeURIComponent(id)}`
+function getUrl({ _id, meetings }) {
+  const { symbol } = meetings[0]
+
+  return `/meetings/${encodeURIComponent(symbol)}/sessions/${encodeURIComponent(_id)}`
 }
 
 async function created(){
   this.api = new Api(this.tokenReader);
 
-  let q = { normalizedSymbol: this.route.params.meeting.toUpperCase() };
-  const meetings = await this.api.queryMeetings({q, f: { _id:1, normalizedSymbol:1 }});
+  const isMeeting = await this.meetingQuery();
+  const q         = isMeeting? isMeeting: await this.conferenceQuery();
 
-  q = { meetingIds : { $in: meetings.map(m=>mapObjectId(m._id)) } };
-  const sessions = await this.api.querySessions({q, s: { date:-1 }});
+  this.sessions  = await this.api.querySessions({ q, s: { date:-1 } });
+}
 
-  this.meetings = meetings;
-  this.sessions = sessions;
+async function meetingQuery(){
+  const normalizedSymbol = this.route?.params?.meeting? this.route?.params?.meeting.toUpperCase() : ''
+
+  if(!normalizedSymbol) return ''
+
+  const q        = { normalizedSymbol };
+
+  this.meetings = await this.api.queryMeetings({q, f: { _id:1, normalizedSymbol:1 }});
+
+  return { meetingIds : { $in: this.meetings.map(m=>mapObjectId(m._id)) }, date: { $lte: { $date: this.now.add(24, 'hours') } } };
+}
+
+async function conferenceQuery(){
+  const { code } = this.route.params
+
+  if(!code) throw new Error('No meeting id or conference code route param for session list')
+
+  const q                              = { 'code': code };
+  const { MajorEventIDs: meetingIds }  = await this.api.getConference(code);
+
+  return { 'conference.symbol': code, meetingIds : { $in: meetingIds.map(m=>mapObjectId(m)) }, date: { $lte: { $date: this.now.add(24, 'hours') } } };
+}
+
+function sessionNumber(index){
+  return this.sessions.length - index
+}
+
+function isInProgress(date){
+
+  const isWithin8HoursToStart = moment().isAfter(moment(date).subtract(8, 'hours'))
+  const isWithin8HoursToEnd   = moment().isBefore(moment(date).add(8, 'hours'))
+
+  return isWithin8HoursToStart && isWithin8HoursToEnd
+}
+
+function now(){
+  const { datetime } = this.route.params
+
+  return datetime? moment(datetime) : moment()
 }
 </script>
