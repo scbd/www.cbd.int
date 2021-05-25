@@ -1,5 +1,6 @@
 import app from '~/app';
 import { securize, currentUser, mapView } from './mixin';
+import * as vueViewWrapper     from '~/views/vue-view-wrapper'
 import * as angularViewWrapper from '~/views/angular-view-wrapper'
 
 // Static views
@@ -11,6 +12,7 @@ import * as paragraphView    from '~/views/decisions/paragraph'
 
 // On-demand views
 const editDecisionView  = { component: ()=>import('~/views/decisions/edit') }
+const ckeditorSample    = { component: ()=>import('~/views/decisions/ckeditor-sample.vue') }
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
@@ -24,6 +26,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:body/:session',                      { ...mapView(decisionListView),       resolve: { user : currentUser() } } )
     .when('/:body/:session/:decision',            { ...mapView(decisionView),           resolve: { user : currentUser() } } )
     .when('/:body/:session/:decision/edit',       { ...mapView(angularViewWrapper),     resolve: { ...editDecisionView, user : securize(["Administrator","DecisionTrackingTool", "ScbdStaff"]) } } )
+    .when('/:body/:session/:decision/ckeditor',   { ...mapView(vueViewWrapper),         resolve: { ...ckeditorSample,   user : securize(["Administrator","DecisionTrackingTool", "ScbdStaff"]) } } )
     .when('/:body/:session/:decision/:paragraph', { ...mapView(paragraphView),          resolve: { user : currentUser() } })
     .otherwise({redirectTo: '/404'});
 }]);
