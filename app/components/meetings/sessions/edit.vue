@@ -262,9 +262,6 @@ function isInPast({ date } ={}){
 function isInFuture({ date } ={}){
   if(!date) return false
 
-  const isWithin8HoursToStart = moment().isAfter(moment(date).subtract(8, 'hours'))
-  const isWithin8HoursToEnd   = moment().isBefore(moment(date).add(8, 'hours'))
-
   return moment().isBefore(moment(date).subtract(8, 'hours'))
 }
 
