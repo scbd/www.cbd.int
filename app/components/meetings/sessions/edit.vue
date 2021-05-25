@@ -9,7 +9,7 @@
       </small>
     </h1>
 
-    <h3 :class="{ 'bg-warning': isInPast(session), 'text-dark': isInPast(session), 'p-1': isInPast(session) || isInFuture(session), 'bg-danger': isInFuture(session), 'text-white': isInFuture(session)}" class="position-sticky sticky-date"> 
+    <h3 :class="{ 'bg-warning text-dark p-1': isInPast(session), 'bg-danger text-white p-1': isInFuture(session) }" class="position-sticky sticky-date"> 
         {{ (session || {}).date  | dateTimeFilter('T  - cccc, d MMMM yyyy') }}
     </h3>
 
