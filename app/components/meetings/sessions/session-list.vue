@@ -78,7 +78,7 @@ async function created(){
 }
 
 async function meetingQuery(){
-  const normalizedSymbol = this.route?.params?.meeting? this.route?.params?.meeting.toUpperCase() : ''
+  const normalizedSymbol = this.route?.params?.meeting?.toUpperCase() || '';
 
   if(!normalizedSymbol) return ''
 
