@@ -57,7 +57,6 @@ export default {
 function data(){
   return { 
     sessions: [],
-    meetings: [], 
     api: undefined
   }
 }
@@ -71,8 +70,10 @@ function getUrl({ _id, meetings }) {
 async function created(){
   this.api = new Api(this.tokenReader);
 
-  const isMeeting = await this.meetingQuery();
-  const q         = isMeeting? isMeeting: await this.conferenceQuery();
+  const isMeeting = this.route?.params?.meeting;
+  const q         = isMeeting? await this.meetingQuery() : await this.conferenceQuery();
+
+  q.date = { $lte: { $date: this.now.add(24, 'hours') } }
 
   this.sessions  = await this.api.querySessions({ q, s: { date:-1 } });
 }
@@ -83,10 +84,9 @@ async function meetingQuery(){
   if(!normalizedSymbol) return ''
 
   const q        = { normalizedSymbol };
+  const meetings = await this.api.queryMeetings({q, f: { _id:1, normalizedSymbol:1 }});
 
-  this.meetings = await this.api.queryMeetings({q, f: { _id:1, normalizedSymbol:1 }});
-
-  return { meetingIds : { $in: this.meetings.map(m=>mapObjectId(m._id)) }, date: { $lte: { $date: this.now.add(24, 'hours') } } };
+  return { meetingIds : { $in: this.meetings.map(m=>mapObjectId(m._id)) } };
 }
 
 async function conferenceQuery(){
@@ -97,7 +97,7 @@ async function conferenceQuery(){
   const q                              = { 'code': code };
   const { MajorEventIDs: meetingIds }  = await this.api.getConference(code);
 
-  return { meetingIds : { $in: meetingIds.map(m=>mapObjectId(m)) }, date: { $lte: { $date: this.now.add(24, 'hours') } } };
+  return { meetingIds : { $in: meetingIds.map(m=>mapObjectId(m)) } };
 }
 
 function sessionNumber(index){
