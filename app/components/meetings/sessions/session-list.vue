@@ -97,7 +97,7 @@ async function conferenceQuery(){
   const q                              = { 'code': code };
   const { MajorEventIDs: meetingIds }  = await this.api.getConference(code);
 
-  return { 'conference.symbol': code, meetingIds : { $in: meetingIds.map(m=>mapObjectId(m)) }, date: { $lte: { $date: this.now.add(24, 'hours') } } };
+  return { meetingIds : { $in: meetingIds.map(m=>mapObjectId(m)) }, date: { $lte: { $date: this.now.add(24, 'hours') } } };
 }
 
 function sessionNumber(index){
