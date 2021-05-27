@@ -8,27 +8,27 @@
                         <td>
                             <select class="form-control" id="languages" v-model="selectedLanguage">
                                 <option 
-                                    v-for="lang in Object.keys(languages)"
-                                    :key="lang" 
-                                    :value="lang">
-                                    {{languages[lang]}}
+                                    v-for="(language, locale) in languages"
+                                    :key="locale" 
+                                    :value="locale">
+                                    {{language}}
                                 </option>
                             </select>
                         </td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(row, index) in docRows" :key="index">
+                    <tr v-for="(row, index) in rows" :key="index">
                         <td><span v-html="row.en" /></td>
                         <td>
-                            <div v-if="docRows[index].editor">
-                                <ckeditor v-model="editorHtml" :editor="editorType" :config="editorConfig"></ckeditor>
-                                <div class="float-right">
-                                    <span class="btn text-success" @click="save(row, index)"><i class="fa fa-check"></i></span>
-                                    <span class="btn text-danger" @click="cancel(row, index)"><i class="fa fa-times"></i></span>
+                            <div v-if="rows[index].editor">
+                                <ckeditor v-model="rows[index].editorHtml" :editor="editorType" :config="editorConfig"></ckeditor>
+                                <div class="text-right">
+                                    <span class="btn text-success" @click="save(row)"><i class="fa fa-check"></i></span>
+                                    <span class="btn text-danger" @click="cancel(row)"><i class="fa fa-times"></i></span>
                                 </div>
                             </div>
-                            <span v-else v-html="row[selectedLanguage]"  @click="handleRowClick(row, index)" />
+                            <div v-else v-html="row[selectedLanguage]"  @click="edit(row)" />
                         </td>
                     </tr>
                 </tbody>
@@ -41,7 +41,7 @@
 import { cloneDeep } from 'lodash'
 import ClassicEditor from 'ckeditor5';
 import { component as ckeditor } from 'vue-ckeditor5'
-import docRows from '~/data/decisions/text-info.json';
+import rows from '~/data/decisions/text-info.json';
 import languages from '~/components/languages.js';
 
 export default {
@@ -51,9 +51,8 @@ export default {
         return {
             editorType: ClassicEditor,
             editorConfig: {},
-            editorHtml: '',
             selectedLanguage: 'fr',
-            docRows,
+            rows,
         }
     },
     computed: {
@@ -63,30 +62,34 @@ export default {
             return langs;
         } 
     },
+    created,
     methods: {
-        handleRowClick,
+        edit,
         save, 
         cancel
     }
 }
 
-function handleRowClick(row, index) {
+function created() {
+    rows.forEach(row=>{
+        row.editor = false;
+        row.editorHtml = '';
+    });
+}
+function edit(row) {
     row.editor = true;
-    this.editorHtml = this.docRows[index][this.selectedLanguage] || '';
-    this.$set(this.docRows, index, row);
+    row.editorHtml = row[this.selectedLanguage] || '';
 }
 
-function save(row, index) {
+function save(row) {
     row.editor = false;
-    row[this.selectedLanguage] = this.editorHtml;
-    this.editorHtml = '';
-    this.$set(this.docRows, index, row);
+    row[this.selectedLanguage] = row.editorHtml;
+    row.editorHtml = '';
 }
 
-function cancel(row, index) {
+function cancel(row) {
     row.editor = false;
-    this.editorHtml = '';
-    this.$set(this.docRows, index, row);
+    row.editorHtml = '';
 }
 
 </script>
@@ -99,6 +102,15 @@ table {
 
 table td {
     width: 50%;
+}
+
+.paragraph {
+  min-height:15px;
+  border: dotted 1px #c0c0c0; 
+}
+
+[lang="ar"] {
+  direction:rtl
 }
 
 table thead tr {
