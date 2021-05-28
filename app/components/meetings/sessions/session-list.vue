@@ -81,7 +81,7 @@ async function created(){
 async function meetingQuery(){
   const normalizedSymbol = this.route?.params?.meeting?.toUpperCase() || '';
 
-  if(!normalizedSymbol) return ''
+  if(!normalizedSymbol) return null
 
   const q        = { normalizedSymbol };
   const meetings = await this.api.queryMeetings({q, f: { _id:1, normalizedSymbol:1 }});
