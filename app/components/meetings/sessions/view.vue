@@ -3,19 +3,20 @@
     <Session :_id="_id" class="card" 
       :body-class="{'collapse':true, 'show': numberOfSessions==1 }" 
       :body-id="`sid${_id}`" 
-      v-for="{ title, _id, interventions, date, videos } in sessions" :key="_id">
+      v-for="{ title, _id, interventions, date, videos, count } in sessions" :key="_id">
 
       <template v-slot:header>
 
         <div class="card-header" data-toggle="collapse" :data-target="`#sid${_id}`" :class="{ collapsed: numberOfSessions>1 }" >
-          <h5> 
+          <h5 @click="!interventions && loadInterventions(_id)"> 
             {{ title }}
             <span v-if="!title" >{{ date | dateTimeFilter('cccc, d MMMM yyyy - T') }}</span>
-            ({{interventions.length}})
+            ({{count}})
 
             <i class="text-muted fa fa-caret-up"/>
             <i class="text-muted fa fa-caret-down"/>
             <i class="text-muted help">click to expand</i>
+            <i v-if="!interventions" class="loading text-muted  fa fa-cog fa-spin"></i>
 
             <span class="video" v-if="videos && videos.length">
               <VideoLink class="pull-right" :videos="videos" title="Full session webcast"/>
@@ -55,6 +56,7 @@ export default {
                 },
   computed   : { numberOfSessions },
   filters    : { dateTimeFilter },
+  methods    : { loadInterventions },
   created, data
 }
 
@@ -67,14 +69,33 @@ function data(){
 async function created(){
   this.api = new Api(this.tokenReader);
 
-  const sessions = await this.api.getSessions(this.route.params.meeting);
+  const meetingCode = this.route.params.meeting;
+  const meeting     = await this.api.getMeetingByCode(meetingCode)
+  const sessions    = await this.api.querySessions({ s: { date: -1 }, q: { 'meetingIds': { $oid: meeting._id }, count: { $gt: 0 } } });
 
-  sessions.forEach(s=>{
-    const { date: startDate } = s;
-    if(s.videos) s.videos = s.videos.map(v=>({ startDate, ...v })) // Set video startDate to session.date if not already set 
+  this.sessions = sessions.map(session => {
+    const { date: startDate } = session;
+    const videos = (session.videos||[]).map(v=>({ startDate, ...v })) // Set video startDate to session.date if not already set  
+    return {
+      ...session,
+      videos,
+      interventions : null, //Make it reactive
+    }
   });
 
-  this.sessions = sessions.filter(o=>!!o.interventions?.length);
+  if(sessions.length==1) {
+    const [ session ] = sessions; 
+    this.loadInterventions(session._id)
+  }
+}
+
+async function loadInterventions(sessionId){
+
+    const session = this.sessions.find(o=>o._id == sessionId);
+
+    if(!session) return;
+
+    session.interventions = await this.api.queryInterventions({ s: { datetime:  1 }, q: { sessionId : { $oid: sessionId }, status:"public" } });
 }
 
 function numberOfSessions(){
@@ -101,4 +122,5 @@ function numberOfSessions(){
 
   .card-header           .fa-caret-down { display: inline; }
   .card-header.collapsed .fa-caret-down { display: none; }
+  .card-header.collapsed .loading       { display: none; }
 </style>
