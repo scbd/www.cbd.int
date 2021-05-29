@@ -86,7 +86,7 @@ async function meetingQuery(){
   const q        = { normalizedSymbol };
   const meetings = await this.api.queryMeetings({q, f: { _id:1, normalizedSymbol:1 }});
 
-  return { meetingIds : { $in: this.meetings.map(m=>mapObjectId(m._id)) } };
+  return { meetingIds : { $in: meetings.map(m=>mapObjectId(m._id)) } };
 }
 
 async function conferenceQuery(){
