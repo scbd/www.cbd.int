@@ -28,7 +28,9 @@
                                     <span class="btn text-danger" @click="cancel(row)"><i class="fa fa-times"></i></span>
                                 </div>
                             </div>
-                            <div v-else :lang="selectedLanguage" v-html="row[selectedLanguage]" class="paragraph" @click="edit(row)" />
+                            <div v-else class="paragraph" @click="edit(row)">
+                                <span :lang="selectedLanguage" v-html="row[selectedLanguage]" />
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -54,7 +56,7 @@ export default {
                 toolbar: [ 'bold', 'italic', 'bulletedList', 'numberedList'],
             },
             selectedLanguage: 'fr',
-            rows,
+            rows: [],
         }
     },
     computed: {
@@ -73,10 +75,12 @@ export default {
 }
 
 function created() {
-    rows.forEach(row=>{
+    const rowData = cloneDeep(rows);
+    rowData.forEach(row=>{
         row.editor = false;
         row.editorHtml = '';
     });
+    this.rows = rowData;
 }
 function edit(row) {
     row.editor = true;
@@ -108,10 +112,12 @@ table td {
 
 .paragraph {
   min-height:15px;
+  padding: 5px;
   border: dotted 1px #c0c0c0; 
 }
 
 [lang="ar"] {
-  direction:rtl
+  direction:rtl;
+  text-align: right;
 }
 </style>
