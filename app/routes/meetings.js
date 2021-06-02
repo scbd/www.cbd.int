@@ -28,6 +28,6 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:meeting/sessions/:sessionId', { ...mapView(vueViewWrapper),       resolve : { ...sessionIdView,          user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
     .when('/:meeting/interpreter-panel',   { ...mapView(vueViewWrapper),       resolve : { ...interpretersPanelView,  user : securize(["Administrator","EditorialService", "StatementAdmin", "ScbdStaff", "Interpreters"]) }, reloadOnSearch:false })
     .when('/:meeting/documents',           { redirectTo  : '/:meeting'} )
-    .when('/:meeting',                     { ...mapView(documentsView),        resolve : { showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
+    .when('/:meeting',                     { ...mapView(documentsView),        resolve : { showMeeting : resolveLiteral(true) }, reloadOnSearch:false })
     .otherwise({redirectTo: '/404'});
 }]);
