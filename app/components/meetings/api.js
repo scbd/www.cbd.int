@@ -271,6 +271,11 @@ export default class Api
     await axios.put(url, file, config);
   }
 
+  async getMeetingDocuments(data) {
+    const documents = await this.http.get(`/api/v2016/documents`, data).then(res => res.data).catch(tryCastToApiError);
+    return documents;
+  } 
+
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   //             TO REVIEW
