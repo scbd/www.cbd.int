@@ -281,6 +281,11 @@ export default class Api
     return meetings;
   }
 
+  async getNotifications(data) {
+    const notifications = await this.http.get('/api/v2013/index', data).then(res => res.data).catch(tryCastToApiError);
+    return notifications;
+  }
+
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   //             TO REVIEW

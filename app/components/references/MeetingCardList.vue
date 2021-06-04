@@ -29,7 +29,6 @@ export default {
     },
     data() {
         return {
-            url: null,
             api: new Api(),
             meetingList: [],
             meeting: null
