@@ -2,41 +2,35 @@ import app from '~/app'
 import moment from 'moment-timezone'
 
 
-    app.filter('moment', [function() {
-
-        return function(datetime, method, arg1, arg2, arg3) {
-            
-            if(!datetime)
-                return;
-
-            return method ? moment(datetime)[method](arg1, arg2, arg3)
-                          : moment(datetime);
-        };
-    }]);
-    app.filter('momentUtc', [function() {
-
-        return function(datetime, method, arg1, arg2, arg3) {
-
-            if(!datetime)
-                return;
-
-            return method ? moment.utc(datetime)[method](arg1, arg2, arg3)
-                          : moment.utc(datetime);
-        };
-    }]);
+    app.filter('moment', [() => momentTimezone]);
+    app.filter('momentUtc', [() => momentUtc]);
+    app.filter('fromNow', () => fromNow);    
     //============================================================
     //
     //============================================================
-    app.filter('fromNow', function () {
-        return function (date, unitOfTime) {
 
-            if(!date)
-                return "";
+    export function momentTimezone(datetime, method, arg1, arg2, arg3) {
+            
+        if(!datetime) return;
 
-            if(unitOfTime)
-                return moment(date).startOf(unitOfTime).fromNow();
+        return method ? moment(datetime)[method](arg1, arg2, arg3)
+                        : moment(datetime);
+    };
 
-            return moment(date).fromNow();
-        };
-    });
+    export function momentUtc(datetime, method, arg1, arg2, arg3) {
+
+        if(!datetime) return;
+
+        return method ? moment.utc(datetime)[method](arg1, arg2, arg3)
+                      : moment.utc(datetime);
+    };
+
+    export function fromNow(date, unitOfTime) {
+
+        if(!date) return "";
+
+        if(unitOfTime) return moment(date).startOf(unitOfTime).fromNow();
+
+        return moment(date).fromNow();
+    };
 

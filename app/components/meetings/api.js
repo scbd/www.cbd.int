@@ -276,6 +276,11 @@ export default class Api
     return documents;
   } 
 
+  async getMeetings(code, data) {
+    const meetings = await this.http.get(`/api/v2016/meetings/${code.toUpperCase()}`, data).then(res => res.data).catch(tryCastToApiError);
+    return meetings;
+  }
+
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   //             TO REVIEW

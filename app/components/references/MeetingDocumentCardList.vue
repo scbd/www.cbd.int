@@ -21,7 +21,7 @@ export default {
     components: { MeetingDocumentCard },
     props: {
         documents: {
-            type: Object,
+            type: Array,
             default: () => []
         }
     },
