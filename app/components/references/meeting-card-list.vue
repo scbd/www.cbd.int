@@ -23,7 +23,7 @@ export default {
     components: { MeetingCard },
     props: {
         meetings: {
-            type: [Object, Array],
+            type: Array,
             default: () => []
         }
     },
@@ -40,7 +40,7 @@ export default {
 }
 
 async function created() {
-    const codes = Array.isArray(this.meetings) ? this.meetings.filter(c => !!c) : [this.meetings];
+    const codes = this.meetings.filter(c => !!c);
 
     const linkMeetings = codes.filter(c => isUrl(c)).map(c => ({symbol: c, url: c}));
 
