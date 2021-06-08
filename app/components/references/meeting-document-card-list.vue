@@ -31,34 +31,43 @@ export default {
             documentList: []
         }
     },
-    created
+    created,
+    methods: {
+        lookupMeetingDocuments,
+    }
 }
 
 async function created() {
-    let { documentList } = this;
-    this.documents.forEach(async documentCode => {
-        documentList.push(await lookupMeetingDocument.call(this, documentCode));
-    });
+    let codes = this.documents.filter(c => !!c);
+
+    codes = [...codes, 'test'];
+
+    const linkDocuments = codes.filter(c => isLink(c))
+        .map(c => ({
+            symbol: c, 
+            title: {},
+            files: [{ language: 'en', url : c, type:'text/html' }]
+    }));
+
+    const lookupDocuments = await this.lookupMeetingDocuments(codes.filter(c => !isLink(c)));
+
+    this.documentList = [...lookupDocuments, ...linkDocuments]; //TODO - Sorting
 }
 
-async function lookupMeetingDocument(code) {
-    if(!code) return;
+async function lookupMeetingDocuments(codes) {
+    if (!codes || codes.length === 0) return [];
 
-    const isLink = /http[s]?:\/\//.test(code);
+    codes = codes.map(c => c.toUpperCase());
 
-    if(isLink) {
-        return {
-            symbol: code, 
-            title: {},
-            files: [{ language: 'en', url : code, type:'text/html' }]
-        }
-    }
-
-    const data = { 
+    const options = { 
         cache : true, 
-        params : { q : { symbol: code }, fo: 1 } 
+        params : { q : { symbol: { $in: [...codes] } }} 
     }
-    const document = await this.api.getMeetingDocuments(data);
-    return document;
+    const documents = await this.api.getMeetingDocuments(options);
+    return documents;
+}
+
+function isLink(code) {
+    return /http[s]?:\/\//.test(code);
 }
 </script>

@@ -32,26 +32,30 @@ export default {
             notificationList: [],
         }
     },
-    created
+    created,
+    methods: {
+        lookupNotifications
+    }
 }
 
 async function created() {
-    let { notificationList } = this;
-    this.notifications.forEach(async notificationCode => {
-        notificationList.push(await lookupNotification.call(this, notificationCode));
-    });
+    const codes = this.notifications.filter(c => !!c);
+
+    const notificationList = await this.lookupNotifications(codes);
+    
+    this.notificationList = codes.map(c => notificationList.find(n => n.symbol === c) || {symbol: c, files: []})
 }
 
-async function lookupNotification(code) {
+async function lookupNotifications(codes) {
+    if(!codes || codes.length === 0) return [];
 
-    var options = {
-        cache : true,
+    const options = {
+        cache: true,
         params : {
-            q : "schema_s:notification AND symbol_s:"+solrEscape(code),
+            q : `schema_s:notification AND symbol_s (${codes.map(solrEscape).join(' or ')})`,
             fl : "id, symbol_s,reference_s,title_t,date_dt,url_ss",
-            rows: 1
         }
-    };
+    }
 
     const res = await this.api.getNotifications(options);
 
@@ -67,8 +71,8 @@ async function lookupNotification(code) {
             files : urlToFiles(n.url_ss)
         });
     });
-
-    return results.length > 0 ? results[0] : {symbol: code, files: [] };
+    
+    return results || [];
 }
 
 function urlToFiles(url_ss) {
