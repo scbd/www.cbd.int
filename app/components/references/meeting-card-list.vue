@@ -9,7 +9,7 @@
                 <meeting-card :meeting="meeting"/>
             </div>
         </div>
-        <div v-if="meeting"><meeting-card :meeting="meeting"/></div>
+        <!-- TODO - need to remove card for Single Meeting -->
     </div>
 </template>
 
@@ -31,46 +31,49 @@ export default {
         return {
             api: new Api(),
             meetingList: [],
-            meeting: null
         }
     },
-    created
+    created,
+    methods: {
+        lookupMeetings
+    }
 }
 
 async function created() {
-    const {meetings} = this;
-    if(Array.isArray(this.meetings)) {
-        let { meetingList } = this;
-        meetings.forEach(async meetingCode => {
-            meetingList.push(await lookupMeeting.call(this, meetingCode));
-        });
-    } else {
-        this.meeting = await lookupMeeting.call(this, meetings);
-    }
+    const codes = Array.isArray(this.meetings) ? this.meetings.filter(c => !!c) : [this.meetings];
+
+    const linkMeetings = codes.filter(c => isUrl(c)).map(c => ({symbol: c, url: c}));
+
+    const meetings = await this.lookupMeetings(codes.filter(c => !isUrl(c)));
+
+    this.meetingList = [...linkMeetings, ...meetings]; 
 }
 
-async function lookupMeeting(code) {
+async function lookupMeetings(codes) {
+    if(!codes || codes.length === 0) return [];
 
-    if(!code) return;
+    codes = codes.map(c => c.toUpperCase());
 
-    if(isUrl(code || '')) return {symbol: code, url: code};
-
-    const data = { 
-        cache: true, 
-        params: { f: { symbol:1, EVT_CD:1, EVT_FROM_DT:1, EVT_TO_DT:1, title:1, dateText:1, venueText:1 } }
+    const options = { 
+        cache: true,
+        params: { 
+            q: { normalizedSymbol :{ $in :[...codes] } },
+            f: { symbol:1, EVT_CD:1, EVT_FROM_DT:1, EVT_TO_DT:1, title:1, dateText:1, venueText:1 } 
+        }
     }
 
-    const result = await this.api.getMeetings(code, data);
+    const res = await this.api.getMeetings(options);
 
-    result.url = `/meetings/${encodeURIComponent(result.symbol || result.EVT_CD || code)}`;
-    
-    const meeting = _.defaults({}, result, {
-        symbol:    result.EVT_CD || code,
-        startDate: result.EVT_FROM_DT,
-        endDate:   result.EVT_TO_DT,
-    })
+    const results = _.map(res, function(m) {
+        return _.defaults(m, {
+            url:       `/meetings/${encodeURIComponent(m.symbol || m.EVT_CD || m.code || '')}`,
+            symbol:    m.EVT_CD || m.symbol,
+            startDate: m.EVT_FROM_DT,
+            endDate:   m.EVT_TO_DT,
+        });
+    });
 
-    return meeting;
+    return results;
 }
 
 function isUrl(text) {

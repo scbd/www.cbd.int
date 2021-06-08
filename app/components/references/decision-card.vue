@@ -20,7 +20,7 @@
                 <i class="fa fa-external-link" aria-hidden="true"></i>
             </a>
         </b>
-        <div v-if="decision">
+        <div v-if="decision._id">
     	    <div style="max-height:50px;overflow:hidden">
     		    {{ decision.title | lstring }}
     	    </div>
@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import { lstring } from '~/filters/lstring.js';
+
 export default {
     name: 'Decision',
     props: {
@@ -41,6 +43,7 @@ export default {
         },
     },
     filters: {
+        lstring,
         uppercase(text) {
             return (text + '').toUpperCase();
         },

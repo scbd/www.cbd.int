@@ -32,47 +32,61 @@ export default {
             decisionList: [],
         }
     },
-    created
+    created, 
+    methods: {
+        lookupDecisions
+    }
 }
 
 async function created() {
-    let { decisionList } = this;
-    this.decisions.forEach(async decisionCode => {
-        decisionList.push(await lookupDecision.call(this, decisionCode));
-    });
+
+    const codes = this.decisions.filter(c => !!c);
+
+    const urlCodes = codes.filter(c => isUrl(c)).map(c => ({url: c, code: c, elements: []}));
+
+    const decisions = await this.lookupDecisions(codes.filter(c => !isUrl(c)));
+
+    const decisionList = [...decisions, ...urlCodes];
+
+    this.decisionList = decisionList;
+    //this.decisionList = codes.map(c => decisionList.find(dl => dl.code === c || dl.elements.some(e => e.code === getElementCode(c))) || {code: c, elements: []});
 }
 
-async function lookupDecision(code) {
+async function lookupDecisions(codes) {
+    if(!codes || codes.length === 0) return [];
 
-    if(!code) return;
-
-    if(isUrl(code || '')) return {url: code}
-
-    const elementCode = code.replace(/(\w+\/\w+\/\w+\/\w+)\/(.+)/, '$1.$2');
+    const elementCodes = codes.map(c => getElementCode(c));
 
     const options = {
-      cache: true,
-      params: {
-          q:  { $or: [ { 'code' : code }, { 'elements.code' : elementCode } ]},
-          f:  { "code":1, "symbol":1, "treaty":1, "body":1, "session":1, "decision":1, "meeting":1, "title":1, "elements.code":1, "elements.section":1, "elements.paragraph":1, "elements.item":1, "elements.subitem":1, "elements.text":1 },
-          l:1
-      }
+        cache: true,
+        params: {
+            q:  { $or: [ { 'code' : { $in: [...codes] } }, { 'elements.code' : { $in: [ ...elementCodes] } } ]},
+            //f:  { "code":1, "symbol":1, "treaty":1, "body":1, "session":1, "decision":1, "meeting":1, "title":1, "elements.code":1, "elements.section":1, "elements.paragraph":1, "elements.item":1, "elements.subitem":1, "elements.text":1 },
+            //l: 1
+        }
     }
 
-    const res = await this.api.getDecisions(options);
+    const results = await this.api.getDecisions(options);
     
-    if(!res || res.length === 0) return {url: code};
+    if(!results || results.length === 0) return [];
 
-    const decision = res[0];
-    decision.url = '/decisions/'+decision.body.toLowerCase()+'/'+decision.session+'/'+decision.decision;
-    decision.elements = _.filter(decision.elements || [], { code: elementCode });
+    //TODO need to do for same decision multiple paragraph
+    results.forEach(d => {
+        d.url = 'decisions/'+d.body.toLowerCase()+'/'+d.session+'/'+d.decision;
+        d.elements = d.elements.filter(e => codes.some(c => e.code === getElementCode(c)));
+        //d.elements = d.elements.filter(e => e.code === getElementCode(d.code));
 
-    if(decision.elements[0]) {
-        var el = decision.elements[0];
-        decision.url += '/'+(el.section||'')+el.paragraph
-    }
+        if(d.elements[0]) {
+            const ele = d.elements[0];
+            d.url += '/'+(ele.section || '')+ele.paragraph;
+        }
+    });
 
-    return decision;
+    return results || [];
+}
+
+function getElementCode(text) {
+    return text.replace(/(\w+\/\w+\/\w+\/\w+)\/(.+)/, '$1.$2');
 }
 
 function isUrl(text) {
