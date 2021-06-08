@@ -38,9 +38,7 @@ export default {
 }
 
 async function created() {
-    let codes = this.documents.filter(c => !!c);
-
-    codes = [...codes, 'test'];
+    const codes = this.documents.filter(c => !!c);
 
     const linkDocuments = codes.filter(c => isLink(c))
         .map(c => ({
