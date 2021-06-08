@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import MeetingCard from '~/components/references/MeetingCard.vue'
+import MeetingCard from '~/components/references/meeting-card.vue'
 import Api from '~/components/meetings/api.js';
 import _ from 'lodash';
 

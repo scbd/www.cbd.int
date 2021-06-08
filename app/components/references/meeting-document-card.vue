@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import DocumentFiles from '~/components/references/DocumentFiles.vue';
+import DocumentFiles from '~/components/references/document-files.vue';
 import { lstring } from '~/filters/lstring.js';
 
 export default {

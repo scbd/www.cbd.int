@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import MeetingDocumentCard from '~/components/references/MeetingDocumentCard.vue'
+import MeetingDocumentCard from '~/components/references/meeting-document-card.vue'
 import Api from '~/components/meetings/api.js';
 
 export default {

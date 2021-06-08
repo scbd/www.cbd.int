@@ -23,11 +23,13 @@
 </template>
 
 <script>
+import DocumentFiles from '~/components/references/document-files.vue';
 import {lstring} from '~/filters/lstring.js';
 import {momentTimezone} from '~/filters/moment.js';
 
 export default {
     name: 'NotificationCard',
+    components: {DocumentFiles},
     props: {
         notification: {
             type: Object,

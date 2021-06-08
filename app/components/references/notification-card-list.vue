@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import NotificationCard from '~/components/references/NotificationCard.vue'
+import NotificationCard from '~/components/references/notification-card.vue'
 import Api from '~/components/meetings/api.js';
 import _ from 'lodash';
 

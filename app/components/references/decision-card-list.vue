@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import DecisionCard from '~/components/references/DecisionCard.vue'
+import DecisionCard from '~/components/references/decision-card.vue'
 import Api from '~/components/meetings/api.js';
 import _ from 'lodash';
 
