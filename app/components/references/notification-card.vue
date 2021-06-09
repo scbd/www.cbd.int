@@ -13,7 +13,7 @@
             style="max-height:50px;overflow:hidden" />
         <div v-if="notification.date">
             <i class="fa fa-calendar fa-fw"></i> 
-            {{notification.date | momentTimezone:'utc' | momentTimezone:'format':'LL'}}
+            {{ fmtNotificationDate }}
         </div>
         <document-files
             :files="notification.files" 
@@ -24,8 +24,8 @@
 
 <script>
 import DocumentFiles from '~/components/references/document-files.vue';
+import moment from 'moment-timezone';
 import {lstring} from '~/filters/lstring.js';
-import {momentTimezone} from '~/filters/moment.js';
 
 export default {
     name: 'NotificationCard',
@@ -36,7 +36,17 @@ export default {
             default: () => {}
         }
     },
-    filters: {lstring, momentTimezone}
+    computed: {
+        fmtNotificationDate() {
+            const { notification } = this;
+            if(notification && notification.date) {
+                return moment.utc(notification.date).format('LL');
+            }
+            return '';
+        }
+    },
+    filters: {lstring}
+    
 }
 </script>
 

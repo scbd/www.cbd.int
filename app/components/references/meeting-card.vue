@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import {momentTimezone} from '~/filters/moment.js';
+import moment from 'moment-timezone'
 import {lstring} from '~/filters/lstring.js';
 
 export default {
@@ -34,19 +34,23 @@ export default {
             default: () => {}
         }
     },
-    filters: {momentTimezone, lstring},
+    filters: {lstring},
     computed: {
         meetingDate() {
             const {meeting} = this;
             const {startDate, endDate, endDatet} = meeting;
-            if(momentTimezone(startDate, 'month') === momentTimezone(endDate, 'month')) {
-                if(momentTimezone(startDate, 'day') === momentTimezone(endDatet, 'day')) {
-                    return momentTimezone(endDate, 'format', 'D MMMM, YYYY');
+            const mStartDate = moment(startDate);
+            const mEndDate = moment(endDate);
+            const mEndDatet = moment(endDatet);
+
+            if(mStartDate.month() === mEndDate.month()) {
+                if(mStartDate.day() === mEndDatet.day()) {
+                    return mEndDate.format('D MMMM, YYYY');
                 }
-                return `${momentTimezone(startDate, 'format', 'D')} - ${momentTimezone(endDate, 'format', 'D MMMM, YYYY')}`;
+                return `${mStartDate.format('D')} - ${mEndDate.format('D MMMM, YYYY')}`;
             }
-            
-            return `${momentTimezone(startDate, 'format', 'D MMM')} - ${momentTimezone(endDate, 'format', 'D MMM, YYYY')}`;
+
+            return `${mStartDate.format('D MMM')} - ${mEndDate.format('D MMM, YYYY')}`;
         }
     }
 }
