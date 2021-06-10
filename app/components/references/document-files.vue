@@ -13,7 +13,7 @@
         </div>
         <div class="visible-xs dropdown">
             <button type="button" class="btn btn-default btn-lg dropdown-toggle" 
-                data-toggle="dropdown" aria-expanded="true" @click="initByLanguages">
+                data-toggle="dropdown" aria-expanded="true">
                 <i class="fa fa-arrow-circle-down" style="font-size:1.25em"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
@@ -57,47 +57,35 @@ export default {
             default: () => []
         }
     },
-    data() {
-        return {
-            byTypes: [],
-            byLanguages: [],
-        }
-    },
-    // TODO
-    watch: {
-        deviceSize(value) {
-            if(!this.files || value ==='xs') return; // for performance only load files byTypes  if sreeen > xs
-            this.initByTypes();
-        },
-        files() {
-            //if($scope.$root.deviceSize=='xs') return; // for performance only load files byTypes  if sreeen > xs
-            this.initByTypes();
-        },
-    },
     computed: {
         LANGUAGES() {return LANGUAGES;},
-        MIMES() {return MIMES;}
+        MIMES() {return MIMES;},
+        byTypes() {return byTypes.call(this)},
+        byLanguages() {return byLanguages.call(this)}
     },
-    methods:{
-        initByLanguages,
-        initByTypes
-    },
-    created
 }
 
-function created() {
-    this.byTypes = []; //TODO
-    this.initByTypes(); //TODO
-}
-
-function initByLanguages() {
-    let { byLanguages } = this;
+function byTypes() {
+    const { files } = this;
     
-    if(byLanguages) return;
+    if(!files || files.length === 0) return [];
 
+    const result = {};
+
+    _(files||[]).sort(function(a,b) {
+        return sortByType(a,b) || sortByLanguage(a,b);
+    }).forEach(function(f){
+        result[f.type] = result[f.type] || {};
+        result[f.type][f.language] = f;
+    }).value();
+    
+    return result;
+}
+
+function byLanguages() {
     const { files } = this;
 
-    byLanguages = {};
+    const byLanguages = {};
 
     _(files || []).sort(function(a,b) {
         return sortByLanguage(a,b) || sortByType(a,b);
@@ -106,26 +94,7 @@ function initByLanguages() {
         byLanguages[f.language][f.type] = f;
     }).value();
 
-    this.byLanguages = byLanguages;
-}
-
-function initByTypes() {
-    const { files } = this;
-    let { byTypes } = this;
-    
-    if(!files || files.length === 0) return;
-    if(byTypes && byTypes.length > 0) return;
-
-    byTypes = {};
-
-    _(files||[]).sort(function(a,b) {
-        return sortByType(a,b) || sortByLanguage(a,b);
-    }).forEach(function(f){
-        byTypes[f.type] = byTypes[f.type] || {};
-        byTypes[f.type][f.language] = f;
-    }).value();
-
-    this.byTypes = byTypes;
+    return byLanguages;
 }
 
 function sortByType(a,b) {
