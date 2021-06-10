@@ -1,30 +1,29 @@
 import app from '~/app'
 
-app.filter("lstring", function() {
-	return function(ltext, locale) {
+app.filter("lstring", () => lstring);
 
-		if(!ltext)
-			return ltext;
+export function lstring(ltext, locale) {
+	if(!ltext)
+		return ltext;
 
-		if(typeof ltext === 'string')
-			return ltext;
+	if(typeof ltext === 'string')
+		return ltext;
 
-		var sText;
+	var sText;
 
-		if(!sText && locale)
-			sText = ltext[locale];
+	if(!sText && locale)
+		sText = ltext[locale];
 
-		if(!sText)
-			sText = ltext.en;
+	if(!sText)
+		sText = ltext.en;
 
-		if(!sText) {
-			for(var key in ltext) {
-				sText = ltext[key];
-				if(sText)
-					break;
-			}
+	if(!sText) {
+		for(var key in ltext) {
+			sText = ltext[key];
+			if(sText)
+				break;
 		}
+	}
 
-		return sText;
-	};
-});
+	return sText;	
+}
