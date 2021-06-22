@@ -12,7 +12,7 @@ import * as paragraphView    from '~/views/decisions/paragraph'
 
 // On-demand views
 const editDecisionView  = { component: ()=>import('~/views/decisions/edit') }
-const decisionTranslationView = { component: ()=>import('~/components/decisions/DecisionTranslation.vue') }
+const decisionTranslationView = { component: ()=>import('~/components/decisions/decision-translation.vue') }
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 

@@ -19,7 +19,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="(row, index) in rows" :key="index">
-                        <td class="border border-grey p-2"><span v-html="row.en" /></td>
+                        <td class="border border-grey p-2"><span v-html="row.body.en" /></td>
                         <td class="border border-grey p-2">
                             <div v-if="rows[index].editor">
                                 <ckeditor v-model="rows[index].editorHtml" :editor="editorType" :config="editorConfig"></ckeditor>
@@ -29,7 +29,7 @@
                                 </div>
                             </div>
                             <div v-else class="paragraph" @click="edit(row)">
-                                <span :lang="selectedLanguage" v-html="row[selectedLanguage]" />
+                                <span :lang="selectedLanguage" v-html="row.body[selectedLanguage]" />
                             </div>
                         </td>
                     </tr>
@@ -40,15 +40,18 @@
 </template>
 
 <script>
+import Api from '~/components/meetings/api.js';
 import { cloneDeep } from 'lodash'
 import ClassicEditor from 'ckeditor5';
 import { component as ckeditor } from 'vue-ckeditor5'
-import rows from '~/data/decisions/text-info.json';
 import languages from '~/components/languages.js';
 
 export default {
     name: 'DecisionEditTranslations',
     components : { ckeditor },
+    props: {
+        tokenReader: { type: Function, required: false }
+    },
     data() {
         return {
             editorType: ClassicEditor,
@@ -57,6 +60,8 @@ export default {
             },
             selectedLanguage: 'fr',
             rows: [],
+            nodes: [],
+            decisionId: '60cb7860694e80b257c21639',
         }
     },
     computed: {
@@ -74,23 +79,26 @@ export default {
     }
 }
 
-function created() {
-    const rowData = cloneDeep(rows);
+async function created() {
+    this.api = new Api(this.tokenReader);
+    const rowData = await this.api.queryDecisionNodes(this.decisionId);
     rowData.forEach(row=>{
         row.editor = false;
         row.editorHtml = '';
+        row.body = row.body || {}
     });
     this.rows = rowData;
 }
 function edit(row) {
     row.editor = true;
-    row.editorHtml = row[this.selectedLanguage] || '';
+    row.editorHtml = row.body[this.selectedLanguage] || '';
 }
 
-function save(row) {
+async function save(row) {
     row.editor = false;
-    row[this.selectedLanguage] = row.editorHtml;
+    row.body[this.selectedLanguage] = row.editorHtml;
     row.editorHtml = '';
+    await this.api.updateDecisionNode(this.decisionId, row._id, row.body);
 }
 
 function cancel(row) {
