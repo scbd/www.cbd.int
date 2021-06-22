@@ -95,10 +95,17 @@ function edit(row) {
 }
 
 async function save(row) {
+    const html   = row.editorHtml;
+    const locale = this.selectedLanguage;
+
     row.editor = false;
-    row.body[this.selectedLanguage] = row.editorHtml;
     row.editorHtml = '';
-    await this.api.updateDecisionNode(this.decisionId, row._id, row.body);
+
+    const body   = { ...row.body, [locale]: html };
+
+    const result = await this.api.updateDecisionNode(this.decisionId, row._id, { body });
+    
+    row.body = result.body;
 }
 
 function cancel(row) {
