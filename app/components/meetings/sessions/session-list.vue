@@ -38,7 +38,8 @@
 
 <script>
 
-import   Api, {mapObjectId}from '../api.js'
+import   Api from '../api.js'
+import { mapObjectId }     from '~/api/api-base.js'
 import { dateTimeFilter  } from '../filters.js'
 
 export default {

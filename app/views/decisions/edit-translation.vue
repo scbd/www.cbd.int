@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import Api from '~/components/meetings/api.js';
+import DecisionApi from '~/api/decisions.js';
 import { cloneDeep } from 'lodash'
 import ClassicEditor from 'ckeditor5';
 import { component as ckeditor } from 'vue-ckeditor5'
@@ -80,7 +80,7 @@ export default {
 }
 
 async function created() {
-    this.api = new Api(this.tokenReader);
+    this.api = new DecisionApi(this.tokenReader);
     const rowData = await this.api.queryDecisionNodes(this.decisionId);
     rowData.forEach(row=>{
         row.editor = false;

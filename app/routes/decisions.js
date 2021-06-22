@@ -11,8 +11,8 @@ import * as decisionView     from '~/views/decisions/view'
 import * as paragraphView    from '~/views/decisions/paragraph'
 
 // On-demand views
-const editDecisionView  = { component: ()=>import('~/views/decisions/edit') }
-const decisionTranslationView = { component: ()=>import('~/components/decisions/decision-translation.vue') }
+const editDecisionView    = { component: ()=>import('~/views/decisions/edit') }
+const editTranslationView = { component: ()=>import('~/views/decisions/edit-translation.vue') }
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
@@ -27,6 +27,6 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:body/:session/:decision',            { ...mapView(decisionView),           resolve: { user : currentUser() } } )
     .when('/:body/:session/:decision/edit',       { ...mapView(angularViewWrapper),     resolve: { ...editDecisionView, user : securize(["Administrator","DecisionTrackingTool", "ScbdStaff"]) } } )
     .when('/:body/:session/:decision/:paragraph', { ...mapView(paragraphView),          resolve: { user : currentUser() } })
-    .when('/:body/:session/:decision/edit/translation', { ...mapView(vueViewWrapper), resolve : { ...decisionTranslationView, user : currentUser()}})
+    .when('/:body/:session/:decision/edit/translation', { ...mapView(vueViewWrapper), resolve : { ...editTranslationView, user : currentUser()}})
     .otherwise({redirectTo: '/404'});
 }]);

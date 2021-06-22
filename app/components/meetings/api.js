@@ -1,48 +1,15 @@
 
 import axios from 'axios'
-import { isFunction, isEmpty, cloneDeep } from 'lodash'
-
-let sitePrefixUrl = 'https://api.cbd.int';
-
-if(/\.cbd\.int$/i   .test(window.location.hostname)) sitePrefixUrl= 'https://api.cbd.int';
-if(/\.cbddev\.xyz$/i.test(window.location.hostname)) sitePrefixUrl= 'https://api.cbddev.xyz';
-if(/\localhost$/i   .test(window.location.hostname)) sitePrefixUrl= '/';
+import ApiBase, { tryCastToApiError, mapObjectId, isObjectId } from '../../api/api-base.js'
+import { isEmpty, cloneDeep } from 'lodash'
 
 const cache          = new Map()
-const defaultOptions = { prefixUrl: sitePrefixUrl, timeout  : 30 * 1000 }
 
-export default class Api
+export default class Api extends ApiBase
 {
-    constructor(options) {
-
-      options = options || {};
-
-      if(isFunction(options)) options = { tokenReader : options }
-
-      const { tokenReader, prefixUrl, timeout, tokenType } = { ...defaultOptions, ...options }
-
-
-      const baseConfig = {
-        baseURL : prefixUrl,
-        timeout,
-        tokenReader
-      }
-
-      const http = async function (...args) {
-        return (await loadAsyncHeaders(baseConfig))(...args);
-      }
-
-      http.get     = async (...args)=> (await loadAsyncHeaders(baseConfig)).get    (...args);
-      http.head    = async (...args)=> (await loadAsyncHeaders(baseConfig)).head   (...args);
-      http.post    = async (...args)=> (await loadAsyncHeaders(baseConfig)).post   (...args);
-      http.put     = async (...args)=> (await loadAsyncHeaders(baseConfig)).put    (...args);
-      http.patch   = async (...args)=> (await loadAsyncHeaders(baseConfig)).patch  (...args);
-      http.delete  = async (...args)=> (await loadAsyncHeaders(baseConfig)).delete (...args);
-      http.options = async (...args)=> (await loadAsyncHeaders(baseConfig)).options(...args);
-      http.request = async (...args)=> (await loadAsyncHeaders(baseConfig)).request(...args);
-
-      this.http = http;
-    }
+  constructor(options) {
+    super(options);
+  }
 
   ////////////////////////
   // Meetings {q,f,t,s,l,sk}
@@ -245,17 +212,6 @@ export default class Api
     return { ...session, interventions }
   }
 
-  async queryDecisionNodes(decisionId) {
-
-    const nodes = await this.http.get(`api/v2021/decisions/${encodeURIComponent(decisionId)}/nodes`).then(res => res.data).catch(tryCastToApiError);
-
-    return nodes;
-  }
-
-  async updateDecisionNode(decisionId, nodeId, data) {
-    return this.http.put(`api/v2021/decisions/${encodeURIComponent(decisionId)}/nodes/${encodeURIComponent(nodeId)}`, data).then(res => res.data).catch(tryCastToApiError);
-  }
-
   //////////////////////////
   // Temporary Files
   ////////////////////////
@@ -301,20 +257,6 @@ export default class Api
   
 }
 
-async function loadAsyncHeaders(baseConfig) {
-
-  const { tokenReader, tokenType, ...config } = { ...baseConfig };
-
-  const headers = { ...(config.headers || {}) };
-
-  if(tokenReader) {
-    const token = await tokenReader();
-    headers.Authorization = `${tokenType||'Token'} ${token}`;
-  }
-
-  return axios.create({ ...config, headers } );
-}
-
 function makeMeetingConferenceQuery (code){
   const codeClone                     = cloneDeep(code)
   const meetingOrConferenceIdentifier = Array.isArray(codeClone)? codeClone.map( x => x.toUpperCase()) : [codeClone.toUpperCase()]
@@ -356,29 +298,6 @@ function getAllSessions(interventions){
 //             TO REVIEW
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-//////////////////////////
-// Helpers
-////////////////////////
-
-export function tryCastToApiError(error) {
-
-  if(error && error.response && error.response.data && error.response.data.code) {
-      const apiError = error.response.data
-      throw error.response.data;
-  }
-
-  throw error
-}
-
-export function mapObjectId(id){
-  return isObjectId(id)? { $oid: id } : id
-}
-
-export function isObjectId(id){
-  return /^[a-f0-9]{24}/i.test(id);
-}
 
 export function mergeQueries(...args) {
   const matches = [ ...args ].filter((m) => !!m && !isEmpty(m));
