@@ -6,7 +6,8 @@
                     <tr class="text-center">
                         <td class="bg-primary text-white font-weight-bold">English</td>
                         <td class="bg-primary text-white font-weight-bold">
-                            <select id="languages" v-model="selectedLanguage" class="w-50 ">
+                            <select id="languages" v-model="selectedLanguage" class="w-50"
+                            :disabled="isEditorOpen">
                                 <option 
                                     v-for="(language, locale) in languages"
                                     :key="locale" 
@@ -18,7 +19,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(row, index) in rows" :key="index">
+                    <tr v-for="(row, index) in rows" :key="index" v-show="!isEmpty(row.body)">
                         <td class="border border-grey p-2"><span v-html="row.body.en" /></td>
                         <td class="border border-grey p-2">
                             <div v-if="rows[index].editor">
@@ -41,7 +42,7 @@
 
 <script>
 import DecisionApi from '~/api/decisions.js';
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
 import ClassicEditor from 'ckeditor5';
 import { component as ckeditor } from 'vue-ckeditor5'
 import languages from '~/components/languages.js';
@@ -69,13 +70,17 @@ export default {
             const langs = cloneDeep(languages);
             delete langs.en;
             return langs;
-        } 
+        },
+        isEditorOpen() {
+            return this.rows.some((r) => r.editor);
+        }
     },
     created,
     methods: {
         edit,
         save, 
-        cancel
+        cancel,
+        isEmpty
     }
 }
 
@@ -89,6 +94,7 @@ async function created() {
     });
     this.rows = rowData;
 }
+
 function edit(row) {
     row.editor = true;
     row.editorHtml = row.body[this.selectedLanguage] || '';
