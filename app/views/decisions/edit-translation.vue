@@ -109,6 +109,8 @@ async function save(row) {
 
     const body   = { ...row.body, [locale]: html };
 
+    Object.keys(body).forEach((lang) => !body[lang] && delete body[lang]);
+    
     const result = await this.api.updateDecisionNode(this.decisionId, row._id, { body });
     
     row.body = result.body;
