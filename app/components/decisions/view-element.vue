@@ -18,14 +18,7 @@
             style="opacity:0.5;margin-right:6px"
         >
             <i class="fa fa-info-circle"></i>
-            <span>
-                <span v-if="$options.filters.lowercase(status) === 'active'">active</span>
-                <span v-else-if="$options.filters.lowercase(status) === 'implemented'">implemented</span>
-                <span v-else-if="$options.filters.lowercase(status) === 'superseded'">superseded</span>
-                <span v-else-if="$options.filters.lowercase(status) === 'elapsed'">elapsed</span>
-                <span v-else-if="$options.filters.lowercase(status) === 'retired'">retired</span>
-                <span v-else>{{status | uppercase}}</span>
-            </span>
+            <span>{{statusName(status)}}</span>
         </span>
 
         <span 
@@ -35,20 +28,14 @@
             style="opacity:0.5;margin-right:6px"
         >
             <i class="fa fa-user" aria-hidden="true"></i>
-            <span>
-                <span v-if="$options.filters.lowercase(actor) === 'executive-secretary'">es</span>
-                <span v-else-if="$options.filters.lowercase(actor) === 'parties'">parties</span>
-                <span v-else-if="$options.filters.lowercase(actor) === 'other-governments'">other governments</span>
-                <span v-else-if="$options.filters.lowercase(actor) === 'others'">others</span>
-                <span v-else>{{actor}}</span>
-            </span>
+            <span>{{actorName(actor)}}</span>
         </span>
 
         <p v-if="node.type==='paragraph'">
             <a class="btn btn-primary btn-sm" role="button" v-if="showDecision"
                 :href="`/decisions/cop/${node.data.session}/${node.data.decision}`">
                 <i class="fa fa-search" aria-hidden="true"></i> 
-                UNEP/CBD/COP/DEC/{{romanize(node.data.session)}}/{{node.data.decision}}
+                UNEP/CBD/COP/DEC/{{romans[node.data.session]}}/{{node.data.decision}}
             </a>
             <a class="btn btn-primary btn-sm" role="button" 
                 :href="`/decisions/cop/${node.data.session}/${node.data.decision}/${node.data.section | lowercase}${node.paragraph}${node.item && ('.'+node.item)}`" 
@@ -67,6 +54,10 @@
 </template>
 
 <script>
+import actors from '~/views/decisions/data/actors.js';
+import romans from '~/views/decisions/data/romans.js';
+import statuses from '~/views/decisions/data/statuses.js';
+
 export default {
     name: 'ViewElement',
     filters: {
@@ -81,9 +72,16 @@ export default {
         node: {
             type: Object,
             default: () => {}
+        },
+        showDecision: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
+        actors() { return actors},
+        statuses() { return statuses},
+        romans() { return romans},
         type() {
             let dataType = this.node.data.type;
 
@@ -95,12 +93,20 @@ export default {
         }
     },
     methods: {
-        romanize
+        actorName,
+        statusName
     }
 }
 
-function romanize (n) {
-    var roman = [ '', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI', 'XXII', 'XXII', 'XXIV', 'XXV', 'XXVI', 'XXVII', 'XXVIII', 'XXIX', 'XXX' ];
-    return roman[n];
+function actorName(text) {
+    const lowerText = this.$options.filters.lowercase(text);
+    return actors.find(a => a.code === lowerText)?.title 
+    || this.$options.filters.uppercase(text);
+}
+
+function statusName(text) {
+    const lowerText = this.$options.filters.lowercase(text);
+    return statuses.find(s => s.code === lowerText)?.title 
+        || this.$options.filters.uppercase(text);
 }
 </script>
