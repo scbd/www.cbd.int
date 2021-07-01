@@ -1,56 +1,66 @@
 <template>
+<div>
     <div>
-        <a :name="node.data.code.split('/').join('-')"></a>
-        <span v-if="type" class="pull-right badge" style="opacity:0.5;margin-right:6px"
-            :class="type === 'operational' ? 'badge-info' : 'badge-secondary'">
-            <span>
-                <span v-if="type === 'operational'"><i class="fa fa-cog"></i> operational</span>
-                <span v-else-if="type === 'informational'"><i class="fa fa-info-circle"></i> informational</span>
-                <span v-else>{{node.data.type | uppercase}}</span>
-            </span>
-	    </span>
+        <div class="row">
+            <div class="col-12">
+                <a :name="name"></a>
+                <span v-if="type" class="pull-right badge" style="opacity:0.5;margin-right:6px"
+                    :class="type === 'operational' ? 'badge-info' : 'badge-secondary'">
+                    <span>
+                        <span v-if="type === 'operational'"><i class="fa fa-cog"></i> Operational</span>
+                        <span v-else-if="type === 'informational'"><i class="fa fa-info-circle"></i> Informational</span>
+                        <span v-else>{{node.type | uppercase}}</span>
+                    </span>
+                </span>
 
-        <span 
-            v-for="status in node.data.statuses" 
-            :key="status"
-            class="pull-right badge" 
-            :class="status === 'active' ? 'badge-success' : 'badge-secondary'"
-            style="opacity:0.5;margin-right:6px"
-        >
-            <i class="fa fa-info-circle"></i>
-            <span>{{statusName(status)}}</span>
-        </span>
+                <span 
+                    v-for="status in node.statuses" 
+                    :key="status"
+                    class="pull-right badge" 
+                    :class="status === 'active' ? 'badge-success' : 'badge-secondary'"
+                    style="opacity:0.5;margin-right:6px"
+                >
+                    <i class="fa fa-info-circle"></i>
+                    <span>{{statusName(status)}}</span>
+                </span>
 
-        <span 
-            v-for="actor in node.data.actors" 
-            :key="actor"
-            class="pull-right badge badge-secondary" 
-            style="opacity:0.5;margin-right:6px"
-        >
-            <i class="fa fa-user" aria-hidden="true"></i>
-            <span>{{actorName(actor)}}</span>
-        </span>
+                <span 
+                    v-for="actor in node.actors" 
+                    :key="actor"
+                    class="pull-right badge badge-secondary" 
+                    style="opacity:0.5;margin-right:6px"
+                >
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <span>{{actorName(actor)}}</span>
+                </span>
 
-        <p v-if="node.type==='paragraph'">
-            <a class="btn btn-primary btn-sm" role="button" v-if="showDecision"
-                :href="`/decisions/cop/${node.data.session}/${node.data.decision}`">
-                <i class="fa fa-search" aria-hidden="true"></i> 
-                UNEP/CBD/COP/DEC/{{romans[node.data.session]}}/{{node.data.decision}}
-            </a>
-            <a class="btn btn-primary btn-sm" role="button" 
-                :href="`/decisions/cop/${node.data.session}/${node.data.decision}/${node.data.section | lowercase}${node.paragraph}${node.item && ('.'+node.item)}`" 
-                @click="$root.hiddenHash='view'"
-            >
-                <i class="fa fa-search" aria-hidden="true"></i> 
-                paragraph 
-                <span v-if="node.data.section">{{node.data.section}}.</span> 
-                {{node.paragraph}} 
-                <span v-if="node.item">item ({{node.item}})</span>
-            </a>
-        </p>
-
-        <div><span v-html="node.html" /></div>
+                <p v-if="node.type==='paragraph'">
+                    <a class="btn btn-primary btn-sm" role="button" v-if="showDecision"
+                        :href="`/decisions/cop/${node.session}/${node.decision}`">
+                        <i class="fa fa-search" aria-hidden="true"></i> 
+                        UNEP/CBD/COP/DEC/{{romans[node.session]}}/{{node.decision}}
+                    </a>
+                    <a class="btn btn-primary btn-sm" role="button" 
+                        :href="`/decisions/cop/${node.session}/${node.decision}/${node.section | lowercase}${node.paragraph}${node.item && ('.'+node.item)}`" 
+                        @click="$root.hiddenHash='view'"
+                    >
+                        <i class="fa fa-search" aria-hidden="true"></i> 
+                        paragraph 
+                        <span v-if="node.section">{{node.section}}.</span> 
+                        {{node.paragraph}} 
+                        <span v-if="node.item">item ({{node.item}})</span>
+                    </a>
+                </p>
+            </div>
+        </div>
+        <div class="row" v-if="node.html">
+            <div class="col-12">
+                <span v-html="node.html.en" />
+            </div>
+        </div>
     </div>
+    <view-element v-for="child in node.nodes" :node="child" :key="child._id"/>
+</div>
 </template>
 
 <script>
@@ -82,14 +92,21 @@ export default {
         actors() { return actors},
         statuses() { return statuses},
         romans() { return romans},
+        name() {
+            const {node} = this;
+
+            if(!node.code) return '';
+
+            return node.code.split('/').join('-');
+        },
         type() {
-            let dataType = this.node.data.type;
+            const {node}= this;
 
-            if(!dataType) return '';
+            if(!node.type) return '';
 
-            if(dataType === 'information') dataType = 'informational';
+            if(node.type === 'information') node.type = 'informational';
 
-            return this.$options.filters.lowercase(this.node.data.type);
+            return this.$options.filters.lowercase(node.type);
         }
     },
     methods: {
