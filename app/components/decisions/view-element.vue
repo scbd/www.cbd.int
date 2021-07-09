@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div>
+    <div :class="dimmed && 'dimmed'">
         <div class="row">
             <div class="col-12">
                 <a :name="name"></a>
@@ -59,7 +59,12 @@
             </div>
         </div>
     </div>
-    <view-element v-for="child in node.nodes" :node="child" :key="child._id"/>
+    <view-element 
+        v-for="child in node.nodes" 
+        :key="child._id"
+        :node="child"
+        :filters.sync="filters"
+    />
 </div>
 </template>
 
@@ -67,6 +72,7 @@
 import actors from '~/views/decisions/data/actors.js';
 import romans from '~/views/decisions/data/romans.js';
 import statuses from '~/views/decisions/data/statuses.js';
+import _ from 'lodash';
 
 export default {
     name: 'ViewElement',
@@ -86,6 +92,10 @@ export default {
         showDecision: {
             type: Boolean,
             default: false
+        },
+        filters: {
+            type: Object,
+            default: () => {}
         }
     },
     computed: {
@@ -93,20 +103,35 @@ export default {
         statuses() { return statuses},
         romans() { return romans},
         name() {
-            const {node} = this;
+            const { node } = this;
 
             if(!node.code) return '';
 
             return node.code.split('/').join('-');
         },
         type() {
-            const {node}= this;
+            const { node }= this;
 
             if(!node.type) return '';
 
             if(node.type === 'information') node.type = 'informational';
 
             return this.$options.filters.lowercase(node.type);
+        },
+        dimmed() {
+            const { node, filters } = this;
+
+            if(!filters || Object.keys(filters).length === 0) return false;
+
+            const {actors, statuses, types, aichiTargets, subjects} = filters;
+
+            if(types && _(types).intersection([node.type]).some()) return false;
+            if(statuses && _(statuses).intersection(node.statuses).some()) return false;
+            if(actors && _(actors).intersection(node.actors).some()) return false;
+            if(aichiTargets && _(aichiTargets).intersection(node.aichiTargets).some()) return false;
+            if(subjects && _(subjects).intersection(node.subjects).some()) return false;
+
+            return true;
         }
     },
     methods: {
@@ -127,3 +152,9 @@ function statusName(text) {
         || this.$options.filters.uppercase(text);
 }
 </script>
+
+<style scoped>
+.dimmed {
+    opacity: 0.5
+}
+</style>
