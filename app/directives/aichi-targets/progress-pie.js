@@ -308,7 +308,10 @@ import template from './progress-pie.html'
                                   return count += (n * parseInt(k));
                                 }, 0);
           
-                    return Math.round(count/docs.length);
+                    var validDocs = _.filter(docs, function(doc){
+                        return !_.includes(["Unknown"], doc.progress_EN_t)
+                        });
+                        return Math.round(count/validDocs.length);
           
                   }
 
