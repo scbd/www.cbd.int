@@ -8,12 +8,40 @@ export default class DecisionApi extends ApiBase
 
   async queryDecisionNodes(decisionId) {
 
-    const nodes = await this.http.get(`api/v2021/decisions/${encodeURIComponent(decisionId)}/nodes`).then(res => res.data).catch(tryCastToApiError);
+    const result = await this.http.get(`api/v2021/decisions/${encodeURIComponent(decisionId)}/nodes`).then(res => res.data).catch(tryCastToApiError);
 
-    return nodes;
+    return result;
+  }
+
+  async queryDecisionTree(code) {
+
+    const result = await this.http.get(`api/v2021/decisions/${encodeURIComponent(code)}/tree`, {cache:true }).then(res => res.data).catch(tryCastToApiError);
+
+    return result;
   }
 
   async updateDecisionNode(decisionId, nodeId, data) {
     return this.http.put(`api/v2021/decisions/${encodeURIComponent(decisionId)}/nodes/${encodeURIComponent(nodeId)}`, data).then(res => res.data).catch(tryCastToApiError);
+  }
+
+  async getTreaties(code) {
+    
+    const result = await this.http.get(`api/v2015/treaties/${encodeURIComponent(code)}`, { cache: true }).then(res => res.data).catch(tryCastToApiError);
+
+    return result;
+  }
+
+  async getDecisionDocuments(params) {
+    
+    const result = await this.http.get('api/v2013/index', { params });
+
+    return result;
+  }
+
+  async getRelatedDecisions(params) {
+    
+    const result = await this.http.get('api/v2016/decision-texts/search', { params });
+
+    return result;
   }
 }

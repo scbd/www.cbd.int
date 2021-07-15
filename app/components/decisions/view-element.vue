@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div :class="dimmed && 'dimmed'">
+    <div :class="dimmed && 'dimmed'" class="pointer" @click="setSelectedNode">
         <div class="row">
             <div class="col-12">
                 <a :name="name"></a>
@@ -61,9 +61,11 @@
     </div>
     <view-element 
         v-for="child in node.nodes" 
+        v-show="child && child._id"
         :key="child._id"
         :node="child"
         :filters.sync="filters"
+        :selectedNode.sync="selectedNode"
     />
 </div>
 </template>
@@ -96,6 +98,10 @@ export default {
         filters: {
             type: Object,
             default: () => {}
+        },
+        selectedNode: {
+            type: Object,
+            default: () => {}
         }
     },
     computed: {
@@ -119,7 +125,12 @@ export default {
             return this.$options.filters.lowercase(node.type);
         },
         dimmed() {
-            const { node, filters } = this;
+            const { node, filters, selectedNode } = this;
+
+            if(selectedNode && Object.keys(selectedNode).length > 0) {
+                if(selectedNode._id === node._id) return false;
+                else return true;
+            }
 
             if(!filters || Object.keys(filters).length === 0) return false;
 
@@ -136,7 +147,8 @@ export default {
     },
     methods: {
         actorName,
-        statusName
+        statusName,
+        setSelectedNode
     }
 }
 
@@ -151,10 +163,17 @@ function statusName(text) {
     return statuses.find(s => s.code === lowerText)?.title 
         || this.$options.filters.uppercase(text);
 }
+
+function setSelectedNode() {
+    this.$emit("update:selectedNode", this.node);
+}
 </script>
 
 <style scoped>
 .dimmed {
     opacity: 0.5
+}
+.pointer {
+    cursor: pointer; 
 }
 </style>

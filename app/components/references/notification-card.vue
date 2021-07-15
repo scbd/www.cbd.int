@@ -25,7 +25,7 @@
 <script>
 import DocumentFiles from '~/components/references/document-files.vue';
 import moment from 'moment-timezone';
-import {lstring} from '~/filters/lstring.js';
+import lstring from '~/filters/lstring.js';
 
 export default {
     name: 'NotificationCard',

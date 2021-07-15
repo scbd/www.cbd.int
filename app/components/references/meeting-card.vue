@@ -24,7 +24,7 @@
 
 <script>
 import moment from 'moment-timezone'
-import {lstring} from '~/filters/lstring.js';
+import lstring from '~/filters/lstring.js';
 
 export default {
     name: 'MeetingCard',

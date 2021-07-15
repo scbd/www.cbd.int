@@ -9,7 +9,6 @@
                 <meeting-card :meeting="meeting"/>
             </div>
         </div>
-        <!-- TODO - need to remove card for Single Meeting -->
     </div>
 </template>
 
