@@ -271,10 +271,13 @@ import row from './target-row.html'
                     progressCount[num]++;
                   });
                   var count = _.reduce(progressCount, function(count, n, k){
-                                return count += (n * (parseInt(k)+1));
+                                return count += (n * (parseInt(k)));
                               }, 0);
         
-                  return Math.round(count/docs.length);
+                  var validDocs = _.filter(docs, function(doc){
+                    return !_.includes(["Unknown"], doc.progress_EN_t)
+                  });
+                  return Math.round(count/validDocs.length);
         
                 }
 
@@ -453,7 +456,7 @@ import row from './target-row.html'
 
                   switch (progress) {
                     case 0:
-                      return 'Unknon ' + aichiTargetReadable(target);
+                      return 'Unknown ' + aichiTargetReadable(target);
                     case 1:
                       return 'Moving away from ' + aichiTargetReadable(target) + ' (things are getting worse rather than better).';
                     case 2:
