@@ -63,11 +63,7 @@ function bundle(relativePath, baseDir='app') {
         allowAllFormats: true
       }),
       isWatchOn ? null : terser({ mangle: false }) // DISABLE IN DEV
-    ],
-    onwarn(warning, warn) {
-      if(warning.code=='EVAL' && warning.id.endsWith('js/interface.js')) return; //disable eval 
-      warn(warning);
-    }
+    ]
   }
 }
 
