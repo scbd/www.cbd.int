@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { lstring } from '~/filters/lstring.js';
+import lstring from '~/filters/lstring.js';
 
 export default {
     name: 'Decision',

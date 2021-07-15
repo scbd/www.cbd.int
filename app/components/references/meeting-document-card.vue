@@ -19,7 +19,7 @@
 
 <script>
 import DocumentFiles from '~/components/references/document-files.vue';
-import { lstring } from '~/filters/lstring.js';
+import lstring       from '~/filters/lstring.js';
 
 export default {
     name: 'MeetingDocumentCard',

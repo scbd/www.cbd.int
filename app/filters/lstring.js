@@ -2,7 +2,7 @@ import app from '~/app'
 
 app.filter("lstring", () => lstring);
 
-export function lstring(ltext, locale) {
+export default function lstring(ltext, locale) {
 	if(!ltext)
 		return ltext;
 
