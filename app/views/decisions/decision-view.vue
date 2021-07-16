@@ -56,8 +56,9 @@
 						:class="{ disabled : filters && filters.types }">
 						{{counts.types}}
 					</a>
-					<a v-for="type in types" :key="type.code"
+					<a v-for="type in allFilters.types" :key="type.code"
 						href="#" class="badge badge-secondary text-nowrap" 
+						style="margin-right:3px;"
 						@click="toggleFilters({ types: [type.code] })" 
 						:class="!isFilterSelected('types', type.code) && 'disabled'" >
 						{{counts.types}} {{type.title}} 
@@ -71,8 +72,9 @@
 						{{counts.statuses}}
 					</a>
 					<a 
-						v-for="status in statuses" :key="status.code"
+						v-for="status in allFilters.statuses" :key="status.code"
 						href="#" class="badge badge-secondary text-nowrap" 
+						style="margin-right:3px;"
 						@click="toggleFilters({ statuses : [status.code]})"
 						:class="!isFilterSelected('statuses', status.code) && 'disabled'" >
 						{{counts.statuses}} {{status.title}} 
@@ -88,11 +90,12 @@
 						{{counts.actors}}
 					</a>
 					<a
-						v-for="actor in actors" :key="actor.code"
+						v-for="actor in allFilters.actors" :key="actor.code"
 						href="#" class="badge badge-secondary text-nowrap" 
+						style="margin-right:3px;"
 						@click="toggleFilters({ actors : [actor.code] })" 
 						:class="!isFilterSelected('actors', actor.code) && 'disabled'">
-						{{counts.actors}} {{actor.code}} 
+						{{counts.actors}} {{actor.title}} 
 						<i class="fa fa-filter" aria-hidden="true"></i>
 					</a>
 				</dd>
@@ -103,8 +106,10 @@
 						@click="toggleFilters({ aichiTargets : null })" 
 						:class="!isFilterSelected('aichiTargets', 'aichiTarget') && 'disabled'">
 						{{counts.aichiTargets}}</a>
-					<span class="chip-sm" v-for="aichiTarget in aichiTargets" :key="aichiTarget" 
-                        v-show="aichiTargets && aichiTargets.length > 0"
+					<span class="chip-sm" 
+						v-for="aichiTarget in allFilters.aichiTargets" 
+						:key="aichiTarget" 
+						@click="toggleFilters({ aichiTargets : [aichiTarget.index] })" 
 						:class="!isFilterSelected('aichiTargets', aichiTargets.index) && 'disabled'">
 							<img :title="aichiTarget.description" 
 							:src="`/app/images/aichi-targets/abt-${aichiTarget.index}-96.png`" 
@@ -121,12 +126,15 @@
 						:class="{ disabled : filters &&  filters.subjects }">
 						{{counts.subjects}}
 					</a>
-					<span style="margin-right:3px;" v-for="subject in subjects" :key="subject">
-                        <a href="#" class="badge badge-secondary text-nowrap" 
-						 :class="!isFilterSelected('subjects', 'subject')">
-							 {{subject}}
-						</a> 
-                    </span>
+
+					<a href="#" class="badge badge-secondary text-nowrap" 
+						v-for="subject in allFilters.subjects" 
+						:key="subject.code"
+						style="margin-right:3px;"
+						@click="toggleFilters({ subjects : [subject.code] })" 
+						:class="!isFilterSelected('subjects', subject.code) && 'disabled'">
+							 {{subject.title}}
+					</a> 
 				</dd>
 				<br>
 
@@ -171,6 +179,7 @@ import aichiTargets from '~/data/reports/aichiTargets.json';
 import DocumentFiles from '~/components/references/document-files.vue';
 import DecisionCardList from '~/components/references/decision-card-list.vue';
 import MeetingCardList from '~/components/references/meeting-card-list.vue';
+import term from '~/filters/term.js';
 
 export default {
     name: 'DecisionView',
@@ -200,6 +209,7 @@ export default {
 			documents: [],
 			filters: {},
 			counts: {},
+			allFilters: {},
 		}
 	},
     computed: {
@@ -228,7 +238,9 @@ export default {
 		resetCount,
 		loadRelatedDecisions,
 		loadDocuments,
-		isFilterSelected
+		isFilterSelected,
+		lookupTermText,
+		loadFilters
     },
 	mounted: load
 }
@@ -264,6 +276,35 @@ async function load() {
 	this.documents = await this.loadDocuments(decision);
 
 	this.resetCount();
+
+	await this.loadFilters();
+}
+
+async function loadFilters() {
+	const {decision} = this;
+
+	let allFilters = {};
+
+	if(!decision) {
+		this.$set({}, "allFilters", {});
+		return;
+	}
+
+	allFilters.types = getTags(decision, "type").map(tag => types.find(item => item.code === tag) || tag);
+	allFilters.statuses = getTags(decision, "statuses").map(tag => statuses.find(item => item.code === tag) || tag);
+	allFilters.actors = getTags(decision, "actors").map(tag => actors.find(item => item.code === tag) || tag);
+	allFilters.aichiTargets = getTags(decision, "aichiTargets").map(tag => aichiTargets.find(item => item.index === tag) || tag);
+
+	//load subjects
+	const codes = getTags(decision, 'subjects');
+	const subjects = codes.map(async code => {
+		const title = await lookupTermText(code) 
+		return {code , title}
+	});
+	const data = await Promise.all(subjects);
+	allFilters.subjects = data;
+
+	this.$set(this, 'allFilters', allFilters);
 }
 
 async function loadDocuments(decision) {
@@ -385,6 +426,25 @@ function isFilterSelected(type, code) {
 	return filters[type].some((c) => c === code);
 }
 
+function getTags(collection, field) {
+	let list = [];
+	if(!_.isEmpty(collection[field])) list.push(collection[field]);
+
+	if(!_.isEmpty(collection.nodes)) {
+		collection.nodes.forEach((node) => {
+			var sublist = getTags(node, field);
+			list.push(sublist);
+		});
+	}
+	return _(list).flatten().uniq().value();
+
+}
+
+async function lookupTermText(code) {
+	var termCode = {identifier:code};
+	const text = await term(termCode);
+	return text;
+}
 </script>
 
 <style scoped>

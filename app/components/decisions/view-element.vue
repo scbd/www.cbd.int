@@ -1,7 +1,7 @@
 <template>
 <div>
-    <div :class="dimmed && 'dimmed'" class="pointer" @click="setSelectedNode">
-        <div class="row">
+    <div class="pointer" @click="setSelectedNode">
+        <div class="row" :class="dimmed && 'dimmed'">
             <div class="col-12">
                 <a :name="name"><small>{{name}}</small></a>
                 <span v-if="type" class="pull-right badge" style="opacity:0.5;margin-right:6px"
@@ -53,7 +53,7 @@
                 </p>
             </div>
         </div>
-        <div class="row" v-if="node.html">
+        <div class="row" v-if="node.html" :class="dimmed && 'dimmed'">
             <div class="col-12">
                 <span v-html="node.html.en" />
             </div>
