@@ -3,7 +3,7 @@
     <div :class="dimmed && 'dimmed'" class="pointer" @click="setSelectedNode">
         <div class="row">
             <div class="col-12">
-                <a :name="name"></a>
+                <a :name="name"><small>{{name}}</small></a>
                 <span v-if="type" class="pull-right badge" style="opacity:0.5;margin-right:6px"
                     :class="type === 'operational' ? 'badge-info' : 'badge-secondary'">
                     <span>
@@ -58,15 +58,17 @@
                 <span v-html="node.html.en" />
             </div>
         </div>
+
+        <view-element 
+            v-for="child in node.nodes" 
+            v-show="child && child._id"
+            :key="child._id"
+            :node="child"
+            :filters.sync="filters"
+            :selectedNode.sync="selectedNode"
+        />
     </div>
-    <view-element 
-        v-for="child in node.nodes" 
-        v-show="child && child._id"
-        :key="child._id"
-        :node="child"
-        :filters.sync="filters"
-        :selectedNode.sync="selectedNode"
-    />
+
 </div>
 </template>
 
@@ -175,5 +177,8 @@ function setSelectedNode() {
 }
 .pointer {
     cursor: pointer; 
-}
-</style>
+    /* TMP */
+    border: 1px dotted #c0c0c0;
+    padding: 2px;
+    margin: 2px;
+}</style>
