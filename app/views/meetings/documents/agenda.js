@@ -10,6 +10,10 @@ import 'css!./agenda.css'
 import _ from 'lodash'
 import moment from 'moment-timezone'
 import ng from 'angular'
+import ScheduleAgendaDynamicConnectButton from '~/components/meetings/schedule-agenda-dynamic-connect-button.vue'
+import ReservationLinks from '~/components/meetings/reservation-links.vue'
+import Vue from 'vue'
+import 'angular-vue'
 
 export { default as template } from './agenda.html'
 
@@ -32,6 +36,8 @@ export { default as template } from './agenda.html'
 export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceService', '$location', '$timeout', '$rootScope',
     function ($scope, $route, $http, $q, $interval, conferenceService, $location, $timeout, $rootScope) {
 
+        Vue.component('ScheduleAgendaDynamicConnectButton', ScheduleAgendaDynamicConnectButton)
+        Vue.component('ReservationLinks', ReservationLinks)
         var eventId;
         var streamId;
         var timeTimer;
@@ -49,10 +55,14 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         
         $q.when(conferenceService.getActiveConference())
         .then(function(meeting){
-            _ctrl.all            = meeting.schedule.all
-            _ctrl.connectionInit = meeting.schedule.connection.initTimes
+            const { schedule }        = meeting || {};
+            const { all, connection } = schedule;
+
+            $scope.schedule      = schedule;
+            _ctrl.all            = all;
+            _ctrl.connectionInit = connection?.initTimes
             eventId              = meeting._id;
-            streamId             = meeting.conference.streamId;
+            streamId             = meeting?.conference?.streamId;
             _ctrl.streamId       = streamId;
             _ctrl.meeting        = meeting;
             
@@ -307,7 +317,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             const   start      = moment(now).startOf('minute').toDate(); // start of minute to avois cache busting
             const   end        = _ctrl.all?  eventEnd : tomorrow// to tomorrow
 
-            var fields = { start : 1, end : 1, agenda :1, type: 1, title: 1, video:1, videoUrl:1,location: 1 };
+            const fields = { start : 1, end : 1, agenda :1, type: 1, title: 1, video:1, videoUrl:1, location: 1, links: 1, videoUrlMinutes: 1, displayLinksImmediately: 1 };
             var sort   = { start : 1, end : 1 };
             var query  = {
                 'agenda.items': { $exists: true, $ne: [] },
@@ -442,6 +452,12 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                 var dateOption = {
                     value : date.format('YYYY-MM-DD')
                 }
+         
+                if(isToday(date)) { 
+                  dateOption.text  = `Today: ${date.format('ddd Do')}`
+                  dateOption.today = true
+                }
+
                 dates.push(dateOption)
             }
 
@@ -458,7 +474,28 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             _ctrl.scheduleDates = dates;
         };
 
-        function scheduleDateChanged(date){ 
+        function isToday(testDateTime){
+          const test = ensureMoment(testDateTime).startOf('day');
+          const now  = moment.tz(new Date(), getTimezone()).startOf('day');
+
+          return test.format('X') === now.format('X')
+        }
+
+        function ensureMoment(testDateTime, tz = true){
+          const isMoment = moment.isMoment(testDateTime)
+
+          if(isMoment) return testDateTime
+
+          const { timezone } = getTimezone()
+          const   aMoment    = tz? moment.tz(testDateTime, timezone) : moment(testDateTime)
+
+          if(!aMoment.isValid()) throw new Error(`ensureMoment: ${testDateTime} not a valid datetime`)
+
+          return aMoment
+        }
+
+        function scheduleDateChanged(date, disabled=false){
+            if(disabled) return
             _ctrl.scheduleDate = date;
             var tab = _ctrl.currentTab;     
             _ctrl.types[0].loaded = false;

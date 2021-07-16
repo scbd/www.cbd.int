@@ -13,6 +13,12 @@
       <SearchControls v-if="meetings.length" :meetings="meetings" @query="query"/>
     </keep-alive>
 
+    <div class="pull-left text-muted">
+      <label>
+        <input type="checkbox" v-model="showNFI" @change="refresh"/>
+        Include <em>Not for interpretation</em>
+      </label>  
+    </div>
     <div class="text-right text-muted">
       <button @click="refresh" class="btn btn-link"><i class="fa fa-refresh"></i></button>
       <i v-if="lastUpdated" class="text-muted"> Last refresh on {{ lastUpdated | dateTimeFilter('T')}} - </i>
@@ -55,6 +61,7 @@ export default {
 
 function data(){
   return { 
+    showNFI : false,
     interventions: [], 
     meetings : [],
     maxResultCount : 250,
@@ -89,8 +96,11 @@ async function query(queryArgs){
   const { query, freeText }  = queryArgs;
   const isPending = { status: 'pending' };
   const hasFiles  = { 'files.0': {$exists: true} }; // has at least one file
+  let   showNFI   = null; // true
 
-  const q = mergeQueries(query, isPending, hasFiles);
+  if(!this.showNFI) showNFI = { 'tags' : {$nin: ['not-for-interpretation'] } }; // hide to interpreters
+
+  const q = mergeQueries(query, isPending, hasFiles, showNFI);
   const t = freeText;
   const l = this.maxResultCount;
   const s = { score: -1, title: 1, agendaItem: 1, datetime: -1 }

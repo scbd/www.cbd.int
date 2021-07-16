@@ -34,6 +34,13 @@
         <slot>
             <FilesPreview v-if="isPending(intervention.status)" :files="intervention.files" />
         </slot>
+
+        <div>
+          <span class="badge badge-light" v-for="{ tag, title } in tags" :key="tag">
+            {{title}}
+          </span>   
+        </div>
+
     </td>
 
     <td class="files-col" style="text-align: center; vertical-align: middle;">
@@ -52,8 +59,9 @@ import   AgendaItem   from './agenda-item.vue'
 import   FilesView    from './files-view.vue'
 import   i18n         from '../locales.js'
 import   FilesPreview from './files-preview.vue'
-
 import { dateTimeFilter } from '../filters.js'
+import { isPublic as isTagPublic, 
+         getTitle as getTagTitle } from './tags.js'
 
 export default {
   name      : 'InterventionLine',
@@ -63,10 +71,22 @@ export default {
                   intervention: { type: Object,  required: true },
                   showDate    : { type: Boolean, required: false, default: true },
                   showTime    : { type: Boolean, required: false, default: true },
+                  publicView  : { type: Boolean, required: false, default: false },
               },
   methods   : { getOrgType, isPending },
   filters   : { dateTimeFilter },
+  computed  : { tags },
   i18n, 
+}
+
+function tags() {
+
+  let tags = this.intervention?.tags || [];
+
+  if(this.publicView)
+    tags = tags.filter(isTagPublic);
+
+  return tags.map(tag=>({ tag, title: getTagTitle(tag) }));
 }
 
 function getOrgType({ organizationType }){
@@ -76,6 +96,7 @@ function getOrgType({ organizationType }){
 function isPending (status){
   return status === 'pending'
 }
+
 </script>
 
 <style scoped>

@@ -2,6 +2,7 @@ import '~/directives/meetings/conference-header'
 import app from '~/app';
 import { securize, resolveLiteral, injectRouteParams, mapView, currentUser } from './mixin';
 import * as angularViewWrapper from '~/views/angular-view-wrapper'
+import * as vueViewWrapper     from '~/views/vue-view-wrapper'
 
 // Static views
 import * as conferencesView       from '~/views/meetings/conferences'
@@ -17,6 +18,7 @@ const scheduleView          = { component: ()=>import('~/views/meetings/document
 const parallelMeetingsView  = { component: ()=>import('~/views/meetings/parallel-meetings') }
 const notificationIdView    = { component: ()=>import('~/views/notifications/index-id') }
 const virtualTableView      = { component: ()=>import('~/views/virtual-tables/index') }
+const sessionListView       = { component: ()=>import('~/components/meetings/sessions/session-list.vue') }
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
@@ -41,6 +43,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:code/virtual-tables/events',         { ...mapView(angularViewWrapper),  resolve: { ...virtualTableView, user:currentUser(), routePrams: injectRouteParams({type:'event'}) }, reloadOnSearch:false})
     .when('/:code/schedules',                     { ...mapView(angularViewWrapper),  resolve: { ...scheduleView }, reloadOnSearch:true })
     .when('/:code/insession',                     { ...mapView(angularViewWrapper),  resolve: { ...inSessionView }, reloadOnSearch:false })
+    .when('/:code/sessions',                      { ...mapView(vueViewWrapper),      resolve : { ...sessionListView,        user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
     .when('/:code/:meeting',                      { ...mapView(introductionView),    resolve: { routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) } })
     .when('/:code/:meeting/documents',            { ...mapView(documentsView),       resolve: { showMeeting : resolveLiteral(false) },                    reloadOnSearch:false })
     .when('/:code/:meeting/documents/:id',        { ...mapView(angularViewWrapper),  resolve: { ...documentIdView, user : securize(["Administrator","EditorialService"]) },  reloadOnSearch:false })

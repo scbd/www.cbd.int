@@ -4,8 +4,12 @@
         cursor: not-allowed;
         color: white important!;
       }
+      .today {
+        font-weight: bold !important;
+        background: #f5c0c0 !important;
+      }
     </style>
-    <time-zone-feature-alert ng-if="agendaCtrl.loaded && agendaCtrl.getTimezones().length" ng-cloak/>
+    <time-zone-feature-alert ng-if="agendaCtrl.all && agendaCtrl.loaded && agendaCtrl.getTimezones().length" ng-cloak/>
     <!-- Nav tabs -->
     <nav class="nav-{{::deviceSize}}">
         <ul class="nav nav-tabs hidden-print" role="tablist" style="margin-top:5px">
@@ -50,9 +54,9 @@
                         <b ng-if="agendaCtrl.scheduleDate!=''" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':'MMM Do'"></b>
                     </a>
             		<div class="dropdown-menu dropdown-menu-right">
-            			<a class="text-nowrap dropdown-item" href="#" ng-repeat="item in agendaCtrl.scheduleDates" ng-click="agendaCtrl.scheduleDateChanged(item.value)">
-                            <span class="hidden-xs hidden-sm"   ng-bind="item.text || (item.value|moment:'format':'DD MMM YYYY (ddd)')" ></span>
-                            <span class="visible-xs visible-sm" ng-bind="item.text || (item.value|moment:'format':'ddd Do')" ></span>
+            			<a ng-class="{ 'disabled': item.today}" class="text-nowrap dropdown-item" href="#" ng-repeat="item in agendaCtrl.scheduleDates" ng-click="agendaCtrl.scheduleDateChanged(item.value, item.today)">
+                            <span ng-class="{ 'today': item.today}" class="hidden-xs hidden-sm"   ng-bind="item.text || (item.value|moment:'format':'DD MMM YYYY (ddd)')" ></span>
+                            <span ng-class="{ 'today': item.today}" class="visible-xs visible-sm" ng-bind="item.text || (item.value|moment:'format':'ddd Do')" ></span>
                         </a>
             		</div>
             	</li>
@@ -107,17 +111,8 @@
                             <td class="text-center text-nowrap text-primary" style="width:1px;border-right:solid 1px #ddd">
                                 <b title="{{agendaCtrl.getTimezone()}}">{{::res.start|moment:'tz':agendaCtrl.getTimezone()|moment:'format':'HH:mm'}}</b>
 
-
+                                <schedule-agenda-dynamic-connect-button :is-badge="true" :reservation="res" :schedule="schedule" ng-vue/>
                                 <div ng-show="res.videoUrl">
-                                
-                                    <a ng-if="::(agendaCtrl.all && !agendaCtrl.canConnect(res))"  href="javascript:void(0)" class="badge badge-dark disabled" data-toggle="tooltip" data-html="true"  data-title="This meeting will be accessible {{::agendaCtrl.minutesBefore(res)}} minutes before the scheduled start." >
-                                      Connect <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48" style="fill: white;"> <title>laptop</title> <path d="M43 30v-24c0-2.21-1.79-4-4-4h-30c-2.21 0-4 1.79-4 4v24l-5 10v2c0 2.21 1.79 4 4 4h40c2.21 0 4-1.79 4-4v-2l-5-10zM12.2 7h23.6c1.22 0 2.2 0.98 2.2 2.2v15.6c0 1.22-0.98 2.2-2.2 2.2h-23.6c-1.22 0-2.2-0.98-2.2-2.2l0-15.6c0-1.22 0.98-2.2 2.2-2.2zM18 36h12l1 4h-14l1-4z"></path> </svg>
-                                    </a>
-                              
-                                    <a ng-if="::(agendaCtrl.all && agendaCtrl.canConnect(res))"  class="badge badge-danger"  title="video stream" target="_blank" ng-href="{{::res.videoUrl}}">
-                                      <div>Connect  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48" style="fill: white;"> <title>laptop</title> <path d="M43 30v-24c0-2.21-1.79-4-4-4h-30c-2.21 0-4 1.79-4 4v24l-5 10v2c0 2.21 1.79 4 4 4h40c2.21 0 4-1.79 4-4v-2l-5-10zM12.2 7h23.6c1.22 0 2.2 0.98 2.2 2.2v15.6c0 1.22-0.98 2.2-2.2 2.2h-23.6c-1.22 0-2.2-0.98-2.2-2.2l0-15.6c0-1.22 0.98-2.2 2.2-2.2zM18 36h12l1 4h-14l1-4z"></path> </svg> </div>
-                                      <div><small ng-if="::agendaCtrl.isInProgress(res)">(In Progress)</small></div>
-                                    </a>
                                     <a ng-if="::!agendaCtrl.all" class="badge badge-dark"  title="video stream" target="_blank" ng-href="{{::res.videoUrl}}">
                                         Watch <i  class="fa fa-video-camera"></i>
                                     </a> <br>
@@ -126,6 +121,7 @@
                                         Live
                                     </a> 
                                 </div>
+                                <reservation-links :reservation="res" :schedule="schedule" position="right" ng-vue/>
                             </td>
 
                             <td style="padding:0px;" >

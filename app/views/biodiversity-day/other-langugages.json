@@ -5,7 +5,7 @@
        "day": "BIODIVERSITEIT DAG",
        "individualTagline": "Ek is deel van die oplossing",
        "collectiveTagline": "Ons is deel van die oplossing",
-       "hashTag": "vir Nature",
+       "hashTag": "#virNature",
        "name": "biodiversiteit"
     },
     "sq": {
@@ -14,7 +14,7 @@
        "day": "BIODIVERSITETI DAY",
        "individualTagline": "Unë jam pjesë e zgjidhjes",
        "collectiveTagline": "Ne jemi pjesë e zgjidhjes",
-       "hashTag": "për natyrën",
+       "hashTag": "#përnatyrën",
        "name": "Biodiversiteti"
     },
     "am": {
@@ -23,7 +23,7 @@
        "day": "የብዝሃ ሕይወት ቀን",
        "individualTagline": "እኔ የመፍትሔው አካል ነኝ",
        "collectiveTagline": "እኛ የመፍትሔው አካል ነዎት",
-       "hashTag": "ተፈጥሮ ለ",
+       "hashTag": "#ተፈጥሮለ",
        "name": "ብዝሃ"
     },
     "hy": {
@@ -32,7 +32,7 @@
        "day": "ԿԵՆՍԱԲԱԶՄԱԶԱՆՈՒԹՅԱՆ ՕՐՆ",
        "individualTagline": "Ես մասը լուծում",
        "collectiveTagline": "Մենք մասը լուծում",
-       "hashTag": "հանուն բնության",
+       "hashTag": "#հանունբնության",
        "name": "biodiversity"
     },
     "az": {
@@ -41,7 +41,7 @@
        "day": "Biomüxtəliflik Günü",
        "individualTagline": "Mən həllin bir parçası deyiləm",
        "collectiveTagline": "Həll hissəsi etdiyiniz",
-       "hashTag": "Təbiət",
+       "hashTag": "#Təbiət",
        "name": "Biomüxtəliflik"
     },
     "eu": {
@@ -50,7 +50,7 @@
        "day": "BIODIBERTSITATEA EGUNA",
        "individualTagline": "konponbidearen parte naiz",
        "collectiveTagline": "konponbidearen parte gara",
-       "hashTag": "Nature for",
+       "hashTag": "#ForNature",
        "name": "Bioaniztasuna"
     },
     "bn": {
@@ -59,7 +59,7 @@
        "day": "জীব বৈচিত্র্য দিন",
        "individualTagline": "আমি সমাধানের অংশ নই",
        "collectiveTagline": "আমরা সমাধান অংশ",
-       "hashTag": "প্রকৃতির জন্য",
+       "hashTag": "#প্রকৃতিরজন্য",
        "name": "জীববৈচিত্র্য"
     },
     "bg": {
@@ -68,7 +68,7 @@
        "day": "БИОРАЗНООБРАЗИЕТО ДЕН",
        "individualTagline": "Аз съм част от решението,",
        "collectiveTagline": "Ние сме част от решението,",
-       "hashTag": "За да остане природа",
+       "hashTag": "#Задаостанеприрода",
        "name": "биоразнообразие"
     },
     "my": {
@@ -77,7 +77,7 @@
        "day": "ဇီဝမျိုးစုံမျိုးကွဲများနေ့",
        "individualTagline": "ငါအဖြေရဲ့အစိတ်အပိုင်းပါပဲ",
        "collectiveTagline": "ကျနော်တို့ဖြေရှင်းချက်နေတစ်စိတ်တစ်ဒေသ",
-       "hashTag": "သဘာဝတရားအဘို့",
+       "hashTag": "#သဘာဝတရားအဘို့",
        "name": "ဇီဝမျိုးစုံမျိုးကွဲ"
     },
     "be": {
@@ -86,7 +86,7 @@
        "day": "біялагічныя ДЗЕНЬ",
        "individualTagline": "Я частка рашэння",
        "collectiveTagline": "Мы частка рашэння",
-       "hashTag": "для прыроды",
+       "hashTag": "#дляпрыроды",
        "name": "біяразнастайнасць"
     },
     "km": {
@@ -95,7 +95,7 @@
        "day": "ថ្ងៃអភិរក្សជីវៈចម្រុះ",
        "individualTagline": "ខ្ញុំជាផ្នែកមួយនៃដំណោះស្រាយ",
        "collectiveTagline": "យើងមានផ្នែកមួយនៃដំណោះស្រាយ",
-       "hashTag": "សម្រាប់ធម្មជាតិ",
+       "hashTag": "#សម្រាប់ធម្មជាតិ",
        "name": "ជីវចំរុះ"
     },
     "ca": {
@@ -104,7 +104,7 @@
        "day": "BIODIVERSITAT DIA",
        "individualTagline": "Sóc part de la solució",
        "collectiveTagline": "Som part de la solució",
-       "hashTag": "per a la Naturalesa",
+       "hashTag": "#peralaNaturalesa",
        "name": "biodiversitat"
     },
     "co": {
@@ -113,7 +113,7 @@
        "day": "biodiversità DAY",
        "individualTagline": "I sugnu parte di u definitivu",
        "collectiveTagline": "Avemu Patrunu parte di u definitivu",
-       "hashTag": "per Nature",
+       "hashTag": "#perNature",
        "name": "biodiversità"
     },
     "hr": {
@@ -122,8 +122,8 @@
        "day": "BIOLOŠKA RAZNOLIKOST DAN",
        "individualTagline": "Ja sam dio rješenja",
        "collectiveTagline": "Mi smo dio rješenja",
-       "hashTag": "za prirodu",
-       "name": "Biološka raznolikost"
+       "hashTag": "#zaprirodu",
+       "name": "Biološkaraznolikost"
     },
     "cs": {
        "language": "Czech",
@@ -131,8 +131,8 @@
        "day": "BIODIVERZITA DAY",
        "individualTagline": "Jsem součástí řešení",
        "collectiveTagline": "Jsme součástí řešení",
-       "hashTag": "pro přírodu",
-       "name": "Biologická rozmanitost"
+       "hashTag": "#propřírodu",
+       "name": "Biologickározmanitost"
     },
     "da": {
        "language": "Danish",
@@ -140,7 +140,7 @@
        "day": "BIODIVERSITET DAG",
        "individualTagline": "Jeg er en del af løsningen",
        "collectiveTagline": "Vi er en del af løsningen",
-       "hashTag": "Til Naturen",
+       "hashTag": "#TilNaturen",
        "name": "biodiversitet"
     },
     "nl": {
@@ -149,7 +149,7 @@
        "day": "Dag van de Biodiversiteit",
        "individualTagline": "Ik ben een deel van de oplossing",
        "collectiveTagline": "We zijn deel van de oplossing",
-       "hashTag": "voor Nature",
+       "hashTag": "#voorNature",
        "name": "biodiversiteit"
     },
     "eo": {
@@ -158,7 +158,7 @@
        "day": "biodiverseco TAGO",
        "individualTagline": "Mi estas parto de la solvo",
        "collectiveTagline": "Ni estas parto de la solvo",
-       "hashTag": "por Naturo",
+       "hashTag": "#porNaturo",
        "name": "biodiverseco"
     },
     "et": {
@@ -167,8 +167,8 @@
        "day": "bioloogilise mitmekesisuse päevaga",
        "individualTagline": "Ma olen osa lahendusest",
        "collectiveTagline": "Oleme osa lahendusest",
-       "hashTag": "Looduse",
-       "name": "Bioloogiline mitmekesisus"
+       "hashTag": "#Looduse",
+       "name": "Bioloogilinemitmekesisus"
     },
     "fi": {
        "language": "Finnish",
@@ -176,7 +176,7 @@
        "day": "luonnon monimuotoisuuden päivänä",
        "individualTagline": "Olen osa ratkaisua",
        "collectiveTagline": "Olemme osa ratkaisua",
-       "hashTag": "for Nature",
+       "hashTag": "#forNature",
        "name": "biodiversiteetti"
     },
     "fy": {
@@ -185,7 +185,7 @@
        "day": "Biodiversity DAY",
        "individualTagline": "Ik bin part fan de oplossing",
        "collectiveTagline": "Wy binne in part fan de oplossing",
-       "hashTag": "foar Nature",
+       "hashTag": "#foarNature",
        "name": "Biodiversity"
     },
     "gd": {
@@ -194,7 +194,7 @@
        "day": "BITH-IOMADACHD LATHA",
        "individualTagline": "Tha mi pàirt den fhuasglaidh",
        "collectiveTagline": "Tha sinn pàirt den fhuasglaidh",
-       "hashTag": "airson Nature",
+       "hashTag": "#airsonNature",
        "name": "Bith-iomadachd"
     },
     "gl": {
@@ -203,7 +203,7 @@
        "day": "biodiversidade DÍA",
        "individualTagline": "Eu son parte da solución",
        "collectiveTagline": "Somos parte da solución",
-       "hashTag": "para a Natureza",
+       "hashTag": "#paraaNatureza",
        "name": "biodiversidade"
     },
     "ka": {
@@ -212,7 +212,7 @@
        "day": "ბიომრავალფეროვნების DAY",
        "individualTagline": "მე ვარ ნაწილი გამოსავალი",
        "collectiveTagline": "ჩვენ ნაწილი გადაწყვეტა",
-       "hashTag": "ბუნება",
+       "hashTag": "#ბუნება",
        "name": "ბიომრავალფეროვნების"
     },
     "de": {
@@ -221,7 +221,7 @@
        "day": "Biodiversitätstag",
        "individualTagline": "Ich bin ein Teil der Lösung",
        "collectiveTagline": "Wir sind ein Teil der Lösung",
-       "hashTag": "For Nature",
+       "hashTag": "#ForNature",
        "name": "Biodiversität"
     },
     "el": {
@@ -230,7 +230,7 @@
        "day": "ΒΙΟΠΟΙΚΙΛΟΤΗΤΑ ΗΜΕΡΑ",
        "individualTagline": "Είμαι μέρος της λύσης",
        "collectiveTagline": "Είμαστε μέρος της λύσης",
-       "hashTag": "Για Φύση",
+       "hashTag": "#ΓιαΦύση",
        "name": "βιοποικιλότητα"
     },
     "gu": {
@@ -239,7 +239,7 @@
        "day": "વ િવિવધતા DAY",
        "individualTagline": "હું ઉકેલ ભાગ છું",
        "collectiveTagline": "અમે ઉકેલ ભાગ છો",
-       "hashTag": "પ્રકૃતિ માટે",
+       "hashTag": "#પ્રકૃતિમાટે",
        "name": "જીવવિવિધતા"
     },
     "ha": {
@@ -248,7 +248,7 @@
        "day": "rabe-raben DAY",
        "individualTagline": "Ina da wani ɓangare na bayani",
        "collectiveTagline": "Muna da wani ɓangare na bayani",
-       "hashTag": "domin Nature",
+       "hashTag": "#dominNature",
        "name": "rabe-raben"
     },
     "iw": {
@@ -257,8 +257,8 @@
        "day": "המגוון הביולוגי DAY",
        "individualTagline": "אני חלק מהפתרון",
        "collectiveTagline": "אנחנו חלק מהפתרון",
-       "hashTag": "לטבע",
-       "name": "מגוון ביולוגי"
+       "hashTag": "#לטבע",
+       "name": "מגווןביולוגי"
     },
     "hi": {
        "language": "Hindi",
@@ -266,8 +266,8 @@
        "day": "जैव विविधता दिवस",
        "individualTagline": "मैं समाधान का हिस्सा हूँ",
        "collectiveTagline": "हम समाधान का हिस्सा हैं",
-       "hashTag": "प्रकृति के लिए",
-       "name": "जैव विविधता"
+       "hashTag": "#प्रकृतिकेलिए",
+       "name": "जैवविविधता"
     },
     "hu": {
        "language": "Hungarian",
@@ -275,7 +275,7 @@
        "day": "BIODIVERZITÁS DAY",
        "individualTagline": "Vagyok a megoldás része",
        "collectiveTagline": "Mi vagyunk a megoldás része",
-       "hashTag": "for Nature",
+       "hashTag": "#forNature",
        "name": "Biodiverzitás"
     },
     "is": {
@@ -284,8 +284,8 @@
        "day": "Líffræðilegur fjölbreytileiki DAY",
        "individualTagline": "Ég er hluti af lausninni",
        "collectiveTagline": "Við erum hluti af lausninni",
-       "hashTag": "fyrir Nature",
-       "name": "Líffræðilegur fjölbreytileiki"
+       "hashTag": "#fyrirNature",
+       "name": "Líffræðilegurfjölbreytileiki"
     },
     "in": {
        "language": "Indonesian",
@@ -293,8 +293,8 @@
        "day": "KEANEKARAGAMAN HAYATI DAY",
        "individualTagline": "Aku bagian dari solusi",
        "collectiveTagline": "Kami bagian dari solusi",
-       "hashTag": "Alam",
-       "name": "keanekaragaman hayati"
+       "hashTag": "#Alam",
+       "name": "keanekaragamanhayati"
     },
     "ga": {
        "language": "Irish",
@@ -302,7 +302,7 @@
        "day": "BITHÉAGSÚLACHTA DAY",
        "individualTagline": "Tá mé mar chuid den réiteach",
        "collectiveTagline": "Táimid mar chuid den réiteach",
-       "hashTag": "Do Dúlra",
+       "hashTag": "#DoDúlra",
        "name": "Bithéagsúlacht"
     },
     "it": {
@@ -311,7 +311,7 @@
        "day": "Giornata della Biodiversità",
        "individualTagline": "Sono parte della soluzione",
        "collectiveTagline": "Noi siamo parte della soluzione",
-       "hashTag": "per natura",
+       "hashTag": "#pernatura",
        "name": "biodiversità"
     },
     "ja": {
@@ -320,7 +320,7 @@
        "day": "生物多様性DAY",
        "individualTagline": "私は解決策の一部です",
        "collectiveTagline": "私たちは、ソリューションの一部です",
-       "hashTag": "自然のために",
+       "hashTag": "#自然のために",
        "name": "生物多様性"
     },
     "jw": {
@@ -329,7 +329,7 @@
        "day": "ambanipun DAY",
        "individualTagline": "Aku bagean solusi",
        "collectiveTagline": "We lagi bagéan saka solusi",
-       "hashTag": "kanggo Alam",
+       "hashTag": "#kanggoAlam",
        "name": "ambanipun"
     },
     "kn": {
@@ -338,7 +338,7 @@
        "day": "ಜೀವವೈವಿಧ್ಯ ದಿನ",
        "individualTagline": "ನಾನು ಪರಿಹಾರದ ಭಾಗವಾಗಿ ಮನುಷ್ಯ",
        "collectiveTagline": "ನಾವು ಪರಿಹಾರ ಭಾಗವಾಗಿದ್ದೀರಿ",
-       "hashTag": "ನೇಚರ್",
+       "hashTag": "#ನೇಚರ್",
        "name": "ಜೀವವೈವಿಧ್ಯ"
     },
     "kk": {
@@ -347,7 +347,7 @@
        "day": "биологиялық күннен",
        "individualTagline": "Мен шешу бөлігі қалдым",
        "collectiveTagline": "Біз шешу жатқан бөлігі",
-       "hashTag": "табиғат",
+       "hashTag": "#табиғат",
        "name": "биоалуантүрлілігі"
     },
     "rw": {
@@ -356,7 +356,7 @@
        "day": "rw'ibinyabuzima UMUNSI",
        "individualTagline": "Ndi bigize umuti",
        "collectiveTagline": "Turi mu umuti",
-       "hashTag": "kuko Nature",
+       "hashTag": "#kukoNature",
        "name": "Urusobe"
     },
     "ky": {
@@ -365,8 +365,8 @@
        "day": "BIODIVERSITY DAY",
        "individualTagline": "Мен маселени чечүүнүн бир бөлүгү эмесмин",
        "collectiveTagline": "Биз чечүү бөлүгү",
-       "hashTag": "Анткени Жаратылыш",
-       "name": "биологиялык ар түрдүүлүк"
+       "hashTag": "#АнткениЖаратылыш",
+       "name": "биологиялык артүрдүүлүк"
     },
     "ko": {
        "language": "Korean",
@@ -374,8 +374,8 @@
        "day": "생물 다양성 DAY",
        "individualTagline": "나는 솔루션의 일부 해요",
        "collectiveTagline": "우리는 솔루션의 일부입니다",
-       "hashTag": "자연에 대한",
-       "name": "생물 다양성"
+       "hashTag": "#자연에대한",
+       "name": "생물다양성"
     },
     "ku": {
        "language": "Kurdish",
@@ -383,7 +383,7 @@
        "day": "hilnaweşîne DAY",
        "individualTagline": "Ez beşek ji çareseriyê im",
        "collectiveTagline": "Em beşek ji çareseriyê î",
-       "hashTag": "ji bo Nature",
+       "hashTag": "#jiboNature",
        "name": "Biodiversity"
     },
     "lo": {
@@ -392,7 +392,7 @@
        "day": "ຊີວະນາໆພັນ DAY",
        "individualTagline": "ຂ້າພະເຈົ້າສ່ວນຫນຶ່ງຂອງການດັດແປງ",
        "collectiveTagline": "ພວກເຮົາກໍາລັງສ່ວນຫນຶ່ງຂອງການດັດແປງ",
-       "hashTag": "ສໍາລັບທໍາມະຊາດ",
+       "hashTag": "#ສໍາລັບທໍາມະຊາດ",
        "name": "ຊີວະນາໆພັນ"
     },
     "la": {
@@ -401,7 +401,7 @@
        "day": "Dies BIODIVERSITY",
        "individualTagline": "Ego pars solution",
        "collectiveTagline": "Sumus pars solution",
-       "hashTag": "quia natura",
+       "hashTag": "#quianatura",
        "name": "Page"
     },
     "lv": {
@@ -410,8 +410,8 @@
        "day": "Bioloģiskās daudzveidības diena",
        "individualTagline": "Es esmu daļa no risinājuma",
        "collectiveTagline": "Mēs esam daļa no risinājuma",
-       "hashTag": "Par Nature",
-       "name": "Bioloģiskā daudzveidība"
+       "hashTag": "#ParNature",
+       "name": "Bioloģiskādaudzveidība"
     },
     "cy": {
        "language": "Welsh",
@@ -419,7 +419,7 @@
        "day": "BIOAMRYWIAETH DYDD",
        "individualTagline": "Rwy'n rhan o'r ateb",
        "collectiveTagline": "Rydym yn rhan o'r ateb",
-       "hashTag": "I Nature",
+       "hashTag": "#INature",
        "name": "Bioamrywiaeth"
     },
     "fa": {
@@ -428,8 +428,8 @@
        "day": "تنوع زیستی روز",
        "individualTagline": "من بخشی از راه حل هستم",
        "collectiveTagline": "ما بخشی از راه حل هستید",
-       "hashTag": "برای طبیعت",
-       "name": "تنوع زیستی"
+       "hashTag": "#برایطبیعت",
+       "name": "تنوعزیستی"
     },
     "ji": {
        "language": "Yiddish",
@@ -437,7 +437,7 @@
        "day": "בייאָודייווערסאַטי טאָג",
        "individualTagline": "איך בין טייל פון די לייזונג",
        "collectiveTagline": "מיר 'רע טייל פון די לייזונג",
-       "hashTag": "פֿאַר נאַטורע",
+       "hashTag": "#פֿאַרנאַטורע",
        "name": "בייאָודייווערסאַטי"
     },
     "lt": {
@@ -446,8 +446,8 @@
        "day": "BIOLOGINĖ ĮVAIROVĖ DIENA",
        "individualTagline": "Aš sprendimo dalis",
        "collectiveTagline": "Mes sprendimo dalis",
-       "hashTag": "gamtos",
-       "name": "Biologinė įvairovė"
+       "hashTag": "#gamtos",
+       "name": "Biologinėįvairovė"
     },
     "mg": {
        "language": "Malagasy",
@@ -455,7 +455,7 @@
        "day": "zavamananaina DAY",
        "individualTagline": "Aho tafiditra ao anatin'ny vahaolana",
        "collectiveTagline": "Izahay tafiditra ao anatin'ny vahaolana",
-       "hashTag": "Fa Nature",
+       "hashTag": "#FaNature",
        "name": "Adin-tsaina"
     },
     "mi": {
@@ -464,7 +464,7 @@
        "day": "Biodiversity DAY",
        "individualTagline": "ahau wahi o te otinga ahau",
        "collectiveTagline": "kei wahi o te otinga matou",
-       "hashTag": "hoki Nature",
+       "hashTag": "#hokiNature",
        "name": "Biodiversity"
     },
     "mk": {
@@ -473,8 +473,8 @@
        "day": "БИОДИВЕРЗИТЕТОТ ДЕН",
        "individualTagline": "Јас сум дел од решението",
        "collectiveTagline": "Ние сме дел од решението",
-       "hashTag": "за заштита на природата",
-       "name": "биолошката разновидност"
+       "hashTag": "#зазаштитанаприродата",
+       "name": "биолошкатаразновидност"
     },
     "ml": {
        "language": "Malayalam",
@@ -482,7 +482,7 @@
        "day": "ബയോഡൈവേഴ്സിറ്റി DAY,",
        "individualTagline": "ഞാൻ പരിഹാരം അംഗമായ",
        "collectiveTagline": "നാം പരിഹാരം അല്ലെന്ന് ഭാഗം",
-       "hashTag": "പ്രകൃതി എന്ന",
+       "hashTag": "#പ്രകൃതിഎന്ന",
        "name": "ജൈവവൈവിധ്യം"
     },
     "mn": {
@@ -491,8 +491,8 @@
        "day": "Биологийн Төрөл Зүйлийн өдрийг",
        "individualTagline": "Би уусмал нэг хэсэг байна",
        "collectiveTagline": "Бид уусмал нэг хэсэг шүү дээ",
-       "hashTag": "Байгаль нь",
-       "name": "Биологийн олон янз байдлын"
+       "hashTag": "#Байгальнь",
+       "name": "Биологийн олон янзбайдлын"
     },
     "mo": {
        "language": "Moldavian",
@@ -500,16 +500,16 @@
        "day": "BIODIVERSITATE ZIUA",
        "individualTagline": "Sunt o parte a soluției",
        "collectiveTagline": "Suntem o parte a soluției",
-       "hashTag": "pentru Natura",
+       "hashTag": "#pentruNatura",
        "name": "biodiversitatea"
     },
     "mr": {
        "language": "Marathi",
        "date": "22 मे 2021",
        "day": "जैवविविधता दिवस",
-       "individualTagline": "मी उपाय भाग आहे",
-       "collectiveTagline": "आम्ही उपाय एक भाग आहात",
-       "hashTag": "निसर्ग",
+       "individualTagline": "मी समाधानाचा भाग आहे",
+       "collectiveTagline": "आम्ही समाधानाचा एक भाग आहोत",
+       "hashTag": "#निसर्ग",
        "name": "जैवविविधता"
     },
     "ms": {
@@ -518,7 +518,7 @@
        "day": "BIODIVERSITI HARI",
        "individualTagline": "Saya sebahagian daripada penyelesaian",
        "collectiveTagline": "Kami sebahagian daripada penyelesaian",
-       "hashTag": "Alam",
+       "hashTag": "#Alam",
        "name": "biodiversiti"
     },
     "mt": {
@@ -527,7 +527,7 @@
        "day": "BIJODIVERSITÀ JUM",
        "individualTagline": "Jien parti mis-soluzzjoni",
        "collectiveTagline": "Aħna parti mis-soluzzjoni",
-       "hashTag": "għan-Natura",
+       "hashTag": "#għan-Natura",
        "name": "bijodiversità"
     },
     "ne": {
@@ -536,8 +536,8 @@
        "day": "जैविक विविधता DAY",
        "individualTagline": "म समाधान को भाग छु",
        "collectiveTagline": "हामी समाधान को भाग हुनुहुन्छ",
-       "hashTag": "प्रकृति को लागि",
-       "name": "जैविक विविधता"
+       "hashTag": "#प्रकृति कोलागि",
+       "name": "जैविकविविधता"
     },
     "no": {
        "language": "Norwegian",
@@ -545,8 +545,8 @@
        "day": "BIOLOGISK MANGFOLD DAY",
        "individualTagline": "Jeg er en del av løsningen",
        "collectiveTagline": "Vi er en del av løsningen",
-       "hashTag": "for Nature",
-       "name": "Biologisk mangfold"
+       "hashTag": "#forNature",
+       "name": "Biologiskmangfold"
     },
     "or": {
        "language": "Oriya",
@@ -554,7 +554,7 @@
        "day": "BIODIVERSITY DAY",
        "individualTagline": "ମୁଁ ସମାଧାନ ଅଂଶ ଅଛି",
        "collectiveTagline": "ଆମେ ସମାଧାନ ଅଂଶ ହୋଇଥିବେ",
-       "hashTag": "Nature ପାଇଁ",
+       "hashTag": "#Natureପାଇଁ",
        "name": "Biodiversity"
     },
     "pa": {
@@ -563,7 +563,7 @@
        "day": "ਜੈਵ ਦਿਨ",
        "individualTagline": "ਮੈਨੂੰ ਹੱਲ ਹੈ ਦਾ ਹਿੱਸਾ ਰਿਹਾ ਹੈ",
        "collectiveTagline": "ਸਾਨੂੰ ਦਾ ਹੱਲ ਦਾ ਹਿੱਸਾ ਹੋ",
-       "hashTag": "ਕੁਦਰਤ ਲਈ",
+       "hashTag": "#ਕੁਦਰਤਲਈ",
        "name": "ਬਾਇਓਡਾਇਵਰਸਿਟੀ"
     },
     "pl": {
@@ -572,7 +572,7 @@
        "day": "BIORÓŻNORODNOŚĆ DZIEŃ",
        "individualTagline": "Jestem częścią rozwiązania",
        "collectiveTagline": "Jesteśmy częścią rozwiązania",
-       "hashTag": "na łonie natury",
+       "hashTag": "#nałonienatury",
        "name": "bioróżnorodność"
     },
     "ps": {
@@ -581,7 +581,7 @@
        "day": "تنوع ورځ",
        "individualTagline": "زه د حل یوه برخه یم",
        "collectiveTagline": "مونږ د حل برخه",
-       "hashTag": "د طبیعت",
+       "hashTag": "#دطبیعت",
        "name": "تنوع"
     },
     "pt": {
@@ -590,7 +590,7 @@
        "day": "BIODIVERSIDADE DIA",
        "individualTagline": "Eu sou parte da solução",
        "collectiveTagline": "Nós somos parte da solução",
-       "hashTag": "para a Natureza",
+       "hashTag": "#paraaNatureza",
        "name": "biodiversidade"
     },
     "ro": {
@@ -599,7 +599,7 @@
        "day": "BIODIVERSITATE ZIUA",
        "individualTagline": "Sunt o parte a soluției",
        "collectiveTagline": "Suntem o parte a soluției",
-       "hashTag": "pentru Natura",
+       "hashTag": "#pentruNatura",
        "name": "biodiversitatea"
     },
     "sd": {
@@ -608,8 +608,8 @@
        "day": "جهنگلي حيات ڏينهن",
        "individualTagline": "مون کي سنڌ جي حل جو حصو آهيان",
        "collectiveTagline": "اسان جي حل جي آهين حصو",
-       "hashTag": "قدرت لاء",
-       "name": "جهنگلي حيات"
+       "hashTag": "#قدرتلاء",
+       "name": "جهنگليحيات"
     },
     "si": {
        "language": "Singhalese",
@@ -617,8 +617,8 @@
        "day": "විවිධත්ව දිනය",
        "individualTagline": "මම විසඳුමේ කොටසක් ඉන්නේ",
        "collectiveTagline": "අපි විසඳුමක් ඉන්නේ කොටසක්",
-       "hashTag": "ස්වභාව සඳහා",
-       "name": "ජෛව විවිධත්වය"
+       "hashTag": "#ස්වභාවසඳහා",
+       "name": "ජෛවවිවිධත්වය"
     },
     "sk": {
        "language": "Slovak",
@@ -626,7 +626,7 @@
        "day": "BIODIVERZITA DAY",
        "individualTagline": "Som súčasťou riešenia",
        "collectiveTagline": "Sme súčasťou riešenia",
-       "hashTag": "pre prírodu",
+       "hashTag": "#preprírodu",
        "name": "biodiverzita"
     },
     "sl": {
@@ -635,8 +635,8 @@
        "day": "BIOTSKA DAN",
        "individualTagline": "Jaz sem del rešitve",
        "collectiveTagline": "Mi smo del rešitve",
-       "hashTag": "za naravo",
-       "name": "Biotska raznovrstnost"
+       "hashTag": "#zanaravo",
+       "name": "Biotskaraznovrstnost"
     },
     "sm": {
        "language": "Samoan",
@@ -644,7 +644,7 @@
        "day": "meaola ASO",
        "individualTagline": "Ou te vaega o le vaifofo",
        "collectiveTagline": "Tatou o vaega o le vaifofo",
-       "hashTag": "mo le Natura",
+       "hashTag": "#moleNatura",
        "name": "meaola"
     },
     "sn": {
@@ -653,7 +653,7 @@
        "day": "zvipenyu DAY",
        "individualTagline": "Ndiri chikamu chemhinduro",
        "collectiveTagline": "Tiri chikamu chemhinduro",
-       "hashTag": "For Nature",
+       "hashTag": "#ForNature",
        "name": "zvipenyu"
     },
     "so": {
@@ -662,7 +662,7 @@
        "day": "noole DAY",
        "individualTagline": "Waxaan qayb ka mid ah xalka ahay",
        "collectiveTagline": "Waxaan qayb ka mid ah xalka tahay",
-       "hashTag": "Waayo, Nature",
+       "hashTag": "#WaayoNature",
        "name": "noole"
     },
     "sr": {
@@ -671,7 +671,7 @@
        "day": "Дан биодиверзитета",
        "individualTagline": "Ја сам део решења",
        "collectiveTagline": "Ми смо део решења",
-       "hashTag": "за природу",
+       "hashTag": "#заприроду",
        "name": "биодиверзитет"
     },
     "st": {
@@ -680,8 +680,8 @@
        "day": "phedisano ya diphedi LETSATSI",
        "individualTagline": "Ke karolo ea tharollo",
        "collectiveTagline": "Re karolo ea tharollo",
-       "hashTag": "bakeng sa Nature",
-       "name": "mefuta-futa ena"
+       "hashTag": "#bakengsaNature",
+       "name": "mefuta-futaena"
     },
     "su": {
        "language": "Sudanese",
@@ -689,7 +689,7 @@
        "day": "biodiversiti dinten",
        "individualTagline": "Abdi bagian tina solusi",
        "collectiveTagline": "Simkuring bagian tina solusi",
-       "hashTag": "pikeun Alam",
+       "hashTag": "#pikeunAlam",
        "name": "biodiversiti"
     },
     "sv": {
@@ -698,8 +698,8 @@
        "day": "dagen för biologisk mångfald",
        "individualTagline": "Jag är en del av lösningen",
        "collectiveTagline": "Vi är en del av lösningen",
-       "hashTag": "för natur",
-       "name": "Biologisk mångfald"
+       "hashTag": "#förnatur",
+       "name": "Biologiskmångfald"
     },
     "sw": {
        "language": "Swahili",
@@ -707,8 +707,8 @@
        "day": "Bayoanuwai DAY",
        "individualTagline": "Mimi ni sehemu ya suluhisho",
        "collectiveTagline": "Sisi ni sehemu ya suluhisho",
-       "hashTag": "Kwa Nature",
-       "name": "viumbe hai"
+       "hashTag": "#KwaNature",
+       "name": "viumbehai"
     },
     "ta": {
        "language": "Tamil",
@@ -716,7 +716,7 @@
        "day": "பல்லுயிர் நாள்",
        "individualTagline": "நான் தீர்வின் பகுதியாக இருக்கிறேன்",
        "collectiveTagline": "நாம் தீர்வு அங்கமாகிறீர்கள்",
-       "hashTag": "இயற்கை",
+       "hashTag": "#இயற்கை",
        "name": "பல்லுயிர்"
     },
     "te": {
@@ -725,7 +725,7 @@
        "day": "జీవవైవిధ్యం DAY",
        "individualTagline": "నేను పరిష్కారం భాగంగా రెడీ",
        "collectiveTagline": "మేము పరిష్కారం భాగంగా ఉన్నాము",
-       "hashTag": "ప్రకృతికి",
+       "hashTag": "#ప్రకృతికి",
        "name": "జీవవైవిధ్యం"
     },
     "tg": {
@@ -734,7 +734,7 @@
        "day": "гуногунии биологї РӮЗИ",
        "individualTagline": "Ман як қисми ҳалли дорам",
        "collectiveTagline": "Мо як қисми ҳалли ҳастед",
-       "hashTag": "Зеро табиат",
+       "hashTag": "#Зеротабиат",
        "name": "биологӣ"
     },
     "th": {
@@ -743,7 +743,7 @@
        "day": "ความหลากหลายทางชีวภาพ DAY",
        "individualTagline": "ฉันเป็นส่วนหนึ่งของการแก้ปัญหา",
        "collectiveTagline": "เราเป็นส่วนหนึ่งของการแก้ปัญหา",
-       "hashTag": "เพื่อธรรมชาติ",
+       "hashTag": "#เพื่อธรรมชาติ",
        "name": "ความหลากหลายทางชีวภาพ"
     },
     "tk": {
@@ -752,7 +752,7 @@
        "day": "BIODÜRLÜLIGINI Day",
        "individualTagline": "Men çözülmegi bir bölegi gözlüm",
        "collectiveTagline": "Biz çözülmegi bir bölegi bolarsyňyz",
-       "hashTag": "dogan",
+       "hashTag": "#dogan",
        "name": "biodürlüligi"
     },
     "tl": {
@@ -761,7 +761,7 @@
        "day": "biodiversity DAY",
        "individualTagline": "Ako ay bahagi ng ang solusyon",
        "collectiveTagline": "Humihingi kami ng bahagi ng ang solusyon",
-       "hashTag": "para sa Kalikasan",
+       "hashTag": "#parasaKalikasan",
        "name": "biodiversity"
     },
     "tr": {
@@ -770,7 +770,7 @@
        "day": "BİYOLOJİK ÇEŞİTLİLİK GÜNÜ",
        "individualTagline": "Ben çözümün bir parçası olduğum",
        "collectiveTagline": "Biz çözümün bir parçası olduğunu",
-       "hashTag": "Doğa için",
+       "hashTag": "#Doğaiçin",
        "name": "biyoçeşitlilik"
     },
     "tt": {
@@ -779,7 +779,7 @@
        "day": "төрлелекне КӨНЕ",
        "individualTagline": "Мин хәл өлеше генэ",
        "collectiveTagline": "Без хәл өлеше яратам",
-       "hashTag": "табигать өчен",
+       "hashTag": "#табигатьөчен",
        "name": "биотөрлелек"
     },
     "uk": {
@@ -788,7 +788,7 @@
        "day": "БІОЛОГІЧНИЙ ДЕНЬ",
        "individualTagline": "Я частина рішення",
        "collectiveTagline": "Ми частина рішення",
-       "hashTag": "для природи",
+       "hashTag": "#дляприроди",
        "name": "біорізноманіття"
     },
     "ur": {
@@ -797,8 +797,8 @@
        "day": "جیوویودتا DAY",
        "individualTagline": "میں نے حل کا حصہ ہوں",
        "collectiveTagline": "ہم حل کا حصہ ہیں",
-       "hashTag": "فطرت کے لئے",
-       "name": "جیو ویودتا"
+       "hashTag": "#فطرت کےلئے",
+       "name": "جیوویودتا"
     },
     "uz": {
        "language": "Uzbek",
@@ -806,8 +806,8 @@
        "day": "BİYOÇEŞİTLİLİK DAY",
        "individualTagline": "Men yechim qismi emasman",
        "collectiveTagline": "Biz hal qismi odamsiz",
-       "hashTag": "tabiat uchun",
-       "name": "Biologik xilma-xillik"
+       "hashTag": "#tabiatuchun",
+       "name": "Biologikxilma-xillik"
     },
     "vi": {
        "language": "Vietnamese",
@@ -815,8 +815,8 @@
        "day": "ĐA DẠNG SINH HỌC NGÀY",
        "individualTagline": "Tôi là một phần của giải pháp",
        "collectiveTagline": "Chúng tôi là một phần của giải pháp",
-       "hashTag": "Thiên nhiên",
-       "name": "Đa dạng sinh học"
+       "hashTag": "#Thiênnhiên",
+       "name": "Đa dạng sinhhọc"
     },
     "xh": {
        "language": "Xhosa",
@@ -824,7 +824,7 @@
        "day": "USUKU IZITYALO",
        "individualTagline": "Ndanelisekile yinxenye yesisombululo",
        "collectiveTagline": "Sicela yinxenye yesisombululo",
-       "hashTag": "Ngokuba Nature",
+       "hashTag": "#NgokubaNature",
        "name": "Biodiversity"
     },
     "yo": {
@@ -833,7 +833,7 @@
        "day": "ipinsiyeleyele DAY",
        "individualTagline": "Mo wa apa ti awọn ojutu",
        "collectiveTagline": "A ba apa ti awọn ojutu",
-       "hashTag": "fun Nature",
+       "hashTag": "#funNature",
        "name": "Biodiversity"
     },
     "zu": {
@@ -842,8 +842,8 @@
        "day": "USUKU Biodiversity",
        "individualTagline": "Ngingumfana yesixazululo",
        "collectiveTagline": "Sesikhathele yesixazululo",
-       "hashTag": "Ukuze Imvelo",
-       "name": "Imvelo Ehlukahlukene"
+       "hashTag": "#UkuzeImvelo",
+       "name": "ImveloEhlukahlukene"
     },
     "ceb": {
        "language": "Visayas",
@@ -851,7 +851,7 @@
        "day": "biodiversity ADLAW",
        "individualTagline": "ako bahin sa solusyon",
        "collectiveTagline": "Kita nga bahin sa solusyon",
-       "hashTag": "Kay Kinaiyahan",
+       "hashTag": "#KayKinaiyahan",
        "name": "biodiversity"
     }
  }

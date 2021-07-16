@@ -1,6 +1,6 @@
 
 <template >
-  <div>
+  <div class="position-relative">
     <h1>Session Preparation
       <small class="text-muted">
         <span v-for="{normalizedSymbol} in meetings" :key="normalizedSymbol">
@@ -9,11 +9,14 @@
       </small>
     </h1>
 
-    <h3> {{ (session || {}).date  | dateTimeFilter('T  - cccc, d MMMM yyyy') }} </h3>
+    <h3 :class="{ 'bg-warning text-dark p-1': isInPast(session), 'bg-danger text-white p-1': isInFuture(session) }" class="position-sticky sticky-date"> 
+        {{ (session || {}).date  | dateTimeFilter('T  - cccc, d MMMM yyyy') }}
+    </h3>
 
     <Session v-if="session">
       <InterventionRow v-for="(intervention, index) in interventions" :index="index+1" v-bind="{intervention}" v-bind:key="intervention._id">
         <template slot="controls">
+          <TagSelector :selectedTags="intervention.tags" @tag="toggleTag(intervention, $event)"/>
           <div class="btn-group" role="group">
             <button class="btn btn-sm btn-outline-dark" @click="editId(intervention._id, 'edit')"><i class="fa fa-edit"></i></button>
             <button class="btn btn-sm btn-outline-danger" @click="askDelete(intervention)"><i class="fa fa-trash"></i></button>
@@ -39,6 +42,7 @@
       <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" v-bind:key="intervention._id" @dblclick="edit(intervention)" >
         <template slot="controls">
           <div class="text-nowrap">
+            <TagSelector :selectedTags="intervention.tags" @tag="toggleTag(intervention, $event)"/>
             <button class="btn btn-sm btn-outline-success" @click="editId(intervention._id, 'publish')"><i class="fa fa-microphone"></i></button>
 
             <div class="btn-group" role="group">
@@ -63,7 +67,8 @@
 </template>
 
 <script>
-import Api, { mergeQueries, mapObjectId } from '../api.js'
+import Api, { mergeQueries } from '../api.js'
+import { mapObjectId }       from '~/api/api-base.js'
 
 import { sortBy                , debounce } from 'lodash'
 import { dateTimeFilter        }            from '../filters.js'
@@ -71,6 +76,8 @@ import   EditInterventionModal              from './edit-intervention-modal.vue'
 import   InterventionRow                    from './intervention-row.vue'
 import   Session                            from './session.vue'
 import   EditRow                            from './edit-row.vue'
+import   TagSelector                        from './tag-selector.vue'
+import   moment                             from 'moment'
 
 export default {
   name      : 'SessionEdit',
@@ -78,7 +85,7 @@ export default {
                 route      : { type: Object,   required: false },
                 tokenReader: { type: Function, required: false }
               },
-  components: { Session, EditRow, InterventionRow, EditInterventionModal },
+  components: { Session, EditRow, InterventionRow, EditInterventionModal, TagSelector },
   computed  : { 
                 agendaItems, 
                 sessionId() { return this.session._id } 
@@ -92,8 +99,11 @@ export default {
                 editClose,
                 askDelete,
                 replace,
+                toggleTag,
                 queryPendingInterventions,
-                onSearch : debounce(onSearch, 400)
+                onSearch : debounce(onSearch, 400),
+                isInPast, 
+                isInFuture
               },
   data, created, mounted
 }
@@ -181,8 +191,6 @@ async function askDelete(intervention){
   this.replace(_id, null);
 }
 
-
-
 function replace(_id, intervention) {
   let  i = this.interventions       .findIndex(o=>o._id === _id );
   let pi = this.pendingInterventions.findIndex(o=>o._id === _id );
@@ -202,6 +210,17 @@ function replace(_id, intervention) {
   }
 
   this.interventions = sortBy(this.interventions, o=>o.datetime);
+}
+
+async function toggleTag(intervention, tag) {
+
+  let tags = intervention.tags || [];
+
+  tags = !tags.includes(tag)
+       ? await this.api.addInterventionTag   (intervention._id, tag)
+       : await this.api.deleteInterventionTag(intervention._id, tag);
+
+  intervention.tags = tags;
 }
 
 function onSearch() {
@@ -235,4 +254,22 @@ function agendaItems() {
     }))
   }));
 }
+function isInPast({ date } ={}){
+  if(!date) return false
+
+  return moment().isAfter(moment(date).add(8, 'hours'))
+}
+
+function isInFuture({ date } ={}){
+  if(!date) return false
+
+  return moment().isBefore(moment(date).subtract(8, 'hours'))
+}
+
 </script>
+<style scoped>
+  .sticky-date { top: 155px; background-color: white; z-index:55; }
+  @media screen and (max-width: 768px) {
+    .sticky-date { top: 30px; }
+  }
+</style>
