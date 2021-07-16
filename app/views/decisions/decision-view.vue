@@ -47,21 +47,22 @@
 				<dt v-if="decision.meeting">Meeting</dt>
 				<dd v-if="decision.meeting">
 					<meeting-card-list :meetings="[decision.meeting]" />
-                    <decision-meeting symbol="decision.meeting"></decision-meeting>
                 </dd>
+				<br>
+
 				<dt>Elements of decision</dt>
 				<dd>
 					<a href="#" class="badge badge-secondary text-nowrap" 
 						@click="toggleFilters({ types: null })" 
 						:class="{ disabled : filters && filters.types }">
-						{{counts.types}}
+						{{ sum(counts.types) }}
 					</a>
 					<a v-for="type in allFilters.types" :key="type.code"
 						href="#" class="badge badge-secondary text-nowrap" 
 						style="margin-right:3px;"
 						@click="toggleFilters({ types: [type.code] })" 
 						:class="!isFilterSelected('types', type.code) && 'disabled'" >
-						{{counts.types}} {{type.title}} 
+						{{ counts.types[type.code] || 0 }} {{type.title}} 
 						<i class="fa fa-filter" aria-hidden="true"></i>
 					</a>
 				</dd>
@@ -69,7 +70,7 @@
 					<a href="#" class="badge badge-secondary text-nowrap" 
 						@click="toggleFilters({ statuses : null })" 
 						:class="{ disabled : filters && filters.statuses }">
-						{{counts.statuses}}
+						{{ sum(counts.statuses) }}
 					</a>
 					<a 
 						v-for="status in allFilters.statuses" :key="status.code"
@@ -77,7 +78,7 @@
 						style="margin-right:3px;"
 						@click="toggleFilters({ statuses : [status.code]})"
 						:class="!isFilterSelected('statuses', status.code) && 'disabled'" >
-						{{counts.statuses}} {{status.title}} 
+						{{ counts.statuses[status.code] || 0 }} {{ status.title }} 
 						<i class="fa fa-filter" aria-hidden="true"></i>
 					</a>
 				</dd>
@@ -87,7 +88,7 @@
                     <a href="#" class="badge badge-secondary text-nowrap" 
 						@click="toggleFilters({ actors : null })" 
 						:class="{ disabled : filters &&  filters.actors }">
-						{{counts.actors}}
+						{{ sum(counts.actors) }}
 					</a>
 					<a
 						v-for="actor in allFilters.actors" :key="actor.code"
@@ -95,7 +96,7 @@
 						style="margin-right:3px;"
 						@click="toggleFilters({ actors : [actor.code] })" 
 						:class="!isFilterSelected('actors', actor.code) && 'disabled'">
-						{{counts.actors}} {{actor.title}} 
+						{{counts.actors[actor.code]}} {{actor.title}} 
 						<i class="fa fa-filter" aria-hidden="true"></i>
 					</a>
 				</dd>
@@ -105,7 +106,7 @@
 					<a href="#" class="badge badge-secondary text-nowrap" 
 						@click="toggleFilters({ aichiTargets : null })" 
 						:class="!isFilterSelected('aichiTargets', 'aichiTarget') && 'disabled'">
-						{{counts.aichiTargets}}</a>
+						{{sum(counts.aichiTargets)}}</a>
 					<span class="chip-sm" 
 						v-for="aichiTarget in allFilters.aichiTargets" 
 						:key="aichiTarget" 
@@ -115,7 +116,6 @@
 							:src="`/app/images/aichi-targets/abt-${aichiTarget.index}-96.png`" 
 							width="20" style="margin: 1px 1px 1px 1px;">
 					</span>
-					<!-- </a>  -->
 				</dd>
 				<br>
 
@@ -124,7 +124,7 @@
 					<a href="#" class="badge badge-secondary text-nowrap" 
 						@click="toggleFilters({ subjects : null })" 
 						:class="{ disabled : filters &&  filters.subjects }">
-						{{counts.subjects}}
+						{{sum(counts.subjects)}}
 					</a>
 
 					<a href="#" class="badge badge-secondary text-nowrap" 
@@ -133,7 +133,7 @@
 						style="margin-right:3px;"
 						@click="toggleFilters({ subjects : [subject.code] })" 
 						:class="!isFilterSelected('subjects', subject.code) && 'disabled'">
-							 {{subject.title}}
+						{{counts.subjects[subject.code]}} {{subject.title}}
 					</a> 
 				</dd>
 				<br>
@@ -208,7 +208,6 @@ export default {
 			decision: null,
 			documents: [],
 			filters: {},
-			counts: {},
 			allFilters: {},
 		}
 	},
@@ -230,26 +229,33 @@ export default {
 			// const { user } = $auth;
 			// return canEdit || _.intersection(user.roles, ["ScbdStaff"]).length>0;
 		},
+		counts() {
+			const {decision} = this;
+			let counts = {};
+			counts.types = _.countBy(getTags(decision, "type", true));
+			counts.statuses = _.countBy(getTags(decision, "statuses", true));
+			counts.actors = _.countBy(getTags(decision, "actors", true));
+			counts.aichiTargets = _.countBy(getTags(decision, "aichiTargets", true));
+			counts.subjects = _.countBy(getTags(decision, "subjects", true));
+			return counts;
+		}
     },
     methods: {
 		edit,
-		sumValues,
 		toggleFilters,
-		resetCount,
 		loadRelatedDecisions,
 		loadDocuments,
 		isFilterSelected,
 		lookupTermText,
-		loadFilters
+		loadFilters,
+		sum
     },
 	mounted: load
 }
 
 async function load() {
-	const { route, user } = this;
+	const { route } = this;
 
-	console.log('----------'+user);
-	
 	this.api = new DecisionApi(this.tokenReader);
 	
 	let treaty    = null ;
@@ -274,8 +280,6 @@ async function load() {
 	this.decision = decision;
 
 	this.documents = await this.loadDocuments(decision);
-
-	this.resetCount();
 
 	await this.loadFilters();
 }
@@ -333,7 +337,6 @@ async function loadDocuments(decision) {
 }
 
 async function loadRelatedDecisions(code){
-
 	var WithDot   = code.replace(/(\w+\/\w+\/\w+\/\w+)\/(.+)/, '$1.$2');
 	var WithSlash = code.replace(/(\w+\/\w+\/\w+\/\w+)\.(.+)/, '$1/$2');
 
@@ -346,17 +349,7 @@ async function loadRelatedDecisions(code){
 	return _.map(result.data, "code");
 }
 
-function resetCount() {
-	const {counts} = this;
-	counts.types = 0;
-	counts.statuses = 0;
-	counts.aichiTargets = 0;
-	counts.subjects = 0;
-	counts.actors = 0;
-}
-
 function toggleFilters(newFilters) {
-
 	let filters = {};
 	const oldFilters = this.filters || {};
 
@@ -377,28 +370,8 @@ function toggleFilters(newFilters) {
 	});
 
 	this.filters = filters;
-	//updateSums(filters);
 }
 
-function sumValues(o) {
-	return _(o||{}).values().reduce(function(a,v) { return a+v; }, 0);
-}
-
-function isMatch(entry, filters) {
-
-	if(!filters) return true;
-
-	const { actors, statuses, types, aichiTargets, subjects} = filters;
-
-	if(actors) return _(actors).intersection(entry.data.actors).some();
-	if(statuses) return _(statuses).intersection(entry.data.statuses).some();
-	if(types) return _(types).intersection([entry.data.type]).some();
-
-	if(aichiTargets) return _(aichiTargets).intersection(entry.data.aichiTargets).some();
-	if(subjects) return _(subjects).intersection(entry.data.subjects).some();
-
-	return true;
-}
 function edit(hash) {
 
 	// window.location.url(('/'+decision.body+'/'+decision.session+'/'+decision.decision+'/edit').toLowerCase());
@@ -408,11 +381,8 @@ function edit(hash) {
 }
 
 function pad(input) {
-
 	var output = (input || '').toString();
-
 	while(output.length<2) output = '0' + output;
-
 	return output;
 }
 
@@ -426,18 +396,20 @@ function isFilterSelected(type, code) {
 	return filters[type].some((c) => c === code);
 }
 
-function getTags(collection, field) {
+function getTags(collection, field, all) {
 	let list = [];
 	if(!_.isEmpty(collection[field])) list.push(collection[field]);
 
 	if(!_.isEmpty(collection.nodes)) {
 		collection.nodes.forEach((node) => {
-			var sublist = getTags(node, field);
+			var sublist = getTags(node, field, all);
 			list.push(sublist);
 		});
 	}
-	return _(list).flatten().uniq().value();
 
+	if(all) return _(list).flatten().value(); 
+
+	return _(list).flatten().uniq().value();
 }
 
 async function lookupTermText(code) {
@@ -445,6 +417,11 @@ async function lookupTermText(code) {
 	const text = await term(termCode);
 	return text;
 }
+
+function sum(object) {
+	return _.sum(_.values(object));
+}
+
 </script>
 
 <style scoped>
