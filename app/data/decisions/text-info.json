@@ -1,0 +1,8 @@
+[
+  { "en": "this is my source text <i>in html</i>"},
+  { "en": " 2nd paragraph this is my source text <i>in html</i>"},
+  { 
+    "en": "3rd paragraph. this is my source text <i>in html</i>",
+    "fr": "3e paragraphe. Ceci est mon text d'origine <i>en html</i>"
+  }
+]

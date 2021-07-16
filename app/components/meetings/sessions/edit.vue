@@ -67,7 +67,8 @@
 </template>
 
 <script>
-import Api, { mergeQueries, mapObjectId } from '../api.js'
+import Api, { mergeQueries } from '../api.js'
+import { mapObjectId }       from '~/api/api-base.js'
 
 import { sortBy                , debounce } from 'lodash'
 import { dateTimeFilter        }            from '../filters.js'

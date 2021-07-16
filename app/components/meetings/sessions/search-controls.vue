@@ -64,7 +64,7 @@
 
 <script>
 import { debounce          } from 'lodash'
-import { mapObjectId       } from '../api.js'
+import { mapObjectId       } from '~/api/api-base.js'
 import { dateTimeFilterUTC } from '../filters.js'
 
 import Multiselect        from 'vue-multiselect'

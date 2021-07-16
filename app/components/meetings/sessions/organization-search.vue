@@ -28,7 +28,7 @@
 
 import { debounce } from 'lodash'
 import Multiselect  from 'vue-multiselect'
-import Api, { mapObjectId } from '../api.js'
+import Api          from '../api.js'
 
 export default {
   name: 'OrganizationSearch',

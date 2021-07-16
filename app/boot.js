@@ -61,6 +61,8 @@ export default function bootApp(window, require, defineX) {
           'html2canvas'       :  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min',
           'angular-grid'      : `${cdnUrl}npm/angulargrid@0.6.5/angulargrid.min`,
           'mark'              : `${cdnUrl}npm/mark.js@8.11.1/dist/mark.min`,
+          'ckeditor5'         : `${cdnUrl}npm/@ckeditor/ckeditor5-build-classic@27.1.0/build/ckeditor.min`,
+          'vue-ckeditor5'     : `${cdnUrl}npm/@ckeditor/ckeditor5-vue2@1.0.5/dist/ckeditor.min`,
           'vue-tippy'         : `${cdnUrl}npm/vue-tippy@4.10.0/dist/vue-tippy.umd`
       },
       shim: {
@@ -83,6 +85,7 @@ export default function bootApp(window, require, defineX) {
           'amchart/themes/light' : { deps : ['amchart'] },
           'amchart/pie'          : { deps : ['amchart'] },
           'angular-grid'         : { deps : ['angular'] },
+          'vue-ckeditor5'        : { deps : ['ckeditor5'] },
       },
       packages: [
           { name: 'amchart', main: 'amcharts.min', location : cdnUrl+'npm/amcharts3@3.21.15/amcharts' },
