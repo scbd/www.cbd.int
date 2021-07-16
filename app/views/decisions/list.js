@@ -85,13 +85,7 @@ import './directives/header-decisions';
         }
 
         function pad(input) {
-
-            var output = (input || '').toString();
-
-            while(output.length<2)
-                output = '0' + output;
-
-            return output;
+            return _.padStart((input ?? '').toString(), 2, 0);
         }
     }];
 

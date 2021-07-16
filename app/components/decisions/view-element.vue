@@ -36,7 +36,7 @@
 
                 <p v-if="node.type==='paragraph'">
                     <a class="btn btn-primary btn-sm" role="button" v-if="showDecision"
-                        :href="`/decisions/cop/${node.session}/${node.decision}`">
+                        :href="`/decisions/${node.body}/${node.session}/${node.decision}`">
                         <i class="fa fa-search" aria-hidden="true"></i> 
                         UNEP/CBD/COP/DEC/{{romans[node.session]}}/{{node.decision}}
                     </a>
@@ -82,10 +82,10 @@ export default {
     name: 'ViewElement',
     filters: {
         uppercase(text) {
-            return (text + '').toUpperCase();
+            return (text??'').toString().toUpperCase();
         },
         lowercase(text) {
-            return (text + '').toLowerCase()
+            return (text??'').toString().toLowerCase()
         }
     },
     props: {
@@ -121,8 +121,6 @@ export default {
             const { node }= this;
 
             if(!node.type) return '';
-
-            if(node.type === 'information') node.type = 'informational';
 
             return this.$options.filters.lowercase(node.type);
         },

@@ -191,10 +191,10 @@ export default {
 	},
     filters: {
         uppercase(text) {
-            return (text + '').toUpperCase();
+            return (text??'').toString().toUpperCase();
         },
         lowercase(text) {
-            return (text + '').toLowerCase()
+            return (text??'').toString().toLowerCase()
         }
     },
     props: {

@@ -46,8 +46,8 @@
 </template>
 
 <script>
-import LANGUAGES from '~/components/languages.js';
-import MIMES from '~/components/file-type.js';
+import LANGUAGES from '~/data/languages.js';
+import MIMES from '~/data/file-types.js';
 
 export default {
     name: 'DocumentTypes',

@@ -16,6 +16,7 @@
 import NotificationCard from '~/components/references/notification-card.vue'
 import Api from '~/components/meetings/api.js';
 import _ from 'lodash';
+import solr from '~/util/solr.js';
 
 export default {
     name: 'NotificationCardList',
@@ -52,7 +53,7 @@ async function lookupNotifications(codes) {
     const options = {
         cache: true,
         params : {
-            q : `schema_s:notification AND symbol_s (${codes.map(solrEscape).join(' or ')})`,
+            q : `schema_s:notification AND symbol_s (${codes.map(solr.escape).join(' or ')})`,
             fl : "id, symbol_s,reference_s,title_t,date_dt,url_ss",
         }
     }
@@ -101,42 +102,4 @@ function urlToFiles(url_ss) {
     });
 }
 
-//========================================
-//
-//
-//========================================
-function solrEscape(value) {
-
-    if(value===undefined) throw "Value is undefined";
-    if(value===null)      throw "Value is null";
-    if(value==="")        throw "Value is null";
-
-    if(_.isNumber(value)) value = value.toString();
-    if(_.isDate  (value)) value = value.toISOString();
-
-    //TODO add more types
-
-    value = value.toString();
-
-    value = value.replace(/\\/g,   '\\\\');
-    value = value.replace(/\+/g,   '\\+');
-    value = value.replace(/\-/g,   '\\-');
-    value = value.replace(/\&\&/g, '\\&&');
-    value = value.replace(/\|\|/g, '\\||');
-    value = value.replace(/\!/g,   '\\!');
-    value = value.replace(/\(/g,   '\\(');
-    value = value.replace(/\)/g,   '\\)');
-    value = value.replace(/\{/g,   '\\{');
-    value = value.replace(/\}/g,   '\\}');
-    value = value.replace(/\[/g,   '\\[');
-    value = value.replace(/\]/g,   '\\]');
-    value = value.replace(/\^/g,   '\\^');
-    value = value.replace(/\"/g,   '\\"');
-    value = value.replace(/\~/g,   '\\~');
-    value = value.replace(/\*/g,   '\\*');
-    value = value.replace(/\?/g,   '\\?');
-    value = value.replace(/\:/g,   '\\:');
-
-    return value;
-}
 </script>
