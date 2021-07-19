@@ -6,16 +6,23 @@ export default class DecisionApi extends ApiBase
     super(options);
   }
 
-  async queryDecisionNodes(decisionId) {
+  async getDecision(decisionCodeOrId) {
 
-    const result = await this.http.get(`api/v2021/decisions/${encodeURIComponent(decisionId)}/nodes`).then(res => res.data).catch(tryCastToApiError);
+    const result = await this.http.get(`api/v2021/decisions/${encodeURIComponent(decisionCodeOrId)}`).then(res => res.data).catch(tryCastToApiError);
+
+    return result;
+  }
+  
+  async queryDecisionNodes(decisionCodeOrId) {
+
+    const result = await this.http.get(`api/v2021/decisions/${encodeURIComponent(decisionCodeOrId)}/nodes`).then(res => res.data).catch(tryCastToApiError);
 
     return result;
   }
 
-  async queryDecisionTree(code) {
+  async queryDecisionTree(decisionCodeOrId) {
 
-    const result = await this.http.get(`api/v2021/decisions/${encodeURIComponent(code)}/tree`, {cache:true }).then(res => res.data).catch(tryCastToApiError);
+    const result = await this.http.get(`api/v2021/decisions/${encodeURIComponent(decisionCodeOrId)}/tree`, {cache:true }).then(res => res.data).catch(tryCastToApiError);
 
     return result;
   }
