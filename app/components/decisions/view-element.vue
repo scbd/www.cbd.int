@@ -1,7 +1,7 @@
 <template>
 <div>
-    <div class="pointer" @click="setSelectedNode">
-        <div class="row" :class="dimmed && 'dimmed'">
+    <div class="pointer" @click.stop="setSelectedNode" :class="{ selected: isSelected }">
+        <div class="row" :class="{ dimmed }">
             <div class="col-12">
                 <a :name="name"><small>{{name}}</small></a>
                 <span v-if="type" class="pull-right badge" style="opacity:0.5;margin-right:6px"
@@ -53,7 +53,7 @@
                 </p>
             </div>
         </div>
-        <div class="row" v-if="node.html" :class="dimmed && 'dimmed'">
+        <div class="row" v-if="node.html" :class="{ dimmed, 'match-filter':isMatchFilter }">
             <div class="col-12">
                 <span v-html="node.html.en" />
             </div>
@@ -64,8 +64,10 @@
             v-show="child && child._id"
             :key="child._id"
             :node="child"
-            :filters.sync="filters"
-            :selectedNode.sync="selectedNode"
+            :filters.sync="filters" 
+            :selectedNode="selectedNode" 
+            @update:filters="$emit('update:filters', $event)"
+            @update:selectedNode="$emit('update:selectedNode', $event)"
         />
     </div>
 
@@ -102,8 +104,8 @@ export default {
             default: () => {}
         },
         selectedNode: {
-            type: Object,
-            default: () => {}
+            type: String,
+            default: () => null
         }
     },
     computed: {
@@ -125,12 +127,27 @@ export default {
             return this.$options.filters.lowercase(node.type);
         },
         dimmed() {
-            const { node, filters, selectedNode } = this;
+            if(this.hasFilter    && !this.isMatchFilter) return true;
+            if(this.selectedNode && !this.isSelected)    return true;
 
-            if(selectedNode && Object.keys(selectedNode).length > 0) {
-                if(selectedNode._id === node._id) return false;
-                else return true;
-            }
+
+            return false;
+        },
+        isSelected () {
+            const { node, selectedNode } = this;
+
+            if(!selectedNode)
+                return false;
+
+            let selected = false;
+
+            selected = selected || node.code && selectedNode && node.code.indexOf(selectedNode)==0;
+
+            return selected;
+        },
+        isMatchFilter() {
+
+            const { node, filters } = this;
 
             if(!filters || Object.keys(filters).length === 0) return false;
 
@@ -144,7 +161,13 @@ export default {
             if(match && aichiTargets) match = _(aichiTargets).intersection(node.aichiTargets).some();
             if(match && subjects) match = _(subjects).intersection(node.subjects).some();
 
-            return !match;
+            return match;
+        },
+        hasFilter() {
+
+            const { filters } = this;
+
+            return !_.isEmpty(filters);
         }
     },
     methods: {
@@ -167,14 +190,24 @@ function statusName(text) {
 }
 
 function setSelectedNode() {
-    this.$emit("update:selectedNode", this.node);
+    this.$emit("update:selectedNode", this.node?.code);
 }
 </script>
 
 <style scoped>
 .dimmed {
-    opacity: 0.5
+    opacity: 0.30
 }
+
+.selected {
+    border-color: #5bc0de;
+    background-color: #baeaf8;
+}
+
+.match-filter {
+    font-weight: bold;
+}
+
 .pointer {
     cursor: pointer; 
     /* TMP */
