@@ -57,15 +57,22 @@ export default {
     data() {
         return {
             editorType: ClassicEditor,
-            editorConfig: {
-                toolbar: [ 'bold', 'italic', 'bulletedList', 'numberedList'],
-            },
             selectedLanguage: 'fr',
             rows: [],
             nodes: [],
         }
     },
     computed: {
+
+        editorConfig() {
+            return {
+                toolbar: [ 'bold', 'italic', 'bulletedList', 'numberedList'],
+                language: {
+                    ui: 'en', // The UI will be English.
+                    content: this.selectedLanguage
+                }
+            };
+        },
         languages() {
             const langs = cloneDeep(languages);
             delete langs.en;
