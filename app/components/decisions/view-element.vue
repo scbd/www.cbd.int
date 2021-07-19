@@ -134,15 +134,17 @@ export default {
 
             if(!filters || Object.keys(filters).length === 0) return false;
 
+            let match = true;
+
             const {actors, statuses, types, aichiTargets, subjects} = filters;
 
-            if(types && _(types).intersection([node.type]).some()) return false;
-            if(statuses && _(statuses).intersection(node.statuses).some()) return false;
-            if(actors && _(actors).intersection(node.actors).some()) return false;
-            if(aichiTargets && _(aichiTargets).intersection(node.aichiTargets).some()) return false;
-            if(subjects && _(subjects).intersection(node.subjects).some()) return false;
+            if(match && actors) match = _(actors).intersection(node.actors).some();
+            if(match && statuses) match = _(statuses).intersection(node.statuses).some();
+            if(match && types) match = _(types).intersection([node.type]).some();
+            if(match && aichiTargets) match = _(aichiTargets).intersection(node.aichiTargets).some();
+            if(match && subjects) match = _(subjects).intersection(node.subjects).some();
 
-            return true;
+            return !match;
         }
     },
     methods: {
