@@ -24,9 +24,9 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/search',                              { ...mapView(searchView) ,            resolve: { user : currentUser() }, reloadOnSearch : false } )
     .when('/:body',                               { ...mapView(redirectView),           resolve: { } })
     .when('/:body/:session',                      { ...mapView(decisionListView),       resolve: { user : currentUser() } } )
-    .when('/:body/:session/:decision',            { ...mapView(vueViewWrapper), resolve : { ...decisionView, user : currentUser()}})
     .when('/:body/:session/:decision/edit',       { ...mapView(angularViewWrapper),     resolve: { ...editDecisionView, user : securize(["Administrator","DecisionTrackingTool", "ScbdStaff"]) } } )
-    .when('/:body/:session/:decision/:paragraph', { ...mapView(paragraphView),          resolve: { user : currentUser() } })
+//    .when('/:body/:session/:decision/:paragraph', { ...mapView(paragraphView),          resolve: { user : currentUser() } })
     .when('/:body/:session/:decision/edit/translation', { ...mapView(vueViewWrapper), resolve : { ...editTranslationView, user : securize(["Administrator","DecisionTrackingTool"]) } } )
+    .when('/:body/:session/:decision*',           { ...mapView(vueViewWrapper), resolve : { ...decisionView, user : currentUser()}})
     .otherwise({redirectTo: '/404'});
 }]);
