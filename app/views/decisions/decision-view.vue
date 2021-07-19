@@ -257,19 +257,28 @@ export default {
 async function load() {
 	const { route } = this;
 
+	console.log(route, route);
+
 	this.api = new DecisionApi(this.tokenReader);
 	
 	let treaty    = null ;
 	const body      = route.params.body.toUpperCase();
-	const session   = parseInt(route.params.session);
-	const number    = parseInt(route.params.decision);
 
-	if(body=='COP') treaty = { code : "XXVII8" } ;
+if(body=='COP') treaty = { code : "XXVII8" } ;
 
 	if(!treaty) {
 		//alert('ONLY "COP" DECISIONS ARE SUPPORTED');
 		throw 'ONLY "COP" DECISIONS ARE SUPPORTED';
 	}
+
+	const pathParser = /^(?<dec>\d+)(?:\/(?<para>.*))?/;
+
+	if(!pathParser.test(route.params.decision)) throw Error("Invalid path")
+
+	const parsed = pathParser.exec(route.params.decision);
+	const session = parseInt(route.params.session);
+	const number  = parseInt(parsed.groups.dec);
+	const para    = parsed.groups?.para?.toUpperCase();
 
 	treaty = await this.api.getTreaties(treaty.code);
 
@@ -283,6 +292,11 @@ async function load() {
 	this.documents = await this.loadDocuments(decision);
 
 	await this.loadFilters();
+
+	if(para) {
+		this.selectedNode = `${code}/${para}`;
+		document.querySelector(`a[name="${this.selectedNode.replace(/\//g, '-')}"]`).scrollIntoView()
+	}
 }
 
 async function loadFilters() {
