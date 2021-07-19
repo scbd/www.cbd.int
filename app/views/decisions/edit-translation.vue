@@ -66,7 +66,7 @@ export default {
 
         editorConfig() {
             return {
-                toolbar: [ 'bold', 'italic', 'bulletedList', 'numberedList'],
+                toolbar: [ 'bold', 'italic'],
                 language: {
                     ui: 'en', // The UI will be English.
                     content: this.selectedLanguage

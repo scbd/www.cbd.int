@@ -209,6 +209,7 @@ export default {
 			documents: [],
 			filters: {},
 			allFilters: {},
+			selectedNode: null,
 		}
 	},
     computed: {
