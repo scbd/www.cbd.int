@@ -141,7 +141,7 @@ export default {
         isSelected () {
             const { node, selectedNode } = this;
 
-            if(selectedNode) return false;
+            if(!selectedNode) return false;
 
             let selected = false;
 
