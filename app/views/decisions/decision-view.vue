@@ -246,16 +246,21 @@ export default {
 			// return canEdit || _.intersection(user.roles, ["ScbdStaff"]).length>0;
 		},
 		counts() {
-			const {decision} = this;
+			const {decision, selectedNode} = this;
+			
+			const collection = selectedNode || decision;
 			let counts = {};
-			counts.types = _.countBy(getTags(decision, "type", true));
-			counts.statuses = _.countBy(getTags(decision, "statuses", true));
-			counts.actors = _.countBy(getTags(decision, "actors", true));
-			counts.aichiTargets = _.countBy(getTags(decision, "aichiTargets", true));
-			counts.subjects = _.countBy(getTags(decision, "subjects", true));
+			counts.types = _.countBy(getTags(collection, "type", true));
+			counts.statuses = _.countBy(getTags(collection, "statuses", true));
+			counts.actors = _.countBy(getTags(collection, "actors", true));
+			counts.aichiTargets = _.countBy(getTags(collection, "aichiTargets", true));
+			counts.subjects = _.countBy(getTags(collection, "subjects", true));
 			return counts;
 		}
     },
+	watch: {
+		selectedNode: loadFilters,
+	},
     methods: {
 		edit,
 		toggleFilters,
@@ -272,14 +277,12 @@ export default {
 async function load() {
 	const { $route: route } = this;
 
-	console.log(route, route);
-
 	this.api = new DecisionApi(this.tokenReader);
 	
 	let treaty    = null ;
 	const body      = route.params.body.toUpperCase();
 
-if(body=='COP') treaty = { code : "XXVII8" } ;
+	if(body=='COP') treaty = { code : "XXVII8" } ;
 
 	if(!treaty) {
 		//alert('ONLY "COP" DECISIONS ARE SUPPORTED');
@@ -315,7 +318,7 @@ if(body=='COP') treaty = { code : "XXVII8" } ;
 }
 
 async function loadFilters() {
-	const {decision} = this;
+	const {decision, selectedNode} = this;
 
 	let allFilters = {};
 
@@ -324,13 +327,15 @@ async function loadFilters() {
 		return;
 	}
 
-	allFilters.types = getTags(decision, "type").map(tag => types.find(item => item.code === tag) || tag);
-	allFilters.statuses = getTags(decision, "statuses").map(tag => statuses.find(item => item.code === tag) || tag);
-	allFilters.actors = getTags(decision, "actors").map(tag => actors.find(item => item.code === tag) || tag);
-	allFilters.aichiTargets = getTags(decision, "aichiTargets").map(tag => aichiTargets.find(item => item.index === tag) || tag);
+	const collection = selectedNode || decision
+
+	allFilters.types = getTags(collection, "type").map(tag => types.find(item => item.code === tag) || tag);
+	allFilters.statuses = getTags(collection, "statuses").map(tag => statuses.find(item => item.code === tag) || tag);
+	allFilters.actors = getTags(collection, "actors").map(tag => actors.find(item => item.code === tag) || tag);
+	allFilters.aichiTargets = getTags(collection, "aichiTargets").map(tag => aichiTargets.find(item => item.index === tag) || tag);
 
 	//load subjects
-	const codes = getTags(decision, 'subjects');
+	const codes = getTags(collection, 'subjects');
 	const subjects = codes.map(async code => {
 		const title = await lookupTermText(code) 
 		return {code , title}

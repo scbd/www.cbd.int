@@ -107,8 +107,8 @@ export default {
             default: () => {}
         },
         selectedNode: {
-            type: String,
-            default: () => null
+            type: Object,
+            default: () => {}
         },
         locale: {
             type: String,
@@ -136,19 +136,16 @@ export default {
         dimmed() {
             if(this.hasFilter    && !this.isMatchFilter) return true;
             if(this.selectedNode && !this.isSelected)    return true;
-
-
             return false;
         },
         isSelected () {
             const { node, selectedNode } = this;
 
-            if(!selectedNode)
-                return false;
+            if(selectedNode) return false;
 
             let selected = false;
 
-            selected = selected || node.code && selectedNode && node.code.indexOf(selectedNode)==0;
+            selected = selected || node.code && selectedNode.code && node.code.indexOf(selectedNode.code)==0;
 
             return selected;
         },
@@ -202,7 +199,11 @@ function statusName(text) {
 }
 
 function setSelectedNode() {
-    this.$emit("update:selectedNode", this.node?.code);
+    const {isSelected} = this;
+
+    const updatedNode = isSelected ? null : this.node;
+    
+    this.$emit("update:selectedNode", updatedNode);
 }
 </script>
 
