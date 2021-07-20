@@ -17,21 +17,9 @@
 			<div class="document card border-primary">
     			<div class="card-header bg-primary text-white">
     				<b v-if="decision">UNEP/CBD/COP/DEC/{{decision.session}}/{{decision.decision}}</b>
-
-					<div class="float-right">
-						<select id="locales" v-model="selectedLocale" class="badge badge-info">
-							<option 
-								v-for="(language, locale) in languages"
-								:key="locale" 
-								:value="locale">
-								{{language}}
-							</option>
-						</select>
-
-						<a href="#" v-if="filters && Object.keys(filters).length > 0" class="badge badge-info" @click="filters = {}" style="margin-top:2px">
-							<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> filtered <i class="fa fa-times" aria-hidden="true"></i>
-						</a>
-					</div>
+    				<a href="#" v-if="filters" class="float-right badge badge-info" @click="filter(null)" style="margin-top:2px">
+    					<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> filtered <i class="fa fa-times" aria-hidden="true"></i>
+    				</a>
     			</div>
     			<div class="card-body">
 					<h3>{{decision.title.en}}</h3>
@@ -40,7 +28,6 @@
 							:node="node" 
 							:filters="filters"
 							:selectedNode.sync="selectedNode"
-							:locale="selectedLocale"
 						/>
 					</div>
     			</div>
@@ -68,14 +55,13 @@
 					<a href="#" class="badge badge-secondary text-nowrap" 
 						@click="toggleFilters({ types: null })" 
 						:class="{ disabled : filters && filters.types }">
-						{{ sum(counts.types) }} 
-						<i class="fa fa-times" aria-hidden="true"></i>
+						{{ sum(counts.types) }}
 					</a>
 					<a v-for="type in allFilters.types" :key="type.code"
-						href="#" class="badge text-nowrap" 
+						href="#" class="badge badge-secondary text-nowrap" 
 						style="margin-right:3px;"
 						@click="toggleFilters({ types: [type.code] })" 
-						:class="`${!isFilterSelected('types', type.code) && 'disabled'} ${type.class || 'badge-secondary'}`" >
+						:class="!isFilterSelected('types', type.code) && 'disabled'" >
 						{{ counts.types[type.code] || 0 }} {{type.title}} 
 						<i class="fa fa-filter" aria-hidden="true"></i>
 					</a>
@@ -85,14 +71,13 @@
 						@click="toggleFilters({ statuses : null })" 
 						:class="{ disabled : filters && filters.statuses }">
 						{{ sum(counts.statuses) }}
-						<i class="fa fa-times" aria-hidden="true"></i>
 					</a>
 					<a 
 						v-for="status in allFilters.statuses" :key="status.code"
-						href="#" class="badge text-nowrap" 
+						href="#" class="badge badge-secondary text-nowrap" 
 						style="margin-right:3px;"
 						@click="toggleFilters({ statuses : [status.code]})"
-						:class="`${!isFilterSelected('statuses', status.code) && 'disabled'} ${status.class || 'badge-secondary'}`" >
+						:class="!isFilterSelected('statuses', status.code) && 'disabled'" >
 						{{ counts.statuses[status.code] || 0 }} {{ status.title }} 
 						<i class="fa fa-filter" aria-hidden="true"></i>
 					</a>
@@ -103,15 +88,14 @@
                     <a href="#" class="badge badge-secondary text-nowrap" 
 						@click="toggleFilters({ actors : null })" 
 						:class="{ disabled : filters &&  filters.actors }">
-						{{ sum(counts.actors) }} 
-						<i class="fa fa-times" aria-hidden="true"></i>
+						{{ sum(counts.actors) }}
 					</a>
 					<a
 						v-for="actor in allFilters.actors" :key="actor.code"
-						href="#" class="badge text-nowrap" 
+						href="#" class="badge badge-secondary text-nowrap" 
 						style="margin-right:3px;"
 						@click="toggleFilters({ actors : [actor.code] })" 
-						:class="`${!isFilterSelected('actors', actor.code) && 'disabled'} ${actor.class || 'badge-secondary'}`" >
+						:class="!isFilterSelected('actors', actor.code) && 'disabled'">
 						{{counts.actors[actor.code]}} {{actor.title}} 
 						<i class="fa fa-filter" aria-hidden="true"></i>
 					</a>
@@ -121,15 +105,13 @@
 				<dd>
 					<a href="#" class="badge badge-secondary text-nowrap" 
 						@click="toggleFilters({ aichiTargets : null })" 
-						:class="{ disabled : filters &&  filters.aichiTargets }">
-						{{sum(counts.aichiTargets)}} 
-						<i class="fa fa-times" aria-hidden="true"></i>
-					</a>
+						:class="!isFilterSelected('aichiTargets', 'aichiTarget') && 'disabled'">
+						{{sum(counts.aichiTargets)}}</a>
 					<span class="chip-sm" 
 						v-for="aichiTarget in allFilters.aichiTargets" 
 						:key="aichiTarget" 
 						@click="toggleFilters({ aichiTargets : [aichiTarget.index] })" 
-						:class="`${!isFilterSelected('aichiTargets', aichiTarget.index) && 'disabled'} ${aichiTarget.class || 'badge-secondary'}`" >
+						:class="!isFilterSelected('aichiTargets', aichiTargets.index) && 'disabled'">
 							<img :title="aichiTarget.description" 
 							:src="`/app/images/aichi-targets/abt-${aichiTarget.index}-96.png`" 
 							width="20" style="margin: 1px 1px 1px 1px;">
@@ -142,16 +124,15 @@
 					<a href="#" class="badge badge-secondary text-nowrap" 
 						@click="toggleFilters({ subjects : null })" 
 						:class="{ disabled : filters &&  filters.subjects }">
-						{{sum(counts.subjects)}} 
-						<i class="fa fa-times" aria-hidden="true"></i>
+						{{sum(counts.subjects)}}
 					</a>
 
-					<a href="#" class="badge text-nowrap" 
+					<a href="#" class="badge badge-secondary text-nowrap" 
 						v-for="subject in allFilters.subjects" 
 						:key="subject.code"
 						style="margin-right:3px;"
 						@click="toggleFilters({ subjects : [subject.code] })" 
-						:class="`${!isFilterSelected('subjects', subject.code) && 'disabled'} ${subject.class || 'badge-secondary'}`" >
+						:class="!isFilterSelected('subjects', subject.code) && 'disabled'">
 						{{counts.subjects[subject.code]}} {{subject.title}}
 					</a> 
 				</dd>
@@ -199,7 +180,6 @@ import DocumentFiles from '~/components/references/document-files.vue';
 import DecisionCardList from '~/components/references/decision-card-list.vue';
 import MeetingCardList from '~/components/references/meeting-card-list.vue';
 import term from '~/filters/term.js';
-import languages from '~/components/languages.js';
 
 export default {
     name: 'DecisionView',
@@ -230,7 +210,6 @@ export default {
 			filters: {},
 			allFilters: {},
 			selectedNode: null,
-			selectedLocale: 'en', 
 		}
 	},
     computed: {
@@ -239,7 +218,6 @@ export default {
         statuses() { return statuses},
         romans() { return romans},
 		aichiTargets() { return aichiTargets},
-		languages() {return languages},
 		canEdit() {
 			return true;
 			// const { $auth } = this;
@@ -277,7 +255,7 @@ export default {
 }
 
 async function load() {
-	const { route } = this;
+	const { $route: route } = this;
 
 	console.log(route, route);
 
