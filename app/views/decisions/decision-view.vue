@@ -16,13 +16,25 @@
 		<div class="col-md-6">
 			<div class="document card border-primary">
     			<div class="card-header bg-primary text-white">
-    				<b v-if="decision">UNEP/CBD/COP/DEC/{{decision.session}}/{{decision.decision}}</b>
-    				<a href="#" v-if="filters" class="float-right badge badge-info" @click="filter(null)" style="margin-top:2px">
-    					<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> filtered <i class="fa fa-times" aria-hidden="true"></i>
-    				</a>
+    				<b v-if="decision">{{decision.symbol || 'TODO'}}</b>
+
+					<div class="float-right">
+						<select id="locales" v-model="selectedLocale" class="badge badge-info">
+							<option 
+								v-for="(language, locale) in languages"
+								:key="locale" 
+								:value="locale">
+								{{language}}
+							</option>
+						</select>
+
+						<a href="#" v-if="filters && Object.keys(filters).length > 0" class="badge badge-info" @click="filters = {}" style="margin-top:2px">
+							<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> filtered <i class="fa fa-times" aria-hidden="true"></i>
+						</a>
+					</div>
     			</div>
     			<div class="card-body">
-					<h3>{{decision.title.en}}</h3>
+					<h3>{{decision.title | lstring}}</h3>
     				<div v-for="node in decision.nodes" :key="node._id">
 						<view-element 
 							:node="node" 
@@ -180,6 +192,8 @@ import DocumentFiles from '~/components/references/document-files.vue';
 import DecisionCardList from '~/components/references/decision-card-list.vue';
 import MeetingCardList from '~/components/references/meeting-card-list.vue';
 import term from '~/filters/term.js';
+import languages from '~/components/languages.js';
+import lstring from '~/filters/lstring.js';
 
 export default {
     name: 'DecisionView',
@@ -190,6 +204,7 @@ export default {
 		MeetingCardList
 	},
     filters: {
+		lstring,
         uppercase(text) {
             return (text??'').toString().toUpperCase();
         },

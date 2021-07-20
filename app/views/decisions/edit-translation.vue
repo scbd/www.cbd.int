@@ -6,7 +6,7 @@
                     <tr class="text-center">
                         <td class="bg-primary text-white font-weight-bold">English</td>
                         <td class="bg-primary text-white font-weight-bold">
-                            <select id="languages" v-model="selectedLanguage" class="w-50"
+                            <select id="languages" v-model="selectedLanguage" class="badge"
                             :disabled="isEditorOpen">
                                 <option 
                                     v-for="(language, locale) in languages"
@@ -15,6 +15,10 @@
                                     {{language}}
                                 </option>
                             </select>
+                            <span class="float-right" style="background: white" v-show="isEditorOpen">
+                                <a href="javascript:void(0)" class="text-success mx-1" @click="saveAll"><i class="fa fa-check"></i></a>
+                                <a href="javascript:void(0)" class="text-danger mx-1" @click="cancelAll"><i class="fa fa-times"></i></a>
+                            </span>
                         </td>
                     </tr>
                 </thead>
@@ -30,7 +34,8 @@
                                 </div>
                             </div>
                             <div v-else class="paragraph" @click="edit(row)">
-                                <span :lang="selectedLanguage" v-html="row.html[selectedLanguage]" />
+                                <span v-if="row.html[selectedLanguage]" :lang="selectedLanguage" v-html="row.html[selectedLanguage]" />
+                                <span v-else class="text-muted">&lt;click to add translation&gt;</span>
                             </div>
                         </td>
                     </tr>
@@ -85,6 +90,8 @@ export default {
     created,
     methods: {
         edit,
+        saveAll,
+        cancelAll,
         save, 
         cancel,
         isEmpty
@@ -130,12 +137,23 @@ function edit(row) {
     row.editorHtml = row.html[this.selectedLanguage] || '';
 }
 
+async function saveAll() {
+    const {rows} = this;
+    const openRows = rows.filter((r) => r.editor);
+    openRows.forEach(r => this.save(r));
+}
+
+async function cancelAll() {
+    const {rows} = this;
+    rows.forEach(r => {
+        r.editor = false;
+        r.editorHtml = '';
+    })
+}
+
 async function save(row) {
     const html   = row.editorHtml;
     const locale = this.selectedLanguage;
-
-    row.editor = false;
-    row.editorHtml = '';
 
     const { decisionId } = row
     const data   = {
@@ -147,6 +165,8 @@ async function save(row) {
     const result = await this.api.updateDecisionNode(decisionId, row._id, data );
     
     row.html = result.html;
+    row.editor = false;
+    row.editorHtml = '';
 }
 
 function cancel(row) {
