@@ -53,9 +53,9 @@
                 </p>
             </div>
         </div>
-        <div class="row" v-if="node.html" :class="{ dimmed, 'match-filter':isMatchFilter }">
+        <div class="row" v-if="htmlText" :class="{ dimmed, 'match-filter':isMatchFilter }">
             <div class="col-12">
-                <span v-html="node.html.en" />
+                <span v-html="htmlText" />
             </div>
         </div>
 
@@ -65,7 +65,8 @@
             :key="child._id"
             :node="child"
             :filters.sync="filters" 
-            :selectedNode="selectedNode" 
+            :selectedNode="selectedNode"
+            :locale="locale" 
             @update:filters="$emit('update:filters', $event)"
             @update:selectedNode="$emit('update:selectedNode', $event)"
         />
@@ -79,10 +80,12 @@ import actors from '~/views/decisions/data/actors.js';
 import romans from '~/views/decisions/data/romans.js';
 import statuses from '~/views/decisions/data/statuses.js';
 import _ from 'lodash';
+import lstring from '~/filters/lstring.js';
 
 export default {
     name: 'ViewElement',
     filters: {
+        lstring,
         uppercase(text) {
             return (text??'').toString().toUpperCase();
         },
@@ -106,6 +109,10 @@ export default {
         selectedNode: {
             type: String,
             default: () => null
+        },
+        locale: {
+            type: String,
+            default: 'en'
         }
     },
     computed: {
@@ -168,6 +175,11 @@ export default {
             const { filters } = this;
 
             return !_.isEmpty(filters);
+        },
+        htmlText() {
+            const {node, locale} = this;
+            
+            return this.$options.filters.lstring(node.html, locale);
         }
     },
     methods: {
