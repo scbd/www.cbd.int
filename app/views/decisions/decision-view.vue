@@ -248,7 +248,7 @@ export default {
 		counts() {
 			const {decision, selectedNode} = this;
 			
-			const collection = selectedNode || decision;
+			const collection = findNode(decision, selectedNode) || decision;
 			let counts = {};
 			counts.types = _.countBy(getTags(collection, "type", true));
 			counts.statuses = _.countBy(getTags(collection, "statuses", true));
@@ -272,6 +272,20 @@ export default {
 		sum
     },
 	mounted: load
+}
+
+function findNode(collection, code) {
+	if(collection && collection.code && collection.code.indexOf(code) >= 0) {
+		return collection;
+	} else if (!_.isEmpty(collection.nodes)) {
+		let result = null;
+		collection.nodes.forEach(node => {
+			if(result) return;
+			result = findNode(node, code);
+		});
+		return result;
+	}
+	return null;
 }
 
 async function load() {
@@ -327,7 +341,7 @@ async function loadFilters() {
 		return;
 	}
 
-	const collection = selectedNode || decision
+	const collection = findNode(decision, selectedNode) || decision
 
 	allFilters.types = getTags(collection, "type").map(tag => types.find(item => item.code === tag) || tag);
 	allFilters.statuses = getTags(collection, "statuses").map(tag => statuses.find(item => item.code === tag) || tag);

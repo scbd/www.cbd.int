@@ -107,8 +107,8 @@ export default {
             default: () => {}
         },
         selectedNode: {
-            type: Object,
-            default: () => {}
+            type: String,
+            default: null
         },
         locale: {
             type: String,
@@ -145,7 +145,7 @@ export default {
 
             let selected = false;
 
-            selected = selected || node.code && selectedNode.code && node.code.indexOf(selectedNode.code)==0;
+            selected = selected || node.code && selectedNode && node.code.indexOf(selectedNode)==0;
 
             return selected;
         },
@@ -199,9 +199,9 @@ function statusName(text) {
 }
 
 function setSelectedNode() {
-    const {isSelected} = this;
+    const {isSelected, node} = this;
 
-    const updatedNode = isSelected ? null : this.node;
+    const updatedNode = isSelected ? null : node?.code;
     
     this.$emit("update:selectedNode", updatedNode);
 }
