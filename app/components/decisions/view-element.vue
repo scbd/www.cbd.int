@@ -202,6 +202,8 @@ function setSelectedNode() {
     const {isSelected, node} = this;
 
     const updatedNode = isSelected ? null : node?.code;
+
+    console.log(updatedNode);
     
     this.$emit("update:selectedNode", updatedNode);
 }
