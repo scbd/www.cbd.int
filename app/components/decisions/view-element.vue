@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="pointer" @click.stop="setSelectedNode" :class="{ selected: isSelected }">
-        <div class="row" :class="{ dimmed }">
+        <div class="row paragraph" :class="{ dimmed }">
             <div class="col-12">
                 <a :name="name"><small>{{name}}</small></a>
                 <span v-if="type" class="pull-right badge" style="opacity:0.5;margin-right:6px"
@@ -203,9 +203,13 @@ function setSelectedNode() {
 
     const updatedNode = isSelected ? null : node?.code;
 
-    console.log(updatedNode);
-    
     this.$emit("update:selectedNode", updatedNode);
+}
+
+function pad(input) {
+	var output = (input || '').toString();
+	while(output.length<2) output = '0' + output;
+	return output;
 }
 </script>
 

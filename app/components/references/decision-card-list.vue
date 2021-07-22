@@ -72,7 +72,7 @@ async function lookupDecisions(codes) {
 
     //TODO need to do for same decision multiple paragraph
     results.forEach(d => {
-        d.url = 'decisions/'+d.body.toLowerCase()+'/'+d.session+'/'+d.decision;
+        d.url = '/decisions/'+d.body.toLowerCase()+'/'+d.session+'/'+d.decision;
         d.elements = d.elements.filter(e => codes.some(c => e.code === getElementCode(c)));
         //d.elements = d.elements.filter(e => e.code === getElementCode(d.code));
 

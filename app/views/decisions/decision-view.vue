@@ -69,7 +69,7 @@
 						@click="toggleFilters({ types: null })" 
 						:class="{ disabled : filters && filters.types }">
 						{{ sum(counts.types) }} 
-						<i class="fa fa-times" aria-hidden="true"></i>
+						<i v-if="filters && filters.types" class="fa fa-times" aria-hidden="true"></i>
 					</a>
 					<a v-for="type in allFilters.types" :key="type.code"
 						href="#" class="badge text-nowrap" 
@@ -85,7 +85,7 @@
 						@click="toggleFilters({ statuses : null })" 
 						:class="{ disabled : filters && filters.statuses }">
 						{{ sum(counts.statuses) }}
-						<i class="fa fa-times" aria-hidden="true"></i>
+						<i v-if="filters && filters.statuses" class="fa fa-times" aria-hidden="true"></i>
 					</a>
 					<a 
 						v-for="status in allFilters.statuses" :key="status.code"
@@ -104,7 +104,7 @@
 						@click="toggleFilters({ actors : null })" 
 						:class="{ disabled : filters &&  filters.actors }">
 						{{ sum(counts.actors) }} 
-						<i class="fa fa-times" aria-hidden="true"></i>
+						<i v-if="filters && filters.actors" class="fa fa-times" aria-hidden="true"></i>
 					</a>
 					<a
 						v-for="actor in allFilters.actors" :key="actor.code"
@@ -123,7 +123,7 @@
 						@click="toggleFilters({ aichiTargets : null })" 
 						:class="{ disabled : filters &&  filters.aichiTargets }">
 						{{sum(counts.aichiTargets)}} 
-						<i class="fa fa-times" aria-hidden="true"></i>
+						<i v-if="filters && filters.aichiTargets" class="fa fa-times" aria-hidden="true"></i>
 					</a>
 					<span class="chip-sm" 
 						v-for="aichiTarget in allFilters.aichiTargets" 
@@ -143,7 +143,7 @@
 						@click="toggleFilters({ subjects : null })" 
 						:class="{ disabled : filters &&  filters.subjects }">
 						{{sum(counts.subjects)}} 
-						<i class="fa fa-times" aria-hidden="true"></i>
+						<i v-if="filters && filters.subjects" class="fa fa-times" aria-hidden="true"></i>
 					</a>
 
 					<a href="#" class="badge text-nowrap" 
@@ -202,6 +202,11 @@ import term from '~/filters/term.js';
 import languages from '~/components/languages.js';
 import lstring from '~/filters/lstring.js';
 
+const scrollOptions = {
+	block: 'center',
+	behavior: "smooth"
+};
+
 export default {
     name: 'DecisionView',
 	components: {
@@ -221,6 +226,7 @@ export default {
     },
     props: {
 		route: { type: Object, required: false },
+		router: { type: Object, required: false },
 		tokenReader: { type: Function, required: false },
 		user: { type: Object, required: false}
 	},
@@ -269,6 +275,11 @@ export default {
     },
 	watch: {
 		selectedNode: loadFilters,
+		filters() {
+			this.$nextTick().then(() => {
+				document.querySelector(".paragraph:not(.dimmed)").scrollIntoView(scrollOptions);	
+			});
+		}
 	},
     methods: {
 		edit,
@@ -298,7 +309,7 @@ function findNode(collection, code) {
 }
 
 async function load() {
-	const { $route: route } = this;
+	const { $route: route, $router: router } = this;
 
 	this.api = new DecisionApi(this.tokenReader);
 	
@@ -335,8 +346,10 @@ async function load() {
 	await this.loadFilters();
 
 	if(para) {
-		this.selectedNode = `${code}/${para}`;
-		document.querySelector(`a[name="${this.selectedNode.replace(/\//g, '-')}"]`).scrollIntoView()
+		this.selectedNode = `${code}/${para}`.replace(/\d+/g, pad);
+		const element = document.querySelector(`a[name="${this.selectedNode.replace(/\//g, '-')}"]`);
+		if(element) element.scrollIntoView(scrollOptions);
+		else router.replace(`/${code}`); //TODO
 	}
 }
 
