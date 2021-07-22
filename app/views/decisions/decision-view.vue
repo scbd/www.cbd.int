@@ -1,7 +1,9 @@
 <template>
 <div class="decision-tracking" v-if="decision">
+	<v-tour name="decision-view-tour" :steps="steps"></v-tour>
 	<header-decisions>
 		<span class="float-right">
+			<a href="javascript:void(0)" @click="startTour">Help</a>
 			<a href="#" v-if="canComment" class="btn btn-default" @click="edit('comment')" style="margin-top:2px;color:inherit">
 				<i class="fa fa-comment-o" aria-hidden="true"></i>
 			</a>
@@ -13,10 +15,10 @@
 	</header-decisions>
 
     <div class="view-decision row">
-		<div class="col-md-6">
+		<div class="col-md-6 scrollable-section">
 			<div class="document card border-primary">
     			<div class="card-header bg-primary text-white">
-    				<b v-if="decision">{{decision.symbol || 'TODO'}}</b>
+    				<b v-if="decision" id="decision-symbol">{{decision.symbol || 'TODO'}}</b>
 
 					<div class="float-right">
 						<select id="locales" v-model="selectedLocale" class="badge badge-info">
@@ -46,7 +48,7 @@
     			</div>
             </div>
 		</div>
-		<div class="col-md-6" style="padding-top:16px">
+		<div class="col-md-6 scrollable-section" style="padding-top:16px">
 			<div id="decision-meta">
 			<dl>
 				<dt v-if="decision.body">Body</dt>
@@ -201,6 +203,7 @@ import MeetingCardList from '~/components/references/meeting-card-list.vue';
 import term from '~/filters/term.js';
 import languages from '~/components/languages.js';
 import lstring from '~/filters/lstring.js';
+import VueTour from 'vue-tour';
 
 const scrollOptions = {
 	block: 'center',
@@ -213,7 +216,8 @@ export default {
 		ViewElement,
 		DocumentFiles,
 		DecisionCardList,
-		MeetingCardList
+		MeetingCardList,
+		VueTour
 	},
     filters: {
 		lstring,
@@ -238,7 +242,20 @@ export default {
 			filters: {},
 			allFilters: {},
 			selectedNode: null,
-			selectedLocale: 'en', 
+			selectedLocale: 'en',
+			steps: [
+				{
+					target: '#decision-symbol',
+					header: {
+						title: 'Title',
+					},
+					content: `Decision Title!`
+				},
+				{
+					target: '#locales',
+					content: 'Change language to see content on preferred language!'
+				}
+			]
 		}
 	},
     computed: {
@@ -289,7 +306,8 @@ export default {
 		isFilterSelected,
 		lookupTermText,
 		loadFilters,
-		sum
+		sum,
+		startTour
     },
 	mounted: load
 }
@@ -351,6 +369,10 @@ async function load() {
 		if(element) element.scrollIntoView(scrollOptions);
 		else router.replace(`/${code}`); //TODO
 	}
+}
+
+function startTour() {
+	this.$tours['decision-view-tour'].start()
 }
 
 async function loadFilters() {
@@ -498,5 +520,11 @@ function sum(object) {
 <style scoped>
 .disabled {
 	opacity: 50%;
+}
+
+.scrollable-section {
+	/* TODO - height */
+	height: 100vh;
+	overflow: scroll;
 }
 </style>
