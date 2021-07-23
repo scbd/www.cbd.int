@@ -15,7 +15,7 @@
 	</header-decisions>
 
     <div class="view-decision row">
-		<div class="col-md-6 scrollable-section">
+		<div class="col-md-6">
 			<div class="document card border-primary">
     			<div class="card-header bg-primary text-white">
     				<b v-if="decision" id="decision-symbol">{{decision.symbol || 'TODO'}}</b>
@@ -37,13 +37,15 @@
     			</div>
     			<div class="card-body">
 					<h3>{{decision.title | lstring}}</h3>
-    				<div v-for="node in decision.nodes" :key="node._id">
-						<view-element 
-							:node="node" 
-							:filters="filters"
-							:selectedNode.sync="selectedNode"
-							:locale="selectedLocale"
-						/>
+					<div class="scrollable-section">
+						<div v-for="node in decision.nodes" :key="node._id">
+							<view-element 
+								:node="node" 
+								:filters="filters"
+								:selectedNode.sync="selectedNode"
+								:locale="selectedLocale"
+							/>
+						</div>
 					</div>
     			</div>
             </div>
@@ -245,15 +247,34 @@ export default {
 			selectedLocale: 'en',
 			steps: [
 				{
+					target: 'h1',
+					header: {
+						title: 'Title',
+					},
+					content: `Decision!`,
+			        params: { 
+						enableScrolling: false,
+						placement: 'top',
+					}
+				},
+				{
 					target: '#decision-symbol',
 					header: {
 						title: 'Title',
 					},
-					content: `Decision Title!`
+					content: `Decision Title!`,
+			        params: { 
+						enableScrolling: false,
+						placement: 'top',
+					}
 				},
 				{
 					target: '#locales',
-					content: 'Change language to see content on preferred language!'
+					content: 'Change language to see content on preferred language!',
+			        params: { 
+						enableScrolling: false,
+						placement: 'top',
+					}
 				}
 			]
 		}
@@ -526,5 +547,11 @@ function sum(object) {
 	/* TODO - height */
 	height: 100vh;
 	overflow: scroll;
+}
+
+.card-header:first-child {
+    position: sticky;
+    top: 0px;
+    z-index: 1;
 }
 </style>

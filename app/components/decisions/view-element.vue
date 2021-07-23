@@ -233,4 +233,11 @@ function pad(input) {
     border: 1px dotted #c0c0c0;
     padding: 2px;
     margin: 2px;
-}</style>
+}
+
+.card-header:first-child {
+    position: sticky;
+    top: 0px;
+    z-index: 1;
+}
+</style>
