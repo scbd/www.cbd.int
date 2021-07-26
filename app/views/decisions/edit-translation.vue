@@ -50,7 +50,7 @@ import DecisionApi from '~/api/decisions.js';
 import { cloneDeep, isEmpty } from 'lodash'
 import ClassicEditor from 'ckeditor5';
 import { component as ckeditor } from 'vue-ckeditor5'
-import languages from '~/components/languages.js';
+import languages from '~/data/languages.js';
 
 export default {
     name: 'DecisionEditTranslations',

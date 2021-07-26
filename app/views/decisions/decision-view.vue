@@ -4,10 +4,10 @@
 	<header-decisions>
 		<span class="float-right">
 			<a href="javascript:void(0)" @click="startTour">Help</a>
-			<a href="#" v-if="canComment" class="btn btn-default" @click="edit('comment')" style="margin-top:2px;color:inherit">
+			<a href="javascript:void(0)" v-if="canComment" class="btn btn-default" @click="edit('comment')" style="margin-top:2px;color:inherit">
 				<i class="fa fa-comment-o" aria-hidden="true"></i>
 			</a>
-			<a href="#" v-if="canEdit" class="btn btn-default" @click="edit()" style="margin-top:2px;color:inherit">
+			<a href="javascript:void(0)" v-if="canEdit" class="btn btn-default" @click="edit()" style="margin-top:2px;color:inherit">
 				<i class="fa fa-edit" aria-hidden="true"></i>
 			</a>
 		</span>						
@@ -30,13 +30,13 @@
 							</option>
 						</select>
 
-						<a href="#" v-if="filters && Object.keys(filters).length > 0" class="badge badge-info" @click="filters = {}" style="margin-top:2px">
+						<a href="javascript:void(0)" v-if="filters && Object.keys(filters).length > 0" class="badge badge-info" @click="filters = {}" style="margin-top:2px">
 							<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> filtered <i class="fa fa-times" aria-hidden="true"></i>
 						</a>
 					</div>
     			</div>
     			<div class="card-body">
-					<h3>{{decision.title | lstring}}</h3>
+					<h3 :lang="selectedLocale">{{decision.title | lstring}}</h3>
 					<div class="scrollable-section">
 						<div v-for="node in decision.nodes" :key="node._id">
 							<view-element 
@@ -69,14 +69,14 @@
 
 				<dt>Elements of decision</dt>
 				<dd>
-					<a href="#" class="badge badge-secondary text-nowrap" 
+					<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
 						@click="toggleFilters({ types: null })" 
 						:class="{ disabled : filters && filters.types }">
 						{{ sum(counts.types) }} 
 						<i v-if="filters && filters.types" class="fa fa-times" aria-hidden="true"></i>
 					</a>
 					<a v-for="type in allFilters.types" :key="type.code"
-						href="#" class="badge text-nowrap" 
+						href="javascript:void(0)" class="badge text-nowrap" 
 						style="margin-right:3px;"
 						@click="toggleFilters({ types: [type.code] })" 
 						:class="`${!isFilterSelected('types', type.code) && 'disabled'} ${type.class || 'badge-secondary'}`" >
@@ -85,7 +85,7 @@
 					</a>
 				</dd>
 				<dd>
-					<a href="#" class="badge badge-secondary text-nowrap" 
+					<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
 						@click="toggleFilters({ statuses : null })" 
 						:class="{ disabled : filters && filters.statuses }">
 						{{ sum(counts.statuses) }}
@@ -93,7 +93,7 @@
 					</a>
 					<a 
 						v-for="status in allFilters.statuses" :key="status.code"
-						href="#" class="badge text-nowrap" 
+						href="javascript:void(0)" class="badge text-nowrap" 
 						style="margin-right:3px;"
 						@click="toggleFilters({ statuses : [status.code]})"
 						:class="`${!isFilterSelected('statuses', status.code) && 'disabled'} ${status.class || 'badge-secondary'}`" >
@@ -104,7 +104,7 @@
 
 				<dt>Actors</dt>
 				<dd>
-                    <a href="#" class="badge badge-secondary text-nowrap" 
+                    <a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
 						@click="toggleFilters({ actors : null })" 
 						:class="{ disabled : filters &&  filters.actors }">
 						{{ sum(counts.actors) }} 
@@ -112,7 +112,7 @@
 					</a>
 					<a
 						v-for="actor in allFilters.actors" :key="actor.code"
-						href="#" class="badge text-nowrap" 
+						href="javascript:void(0)" class="badge text-nowrap" 
 						style="margin-right:3px;"
 						@click="toggleFilters({ actors : [actor.code] })" 
 						:class="`${!isFilterSelected('actors', actor.code) && 'disabled'} ${actor.class || 'badge-secondary'}`" >
@@ -123,7 +123,7 @@
 
 				<dt>AICHI targets</dt>
 				<dd>
-					<a href="#" class="badge badge-secondary text-nowrap" 
+					<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
 						@click="toggleFilters({ aichiTargets : null })" 
 						:class="{ disabled : filters &&  filters.aichiTargets }">
 						{{sum(counts.aichiTargets)}} 
@@ -143,14 +143,14 @@
 
 				<dt>Subjects</dt>
 				<dd>
-					<a href="#" class="badge badge-secondary text-nowrap" 
+					<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
 						@click="toggleFilters({ subjects : null })" 
 						:class="{ disabled : filters &&  filters.subjects }">
 						{{sum(counts.subjects)}} 
 						<i v-if="filters && filters.subjects" class="fa fa-times" aria-hidden="true"></i>
 					</a>
 
-					<a href="#" class="badge text-nowrap" 
+					<a href="javascript:void(0)" class="badge text-nowrap" 
 						v-for="subject in allFilters.subjects" 
 						:key="subject.code"
 						style="margin-right:3px;"
@@ -203,7 +203,7 @@ import DocumentFiles from '~/components/references/document-files.vue';
 import DecisionCardList from '~/components/references/decision-card-list.vue';
 import MeetingCardList from '~/components/references/meeting-card-list.vue';
 import term from '~/filters/term.js';
-import languages from '~/components/languages.js';
+import languages from '~/data/languages.js';
 import lstring from '~/filters/lstring.js';
 import VueTour from 'vue-tour';
 
@@ -388,7 +388,10 @@ async function load() {
 		this.selectedNode = `${code}/${para}`.replace(/\d+/g, pad);
 		const element = document.querySelector(`a[name="${this.selectedNode.replace(/\//g, '-')}"]`);
 		if(element) element.scrollIntoView(scrollOptions);
-		else router.replace(`/${code}`); //TODO
+		else {
+			const path = route.path.substring(0, route.path.lastIndexOf("/"));
+			router.replace({path}); //TODO
+		}
 	}
 }
 
@@ -553,5 +556,10 @@ function sum(object) {
     position: sticky;
     top: 0px;
     z-index: 1;
+}
+
+[lang="ar"] {
+  direction:rtl;
+  text-align: right;
 }
 </style>

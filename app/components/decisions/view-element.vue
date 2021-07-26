@@ -33,15 +33,14 @@
                     <i class="fa fa-user" aria-hidden="true"></i>
                     <span>{{actorName(actor)}}</span>
                 </span>
-
                 <p v-if="node.type==='paragraph'">
                     <a class="btn btn-primary btn-sm" role="button" v-if="showDecision"
                         :href="`/decisions/${node.body}/${node.session}/${node.decision}`">
                         <i class="fa fa-search" aria-hidden="true"></i> 
-                        UNEP/CBD/COP/DEC/{{romans[node.session]}}/{{node.decision}}
+                        {{node.symbol || 'TODO'}}
                     </a>
                     <a class="btn btn-primary btn-sm" role="button" 
-                        :href="`/decisions/cop/${node.session}/${node.decision}/${node.section | lowercase}${node.paragraph}${node.item && ('.'+node.item)}`" 
+                        :href="`/decisions/${node.body}/${node.session}/${node.decision}/${node.section | lowercase}${node.paragraph}${node.item && ('.'+node.item)}`" 
                         @click="$root.hiddenHash='view'"
                     >
                         <i class="fa fa-search" aria-hidden="true"></i> 
@@ -55,7 +54,7 @@
         </div>
         <div class="row" v-if="htmlText" :class="{ dimmed, 'match-filter':isMatchFilter }">
             <div class="col-12">
-                <span v-html="htmlText" />
+                <span v-html="htmlText" :lang="locale" />
             </div>
         </div>
 
@@ -205,12 +204,6 @@ function setSelectedNode() {
 
     this.$emit("update:selectedNode", updatedNode);
 }
-
-function pad(input) {
-	var output = (input || '').toString();
-	while(output.length<2) output = '0' + output;
-	return output;
-}
 </script>
 
 <style scoped>
@@ -239,5 +232,10 @@ function pad(input) {
     position: sticky;
     top: 0px;
     z-index: 1;
+}
+
+[lang="ar"] {
+  direction:rtl;
+  text-align: right;
 }
 </style>
