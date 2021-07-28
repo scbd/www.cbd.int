@@ -157,14 +157,14 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                 $scope.subjects     = data.subjects     = (data.subjects     || []);
                 $scope.aichiTargets = data.aichiTargets = (data.aichiTargets || []);
 
-                $('#content').html(data.content);
+                // $('#content').html(data.content);
 
 
-                clean($('#content')[0]);
-                clean($('#content')[0]);
-                clean($('#content')[0]);
+                // clean($('#content')[0]);
+                // clean($('#content')[0]);
+                // clean($('#content')[0]);
 
-                $('#content,element').mousedown(mousedown_selectNode);
+                // $('#content,element').mousedown(mousedown_selectNode);
 
             }).then(function(){
 

@@ -51,11 +51,11 @@ export default {
     computed: {
       dataType() {
         const {node} = this;
-        if(node.subitem) return `${node.item} (${node.subitem})`;
-        if(node.item) return `${node.item}`;
+        if(node.subitem)   return `paragraph ${node.paragraph} ${node.item} (${node.subitem})`;
+        if(node.item)      return `paragraph ${node.paragraph} ${node.item}`;
         if(node.paragraph) return `paragraph ${node.paragraph}`;
-        if(node.section) return `section ${node.section}`;
-        return 'body';
+        if(node.section)   return `section ${node.section}`;
+        return null;
       },
       isSelected() {
           const { node, selectedNode } = this;
@@ -69,9 +69,9 @@ export default {
           return selected;
       },
       htmlText() {
-          const {node, locale} = this;
+          const {node} = this;
           
-          return this.$options.filters.lstring(node.html, locale);
+          return this.$options.filters.lstring(node.html, 'en');
       }
     },
     methods: {

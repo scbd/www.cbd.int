@@ -2,7 +2,7 @@
     <div v-if="decision">
         <div class="bg-orange">Decision {{symbol}}</div>
         <div class="document" style="height:100%;overflow-y:scroll;padding:5px">
-            <element data-type="title">{{decision.title | lstring}}</element>
+            <h1>{{decision.title | lstring('en')}}</h1>
             <div v-for="node in decision.nodes" :key="node._id">
                 <edit-element :node="node" :comments="comments" :selectedNode.sync="selectedNode"/>
             </div>
