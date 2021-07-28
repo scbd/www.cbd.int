@@ -51,4 +51,11 @@ export default class DecisionApi extends ApiBase
 
     return result;
   }
+
+  async getDecisionComments(params) {
+    
+    const result = await this.http.get('api/v2017/comments', { params });
+
+    return result;
+  }
 }

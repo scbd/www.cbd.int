@@ -85,7 +85,9 @@ import './directives/header-decisions';
         }
 
         function pad(input) {
-            return _.padStart((input ?? '').toString(), 2, 0);
+            var output = (input || '').toString();
+            while(output.length<2) output = '0' + output;
+            return output;
         }
     }];
 

@@ -19,11 +19,18 @@ import itemList      from './data/items'
 import subItemList   from './data/sub-items'
 import actorList     from './data/actors'
 import statusesList  from './data/statuses'
+import DecisionEdit from '~/views/decisions/decision-edit.vue';
+import 'angular-vue'
 
 export { default as template } from './edit.html'
 
-export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$compile', 'ngDialog', 'user', '$anchorScroll', function($scope, $http, $route, $location, $filter, $q, $compile, ngDialog, user, $anchorScroll) {
+export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$compile', 'ngDialog', 'user', '$anchorScroll','apiToken', function($scope, $http, $route, $location, $filter, $q, $compile, ngDialog, user, $anchorScroll, apiToken) {
 
+        $scope.tokenReader = function(){ return apiToken.get()}
+        $scope.route       = { params : $route.current.params, query: $location.search() }
+        $scope.vueOptions = {
+            components : {DecisionEdit}
+        };
         var treaty        = null;
         var body          = $route.current.params.body.toUpperCase();
         var session       = parseInt($route.current.params.session);
@@ -254,7 +261,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         //
         //===========================
         function loadComments() {
-
+            console.log(data.code);
             return $http.get('/api/v2017/comments', { params : { q: { type:'decision', resources: data.code } } }).then(function(res){
 
                 var comments = res.data;

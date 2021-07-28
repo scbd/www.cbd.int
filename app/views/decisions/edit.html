@@ -238,10 +238,11 @@
                     </div>
                 </div>
 
-                <div class="bg-orange">Decision {{symbol}}</div>
+                <decision-edit ng-vue="vueOptions" :token-reader="tokenReader" :route="route"></decision-edit>
+                <!-- <div class="bg-orange">Decision {{symbol}}</div>
                 <div class="document" style="height:100%;overflow-y:scroll;padding:5px">
                     <div id='content' class='decision' style="min-height:100%;padding-bottom:150px"></div>
-                </div>
+                </div> -->
             </div>
             <div class="col-sm-6" style="height:100%;overflow-y:scroll;padding:10px">
 
