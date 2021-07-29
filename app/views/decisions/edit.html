@@ -70,13 +70,21 @@
         font-weight: bold;
         color: #888;
         width: 140px;
-        ;z-index:1;
+        z-index:1;
     }
 
     .edit-decision button.comment {
         position: absolute;
         top:0px;
         right: 0px;
+        z-index:1;
+        margin: 0px
+    }
+
+    .edit-decision button.edit {
+        position: absolute;
+        top:0px;
+        right: 20px;
         z-index:1;
         margin: 0px
     }
@@ -111,16 +119,27 @@
         user-select: all;*/
         cursor: text;
     }
+
+    .add-button {
+        display: none;
+    }
+    
+    .edit-decision element.selected .add-button {
+        display:block;
+    }
     .edit-decision element[data-type=title] {
         font-size: 20px;
     }
 
     .edit-decision button.comment,
-    .edit-decision button.comment:hover {
+    .edit-decision button.edit,
+    .edit-decision button.comment:hover,
+    .edit-decision button.edit:hover {
         text-decoration: none;
     }
 
-    .edit-decision button.comment {
+    .edit-decision button.comment,
+    .edit-decision button.edit {
         color: #aaa;
     }
 

@@ -196,7 +196,7 @@ import DecisionApi from '~/api/decisions.js';
 import ViewElement from '~/components/decisions/view-element.vue';
 import types from '~/views/decisions/data/types.js';
 import actors from '~/views/decisions/data/actors.js';
-import romans from '~/views/decisions/data/romans.js';
+import romanChars from '~/views/decisions/data/romans.js';
 import statuses from '~/views/decisions/data/statuses.js';
 import aichiTargets from '~/data/reports/aichiTargets.json';
 import DocumentFiles from '~/components/references/document-files.vue';
@@ -283,7 +283,7 @@ export default {
 		types() { return types},
 		actors() { return actors},
         statuses() { return statuses},
-        romans() { return romans},
+        romans() { return romanChars},
 		aichiTargets() { return aichiTargets},
 		languages() {return languages},
 		canEdit() {
