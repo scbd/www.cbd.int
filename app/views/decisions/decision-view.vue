@@ -385,9 +385,12 @@ async function load() {
 	await this.loadFilters();
 
 	if(para) {
-		this.selectedNode = `${code}/${para}`.replace(/\d+/g, pad);
-		const element = document.querySelector(`a[name="${this.selectedNode.replace(/\//g, '-')}"]`);
-		if(element) element.scrollIntoView(scrollOptions);
+		const node = `${code}/${para}`.replace(/\d+/g, pad);
+		const element = document.querySelector(`a[name="${node.replace(/\//g, '-')}"]`);
+		if(element) { 
+			this.selectedNode = node;
+			element.scrollIntoView(scrollOptions);
+		}
 		else {
 			const path = route.path.substring(0, route.path.lastIndexOf("/"));
 			router.replace({path}); //TODO
