@@ -8,9 +8,10 @@
                 <span class="btn text-danger" @click="cancel(row)"><i class="fa fa-times"></i></span>
             </div>
         </div>
-        <span v-else @click="toggleSelected" style="min-height: 20px">
-          <span v-html="htmlText" />
-        </span>
+        <div v-else @click="toggleSelected">
+          <!-- TODO - remove nbsp; -->
+          &nbsp;<span v-html="htmlText" />
+        </div>
         <button class="btn btn-link comment">
           <!-- TODO - fa-comments icon -->
           <span class="fa fa-comment-o" />
@@ -18,8 +19,8 @@
         <button class="btn btn-link edit" @click="edit">
           <span class="fa fa-edit" />
         </button>
-        <div v-if="isSelected" class="row">
-          <button class="btn btn-primary col-4 offset-4 border-bottom-0 rounded-5 p-0 add-button" 
+        <div v-if="isSelected">
+          <button class="btn btn-sm btn-primary w-100 border-bottom-0 rounded-5 p-0 add-button" 
             @click="addNode(node._id, null)">+</button>
         </div>
         <edit-element 
@@ -33,8 +34,8 @@
           @addNode="$emit('addNode', $event)"
       />
     </element>
-    <div v-if="isSelected || (selectedNode && node.parentId === selectedNode)" class="row">
-      <button class="btn btn-primary col-4 offset-4 border-bottom-0 rounded-5 p-0 add-button" 
+    <div v-if="isSelected || (selectedNode && node.parentId === selectedNode)">
+      <button class="btn btn-sm btn-primary w-100 border-bottom-0 rounded-5 p-0 add-button" 
         @click="addNode(node.parentId, node._id)">+</button>
     </div>
   </div>

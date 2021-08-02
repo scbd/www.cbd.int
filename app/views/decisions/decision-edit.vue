@@ -45,7 +45,8 @@ export default {
     mounted: load,
     methods: {
         loadComments,
-        addNode
+        addNode,
+        load
     }
 }
 
@@ -105,7 +106,7 @@ async function loadComments(code) {
 
 async function addNode(params) {
     await this.api.addNodeToDecisionTree(this.decision._id, params);
-    await load();
+    await this.load();
 }
 
 function pad(input) {
