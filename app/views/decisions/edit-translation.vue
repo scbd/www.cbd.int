@@ -156,15 +156,10 @@ async function save(row) {
     const locale = this.selectedLanguage;
 
     const { decisionId } = row
-    const data   = {
-        html: { ...row.html, [locale]: html },
-    }
-
-    Object.keys(data.html).forEach((lang) => !data.html[lang] && delete data.html[lang]);
     
-    const result = await this.api.updateDecisionNode(decisionId, row._id, data );
+    const result = await this.api.updateDecisionNodeText(decisionId, row._id, locale, html );
     
-    row.html = result.html;
+    row.html = result;
     row.editor = false;
     row.editorHtml = '';
 }
