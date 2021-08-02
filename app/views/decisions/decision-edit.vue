@@ -10,6 +10,7 @@
                     :comments="comments" 
                     :selectedNode.sync="selectedNode"
                     :token-reader="tokenReader"
+                    @addNode="addNode"
                 />
             </div>
         </div>
@@ -43,7 +44,8 @@ export default {
     },
     mounted: load,
     methods: {
-        loadComments
+        loadComments,
+        addNode
     }
 }
 
@@ -99,6 +101,11 @@ async function loadComments(code) {
     } catch (error) {
         return {};
     }
+}
+
+async function addNode(params) {
+    await this.api.addNodeToDecisionTree(this.decision._id, params);
+    await load();
 }
 
 function pad(input) {

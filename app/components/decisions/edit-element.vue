@@ -1,34 +1,42 @@
 <template>
   <div>
     <element :data-type="dataType" :class="isSelected && 'selected'">
-      <div v-if="editor">
-          <ckeditor v-model="editorHtml" :editor="editorType" :config="editorConfig"></ckeditor>
-          <div class="text-right">
-              <span class="btn text-success" @click="save(row)"><i class="fa fa-check"></i></span>
-              <span class="btn text-danger" @click="cancel(row)"><i class="fa fa-times"></i></span>
-          </div>
-      </div>
-      <span v-else v-html="htmlText" @click="toggleSelected" />
-      <button class="btn btn-link comment">
-        <!-- TODO - fa-comments icon -->
-        <span class="fa fa-comment-o" />
-      </button>
-      <button class="btn btn-link edit" @click="edit">
-        <span class="fa fa-edit" />
-      </button>
-      <div class="add-button">
-        <button class="btn btn-link w-100 text-center">+</button>
-      </div>
-      <edit-element 
-        v-for="child in node.nodes" 
-        v-show="child && child._id"
-        :key="child._id"
-        :node="child"
-        :selectedNode.sync="selectedNode"
-        :comments="comments"
-        :token-reader="tokenReader"
-    />
+        <div v-if="editor">
+            <ckeditor v-model="editorHtml" :editor="editorType" :config="editorConfig"></ckeditor>
+            <div class="text-right">
+                <span class="btn text-success" @click="save(row)"><i class="fa fa-check"></i></span>
+                <span class="btn text-danger" @click="cancel(row)"><i class="fa fa-times"></i></span>
+            </div>
+        </div>
+        <span v-else @click="toggleSelected" style="min-height: 20px">
+          <span v-html="htmlText" />
+        </span>
+        <button class="btn btn-link comment">
+          <!-- TODO - fa-comments icon -->
+          <span class="fa fa-comment-o" />
+        </button>
+        <button class="btn btn-link edit" @click="edit">
+          <span class="fa fa-edit" />
+        </button>
+        <div v-if="isSelected" class="row">
+          <button class="btn btn-primary col-4 offset-4 border-bottom-0 rounded-5 p-0 add-button" 
+            @click="addNode(node._id, null)">+</button>
+        </div>
+        <edit-element 
+          v-for="child in node.nodes" 
+          v-show="child && child._id"
+          :key="child._id"
+          :node="child"
+          :selectedNode.sync="selectedNode"
+          :comments="comments"
+          :token-reader="tokenReader"
+          @addNode="$emit('addNode', $event)"
+      />
     </element>
+    <div v-if="isSelected || (selectedNode && node.parentId === selectedNode)" class="row">
+      <button class="btn btn-primary col-4 offset-4 border-bottom-0 rounded-5 p-0 add-button" 
+        @click="addNode(node.parentId, node._id)">+</button>
+    </div>
   </div>
 </template>
 
@@ -99,11 +107,9 @@ export default {
 
           if(!selectedNode) return false;
 
-          let selected = false;
+          if(!(node || {})._id) return false;
 
-          selected = selected || node.code && selectedNode && node.code.indexOf(selectedNode)===0;
-
-          return selected;
+          return node._id === selectedNode;
       },
       htmlText() {
           const {node} = this;
@@ -115,9 +121,19 @@ export default {
       toggleSelected,
       edit,
       save,
-      cancel
+      cancel,
+      addNode
     },
     created
+}
+
+function addNode(parentId, nextTo) {
+  const params = {
+    parentId, 
+    nextTo: nextTo || '000000000000000000000000',
+    html: null
+  }
+  this.$emit('addNode', params);
 }
 
 function created() {
@@ -126,7 +142,7 @@ function created() {
 
 function toggleSelected() {
   const {node, isSelected} = this;
-  this.$emit("update:selectedNode", isSelected ? null: node.code);
+  this.$emit("update:selectedNode", isSelected ? null: node._id);
 }
 
 function edit() {

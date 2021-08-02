@@ -51,7 +51,7 @@
         user-select: none;
     }*/
 
-    .edit-decision element[data-type] {
+    .edit-decision element {
         position: relative;
 
     }
@@ -102,6 +102,7 @@
         margin-top:6px;
         margin-bottom:6px;
         background-color: rgba(255,255,255,0.85);
+        min-height: 40px;
         /*-moz-user-select: none;
         -webkit-user-select: none;
         -ms-user-select: none;
@@ -120,13 +121,10 @@
         cursor: text;
     }
 
-    .add-button {
-        display: none;
+    .edit-decision .add-button {
+        border-color: blue;
     }
-    
-    .edit-decision element.selected .add-button {
-        display:block;
-    }
+
     .edit-decision element[data-type=title] {
         font-size: 20px;
     }

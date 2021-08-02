@@ -56,4 +56,9 @@ export default class DecisionApi extends ApiBase
     const result = await this.http.get('api/v2017/comments', { params });
     return result;
   }
+
+  async addNodeToDecisionTree(decisionCodeOrId, params) {
+    const result = await this.http.post(`api/v2021/decisions/${encodeURIComponent(decisionCodeOrId)}/nodes`, params);
+    return result
+  }
 }
