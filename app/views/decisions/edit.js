@@ -76,6 +76,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         $scope.initials=function(t) { return _.startCase(t).replace(/[^A-Z]/g, ''); };
         $scope.addTo       = addTo;
         $scope.removeFrom  = removeFrom;
+        $scope.element = {};
 
         $scope.noNarrower = function(t) { return !t.narrowerTerms || !t.narrowerTerms.length; };
         $scope.collections = {

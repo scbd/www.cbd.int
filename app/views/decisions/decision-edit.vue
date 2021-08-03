@@ -8,7 +8,7 @@
                 <edit-element 
                     :node="node" 
                     :comments="comments" 
-                    :selectedNode.sync="selectedNode"
+                    :selectedNode="selectedNode"
                     :token-reader="tokenReader"
                     @addNode="addNode"
                 />
@@ -40,14 +40,36 @@ export default {
     },
     props: {
         tokenReader: { type: Function, required: false },
-		route: { type: Object, required: false }
+		route: { type: Object, required: false },
+        element: {type: Object, required: false}
+    },
+    watch: {
+        selectedNode(val) {
+            //const node = this.findNode(this.decision, val);
+            console.log(val);
+        }
     },
     mounted: load,
     methods: {
         loadComments,
         addNode,
-        load
+        load,
+        findNode
     }
+}
+
+function findNode(collection, id) {
+	if(collection && collection._id && collection._id === id) {
+		return collection;
+	} else if (!_.isEmpty(collection.nodes)) {
+		let result = null;
+		collection.nodes.forEach(node => {
+			if(result) return;
+			result = findNode(node, id);
+		});
+		return result;
+	}
+	return null;
 }
 
 async function load() {
@@ -95,8 +117,6 @@ async function loadComments(code) {
             comments[key] = comments[key] || [];
             comments[key].push(comment);
         });
-        console.log(comments);
-
         return comments;
     });    
     } catch (error) {

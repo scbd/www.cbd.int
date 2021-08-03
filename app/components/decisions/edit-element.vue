@@ -28,10 +28,11 @@
           v-show="child && child._id"
           :key="child._id"
           :node="child"
-          :selectedNode.sync="selectedNode"
+          :selectedNode="selectedNode"
           :comments="comments"
           :token-reader="tokenReader"
           @addNode="$emit('addNode', $event)"
+          @update:selectedNode="$emit('update:selectedNode', $event)"
       />
     </element>
     <div v-if="isSelected || (selectedNode && node.parentId === selectedNode)">
