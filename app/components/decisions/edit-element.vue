@@ -155,15 +155,10 @@ async function save() {
   const {node, editorHtml, locale} = this;
 
   const { decisionId } = node
-  const data   = {
-      html: { ...node.html, [locale]: editorHtml },
-  }
-
-  Object.keys(data.html).forEach((lang) => !data.html[lang] && delete data.html[lang]);
   
-  const result = await this.api.updateDecisionNode(decisionId, node._id, data );
+  const result = await this.api.updateDecisionNodeText(decisionId, node._id, locale, editorHtml );
   
-  node.html = result.html;
+  node.html = result;
   this.editor = false;
   this.editorHtml = '';
 }
