@@ -28,11 +28,11 @@
           v-show="child && child._id"
           :key="child._id"
           :node="child"
-          :selectedNode="selectedNode"
+          :selected-node="selectedNode"
           :comments="comments"
           :token-reader="tokenReader"
           @addNode="$emit('addNode', $event)"
-          @update:selectedNode="$emit('update:selectedNode', $event)"
+          @update:selected-node="$emit('update:selected-node', $event)"
       />
     </element>
     <div v-if="isSelected || (selectedNode && node.parentId === selectedNode)">
@@ -144,7 +144,7 @@ function created() {
 
 function toggleSelected() {
   const {node, isSelected} = this;
-  this.$emit("update:selectedNode", isSelected ? null: node._id);
+  this.$emit("update:selected-node", isSelected ? null: node._id);
 }
 
 function edit() {

@@ -8,8 +8,9 @@
                 <edit-element 
                     :node="node" 
                     :comments="comments" 
-                    :selectedNode="selectedNode"
+                    :selected-node="selectedNode"
                     :token-reader="tokenReader"
+                    @update:selected-node="$emit('update:selected-node', $event);"
                     @addNode="addNode"
                 />
             </div>
@@ -35,12 +36,14 @@ export default {
             api: {},
 			decision: null,
             comments: {},
-            selectedNode: null
         }
     },
     props: {
         tokenReader: { type: Function, required: false },
-		route: { type: Object, required: false },
+        selectedNode: {
+            type: String,
+            default: null
+        },
         element: {type: Object, required: false}
     },
     watch: {

@@ -44,7 +44,7 @@ export default function bootApp(window, require, defineX) {
           'datepicker'        : `${cdnUrl}npm/bootstrap-datepicker@1.4.0/js/bootstrap-datepicker.min`,
           'toastr'            : `${cdnUrl}npm/angular-toastr@1.7.0/dist/angular-toastr.min`,
           'ngVue'             : `${cdnUrl}npm/ngVue@1.7.7/build/index.min`,
-          'angular-vue'       : `${cdnUrl}npm/@scbd/angular-vue@2.0.0/dist/angular-vue.min`,
+          'angular-vue'       : `${cdnUrl}npm/@scbd/angular-vue@3.0.0/dist/angular-vue.min`,
           'conferenceCal'     : `${cdnUrl}npm/@scbd/conference-cal@0.1.2/dist/lib/ConferenceCal.umd.min`,
           'angular-cache'     : `${cdnUrl}npm/angular-cache@4.6.0/dist/angular-cache.min`,
           'PageHeaderFixed'   : `${cdnUrl}npm/@scbd/page-header-fixed/dist/PageHeaderFixed.umd.min`,

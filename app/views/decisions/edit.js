@@ -37,6 +37,14 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         var decision      = parseInt($route.current.params.decision);
         var selectedElement = null;
 
+        $scope.TODO_selectedNode = null;
+
+        $scope.$watch("TODO_selectedNode", (_new, _old)=>{ 
+            console.log("(Angular) Selected Node (TODO):", $scope.TODO_selectedNode, _new, _old); 
+        } );
+
+
+
              if(body=='COP') treaty = { code : "XXVII8" } ;
     //  else if(body=='CP')  treaty = "XXVII8a";
     //  else if(body=='NP')  treaty = "XXVII8b";
