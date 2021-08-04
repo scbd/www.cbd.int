@@ -39,18 +39,7 @@ export default {
         }
     },
     props: {
-        tokenReader: { type: Function, required: false },
-        selectedNode: {
-            type: String,
-            default: null
-        },
-        element: {type: Object, required: false}
-    },
-    watch: {
-        selectedNode(val) {
-            //const node = this.findNode(this.decision, val);
-            console.log(val);
-        }
+        tokenReader: { type: Function, required: false }
     },
     mounted: load,
     methods: {

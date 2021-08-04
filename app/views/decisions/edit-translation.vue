@@ -27,7 +27,7 @@
                         <td class="border border-grey p-2"><span v-html="row.html.en" /></td>
                         <td class="border border-grey p-2">
                             <div v-if="rows[index].editor">
-                                <ckeditor v-model="rows[index].editorHtml" :editor="editorType" :config="editorConfig"></ckeditor>
+                                <text-editor :html.sync="editorHtml" :locale="selectedLanguage" />
                                 <div class="text-right">
                                     <span class="btn text-success" @click="save(row)"><i class="fa fa-check"></i></span>
                                     <span class="btn text-danger" @click="cancel(row)"><i class="fa fa-times"></i></span>
@@ -48,27 +48,25 @@
 <script>
 import DecisionApi from '~/api/decisions.js';
 import { cloneDeep, isEmpty } from 'lodash'
-import ClassicEditor from 'ckeditor5';
-import { component as ckeditor } from 'vue-ckeditor5'
+import TextEditor, { EditorTypes } from '~/components/text-editor.vue';
 import languages from '~/data/languages.js';
 
 export default {
     name: 'DecisionEditTranslations',
-    components : { ckeditor },
+    components : { TextEditor },
     props: {
         tokenReader: { type: Function, required: false },
 		route: { type: Object, required: false }
     },
     data() {
         return {
-            editorType: ClassicEditor,
             selectedLanguage: 'fr',
             rows: [],
             nodes: [],
         }
     },
     computed: {
-
+        EditorTypes() { return EditorTypes},
         editorConfig() {
             return {
                 toolbar: [ 'bold', 'italic'],
