@@ -39,9 +39,18 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
 
         $scope.selectedNode = null;
 
-        $scope.$watch("selectedNode", (_new, _old)=>{
-            $scope.element = _new;
-            console.log("(Angular) Selected Node (TODO):", $scope.selectedNode, _new, _old); 
+        $scope.$watch("selectedNode", (newNode, oldNoe)=>{
+            if(newNode) {
+                const {section, paragraph, item, subitem} = newNode;
+                let element = {};
+                element.type = paragraph && `paragraph`;
+                element.section = section && `${section}`;
+                element.paragraph = paragraph && `${paragraph}`;
+                element.item = item && `${item}`;
+                element.subitem = subitem && `${subitem}`;
+                element.data = newNode;
+                $scope.element = element;
+            }
         });
 
         if(body=='COP') treaty = { code : "XXVII8" } ;
@@ -269,7 +278,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         //
         //===========================
         function loadComments() {
-            console.log(data.code);
             return $http.get('/api/v2017/comments', { params : { q: { type:'decision', resources: data.code } } }).then(function(res){
 
                 var comments = res.data;

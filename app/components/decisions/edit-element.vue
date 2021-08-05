@@ -46,6 +46,10 @@
 import DecisionApi from '~/api/decisions.js';
 import lstring from '~/filters/lstring.js';
 import TextEditor, {EditorTypes} from '~/components/text-editor.vue';
+import sectionList from '~/views/decisions/data/sections.js';
+import paragraphList from '~/views/decisions/data/paragraphes.js';
+import itemList from '~/views/decisions/data/items.js';
+import subItemList from '~/views/decisions/data/sub-items.js';
 
 export default {
     name: 'EditElement',
@@ -89,10 +93,11 @@ export default {
       EditorTypes() {return EditorTypes;},
       dataType() {
         const {node} = this;
-        if(node.subitem)   return `paragraph ${node.paragraph} ${node.item} (${node.subitem})`;
-        if(node.item)      return `paragraph ${node.paragraph} ${node.item}`;
-        if(node.paragraph) return `paragraph ${node.paragraph}`;
-        if(node.section)   return `section ${node.section}`;
+        const {section, paragraph, item, subitem} = node;
+        if(subitem)   return `paragraph ${label('section',section)} ${label('paragraph',paragraph)}${label('item',item)} (${label('subitem',subitem)})`;
+        if(item)      return `paragraph ${label('section',section)} ${label('paragraph',paragraph)}${label('item',item)}`;
+        if(paragraph) return `paragraph ${label('section',section)} ${label('paragraph',paragraph)}`;
+        if(section)   return `section ${label('section',section)}`;
         return null;
       },
       isSelected() {
@@ -115,16 +120,24 @@ export default {
       edit,
       save,
       cancel,
-      addNode
+      addNode,
+      label
     },
     mounted: load
 }
 
+function label(type, value) {
+  let list = [];
+  if(type === 'section') list = sectionList;
+  else if(type === 'paragraph') list = paragraphList;
+  else if(type === 'item') list = itemList;
+  else if(type === 'subItem') list = subItemList;
+  
+  return (list.find(e => e.value === value) || {}).code || value;
+}
+
 function load() {
   this.api = new DecisionApi(this.tokenReader);
-  if(this.node && this.node.paragraph) {
-    this.node.type = 'paragraph';
-  }
 }
 
 function addNode(parentId, nextTo) {
