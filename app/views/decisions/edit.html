@@ -354,13 +354,13 @@
 
             <div class="col-sm-6">
 
-                <div class="form-group">
+                <!-- <div class="form-group">
     		    	<label for="elementTimeline">Timelines</label>
     		    	<select class="form-control" id="elementTimeline" ng-model="element.elementTimeline"  ng-disabled="element.type!='paragraph' || true">
     					<option value='na'>Not applicable</option>
     					<option value='due'>Due date</option>
     				</select>
-    		  	</div>
+    		  	</div> -->
 
                 <div class="form-group" ng-show="element.elementTimeline=='due'">
                     <label for="elementTimelineDate" style="font-weight:inherit">Details about <i>Timelines</i></label>
@@ -441,7 +441,7 @@
     				<button ng-if="::canEdit" class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectDecision()">add a decision / recommendation</button>
     			</div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
     				<label for="exampleInputEmail1">Related documents</label><br>
 
     				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.documents|orderBy">
@@ -451,7 +451,7 @@
     					</div>
     				</div>
     				<button ng-if="::canEdit" class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectMeetingDocument()">add a document</button>
-    			</div>
+    			</div> -->
 
     		</div>
     		<div class="col-sm-6">
@@ -467,7 +467,7 @@
     			</div> -->
 
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Related activities / outcomes</label><br>
+                    <label for="exampleInputEmail1">Outcomes / proof of implementation</label><br>
                     <div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.meetings|orderBy">
                           <div class="panel-body" style="padding:12px;font-size:0.9em">
                             <button class="btn btn-outline-danger btn-xs pull-right" style="margin: -9px;" ng-click="removeFrom(item.symbol_s||item, element.data.meetings)"><i class="fa fa-minus-circle"></i></button>
@@ -479,7 +479,7 @@
 
     		</div>
     	</div>
-        <hr ng-if="element.type=='paragraph'"/>
+        <!-- <hr ng-if="element.type=='paragraph'"/>
         <h5 ng-if="element.type=='paragraph'">
             Submissions
     	</h5>
@@ -517,8 +517,8 @@
                 </div>
             </div>
 
-            <!-- <button ng-if="::canEdit" class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="upload()"><i class="fa fa-plus-circle"></i> upload document(s)</button> -->
-    	</div>
+            <button ng-if="::canEdit" class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="upload()"><i class="fa fa-plus-circle"></i> upload document(s)</button>
+    	</div> -->
 
         <hr ng-if="element.type=='paragraph'"/>
         <h4 ng-if="element.type=='paragraph'">

@@ -20,6 +20,7 @@ import subItemList   from './data/sub-items'
 import actorList     from './data/actors'
 import statusesList  from './data/statuses'
 import DecisionEdit from '~/views/decisions/decision-edit.vue';
+import DecisionApi from '~/api/decisions.js';
 import 'angular-vue'
 
 export { default as template } from './edit.html'
@@ -31,6 +32,8 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         $scope.vueOptions = {
             components : {DecisionEdit}
         };
+        $scope.api = new DecisionApi($scope.tokenReader);
+
         var treaty        = null;
         var body          = $route.current.params.body.toUpperCase();
         var session       = parseInt($route.current.params.session);
@@ -219,60 +222,74 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         //===========================
         //
         //===========================
-        function save() {
 
+        async function save() {
             if(!canEdit()) {
                 alert("Unauthorized to save");
                 throw new Error("unauthorized to save");
             }
 
-            var selectedNode = selectedElement;
-
-            selectNode(null);
-
-            //Cleanup data;
-
-            clearCommentButton();
-
-            $('#content element').each(function() {
-                var info = $(this).data('info');
-
-                if(info && info.type!='paragraph') {
-                    delete info.data;
-                    $(this).attr('data-info', ng.toJson(info));
-                }
-            });
-
-            // Save
-
-            data.content = $('#content').html();
-
-            updateCommentButton();
-
-            var req = {
-                method : data._id ? 'PUT' : 'POST',
-                url    : '/api/v2016/decision-texts' + (data._id ? '/'+data._id : ''),
-                data   : _.pick(data, "_id","treaty","body","session","decision","meeting","content","subjects","aichiTargets")
-            };
-
-
-            $http(req).then(function(res){
-
-                data._id = data._id || res.data._id;
-
-                selectNode(selectedNode);
-
-                alert( "Your document has been successfully saved." );
-
-            }).catch(function(err){
-
-                err = (err||{}).data || err;
-
-                console.error(err);
-
-                alert(err.message||JSON.stringify(err, null, ' '));
-            });
+            const {selectedNode} = $scope;
+            const {decisionId, _id} = selectedNode;
+            const result = await $scope.api.updateDecisionNode(decisionId, _id, selectedNode);
+            console.log(decisionId, _id, result);
+            alert( "Your document has been successfully saved." );
         }
+
+        //TODO - remove
+        // function save() {
+        //     if(!canEdit()) {
+        //         alert("Unauthorized to save");
+        //         throw new Error("unauthorized to save");
+        //     }
+
+        //     var selectedNode = selectedElement;
+
+        //     selectNode(null);
+
+        //     //Cleanup data;
+
+        //     clearCommentButton();
+
+        //     $('#content element').each(function() {
+        //         var info = $(this).data('info');
+
+        //         if(info && info.type!='paragraph') {
+        //             delete info.data;
+        //             $(this).attr('data-info', ng.toJson(info));
+        //         }
+        //     });
+
+        //     // Save
+
+        //     data.content = $('#content').html();
+
+        //     updateCommentButton();
+
+        //     var req = {
+        //         method : data._id ? 'PUT' : 'POST',
+        //         url    : '/api/v2016/decision-texts' + (data._id ? '/'+data._id : ''),
+        //         data   : _.pick(data, "_id","treaty","body","session","decision","meeting","content","subjects","aichiTargets")
+        //     };
+
+
+        //     $http(req).then(function(res){
+
+        //         data._id = data._id || res.data._id;
+
+        //         selectNode(selectedNode);
+
+        //         alert( "Your document has been successfully saved." );
+
+        //     }).catch(function(err){
+
+        //         err = (err||{}).data || err;
+
+        //         console.error(err);
+
+        //         alert(err.message||JSON.stringify(err, null, ' '));
+        //     });
+        // }
 
         //===========================
         //
