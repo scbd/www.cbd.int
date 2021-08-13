@@ -121,7 +121,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                 const colorMap = {}
 
                 for (const { EVT_CD:code, agenda } of agendas)
-                  colorMap[code] = agenda.color
+                  colorMap[code] = agenda?.color || '#808080'
                 
                 _ctrl.colorMap = colorMap
             }).then(function(){
