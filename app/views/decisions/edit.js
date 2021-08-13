@@ -147,6 +147,13 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
 
                 treaty   = res[2].data;
 
+                //TODO - remove or pass this decision to decision-edit
+                const code = treaty.acronym+'/'+body+'/'+pad(session)+'/'+pad(decision);
+                $scope.api.queryDecisionTree(code).then((d) => {
+                    $scope.subjects = (d.subjects|| []);
+                    $scope.aichiTargets = (d.aichiTargets || []);
+                });
+                
                 return $http.get('/api/v2016/decision-texts', { params : { q : { $or: [{ decision: roman[session] + '/' + decision}, { treaty:treaty.code,  body: body, session: session, decision: decision }]}, fo: 1 }});
 
             }).then(function(res){
@@ -174,8 +181,8 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                     data.decision = parseInt(data.symbol.replace(/.*\/(\d+)$/, '$1'));
                 }
 
-                $scope.subjects     = data.subjects     = (data.subjects     || []);
-                $scope.aichiTargets = data.aichiTargets = (data.aichiTargets || []);
+                // $scope.subjects     = data.subjects     = (data.subjects     || []);
+                // $scope.aichiTargets = data.aichiTargets = (data.aichiTargets || []);
 
                 // $('#content').html(data.content);
 
