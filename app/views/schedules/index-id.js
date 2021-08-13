@@ -68,7 +68,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 
                 return $q.all([
                     $http.get('/api/v2016/types',       { cache : true, params: { q: { schema: 'reservations' }, f: { title: 1, priority: 1, closed: 1, style: 1 }, cache:true } }),
-                    $http.get('/api/v2016/venue-rooms', { cache : true, params: { q: { venue : venueId },        f: { title: 1, location: 1, videoUrl:1 }, cache:true } })
+                    $http.get('/api/v2016/venue-rooms', { cache : true, params: { q: { venue : venueId, 'meta.status': { $nin : ['deleted','archived'] } }, f: { title: 1, location: 1, videoUrl:1 }, cache:true } })
                 ]);
 
             }).then(function(res) {
