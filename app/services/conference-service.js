@@ -75,7 +75,7 @@ import 'angular-cache'
 
                     if(menu.behavior == 'collapsed' && menu.menus)//expand behavior is only for menus with sub-menu
                       menu.expanded = false;
-                    else if((menu.behavior == 'fixed' || menu.behavior == 'expanded') && menu.menus)
+                    else if((menu.behavior == 'fixed') && menu.menus)
                       menu.expanded = true;
 
                     if(menu.behavior == 'collapsed' || menu.behavior == 'expanded')

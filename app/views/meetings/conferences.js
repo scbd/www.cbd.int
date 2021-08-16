@@ -23,9 +23,9 @@ export default ['$location','$scope', '$rootScope', 'conferenceService', '$q', '
                 conference: { $exists :1 }
             }
             var fields = {
-                _id:1, Title:1, Description:1, Venue:1, StartDate:1, EndDate:1, timezone:1, code:1
+                _id:1, Title:1, Description:1, Venue:1, StartDate:1, EndDate:1, timezone:1, code:1, active:1
             };
-            $q.when(conferenceService.getConferences(query, fields, {StartDate:-1}))
+            $q.when(conferenceService.getConferences(query, fields, { active:-1, StartDate:-1}))
             .then(function(conferences){
                 
 
