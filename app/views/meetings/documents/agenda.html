@@ -161,8 +161,7 @@
                                                 <span class="visible-xs-inline-block badge label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::agendaItem.item}}</span>
                                                 <span class="title agenda">
                                                     <div class="hidden-xs" ng-if="::type._id=='570fd1552e3fa5cfa61d90f0'" style="font-weight:bold">
-                                                        <span ng-if="::!agendaCtrl.all"> {{::res.title}} <br></span> 
-                                                        <span ng-if="::agendaCtrl.all" class="text-uppercase font-weight-bold"> {{agendaCtrl.getReservationTypeName(res.type)}}: <span ng-if="::res.title">{{::res.title | tempTitleFilterToRemove}} </span></span>
+                                                        <span> {{::res.title}} <br></span> 
                                                     </div>
                                                     <span ng-if="::!agendaItem.text">
                                                         <span class="hidden-xs" >{{::agendaItem.title}}</span>
@@ -185,8 +184,7 @@
                                     </tr>
                                 </table>
                                 <div class="p-1" ng-if="!res.agenda.visible || !res.agenda.items || !res.agenda.items.length">
-                                  <span ng-if="!agendaCtrl.all"> {{::res.title}} <br></span> 
-                                  <span ng-if="agendaCtrl.all" class="font-weight-bold"> {{agendaCtrl.getReservationTypeName(res.type)}}: <span ng-if="res.title">{{::res.title | tempTitleFilterToRemove}} </span></span>
+                                  <span> {{::res.title}}</span> 
                                   <br>
                                   <span ng-repeat="(key, value) in res.agenda.meetings">
                                     <span ng-if="value" ng-style="{ 'background-color' : agendaCtrl.getColor(key)}" class="badge label agenda {{item.prefix}}" style="min-width:51px">{{::key}}</span>
