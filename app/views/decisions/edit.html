@@ -255,7 +255,25 @@
                     </div>
                 </div>
 
-                <decision-edit ng-vue="vueOptions" :selected-node.sync="selectedNode" :token-reader="tokenReader" ></decision-edit>
+                <div ng-if="decision">
+                    <div class="bg-orange">Decision {{symbol}}</div>
+                    <div class="document" style="height:100vh;overflow-y:scroll;padding:5px">
+                        <h1>{{decision.title|lstring}}</h1>
+                        <div ng-repeat="node in decision.nodes">
+                            <edit-element 
+                                ng-vue="vueOptions"
+                                :decision-id="decision._id"
+                                :node="node" 
+                                :comments="comments" 
+                                :selected-node="selectedNode"
+                                :token-reader="tokenReader"
+                                @update:selected-node="updateSelectedNode"
+                                @change="updateDecision"
+                            />
+                        </div>
+                    </div>
+                </div>
+
                 <!-- <div class="bg-orange">Decision {{symbol}}</div>
                 <div class="document" style="height:100%;overflow-y:scroll;padding:5px">
                     <div id='content' class='decision' style="min-height:100%;padding-bottom:150px"></div>

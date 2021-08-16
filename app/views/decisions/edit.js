@@ -19,7 +19,7 @@ import itemList      from './data/items'
 import subItemList   from './data/sub-items'
 import actorList     from './data/actors'
 import statusesList  from './data/statuses'
-import DecisionEdit from '~/views/decisions/decision-edit.vue';
+import EditElement from '~/components/decisions/edit-element.vue';
 import DecisionApi from '~/api/decisions.js';
 import 'angular-vue'
 
@@ -30,9 +30,10 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         $scope.tokenReader = function(){ return apiToken.get()}
         $scope.route       = { params : $route.current.params, query: $location.search() }
         $scope.vueOptions = {
-            components : {DecisionEdit}
+            components : {EditElement}
         };
         $scope.api = new DecisionApi($scope.tokenReader);
+        $scope.decision = {};
 
         var treaty        = null;
         var body          = $route.current.params.body.toUpperCase();
@@ -41,20 +42,8 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         var selectedElement = null;
 
         $scope.selectedNode = null;
-
-        $scope.$watch("selectedNode", (newNode, oldNoe)=>{
-            if(newNode) {
-                const {section, paragraph, item, subitem} = newNode;
-                let element = {};
-                element.type = paragraph && `paragraph`;
-                element.section = section && `${section}`;
-                element.paragraph = paragraph && `${paragraph}`;
-                element.item = item && `${item}`;
-                element.subitem = subitem && `${subitem}`;
-                element.data = newNode;
-                $scope.element = element;
-            }
-        });
+        $scope.updateSelectedNode = updateSelectedNode;
+        $scope.updateDecision = load;
 
         if(body=='COP') treaty = { code : "XXVII8" } ;
     //  else if(body=='CP')  treaty = "XXVII8a";
@@ -149,38 +138,38 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
 
                 //TODO - remove or pass this decision to decision-edit
                 const code = treaty.acronym+'/'+body+'/'+pad(session)+'/'+pad(decision);
-                $scope.api.queryDecisionTree(code).then((d) => {
-                    $scope.decision = d;
-                    $scope.subjects = (d.subjects|| []);
-                    $scope.aichiTargets = (d.aichiTargets || []);
-                });
+                return $scope.api.queryDecisionTree(code);
                 
-                return $http.get('/api/v2016/decision-texts', { params : { q : { $or: [{ decision: roman[session] + '/' + decision}, { treaty:treaty.code,  body: body, session: session, decision: decision }]}, fo: 1 }});
+                //return $http.get('/api/v2016/decision-texts', { params : { q : { $or: [{ decision: roman[session] + '/' + decision}, { treaty:treaty.code,  body: body, session: session, decision: decision }]}, fo: 1 }});
 
             }).then(function(res){
 
-                data = res.data || {
-                    treaty  : treaty.code,
-                    body    : body,
-                    session : session,
-                    decision: decision,
-                    meeting : body+'-'+ pad(session),
-                    subjects : [],
-                    aichiTargets : [],
-                    content: 'paste here'
-                };
+                $scope.decision = res;
+                $scope.subjects = (res.subjects|| []);
+                $scope.aichiTargets = (res.aichiTargets || []);
 
-                data = _.defaults(data, {
-                    symbol : data.decision,
-                    body   : body,
-                    treaty : treaty.code,
-                    subjects : [],
-                    aichiTargets : []
-                });
+                // data = res.data || {
+                //     treaty  : treaty.code,
+                //     body    : body,
+                //     session : session,
+                //     decision: decision,
+                //     meeting : body+'-'+ pad(session),
+                //     subjects : [],
+                //     aichiTargets : [],
+                //     content: 'paste here'
+                // };
 
-                if(typeof(data.decision)=='string') {
-                    data.decision = parseInt(data.symbol.replace(/.*\/(\d+)$/, '$1'));
-                }
+                // data = _.defaults(data, {
+                //     symbol : data.decision,
+                //     body   : body,
+                //     treaty : treaty.code,
+                //     subjects : [],
+                //     aichiTargets : []
+                // });
+
+                // if(typeof(data.decision)=='string') {
+                //     data.decision = parseInt(data.symbol.replace(/.*\/(\d+)$/, '$1'));
+                // }
 
                 // $scope.subjects     = data.subjects     = (data.subjects     || []);
                 // $scope.aichiTargets = data.aichiTargets = (data.aichiTargets || []);
@@ -196,7 +185,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
 
             }).then(function(){
 
-                lazyRetag();
+                //lazyRetag();
                 loadComments();
 
             }).catch(function(err){
@@ -212,20 +201,34 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
             });
         }
 
-        function lazyRetag(paragraphes) {
-            if(paragraphes && paragraphes.length==0) {
-                selectNode(null);
-                return;
-            }
-
-            paragraphes = paragraphes || $('#content element').toArray();
-
-            var el = paragraphes.shift();
-
-            $scope.$applyAsync(function(){ selectNode(el);         });
-            $scope.$applyAsync(function(){ tag();                  });
-            $scope.$applyAsync(function(){ lazyRetag(paragraphes); });
+        function updateSelectedNode(newNode) {
+            $scope.selectedNode = newNode;
+            if(!newNode) return;
+            const {section, paragraph, item, subitem} = newNode;
+            let element = {};
+            element.type = paragraph && `paragraph`;
+            element.section = section && `${section}`;
+            element.paragraph = paragraph && `${paragraph}`;
+            element.item = item && `${item}`;
+            element.subitem = subitem && `${subitem}`;
+            element.data = newNode;
+            $scope.element = element;
         }
+
+        // function lazyRetag(paragraphes) {
+        //     if(paragraphes && paragraphes.length==0) {
+        //         selectNode(null);
+        //         return;
+        //     }
+
+        //     paragraphes = paragraphes || $('#content element').toArray();
+
+        //     var el = paragraphes.shift();
+
+        //     $scope.$applyAsync(function(){ selectNode(el);         });
+        //     $scope.$applyAsync(function(){ tag();                  });
+        //     $scope.$applyAsync(function(){ lazyRetag(paragraphes); });
+        // }
 
         //===========================
         //
@@ -248,7 +251,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                 // console.log(result);
                 // alert( "Your document has been successfully saved." );
             }
-
             if(selectedNode) {
                 const {decisionId, _id} = selectedNode;
 
@@ -262,11 +264,9 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
 
                 const result = await $scope.api.updateDecisionNode(decisionId, _id, newNode);
 
-                console.log(decisionId, _id, result);
                 alert( "Your document has been successfully saved." );
+                load();
             } 
-            
-            
         }
 
         //TODO - remove
@@ -341,12 +341,12 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                     });
                 });
 
-                updateCommentButton();
+                //updateCommentButton();
 
             }).catch(console.error);
         }
         
-        updateCommentButton();
+        //updateCommentButton();
 
         //===========================
         //

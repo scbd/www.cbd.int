@@ -27,11 +27,12 @@
           v-for="child in node.nodes" 
           v-show="child && child._id"
           :key="child._id"
+          :decisionId="decisionId"
           :node="child"
           :selected-node.sync="selectedNode"
           :comments="comments"
           :token-reader="tokenReader"
-          @addNode="$emit('addNode', $event)"
+          @change="$emit('change', $event)"
           @update:selected-node="$emit('update:selected-node', $event)"
       />
     </element>
@@ -65,6 +66,10 @@ export default {
     },
     props: {
       tokenReader: { type: Function, required: false },
+      decisionId: {
+        type: String,
+        default: '',
+      },
       node: {
         type: Object,
         default: () => {}
@@ -140,13 +145,15 @@ function load() {
   this.api = new DecisionApi(this.tokenReader);
 }
 
-function addNode(parentId, nextTo) {
+async function addNode(parentId, nextTo) {
   const params = {
     parentId, 
     nextTo: nextTo || '000000000000000000000000',
     html: null
   }
-  this.$emit('addNode', params);
+
+  await this.api.addNodeToDecisionTree(this.decisionId, params);
+  this.$emit('change');
 }
 
 function toggleSelected() {
