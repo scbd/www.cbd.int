@@ -131,7 +131,7 @@ function label(type, value) {
   if(type === 'section') list = sectionList;
   else if(type === 'paragraph') list = paragraphList;
   else if(type === 'item') list = itemList;
-  else if(type === 'subItem') list = subItemList;
+  else if(type === 'subitem') list = subItemList;
   
   return (list.find(e => e.value === value) || {}).code || value;
 }
@@ -151,6 +151,13 @@ function addNode(parentId, nextTo) {
 
 function toggleSelected() {
   const {node, isSelected} = this;
+  const {section, paragraph, item, subitem} = node;
+
+  if(section) node.section = label('section', section);
+  if(paragraph) node.paragraph = label('paragraph', paragraph);
+  if(item) node.item = label('item', item);
+  if(subitem) node.subitem = label('subitem', subitem);
+  
   this.$emit("update:selected-node", isSelected ? null: node);
 }
 

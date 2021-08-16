@@ -150,6 +150,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                 //TODO - remove or pass this decision to decision-edit
                 const code = treaty.acronym+'/'+body+'/'+pad(session)+'/'+pad(decision);
                 $scope.api.queryDecisionTree(code).then((d) => {
+                    $scope.decision = d;
                     $scope.subjects = (d.subjects|| []);
                     $scope.aichiTargets = (d.aichiTargets || []);
                 });
@@ -236,11 +237,36 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                 throw new Error("unauthorized to save");
             }
 
-            const {selectedNode} = $scope;
-            const {decisionId, _id} = selectedNode;
-            const result = await $scope.api.updateDecisionNode(decisionId, _id, selectedNode);
-            console.log(decisionId, _id, result);
-            alert( "Your document has been successfully saved." );
+            const {selectedNode, element, decision} = $scope;
+
+            if(decision) {
+                // console.log(JSON.stringify(decision));
+                // const {_id} = decision;
+                // decision.subjects = $scope.subjects;
+                // decision.aichiTargets = $scope.aichiTargets;
+                // const result = await $scope.api.updateDecisionNode(_id, _id, decision);
+                // console.log(result);
+                // alert( "Your document has been successfully saved." );
+            }
+
+            if(selectedNode) {
+                const {decisionId, _id} = selectedNode;
+
+                const newNode = {...selectedNode};
+                const {section, paragraph, item, subitem} = element;
+
+                newNode.section = section && ((sectionList.find(s => s.code === section) || {}).value || section);
+                newNode.paragraph = paragraph && ((paragraphList.find(s => s.code === paragraph) || {}).value || paragraph);
+                newNode.item = item && ((itemList.find(s => s.code === item) || {}).value || item);
+                newNode.subitem = subitem && ((subItemList.find(s => s.code === subitem) || {}).value || subitem);
+
+                const result = await $scope.api.updateDecisionNode(decisionId, _id, newNode);
+
+                console.log(decisionId, _id, result);
+                alert( "Your document has been successfully saved." );
+            } 
+            
+            
         }
 
         //TODO - remove
