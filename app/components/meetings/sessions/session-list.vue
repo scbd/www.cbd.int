@@ -73,8 +73,6 @@ async function created(){
   const isMeeting = this.route?.params?.meeting;
   const q         = isMeeting? await this.meetingQuery() : await this.conferenceQuery();
 
-  q.date = { $lte: { $date: this.now.add(24, 'hours') } }
-
   this.sessions  = await this.api.querySessions({ q, s: { date:-1 } });
 }
 
