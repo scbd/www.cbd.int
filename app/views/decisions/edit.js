@@ -60,6 +60,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         var data = { content: 'loading...' };
 
         $scope.self    = $scope;
+        $scope.isDisabled = isDisabled,
         $scope.canEdit = canEdit();
         $scope.canView = canView();
         $scope.canDebug = canDebug();
@@ -145,8 +146,8 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
             }).then(function(res){
 
                 $scope.decision = res;
-                $scope.subjects = (res.subjects|| []);
-                $scope.aichiTargets = (res.aichiTargets || []);
+                $scope.subjects = _.cloneDeep(res.subjects|| []);
+                $scope.aichiTargets = _.cloneDeep(res.aichiTargets || []);
 
                 // data = res.data || {
                 //     treaty  : treaty.code,
@@ -240,19 +241,20 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                 throw new Error("unauthorized to save");
             }
 
-            const {selectedNode, element, decision} = $scope;
+            const {selectedNode, element, decision, subjects, aichiTargets} = $scope;
 
-            if(decision) {
-                // console.log(JSON.stringify(decision));
-                // const {_id} = decision;
-                // decision.subjects = $scope.subjects;
-                // decision.aichiTargets = $scope.aichiTargets;
-                // const result = await $scope.api.updateDecisionNode(_id, _id, decision);
-                // console.log(result);
-                // alert( "Your document has been successfully saved." );
+            const decisionId = decision._id;
+            var saved = false;
+            if(!_.isEqual(subjects.sort(), decision.subjects.sort()) 
+                || !_.isEqual(aichiTargets.sort(), decision.aichiTargets.sort())) {
+                const {title} = decision;
+                const params = {title, subjects, aichiTargets};
+                await $scope.api.updateDecision(decisionId, params);
+                saved = true;
             }
+
             if(selectedNode) {
-                const {decisionId, _id} = selectedNode;
+                const {_id} = selectedNode;
 
                 const newNode = {...selectedNode};
                 const {section, paragraph, item, subitem} = element;
@@ -262,11 +264,12 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                 newNode.item = item && ((itemList.find(s => s.code === item) || {}).value || item);
                 newNode.subitem = subitem && ((subItemList.find(s => s.code === subitem) || {}).value || subitem);
 
-                const result = await $scope.api.updateDecisionNode(decisionId, _id, newNode);
+                await $scope.api.updateDecisionNode(decisionId, _id, newNode);
 
-                alert( "Your document has been successfully saved." );
                 load();
-            } 
+                saved = true;
+            }
+            if(saved) alert( "Your document has been successfully saved." );
         }
 
         //TODO - remove
@@ -834,6 +837,21 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         function canDebug() { return !!_.intersection(user.roles, ["Administrator"]).length; }
         function canEdit()  { return !!_.intersection(user.roles, ["DecisionTrackingTool"]).length; }
         function canView()  { return !!_.intersection(user.roles, ["Administrator","DecisionTrackingTool", "ScbdStaff"]).length; }
+        function isDisabled(parentId, field) { return !!(findNode($scope.decision, parentId) || {})[field];}
+
+        function findNode(collection, id) {
+            if(collection && collection._id && collection._id === id) {
+                return collection;
+            } else if (!_.isEmpty(collection.nodes)) {
+                let result = null;
+                collection.nodes.forEach(node => {
+                    if(result) return;
+                    result = findNode(node, id);
+                });
+                return result;
+            }
+            return null;
+        }
 
         //==============================
         //

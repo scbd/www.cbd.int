@@ -27,6 +27,10 @@ export default class DecisionApi extends ApiBase
     return result;
   }
 
+  async updateDecision(decisionId, data) {
+    return this.http.put(`api/v2021/decisions/${encodeURIComponent(decisionId)}`, data).then(res => res.data).catch(tryCastToApiError);
+  }
+
   async updateDecisionNode(decisionId, nodeId, data) {
     return this.http.put(`api/v2021/decisions/${encodeURIComponent(decisionId)}/nodes/${encodeURIComponent(nodeId)}`, data).then(res => res.data).catch(tryCastToApiError);
   }

@@ -303,7 +303,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementType">Section</label>
-                            <select class="form-control" id="elementType" ng-model="element.section" ng-options="o.code as o.title for o in collections.sections" ng-change="tag()" ng-disabled="!canEdit || formattingLocked || element.type!='paragraph'">
+                            <select class="form-control" id="elementType" ng-model="element.section" ng-options="o.code as o.title for o in collections.sections" ng-change="tag()" ng-disabled="!canEdit || formattingLocked || element.type!='paragraph' || isDisabled(element.data.parentId, 'section')">
                                 <option></option>
                             </select>
                         </div>
@@ -311,7 +311,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementParagraph">Paragraph</label>
-                            <select class="form-control" id="elementParagraph" ng-model="element.paragraph" ng-options="o.code as o.title for o in collections.paragraphes" ng-change="tag()" ng-disabled="!canEdit || formattingLocked || element.type!='paragraph'">
+                            <select class="form-control" id="elementParagraph" ng-model="element.paragraph" ng-options="o.code as o.title for o in collections.paragraphes" ng-change="tag()" ng-disabled="!canEdit || formattingLocked || element.type!='paragraph' || isDisabled(element.data.parentId, 'paragraph')">
                                 <option></option>
                             </select>
                         </div>
@@ -319,7 +319,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementItem">Item</label>
-                            <select class="form-control" id="elementItem" ng-model="element.item" ng-options="o.code as o.title for o in collections.items" ng-change="tag()" ng-disabled="!canEdit || formattingLocked || element.type!='paragraph' || !element.data.paragraph">
+                            <select class="form-control" id="elementItem" ng-model="element.item" ng-options="o.code as o.title for o in collections.items" ng-change="tag()" ng-disabled="!canEdit || formattingLocked || element.type!='paragraph' || !element.data.paragraph || isDisabled(element.data.parentId, 'item')">
                                 <option></option>
                             </select>
                         </div>
@@ -327,7 +327,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementSubitem">Subitem</label>
-                            <select class="form-control" id="elementSubitem" ng-model="element.subitem" ng-options="o.code as o.title for o in collections.subItems" ng-change="tag()" ng-disabled="!canEdit || formattingLocked || element.type!='paragraph' || !element.data.paragraph || !element.data.item">
+                            <select class="form-control" id="elementSubitem" ng-model="element.subitem" ng-options="o.code as o.title for o in collections.subItems" ng-change="tag()" ng-disabled="!canEdit || formattingLocked || element.type!='paragraph' || !element.data.paragraph || !element.data.item || isDisabled(element.data.parentId, 'subitem')">
                                 <option></option>
                             </select>
                         </div>
