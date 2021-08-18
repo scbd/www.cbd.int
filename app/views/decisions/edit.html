@@ -44,12 +44,6 @@
         background-color: #f4f2f9;
         color: #4e25c7;
     }
-    /*div {
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }*/
 
     .edit-decision element {
         position: relative;
@@ -103,10 +97,6 @@
         margin-bottom:6px;
         background-color: rgba(255,255,255,0.85);
         min-height: 40px;
-        /*-moz-user-select: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
-        user-select: none;*/
         cursor: pointer;
     }
     .edit-decision element.selected {
@@ -114,10 +104,6 @@
         border-radius: 4px;
         padding:5px;
         background-color: #dfd;
-        /*-moz-user-select: all;
-        -webkit-user-select: all;
-        -ms-user-select: all;
-        user-select: all;*/
         cursor: text;
     }
 
@@ -152,21 +138,6 @@
     .edit-decision button.comment.has-comments > .fa-comments-o { display: inline; }
 
     select.btn { max-width: 125px;}
-
-
-    /*element.selected div {
-        -moz-user-select: all;
-        -webkit-user-select: all;
-        -ms-user-select: all;
-        user-select: all;
-    }
-
-    #content.selected div {
-        -moz-user-select: all;
-        -webkit-user-select: all;
-        -ms-user-select: all;
-        user-select: all;
-    }*/
 
     .edit-decision .bg-orange{
         background-color:#6F5495!important;
@@ -212,10 +183,6 @@
         <div style="position:fixed;top:0px;left:0px;right:0px;background-color:#ddd;z-index:1000;padding:6px">&nbsp;
             <button class="btn btn-default pull-right" ng-click="close()">Close</button>
             <button class="btn btn-success" ng-if="::canEdit" ng-click="save()">Save</button> &nbsp; &nbsp;
-            <button class="btn btn-primary" ng-if="::canEdit" ng-click="actionBox('element')">Box</button>
-            <button class="btn btn-primary" ng-if="::canEdit" ng-click="actionUnbox()">Unbox</button>
-            <button class="btn btn-primary" ng-if="::canEdit" ng-click="actionEdit()" ng-class="{ active: isEditable() }">Edit <i ng-if="isEditable()" class="fa fa-pencil" aria-hidden="true"></i></button> &nbsp; &nbsp;
-            <button class="btn btn-danger"  ng-if="::canEdit" ng-click="actionClean()">Remove formatting</button>
         </div>
 
         <div class="row" style="margin-top:60px;height:100%">
@@ -273,11 +240,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- <div class="bg-orange">Decision {{symbol}}</div>
-                <div class="document" style="height:100%;overflow-y:scroll;padding:5px">
-                    <div id='content' class='decision' style="min-height:100%;padding-bottom:150px"></div>
-                </div> -->
             </div>
             <div class="col-sm-6" style="height:100%;overflow-y:scroll;padding:10px">
 
@@ -288,8 +250,8 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="elementType">Level</label>
-                            <select class="form-control" id="elementType" ng-model="element.type" ng-change="tag()" ng-disabled="!canEdit && (formattingLocked || !element)">
+                            <label for="elementNodeType">Level</label>
+                            <select class="form-control" id="elementNodeType" ng-model="element.nodeType" ng-disabled="!canEdit && (formattingLocked || !element)">
                                 <option value=""></option>
                                 <option value="title">Decision Title</option>
                                 <option value="body">Decision Body</option>
@@ -302,8 +264,14 @@
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
-                            <label for="elementType">Section</label>
-                            <select class="form-control" id="elementType" ng-model="element.section" ng-options="o.code as o.title for o in collections.sections" ng-change="tag()" ng-disabled="!canEdit || formattingLocked || element.type!='paragraph' || isDisabled(element.data.parentId, 'section')">
+                            <label for="elementSection">Section</label>
+                            <select 
+                                class="form-control" 
+                                id="elementSection" 
+                                ng-model="element.section" 
+                                ng-options="o.value as o.title for o in collections.sections" 
+                                ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || isDisabled(element.parentId, 'section')"
+                            >
                                 <option></option>
                             </select>
                         </div>
@@ -311,7 +279,13 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementParagraph">Paragraph</label>
-                            <select class="form-control" id="elementParagraph" ng-model="element.paragraph" ng-options="o.code as o.title for o in collections.paragraphes" ng-change="tag()" ng-disabled="!canEdit || formattingLocked || element.type!='paragraph' || isDisabled(element.data.parentId, 'paragraph')">
+                            <select 
+                                class="form-control" 
+                                id="elementParagraph" 
+                                ng-model="element.paragraph" 
+                                ng-options="o.value as o.title for o in collections.paragraphes track by o.value" 
+                                ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || isDisabled(element.parentId, 'paragraph')"
+                            >
                                 <option></option>
                             </select>
                         </div>
@@ -319,7 +293,13 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementItem">Item</label>
-                            <select class="form-control" id="elementItem" ng-model="element.item" ng-options="o.code as o.title for o in collections.items" ng-change="tag()" ng-disabled="!canEdit || formattingLocked || element.type!='paragraph' || !element.data.paragraph || isDisabled(element.data.parentId, 'item')">
+                            <select 
+                                class="form-control" 
+                                id="elementItem" 
+                                ng-model="element.item" 
+                                ng-options="o.value as o.title for o in collections.items track by o.value" 
+                                ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || !element.paragraph || isDisabled(element.parentId, 'item')"
+                            >
                                 <option></option>
                             </select>
                         </div>
@@ -327,21 +307,27 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label for="elementSubitem">Subitem</label>
-                            <select class="form-control" id="elementSubitem" ng-model="element.subitem" ng-options="o.code as o.title for o in collections.subItems" ng-change="tag()" ng-disabled="!canEdit || formattingLocked || element.type!='paragraph' || !element.data.paragraph || !element.data.item || isDisabled(element.data.parentId, 'subitem')">
+                            <select 
+                                class="form-control" 
+                                id="elementSubitem" 
+                                ng-model="element.subitem" 
+                                ng-options="o.value as o.title for o in collections.subItems track by o.value" 
+                                ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || !element.paragraph || !element.item || isDisabled(element.parentId, 'subitem')"
+                            >
                                 <option></option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-        <h4 ng-if="element.type=='paragraph'">
+        <h4 ng-if="element.nodeType=='paragraph'">
             Paragraph details
         </h4>
-    	<div ng-if="element.type=='paragraph'" class="row">
+    	<div ng-if="element.nodeType=='paragraph'" class="row">
     		<div class="col-sm-6">
     			<div class="form-group">
     		    	<label for="elementType">Type of decision</label>
-    		    	<select class="form-control" id="elementType" ng-model="element.data.type"  ng-disabled="!canEdit || element.type!='paragraph'">
+    		    	<select class="form-control" id="elementType" ng-model="element.type"  ng-disabled="!canEdit || element.nodeType!='paragraph'">
                         <option></option>
     					<option value="operational">Operational</option>
     					<option value="informational">For‎ information</option>
@@ -351,34 +337,26 @@
                 <div class="form-group">
     		    	<label for="elementDirectedTo">Status of the decision</label><br>
 
-                    <div ng-repeat="item in element.data.statuses" class="input-group" style="margin-bottom:2px" ng-disabled="element.type!='paragraph'">
+                    <div ng-repeat="item in element.statuses" class="input-group" style="margin-bottom:2px" ng-disabled="element.nodeType!='paragraph'">
                         <span class="form-control">{{collections.statusesMap[item].title||item}}</span>
                         <div class="input-group-append">
-                           <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.data.statuses)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                           <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.statuses)" ng-disabled="element.nodeType!='paragraph'"><i class="fa fa-minus-circle"></i></button>
                        </div>
                      </div>
 
-    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedStatus" ng-options="status.code as status.title for status in collections.statusesMap" ng-change="addTo(selectedStatus, element.data.statuses); selectedStatus=''" ng-disabled="element.type!='paragraph'">
+    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedStatus" ng-options="status.code as status.title for status in collections.statusesMap" ng-change="addTo(selectedStatus, element.statuses); selectedStatus=''" ng-disabled="element.nodeType!='paragraph'">
                         <option value="">add a status</option>
     				</select>
     		  	</div>
 
-                <div class="form-group" ng-show="element.data.statuses.length || element.elementStatusDetails">
+                <div class="form-group" ng-show="element.statuses.length || element.elementStatusDetails">
     		    	<label for="elementStatus" style="font-weight:inherit">Additional details about the status</label>
-    		    	<textarea class="form-control" id="elementStatusDetails" ng-disabled="!canEdit" ng-model="element.data.statusInfo"></textarea>
+    		    	<textarea class="form-control" id="elementStatusDetails" ng-disabled="!canEdit" ng-model="element.statusInfo"></textarea>
     		  	</div>
 
     		</div>
 
             <div class="col-sm-6">
-
-                <!-- <div class="form-group">
-    		    	<label for="elementTimeline">Timelines</label>
-    		    	<select class="form-control" id="elementTimeline" ng-model="element.elementTimeline"  ng-disabled="element.type!='paragraph' || true">
-    					<option value='na'>Not applicable</option>
-    					<option value='due'>Due date</option>
-    				</select>
-    		  	</div> -->
 
                 <div class="form-group" ng-show="element.elementTimeline=='due'">
                     <label for="elementTimelineDate" style="font-weight:inherit">Details about <i>Timelines</i></label>
@@ -388,41 +366,41 @@
                 <div class="form-group">
     		    	<label for="elementDirectedTo">Directed to</label><br>
 
-                    <div ng-repeat="item in element.data.actors" class="input-group" style="margin-bottom:2px;" title="{{collections.actorsMap[item].title||item}}" ng-disabled="element.type!='paragraph'">
+                    <div ng-repeat="item in element.actors" class="input-group" style="margin-bottom:2px;" title="{{collections.actorsMap[item].title||item}}" ng-disabled="element.nodeType!='paragraph'">
                         <span class="form-control">{{collections.actorsMap[item].code||item}}</span>
                         <div class="input-group-append">
-                            <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.data.actors)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                            <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.actors)" ng-disabled="element.nodeType!='paragraph'"><i class="fa fa-minus-circle"></i></button>
                         </div>
                      </div>
 
-    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedActor" ng-options="actor.code as actor.title group by actor.group for actor in collections.actorsMap" ng-change="addTo(selectedActor, element.data.actors)"  ng-disabled="element.type!='paragraph'">
+    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedActor" ng-options="actor.code as actor.title group by actor.group for actor in collections.actorsMap" ng-change="addTo(selectedActor, element.actors)"  ng-disabled="element.nodeType!='paragraph'">
                         <option value="">add an actor</option>
     				</select>
 
 
     		  	</div>
 
-                <div class="form-group" ng-show="element.data.actors.length || element.data.actorsInfo">
+                <div class="form-group" ng-show="element.actors.length || element.actorsInfo">
     		    	<label for="elementDirectedToDetails" style="font-weight:inherit">Additional details about the actor(s)</i></label>
-    		    	<textarea class="form-control" id="elementDirectedToDetails" ng-disabled="!canEdit" ng-model="element.data.actorsInfo"></textarea>
+    		    	<textarea class="form-control" id="elementDirectedToDetails" ng-disabled="!canEdit" ng-model="element.actorsInfo"></textarea>
     		  	</div>
 
     		</div>
     	</div>
 
-        <hr ng-if="element.type=='paragraph'"/>
-    	<div ng-if="element.type=='paragraph'" class="row">
+        <hr ng-if="element.nodeType=='paragraph'"/>
+    	<div ng-if="element.nodeType=='paragraph'" class="row">
     		<div class="col-sm-6">
 
                 <div class="form-group">
     		    	<label for="elementSubject">CBD Subjects</label><br>
-                    <div ng-repeat="item in element.data.subjects" class="input-group" style="margin-bottom:2px;overflow-y:hidden" title="" ng-disabled="element.type!='paragraph'">
+                    <div ng-repeat="item in element.subjects" class="input-group" style="margin-bottom:2px;overflow-y:hidden" title="" ng-disabled="element.nodeType!='paragraph'">
                          <span class="form-control">{{(collections.subjectsMap[item].title|lstring)||item}}</span>
                          <div class="input-group-append">
-                            <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.data.subjects)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                            <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.subjects)" ng-disabled="element.nodeType!='paragraph'"><i class="fa fa-minus-circle"></i></button>
                         </div>
                      </div>
-    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedSubject" ng-options="subject.identifier as (subject.title|lstring) group by collections.subjectsMap[subject.broaderTerms[0]].name for subject in collections.subjects|filter:noNarrower" ng-change="addTo(selectedSubject, element.data.subjects); selectedSubject=''" ng-disabled="element.type!='paragraph'">
+    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedSubject" ng-options="subject.identifier as (subject.title|lstring) group by collections.subjectsMap[subject.broaderTerms[0]].name for subject in collections.subjects|filter:noNarrower" ng-change="addTo(selectedSubject, element.subjects); selectedSubject=''" ng-disabled="element.nodeType!='paragraph'">
                         <option value="">add a subject</option>
     				</select>
     		  	</div>
@@ -432,128 +410,65 @@
                 <div class="form-group">
     		    	<label for="elementSubject">Aichi Targets</label><br>
 
-                    <div ng-repeat="item in element.data.aichiTargets" class="input-group" style="margin-bottom:2px;overflow-y:hidden" ng-disabled="element.type!='paragraph'">
+                    <div ng-repeat="item in element.aichiTargets" class="input-group" style="margin-bottom:2px;overflow-y:hidden" ng-disabled="element.nodeType!='paragraph'">
                         <span class="form-control">{{(collections.aichiTargetsMap[item].title|lstring)||item}}</span>
                         <div class="input-group-append">
-                           <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.data.aichiTargets)" ng-disabled="element.type!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                           <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.aichiTargets)" ng-disabled="element.nodeType!='paragraph'"><i class="fa fa-minus-circle"></i></button>
                        </div>
                      </div>
-    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedTarget" ng-options="target.identifier as (target.title|lstring) group by collections.aichiTargetsMap[target.broaderTerms[0]].name for target in collections.aichiTargets|filter:noNarrower" ng-change="addTo(selectedTarget, element.data.aichiTargets); selectedTarget=''" ng-disabled="element.type!='paragraph'">
+    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedTarget" ng-options="target.identifier as (target.title|lstring) group by collections.aichiTargetsMap[target.broaderTerms[0]].name for target in collections.aichiTargets|filter:noNarrower" ng-change="addTo(selectedTarget, element.aichiTargets); selectedTarget=''" ng-disabled="element.nodeType!='paragraph'">
                         <option value="">add a target</option>
     				</select>
     		  	</div>
             </div>
         </div>
 
-        <hr ng-if="element.type=='paragraph'"/>
-    	<div ng-if="element.type=='paragraph'" class="row">
+        <hr ng-if="element.nodeType=='paragraph'"/>
+    	<div ng-if="element.nodeType=='paragraph'" class="row">
     		<div class="col-sm-6">
     			<div class="form-group">
     				<label>Related decisions / recommendations</label><br>
-    				<div class="panel panel-default" style="margin-top:4px;margin-bottom:4px" ng-repeat="item in element.data.decisions">
+    				<div class="panel panel-default" style="margin-top:4px;margin-bottom:4px" ng-repeat="item in element.decisions">
     		  			<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button ng-if="::canEdit" class="btn btn-outline-danger pull-right" style="margin: -9px;" ng-click="removeFrom(item, element.data.decisions)"><i class="fa fa-minus-circle"></i></button>
+    						<button ng-if="::canEdit" class="btn btn-outline-danger pull-right" style="margin: -9px;" ng-click="removeFrom(item, element.decisions)"><i class="fa fa-minus-circle"></i></button>
                             <decision-reference symbol="item"></decision-reference>
     					</div>
     				</div>
-    				<button ng-if="::canEdit" class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectDecision()">add a decision / recommendation</button>
+    				<button ng-if="::canEdit" class="btn btn-primary btn-xs" ng-disabled="element.nodeType!='paragraph'" ng-click="selectDecision()">add a decision / recommendation</button>
     			</div>
-
-                <!-- <div class="form-group">
-    				<label for="exampleInputEmail1">Related documents</label><br>
-
-    				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.documents|orderBy">
-    					<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button ng-if="::canEdit" class="btn btn-outline-danger btn-xs pull-right" style="margin: -9px;" ng-click="removeFrom(item, element.data.documents)"><i class="fa fa-minus-circle"></i></button>
-                            <decision-meeting-document symbol="item"></decision-meeting-document>
-    					</div>
-    				</div>
-    				<button ng-if="::canEdit" class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectMeetingDocument()">add a document</button>
-    			</div> -->
 
     		</div>
     		<div class="col-sm-6">
-    			<!-- <div class="form-group">
-    				<label for="exampleInputEmail1">Notifications issued</label><br>
-    				<div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.notifications|orderBy">
-    		  			<div class="panel-body" style="padding:12px;font-size:0.9em">
-    						<button ng-if="::canEdit" class="btn btn-outline-danger btn-xs pull-right" style="margin: -9px;" ng-click="removeFrom(item, element.data.notifications)"><i class="fa fa-minus-circle"></i></button>
-                            <decision-notification symbol="item"></decision-notification>
-    					</div>
-    				</div>
-    				<button ng-if="::canEdit" class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectNotification()">add a notification</button>
-    			</div> -->
-
                 <div class="form-group">
                     <label for="exampleInputEmail1">Outcomes / proof of implementation</label><br>
-                    <div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.data.meetings|orderBy">
+                    <div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.meetings|orderBy">
                           <div class="panel-body" style="padding:12px;font-size:0.9em">
-                            <button class="btn btn-outline-danger btn-xs pull-right" style="margin: -9px;" ng-click="removeFrom(item.symbol_s||item, element.data.meetings)"><i class="fa fa-minus-circle"></i></button>
+                            <button class="btn btn-outline-danger btn-xs pull-right" style="margin: -9px;" ng-click="removeFrom(item.symbol_s||item, element.meetings)"><i class="fa fa-minus-circle"></i></button>
                             <decision-meeting symbol="item"></decision-meeting>
                         </div>
                     </div>
-                    <button ng-if="::canEdit" class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="selectMeeting()">add an outcome</button>
+                    <button ng-if="::canEdit" class="btn btn-primary btn-xs" ng-disabled="element.nodeType!='paragraph'" ng-click="selectMeeting()">add an outcome</button>
                 </div>
 
     		</div>
     	</div>
-        <!-- <hr ng-if="element.type=='paragraph'"/>
-        <h5 ng-if="element.type=='paragraph'">
-            Submissions
-    	</h5>
-    	<div ng-if="element.type=='paragraph'">
-    		<div class="form-group">
 
-                <div ng-repeat="item in element.data.files" class="input-group" style="margin-bottom:2px">
-                    <span class="form-control">
-                        <i class="fa fa-file-pdf-o" style="color:red"></i> <a ng-href="{{buildFileUrl(item)}}" target="_blank">{{item.filename}}</a> <i>({{item.size/1024 | number:1}} kB)</i>
-                    </span>
-                    <div class="input-group-append">
-                       <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.data.files)"><i class="fa fa-minus-circle"></i></button>
-                   </div>
-                 </div>
-    		</div>
-
-    		<div ng-repeat="item in uploads" ng-class="{ 'has-error' : item.error }" class="input-group"  style="margin-bottom:2px">
-                <div span class="form-control">
-
-                    <span ng-if="!item.error">
-                        <button class="btn btn-default btn-xs pull-right"><i class="fa fa-cog fa-spin"></i></button>
-                        <i class="fa fa-file-pdf-o" style="color:red"></i>
-                        <a>{{item.filename}}</a> <i>({{item.size/1024 | number:1}} kB)</i>
-                    </span>
-
-                    <span ng-if="item.error">
-                        <i class="fa fa-exclamation-circle text-danger"></i>
-                        <span class="text-danger"> Error occured while uploading file: </span>
-                        {{item.filename}} <i>({{item.size/1024 | number:1}} kB)</i>
-                    </span>
-                 </div>
-
-                 <div ng-if="item.error" class="input-group-append">
-                    <button class="btn btn-outline-danger  btn-xs pull-right" ng-click="uploads.splice($index, 1)"><i class="fa fa-minus-circle"></i></button>
-                </div>
-            </div>
-
-            <button ng-if="::canEdit" class="btn btn-primary btn-xs" ng-disabled="element.type!='paragraph'" ng-click="upload()"><i class="fa fa-plus-circle"></i> upload document(s)</button>
-    	</div> -->
-
-        <hr ng-if="element.type=='paragraph'"/>
-        <h4 ng-if="element.type=='paragraph'">
+        <hr ng-if="element.nodeType=='paragraph'"/>
+        <h4 ng-if="element.nodeType=='paragraph'">
             Notes
     	</h4>
-    	<div ng-if="element.type=='paragraph'">
+    	<div ng-if="element.nodeType=='paragraph'">
     		<div class="form-group">
-                <textarea rows="6" class="form-control" ng-model="element.data.notes" ng-disabled="!canEdit || !element"></textarea>
+                <textarea rows="6" class="form-control" ng-model="element.notes" ng-disabled="!canEdit || !element"></textarea>
             </div>
         </div>
 
         <a name="comment"></a>
-        <hr ng-if="canView && element.type=='paragraph'"/>
-        <h4 ng-if="canView && element.type=='paragraph'">
+        <hr ng-if="canView && element.nodeType=='paragraph'"/>
+        <h4 ng-if="canView && element.nodeType=='paragraph'">
             Programme Officers comments
     	</h4>
-    	<div ng-if="canView && element.type=='paragraph'">
+    	<div ng-if="canView && element.nodeType=='paragraph'">
             <internal-comments type="decision" resources="commentResources" can-edit="canEdit"></internal-comments>
         </div>
 

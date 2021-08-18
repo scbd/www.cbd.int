@@ -12,7 +12,6 @@ import _       from 'lodash'
 import ng      from 'angular'
 import rangy   from 'rangy'
 import $       from 'jquery'
-import roman         from './data/romans'
 import sectionList   from './data/sections'
 import paragraphList from './data/paragraphes'
 import itemList      from './data/items'
@@ -45,9 +44,19 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         $scope.updateSelectedNode = updateSelectedNode;
         $scope.updateDecision = load;
 
+        $scope.$watchCollection("element", function(node) {
+            const el = _.cloneDeep(node);
+            delete el.nodeType;
+            if(JSON.stringify($scope.selectedNode) === JSON.stringify(el)) {
+                console.log("same");
+            } else {
+                console.log("not same");
+            }
+        });
+
         if(body=='COP') treaty = { code : "XXVII8" } ;
-    //  else if(body=='CP')  treaty = "XXVII8a";
-    //  else if(body=='NP')  treaty = "XXVII8b";
+        //  else if(body=='CP')  treaty = "XXVII8a";
+        //  else if(body=='NP')  treaty = "XXVII8b";
 
         if(!treaty) {
             alert('ONLY "COP" DECISIONS ARE SUPPORTED');
@@ -77,7 +86,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         $scope.selectNotification = selectNotification;
         $scope.actionEdit  = edit;
         $scope.isEditable  = isEditable;
-        $scope.tag         = tag;
         $scope.actionBox   = surroundSelection;
         $scope.actionUnbox = unsurroundSelection;
         $scope.actionClean = removeSelectionFormatting;
@@ -106,11 +114,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
 
         return this;
 
-        //************************************************************
-        //************************************************************
-        //************************************************************
-        //************************************************************
-
         //==============================
         //
         //==============================
@@ -137,11 +140,8 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
 
                 treaty   = res[2].data;
 
-                //TODO - remove or pass this decision to decision-edit
                 const code = treaty.acronym+'/'+body+'/'+pad(session)+'/'+pad(decision);
                 return $scope.api.queryDecisionTree(code);
-                
-                //return $http.get('/api/v2016/decision-texts', { params : { q : { $or: [{ decision: roman[session] + '/' + decision}, { treaty:treaty.code,  body: body, session: session, decision: decision }]}, fo: 1 }});
 
             }).then(function(res){
 
@@ -149,44 +149,8 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                 $scope.subjects = _.cloneDeep(res.subjects|| []);
                 $scope.aichiTargets = _.cloneDeep(res.aichiTargets || []);
 
-                // data = res.data || {
-                //     treaty  : treaty.code,
-                //     body    : body,
-                //     session : session,
-                //     decision: decision,
-                //     meeting : body+'-'+ pad(session),
-                //     subjects : [],
-                //     aichiTargets : [],
-                //     content: 'paste here'
-                // };
-
-                // data = _.defaults(data, {
-                //     symbol : data.decision,
-                //     body   : body,
-                //     treaty : treaty.code,
-                //     subjects : [],
-                //     aichiTargets : []
-                // });
-
-                // if(typeof(data.decision)=='string') {
-                //     data.decision = parseInt(data.symbol.replace(/.*\/(\d+)$/, '$1'));
-                // }
-
-                // $scope.subjects     = data.subjects     = (data.subjects     || []);
-                // $scope.aichiTargets = data.aichiTargets = (data.aichiTargets || []);
-
-                // $('#content').html(data.content);
-
-
-                // clean($('#content')[0]);
-                // clean($('#content')[0]);
-                // clean($('#content')[0]);
-
-                // $('#content,element').mousedown(mousedown_selectNode);
-
             }).then(function(){
 
-                //lazyRetag();
                 loadComments();
 
             }).catch(function(err){
@@ -203,33 +167,13 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         }
 
         function updateSelectedNode(newNode) {
+            newNode = _.cloneDeep(newNode);
             $scope.selectedNode = newNode;
             if(!newNode) return;
-            const {section, paragraph, item, subitem} = newNode;
-            let element = {};
-            element.type = paragraph && `paragraph`;
-            element.section = section && `${section}`;
-            element.paragraph = paragraph && `${paragraph}`;
-            element.item = item && `${item}`;
-            element.subitem = subitem && `${subitem}`;
-            element.data = newNode;
-            $scope.element = element;
+
+            let nodeType = newNode.paragraph && `paragraph`;
+            $scope.element = {nodeType, ...newNode};
         }
-
-        // function lazyRetag(paragraphes) {
-        //     if(paragraphes && paragraphes.length==0) {
-        //         selectNode(null);
-        //         return;
-        //     }
-
-        //     paragraphes = paragraphes || $('#content element').toArray();
-
-        //     var el = paragraphes.shift();
-
-        //     $scope.$applyAsync(function(){ selectNode(el);         });
-        //     $scope.$applyAsync(function(){ tag();                  });
-        //     $scope.$applyAsync(function(){ lazyRetag(paragraphes); });
-        // }
 
         //===========================
         //
@@ -254,78 +198,12 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
             }
 
             if(selectedNode) {
-                const {_id} = selectedNode;
-
-                const newNode = {...selectedNode};
-                const {section, paragraph, item, subitem} = element;
-
-                newNode.section = section && ((sectionList.find(s => s.code === section) || {}).value || section);
-                newNode.paragraph = paragraph && ((paragraphList.find(s => s.code === paragraph) || {}).value || paragraph);
-                newNode.item = item && ((itemList.find(s => s.code === item) || {}).value || item);
-                newNode.subitem = subitem && ((subItemList.find(s => s.code === subitem) || {}).value || subitem);
-
-                await $scope.api.updateDecisionNode(decisionId, _id, newNode);
-
+                await $scope.api.updateDecisionNode(decisionId, element._id, element);
                 load();
                 saved = true;
             }
             if(saved) alert( "Your document has been successfully saved." );
         }
-
-        //TODO - remove
-        // function save() {
-        //     if(!canEdit()) {
-        //         alert("Unauthorized to save");
-        //         throw new Error("unauthorized to save");
-        //     }
-
-        //     var selectedNode = selectedElement;
-
-        //     selectNode(null);
-
-        //     //Cleanup data;
-
-        //     clearCommentButton();
-
-        //     $('#content element').each(function() {
-        //         var info = $(this).data('info');
-
-        //         if(info && info.type!='paragraph') {
-        //             delete info.data;
-        //             $(this).attr('data-info', ng.toJson(info));
-        //         }
-        //     });
-
-        //     // Save
-
-        //     data.content = $('#content').html();
-
-        //     updateCommentButton();
-
-        //     var req = {
-        //         method : data._id ? 'PUT' : 'POST',
-        //         url    : '/api/v2016/decision-texts' + (data._id ? '/'+data._id : ''),
-        //         data   : _.pick(data, "_id","treaty","body","session","decision","meeting","content","subjects","aichiTargets")
-        //     };
-
-
-        //     $http(req).then(function(res){
-
-        //         data._id = data._id || res.data._id;
-
-        //         selectNode(selectedNode);
-
-        //         alert( "Your document has been successfully saved." );
-
-        //     }).catch(function(err){
-
-        //         err = (err||{}).data || err;
-
-        //         console.error(err);
-
-        //         alert(err.message||JSON.stringify(err, null, ' '));
-        //     });
-        // }
 
         //===========================
         //
@@ -421,42 +299,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         //===========================
         //
         //===========================
-        function tag() {
-            
-            if(!selectedElement) return;
-            if(!$scope.element)  return;
-
-            var element = $scope.element;
-
-            element.section   = element.type=='paragraph' ? (element.section  || undefined) : undefined;
-            element.paragraph = element.type=='paragraph' ? (element.paragraph|| undefined) : undefined;
-            element.item      = element.type=='paragraph' ? (element.item     || undefined) : undefined;
-            element.subitem   = element.type=='paragraph' ? (element.subitem  || undefined) : undefined;
-
-            var data = element.data = element.data || { };
-
-            data.section   = element.section   && element.section.toUpperCase();
-            data.paragraph = element.paragraph && parseInt(element.paragraph);
-            data.item      = element.item      && element.item.charCodeAt(0) - 'a'.charCodeAt(0) + 1;
-            data.subitem   = element.subitem   && roman.indexOf(element.subitem.toUpperCase());
-
-            // tag
-            var tag = element.type || '';
-
-            if(element.section)   tag += ' ' + element.section;
-            if(element.paragraph) tag += ' ' + element.paragraph;
-            if(element.item)      tag += ''  + element.item;
-            if(element.subitem)   tag += ' (' + element.subitem + ')';
-
-            if(tag) $(selectedElement).attr('data-type', tag);
-            else    $(selectedElement).removeAttr('data-type');
-            
-            updateCommentButton();
-        }
-
-        //===========================
-        //
-        //===========================
         function surroundSelection(tag) {
 
             var range = window.getSelection().getRangeAt(0);
@@ -519,11 +361,11 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
 
             $scope.element = cleanup($(selectedElement).data('info') || {});
 
-            if(($scope.element.data||{}).type == 'information')
-                $scope.element.data.type = 'informational';
+            if(($scope.element||{}).type == 'information')
+                $scope.element.type = 'informational';
 
-            if($scope.element.data) {
-                $scope.element.data.statusInfo = $scope.element.data.statusInfo || $scope.element.elementStatusDetails;
+            if($scope.element) {
+                $scope.element.statusInfo = $scope.element.statusInfo || $scope.element.elementStatusDetails;
                 delete $scope.element.elementStatusDetails;
             }
 
@@ -536,29 +378,29 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         //===========================
         function cleanup(element, deleteEmpty) {
 
-            if(element && element.data) {
+            if(element) {
 
-                element.data.subjects      = _(element.data.subjects     ||[]).uniq().value();
-                element.data.aichiTargets  = _(element.data.aichiTargets ||[]).uniq().value();
-                element.data.actors        = _(element.data.actors       ||[]).uniq().value();
-                element.data.statuses      = _(element.data.statuses     ||[]).uniq().value();
-                element.data.decisions     = _(element.data.decisions    ||[]).uniq().value();
-                element.data.notifications = _(element.data.notifications||[]).uniq().value();
-                element.data.documents     = _(element.data.documents    ||[]).uniq().value();
-                element.data.meetings      = _(element.data.meetings     ||[]).uniq().map(mettingUrlToCode).value();
+                element.subjects      = _(element.subjects     ||[]).uniq().value();
+                element.aichiTargets  = _(element.aichiTargets ||[]).uniq().value();
+                element.actors        = _(element.actors       ||[]).uniq().value();
+                element.statuses      = _(element.statuses     ||[]).uniq().value();
+                element.decisions     = _(element.decisions    ||[]).uniq().value();
+                element.notifications = _(element.notifications||[]).uniq().value();
+                element.documents     = _(element.documents    ||[]).uniq().value();
+                element.meetings      = _(element.meetings     ||[]).uniq().map(mettingUrlToCode).value();
 
                 if(deleteEmpty) { // Remove empty fields/arrays
 
-                    for(var key in element.data) {
+                    for(var key in element) {
 
-                        var val = element.data[key];
+                        var val = element[key];
 
-                        if(val===undefined) { delete element.data[key]; continue; }
-                        if(val===null)      { delete element.data[key]; continue; }
-                        if(val==="")        { delete element.data[key]; continue; }
+                        if(val===undefined) { delete element[key]; continue; }
+                        if(val===null)      { delete element[key]; continue; }
+                        if(val==="")        { delete element[key]; continue; }
 
                         if(_.isArray(val) && !val.length) {
-                            delete element.data[key]; continue;
+                            delete element[key]; continue;
                         }
                     }
                 }
@@ -689,7 +531,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                 filename : file.name,
                 metadata : {
                     source  : 'dtt',
-                    paragraph : $scope.element.data.code
+                    paragraph : $scope.element.code
                 }
             };
 
@@ -716,8 +558,8 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                 while(~(index = $scope.uploads.indexOf(fileInfo)))
                     $scope.uploads.splice(index, 1);
 
-                $scope.element.data.files = $scope.element.data.files||[];
-                $scope.element.data.files.push(fileInfo);
+                $scope.element.files = $scope.element.files||[];
+                $scope.element.files.push(fileInfo);
 
             }).catch(function(err) {
 
@@ -751,7 +593,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                     if(!res.value)
                         return;
 
-                    addTo(res.value, $scope.element.data.documents);
+                    addTo(res.value, $scope.element.documents);
                 });
             });
         }
@@ -768,7 +610,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                     if(!res.value)
                         return;
 
-                    addTo(res.value, $scope.element.data.decisions);
+                    addTo(res.value, $scope.element.decisions);
                 });
             });
         }
@@ -785,7 +627,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                     if(!res.value)
                         return;
 
-                    addTo(res.value.symbol, $scope.element.data.notifications);
+                    addTo(res.value.symbol, $scope.element.notifications);
                 });
             });
         }
@@ -802,7 +644,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                     if(!res.value)
                         return;
 
-                    addTo(mettingUrlToCode(res.value.symbol), $scope.element.data.meetings);
+                    addTo(mettingUrlToCode(res.value.symbol), $scope.element.meetings);
                 });
             });
         }

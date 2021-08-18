@@ -3,7 +3,7 @@
     <div class="pointer" @click.stop="setSelectedNode" :class="{ selected: isSelected }">
         <div class="row paragraph" :class="{ dimmed }">
             <div class="col-12">
-                <a :name="name"><small>{{name}}</small></a>
+                <a :name="name"><small></small></a>
                 <span v-if="type" class="pull-right badge" style="opacity:0.5;margin-right:6px"
                     :class="type === 'operational' ? 'badge-info' : 'badge-secondary'">
                     <span>
@@ -222,10 +222,6 @@ function setSelectedNode() {
 
 .pointer {
     cursor: pointer; 
-    /* TMP */
-    border: 1px dotted #c0c0c0;
-    padding: 2px;
-    margin: 2px;
 }
 
 .card-header:first-child {

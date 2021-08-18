@@ -37,7 +37,7 @@
     			</div>
     			<div class="card-body">
 					<h3 :lang="selectedLocale">{{decision.title | lstring}}</h3>
-					<div class="scrollable-section">
+					<div id="decision-node" class="scrollable-section" :style="scrollableStyle('decision-node')">
 						<div v-for="node in decision.nodes" :key="node._id">
 							<view-element 
 								:node="node" 
@@ -50,141 +50,145 @@
     			</div>
             </div>
 		</div>
-		<div class="col-md-6 scrollable-section" style="padding-top:16px">
-			<div id="decision-meta">
-			<dl>
-				<dt v-if="decision.body">Body</dt>
-                <dd v-if="decision.body">
-                    <span v-if="decision.body === 'COP'">Conference of the Parties (COP)</span>
-                    <span v-else>{{ decision.body | uppercase }}</span>
-                </dd>
+		<div class="col-md-6">
+			<div class="document card border-grey">
+				<div class="card-body">
+					<div id="decision-meta" class="scrollable-section" :style="scrollableStyle('decision-meta')">
+					<dl>
+						<dt v-if="decision.body">Body</dt>
+						<dd v-if="decision.body">
+							<span v-if="decision.body === 'COP'">Conference of the Parties (COP)</span>
+							<span v-else>{{ decision.body | uppercase }}</span>
+						</dd>
 
-				<br v-if="decision.body">
+						<br v-if="decision.body">
 
-				<dt v-if="decision.meeting">Meeting</dt>
-				<dd v-if="decision.meeting">
-					<meeting-card-list :meetings="[decision.meeting]" />
-                </dd>
-				<br>
+						<dt v-if="decision.meeting">Meeting</dt>
+						<dd v-if="decision.meeting">
+							<meeting-card-list :meetings="[decision.meeting]" />
+						</dd>
+						<br>
 
-				<dt>Elements of decision</dt>
-				<dd>
-					<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
-						@click="toggleFilters({ types: null })" 
-						:class="{ disabled : filters && filters.types }">
-						{{ sum(counts.types) }} 
-						<i v-if="filters && filters.types" class="fa fa-times" aria-hidden="true"></i>
-					</a>
-					<a v-for="type in allFilters.types" :key="type.code"
-						href="javascript:void(0)" class="badge text-nowrap" 
-						style="margin-right:3px;"
-						@click="toggleFilters({ types: [type.code] })" 
-						:class="`${!isFilterSelected('types', type.code) && 'disabled'} ${type.class || 'badge-secondary'}`" >
-						{{ counts.types[type.code] || 0 }} {{type.title}} 
-						<i class="fa fa-filter" aria-hidden="true"></i>
-					</a>
-				</dd>
-				<dd>
-					<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
-						@click="toggleFilters({ statuses : null })" 
-						:class="{ disabled : filters && filters.statuses }">
-						{{ sum(counts.statuses) }}
-						<i v-if="filters && filters.statuses" class="fa fa-times" aria-hidden="true"></i>
-					</a>
-					<a 
-						v-for="status in allFilters.statuses" :key="status.code"
-						href="javascript:void(0)" class="badge text-nowrap" 
-						style="margin-right:3px;"
-						@click="toggleFilters({ statuses : [status.code]})"
-						:class="`${!isFilterSelected('statuses', status.code) && 'disabled'} ${status.class || 'badge-secondary'}`" >
-						{{ counts.statuses[status.code] || 0 }} {{ status.title }} 
-						<i class="fa fa-filter" aria-hidden="true"></i>
-					</a>
-				</dd>
+						<dt>Elements of decision</dt>
+						<dd>
+							<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
+								@click="toggleFilters({ types: null })" 
+								:class="{ disabled : filters && filters.types }">
+								{{ sum(counts.types) }} 
+								<i v-if="filters && filters.types" class="fa fa-times" aria-hidden="true"></i>
+							</a>
+							<a v-for="type in allFilters.types" :key="type.code"
+								href="javascript:void(0)" class="badge text-nowrap" 
+								style="margin-right:3px;"
+								@click="toggleFilters({ types: [type.code] })" 
+								:class="`${!isFilterSelected('types', type.code) && 'disabled'} ${type.class || 'badge-secondary'}`" >
+								{{ counts.types[type.code] || 0 }} {{type.title}} 
+								<i class="fa fa-filter" aria-hidden="true"></i>
+							</a>
+						</dd>
+						<dd>
+							<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
+								@click="toggleFilters({ statuses : null })" 
+								:class="{ disabled : filters && filters.statuses }">
+								{{ sum(counts.statuses) }}
+								<i v-if="filters && filters.statuses" class="fa fa-times" aria-hidden="true"></i>
+							</a>
+							<a 
+								v-for="status in allFilters.statuses" :key="status.code"
+								href="javascript:void(0)" class="badge text-nowrap" 
+								style="margin-right:3px;"
+								@click="toggleFilters({ statuses : [status.code]})"
+								:class="`${!isFilterSelected('statuses', status.code) && 'disabled'} ${status.class || 'badge-secondary'}`" >
+								{{ counts.statuses[status.code] || 0 }} {{ status.title }} 
+								<i class="fa fa-filter" aria-hidden="true"></i>
+							</a>
+						</dd>
 
-				<dt>Actors</dt>
-				<dd>
-                    <a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
-						@click="toggleFilters({ actors : null })" 
-						:class="{ disabled : filters &&  filters.actors }">
-						{{ sum(counts.actors) }} 
-						<i v-if="filters && filters.actors" class="fa fa-times" aria-hidden="true"></i>
-					</a>
-					<a
-						v-for="actor in allFilters.actors" :key="actor.code"
-						href="javascript:void(0)" class="badge text-nowrap" 
-						style="margin-right:3px;"
-						@click="toggleFilters({ actors : [actor.code] })" 
-						:class="`${!isFilterSelected('actors', actor.code) && 'disabled'} ${actor.class || 'badge-secondary'}`" >
-						{{counts.actors[actor.code]}} {{actor.title}} 
-						<i class="fa fa-filter" aria-hidden="true"></i>
-					</a>
-				</dd>
+						<dt>Actors</dt>
+						<dd>
+							<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
+								@click="toggleFilters({ actors : null })" 
+								:class="{ disabled : filters &&  filters.actors }">
+								{{ sum(counts.actors) }} 
+								<i v-if="filters && filters.actors" class="fa fa-times" aria-hidden="true"></i>
+							</a>
+							<a
+								v-for="actor in allFilters.actors" :key="actor.code"
+								href="javascript:void(0)" class="badge text-nowrap" 
+								style="margin-right:3px;"
+								@click="toggleFilters({ actors : [actor.code] })" 
+								:class="`${!isFilterSelected('actors', actor.code) && 'disabled'} ${actor.class || 'badge-secondary'}`" >
+								{{counts.actors[actor.code]}} {{actor.title}} 
+								<i class="fa fa-filter" aria-hidden="true"></i>
+							</a>
+						</dd>
 
-				<dt>AICHI targets</dt>
-				<dd>
-					<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
-						@click="toggleFilters({ aichiTargets : null })" 
-						:class="{ disabled : filters &&  filters.aichiTargets }">
-						{{sum(counts.aichiTargets)}} 
-						<i v-if="filters && filters.aichiTargets" class="fa fa-times" aria-hidden="true"></i>
-					</a>
-					<span class="chip-sm" 
-						v-for="aichiTarget in allFilters.aichiTargets" 
-						:key="aichiTarget" 
-						@click="toggleFilters({ aichiTargets : [aichiTarget.index] })" 
-						:class="`${!isFilterSelected('aichiTargets', aichiTarget.index) && 'disabled'} ${aichiTarget.class || 'badge-secondary'}`" >
-							<img :title="aichiTarget.description" 
-							:src="`/app/images/aichi-targets/abt-${aichiTarget.index}-96.png`" 
-							width="20" style="margin: 1px 1px 1px 1px;">
-					</span>
-				</dd>
-				<br>
+						<dt>AICHI targets</dt>
+						<dd>
+							<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
+								@click="toggleFilters({ aichiTargets : null })" 
+								:class="{ disabled : filters &&  filters.aichiTargets }">
+								{{sum(counts.aichiTargets)}} 
+								<i v-if="filters && filters.aichiTargets" class="fa fa-times" aria-hidden="true"></i>
+							</a>
+							<span class="chip-sm" 
+								v-for="aichiTarget in allFilters.aichiTargets" 
+								:key="aichiTarget" 
+								@click="toggleFilters({ aichiTargets : [aichiTarget] })" 
+								:class="`${!isFilterSelected('aichiTargets', aichiTarget) && 'disabled'} 'badge-secondary'`" >
+									<img :title="aichiTarget.description" 
+									:src="`/app/images/aichi-targets/abt-${aichiTarget.replace('AICHI-TARGET-','')}-96.png`" 
+									width="20" style="margin: 1px 1px 1px 1px;">
+							</span>
+						</dd>
+						<br>
 
-				<dt>Subjects</dt>
-				<dd>
-					<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
-						@click="toggleFilters({ subjects : null })" 
-						:class="{ disabled : filters &&  filters.subjects }">
-						{{sum(counts.subjects)}} 
-						<i v-if="filters && filters.subjects" class="fa fa-times" aria-hidden="true"></i>
-					</a>
+						<dt>Subjects</dt>
+						<dd>
+							<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
+								@click="toggleFilters({ subjects : null })" 
+								:class="{ disabled : filters &&  filters.subjects }">
+								{{sum(counts.subjects)}} 
+								<i v-if="filters && filters.subjects" class="fa fa-times" aria-hidden="true"></i>
+							</a>
 
-					<a href="javascript:void(0)" class="badge text-nowrap" 
-						v-for="subject in allFilters.subjects" 
-						:key="subject.code"
-						style="margin-right:3px;"
-						@click="toggleFilters({ subjects : [subject.code] })" 
-						:class="`${!isFilterSelected('subjects', subject.code) && 'disabled'} ${subject.class || 'badge-secondary'}`" >
-						{{counts.subjects[subject.code]}} {{subject.title}}
-					</a> 
-				</dd>
-				<br>
+							<a href="javascript:void(0)" class="badge text-nowrap" 
+								v-for="subject in allFilters.subjects" 
+								:key="subject.code"
+								style="margin-right:3px;"
+								@click="toggleFilters({ subjects : [subject.code] })" 
+								:class="`${!isFilterSelected('subjects', subject.code) && 'disabled'} ${subject.class || 'badge-secondary'}`" >
+								{{counts.subjects[subject.code]}} {{subject.title}}
+							</a> 
+						</dd>
+						<br>
 
-				<div v-if="documents && documents.length > 0">
-					<dt>Document</dt>
-					<dd v-for="d in documents" :key="d">
-						<div class="card" style="margin-bottom:4px">
-							<div class="card-body" style="padding:12px;font-size:0.9em">
-								<document-files :files="d.files" class="visible-xs pull-right"></document-files>
-								<b>{{d.symbol}}</b>
-								<div>{{ decision.title | lstring }}</div>
-								<document-files class="hidden-xs" :files="d.files"></document-files>
-							</div>
+						<div v-if="documents && documents.length > 0">
+							<dt>Document</dt>
+							<dd v-for="d in documents" :key="d">
+								<div class="card" style="margin-bottom:4px">
+									<div class="card-body" style="padding:12px;font-size:0.9em">
+										<document-files :files="d.files" class="visible-xs pull-right"></document-files>
+										<b>{{d.symbol}}</b>
+										<div>{{ decision.title | lstring }}</div>
+										<document-files class="hidden-xs" :files="d.files"></document-files>
+									</div>
+								</div>
+							</dd>
 						</div>
-					</dd>
+
+						<span v-if="decision.decisions && decision.decisions.length > 0">
+							<dt>Related decisions</dt>
+							<dd>
+								<decision-card-list :decisions="decision.decisions" />
+							</dd>
+							<br>
+						</span>
+
+					</dl>
+					</div>	
 				</div>
-
-				<span v-if="decision.decisions && decision.decisions.length > 0">
-    				<dt>Related decisions</dt>
-					<dd>
-						<decision-card-list :decisions="decision.decisions" />
-					</dd>
-    				<br>
-				</span>
-
-			</dl>
-			</div>	
+			</div>
 		</div>
     </div>
 </div>
@@ -328,11 +332,23 @@ export default {
 		lookupTermText,
 		loadFilters,
 		sum,
-		startTour
+		startTour,
+		scrollableStyle
     },
 	mounted: load
 }
 
+function scrollableStyle(id) {
+	//TODO - need to handle height when select any filter when scroll external one
+	var top = 0;
+	if($(`#${id}`).length > 0) {
+		top = $(`#${id}`).offset().top - $(window).scrollTop();
+	}
+	
+	console.log(top);
+	return `height: calc(100vh - ${top}px)`;
+	
+}
 function findNode(collection, code) {
 	if(collection && collection.code && collection.code.indexOf(code) === 0) {
 		return collection;
@@ -493,6 +509,15 @@ function toggleFilters(newFilters) {
 }
 
 function edit(hash) {
+	const {route} = this;
+	const {params} = route;
+	const {body, session, decision} = params;
+	
+	let url = `${body}/${session}/${decision}/edit`;
+
+	if(hash) url += `#${hash}`;
+	
+	window.location.href = url;
 
 	// window.location.url(('/'+decision.body+'/'+decision.session+'/'+decision.decision+'/edit').toLowerCase());
 
@@ -550,8 +575,6 @@ function sum(object) {
 }
 
 .scrollable-section {
-	/* TODO - height */
-	height: 100vh;
 	overflow: scroll;
 }
 
