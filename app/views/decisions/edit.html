@@ -162,6 +162,11 @@
     .edit-decision .document {
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     }
+
+    .decision-nodes-div[disabled=disabled] {
+        pointer-events: none;
+        opacity: 0.5;
+    }
 </style>
 
 <div ng-show="paramError" class="row">
@@ -182,7 +187,8 @@
 
         <div style="position:fixed;top:0px;left:0px;right:0px;background-color:#ddd;z-index:1000;padding:6px">&nbsp;
             <button class="btn btn-default pull-right" ng-click="close()">Close</button>
-            <button class="btn btn-success" ng-if="::canEdit" ng-click="save()">Save</button> &nbsp; &nbsp;
+            <button class="btn btn-success" ng-if="::canEdit" ng-disabled="!contentEdited()" ng-click="save()">Save</button> &nbsp; &nbsp;
+            <button class="btn btn-default" ng-if="::canEdit" ng-disabled="!contentEdited()" ng-click="cancel()">Cancel</button> &nbsp; &nbsp;
         </div>
 
         <div class="row" style="margin-top:60px;height:100%">
@@ -222,7 +228,7 @@
                     </div>
                 </div>
 
-                <div ng-if="decision">
+                <div ng-if="decision" ng-disabled="contentEdited()" class="decision-nodes-div">
                     <div class="bg-orange">Decision {{symbol}}</div>
                     <div class="document" style="height:100vh;overflow-y:scroll;padding:5px">
                         <h1>{{decision.title|lstring}}</h1>

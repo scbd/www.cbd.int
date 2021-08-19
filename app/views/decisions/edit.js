@@ -44,16 +44,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         $scope.updateSelectedNode = updateSelectedNode;
         $scope.updateDecision = load;
 
-        $scope.$watchCollection("element", function(node) {
-            const el = _.cloneDeep(node);
-            delete el.nodeType;
-            if(JSON.stringify($scope.selectedNode) === JSON.stringify(el)) {
-                console.log("same");
-            } else {
-                console.log("not same");
-            }
-        });
-
         if(body=='COP') treaty = { code : "XXVII8" } ;
         //  else if(body=='CP')  treaty = "XXVII8a";
         //  else if(body=='NP')  treaty = "XXVII8b";
@@ -70,12 +60,14 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
 
         $scope.self    = $scope;
         $scope.isDisabled = isDisabled,
+        $scope.contentEdited = contentEdited,
         $scope.canEdit = canEdit();
         $scope.canView = canView();
         $scope.canDebug = canDebug();
         $scope.user   = _.pick(user, ['userID', 'name']);
         $scope.close  = close;
         $scope.save   = save;
+        $scope.cancel   = cancel;
         $scope.upload = upload;
         $scope.comments    = {};
         $scope.commentResources = [];
@@ -205,6 +197,13 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                 saved = true;
             }
             if(saved) alert( "Your document has been successfully saved." );
+        }
+
+        function cancel() {
+            $scope.subjects = _.cloneDeep($scope.decision.subjects);
+            $scope.aichiTargets = _.cloneDeep($scope.decision.aichiTargets);
+            $scope.selectedNode = null;
+            $scope.element = {} ;
         }
 
         //===========================
@@ -682,6 +681,19 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         function canEdit()  { return !!_.intersection(user.roles, ["DecisionTrackingTool"]).length; }
         function canView()  { return !!_.intersection(user.roles, ["Administrator","DecisionTrackingTool", "ScbdStaff"]).length; }
         function isDisabled(parentId, field) { return !!(findNode($scope.decision, parentId) || {})[field];}
+        function contentEdited() {
+            const {element, selectedNode, subjects, aichiTargets, decision} = $scope;
+
+            if(subjects && decision.subjects && !_.isEqual(subjects.sort(), decision.subjects.sort())) return true;
+            if(aichiTargets && decision.aichiTargets && !_.isEqual(aichiTargets.sort(), decision.aichiTargets.sort())) return true;
+            
+            const el = _.cloneDeep(element);
+            delete el.nodeType;
+            //TODO for inner array property of element
+            if(!_.isEqual(selectedNode || {}, el || {})) return true;
+
+            return false;
+        }
 
         function findNode(collection, id) {
             if(collection && collection._id && collection._id === id) {
