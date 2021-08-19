@@ -37,7 +37,7 @@
     			</div>
     			<div class="card-body">
 					<h3 :lang="selectedLocale">{{decision.title | lstring}}</h3>
-					<div id="decision-node" class="scrollable-section" :style="scrollableStyle('decision-node')">
+					<div id="decision-node" class="scrollable-section" :style="style.decisionNode">
 						<div v-for="node in decision.nodes" :key="node._id">
 							<view-element 
 								:node="node" 
@@ -53,7 +53,7 @@
 		<div class="col-md-6">
 			<div class="document card border-grey">
 				<div class="card-body">
-					<div id="decision-meta" class="scrollable-section" :style="scrollableStyle('decision-meta')">
+					<div id="decision-meta" class="scrollable-section" :style="style.decisionMeta">
 					<dl>
 						<dt v-if="decision.body">Body</dt>
 						<dd v-if="decision.body">
@@ -249,6 +249,10 @@ export default {
 			allFilters: {},
 			selectedNode: null,
 			selectedLocale: 'en',
+			style: {
+				decisonNode: '0px',
+				decisionMeta: '0px'
+			},
 			steps: [
 				{
 					target: 'h1',
@@ -333,22 +337,18 @@ export default {
 		loadFilters,
 		sum,
 		startTour,
-		scrollableStyle
+		handleScroll
+
     },
+	created () {
+    	window.addEventListener('scroll', this.handleScroll);
+  	},
+  	destroyed () {
+	    window.removeEventListener('scroll', this.handleScroll);
+  	},
 	mounted: load
 }
 
-function scrollableStyle(id) {
-	//TODO - need to handle height when select any filter when scroll external one
-	var top = 0;
-	if($(`#${id}`).length > 0) {
-		top = $(`#${id}`).offset().top - $(window).scrollTop();
-	}
-	
-	console.log(top);
-	return `height: calc(100vh - ${top}px)`;
-	
-}
 function findNode(collection, code) {
 	if(collection && collection.code && collection.code.indexOf(code) === 0) {
 		return collection;
@@ -412,6 +412,7 @@ async function load() {
 			router.replace({path}); //TODO
 		}
 	}
+	this.handleScroll();
 }
 
 function startTour() {
@@ -565,6 +566,22 @@ async function lookupTermText(code) {
 
 function sum(object) {
 	return _.sum(_.values(object));
+}
+
+function handleScroll() {
+	var top= 0;
+	const {style} = this;
+	if($('#decision-node').length > 0) {
+		top = $('#decision-node').offset().top - $(window).scrollTop();
+	}
+	style.decisionNode = `height: calc(100vh - ${top > 0 ? top : 0}px);`;
+
+	if($('#decision-meta').length > 0) {
+		top = $('#decision-meta').offset().top - $(window).scrollTop();
+	}
+	style.decisionMeta = `height: calc(100vh - ${top > 0 ? top : 0}px);`;
+
+	this.style = style;
 }
 
 </script>
