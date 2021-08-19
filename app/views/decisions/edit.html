@@ -269,7 +269,7 @@
                                 class="form-control" 
                                 id="elementSection" 
                                 ng-model="element.section" 
-                                ng-options="o.value as o.title for o in collections.sections" 
+                                ng-options="o.code as o.title for o in collections.sections" 
                                 ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || isDisabled(element.parentId, 'section')"
                             >
                                 <option></option>
@@ -283,7 +283,7 @@
                                 class="form-control" 
                                 id="elementParagraph" 
                                 ng-model="element.paragraph" 
-                                ng-options="o.value as o.title for o in collections.paragraphes track by o.value" 
+                                ng-options="o.value as o.title for o in collections.paragraphes" 
                                 ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || isDisabled(element.parentId, 'paragraph')"
                             >
                                 <option></option>
@@ -297,7 +297,7 @@
                                 class="form-control" 
                                 id="elementItem" 
                                 ng-model="element.item" 
-                                ng-options="o.value as o.title for o in collections.items track by o.value" 
+                                ng-options="o.value as o.title for o in collections.items" 
                                 ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || !element.paragraph || isDisabled(element.parentId, 'item')"
                             >
                                 <option></option>
@@ -311,7 +311,7 @@
                                 class="form-control" 
                                 id="elementSubitem" 
                                 ng-model="element.subitem" 
-                                ng-options="o.value as o.title for o in collections.subItems track by o.value" 
+                                ng-options="o.value as o.title for o in collections.subItems" 
                                 ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || !element.paragraph || !element.item || isDisabled(element.parentId, 'subitem')"
                             >
                                 <option></option>

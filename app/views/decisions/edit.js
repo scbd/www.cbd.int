@@ -145,6 +145,8 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
 
             }).then(function(res){
 
+                $scope.selectedNode = null;
+                $scope.element = {};
                 $scope.decision = res;
                 $scope.subjects = _.cloneDeep(res.subjects|| []);
                 $scope.aichiTargets = _.cloneDeep(res.aichiTargets || []);
