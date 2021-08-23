@@ -8,6 +8,7 @@ import './directives/notification'
 import './directives/meeting-document'
 import './directives/meeting'
 import './directives/decision-reference'
+import '~/directives/checkbox'
 import _       from 'lodash'
 import ng      from 'angular'
 import rangy   from 'rangy'
@@ -43,6 +44,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         $scope.selectedNode = null;
         $scope.updateSelectedNode = updateSelectedNode;
         $scope.updateDecision = load;
+        $scope.allowAddNodes = false;
 
         if(body=='COP') treaty = { code : "XXVII8" } ;
         //  else if(body=='CP')  treaty = "XXVII8a";
@@ -78,8 +80,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         $scope.selectNotification = selectNotification;
         $scope.actionEdit  = edit;
         $scope.isEditable  = isEditable;
-        $scope.actionBox   = surroundSelection;
-        $scope.actionUnbox = unsurroundSelection;
         $scope.actionClean = removeSelectionFormatting;
         $scope.jumpTo      = jumpTo;
         $scope.initials=function(t) { return _.startCase(t).replace(/[^A-Z]/g, ''); };
@@ -110,7 +110,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         //
         //==============================
         function close() {
-            $location.url(('/'+body+'/'+session+'/'+decision).toLowerCase());
+            $location.url(('/'+body+'/'+pad(session)+'/'+pad(decision)).toLowerCase());
         }
 
 
@@ -161,12 +161,17 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         }
 
         function updateSelectedNode(newNode) {
-            newNode = _.cloneDeep(newNode);
-            $scope.selectedNode = newNode;
-            if(!newNode) return;
+            if(!newNode) {
+                $scope.selectedNode = null;
+                $scope.element = {};
+                return;
+            }
+            
+            const selectedNode = _.cloneDeep(newNode);
+            selectedNode.nodeType = selectedNode.paragraph && `paragraph`;
 
-            let nodeType = newNode.paragraph && `paragraph`;
-            $scope.element = {nodeType, ...newNode};
+            $scope.selectedNode = selectedNode;
+            $scope.element = _.cloneDeep(selectedNode);
         }
 
         //===========================
@@ -183,8 +188,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
 
             const decisionId = decision._id;
             var saved = false;
-            if(!_.isEqual(subjects.sort(), decision.subjects.sort()) 
-                || !_.isEqual(aichiTargets.sort(), decision.aichiTargets.sort())) {
+            if(!areEquals(subjects, decision.subjects) || !areEquals(aichiTargets, decision.aichiTargets)) {
                 const {title} = decision;
                 const params = {title, subjects, aichiTargets};
                 await $scope.api.updateDecision(decisionId, params);
@@ -204,6 +208,34 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
             $scope.aichiTargets = _.cloneDeep($scope.decision.aichiTargets);
             $scope.selectedNode = null;
             $scope.element = {} ;
+        }
+
+        //TODO - need to extract to individual file
+        function areEquals(a, b, field) {
+            const va = field ? _.get(a, field) : a;
+            const vb = field ? _.get(b, field) : b;
+        
+            if(va === vb) return true;
+        
+            if(_.isArray(va) && _.isArray(vb) && va.length == vb.length) {
+                const size = va.length
+        
+                for(let i=0; i<size; ++i)
+                    if(!areEquals(va, vb,`[${i}]`)) return false;
+                
+                return true;
+            }
+        
+            if(_.isObject(va) && _.isObject(vb)) { 
+                const keys = _.union(Object.keys(va), Object.keys(vb));
+        
+                for(let key of keys)
+                    if(!areEquals(va,vb, key)) return false;
+        
+                return true;
+            }
+                
+            return false;
         }
 
         //===========================
@@ -300,83 +332,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         //===========================
         //
         //===========================
-        function surroundSelection(tag) {
-
-            var range = window.getSelection().getRangeAt(0);
-
-            var commonAncestor = $(range.commonAncestorContainer);
-
-            if(!commonAncestor.is("#content") && !commonAncestor.parents('#content').length) {
-                alert('Please select text from the decision');
-                return;
-            }
-
-            var span = document.createElement(tag);
-            var content = range.extractContents();
-
-            span.appendChild(content);
-            range.insertNode(span);
-
-            clean($('#content')[0]);
-            clean($('#content')[0]);
-            clean($('#content')[0]);
-
-            $(span).mousedown(mousedown_selectNode);
-
-            selectNode(span);
-        }
-
-        //===========================
-        //
-        //===========================
-        function unsurroundSelection() {
-
-            if(!selectedElement) return alert('no selectedElement');
-
-            $(selectedElement).contents().unwrap();
-
-            selectedElement = null;
-        }
-
-        //===========================
-        //
-        //===========================
-        function selectNode(node) {
-
-            delete $scope.formattingLocked;
-
-            $(selectedElement).attr('data-info', ng.toJson(cleanup($scope.element, true)));
-
-            $(selectedElement).removeClass('selected');
-
-            delete $scope.element;
-
-            selectedElement = node;
-
-            if(!selectedElement) {
-                $scope.commentResources = [];
-                return;
-            }
-
-            $(selectedElement).addClass('selected');
-
-            $scope.element = cleanup($(selectedElement).data('info') || {});
-
-            if(($scope.element||{}).type == 'information')
-                $scope.element.type = 'informational';
-
-            if($scope.element) {
-                $scope.element.statusInfo = $scope.element.statusInfo || $scope.element.elementStatusDetails;
-                delete $scope.element.elementStatusDetails;
-            }
-
-            $scope.formattingLocked = !!$scope.element.type;
-            $scope.commentResources = _.compact([data.code, $scope.element.code]);
-        }
-
-        //===========================
-        //
-        //===========================
         function cleanup(element, deleteEmpty) {
 
             if(element) {
@@ -423,22 +378,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
             return m;
         }
 
-
-        //===========================
-        //
-        //===========================
-        function mousedown_selectNode(event) {
-
-            var node = this; // jshint ignore: line
-
-            event.stopPropagation();
-
-            jumpTo('top');
-
-            $scope.$applyAsync(function(){
-                selectNode(node);
-            });
-        }
 
         //===========================
         //
@@ -684,13 +623,13 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         function contentEdited() {
             const {element, selectedNode, subjects, aichiTargets, decision} = $scope;
 
-            if(subjects && decision.subjects && !_.isEqual(subjects.sort(), decision.subjects.sort())) return true;
-            if(aichiTargets && decision.aichiTargets && !_.isEqual(aichiTargets.sort(), decision.aichiTargets.sort())) return true;
+            if(subjects && decision.subjects && !areEquals(subjects, decision.subjects)) return true;
+            if(aichiTargets && decision.aichiTargets && !areEquals(aichiTargets, decision.aichiTargets)) return true;
             
-            const el = _.cloneDeep(element);
-            delete el.nodeType;
-            //TODO for inner array property of element
-            if(!_.isEqual(selectedNode || {}, el || {})) return true;
+            const a = _.pick(element, (e) => !!e);
+            const b = _.pick(selectedNode, (e) => !!e);
+
+            if(!areEquals(a, b)) return true;
 
             return false;
         }

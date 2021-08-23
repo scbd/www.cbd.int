@@ -320,7 +320,7 @@ export default {
 		}
     },
 	watch: {
-		selectedNode: loadFilters,
+		selectedNode: onChangeSelectedNode,
 		filters() {
 			this.$nextTick().then(() => {
 				document.querySelector(".paragraph:not(.dimmed)").scrollIntoView(scrollOptions);	
@@ -337,7 +337,8 @@ export default {
 		loadFilters,
 		sum,
 		startTour,
-		handleScroll
+		handleScroll,
+		onChangeSelectedNode
 
     },
 	created () {
@@ -448,6 +449,19 @@ async function loadFilters() {
 	this.$set(this, 'allFilters', allFilters);
 }
 
+async function onChangeSelectedNode(selectedNode) {
+	const {decision, $route: route, $router: router} = this;
+
+	await this.loadFilters();
+
+	const body = route.params.body.toUpperCase();
+
+	const {code} = findNode(decision, selectedNode) || decision;
+
+	const path = `${code.substring(code.indexOf(body))}`.toLowerCase();
+	router.replace({path});
+}
+
 async function loadDocuments(decision) {
 	const params = {
 		fl: 'id,symbol_s,schema_s,position_i,meeting_ss,title_*, description_*,file_ss,url_ss',
@@ -510,20 +524,18 @@ function toggleFilters(newFilters) {
 }
 
 function edit(hash) {
-	const {route} = this;
-	const {params} = route;
-	const {body, session, decision} = params;
+	const pathParser = /^(?<dec>\d+)(?:\/(?<para>.*))?/;
+
+	const {$route: route, $router: router} = this;
 	
-	let url = `${body}/${session}/${decision}/edit`;
+	const body = route.params.body.toUpperCase();
+	const parsed = pathParser.exec(route.params.decision);
+	const session = parseInt(route.params.session);
+	const decision  = parseInt(parsed.groups.dec);
 
-	if(hash) url += `#${hash}`;
-	
-	window.location.href = url;
-
-	// window.location.url(('/'+decision.body+'/'+decision.session+'/'+decision.decision+'/edit').toLowerCase());
-
-	// if(hash)
-	// 	$location.hash(hash);
+	hash = hash ? `#${hash}` : '';
+	const path = `${body}/${pad(session)}/${pad(decision)}/edit${hash}`.toLowerCase();
+	router.push({path});
 }
 
 function pad(input) {

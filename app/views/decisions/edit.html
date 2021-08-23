@@ -189,12 +189,13 @@
             <button class="btn btn-default pull-right" ng-click="close()">Close</button>
             <button class="btn btn-success" ng-if="::canEdit" ng-disabled="!contentEdited()" ng-click="save()">Save</button> &nbsp; &nbsp;
             <button class="btn btn-default" ng-if="::canEdit" ng-disabled="!contentEdited()" ng-click="cancel()">Cancel</button> &nbsp; &nbsp;
+            <checkbox ng-model="allowAddNodes" style="font-size:20px"></checkbox> Allow add nodes
         </div>
 
         <div class="row" style="margin-top:60px;height:100%">
             <div class="col-sm-6 edit-decision" style="height:86%">
 
-            	<div class="row" style="max-height: 150px; overflow-y: scroll">
+            	<div class="row" style="height: 150px; overflow-y: scroll">
             		<div class="col-sm-6">
 
                         <div class="form-group">
@@ -230,7 +231,7 @@
 
                 <div ng-if="decision" ng-disabled="contentEdited()" class="decision-nodes-div">
                     <div class="bg-orange">Decision {{symbol}}</div>
-                    <div class="document" style="height:100vh;overflow-y:scroll;padding:5px">
+                    <div class="document" style="height:calc(100vh - 260px);overflow-y:scroll;padding:5px">
                         <h1>{{decision.title|lstring}}</h1>
                         <div ng-repeat="node in decision.nodes">
                             <edit-element 
@@ -240,6 +241,7 @@
                                 :comments="comments" 
                                 :selected-node="selectedNode"
                                 :token-reader="tokenReader"
+                                :allow-add-nodes="allowAddNodes"
                                 @update:selected-node="updateSelectedNode"
                                 @change="updateDecision"
                             />

@@ -19,7 +19,7 @@
         <button class="btn btn-link edit" @click="edit">
           <span class="fa fa-edit" />
         </button>
-        <div v-if="isSelected">
+        <div v-if="allowAddNodes && isSelected">
           <button class="btn btn-sm btn-primary w-100 border-bottom-0 rounded-5 p-0 add-button" 
             @click="addNode(node._id, null)">+</button>
         </div>
@@ -32,11 +32,12 @@
           :selected-node.sync="selectedNode"
           :comments="comments"
           :token-reader="tokenReader"
+          :allow-add-nodes="allowAddNodes"
           @change="$emit('change', $event)"
           @update:selected-node="$emit('update:selected-node', $event)"
       />
     </element>
-    <div v-if="isSelected || (selectedNode && node.parentId === selectedNode._id)">
+    <div v-if="allowAddNodes && (isSelected || (selectedNode && node.parentId === selectedNode._id))">
       <button class="btn btn-sm btn-primary w-100 border-bottom-0 rounded-5 p-0 add-button" 
         @click="addNode(node.parentId, node._id)">+</button>
     </div>
@@ -86,6 +87,10 @@ export default {
         type: String,
         default: 'en'
       },
+      allowAddNodes: {
+        type: Boolean,
+        default: false
+      }
     },
     data() {
       return {
