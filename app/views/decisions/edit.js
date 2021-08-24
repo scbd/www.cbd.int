@@ -43,6 +43,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         $scope.selectedNode = null;
         $scope.updateSelectedNode = updateSelectedNode;
         $scope.updateDecision = load;
+        $scope.editComment = editComment;
         $scope.allowAddNodes = false;
 
         if(body=='COP') treaty = { code : "XXVII8" } ;
@@ -153,10 +154,12 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             });
         }
 
-        function updateSelectedNode(newNode) {
+        function updateSelectedNode(newNode, comments) {
+
             if(!newNode) {
                 $scope.selectedNode = null;
                 $scope.element = {};
+                $scope.commentResources = [];
                 return;
             }
             
@@ -165,6 +168,13 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
 
             $scope.selectedNode = selectedNode;
             $scope.element = _.cloneDeep(selectedNode);
+
+            $scope.commentResources = _.compact([data.code, $scope.element.code]);
+        }
+
+        function editComment(node) {
+            if(!$scope.selectedNode || $scope.selectedNode._id !== node._id) updateSelectedNode(node);
+            document.querySelector('#comments').scrollIntoView();
         }
 
         //===========================

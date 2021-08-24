@@ -12,12 +12,15 @@
           <!-- TODO - remove nbsp; -->
           &nbsp;<span v-html="htmlText" />
         </div>
-        <button class="btn btn-link comment">
+        <button class="btn btn-link action-button comment">
           <!-- TODO - fa-comments icon -->
-          <span class="fa fa-comment-o" />
+          <span class="fa fa-comment-o" @click="$emit('edit-comment', node)"/>
         </button>
-        <button class="btn btn-link edit" @click="edit">
+        <button class="btn btn-link action-button edit" @click="edit">
           <span class="fa fa-edit" />
+        </button>
+        <button class="btn btn-link action-button delete" @click="deleteNode">
+          <span class="fa fa-trash" />
         </button>
         <div v-if="allowAddNodes && isSelected">
           <button class="btn btn-sm btn-primary w-100 border-bottom-0 rounded-5 p-0 add-button" 
@@ -35,6 +38,7 @@
           :allow-add-nodes="allowAddNodes"
           @change="$emit('change', $event)"
           @update:selected-node="$emit('update:selected-node', $event)"
+          @edit-comment="$emit('edit-comment', $event)"
       />
     </element>
     <div v-if="allowAddNodes && (isSelected || (selectedNode && node.parentId === selectedNode._id))">
@@ -131,7 +135,8 @@ export default {
       save,
       cancel,
       addNode,
-      label
+      label,
+      deleteNode
     },
     mounted: load
 }
@@ -169,6 +174,10 @@ function toggleSelected() {
 function edit() {
   this.editor = true;
   this.editorHtml = this.htmlText;
+}
+
+function deleteNode() {
+  //TODO - delete
 }
 
 async function save() {

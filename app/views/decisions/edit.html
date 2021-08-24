@@ -67,7 +67,7 @@
         z-index:1;
     }
 
-    .edit-decision button.comment {
+    .edit-decision button.action-button {
         position: absolute;
         top:0px;
         right: 0px;
@@ -75,12 +75,12 @@
         margin: 0px
     }
 
-    .edit-decision button.edit {
-        position: absolute;
-        top:0px;
-        right: 20px;
-        z-index:1;
-        margin: 0px
+    .edit-decision button.action-button.edit {
+        right: 25px;
+    }
+
+    .edit-decision button.action-button.comment {
+        right: 50px;
     }
 
     .edit-decision element[has-comment]::after {
@@ -115,15 +115,12 @@
         font-size: 20px;
     }
 
-    .edit-decision button.comment,
-    .edit-decision button.edit,
-    .edit-decision button.comment:hover,
-    .edit-decision button.edit:hover {
+    .edit-decision button.action-button,
+    .edit-decision button.action-button:hover {
         text-decoration: none;
     }
 
-    .edit-decision button.comment,
-    .edit-decision button.edit {
+    .edit-decision button.action-button {
         color: #aaa;
     }
 
@@ -141,7 +138,7 @@
 
     .edit-decision .bg-orange{
         background-color:#6F5495!important;
-        xbackground-color:#fa6938!important;
+        /* background-color:#fa6938!important; */
         color:white!important;
         font-family: "Helvetica Neue", Helvetica, sans-serif, "Trebuchet MS";
         font-size: 14px;
@@ -244,6 +241,7 @@
                                 :allow-add-nodes="allowAddNodes"
                                 @update:selected-node="updateSelectedNode"
                                 @change="updateDecision"
+                                @edit-comment="editComment"
                             />
                         </div>
                     </div>
@@ -473,7 +471,7 @@
 
         <a name="comment"></a>
         <hr ng-if="canView && element.nodeType=='paragraph'"/>
-        <h4 ng-if="canView && element.nodeType=='paragraph'">
+        <h4 ng-if="canView && element.nodeType=='paragraph'" id="comments">
             Programme Officers comments
     	</h4>
     	<div ng-if="canView && element.nodeType=='paragraph'">
