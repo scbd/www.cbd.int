@@ -11,7 +11,6 @@ import './directives/decision-reference'
 import '~/directives/checkbox'
 import _       from 'lodash'
 import ng      from 'angular'
-import rangy   from 'rangy'
 import $       from 'jquery'
 import sectionList   from './data/sections'
 import paragraphList from './data/paragraphes'
@@ -26,7 +25,7 @@ import 'angular-vue'
 
 export { default as template } from './edit.html'
 
-export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$compile', 'ngDialog', 'user', '$anchorScroll','apiToken', function($scope, $http, $route, $location, $filter, $q, $compile, ngDialog, user, $anchorScroll, apiToken) {
+export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'user', '$anchorScroll','apiToken', function($scope, $http, $route, $location, $q, ngDialog, user, $anchorScroll, apiToken) {
 
         $scope.tokenReader = function(){ return apiToken.get()}
         $scope.route       = { params : $route.current.params, query: $location.search() }
@@ -73,16 +72,10 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         $scope.upload = upload;
         $scope.comments    = {};
         $scope.commentResources = [];
-        $scope.buildFileUrl = buildFileUrl;
         $scope.selectDecision = selectDecision;
         $scope.selectMeeting  = selectMeeting;
-        $scope.selectMeetingDocument = selectMeetingDocument;
-        $scope.selectNotification = selectNotification;
         $scope.actionEdit  = edit;
         $scope.isEditable  = isEditable;
-        $scope.actionClean = removeSelectionFormatting;
-        $scope.jumpTo      = jumpTo;
-        $scope.initials=function(t) { return _.startCase(t).replace(/[^A-Z]/g, ''); };
         $scope.addTo       = addTo;
         $scope.removeFrom  = removeFrom;
         $scope.element = {};
@@ -227,45 +220,9 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                     });
                 });
 
-                //updateCommentButton();
-
             }).catch(console.error);
         }
         
-        //updateCommentButton();
-
-        //===========================
-        //
-        //===========================
-        function clearCommentButton() {
-            ng.element('#content button.comment').remove();
-        }
-
-        //===========================
-        //
-        //===========================
-        function updateCommentButton() {
-
-            clearCommentButton();
-
-            $scope.$applyAsync(function(){
-
-                ng.element('#content element[data-type^=paragraph]').each(function(){
-
-                    var $this = ng.element(this);
-                    var info =  $this.data('info');
-                    var btn   = $compile('<button class="btn btn-link comment" ng-click="jumpTo(\'comment\')"><span class="fa fa-comment-o"></span><span class="fa fa-comments-o"></span></button>')($scope);
-
-                    if(($scope.comments[info.code]||[]).length)
-                        btn.addClass('has-comments');
-
-                    $this.append(btn);
-                });
-
-            });
-
-        }
-
         //===========================
         //
         //===========================
@@ -304,42 +261,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         //===========================
         //
         //===========================
-        function cleanup(element, deleteEmpty) {
-
-            if(element) {
-
-                element.subjects      = _(element.subjects     ||[]).uniq().value();
-                element.aichiTargets  = _(element.aichiTargets ||[]).uniq().value();
-                element.actors        = _(element.actors       ||[]).uniq().value();
-                element.statuses      = _(element.statuses     ||[]).uniq().value();
-                element.decisions     = _(element.decisions    ||[]).uniq().value();
-                element.notifications = _(element.notifications||[]).uniq().value();
-                element.documents     = _(element.documents    ||[]).uniq().value();
-                element.meetings      = _(element.meetings     ||[]).uniq().map(mettingUrlToCode).value();
-
-                if(deleteEmpty) { // Remove empty fields/arrays
-
-                    for(var key in element) {
-
-                        var val = element[key];
-
-                        if(val===undefined) { delete element[key]; continue; }
-                        if(val===null)      { delete element[key]; continue; }
-                        if(val==="")        { delete element[key]; continue; }
-
-                        if(_.isArray(val) && !val.length) {
-                            delete element[key]; continue;
-                        }
-                    }
-                }
-            }
-
-            return element;
-        }
-
-        //===========================
-        //
-        //===========================
         function mettingUrlToCode(m) {
 
             var meetingUrlRE = /^https?:\/\/www.cbd.int\/meetings\/([a-zA-Z0-9\-]+)$/;
@@ -348,31 +269,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                 m = m.replace(meetingUrlRE, '$1');
 
             return m;
-        }
-
-
-        //===========================
-        //
-        //===========================
-        function clean(node) {
-
-            for(var n = 0; n < node.childNodes.length; n ++) {
-
-                var child = node.childNodes[n];
-
-                if(child.nodeType === 8 || (child.nodeType === 3 && !/\S/.test(child.nodeValue))) {
-
-                    node.removeChild(child);
-                    n --;
-
-                } else if(child.nodeType === 1) {
-
-                    clean(child);
-
-                    if(!child.innerHTML)
-                        node.removeChild(child);
-                }
-            }
         }
 
         //===========================
@@ -485,34 +381,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         //===========================
         //
         //===========================
-        function buildFileUrl(item) {
-            return '/api/v2016/decision-texts/'+data._id+'/attachments/'+item.hash+'/stream';
-        }
-
-        ////////////////////
-        // DIALOGS
-        ////////////////////
-
-        //===========================
-        //
-        //===========================
-        function selectMeetingDocument() {
-
-            openDialog(import('./select-document-dialog'), { showClose: false }).then(function(dialog){
-
-                dialog.closePromise.then(function(res){
-
-                    if(!res.value)
-                        return;
-
-                    addTo(res.value, $scope.element.documents);
-                });
-            });
-        }
-
-        //===========================
-        //
-        //===========================
         function selectDecision() {
 
             openDialog(import('./select-decision-dialog'), { showClose: false }).then(function(dialog){
@@ -523,23 +391,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                         return;
 
                     addTo(res.value, $scope.element.decisions);
-                });
-            });
-        }
-
-        //===========================
-        //
-        //===========================
-        function selectNotification() {
-
-            openDialog(import('./select-notification-dialog'), { showClose: false }).then(function(dialog){
-
-                dialog.closePromise.then(function(res){
-
-                    if(!res.value)
-                        return;
-
-                    addTo(res.value.symbol, $scope.element.notifications);
                 });
             });
         }
@@ -619,112 +470,11 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
             }
             return null;
         }
-
-        //==============================
-        //
-        //==============================
-        function jumpTo(hash) {
-
-            if(!hash)
-                return;
-
-            $scope.$applyAsync(function() {
-                $anchorScroll(hash);
-            });
-        }
     }];
-
-    //===========================
-    //
-    //===========================
-    function replaceWithOwnChildren(el) {
-        var parent = el.parentNode;
-        while (el.hasChildNodes()) {
-            parent.insertBefore(el.firstChild, el);
-        }
-        parent.removeChild(el);
-    }
-
-    //===========================
-    //
-    //===========================
-    function removeSelectionFormatting() {
-        var range, sel = rangy.getSelection();
-
-        if(sel.isCollapsed)
-            return;
-
-        for (var r = 0; r < sel.rangeCount; ++r) {
-
-            var commonAncestor = $(sel.getRangeAt(r).commonAncestorContainer);
-
-            if(!commonAncestor.is("#content") && !commonAncestor.parents('#content').length) {
-                alert('Please select text only from the decision');
-                return;
-            }
-        }
-
-        for (var i = 0; i < sel.rangeCount; ++i) {
-            range = sel.getRangeAt(i);
-
-            // Split partially selected nodes
-            range.splitBoundaries();
-
-            // Get formatting elements. For this example, we'll count any
-            // element with display: inline, except <br>s.
-            var formattingEls = range.getNodes([1], function(el) {
-                return el.tagName != "BR";
-            });
-
-            // Remove the formatting elements
-            for (var j = 0; j<formattingEls.length; j++) {
-                replaceWithOwnChildren(formattingEls[j]);
-            }
-        }
-    }
 
     //===========================
     //
     //===========================
     function resData(res) {
         return res.data;
-    }
-
-    //========================================
-    //
-    //
-    //========================================
-    function solrEscape(value) {
-
-        if(value===undefined) throw "Value is undefined";
-        if(value===null)      throw "Value is null";
-        if(value==="")        throw "Value is null";
-
-        if(_.isNumber(value)) value = value.toString();
-        if(_.isDate  (value)) value = value.toISOString();
-
-        //TODO add more types
-
-        value = value.toString();
-
-        value = value.replace(/\\/g,   '\\\\');
-        value = value.replace(/\+/g,   '\\+');
-        value = value.replace(/\-/g,   '\\-');
-        value = value.replace(/\&\&/g, '\\&&');
-        value = value.replace(/\|\|/g, '\\||');
-        value = value.replace(/\!/g,   '\\!');
-        value = value.replace(/\(/g,   '\\(');
-        value = value.replace(/\)/g,   '\\)');
-        value = value.replace(/\{/g,   '\\{');
-        value = value.replace(/\}/g,   '\\}');
-        value = value.replace(/\[/g,   '\\[');
-        value = value.replace(/\]/g,   '\\]');
-        value = value.replace(/\^/g,   '\\^');
-        value = value.replace(/\"/g,   '\\"');
-        value = value.replace(/\~/g,   '\\~');
-        value = value.replace(/\*/g,   '\\*');
-        value = value.replace(/\?/g,   '\\?');
-        value = value.replace(/\:/g,   '\\:');
-
-        return value;
     }
