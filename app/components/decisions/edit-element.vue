@@ -12,16 +12,18 @@
           <!-- TODO - remove nbsp; -->
           &nbsp;<span v-html="htmlText" />
         </div>
-        <button class="btn btn-link action-button comment">
-          <!-- TODO - fa-comments icon -->
-          <span class="fa fa-comment-o" @click="$emit('edit-comment', node)"/>
-        </button>
-        <button class="btn btn-link action-button edit" @click="edit">
-          <span class="fa fa-edit" />
-        </button>
-        <button class="btn btn-link action-button delete" @click="deleteNode">
-          <span class="fa fa-trash" />
-        </button>
+        <div class="action-buttons row">
+          <button class="btn btn-link action-button comment">
+            <!-- TODO - fa-comments icon -->
+            <span class="fa fa-comment-o" @click="$emit('edit-comment', node)"/>
+          </button>
+          <button class="btn btn-link action-button edit" @click="edit">
+            <span class="fa fa-edit" />
+          </button>
+          <button v-if="!node.nodes || node.nodes.length === 0" class="btn btn-link action-button delete" @click="deleteNode">
+            <span class="fa fa-trash" />
+          </button>
+        </div>
         <div v-if="allowAddNodes && isSelected">
           <button class="btn btn-sm btn-primary w-100 border-bottom-0 rounded-5 p-0 add-button" 
             @click="addNode(node._id, null)">+</button>
@@ -176,8 +178,15 @@ function edit() {
   this.editorHtml = this.htmlText;
 }
 
-function deleteNode() {
+async function deleteNode() {
   //TODO - delete
+  const { node } = this;
+
+  const { _id, decisionId } = node;
+
+  await this.api.deleteDecisionNode(decisionId, _id);
+
+  this.$emit('change');
 }
 
 async function save() {

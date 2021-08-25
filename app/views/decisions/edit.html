@@ -67,20 +67,12 @@
         z-index:1;
     }
 
-    .edit-decision button.action-button {
+    .edit-decision div.action-buttons {
         position: absolute;
         top:0px;
         right: 0px;
         z-index:1;
         margin: 0px
-    }
-
-    .edit-decision button.action-button.edit {
-        right: 25px;
-    }
-
-    .edit-decision button.action-button.comment {
-        right: 50px;
     }
 
     .edit-decision element[has-comment]::after {
@@ -115,20 +107,21 @@
         font-size: 20px;
     }
 
-    .edit-decision button.action-button,
-    .edit-decision button.action-button:hover {
+    .edit-decision div.action-buttons button,
+    .edit-decision div.action-buttons button:hover {
         text-decoration: none;
     }
 
-    .edit-decision button.action-button {
+    .edit-decision div.action-buttons button {
         color: #aaa;
+        padding: 5px 3px;
+        margin: 0px !important;
     }
 
-
-    .edit-decision button.comment.has-comments {
+    .edit-decision div.action-buttons button.comment.has-comments {
         color: blue;
     }
-
+    
     .edit-decision button.comment              > .fa-comment-o  { display: inline; }
     .edit-decision button.comment              > .fa-comments-o { display: none; }
     .edit-decision button.comment.has-comments > .fa-comment-o  { display: none; }

@@ -39,6 +39,10 @@ export default class DecisionApi extends ApiBase
     return this.http.put(`api/v2021/decisions/${encodeURIComponent(decisionId)}/nodes/${encodeURIComponent(nodeId)}/text/${encodeURIComponent(locale)}`, { html }).then(res => res.data).catch(tryCastToApiError);
   }
 
+  async deleteDecisionNode(decisionId, nodeId) {
+    return this.http.delete(`api/v2021/decisions/${encodeURIComponent(decisionId)}/nodes/${encodeURIComponent(nodeId)}`).then(res => res.data).catch(tryCastToApiError);
+  }
+
   async getTreaties(code) {
     
     const result = await this.http.get(`api/v2015/treaties/${encodeURIComponent(code)}`, { cache: true }).then(res => res.data).catch(tryCastToApiError);
