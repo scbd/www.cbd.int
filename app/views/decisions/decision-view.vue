@@ -1,9 +1,9 @@
 <template>
 <div class="decision-tracking" v-if="decision">
-	<v-tour name="decision-view-tour" :steps="steps"></v-tour>
+	
 	<header-decisions>
 		<span class="float-right">
-			<a href="javascript:void(0)" @click="startTour">Help</a>
+			<decision-view-help title="Help" />
 			<a href="javascript:void(0)" v-if="canComment" class="btn btn-default" @click="edit('comment')" style="margin-top:2px;color:inherit">
 				<i class="fa fa-comment-o" aria-hidden="true"></i>
 			</a>
@@ -11,17 +11,17 @@
 				<i class="fa fa-edit" aria-hidden="true"></i>
 			</a>
 		</span>						
-		<h1>Decision {{decision.body | uppercase}} {{romans[decision.session]}}/{{decision.decision}}</h1>
+		<h1><span id="step1">Decision {{decision.body | uppercase}} {{romans[decision.session]}}/{{decision.decision}}</span></h1>
 	</header-decisions>
 
     <div class="view-decision row">
 		<div class="col-md-6">
 			<div class="document card border-primary">
     			<div class="card-header bg-primary text-white">
-    				<b v-if="decision" id="decision-symbol">{{decision.symbol || 'TODO'}}</b>
+    				<b v-if="decision" id="step2">{{decision.symbol || 'TODO'}}</b>
 
 					<div class="float-right">
-						<select id="locales" v-model="selectedLocale" class="badge badge-info">
+						<select id="step3" v-model="selectedLocale" class="badge badge-info">
 							<option 
 								v-for="(language, locale) in languages"
 								:key="locale" 
@@ -205,7 +205,7 @@ import MeetingCardList from '~/components/references/meeting-card-list.vue';
 import term from '~/filters/term.js';
 import languages from '~/data/languages.js';
 import lstring from '~/filters/lstring.js';
-import VueTour from 'vue-tour';
+import DecisionViewHelp from '~/components/decisions/decision-view-help.vue';
 
 const scrollOptions = {
 	block: 'center',
@@ -219,7 +219,7 @@ export default {
 		DocumentFiles,
 		DecisionCardList,
 		MeetingCardList,
-		VueTour
+		DecisionViewHelp
 	},
     filters: {
 		lstring,
@@ -244,39 +244,7 @@ export default {
 			filters: {},
 			allFilters: {},
 			selectedNode: null,
-			selectedLocale: 'en',
-			steps: [
-				{
-					target: 'h1',
-					header: {
-						title: 'Title',
-					},
-					content: `Decision!`,
-			        params: { 
-						enableScrolling: false,
-						placement: 'top',
-					}
-				},
-				{
-					target: '#decision-symbol',
-					header: {
-						title: 'Title',
-					},
-					content: `Decision Title!`,
-			        params: { 
-						enableScrolling: false,
-						placement: 'top',
-					}
-				},
-				{
-					target: '#locales',
-					content: 'Change language to see content on preferred language!',
-			        params: { 
-						enableScrolling: false,
-						placement: 'top',
-					}
-				}
-			]
+			selectedLocale: 'en'
 		}
 	},
     computed: {
@@ -328,9 +296,7 @@ export default {
 		lookupTermText,
 		loadFilters,
 		sum,
-		startTour,
 		onChangeSelectedNode
-
     },
 	mounted: load
 }
@@ -398,10 +364,6 @@ async function load() {
 			router.replace({path}); //TODO
 		}
 	}
-}
-
-function startTour() {
-	this.$tours['decision-view-tour'].start()
 }
 
 async function loadFilters() {
