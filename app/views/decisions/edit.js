@@ -154,7 +154,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             });
         }
 
-        function updateSelectedNode(newNode, comments) {
+        function updateSelectedNode(newNode) {
 
             if(!newNode) {
                 $scope.selectedNode = null;
@@ -174,7 +174,12 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
 
         function editComment(node) {
             if(!$scope.selectedNode || $scope.selectedNode._id !== node._id) updateSelectedNode(node);
-            document.querySelector('#comments').scrollIntoView();
+            $scope.$applyAsync(() => {
+                document.querySelector('a[name="comment"]').scrollIntoView({
+                    block: 'center',
+                    behavior: "smooth"
+                });
+            });
         }
 
         //===========================
@@ -209,8 +214,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         function cancel() {
             $scope.subjects = _.cloneDeep($scope.decision.subjects);
             $scope.aichiTargets = _.cloneDeep($scope.decision.aichiTargets);
-            $scope.selectedNode = null;
-            $scope.element = {} ;
+            updateSelectedNode($scope.selectedNode);
         }
 
         //===========================

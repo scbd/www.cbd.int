@@ -35,25 +35,22 @@
 						</a>
 					</div>
     			</div>
-    			<div class="card-body">
+    			<div class="card-body scrollable-section">
 					<h3 :lang="selectedLocale">{{decision.title | lstring}}</h3>
-					<div id="decision-node" class="scrollable-section" :style="style.decisionNode">
-						<div v-for="node in decision.nodes" :key="node._id">
-							<view-element 
-								:node="node" 
-								:filters="filters"
-								:selectedNode.sync="selectedNode"
-								:locale="selectedLocale"
-							/>
-						</div>
+					<div v-for="node in decision.nodes" :key="node._id">
+						<view-element 
+							:node="node" 
+							:filters="filters"
+							:selectedNode.sync="selectedNode"
+							:locale="selectedLocale"
+						/>
 					</div>
     			</div>
             </div>
 		</div>
 		<div class="col-md-6">
 			<div class="document card border-grey">
-				<div class="card-body">
-					<div id="decision-meta" class="scrollable-section" :style="style.decisionMeta">
+				<div class="card-body scrollable-section">
 					<dl>
 						<dt v-if="decision.body">Body</dt>
 						<dd v-if="decision.body">
@@ -186,7 +183,6 @@
 						</span>
 
 					</dl>
-					</div>	
 				</div>
 			</div>
 		</div>
@@ -249,10 +245,6 @@ export default {
 			allFilters: {},
 			selectedNode: null,
 			selectedLocale: 'en',
-			style: {
-				decisonNode: '0px',
-				decisionMeta: '0px'
-			},
 			steps: [
 				{
 					target: 'h1',
@@ -337,16 +329,9 @@ export default {
 		loadFilters,
 		sum,
 		startTour,
-		handleScroll,
 		onChangeSelectedNode
 
     },
-	created () {
-    	window.addEventListener('scroll', this.handleScroll);
-  	},
-  	destroyed () {
-	    window.removeEventListener('scroll', this.handleScroll);
-  	},
 	mounted: load
 }
 
@@ -413,7 +398,6 @@ async function load() {
 			router.replace({path}); //TODO
 		}
 	}
-	this.handleScroll();
 }
 
 function startTour() {
@@ -580,22 +564,6 @@ function sum(object) {
 	return _.sum(_.values(object));
 }
 
-function handleScroll() {
-	var top= 0;
-	const {style} = this;
-	if($('#decision-node').length > 0) {
-		top = $('#decision-node').offset().top - $(window).scrollTop();
-	}
-	style.decisionNode = `height: calc(100vh - ${top > 0 ? top : 0}px);`;
-
-	if($('#decision-meta').length > 0) {
-		top = $('#decision-meta').offset().top - $(window).scrollTop();
-	}
-	style.decisionMeta = `height: calc(100vh - ${top > 0 ? top : 0}px);`;
-
-	this.style = style;
-}
-
 </script>
 
 <style scoped>
@@ -605,6 +573,8 @@ function handleScroll() {
 
 .scrollable-section {
 	overflow: scroll;
+	height: 100vh;
+	padding-bottom: 300px;
 }
 
 .card-header:first-child {

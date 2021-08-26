@@ -1,6 +1,22 @@
 <template>
   <div>
     <element :data-type="dataType" :class="isSelected && 'selected'">
+        <div class="action-buttons row" :class="dataType?'absolute':'relative'">
+          <button 
+            v-if="node.code" 
+            class="btn btn-link action-button comment" 
+            :class="nodeComments.length > 0 && 'has-comments'"
+          >
+            <span class="fa fa-comments-o" @click="$emit('edit-comment', node)" />
+            <span class="fa fa-comment-o" @click="$emit('edit-comment', node)"/>
+          </button>
+          <button class="btn btn-link action-button edit" @click="edit">
+            <span class="fa fa-edit" />
+          </button>
+          <button v-if="!node.nodes || node.nodes.length === 0" class="btn btn-link action-button delete" @click="deleteNode">
+            <span class="fa fa-trash" />
+          </button>
+        </div>
         <div v-if="editor">
             <text-editor :html.sync="editorHtml" :locale="locale" :type="EditorTypes.Full" />
             <div class="text-right">
@@ -11,18 +27,6 @@
         <div v-else @click="toggleSelected">
           <!-- TODO - remove nbsp; -->
           &nbsp;<span v-html="htmlText" />
-        </div>
-        <div class="action-buttons row">
-          <button class="btn btn-link action-button comment">
-            <!-- TODO - fa-comments icon -->
-            <span class="fa fa-comment-o" @click="$emit('edit-comment', node)"/>
-          </button>
-          <button class="btn btn-link action-button edit" @click="edit">
-            <span class="fa fa-edit" />
-          </button>
-          <button v-if="!node.nodes || node.nodes.length === 0" class="btn btn-link action-button delete" @click="deleteNode">
-            <span class="fa fa-trash" />
-          </button>
         </div>
         <div v-if="allowAddNodes && isSelected">
           <button class="btn btn-sm btn-primary w-100 border-bottom-0 rounded-5 p-0 add-button" 
@@ -117,18 +121,23 @@ export default {
         return null;
       },
       isSelected() {
-          const { node, selectedNode } = this;
+        const { node, selectedNode } = this;
 
-          if(!selectedNode) return false;
+        if(!selectedNode) return false;
 
-          if(!(node || {})._id) return false;
+        if(!(node || {})._id) return false;
 
-          return node._id === selectedNode._id;
+        return node._id === selectedNode._id;
       },
       htmlText() {
-          const {node} = this;
-          
-          return this.$options.filters.lstring(node.html, 'en');
+        const {node} = this;
+        
+        return this.$options.filters.lstring(node.html, 'en');
+      },
+      nodeComments() {
+        const {node, comments} = this;
+
+        return comments[node.code] || [];
       }
     },
     methods: {
@@ -144,6 +153,8 @@ export default {
 }
 
 function label(type, value) {
+  if(!value) return '';
+
   let list = [];
   if(type === 'section') list = sectionList;
   else if(type === 'paragraph') list = paragraphList;

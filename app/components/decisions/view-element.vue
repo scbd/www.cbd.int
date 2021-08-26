@@ -212,8 +212,11 @@ function setSelectedNode() {
 }
 
 .selected {
-    border-color: #5bc0de;
     background-color: #baeaf8;
+    padding: 5px;
+    margin-bottom: 5px;
+    border: 1px solid blue;
+    border-radius: 4px;
 }
 
 .match-filter {

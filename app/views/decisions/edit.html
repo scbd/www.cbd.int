@@ -67,12 +67,20 @@
         z-index:1;
     }
 
-    .edit-decision div.action-buttons {
+    .edit-decision div.action-buttons.absolute {
         position: absolute;
         top:0px;
         right: 0px;
-        z-index:1;
-        margin: 0px
+        z-index: 1;
+        margin: 0px 8px;
+    }
+
+    .edit-decision div.action-buttons.relative {
+        position: relative;
+        align-items: flex-end;
+        float: right;
+        margin: 0px;
+        z-index: 1;
     }
 
     .edit-decision element[has-comment]::after {
@@ -173,7 +181,7 @@
 
 <div ng-hide="paramError" style="position:fixed;top:0px;left:0px;right:0px;bottom:0px;z-index:4000;background-color:white">
 
-    <div class="container" style="">
+    <div class="container">
 
         <div style="position:fixed;top:0px;left:0px;right:0px;background-color:#ddd;z-index:1000;padding:6px">&nbsp;
             <button class="btn btn-default pull-right" ng-click="close()">Close</button>
@@ -464,7 +472,7 @@
 
         <a name="comment"></a>
         <hr ng-if="canView && element.nodeType=='paragraph'"/>
-        <h4 ng-if="canView && element.nodeType=='paragraph'" id="comments">
+        <h4 ng-if="canView && element.nodeType=='paragraph'">
             Programme Officers comments
     	</h4>
     	<div ng-if="canView && element.nodeType=='paragraph'">
