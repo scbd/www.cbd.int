@@ -9,8 +9,8 @@ import ClassicEditor from 'ckeditor5';
 import { component as ckeditor } from 'vue-ckeditor5'
 
 export const EditorTypes = {
-  'Limited': ['bold', 'italic'],
-  'Full' : ['bold', 'italic', 'bulletedList', 'numberedList']
+  'Limited': ['heading', '|', 'bold', 'italic', 'link'],
+  'Full' : ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'outdent', 'indent', '|', 'blockQuote', 'insertTable', 'undo', 'redo']
 }
 
 export default {
@@ -38,7 +38,24 @@ export default {
     computed: {
       editorConfig() {
         return {
-            toolbar: this.type || EditorTypes.Limited,
+            toolbar: {
+              items: this.type || EditorTypes.Limited
+            },
+            image: {
+              toolbar: [
+                'imageTextAlternative',
+                'imageStyle:inline',
+                'imageStyle:block',
+                'imageStyle:side'
+              ]
+            },
+            table: {
+              contentToolbar: [
+                'tableColumn',
+                'tableRow',
+                'mergeTableCells'
+              ]
+            },
             language: {
                 ui: 'en', // The UI will be English.
                 content: this.locale

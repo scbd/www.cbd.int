@@ -259,70 +259,83 @@
                         <div class="form-group">
                             <label for="elementNodeType">Level</label>
                             <select class="form-control" id="elementNodeType" ng-model="element.nodeType" ng-disabled="!canEdit && (formattingLocked || !element)">
-                                <option value=""></option>
-                                <option value="title">Decision Title</option>
-                                <option value="body">Decision Body</option>
-                                <option value="annex">Decision Annex</option>
-                                <option value="section">Section</option>
-                                <option value="sectionTitle">Section Title</option>
                                 <option value="paragraph">Paragraph</option>
+                                <option value="annex" ng-if="!element.parentId">Decision Annex</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3" ng-if="element.nodeType === 'annex'">
                         <div class="form-group">
-                            <label for="elementSection">Section</label>
+                            <label for="elementAnnex">Annex</label>
                             <select 
                                 class="form-control" 
-                                id="elementSection" 
-                                ng-model="element.section" 
-                                ng-options="o.code as o.title for o in collections.sections" 
-                                ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || isDisabled(element.parentId, 'section')"
+                                id="elementAnnex" 
+                                ng-model="element.annex" 
+                                ng-options="o.value as o.title for o in collections.annexes" 
+                                ng-disabled="!canEdit || formattingLocked || element.nodeType!='annex'"
                             >
                                 <option></option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label for="elementParagraph">Paragraph</label>
-                            <select 
-                                class="form-control" 
-                                id="elementParagraph" 
-                                ng-model="element.paragraph" 
-                                ng-options="o.value as o.title for o in collections.paragraphes" 
-                                ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || isDisabled(element.parentId, 'paragraph')"
-                            >
-                                <option></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label for="elementItem">Item</label>
-                            <select 
-                                class="form-control" 
-                                id="elementItem" 
-                                ng-model="element.item" 
-                                ng-options="o.value as o.title for o in collections.items" 
-                                ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || !element.paragraph || isDisabled(element.parentId, 'item')"
-                            >
-                                <option></option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <label for="elementSubitem">Subitem</label>
-                            <select 
-                                class="form-control" 
-                                id="elementSubitem" 
-                                ng-model="element.subitem" 
-                                ng-options="o.value as o.title for o in collections.subItems" 
-                                ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || !element.paragraph || !element.item || isDisabled(element.parentId, 'subitem')"
-                            >
-                                <option></option>
-                            </select>
+                    <div class="col-sm-8" ng-if="element.nodeType !== 'annex'">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="elementSection">Section</label>
+                                    <select 
+                                        class="form-control" 
+                                        id="elementSection" 
+                                        ng-model="element.section" 
+                                        ng-options="o.code as o.title for o in collections.sections" 
+                                        ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || isDisabled(element.parentId, 'section')"
+                                    >
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="elementParagraph">Paragraph</label>
+                                    <select 
+                                        class="form-control" 
+                                        id="elementParagraph" 
+                                        ng-model="element.paragraph" 
+                                        ng-options="o.value as o.title for o in collections.paragraphes" 
+                                        ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || isDisabled(element.parentId, 'paragraph')"
+                                    >
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="elementItem">Item</label>
+                                    <select 
+                                        class="form-control" 
+                                        id="elementItem" 
+                                        ng-model="element.item" 
+                                        ng-options="o.value as o.title for o in collections.items" 
+                                        ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || !element.paragraph || isDisabled(element.parentId, 'item')"
+                                    >
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="elementSubitem">Subitem</label>
+                                    <select 
+                                        class="form-control" 
+                                        id="elementSubitem" 
+                                        ng-model="element.subitem" 
+                                        ng-options="o.value as o.title for o in collections.subItems" 
+                                        ng-disabled="!canEdit || formattingLocked || element.nodeType!='paragraph' || !element.paragraph || !element.item || isDisabled(element.parentId, 'subitem')"
+                                    >
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

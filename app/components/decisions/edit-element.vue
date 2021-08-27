@@ -58,6 +58,7 @@
 import DecisionApi from '~/api/decisions.js';
 import lstring from '~/filters/lstring.js';
 import TextEditor, {EditorTypes} from '~/components/text-editor.vue';
+import annexList from '~/views/decisions/data/annexes.js';
 import sectionList from '~/views/decisions/data/sections.js';
 import paragraphList from '~/views/decisions/data/paragraphes.js';
 import itemList from '~/views/decisions/data/items.js';
@@ -113,7 +114,8 @@ export default {
       EditorTypes() {return EditorTypes;},
       dataType() {
         const {node} = this;
-        const {section, paragraph, item, subitem} = node;
+        const {annex, section, paragraph, item, subitem} = node;
+        if(annex)     return `annex ${label('annex', annex)}`;
         if(subitem)   return `paragraph ${label('section',section)} ${label('paragraph',paragraph)}${label('item',item)} (${label('subitem',subitem)})`;
         if(item)      return `paragraph ${label('section',section)} ${label('paragraph',paragraph)}${label('item',item)}`;
         if(paragraph) return `paragraph ${label('section',section)} ${label('paragraph',paragraph)}`;
@@ -156,7 +158,8 @@ function label(type, value) {
   if(!value) return '';
 
   let list = [];
-  if(type === 'section') list = sectionList;
+  if(type === 'annex') list = annexList;
+  else if(type === 'section') list = sectionList;
   else if(type === 'paragraph') list = paragraphList;
   else if(type === 'item') list = itemList;
   else if(type === 'subitem') list = subItemList;
@@ -190,7 +193,9 @@ function edit() {
 }
 
 async function deleteNode() {
-  //TODO - delete
+  
+  if(!confirm('Are you sure you want to delete?')) return;
+
   const { node } = this;
 
   const { _id, decisionId } = node;

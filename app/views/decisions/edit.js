@@ -12,15 +12,16 @@ import '~/directives/checkbox'
 import _       from 'lodash'
 import ng      from 'angular'
 import $       from 'jquery'
+import annexList     from './data/annexes'
 import sectionList   from './data/sections'
 import paragraphList from './data/paragraphes'
 import itemList      from './data/items'
 import subItemList   from './data/sub-items'
 import actorList     from './data/actors'
 import statusesList  from './data/statuses'
-import EditElement from '~/components/decisions/edit-element.vue';
-import DecisionApi from '~/api/decisions.js';
-import areEquals from '~/filters/areEquals';
+import EditElement from '~/components/decisions/edit-element.vue'
+import DecisionApi from '~/api/decisions.js'
+import areEquals from '~/filters/areEquals'
 import 'angular-vue'
 
 export { default as template } from './edit.html'
@@ -83,6 +84,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
 
         $scope.noNarrower = function(t) { return !t.narrowerTerms || !t.narrowerTerms.length; };
         $scope.collections = {
+            annexes     : annexList,
             sections    : sectionList,
             paragraphes : paragraphList,
             items       : itemList,
@@ -131,11 +133,13 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
 
             }).then(function(res){
 
-                $scope.selectedNode = null;
-                $scope.element = {};
                 $scope.decision = res;
                 $scope.subjects = _.cloneDeep(res.subjects|| []);
                 $scope.aichiTargets = _.cloneDeep(res.aichiTargets || []);
+
+                if(!_.isEmpty($scope.selectedNode)) {
+                    updateSelectedNode(findNode($scope.decision, $scope.selectedNode._id));
+                }
 
             }).then(function(){
 
@@ -164,7 +168,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             }
             
             const selectedNode = _.cloneDeep(newNode);
-            selectedNode.nodeType = selectedNode.paragraph && `paragraph`;
+            selectedNode.nodeType = selectedNode.annex ? 'annex' : 'paragraph';
 
             $scope.selectedNode = selectedNode;
             $scope.element = _.cloneDeep(selectedNode);
@@ -204,8 +208,12 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             }
 
             if(selectedNode) {
+                if(element.nodeType !== 'annex') element.annex = null;
+                else element.annex = element.annex || annexList[0].value;
+
                 await $scope.api.updateDecisionNode(decisionId, element._id, element);
                 load();
+                updateSelectedNode(selectedNode);
                 saved = true;
             }
             if(saved) alert( "Your document has been successfully saved." );
