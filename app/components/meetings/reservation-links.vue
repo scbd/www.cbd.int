@@ -1,22 +1,25 @@
 <template>
   <div  v-if="isVisible">
-    <div v-if="youTubeLinks.length" class="position-relative"  @focusout="clickYoutube($event)">
-      <a @click="clickYoutube()" class="badge badge-dark dropdown-toggle" href="javascript:void(0)" aria-haspopup="true" aria-expanded="false">
+    <div v-if="youTubeLinks.length" class="position-relative" :class="{'dropleft': this.position==='left', 'dropright': this.position==='right' }">
+      <a class="badge badge-dark dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Watch <i class="fa fa-video-camera"></i>
       </a>
 
-      <div ref="youtube" :class="{'drop-left': this.position==='left', 'drop-right': this.position!=='left'}" class="dropdown-menu drop" x-placement="left-start" >
+      <div ref="youtube" class="dropdown-menu dropdown-menu-right" x-placement="left-start" >
         <a  :href="url" v-for="{ url, locale } in youTubeLinks" :key="url" target="video" class="fix dropdown-item text-nowrap"><i aria-hidden="true" class="fa fa-play-circle"></i> {{locale | langText}}</a>
       </div>
     </div>
 
-    <div v-if="nonYouTubeLinks.length" class="position-relative"  @focusout="clickLinks($event)">
-      <a @click="clickLinks()" class="badge badge-info dropdown-toggle" href="javascript:void(0)" aria-haspopup="true" aria-expanded="false">
+    <div v-if="nonYouTubeLinks.length" class="position-relative"  :class="{'dropleft': this.position==='left', 'dropright': this.position==='right' }">
+      <a class="badge badge-info dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Links <i ref="caret" class="fa fa-caret-down"></i>
       </a>
 
-      <div ref="links" :class="{'drop-left': this.position==='left', 'drop-right': this.position!=='left'}" class="dropdown-menu drop" x-placement="left-start" >
-        <a :href="url" v-for="{ url, name } in nonYouTubeLinks" :key="url" target="video" class="fix dropdown-item text-nowrap"><i aria-hidden="true" class="fa fa-link"></i> {{name}}</a>
+      <div ref="links" class="dropdown-menu dropdown-menu-right" x-placement="left-start" >
+        <a :href="url" v-for="{ url, name, locale } in nonYouTubeLinks" :key="url" target="video" class="fix dropdown-item text-nowrap"><i aria-hidden="true" class="fa fa-link"></i> 
+          {{name}} 
+          <span v-if="locale">({{locale | langText}})</span>
+        </a>
       </div>
     </div>
   </div>
@@ -24,18 +27,17 @@
 
 <script>
   import * as ResService from '~/services/reservation'
-
-  const langsMap = { ar:'العربية', en: 'English',  es: 'Español', fr: 'Français', ru:'Русский', zh:'中文' }
+  import langsMap        from '../languages'
 
   export default {
     name      : 'ReservationLinks',
     props     : {
                   reservation: { type: Object, required: true },
                   schedule   : { type: Object, required: true },
-                  position   : { type: String, default: 'left'}
+                  position   : { type: String, default: ''}
                 },
     computed  : { isVisible, youTubeLinks, nonYouTubeLinks, displayLinksImmediately },
-    methods   : { clickYoutube, clickLinks, refresher, clearRefresher },
+    methods   : { refresher, clearRefresher },
     filters   : { langText },
     data, created, mounted, beforeDestroy
   }
@@ -59,25 +61,6 @@
   /*****************/
   /* vue methods
   /****************/
-  function clickYoutube(e){
-    const { youtube } = this.$refs
-
-    if(e?.relatedTarget) return setTimeout(() => youtube.classList.toggle('show'), 500)
-
-    youtube.classList.toggle('show')
-  }
-
-  function clickLinks(e){
-    const { links, caret } = this.$refs
-
-    if(e?.relatedTarget) return setTimeout(() => links.classList.toggle('show'), 500)
-
-    links.classList.toggle('show')
-
-    caret.classList.toggle('fa-caret-down')
-    caret.classList.toggle('fa-caret-up')
-  }
-
   function refresher(){
     const { displayLinksImmediately } = this.reservation
 
@@ -128,9 +111,3 @@
   function langText(code){ return langsMap[code] }
 
 </script>
-
-<style scoped>
-  .drop { position: absolute; transform: translate3d(-140px, 0px, 0px); top: 0px; left: 0px; will-change: transform; }
-  .drop-left { transform: translate3d(-140px, 0px, 0px); }
-  .drop-right{ transform: translate3d(80px, 0px, 0px); }
-</style>
