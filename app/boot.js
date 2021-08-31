@@ -44,7 +44,7 @@ export default function bootApp(window, require, defineX) {
           'datepicker'        : `${cdnUrl}npm/bootstrap-datepicker@1.4.0/js/bootstrap-datepicker.min`,
           'toastr'            : `${cdnUrl}npm/angular-toastr@1.7.0/dist/angular-toastr.min`,
           'ngVue'             : `${cdnUrl}npm/ngVue@1.7.7/build/index.min`,
-          'angular-vue'       : `${cdnUrl}npm/@scbd/angular-vue@2.0.0/dist/angular-vue.min`,
+          'angular-vue'       : `${cdnUrl}npm/@scbd/angular-vue@3.0.0/dist/angular-vue.min`,
           'conferenceCal'     : `${cdnUrl}npm/@scbd/conference-cal@0.1.2/dist/lib/ConferenceCal.umd.min`,
           'angular-cache'     : `${cdnUrl}npm/angular-cache@4.6.0/dist/angular-cache.min`,
           'PageHeaderFixed'   : `${cdnUrl}npm/@scbd/page-header-fixed/dist/PageHeaderFixed.umd.min`,
@@ -61,7 +61,10 @@ export default function bootApp(window, require, defineX) {
           'html2canvas'       :  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min',
           'angular-grid'      : `${cdnUrl}npm/angulargrid@0.6.5/angulargrid.min`,
           'mark'              : `${cdnUrl}npm/mark.js@8.11.1/dist/mark.min`,
-          'vue-tippy'         : `${cdnUrl}npm/vue-tippy@4.10.0/dist/vue-tippy.umd`
+          'ckeditor5'         : `${cdnUrl}npm/@ckeditor/ckeditor5-build-classic@27.1.0/build/ckeditor.min`,
+          'vue-ckeditor5'     : `${cdnUrl}npm/@ckeditor/ckeditor5-vue2@1.0.5/dist/ckeditor.min`,
+          'vue-tippy'         : `${cdnUrl}npm/vue-tippy@4.10.0/dist/vue-tippy.umd`,
+          'vue-tour'          : `${cdnUrl}npm/vue-tour@2.0.0/dist/vue-tour.umd.min`
       },
       shim: {
           'ngDialog'             : { deps : ['angular', `css!${cdnUrl}combine/npm/ng-dialog@0.6.1/css/ngDialog.min.css,npm/ng-dialog@0.6.1/css/ngDialog-theme-default.min.css`] },
@@ -69,6 +72,7 @@ export default function bootApp(window, require, defineX) {
           'interface'            : { deps : []},
           'magnific-popup'       : { deps : ['jquery', `css!${cdnUrl}npm/magnific-popup@1.1.0/dist/magnific-popup.css` ]},
           'dragula'              : { deps : [`css!${cdnUrl}npm/dragula@3.7.3/dist/dragula.min.css`]},
+          'vue-tour'             : { deps : ['ngVue', `css!${cdnUrl}npm/vue-tour@2.0.0/dist/vue-tour.css`]},
           'alasql'               : { deps : ['xlsx']},
           'gmapsapi'             : { exports: 'google'},
           'facebook'             : { exports: 'FB'},
@@ -83,6 +87,8 @@ export default function bootApp(window, require, defineX) {
           'amchart/themes/light' : { deps : ['amchart'] },
           'amchart/pie'          : { deps : ['amchart'] },
           'angular-grid'         : { deps : ['angular'] },
+          'vue-ckeditor5'        : { deps : ['ckeditor5'] },
+          
       },
       packages: [
           { name: 'amchart', main: 'amcharts.min', location : cdnUrl+'npm/amcharts3@3.21.15/amcharts' },

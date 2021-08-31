@@ -19,7 +19,24 @@
 	</header-decisions>
 
 	<div class="view-decision row">
-		<div class="col-md-7">
+		<div class="col-md-6">
+			<div class="document card border-primary">
+    			<div class="card-header bg-primary text-white">
+    				<b ng-if="newDecision">UNEP/CBD/COP/DEC/{{::newDecision.session}}/{{::newDecision.decision}}</b>
+    				<a href="#" ng-show="filters" class="float-right badge badge-info" ng-click="filter(null)" style="margin-top:2px">
+    					<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> filtered <i class="fa fa-times" aria-hidden="true"></i>
+    				</a>
+    			</div>
+    			<div class="card-body">
+					<h3>{{::newDecision.title.en}}</h3>
+    				<div ng-repeat="node in newDecision.nodes">
+						<view-element ng-vue="vueOptions" :node="node" />
+					</div>
+    			</div>
+            </div>
+		</div>
+
+		<div class="col-md-6">
             <div class="document card border-primary">
     			<div class="card-header bg-primary text-white">
     				<b ng-if="decision">UNEP/CBD/COP/DEC/{{::decision.session}}/{{::decision.decision}}</b>

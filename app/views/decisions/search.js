@@ -10,6 +10,8 @@ import _ from 'lodash'
 import actorList from './data/actors'
 import statusesList from './data/statuses'
 import sessionList from './data/sessions'
+import DecisionSearchHelp from '~/components/decisions/decision-search-help.vue'
+import 'angular-vue'
 
 export { default as template } from './search.html';
 
@@ -29,6 +31,10 @@ export default ['$scope', '$http', '$q', '$location', '$compile', '$timeout', '$
             actors          : [],
             statuses        : [],
             freeText        : []            
+        };
+
+        $scope.vueOptions = {
+            components : {DecisionSearchHelp}
         };
 
         $scope.collections = {

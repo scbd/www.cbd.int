@@ -38,9 +38,10 @@
 
 <script>
 
-import   Api           , { mapObjectId }from '../api.js'
-import { dateTimeFilter }               from '../filters.js'
-import   moment                         from 'moment'
+import Api from '../api.js';
+import { mapObjectId } from '~/api/api-base.js';
+import { dateTimeFilter } from '../filters.js';
+import moment from 'moment';
 
 export default {
   name       : 'SessionsList',

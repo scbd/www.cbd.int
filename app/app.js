@@ -1,4 +1,8 @@
 import angular from 'angular'
+import Vue from 'vue'
+import CreateAngularVuePlug   from "./vue/angular-vue-plug";
+import AngularVueRoutePlugin  from "./vue/angular-vue-route-plugin";
+import AngularVueRouterPlugin from "./vue/angular-vue-router-plugin";
 import 'toastr'
 
 const app = angular.module('app', angular.defineModules(
@@ -114,5 +118,17 @@ const app = angular.module('app', angular.defineModules(
       }
     }
   }
+
+app.run(['$injector', function ($injector) {
+
+  Vue.use(new AngularVueRoutePlugin ($injector));
+  Vue.use(new AngularVueRouterPlugin($injector));
+
+}]);
+
+function registerVuePlugin(name, service){
+  const newPlugin = new CreateAngularVuePlug(name, service)
+  window.Vue.use(newPlugin);
+}
 
 export default app;

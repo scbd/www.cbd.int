@@ -25,7 +25,7 @@
 
 import { Duration } from 'luxon'
 import { asDateTime } from '../filters.js'
-import languages from '../../languages.js'
+import languages from '~/data/languages.js';
 
 const Types = { 
   youtube : { param : "t", format: "s" }
