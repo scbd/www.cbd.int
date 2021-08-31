@@ -36,7 +36,7 @@
 					</div>
     			</div>
     			<div class="card-body scrollable-section">
-					<h3 :lang="selectedLocale">{{decision.title | lstring}}</h3>
+					<h3 :lang="selectedLocale">{{decision.title | lstring(this.selectedLocale)}}</h3>
 					<div v-for="node in decision.nodes" :key="node._id">
 						<view-element 
 							:node="node" 

@@ -23,11 +23,27 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr v-if="decision && decision.title && decision.title.en">
+                        <td class="border border-grey p-2"><span v-html="decision.title.en" /></td>
+                        <td class="border border-grey p-2">
+                            <div v-if="decision.editor">
+                                <input type="text" class="w-100 p-2" :locale="selectedLanguage" v-model="decision.editorHtml" />
+                                <div class="text-right">
+                                    <span class="btn text-success" @click="save(decision)"><i class="fa fa-check"></i></span>
+                                    <span class="btn text-danger" @click="cancel(decision)"><i class="fa fa-times"></i></span>
+                                </div>
+                            </div>
+                            <div v-else class="paragraph" @click="edit(decision, true)">
+                                <span v-if="decision.title[selectedLanguage]" :lang="selectedLanguage" v-html="decision.title[selectedLanguage]" />
+                                <span v-else class="text-muted">&lt;click to add translation&gt;</span>
+                            </div>
+                        </td>
+                    </tr>
                     <tr v-for="(row, index) in rows" :key="index" v-show="!isEmpty(row.html)">
                         <td class="border border-grey p-2"><span v-html="row.html.en" /></td>
                         <td class="border border-grey p-2">
                             <div v-if="rows[index].editor">
-                                <text-editor :html.sync="editorHtml" :locale="selectedLanguage" />
+                                <text-editor :html.sync="row.editorHtml" :locale="selectedLanguage" />
                                 <div class="text-right">
                                     <span class="btn text-success" @click="save(row)"><i class="fa fa-check"></i></span>
                                     <span class="btn text-danger" @click="cancel(row)"><i class="fa fa-times"></i></span>
@@ -63,6 +79,7 @@ export default {
             selectedLanguage: 'fr',
             rows: [],
             nodes: [],
+            decision: {}
         }
     },
     computed: {
@@ -118,8 +135,10 @@ async function created() {
 
 
     const decision = await this.api.getDecision(code);
-
-    // TODO Title
+    decision.editor = false;
+    decision.editorHtml = '';
+    decision.title = decision.title || {}
+    this.decision = decision;
 
     const rowData = await this.api.queryDecisionNodes(code);
     rowData.forEach(row=>{
@@ -130,36 +149,42 @@ async function created() {
     this.rows = rowData;
 }
 
-function edit(row) {
+function edit(row, isTitle) {
     row.editor = true;
-    row.editorHtml = row.html[this.selectedLanguage] || '';
+    row.editorHtml = (isTitle? row.title : row.html)[this.selectedLanguage] || '';
 }
 
 async function saveAll() {
-    const {rows} = this;
-    const openRows = rows.filter((r) => r.editor);
+    const {decision, rows} = this;
+    const openRows = [decision, ...rows].filter((r) => r.editor);
     openRows.forEach(r => this.save(r));
 }
 
 async function cancelAll() {
-    const {rows} = this;
-    rows.forEach(r => {
+    const {decision, rows} = this;
+    [decision, ...rows].forEach(r => {
         r.editor = false;
         r.editorHtml = '';
     })
 }
 
 async function save(row) {
-    const html   = row.editorHtml;
-    const locale = this.selectedLanguage;
+    if(!isEmpty(row.title)) {
+        row.title[this.selectedLanguage] = row.editorHtml;
+        const result = await this.api.updateDecision(row._id, row);
+        this.decision = {...result, editor: false, editorHtml: ''};
+    } else {
+        const html   = row.editorHtml;
+        const locale = this.selectedLanguage;
 
-    const { decisionId } = row
-    
-    const result = await this.api.updateDecisionNodeText(decisionId, row._id, locale, html );
-    
-    row.html = result;
-    row.editor = false;
-    row.editorHtml = '';
+        const { decisionId } = row
+        
+        const result = await this.api.updateDecisionNodeText(decisionId, row._id, locale, html );
+        
+        row.html = result;
+        row.editor = false;
+        row.editorHtml = '';
+    }
 }
 
 function cancel(row) {

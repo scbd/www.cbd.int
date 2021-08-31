@@ -41,21 +41,8 @@ export default {
             toolbar: {
               items: this.type || EditorTypes.Limited
             },
-            image: {
-              toolbar: [
-                'imageTextAlternative',
-                'imageStyle:inline',
-                'imageStyle:block',
-                'imageStyle:side'
-              ]
-            },
-            table: {
-              contentToolbar: [
-                'tableColumn',
-                'tableRow',
-                'mergeTableCells'
-              ]
-            },
+            image: this.type == EditorTypes.Full ? {toolbar: ['imageTextAlternative','imageStyle:inline','imageStyle:block','imageStyle:side']} : {},
+            table: this.type === EditorTypes.Full ? {contentToolbar: ['tableColumn','tableRow','mergeTableCells']} : {},
             language: {
                 ui: 'en', // The UI will be English.
                 content: this.locale
