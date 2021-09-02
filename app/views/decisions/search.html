@@ -1,4 +1,4 @@
-<div class="decision-tracking">
+﻿<div class="decision-tracking">
     <style>
         .chip {
             display: inline-block;
@@ -55,7 +55,7 @@
                                     <i 
                                         ng-if="!['freeText', 'session'].includes(key)"
                                         class="fa fa-exclamation-circle" 
-                                        ng-class="{ 'text-secondary': !value.notInclude, 'text-warning': value.notInclude}" 
+                                        ng-class="{'text-warning': value.notInclude}" 
                                         ng-click="toggleNotInclude(value, key)"
                                     >
                                     </i>
