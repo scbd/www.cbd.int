@@ -76,6 +76,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         $scope.commentResources = [];
         $scope.selectDecision = selectDecision;
         $scope.selectMeeting  = selectMeeting;
+        $scope.selectMeetingDocument = selectMeetingDocument;
         $scope.actionEdit  = edit;
         $scope.isEditable  = isEditable;
         $scope.addTo       = addTo;
@@ -172,6 +173,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
 
             $scope.selectedNode = selectedNode;
             $scope.element = _.cloneDeep(selectedNode);
+            $scope.element.documents = $scope.element.documents || [];
 
             $scope.commentResources = _.compact([data.code, $scope.element.code]);
         }
@@ -397,6 +399,20 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
 
                 fileInfo.error = (err||{}).data || err;
 
+            });
+        }
+
+        function selectMeetingDocument() {
+
+            openDialog(import('./select-document-dialog'), { showClose: false }).then(function(dialog){
+
+                dialog.closePromise.then(function(res){
+
+                    if(!res.value)
+                        return;
+
+                    addTo(res.value, $scope.element.documents);
+                });
             });
         }
 

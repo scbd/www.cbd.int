@@ -253,7 +253,15 @@ export default {
         statuses() { return statuses},
         romans() { return romanChars},
 		aichiTargets() { return aichiTargets},
-		languages() {return languages},
+		languages() {
+			const {decision} = this;
+			if(!decision) return [];
+
+			const {title} = decision;
+			if(!title) return [];
+
+			return _.pick(languages, _.keys(title));
+		},
 		canEdit() {
 			return true;
 			// const { $auth } = this;
@@ -281,7 +289,9 @@ export default {
     },
 	watch: {
 		selectedNode: onChangeSelectedNode,
-		filters() {
+		filters(val) {
+			if(_.isEmpty(val)) return;
+			
 			this.$nextTick().then(() => {
 				document.querySelector(".paragraph:not(.dimmed)").scrollIntoView(scrollOptions);	
 			});
