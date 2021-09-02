@@ -1,4 +1,4 @@
-﻿<div class="decision-tracking">
+<div class="decision-tracking">
     <style>
         .chip {
             display: inline-block;
@@ -51,9 +51,18 @@
                     <div class="row" ng-if="selectedFilter" style="border-bottom:1px solid #eee; padding-bottom:10px">
                         <div class="col-md-12">
                             <span ng-repeat="(key, filters) in selectedFilter">
-                                <span class="badge badge-primary chip" ng-repeat="value in filters" ng-click="removeFilter(value, key)">
-                                    {{value.title|lstring}}
-                                    <i class="fa fa-minus-circle"></i>
+                                <span ng-repeat="value in filters">
+                                    <i 
+                                        ng-if="!['freeText', 'session'].includes(key)"
+                                        class="fa fa-exclamation-circle" 
+                                        ng-class="{ 'text-secondary': !value.notInclude, 'text-warning': value.notInclude}" 
+                                        ng-click="toggleNotInclude(value, key)"
+                                    >
+                                    </i>
+                                    <span class="badge chip" ng-class="{ 'badge-primary': !value.notInclude, 'badge-danger': value.notInclude}">
+                                        {{value.title|lstring}}
+                                        <i class="fa fa-minus-circle" ng-click="removeFilter(value, key)"></i>
+                                    </span>
                                 </span>
                             </span>
                         </div>

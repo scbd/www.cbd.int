@@ -90,6 +90,14 @@ export default ['$scope', '$http', '$q', '$location', '$compile', '$timeout', '$
             $scope.search();
         }
 
+        $scope.toggleNotInclude = function(value, list) {
+            var list = $scope.selectedFilter[list];
+            var object = list.find(l => l.code === value.code);
+            object.notInclude = !object.notInclude;
+            updateQueryString();
+            $scope.search();
+        }
+
 
 		var canceler 				= null;
         $scope.search = function(selected, list, skipQS, count){
@@ -102,7 +110,11 @@ export default ['$scope', '$http', '$q', '$location', '$compile', '$timeout', '$
                 '$and':[]
             }
             _.each($scope.selectedFilter, function(item, key){
+
+                if(key == 'freeText' && ($scope.freeText||'')!='') return;
+
                 var inQuery;
+                var notInQuery;
                 //for session split to two fields
                 if(key == 'session'){
                     var sessionOr =  _(item).map(function(v){ 
@@ -114,25 +126,27 @@ export default ['$scope', '$http', '$q', '$location', '$compile', '$timeout', '$
                     }).value();
                     if(sessionOr && sessionOr.length > 0)
                         inQuery = {$or    : sessionOr };
-                }
-                else if(key == 'freeText' && ($scope.freeText||'')!=''){
-                    query.$and.push({
-                        'text' : { '$$contains' : $scope.freeText }
-                    })
-                }
-                else{
-                    var codes = _.map(item, 'code');
-                    if(codes.length){
-                        var prefix = '';
-                        if(key != 'elementType')
-                            prefix = 'inheritance.';
+                } else{
+                    var prefix = '';
+                    if(key != 'elementType')
+                        prefix = 'inheritance.';
 
-                        inQuery = {}
-                        inQuery[prefix+key] = { '$in' : codes } 
+                    var inCodes = _.map(item.filter(i => !i.notInclude), 'code');
+                    var notInCodes = _.map(item.filter(i => i.notInclude), 'code');
+                    if(inCodes.length) {
+                        inQuery = {};
+                        inQuery[prefix+key] = { '$in' : inCodes };
+                    }
+                    if(notInCodes.length) {
+                        notInQuery = {};
+                        notInQuery[prefix+key] = { '$nin' : notInCodes };
                     }
                 }
+
                 if(inQuery)
                     query.$and.push(inQuery);
+                if(notInQuery)
+                    query.$and.push(notInQuery);
             });
             var qs = {
                 c   : 1
@@ -146,7 +160,9 @@ export default ['$scope', '$http', '$q', '$location', '$compile', '$timeout', '$
             if(query.$and.length == 0)
                 query.$and = undefined;
 
-            qs.q  =  JSON.stringify(query)
+            qs.q  =  JSON.stringify(query);
+
+            if($scope.freeText) qs.t = $scope.freeText;
 
             var countQuery;
 
