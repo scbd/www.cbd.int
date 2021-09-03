@@ -1,4 +1,4 @@
-﻿import '~/filters/lodash'
+import '~/filters/lodash'
 import '~/filters/lstring'
 import '~/filters/term'
 import './view-element'
@@ -48,6 +48,12 @@ export default ['$scope', '$http', '$q', '$location', '$compile', '$timeout', '$
 
         $scope.addSearchFilter = function(selected, list, skipQS){
             
+            var notInclude = false;
+            if(list != 'freeText' && list != 'session' && selected.charAt(0) === '!') {
+                selected = selected.substring(1);
+                notInclude = true;
+            }
+
             if(list == 'freeText'){
                 if(selected!=''){
                     $scope.selectedFilter.freeText[0] = ({ title: selected, type:list, code:selected });
@@ -74,7 +80,7 @@ export default ['$scope', '$http', '$q', '$location', '$compile', '$timeout', '$
             if(list == 'session')
                 title = selectedDetails.group + '-' + selectedDetails.title;
 
-            $scope.selectedFilter[list].push({ title: title, type:list, code:selected });
+            $scope.selectedFilter[list].push({ title: title, type:list, code:selected, notInclude });
             if(!skipQS)
                 updateQueryString();
         }
@@ -278,7 +284,11 @@ export default ['$scope', '$http', '$q', '$location', '$compile', '$timeout', '$
 
             _.each($scope.selectedFilter, function(item, key){
                 $location.replace();
-                $location.search(key, _.pluck(item, 'code'))
+                var codes = [];
+                item.forEach(i => {
+                    codes.push(i.notInclude?`!${i.code}`:`${i.code}`);
+                });
+                $location.search(key, codes);             
             })
 
             if(($scope.freeText||'')!=='')

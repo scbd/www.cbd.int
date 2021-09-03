@@ -170,10 +170,10 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             
             const selectedNode = _.cloneDeep(newNode);
             selectedNode.nodeType = selectedNode.annex ? 'annex' : 'paragraph';
-
+            selectedNode.documents = selectedNode.documents || [];
+            
             $scope.selectedNode = selectedNode;
             $scope.element = _.cloneDeep(selectedNode);
-            $scope.element.documents = $scope.element.documents || [];
 
             $scope.commentResources = _.compact([data.code, $scope.element.code]);
         }
