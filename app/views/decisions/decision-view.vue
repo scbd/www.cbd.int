@@ -160,9 +160,9 @@
 						</dd>
 						<br>
 
-						<div v-if="documents && documents.length > 0">
-							<dt>Document</dt>
-							<dd v-for="d in documents" :key="d">
+						<div v-if="decisionDocuments && decisionDocuments.length > 0">
+							<dt>Decision document</dt>
+							<dd v-for="d in decisionDocuments" :key="d">
 								<div class="card" style="margin-bottom:4px">
 									<div class="card-body" style="padding:12px;font-size:0.9em">
 										<document-files :files="d.files" class="visible-xs pull-right"></document-files>
@@ -171,6 +171,13 @@
 										<document-files class="hidden-xs" :files="d.files"></document-files>
 									</div>
 								</div>
+							</dd>
+						</div>
+
+						<div v-if="documents && documents.length > 0">
+							<dt>Documents</dt>
+							<dd>
+								<meeting-document-card-list :documents="documents"></meeting-document-card-list>
 							</dd>
 						</div>
 
@@ -202,6 +209,7 @@ import aichiTargets from '~/data/reports/aichiTargets.json';
 import DocumentFiles from '~/components/references/document-files.vue';
 import DecisionCardList from '~/components/references/decision-card-list.vue';
 import MeetingCardList from '~/components/references/meeting-card-list.vue';
+import MeetingDocumentCardList from '~/components/references/meeting-document-card-list.vue';
 import term from '~/filters/term.js';
 import languages from '~/data/languages.js';
 import lstring from '~/filters/lstring.js';
@@ -219,6 +227,7 @@ export default {
 		DocumentFiles,
 		DecisionCardList,
 		MeetingCardList,
+		MeetingDocumentCardList,
 		DecisionViewHelp
 	},
     filters: {
@@ -240,7 +249,7 @@ export default {
 		return {
 			api: {},
 			decision: null,
-			documents: [],
+			decisionDocuments: [],
 			filters: {},
 			allFilters: {},
 			selectedNode: null,
@@ -285,6 +294,17 @@ export default {
 			counts.aichiTargets = _.countBy(getTags(collection, "aichiTargets", true));
 			counts.subjects = _.countBy(getTags(collection, "subjects", true));
 			return counts;
+		},
+		documents() {
+			const {decision, selectedNode} = this;
+			
+			const collection = findNode(decision, selectedNode) || decision;
+
+			const { documents } = collection;
+
+			if(_.isEmpty(documents)) return null;
+
+			return documents.filter(code => !/^SCBD\/LOG/.test(code||'')); //return public documents only
 		}
     },
 	watch: {
@@ -301,7 +321,7 @@ export default {
 		edit,
 		toggleFilters,
 		loadRelatedDecisions,
-		loadDocuments,
+		loadDecisionDocuments,
 		isFilterSelected,
 		lookupTermText,
 		loadFilters,
@@ -358,7 +378,7 @@ async function load() {
 	decision.decisions = _.union(decision.decisions||[], relatedDecisions);
 	this.decision = decision;
 
-	this.documents = await this.loadDocuments(decision);
+	this.decisionDocuments = await this.loadDecisionDocuments(decision);
 
 	await this.loadFilters();
 
@@ -418,7 +438,7 @@ async function onChangeSelectedNode(selectedNode) {
 	router.replace({path});
 }
 
-async function loadDocuments(decision) {
+async function loadDecisionDocuments(decision) {
 	const params = {
 		fl: 'id,symbol_s,schema_s,position_i,meeting_ss,title_*, description_*,file_ss,url_ss',
 		q : 'schema_s:(decision recommendation) AND treaty_s:'+decision.treaty + ' AND body_s:'+decision.body + ' AND session_i:'+decision.session + ' AND decision_i:'+decision.decision, 
