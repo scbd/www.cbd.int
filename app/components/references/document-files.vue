@@ -1,7 +1,7 @@
 <template>
     <div class="document-files">
         <div class="hidden-xs" v-for="(languages, type) in byTypes" :key="type">
-            <i :class="`fa ${(MIMES[type] || MIMES.default).icon}`" :style="{color: MIMES[type].color}"></i>
+            <i :class="`fa ${(MIMES[type] || MIMES.default).icon}`" :style="{color: (MIMES[type] || MIMES.default).color}"></i>
             <span v-for="(file, language) in languages" :key="language">
                 <a target="_blank" :href="file.url" @click="$event.stopPropagation();">
                     <span class="visible-md-inline visible-lg-inline visible-xl-inline language">
@@ -32,7 +32,7 @@
                         <a 
                             v-for="(file,type) in types" 
                             :key="type"
-                            :class="`btn btn-sm ${MIMES[type].btn || 'btn-default'}`"
+                            :class="`btn btn-sm ${(MIMES[type] || MIMES.default).btn || 'btn-default'}`"
                             style="margin-right:5px;font-size:16px;"
                             target="_blank"  
                             :href="file.url">

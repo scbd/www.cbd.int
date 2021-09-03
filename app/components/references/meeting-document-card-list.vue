@@ -33,11 +33,19 @@ export default {
     },
     created,
     methods: {
+        loadDocumentList,
         lookupMeetingDocuments,
+    },
+    watch: {
+        documents: loadDocumentList
     }
 }
 
 async function created() {
+    await this.loadDocumentList();   
+}
+
+async function loadDocumentList() {
     const codes = this.documents.filter(c => !!c);
 
     const linkDocuments = codes.filter(c => isLink(c))

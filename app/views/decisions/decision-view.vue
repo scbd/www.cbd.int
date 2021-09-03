@@ -300,7 +300,7 @@ export default {
 			
 			const collection = findNode(decision, selectedNode) || decision;
 
-			const { documents } = collection;
+			const documents = getTags(collection, 'documents');
 
 			if(_.isEmpty(documents)) return null;
 
