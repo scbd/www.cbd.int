@@ -46,6 +46,15 @@
   </style>
 
   <div>
+      <div class="col-xs-12" ng-if="!scheduleCtrl.frames">
+        <div class="alert alert-warning" role="alert" >
+          <span >
+              <b>No streamId set for conference </b> <br>
+              Please have IT administrators associate the conference and streamId. 
+          </span>
+        </div>
+      </div>
+      
       <div class="col-xs-12" ng-if="scheduleCtrl.frames.length==0">
           <h3 ng-if="scheduleCtrl.getTimezone()">{{::scheduleCtrl.now()|moment:'tz':scheduleCtrl.getTimezone()|moment:'calendar':(undefined|moment):scheduleCtrl.CALENDAR}}</h3>
           No more activities scheduled for the day
@@ -130,7 +139,7 @@
                                           <a ng-if=":: r.sideEvent" ng-href="https://www.cbd.int/side-events/{{::r.sideEvent.id}}" target="sideEvent" style="color:inherit">{{r.sideEvent.title || r.title}}</a>
                                       </div>
 
-                                      <div ng-if="!scheduleCtrl.all" class="schedule-item-location">
+                                      <div ng-if="scheduleCtrl.showRooms || !scheduleCtrl.all" class="schedule-item-location">
                                           <em>{{:: r.room.title}}</em>
                                           <em ng-if="r.room.location">- {{::r.room.location}}</em>
                                       </div>

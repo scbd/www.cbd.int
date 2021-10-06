@@ -48,19 +48,23 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 
             }).then(function(conf){
                 _ctrl.conferenceTimezone = conf.timezone;
-                _ctrl.code = conf.code
-                _ctrl.all = conf.schedule.all
-                $scope.schedule = conf.schedule
+                _ctrl.code               = conf.code
+                _ctrl.all                = conf.schedule.all
+                _ctrl.showRooms          = conf.schedule.showRooms
+                $scope.schedule          = conf.schedule
 
                 options.params.datetime = _ctrl.now();
                 
             }).then(function(){
+                if(!streamId) return {}
+
                 const url = _ctrl.all?  `/api/v2016/cctv-streams/${streamId}/all` : 
                                         `/api/v2016/cctv-streams/${streamId}`
 
                 return $http.get(url, options);
 
             }).then(function(res) {
+                if(!res.data) return {}
 
                 _streamData = res.data;
 
@@ -72,6 +76,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                 ]);
 
             }).then(function(res) {
+                if(!res[0]) return
 
                 var types = _.reduce(res[0].data, function(ret, r){ ret[r._id] = r; return ret; }, {});
                 var rooms = _.reduce(res[1].data, function(ret, r){ ret[r._id] = r; return ret; }, {});
