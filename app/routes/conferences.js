@@ -12,13 +12,15 @@ import * as introductionView      from '~/views/meetings/introduction'
 import * as articleView           from '~/views/articles/index'
 
 // On-demand views
-const documentIdView        = { component: ()=>import('~/views/meetings/documents/management/document-id') }
-const inSessionView         = { component: ()=>import('~/views/meetings/documents/in-session-documents') }
-const scheduleView          = { component: ()=>import('~/views/meetings/documents/agenda') }
-const parallelMeetingsView  = { component: ()=>import('~/views/meetings/parallel-meetings') }
-const notificationIdView    = { component: ()=>import('~/views/notifications/index-id') }
-const virtualTableView      = { component: ()=>import('~/views/virtual-tables/index') }
-const sessionListView       = { component: ()=>import('~/components/meetings/sessions/session-list.vue') }
+const documentIdView        = { component: ()=>import('~/views/meetings/documents/management/document-id')   .catch(traceError) }
+const inSessionView         = { component: ()=>import('~/views/meetings/documents/in-session-documents')     .catch(traceError) }
+const scheduleView          = { component: ()=>import('~/views/meetings/documents/agenda')                   .catch(traceError) }
+const parallelMeetingsView  = { component: ()=>import('~/views/meetings/parallel-meetings')                  .catch(traceError) }
+const notificationIdView    = { component: ()=>import('~/views/notifications/index-id')                      .catch(traceError) }
+const virtualTableView      = { component: ()=>import('~/views/virtual-tables/index')                        .catch(traceError) }
+const sessionListView       = { component: ()=>import('~/components/meetings/sessions/session-list.vue')     .catch(traceError) }
+const sessionIdView         = { component: ()=>import('~/components/meetings/sessions/edit.vue')             .catch(traceError)}
+const interpretersPanelView = { component: ()=>import('~/components/meetings/sessions/interpreters-view.vue').catch(traceError)}
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
@@ -43,7 +45,9 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:code/virtual-tables/events',         { ...mapView(angularViewWrapper),  resolve: { ...virtualTableView, user:currentUser(), routePrams: injectRouteParams({type:'event'}) }, reloadOnSearch:false})
     .when('/:code/schedules',                     { ...mapView(angularViewWrapper),  resolve: { ...scheduleView }, reloadOnSearch:true })
     .when('/:code/insession',                     { ...mapView(angularViewWrapper),  resolve: { ...inSessionView }, reloadOnSearch:false })
-    .when('/:code/sessions',                      { ...mapView(vueViewWrapper),      resolve : { ...sessionListView,        user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
+    .when('/:code/sessions',                      { ...mapView(vueViewWrapper),      resolve: { ...sessionListView,        user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
+    .when('/:code/sessions/:sessionId',           { ...mapView(vueViewWrapper),      resolve: { ...sessionIdView,          user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
+    .when('/:code/interpreter-panel',             { ...mapView(vueViewWrapper),      resolve: { ...interpretersPanelView,  user : securize(["Administrator","EditorialService", "StatementAdmin", "ScbdStaff", "Interpreters"]) }, reloadOnSearch:false })
     .when('/:code/:meeting',                      { ...mapView(introductionView),    resolve: { routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) } })
     .when('/:code/:meeting/documents',            { ...mapView(documentsView),       resolve: { showMeeting : resolveLiteral(false) },                    reloadOnSearch:false })
     .when('/:code/:meeting/documents/:id',        { ...mapView(angularViewWrapper),  resolve: { ...documentIdView, user : securize(["Administrator","EditorialService"]) },  reloadOnSearch:false })
@@ -62,3 +66,8 @@ app.run(['$compile', '$rootScope','$location', async function($compile, $rootSco
     conferenceHeader.html('').append('<conference-header><conference-header>')
     $compile(conferenceHeader.contents())($rootScope);
 }]);
+
+function traceError(e) {
+    console.error(e);
+    throw e;
+}

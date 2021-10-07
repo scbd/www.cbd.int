@@ -77,6 +77,8 @@ import   Session                            from './session.vue'
 import   EditRow                            from './edit-row.vue'
 import   TagSelector                        from './tag-selector.vue'
 import   moment                             from 'moment'
+import   remapCode                          from './re-map.js'
+import remap from './re-map.js'
 
 export default {
   name      : 'SessionEdit',
@@ -129,21 +131,33 @@ function mounted(){
 }
 
 async function init(){
-    const { sessionId, meeting: meetingCode } = this.route.params
+    const { sessionId, code: conferenceCode } = this.route.params;
+    const meetingCode = remapCode(this.route.params.meeting);
 
     const promises = [
-      this.api.getMeetingByCode(meetingCode),
       this.api.getSessionById(sessionId),
-      this.api.getInterventionsBySessionId(sessionId, { s:{datetime:1}}),
-    ]
+      this.api.getInterventionsBySessionId(sessionId, { s:{datetime:1}})
+    ];
 
-    const [ meeting, session, interventions ] = await Promise.all(promises);
+    if(meetingCode) {
+      promises.push(this.api.getMeetingByCode(meetingCode))
+    }
 
-    if(!meeting) throw Error("Meeting not found");
+    const [ session, interventions, meeting ] = await Promise.all(promises);
+
     if(!session) throw Error("Session not found");
-    if(!session.meetingIds.includes(meeting._id)) throw Error("Meeting & Session do not match");
+    if(meeting && !session.meetingIds.includes(meeting._id)) throw Error("Meeting & Session do not match");
+    
+    if(meeting) {
+      this.meetings = [ meeting ];
+    }
+    else {
+      const meetingIds = _(session.meetingIds).map(remapCode).uniq().value();
+      const meetings   = await Promise.all(meetingIds.map(id=>this.api.getMeetingById(id)));
 
-    this.meetings              = [ meeting ];
+      this.meetings = meetings.filter(o=>!!o.agenda);
+    }
+
     this.session               = session;
     this.interventions         = interventions;
     this.pendingInterventions  = await this.queryPendingInterventions();
@@ -227,17 +241,16 @@ function onSearch() {
 }
 
 async function queryPendingInterventions(args={}){
-  if(!this.meetings[0]) return []
+  if(!this.meetings.length) return []
 
   const { t, agendaItem } = args;
   const   isPending       = { status: 'pending' };
   const   hasFiles        = { 'files.0': {$exists: true} }; 
   const   meetingIds      = { meetingId : { $in: this.meetings.map(m=>mapObjectId(m._id)) } }; 
-  const   meetingId       = this.meetings[0]._id;
   const   q               = mergeQueries(isPending, hasFiles, meetingIds, agendaItem);
   const   l               = this.maxResultCount;
 
-  const textSearch = t? { t, meetingId } : {};
+  const textSearch = t? { t } : {};
   
   this.pendingInterventions = await this.api.queryInterventions({ q, l, ...textSearch  });
 
@@ -245,13 +258,16 @@ async function queryPendingInterventions(args={}){
 }
 
 function agendaItems() {
-  return this.meetings.map(m=>({
-    normalizedSymbol : m.normalizedSymbol,
-    items : m.agenda.items.map(i=>({ ...i, 
-      meetingId: m._id, 
-      display:   `${i.item} - ${i.shortTitle}`,
-    }))
-  }));
+  return this.meetings.map(m=>{
+    const prefix = withPrefix ? (m.agenda.prefix||'') : '';
+    return {
+      normalizedSymbol : m.normalizedSymbol,
+      items : m.agenda.items.map(i=>({ ...i, 
+        meetingId: m._id, 
+        display:   `${prefix} ${i.item} - ${i.shortTitle || i.title}`.trim(),
+      }))
+    };
+  });
 }
 function isInPast({ date } ={}){
   if(!date) return false
@@ -267,7 +283,7 @@ function isInFuture({ date } ={}){
 
 </script>
 <style scoped>
-  .sticky-date { top: 155px; background-color: white; z-index:55; }
+  .sticky-date { top: 155px; background-color: white; }
   @media screen and (max-width: 768px) {
     .sticky-date { top: 30px; }
   }

@@ -156,6 +156,7 @@
 import $    from 'jquery';
 import i18n from './locales.js'
 import Api  from './api.js'
+import remapCode  from './sessions/re-map.js'
 
 export default {
     name: 'uploadStatement',
@@ -218,19 +219,18 @@ export default {
         async init(){
 
             if(this.route.params.meeting){
-            
-                const meetingCode = this.route.params.meeting;
+                const meetingCode = remapCode(this.route.params.meeting);
                 const meeting     = await this.api.getMeetingByCode(meetingCode)
 
                 this.meetings    = [meeting];
             }
             else if(this.route.params.code){
-                const conferenceCode = this.route.params.code
+                const conferenceCode = remapCode(this.route.params.code);
                 const conference     = await this.api.getConference(conferenceCode);
-                const meetingIds     = conference.MajorEventIds;
+                const meetingIds     = conference.MajorEventIDs.map(remapCode);
                 const meetings       = await Promise.all(meetingIds.map(id=>this.api.getMeetingById(id)));
 
-                this.meetings = meetings;
+                this.meetings = meetings.filter(o=>!!o.agenda);
             }
             else {
                 error = { message : "Invalid status: No Meeting or Conference"}

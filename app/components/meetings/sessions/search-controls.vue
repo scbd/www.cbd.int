@@ -2,37 +2,9 @@
 <template >
   <div class="row mb-3">
     <div class="col-3 pr-0">
-      <multiselect
-        v-if="meetings.length"
-        id="xxx"
-        v-model="selectedAgendaItems"
-        deselect-label="remove this value"
-        :placeholder="$t('Agenda Item')"
-        :options="agendaItems"
-        :searchable="false"
-        :multiple="true"
-        group-values="items"
-        group-label="normalizedSymbol"
-        :hide-selected="true"
-        track-by="item"
-        label="display"
-        @select="onChange"
-        @remove="onChange"
-        class="agenda"
-        >
-        <template  slot="option" slot-scope="props" >
-          <div class="row" v-if="props.option.$groupLabel">
-            <div class="col-12">
-              <span class="filter-label">{{ props.option.$groupLabel}}</span>
-            </div>
-          </div>
-          <div class="row" v-if="!props.option.$groupLabel">
-            <div class="col-12">
-              <span  >{{props.option.display}}</span>
-            </div>
-          </div>
-        </template>
-      </multiselect>
+      <div class="input-group">
+        <AgendaSelect v-model="selectedAgendaItems" :meetings="meetings" @change="onChange" :max="10" :multiple="true" />
+      </div>
     </div>
     <div class="col-9">
       <div class="input-group">
@@ -67,19 +39,18 @@ import { debounce          } from 'lodash'
 import { mapObjectId       } from '../api.js'
 import { dateTimeFilterUTC } from '../filters.js'
 
-import Multiselect        from 'vue-multiselect'
+import AgendaSelect       from './agenda-item-select.vue'
 import i18n               from '../locales.js'
 
 
 export default {
   name      : 'SearchControls',
-  components: { Multiselect },
+  components: { AgendaSelect },
   props     : { 
                 meetings: { type: Array, required: true },
               },
   methods   : { onChange : debounce(onChange, 400), buildQuery, clearText},
   filters   : { dateTimeFilterUTC },
-  computed  : { agendaItems },
   data,
   i18n,
   created() { this.onChange() },
@@ -96,16 +67,6 @@ function data(){
 function clearText(){
   this.freeText=''
   this.onChange()
-}
-
-function agendaItems() {
-  return this.meetings.map(m=>({
-    normalizedSymbol : m.normalizedSymbol,
-    items : m.agenda.items.map(i=>({ ...i, 
-      meetingId: m._id, 
-      display:   `${i.item} - ${i.shortTitle}`,
-    }))
-  }));
 }
 
 function onChange(){
