@@ -5,34 +5,48 @@
     deselect-label="remove this agenda item"
     :placeholder="$t('Agenda Item')"
     :options="agendaItems"
-    :searchable="false"
-    :multiple="multiple"
+    :searchable="true"
     :max="max" 
-    :hide-selected="multiple? true : false"
+    :multiple="multiple"
+    :close-on-select="!multiple"
+    :clear-on-select="!multiple"
+    :hide-selected="multiple"
     :preserveSearch="true"
     @input="onInput"
     class="agenda"
-    group-values="items"
-    group-label="normalizedSymbol"
-    track-by="item"
-    label="display"
+    track-by="key"
+    label="textSearch"
     >
 
     <template slot="maxElements">
       <small class="text-danger"> {{$t('Maximum 1 selection')}}</small>
     </template>
 
+    <template slot="option" slot-scope="{option}">
+      <AgendaItem :item="option" :show-caption="true"/>
+    </template>   
+
+    <template slot="tag" slot-scope="{option,remove}">
+      <div class="tag">
+        <span class="tag-remove text-danger" @click="remove(option)">
+          <i class="fa fa-times"></i>
+        </span>
+        <AgendaItem :item="option" :show-caption="true"/>
+      </div>
+    </template>   
   </multiselect>
 </template>
 
 <script>
+import _ from 'lodash'
 import   Multiselect         from 'vue-multiselect'
 import   i18n                from '../locales.js'
 import { dateTimeFilterUTC } from '../filters.js'
+import   AgendaItem   from './agenda-item.vue'
 
 export default {
   name      : 'AgendaItemSelect',
-  components: { Multiselect },
+  components: { Multiselect, AgendaItem },
   props     : { 
                 meetings: { type:   Array          , required: true },
                 multiple: { type:   Boolean        , required: false, default: true },
@@ -69,16 +83,36 @@ function onInput(){
 }
 
 function agendaItems() {
-  return this.meetings.map(m=>({
-    normalizedSymbol : m.normalizedSymbol,
-    items : m.agenda.items.map(i=>({ ...i, 
+
+  const withPrefix = this.meetings.length>1;
+
+  const entries = _(this.meetings).map(m=>{
+    const prefix = withPrefix ? (m?.agenda?.prefix || m.normalizedSymbol ) : '';
+    const color  = m?.agenda?.color;
+    return m.agenda.items.map(i=>({ ...i, 
+      color,
+      prefix,
       meetingId: m._id, 
-      display:   `${i.item} - ${i.shortTitle}`,
-    }))
-  }));
+      key: `${m._id}-${i.item}`,
+      textSearch: `${prefix} ${i.item} - ${i.title || i.shortTitle}`.trim(),
+    }));
+  }).flatten().value();
+
+  return entries;
 }
 
 function value(newValue){
   this.selectedAgendaItems = newValue? newValue : []
 }
 </script>
+
+<style scoped>
+ .tag {
+   white-space:nowrap;
+   overflow:hidden;
+   text-overflow: ellipsis;
+ }
+ .tag-remove {
+   cursor: pointer;
+ }
+</style>

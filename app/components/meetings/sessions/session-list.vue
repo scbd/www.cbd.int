@@ -41,6 +41,7 @@
 import   Api           , { mapObjectId }from '../api.js'
 import { dateTimeFilter }               from '../filters.js'
 import   moment                         from 'moment'
+import   remapCode                      from './re-map.js'
 
 export default {
   name       : 'SessionsList',
@@ -51,20 +52,30 @@ export default {
   methods    : { getUrl, meetingQuery,conferenceQuery, sessionNumber, isInProgress, now },
   computed   : { now },
   filters    : { dateTimeFilter },
-  created, data
+  created, 
+  data
 }
 
 function data(){
   return { 
     sessions: [],
-    api: undefined
+    api: undefined,
+    isMeeting: !!this.route?.params?.meeting
   }
 }
 
-function getUrl({ _id, meetings }) {
-  const { symbol } = meetings[0]
 
-  return `/meetings/${encodeURIComponent(symbol)}/sessions/${encodeURIComponent(_id)}`
+function getUrl({ _id, meetings }) {
+  const isMeeting = this.route?.params?.meeting;
+
+  if(isMeeting) {
+    const { symbol } = meetings[0]
+    return `/meetings/${encodeURIComponent(symbol)}/sessions/${encodeURIComponent(_id)}`
+  }
+  else {
+    const { code }   = this.route.params;
+    return `/conferences/${encodeURIComponent(code)}/sessions/${encodeURIComponent(_id)}`;
+  }
 }
 
 async function created(){
@@ -88,12 +99,13 @@ async function meetingQuery(){
 }
 
 async function conferenceQuery(){
-  const { code } = this.route.params
+  const code = remapCode(this.route.params.code);
 
   if(!code) throw new Error('No meeting id or conference code route param for session list')
 
-  const q                              = { 'code': code };
-  const { MajorEventIDs: meetingIds }  = await this.api.getConference(code);
+  const q          = { 'code': code };
+  const conference = await this.api.getConference(code);
+  const meetingIds = conference.MajorEventIDs.map(remapCode);
 
   return { meetingIds : { $in: meetingIds.map(m=>mapObjectId(m)) } };
 }

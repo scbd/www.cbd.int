@@ -42,6 +42,7 @@ import { dateTimeFilter  } from '../filters.js'
 import   Session           from './session.vue'
 import   SearchControls    from './search-controls.vue'
 import   InterventionRow   from './intervention-row.vue'
+import remapCode  from './re-map.js'
 
 
 export default {
@@ -72,9 +73,18 @@ function data(){
 async function created(){
   this.api = new Api(this.tokenReader);
 
-  const meeting = await this.api.getMeetingByCode(this.route.params.meeting);
+  if(this.route.params.meeting) {
+    const meeting = await this.api.getMeetingByCode(this.route.params.meeting);
+    this.meetings = [meeting];
+  }
+  else {
+    const conferenceCode = remapCode(this.route.params.code);
+    const conference     = await this.api.getConference(conferenceCode);
+    const meetingIds     = conference.MajorEventIDs.map(remapCode);
+    const meetings       = await Promise.all(meetingIds.map(id=>this.api.getMeetingById(id)));
 
-  this.meetings = [meeting];
+    this.meetings = meetings.filter(o=>!!o.agenda);
+  }
 }
 
 async function mounted(){

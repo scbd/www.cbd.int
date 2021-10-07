@@ -3,7 +3,7 @@
 
     <div class="col-2 pr-0">
       <div class="input-group">
-        <AgendaSelect v-model="selectedAgendaItem" :meetings="meetings" @change="onChange" :multiple="true" />
+        <AgendaSelect v-model="selectedAgendaItems" :meetings="meetings" @change="onChange" :max="10" :multiple="true" />
       </div>
     </div>
 
@@ -36,7 +36,7 @@
 
 <script>
 
-import Api                from '../api.js'
+import Api, { mapObjectId } from '../api.js'
 import AgendaSelect       from './agenda-item-select.vue'
 import OrganizationSearch from './organization-search-v2.vue'
 import i18n               from '../locales.js'
@@ -65,7 +65,7 @@ export default {
 
 function data(){
   return {
-    selectedAgendaItem  : [],
+    selectedAgendaItems : [],
     organization        : [],
     timeText            : dateTimeFilter((new Date()).toISOString()),
     intervalRef         : undefined
@@ -94,7 +94,7 @@ function onChange(args){
 
 async function createSessionIntervention(){
   const { sessionId            } = this.route.params
-  const { item     :agendaItem } = this.selectedAgendaItem[0]
+  const { item     :agendaItem } = this.selectedAgendaItems[0]
   const { display  :title      } = this.organization[0]
 
   const organization = cloneDeep(this.organization[0])
@@ -111,16 +111,19 @@ async function createSessionIntervention(){
 }
 
 function getAgendaQuery(){
-  if(!this.selectedAgendaItem?.length) return
+  if(!this.selectedAgendaItems?.length) return
 
-  const { item: agendaItem } = this.selectedAgendaItem[0];
+  const $or = this.selectedAgendaItems.map(i=>({ 
+    meetingId : mapObjectId(i.meetingId),
+    agendaItem : i.item
+  }));
 
-  return agendaItem? { agendaItem } : undefined
+  return { $or };
 }
 
 function clearForm(){
-  this.selectedAgendaItem = []
-  this.organization       = []
+  this.selectedAgendaItems = []
+  this.organization        = []
 
   this.$forceUpdate()
 }
@@ -130,7 +133,7 @@ function resetTime () {
 }
 
 function isCreateSessionInterventionDisabled(){
-  return !this.selectedAgendaItem?.length || !this.organization?.length
+  return this.selectedAgendaItems?.length!=1 || !this.organization?.length
 }
 
 </script>
