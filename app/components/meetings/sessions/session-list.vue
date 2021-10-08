@@ -64,18 +64,12 @@ function data(){
   }
 }
 
-
 function getUrl({ _id, meetings }) {
-  const isMeeting = this.route?.params?.meeting;
+  const { isMeeting } = this;
+  const { code, meeting: symbol } = this.route?.params
 
-  if(isMeeting) {
-    const { symbol } = meetings[0]
-    return `/meetings/${encodeURIComponent(symbol)}/sessions/${encodeURIComponent(_id)}`
-  }
-  else {
-    const { code }   = this.route.params;
-    return `/conferences/${encodeURIComponent(code)}/sessions/${encodeURIComponent(_id)}`;
-  }
+  if(isMeeting) return  `/meetings/${encodeURIComponent(symbol)}/sessions/${encodeURIComponent(_id)}`
+  else          return `/conferences/${encodeURIComponent(code)}/sessions/${encodeURIComponent(_id)}`;
 }
 
 async function created(){

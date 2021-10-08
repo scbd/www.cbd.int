@@ -51,9 +51,25 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         _ctrl.resolveLiteral = function(value) { return function() { return value; }; };
         _ctrl.scheduleDateChanged = scheduleDateChanged;
         _ctrl.deviceSize          = $rootScope.deviceSize;
+        _ctrl.notify = function(msg) {
+            $scope.$emit("showInfo", msg);
+        }
+
+        $scope.route       = { params : $route.current.params, query: $location.search() }
+        $scope.vueOptions  = {
+            components: { },
+            i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
+        };
+
+        function registerComponents(components) {
+            Object.keys(components).forEach((name) => {
+                const component = components[name].default || components[name];
+                $scope.vueOptions.components[name] = component;
+            });
+        }
         
         $q.when(conferenceService.getActiveConference())
-        .then(function(meeting){
+        .then(async function(meeting){
             const { schedule }        = meeting || {};
             const { all, connection } = schedule;
 
@@ -68,6 +84,11 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             load();
             timeTimer    = $interval(updateTime, 30*1000);
             refreshTimer = $interval(refresh, 10*60*1000);
+
+            if(meeting.uploadStatement) {
+                registerComponents({uploadStatementButton : await import('~/components/meetings/upload-statement-button.vue') });
+            }
+
         })
 
         $scope.$on("$destroy", function() {

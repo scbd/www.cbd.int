@@ -11,8 +11,6 @@ import _ from 'lodash'
 import ng from 'angular'
 import moment from 'moment'
 import * as meta from '~/services/meta'
-// import sessionsView from '~/components/meetings/sessions/view.vue'
-// import uploads from '~/components/meetings/uploads.vue'
 
 export { default as template } from './documents.html';
 
@@ -89,7 +87,6 @@ export { default as template } from './documents.html';
             let documents = null;
             _ctrl.inSessionEnabled = false; //to adjust the height for non insession case
             const meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, uploadStatement:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, alerts:1 }, cache:true } }).then(async function(res){
-
                 const meeting = _.defaults(res.data, {
                     code: res.data.EVT_CD,
                     agenda: { items: [] },
@@ -100,11 +97,7 @@ export { default as template } from './documents.html';
                 meta.title(`${meeting.code} - Documents`);
 
                 if(meeting.uploadStatement) {
-                    registerComponents({uploads : await import('~/components/meetings/uploads.vue') });
-                }
-
-                if(meeting.uploadStatement && $location.search().uploadStatementBy) {
-                    _ctrl.uploadStatement = true;
+                    registerComponents({uploadStatementButton : await import('~/components/meetings/upload-statement-button.vue') });
                 }
 
                 meeting.alerts = _(meeting.alerts||[]).map(fixAlertHash).filter(isAlertVisible).value();
