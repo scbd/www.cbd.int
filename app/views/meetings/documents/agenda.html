@@ -10,6 +10,7 @@
       }
     </style>
     <time-zone-feature-alert ng-if="agendaCtrl.all && agendaCtrl.loaded && agendaCtrl.getTimezones().length" ng-cloak/>
+
     <!-- Nav tabs -->
     <nav class="nav-{{::deviceSize}}">
         <ul class="nav nav-tabs hidden-print" role="tablist" style="margin-top:5px">
@@ -30,9 +31,14 @@
                 </a>
             </li>
             <li ng-hide="agendaCtrl.loaded" ><a><h3  style="color: #777;margin: 0px"><i class="fa fa-circle-o-notch fa-spin"></i></h3></a></li>
+            
+            <li class="nav-item ml-auto"></li>
 
-            <li class="nav-item ml-auto" ng-if="agendaCtrl.now">
-              <li ng-if="::agendaCtrl.all"   class="nav-item dropdown ml-auto">
+            <li class="nav-item ml-0" ng-if="vueOptions.components.uploadStatementButton">
+                <upload-statement-button ng-vue="vueOptions" ng-vue-expose="agendaCtrl" :route="route" @notify="agendaCtrl.notify" />
+            </li>
+            
+            <li class="nav-item ml-0" ng-if="agendaCtrl.now">
                 <a  ng-if="::agendaCtrl.getTimezones().length" ng-class="{'dropdown-toggle': agendaCtrl.getTimezones().length }"  class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-href="#" style="border:1px solid #f5efef">
                     <i class="fa fa-globe"></i>
                     <span class="small">{{agendaCtrl.getTimezone()}}</span>
@@ -54,7 +60,7 @@
                         <b ng-if="agendaCtrl.scheduleDate!=''" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':'MMM Do'"></b>
                     </a>
             		<div class="dropdown-menu dropdown-menu-right">
-            			<a ng-class="{ 'disabled': item.today}" class="text-nowrap dropdown-item" href="#" ng-repeat="item in agendaCtrl.scheduleDates" ng-click="agendaCtrl.scheduleDateChanged(item.value, item.today)">
+            			<a class="text-nowrap dropdown-item" href="#" ng-repeat="item in agendaCtrl.scheduleDates" ng-click="agendaCtrl.scheduleDateChanged(item.value, item.today)">
                             <span ng-class="{ 'today': item.today}" class="hidden-xs hidden-sm"   ng-bind="item.text || (item.value|moment:'format':'DD MMM YYYY (ddd)')" ></span>
                             <span ng-class="{ 'today': item.today}" class="visible-xs visible-sm" ng-bind="item.text || (item.value|moment:'format':'ddd Do')" ></span>
                         </a>

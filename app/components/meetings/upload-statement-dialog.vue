@@ -8,7 +8,9 @@
                     <div class="modal-header">
                         <h4 class="modal-title" id="uploadModalLabel">
                             <i class="fa fa-arrow-circle-up"></i> Statement Submission 
-                            <small v-for="{normalizedSymbol} in meetings" :key="normalizedSymbol">{{normalizedSymbol}}</small>
+                            <small v-for="({normalizedSymbol}, index) in meetings" :key="normalizedSymbol">
+                                <span class="text-nowrap">{{normalizedSymbol}}</span><span v-if="index<(meetings.length-1)">, </span>
+                                </small>
                         </h4>
                         <button :disabled="!!progress" type="button" class="close" aria-label="Close" @click="close">
                             <span aria-hidden="true">&times;</span>
@@ -54,7 +56,10 @@
                                 <div class="col-sm-9">
                                     <select :disabled="!!progress" class="form-control" id="agendaItem"  v-model="selectedAgendaItem" required>
                                         <optgroup v-for="{ _id: meetingId, agenda, normalizedSymbol } in meetings" :key="meetingId" :label="normalizedSymbol">
-                                            <option v-for="{ item, shortTitle, title } in agenda.items" :key="item" :value="{ meetingId, item }">{{item }} - {{ shortTitle || title }} </option>
+                                            <option v-for="{ item, shortTitle, title } in agenda.items" :key="item" :value="{ meetingId, item }">
+                                                {{ meetings.length>1 ? (agenda.prefix||'') : '' }}
+                                                {{ item }} - {{ shortTitle || title }} 
+                                            </option>
                                         </optgroup>
                                     </select>
                                     <div class="invalid-feedback">Please select a an agenda item.</div>
@@ -235,6 +240,8 @@ export default {
             else {
                 error = { message : "Invalid status: No Meeting or Conference"}
             }
+
+            this.meetings = this.meetings.filter(o=>o.uploadStatement);
         },
 
         open()  { this.openDialog(true) },
@@ -345,3 +352,8 @@ export default {
     }
 }
 </script>
+<style scoped>
+.modal-content-upload {
+    display: inline;
+}
+</style>
