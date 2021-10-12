@@ -1,35 +1,18 @@
 
 <template >
   <div class="row mb-3">
-    <div class="col-3 pr-0">
+    <div class="col-12 col-lg-4">
       <div class="input-group">
         <AgendaSelect v-model="selectedAgendaItems" :meetings="meetings" @change="onChange" :max="10" :multiple="true" />
       </div>
     </div>
-    <div class="col-9">
+    <div class="col-12 col-lg-8">
       <div class="input-group">
         <input  :placeholder="$t('Text Search')" v-model="freeText" v-on:input="onChange" type="text" class="form-control text-search" id="text-search" ref="textSearch"/>
           <div class="input-group-append">
             <button v-on:click="clearText" class="btn btn-outline-secondary clear-t" type="button"><i class="fa fa-close" /></button>
           </div>
       </div>
-    </div>
-    <div v-if="false" class="col-3 pl-0">
-      <multiselect 
-        v-model="selectedDate" 
-        :placeholder="$t('Date')"
-        :options="dates"
-        :searchable="false"
-        @select="onChange"
-        @remove="onChange"
-        class="dates">
-        <template slot="singleLabel" slot-scope="{option}">
-          {{ option | dateTimeFilterUTC('yyyy-MM-dd')}}
-        </template>
-        <template slot="option" slot-scope="{option}">
-          {{ option | dateTimeFilterUTC('yyyy-MM-dd')}}
-        </template>
-      </multiselect>
     </div>
   </div>
 </template>
@@ -59,7 +42,6 @@ export default {
 function data(){
   return {
     freeText: '',
-    selectedDate: undefined,
     selectedAgendaItems: [],
   }
 }
