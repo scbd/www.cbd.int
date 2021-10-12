@@ -9,11 +9,12 @@ import '../articles';
 import moment from 'moment';
 import cbdAddNewArticle from '~/directives/articles/cbd-add-new-article.vue'
 import 'angular-vue';
+import '~/services/conference-service'
       
 export { default as template  } from './index.html';
 
-export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articleService', 'angularGridInstance', 'ngDialog', '$route',
- function( $q, user,$http, $scope,  $rootScope, $timeout, articleService, angularGridInstance, ngDialog, $route) {
+export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articleService', 'angularGridInstance', 'ngDialog', '$route', 'conferenceService',
+ function( $q, user,$http, $scope,  $rootScope, $timeout, articleService, angularGridInstance, ngDialog, $route, conferenceService) {
 
     var basePath  = $scope.basePath = (angular.element('base').attr('href')||'').replace(/\/+$/g, '');
 
@@ -36,9 +37,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         'other'                            : 'Other'
     }
     $scope.meetingType = {
-        'all':'All meetings',
-        'sbstta-24'  : 'SBSTTA-24',
-        'sbi-3': 'SBI-3'
+        'all':'All meetings'
     }
     $scope.eventType = {
         'all'                                     : 'All types',
@@ -177,9 +176,23 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         return val.toLowerCase().replace(/\s/g, '-')
     }
 
+    async function loadMeetingTypes(){
+        
+        const code = $route.current.params.code
+        const conference = await conferenceService.getConference(code)
+        var meetingIds =  { _id : { $in: conference.MajorEventIDs.map(m=>{ return {$oid: m}}) } };
+        
+        const meeting = await $http.get("/api/v2016/meetings/", { cache: true, params: {q:meetingIds, f: { EVT_CD:1 } } })
+     
+        meeting.data.forEach(m=>{
+            $scope.meetingType[m.EVT_CD] = m.EVT_CD;
+        });
+    }
+
     buildQuery();
 
     fetchPosterArticles();
+    loadMeetingTypes();
 
 }];
 
