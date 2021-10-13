@@ -3,8 +3,8 @@
   <div style="padding-bottom:100px">
     <h1>Statements and interventions 
       <small class="text-muted">
-        <span v-for="{normalizedSymbol} in meetings" :key="normalizedSymbol">
-          {{normalizedSymbol}}
+        <span v-for="({normalizedSymbol}, index) in meetings" :key="normalizedSymbol">
+          <span class="text-nowrap">{{normalizedSymbol}}</span><span v-if="index<(meetings.length-1)">, </span>
         </span>
       </small>
     </h1>
