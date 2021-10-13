@@ -98,7 +98,7 @@ import 'angular-cache'
 
                       menu.isParent = true;
                       normalizeMenus(menu.menus, meeting, menu);
-                      menu.xsUrl = menu.menus[0].url;
+                      menu.xsUrl = menu.url || menu.menus[0].url;
                     }
                 });
 
