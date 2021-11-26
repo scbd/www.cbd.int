@@ -20,6 +20,7 @@ if(!process.env.API_URL) {
 
 const apiUrl     =  process.env.API_URL || 'https://api.cbddev.xyz';
 const gitVersion = (process.env.COMMIT  || 'UNKNOWN').substr(0, 8);
+const siteAlert  =  process.env.SITE_ALERT || '';
 
 console.info(`info: www.cbd.int`);
 console.info(`info: Git version: ${gitVersion}`);
@@ -68,7 +69,7 @@ app.use(require('./libs/prerender')); // set env PRERENDER_SERVICE_URL
 
 app.get('/*', function(req, res) {
     res.setHeader('Cache-Control', 'public');
-    res.render('template', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); 
+    res.render('template', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, siteAlert  }); 
 });
 app.all('/*', send404);
 
