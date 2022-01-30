@@ -28,7 +28,7 @@ export default ['$http', '$route', '$location', 'conferenceService', 'user', fun
         _ctrl.conference = conference;
 
 
-        query = [{
+        const query = [{
           $match : {
             'meta.createdBy': user.userID,
             $or : [ { 'conference': {$oid: conference._id} }, 
