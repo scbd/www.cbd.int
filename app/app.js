@@ -30,7 +30,7 @@ const app = angular.module('app', angular.defineModules(
           },
           target: 'body',
           timeOut: 5000,
-          progressBar: true,
+          progressBar: false,
         });
         $httpProvider.useApplyAsync(true);
         $httpProvider.interceptors.push('flexHttpInterceptor');
