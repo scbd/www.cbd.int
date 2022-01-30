@@ -71,7 +71,7 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
                     _.each(meetings, function(meeting){
                         _ctrl.meetings[meeting._id] = meeting;
                     }); 
-                    console.log(_ctrl.meetings)   
+
                 });
             })
             .then(function(){
@@ -111,24 +111,27 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
             .then(function(mediaRequests) { 
 
                 _ctrl.requests = mediaRequests;
-                var mediaRequestQueries = []
-                var queryRequests;
+
+                const mediaRequestQueries = []
+
                 while(mediaRequests.length) {
-                    queryRequests = _.take(mediaRequests, 20);
+                    const queryRequests = _.take(mediaRequests, 20);
                     mediaRequests = _.drop(mediaRequests, 20);
 
-                    requestIds = _(queryRequests).map(function(r){ return [r._id, { $oid : r._id}] }).flatten().value();
-                    var orgQuery = {
+                    const requestIds = queryRequests.map((r) => ({ '$oid': r._id }))
+
+                    const orgQuery = {
                         q : { $or : [{ requestId : {$in : requestIds} }, {requestId:{$exists:false}}] }
                     }
+
                     mediaRequestQueries.push($http.get('/api/v2018/kronos/participation-request/organizations', { params: orgQuery}));
                 }
                 
-                
+
                 return $q.all(mediaRequestQueries)
                     .then(function(results) { 
                         var organizations = _(results).map('data').flatten().compact().value();
-                       
+
                         if(organizations && organizations.length >0){
 
                             _.map(organizations, function(organization){
@@ -157,7 +160,6 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
         //
         //===================================
         function selectRequest(request, participant) {
-
             var prevRequest     = _ctrl.selectedRequest;
             var prevParticipant = _ctrl.selectedParticipant;
 
@@ -224,7 +226,7 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
 
             var query = {};
 
-            if((!searchText && request.organization.kronosIds||[]).length) {
+            if((!searchText && request.organization && request.organization.kronosIds||[]).length) {
                 query.OrganizationUIDs = request.organization.kronosIds;
             }
             else {
