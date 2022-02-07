@@ -29,9 +29,6 @@ export default ['$location','$route','$q','$http','$scope','user',function ($loc
 						getResources();
 						getInitiatives ();
 						loadTreads();
-						// $q.when(bbi ).then(function(val){
-						// 	console.log(val.data);
-						// });
 				}
 
 				//============================================================

@@ -21,6 +21,5 @@ export default ['$scope','$routeParams','user', function ($scope,$routeParams,us
 
 				$scope.$root.page={};
 				$scope.$root.page.title = "Edit: BBI Web Platform";
-				// console.log('schema',schema);
-				// console.log('id',id);
+
     }];

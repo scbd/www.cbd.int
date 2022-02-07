@@ -272,7 +272,7 @@ import template from './progress-pie.html'
                                 $scope.nothingReported = false;
                             }
                         })
-                        console.log(countryC)
+                        // console.log(countryC)
                         // _.each(docs, function(doc) {
                         //     if (progressToNum(doc.progress_EN_t) === undefined){
                         //         return 

@@ -50,7 +50,6 @@ export default {
         this.$once('hook:beforeDestroy', () => {
             dialog.$destroy();
             target.removeChild(dialog.$el)
-            console.log('xx')
         });
         
         if(this.route.query.uploadStatementBy) {

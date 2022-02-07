@@ -24,8 +24,7 @@ export default ['$scope', '$routeParams',  '$route', 'IStorage','mongoStorage','
         var id = $routeParams.id;
         $scope.$root.page={};
         $scope.$root.page.title = "Record View: BBI Web Platform";
-        // console.log('schema',schema);
-        // console.log('id',id);
+
 
         //==================================
         //
