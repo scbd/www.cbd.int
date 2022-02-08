@@ -26,7 +26,7 @@
     <div class="container-fluid">
         <div class="col-xs-12">
             <h2 class="marginless ">
-                Media Requests
+                Media Requests <i ng-if="mediaRequestCtrl.loading" class="fa fa-spinner fa-spin"></i>
             </h2>
         </div>
         <div class="col-xs-12 panel  panel-default">
@@ -41,14 +41,6 @@
                             <option value="rejected">Rejected</option>
                         </select>
                     </div>
-                    <!-- <div class="col-sm-3">
-                        <div class="input-group" style="width: 200px;">
-                            <input type="text" class="form-control">
-                            <span type="button" class="input-group-addon">
-                                <i class="fa fa-search"></i>
-                            </span>
-                        </div>
-                    </div> -->
                 </div>
 
                 <hr>
@@ -175,16 +167,16 @@
                                                     <tbody ng-repeat="korg in request.kronos.organizations">
                                                         <tr>
                                                             <td>
-                                                                <button type="button" class="btn btn-sm" ng-click="korg.showMore=true" ng-if="!korg.showMore">
+                                                                <button type="button" class="btn btn-sm" ng-click="mediaRequestCtrl.toggle(korg)" ng-if="!korg.showMore">
                                                                     <i class="fa fa-chevron-circle-down"></i>
                                                                 </button>
-                                                                <button type="button" class="btn btn-sm" ng-click="korg.showMore=false" ng-if="korg.showMore">
+                                                                <button type="button" class="btn btn-sm" ng-click="mediaRequestCtrl.toggle(korg)" ng-if="korg.showMore">
                                                                     <i class="fa fa-chevron-circle-up"></i>
                                                                 </button>
-                                                                {{korg.OrganizationName}}
-                                                                <span ng-if="korg.OrganizationAcronym">({{korg.OrganizationAcronym}})</span>
+                                                                {{korg.name}}
+                                                                <span ng-if="korg.OrganizationAcronym">({{korg.acronym}})</span>
                                                             </td>
-                                                            <td>{{korg.Country|lowercase|term}}</td>
+                                                            <td>{{korg.country|lowercase|term}}</td>
                                                             <td>
                                                                 <div role="group" class="btn-group btn-group-xs pull-right">
                                                                     
@@ -200,20 +192,20 @@
                                                         <tr ng-if="korg.showMore">
                                                             <td colspan="3">
                                                                     <address style="margin-bottom:2px!important">
-                                                                        <div>{{korg.Address}} </div>
-                                                                        <div ng-if="korg.City">{{korg.City}},</div>
-                                                                        <div ng-if="korg.State">{{korg.State}},</div>                                                                        
-                                                                        <span ng-show="korg.postalCode"> {{korg.PostalCode}}, </span>
+                                                                        <div>{{korg.address}} </div>
+                                                                        <div ng-if="korg.city">{{korg.city}},</div>
+                                                                        <div ng-if="korg.state">{{korg.state}},</div>                                                                        
+                                                                        <span ng-show="korg.postalCode"> {{korg.postalCode}}, </span>
                                                                         <div style="font-weight:500;"> {{korg.country|lowercase|term}}</div>
                                                                     </address>
-                                                                    <div ng-if="korg.Phones">
-                                                                        Phones: <span ng-repeat="phone in korg.Phones"> {{phone}}</span>
+                                                                    <div ng-if="korg.phones.length">
+                                                                        Phones: <span ng-repeat="phone in korg.phones"> {{phone}}</span>
                                                                     </div>
-                                                                    <div ng-if="korg.Emails">
-                                                                        Emails: <span ng-repeat="email in korg.Emails"> {{email}}</span>
+                                                                    <div ng-if="korg.emails.length">
+                                                                        Emails: <span ng-repeat="email in korg.emails"> {{email}}</span>
                                                                     </div>
-                                                                    <div ng-if="korg.Webs">
-                                                                        Websites: <span ng-repeat="web in korg.Webs"> {{web}}</span>
+                                                                    <div ng-if="korg.webs.length">
+                                                                        Websites: <span ng-repeat="web in korg.webs"> {{web}}</span>
                                                                     </div>
                                                             </td>
                                                         </tr>
@@ -240,9 +232,11 @@
 
                         <div class="panel panel-default">
     
-                            <div class="panel-body collapse in" id="mediaRequestCtrl.participants{{$index}}" ng-if="request.participants && request.showParticipants">
+                            <div class="panel-body collapse in" id="mediaRequestCtrl.participants{{$index}}" ng-if="(request.participants && request.showParticipants) || request.loadingParticipants">
                                 <div class="row">
-                                    <i class="fa fa-spin fa-spinner" ng-if="request.loadingParticipants" />
+                                    <div class="text-center">
+                                      <i class="fa fa-spin fa-spinner fa-2x" ng-if="request.loadingParticipants || !(request.participants && request.showParticipants)" />
+                                    </div>
                                     <div ng-repeat="participant in request.participants" style="border:1px solid #eee; margin:5px;padding:5px;" ng-click="mediaRequestCtrl.selectParticipant(request, participant)"
                                         class="">
                                         <table class="table inactive" width="100%">
@@ -267,7 +261,7 @@
                                                     </td>
                                                     <td>
                                                         Kronos Contact
-                                                        <i ng-if="participant.kronos.loading" class="fa fa-cog fa-spin"></i>
+                                                        <i ng-if="participant.kronos.loading && !participant.kronos.contacts.length" class="fa fa-cog fa-spin"></i>
                                                         <div class="pull-right" style="display: inline-block;">
                                                             <div class="input-group input-sm" style="width: 200px;padding:0px">
                                                                 <input style="height:30px" type="text" class="form-control" ng-change="mediaRequestCtrl.searchKronosContact(participant.kronos.search, participant, request)"
@@ -304,22 +298,23 @@
                                                         <div ng-if="participant.nationality">
                                                             <span style="font-weight:500;">{{participant.nationality|lowercase|term}}</span>
                                                         </div>
+                                                        <div class="text-left"><hr/ ></div>
                                                         <table>
-                                                            <tr>
+                                                            <tr ng-if="participant.dateOfBirth">
                                                                 <td>Date of birth</td>
                                                                 <td>{{participant.dateOfBirth}}</td>
                                                             </tr>
-                                                            <tr>
+                                                            <tr ng-if="participant.passportNumber">
                                                                 <td>Passport number</td>
                                                                 <td>{{participant.passportNumber }}</td>
                                                             </tr>
-                                                            <tr>
+                                                            <tr ng-if="participant.phone">
                                                                 <td>Phone</td>
-                                                                <td>{{participant.phone }}</td>
+                                                                <td>{{participant.phone}}</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Email</td>
-                                                                <td>{{participant.email }}</td>
+                                                                <td>{{participant.email}}</td>
                                                             </tr>
                                                             <!-- <tr>
                                                                                         <td></td><td></td>
@@ -370,14 +365,14 @@
                                                             <tbody ng-repeat="kctc in participant.kronos.contacts">
                                                                 <tr ng-class="{'active':kctc.isLinked}">
                                                                     <td>
-                                                                        <button type="button" class="btn btn-sm" ng-click="kctc.showMore=true" ng-if="!kctc.showMore">
+                                                                        <button type="button" class="btn btn-sm" ng-click="mediaRequestCtrl.toggle(kctc)" ng-if="!kctc.showMore">
                                                                             <i class="fa fa-chevron-circle-down"></i>
                                                                         </button>
-                                                                        <button type="button" class="btn btn-sm" ng-click="kctc.showMore=false" ng-if="kctc.showMore">
+                                                                        <button type="button" class="btn btn-sm" ng-click="mediaRequestCtrl.toggle(kctc)" ng-if="kctc.showMore">
                                                                             <i class="fa fa-chevron-circle-up"></i>
                                                                         </button>
-                                                                        {{kctc.FirstName}} {{kctc.LastName}}</td>
-                                                                    <td>{{kctc.Country|lowercase|term}}</td>
+                                                                        {{kctc.firstName}} {{kctc.lastName}}</td>
+                                                                    <td>{{kctc.country | lowercase | term}}</td>
                                                                     <td>
 
                                                                         <div role="group" class="btn-group btn-group-xs pull-right">
@@ -396,24 +391,27 @@
                                                                     <td colspan="3">
                                                                             <address style="margin-bottom:2px!important">
                                                                                 <div>
-                                                                                    <strong>{{kctc.OrganizationName}}
-                                                                                        <span ng-if="kctc.OrganizationAcronym">({{kctc.OrganizationAcronym}})</span>
+                                                                                    <strong>{{kctc.organization.name}}
+                                                                                        <span ng-if="kctc.acronym">({{kctc.organization.acronym}})</span>
                                                                                     </strong>
                                                                                 </div>
-                                                                                <div>{{kctc.Address}} </div>
-                                                                                <div ng-if="kctc.City">{{kctc.City}},</div>
-                                                                                <div ng-if="kctc.State">{{kctc.State}},</div>                                                                        
-                                                                                <span ng-show="kctc.postalCode"> {{kctc.PostalCode}}, </span>
-                                                                                <div style="font-weight:500;"> {{kctc.Country|lowercase|term}}</div>
+                                                                                <div>{{kctc.address}} </div>
+                                                                                <div ng-if="kctc.city">{{kctc.city}},</div>
+                                                                                <div ng-if="kctc.state">{{kctc.state}},</div>                                                                        
+                                                                                <span ng-show="kctc.postalCode"> {{kctc.postalCode}}, </span>
+                                                                                <div style="font-weight:500;"> {{kctc.country|lowercase|term}}</div>
                                                                             </address>
-                                                                            <div ng-if="kctc.Phones">
-                                                                                Phones: <span ng-repeat="phone in kctc.Phones"> {{phone}}</span>
+                                                                            <div ng-if="kctc.phones.length">
+                                                                                Phones: <span ng-repeat="phone in kctc.phones"> {{phone}}</span>
                                                                             </div>
-                                                                            <div ng-if="kctc.Emails">
-                                                                                Emails: <span ng-repeat="email in kctc.Emails"> {{email}}</span>
+                                                                            <div ng-if="kctc.mobiles.length">
+                                                                              Phones: <span ng-repeat="phone in kctc.mobiles"> {{phone}}</span>
                                                                             </div>
-                                                                            <div ng-if="kctc.Webs">
-                                                                                Websites: <span ng-repeat="web in kctc.Webs"> {{web}}</span>
+                                                                            <div ng-if="kctc.emails.length">
+                                                                                Emails: <span ng-repeat="email in kctc.emails"> {{email}}</span>
+                                                                            </div>
+                                                                            <div ng-if="kctc.webs.length">
+                                                                                Websites: <span ng-repeat="web in kctc.webs"> {{web}}</span>
                                                                             </div>
                                                                     </td>
                                                                 </tr>

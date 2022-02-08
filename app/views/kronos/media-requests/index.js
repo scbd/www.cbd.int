@@ -8,9 +8,10 @@ export { default as template } from './index.html'
 
     var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
 
-export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $q) {
+export default ['$http', 'user', 'kronos', '$q','$scope', function($http, user, kronos, $q, $scope) {
         var _ctrl = this;
 
+        _ctrl.toggle                = toggle;
         _ctrl.selectRequest         = selectRequest;
         _ctrl.selectParticipant     = selectRequest;
         _ctrl.loadParticipants      = loadParticipants;
@@ -33,7 +34,8 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
         _ctrl.createKronosOrg                   = createKronosOrg;  
         _ctrl.createKronosContact               = createKronosContact;  
         _ctrl.refreshRequestList                = LoadRequests;         
-        
+        _ctrl.loading                           = true;
+
         load();
         
         //===================================
@@ -82,6 +84,7 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
 
             })
         }
+
         function LoadRequests(status){
 
             status = status || _ctrl.requestStatus;
@@ -152,10 +155,11 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
 
             }).catch(function(err) {
 
-                _ctrl.error = err.data || err;
-
-            })
+                _ctrl.error   = err.data || err;
+                _ctrl.loading = false
+            }).finally(() => _ctrl.loading = false)
         }
+
         //===================================
         //
         //===================================
@@ -191,23 +195,35 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
         //===================================
         //
         //===================================
-        function loadParticipants(request){
+        async function loadParticipants(request){
             request.showParticipants = !request.showParticipants;
             
-            if(!request.participants){
-                    
-                request.loadingParticipants = true;
+            if(request.participants) return;
 
-                var query = { $or : [ { requestId : request._id }, { requestId : { $oid : request._id } } ] };
+            request.loadingParticipants = true;
 
-                $http.get('/api/v2018/kronos/participation-request/participants', { params: { q: query } }).then(function(result) {
+            const requestId = request._id;
+            const $oid      = requestId;
+            const $or       = [ { requestId }, { requestId: { $oid } } ];
+            const query     = { $or };
 
-                    request.participants = result.data;
-                })
-                .finally(function(){
-                    request.loadingParticipants = false;
-                })
+            try{
+              const { data } = await $http.get('/api/v2018/kronos/participation-request/participants', { params: { q: query } });
+
+              request.participants = data;
+
+              for (const participant of request.participants)
+                await selectRequest(request, participant)
+
+            }catch(err){
+              console.error(err)
             }
+            finally{
+              request.loadingParticipants = false;
+
+              $scope.$digest()
+            }
+            
         }
 
         ///////////////////////////////////////////
@@ -217,84 +233,83 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
         //===================================
         //
         //===================================
-        function lookUpKronosOrganizations(request, searchText) {
+        async function lookUpKronosOrganizations(request = _ctrl.selectedRequest, searchText) {
 
-            request = request || _ctrl.selectedRequest;
+            if(!request) return;
 
-            if(!request)
-                return;
+            const { organization }  = request;
+            const   organizationIds = organization?.kronosIds || [];
+            const   freeText        = searchText || organization.title || '';
+            const   typeIds         = [ KRONOS_MEDIA_TYPE ]
 
-            var query = {};
+            const hasKronosLinksAndNoSearchText = !searchText &&  organizationIds.length
 
-            if((!searchText && request.organization && request.organization.kronosIds||[]).length) {
-                query.OrganizationUIDs = request.organization.kronosIds;
-            }
-            else {
-                query.FreeText = searchText || request.organization.title;
-                query.TypeUIDs = [ KRONOS_MEDIA_TYPE ];
-            }
+            const query = hasKronosLinksAndNoSearchText? { organizationIds } : { typeIds, freeText }
+
 
             var _kronos = request.kronos = request.kronos || {};
 
-            _kronos.search  = query.FreeText||'';
+            _kronos.search  = freeText;
             _kronos.loading = true;
             _kronos.error   = null;
-            
-            return $http.get(kronos.baseUrl+'/api/v2018/organizations', { params: { q: query } }).then(resData).then(function(organizations){
 
-                organizations.forEach(function(o){
-                    o.isLinked = _.includes(request.organization.kronosIds||[], o.OrganizationUID);
-                });
+            try{
+              const { records }  = await $http.get(kronos.baseUrl+'/api/v2018/organizations', { params: { q: query } }).then(resData)
 
-                _kronos.organizations = organizations;
+              for (const org of records){
+                org.isLinked = organizationIds.includes(org.organizationId)
+                org.showMore = false
+              }
 
-            }).catch(function(err) {
-                _kronos.error = err.data || err;
-            }).finally(function(){
-                delete _kronos.loading;
-            })
+              _kronos.organizations = records
+            } catch(err){
+              _kronos.error = err.data || err;
+            }
+            finally{
+              _kronos.loading = false;
+              $scope.$digest()
+            }
         }
 
         //===================================
         //
         //===================================
-        function lookUpKronosContact(participant, request, searchText) {
+        async function lookUpKronosContact(participant = _ctrl.selectedParticipant, { organization }, searchText) {
 
-            var participant = participant || _ctrl.selectedParticipant;
+            if(!participant) return;
 
-            if(!participant)
-                return;
+            const { kronosId: contactId, firstName, lastName } = participant;
 
-            var query = {};
-
-            if(!searchText && participant.kronosId) {
-                query.ContactUID = participant.kronosId;
-            }
-            else {
-                query.FreeText = searchText || ((participant.firstName||'') + ' ' + (participant.lastName||''));
-                query.limit    = 25;
-
-                if(request && request.organization && request.organization.kronosIds && request.organization.kronosIds.length)
-                    query.OrganizationUIDs = request.organization.kronosIds;
-            }
+            const freeText                      = searchText || `${firstName || ''} ${lastName || ''}` || '';
+            const limit                         = 25;
+            const hasKronosLinksAndNoSearchText = !searchText && contactId;
+            const organizationIds               = organization.kronosIds;
+            const textQuery                     = organizationIds? { freeText, limit, organizationIds } : { freeText, limit }
+            const query                         = hasKronosLinksAndNoSearchText? { contactId } : textQuery 
 
             var _kronos = participant.kronos = participant.kronos || {};
 
-            _kronos.search = query.FreeText||'';
+            _kronos.search  = freeText;
             _kronos.loading = true;
             _kronos.error   = null;
 
-            return $http.get(kronos.baseUrl+'/api/v2018/contacts', { params: { q: query } }).then(resData).then(function(contacts){
+            try{
+                const { records } = await $http.get(kronos.baseUrl+'/api/v2018/contacts', { params: { q: query } }).then(resData)
 
-                contacts.forEach(function(o){ o.isLinked = participant.kronosId && participant.kronosId == o.ContactUID; });
+                for (const contact of records){
+                  contact.isLinked = contactId === contact.contactId;
+                  contact.showMore = false
+                }
 
-                participant.kronos.contacts = contacts;
+                participant.kronos.contacts = records;
 
-            }).catch(function(err) {
+            }catch(err){
                 _kronos.error = err.data || err;
-            }).finally(function(){
-                delete _kronos.loading;
-            })
+            }finally{
+                _kronos.loading = false;
+                $scope.$digest()
+            }
+            
         }
 
         function updateOrganizationStatus(request, status){
@@ -341,16 +356,16 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
 
         function linkKronsOrganization(request, korg){
 
-            return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/link-kronos/' + korg.OrganizationUID,)
+            return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/link-kronos/' + korg.organizationId,)
             .then(function(result){               
                 if(result.status == 200){                    
                     if(!request.organization.kronosIds)
                         request.organization.kronosIds = [];
-                    request.organization.kronosIds.push(korg.OrganizationUID);
+                    request.organization.kronosIds.push(korg.organizationId);
                     korg.isLinked=true;
                 }
             }).catch(function(err) {
-               console.log(err)
+                console.log(err)
             }).finally(function(){
                 // delete _kronos.loading;
             })
@@ -358,10 +373,10 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
 
         function removeKronsOrganization(request, korg){
             
-            return $http.delete('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/link-kronos/' + korg.OrganizationUID,)
+            return $http.delete('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/link-kronos/' + korg.organizationId,)
             .then(function(result){               
                 if(result.status == 200){
-                    var index =  _.indexOf(request.organization.kronosIds, korg.OrganizationUID)
+                    var index =  _.indexOf(request.organization.kronosIds, korg.organizationId)
                     request.organization.kronosIds.splice(index, 1);
                     korg.isLinked=false;
                 }
@@ -376,11 +391,11 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
 
             //link KRONOS contact with Media request particiapnt
             return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
-            '/participants/' + participant._id+ '/link-kronos/' + kcontact.ContactUID)            
+            '/participants/' + participant._id+ '/link-kronos/' + kcontact.contactId)            
             .then(function(result){               
                 if(result.status == 200){
                     _.map(participant.kronos.contacts, function(con){con.isLinked=false;})                    
-                    participant.kronosId = kcontact.ContactUID;
+                    participant.kronosId = kcontact.contactId;
                     kcontact.isLinked = participant.isNominated = kcontact.isNominated = true;
                 }
             }).catch(function(err) {
@@ -393,7 +408,7 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
         function removeKronosContact(request, participant, kcontact){
             
             return $http.delete('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
-            '/participants/' + participant._id+ '/link-kronos/' + kcontact.ContactUID)
+            '/participants/' + participant._id+ '/link-kronos/' + kcontact.contactId)
             .then(function(result){               
                 if(result.status == 200){             
                     participant.kronosId = undefined;
@@ -410,18 +425,18 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
 
             var organization = request.organization;
             var kronosOrg = {
-                OrganizationName        : organization.title,
-                OrganizationAcronym     : organization.acronym,
-                OrganizationTypeUID     : KRONOS_MEDIA_TYPE,
-                Address                 : (organization.address.unitNumber||'') + '' + (organization.address.streetNumber||'') + '' +(organization.address.street||''),
-                City                    : organization.address.locality,
-                State                   : organization.address.administrativeArea,
-                Country                 : organization.address.country,
-                PostalCode              : organization.address.postalCode,
-                Phones                  : _.compact([organization.phone]),
-                Emails                  : _.compact([organization.email]),
-                EmailCcs                : _.compact([organization.emailCc]),
-                Webs                    : _.compact([organization.website])
+                name                    : organization.title,
+                acronym                 : organization.acronym,
+                organizationTypeId      : KRONOS_MEDIA_TYPE,
+                address                 : (organization.address.unitNumber||'') + '' + (organization.address.streetNumber||'') + '' +(organization.address.street||''),
+                city                    : organization.address.locality,
+                state                   : organization.address.administrativeArea,
+                country                 : organization.address.country,
+                postalCode              : organization.address.postalCode,
+                phones                  : _.compact([organization.phone]),
+                emails                  : _.compact([organization.email]),
+                emailCcs                : _.compact([organization.emailCc]),
+                webs                    : _.compact([organization.website])
 
             }
             request.creatingKronosOrg = true;
@@ -430,7 +445,7 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
                 if(result.status == 200){                    
                     if(!organization.kronosIds)
                         organization.kronosIds = [];
-                    organization.kronosIds.push(result.data.OrganizationUID);
+                    organization.kronosIds.push(result.data.organizationId);
 
                     return linkKronsOrganization(request, result.data).then(function(data){
                             if((request.kronos.organizations||[]).length)
@@ -453,45 +468,46 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
                return;
             }
 
-            var organizationUID;
+            var organizationId;
             
             if(request.organization.kronosIds.length == 1)
-                organizationUID = request.organization.kronosIds[0];
+                organizationId = request.organization.kronosIds[0];
             else{
                 //show dialog?
-                organizationUID = request.organization.kronosIds[0];
+                organizationId = request.organization.kronosIds[0];
             }
             var kronosContact = {
-                OrganizationUID            : organizationUID,
-                OrganizationTypeUID        : KRONOS_MEDIA_TYPE,
-                Title                      : participant.title,
-                FirstName                  : participant.firstName,
-                LastName                   : participant.lastName,
-                Designation                : participant.designation,
-                Department                 : participant.department,
-                Affiliation                : participant.affiliation,
-                Language                   : participant.language,
-                Phones                     : _.compact([participant.phones, participant.phoneDuringMeeting]),
-                Mobiles                    : _.compact([participant.mobile]),
-                Emails                     : _.compact([participant.email]),
-                EmailCcs                   : _.compact([participant.emailCc]),
-               DateOfBirth                : participant.dateOfBirth ? moment(participant.dateOfBirth).toDate() : null, // TO FIX DATES IN ASP.NET
-                UseOrganizationAddress     : participant.useOrganizationAddress
+                organizationId,
+                organizationTypeId        : KRONOS_MEDIA_TYPE,
+                title                      : participant.title,
+                firstName                  : participant.firstName,
+                lastName                   : participant.lastName,
+                designation                : participant.designation,
+                department                 : participant.department,
+                affiliation                : participant.affiliation,
+                language                   : participant.language,
+                phones                     : _.compact([participant.phones, participant.phoneDuringMeeting]),
+                mobiles                    : _.compact([participant.mobile]),
+                emails                     : _.compact([participant.email]),
+                emailCcs                   : _.compact([participant.emailCc]),
+                dateOfBirth                : participant.dateOfBirth ? moment(participant.dateOfBirth).toDate() : null, // TO FIX DATES IN ASP.NET
+                country                    : participant.nationality,
+                useOrganizationAddress     : participant.useOrganizationAddress
             };
 
             if(!participant.useOrganizationAddress){                
-                kronosContact.Address    = (participant.address.unitNumber||'') + '' + (participant.address.streetNumber||'') + '' + (participant.address.street||'');
-                kronosContact.City       = participant.address.locality;
-                kronosContact.State      = participant.address.administrativeArea;
-                kronosContact.Country    = participant.address.country;
-                kronosContact.PostalCode = participant.address.postalCode;
+                kronosContact.address    = (participant.address.unitNumber||'') + '' + (participant.address.streetNumber||'') + '' + (participant.address.street||'');
+                kronosContact.city       = participant.address.locality;
+                kronosContact.state      = participant.address.administrativeArea;
+                kronosContact.country    = participant.address.country;
+                kronosContact.postalCode = participant.address.postalCode;
             }
 
             participant.creatingKronosContact = true;
-            return $http.post(kronos.baseUrl+'/api/v2018/organizations/'+organizationUID+'/contacts', kronosContact)
+            return $http.post(kronos.baseUrl+'/api/v2018/organizations/'+organizationId+'/contacts', kronosContact)
             .then(function(result){               
                 if(result.status == 200){   
-                    participant.kronosId = result.data.contactUID;
+                    participant.kronosId = result.data.contactId;
                     return linkKronosContact(request, participant, result.data).then(function(data){
                         if((participant.kronos.contacts||[]).length)
                             participant.kronos.contacts.push(result.data)
@@ -507,13 +523,17 @@ export default ['$http', 'user', 'kronos', '$q', function($http, user, kronos, $
         }
 
         function searchKronosOrg(search, request){
-            return lookUpKronosOrganizations(request, search)
+            return $scope.$applyAsync(()=> lookUpKronosOrganizations(request, search))
         }
 
         function searchKronosContact(search, participant, request){
-            return lookUpKronosContact(participant, request, search)
+            return $scope.$applyAsync(()=> lookUpKronosContact(participant, request, search))
         }
         
+        function toggle(obj){
+          obj.showMore = !obj.showMore
+        }
+
         //===================================
         //
         //===================================
