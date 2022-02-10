@@ -431,7 +431,7 @@ export default ['$http', 'user', 'kronos', '$q','$scope', function($http, user, 
                 address                 : (organization.address.unitNumber||'') + '' + (organization.address.streetNumber||'') + '' +(organization.address.street||''),
                 city                    : organization.address.locality,
                 state                   : organization.address.administrativeArea,
-                country                 : organization.address.country,
+                country                 : organization.address.country? organization.address.country.toLowerCase() : '',
                 postalCode              : organization.address.postalCode,
                 phones                  : _.compact([organization.phone]),
                 emails                  : _.compact([organization.email]),
@@ -491,7 +491,7 @@ export default ['$http', 'user', 'kronos', '$q','$scope', function($http, user, 
                 emails                     : _.compact([participant.email]),
                 emailCcs                   : _.compact([participant.emailCc]),
                 dateOfBirth                : participant.dateOfBirth ? moment(participant.dateOfBirth).toDate() : null, // TO FIX DATES IN ASP.NET
-                country                    : participant.nationality,
+                country                    : participant.nationality? participant.nationality.toLowerCase() : '',
                 useOrganizationAddress     : participant.useOrganizationAddress
             };
 
@@ -499,7 +499,7 @@ export default ['$http', 'user', 'kronos', '$q','$scope', function($http, user, 
                 kronosContact.address    = (participant.address.unitNumber||'') + '' + (participant.address.streetNumber||'') + '' + (participant.address.street||'');
                 kronosContact.city       = participant.address.locality;
                 kronosContact.state      = participant.address.administrativeArea;
-                kronosContact.country    = participant.address.country;
+                kronosContact.country    = participant.address.country? participant.address.country.toLowerCase(): '';
                 kronosContact.postalCode = participant.address.postalCode;
             }
 
