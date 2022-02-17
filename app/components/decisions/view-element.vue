@@ -53,7 +53,7 @@
             </div>
         </div>
         <div class="row" v-if="htmlText" :class="{ dimmed, 'match-filter':isMatchFilter }">
-            <div class="col-12">
+            <div class="col-12" style="padding-bottom:10px">
                 <span v-html="htmlText" :lang="locale" />
             </div>
         </div>

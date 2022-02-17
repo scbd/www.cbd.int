@@ -66,99 +66,107 @@
 						</dd>
 						<br>
 
-						<dt>Elements of decision</dt>
-						<dd>
-							<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
-								@click="toggleFilters({ types: null })" 
-								:class="{ disabled : filters && filters.types }">
-								{{ sum(counts.types) }} 
-								<i v-if="filters && filters.types" class="fa fa-times" aria-hidden="true"></i>
-							</a>
-							<a v-for="type in allFilters.types" :key="type.code"
-								href="javascript:void(0)" class="badge text-nowrap" 
-								style="margin-right:3px;"
-								@click="toggleFilters({ types: [type.code] })" 
-								:class="`${!isFilterSelected('types', type.code) && 'disabled'} ${type.class || 'badge-secondary'}`" >
-								{{ counts.types[type.code] || 0 }} {{type.title}} 
-								<i class="fa fa-filter" aria-hidden="true"></i>
-							</a>
-						</dd>
-						<dd>
-							<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
-								@click="toggleFilters({ statuses : null })" 
-								:class="{ disabled : filters && filters.statuses }">
-								{{ sum(counts.statuses) }}
-								<i v-if="filters && filters.statuses" class="fa fa-times" aria-hidden="true"></i>
-							</a>
-							<a 
-								v-for="status in allFilters.statuses" :key="status.code"
-								href="javascript:void(0)" class="badge text-nowrap" 
-								style="margin-right:3px;"
-								@click="toggleFilters({ statuses : [status.code]})"
-								:class="`${!isFilterSelected('statuses', status.code) && 'disabled'} ${status.class || 'badge-secondary'}`" >
-								{{ counts.statuses[status.code] || 0 }} {{ status.title }} 
-								<i class="fa fa-filter" aria-hidden="true"></i>
-							</a>
-						</dd>
+						<div v-if="(sum(counts.types)+sum(counts.statuses))>0"> 
 
-						<dt>Actors</dt>
-						<dd>
-							<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
-								@click="toggleFilters({ actors : null })" 
-								:class="{ disabled : filters &&  filters.actors }">
-								{{ sum(counts.actors) }} 
-								<i v-if="filters && filters.actors" class="fa fa-times" aria-hidden="true"></i>
-							</a>
-							<a
-								v-for="actor in allFilters.actors" :key="actor.code"
-								href="javascript:void(0)" class="badge text-nowrap" 
-								style="margin-right:3px;"
-								@click="toggleFilters({ actors : [actor.code] })" 
-								:class="`${!isFilterSelected('actors', actor.code) && 'disabled'} ${actor.class || 'badge-secondary'}`" >
-								{{counts.actors[actor.code]}} {{actor.title}} 
-								<i class="fa fa-filter" aria-hidden="true"></i>
-							</a>
-						</dd>
+							<dt>Elements of decision</dt>
+							<dd v-if="sum(counts.types)>0"> 
+								<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
+									@click="toggleFilters({ types: null })" 
+									:class="{ disabled : filters && filters.types }">
+									{{ sum(counts.types) }} 
+									<i v-if="filters && filters.types" class="fa fa-times" aria-hidden="true"></i>
+								</a>
+								<a v-for="type in allFilters.types" :key="type.code"
+									href="javascript:void(0)" class="badge text-nowrap" 
+									style="margin-right:3px;"
+									@click="toggleFilters({ types: [type.code] })" 
+									:class="`${!isFilterSelected('types', type.code) && 'disabled'} ${type.class || 'badge-secondary'}`" >
+									{{ counts.types[type.code] || 0 }} {{type.title}} 
+									<i class="fa fa-filter" aria-hidden="true"></i>
+								</a>
+							</dd>
 
-						<dt>AICHI targets</dt>
-						<dd>
-							<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
-								@click="toggleFilters({ aichiTargets : null })" 
-								:class="{ disabled : filters &&  filters.aichiTargets }">
-								{{sum(counts.aichiTargets)}} 
-								<i v-if="filters && filters.aichiTargets" class="fa fa-times" aria-hidden="true"></i>
-							</a>
-							<span class="chip-sm" 
-								v-for="aichiTarget in allFilters.aichiTargets" 
-								:key="aichiTarget" 
-								@click="toggleFilters({ aichiTargets : [aichiTarget] })" 
-								:class="`${!isFilterSelected('aichiTargets', aichiTarget) && 'disabled'} 'badge-secondary'`" >
-									<img :title="aichiTarget.description" 
-									:src="`/app/images/aichi-targets/abt-${aichiTarget.replace('AICHI-TARGET-','')}-96.png`" 
-									width="20" style="margin: 1px 1px 1px 1px;">
-							</span>
-						</dd>
-						<br>
+							<dd v-if="sum(counts.statuses)>0"> 
+								<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
+									@click="toggleFilters({ statuses : null })" 
+									:class="{ disabled : filters && filters.statuses }">
+									{{ sum(counts.statuses) }}
+									<i v-if="filters && filters.statuses" class="fa fa-times" aria-hidden="true"></i>
+								</a>
+								<a 
+									v-for="status in allFilters.statuses" :key="status.code"
+									href="javascript:void(0)" class="badge text-nowrap" 
+									style="margin-right:3px;"
+									@click="toggleFilters({ statuses : [status.code]})"
+									:class="`${!isFilterSelected('statuses', status.code) && 'disabled'} ${status.class || 'badge-secondary'}`" >
+									{{ counts.statuses[status.code] || 0 }} {{ status.title }} 
+									<i class="fa fa-filter" aria-hidden="true"></i>
+								</a>
+							</dd>
+						</div>
 
-						<dt>Subjects</dt>
-						<dd>
-							<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
-								@click="toggleFilters({ subjects : null })" 
-								:class="{ disabled : filters &&  filters.subjects }">
-								{{sum(counts.subjects)}} 
-								<i v-if="filters && filters.subjects" class="fa fa-times" aria-hidden="true"></i>
-							</a>
+						<div v-if="sum(counts.actors)>0"> 
+							<dt>Actors</dt>
+							<dd>
+								<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
+									@click="toggleFilters({ actors : null })" 
+									:class="{ disabled : filters &&  filters.actors }">
+									{{ sum(counts.actors) }} 
+									<i v-if="filters && filters.actors" class="fa fa-times" aria-hidden="true"></i>
+								</a>
+								<a
+									v-for="actor in allFilters.actors" :key="actor.code"
+									href="javascript:void(0)" class="badge text-nowrap" 
+									style="margin-right:3px;"
+									@click="toggleFilters({ actors : [actor.code] })" 
+									:class="`${!isFilterSelected('actors', actor.code) && 'disabled'} ${actor.class || 'badge-secondary'}`" >
+									{{counts.actors[actor.code]}} {{actor.title}} 
+									<i class="fa fa-filter" aria-hidden="true"></i>
+								</a>
+							</dd>
+						</div>
 
-							<a href="javascript:void(0)" class="badge text-nowrap" 
-								v-for="subject in allFilters.subjects" 
-								:key="subject.code"
-								style="margin-right:3px;"
-								@click="toggleFilters({ subjects : [subject.code] })" 
-								:class="`${!isFilterSelected('subjects', subject.code) && 'disabled'} ${subject.class || 'badge-secondary'}`" >
-								{{counts.subjects[subject.code]}} {{subject.title}}
-							</a> 
-						</dd>
-						<br>
+						<div v-if="sum(counts.aichiTargets)>0"> 
+							<dt>AICHI targets</dt>
+							<dd>
+								<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
+									@click="toggleFilters({ aichiTargets : null })" 
+									:class="{ disabled : filters &&  filters.aichiTargets }">
+									{{sum(counts.aichiTargets)}} 
+									<i v-if="filters && filters.aichiTargets" class="fa fa-times" aria-hidden="true"></i>
+								</a>
+								<span class="chip-sm" 
+									v-for="aichiTarget in allFilters.aichiTargets" 
+									:key="aichiTarget" 
+									@click="toggleFilters({ aichiTargets : [aichiTarget] })" 
+									:class="`${!isFilterSelected('aichiTargets', aichiTarget) && 'disabled'} 'badge-secondary'`" >
+										<img :title="aichiTarget.description" 
+										:src="`/app/images/aichi-targets/abt-${aichiTarget.replace('AICHI-TARGET-','')}-96.png`" 
+										width="20" style="margin: 1px 1px 1px 1px;">
+								</span>
+							</dd>
+						</div>
+
+						<div v-if="sum(counts.subjects)>0">
+							<dt>Subjects</dt>
+							<dd>
+								<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
+									@click="toggleFilters({ subjects : null })" 
+									:class="{ disabled : filters &&  filters.subjects }">
+									{{sum(counts.subjects)}} 
+									<i v-if="filters && filters.subjects" class="fa fa-times" aria-hidden="true"></i>
+								</a>
+
+								<a href="javascript:void(0)" class="badge text-nowrap" 
+									v-for="subject in allFilters.subjects" 
+									:key="subject.code"
+									style="margin-right:3px;"
+									@click="toggleFilters({ subjects : [subject.code] })" 
+									:class="`${!isFilterSelected('subjects', subject.code) && 'disabled'} ${subject.class || 'badge-secondary'}`" >
+									{{counts.subjects[subject.code]}} {{subject.title}}
+								</a> 
+							</dd>
+						</div>
 
 						<div v-if="decisionDocuments && decisionDocuments.length > 0">
 							<dt>Decision document</dt>
@@ -171,6 +179,14 @@
 										<document-files class="hidden-xs" :files="d.files"></document-files>
 									</div>
 								</div>
+							</dd>
+						</div>
+
+
+						<div v-if="outcomes && outcomes.length > 0">
+							<dt>Outcomes</dt>
+							<dd>
+								<meeting-card-list :meetings="outcomes"></meeting-card-list>
 							</dd>
 						</div>
 
@@ -297,15 +313,19 @@ export default {
 		},
 		documents() {
 			const {decision, selectedNode} = this;
-			
-			const collection = findNode(decision, selectedNode) || decision;
+			const src = findNode(decision, selectedNode) || decision;
 
-			const documents = getTags(collection, 'documents');
+			const docs = src.documents || [];
 
-			if(_.isEmpty(documents)) return null;
+			return docs.filter(code => !/^SCBD\/LOG/.test(code||'')); //return public documents only
+		},
+		outcomes() {
+			const {decision, selectedNode} = this;
 
-			return documents.filter(code => !/^SCBD\/LOG/.test(code||'')); //return public documents only
-		}
+			const src = findNode(decision, selectedNode) || decision;
+
+			return src.outcomes||[];
+		}		
     },
 	watch: {
 		selectedNode: onChangeSelectedNode,
