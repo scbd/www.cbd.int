@@ -473,9 +473,9 @@
     		<div class="col-sm-6">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Outcomes / proof of implementation</label><br>
-                    <div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.meetings|orderBy">
+                    <div class="panel panel-default" style="margin-bottom:4px" ng-repeat="item in element.outcomes|orderBy">
                           <div class="panel-body" style="padding:12px;font-size:0.9em">
-                            <button class="btn btn-outline-danger btn-xs pull-right" style="margin: -9px;" ng-click="removeFrom(item.symbol_s||item, element.meetings)"><i class="fa fa-minus-circle"></i></button>
+                            <button class="btn btn-outline-danger btn-xs pull-right" style="margin: -9px;" ng-click="removeFrom(item.symbol_s||item, element.outcomes)"><i class="fa fa-minus-circle"></i></button>
                             <decision-meeting symbol="item"></decision-meeting>
                         </div>
                     </div>

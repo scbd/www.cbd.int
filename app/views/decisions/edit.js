@@ -445,7 +445,9 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
                     if(!res.value)
                         return;
 
-                    addTo(mettingUrlToCode(res.value.symbol), $scope.element.meetings);
+                    $scope.element.outcomes = $scope.element.outcomes || [];
+
+                    addTo(mettingUrlToCode(res.value.symbol), $scope.element.outcomes);
                 });
             });
         }
