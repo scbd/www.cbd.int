@@ -33,13 +33,15 @@ export default {
             notificationList: [],
         }
     },
-    created,
+    watch: {
+        notifications: refresh
+    },
     methods: {
         lookupNotifications
     }
 }
 
-async function created() {
+async function refresh() {
     const codes = this.notifications.filter(c => !!c);
 
     const notificationList = await this.lookupNotifications(codes);

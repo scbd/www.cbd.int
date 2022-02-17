@@ -32,13 +32,15 @@ export default {
             decisionList: [],
         }
     },
-    created, 
+    watch:{
+        decisions: refresh
+    },
     methods: {
         lookupDecisions
     }
 }
 
-async function created() {
+async function refresh() {
 
     const codes = this.decisions.filter(c => !!c);
 

@@ -32,13 +32,15 @@ export default {
             meetingList: [],
         }
     },
-    created,
+    watch:{
+        meetings: refresh
+    },
     methods: {
         lookupMeetings
     }
 }
 
-async function created() {
+async function refresh() {
     const codes = this.meetings.filter(c => !!c);
 
     const linkMeetings = codes.filter(c => isUrl(c)).map(c => ({symbol: c, url: c}));

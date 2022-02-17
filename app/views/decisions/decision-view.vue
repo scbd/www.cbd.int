@@ -197,10 +197,10 @@
 							</dd>
 						</div>
 
-						<span v-if="decision.decisions && decision.decisions.length > 0">
+						<span v-if="decisions && decisions.length > 0">
 							<dt>Related decisions</dt>
 							<dd>
-								<decision-card-list :decisions="decision.decisions" />
+								<decision-card-list :decisions="decisions" />
 							</dd>
 							<br>
 						</span>
@@ -302,29 +302,40 @@ export default {
 		counts() {
 			const {decision, selectedNode} = this;
 			
-			const collection = findNode(decision, selectedNode) || decision;
+			const src = findNode(decision, selectedNode) || decision;
 			let counts = {};
-			counts.types = _.countBy(getTags(collection, "type", true));
-			counts.statuses = _.countBy(getTags(collection, "statuses", true));
-			counts.actors = _.countBy(getTags(collection, "actors", true));
-			counts.aichiTargets = _.countBy(getTags(collection, "aichiTargets", true));
-			counts.subjects = _.countBy(getTags(collection, "subjects", true));
+			counts.types = _.countBy(getTags(src, "type", true));
+			counts.statuses = _.countBy(getTags(src, "statuses", true));
+			counts.actors = _.countBy(getTags(src, "actors", true));
+			counts.aichiTargets = _.countBy(getTags(src, "aichiTargets", true));
+			counts.subjects = _.countBy(getTags(src, "subjects", true));
 			return counts;
 		},
 		documents() {
 			const {decision, selectedNode} = this;
 			const src = findNode(decision, selectedNode) || decision;
 
-			const docs = src.documents || [];
+			const documents = getTags(src, 'documents') || [];
 
-			return docs.filter(code => !/^SCBD\/LOG/.test(code||'')); //return public documents only
+			return documents.filter(code => !/^SCBD\/LOG/.test(code||'')); //return public documents only
 		},
 		outcomes() {
 			const {decision, selectedNode} = this;
 
 			const src = findNode(decision, selectedNode) || decision;
 
-			return src.outcomes||[];
+			const outcomes = getTags(src, 'outcomes') || [];
+
+			return outcomes;
+		},		
+		decisions() {
+			const {decision, selectedNode} = this;
+
+			const src = findNode(decision, selectedNode) || decision;
+
+			const decisions = getTags(src, 'decisions') || [];
+
+			return decisions;
 		}		
     },
 	watch: {

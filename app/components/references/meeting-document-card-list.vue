@@ -31,17 +31,16 @@ export default {
             documentList: []
         }
     },
-    created,
     methods: {
         loadDocumentList,
         lookupMeetingDocuments,
     },
     watch: {
-        documents: loadDocumentList
+        documents: refresh
     }
 }
 
-async function created() {
+async function refresh() {
     await this.loadDocumentList();   
 }
 
