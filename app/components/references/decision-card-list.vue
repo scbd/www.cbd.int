@@ -32,6 +32,7 @@ export default {
             decisionList: [],
         }
     },
+    created:refresh,
     watch:{
         decisions: refresh
     },

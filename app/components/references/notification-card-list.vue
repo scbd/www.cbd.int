@@ -33,6 +33,7 @@ export default {
             notificationList: [],
         }
     },
+    created:refresh,
     watch: {
         notifications: refresh
     },

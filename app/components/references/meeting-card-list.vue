@@ -32,6 +32,7 @@ export default {
             meetingList: [],
         }
     },
+    created:refresh,
     watch:{
         meetings: refresh
     },
