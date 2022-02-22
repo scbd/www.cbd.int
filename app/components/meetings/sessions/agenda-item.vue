@@ -1,7 +1,7 @@
 
 <template >
   <span>
-    <span v-if="item " class="badge label agenda" :class="[item.prefix]" :style="{ color: item.color }" :title="item.title">
+    <span v-if="item" class="badge label agenda" :class="[item.prefix]" :style="{ 'background-color': item.color }" :title="item.title">
       {{$t(item.prefix)}} {{item.item}} 
     </span>
     <span v-if="showCaption" :title="item.title">
