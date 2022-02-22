@@ -12,15 +12,16 @@
     <select :disabled="disabled" class="form-control" id="minutePart" v-model="minutePart" @change="onChange">
         <option v-for="item in minutes" :key="item" :value="item">{{item}}</option>
     </select>
-      <button type="button" class="form-control text-muted" @click="addMinutes(-1)">-</button>
-      <button type="button" class="form-control text-muted" @click="addMinutes( 1)">+</button>
-    </div>
+    <button type="button" class="form-control text-muted" @click="addMinutes(-1)">-</button>
+    <button type="button" class="form-control text-muted" @click="addMinutes( 1)">+</button>
+    <span class="form-control">
+      <i>{{datetime | formatDate('z')}}</i>
+    </span>
   </div>
 </template>
 
 <script>
-import {DateTime} from 'luxon'
-import { asDateTime } from '../filters.js'
+import { timezone as setTimezone, format as formatDate } from '../datetime.js'
 
 const HOURS   = enumerate(24);
 const MINUTES = enumerate(60);
@@ -30,10 +31,11 @@ export default {
   props: { 
     value    : { type: [Date, String], required: true },
     disabled : { type: Boolean,        required: false, default:false },
-    timezone : { type: String,         required: false }, // TODO!!!
+    timezone : { type: String,         required: false, default:'local' }
   },
   computed : {
     dates,
+    datetime()  { return setTimezone(this.value, this.timezone); },
     hours()     { return HOURS },
     minutes()   { return MINUTES },
     datePart:   { get() { return this.getPart('yyyy-MM-dd') }, set(value) { this.setDatePart  (value) } },
@@ -48,11 +50,14 @@ export default {
     setMinutePart,
     emitUpdate,
     addMinutes,
+  },
+  filters: {
+    formatDate
   }
 }
 
 function getPart(format) {
-  return asDateTime(this.value).toFormat(format)
+  return formatDate(this.datetime, format);
 }
 
 function onChange() {
@@ -64,7 +69,7 @@ function setDatePart(value) {
 
   const [,year,month, day] = value.match(/(\d{4})-(\d{2})-(\d{2})/)
   
-  let date = asDateTime(this.value);
+  let date = this.datetime;
 
   date = date.set({ 
     year:  parseInt(year,  10),
@@ -79,7 +84,7 @@ function setDatePart(value) {
 function setHourPart(value) {
   console.log('setHourPart', this.value)
 
-  let date = asDateTime(this.value);
+  let date = this.datetime;
 
   date = date.set({ hour:  parseInt(value,  10) });
 
@@ -88,7 +93,7 @@ function setHourPart(value) {
 
 function setMinutePart(value) {
 
-  let date = asDateTime(this.value);
+  let date = this.datetime;
 
   date = date.set({ minute:  parseInt(value,  10) });
 
@@ -96,7 +101,7 @@ function setMinutePart(value) {
 }
 
 function addMinutes(offset) {
-  let date = asDateTime(this.value);
+  let date = this.datetime;
 
   date = date.plus({ minutes: offset });
 
@@ -117,7 +122,7 @@ function emitUpdate(date) {
 
 function dates() {
 
-  let date = asDateTime(this.value);
+  let date = this.datetime;
 
   const dates = [];
 

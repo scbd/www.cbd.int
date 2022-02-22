@@ -10,11 +10,12 @@
     </h1>
 
     <h3 :class="{ 'bg-warning text-dark p-1': isInPast(session), 'bg-danger text-white p-1': isInFuture(session) }" class="position-sticky sticky-date"> 
-        {{ (session || {}).date  | dateTimeFilter('T  - cccc, d MMMM yyyy') }}
+                  {{ (session || {}).date | timezone(session.timezone) | formatDate('d MMMM yyyy (cccc) T') }}
+        <small><i>{{ (session || {}).date | timezone(session.timezone) | formatDate('(z)') }}</i></small>
     </h3>
 
     <Session v-if="session">
-      <InterventionRow v-for="(intervention, index) in interventions" :index="index+1" v-bind="{intervention}" v-bind:key="intervention._id">
+      <InterventionRow v-for="(intervention, index) in interventions" :index="index+1" v-bind="{intervention}" :timezone="session.timezone" v-bind:key="intervention._id">
         <template slot="controls">
           <TagSelector :selectedTags="intervention.tags" @tag="toggleTag(intervention, $event)"/>
           <div class="btn-group" role="group">
@@ -27,7 +28,7 @@
 
     <hr/>
 
-    <EditRow v-if="session || pendingInterventions.length" v-on:penging-query="queryPendingInterventions" v-bind="$props" :meetings="meetings" @new-intervention="init">
+    <EditRow v-if="session || pendingInterventions.length" v-on:penging-query="queryPendingInterventions" v-bind="$props" :timezone="session.timezone" :meetings="meetings" @new-intervention="init">
       <template slot="controls">
         <button class="btn" @click="createPendingIntervention()"><i class="fa fa-upload"></i></button>
       </template>
@@ -39,7 +40,7 @@
       <small>{{pendingInterventions.length}} {{$t('Pending statements uploaded')}}</small>
     </caption>
     <Session v-if="pendingInterventions.length" >
-      <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" v-bind:key="intervention._id" @dblclick="edit(intervention)" >
+      <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" :timezone="session.timezone" v-bind:key="intervention._id" @dblclick="edit(intervention)" >
         <template slot="controls">
           <div class="text-nowrap">
             <TagSelector :selectedTags="intervention.tags" @tag="toggleTag(intervention, $event)"/>
@@ -55,7 +56,8 @@
     </Session>
 
     <EditInterventionModal v-if="!!editedIntervention"
-      :sessionId="sessionId" 
+      :sessionId="sessionId"
+      :timezone="session.timezone" 
       :intervention="editedIntervention" 
       :action="editAction"
       :route="route"
@@ -70,7 +72,7 @@
 import Api, { mergeQueries, mapObjectId } from '../api.js'
 
 import { sortBy                , debounce } from 'lodash'
-import { dateTimeFilter        }            from '../filters.js'
+import { format as formatDate, timezone }                 from '../datetime.js'
 import   EditInterventionModal              from './edit-intervention-modal.vue'
 import   InterventionRow                    from './intervention-row.vue'
 import   Session                            from './session.vue'
@@ -91,7 +93,7 @@ export default {
                 agendaItems, 
                 sessionId() { return this.session._id } 
               },
-  filters   : { dateTimeFilter },
+  filters   : { formatDate, timezone },
   methods   : {
                 init,
                 createPendingIntervention, 

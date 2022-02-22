@@ -41,7 +41,6 @@
 import _ from 'lodash'
 import   Multiselect         from 'vue-multiselect'
 import   i18n                from '../locales.js'
-import { dateTimeFilterUTC } from '../filters.js'
 import   AgendaItem   from './agenda-item.vue'
 
 export default {
@@ -55,7 +54,6 @@ export default {
               },
   watch     : { value },
   methods   : { onInput },
-  filters   : { dateTimeFilterUTC },
   computed  : { agendaItems },
   data, i18n, created
 }

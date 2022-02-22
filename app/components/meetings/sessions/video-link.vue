@@ -24,7 +24,7 @@
 <script>
 
 import { Duration } from 'luxon'
-import { asDateTime } from '../filters.js'
+import { asDateTime } from '../datetime.js'
 import languages from '../../languages.js'
 
 const Types = { 

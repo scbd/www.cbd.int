@@ -3,20 +3,26 @@
     <Session :_id="_id" class="card" 
       :body-class="{'collapse':true, 'show': numberOfSessions==1 }" 
       :body-id="`sid${_id}`" 
-      v-for="{ title, _id, interventions, date, videos, count } in sessions" :key="_id">
+      v-for="{ title, _id, interventions, date, videos, count, timezone } in sessions" :key="_id">
 
       <template v-slot:header>
 
         <div class="card-header" data-toggle="collapse" :data-target="`#sid${_id}`" :class="{ collapsed: numberOfSessions>1 }" >
-          <h5 @click="!interventions && loadInterventions(_id)"> 
+          <h5 @click="!interventions && loadInterventions(_id)"
+           :title="date | setTimezone(timezone) | format('z')"> 
             {{ title }}
-            <span v-if="!title" >{{ date | dateTimeFilter('cccc, d MMMM yyyy - T') }}</span>
+            <span v-if="!title" >
+              {{ date | setTimezone(timezone) | format('cccc, d MMMM yyyy - T') }}
+            </span>
             ({{count}})
+            
+            <i class="loading text-muted tiny">{{date | setTimezone(timezone) | format('z')}}</i>
 
             <i class="text-muted fa fa-caret-up"/>
             <i class="text-muted fa fa-caret-down"/>
-            <i class="text-muted help">click to expand</i>
+            <i class="text-muted help tiny">click to expand</i>
             <i v-if="!interventions" class="loading text-muted  fa fa-cog fa-spin"></i>
+            
 
             <span class="video" v-if="videos && videos.length">
               <VideoLink class="pull-right" :videos="videos" title="Full session webcast"/>
@@ -27,7 +33,7 @@
         </div>
       </template>
 
-      <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention}" :index="index+1" v-bind:key="intervention._id" :public-view="true">
+      <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention}" :timezone="timezone" :index="index+1" v-bind:key="intervention._id" :public-view="true">
         <template v-slot:controls>
           <div class="video">
             <VideoLink :videos="videos" :start-at="intervention.datetime" :title="`Start at intervention of ${intervention.title}`"/>
@@ -45,7 +51,7 @@ import   Api               from '../api.js'
 import   Session           from './session.vue'
 import   InterventionRow   from './intervention-row.vue'
 import   VideoLink         from './video-link.vue'
-import { dateTimeFilter  } from '../filters.js'
+import { format, timezone as setTimezone } from '../datetime.js'
 
 export default {
   name       : 'SessionsView',
@@ -55,7 +61,7 @@ export default {
                   tokenReader: { type: Function, required: false }
                 },
   computed   : { numberOfSessions },
-  filters    : { dateTimeFilter },
+  filters    : { format, setTimezone },
   methods    : { loadInterventions },
   created, data
 }
@@ -117,7 +123,8 @@ function numberOfSessions(){
   .card-header           .fa-caret-up   { display: none; }
   .card-header.collapsed .fa-caret-up   { display: inline; }
 
-  .card-header           .help          { display: none; font-weight: lighter; font-size: 80%; }
+  .card-header           .tiny          { font-weight: lighter; font-size: 80%; }
+  .card-header           .help          { display: none; }
   .card-header.collapsed .help          { display: inline; }
 
   .card-header           .fa-caret-down { display: inline; }
