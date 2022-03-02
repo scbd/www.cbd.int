@@ -1,14 +1,18 @@
 import { DateTime } from 'luxon'
 
-//https://moment.github.io/luxon/docs/manual/formatting#table-of-tokens
-export function dateTimeFilterUTC(dateTime, format='T') { 
-    return dateTime && asDateTime(dateTime).setZone('utc').toFormat(format)
+export function timezone(dateTime, tz=null) {
+    dateTime = dateTime && asDateTime(dateTime);
+
+    if(dateTime) dateTime = dateTime.setZone(tz||'local');
+
+    return dateTime;
 }
 
-export function dateTimeFilter(dateTime, format='T') {
+//https://moment.github.io/luxon/docs/manual/formatting#table-of-tokens
+
+export function format(dateTime, format='T') {
     return dateTime && asDateTime(dateTime).toFormat(format)
 }
-
 
 export function asDateTime(date) {
     if(date instanceof DateTime)  return date

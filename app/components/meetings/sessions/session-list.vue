@@ -14,15 +14,23 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">Date</th>
+          <th scope="col"></th>
           <th scope="col">Title</th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="({ _id, date, title, meetings }, index) in sessions" :key="_id" :class="{ 'table-success': isInProgress(date)}">
+        <tr v-for="({ _id, date, title, meetings, timezone }, index) in sessions" :key="_id" :class="{ 'table-success': isInProgress(date)}">
           <th scope="row">{{ sessionNumber(index) }}</th>
-          <td>{{ date | dateTimeFilter('cccc, d MMMM yyyy - T') }}</td>
-          <td>{{title}}</td>
+          <td>
+            {{ date | tz(timezone) | formatDate('d MMMM yyyy - cccc T (z)') }}
+            </td>
+          <td>
+            <i v-for="({ symbol }) in meetings" :key="symbol">{{symbol}}</i>
+          </td>
+          <td>
+            {{title}}
+          </td>
           <td>
             <div class="btn-group" role="group">
               <a class="btn btn-sm btn-outline-dark" :href="getUrl({ _id, meetings })"><i class="fa fa-list"></i></a>
@@ -39,7 +47,7 @@
 <script>
 
 import   Api           , { mapObjectId }from '../api.js'
-import { dateTimeFilter }               from '../filters.js'
+import { format, timezone }             from '../datetime.js'
 import   moment                         from 'moment'
 import   remapCode                      from './re-map.js'
 
@@ -51,7 +59,7 @@ export default {
                 },
   methods    : { getUrl, meetingQuery,conferenceQuery, sessionNumber, isInProgress, now },
   computed   : { now },
-  filters    : { dateTimeFilter },
+  filters    : { formatDate: format, tz: timezone },
   created, 
   data
 }

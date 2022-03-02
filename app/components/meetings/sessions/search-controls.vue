@@ -20,7 +20,6 @@
 <script>
 import { debounce          } from 'lodash'
 import { mapObjectId       } from '../api.js'
-import { dateTimeFilterUTC } from '../filters.js'
 
 import AgendaSelect       from './agenda-item-select.vue'
 import i18n               from '../locales.js'
@@ -33,7 +32,6 @@ export default {
                 meetings: { type: Array, required: true },
               },
   methods   : { onChange : debounce(onChange, 400), buildQuery, clearText},
-  filters   : { dateTimeFilterUTC },
   data,
   i18n,
   created() { this.onChange() },

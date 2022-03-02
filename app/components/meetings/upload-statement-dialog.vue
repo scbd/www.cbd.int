@@ -23,7 +23,7 @@
                         <form  id="statement-submission-form" @submit.prevent="submitForm" enctype="multipart/form-data" ref="form" novalidate :class="{ 'was-validated': wasValidated }">
 
                             <div class="form-group row">
-                                <label for="participantIdentity" class="col-sm-3 col-form-label">Priority-Pass Code</label>
+                                <label for="participantIdentity" class="col-sm-3 col-form-label">Priority-Pass or Badge Code</label>
                                 <div class="col-sm-9">
                                     <div class="input-group">
                                         <input :disabled="!!progress" type="text" class="form-control" id="participantIdentity" ref="participantIdentity" placeholder="ABCDE-12345" v-model.trim="participantIdentity" required>

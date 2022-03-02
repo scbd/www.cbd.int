@@ -10,6 +10,8 @@
             Preview
             <input v-model="searchText" type="text" ref="search" class="form-control" @input="search()" @change="search(true)" placeholder="Search..."/>
             <small v-if="searchMatches!==null" style="display:inline-block">{{searchMatches}} match(es) found</small>
+            <button style="font-size:90%"  type="button" :disabled="magnification<-10" class="btn" @click="magnification--">A-</button>
+            <button style="font-size:105%" type="button" :disabled="magnification> 20" class="btn" @click="magnification++;">A+</button>
           </h3>
           
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -18,7 +20,7 @@
                       
         </div>
         <div class="modal-body">
-          <p ref="text" class="preview" :lang="language">{{cleanText}}</p>
+          <p ref="text" class="preview" :style="{ 'font-size':`${20+magnification}px`, 'line-height':`${35+magnification}px` }" :lang="language">{{cleanText}}</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn" data-dismiss="modal">Close</button>
@@ -49,11 +51,12 @@ const TextPreviewDialog = {
   data() { 
     return {
       searchText: '',
-      searchMatches: null
+      searchMatches: null,
+      magnification: 0
     };
   },
-  methods: { open, search: debounce(search, 500) },
-  watch:   { show: open },
+  methods: { open, search: debounce(search, 500), loadMagnification },
+  watch:   { show: open, magnification: saveMagnification },
   mounted
 }
 
@@ -87,7 +90,17 @@ function search(scroll) {
   }
 }
 
+function saveMagnification() {
+  sessionStorage.setItem("interpreter-magnification", this.magnification);
+}
+
+function loadMagnification() {
+  this.magnification = parseInt(sessionStorage.getItem("interpreter-magnification")) || 0;
+}
+
 function mounted() {
+
+  this.loadMagnification();
 
   this.marker = new Mark(this.$refs.text);
 

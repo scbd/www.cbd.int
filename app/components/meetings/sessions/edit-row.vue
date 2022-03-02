@@ -42,14 +42,15 @@ import OrganizationSearch from './organization-search-v2.vue'
 import i18n               from '../locales.js'
 
 import { cloneDeep      } from 'lodash'
-import { dateTimeFilter } from '../filters.js'
+import { format, timezone as setTimezone } from '../datetime.js'
 
 export default {
   name         : 'EditRow',
   props        : {
-                    meetings                 : { type: Array,    required: true },
-                    route                    : { type: Object,   required: true },
-                    tokenReader              : { type: Function, required: true },
+                    meetings    : { type: Array,    required: true },
+                    route       : { type: Object,   required: true },
+                    tokenReader : { type: Function, required: true },
+                    timezone    : { type: String,   required: false, default:'local' }
                   },
   components : { AgendaSelect, OrganizationSearch },
   computed   : { meetingId, isCreateSessionInterventionDisabled },
@@ -67,7 +68,7 @@ function data(){
   return {
     selectedAgendaItems : [],
     organization        : [],
-    timeText            : dateTimeFilter((new Date()).toISOString()),
+    timeText            : format(setTimezone(new Date(), this.timezone)),
     intervalRef         : undefined
   }
 }
@@ -129,7 +130,7 @@ function clearForm(){
 }
 
 function resetTime () {
-  this.timeText = dateTimeFilter((new Date()).toISOString());
+  this.timeText = format(setTimezone(new Date(), this.timezone));
 }
 
 function isCreateSessionInterventionDisabled(){

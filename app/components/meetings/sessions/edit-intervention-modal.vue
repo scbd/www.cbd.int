@@ -66,7 +66,7 @@
                             <div class="form-group row">
                                 <label for="status" class="col-sm-3 col-form-label">Date / Time</label>
                                 <div class="col-sm-9">
-                                    <DateTimeSelector :disabled="!!progress" v-model="datetime"/>
+                                    <DateTimeSelector :disabled="!!progress" v-model="datetime" :timezone="timezone"/>
                                 </div>        
                             </div>       
 
@@ -140,6 +140,7 @@ export default {
         route        : { type: Object,   required: false },
         intervention : { type: Object,   required: true  },
         sessionId    : { type: String,   required: false },
+        timezone     : { type: String,   required: false },
         meetings     : { type: Array,    required: false },
         action       : { type: String,   required: false, default: "edit" },
     },

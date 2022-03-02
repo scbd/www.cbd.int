@@ -11,11 +11,13 @@
     </td>
 
     <td v-if="showDate" class="date-col d-none d-lg-table-cell" style="text-align: center; vertical-align: middle;">
-        <span>{{ intervention.datetime | dateTimeFilter('MMM d') }}</span>
+        <span>{{ intervention.datetime | setTimezone(timezone) | formatDate('MMM d') }}</span>
     </td>
 
     <td v-if="showTime"  class="time-col d-none d-lg-table-cell" style="text-align: center; vertical-align: middle;">
-        <span>{{ intervention.datetime | dateTimeFilter('T') }}</span>
+        <span :title="intervention.datetime | setTimezone(timezone) | formatDate('z')">
+          {{ intervention.datetime | setTimezone(timezone) | formatDate('T') }}
+        </span>
     </td>
 
     <td style="vertical-align: middle;"> 
@@ -26,8 +28,11 @@
 
         <div class="d-lg-none small">
           <AgendaItem :item="intervention.agenda || ( intervention.agendaItem && { item: intervention.agendaItem})"/>
-          <span v-if="showDate" >{{ intervention.datetime | dateTimeFilter('MMM d') }}</span>
-          <span v-if="showTime">{{ intervention.datetime | dateTimeFilter('T') }}</span>
+          <span v-if="showDate">{{ intervention.datetime | setTimezone(timezone) | formatDate('MMM d') }}</span>
+          <span v-if="showTime"
+            :title="intervention.datetime | setTimezone(timezone) | formatDate('z')">
+            {{ intervention.datetime | setTimezone(timezone) | formatDate('T') }}
+          </span>
         </div>
 
 
@@ -59,7 +64,7 @@ import   AgendaItem   from './agenda-item.vue'
 import   FilesView    from './files-view.vue'
 import   i18n         from '../locales.js'
 import   FilesPreview from './files-preview.vue'
-import { dateTimeFilter } from '../filters.js'
+import { format as formatDate, timezone as setTimezone } from '../datetime.js'
 import { isPublic as isTagPublic, 
          getTitle as getTagTitle } from './tags.js'
 
@@ -72,9 +77,10 @@ export default {
                   showDate    : { type: Boolean, required: false, default: true },
                   showTime    : { type: Boolean, required: false, default: true },
                   publicView  : { type: Boolean, required: false, default: false },
+                  timezone    : { type: String,  required: false, default: 'local' },
               },
   methods   : { getOrgType, isPending },
-  filters   : { dateTimeFilter },
+  filters   : { formatDate, setTimezone },
   computed  : { tags },
   i18n, 
 }
