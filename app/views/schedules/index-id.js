@@ -48,8 +48,10 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 
             }).then(function(conf){
                 _ctrl.conferenceTimezone = conf.timezone;
-                _ctrl.code = conf.code
-                _ctrl.all = conf.schedule.all
+                _ctrl.code               = conf.code
+                _ctrl.all                = conf.schedule.all
+                _ctrl.showRooms          = conf.schedule.showRooms
+
                 $scope.schedule = conf.schedule
 
                 options.params.datetime = _ctrl.now();

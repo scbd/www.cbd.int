@@ -130,7 +130,7 @@
                                           <a ng-if=":: r.sideEvent" ng-href="https://www.cbd.int/side-events/{{::r.sideEvent.id}}" target="sideEvent" style="color:inherit">{{r.sideEvent.title || r.title}}</a>
                                       </div>
 
-                                      <div ng-if="!scheduleCtrl.all" class="schedule-item-location">
+                                      <div ng-if="!scheduleCtrl.all || scheduleCtrl.showRooms" class="schedule-item-location">
                                           <em>{{:: r.room.title}}</em>
                                           <em ng-if="r.room.location">- {{::r.room.location}}</em>
                                       </div>
