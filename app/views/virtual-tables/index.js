@@ -46,7 +46,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         'in-person-event-meeting-or-activity'     : 'In-person event, meeting or activity',
         'other'                                   : 'Other'
     }
-
+    $scope.filterAdminTags = ["virtual-table"];
     $scope.isEvent = $route.current.params.type == 'event';
     $scope.isPublication = $route.current.params.type == 'publication';
 
@@ -191,13 +191,11 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
             $scope.meetingType[m.EVT_CD.toLowerCase()] = m.EVT_CD;
         });
 
-        console.log($scope.meetingType)
     }
 
     buildQuery();
 
-    fetchPosterArticles();
-    loadMeetingTypes();
+    loadMeetingTypes().then(fetchPosterArticles);
 
 }];
 
