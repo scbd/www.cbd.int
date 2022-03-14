@@ -123,7 +123,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         }
         
         ag.push(sortBy);
-        ag.push({"$project" : { coverImage:1, adminTags:1, title:1, summary:1,eventData:1}});
+        ag.push({"$project" : { coverImage:1, adminTags:1, title:1, summary:1,eventData:1, 'meta.createdOn':1}});
         ag.push({"$limit":1000});
 
         articleService.query({ "ag" : JSON.stringify(ag) })
@@ -137,8 +137,11 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
                     article.adminTags.forEach(t=>{
                         if( $scope.publicationType[t])
                             article[t] = true;
-                        if( $scope.meetingType[t])
+                        if( $scope.meetingType[t]){
                             article[t] = true;
+                            article.meetingTypes = article.meetingTypes||[];
+                            article.meetingTypes.push($scope.meetingType[t])
+                        }
                         if( $scope.eventType[t])
                             article[t] = true;
                     })
@@ -185,8 +188,10 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         const meeting = await $http.get("/api/v2016/meetings/", { cache: true, params: {q:meetingIds, f: { EVT_CD:1 } } })
      
         meeting.data.forEach(m=>{
-            $scope.meetingType[m.EVT_CD] = m.EVT_CD;
+            $scope.meetingType[m.EVT_CD.toLowerCase()] = m.EVT_CD;
         });
+
+        console.log($scope.meetingType)
     }
 
     buildQuery();
