@@ -143,12 +143,12 @@
                 }
 
                 .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body,
-                .dialog-article-cover, .dialog-article-cover .image-credit-wrapper{
+                .dialog-article-cover, .dialog-article-cover .image-wrapper{
                     margin: 0px!important;
                     padding: 0px!important;
                 }
                 @media (max-width: 767px){
-                    .dialog-article-cover .image-credit-wrapper {
+                    .dialog-article-cover .image-wrapper {
                         height: 250px;
                     }
                     .ngdialog.ngdialog-theme-default .ngdialog-content {
@@ -156,7 +156,7 @@
                     }
                 }
 
-                .dialog-article-cover .image-credit-wrapper .cover-image {
+                .dialog-article-cover .image-wrapper .cover-image {
                     border-radius: 4px 4px 0 0;
                 }
 
@@ -221,6 +221,29 @@
                         max-height: 500px;
                     }
                 }
+
+                .image-wrapper {
+                    overflow: hidden;
+                    position: relative;
+                    width: 100%
+                }
+
+                .image-wrapper .article-date {
+                    position: absolute;
+                    right: 0px;
+                    bottom: 4px;
+                }
+
+                .article-date {
+                    background: rgba(0, 0, 0, .7);
+                    color: #ccc;
+                    display: inline-block;
+                    font-size: 14px;
+                    padding: 5px 8px;
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                }
             </style>
             <div  class="col-lg-12">
                 <h2>
@@ -251,15 +274,20 @@
                     ag-gutter-size="10" ag-id="gallery"  ag-infinite-scroll="updateScrollPage()"
                     ag-infinite-scroll-distance="100" id="articlesBody">
                     <article class="card white-panel" ng-repeat="article in filterPosters = (posters | filter:filterBy)"
-                    ng-click="showArticle(article)" style="cursor:pointer">                    
-                        <div ng-if="article.url_600" class="img" style="background-image: url({{::article.url_600}});"></div>
-                        <div class="inside">                                        
-                            <h3>{{::article.title|lstring}}</h3>
-                            <div class="description" ng-bind-html="::article.summary |lstring | limitTo:100|unsafe"></div>
+                    ng-click="showArticle(article)" style="cursor:pointer"> 
+                    <div ng-if="article.url_600" class="img" style="background-image: url({{::article.url_600}});"></div>
+                                       
+                        <div class="inside">    
+                            <div class="image-wrapper1" >                                    
+                                <h3>{{::article.title|lstring}}</h3>
+                                <div class="description" ng-bind-html="::article.summary |lstring | limitTo:100|unsafe"></div>
+                                
+                            </div>    
+                            <span class="article-date">{{article.meta.createdOn|moment:'toDate'|date:'yyyy-MM-dd':'UTC'}}</span>
                         </div>
-                        <div ng-if="isAdmin" style="border-top: 1px solid #eee">
-                            <div>&nbsp; updated on {{article.meta.modifiedOn|formatDate}}</div>
-                            <div class="btn-group pull-right">
+                        
+                        <div style="border-top: 1px solid #eee">
+                            <div class="btn-group pull-right" ng-if="isAdmin">
                                 <a class="btn" href="https://www.cbd.int/management/articles/{{article._id}}/edit">
                                     <i class="fa fa-edit"></i>
                                 </a>
@@ -279,10 +307,14 @@
                         <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;text-align: center;">               
                             <h3>{{virtualArticle.title.en}}</h3>
                             <hr/>
+                            <strong>{{virtualArticle.meta.createdOn|moment:'toDate'|date:'yyyy-MM-dd':'UTC'}}</strong>
                         </div>
                         <div class="content">
+                            <span class="badge rounded-pill bg-secondary" ng-repeat="type in virtualArticle.meetingTypes">{{type}}</span>
+                            
                             <cbd-article query="virtualArticleQuery" ng-if="virtualArticleQuery" on-load="onArticleLoad(article)"  hide-cover-image="true"></cbd-article>
-                        </div>                        
+                            
+                        </div>      
                     </main>
                     
                 </div>
