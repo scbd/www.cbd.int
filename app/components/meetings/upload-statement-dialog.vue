@@ -125,6 +125,14 @@
                                 </div>
                             </div>  
 
+                            <div class="form-group row">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-9 input-group">
+                                    <div id="g-recaptcha"></div>
+                                    <div class="invalid-feedback captcha" v-if="!grecaptchaToken" >Please check the box to proceed.</div>
+                                </div>
+                            </div>  
+
                             <div class="alert alert-warning" role="alert" v-if="error">
                                 <span v-if="error.code === 'forbidden'">
                                     <b>Invalid or expired badged or prority-pass.</b> <br>
@@ -163,6 +171,9 @@ import i18n from './locales.js'
 import Api  from './api.js'
 import remapCode  from './sessions/re-map.js'
 
+const captchaSiteKeyV2 = (document && document.documentElement.attributes['captcha-site-key-v2'].value);
+let recaptchaWidgetId;
+
 export default {
     name: 'uploadStatement',
     i18n,
@@ -184,6 +195,7 @@ export default {
             wasValidated       : false,
             progress           : null,
             error              : null,
+            grecaptchaToken    : undefined
         }
     },
     created() {
@@ -242,6 +254,11 @@ export default {
             }
 
             this.meetings = this.meetings.filter(o=>o.uploadStatement);
+
+            recaptchaWidgetId = grecaptcha.render('g-recaptcha', {
+                'sitekey' : captchaSiteKeyV2,
+                'callback' : this.recaptchaCallback,
+            });
         },
 
         open()  { this.openDialog(true) },
@@ -272,7 +289,7 @@ export default {
             this.clearError();
             this.wasValidated = true;
 
-            if(!this.isFormValid)
+            if(!this.isFormValid || !this.grecaptchaToken)
                 return e.stopPropagation();
 
             const passCode = this.cleanParticipantIdentity;
@@ -288,7 +305,7 @@ export default {
 
             this.progress = { message: "Preparing..." };
 
-            const slot    = await this.api.createInterventionFileSlot(passCode, data)
+            const slot    = await this.api.createInterventionFileSlot(passCode, data, this.grecaptchaToken);
 
             this.progress = { message: "Uploading...", percent: 0 };
 
@@ -308,8 +325,11 @@ export default {
           } catch(err) {
               if(err.code=='forbidden') this.$refs.participantIdentity.setCustomValidity("Invalid badge or priority-pass number")
               this.error = err
+              grecaptcha.reset(recaptchaWidgetId);
+              this.grecaptchaToken = undefined;
           } finally {
             this.progress = null;
+            this.wasValidated = false;
           }
         },
         resetForm(){
@@ -334,6 +354,11 @@ export default {
                 this.participantIdentity = this.route.query.uploadStatementBy;
             }
 
+            this.grecaptchaToken = undefined;
+            if(recaptchaWidgetId!=undefined){
+                grecaptcha.reset(recaptchaWidgetId);
+            }
+
         },
 
         persistIdentity() {
@@ -348,6 +373,11 @@ export default {
 
         onUploadProgress({loaded, total}) {
             (this.progress||{}).percent = (loaded*100/total)|0;
+        },
+
+        recaptchaCallback(token){
+            this.grecaptchaToken = token;
+            this.error = undefined;
         }
     }
 }
@@ -355,5 +385,8 @@ export default {
 <style scoped>
 .modal-content-upload {
     display: inline;
+}
+.invalid-feedback.captcha{
+    display: block;
 }
 </style>

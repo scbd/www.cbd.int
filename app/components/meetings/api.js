@@ -157,10 +157,11 @@ export default class Api
   // Interventions Files
   ////////////////////////
 
-  async createInterventionFileSlot(passCode, data){
+  async createInterventionFileSlot(passCode, data, grecaptchaToken){
     
     const headers = {
-      Authorization : `Pass ${passCode}`
+      Authorization        : `Pass ${passCode}`,
+      'x-captcha-v2-token' :  grecaptchaToken
     };
 
     const slot = await this.http.post("api/v2021/meeting-interventions/slot", data, { headers }).then(res => res.data).catch(tryCastToApiError);
