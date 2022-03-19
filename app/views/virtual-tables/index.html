@@ -244,6 +244,10 @@
                     bottom: 0;
                     right: 0;
                 }
+                .content .badge.bg-dark{
+                    margin-right: 5px;
+                    color: #fff;
+                }
             </style>
             <div  class="col-lg-12">
                 <h2>
@@ -309,8 +313,8 @@
                             <hr/>
                             <strong>{{virtualArticle.meta.createdOn|moment:'toDate'|date:'yyyy-MM-dd':'UTC'}}</strong>
                         </div>
-                        <div class="content">
-                            <span class="badge rounded-pill bg-secondary" ng-repeat="type in virtualArticle.meetingTypes">{{type}}</span>
+                        <div class="content">                           
+                            <span class="badge rounded-pill bg-dark" ng-repeat="type in virtualArticle.meetingTypes">{{type}}</span>
                             
                             <cbd-article query="virtualArticleQuery" ng-if="virtualArticleQuery" on-load="onArticleLoad(article)"  hide-cover-image="true"></cbd-article>
                             
