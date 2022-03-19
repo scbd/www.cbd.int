@@ -114,7 +114,6 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             if(_ctrl.event){              
                 // BF not sure why we use $route.current.params.datetime instead of $location for reading qs
                 _ctrl.now = moment.tz($location.search().datetime || $route.current.params.datetime || new Date() , getTimezone()).toDate();
-                $scope.$applyAsync(()=>{});
             }
             return _ctrl.now;
         }
