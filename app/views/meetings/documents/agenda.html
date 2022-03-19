@@ -54,15 +54,16 @@
                 </div>
             </li>
                 <li class="nav-item dropdown ml-0">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-href="#" style="border:1px solid #f5efef">
+                    <a class="nav-link btn dropdown-toggle" ng-class="{ 'btn-danger' : agendaCtrl.isDateOverride }" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-href="#" style="border:1px solid #f5efef">
                         <em class="visible-xs-inline1 fa fa-clock-o"></em> 
-                        <b ng-if="agendaCtrl.scheduleDate==''" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':'H:mm'"></b>
-                        <b ng-if="agendaCtrl.scheduleDate!=''" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':'MMM Do'"></b>
+                        <b ng-if="!agendaCtrl.isDateOverride" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':'H:mm'"></b>
+                        <b ng-if=" agendaCtrl.isDateOverride" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':'MMM Do'"></b>
                     </a>
             		<div class="dropdown-menu dropdown-menu-right">
-            			<a class="text-nowrap dropdown-item" href="#" ng-repeat="item in agendaCtrl.scheduleDates" ng-click="agendaCtrl.scheduleDateChanged(item.value, item.today)">
-                            <span ng-class="{ 'today': item.today}" class="hidden-xs hidden-sm"   ng-bind="item.text || (item.value|moment:'format':'DD MMM YYYY (ddd)')" ></span>
-                            <span ng-class="{ 'today': item.today}" class="visible-xs visible-sm" ng-bind="item.text || (item.value|moment:'format':'ddd Do')" ></span>
+            			<a class="text-nowrap dropdown-item" href="#" ng-repeat="item in agendaCtrl.scheduleDates" ng-click="agendaCtrl.scheduleDateChanged(item.value)">
+                            <span ng-if=" item.value" class="hidden-xs hidden-sm"  >{{item.text || (item.value|moment:'format':'DD MMM YYYY (ddd)')}}</span>
+                            <span ng-if=" item.value" class="visible-xs visible-sm">{{item.text || (item.value|moment:'format':'ddd Do')}}</span>
+                            <b    ng-if="!item.value">Now</b>
                         </a>
             		</div>
             	</li>

@@ -54,7 +54,8 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 
                 $scope.schedule = conf.schedule
 
-                options.params.datetime = _ctrl.now();
+                if($route.current.params.datetime)
+                    options.params.datetime = _ctrl.now();
                 
             }).then(function(){
                 const url = _ctrl.all?  `/api/v2016/cctv-streams/${streamId}/all` : 
