@@ -48,6 +48,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         _ctrl.expandAll = expandAll;
         _ctrl.selectTab = selectTab;
         _ctrl.hasTab    = hasTab;
+        _ctrl.isDateOverride = !!$route.current.params.datetime;
         _ctrl.resolveLiteral = function(value) { return function() { return value; }; };
         _ctrl.scheduleDateChanged = scheduleDateChanged;
         _ctrl.deviceSize          = $rootScope.deviceSize;
@@ -113,6 +114,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             if(_ctrl.event){              
                 // BF not sure why we use $route.current.params.datetime instead of $location for reading qs
                 _ctrl.now = moment.tz($location.search().datetime || $route.current.params.datetime || new Date() , getTimezone()).toDate();
+                $scope.$applyAsync(()=>{});
             }
             return _ctrl.now;
         }
@@ -451,15 +453,6 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             else
                 end = moment.tz(schedule.start, getTimezone()).add(30, 'd')
 
-
-            if($route.current.params.datetime)
-                _ctrl.scheduleDate =  moment.tz($route.current.params.datetime, getTimezone()).format('YYYY-MM-DD');
-            else if(now > end){
-                _ctrl.scheduleDate =  moment.tz(end, getTimezone()).format('YYYY-MM-DD');
-                 //update querystring so that schedule directive can load appropriate date/ this if for plain shedule url where the date 
-                 //is not specidied the default to end date
-                 $location.search({datetime:moment.tz(end, _ctrl.event.timezone).format('YYYY-MM-DD')});
-            }
             if(!_ctrl.all && end > now){
                 end = now;
             }
@@ -469,28 +462,19 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             var dates = []
             for(var i=0; i < difference; i++){
                 var date = moment.tz(schedule.start, getTimezone()).add(i, 'd');
-                var dateOption = {
-                    value : date.format('YYYY-MM-DD')
-                }
-         
+
+                dates.push({ value : date.format('YYYY-MM-DD') })
+
                 if(isToday(date)) { 
-                  dateOption.text  = `Today: ${date.format('ddd Do')}`
-                  dateOption.today = true
+                    dates.push({ value: null })
                 }
 
-                dates.push(dateOption)
             }
 
-            if(end == now){
-                var date = moment.tz(new Date(), getTimezone()).add(i, 'd');
-                var dateOption = {
-                    value : '',
-                    text : 'Now'
-                }
-                dates.push(dateOption)
+            if(!dates.find(o=>o.value===null)){
+                dates.push({ value : null });
             }
 
-            _ctrl.scheduleDate  = _ctrl.scheduleDate || "";
             _ctrl.scheduleDates = dates;
         };
 
@@ -514,14 +498,13 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
           return aMoment
         }
 
-        function scheduleDateChanged(date, disabled=false){
-            if(disabled) return
-            _ctrl.scheduleDate = date;
+        function scheduleDateChanged(date){
+
             var tab = _ctrl.currentTab;     
             _ctrl.types[0].loaded = false;
             _ctrl.currentTab = undefined;
 
-            $location.search({ datetime: _ctrl.scheduleDate||undefined });
+            $location.search({ datetime: date });
 
             load();
             _ctrl.currentTab = tab;
