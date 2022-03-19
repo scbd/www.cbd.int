@@ -80,8 +80,8 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
                         ngDialog.close();                                            
                     }
 
-                    $scope.onArticleLoad = function(article){
-                        $scope.virtualArticle = article;
+                    $scope.onArticleLoad = function(virtualArticle){
+                        $scope.virtualArticle = {...article, ...virtualArticle };
                         $scope.isLoading = false;
                     }
 
