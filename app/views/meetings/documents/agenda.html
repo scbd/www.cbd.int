@@ -138,9 +138,8 @@
                             </td>
 
                             <td style="padding:0px;" >
-
-                                <table ng-if="res.agenda.visible && res.agenda.items && res.agenda.items.length" class="table no-border-first-row no-border-first-row" style="margin:0px">
-
+                              <div style="padding: 10px ;"><b>{{::res.title}}</b></div>
+                                <table ng-if="res.agenda.visible && res.agenda.items && res.agenda.items.length" class="table" style="margin:0px">
                                     <tr  ng-repeat="agendaItem in res.agenda.items" style="cursor:default">
                                         <td class="hidden-xs" style="width:55px" ng-click="agendaItem.expanded=!agendaItem.expanded">
                                             <span ng-style="{ 'background-color' : agendaItem.color}" class="badge label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::agendaItem.item}}</span>
@@ -150,10 +149,6 @@
                                                 <div class="pull-right">
 
                                                     <span class="small">
-
-                                                        <!-- <span class="text-muted" ng-if="::(agendaItem.status || agendaItem.files.length) && (!agendaItem.documents.length || agendaItem.documents.length!=agendaItem.files.length)">
-                                                            document not yet available<i class="fa fa-fw fa-caret-down" style="visibility:hidden"></i>
-                                                        </span> -->
 
                                                         <a class="text-muted" ng-if="::agendaItem.documents.length" style="text-decoration:none" href="#">
                                                             <b ng-if="::agendaItem.documents.length==1">{{::agendaItem.documents.length}} document</b>
@@ -173,9 +168,6 @@
                                                 </div>
                                                 <span class="visible-xs-inline-block badge label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::agendaItem.item}}</span>
                                                 <span class="title agenda">
-                                                    <div class="hidden-xs" ng-if="::type._id=='570fd1552e3fa5cfa61d90f0'" style="font-weight:bold">
-                                                        <span> {{::res.title}} <br></span> 
-                                                    </div>
                                                     <span ng-if="::!agendaItem.text">
                                                         <span class="hidden-xs" >{{::agendaItem.title}}</span>
                                                         <span class="visible-xs-inline">{{::agendaItem.shortTitle||agendaItem.title}}</span>
