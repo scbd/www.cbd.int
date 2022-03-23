@@ -119,6 +119,12 @@
                                 <b title="{{agendaCtrl.getTimezone()}}">{{::res.start|moment:'tz':agendaCtrl.getTimezone()|moment:'format':'HH:mm'}}</b>
 
                                 <schedule-agenda-dynamic-connect-button :is-badge="true" :reservation="res" :schedule="schedule" ng-vue/>
+
+                                <div  ng-if="!scheduleCtrl.all || scheduleCtrl.showRooms" style="padding-top:3px;">
+                                    <em>{{:: res.room.title}}</em>
+                                    <em ng-if="res.room.location"><br>{{::res.room.location}}</em>
+                                </div>
+
                                 <div ng-show="res.videoUrl">
                                     <a ng-if="::!agendaCtrl.all" class="badge badge-dark"  title="video stream" target="_blank" ng-href="{{::res.videoUrl}}">
                                         Watch <i  class="fa fa-video-camera"></i>
