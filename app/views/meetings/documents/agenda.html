@@ -138,7 +138,7 @@
                             </td>
 
                             <td style="padding:0px;" >
-                              <div style="padding: 10px ;"><b>{{::res.title}}</b></div>
+                              <div style="padding: 10px;"><b>{{::res.title}}</b></div>
                                 <table ng-if="res.agenda.visible && res.agenda.items && res.agenda.items.length" class="table" style="margin:0px">
                                     <tr  ng-repeat="agendaItem in res.agenda.items" style="cursor:default">
                                         <td class="hidden-xs" style="width:55px" ng-click="agendaItem.expanded=!agendaItem.expanded">
@@ -188,9 +188,7 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <div class="p-1" ng-if="!res.agenda.visible || !res.agenda.items || !res.agenda.items.length">
-                                  <span> {{::res.title}}</span> 
-                                  <br>
+                                <div style="padding-left: 10px;"  ng-if="!res.agenda.visible || !res.agenda.items || !res.agenda.items.length">
                                   <span ng-repeat="(key, value) in res.agenda.meetings">
                                     <span ng-if="value" ng-style="{ 'background-color' : agendaCtrl.getColor(key)}" class="badge label agenda {{item.prefix}}" style="min-width:51px">{{::key}}</span>
                                   </span>
