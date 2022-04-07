@@ -6,11 +6,13 @@ import 'moment-timezone';
 import '~/filters/lstring';
 import '~/filters/moment';
 import '~/filters/initials';
-import 'directives/file';
+import '~/directives/file';
 import 'ngDialog';
 import '~/directives/meetings/documents/document-files';
 import './document-progress-steps';
-import 'directives/comments/internal-comments';
+import '~/directives/comments/internal-comments';
+
+export { default as template } from './documents-progress.html';
 
 	export default ["$scope", "$route", "$http", '$location', '$q', 'user', 'ngDialog', function ($scope, $route, $http, $location, $q, user, ngDialog) {
         

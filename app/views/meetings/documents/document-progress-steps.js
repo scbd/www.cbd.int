@@ -5,7 +5,7 @@ import template from './document-progress-steps.html';
 import '~/filters/moment';
 import '~/filters/initials';
 import 'ngDialog';
-import 'directives/select-user'; 
+import '~/directives/select-user'; 
 
     app.directive('documentProgressSteps', ['ngDialog', '$q',"$http", function(ngDialog, $q, $http) {
         return {
