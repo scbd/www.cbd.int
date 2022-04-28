@@ -65,7 +65,9 @@
       "line2_part2": "",
       "hashTag": "#ProPřírodu",
       "line1_part1_css"     : "outline-text",
-      "name": "DEN BIODIVERZITY"
+      "name": "DEN BIODIVERZITY",
+      "line2CutOffMargin" : 25,
+      "line3CutOffMargin" : 14
    },
    "de": {
       "language": "Germany De",
@@ -75,7 +77,9 @@
       "line2_part2": "",
       "hashTag": "#FürDieNatur",
       "line1_part1_css"     : "outline-text",
-      "name": "TAG DER BIODIVERSITÄT"
+      "name": "TAG DER BIODIVERSITÄT",
+      "line2CutOffMargin" : 25,
+      "line3CutOffMargin" : 10
    },
    "eu": {
       "language": "Spain-Basque",
@@ -86,7 +90,7 @@
       "hashTag": "#Naturarentzat",
       "line2_part2_css"     : "outline-text",
       "name": "BIODIBERTSITATEAREN EGUNA",
-      "line2CutOffMargin" : 6,
+      "line2CutOffMargin" : 12,
       "line3CutOffMargin" : 3
    },
    "fi": {
@@ -111,7 +115,7 @@
       "line1_part1_css"     : "outline-text",
       "name": "LÁ BITHÉAGSÚLACHTA",
       "line2CutOffMargin" : 17,
-      "line3CutOffMargin" : -3
+      "line3CutOffMargin" : 7
    },
    "gd": {
       "language": "Scots Gaelic",
@@ -168,8 +172,8 @@
       "hashTag": "#ZaPrirodu",
       "line1_part1_css"     : "outline-text",
       "name": "DAN BIORAZNOLIKOSTI",
-      "line2CutOffMargin" : 17,
-      "line3CutOffMargin" : -3
+      "line2CutOffMargin" : 20,
+      "line3CutOffMargin" : 3
    },
    "ht": {
       "language": "Haitian Creole",
@@ -191,7 +195,7 @@
       "line1_part1_css"     : "outline-text",
       "name": "DAGUR FJÖLBREYTNI LÍFRÍKISINS",
       "line2CutOffMargin" : 17,
-      "line3CutOffMargin" : -3
+      "line3CutOffMargin" : 7
    },
    "it": {
       "language": "Italian",
@@ -203,7 +207,7 @@
       "line1_part1_css"     : "outline-text",
       "name": "GIORNATA DELLA BIODIVERSITÀ",
       "line2CutOffMargin" : 17,
-      "line3CutOffMargin" : -3
+      "line3CutOffMargin" : 7
    },
    "ja": {
       "language": "Japanese",
@@ -267,7 +271,7 @@
       "line1_part1_css"     : "outline-text",
       "name": "DZIEŃ BIORÓŻNORODNOŚCI",
       "line2CutOffMargin" : 17,
-      "line3CutOffMargin" : -3
+      "line3CutOffMargin" : 7
    },
    "pt": {
       "language": "Portuguese",
@@ -279,7 +283,7 @@
       "line1_part1_css"     : "outline-text",
       "name": "DIA DA BIODIVERSIDADE",
       "line2CutOffMargin" : 17,
-      "line3CutOffMargin" : -3
+      "line3CutOffMargin" : 7
    },
    "ro": {
       "language": "Romanian",
@@ -291,7 +295,7 @@
       "line1_part1_css"     : "outline-text",
       "name": "ZIUA BIODIVERSITĂȚII",
       "line2CutOffMargin" : 17,
-      "line3CutOffMargin" : -3
+      "line3CutOffMargin" : 7
    },
    "sk": {
       "language": "Slovak",
@@ -312,8 +316,8 @@
       "hashTag": "#ЗаПрироду",
       "line1_part1_css"     : "outline-text",
       "name": "ДАН БИОДИВЕРЗИТЕТА",
-      "line2CutOffMargin" : 20,
-      "line3CutOffMargin" : -8
+      "line2CutOffMargin" : 24,
+      "line3CutOffMargin" : 7
    },
    "tr": {
       "language": "Turkish-upercase",
@@ -324,8 +328,8 @@
       "hashTag": "#Doğaİçin",
       "line1_part1_css"     : "outline-text",
       "name": "BİYOÇEŞİTLİLİK GÜNÜ",
-      "line2CutOffMargin" : 16,
-      "line3CutOffMargin" : 12
+      "line2CutOffMargin" : 26,
+      "line3CutOffMargin" : 5
    },
    "uk": {
       "language": "Ukraininan",
