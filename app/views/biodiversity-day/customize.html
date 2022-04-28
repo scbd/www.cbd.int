@@ -1,5 +1,10 @@
-<div class="container" class="app" >
+<div class="container idb-container" class="app" >
     <style>
+
+        .container.idb-container {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
         @font-face{
             font-family: "Impact";
             src: url("/app/fonts/impact.ttf") format("truetype");
@@ -12,8 +17,8 @@
         }
 
         .boxIncon img{
-            height: 290px;
-            padding-right: 5px;
+            height: 235px;
+            /* padding-right: 5px; */
             padding-left: 5px;
         }    
         .impact-font{
@@ -98,9 +103,10 @@
             padding: 5px;
         }
         
+        .logo-box,
         .boxGenerate .box-size{
             width:716.484px;
-            height:308px;
+            height:245px;
         }
         .boxGenerate .text-box-width{
             width: 428.016px;
@@ -111,7 +117,26 @@
         .fr .boxGenerate .box-size,
         .es .boxGenerate .box-size{
             width:816.484px;
-            height:308px;
+            height:245px;
+        }
+
+        .boxGenerate .box-size{
+            padding-top: 3px;
+        }
+        .mr .boxGenerate .box-size{
+            padding-bottom: 3px;
+        }
+        /* .ru.logo-box,
+        .ru .boxIncon img, */
+        .ru .boxGenerate .box-size {
+            /* width: 100%!important; */
+            height:250px!important;
+        }
+        .zh.logo-box,
+        .zh .boxIncon img,
+        .zh .boxGenerate .box-size {
+            width: 100%!important;
+            height:370px;
         }
 
         .zh .boxGenerate .text-box-width,
@@ -121,23 +146,75 @@
             width: 528.016px;
         }
 
-        .impact-font{
-            padding-left: 5px;
+
+        .bn.logo-box,
+        .bn .boxIncon img,
+        .bn .boxGenerate .box-size,
+        .mr.logo-box,
+        .mr .boxIncon img,
+        .mr .boxGenerate .box-size,
+        .hi.logo-box,
+        .hi .boxIncon img,
+        .hi .boxGenerate .box-size,
+        .ko.logo-box,
+        .ko .boxIncon img,
+        .ko .boxGenerate .box-size {
+            /* width: 100%!important; */
+            height:250px;
         }
+
+        .bg .boxGenerate .box-size,
+        .ca .boxGenerate .box-size,
+        .hr .boxGenerate .box-size,
+        .cs .boxGenerate .box-size,
+        .fi .boxGenerate .box-size,
+        .gl .boxGenerate .box-size,
+        .de .boxGenerate .box-size,
+        .el .boxGenerate .box-size,
+        .is .boxGenerate .box-size,
+        .ga .boxGenerate .box-size,
+        .fl .boxGenerate .box-size,
+        .it .boxGenerate .box-size,
+        .pl .boxGenerate .box-size,
+        .pt .boxGenerate .box-size,
+        .ro .boxGenerate .box-size,
+        .sr .boxGenerate .box-size,
+        .uk .boxGenerate .box-size,
+        .eu .boxGenerate .box-size,
+        .az .boxGenerate .box-size{
+            width:816.484px;
+        }
+        .bg .boxGenerate .text-box-width,
+        .ca .boxGenerate .text-box-width,
+        .hr .boxGenerate .text-box-width,
+        .cs .boxGenerate .text-box-width,
+        .fi .boxGenerate .text-box-width,
+        .gl .boxGenerate .text-box-width,
+        .de .boxGenerate .text-box-width,
+        .el .boxGenerate .text-box-width,
+        .is .boxGenerate .text-box-width,
+        .ga .boxGenerate .text-box-width,
+        .fl .boxGenerate .text-box-width,
+        .it .boxGenerate .text-box-width,
+        .pl .boxGenerate .text-box-width,
+        .pt .boxGenerate .text-box-width,
+        .ro .boxGenerate .text-box-width,
+        .sr .boxGenerate .text-box-width,
+        .uk .boxGenerate .text-box-width,
+        .eu .boxGenerate .text-box-width,
+        .az .boxGenerate .text-box-width{
+            width: 528.016px;
+        }
+
         .ar .impact-font{
             padding-right: 5px;
         }
 
-        .zh #logoDate{
+        .zh #line1{
             font-weight: bold;
             font-family: 'Hiragino Kaku Gothic Pro', 'WenQuanYi Zen Hei', '微軟正黑體', '蘋果儷中黑', Helvetica, Arial, sans-serif;
         }
-        .ru .impact-font{
-            margin-top: -20px;
-        }
-        /* .container .container{
-            padding: 0px 10px;
-        } */
+
         .ngdialog.ngdialog-theme-default .ngdialog-content {
             background-color: #fff;
             width: 70%;
@@ -169,6 +246,42 @@
         .overlay-wrapper {
             position: relative;
         }
+        .outline-text{
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke-width: 3px;
+            -webkit-text-stroke-color: #0086b7;
+        }
+
+        #customText{
+            /* position: absolute;
+            bottom: 0px; */
+        }
+        #line2{
+            /* position: absolute; */
+        }
+        #idb2020Logo hr {
+            width: 100%;
+        }
+
+        #imgGenerator{
+            padding-left:10px;
+        }
+        .fr #imgGenerator{
+            padding-top: 10px;
+            padding-bottom: 5px;
+        }
+        .ar #imgGenerator{
+            padding-right:10px;
+            padding-left:unset;
+        }
+
+        .az .impact-font,
+        .ro .impact-font{
+            font-family:Arial!important;
+        }
+        /* #newImage img{
+            width:500px
+        } */
     </style>
 
     <div class="row" id="idb2020Logo">
@@ -181,36 +294,28 @@
         <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
             <cbd-article query="articleQuery" ng-if="articleQuery" hide-cover-image="true"></cbd-article>
         </div>
-       
-        <div  class="col-lg-7">
-            <div id="newImage"></div>
-        </div>    
-        <div class="col-lg-5" ng-class="{'overlay-wrapper':uploading}"">
+        
+        <hr/>
+        <!-- <code>{{logs|json}}</code> -->
+        <div class="col-lg-3" ng-class="{'overlay-wrapper':uploading}">
             <div class="overlay" ng-if="uploading" >                
-                <span style="margin:35%;font-size: 18px;color: #fff;position: absolute;"><i class="fa fa-spin fa-spinner"></i> Processing...</span>
+                <span style="margin:35%;font-size: 18px;color: #fff;position: absolute;"><i class="fa fa-spin fa-spinner"></i> Generating your logo...</span>
             </div>
             <div class="row">
                 <div class="col-lg-12 col-md-6 col-sm-6 padding">
-                        <label for="language">Select logo language</label>
+                    <label for="language">Select logo language</label>
                     <div class="input-group">
                         <select class="form-control" ng-model="language" ng-change="onLanguageChange();" 
                             ng-options="option.language group by option.group for option in defaultLanguages track by option.code">
                         </select>      
-                        <div class="input-group-append">
+                        <!-- <div class="input-group-append">
                             <input type="button" class=" btn btn-primary btn-xs  btn-sm" style="z-index: auto;" id="btnCustomLang" value="Edit" ng-click="customLanguage(language.code)" ng-disabled="uploading || text[language.code].isUNLanguage"/>   
-                        </div>
+                        </div> -->
                     </div> 
-                </div>
-                <div class="col-lg-12 col-md-6  col-sm-6 padding">
-                    <label for="lototype">Is your logo for an individual or a collective?</label>
-                    <select class="form-control" ng-model="logoType" ng-change="fitText()" ng-disabled="text[language.code].isCustomLanguage">
-                        <option value="collective">Collective</option>
-                        <option value="individual" selected>Individual</option>
-                    </select>            
                 </div>
                 <div class="col-lg-12 padding">
                     <label for="name">Name to appear in the logo</label>
-                    <input type="text" class="form-control" id="name" placeholder="Name" ng-model="text[language.code].name" ng-change="fitText()">
+                    <input type="text" class="form-control" id="name" placeholder="Your name here" ng-model="text[language.code].name" ng-change="fitText()">
                 </div>
                 <div class="col-lg-12 padding">
                     <div id="g-recaptcha"></div>
@@ -220,52 +325,58 @@
                     </div>
                 </div>
                 <div class="col-lg-12 padding btn-group">
+                    <!-- <input type="button" class=" btn btn-primary btn-xs  btn-sm" id="btnSave" value="Update" ng-click="saveImage(true)">    -->
                     <input type="button" class=" btn btn-primary btn-xs  btn-sm" id="btnSave" value="Download" ng-click="saveImage()" ng-disabled="!grecaptchaToken || uploading"/>                    
                     <a class="btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/logo/collage">View published logos</a>
                     <a class="btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/logo/collage/draft" ng-if="isAdmin">Approve logos</a>         
                 </div>
             </div>
         </div>
-        <div class="col-lg-12" style="display: none;">
-            <div id="myimage"></div>
-        </div>
-    </div>
-    
-    <br/>
-    <br/>
-    <div style="opacity: 000;" class="{{language.code}}">
-        <div class="boxGenerate box-size">
-            <div class="boxIncon box-size" id="imgGenerator" style="padding:10px;">
-                <div class="row box-size" >
-                    <div class="col-lg-51" style="width: 286.438px;">
-                        <img src="/app/images/idb-2021-logo.png" class="img-fluid idb-logo pull-right" id="logoImg"/>
-                    </div>
-                    <div class="impact-font col-lg-71 text-box-width" style="padding-left: 5px;max-height: 288px;" ng-if="language.code" >   
-                        
-                        <div id="bigtext" class="impact-font " style="max-width: 100%;">                                
-                            <div class="border-green1 color-blue" id="logoDate" >
-                                <span  ng-if="language.code!='ar'" ng-bind="text[language.code].date"></span>
-                                <span  ng-if="language.code=='ar'">٢٢ أيار<span style="font-family: auto;">/</span>مايو ٢٠٢١</span>
+        <div  class="col-lg-9 logo-box {{language.code}}" style="padding-left:5%">
+            <div style="opacity: 0010;padding-top: 20px;" >
+                <div class="boxGenerate box-size" id="mainImageBox">
+                    <div class="boxIncon box-size" id="imgGenerator">
+                        <div class="row box-size">
+                            <div class="col-lg-51">
+                                <img src="/app/images/idb-celebrations/idb-logo.png"  class="img-fluid idb-logo pull-right" id="logoImg"/>
+                            </div>
+                            <div class="impact-font col-lg-71 text-box-width" style="padding-left: 5px;" ng-if="language.code" >   
                                 
-                            </div>
-                            <div id="logoDay" class="border-blue1 color-blue">
-                                <span ng-bind="text[language.code].day"></span>
-                            </div>
-                            <div  id="logoTagline" class="border-orange1" ng-if="language.code!='zh'">
-                                <span class="color-green"ng-if="logoType=='collective'" ng-bind="text[language.code].collectiveTagline"></span>
-                                <span class="color-green"ng-if="logoType=='individual'" ng-bind="text[language.code].individualTagline"></span>
-                            </div>
-                            <div class="color-green border-red1" id="logoName" >
-                                <span ng-if="language.code=='zh'" ng-bind="text[language.code].collectiveTagline"></span> 
-                                <span ng-bind="text[language.code].name"></span> 
-                                <span ng-bind="text[language.code].hashTag"></span>
+                                <div id="bigtext" class="impact-font " style="max-width: 100%;">                                
+                                    <div class="border-green1 color-blue" id="line1" >
+                                        <span id="line1_part1" ng-if="language.code!='ar1'" ng-bind="text[language.code].line1_part1" class="{{text[language.code].line1_part1_css}}"></span>
+                                        <span id="line1_part2" ng-if="language.code!='ar1'" ng-bind="text[language.code].line1_part2" class="{{text[language.code].line1_part2_css}}"></span>
+                                        <!-- <span  ng-if="language.code=='ar'">٢٢ أيار<span style="font-family: auto;">/</span>مايو ٢٠٢١</span> -->
+                                        
+                                    </div>
+                                    <div id="line2" class="border-blue1 color-blue">
+                                        <span id="line2_part1" id="line2_part1" ng-bind="text[language.code].line2_part1" class="{{text[language.code].line2_part1_css}}"></span>
+                                        <span id="line2_part2" id="line2_part2" ng-bind="text[language.code].line2_part2" class="{{text[language.code].line2_part2_css}}"></span>
+                                    </div>
+                                    <div class="color-blue border-red1 pull-left" id="customText" >
+                                        <span ng-bind="text[language.code].name"></span> 
+                                        <span ng-bind="text[language.code].hashTag"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        
                     </div>
                 </div>
-                
             </div>
-        </div>
+        </div>   
+       
+    </div>
+    
+    <div  style="opacity: 0001;display: none1;" class="col-lg-23">
+        <div id="newImage"></div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+
+    <div class="col-lg-12" style="display: none;">
+        <div id="myimage"></div>
     </div>
     <script type="text/ng-template" id="customLanguage">
         <div class="modal-header">
