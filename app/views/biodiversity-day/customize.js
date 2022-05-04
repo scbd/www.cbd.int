@@ -102,12 +102,12 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         $scope.saveImage = function(generateOnly) { 
             $scope.showSuccessMessage = false;
             $scope.uploading = true;
-            var node =document.getElementById("imgGenerator");
+            // var node =document.getElementById("imgGenerator");
 
-            htmlToImage.toPng(node)
-            .then(function (dataUrl) {
-                var img = new Image();
-                img.src = dataUrl;
+            // htmlToImage.toPng(node)
+            // .then(function (dataUrl) {
+            //     var img = new Image();
+            //     img.src = dataUrl;
                 // $('#newImage').empty().append(img);
 
                 if(!generateOnly){  
@@ -115,32 +115,33 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                         $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.text[$scope.language.code].name+'&language='+$scope.language.code);
                         $window.ga('send', 'pageview');
                     }
-                    const blob = dataURLtoBlob(dataUrl);
-                    return uploadImage(dataUrl)
+                    // const blob = dataURLtoBlob(dataUrl);
+                     uploadImage()
                     .then(function(){
                         saveAs(blob, `22-May-Biodiversity-Day_${$scope.language.code||''}.png`);  
-                    });
+                    })
+                    .catch(function (e) {
+                        console.error('oops, something went wrong!', e);
+                        if(e.data.code == "INVALID_CAPTCHA"){
+                            $scope.error = 'There was a problem with captcha validation, please try again';
+                        }
+                        if(e.data.code == "INVALID_CAPTCHA_SCORE"){
+                            $scope.error = e.data.message;
+                        }
+                        else{
+                            $scope.error = 'There was a problem connecting to our server, please try again';
+                        }
+                    })
+                    .finally(()=>{
+                        $scope.$applyAsync(()=> {
+                            $scope.uploading = false;
+                            $scope.grecaptchaToken = undefined;
+                            grecaptcha.reset(recaptchaWidgetId);
+                        });
+                    });;
                 }
-            })
-            .catch(function (e) {
-                console.error('oops, something went wrong!', e);
-                if(e.data.code == "INVALID_CAPTCHA"){
-                    $scope.error = 'There was a problem with captcha validation, please try again';
-                }
-                if(e.data.code == "INVALID_CAPTCHA_SCORE"){
-                    $scope.error = e.data.message;
-                }
-                else{
-                    $scope.error = 'There was a problem connecting to our server, please try again';
-                }
-            })
-            .finally(()=>{
-                $scope.$applyAsync(()=> {
-                    $scope.uploading = false;
-                    $scope.grecaptchaToken = undefined;
-                    grecaptcha.reset(recaptchaWidgetId);
-                });
-            });
+            // })
+           
         };
 
         $scope.onLanguageChange = function(){
@@ -383,4 +384,11 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
 
         loadLanguages();
         buildQuery();
+
+        const search = $location.search()
+        if(search?.lang)
+            $scope.language = { code : search.lang }
+       
+        if(search?.name)
+            $scope.text[$scope.language.code].name = search.name
 }]
