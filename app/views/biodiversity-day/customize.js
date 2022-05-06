@@ -114,10 +114,9 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                         $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.text[$scope.language.code].name+'&language='+$scope.language.code);
                         $window.ga('send', 'pageview');
                     }
-                    // const blob = dataURLtoBlob(dataUrl);
                      uploadImage()
-                    .then(function(){
-                        saveAs(blob, `22-May-Biodiversity-Day_${$scope.language.code||''}.png`);  
+                    .then(function(blob){
+                        saveAs(new Blob([blob]), `22-May-Biodiversity-Day_${$scope.language.code||''}.png`);  
                     })
                     .catch(function (e) {
                         console.error('oops, something went wrong!', e);
