@@ -30,7 +30,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 line2_part2         : '22 MAY',
                 line2_part2_css     : 'outline-text',
                 hashTag             : '#ForNature', 
-                name:'Biodiversity', 
+                name:'Name', 
                 isUNLanguage:true,
                 line2CutOffMargin : 17,
                 line3CutOffMargin : 13 
@@ -40,7 +40,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 line1_part2         : 'DÍA DE LA',
                 line2_part1         : 'BIODIVERSIDAD',
                 line1_part1_css     : 'outline-text',
-                hashTag             : '#PorLaNaturaleza', name:'La biodiversidad', isUNLanguage:true,
+                hashTag             : '#PorLaNaturaleza', name:'Nombre', isUNLanguage:true,
                 line2CutOffMargin : 17,
                 line3CutOffMargin : 5 
             },
@@ -49,7 +49,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 line1_part2         : 'JOURNÉE DE LA',
                 line2_part1         : 'BIODIVERSITÉ',
                 line1_part1_css     : 'outline-text',
-                hashTag             : '#PourLaNature', name:'Biodiversité', isUNLanguage:true,
+                hashTag             : '#PourLaNature', name:'Nom', isUNLanguage:true,
                 line2CutOffMargin : 18,
                 line3CutOffMargin : 4 
             },
@@ -58,7 +58,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 line1_part2         : 'ДЕНЬ',
                 line2_part1         : 'БИОРАЗНООБРАЗИЯ',
                 line1_part1_css     : 'outline-text',
-                hashTag             : '#ЗаПрироду', name:'Биоразнообразие', isUNLanguage:true,
+                hashTag             : '#ЗаПрироду', name:'Имя', isUNLanguage:true,
                 line2CutOffMargin : 35,
                 line3CutOffMargin : -5 
             },
@@ -66,7 +66,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 line1_part1         : '生物多样性日',                
                 line2_part2         : '5月22日',
                 line2_part2_css     : 'outline-text',
-                hashTag             : '有份', name:'生物多样性', isUNLanguage:true,
+                hashTag             : '有份', name:'姓名', isUNLanguage:true,
                 line2CutOffMargin : 19,
                 line3CutOffMargin : 8 
             },
@@ -75,7 +75,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 line1_part2         : '٢٢ أيار/مايو',
                 line2_part1         : 'يوم التنوع البيولوجي',
                 line1_part2_css     : 'outline-text',
-                hashTag             : 'من#_أجل_الطبيعة', name:'التنوع البيولوجي', isUNLanguage:true,
+                hashTag             : 'من#_أجل_الطبيعة', name:'اسم', isUNLanguage:true,
                 line2CutOffMargin : 13,
                 line3CutOffMargin : 1 
             },

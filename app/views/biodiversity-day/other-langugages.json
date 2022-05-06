@@ -1,4 +1,16 @@
 {
+   "am": {
+      "language": "Amharic",
+      "line1_part1": "የብዝሃ ሕይወት",
+      "line1_part2": "",
+      "line2_part1": "ቀን",
+      "line2_part2": "14 ግንቦት",
+      "hashTag": "#ለተፈጥሮ",
+      "line2_part2_css"     : "outline-text",
+      "name": "ስም",
+      "line2CutOffMargin" : 12,
+      "line3CutOffMargin" : -5 
+   },
    "az": {
       "language": "Azerbaijani",
       "line1_part1": "BİOMÜXTƏLİFLİK",
@@ -7,7 +19,7 @@
       "line2_part2": "22 MAY",
       "hashTag": "#TəbiətÜçün",
       "line2_part2_css"     : "outline-text",
-      "name": "BİOMÜXTƏLİFLİK GÜNÜ",
+      "name": "AD",
       "line2CutOffMargin" : 12,
       "line3CutOffMargin" : -5 
    },
@@ -19,7 +31,7 @@
       "line2_part2": "",
       "hashTag": "#ЗаПриродата",
       "line1_part1_css"     : "outline-text",
-      "name": "ДЕН НА БИОРАЗНООБРАЗИЕТО",
+      "name": "ИМЕ",
       "line2CutOffMargin" : 12,
       "line3CutOffMargin" : 1
    },
@@ -31,7 +43,7 @@
       "line2_part2": "২২ মে",
       "hashTag": "#প্রকৃতিরজন্য",
       "line2_part2_css"     : "outline-text",
-      "name": "জীববৈচিত্র্য দিবস",
+      "name": "নাম",
       "line2CutOffMargin" : 20,
       "line3CutOffMargin" : 17
    },
@@ -43,17 +55,17 @@
       "line2_part2": "",
       "hashTag": "#ZaPrirodu",
       "line1_part1_css"     : "outline-text",
-      "name": "DAN BIORAZNOLIKOSTI"
+      "name": "IME"
    },
    "ca": {
-      "language": "Spain-Catalan",
+      "language": "Catalan",
       "line1_part1": "22 DE MAIG",
       "line1_part2": "DIA DE LA",
       "line2_part1": "BIODIVERSITAT",
       "line2_part2": "",
       "hashTag": "#PerLaNatura",
       "line1_part1_css"     : "outline-text",
-      "name": "DIA DE LA BIODIVERSITAT",
+      "name": "NOM",
       "line2CutOffMargin" : 10,
       "line3CutOffMargin" : 7
    },
@@ -65,31 +77,43 @@
       "line2_part2": "",
       "hashTag": "#ProPřírodu",
       "line1_part1_css"     : "outline-text",
-      "name": "DEN BIODIVERZITY",
+      "name": "NÁZEV",
       "line2CutOffMargin" : 25,
       "line3CutOffMargin" : 14
    },
    "de": {
-      "language": "Germany De",
+      "language": "German",
       "line1_part1": "22. MAI",
       "line1_part2": "TAG DER",
       "line2_part1": "BIODIVERSITÄT",
       "line2_part2": "",
       "hashTag": "#FürDieNatur",
       "line1_part1_css"     : "outline-text",
-      "name": "TAG DER BIODIVERSITÄT",
+      "name": "NAME",
+      "line2CutOffMargin" : 25,
+      "line3CutOffMargin" : 10
+   },
+   "et": {
+      "language": "Estonian",
+      "line1_part1": "ELURIKKUSE",
+      "line1_part2": "",
+      "line2_part1": "PÄEV",
+      "line2_part2": "22. MAI",
+      "hashTag": "#LooduseJaoks",
+      "line2_part2_css"     : "outline-text",
+      "name": "NIMI",
       "line2CutOffMargin" : 25,
       "line3CutOffMargin" : 10
    },
    "eu": {
-      "language": "Spain-Basque",
+      "language": "Basque",
       "line1_part1": "BIODIBERTSITATEAREN",
       "line1_part2": "",
       "line2_part1": "EGUNA",
       "line2_part2": "MAIATZAREN 22a",
       "hashTag": "#Naturarentzat",
       "line2_part2_css"     : "outline-text",
-      "name": "BIODIBERTSITATEAREN EGUNA",
+      "name": "IZENA",
       "line2CutOffMargin" : 12,
       "line3CutOffMargin" : 3
    },
@@ -101,7 +125,7 @@
       "line2_part2": "22. TOUKOKUUTA",
       "hashTag": "#LuonnonPuolesta",
       "line2_part2_css"     : "outline-text",
-      "name": "LUONNON MONIMUOTOISUUDEN PÄIVÄ",
+      "name": "NIMI",
       "line2CutOffMargin" : 6,
       "line3CutOffMargin" : 3
    },
@@ -113,55 +137,55 @@
       "line2_part2": "",
       "hashTag": "#DoDúlra",
       "line1_part1_css"     : "outline-text",
-      "name": "LÁ BITHÉAGSÚLACHTA",
+      "name": "AINM",
       "line2CutOffMargin" : 17,
       "line3CutOffMargin" : 7
    },
    "gd": {
-      "language": "Scots Gaelic",
+      "language": "Gaelic",
       "line1_part1": "22 CÈITEAN",
       "line1_part2": "LATHA",
       "line2_part1": "BITH-IOMADACHD",
       "line2_part2": "",
       "hashTag": "#AirsonNàdur",
       "line1_part1_css"     : "outline-text",
-      "name": "LATHA BITH-IOMADACHD",
+      "name": "AINM",
       "line2CutOffMargin" : 17,
       "line3CutOffMargin" : -3
    },
    "gl": {
-      "language": "Spain-Galician",
+      "language": "Galician",
       "line1_part1": "22 DE MAIO",
       "line1_part2": "DÍA DA",
       "line2_part1": "BIODIVERSIDADE",
       "line2_part2": "",
       "hashTag": "#ParaaNatureza",
       "line1_part1_css"     : "outline-text",
-      "name": "DÍA DA BIODIVERSIDADE",
+      "name": "NOME",
       "line2CutOffMargin" : 10,
       "line3CutOffMargin" : 7
    },
    "el": {
-      "language": "Greek uppercase",
+      "language": "Greek",
       "line1_part1": "22 ΜΑΪΟΥ",
       "line1_part2": "ΗΜΕΡΑ ΤΗΣ",
       "line2_part1": "ΒΙΟΠΟΙΚΙΛΟΤΗΤΑΣ",
       "line2_part2": "",
       "hashTag": "#ΓιαΤηΦύση",
       "line1_part1_css"     : "outline-text",
-      "name": "ΗΜΕΡΑ ΤΗΣ ΒΙΟΠΟΙΚΙΛΟΤΗΤΑΣ",
+      "name": "ΟΝΟΜΑ",
       "line2CutOffMargin" : 17,
       "line3CutOffMargin" : -3
    },
    "hi": {
-      "language": "India-Hindi",
+      "language": "Hindi",
       "line1_part1": "जैव विविधता",
       "line1_part2": "",
       "line2_part1": "दिवस",
       "line2_part2": "22 मई",
       "hashTag": "#प्रकृतिकेलिए",
       "line2_part2_css"     : "outline-text",
-      "name": "जैव विविधता दिवस"
+      "name": "नाम"
    },
    "hr": {
       "language": "Croatian",
@@ -171,7 +195,7 @@
       "line2_part2": "",
       "hashTag": "#ZaPrirodu",
       "line1_part1_css"     : "outline-text",
-      "name": "DAN BIORAZNOLIKOSTI",
+      "name": "IME",
       "line2CutOffMargin" : 20,
       "line3CutOffMargin" : 3
    },
@@ -183,7 +207,7 @@
       "line2_part2": "",
       "hashTag": "#PouLanati",
       "line1_part1_css"     : "outline-text",
-      "name": "JOUNEN BIYODIVÈSITE"
+      "name": "NON"
    },
    "is": {
       "language": "Icelandic",
@@ -193,9 +217,33 @@
       "line2_part2": "",
       "hashTag": "#FyrirNáttúruna",
       "line1_part1_css"     : "outline-text",
-      "name": "DAGUR FJÖLBREYTNI LÍFRÍKISINS",
+      "name": "NAFN",
       "line2CutOffMargin" : 17,
       "line3CutOffMargin" : 7
+   },
+   "hu": {
+      "language": "Hungarian",
+      "line1_part1": "MÁJUS 22.",
+      "line1_part2": "A",
+      "line2_part1": "BIODIVERZITÁS NAPJA",
+      "line2_part2": "",
+      "hashTag": "#aTermészetért",
+      "line1_part1_css"     : "outline-text",
+      "name": "NÉV",
+      "line2CutOffMargin" : 17,
+      "line3CutOffMargin" : 7
+   },
+   "hy": {
+      "language": "Armenian",
+      "line1_part1": "Կենսաբազմազանության",
+      "line1_part2": "",
+      "line2_part1": "օրը",
+      "line2_part2": "Մայիսի 22",
+      "hashTag": "#բնության_համար",
+      "line2_part2_css"     : "outline-text",
+      "name": "ԱՆՈՒՆ",
+      "line2CutOffMargin" : 5,
+      "line3CutOffMargin" : -5
    },
    "it": {
       "language": "Italian",
@@ -205,7 +253,7 @@
       "line2_part2": "",
       "hashTag": "#PerLaNatura",
       "line1_part1_css"     : "outline-text",
-      "name": "GIORNATA DELLA BIODIVERSITÀ",
+      "name": "NOME",
       "line2CutOffMargin" : 17,
       "line3CutOffMargin" : 7
    },
@@ -217,7 +265,19 @@
       "line2_part2": "",
       "hashTag": "#自然のための",
       "line2_part1_css"     : "outline-text",
-      "name": "生物多様性の日"
+      "name": "名前"
+   },
+   "ka": {
+      "language": "Georgian",
+      "line1_part1": "ბიომრავალფეროვნების",
+      "line1_part2": "",
+      "line2_part1": "დღე",
+      "line2_part2": "22 მაისი",
+      "hashTag": "#ბუნებისთვის",
+      "line2_part2_css"     : "outline-text",
+      "name": "სახელი",
+      "line2CutOffMargin" : 5,
+      "line3CutOffMargin" : -5
    },
    "ko": {
       "language": "Korean",
@@ -227,29 +287,53 @@
       "line2_part2": "",
       "hashTag": "#자연지킴이",
       "line2_part1_css"     : "outline-text",
-      "name": "생물다양성의 날",
+      "name": "이름",
       "line2CutOffMargin" : 15,
       "line3CutOffMargin" : 16
    },
+   "lt": {
+      "language": "Lithuanian",
+      "line1_part1": "BIOLOGINĖS ĮVAIROVĖS",
+      "line1_part2": "",
+      "line2_part1": "DIENA",
+      "line2_part2": "GEGUŽĖS 22",
+      "hashTag": "#UžGamtą",
+      "line2_part2_css"     : "outline-text",
+      "name": "VARDAS",
+      "line2CutOffMargin" : 9,
+      "line3CutOffMargin" : -5
+   },
+   "lv": {
+      "language": "Latvian",
+      "line1_part1": "BIOLOĢISKĀS DAUDZVEIDĪBAS",
+      "line1_part2": "",
+      "line2_part1": "DIENA",
+      "line2_part2": "22. MAIJS",
+      "hashTag": "#Dabai",
+      "line2_part2_css"     : "outline-text",
+      "name": "NOSAUKUMS",
+      "line2CutOffMargin" : 9,
+      "line3CutOffMargin" : -1
+   },
    "mr": {
-      "language": "India-Marathi",
+      "language": "Marathi",
       "line1_part1": "जैविक विविधता ",
       "line1_part2": "",
       "line2_part1": "दिवस",
       "line2_part2": "22 मे",
       "hashTag": "#निसर्गासाठी",      
       "line2_part2_css": "outline-text",
-      "name": "जैविक विविधता दिवस"
+      "name": "नाव"
    },
    "ms": {
-      "language": "Malay / Bahasa Melayu",
+      "language": "Malay",
       "line1_part1": "22 MEI",
       "line1_part2": "HARI",
       "line2_part1": "BIODIVERSITI",
       "line2_part2": "",
       "hashTag": "#DemiAlam",
       "line1_part1_css"     : "outline-text",
-      "name": "HARI BIODIVERSITI"
+      "name": "NAMA"
    },
    "ne": {
       "language": "Nepali",
@@ -269,7 +353,7 @@
       "line2_part2": "",
       "hashTag": "#DlaPrzyrody",
       "line1_part1_css"     : "outline-text",
-      "name": "DZIEŃ BIORÓŻNORODNOŚCI",
+      "name": "IMIĘ",
       "line2CutOffMargin" : 17,
       "line3CutOffMargin" : 7
    },
@@ -281,7 +365,7 @@
       "line2_part2": "",
       "hashTag": "#PelaNatureza",
       "line1_part1_css"     : "outline-text",
-      "name": "DIA DA BIODIVERSIDADE",
+      "name": "NOME",
       "line2CutOffMargin" : 17,
       "line3CutOffMargin" : 7
    },
@@ -293,7 +377,7 @@
       "line2_part2": "",
       "hashTag": "#PentruNatură",
       "line1_part1_css"     : "outline-text",
-      "name": "ZIUA BIODIVERSITĂȚII",
+      "name": "NUME",
       "line2CutOffMargin" : 17,
       "line3CutOffMargin" : 7
    },
@@ -305,7 +389,19 @@
       "line2_part2": "",
       "hashTag": "#PrePrírodu",
       "line1_part1_css"     : "outline-text",
-      "name": "DEŇ BIODIVERZITY"
+      "name": "NÁZOV"
+   },
+   "sl": {
+      "language": "Slovenian",
+      "line1_part1": "22 MAJ",
+      "line1_part2": "DAN",
+      "line2_part1": "BIOTSKE RAZNOVRSTNOSTI",
+      "line2_part2": "",
+      "hashTag": "#ZaNaravo",
+      "line1_part1_css"     : "outline-text",
+      "name": "IME",
+      "line2CutOffMargin" : 17,
+      "line3CutOffMargin" : -1
    },
    "sr": {
       "language": "Serbian",
@@ -315,19 +411,19 @@
       "line2_part2": "",
       "hashTag": "#ЗаПрироду",
       "line1_part1_css"     : "outline-text",
-      "name": "ДАН БИОДИВЕРЗИТЕТА",
+      "name": "НАМЕ",
       "line2CutOffMargin" : 24,
       "line3CutOffMargin" : 7
    },
    "tr": {
-      "language": "Turkish-upercase",
+      "language": "Turkish",
       "line1_part1": "22 MAYIS",
       "line1_part2": "",
       "line2_part1": "BİYOÇEŞİTLİLİK GÜNÜ",
       "line2_part2": "",
       "hashTag": "#Doğaİçin",
       "line1_part1_css"     : "outline-text",
-      "name": "BİYOÇEŞİTLİLİK GÜNÜ",
+      "name": "İSİM",
       "line2CutOffMargin" : 26,
       "line3CutOffMargin" : 5
    },
@@ -339,7 +435,7 @@
       "line2_part2": "",
       "hashTag": "#ДляПрироди",
       "line1_part1_css"     : "outline-text",
-      "name": "ДЕНЬ БІОРІЗНОМАНІТТЯ",
+      "name": "ІМЯ",
       "line2CutOffMargin" : 20,
       "line3CutOffMargin" : -8
    }
