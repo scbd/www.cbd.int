@@ -378,4 +378,6 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
        
         if(search?.name)
             $scope.text[$scope.language.code].name = search.name
+        
+        $scope.isPrerender = search.prerender=='true';
 }]
