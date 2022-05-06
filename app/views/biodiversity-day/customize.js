@@ -2,10 +2,9 @@
 import 'file-saverjs';
 import 'bigText';
 import _ from 'lodash';
-import ngDialog from 'ngDialog';
 import languageTranslation from './other-langugages.json';
 import '~/directives/articles/cbd-article';
-import * as htmlToImage from 'html-to-image'
+// import * as htmlToImage from 'html-to-image'
       
 export { default as template  } from './customize.html';
 
@@ -115,10 +114,9 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                         $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.text[$scope.language.code].name+'&language='+$scope.language.code);
                         $window.ga('send', 'pageview');
                     }
-                    // const blob = dataURLtoBlob(dataUrl);
                      uploadImage()
-                    .then(function(){
-                        saveAs(blob, `22-May-Biodiversity-Day_${$scope.language.code||''}.png`);  
+                    .then(function(blob){
+                        saveAs(new Blob([blob]), `22-May-Biodiversity-Day_${$scope.language.code||''}.png`);  
                     })
                     .catch(function (e) {
                         console.error('oops, something went wrong!', e);
@@ -146,8 +144,6 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
 
         $scope.onLanguageChange = function(){
             $scope.fitText();
-            // if(!['ar', 'en', 'fr', 'ru', 'es', 'zh',].includes($scope.language.code))
-            //     $scope.customLanguage($scope.language.code);
         }
 
         $scope.fitText = function(selector){
@@ -295,18 +291,18 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             $scope.fitText();
         }
 
-        function uploadImage(blob){
+        function uploadImage(){
 
             var data = {
-                'file': blob,
                 year: (new Date()).getFullYear(),
                 'language': $scope.language.code,
                 ...$scope.text[$scope.language.code]
             }
 
-            return $http.post('/api/v2021/idb-logos', data, {headers: {'x-captcha-v2-token':$scope.grecaptchaToken}})
+            return $http.post('/api/v2021/idb-logos', data, {responseType: "arraybuffer", headers: {'x-captcha-v2-token':$scope.grecaptchaToken}})
             .then(function(success) {
                 $scope.showSuccessMessage = true;
+                console.log(success)
                 return success.data;
             })
         }
@@ -355,15 +351,6 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             ag.push({"$limit"   : 1 });
 
             $scope.articleQuery = ag;
-        }
-
-        function dataURLtoBlob(dataurl) {
-            var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-            while(n--){
-                u8arr[n] = bstr.charCodeAt(n);
-            }
-            return new Blob([u8arr], {type:mime});
         }
 
         angular.element($window).on('resize', onResize);
