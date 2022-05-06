@@ -2,10 +2,9 @@
 import 'file-saverjs';
 import 'bigText';
 import _ from 'lodash';
-import ngDialog from 'ngDialog';
 import languageTranslation from './other-langugages.json';
 import '~/directives/articles/cbd-article';
-import * as htmlToImage from 'html-to-image'
+// import * as htmlToImage from 'html-to-image'
       
 export { default as template  } from './customize.html';
 
@@ -31,7 +30,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 line2_part2         : '22 MAY',
                 line2_part2_css     : 'outline-text',
                 hashTag             : '#ForNature', 
-                name:'Biodiversity', 
+                name:'Name', 
                 isUNLanguage:true,
                 line2CutOffMargin : 17,
                 line3CutOffMargin : 13 
@@ -41,7 +40,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 line1_part2         : 'DÍA DE LA',
                 line2_part1         : 'BIODIVERSIDAD',
                 line1_part1_css     : 'outline-text',
-                hashTag             : '#PorLaNaturaleza', name:'La biodiversidad', isUNLanguage:true,
+                hashTag             : '#PorLaNaturaleza', name:'Nombre', isUNLanguage:true,
                 line2CutOffMargin : 17,
                 line3CutOffMargin : 5 
             },
@@ -50,7 +49,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 line1_part2         : 'JOURNÉE DE LA',
                 line2_part1         : 'BIODIVERSITÉ',
                 line1_part1_css     : 'outline-text',
-                hashTag             : '#PourLaNature', name:'Biodiversité', isUNLanguage:true,
+                hashTag             : '#PourLaNature', name:'Nom', isUNLanguage:true,
                 line2CutOffMargin : 18,
                 line3CutOffMargin : 4 
             },
@@ -59,7 +58,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 line1_part2         : 'ДЕНЬ',
                 line2_part1         : 'БИОРАЗНООБРАЗИЯ',
                 line1_part1_css     : 'outline-text',
-                hashTag             : '#ЗаПрироду', name:'Биоразнообразие', isUNLanguage:true,
+                hashTag             : '#ЗаПрироду', name:'Имя', isUNLanguage:true,
                 line2CutOffMargin : 35,
                 line3CutOffMargin : -5 
             },
@@ -67,7 +66,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 line1_part1         : '生物多样性日',                
                 line2_part2         : '5月22日',
                 line2_part2_css     : 'outline-text',
-                hashTag             : '有份', name:'生物多样性', isUNLanguage:true,
+                hashTag             : '有份', name:'姓名', isUNLanguage:true,
                 line2CutOffMargin : 19,
                 line3CutOffMargin : 8 
             },
@@ -76,7 +75,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 line1_part2         : '٢٢ أيار/مايو',
                 line2_part1         : 'يوم التنوع البيولوجي',
                 line1_part2_css     : 'outline-text',
-                hashTag             : 'من#_أجل_الطبيعة', name:'التنوع البيولوجي', isUNLanguage:true,
+                hashTag             : 'من#_أجل_الطبيعة', name:'اسم', isUNLanguage:true,
                 line2CutOffMargin : 13,
                 line3CutOffMargin : 1 
             },
@@ -102,12 +101,12 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         $scope.saveImage = function(generateOnly) { 
             $scope.showSuccessMessage = false;
             $scope.uploading = true;
-            var node =document.getElementById("imgGenerator");
+            // var node =document.getElementById("imgGenerator");
 
-            htmlToImage.toPng(node)
-            .then(function (dataUrl) {
-                var img = new Image();
-                img.src = dataUrl;
+            // htmlToImage.toPng(node)
+            // .then(function (dataUrl) {
+            //     var img = new Image();
+            //     img.src = dataUrl;
                 // $('#newImage').empty().append(img);
 
                 if(!generateOnly){  
@@ -115,38 +114,36 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                         $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.text[$scope.language.code].name+'&language='+$scope.language.code);
                         $window.ga('send', 'pageview');
                     }
-                    const blob = dataURLtoBlob(dataUrl);
-                    return uploadImage(dataUrl)
-                    .then(function(){
-                        saveAs(blob, `22-May-Biodiversity-Day_${$scope.language.code||''}.png`);  
-                    });
+                     uploadImage()
+                    .then(function(blob){
+                        saveAs(new Blob([blob]), `22-May-Biodiversity-Day_${$scope.language.code||''}.png`);  
+                    })
+                    .catch(function (e) {
+                        console.error('oops, something went wrong!', e);
+                        if(e.data.code == "INVALID_CAPTCHA"){
+                            $scope.error = 'There was a problem with captcha validation, please try again';
+                        }
+                        if(e.data.code == "INVALID_CAPTCHA_SCORE"){
+                            $scope.error = e.data.message;
+                        }
+                        else{
+                            $scope.error = 'There was a problem connecting to our server, please try again';
+                        }
+                    })
+                    .finally(()=>{
+                        $scope.$applyAsync(()=> {
+                            $scope.uploading = false;
+                            $scope.grecaptchaToken = undefined;
+                            grecaptcha.reset(recaptchaWidgetId);
+                        });
+                    });;
                 }
-            })
-            .catch(function (e) {
-                console.error('oops, something went wrong!', e);
-                if(e.data.code == "INVALID_CAPTCHA"){
-                    $scope.error = 'There was a problem with captcha validation, please try again';
-                }
-                if(e.data.code == "INVALID_CAPTCHA_SCORE"){
-                    $scope.error = e.data.message;
-                }
-                else{
-                    $scope.error = 'There was a problem connecting to our server, please try again';
-                }
-            })
-            .finally(()=>{
-                $scope.$applyAsync(()=> {
-                    $scope.uploading = false;
-                    $scope.grecaptchaToken = undefined;
-                    grecaptcha.reset(recaptchaWidgetId);
-                });
-            });
+            // })
+           
         };
 
         $scope.onLanguageChange = function(){
             $scope.fitText();
-            // if(!['ar', 'en', 'fr', 'ru', 'es', 'zh',].includes($scope.language.code))
-            //     $scope.customLanguage($scope.language.code);
         }
 
         $scope.fitText = function(selector){
@@ -160,7 +157,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             $timeout(function(){
                 let maxFontSize;// = 120;
                 if(['zh'].includes($scope.language.code))
-                    maxFontSize = 150;
+                    maxFontSize = 140;
 
                 $('#bigtext').bigtext({
                     maxfontsize:maxFontSize
@@ -294,18 +291,18 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             $scope.fitText();
         }
 
-        function uploadImage(blob){
+        function uploadImage(){
 
             var data = {
-                'file': blob,
                 year: (new Date()).getFullYear(),
                 'language': $scope.language.code,
                 ...$scope.text[$scope.language.code]
             }
 
-            return $http.post('/api/v2021/idb-logos', data, {headers: {'x-captcha-v2-token':$scope.grecaptchaToken}})
+            return $http.post('/api/v2021/idb-logos', data, {responseType: "arraybuffer", headers: {'x-captcha-v2-token':$scope.grecaptchaToken}})
             .then(function(success) {
                 $scope.showSuccessMessage = true;
+                console.log(success)
                 return success.data;
             })
         }
@@ -356,15 +353,6 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             $scope.articleQuery = ag;
         }
 
-        function dataURLtoBlob(dataurl) {
-            var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-            while(n--){
-                u8arr[n] = bstr.charCodeAt(n);
-            }
-            return new Blob([u8arr], {type:mime});
-        }
-
         angular.element($window).on('resize', onResize);
         $scope.$on('$destroy', function(){
             angular.element($window).off('resize', onResize);
@@ -383,4 +371,13 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
 
         loadLanguages();
         buildQuery();
+
+        const search = $location.search()
+        if(search?.lang)
+            $scope.language = { code : search.lang }
+       
+        if(search?.name)
+            $scope.text[$scope.language.code].name = search.name
+        
+        $scope.isPrerender = search.prerender=='true';
 }]
