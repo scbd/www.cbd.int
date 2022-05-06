@@ -112,7 +112,7 @@
             width: 428.016px;
         }
 
-        .zh .boxGenerate .box-size,
+        /* .zh .boxGenerate .box-size, */
         .ru .boxGenerate .box-size,
         .fr .boxGenerate .box-size,
         .es .boxGenerate .box-size{
@@ -135,11 +135,11 @@
         .zh.logo-box,
         .zh .boxIncon img,
         .zh .boxGenerate .box-size {
-            width: 100%!important;
-            height:370px;
+            /* width: 100%!important; */
+            height:280px;
         }
 
-        .zh .boxGenerate .text-box-width,
+        /* .zh .boxGenerate .text-box-width, */
         .ru .boxGenerate .text-box-width,
         .fr .boxGenerate .text-box-width,
         .es .boxGenerate .text-box-width{
@@ -313,7 +313,7 @@
                         </div> -->
                     </div> 
                 </div>
-                <div class="col-lg-12 padding">
+                <div class="col-lg-12  col-md-6 col-sm-6 padding">
                     <label for="name">Name to appear in the logo</label>
                     <input type="text" class="form-control" id="name" placeholder="Your name here" ng-model="text[language.code].name" ng-change="fitText()">
                 </div>
@@ -332,7 +332,7 @@
                 </div>
             </div>
         </div>
-        <div  class="col-lg-9 logo-box {{language.code}}" style="padding-left:5%" ng-class="{'col-lg-12' : language.code=='zh' && !isPrerender}">
+        <div  class="col-lg-9 logo-box {{language.code}}" style="padding-left:5%">
             <div style="opacity: 0010;padding-top: 20px;" >
                 <div class="boxGenerate box-size" id="mainImageBox">
                     <div class="boxIncon box-size" id="imgGenerator">
@@ -354,6 +354,7 @@
                                         <span id="line2_part2" id="line2_part2" ng-bind="text[language.code].line2_part2" class="{{text[language.code].line2_part2_css}}"></span>
                                     </div>
                                     <div class="color-blue border-red1 pull-left" id="customText" >
+                                        <span ng-if="language.code=='zh'">呵护自然, </span> 
                                         <span ng-bind="text[language.code].name"></span> 
                                         <span ng-bind="text[language.code].hashTag"></span>
                                     </div>
