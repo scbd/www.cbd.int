@@ -296,7 +296,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
 
             var data = {
                 year: (new Date()).getFullYear(),
-                'language': $scope.language.code,
+                code: $scope.language.code,
                 ...$scope.text[$scope.language.code]
             }
 
