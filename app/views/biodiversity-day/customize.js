@@ -121,10 +121,10 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                     })
                     .catch(function (e) {
                         console.error('oops, something went wrong!', e);
-                        if(e?.data?.code == "INVALID_CAPTCHA"){
+                        if(e && e.data && e.data.code == "INVALID_CAPTCHA"){
                             $scope.error = 'There was a problem with captcha validation, please try again';
                         }
-                        if(e?.data?.code == "INVALID_CAPTCHA_SCORE"){
+                        if(e && e.data && e.data.code == "INVALID_CAPTCHA_SCORE"){
                             $scope.error = e.data.message;
                         }
                         else{
