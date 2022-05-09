@@ -99,6 +99,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         var basePath  = $scope.basePath = (angular.element('base').attr('href')||'').replace(/\/+$/g, '');
 
         $scope.saveImage = function(generateOnly) { 
+            $scope.fitText();
             $scope.showSuccessMessage = false;
             $scope.uploading = true;
             // var node =document.getElementById("imgGenerator");
@@ -120,14 +121,14 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                     })
                     .catch(function (e) {
                         console.error('oops, something went wrong!', e);
-                        if(e.data.code == "INVALID_CAPTCHA"){
+                        if(e && e.data && e.data.code == "INVALID_CAPTCHA"){
                             $scope.error = 'There was a problem with captcha validation, please try again';
                         }
-                        if(e.data.code == "INVALID_CAPTCHA_SCORE"){
+                        if(e && e.data && e.data.code == "INVALID_CAPTCHA_SCORE"){
                             $scope.error = e.data.message;
                         }
                         else{
-                            $scope.error = 'There was a problem connecting to our server, please try again';
+                            $scope.error = 'There was a problem generating the logo, please try again';
                         }
                     })
                     .finally(()=>{
@@ -295,7 +296,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
 
             var data = {
                 year: (new Date()).getFullYear(),
-                'language': $scope.language.code,
+                code: $scope.language.code,
                 ...$scope.text[$scope.language.code]
             }
 
@@ -322,13 +323,27 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                         $scope.defaultLanguages.push(lang)
                         return lang;
                     }
-                });
+                });                
                 $scope.defaultLanguages = _($scope.defaultLanguages).compact().uniq().sort(function(a,b){
                     if(a.language<b.language) return -1;
                     if(a.language>b.language) return  1;
                     return 0;
                 }).value();
             })
+            .then(()=>{
+                const search = $location.search()||{};
+                if(search.lang){ 
+                    if(_.find($scope.defaultLanguages, {code : search.lang}))
+                        $scope.language = { code : search.lang }
+                }
+            
+                if(search.name)
+                    $scope.text[$scope.language.code].name = search.name
+                
+                $scope.isPrerender = search.prerender=='true';
+
+                $scope.fitText();
+            });
         }
 
         function recaptchaCallback(token){
@@ -372,12 +387,4 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         loadLanguages();
         buildQuery();
 
-        const search = $location.search()
-        if(search?.lang)
-            $scope.language = { code : search.lang }
-       
-        if(search?.name)
-            $scope.text[$scope.language.code].name = search.name
-        
-        $scope.isPrerender = search.prerender=='true';
 }]
