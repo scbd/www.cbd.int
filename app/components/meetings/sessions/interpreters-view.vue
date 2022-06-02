@@ -4,7 +4,7 @@
     <h1>Statements and interventions 
       <small class="text-muted">
         <span v-for="({normalizedSymbol}, index) in meetings" :key="normalizedSymbol">
-          <span class="text-nowrap">{{normalizedSymbol}}</span><span v-if="index<(meetings.length-1)">, </span>
+          <a :target="`meeting:${normalizedSymbol}`" :href="`/meetings/${normalizedSymbol}`" class="text-nowrap">{{normalizedSymbol}} <i class="fa fa-external-link" aria-hidden="true"></i></a><span v-if="index<(meetings.length-1)">, </span>
         </span>
       </small>
     </h1>
