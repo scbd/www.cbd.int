@@ -1,11 +1,10 @@
 
 import 'file-saverjs';
 import 'bigText';
-import 'html2canvas';
 import _ from 'lodash';
-import ngDialog from 'ngDialog';
 import languageTranslation from './other-langugages.json';
 import '~/directives/articles/cbd-article';
+// import * as htmlToImage from 'html-to-image'
       
 export { default as template  } from './customize.html';
 
@@ -26,46 +25,59 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         ]
         $scope.text = {
             en : {
-                date                : '22 MAY 2021',
-                day                 : 'BIODIVERSITY DAY',
-                collectiveTagline   : 'We’re part of the solution',
-                individualTagline   : 'I’m part of the solution',
-                hashTag             : '#ForNature', name:'Biodiversity', isUNLanguage:true
+                line1_part1         : 'BIODIVERSITY',
+                line2_part1         : 'Day',
+                line2_part2         : '22 MAY',
+                line2_part2_css     : 'outline-text',
+                hashTag             : '#ForNature', 
+                name:'Name', 
+                isUNLanguage:true,
+                line2CutOffMargin : 17,
+                line3CutOffMargin : 13 
             },
             es:{
-                date                : '22 DE MAYO DE 2021',
-                day                 : 'DÍA DE LA BIODIVERSIDAD',
-                collectiveTagline    : 'Somos parte de la solución',
-                individualTagline   : 'Soy parte de la solución',
-                hashTag             : '#PorLaNaturaleza', name:'La biodiversidad', isUNLanguage:true
+                line1_part1         : '22 DE MAYO',
+                line1_part2         : 'DÍA DE LA',
+                line2_part1         : 'BIODIVERSIDAD',
+                line1_part1_css     : 'outline-text',
+                hashTag             : '#PorLaNaturaleza', name:'Nombre', isUNLanguage:true,
+                line2CutOffMargin : 17,
+                line3CutOffMargin : 5 
             },
             fr:{
-                date                : '22 MAI 2021',
-                day                 : 'JOURNÉE DE LA BIODIVERSITÉ',
-                collectiveTagline    : 'Nous faisons partie de la solution',
-                individualTagline   : 'Je fais partie de la solution',
-                hashTag             : '#PourLaNature', name:'Biodiversité', isUNLanguage:true
+                line1_part1         : '22 MAI',
+                line1_part2         : 'JOURNÉE DE LA',
+                line2_part1         : 'BIODIVERSITÉ',
+                line1_part1_css     : 'outline-text',
+                hashTag             : '#PourLaNature', name:'Nom', isUNLanguage:true,
+                line2CutOffMargin : 18,
+                line3CutOffMargin : 4 
             },
             ru:{
-                date                : '22 МАЯ 2021 ГОДА',
-                day                 : 'ДЕНЬ БИОРАЗНООБРАЗИЯ',
-                collectiveTagline    : 'Мы часть решения',
-                individualTagline   : 'Я часть решения',
-                hashTag             : '#ЗаПрироду', name:'Биоразнообразие', isUNLanguage:true
+                line1_part1         : '22 МАЯ',
+                line1_part2         : 'ДЕНЬ',
+                line2_part1         : 'БИОРАЗНООБРАЗИЯ',
+                line1_part1_css     : 'outline-text',
+                hashTag             : '#ЗаПрироду', name:'Имя', isUNLanguage:true,
+                line2CutOffMargin : 35,
+                line3CutOffMargin : -5 
             },
             zh:{
-                date                : '2021年5月22日',
-                day                 : '生物多样性日',
-                collectiveTagline    : '呵护自然，',
-                individualTagline   : '呵护自然，',
-                hashTag             : '有份', name:'生物多样性', isUNLanguage:true
+                line1_part1         : '生物多样性日',                
+                line2_part2         : '5月22日',
+                line2_part2_css     : 'outline-text',
+                hashTag             : '有份', name:'姓名', isUNLanguage:true,
+                line2CutOffMargin : 19,
+                line3CutOffMargin : 8 
             },
             ar:{
-                date                : '٢٢ أيار/مايو ٢٠٢١',
-                day                 : 'يوم التنوع البيولوجي',
-                tagline             : 'نحن جزء من الحل',
-                individualTagline   : 'أنا جزء من الحل',
-                hashTag             : 'من#_أجل_الطبيعة', name:'التنوع البيولوجي', isUNLanguage:true
+                line1_part1         : 'يوم',
+                line1_part2         : '٢٢ أيار/مايو',
+                line2_part1         : 'يوم التنوع البيولوجي',
+                line1_part2_css     : 'outline-text',
+                hashTag             : 'من#_أجل_الطبيعة', name:'اسم', isUNLanguage:true,
+                line2CutOffMargin : 13,
+                line3CutOffMargin : 1 
             },
             ...languageTranslation            
         }
@@ -81,57 +93,58 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             ji	: 'Yiddish',
         }
         
-        $scope.logoType = 'individual';
         $scope.language = { code : 'en' }
         $scope.isAdmin  = _.intersection(['Administrator', 'idb-logo-administrator'], user.roles).length
 
         var basePath  = $scope.basePath = (angular.element('base').attr('href')||'').replace(/\/+$/g, '');
 
         $scope.saveImage = function(generateOnly) { 
+            $scope.fitText();
             $scope.showSuccessMessage = false;
-            
+            $scope.uploading = true;
+            // var node =document.getElementById("imgGenerator");
 
-            html2canvas($("#imgGenerator"), {
-                
-                onrendered: function(canvas) {
+            // htmlToImage.toPng(node)
+            // .then(function (dataUrl) {
+            //     var img = new Image();
+            //     img.src = dataUrl;
+                // $('#newImage').empty().append(img);
 
-                    $scope.error = undefined;
-
-                    $('#newImage').empty().append(canvas);
-                    canvas.toBlob(function(blob) {
-                        if(!generateOnly){  
-
-                            if(~document.location.hostname.indexOf('cbd.int')){
-                                $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.text[$scope.language.code].name+'&language='+$scope.language.code+'&logoType='+$scope.logoType);
-                                $window.ga('send', 'pageview');
-                            }
-
-                            uploadImage(canvas.toDataURL())
-                            .then(function(){
-                                saveAs(blob, "22-May-Biodiversity-Day.jpg");  
-                            })
-                            .catch(function(e){
-                                if(e.data.code == "INVALID_CAPTCHA"){
-                                    $scope.error = 'There was a problem with captcha validation, please try again';
-                                }
-                                if(e.data.code == "INVALID_CAPTCHA_SCORE"){
-                                    $scope.error = e.data.message;
-                                }
-                                else{
-                                    $scope.error = 'There was a problem connecting to our server, please try again';
-                                }
-                                console.log(e)
-                            });
+                if(!generateOnly){  
+                    if(~document.location.hostname.indexOf('cbd.int')){
+                        $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.text[$scope.language.code].name+'&language='+$scope.language.code);
+                        $window.ga('send', 'pageview');
+                    }
+                     uploadImage()
+                    .then(function(blob){
+                        saveAs(new Blob([blob]), `22-May-Biodiversity-Day_${$scope.language.code||''}.png`);  
+                    })
+                    .catch(function (e) {
+                        console.error('oops, something went wrong!', e);
+                        if(e && e.data && e.data.code == "INVALID_CAPTCHA"){
+                            $scope.error = 'There was a problem with captcha validation, please try again';
                         }
-                    });
+                        if(e && e.data && e.data.code == "INVALID_CAPTCHA_SCORE"){
+                            $scope.error = e.data.message;
+                        }
+                        else{
+                            $scope.error = 'There was a problem generating the logo, please try again';
+                        }
+                    })
+                    .finally(()=>{
+                        $scope.$applyAsync(()=> {
+                            $scope.uploading = false;
+                            $scope.grecaptchaToken = undefined;
+                            grecaptcha.reset(recaptchaWidgetId);
+                        });
+                    });;
                 }
-            });
+            // })
+           
         };
 
         $scope.onLanguageChange = function(){
             $scope.fitText();
-            if(!['ar', 'en', 'fr', 'ru', 'es', 'zh',].includes($scope.language.code))
-                $scope.customLanguage($scope.language.code);
         }
 
         $scope.fitText = function(selector){
@@ -143,13 +156,21 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
 
             selector = selector||'.fit'
             $timeout(function(){
-                $('#bigtext').bigtext();
-                getSize();
-                $scope.saveImage(true);
+                let maxFontSize;// = 120;
+                if(['zh'].includes($scope.language.code))
+                    maxFontSize = 140;
+
+                $('#bigtext').bigtext({
+                    maxfontsize:maxFontSize
+                });
+                resizeMargins();
+                // $scope.saveImage(true);
             }, 200)
         }
         
         $scope.customLanguage = function(lang){
+
+            return;
             $scope.customText = _.clone($scope.text[lang]);
             if(! $scope.customText){
                 $scope.customText = $scope.text[lang] = _.clone($scope.text['en']);
@@ -194,102 +215,107 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             $scope.customText.date = ($scope.customText.date||'').toUpperCase()
             $scope.customText.day = ($scope.customText.day||'').toUpperCase()
 
-            var collectiveTagline = ($scope.customText.collectiveTagline||'')
-            var individualTagline = ($scope.customText.individualTagline||'')
-            if(collectiveTagline.length)
-                $scope.customText.collectiveTagline = collectiveTagline[0].toUpperCase() + (collectiveTagline.length > 1 ? collectiveTagline.substr(1) : '')
-
-            if(individualTagline.length)
-                $scope.customText.individualTagline = individualTagline[0].toUpperCase() + (individualTagline.length > 1 ? individualTagline.substr(1) : '')
         }
         
-        function getSize() {
-            var myImg       = $('.boxGenerate #logoImg');
-            var logoDate    = $('#bigtext #logoDate');
-            var logoDay     = $('#bigtext #logoDay')
-            var logoTagline = $('#bigtext #logoTagline')
-            var logoName    = $('#bigtext #logoName')
+        function resizeMargins() {
+            var logs = {};
+            
+            const languageDetails = $scope.text[$scope.language.code];
+            languageDetails.line2CutOffMargin = languageDetails.line2CutOffMargin || 14;
+            languageDetails.line3CutOffMargin = languageDetails.line3CutOffMargin || 9;
 
-            var myImgHeight       = myImg      .height(),
-                logoDateHeight    = logoDate   .height(),
-                logoDayHeight     = logoDay    .height(),
-                logoTaglineHeight = logoTagline.height(),
-                logoNameHeight    = logoName   .height();
+            var idbLogo    = $('.boxGenerate #logoImg');
 
+            var line1      = $('#bigtext #line1');
+            var line1_part1= $('#bigtext #line1_part1');
+            var line1_part2= $('#bigtext #line1_part2');
+            var line2_part1= $('#bigtext #line2_part1')
+            var line2_part2= $('#bigtext #line2_part2')
+            var line2      = $('#bigtext #line2')
+            var customText = $('#bigtext #customText')
 
-
-            var myImgfontSize       = parseInt(myImg      .css("fontSize")||0),
-                logoDatefontSize    = parseInt(logoDate   .css("fontSize")||0),
-                logoDayfontSize     = parseInt(logoDay    .css("fontSize")||0),
-                logoTaglinefontSize = parseInt(logoTagline.css("fontSize")||0),
-                logoNamefontSize    = parseInt(logoName   .css("fontSize")||0); 
-
-                logoDate   .css("height", logoDatefontSize    +'px')
-                logoDay    .css("height", logoDayfontSize     +'px')
-                logoTagline.css("height", logoTaglinefontSize +'px')
-                logoName   .css("height", logoNamefontSize    +'px')
+            var myImgHeight      = idbLogo   .height(),
+                line1Height      = line1     .height(),
+                line2Height      = line2     .height(),
+                customTextHeight = customText.height();
 
 
-            var totalFontSize = logoDatefontSize +
-                                logoDayfontSize  +
-                                logoTaglinefontSize+
-                                logoNamefontSize
-            var equalMargin = (myImgHeight-totalFontSize)/3;
-            var margin_logoDate    = ((logoDateHeight    - logoDatefontSize   )/2)
 
-            // if($scope.language!= 'zh')
-                logoDate   .css('margin-top', '-' + (margin_logoDate   ) + 'px')
+            var idbLogoFontSize    = parseInt(idbLogo   .css("fontSize")||0),
+                line1fontSize      = parseInt(line1     .css("fontSize")||0),
+                line2fontSize      = parseInt(line2     .css("fontSize")||0),
+                customTextfontSize = parseInt(customText.css("fontSize")||0);
 
-            if($scope.language.code== 'fr'){
-                logoDay    .css('margin-top', '' + (equalMargin +10) + 'px');
-                $('.impact-font.text-box-width').css('margin-top', '-10px');
+            line1       .css("height", line1fontSize     +'px')
+            line2       .css("height", line2fontSize     +'px')           
+            customText  .css("height", customTextfontSize+'px')
+            
+
+            var totalFontSize = line1fontSize +
+                                line2fontSize  +
+                                customTextfontSize;
+            
+            let customTextMarginAdjust = 21;
+            let line2MarginAdjust      = 4;
+            var equalMargin  = (myImgHeight-totalFontSize)/2;
+            var margin_line1 = ((line1Height    - line1fontSize   )/2)
+            var margin_line2 = ((line2Height    - line2fontSize   )/2)
+            var margin_customText = ((customTextHeight    - customTextfontSize   )/2)
+
+            if($scope.language.code== 'ru'){
+                customTextMarginAdjust = 28;
+                line2MarginAdjust      = -9;
             }
-            else{
-                logoDay    .css('margin-top', '' + (equalMargin ) + 'px')
-                $('.impact-font.text-box-width').css('margin-top', '0px');
+
+            line1       .css('margin-top', `-${margin_line1}px`);            
+            line2       .css('margin-top', `${(-margin_line2+equalMargin)+languageDetails.line2CutOffMargin}px`)
+            customText  .css('margin-top', `${equalMargin+languageDetails.line3CutOffMargin}px`)
+
+            logs = {
+                ...logs,
+                myImgHeight,
+                idbLogoFontSize,
+                line1Height,
+                line1fontSize,     
+                line2Height,
+                line2fontSize,    
+                customTextHeight, 
+                customTextfontSize,
+                totalFontSize,
+                equalMargin,
+                ...languageDetails
             }
-            logoTagline.css('margin-top', '' + (equalMargin ) + 'px')
-
-            if($scope.language.code== 'zh')
-                logoName   .css('margin-top', '' + (equalMargin +10) + 'px')
-            else
-                logoName   .css('margin-top', '' + (equalMargin ) + 'px')
-
-
+            $scope.logs = logs
         }        
 
         function onResize() {
             $scope.fitText();
         }
 
-        function uploadImage(blob){
+        function uploadImage(){
 
-            $scope.uploading = true;
             var data = {
-                'file': blob,
-                'logoType': $scope.logoType,
-                'language': $scope.language.code,
+                year: (new Date()).getFullYear(),
+                code: $scope.language.code,
                 ...$scope.text[$scope.language.code]
             }
 
-            return $http.post('/api/v2021/idb-logos', data, {headers: {'x-captcha-v2-token':$scope.grecaptchaToken}})
+            return $http.post('/api/v2021/idb-logos', data, {responseType: "arraybuffer", headers: {'x-captcha-v2-token':$scope.grecaptchaToken}})
             .then(function(success) {
                 $scope.showSuccessMessage = true;
+                console.log(success)
                 return success.data;
             })
-            .finally(function(){
-                $scope.uploading = false;
-                $scope.grecaptchaToken = undefined;
-                grecaptcha.reset(recaptchaWidgetId);
-            });
         }
 
         function loadLanguages(){
+            
             $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms', {cache:true}).then(function(data){
-                $scope.languages = _(data.data).map(function(lang){
+                data.data.forEach(function(lang){
                     var code = lang.identifier.replace('lang-', '')
-                    if(!_.find($scope.defaultLanguages, {code : code})){
+                    if(languageTranslation[code] && !_.find($scope.defaultLanguages, {code : code})){
                         var lang = {
+                            ...languageTranslation[code],
                             code: code,
                             language: lang.title.en,
                             group:'Other Languages',
@@ -297,12 +323,27 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                         $scope.defaultLanguages.push(lang)
                         return lang;
                     }
-                }).compact().uniq().sort(function(a,b){
+                });                
+                $scope.defaultLanguages = _($scope.defaultLanguages).compact().uniq().sort(function(a,b){
                     if(a.language<b.language) return -1;
                     if(a.language>b.language) return  1;
                     return 0;
                 }).value();
             })
+            .then(()=>{
+                const search = $location.search()||{};
+                if(search.lang){ 
+                    if(_.find($scope.defaultLanguages, {code : search.lang}))
+                        $scope.language = { code : search.lang }
+                }
+            
+                if(search.name)
+                    $scope.text[$scope.language.code].name = search.name
+                
+                $scope.isPrerender = search.prerender=='true';
+
+                $scope.fitText();
+            });
         }
 
         function recaptchaCallback(token){
@@ -345,4 +386,5 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
 
         loadLanguages();
         buildQuery();
+
 }]

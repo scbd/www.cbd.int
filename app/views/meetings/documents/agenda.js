@@ -246,7 +246,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                                 return ret;
                             }, {});
 
-                            mItemDocuments = _(rItem.files).map(function(f) {
+                            mItemDocuments = _(rItem.files).compact().map(function(f) {
                                 return docsById[f._id];
                             }).compact().value();
 

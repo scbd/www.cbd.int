@@ -1,13 +1,13 @@
 
 import 'file-saverjs';
 import 'bigText';
-import 'html2canvas';
 import _ from 'lodash';
 import 'ngInfiniteScroll'
       
 export { default as template  } from './collage.html';
 
-export default ['$q', 'user','$http','$scope', '$rootScope', '$window', 'status',  function( $q, user,$http, $scope,  $rootScope, $window, status) {
+export default ['$q', 'user','$http','$scope', '$rootScope', '$window', 'status', '$routeParams',
+  function( $q, user,$http, $scope,  $rootScope, $window, status, $routeParams) {
 
 
     $scope.$root.page={
@@ -25,7 +25,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$window', 'status'
         if(!$scope.loading && ($scope.logos||[]).length < $scope.logoCount){
 
             var query = {
-                q: { status:status },
+                q: { status:status, year : Number($routeParams.year)||(new Date).getFullYear() },
                 s: { updatedOn:-1 },
                 sk: currentPage,
                 l:10
@@ -74,7 +74,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$window', 'status'
 
     function loadLogoCounts(){
         var query = {
-            q: { status:status },
+            q: { status:status, year : Number($routeParams.year)||(new Date).getFullYear() },
             c: 1
         };
         $scope.loading = true;

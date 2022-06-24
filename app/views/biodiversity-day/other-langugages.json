@@ -1,857 +1,442 @@
 {
-    "af": {
-       "language": "Afrikaans",
-       "date": "22 Mei 2021",
-       "day": "BIODIVERSITEIT DAG",
-       "individualTagline": "Ek is deel van die oplossing",
-       "collectiveTagline": "Ons is deel van die oplossing",
-       "hashTag": "#virNature",
-       "name": "biodiversiteit"
-    },
-    "sq": {
-       "language": "Albanian",
-       "date": "22 Maj 2021",
-       "day": "BIODIVERSITETI DAY",
-       "individualTagline": "Unë jam pjesë e zgjidhjes",
-       "collectiveTagline": "Ne jemi pjesë e zgjidhjes",
-       "hashTag": "#përnatyrën",
-       "name": "Biodiversiteti"
-    },
-    "am": {
-       "language": "Amharic",
-       "date": "22 ግንቦት 2021",
-       "day": "የብዝሃ ሕይወት ቀን",
-       "individualTagline": "እኔ የመፍትሔው አካል ነኝ",
-       "collectiveTagline": "እኛ የመፍትሔው አካል ነዎት",
-       "hashTag": "#ተፈጥሮለ",
-       "name": "ብዝሃ"
-    },
-    "hy": {
-       "language": "Armenian",
-       "date": "22 Մայիս 2021",
-       "day": "ԿԵՆՍԱԲԱԶՄԱԶԱՆՈՒԹՅԱՆ ՕՐՆ",
-       "individualTagline": "Ես մասը լուծում",
-       "collectiveTagline": "Մենք մասը լուծում",
-       "hashTag": "#հանունբնության",
-       "name": "biodiversity"
-    },
-    "az": {
-       "language": "Azerbaijani",
-       "date": "22 MAY 2021",
-       "day": "Biomüxtəliflik Günü",
-       "individualTagline": "Mən həllin bir parçası deyiləm",
-       "collectiveTagline": "Həll hissəsi etdiyiniz",
-       "hashTag": "#Təbiət",
-       "name": "Biomüxtəliflik"
-    },
-    "eu": {
-       "language": "Basque",
-       "date": "May 22 2021",
-       "day": "BIODIBERTSITATEA EGUNA",
-       "individualTagline": "konponbidearen parte naiz",
-       "collectiveTagline": "konponbidearen parte gara",
-       "hashTag": "#ForNature",
-       "name": "Bioaniztasuna"
-    },
-    "bn": {
-       "language": "Bengali Bangla",
-       "date": "22 মে 2021",
-       "day": "জীব বৈচিত্র্য দিন",
-       "individualTagline": "আমি সমাধানের অংশ নই",
-       "collectiveTagline": "আমরা সমাধান অংশ",
-       "hashTag": "#প্রকৃতিরজন্য",
-       "name": "জীববৈচিত্র্য"
-    },
-    "bg": {
-       "language": "Bulgarian",
-       "date": "22 Май 2021 г.",
-       "day": "БИОРАЗНООБРАЗИЕТО ДЕН",
-       "individualTagline": "Аз съм част от решението,",
-       "collectiveTagline": "Ние сме част от решението,",
-       "hashTag": "#Задаостанеприрода",
-       "name": "биоразнообразие"
-    },
-    "my": {
-       "language": "Burmese",
-       "date": "22 မေလ 2021",
-       "day": "ဇီဝမျိုးစုံမျိုးကွဲများနေ့",
-       "individualTagline": "ငါအဖြေရဲ့အစိတ်အပိုင်းပါပဲ",
-       "collectiveTagline": "ကျနော်တို့ဖြေရှင်းချက်နေတစ်စိတ်တစ်ဒေသ",
-       "hashTag": "#သဘာဝတရားအဘို့",
-       "name": "ဇီဝမျိုးစုံမျိုးကွဲ"
-    },
-    "be": {
-       "language": "Byelorussian",
-       "date": "22 мая 2021",
-       "day": "біялагічныя ДЗЕНЬ",
-       "individualTagline": "Я частка рашэння",
-       "collectiveTagline": "Мы частка рашэння",
-       "hashTag": "#дляпрыроды",
-       "name": "біяразнастайнасць"
-    },
-    "km": {
-       "language": "Cambodian",
-       "date": "22 ខែឧសភាឆ្នាំ 2021",
-       "day": "ថ្ងៃអភិរក្សជីវៈចម្រុះ",
-       "individualTagline": "ខ្ញុំជាផ្នែកមួយនៃដំណោះស្រាយ",
-       "collectiveTagline": "យើងមានផ្នែកមួយនៃដំណោះស្រាយ",
-       "hashTag": "#សម្រាប់ធម្មជាតិ",
-       "name": "ជីវចំរុះ"
-    },
-    "ca": {
-       "language": "Catalan",
-       "date": "22 de de maig de 2021",
-       "day": "BIODIVERSITAT DIA",
-       "individualTagline": "Sóc part de la solució",
-       "collectiveTagline": "Som part de la solució",
-       "hashTag": "#peralaNaturalesa",
-       "name": "biodiversitat"
-    },
-    "co": {
-       "language": "Corsican",
-       "date": "22 di maghju di u 2021",
-       "day": "biodiversità DAY",
-       "individualTagline": "I sugnu parte di u definitivu",
-       "collectiveTagline": "Avemu Patrunu parte di u definitivu",
-       "hashTag": "#perNature",
-       "name": "biodiversità"
-    },
-    "hr": {
-       "language": "Croatian",
-       "date": "22. svibanj 2021",
-       "day": "BIOLOŠKA RAZNOLIKOST DAN",
-       "individualTagline": "Ja sam dio rješenja",
-       "collectiveTagline": "Mi smo dio rješenja",
-       "hashTag": "#zaprirodu",
-       "name": "Biološkaraznolikost"
-    },
-    "cs": {
-       "language": "Czech",
-       "date": "22.května 2021",
-       "day": "BIODIVERZITA DAY",
-       "individualTagline": "Jsem součástí řešení",
-       "collectiveTagline": "Jsme součástí řešení",
-       "hashTag": "#propřírodu",
-       "name": "Biologickározmanitost"
-    },
-    "da": {
-       "language": "Danish",
-       "date": "22 maj 2021",
-       "day": "BIODIVERSITET DAG",
-       "individualTagline": "Jeg er en del af løsningen",
-       "collectiveTagline": "Vi er en del af løsningen",
-       "hashTag": "#TilNaturen",
-       "name": "biodiversitet"
-    },
-    "nl": {
-       "language": "Dutch",
-       "date": "22 mei 2021",
-       "day": "Dag van de Biodiversiteit",
-       "individualTagline": "Ik ben een deel van de oplossing",
-       "collectiveTagline": "We zijn deel van de oplossing",
-       "hashTag": "#voorNature",
-       "name": "biodiversiteit"
-    },
-    "eo": {
-       "language": "Esperanto",
-       "date": "22 majo 2021",
-       "day": "biodiverseco TAGO",
-       "individualTagline": "Mi estas parto de la solvo",
-       "collectiveTagline": "Ni estas parto de la solvo",
-       "hashTag": "#porNaturo",
-       "name": "biodiverseco"
-    },
-    "et": {
-       "language": "Estonian",
-       "date": "22. mai 2021",
-       "day": "bioloogilise mitmekesisuse päevaga",
-       "individualTagline": "Ma olen osa lahendusest",
-       "collectiveTagline": "Oleme osa lahendusest",
-       "hashTag": "#Looduse",
-       "name": "Bioloogilinemitmekesisus"
-    },
-    "fi": {
-       "language": "Finnish",
-       "date": "22 toukokuu 2021",
-       "day": "luonnon monimuotoisuuden päivänä",
-       "individualTagline": "Olen osa ratkaisua",
-       "collectiveTagline": "Olemme osa ratkaisua",
-       "hashTag": "#forNature",
-       "name": "biodiversiteetti"
-    },
-    "fy": {
-       "language": "Frisian",
-       "date": "22 maaie 2021",
-       "day": "Biodiversity DAY",
-       "individualTagline": "Ik bin part fan de oplossing",
-       "collectiveTagline": "Wy binne in part fan de oplossing",
-       "hashTag": "#foarNature",
-       "name": "Biodiversity"
-    },
-    "gd": {
-       "language": "Gaelic (Scots Gael",
-       "date": "22 An Cèitean 2021",
-       "day": "BITH-IOMADACHD LATHA",
-       "individualTagline": "Tha mi pàirt den fhuasglaidh",
-       "collectiveTagline": "Tha sinn pàirt den fhuasglaidh",
-       "hashTag": "#airsonNature",
-       "name": "Bith-iomadachd"
-    },
-    "gl": {
-       "language": "Galician",
-       "date": "22 de maio de 2021",
-       "day": "biodiversidade DÍA",
-       "individualTagline": "Eu son parte da solución",
-       "collectiveTagline": "Somos parte da solución",
-       "hashTag": "#paraaNatureza",
-       "name": "biodiversidade"
-    },
-    "ka": {
-       "language": "Georgian",
-       "date": "22 მაისი 2021",
-       "day": "ბიომრავალფეროვნების DAY",
-       "individualTagline": "მე ვარ ნაწილი გამოსავალი",
-       "collectiveTagline": "ჩვენ ნაწილი გადაწყვეტა",
-       "hashTag": "#ბუნება",
-       "name": "ბიომრავალფეროვნების"
-    },
-    "de": {
-       "language": "German",
-       "date": "22. Mai 2021",
-       "day": "Biodiversitätstag",
-       "individualTagline": "Ich bin ein Teil der Lösung",
-       "collectiveTagline": "Wir sind ein Teil der Lösung",
-       "hashTag": "#ForNature",
-       "name": "Biodiversität"
-    },
-    "el": {
-       "language": "Greek",
-       "date": "22 του Μάη 2021",
-       "day": "ΒΙΟΠΟΙΚΙΛΟΤΗΤΑ ΗΜΕΡΑ",
-       "individualTagline": "Είμαι μέρος της λύσης",
-       "collectiveTagline": "Είμαστε μέρος της λύσης",
-       "hashTag": "#ΓιαΦύση",
-       "name": "βιοποικιλότητα"
-    },
-    "gu": {
-       "language": "Gujarati",
-       "date": "22 મે 2021",
-       "day": "વ િવિવધતા DAY",
-       "individualTagline": "હું ઉકેલ ભાગ છું",
-       "collectiveTagline": "અમે ઉકેલ ભાગ છો",
-       "hashTag": "#પ્રકૃતિમાટે",
-       "name": "જીવવિવિધતા"
-    },
-    "ha": {
-       "language": "Hausa",
-       "date": "22 MAY 2021",
-       "day": "rabe-raben DAY",
-       "individualTagline": "Ina da wani ɓangare na bayani",
-       "collectiveTagline": "Muna da wani ɓangare na bayani",
-       "hashTag": "#dominNature",
-       "name": "rabe-raben"
-    },
-    "iw": {
-       "language": "Hebrew",
-       "date": "22 מאי 2021",
-       "day": "המגוון הביולוגי DAY",
-       "individualTagline": "אני חלק מהפתרון",
-       "collectiveTagline": "אנחנו חלק מהפתרון",
-       "hashTag": "#לטבע",
-       "name": "מגווןביולוגי"
-    },
-    "hi": {
-       "language": "Hindi",
-       "date": "22 मई 2021",
-       "day": "जैव विविधता दिवस",
-       "individualTagline": "मैं समाधान का हिस्सा हूँ",
-       "collectiveTagline": "हम समाधान का हिस्सा हैं",
-       "hashTag": "#प्रकृतिकेलिए",
-       "name": "जैवविविधता"
-    },
-    "hu": {
-       "language": "Hungarian",
-       "date": "Május 22, 2021",
-       "day": "BIODIVERZITÁS DAY",
-       "individualTagline": "Vagyok a megoldás része",
-       "collectiveTagline": "Mi vagyunk a megoldás része",
-       "hashTag": "#forNature",
-       "name": "Biodiverzitás"
-    },
-    "is": {
-       "language": "Icelandic",
-       "date": "22. maí 2021",
-       "day": "Líffræðilegur fjölbreytileiki DAY",
-       "individualTagline": "Ég er hluti af lausninni",
-       "collectiveTagline": "Við erum hluti af lausninni",
-       "hashTag": "#fyrirNature",
-       "name": "Líffræðilegurfjölbreytileiki"
-    },
-    "in": {
-       "language": "Indonesian",
-       "date": "22 Mei 2021",
-       "day": "KEANEKARAGAMAN HAYATI DAY",
-       "individualTagline": "Aku bagian dari solusi",
-       "collectiveTagline": "Kami bagian dari solusi",
-       "hashTag": "#Alam",
-       "name": "keanekaragamanhayati"
-    },
-    "ga": {
-       "language": "Irish",
-       "date": "22 Bealtaine, 2021",
-       "day": "BITHÉAGSÚLACHTA DAY",
-       "individualTagline": "Tá mé mar chuid den réiteach",
-       "collectiveTagline": "Táimid mar chuid den réiteach",
-       "hashTag": "#DoDúlra",
-       "name": "Bithéagsúlacht"
-    },
-    "it": {
-       "language": "Italian",
-       "date": "22 mag 2021",
-       "day": "Giornata della Biodiversità",
-       "individualTagline": "Sono parte della soluzione",
-       "collectiveTagline": "Noi siamo parte della soluzione",
-       "hashTag": "#pernatura",
-       "name": "biodiversità"
-    },
-    "ja": {
-       "language": "Japanese",
-       "date": "2021年5月22日",
-       "day": "生物多様性DAY",
-       "individualTagline": "私は解決策の一部です",
-       "collectiveTagline": "私たちは、ソリューションの一部です",
-       "hashTag": "#自然のために",
-       "name": "生物多様性"
-    },
-    "jw": {
-       "language": "Javanese",
-       "date": "22 Mei 2021",
-       "day": "ambanipun DAY",
-       "individualTagline": "Aku bagean solusi",
-       "collectiveTagline": "We lagi bagéan saka solusi",
-       "hashTag": "#kanggoAlam",
-       "name": "ambanipun"
-    },
-    "kn": {
-       "language": "Kannada",
-       "date": "22 ಮೇ 2021",
-       "day": "ಜೀವವೈವಿಧ್ಯ ದಿನ",
-       "individualTagline": "ನಾನು ಪರಿಹಾರದ ಭಾಗವಾಗಿ ಮನುಷ್ಯ",
-       "collectiveTagline": "ನಾವು ಪರಿಹಾರ ಭಾಗವಾಗಿದ್ದೀರಿ",
-       "hashTag": "#ನೇಚರ್",
-       "name": "ಜೀವವೈವಿಧ್ಯ"
-    },
-    "kk": {
-       "language": "Kazakh",
-       "date": "22 мамыр 2021",
-       "day": "биологиялық күннен",
-       "individualTagline": "Мен шешу бөлігі қалдым",
-       "collectiveTagline": "Біз шешу жатқан бөлігі",
-       "hashTag": "#табиғат",
-       "name": "биоалуантүрлілігі"
-    },
-    "rw": {
-       "language": "Kinyarwanda",
-       "date": "22 Gicurasi 2021",
-       "day": "rw'ibinyabuzima UMUNSI",
-       "individualTagline": "Ndi bigize umuti",
-       "collectiveTagline": "Turi mu umuti",
-       "hashTag": "#kukoNature",
-       "name": "Urusobe"
-    },
-    "ky": {
-       "language": "Kirghiz",
-       "date": "22-май 2021",
-       "day": "BIODIVERSITY DAY",
-       "individualTagline": "Мен маселени чечүүнүн бир бөлүгү эмесмин",
-       "collectiveTagline": "Биз чечүү бөлүгү",
-       "hashTag": "#АнткениЖаратылыш",
-       "name": "биологиялык артүрдүүлүк"
-    },
-    "ko": {
-       "language": "Korean",
-       "date": "2021년 5월 22일",
-       "day": "생물 다양성 DAY",
-       "individualTagline": "나는 솔루션의 일부 해요",
-       "collectiveTagline": "우리는 솔루션의 일부입니다",
-       "hashTag": "#자연에대한",
-       "name": "생물다양성"
-    },
-    "ku": {
-       "language": "Kurdish",
-       "date": "22 MAY 2021",
-       "day": "hilnaweşîne DAY",
-       "individualTagline": "Ez beşek ji çareseriyê im",
-       "collectiveTagline": "Em beşek ji çareseriyê î",
-       "hashTag": "#jiboNature",
-       "name": "Biodiversity"
-    },
-    "lo": {
-       "language": "Laothian",
-       "date": "22 ພຶດສະພາ 2021",
-       "day": "ຊີວະນາໆພັນ DAY",
-       "individualTagline": "ຂ້າພະເຈົ້າສ່ວນຫນຶ່ງຂອງການດັດແປງ",
-       "collectiveTagline": "ພວກເຮົາກໍາລັງສ່ວນຫນຶ່ງຂອງການດັດແປງ",
-       "hashTag": "#ສໍາລັບທໍາມະຊາດ",
-       "name": "ຊີວະນາໆພັນ"
-    },
-    "la": {
-       "language": "Latin",
-       "date": "XXII Maii MMXXI",
-       "day": "Dies BIODIVERSITY",
-       "individualTagline": "Ego pars solution",
-       "collectiveTagline": "Sumus pars solution",
-       "hashTag": "#quianatura",
-       "name": "Page"
-    },
-    "lv": {
-       "language": "Latvian Lettish",
-       "date": "2021 22. maijs",
-       "day": "Bioloģiskās daudzveidības diena",
-       "individualTagline": "Es esmu daļa no risinājuma",
-       "collectiveTagline": "Mēs esam daļa no risinājuma",
-       "hashTag": "#ParNature",
-       "name": "Bioloģiskādaudzveidība"
-    },
-    "cy": {
-       "language": "Welsh",
-       "date": "Mai 22, 2021",
-       "day": "BIOAMRYWIAETH DYDD",
-       "individualTagline": "Rwy'n rhan o'r ateb",
-       "collectiveTagline": "Rydym yn rhan o'r ateb",
-       "hashTag": "#INature",
-       "name": "Bioamrywiaeth"
-    },
-    "fa": {
-       "language": "Persian",
-       "date": "2021 مه 22",
-       "day": "تنوع زیستی روز",
-       "individualTagline": "من بخشی از راه حل هستم",
-       "collectiveTagline": "ما بخشی از راه حل هستید",
-       "hashTag": "#برایطبیعت",
-       "name": "تنوعزیستی"
-    },
-    "ji": {
-       "language": "Yiddish",
-       "date": "מאי 22, 2021",
-       "day": "בייאָודייווערסאַטי טאָג",
-       "individualTagline": "איך בין טייל פון די לייזונג",
-       "collectiveTagline": "מיר 'רע טייל פון די לייזונג",
-       "hashTag": "#פֿאַרנאַטורע",
-       "name": "בייאָודייווערסאַטי"
-    },
-    "lt": {
-       "language": "Lithuanian",
-       "date": "Gegužės 22 2021",
-       "day": "BIOLOGINĖ ĮVAIROVĖ DIENA",
-       "individualTagline": "Aš sprendimo dalis",
-       "collectiveTagline": "Mes sprendimo dalis",
-       "hashTag": "#gamtos",
-       "name": "Biologinėįvairovė"
-    },
-    "mg": {
-       "language": "Malagasy",
-       "date": "22 MAY 2021",
-       "day": "zavamananaina DAY",
-       "individualTagline": "Aho tafiditra ao anatin'ny vahaolana",
-       "collectiveTagline": "Izahay tafiditra ao anatin'ny vahaolana",
-       "hashTag": "#FaNature",
-       "name": "Adin-tsaina"
-    },
-    "mi": {
-       "language": "Maori",
-       "date": "22 Haratua 2021",
-       "day": "Biodiversity DAY",
-       "individualTagline": "ahau wahi o te otinga ahau",
-       "collectiveTagline": "kei wahi o te otinga matou",
-       "hashTag": "#hokiNature",
-       "name": "Biodiversity"
-    },
-    "mk": {
-       "language": "Macedonian",
-       "date": "22 мај 2021 година влегува",
-       "day": "БИОДИВЕРЗИТЕТОТ ДЕН",
-       "individualTagline": "Јас сум дел од решението",
-       "collectiveTagline": "Ние сме дел од решението",
-       "hashTag": "#зазаштитанаприродата",
-       "name": "биолошкатаразновидност"
-    },
-    "ml": {
-       "language": "Malayalam",
-       "date": "22 മേയ് 2021",
-       "day": "ബയോഡൈവേഴ്സിറ്റി DAY,",
-       "individualTagline": "ഞാൻ പരിഹാരം അംഗമായ",
-       "collectiveTagline": "നാം പരിഹാരം അല്ലെന്ന് ഭാഗം",
-       "hashTag": "#പ്രകൃതിഎന്ന",
-       "name": "ജൈവവൈവിധ്യം"
-    },
-    "mn": {
-       "language": "Mongolian",
-       "date": "May 22 2021",
-       "day": "Биологийн Төрөл Зүйлийн өдрийг",
-       "individualTagline": "Би уусмал нэг хэсэг байна",
-       "collectiveTagline": "Бид уусмал нэг хэсэг шүү дээ",
-       "hashTag": "#Байгальнь",
-       "name": "Биологийн олон янзбайдлын"
-    },
-    "mo": {
-       "language": "Moldavian",
-       "date": "22 mai 2021",
-       "day": "BIODIVERSITATE ZIUA",
-       "individualTagline": "Sunt o parte a soluției",
-       "collectiveTagline": "Suntem o parte a soluției",
-       "hashTag": "#pentruNatura",
-       "name": "biodiversitatea"
-    },
-    "mr": {
-       "language": "Marathi",
-       "date": "22 मे 2021",
-       "day": "जैवविविधता दिवस",
-       "individualTagline": "मी समाधानाचा भाग आहे",
-       "collectiveTagline": "आम्ही समाधानाचा एक भाग आहोत",
-       "hashTag": "#निसर्ग",
-       "name": "जैवविविधता"
-    },
-    "ms": {
-       "language": "Malay",
-       "date": "Mei 22, 2021",
-       "day": "BIODIVERSITI HARI",
-       "individualTagline": "Saya sebahagian daripada penyelesaian",
-       "collectiveTagline": "Kami sebahagian daripada penyelesaian",
-       "hashTag": "#Alam",
-       "name": "biodiversiti"
-    },
-    "mt": {
-       "language": "Maltese",
-       "date": "Mejju 22, 2021",
-       "day": "BIJODIVERSITÀ JUM",
-       "individualTagline": "Jien parti mis-soluzzjoni",
-       "collectiveTagline": "Aħna parti mis-soluzzjoni",
-       "hashTag": "#għan-Natura",
-       "name": "bijodiversità"
-    },
-    "ne": {
-       "language": "Nepali",
-       "date": "22 मई 2021",
-       "day": "जैविक विविधता DAY",
-       "individualTagline": "म समाधान को भाग छु",
-       "collectiveTagline": "हामी समाधान को भाग हुनुहुन्छ",
-       "hashTag": "#प्रकृति कोलागि",
-       "name": "जैविकविविधता"
-    },
-    "no": {
-       "language": "Norwegian",
-       "date": "22 mai 2021",
-       "day": "BIOLOGISK MANGFOLD DAY",
-       "individualTagline": "Jeg er en del av løsningen",
-       "collectiveTagline": "Vi er en del av løsningen",
-       "hashTag": "#forNature",
-       "name": "Biologiskmangfold"
-    },
-    "or": {
-       "language": "Oriya",
-       "date": "22 MAY 2021",
-       "day": "BIODIVERSITY DAY",
-       "individualTagline": "ମୁଁ ସମାଧାନ ଅଂଶ ଅଛି",
-       "collectiveTagline": "ଆମେ ସମାଧାନ ଅଂଶ ହୋଇଥିବେ",
-       "hashTag": "#Natureପାଇଁ",
-       "name": "Biodiversity"
-    },
-    "pa": {
-       "language": "Punjabi",
-       "date": "22 ਮਈ 2021",
-       "day": "ਜੈਵ ਦਿਨ",
-       "individualTagline": "ਮੈਨੂੰ ਹੱਲ ਹੈ ਦਾ ਹਿੱਸਾ ਰਿਹਾ ਹੈ",
-       "collectiveTagline": "ਸਾਨੂੰ ਦਾ ਹੱਲ ਦਾ ਹਿੱਸਾ ਹੋ",
-       "hashTag": "#ਕੁਦਰਤਲਈ",
-       "name": "ਬਾਇਓਡਾਇਵਰਸਿਟੀ"
-    },
-    "pl": {
-       "language": "Polish",
-       "date": "22 maja 2021",
-       "day": "BIORÓŻNORODNOŚĆ DZIEŃ",
-       "individualTagline": "Jestem częścią rozwiązania",
-       "collectiveTagline": "Jesteśmy częścią rozwiązania",
-       "hashTag": "#nałonienatury",
-       "name": "bioróżnorodność"
-    },
-    "ps": {
-       "language": "Pashto Pushto",
-       "date": "22 می 2021",
-       "day": "تنوع ورځ",
-       "individualTagline": "زه د حل یوه برخه یم",
-       "collectiveTagline": "مونږ د حل برخه",
-       "hashTag": "#دطبیعت",
-       "name": "تنوع"
-    },
-    "pt": {
-       "language": "Portuguese",
-       "date": "22 de maio de 2021",
-       "day": "BIODIVERSIDADE DIA",
-       "individualTagline": "Eu sou parte da solução",
-       "collectiveTagline": "Nós somos parte da solução",
-       "hashTag": "#paraaNatureza",
-       "name": "biodiversidade"
-    },
-    "ro": {
-       "language": "Romanian",
-       "date": "22 mai 2021",
-       "day": "BIODIVERSITATE ZIUA",
-       "individualTagline": "Sunt o parte a soluției",
-       "collectiveTagline": "Suntem o parte a soluției",
-       "hashTag": "#pentruNatura",
-       "name": "biodiversitatea"
-    },
-    "sd": {
-       "language": "Sindhi",
-       "date": "22 مئي 2021",
-       "day": "جهنگلي حيات ڏينهن",
-       "individualTagline": "مون کي سنڌ جي حل جو حصو آهيان",
-       "collectiveTagline": "اسان جي حل جي آهين حصو",
-       "hashTag": "#قدرتلاء",
-       "name": "جهنگليحيات"
-    },
-    "si": {
-       "language": "Singhalese",
-       "date": "මැයි 22 2021",
-       "day": "විවිධත්ව දිනය",
-       "individualTagline": "මම විසඳුමේ කොටසක් ඉන්නේ",
-       "collectiveTagline": "අපි විසඳුමක් ඉන්නේ කොටසක්",
-       "hashTag": "#ස්වභාවසඳහා",
-       "name": "ජෛවවිවිධත්වය"
-    },
-    "sk": {
-       "language": "Slovak",
-       "date": "22.mája 2021",
-       "day": "BIODIVERZITA DAY",
-       "individualTagline": "Som súčasťou riešenia",
-       "collectiveTagline": "Sme súčasťou riešenia",
-       "hashTag": "#preprírodu",
-       "name": "biodiverzita"
-    },
-    "sl": {
-       "language": "Slovenian",
-       "date": "22. maj 2021",
-       "day": "BIOTSKA DAN",
-       "individualTagline": "Jaz sem del rešitve",
-       "collectiveTagline": "Mi smo del rešitve",
-       "hashTag": "#zanaravo",
-       "name": "Biotskaraznovrstnost"
-    },
-    "sm": {
-       "language": "Samoan",
-       "date": "22 Me 2021",
-       "day": "meaola ASO",
-       "individualTagline": "Ou te vaega o le vaifofo",
-       "collectiveTagline": "Tatou o vaega o le vaifofo",
-       "hashTag": "#moleNatura",
-       "name": "meaola"
-    },
-    "sn": {
-       "language": "Shona",
-       "date": "22 MAY 2021",
-       "day": "zvipenyu DAY",
-       "individualTagline": "Ndiri chikamu chemhinduro",
-       "collectiveTagline": "Tiri chikamu chemhinduro",
-       "hashTag": "#ForNature",
-       "name": "zvipenyu"
-    },
-    "so": {
-       "language": "Somali",
-       "date": "22 MAY 2021",
-       "day": "noole DAY",
-       "individualTagline": "Waxaan qayb ka mid ah xalka ahay",
-       "collectiveTagline": "Waxaan qayb ka mid ah xalka tahay",
-       "hashTag": "#WaayoNature",
-       "name": "noole"
-    },
-    "sr": {
-       "language": "Serbian",
-       "date": "22 Мај 2021",
-       "day": "Дан биодиверзитета",
-       "individualTagline": "Ја сам део решења",
-       "collectiveTagline": "Ми смо део решења",
-       "hashTag": "#заприроду",
-       "name": "биодиверзитет"
-    },
-    "st": {
-       "language": "Sesotho",
-       "date": "22 May, 2021",
-       "day": "phedisano ya diphedi LETSATSI",
-       "individualTagline": "Ke karolo ea tharollo",
-       "collectiveTagline": "Re karolo ea tharollo",
-       "hashTag": "#bakengsaNature",
-       "name": "mefuta-futaena"
-    },
-    "su": {
-       "language": "Sudanese",
-       "date": "22 Méi 2021",
-       "day": "biodiversiti dinten",
-       "individualTagline": "Abdi bagian tina solusi",
-       "collectiveTagline": "Simkuring bagian tina solusi",
-       "hashTag": "#pikeunAlam",
-       "name": "biodiversiti"
-    },
-    "sv": {
-       "language": "Swedish",
-       "date": "22 maj 2021",
-       "day": "dagen för biologisk mångfald",
-       "individualTagline": "Jag är en del av lösningen",
-       "collectiveTagline": "Vi är en del av lösningen",
-       "hashTag": "#förnatur",
-       "name": "Biologiskmångfald"
-    },
-    "sw": {
-       "language": "Swahili",
-       "date": "Mei 22, 2021",
-       "day": "Bayoanuwai DAY",
-       "individualTagline": "Mimi ni sehemu ya suluhisho",
-       "collectiveTagline": "Sisi ni sehemu ya suluhisho",
-       "hashTag": "#KwaNature",
-       "name": "viumbehai"
-    },
-    "ta": {
-       "language": "Tamil",
-       "date": "22 மே 2021",
-       "day": "பல்லுயிர் நாள்",
-       "individualTagline": "நான் தீர்வின் பகுதியாக இருக்கிறேன்",
-       "collectiveTagline": "நாம் தீர்வு அங்கமாகிறீர்கள்",
-       "hashTag": "#இயற்கை",
-       "name": "பல்லுயிர்"
-    },
-    "te": {
-       "language": "Tegulu",
-       "date": "22 మే 2021",
-       "day": "జీవవైవిధ్యం DAY",
-       "individualTagline": "నేను పరిష్కారం భాగంగా రెడీ",
-       "collectiveTagline": "మేము పరిష్కారం భాగంగా ఉన్నాము",
-       "hashTag": "#ప్రకృతికి",
-       "name": "జీవవైవిధ్యం"
-    },
-    "tg": {
-       "language": "Tajik",
-       "date": "22 майи соли 2021",
-       "day": "гуногунии биологї РӮЗИ",
-       "individualTagline": "Ман як қисми ҳалли дорам",
-       "collectiveTagline": "Мо як қисми ҳалли ҳастед",
-       "hashTag": "#Зеротабиат",
-       "name": "биологӣ"
-    },
-    "th": {
-       "language": "Thai",
-       "date": "22 พฤษภาคม 2021",
-       "day": "ความหลากหลายทางชีวภาพ DAY",
-       "individualTagline": "ฉันเป็นส่วนหนึ่งของการแก้ปัญหา",
-       "collectiveTagline": "เราเป็นส่วนหนึ่งของการแก้ปัญหา",
-       "hashTag": "#เพื่อธรรมชาติ",
-       "name": "ความหลากหลายทางชีวภาพ"
-    },
-    "tk": {
-       "language": "Turkmen",
-       "date": "22-nji maý 2021",
-       "day": "BIODÜRLÜLIGINI Day",
-       "individualTagline": "Men çözülmegi bir bölegi gözlüm",
-       "collectiveTagline": "Biz çözülmegi bir bölegi bolarsyňyz",
-       "hashTag": "#dogan",
-       "name": "biodürlüligi"
-    },
-    "tl": {
-       "language": "Tagalog",
-       "date": "22 MAY 2021",
-       "day": "biodiversity DAY",
-       "individualTagline": "Ako ay bahagi ng ang solusyon",
-       "collectiveTagline": "Humihingi kami ng bahagi ng ang solusyon",
-       "hashTag": "#parasaKalikasan",
-       "name": "biodiversity"
-    },
-    "tr": {
-       "language": "Turkish",
-       "date": "22 MAY 2021",
-       "day": "BİYOLOJİK ÇEŞİTLİLİK GÜNÜ",
-       "individualTagline": "Ben çözümün bir parçası olduğum",
-       "collectiveTagline": "Biz çözümün bir parçası olduğunu",
-       "hashTag": "#Doğaiçin",
-       "name": "biyoçeşitlilik"
-    },
-    "tt": {
-       "language": "Tatar",
-       "date": "22 май 2021",
-       "day": "төрлелекне КӨНЕ",
-       "individualTagline": "Мин хәл өлеше генэ",
-       "collectiveTagline": "Без хәл өлеше яратам",
-       "hashTag": "#табигатьөчен",
-       "name": "биотөрлелек"
-    },
-    "uk": {
-       "language": "Ukrainian",
-       "date": "22 травня 2021",
-       "day": "БІОЛОГІЧНИЙ ДЕНЬ",
-       "individualTagline": "Я частина рішення",
-       "collectiveTagline": "Ми частина рішення",
-       "hashTag": "#дляприроди",
-       "name": "біорізноманіття"
-    },
-    "ur": {
-       "language": "Urdu",
-       "date": "22 مئی 2021",
-       "day": "جیوویودتا DAY",
-       "individualTagline": "میں نے حل کا حصہ ہوں",
-       "collectiveTagline": "ہم حل کا حصہ ہیں",
-       "hashTag": "#فطرت کےلئے",
-       "name": "جیوویودتا"
-    },
-    "uz": {
-       "language": "Uzbek",
-       "date": "22 MAY 2021",
-       "day": "BİYOÇEŞİTLİLİK DAY",
-       "individualTagline": "Men yechim qismi emasman",
-       "collectiveTagline": "Biz hal qismi odamsiz",
-       "hashTag": "#tabiatuchun",
-       "name": "Biologikxilma-xillik"
-    },
-    "vi": {
-       "language": "Vietnamese",
-       "date": "22 tháng 5 năm 2021",
-       "day": "ĐA DẠNG SINH HỌC NGÀY",
-       "individualTagline": "Tôi là một phần của giải pháp",
-       "collectiveTagline": "Chúng tôi là một phần của giải pháp",
-       "hashTag": "#Thiênnhiên",
-       "name": "Đa dạng sinhhọc"
-    },
-    "xh": {
-       "language": "Xhosa",
-       "date": "22 Meyi 2021",
-       "day": "USUKU IZITYALO",
-       "individualTagline": "Ndanelisekile yinxenye yesisombululo",
-       "collectiveTagline": "Sicela yinxenye yesisombululo",
-       "hashTag": "#NgokubaNature",
-       "name": "Biodiversity"
-    },
-    "yo": {
-       "language": "Yoruba",
-       "date": "22 MAY 2021",
-       "day": "ipinsiyeleyele DAY",
-       "individualTagline": "Mo wa apa ti awọn ojutu",
-       "collectiveTagline": "A ba apa ti awọn ojutu",
-       "hashTag": "#funNature",
-       "name": "Biodiversity"
-    },
-    "zu": {
-       "language": "Zulu",
-       "date": "22 Meyi 2021",
-       "day": "USUKU Biodiversity",
-       "individualTagline": "Ngingumfana yesixazululo",
-       "collectiveTagline": "Sesikhathele yesixazululo",
-       "hashTag": "#UkuzeImvelo",
-       "name": "ImveloEhlukahlukene"
-    },
-    "ceb": {
-       "language": "Visayas",
-       "date": "22 Mayo 2021",
-       "day": "biodiversity ADLAW",
-       "individualTagline": "ako bahin sa solusyon",
-       "collectiveTagline": "Kita nga bahin sa solusyon",
-       "hashTag": "#KayKinaiyahan",
-       "name": "biodiversity"
-    }
- }
+   "am": {
+      "language": "Amharic",
+      "line1_part1": "የብዝሃ ሕይወት",
+      "line1_part2": "",
+      "line2_part1": "ቀን",
+      "line2_part2": "14 ግንቦት",
+      "hashTag": "#ለተፈጥሮ",
+      "line2_part2_css"     : "outline-text",
+      "name": "ስም",
+      "line2CutOffMargin" : 12,
+      "line3CutOffMargin" : -5 
+   },
+   "az": {
+      "language": "Azerbaijani",
+      "line1_part1": "BİOMÜXTƏLİFLİK",
+      "line1_part2": "",
+      "line2_part1": "GÜNÜ",
+      "line2_part2": "22 MAY",
+      "hashTag": "#TəbiətÜçün",
+      "line2_part2_css"     : "outline-text",
+      "name": "AD",
+      "line2CutOffMargin" : 12,
+      "line3CutOffMargin" : -5 
+   },
+   "bg": {
+      "language": "Bulgarian",
+      "line1_part1": "22 МАЙ",
+      "line1_part2": "ДЕН НА",
+      "line2_part1": "БИОРАЗНООБРАЗИЕТО",
+      "line2_part2": "",
+      "hashTag": "#ЗаПриродата",
+      "line1_part1_css"     : "outline-text",
+      "name": "ИМЕ",
+      "line2CutOffMargin" : 12,
+      "line3CutOffMargin" : 1
+   },
+   "bn": {
+      "language": "Bengali",
+      "line1_part1": "জীববৈচিত্র্য ",
+      "line1_part2": "",
+      "line2_part1": "দিবস",
+      "line2_part2": "২২ মে",
+      "hashTag": "#প্রকৃতিরজন্য",
+      "line2_part2_css"     : "outline-text",
+      "name": "নাম",
+      "line2CutOffMargin" : 20,
+      "line3CutOffMargin" : 17
+   },
+   "bs": {
+      "language": "Bosnian",
+      "line1_part1": "22. MAJ",
+      "line1_part2": "DAN",
+      "line2_part1": "BIORAZNOLIKOSTI",
+      "line2_part2": "",
+      "hashTag": "#ZaPrirodu",
+      "line1_part1_css"     : "outline-text",
+      "name": "IME"
+   },
+   "ca": {
+      "language": "Catalan",
+      "line1_part1": "22 DE MAIG",
+      "line1_part2": "DIA DE LA",
+      "line2_part1": "BIODIVERSITAT",
+      "line2_part2": "",
+      "hashTag": "#PerLaNatura",
+      "line1_part1_css"     : "outline-text",
+      "name": "NOM",
+      "line2CutOffMargin" : 10,
+      "line3CutOffMargin" : 7
+   },
+   "cs": {
+      "language": "Czech",
+      "line1_part1": "22. KVĚTNA",
+      "line1_part2": "DEN",
+      "line2_part1": "BIODIVERZITY",
+      "line2_part2": "",
+      "hashTag": "#ProPřírodu",
+      "line1_part1_css"     : "outline-text",
+      "name": "NÁZEV",
+      "line2CutOffMargin" : 25,
+      "line3CutOffMargin" : 14
+   },
+   "de": {
+      "language": "German",
+      "line1_part1": "22. MAI",
+      "line1_part2": "TAG DER",
+      "line2_part1": "BIODIVERSITÄT",
+      "line2_part2": "",
+      "hashTag": "#FürDieNatur",
+      "line1_part1_css"     : "outline-text",
+      "name": "NAME",
+      "line2CutOffMargin" : 25,
+      "line3CutOffMargin" : 10
+   },
+   "et": {
+      "language": "Estonian",
+      "line1_part1": "ELURIKKUSE",
+      "line1_part2": "",
+      "line2_part1": "PÄEV",
+      "line2_part2": "22. MAI",
+      "hashTag": "#LooduseJaoks",
+      "line2_part2_css"     : "outline-text",
+      "name": "NIMI",
+      "line2CutOffMargin" : 25,
+      "line3CutOffMargin" : 10
+   },
+   "eu": {
+      "language": "Basque",
+      "line1_part1": "BIODIBERTSITATEAREN",
+      "line1_part2": "",
+      "line2_part1": "EGUNA",
+      "line2_part2": "MAIATZAREN 22a",
+      "hashTag": "#Naturarentzat",
+      "line2_part2_css"     : "outline-text",
+      "name": "IZENA",
+      "line2CutOffMargin" : 12,
+      "line3CutOffMargin" : 3
+   },
+   "fi": {
+      "language": "Finnish",
+      "line1_part1": "LUONNON MONIMUOTOISUUDEN",
+      "line1_part2": "",
+      "line2_part1": "PÄIVÄ",
+      "line2_part2": "22. TOUKOKUUTA",
+      "hashTag": "#LuonnonPuolesta",
+      "line2_part2_css"     : "outline-text",
+      "name": "NIMI",
+      "line2CutOffMargin" : 6,
+      "line3CutOffMargin" : 3
+   },
+   "ga": {
+      "language": "Irish",
+      "line1_part1": "22 BEALTAINE",
+      "line1_part2": "LÁ",
+      "line2_part1": "BITHÉAGSÚLACHTA",
+      "line2_part2": "",
+      "hashTag": "#DoDúlra",
+      "line1_part1_css"     : "outline-text",
+      "name": "AINM",
+      "line2CutOffMargin" : 17,
+      "line3CutOffMargin" : 7
+   },
+   "gd": {
+      "language": "Gaelic",
+      "line1_part1": "22 CÈITEAN",
+      "line1_part2": "LATHA",
+      "line2_part1": "BITH-IOMADACHD",
+      "line2_part2": "",
+      "hashTag": "#AirsonNàdur",
+      "line1_part1_css"     : "outline-text",
+      "name": "AINM",
+      "line2CutOffMargin" : 17,
+      "line3CutOffMargin" : -3
+   },
+   "gl": {
+      "language": "Galician",
+      "line1_part1": "22 DE MAIO",
+      "line1_part2": "DÍA DA",
+      "line2_part1": "BIODIVERSIDADE",
+      "line2_part2": "",
+      "hashTag": "#ParaaNatureza",
+      "line1_part1_css"     : "outline-text",
+      "name": "NOME",
+      "line2CutOffMargin" : 10,
+      "line3CutOffMargin" : 7
+   },
+   "el": {
+      "language": "Greek",
+      "line1_part1": "22 ΜΑΪΟΥ",
+      "line1_part2": "ΗΜΕΡΑ ΤΗΣ",
+      "line2_part1": "ΒΙΟΠΟΙΚΙΛΟΤΗΤΑΣ",
+      "line2_part2": "",
+      "hashTag": "#ΓιαΤηΦύση",
+      "line1_part1_css"     : "outline-text",
+      "name": "ΟΝΟΜΑ",
+      "line2CutOffMargin" : 17,
+      "line3CutOffMargin" : -3
+   },
+   "hi": {
+      "language": "Hindi",
+      "line1_part1": "जैव विविधता",
+      "line1_part2": "",
+      "line2_part1": "दिवस",
+      "line2_part2": "22 मई",
+      "hashTag": "#प्रकृतिकेलिए",
+      "line2_part2_css"     : "outline-text",
+      "name": "नाम"
+   },
+   "hr": {
+      "language": "Croatian",
+      "line1_part1": "22. SVIBNJA",
+      "line1_part2": "DAN",
+      "line2_part1": "BIORAZNOLIKOSTI",
+      "line2_part2": "",
+      "hashTag": "#ZaPrirodu",
+      "line1_part1_css"     : "outline-text",
+      "name": "IME",
+      "line2CutOffMargin" : 20,
+      "line3CutOffMargin" : 3
+   },
+   "ht": {
+      "language": "Haitian Creole",
+      "line1_part1": "22 ME",
+      "line1_part2": "JOUNEN",
+      "line2_part1": "BIYODIVÈSITE",
+      "line2_part2": "",
+      "hashTag": "#PouLanati",
+      "line1_part1_css"     : "outline-text",
+      "name": "NON"
+   },
+   "is": {
+      "language": "Icelandic",
+      "line1_part1": "22. MAÍ",
+      "line1_part2": "DAGUR",
+      "line2_part1": "FJÖLBREYTNI LÍFRÍKISINS",
+      "line2_part2": "",
+      "hashTag": "#FyrirNáttúruna",
+      "line1_part1_css"     : "outline-text",
+      "name": "NAFN",
+      "line2CutOffMargin" : 17,
+      "line3CutOffMargin" : 7
+   },
+   "hu": {
+      "language": "Hungarian",
+      "line1_part1": "MÁJUS 22.",
+      "line1_part2": "A",
+      "line2_part1": "BIODIVERZITÁS NAPJA",
+      "line2_part2": "",
+      "hashTag": "#aTermészetért",
+      "line1_part1_css"     : "outline-text",
+      "name": "NÉV",
+      "line2CutOffMargin" : 17,
+      "line3CutOffMargin" : 7
+   },
+   "hy": {
+      "language": "Armenian",
+      "line1_part1": "Կենսաբազմազանության",
+      "line1_part2": "",
+      "line2_part1": "օրը",
+      "line2_part2": "Մայիսի 22",
+      "hashTag": "#բնության_համար",
+      "line2_part2_css"     : "outline-text",
+      "name": "ԱՆՈՒՆ",
+      "line2CutOffMargin" : 5,
+      "line3CutOffMargin" : -5
+   },
+   "it": {
+      "language": "Italian",
+      "line1_part1": "22 MAGGIO",
+      "line1_part2": "GIORNATA",
+      "line2_part1": "DELLA BIODIVERSITÀ",
+      "line2_part2": "",
+      "hashTag": "#PerLaNatura",
+      "line1_part1_css"     : "outline-text",
+      "name": "NOME",
+      "line2CutOffMargin" : 17,
+      "line3CutOffMargin" : 7
+   },
+   "ja": {
+      "language": "Japanese",
+      "line1_part1": "生物多様性の日",
+      "line1_part2": "",
+      "line2_part1": "5月22日",
+      "line2_part2": "",
+      "hashTag": "#自然のための",
+      "line2_part1_css"     : "outline-text",
+      "name": "名前"
+   },
+   "ka": {
+      "language": "Georgian",
+      "line1_part1": "ბიომრავალფეროვნების",
+      "line1_part2": "",
+      "line2_part1": "დღე",
+      "line2_part2": "22 მაისი",
+      "hashTag": "#ბუნებისთვის",
+      "line2_part2_css"     : "outline-text",
+      "name": "სახელი",
+      "line2CutOffMargin" : 5,
+      "line3CutOffMargin" : -5
+   },
+   "ko": {
+      "language": "Korean",
+      "line1_part1": "생물다양성의 날",
+      "line1_part2": "",
+      "line2_part1": "5월 22일",
+      "line2_part2": "",
+      "hashTag": "#자연지킴이",
+      "line2_part1_css"     : "outline-text",
+      "name": "이름",
+      "line2CutOffMargin" : 15,
+      "line3CutOffMargin" : 16
+   },
+   "lt": {
+      "language": "Lithuanian",
+      "line1_part1": "BIOLOGINĖS ĮVAIROVĖS",
+      "line1_part2": "",
+      "line2_part1": "DIENA",
+      "line2_part2": "GEGUŽĖS 22",
+      "hashTag": "#UžGamtą",
+      "line2_part2_css"     : "outline-text",
+      "name": "VARDAS",
+      "line2CutOffMargin" : 9,
+      "line3CutOffMargin" : -5
+   },
+   "lv": {
+      "language": "Latvian",
+      "line1_part1": "BIOLOĢISKĀS DAUDZVEIDĪBAS",
+      "line1_part2": "",
+      "line2_part1": "DIENA",
+      "line2_part2": "22. MAIJS",
+      "hashTag": "#Dabai",
+      "line2_part2_css"     : "outline-text",
+      "name": "NOSAUKUMS",
+      "line2CutOffMargin" : 9,
+      "line3CutOffMargin" : -1
+   },
+   "mr": {
+      "language": "Marathi",
+      "line1_part1": "जैविक विविधता ",
+      "line1_part2": "",
+      "line2_part1": "दिवस",
+      "line2_part2": "22 मे",
+      "hashTag": "#निसर्गासाठी",      
+      "line2_part2_css": "outline-text",
+      "name": "नाव"
+   },
+   "ms": {
+      "language": "Malay",
+      "line1_part1": "22 MEI",
+      "line1_part2": "HARI",
+      "line2_part1": "BIODIVERSITI",
+      "line2_part2": "",
+      "hashTag": "#DemiAlam",
+      "line1_part1_css"     : "outline-text",
+      "name": "NAMA"
+   },
+   "ne": {
+      "language": "Nepali",
+      "line1_part1": "जैविक विविधता",
+      "line1_part2": "",
+      "line2_part1": "दिवस",
+      "line2_part2": "मे २२",
+      "hashTag": "#प्रकृतिको लागि",
+      "line2_part2_css"     : "outline-text",
+      "name": "जैविक विविधता दिवस"
+   },
+   "pl": {
+      "language": "Polish",
+      "line1_part1": "22 MAJA",
+      "line1_part2": "DZIEŃ",
+      "line2_part1": "BIORÓŻNORODNOŚCI",
+      "line2_part2": "",
+      "hashTag": "#DlaPrzyrody",
+      "line1_part1_css"     : "outline-text",
+      "name": "IMIĘ",
+      "line2CutOffMargin" : 17,
+      "line3CutOffMargin" : 7
+   },
+   "pt": {
+      "language": "Portuguese",
+      "line1_part1": "22 DE MAIO",
+      "line1_part2": "DIA DA",
+      "line2_part1": "BIODIVERSIDADE",
+      "line2_part2": "",
+      "hashTag": "#PelaNatureza",
+      "line1_part1_css"     : "outline-text",
+      "name": "NOME",
+      "line2CutOffMargin" : 17,
+      "line3CutOffMargin" : 7
+   },
+   "ro": {
+      "language": "Romanian",
+      "line1_part1": "22 MAI",
+      "line1_part2": "ZIUA",
+      "line2_part1": "BIODIVERSITĂȚII",
+      "line2_part2": "",
+      "hashTag": "#PentruNatură",
+      "line1_part1_css"     : "outline-text",
+      "name": "NUME",
+      "line2CutOffMargin" : 17,
+      "line3CutOffMargin" : 7
+   },
+   "sk": {
+      "language": "Slovak",
+      "line1_part1": "22. MÁJ",
+      "line1_part2": "DEŇ",
+      "line2_part1": "BIODIVERZITY",
+      "line2_part2": "",
+      "hashTag": "#PrePrírodu",
+      "line1_part1_css"     : "outline-text",
+      "name": "NÁZOV"
+   },
+   "sl": {
+      "language": "Slovenian",
+      "line1_part1": "22 MAJ",
+      "line1_part2": "DAN",
+      "line2_part1": "BIOTSKE RAZNOVRSTNOSTI",
+      "line2_part2": "",
+      "hashTag": "#ZaNaravo",
+      "line1_part1_css"     : "outline-text",
+      "name": "IME",
+      "line2CutOffMargin" : 17,
+      "line3CutOffMargin" : -1
+   },
+   "sr": {
+      "language": "Serbian",
+      "line1_part1": "22. МАЈА",
+      "line1_part2": "ДАН",
+      "line2_part1": "БИОДИВЕРЗИТЕТА",
+      "line2_part2": "",
+      "hashTag": "#ЗаПрироду",
+      "line1_part1_css"     : "outline-text",
+      "name": "НАМЕ",
+      "line2CutOffMargin" : 24,
+      "line3CutOffMargin" : 7
+   },
+   "tr": {
+      "language": "Turkish",
+      "line1_part1": "22 MAYIS",
+      "line1_part2": "",
+      "line2_part1": "BİYOÇEŞİTLİLİK GÜNÜ",
+      "line2_part2": "",
+      "hashTag": "#Doğaİçin",
+      "line1_part1_css"     : "outline-text",
+      "name": "İSİM",
+      "line2CutOffMargin" : 26,
+      "line3CutOffMargin" : 5
+   },
+   "uk": {
+      "language": "Ukraininan",
+      "line1_part1": "22 ТРАВНЯ",
+      "line1_part2": "ДЕНЬ",
+      "line2_part1": "БІОРІЗНОМАНІТТЯ",
+      "line2_part2": "",
+      "hashTag": "#ДляПрироди",
+      "line1_part1_css"     : "outline-text",
+      "name": "ІМЯ",
+      "line2CutOffMargin" : 20,
+      "line3CutOffMargin" : -8
+   }
+}

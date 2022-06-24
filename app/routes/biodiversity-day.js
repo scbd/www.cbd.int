@@ -11,9 +11,9 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     $locationProvider.hashPrefix('!');
 
     $routeProvider
-        .when('/logo/collage',          { ...mapView(angularViewWrapper),          resolve : { ...collage,   status:resolveLiteral('approved'), user : currentUser() }})
-        .when('/logo/collage/draft',    { ...mapView(angularViewWrapper),          resolve : { ...collage,   status:resolveLiteral('draft'),    user : securize(["Administrator","idb-logo-administrator"]) }})
-        .when('/logo/collage/rejected', { ...mapView(angularViewWrapper),          resolve : { ...collage,   status:resolveLiteral('rejected'), user : securize(["Administrator","idb-logo-administrator"]) }})
-        .when('/logo/customize',        { ...mapView(angularViewWrapper),          resolve : { ...customLogo,user : currentUser() }})
+        .when('/logo/collage/draft/:year?',    { ...mapView(angularViewWrapper),          resolve : { ...collage,   status:resolveLiteral('draft'),    user : securize(["Administrator","idb-logo-administrator"]) }})
+        .when('/logo/collage/rejected/:year?', { ...mapView(angularViewWrapper),          resolve : { ...collage,   status:resolveLiteral('rejected'), user : securize(["Administrator","idb-logo-administrator"]) }})        
+        .when('/logo/collage/:year?',          { ...mapView(angularViewWrapper),          resolve : { ...collage,   status:resolveLiteral('approved'), user : currentUser() }})
+        .when('/logo/customize',               { ...mapView(angularViewWrapper),          resolve : { ...customLogo,user : currentUser() }})
         .otherwise({redirectTo: function(){ window.location.href= window.location}});
 }]);

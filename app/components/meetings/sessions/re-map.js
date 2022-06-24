@@ -6,6 +6,12 @@ export default function remap(code) {
 
     var normalizedCode = (code||'').toLocaleUpperCase();
 
+    //conferences
+
+    if(normalizedCode == 'POST2020')    return 'wg2020-04';
+
+    //Meetings
+
     // if(normalizedCode == 'COP-15')    return 'COP-15-PART1';
     // if(normalizedCode == 'CP-MOP-10') return 'CP-MOP-10-PART1';
     // if(normalizedCode == 'NP-MOP-10') return 'NP-MOP-04-PART1';
