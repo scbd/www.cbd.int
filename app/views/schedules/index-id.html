@@ -101,6 +101,7 @@
                                                   </span>
                                               </span>
                                           </span>
+                                          <a ng-if="r.adminVideoUrl" ng-href="{{::r.adminVideoUrl}}" target="_blank" rel="noopener noreferrer"><i class="fa fa-television" aria-hidden="true"></i></a>
                                           <a ng-if="::r.editUrl" ng-href="{{::r.editUrl}}" target="_blank" rel="noopener noreferrer"><i class="fa fa-edit" ></i></a>
                                           <div  ng-if="::r.sideEvent" class="side-event-id hidden-xs text-muted text-right">
                                                   <a ng-href="https://www.cbd.int/side-events/{{::r.sideEvent.id}}" target="sideEvent" style="color:inherit">
