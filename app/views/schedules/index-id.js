@@ -96,7 +96,10 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                         r.room = rooms[(r.location||{}).room];
                         r.videoUrl = r.video && (r.videoUrl || r.room.videoUrl)
 
+                        const hasInteractio = hasRole && r.videoUrl && r.videoUrl.includes('cbd.kronos-events.net')
+
                         if(hasRole) r.editUrl = `https://eunomia.cbd.int/schedule/${encodeURIComponent(_ctrl.code)}?day=${encodeURIComponent(r.start)}&edit=${encodeURIComponent(r._id)}`
+                        if(hasInteractio) r.interactio = r.videoUrl 
 
                         return _.defaults(r, { open : !(types[r.type]||{}).closed });
 
