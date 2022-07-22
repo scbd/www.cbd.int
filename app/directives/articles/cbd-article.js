@@ -44,9 +44,13 @@ import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@22.0.0/build/c
 
 						preprocessOEmbedl();
 
-						if(($scope.article.coverImage||{}).url)
+						if(($scope.article.coverImage||{}).url){
+							//sometime the file name has space/special chars, use new URL's href prop which encodes the special chars
+							const url = new URL($scope.article.coverImage.url)
+							$scope.article.coverImage.url = url.href;
+
 							$scope.article.coverImage.url_1200  = $scope.article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/')
-						
+						}
 						$scope.onLoad({article: article[0]});
 						
 						$q.when(authentication.getUser())
