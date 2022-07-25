@@ -23,8 +23,11 @@
                     <span ng-bind="activeConference.Venue|lstring"></span>
                 </div>
                 <div ng-click="showConference(activeConference.code)" style="cursor: pointer;">
-                    <span ng-bind="activeConference.StartDate|moment:'toDate'|date:'yyyy-MM-dd':'UTC'"></span>
-                    - <span ng-bind="activeConference.EndDate|moment:'toDate'|date:'yyyy-MM-dd':'UTC'"></span>
+                    <span ng-if="activeConference.Dates.en">{{::activeConference.Dates.en}}</span>
+                    <span ng-if="!activeConference.Dates.en">
+                        <span ng-bind="activeConference.StartDate|moment:'toDate'|date:'yyyy-MM-dd':'UTC'"></span> -
+                        <span ng-bind="activeConference.EndDate|moment:'toDate'|date:'yyyy-MM-dd':'UTC'"></span>
+                    </span>
                 </div>
                 <div ng-click="showConference(activeConference.code)" ng-bind="activeConference.Description|lstring"
                     style="text-align: justify;cursor: pointer;"></div>
@@ -49,8 +52,11 @@
                         <span ng-bind="conference.Venue|lstring"></span>
                     </div>
                     <div ng-click="showConference(conference.code)" style="cursor: pointer;">
-                        <span ng-bind="conference.StartDate|moment:'toDate'|date:'yyyy-MM-dd':'UTC'"></span>
-                        - <span ng-bind="conference.EndDate|moment:'toDate'|date:'yyyy-MM-dd':'UTC'"></span>
+                        <span ng-if="conference.Dates.en">{{::conference.Dates.en}}</span>
+                        <span ng-if="!conference.Dates.en">
+                            <span ng-bind="conference.StartDate|moment:'toDate'|date:'yyyy-MM-dd':'UTC'"></span> -
+                            <span ng-bind="conference.EndDate|moment:'toDate'|date:'yyyy-MM-dd':'UTC'"></span>
+                        </span>
                     </div>
                     <div ng-click="showConference(conference.code)" ng-bind="conference.Description|lstring"
                         style="text-align: justify;cursor: pointer;"></div>
