@@ -3,7 +3,7 @@
     <div>
         <div id="accordion">
             <div class="card item" v-for="article in articles" :key="article._id">
-                <div class="card-header collapsed" :id="article._id" data-toggle="collapse" :data-target="'#' + article.hashTItle"
+                <div class="card-header collapsed" :id="article._id" data-toggle="collapse" :data-target="'#' + article.hashTitle"
                             aria-expanded="true" aria-controls="collapseOne">
                     <h5 class="mb-0">
                         <i class="fa fa-chevron-up pull-right"></i>
@@ -11,8 +11,8 @@
                     </h5>
                 </div>
 
-                <div :id="article.hashTItle" class="collapse" :aria-labelledby="article._id" data-parent="#accordion">
-                     <cbd-add-new-article :id="article._id" target="_self" class="btn btn-default pull-right"></cbd-add-new-article>
+                <div :id="article.hashTitle" class="collapse" :aria-labelledby="article._id" data-parent="#accordion">
+                    <cbd-add-new-article v-if="showEditButton" :id="article._id" target="_self" class="btn btn-default pull-right"></cbd-add-new-article>
                     <div class="card-body" v-html="(article.content||{}).en "></div>
                 </div>
             </div>
@@ -22,8 +22,7 @@
 
 <script>
 
-import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@22.0.0/build/ckeditor.css');
-
+import 'css!cdn!npm/@scbd/ckeditor5-build-inline-full@22.0.0/build/ckeditor.css';
 import ArticlesApi from '../../api/articles';
 import cbdAddNewArticle from './cbd-add-new-article.vue';
 
@@ -31,7 +30,7 @@ export default {
     name: 'articlesAccordion',
     components : { cbdAddNewArticle },
     props: {
-        query: { type: Function, required: true }
+        query: { type: Object, required: true }
     },
     data() {
         return {
@@ -48,11 +47,10 @@ export default {
     },
     methods: {
         async loadArticles() {
-            const query = this.query();
-
+            const query = this.query;
             this.articles = await this.ArticlesApi.queryArticles(query);
             this.articles = this.articles.map(e=>{
-                e.hashTItle = e.title.en.replace(/[^a-z0-9]/gi, '-').replace(/-+/g, '-');
+                e.hashTitle = e.title.en.replace(/[^a-z0-9]/gi, '-').replace(/-+/g, '-');
                 return e;
             });
         }
@@ -70,6 +68,8 @@ export default {
     .card-header.collapsed .fa {
         transform: rotate(180deg);
     }
-    
+    .card-header{
+        cursor: pointer;
+    }
 
 </style>

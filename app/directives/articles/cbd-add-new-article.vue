@@ -23,14 +23,20 @@
 				if(domain=='localhost' || domain == 'cbddev.xyz')
             		baseUrl = 'https://oasis.cbddev.xyz';
 
-				const queryString = 'tags='		+ (this.tags||[]).map(encodeURIComponent).join(',') +
-									 '&customTags='	+ (this.customTags||[]).map(encodeURIComponent).join(',') +
-									 '&adminTags='	+ (this.adminTags||[]).map(encodeURIComponent).join(',') +
-                                     '&returnUrl=' + window.location.href;
+				const queryString = [];
+                if(this.tags?.length)
+                    queryString.push('tags='		+ this.tags.map(encodeURIComponent).join(','))
+                if(this.customTags?.length)
+                    queryString.push('customTags='	+ this.customTags.map(encodeURIComponent).join(','))
+                if(this.adminTags?.length)
+                    queryString.push('adminTags='	+ this.adminTags.map(encodeURIComponent).join(','))
+
+                queryString.push('returnUrl=' + window.location.href);
+
                 if(!this.id)
-                    return `${baseUrl}/articles/new?${queryString}`
+                    return `${baseUrl}/articles/new?${queryString.join('&')}`
                 
-                return  `${baseUrl}/articles/${this.id}/edit?${queryString}`;
+                return  `${baseUrl}/articles/${this.id}/edit?${queryString.join('&')}`;
             }
         }
     }

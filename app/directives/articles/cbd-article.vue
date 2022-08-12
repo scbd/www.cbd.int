@@ -16,8 +16,7 @@
 
 <script>
 
-import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@22.0.0/build/ckeditor.css');
-
+import 'css!cdn!npm/@scbd/ckeditor5-build-inline-full@22.0.0/build/ckeditor.css';
 import axios from 'axios';
 import ArticlesApi from '../../api/articles';
 import cbdAddNewArticle from './cbd-add-new-article.vue';
@@ -27,16 +26,14 @@ export default {
     name: 'cbdArticle',
     components : { cbdAddNewArticle },
     props: {
-        hideCoverImage  : { type: Boolean, required: false, default:false },
-        showEdit        : { type: Boolean, required: false, default:undefined },
-        article         : { type: Object, required: false, default:undefined },
-        query           : { type: Function, required: true },
-        tokenReader     : { type: Function, required: false },
-
+        hideCoverImage  : { type: Boolean, required: false, default:false        },
+        showEdit        : { type: Boolean, required: false, default:undefined    },
+        article         : { type: Object,  required: false, default:undefined    },
+        query           : { type: Object,  required: true                        },
         tags 		    : { type: Array  , required: false, default:[]           }, // [] of tag id's
         customTags 	    : { type: Array  , required: false, default:[]           }, // [] of customTag id's
         adminTags 	    : { type: Array  , required: false, default:[]           }, // [] of adminTag text
-        target          : { type: String , required: false, default: '_blank'    },
+        target          : { type: String , required: false, default: '_self'     },
     },
     data() {
         return {
@@ -52,7 +49,7 @@ export default {
     },
     methods: {
         async loadArticle() {
-            const query = this.query();
+            const query = this.query;
             const article = await this.ArticlesApi.queryArticles(query)
             
                 if(article.length ==0 ){
