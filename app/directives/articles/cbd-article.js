@@ -42,7 +42,7 @@ import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@22.0.0/build/c
 						else
 							$scope.article = article[0];
 
-						preprocessOEmbedl();
+						preprocessOEmbed();
 
 						if(($scope.article.coverImage||{}).url){
 							//sometime the file name has space/special chars, use new URL's href prop which encodes the special chars
@@ -64,7 +64,7 @@ import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@22.0.0/build/c
 				//============================================
 				//
 				//============================================
-				function preprocessOEmbedl(html) {
+				function preprocessOEmbed(html) {
 
 					$timeout(function(){
                         var getLocation = function(href) {

@@ -1,6 +1,6 @@
 <template>
      <a :href="newArticleUrl" :target="target">
-        <slot>Add Article</slot>
+        <slot><i class="fa fa-edit"></i> Edit Article</slot>
     </a>
 </template>
 
@@ -11,6 +11,8 @@
             tags 		: { type: Array  , required: false, default:[]           }, // [] of tag id's
             customTags 	: { type: Array  , required: false, default:[]           }, // [] of customTag id's
             adminTags 	: { type: Array  , required: false, default:[]           }, // [] of adminTag text
+            target      : { type: String , required: false, default: '_blank'    },
+            id          : { type: String , required: false, default: undefined   },
         },
         computed: {
             newArticleUrl : function(){
@@ -21,11 +23,20 @@
 				if(domain=='localhost' || domain == 'cbddev.xyz')
             		baseUrl = 'https://oasis.cbddev.xyz';
 
-				const queryString = 'tags='		+ (this.tags||[]).map(encodeURIComponent).join(',') +
-									 '&customTags='	+ (this.customTags||[]).map(encodeURIComponent).join(',') +
-									 '&adminTags='	+ (this.adminTags||[]).map(encodeURIComponent).join(',');
+				const queryString = [];
+                if(this.tags?.length)
+                    queryString.push('tags='		+ this.tags.map(encodeURIComponent).join(','))
+                if(this.customTags?.length)
+                    queryString.push('customTags='	+ this.customTags.map(encodeURIComponent).join(','))
+                if(this.adminTags?.length)
+                    queryString.push('adminTags='	+ this.adminTags.map(encodeURIComponent).join(','))
 
-                return `${baseUrl}/articles/new?${queryString}`
+                queryString.push('returnUrl=' + encodeURIComponent(window.location.href));
+
+                if(!this.id)
+                    return `${baseUrl}/articles/new?${queryString.join('&')}`
+                
+                return  `${baseUrl}/articles/${encodeURIComponent(this.id)}/edit?${queryString.join('&')}`;
             }
         }
     }

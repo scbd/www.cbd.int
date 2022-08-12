@@ -92,6 +92,9 @@ import _ from 'lodash'
 
 					pCookieToken = pToken = t;
 
+					if(Vue?.prototype.$auth)
+						Vue.prototype.$auth.setUserToken(pToken);
+
 					return t;
 
 				}).finally(function(){
@@ -132,6 +135,9 @@ import _ from 'lodash'
 						authenticationToken : token,
 						authenticationEmail : email
 					};
+
+					if(Vue?.prototype.$auth)
+						Vue.prototype.$auth.setUserToken(pToken);
 
 					authenticationFrame.contentWindow.postMessage(JSON.stringify(msg), accountsBaseUrl);
 				}
@@ -267,6 +273,9 @@ import _ from 'lodash'
 
 			currentUser     = user || undefined;
 			$rootScope.user = user || anonymous();
+
+			if(Vue?.prototype.$auth)
+				Vue.prototype.$auth.setUser($rootScope.user);
 		}
 
 		//============================================================

@@ -4,6 +4,7 @@ import { securize, resolveLiteral, injectRouteParams, mapView, currentUser } fro
 import * as angularViewWrapper from '~/views/angular-view-wrapper'
 import * as vueViewWrapper     from '~/views/vue-view-wrapper'
 
+
 // Static views
 import * as conferencesView       from '~/views/meetings/conferences'
 import * as conferencesIdView     from '~/views/meetings/index'
@@ -19,8 +20,9 @@ const parallelMeetingsView  = { component: ()=>import('~/views/meetings/parallel
 const notificationIdView    = { component: ()=>import('~/views/notifications/index-id')                      .catch(traceError) }
 const virtualTableView      = { component: ()=>import('~/views/virtual-tables/index')                        .catch(traceError) }
 const sessionListView       = { component: ()=>import('~/components/meetings/sessions/session-list.vue')     .catch(traceError) }
-const sessionIdView         = { component: ()=>import('~/components/meetings/sessions/edit.vue')             .catch(traceError)}
-const interpretersPanelView = { component: ()=>import('~/components/meetings/sessions/interpreters-view.vue').catch(traceError)}
+const sessionIdView         = { component: ()=>import('~/components/meetings/sessions/edit.vue')             .catch(traceError) }
+const interpretersPanelView = { component: ()=>import('~/components/meetings/sessions/interpreters-view.vue').catch(traceError) }
+const infoNote              = { component: ()=>import('~/views/conferences/info-note.vue')        .catch(traceError) }
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
@@ -43,6 +45,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:code/virtual-tables',                { ...mapView(angularViewWrapper),  resolve: { ...virtualTableView, user:currentUser(), routePrams: injectRouteParams({type:'publication'}) }, reloadOnSearch:false})
     .when('/:code/virtual-tables/publications',   { ...mapView(angularViewWrapper),  resolve: { ...virtualTableView, user:currentUser(), routePrams: injectRouteParams({type:'publication'}) }, reloadOnSearch:false})
     .when('/:code/virtual-tables/events',         { ...mapView(angularViewWrapper),  resolve: { ...virtualTableView, user:currentUser(), routePrams: injectRouteParams({type:'event'}) }, reloadOnSearch:false})
+    .when('/:code/info-note',                     { ...mapView(vueViewWrapper),      resolve: { ...infoNote, user:currentUser(),        }, reloadOnSearch:false })
     .when('/:code/schedules',                     { ...mapView(angularViewWrapper),  resolve: { ...scheduleView }, reloadOnSearch:true })
     .when('/:code/insession',                     { ...mapView(angularViewWrapper),  resolve: { ...inSessionView }, reloadOnSearch:false })
     .when('/:code/sessions',                      { ...mapView(vueViewWrapper),      resolve: { ...sessionListView,        user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })

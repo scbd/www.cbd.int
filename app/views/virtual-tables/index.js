@@ -132,7 +132,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
                 if(article.coverImage && article.coverImage.url){
                     
                     //sometime the file name has space/special chars, use new URL's href prop which encodes the special chars
-                    const url = new URL($scope.article.coverImage.url)
+                    const url = new URL(article.coverImage.url)
                     article.coverImage.url = url.href;
 
                     article.url_600 = article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&600x400/');                    
