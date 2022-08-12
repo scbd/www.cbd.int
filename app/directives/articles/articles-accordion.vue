@@ -48,8 +48,8 @@ export default {
     methods: {
         async loadArticles() {
             const query = this.query;
-            this.articles = await this.ArticlesApi.queryArticles(query);
-            this.articles = this.articles.map(e=>{
+            const articles = await this.ArticlesApi.queryArticles(query);
+            this.articles = articles.map(e=>{
                 e.hashTitle = e.title.en.replace(/[^a-z0-9]/gi, '-').replace(/-+/g, '-');
                 return e;
             });
