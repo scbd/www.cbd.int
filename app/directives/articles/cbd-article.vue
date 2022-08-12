@@ -60,7 +60,6 @@ export default {
                 else
                     this.article = article[0];
 
-                console.log(this.article)
                 this.preProcessOEmbed();
 
                 if(this.article.coverImage?.url){
