@@ -31,12 +31,12 @@
                 if(this.adminTags?.length)
                     queryString.push('adminTags='	+ this.adminTags.map(encodeURIComponent).join(','))
 
-                queryString.push('returnUrl=' + window.location.href);
+                queryString.push('returnUrl=' + encodeURIComponent(window.location.href));
 
                 if(!this.id)
                     return `${baseUrl}/articles/new?${queryString.join('&')}`
                 
-                return  `${baseUrl}/articles/${this.id}/edit?${queryString.join('&')}`;
+                return  `${baseUrl}/articles/${encodeURIComponent(this.id)}/edit?${queryString.join('&')}`;
             }
         }
     }

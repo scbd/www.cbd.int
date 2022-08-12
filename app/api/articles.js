@@ -8,7 +8,7 @@ export default class ArticlesApi extends ApiBase
   }
   
   async queryArticleGroup(groupKey, params)  {
-    return this.http.get(`api/v2017/articles/grouping/${groupKey}`, { params })
+    return this.http.get(`api/v2017/articles/grouping/${encodeURIComponent(groupKey)}`, { params })
                     .then(res => res.data)
                     .catch(tryCastToApiError);
   }
@@ -21,7 +21,7 @@ export default class ArticlesApi extends ApiBase
 
   async getArticleById(id)  {
 
-    return this.http.get(`api/v2017/articles/${id}`)
+    return this.http.get(`api/v2017/articles/${encodeURIComponent(id)}`)
                     .then(res => res.data)
                     .catch(tryCastToApiError);
   }
