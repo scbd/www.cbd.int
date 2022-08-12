@@ -28,8 +28,8 @@ export default {
     components : { articlesAccordion, cbdArticle, cbdAddNewArticle },
     data(){
         return{
-            introAdminTags : ['conferences', 'info-note', 'introduction', this.getMeetingCode()],
-            infoNoteAdminTags : ['conferences', 'info-note', 'accordion', this.getMeetingCode()],
+            introAdminTags : ['conferences', 'info-note', 'introduction', encodeURIComponent(this.getMeetingCode())],
+            infoNoteAdminTags : ['conferences', 'info-note', 'accordion', encodeURIComponent(this.getMeetingCode())],
             showEditButton : false
         }
     },
@@ -50,16 +50,13 @@ export default {
         },
         articleQuery(){
             const ag = [];
-            ag.push({"$match":{ "$and" : [{"adminTags":{"$all":['conferences', 'introduction', 'info-note', this.getMeetingCode()] }}]}});
+            ag.push({"$match":{ "$and" : [{"adminTags":{"$all":['conferences', 'introduction', 'info-note', encodeURIComponent(this.getMeetingCode())] }}]}});
                         
             ag.push({$sort : {'title.en':1 }});
             ag.push({"$project" : { title:1, content:1, 'meta.createdOn':1}});
             ag.push({"$limit":1000});
 
             return { ag : JSON.stringify(ag) };
-        },
-        tokenReader(){
-            return 'test'
         },
         getMeetingCode(){
             const url = window.location.pathname;
