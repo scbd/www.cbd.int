@@ -1,9 +1,12 @@
-import app from '~/app'
-import html from './participant.html'
+import   app          from '~/app'
+import   html         from './participant.html'
+import { textToHtml } from '~/util/html'
+
 import './address'
 import '~/services/conference-service'
 import '~/directives/kronos/user-messages'
 import '~/directives/file'
+
 
 app.directive('participant', ['$http','$timeout','conferenceService','$filter','$q',function($http,$timeout,conferenceService,$filter,$q) {
 
@@ -12,13 +15,13 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
 			template : html,
       replace: true,
       scope: {
-        typee:'=',
-        binding: "=ngModel",
-        showContact: "=showContact",
-        organization:"=organization",
-        conferenceCode:"=conferenceCode",
-        requestId:"=requestId",
-        isContact:"=isContact"
+        typee         : '='              ,
+        binding       : "=ngModel"       ,
+        showContact   : "=showContact"   ,
+        organization  : "=organization"  ,
+        conferenceCode: "=conferenceCode",
+        requestId     : "=requestId"     ,
+        isContact     : "=isContact"
       },
       link:function($scope){
         $timeout(function(){
@@ -41,6 +44,7 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
           if(prev!==after)
             initDoc()
         });
+
         var conference
 
         $scope.$watch('binding',function(){
@@ -137,6 +141,7 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
             return url
           return '/participation/download/'+encodeURIComponent(url).replace(/%2f/gi, '/');
         }
+
         function validateRequireUploads(){
           if(!$scope.attending.val)return
           if(isPrintFileValidation())
@@ -219,6 +224,8 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
           $scope.binding.organization = $scope.organization._id
           $scope.editForm.$submitted=false
           if($scope.attending.val)selectAllMeetings()
+          $scope.selectedOptions = {}
+          initializeTagModels()
         }
 
         function isMedia(media){
@@ -227,11 +234,13 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
               return true
           return false
         }
+
         function isDesignation(designation){
           if($scope.binding.designation === designation)
               return true
           return false
         }
+
         conferenceService.getConference($scope.conferenceCode)
           .then(function(c){
             conference=c
@@ -240,10 +249,12 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
               .then(function(meetings){
                 $scope.meetings = meetings
                 selectAllMeetings()
+                initRegOptions()
               })
           })
 
           $scope.onUpload=onUpload
+
           function onUpload (params, file, error){
             var exists = findAttachement(params.container.attachment,params.tag)
 
@@ -269,6 +280,7 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
             }
             return ''
           }
+
           function findAttachementIndex (url){
             if(!Array.isArray($scope.binding.attachment)) return -1
             for (var i = 0; i < $scope.binding.attachment.length; i++) {
@@ -277,6 +289,7 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
             }
             return -1
           }
+
           $scope.removeAttachement = removeAttachement
           function removeAttachement (attachment){
             var i = findAttachementIndex (attachment.url)
@@ -284,10 +297,81 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
             if(~i)
               $scope.binding.attachment.splice(i,1)
           }
+
           $scope.isTemp = isTemp
           function isTemp (url){
             return ~url.indexOf('temporary-files')
           }
+
+
+          $scope.selectedOptions = $scope.selectedOptions? $scope.selectedOptions : {}
+          function initRegOptions() {
+            const { globalTags: registrationOptions = [] } = conference?.registrationOptions || {}
+
+            $scope.registrationOptions = registrationOptions.map(registrationOptionsMap);
+            updateRegOptions()
+            
+          }
+
+          function initializeTagModels(){
+            if(!$scope.binding?.tags || !$scope.binding?.tags.length) return 
+
+            for (const op of $scope.registrationOptions) {
+              const theOption = op.options.find((o)=> ($scope.binding.tags || []).includes(o.value)) 
+
+              if(!theOption) continue
+
+              op.selectedOption = theOption.value
+            }
+            updateRegOptions()
+          }
+
+          function registrationOptionsMap({ title, description, options:gtOptions, conditions = [] } ){
+            const options        = gtOptions.map(selectBoxOptionMap);
+            const selectedOption = gtOptions.find((o) => ($scope.binding.tags || []).includes(o.tag))?.tag || undefined;
+
+            return { title, options, conditions, description: textToHtml(description), selectedOption }
+          }
+
+          function selectBoxOptionMap({ tag, title: label, notes: rawNotes = '' }){
+            const notes = textToHtml(rawNotes)
+            const value = tag || undefined
+
+            return { value, label, notes }
+          }
+
+          $scope.updateRegOptions = updateRegOptions
+          function updateRegOptions() {
+
+            const tags = $scope.registrationOptions.map(({ selectedOption }) => selectedOption).filter( x => x )
+
+            for (const option of  $scope.registrationOptions) {
+              option.enabled = testTagConditions(option.conditions, tags);
+
+              if(!option.enabled) option.selectedOption = undefined
+              option.optionNotes = option.options.find((o) => tags.includes(o.value))?.notes;
+            }
+
+            $scope.binding.tags = $scope.registrationOptions.map(({ selectedOption }) => selectedOption).filter( x => x )
+
+            if(!tags.length) delete($scope.binding.tags)
+          }
+
+          function testTagConditions(conditions, tags) {
+            const allRe = /^&/;
+            const notRe = /^!/;
+          
+            const all = conditions.filter((o) => allRe.test(o)).map((o) => o.replace(allRe, ''));
+            const not = conditions.filter((o) => notRe.test(o)).map((o) => o.replace(notRe, ''));
+            const any = conditions.filter((o) => !notRe.test(o) && !allRe.test(o));
+          
+            if (all.length && !all.every((t) => tags.includes(t))) return false;
+            if (not.length &&  not.some((t) => tags.includes(t))) return false;
+            if (any.length && !any.some((t) => tags.includes(t))) return false;
+          
+            return true;
+          }
+
         $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms',{ cache: true })
             .then(function(res){$scope.languages = res.data})
 

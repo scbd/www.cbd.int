@@ -124,7 +124,7 @@ import 'angular-cache'
               else
                 query.code = codeOrId
 
-              return $http.get('/api/v2016/conferences', {params : { q : query, f:{ StartDate:1,MajorEventIDs:1,Title:1,Venue:1,code:1,Description:1, venueId:1, schedule:1, timezone:1 }, s: { StartDate: 1}, fo: 1, cache: true }, cache:httpCache}).then(
+              return $http.get('/api/v2016/conferences', {params : { q : query, f:{ StartDate:1,MajorEventIDs:1,Title:1,Venue:1,code:1,Description:1, venueId:1, schedule:1, timezone:1, registrationOptions:1 }, s: { StartDate: 1}, fo: 1, cache: true }, cache:httpCache}).then(
                 function(res){
 
                   return res.data

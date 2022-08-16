@@ -376,10 +376,42 @@
                     <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url)}}">{{findAttachement(binding.attachment,'tearSheetOrPhotoTwo').title}}</a> <i ng-show="findAttachement(binding.attachment,'tearSheetOrPhotoTwo')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'tearSheetOrPhotoTwo'))"></i></p>
                     <p ng-show="(!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (  editForm.$submitted))" class="text-danger small">Tear sheet or photo two is  required.</p>
                 </div>
+
+
           </div>
         </div>
-    </div>
+      </div>
 
+      <div class="col-xs-12" >
+        <label>Registration </label>
+        <div ng-repeat="regOption in registrationOptions track by regOption.title">
+            <div ng-show="regOption.enabled" class="row">
+              <div class="col-xs-12">
+                <div  class="panel panel-default">
+                  <div class="panel-body">
+                    <div class="form-group" style="margin-bottom: 0;">
+                    <label class="control-label">{{ regOption.title }}</label> 
+                    <p style="white-space: pre-wrap;" ng-bind-html="regOption.description" />
+                    <br/>
+                    <select
+                      ng-model="regOption.selectedOption"
+                      class="form-control"
+
+                      ng-change="updateRegOptions()"
+                      >
+                      <option ng-repeat="option in regOption.options track by option.value" ng-value="option.value" ng-selected="option.value===regOption.selectedOption">{{option.label}}</option>
+                    </select>
+                    <br ng-show="regOption.optionNotes"/>
+                    <p ng-show="regOption.optionNotes" class="small muted" style="white-space: pre-wrap;" ng-bind-html="regOption.optionNotes" />
+                  </div>
+                </div>
+            </div>
+          </div>
+
+        </div>
+        
+      </div>
+    </div>
   </section>
 </form>
       <div class="col-xs-12 ">
