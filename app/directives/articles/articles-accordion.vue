@@ -7,7 +7,7 @@
                             aria-expanded="true" aria-controls="collapseOne">
                     <h5 class="mb-0">
                         <i class="fa fa-chevron-up pull-right"></i>
-                        <span class="pull-right badge badge-warning" v-if="article.meta.modifiedOn">Updated : {{article.meta.modifiedOn | formatDate('yyyy-LL-dd HH:mm')}}</span>
+                        <span class="pull-right badge badge-warning" v-if="article.meta.modifiedOn">Last update: {{article.meta.modifiedOn | formatDate('yyyy-LL-dd HH:mm')}}</span>
                         {{ article.title.en }}
                     </h5>
                 </div>
