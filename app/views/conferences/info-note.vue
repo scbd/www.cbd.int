@@ -8,8 +8,8 @@
         </br>
         <div class="row"  >
             <div class="col-sm-12">
-                 <span class="pull-left badge badge-warning" v-if="lastModifiedOn">Updated : {{lastModifiedOn | formatDate('yyyy-LL-dd HH:mm')}}</span>
-                <cbd-add-new-article v-if="showEditButton" :admin-tags="infoNoteAdminTags" target="_self" class="btn btn-default pull-right">
+                 <span class="pull-right badge badge-warning mb-1" style="margin-right:2.5%" v-if="lastModifiedOn">Updated : {{lastModifiedOn | formatDate('yyyy-LL-dd HH:mm')}}</span>
+                <cbd-add-new-article v-if="showEditButton" :admin-tags="infoNoteAdminTags" target="_self" class="btn btn-default pull-left mb-1">
                     <slot><i class="fa fa-edit"></i>  Add info note</slot>
                 </cbd-add-new-article>
             </div>
