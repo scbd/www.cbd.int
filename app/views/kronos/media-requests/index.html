@@ -53,6 +53,8 @@
                         <em>{{request.organization.address.country|lowercase|term}}</em>
 
                         <div class="pull-right btn-group">
+
+                            <span class="label label-default" ng-if="request.needTags">Need Tags</span>
                             <span class="label label-info" ng-if="request.currentStep=='finished' && !request.accredited && !request.rejected">New</span>
                             <span class="label label-warning" ng-if="request.currentStep!='finished'">Pending</span>
                             <span class="label label-success" ng-if="request.accredited">Accredited</span>
@@ -276,6 +278,8 @@
                                                 <tr>
                                                     <td  ng-class="{'active':participant._id == mediaRequestCtrl.selectedParticipant._id}">
                                                         <div class="pull-right">
+                                                            <span class="label label-default" ng-if="participant.isOnline">Online</span>
+                                                            <span class="label label-default" ng-if="participant.needsVisa">Visa</span>
                                                             <span class="label label-success" ng-if="participant.accredited">Accredited</span>
                                                             <span class="label label-danger" ng-if="participant.rejected">Rejected</span>
                                                             <span class="label label-primary" ng-if="participant.kronosId">Nominated in kronos</span>
