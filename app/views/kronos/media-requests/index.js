@@ -147,6 +147,14 @@ export default ['$http', 'user', 'kronos', '$q','$scope', function($http, user, 
                                 
                                 if(request){
                                     request.organization = organization
+
+                                    const createdDate = moment(request.meta.createdOn)
+                                    const testDate    = moment('2022-08-22T13:00:00.000Z')
+                                    const isBeforeTest = createdDate.isBefore(testDate)
+                                    const isCop15     =  request.conference === '5f43fc3f16d297fb1d2b5292'
+
+                                    if(isBeforeTest && isCop15)
+                                        request.needTags = true
                                 }
                             })
                         }
@@ -211,6 +219,11 @@ export default ['$http', 'user', 'kronos', '$q','$scope', function($http, user, 
               const { data } = await $http.get('/api/v2018/kronos/participation-request/participants', { params: { q: query } });
 
               request.participants = data;
+              
+              for (const participant of request.participants ) {
+                participant.needsVisa = (participant.tags || []).includes('visa')
+                participant.isOnline = (participant.tags || []).includes('online')
+              }
 
               for (const participant of request.participants)
                 await selectRequest(request, participant)
@@ -392,7 +405,8 @@ export default ['$http', 'user', 'kronos', '$q','$scope', function($http, user, 
             //link KRONOS contact with Media request particiapnt
             return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
             '/participants/' + participant._id+ '/link-kronos/' + kcontact.contactId)            
-            .then(function(result){               
+            .then(function(result){    
+                console.log(result)           
                 if(result.status == 200){
                     _.map(participant.kronos.contacts, function(con){con.isLinked=false;})                    
                     participant.kronosId = kcontact.contactId;
@@ -509,6 +523,7 @@ export default ['$http', 'user', 'kronos', '$q','$scope', function($http, user, 
                 if(result.status == 200){   
                     participant.kronosId = result.data.contactId;
                     return linkKronosContact(request, participant, result.data).then(function(data){
+                        console.log('linked', data)
                         if((participant.kronos.contacts||[]).length)
                             participant.kronos.contacts.push(result.data)
                         else
