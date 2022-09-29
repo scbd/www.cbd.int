@@ -18,6 +18,7 @@
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^11.1.0",
+    "axios": "^0.21.1",
     "rollup": "^2.33.1",
     "rollup-plugin-dynamic-import-variables": "^1.1.0",
     "rollup-plugin-string": "^3.0.0",

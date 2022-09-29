@@ -29,7 +29,6 @@ export default class ApiBase
     }
 
     const http = async function (...args) {
-      console.log(args)
       return (await loadAsyncHeaders(baseConfig))(...args);
     }
 

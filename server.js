@@ -18,15 +18,17 @@ if(!process.env.API_URL) {
     console.warn('warning: environment API_URL not set. USING default (https://api.cbd.int:443)');
 }
 
-const apiUrl     =  process.env.API_URL || 'https://api.cbddev.xyz';
+const apiUrl     =  process.env.API_URL || 'https://api.cbd.int';
+const accountsUrl = process.env.ACCOUNTS_URL || 'https://accounts.cbd.int';
 const gitVersion = (process.env.COMMIT  || 'UNKNOWN').substr(0, 8);
 const siteAlert  =  process.env.SITE_ALERT || '';
 
 console.info(`info: www.cbd.int`);
-console.info(`info: Git version: ${gitVersion}`);
-console.info(`info: API address: ${apiUrl}`);
-console.info(`info: CDN address: ${cdnUrl}`);
-console.info(`info: IS DEV: ${process.env.IS_DEV}`);
+console.info(`info: Git version:      ${gitVersion}`);
+console.info(`info: API address:      ${apiUrl}`);
+console.info(`info: Accounts address: ${accountsUrl}`);
+console.info(`info: CDN address:      ${cdnUrl}`);
+console.info(`info: IS DEV:           ${process.env.IS_DEV}`);
 // Configure options
 
 app.set('views', `${__dirname}/app`);
@@ -59,17 +61,17 @@ app.get('/robots.txt', (req, res) => {
 app.get('/insession',    function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
 app.get('/insession/*',  function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
 
-app.get('/idb/*',                  function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); });
-app.get('/biobridge*',             function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); });
-app.get('/aichi-targets*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); });
-app.get('/kronos/media-requests*', function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); });
-app.get('/participation*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); });
+app.get('/idb/*',                  function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, accountsUrl }); });
+app.get('/biobridge*',             function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, accountsUrl }); });
+app.get('/aichi-targets*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, accountsUrl }); });
+app.get('/kronos/media-requests*', function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, accountsUrl }); });
+app.get('/participation*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, accountsUrl }); });
 
 app.use(require('./libs/prerender')); // set env PRERENDER_SERVICE_URL
 
 app.get('/*', function(req, res) {
     res.setHeader('Cache-Control', 'public');
-    res.render('template', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, siteAlert  }); 
+    res.render('template', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, accountsUrl, siteAlert  }); 
 });
 app.all('/*', send404);
 

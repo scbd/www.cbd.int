@@ -3,22 +3,12 @@ import ng from 'angular'
 import $ from 'jquery'
 import _ from 'lodash'
 
-    var accountsBaseUrl = (function(){
 
-        var domain = window.location.hostname.replace(/[^\.]+\./, '');
-
-        if(domain=='localhost')
-            domain = 'cbddev.xyz';
-
-        return 'https://accounts.'+domain;
-
-    })();
-
-	app.factory('apiToken', ["$q", "$rootScope", "$window", "$document", "$timeout", function($q, $rootScope, $window, $document, $timeout) {
+	app.factory('apiToken', ["$q", "$rootScope", "$window", "$document", "$timeout", 'accountsUrl',  function($q, $rootScope, $window, $document, $timeout, accountsUrl) {
 
 		var authenticationFrameQ = $q(function(resolve, reject){
 
-			var frame = $('<iframe src="'+accountsBaseUrl+'/app/authorize.html'+'" style="display:none"></iframe>');
+			var frame = $('<iframe src="'+accountsUrl+'/app/authorize.html'+'" style="display:none"></iframe>');
 
 			$("body").prepend(frame);
 
@@ -70,7 +60,7 @@ import _ from 'lodash'
 				{
 					$timeout.cancel(unauthorizedTimeout);
 
-					if(event.origin!=accountsBaseUrl)
+					if(event.origin!=accountsUrl)
 						return;
 
 					var message = JSON.parse(event.data);
@@ -103,7 +93,7 @@ import _ from 'lodash'
 
 				});
 
-				authenticationFrame.contentWindow.postMessage(JSON.stringify({ type : 'getAuthenticationToken' }), accountsBaseUrl);
+				authenticationFrame.contentWindow.postMessage(JSON.stringify({ type : 'getAuthenticationToken' }), accountsUrl);
 
 				return pToken;
 
@@ -156,7 +146,7 @@ import _ from 'lodash'
 	}]);
 
 
-	app.factory('authentication', ["$http", "$rootScope", "$q", "apiToken", function($http, $rootScope, $q, apiToken) {
+	app.factory('authentication', ["$http", "$rootScope", "$q", "apiToken", 'accountsUrl', function($http, $rootScope, $q, apiToken, accountsUrl) {
 
 		var currentUser = null;
 
@@ -299,7 +289,7 @@ import _ from 'lodash'
 			signOut  : signOut,
 			isInRole : isInRole,
 			user     : LEGACY_user,
-            accountsBaseUrl : function() { return accountsBaseUrl; }
+            accountsBaseUrl : function() { return accountsUrl; }
 		};
 
 	}]);
