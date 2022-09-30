@@ -7,6 +7,7 @@ import './change-case-button';
 import '../meeting-document';
 import _ from 'lodash';
 import moment from 'moment';
+import displayGroups from '../display-groups';
 
 export { default as template } from './document-id.html';
 
@@ -47,6 +48,18 @@ export { default as template } from './document-id.html';
 
         var forceUpdate;
 
+        const groups = { ...displayGroups }
+        const type_natures = [
+            { code : "official",             title: "Official" },
+            { code : "information",          title: "Information" },
+            { code : "other",                title: "Other" },
+            { code : "in-session/statement", title: "Statement (In-Session)" },
+            { code : "in-session/non-paper", title: "Non Paper (In-Session)" },
+            { code : "in-session/crp",       title: "CRP (In-Session}" },
+            { code : "in-session/limited",   title: "L (In-Session)" },
+            { code : "draft-decision",       title: "Draft Decision/Recommendation" },
+        ]
+
         $scope.getFilePatterns = function() { return getFilePatterns(_ctrl && _ctrl.document) };
 
         _ctrl.addItem     = addItem;
@@ -70,6 +83,7 @@ export { default as template } from './document-id.html';
         _ctrl.computeStatementDate       = computeStatementDate;
         _ctrl.addLink                    = addLink;
         _ctrl.documentLink = { language: 'en' }
+        _ctrl.type_natures = [ ...type_natures ]
 
         $scope.$watch('editCtrl.document.type_nature', applyTypeNature);
         $scope.$watch('editCtrl.document.symbol',      function(symbol){
@@ -117,7 +131,7 @@ export { default as template } from './document-id.html';
                 if(type_nature=='in-session/crp')       parts = [_ctrl.meeting.EVT_UN_CD, group, 'CRP*'];
                 if(type_nature=='in-session/limited')   parts = [_ctrl.meeting.EVT_UN_CD, group, 'L*'];
                 if(type_nature=='in-session/non-paper') parts = [];
-                if(type_nature=='in-session/statement') parts = [];
+                if(type_nature=='draft-decision')       parts = [];
                 if(type_nature=='other')                parts = [];
 
                 if(parts) {
@@ -670,7 +684,7 @@ export { default as template } from './document-id.html';
 
             if(doc.type=='official')       return 'official';
             if(doc.type=='information')    return 'information';
-            if(doc.type=='other')          return 'other';
+            if(doc.type=='draft-decision') return 'draft-decision';
             if(doc.type=='in-session') {
 
                 if( doc.nature=='statement') return 'statement';
@@ -678,6 +692,7 @@ export { default as template } from './document-id.html';
                 if( doc.group =='WG.1')      return 'in-session/wg1';
                 if( doc.group =='WG.2')      return 'in-session/wg2';
             }
+
 
             return 'other';
         }

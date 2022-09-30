@@ -456,7 +456,9 @@
             <div class="input-group" ng-repeat="item in editCtrl.document.agendaItems|orderBy:item" style="margin-top:5px">
 
                 <div class="input-group-prepend" style="min-width:75px">   
-                    <span class="label agenda {{::editCtrl.meeting.agenda.prefix}}">{{::editCtrl.meeting.agenda.prefix}} {{::item}}</span>
+                    <div>
+                        <span class="badge label agenda CBD {{::editCtrl.meeting.agenda.prefix}}">{{::editCtrl.meeting.agenda.prefix}} {{::item}}</span>
+                    </div>
                 </div>
                 <span class="form-control" style="overflow:auto;background-color:#eeeeee" >{{(editCtrl.meeting.agenda.items|filter:{item:item}:true)[0].title}}</span>
                 <span class="input-group-append">
