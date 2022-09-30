@@ -115,7 +115,7 @@
         <ul ng-if="!documentsCtrl.noTabs" class="nav nav-tabs nowrap hidden-print doc-tabs" role="tablist" ng-class="::{'inSessionEnabled':documentsCtrl.inSessionEnabled}">
             <li code="{{type.code}}" class="nav-item" 
                 ng-repeat="type in documentsCtrl.tabs|limitTo:documentsCtrl.maxTabCount"  
-                ng-class="{'active': documentsCtrl.currentTab==type.code, 'in-session': type.insession, 'first': type.insessionFirst, 'last': type.insessionLast }" >
+                ng-class="{'active': documentsCtrl.currentTab==type.code, 'in-session': (type.insession||documentsCtrl.tabs.insession), 'first': type.insessionFirst, 'last': type.insessionLast }" >
                 
                 <a class="nav-link" href="#" ng-click="documentsCtrl.switchTab(type)" role="tab" data-toggle="tab" ng-class="{'active': documentsCtrl.currentTab==type.code}">
                     {{::type.title}} ({{type.length}})

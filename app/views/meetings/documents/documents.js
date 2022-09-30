@@ -10,6 +10,7 @@ import 'css!./agenda.css'
 import _ from 'lodash'
 import ng from 'angular'
 import moment from 'moment'
+import displayGroups from './display-groups'
 import * as meta from '~/services/meta'
 
 export { default as template } from './documents.html';
@@ -42,22 +43,12 @@ export { default as template } from './documents.html';
         }
 
 
-        var groups = {
-            'outcome'        : { position: 100 , title : 'Outcomes'      },
-            'official'       : { position: 200 , title : 'Official'      },
-            'information'    : { position: 300 , title : 'Information'   },
-            'notification'   : { position: 500 , title : 'Notifications' },
-            'other'          : { position: 600 , title : 'Other'         },
-            'statement'      : { position: 650 , title : 'Statements',   insession: true },
-            'in-session'     : { position: 700 , title : 'Plenary',      insession: true },
-            'in-session/wg1' : { position: 800 , title : 'WG I',         insession: true },
-            'in-session/wg2' : { position: 900 , title : 'WG II',        insession: true }
-        };
+        var groups = { ...displayGroups }
 
         var sections = {
-            'outcome/report':         { position: 100 , title : 'Final Report'    },
-            'outcome/decision':       { position: 200 , title : 'Decisions'       },
-            'outcome/recommendation': { position: 200 , title : 'Recommendations' },
+            'outcome/report':         { position: 1000 , title : 'Final Report'    },
+            'outcome/decision':       { position: 2000 , title : 'Decisions'       },
+            'outcome/recommendation': { position: 2000 , title : 'Recommendations' },
         };
 
         _ctrl.showMeeting = showMeeting===undefined ? true : !!showMeeting;
@@ -86,7 +77,7 @@ export { default as template } from './documents.html';
         function load() {
             let documents = null;
             _ctrl.inSessionEnabled = false; //to adjust the height for non insession case
-            const meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, uploadStatement:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, alerts:1 }, cache:true } }).then(async function(res){
+            const meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, uploadStatement:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, alerts:1, displayGroups:1 }, cache:true } }).then(async function(res){
                 const meeting = _.defaults(res.data, {
                     code: res.data.EVT_CD,
                     agenda: { items: [] },
@@ -106,11 +97,15 @@ export { default as template } from './documents.html';
                 _ctrl.meeting = meeting;
                 _ctrl.agenda  = meeting.agenda;
 
+                margeToGroups(meeting.displayGroups||{});
+
                 if(meeting.insession) { // Quick insession fix
-                    groups['in-session']    .position = 110;
-                    groups['in-session/wg1'].position = 120;
-                    groups['in-session/wg2'].position = 130;
-                    groups['statement'     ].position = 140;
+
+                    let position        = groups.outcome.position || 1000;
+                    let inSessionGroups = _(groups).filter((o)=>!!o.insession).sortBy((o)=>o.position).value();
+
+                    inSessionGroups.forEach(g=>g.position = (++position));
+
                     _ctrl.inSessionEnabled = true;
                 }
 
@@ -197,6 +192,22 @@ export { default as template } from './documents.html';
         //==============================
         //
         //==============================
+        function margeToGroups(meetingDisplayGroups) {
+
+            const keys = Object.keys(meetingDisplayGroups || {});
+
+            keys.forEach(key=>{
+
+                const oldGroup = groups[key];
+                const newGroup = meetingDisplayGroups[key];
+
+                groups[key] = { ...(oldGroup||{}), ...newGroup }
+            })
+        }
+
+        //==============================
+        //
+        //==============================
         function normalizeDocument(d){
             
             d.status = d.status||'public';
@@ -266,7 +277,7 @@ export { default as template } from './documents.html';
         //
         //==============================
         function isInSessionTab(tab) {
-            return /^in-session/.test(tab.code);
+            return /^in-session/.test(tab.code) || tab.insession;
         }
 
         //==============================
@@ -408,6 +419,8 @@ export { default as template } from './documents.html';
             var tab = findTab(code);
 
             if(!tab) {
+
+                if(groups[code]?.visible===false) return; // do not add tab if forced not visible
 
                 tab = {
                     code : code,
