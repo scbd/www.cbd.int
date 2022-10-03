@@ -74,14 +74,7 @@
                 <!-- Type -->
                 <div class="form-group">
                     <label class="control-label" for="symbol">Type</label>
-                    <select ng-disabled="uploading" class="form-control" ng-model="editCtrl.document.type_nature" ng-change="editCtrl.autoGenerateNextSymbol('type')">
-                        <option value="official">Official</option>
-                        <option value="information">Information</option>
-                        <option value="other">Other</option>
-                        <option value="in-session/statement">Statement (In-Session)</option>
-                        <option value="in-session/non-paper">Non Paper (In-Session)</option>
-                        <option value="in-session/crp">CRP (In-Session)</option>
-                        <option value="in-session/limited">L (In-Session)</option>
+                    <select ng-disabled="uploading" class="form-control" ng-model="editCtrl.document.type_nature" ng-options="item.code as item.title for item in editCtrl.type_natures" ng-change="editCtrl.autoGenerateNextSymbol('type')">
                     </select>
                 </div>
             </div>
