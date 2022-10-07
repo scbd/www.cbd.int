@@ -113,7 +113,10 @@ export default function bootApp(window, require, defineX) {
       window.Vue.use(window.ssoSCBD);
       return window.Vue;
   });
-  defineX('Vue', ['vue'], function(vue) { return vue; })
+  defineX('Vue', ['vue'], function(vue) {
+    vue.config.devtools = true; 
+    return vue; 
+  })
 
   defineX('xlsx', ['cdn!npm/xlsx@0.13.4/dist/xlsx.min.js', 'cdn!npm/xlsx@0.13.4/dist/jszip.js'], function (xlsx, jszip) {
       window.XLSX  = xlsx;
