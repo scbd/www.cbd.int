@@ -128,7 +128,7 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
 
         <style>
 
-        .page-content{ margin-top: 2em;}
+        /* .page-content{ margin-top: 2em;} */
 
         #block-loginlinkblock ul.dropdown-menu { background-color: #01463a; }
         .meetingnav-table a, .meetingnav-table b { font-size: 1.04rem; }
@@ -171,8 +171,8 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
         .header .navbar-wrapper.desktop-only > nav.sub-nav{
         margin-top: 0;
         }
-        @media (min-width:767px){ .page-content{ margin-top: 4em;} }
-        @media (min-width:992px){ .page-content{ margin-top: 10.5em;} }
+        /* @media (min-width:767px){ .page-content{ margin-top: 4em;} }
+        @media (min-width:992px){ .page-content{ margin-top: 10.5em;} } */
 
     </style>    
 </head>
@@ -181,8 +181,9 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
       <div id="page">
         <!-- HEADER -->
           <div style="display:<%=siteAlert ? 'block' : 'none'%>" class="alert alert-danger mb-0"><%=siteAlert%></div>
-          <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeaderFixed" ></vue-component>                  
-          <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeader" ></vue-component>
+          <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeaderFixed" ></vue-component>                  
+          <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeader" ></vue-component> -->
+          <vue-component name="ScbdHeader" ></vue-component>
           <!-- CONTENT -->
           <div class="page-content">
               <div id="conferenceHeader"></div>

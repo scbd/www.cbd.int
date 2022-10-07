@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import app from '~/app'
 import ng from 'angular'
-import PageHeaderFixedComp from 'PageHeaderFixed'
+// import PageHeaderFixedComp from 'PageHeaderFixed'
 import PageHeaderComp from 'PageHeader'
 import PageFooterComp from 'PageFooter'
 import toastTemplate from './toast.html'
@@ -10,6 +10,7 @@ import 'css!cdn!npm/angular-toastr@1.3.0/dist/angular-toastr.css'
 import 'ngVue'
 import '~/providers/realm'
 import './directives/bread-crumbs'
+import ScbdHeader from '~/components/nav/heade.vue'
               
     loadHeaderFooter()
     app.controller('TemplateController', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$location', 
@@ -151,11 +152,13 @@ import './directives/bread-crumbs'
 
     function loadHeaderFooter(){
 
-        var PageHeaderFixed  = window.Vue.component('page-header-fixed', PageHeaderFixedComp);
-        var PageHeader       = window.Vue.component('page-header',       PageHeaderComp);
-        var PageFooter       = window.Vue.component('page-footer',       PageFooterComp);
+        // var PageHeaderFixed  = window.Vue.component('page-header-fixed', PageHeaderFixedComp);
+        // var PageHeader       = window.Vue.component('page-header',       PageHeaderComp);
+        var PageFooter          = window.Vue.component('page-footer',       PageFooterComp);
+        var ScbdHeaderComponent = window.Vue.component('scbd-header',       ScbdHeader);
     
-        app.value('PageHeaderFixed', PageHeaderFixed );
-        app.value('PageHeader',      PageHeader);
+        // app.value('PageHeaderFixed', PageHeaderFixed );
+        // app.value('PageHeader',      PageHeader);
+        app.value('ScbdHeader',      ScbdHeaderComponent);
         app.value('PageFooter',      PageFooter);
     }
