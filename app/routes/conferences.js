@@ -23,6 +23,7 @@ const sessionListView       = { component: ()=>import('~/components/meetings/ses
 const sessionIdView         = { component: ()=>import('~/components/meetings/sessions/edit.vue')             .catch(traceError) }
 const interpretersPanelView = { component: ()=>import('~/components/meetings/sessions/interpreters-view.vue').catch(traceError) }
 const infoNote              = { component: ()=>import('~/views/conferences/info-note.vue')        .catch(traceError) }
+const lang_switch           = { component: ()=>import('~/views/shared/lang')        .catch(traceError) }
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
@@ -36,6 +37,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/2016/cp-mop-8/documents',     { redirectTo    : '/2016/mop-08/documents'})
 
     .when('/',                                    { ...mapView(conferencesView) })
+    .when('/language-switch/:langCode',           { ...mapView(angularViewWrapper), "label":"language switch","resolve":{ ...lang_switch, },"resolveController":true})
     .when('/:code',                               { ...mapView(conferencesIdView),   resolve: { }, reloadOnSearch:false })
     .when('/:code/parallel-meetings',             { ...mapView(angularViewWrapper),  resolve: { ...parallelMeetingsView, routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings', 'introduction'] }) }, reloadOnSearch:false })
     .when('/:code/parallel-meetings/:articleTag', { ...mapView(articleView),         resolve: { routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings'] }) },     reloadOnSearch:false })
