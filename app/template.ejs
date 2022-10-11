@@ -83,15 +83,15 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
     header.large .navbar-nav a:hover { color:white; background-color:#009B48; }
 
 
-    footer {  display: block; padding: 15px 20px; }
-    footer ul { list-style-type: none; padding:0px; }
+    /* footer {  display: block; padding: 15px 20px; }
+    /* footer ul { list-style-type: none; padding:0px; } */
     footer ul li a { font-size: 14px; color: #666; }
     footer ul li a:hover { color: #000; }
     footer h4 {
       font-size: 14px;
       color: #666;
       font-weight: bold;
-    }
+    } */
 
     footer.standard ul.list-inline > li { padding: 0px 5px; border-right:solid 1px #666;font-size: 14px;}
     footer.standard ul.list-inline > li:last-child { border-right: none; }
@@ -194,7 +194,8 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
               <a href="#" class="go-to-top-btn"></a>
           </div>
           <!-- FOOTER -->
-          <vue-component ng-if="!templateCtrl.viewOnly" name="PageFooter" ></vue-component>
+          <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="PageFooter" ></vue-component> -->
+          <vue-component name="ScbdFooter" ></vue-component>
       </div>
   </div>
 

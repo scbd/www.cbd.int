@@ -216,23 +216,14 @@
                                 <li class="topmenu nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="" role="button" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false" title="Language">
-                                        English <span class="flag-icon"></span>
+                                        {{languages[$locale||'en']}} <span class="flag-icon"></span>
                                     </a>
 
                                     <div class="Languages dropdown-menu">
                                         <div class="dropdown-item-container">
-                                            <a href="language/ar" title="العربية" class="dropdown-item"> <span
-                                                    class="dropdown-item-label">العربية</span></a>
-                                            <a href="language/es" title="Español" class="dropdown-item"> <span
-                                                    class="dropdown-item-label">Español</span></a>
-                                            <a href="language/en" title="English" class="dropdown-item"> <span
-                                                    class="dropdown-item-label">English</span></a>
-                                            <a href="language/fr" title="Français" class="dropdown-item"> <span
-                                                    class="dropdown-item-label">Français</span></a>
-                                            <a href="language/ru" title="Русский" class="dropdown-item"> <span
-                                                    class="dropdown-item-label">Русский</span></a>
-                                            <a href="language/zh" title="中文" class="dropdown-item"> <span
-                                                    class="dropdown-item-label">中文</span></a>
+                                            <a v-for="(lang, key) in languages" v-bind:href="'language-switch/'+key+'?returnUrl='+returnUrl" 
+                                                v-bind:title="lang" class="dropdown-item"> <span
+                                                    class="dropdown-item-label">{{lang}}</span></a>
                                         </div>
                                     </div>
                                 </li>
@@ -332,7 +323,8 @@ export default {
         return {
             isAuthenticated : false,
             user            : undefined,
-            returnUrl       : undefined
+            returnUrl       : undefined,
+            languages       : []
         }
     }, 
     computed : {
@@ -341,7 +333,15 @@ export default {
                 return this.user.userName;
         }
     },
-    mounted() {       
+    mounted() {      
+        this.languages = {
+            ar : 'العربية',
+            es : 'Español',
+            en : 'English',
+            fr : 'Français',
+            ru : 'Русский',
+            zg : '中文'
+        }
         this.returnUrl = window.location.href;   
         setTimeout(async() => {
             const user = await Vue?.prototype.$auth.fetchUser()

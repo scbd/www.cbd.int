@@ -53,13 +53,21 @@ header .navbar-wrapper.mobile-only {
 }
 
 @media (max-width:991px) {
-    .page-content {
-        margin-top:60px;
+    .page-wrapper {
+        width: 100%;
+    }
+    .page-content > .container{
+        width: 100%;
+        padding: 10px;
     }
 }
-@media (max-width:749px) {
-    .page-content {
-        margin-top:30px;
+@media (max-width:749px) {    
+    .page-wrapper{
+        width: 100%;
+    }
+    .page-content > .container{
+        width: 100%;
+        padding: 10px;
     }
 }
 

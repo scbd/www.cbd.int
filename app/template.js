@@ -11,6 +11,7 @@ import 'ngVue'
 import '~/providers/realm'
 import './directives/bread-crumbs'
 import ScbdHeader from '~/components/nav/heade.vue'
+import ScbdFooter from '~/components/nav/footer.vue'
               
     loadHeaderFooter()
     app.controller('TemplateController', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$location', 
@@ -154,11 +155,13 @@ import ScbdHeader from '~/components/nav/heade.vue'
 
         // var PageHeaderFixed  = window.Vue.component('page-header-fixed', PageHeaderFixedComp);
         // var PageHeader       = window.Vue.component('page-header',       PageHeaderComp);
-        var PageFooter          = window.Vue.component('page-footer',       PageFooterComp);
-        var ScbdHeaderComponent = window.Vue.component('scbd-header',       ScbdHeader);
-    
+        // var PageFooter          = window.Vue.component('page-footer',       PageFooterComp);
         // app.value('PageHeaderFixed', PageHeaderFixed );
         // app.value('PageHeader',      PageHeader);
+        // app.value('PageFooter',      PageFooter);
+
+        var ScbdHeaderComponent = window.Vue.component('scbd-header',       ScbdHeader);
+        var ScbdFooterComponent = window.Vue.component('scbd-footer',       ScbdFooter);    
         app.value('ScbdHeader',      ScbdHeaderComponent);
-        app.value('PageFooter',      PageFooter);
+        app.value('ScbdFooter',      ScbdFooterComponent);
     }
