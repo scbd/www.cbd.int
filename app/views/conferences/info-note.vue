@@ -68,7 +68,6 @@ export default {
             if(articles.length){
                this.lastModifiedOn = sortByOrder(articles, o=>o.meta.modifiedOn, 'desc')[0].meta.modifiedOn;
             }
-            console.log(this.$route)
         }
     },
     filters: {
