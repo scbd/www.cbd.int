@@ -9,7 +9,7 @@
                 class="btn btn-default"></cbd-add-new-article>
             <br/>    
         </div>
-        <div v-html="article.content.en" class="ck-content"></div>
+        <div v-html="$options.filters.lstring(article.content, $locale)" class="ck-content"></div>
     </div>
 
 </template>
