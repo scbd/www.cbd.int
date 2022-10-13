@@ -1,6 +1,10 @@
 <template>
      <a :href="newArticleUrl" :target="target">
-        <slot><i class="fa fa-edit"></i> Edit Article</slot>
+        <slot>
+            <span v-if="!id"><i class="fa fa-plus"></i> Add Content</span>
+            <span v-if="id" ><i class="fa fa-edit"></i> Edit Content</span>
+            
+        </slot>
     </a>
 </template>
 
@@ -36,7 +40,7 @@
                 if(!this.id)
                     return `${baseUrl}/articles/new?${queryString.join('&')}`
                 
-                return  `${baseUrl}/articles/${encodeURIComponent(this.id)}/edit?${queryString.join('&')}`;
+                return  `${baseUrl}/articles/${encodeURIComponent(this.id)}/edit`;
             }
         }
     }
