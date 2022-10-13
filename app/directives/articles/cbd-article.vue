@@ -53,7 +53,7 @@ export default {
         async loadArticle() {
             const query = this.query;
             const article = await this.ArticlesApi.queryArticles(query)
-            
+     
                 if(article.length ==0 ){
                     this.article = {
                         content : { en : 'No information is available for this section'}
@@ -72,7 +72,7 @@ export default {
                     this.article.coverImage.url_1200  = this.article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/')
                 }
 
-                this.$emit('onLoad', { ...this.article });   
+                this.$emit('load', { ...this.article });   
 
                 if(this.hasOwnProperty(this.showEdit))         
                     this.showEdit = this.$auth.hasScope(['oasisArticleEditor', 'Administrator']);

@@ -10,7 +10,7 @@
                 <!-- <cbd-article query="articleQuery" ng-if="articleQuery" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article> -->
                 <div ng-if="articleQuery" >
                     <cbd-article ng-vue :query="articleQuery" v-if="articleQuery" :admin-tags="articleAdminTags" 
-                    onArticlesLoad="onArticleLoad(article)" hide-cover-image="true" show-edit="true"></cbd-article>
+                    @load="onArticleLoad(article)" hide-cover-image="true" show-edit="true"></cbd-article>
                 </div>
                 <vue-component ng-if="::meeting.conference.overViewCalendar.events.length" name="ConferenceCal" v-props-code="code" v-props-options="{target:'self'}"></vue-component>
             </div>
