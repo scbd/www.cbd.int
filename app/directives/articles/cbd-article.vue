@@ -4,7 +4,8 @@
         <div ng-if="!hideCoverImage && article.coverImage">
             <cbd-article-cover-image cover-image="article.coverImage"></cbd-article-cover-image>
         </div>
-        <div v-if="showEdit" class="pull-right">        
+       
+        <div v-if="showEdit" class="pull-right">    
             <cbd-add-new-article :tags="tags" :admin-tags="adminTags" :custom-tags="customTags" :id="(article||{})._id" :target="target"
                 class="btn btn-default"></cbd-add-new-article>
             <br/>    
@@ -21,6 +22,7 @@ import axios from 'axios';
 import ArticlesApi from '../../api/articles';
 import cbdAddNewArticle from './cbd-add-new-article.vue';
 // import { getAuthToken, getUser } from '~/authentication'
+import '~/filters/vue-filters.js'
 
 export default {
     name: 'cbdArticle',
@@ -54,7 +56,7 @@ export default {
             
                 if(article.length ==0 ){
                     this.article = {
-                        content : { en : 'No information is available for this link'}
+                        content : { en : 'No information is available for this section'}
                     }
                 }
                 else
@@ -72,7 +74,7 @@ export default {
 
                 this.$emit('onLoad', { ...this.article });   
 
-                if(!this.hasOwnProperty(this.showEdit))         
+                if(this.hasOwnProperty(this.showEdit))         
                     this.showEdit = this.$auth.hasScope(['oasisArticleEditor', 'Administrator']);
                 
         },

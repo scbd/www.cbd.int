@@ -4,8 +4,8 @@ import moment from 'moment-timezone'
 
 import 'angular-cache'
 
-    app.factory("conferenceService", ['$http', '$rootScope', '$q', '$timeout', '$filter', '$route', 'CacheFactory',
-    function ($http, $rootScope, $q, $timeout, $filter, $route, CacheFactory) {
+    app.factory("conferenceService", ['$http', '$rootScope', '$q', '$timeout', '$filter', '$route', 'CacheFactory', '$sce',
+    function ($http, $rootScope, $q, $timeout, $filter, $route, CacheFactory, $sce) {
             var meeting
             var httpCache = CacheFactory.get('conferenceHttpCache');
             if (!httpCache) {
@@ -52,6 +52,10 @@ import 'angular-cache'
                                             if((meeting.conference.menus||[]).length){
                                               normalizeMenus(meeting.conference.menus, meeting)
 
+                                            }
+
+                                            if(meeting.conference.customHeader){
+                                              meeting.conference.customHeader = $sce.trustAsHtml(meeting.conference.customHeader);
                                             }
 
                                         }

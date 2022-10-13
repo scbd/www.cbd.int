@@ -38,7 +38,7 @@ import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@22.0.0/build/c
 					$q.when(promiseQ).then(function(article){
 						if(article.length ==0 )
 							$scope.article = {
-								content : { en : 'No information is available for this link'}
+								content : { en : 'No information is available for this section'}
 							}
 						else
 							$scope.article = article[0];

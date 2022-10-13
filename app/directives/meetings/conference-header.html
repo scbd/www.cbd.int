@@ -213,9 +213,14 @@
             padding-top:6px;
             padding-bottom:6px;
         }
+        .menu-header{
+            border: 1px solid #eee;
+        }
    </style>
    <!-- NAVIGATION BAR -->
    <div ng-cloak ng-if="meeting && meetingNavCtrl.isSelected()" class="meetingnav hidden-print">
+        <div class="menu-header" ng-if="meeting.conference.customHeader" ng-bind-html="meeting.conference.customHeader">
+        </div>
        <div>
            <div class="menu-gradient">
                 
@@ -225,8 +230,8 @@
                             <td  class="notselected meetingnav-button no-left-border"  ng-class="{selected:meetingNavCtrl.isSelected('/conferences/'+meeting.code, true)}">
                                 <a href="/conferences/{{::meeting.code}}" class="link"></a>
                                 <a href="/conferences/{{::meeting.code}}" class="hover-link">
-                                <i class="fa fa-home fa-2x" ng-if="!meeting.conference.logo"></i>
-                                <img ng-if="meeting.conference.logo" ng-src="/app/images/{{::meeting.conference.logo}}" style="width:44px;height:44px">
+                                    <i class="fa fa-home fa-2x" ng-if="!meeting.conference.logo"></i>
+                                    <img ng-if="meeting.conference.logo" ng-src="/app/images/{{::meeting.conference.logo}}" style="width:44px;height:44px">
                                 </a>
                             </td>
                             <td ng-if="meeting.conference.showSchedule" class="meetingnav-button" 
@@ -342,7 +347,7 @@
                                     selected:meetingNavCtrl.isSelected('{{::mainMenu.url}}', {{::mainMenu.exactSelection}}) }" 
                                 style="vertical-align:middle"  ng-style="mainMenu.style">
                                 
-                                <div ng-if="(!mainMenu.menus.length && (mainMenu.title || mainMenu.icon)) || (mainMenu.isExpandable && !mainMenu.isExpanded)" 
+                                <div ng-if="(!mainMenu.menus.length && (mainMenu.title || mainMenu.icon || mainMenu.image)) || (mainMenu.isExpandable && !mainMenu.isExpanded)" 
                                 ng-include="'menu'"  onload="menu=mainMenu" ng-click="meetingNavCtrl.expandMenu(mainMenu)"> </div>
 
                                 <div class="visible-xs" ng-if="mainMenu.menus.length && (!mainMenu.isExpandable || mainMenu.isExpanded)" ng-include="'menu'"  onload="menu=mainMenu"> </div>
@@ -400,6 +405,7 @@
                         
                     </div>
                     <i class="fa fa-2x {{::menu.icon}}" ng-if="::!menu.title && menu.icon" ></i>
+                    <img ng-src="/app/images/{{::menu.image}}" ng-if="::!menu.title && !menu.icon && menu.image" style="width:44px;height:44px;background: white;border: 1px solid white;border-radius: 25px;">
                 </a>
                 <div ng-if="::!menu.url && !menu.xsUrl" data-toggle="{{::(menu.links ? 'dropdown' : '')}}">
                     <div class="visible-md visible-lg">
@@ -410,6 +416,7 @@
                     </div> 
                     <div class="visible-xs">
                         <i ng-if=":: menu.icon" class="fa {{::menu.icon||'fa-files-o'}}" aria-hidden="true" style="font-size:24px"></i>
+                        <img ng-src="/app/images/{{::menu.image}}" ng-if="::!menu.icon && menu.image" style="width:44px;height:44px">
                     </div> 
                 </div>
                                               
