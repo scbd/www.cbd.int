@@ -133,13 +133,20 @@
                     overflow-x:  visible!important;
                     overflow-y: visible!important;
                 }
+                .ngdialog-open {
+                    height: auto !important;
+                    overflow: hidden !important;
+                }
                 .ngdialog.ngdialog-theme-default .ngdialog-content {
                     background-color: #fff;
-                    width: 75%;
+                    width: 50%;
                     padding:0px!important
                 }
                 .ngdialog.ngdialog-theme-default {
                     padding-top: 10px;
+                }
+                .ngdialog.ngdialog-theme-default .ngdialog-overlay {
+                    background: rgb(1 0 0 / 90%);
                 }
 
                 .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body,
@@ -178,7 +185,6 @@
                 .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .content{
                     margin: 0 auto;
                     max-width: 90%;
-                    width: 720px;
                 }
                 .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body main{
                     padding: 1% 0;
@@ -187,19 +193,6 @@
                     height: 100%;
                 }
                 
-                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .zoom{
-                    overflow: hidden;
-                    padding-bottom: 41%;
-                    max-height: 600px;
-                }
-                .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .zoom img{
-                    position: relative;
-                    top: 0%;
-                    left: 50%;
-                    max-width: 100%;
-                    width: 100%;
-                    transform: translateX(-50%);
-                }
                 @media (max-width: 667px) {
                     
                     .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .content{
@@ -208,17 +201,6 @@
                         width: 100%;
                         height: 100%;
                         text-align: justify;
-                    }
-                    .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .zoom{
-                        overflow: hidden;
-                        padding-bottom: 0%;
-                        max-height: 500px;
-                    }
-                }
-                @media (min-width: 992px){
-
-                    .ngdialog.ngdialog-theme-default .ngdialog-content .modal-body .zoom{                        
-                        max-height: 500px;
                     }
                 }
 
@@ -247,6 +229,23 @@
                 .content .badge.bg-dark{
                     margin-right: 5px;
                     color: #fff;
+                }
+
+
+                #image-header div.collapse[aria-expanded="false"] {
+                    display: block;
+                    height: 400px !important;
+                    overflow: hidden;
+                }
+
+                #image-header div.collapse.show,
+                #image-header div.collapsing[aria-expanded="false"] {
+                    height: 100% !important;
+                }
+
+                #image-header a.collapsed .down,
+                #image-header a:not(.collapsed) .up {
+                    display: block!important;
                 }
             </style>
             <div  class="col-lg-12">
@@ -279,7 +278,7 @@
                     ag-infinite-scroll-distance="100" id="articlesBody">
                     <article class="card white-panel" ng-repeat="article in filterPosters = (posters | filter:filterBy)"
                     ng-click="showArticle(article)" style="cursor:pointer"> 
-                    <div ng-if="article.url_600" class="img" style="background-image: url({{::article.url_600}});"></div>
+                    <div ng-if="article.coverImage.url_600" class="img" style="background-image: url({{::article.coverImage.url_600}});"></div>
                                        
                         <div class="inside">    
                             <div class="image-wrapper1" >                                    
@@ -304,8 +303,15 @@
             <script type="text/ng-template" id="articleDetails">
                 <div class="modal-body">	                   
 
-                    <header class="zoom">
-                        <img src="{{virtualArticle.coverImage.url}}">
+                    <header id="image-header" style="text-align:center">
+                        <div class="collapse" id="imageBox" aria-expanded="false">
+                            <img src="{{virtualArticle.coverImage.url_1200}}" class="img-fluid rounded mx-auto d-block" style="width:100%">                            
+                        </div>
+                        <a role="button" class="expand collapsed" data-toggle="collapse" href="#imageBox" aria-expanded="false" aria-controls="imageBox"
+                            style="font-size:small;color:black;font-weight: bold;">
+                            <span class="down" style="display:none"><i class="fa fa-arrow-circle-down" aria-hidden="true"></i> Show full image</span>
+                            <span class="up" style="display:none"><i class="fa fa-arrow-circle-up" aria-hidden="true"></i> Show small image</span>
+                        </a>
                     </header>
                     <main role="main">
                         <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;text-align: center;">               
@@ -313,11 +319,10 @@
                             <hr/>
                             <strong>{{virtualArticle.meta.createdOn|moment:'toDate'|date:'yyyy-MM-dd':'UTC'}}</strong>
                         </div>
-                        <div class="content">                           
+                        <div class="content"  ng-if="virtualArticleQuery">                           
                             <span class="badge rounded-pill bg-dark" ng-repeat="type in virtualArticle.meetingTypes">{{type}}</span>
-                            
-                            <cbd-article query="virtualArticleQuery" ng-if="virtualArticleQuery" on-load="onArticleLoad(article)"  hide-cover-image="true"></cbd-article>
-                            
+                            <cbd-article ng-vue ng-vue-expose="&onArticleLoad" :query="virtualArticleQuery"
+                                @load="onArticleLoad($event)"  hide-cover-image="true" show-edit="true"></cbd-article>
                         </div>      
                     </main>
                     
