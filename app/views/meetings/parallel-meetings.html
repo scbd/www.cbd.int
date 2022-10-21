@@ -35,8 +35,8 @@
         <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;"> 
             <div class="row">
                 <div class="col-sm-12 col-lg-12 col-md-12 " >
-                    <cbd-article ng-vue :query="articleQuery" v-if="articleQuery" :admin-tags="parallelMeetingAdminTags" 
-                    @load="onArticleLoad(article)" hide-cover-image="true" show-edit="true"></cbd-article>
+                    <cbd-article ng-vue ng-vue-expose="&onArticleLoad" :query="articleQuery" v-if="articleQuery" :admin-tags="parallelMeetingAdminTags" 
+                    @load="onArticleLoad($event)" hide-cover-image="true" show-edit="true"></cbd-article>
                 </div>
                 <div class="col-sm-12" style="margin-top:5px;" ng-if="meeting.conference.parallelMeetingLinks.length">
                     <table class="table table-hover">
