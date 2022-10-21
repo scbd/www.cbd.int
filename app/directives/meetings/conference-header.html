@@ -1,4 +1,6 @@
-﻿<div class="conference-header" ng-class="{ [conference.code]: true }">
+﻿<div class="conference-header" ng-class="{ [conference.code]: conference.code, ['_'+conference.code]: conference.code }">
+    <!-- in case if conf code begins with number add _ for css standard., keep old for backward compatibility -->
+
     <!-- MEETING HEADER -->
     <style>
 
@@ -216,6 +218,37 @@
         .menu-header{
             border: 1px solid #eee;
         }
+
+
+    .conference-header._2021-2022 .meetingnav td.selected {
+        background-color: #00a29a!important
+    }
+    .conference-header._2021-2022 .meetingnav-buttongroup {
+        background-color: #e5f6f5!important
+    }
+    .conference-header._2021-2022 .meetingnav td.selected .menu-title{
+        color: #000000;
+    }
+    .conference-header._2021-2022 .meetingnav-buttongroup .menu-title{
+        color: #00a29a;
+    }
+
+    .conference-header._2021-2022 .meetingnav td.selected.cop-15-home-menu{
+        background-image: url('/app/images/cop-logo-transparent-50.png');
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    .conference-header._2021-2022 .meetingnav-buttongroup.cop-15-home-menu{
+        background-image: url('/app/images/cop-logo-green-50.png');
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .conference-header._2021-2022 .meetingnav-buttongroup.cop-15-home-menu,
+    .conference-header._2021-2022 .meetingnav td.selected.cop-15-home-menu{
+        width:84px;
+        height:64px
+    }
    </style>
    <!-- NAVIGATION BAR -->
    <div ng-cloak ng-if="meeting && meetingNavCtrl.isSelected()" class="meetingnav hidden-print">

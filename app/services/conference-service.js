@@ -66,7 +66,7 @@ import 'angular-cache'
             }
 
             function getConferences(query, fields, sort){
-              var sort = sort || { StartDate: 1};
+              sort = sort || { StartDate: 1};
 
               return $http.get('/api/v2016/conferences', {params : { q : query, s: sort, f: fields, cache: true }, cache:httpCache});
           }
