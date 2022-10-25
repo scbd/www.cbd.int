@@ -1,7 +1,7 @@
 
 <template>
-   <div class="ck-editor" style="border:none" v-if="article">
-        <div ng-if="!hideCoverImage && article.coverImage">
+   <div class="ck-editor" style="border:none">
+        <div v-if="!hideCoverImage && article.coverImage">
             <cbd-article-cover-image cover-image="article.coverImage"></cbd-article-cover-image>
         </div>
        
@@ -10,7 +10,8 @@
                 class="btn btn-default"></cbd-add-new-article>
             <br/>    
         </div>
-        <div v-html="$options.filters.lstring(article.content, $locale)" class="ck-content"></div>
+        <div v-if="article" v-html="$options.filters.lstring(article.content, $locale)" class="ck-content"></div>
+        <div v-if="!article" class="ck-content">No information is available for this section at the moment.</div>
     </div>
 
 </template>
@@ -54,26 +55,24 @@ export default {
             const query = this.query;
             const article = await this.ArticlesApi.queryArticles(query)
      
-                if(article.length ==0 ){
-                    this.article = {
-                        content : { en : 'No information is available for this section'}
-                    }
-                }
-                else
+                if(article.length){
                     this.article = article[0];
 
-                this.preProcessOEmbed();
+                    this.preProcessOEmbed();
 
-                if(this.article.coverImage?.url){
-                    //sometime the file name has space/special chars, use new URL's href prop which encodes the special chars
-                    const url = new URL(this.article.coverImage.url)
-                    this.article.coverImage.url = url.href;
+                    if(this.article.coverImage?.url){
+                        //sometime the file name has space/special chars, use new URL's href prop which encodes the special chars
+                        const url = new URL(this.article.coverImage.url)
+                        this.article.coverImage.url = url.href;
 
-                    this.article.coverImage.url_1200  = this.article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/')
+                        this.article.coverImage.url_1200  = this.article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/')
+                    }
+
+                    this.$emit('load', { ...this.article });   
                 }
-
-                this.$emit('load', { ...this.article });   
-
+                else {
+                    this.$emit('load');
+                }
                 if(this.hasOwnProperty(this.showEdit))         
                     this.showEdit = this.$auth.hasScope(['oasisArticleEditor', 'Administrator']);
                 
