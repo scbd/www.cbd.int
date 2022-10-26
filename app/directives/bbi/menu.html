@@ -320,11 +320,11 @@ padding-left: 0px !important;
                     <li ng-repeat="link in links " class="active">
                         <div ng-cloak class="dropdown" ng-class="{'border-r':!$last}">
                             <a class="btn btn-link dropdown-toggle" style="text-decoration:none;border-width:0;" ng-href="/biobridge{{link.source}}" ng-click="goTo(link.source,$event);" type="button" id="dropdownMenuL{{$index}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <span ng-if="link.title.en!=='Home'">{{link.title.en}}</span>
-                                <span ng-if="link.title.en==='Home'">  <i class="fa fa-home " style="font-size:1.3em;"></i></span>
+                                <span ng-if="link.title| lstring!=='Home'">{{link.title| lstring}}</span>
+                                <span ng-if="link.title| lstring==='Home'">  <i class="fa fa-home " style="font-size:1.3em;"></i></span>
                             </a>
                             <ul ng-if="link.children.length>0" class="dropdown-menu" aria-labelledby="dropdownMenuL{{$index}}">
-                                <li ng-repeat="child in link.children"> <a ng-href="/biobridge{{child.source}}" ng-click="goTo(child.source,$event);">&nbsp; {{child.title.en}}</a></li>
+                                <li ng-repeat="child in link.children"> <a ng-href="/biobridge{{child.source}}" ng-click="goTo(child.source,$event);">&nbsp; {{child.title| lstring}}</a></li>
                             </ul>
                         </div>
                     </li>
@@ -371,10 +371,10 @@ padding-left: 0px !important;
                     <li ng-repeat="link in links " class="active">
                         <div ng-cloak class="dropdown" ng-class="{'border-r':!$last}">
                             <a class="btn btn-link dropdown-toggle" style="text-decoration:none;color: #001470;" ng-href="/biobridge{{link.source}}" ng-click="goTo(link.source,$event);" type="button" id="dropdownMenuL{{$index}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                       {{link.title.en}}
+                       {{link.title| lstring}}
                   </a>
                             <ul ng-if="link.children.length>0" class="dropdown-menu" aria-labelledby="dropdownMenuL{{$index}}">
-                                <li ng-repeat="child in link.children"> <a ng-href="/biobridge{{child.source}}" ng-click="goTo(child.source,$event);" style="text-decoration:none;color: #001470;">&nbsp; {{child.title.en}}</a></li>
+                                <li ng-repeat="child in link.children"> <a ng-href="/biobridge{{child.source}}" ng-click="goTo(child.source,$event);" style="text-decoration:none;color: #001470;">&nbsp; {{child.title| lstring}}</a></li>
                             </ul>
                         </div>
                     </li>

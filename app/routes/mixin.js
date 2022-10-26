@@ -108,8 +108,10 @@ export function securize(requiredRoles) {
 }
 
 
-app.run(["locale", '$injector', function (locale, $injector,) {
+app.run(["locale", '$injector', 'authentication', function (locale, $injector, authentication) {
+
     registerVuePlugin('$locale', locale);
+    registerVuePlugin('$accountsBaseUrl', authentication.accountsBaseUrl())
 
     window.Vue.use(new AngularVueRoutePlugin ($injector));
     window.Vue.use(new AngularVueRouterPlugin($injector));
@@ -131,12 +133,18 @@ export const AngularVueAuthPlugin = ($injector) =>{
 
     const auth ={
         get user()          { return user; },
-        get loggedIn()      { return user.isAuthenticated },
+        get loggedIn()      { return user && user.isAuthenticated },
         setUser(newUser)    { user = newUser },
         setUserToken(token) { userToken = token; },
 
-        logout()        { throw new Error('Not Implemented'); },
-        fetchUser()     { throw new Error('Not Implemented'); },
+        logout()        { 
+            const authentication = $injector.get('authentication');
+            return authentication.signOut();
+        },
+        fetchUser()     { 
+            const authentication = $injector.get('authentication');
+            return authentication.getUser();
+        },
         hasScope(scopeName)      { 
 
             let rolesToValidate = [];

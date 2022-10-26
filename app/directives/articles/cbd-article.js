@@ -7,7 +7,8 @@ import '~/authentication'
 
 import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@22.0.0/build/ckeditor.css');
 
-	app.directive('cbdArticle', ['$sce', '$q', 'articleService', 'authentication', '$location', '$timeout', '$http',  function ($sce, $q, articleService, authentication, $location, $timeout, $http)
+	app.directive('cbdArticle', ['$sce', '$q', 'articleService', 'authentication', '$location', '$timeout', '$http', 'locale',
+	  function ($sce, $q, articleService, authentication, $location, $timeout, $http, locale)
 	{
 		return {
 			restrict: 'E',
@@ -22,7 +23,7 @@ import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@22.0.0/build/c
 			{
 				$scope.hideCoverImage = $attr.hideCoverImage||false;
 				$scope.returnUrl	  = $location.absUrl();
-
+				$scope.locale 		  = locale;
 				$scope.trustedHtml = function (plainText) {
 					return $sce.trustAsHtml(plainText);
 				}

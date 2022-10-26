@@ -67,9 +67,9 @@ import 'angular-cache'
               return $http.get('/api/v2016/conferences', {params : { q : query, s: sort, f: fields, cache: true }, cache:httpCache});
           }
 
-            function normalizeMenus(menus, meeting){
+            function normalizeMenus(menus, meeting, parentMenu){
 
-                _.each(menus, function(menu, parentMenu){
+                _.each(menus, function(menu, index){
 
                     menu.exactSelection = true;
 

@@ -1,8 +1,9 @@
 import app from '~/app'
 
-app.filter("lstring", function() {
+app.filter("lstring", ['locale', function(appLocale) {
 	return function(ltext, locale) {
 
+		locale = locale || appLocale;
 		if(!ltext)
 			return ltext;
 
@@ -27,4 +28,4 @@ app.filter("lstring", function() {
 
 		return sText;
 	};
-});
+}]);

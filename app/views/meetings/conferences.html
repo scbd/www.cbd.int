@@ -14,7 +14,7 @@
                 <cbd-article-cover-image style="max-height: 300px;cursor: pointer;" cover-image="activeConference.article"
                 ng-click="showConference(activeConference.code)"title="{{activeConference.Title|lstring}}"></cbd-article-cover-image>
             </div>
-            <div class="col-lg-4" style="padding-left:5px;padding-right:20px">
+            <div class="col-lg-4">
                 <strong>
                     <div ng-click="showConference(activeConference.code)" style="cursor: pointer;"
                         ng-bind="activeConference.Title|lstring"></div>
@@ -30,7 +30,7 @@
                     </span>
                 </div>
                 <div ng-click="showConference(activeConference.code)" ng-bind="activeConference.Description|lstring"
-                    style="text-align: justify;cursor: pointer;"></div>
+                    style="text-align: justify;cursor: pointer;" class="mr-1"></div>
             </div>
         </div>
     </div>

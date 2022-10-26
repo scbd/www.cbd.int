@@ -6,13 +6,19 @@ const app = angular.module('app', angular.defineModules(
 
 
     app.provider('$ngVue', $ngVueProvider) // create own ngVue provider as theirs was broken
-    app.config(['$ngVueProvider',function($ngVueProvider) {
-      var i18n = new window.VueI18n({
-        locale        : 'en',
-        fallbackLocale: 'en',
-        messages      : { en:{} }
-      })
-      $ngVueProvider.setRootVueInstanceProps({ i18n: i18n })
+    app.config(['$ngVueProvider', function($ngVueProvider) {
+      
+      angular.injector(['ngCookies']).invoke(['$cookies', function($cookies) {
+       
+        const locale = $cookies.get('locale') || 'en';
+        var i18n = new window.VueI18n({
+          locale        : locale,
+          fallbackLocale: 'en',
+          messages      : { en:{} }
+        })
+        $ngVueProvider.setRootVueInstanceProps({ i18n: i18n })
+
+      }]);
     }])
     
     app.config(['$httpProvider','toastrConfig', function($httpProvider,toastrConfig) {

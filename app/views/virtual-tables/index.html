@@ -309,7 +309,7 @@
                     </header>
                     <main role="main">
                         <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;text-align: center;">               
-                            <h3>{{virtualArticle.title.en}}</h3>
+                            <h3>{{virtualArticle.title|lstring}}</h3>
                             <hr/>
                             <strong>{{virtualArticle.meta.createdOn|moment:'toDate'|date:'yyyy-MM-dd':'UTC'}}</strong>
                         </div>

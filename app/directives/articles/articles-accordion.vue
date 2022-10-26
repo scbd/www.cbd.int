@@ -8,14 +8,14 @@
                     <h5 class="mb-0">
                         <i class="fa fa-chevron-up pull-right"></i>
                         <span class="pull-right" style="font-size: 70%;font-weight: 300;" v-if="article.meta.modifiedOn">Updated: {{article.meta.modifiedOn | formatDate('dd LLL')}}</span>
-                        {{ article.title.en }}
+                        {{ article.title | lstring($locale)  }}
                     </h5>
                 </div>
 
                 <div :id="article.hashTitle" class="collapse" :aria-labelledby="article._id" data-parent="#accordion">
                     <div class="card-body">
                          <cbd-add-new-article v-if="showEditButton" :id="article._id" target="_self" class="btn btn-default pull-right"></cbd-add-new-article>
-                         <div v-html="(article.content||{}).en " class="ck-content"></div>
+                         <div v-html="$options.filters.lstring(article.content, $locale)" class="ck-content"></div>
                      </div>
                 </div>
             </div>
@@ -29,6 +29,8 @@ import 'css!cdn!npm/@scbd/ckeditor5-build-inline-full@22.0.0/build/ckeditor.css'
 import ArticlesApi from '../../api/articles';
 import cbdAddNewArticle from './cbd-add-new-article.vue';
 import { format as formatDate } from '~/components/meetings/datetime';
+import {lstring } from '~/filters/vue-filters'
+
 
 export default {
     name: 'articlesAccordion',
@@ -54,7 +56,7 @@ export default {
             const query = this.query;
             const articles = await this.ArticlesApi.queryArticles(query);
             this.articles = articles.map(e=>{
-                e.hashTitle = e.title.en.replace(/[^a-z0-9]/gi, '-').replace(/-+/g, '-');
+                e.hashTitle = lstring(e.title, this.$locale).replace(/[^a-z0-9]/gi, '-').replace(/-+/g, '-');
                 return e;
             });
             this.$emit('onArticlesLoad', this.articles);

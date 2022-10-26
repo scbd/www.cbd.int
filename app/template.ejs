@@ -83,15 +83,15 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
     header.large .navbar-nav a:hover { color:white; background-color:#009B48; }
 
 
-    footer {  display: block; padding: 15px 20px; }
-    footer ul { list-style-type: none; padding:0px; }
+    /* footer {  display: block; padding: 15px 20px; }
+    /* footer ul { list-style-type: none; padding:0px; } */
     footer ul li a { font-size: 14px; color: #666; }
     footer ul li a:hover { color: #000; }
     footer h4 {
       font-size: 14px;
       color: #666;
       font-weight: bold;
-    }
+    } */
 
     footer.standard ul.list-inline > li { padding: 0px 5px; border-right:solid 1px #666;font-size: 14px;}
     footer.standard ul.list-inline > li:last-child { border-right: none; }
@@ -128,7 +128,7 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
 
         <style>
 
-        .page-content{ margin-top: 2em;}
+        /* .page-content{ margin-top: 2em;} */
 
         #block-loginlinkblock ul.dropdown-menu { background-color: #01463a; }
         .meetingnav-table a, .meetingnav-table b { font-size: 1.04rem; }
@@ -171,8 +171,8 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
         .header .navbar-wrapper.desktop-only > nav.sub-nav{
         margin-top: 0;
         }
-        @media (min-width:767px){ .page-content{ margin-top: 4em;} }
-        @media (min-width:992px){ .page-content{ margin-top: 10.5em;} }
+        /* @media (min-width:767px){ .page-content{ margin-top: 4em;} }
+        @media (min-width:992px){ .page-content{ margin-top: 10.5em;} } */
 
     </style>    
 </head>
@@ -181,8 +181,9 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
       <div id="page">
         <!-- HEADER -->
           <div style="display:<%=siteAlert ? 'block' : 'none'%>" class="alert alert-danger mb-0"><%=siteAlert%></div>
-          <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeaderFixed" ></vue-component>                  
-          <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeader" ></vue-component>
+          <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeaderFixed" ></vue-component>                  
+          <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeader" ></vue-component> -->
+          <vue-component name="ScbdHeader" ></vue-component>
           <!-- CONTENT -->
           <div class="page-content">
               <div id="conferenceHeader"></div>
@@ -193,7 +194,8 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
               <a href="#" class="go-to-top-btn"></a>
           </div>
           <!-- FOOTER -->
-          <vue-component ng-if="!templateCtrl.viewOnly" name="PageFooter" ></vue-component>
+          <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="PageFooter" ></vue-component> -->
+          <vue-component name="ScbdFooter" ></vue-component>
       </div>
   </div>
 
