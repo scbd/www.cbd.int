@@ -7,6 +7,8 @@ export function lstring(ltext, locale) {
   
     if (!ltext)
       return "";
+    if (typeof(ltext) == 'string')
+      return ltext;
     let sText="";
     if (!sText && locale)
       sText = ltext[locale];
