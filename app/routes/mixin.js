@@ -155,7 +155,7 @@ export const AngularVueAuthPlugin = ($injector) =>{
 
             rolesToValidate = scopeName;
 
-            const hasRole = rolesToValidate.find(scope=>user.roles.includes(scope));
+            const hasRole = rolesToValidate.find(scope=>user?.roles.includes(scope));
 
             return !!hasRole;
         },

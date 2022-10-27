@@ -10,12 +10,15 @@ import moment from 'moment';
 import cbdAddNewArticle from '~/directives/articles/cbd-add-new-article.vue'
 import 'angular-vue';
 import '~/services/conference-service'
+import CbdArticle from '~/directives/articles/cbd-article.vue';
+import Vue from 'Vue';
       
 export { default as template  } from './index.html';
 
 export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articleService', 'angularGridInstance', 'ngDialog', '$route', 'conferenceService',
  function( $q, user,$http, $scope,  $rootScope, $timeout, articleService, angularGridInstance, ngDialog, $route, conferenceService) {
 
+    Vue.component('CbdArticle', CbdArticle)
     var basePath  = $scope.basePath = (angular.element('base').attr('href')||'').replace(/\/+$/g, '');
 
     $scope.$root.page={
@@ -71,33 +74,26 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     }
 
     $scope.showArticle =function(article){
+        
         ngDialog.open({
             template:'articleDetails',
             name     : 'articleDetails',
+            scope : $scope,
             controller : ['$scope', '$element', function($scope, $element){
-                    $scope.virtualArticleQuery = [{"$match"   : {_id: { $oid: article._id}} }];
+                
+                    $scope.virtualArticleQuery = { ag : JSON.stringify([{"$match"   : {_id: { $oid: article._id}} }]) };
                     $scope.closeDialog = function(){
                         ngDialog.close();                                            
                     }
 
                     $scope.onArticleLoad = function(virtualArticle){
                         $scope.virtualArticle = {...article, ...virtualArticle };
-                        $scope.isLoading = false;
-                    }
-
-                    $($element).scroll(onScroll);
-
-                    $scope.$on('$destroy', ()=>{$($element).off('scroll', onScroll)})
-
-                    function onScroll(){
-                        var scroll = $($element).scrollTop();
-                          $element.find(".zoom img").css({
-                              transform: 'translate3d(-50%, -'+(scroll/100)+'%, 0) scale('+(100 + scroll/5)/100+')',
-                          });
+                        $scope.isLoading = false;                        
                     }
             }]
         })
     }
+    
 
     $scope.loadPastEvents = function(){
         $scope.includePastEvents=!$scope.includePastEvents;
@@ -135,7 +131,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
                     const url = new URL(article.coverImage.url)
                     article.coverImage.url = url.href;
 
-                    article.url_600 = article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&600x400/');                    
+                    article.coverImage.url_600 = article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&600x400/');                                        
                 }
 
                 if(article.adminTags){
@@ -187,10 +183,10 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     async function loadMeetingTypes(){
         
         const code = $route.current.params.code
-        const conference = await conferenceService.getConference(code)
-        var meetingIds =  { _id : { $in: conference.MajorEventIDs.map(m=>{ return {$oid: m}}) } };
+        const conference = await conferenceService.getActiveConference(code)
+        var meetingIds =  { _id : { $in: (conference.conference?.virtualTableMeetingTypes || conference.MajorEventIDs).map(m=>{ return {$oid: m}}) } };
         
-        const meeting = await $http.get("/api/v2016/meetings/", { cache: true, params: {q:meetingIds, f: { EVT_CD:1 } } })
+        const meeting = await $http.get("/api/v2016/meetings/", { cache: true, params: {q:meetingIds, f: { EVT_CD:1, EVT_FROM_DT:1 }, s : {EVT_FROM_DT : -1} } })
      
         meeting.data.forEach(m=>{
             $scope.meetingType[m.EVT_CD.toLowerCase()] = m.EVT_CD;

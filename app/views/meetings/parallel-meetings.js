@@ -1,11 +1,15 @@
 ﻿import '~/directives/social-media'
 import '~/services/conference-service'
+import CbdArticle from '~/directives/articles/cbd-article.vue';
+import Vue from 'Vue';
+import _ from 'lodash';
 
 export { default as template } from './parallel-meetings.html'
 
 export default ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope',
  function ($scope,  $route, $location, conferenceService, $q, $rootScope) {
        
+            Vue.component('CbdArticle', CbdArticle)
             $scope.isLoading = true;
 
             function buildQuery(){
@@ -21,14 +25,16 @@ export default ['$scope', '$route', '$location', 'conferenceService', '$q', '$ro
                 if((($route.current||{}).params||{}).urlTag)
                     tags = tags.concat($route.current.params.urlTag);
 
-                var match = { "adminTags" : { $all: _(tags).map(kebabCase).value()}};
+                $scope.parallelMeetingAdminTags = _(tags).map(kebabCase).value();
+
+                var match = { "adminTags" : { $all: $scope.parallelMeetingAdminTags }};
 
                 ag.push({"$match"   : match });
                 ag.push({"$project" : { title:1, content:1, coverImage:1}});
                 ag.push({"$sort"    : { "meta.updatedOn":-1}});
                 ag.push({"$limit"   : 1 });
 
-                $scope.articleQuery = ag;
+                $scope.articleQuery = { ag : JSON.stringify(ag) };;
             }
 
             $scope.onArticleLoad = function(article){

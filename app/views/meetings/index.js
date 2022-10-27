@@ -7,7 +7,7 @@ import 'ngVue'
 import '~/services/conference-service'
 import '~/services/article-service'
 import '~/directives/social-media'
-import '~/directives/articles/cbd-article'
+import CbdArticle from '~/directives/articles/cbd-article.vue';
 
 export { default as template } from './index.html'
 
@@ -18,9 +18,12 @@ app.value('ConferenceCal',VueComponent)
 export default ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', '$q',
         function ($location,$scope,$timeout,  $route, $sce, conferenceService, $q) {
        
+            Vue.component('CbdArticle', CbdArticle)
 			var _ctrl = this;
 
-             $scope.code = $route.current.params.code
+            $scope.code = $route.current.params.code
+            $scope.articleAdminTags = ['conferences', 'home-page', 'introduction', encodeURIComponent($scope.code)];
+            
             $scope.trustedHtml = function (plainText) {
                 return $sce.trustAsHtml(plainText);
             }
@@ -44,9 +47,9 @@ export default ['$location','$scope','$timeout', '$route', '$sce', 'conferenceSe
                     ag.push({"$project" : { title:1, content:1, coverImage:1}});
                     ag.push({"$sort"    : { "meta.updatedOn":-1}});
                     ag.push({"$limit"   : 1 });
-    
-                    $scope.articleQuery = ag;
-                    
+                        
+
+                    $scope.articleQuery = { ag : JSON.stringify(ag) };;
                 }
 
             });

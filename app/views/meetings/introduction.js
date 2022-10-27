@@ -2,12 +2,16 @@
 import '~/directives/articles/cbd-article';
 import '~/services/conference-service';
 import app from '~/app'
+import CbdArticle from '~/directives/articles/cbd-article.vue';
+import Vue from 'Vue';
+import _ from 'lodash'
 
 export { default as template } from './introduction.html';
 
 export default ['$scope', '$route', '$location', '$http', '$rootScope',
  function ($scope,  $route, $location, $http, $rootScope) {
-       
+            
+            Vue.component('CbdArticle', CbdArticle)
             $scope.isLoading = true;
 
             function buildQuery(){
@@ -23,14 +27,15 @@ export default ['$scope', '$route', '$location', '$http', '$rootScope',
                 if((($route.current||{}).params||{}).urlTag)
                     tags = tags.concat($route.current.params.urlTag);
 
-                var match = { "adminTags" : { $all: _(tags).map(kebabCase).value()}};
+                $scope.articleAdminTags = _(tags).map(kebabCase).value();
+                var match = { "adminTags" : { $all: $scope.articleAdminTags}};
 
                 ag.push({"$match"   : match });
                 ag.push({"$project" : { title:1, content:1, coverImage:1}});
                 ag.push({"$sort"    : { "meta.updatedOn":-1}});
                 ag.push({"$limit"   : 1 });
 
-                $scope.articleQuery = ag;
+                $scope.articleQuery = { ag : JSON.stringify(ag) };;
             }
 
             $scope.onArticleLoad = function(article){
