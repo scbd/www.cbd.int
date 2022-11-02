@@ -18,7 +18,7 @@
 
 <script>
 
-import 'css!cdn!npm/@scbd/ckeditor5-build-inline-full@22.0.0/build/ckeditor.css';
+import 'css!cdn!npm/@scbd/ckeditor5-build-inline-full@35.0.0/build/content-style.css';
 import axios from 'axios';
 import ArticlesApi from '../../api/articles';
 import cbdAddNewArticle from './cbd-add-new-article.vue';
@@ -100,14 +100,6 @@ export default {
 </script>
     
 <style>
-   .ck-content {
-        padding-top: 15px;
-    }
-
-    .ck-content p {
-        margin-top: inherit!important;
-        margin-bottom: inherit!important;
-    }
 
     .ck-content .table th, .table td {
         vertical-align: inherit;

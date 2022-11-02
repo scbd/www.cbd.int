@@ -115,7 +115,7 @@ app.run(["locale", '$injector', 'authentication', function (locale, $injector, a
 
     window.Vue.use(new AngularVueRoutePlugin ($injector));
     window.Vue.use(new AngularVueRouterPlugin($injector));
-    window.Vue.use(new AngularVueAuthPlugin($injector));
+    window.Vue.use(AngularVueAuthPlugin($injector));
       
 }]);
     
