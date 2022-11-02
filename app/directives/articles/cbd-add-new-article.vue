@@ -28,19 +28,21 @@
             		baseUrl = 'https://oasis.cbddev.xyz';
 
 				const queryString = [];
-                if(this.tags?.length)
-                    queryString.push('tags='		+ this.tags.map(encodeURIComponent).join(','))
-                if(this.customTags?.length)
-                    queryString.push('customTags='	+ this.customTags.map(encodeURIComponent).join(','))
-                if(this.adminTags?.length)
-                    queryString.push('adminTags='	+ this.adminTags.map(encodeURIComponent).join(','))
+                if(!this.id){
+                    if(this.tags?.length)
+                        queryString.push('tags='		+ this.tags.map(encodeURIComponent).join(','))
+                    if(this.customTags?.length)
+                        queryString.push('customTags='	+ this.customTags.map(encodeURIComponent).join(','))
+                    if(this.adminTags?.length)
+                        queryString.push('adminTags='	+ this.adminTags.map(encodeURIComponent).join(','))
+                }
 
                 queryString.push('returnUrl=' + encodeURIComponent(window.location.href));
 
                 if(!this.id)
                     return `${baseUrl}/articles/new?${queryString.join('&')}`
                 
-                return  `${baseUrl}/articles/${encodeURIComponent(this.id)}/edit`;
+                return  `${baseUrl}/articles/${encodeURIComponent(this.id)}/edit?${queryString.join('&')}`;
             }
         }
     }
