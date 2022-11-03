@@ -55,7 +55,7 @@ export default function bootApp(window, require, defineX) {
           'axios'             : `${cdnUrl}npm/axios@0.21.1/dist/axios.min`,
           'vue-multiselect'   : `${cdnUrl}npm/vue-multiselect@2.1.6/dist/vue-multiselect.min`,
           'vue-i18n'          : `${cdnUrl}npm/vue-i18n@8.21.1/dist/vue-i18n.min`,
-          'facebook'          : '//connect.facebook.net/en_US/sdk',
+          'facebook'          : 'https://connect.facebook.net/en_US/sdk',
           'gmapsapi'          : 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places',
           'bigText'           : `${cdnUrl}npm/bigtext@1.0.1/dist/bigtext`,
           'html-to-image'     :  `${cdnUrl}npm/html-to-image@1.9.0/dist/html-to-image`,
