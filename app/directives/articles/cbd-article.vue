@@ -1,6 +1,6 @@
 
 <template>
-   <div class="ck-editor" style="border:none">
+   <div style="border:none;margin-top:10px">
         <div v-if="!hideCoverImage && article.coverImage">
             <cbd-article-cover-image cover-image="article.coverImage"></cbd-article-cover-image>
         </div>
@@ -105,6 +105,88 @@ export default {
         vertical-align: inherit;
     }
     
+.cbd-article .image-credit-wrapper img {
+  width: 100% !important;
+}
+
+.cbd-article .image-credit-wrapper {
+  overflow: hidden;
+  position: relative;
+  /* margin-left: -15px;
+  margin-right: -15px; */
+  max-height: 375px;
+  width: 100%
+}
+
+.cbd-article .image-credit-wrapper .image-credit {
+  position: absolute;
+  right: 0px;
+  bottom: 4px;
+}
+
+.cbd-article .image-credit {
+  background: rgba(0, 0, 0, .7);
+  color: #ccc;
+  display: inline-block;
+  font-size: 11px;
+  font-family: helvetica;
+  font-weight: 300;
+  padding: 5px 8px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.cbd-article .cover-image{
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+
+}
+
+.cbd-article .cover-image-top{
+  background-position: top;
+}
+
+.cbd-article .cover-image-center{
+  background-position: center;
+}
+
+.cbd-article .cover-image-bottom{
+  background-position: bottom;
+}
+
+@media (max-width: 767px) {
+  /*For all phone sizes*/
+  .cbd-article .image-credit-wrapper{
+      height: 120px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  /* For IPads*/
+  .cbd-article .image-credit-wrapper{
+      height: 250px;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  /* For IPad pro*/
+  .cbd-article .image-credit-wrapper{
+      height: 300px;
+  }
+}
+@media (min-width: 1200px) {
+  /* For big screens*/
+  .cbd-article .image-credit-wrapper{
+      height: 350px;
+  }
+}
 
 </style>
 
