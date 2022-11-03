@@ -22,7 +22,7 @@
             newArticleUrl : function(){
 
                 const domain = window.location.hostname.replace(/[^\.]+\./, '');
-				let baseUrl = 'https://cbd.int/management'
+				let baseUrl = 'https://www.cbd.int/management'
 
 				if(domain=='localhost' || domain == 'cbddev.xyz')
             		baseUrl = 'https://oasis.cbddev.xyz';

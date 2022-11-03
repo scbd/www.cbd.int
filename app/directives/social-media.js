@@ -16,10 +16,12 @@ import 'require'
 				})
 
 				import('~/services/fb').then(function(){
-					if ($window.FB && $window.FB.XFBML){
-						$window.FB.XFBML.parse();
-						setServiceReady('facebook');
-					}
+					setTimeout(() => {
+						if ($window.FB && $window.FB.XFBML){
+							$window.FB.XFBML.parse();
+							setServiceReady('facebook');
+						}
+					}, 1000);
 				});
 
 				function setServiceReady(service) {

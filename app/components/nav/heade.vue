@@ -59,8 +59,8 @@
                 </defs>
             </svg>
             <nav class="navbar navbar-expand-lg navbar-light bg-white">
-                <a class="navbar-brand" href="https://cbd.int/" title="Convention on Biological Diversity">
-                    <img src="https://cbd.int/themes/custom/bootstrap_sass/images/CBD_logo_green.png"
+                <a class="navbar-brand" href="https://www.cbd.int/" title="Convention on Biological Diversity">
+                    <img src="https://www.cbd.int/themes/custom/bootstrap_sass/images/CBD_logo_green.png"
                         alt="Convention on Biological Diversity">
                 </a>
                 <button class="navbar-toggler hamburger-icon collapsed" type="button" data-toggle="collapse"
@@ -87,28 +87,28 @@
                                     <div class="Information dropdown-menu">
                                         <div class="dropdown-item-container">
 
-                                            <a href="https://cbd.int/contact" title="Contact us" class="dropdown-item">
+                                            <a href="https://www.cbd.int/contact" title="Contact us" class="dropdown-item">
                                                 <span class="dropdown-item-label">Contact us</span>
                                             </a>
 
 
-                                            <a href="https://cbd.int/terms" title="Terms of Use" class="dropdown-item">
+                                            <a href="https://www.cbd.int/terms" title="Terms of Use" class="dropdown-item">
                                                 <span class="dropdown-item-label">Terms of Use</span>
                                             </a>
 
 
-                                            <a href="https://cbd.int/privacy" title="Privacy Policy"
+                                            <a href="https://www.cbd.int/privacy" title="Privacy Policy"
                                                 class="dropdown-item"> <span class="dropdown-item-label">Privacy
                                                     Policy</span>
                                             </a>
 
 
-                                            <a href="https://cbd.int/credits" title="Credits" class="dropdown-item">
+                                            <a href="https://www.cbd.int/credits" title="Credits" class="dropdown-item">
                                                 <span class="dropdown-item-label">Credits</span>
                                             </a>
 
 
-                                            <a href="https://cbd.int/copyright" title="© CBD Secretariat"
+                                            <a href="https://www.cbd.int/copyright" title="© CBD Secretariat"
                                                 class="dropdown-item"> <span class="dropdown-item-label">© CBD
                                                     Secretariat</span>
                                             </a>
@@ -127,44 +127,44 @@
                                     <div class="About the Secretariat dropdown-menu">
                                         <div class="dropdown-item-container">
 
-                                            <a href="https://cbd.int/staff" title="Staff" class="dropdown-item"> <span
+                                            <a href="https://www.cbd.int/staff" title="Staff" class="dropdown-item"> <span
                                                     class="dropdown-item-label">Staff</span>
                                             </a>
 
 
-                                            <a href="https://cbd.int/secretariat/executive-secretary/"
+                                            <a href="https://www.cbd.int/secretariat/executive-secretary/"
                                                 title="Executive Secretary" class="dropdown-item"> <span
                                                     class="dropdown-item-label">Executive
                                                     Secretary</span>
                                             </a>
 
 
-                                            <a href="https://cbd.int/museum" title="Museum of Nature and Culture"
+                                            <a href="https://www.cbd.int/museum" title="Museum of Nature and Culture"
                                                 class="dropdown-item">
                                                 <span class="dropdown-item-label">Museum of Nature and Culture</span>
                                             </a>
 
 
-                                            <a href="https://cbd.int/secretariat/initiatives.shtml" title="Initiatives"
+                                            <a href="https://www.cbd.int/secretariat/initiatives.shtml" title="Initiatives"
                                                 class="dropdown-item"> <span
                                                     class="dropdown-item-label">Initiatives</span>
                                             </a>
 
 
-                                            <a href="https://cbd.int/secretariat/documents.shtml"
+                                            <a href="https://www.cbd.int/secretariat/documents.shtml"
                                                 title="Secretariat Documents" class="dropdown-item"> <span
                                                     class="dropdown-item-label">Secretariat
                                                     Documents</span>
                                             </a>
 
 
-                                            <a href="https://cbd.int/employment" title="Employment Opportunities"
+                                            <a href="https://www.cbd.int/employment" title="Employment Opportunities"
                                                 class="dropdown-item">
                                                 <span class="dropdown-item-label">Employment Opportunities</span>
                                             </a>
 
 
-                                            <a href="https://cbd.int/secretariat/business"
+                                            <a href="https://www.cbd.int/secretariat/business"
                                                 title="Doing Business with the CBD" class="dropdown-item"> <span
                                                     class="dropdown-item-label">Doing Business
                                                     with
@@ -235,7 +235,7 @@
 
 
                                 <form class="views-exposed-form" data-drupal-selector="views-exposed-form-search-search"
-                                    action="https://cbd.int/search" method="get" id="views-exposed-form-search-search"
+                                    action="https://www.cbd.int/search" method="get" id="views-exposed-form-search-search"
                                     accept-charset="UTF-8">
                                     <div class="form-row">
                                         <div data-drupal-selector="edit-actions" class="form-actions"
@@ -270,7 +270,7 @@
 
                             <ul class="navbar-nav main-nav">
                                 <li class="nav-item  main-menu-item">
-                                    <a class="nav-link " href="https://cbd.int/convention/" role="button"
+                                    <a class="nav-link " href="https://www.cbd.int/convention/" role="button"
                                         title="Biodiversity Convention">
                                         BIODIVERSITY CONVENTION
                                     </a>
@@ -284,21 +284,21 @@
 
                                 </li>
                                 <li class="nav-item  main-menu-item">
-                                    <a class="nav-link " href="https://cbd.int/abs" role="button"
+                                    <a class="nav-link " href="https://www.cbd.int/abs" role="button"
                                         title="Nagoya Protocol">
                                         NAGOYA PROTOCOL
                                     </a>
 
                                 </li>
                                 <li class="nav-item  main-menu-item">
-                                    <a class="nav-link " href="https://cbd.int/countries" role="button"
+                                    <a class="nav-link " href="https://www.cbd.int/countries" role="button"
                                         title="Countries">
                                         COUNTRIES
                                     </a>
 
                                 </li>
                                 <li class="nav-item  main-menu-item">
-                                    <a class="nav-link " href="https://cbd.int/programmes/" role="button"
+                                    <a class="nav-link " href="https://www.cbd.int/programmes/" role="button"
                                         title="Programmes">
                                         PROGRAMMES
                                     </a>
