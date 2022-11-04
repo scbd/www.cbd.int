@@ -8,20 +8,20 @@
                         <a ng-href="{{::document.url}}" style="color:inherit" ng-switch="::document.type">
 
                             <strong ng-switch-when="decision">
-                                Decision <span ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></span>
+                                Decision <span class="break-word">{{::document.symbol}}</span>
                             </strong>
     
                             <strong ng-switch-when="recommendation">
-                                    Recommendation <span ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></span>
+                                    Recommendation <span class="break-word">{{::document.symbol}}</span>
                             </strong>
 
                             <span ng-switch-when="notification">
-                                    <strong ng-bind-html="::breakSymbol((document.reference|encodeHtml))|safeHtml"></strong>
-                                    <i>({{document.symbol}})</i>
+                                    <strong class="break-word">{{::document.symbol}}</strong>
+                                    <i class="break-word">{{::document.reference}}</i>
                             </span>
 
                             <strong ng-switch-default="default">
-                                    <span ng-bind-html="::breakSymbol((document.symbol|encodeHtml))|safeHtml"></span>
+                                <span class="break-word">{{::document.symbol}}</span>
                             </strong>
                         </a>
                     </div>
