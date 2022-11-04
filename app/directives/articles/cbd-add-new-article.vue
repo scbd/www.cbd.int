@@ -37,7 +37,7 @@
                         queryString.push('adminTags='	+ this.adminTags.map(encodeURIComponent).join(','))
                 }
 
-                queryString.push('returnUrl=' + encodeURIComponent(window.location.href));
+                queryString.push('returnUrl=' + encodeURI(window.location.href));
 
                 if(!this.id)
                     return `${baseUrl}/articles/new?${queryString.join('&')}`

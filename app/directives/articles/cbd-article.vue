@@ -5,7 +5,7 @@
             <cbd-article-cover-image cover-image="article.coverImage"></cbd-article-cover-image>
         </div>
        
-        <div v-if="showEdit" class="pull-right">    
+        <div v-if="hasEditRights" class="pull-right">    
             <cbd-add-new-article :tags="tags" :admin-tags="adminTags" :custom-tags="customTags" :id="(article||{})._id" :target="target"
                 class="btn btn-default"></cbd-add-new-article>
             <br/>    
@@ -41,6 +41,7 @@ export default {
     data() {
         return {
             returnUrl       : window.location.href,
+            hasEditRights   : false
         }
     },
     created() {
@@ -73,8 +74,9 @@ export default {
                 else {
                     this.$emit('load');
                 }
-                if(this.hasOwnProperty(this.showEdit))         
-                    this.showEdit = this.$auth.hasScope(['oasisArticleEditor', 'Administrator']);
+                if(this.showEdit || this.showEdit == 'true' || this.hasOwnProperty(this.showEdit)){
+                    this.hasEditRights = this.$auth.hasScope(['oasisArticleEditor', 'Administrator']);
+                }
                 
         },
         preProcessOEmbed() {
