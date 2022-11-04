@@ -325,7 +325,7 @@ export { default as template } from './documents.html';
                         title : { en : n.title_t },
                         files : urlToFiles(n.url_ss)
                     }));
-                }).sortByOrder(['number', 'symbol'], ['desc', 'asc']).value();
+                }).sortByOrder(['symbol', 'reference'], ['desc', 'asc']).value();
 
             }).then(function(docs){
 
