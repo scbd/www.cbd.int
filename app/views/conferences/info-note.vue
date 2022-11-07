@@ -2,7 +2,7 @@
     <div>
         <div class="row" >
             <div class="col-sm-12">
-                <cbd-article :query="articleQuery" :admin-tags="introAdminTags" target="_self"></cbd-article>
+                <cbd-article :query="articleQuery" :admin-tags="introAdminTags" target="_self" show-edit="true"></cbd-article>
             </div>
         </div>
         </br>

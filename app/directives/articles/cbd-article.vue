@@ -74,9 +74,12 @@ export default {
                 else {
                     this.$emit('load');
                 }
-                if(this.showEdit || this.showEdit == 'true' || this.hasOwnProperty(this.showEdit)){
-                    this.hasEditRights = this.$auth.hasScope(['oasisArticleEditor', 'Administrator']);
-                }
+
+                this.$auth.fetchUser().then(()=>{
+                    if(this.showEdit || this.showEdit == 'true' || this.hasOwnProperty(this.showEdit)){
+                        this.hasEditRights = this.$auth.hasScope(['oasisArticleEditor', 'Administrator']);
+                    }
+                })
                 
         },
         preProcessOEmbed() {

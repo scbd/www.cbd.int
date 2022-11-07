@@ -1,6 +1,5 @@
 ﻿import '~/app'
 import '~/directives/social-media'
-import '~/directives/articles/cbd-article'
 import CbdArticle from '~/directives/articles/cbd-article.vue';
 import Vue from 'Vue';
 import _ from 'lodash'

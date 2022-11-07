@@ -3,7 +3,6 @@ import 'angular-grid';
 import _ from 'lodash';
 import '~/services/article-service'
 import 'ngInfiniteScroll'
-import '~/directives/articles/cbd-article';
 import 'ngDialog';
 import '../articles';
 import moment from 'moment';

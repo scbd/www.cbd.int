@@ -52,13 +52,14 @@ import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@35.0.0/build/c
 
 							$scope.article.coverImage.url_1200  = $scope.article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/')
 						}
-						$scope.onLoad({article: article[0]});
-						
+						$scope.onLoad({article: article[0]});						
 						$q.when(authentication.getUser())
 						.then(function(user){
 							if(user)
 								$scope.showEdit = authentication.isInRole(user, ['oasisArticleEditor', 'Administrator']);
 						})
+
+						console.warn('USE new article vue component!')
 					});
 				}
 
