@@ -47,13 +47,14 @@ export default ['$location','$scope', '$rootScope', 'conferenceService', '$q', '
                             return _.includes(tags, conf.code)
                         })
                         if(conference){
-                            //sometime the file name has space/special chars, use new URL's href prop which encodes the special chars
-							const url = new URL(article.coverImage.url)
-							article.coverImage.url = url.href;
+                            if(article.coverImage?.url){
+                                //sometime the file name has space/special chars, use new URL's href prop which encodes the special chars
+                                const url = new URL(article.coverImage.url)
+                                article.coverImage.url = url.href;
 
-                            article.url_300 = article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&500x300/')
-                            article.url_1200 = article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/')
-                            
+                                article.url_300 = article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&500x300/')
+                                article.url_1200 = article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/')
+                            }
                             conference.article = article;
                         }
                     });
