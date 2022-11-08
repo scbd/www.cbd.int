@@ -7,7 +7,6 @@
             <cbd-article-cover-image cover-image="article.coverImage"></cbd-article-cover-image>
 
             <div class="col-lg-8 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
-                <!-- <cbd-article query="articleQuery" ng-if="articleQuery" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article> -->
                 <div ng-if="articleQuery" >
                     <cbd-article ng-vue ng-vue-expose="&onArticleLoad" :query="articleQuery" v-if="articleQuery" :admin-tags="articleAdminTags" 
                     @load="onArticleLoad($event)" hide-cover-image="true" show-edit="true"></cbd-article>

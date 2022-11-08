@@ -1,5 +1,4 @@
 ﻿import '~/directives/social-media';
-import '~/directives/articles/cbd-article';
 import '~/services/conference-service';
 import app from '~/app'
 import CbdArticle from '~/directives/articles/cbd-article.vue';

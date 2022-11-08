@@ -36,7 +36,6 @@
              ng-if="!article.coverImage && documentsLink">
                 <i class="fa fa-file"></i> View Documents
             </a>                  
-            <!-- <cbd-article query="articleQuery" ng-if="articleQuery" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article> -->
             <cbd-article ng-vue ng-vue-expose="&onArticleLoad" :query="articleQuery" v-if="articleQuery" :admin-tags="articleAdminTags" 
             @load="onArticleLoad($event)" hide-cover-image="true" show-edit="true"></cbd-article>
         </div>        
