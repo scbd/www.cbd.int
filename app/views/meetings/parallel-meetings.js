@@ -3,6 +3,7 @@ import '~/services/conference-service'
 import CbdArticle from '~/directives/articles/cbd-article.vue';
 import Vue from 'Vue';
 import _ from 'lodash';
+import { cssEscape } from '~/util/css.escape';
 
 export { default as template } from './parallel-meetings.html'
 
@@ -51,6 +52,11 @@ export default ['$scope', '$route', '$location', 'conferenceService', '$q', '$ro
 
                 return '#'
             }
+
+            $scope.cssEscape = function(url){
+                return cssEscape(url)
+            }
+
             $q.when(conferenceService.getActiveConference())
             .then(function(meeting){
                 $scope.meeting = meeting;

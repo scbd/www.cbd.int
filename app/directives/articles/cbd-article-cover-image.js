@@ -1,4 +1,5 @@
 import app from '~/app'
+import { cssEscape } from '~/util/css.escape';
 import template from './cbd-article-cover-image.html'
 
 	app.directive('cbdArticleCoverImage', [function ()
@@ -10,6 +11,11 @@ import template from './cbd-article-cover-image.html'
 			transclude: true,
 			scope: {
 				coverImage : '<coverImage'
+			},
+			link:function($scope){
+				$scope.cssEscape = function(url){
+					return cssEscape(url)
+				}
 			}
 		};
 	}]);

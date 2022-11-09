@@ -29,7 +29,7 @@
 
             <div class="image-credit-wrapper"  ng-show="article.coverImage">
                 <span class="image-credit" ng-if="article.coverImage.credits">{{article.coverImage.credits}}</span>
-                <div class="img cover-image" style="background-image: url({{::article.coverImage.url_1200}});"></div>
+                <div class="img cover-image" style="background-image: url({{::cssEscape(article.coverImage.url_1200)}});"></div>
             </div>
         </div>       
         <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;"> 

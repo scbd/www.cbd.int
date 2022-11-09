@@ -1,7 +1,7 @@
 
 <template>
    <div style="border:none;margin-top:10px">
-        <div v-if="!hideCoverImage && article.coverImage">
+        <div v-if="!hideCoverImage && article.coverImage.url">
             <cbd-article-cover-image cover-image="article.coverImage"></cbd-article-cover-image>
         </div>
        

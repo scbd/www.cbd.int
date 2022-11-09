@@ -13,7 +13,7 @@
            vertical-align: inherit;
         }
     </style>
-    <div ng-if="!hideCoverImage && article.coverImage">
+    <div ng-if="!hideCoverImage && article.coverImage.url">
         <cbd-article-cover-image cover-image="article.coverImage"></cbd-article-cover-image>
     </div>
     <div ng-if="showEdit" class="pull-right">        
