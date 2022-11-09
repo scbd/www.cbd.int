@@ -1,5 +1,5 @@
 import app from '~/app'
-import { cssEscape } from '~/util/Css.Escape';
+import { cssEscape } from '~/util/css.escape';
 import template from './cbd-article-cover-image.html'
 
 	app.directive('cbdArticleCoverImage', [function ()

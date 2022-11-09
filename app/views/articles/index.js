@@ -3,7 +3,7 @@ import '~/directives/social-media'
 import CbdArticle from '~/directives/articles/cbd-article.vue';
 import Vue from 'Vue';
 import _ from 'lodash'
-import { cssEscape } from '~/util/Css.Escape';
+import { cssEscape } from '~/util/css.escape';
 
 export { default as template } from './index.html'
 
