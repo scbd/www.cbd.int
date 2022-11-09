@@ -3,6 +3,7 @@ import '~/directives/social-media'
 import CbdArticle from '~/directives/articles/cbd-article.vue';
 import Vue from 'Vue';
 import _ from 'lodash'
+import { cssEscape } from '~/util/Css.Escape';
 
 export { default as template } from './index.html'
 
@@ -41,6 +42,9 @@ export default ['$scope', '$route', function ($scope,  $route) {
 
                 $scope.article = article;
                 $scope.isLoading = false;
+            }
+            $scope.cssEscape = function(url){
+                return cssEscape(url)
             }
 
             function kebabCase(val){

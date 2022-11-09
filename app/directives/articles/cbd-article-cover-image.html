@@ -83,7 +83,8 @@
             }
         }
     </style>
-    <div class="img cover-image" style="background-image: url({{::coverImage.url_1200}});" ng-class="{ ['cover-image-'+(coverImage.position||'center')] : true }"></div>
+    <div class="img cover-image" ng-if="coverImage.url_1200"
+        style="background-image: url({{::cssEscape(coverImage.url_1200)}});" ng-class="{ ['cover-image-'+(coverImage.position||'center')] : true }"></div>
     <span class="image-credit" ng-if="coverImage.credits">{{coverImage.credits}}</span>
     <ng-transclude></ng-transclude>
 </div>

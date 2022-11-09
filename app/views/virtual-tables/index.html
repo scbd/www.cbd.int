@@ -278,7 +278,7 @@
                     ag-infinite-scroll-distance="100" id="articlesBody">
                     <article class="card white-panel" ng-repeat="article in filterPosters = (posters | filter:filterBy)"
                     ng-click="showArticle(article)" style="cursor:pointer"> 
-                    <div ng-if="article.coverImage.url_600" class="img" style="background-image: url({{::article.coverImage.url_600}});"></div>
+                    <div ng-if="article.coverImage.url_600" class="img" style="background-image: url({{::cssEscape(article.coverImage.url_600)}});"></div>
                                        
                         <div class="inside">    
                             <div class="image-wrapper1" >                                    
@@ -305,7 +305,7 @@
 
                     <header id="image-header" style="text-align:center">
                         <div class="collapse" id="imageBox" aria-expanded="false">
-                            <img src="{{virtualArticle.coverImage.url_1200}}" class="img-fluid rounded mx-auto d-block" style="width:100%">                            
+                            <img src="{{cssEscape(virtualArticle.coverImage.url_1200)}}" class="img-fluid rounded mx-auto d-block" style="width:100%">                            
                         </div>
                         <a role="button" class="expand collapsed" data-toggle="collapse" href="#imageBox" aria-expanded="false" aria-controls="imageBox"
                             style="font-size:small;color:black;font-weight: bold;">

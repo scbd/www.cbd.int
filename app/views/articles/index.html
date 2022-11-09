@@ -1,4 +1,4 @@
-﻿<div>
+<div>
 
     <div>
         <h3 ng-show="isLoading" style="color: #777"><i class="fa fa-circle-o-notch fa-spin"></i></h3>
@@ -7,7 +7,7 @@
         
         <div class="image-credit-wrapper"  ng-show="article.coverImage" >
             <span class="image-credit" ng-if="article.coverImage.credits">{{article.coverImage.credits}}</span>
-            <div class="img cover-image" style="background-image: url({{::article.coverImage.url_1200}});"></div>
+            <div class="img cover-image" style="background-image: url({{::cssEscape(article.coverImage.url_1200)}});"></div>
         </div>
         <div class="col-lg-8 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
             <cbd-article ng-vue ng-vue-expose="&onArticleLoad" :query="articleQuery" v-if="articleQuery" :admin-tags="articleAdminTags" 

@@ -11,6 +11,7 @@ import 'angular-vue';
 import '~/services/conference-service'
 import CbdArticle from '~/directives/articles/cbd-article.vue';
 import Vue from 'Vue';
+import { cssEscape } from '~/util/Css.Escape';
       
 export { default as template  } from './index.html';
 
@@ -155,6 +156,10 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         .finally(function(){
             $scope.loading = false;
         })
+    }
+
+    $scope.cssEscape = function(url){
+        return cssEscape(url)
     }
 
     function buildQuery(){
