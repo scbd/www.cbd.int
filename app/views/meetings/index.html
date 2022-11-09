@@ -3,9 +3,7 @@
             <h3 ng-show="isLoading" style="color: #777"><i class="fa fa-circle-o-notch fa-spin"></i></h3>
         </div>
         <div class="row" ng-hide="isLoading">
-
-            <cbd-article-cover-image cover-image="article.coverImage"></cbd-article-cover-image>
-
+            <cbd-article-cover-image cover-image="article.coverImage" ng-if="article.coverImage.url && !meeting.conference.hideCoverImage"></cbd-article-cover-image>            
             <div class="col-lg-8 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
                 <div ng-if="articleQuery" >
                     <cbd-article ng-vue ng-vue-expose="&onArticleLoad" :query="articleQuery" v-if="articleQuery" :admin-tags="articleAdminTags" 
