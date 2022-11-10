@@ -217,6 +217,7 @@
         }
         .menu-header{
             border: 1px solid #eee;
+            overflow: hidden;
         }
 
 
@@ -230,7 +231,8 @@
         color: #fff;
     }
     .conference-header._2021-2022 .meetingnav-buttongroup .menu-title{
-        color: #00a29a;
+        font-family: Arial;
+        color: #007368;    
     }
 
     .conference-header._2021-2022 .meetingnav td.selected.cop-15-home-menu{
@@ -248,6 +250,12 @@
     .conference-header._2021-2022 .meetingnav td.selected.cop-15-home-menu{
         width:84px;
         height:64px
+    }
+
+    @media (max-width:768px) {          
+        .conference-header._2021-2022 .menu-title {
+            padding-top: 3px;
+        }
     }
    </style>
    <!-- NAVIGATION BAR -->

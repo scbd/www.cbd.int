@@ -1,17 +1,20 @@
 
 <template>
    <div style="border:none;margin-top:10px">
-        <div v-if="!hideCoverImage && article.coverImage.url">
-            <cbd-article-cover-image cover-image="article.coverImage"></cbd-article-cover-image>
+        <div v-if="!loading">
+            <div v-if="!hideCoverImage && article && article.coverImage && article.coverImage.url">
+                <cbd-article-cover-image cover-image="article.coverImage"></cbd-article-cover-image>
+            </div>
+        
+            <div v-if="hasEditRights" class="pull-right">    
+                <cbd-add-new-article :tags="tags" :admin-tags="adminTags" :custom-tags="customTags" :id="(article||{})._id" :target="target"
+                    class="btn btn-default"></cbd-add-new-article>
+                <br/>    
+            </div>
+            <div v-if="article" v-html="$options.filters.lstring(article.content, $locale)" class="ck-content"></div>
+            <div v-if="!article" class="ck-content">No information is available for this section at the moment.</div>
         </div>
-       
-        <div v-if="hasEditRights" class="pull-right">    
-            <cbd-add-new-article :tags="tags" :admin-tags="adminTags" :custom-tags="customTags" :id="(article||{})._id" :target="target"
-                class="btn btn-default"></cbd-add-new-article>
-            <br/>    
-        </div>
-        <div v-if="article" v-html="$options.filters.lstring(article.content, $locale)" class="ck-content"></div>
-        <div v-if="!article" class="ck-content">No information is available for this section at the moment.</div>
+        <div v-if="loading">Loading section content<i class="fa fa-spinner fa-spin"></i></div>
     </div>
 
 </template>
@@ -41,7 +44,8 @@ export default {
     data() {
         return {
             returnUrl       : window.location.href,
-            hasEditRights   : false
+            hasEditRights   : false,
+            loading         : false
         }
     },
     created() {
@@ -53,8 +57,10 @@ export default {
     },
     methods: {
         async loadArticle() {
-            const query = this.query;
-            const article = await this.ArticlesApi.queryArticles(query)
+            try{
+                this.loading = true;
+                const query = this.query;
+                const article = await this.ArticlesApi.queryArticles(query)
      
                 if(article.length){
                     this.article = article[0];
@@ -80,7 +86,13 @@ export default {
                         this.hasEditRights = this.$auth.hasScope(['oasisArticleEditor', 'Administrator']);
                     }
                 })
-                
+            }
+            catch(e){
+                console.error(e)
+            }
+            finally{
+                this.loading = false;
+            }
         },
         preProcessOEmbed() {
 
@@ -106,93 +118,4 @@ export default {
     
 <style>
 
-    .ck-content .table th, .table td {
-        vertical-align: inherit;
-    }
-    
-.cbd-article .image-credit-wrapper img {
-  width: 100% !important;
-}
-
-.cbd-article .image-credit-wrapper {
-  overflow: hidden;
-  position: relative;
-  /* margin-left: -15px;
-  margin-right: -15px; */
-  max-height: 375px;
-  width: 100%
-}
-
-.cbd-article .image-credit-wrapper .image-credit {
-  position: absolute;
-  right: 0px;
-  bottom: 4px;
-}
-
-.cbd-article .image-credit {
-  background: rgba(0, 0, 0, .7);
-  color: #ccc;
-  display: inline-block;
-  font-size: 11px;
-  font-family: helvetica;
-  font-weight: 300;
-  padding: 5px 8px;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
-
-.cbd-article .cover-image{
-  width: 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-
-}
-
-.cbd-article .cover-image-top{
-  background-position: top;
-}
-
-.cbd-article .cover-image-center{
-  background-position: center;
-}
-
-.cbd-article .cover-image-bottom{
-  background-position: bottom;
-}
-
-@media (max-width: 767px) {
-  /*For all phone sizes*/
-  .cbd-article .image-credit-wrapper{
-      height: 120px;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  /* For IPads*/
-  .cbd-article .image-credit-wrapper{
-      height: 250px;
-  }
-}
-@media (min-width: 992px) and (max-width: 1199px) {
-  /* For IPad pro*/
-  .cbd-article .image-credit-wrapper{
-      height: 300px;
-  }
-}
-@media (min-width: 1200px) {
-  /* For big screens*/
-  .cbd-article .image-credit-wrapper{
-      height: 350px;
-  }
-}
-
 </style>
-
-<!-- this.returnUrl	  = $location.absUrl(); -->
