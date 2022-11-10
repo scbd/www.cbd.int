@@ -51,6 +51,7 @@ function bundle(relativePath, baseDir='app') {
         { find: /^text!(.*)/, replacement:`$1` },
         { find: /^cdn!(.*)/,  replacement:`${cdnUrl}$1` },
       ]}),
+      stripBom(),
       string({ include: "**/*.html" }),
       json({ namedExports: true }),
       injectCssToDom(),
@@ -176,3 +177,18 @@ function injectCssToDom(options = {}) {
   }
 }
  
+
+function stripBom(options = {}) {
+
+  return {
+    name: 'stripBom',
+
+    transform(code) {
+
+      if (typeof (code) == "string")
+        code = code.replace(/^\uFEFF/gm, "").replace(/^\u00BB\u00BF/gm,"");
+
+      return { code, map: this.getCombinedSourcemap() };
+    }
+  };
+}
