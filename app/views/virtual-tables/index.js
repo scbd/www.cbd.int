@@ -177,7 +177,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         ag.push({"$sort"    : { "meta.updatedOn":-1}});
         ag.push({"$limit"   : 1 });
 
-        $scope.articleQuery = ag;
+        $scope.articleQuery = { ag : JSON.stringify(ag) };;
     }
 
     function kebabCase(val){
