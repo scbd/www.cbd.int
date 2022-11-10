@@ -1,17 +1,20 @@
 
 <template>
    <div style="border:none;margin-top:10px">
-        <div v-if="!hideCoverImage && article.coverImage.url">
-            <cbd-article-cover-image cover-image="article.coverImage"></cbd-article-cover-image>
+        <div v-if="!loading">
+            <div v-if="!hideCoverImage && article && article.coverImage && article.coverImage.url">
+                <cbd-article-cover-image cover-image="article.coverImage"></cbd-article-cover-image>
+            </div>
+        
+            <div v-if="hasEditRights" class="pull-right">    
+                <cbd-add-new-article :tags="tags" :admin-tags="adminTags" :custom-tags="customTags" :id="(article||{})._id" :target="target"
+                    class="btn btn-default"></cbd-add-new-article>
+                <br/>    
+            </div>
+            <div v-if="article" v-html="$options.filters.lstring(article.content, $locale)" class="ck-content"></div>
+            <div v-if="!article" class="ck-content">No information is available for this section at the moment.</div>
         </div>
-       
-        <div v-if="hasEditRights" class="pull-right">    
-            <cbd-add-new-article :tags="tags" :admin-tags="adminTags" :custom-tags="customTags" :id="(article||{})._id" :target="target"
-                class="btn btn-default"></cbd-add-new-article>
-            <br/>    
-        </div>
-        <div v-if="article" v-html="$options.filters.lstring(article.content, $locale)" class="ck-content"></div>
-        <div v-if="!article" class="ck-content">No information is available for this section at the moment.</div>
+        <div v-if="loading">Loading section content<i class="fa fa-spinner fa-spin"></i></div>
     </div>
 
 </template>
@@ -41,7 +44,8 @@ export default {
     data() {
         return {
             returnUrl       : window.location.href,
-            hasEditRights   : false
+            hasEditRights   : false,
+            loading         : false
         }
     },
     created() {
@@ -53,8 +57,10 @@ export default {
     },
     methods: {
         async loadArticle() {
-            const query = this.query;
-            const article = await this.ArticlesApi.queryArticles(query)
+            try{
+                this.loading = true;
+                const query = this.query;
+                const article = await this.ArticlesApi.queryArticles(query)
      
                 if(article.length){
                     this.article = article[0];
@@ -80,7 +86,13 @@ export default {
                         this.hasEditRights = this.$auth.hasScope(['oasisArticleEditor', 'Administrator']);
                     }
                 })
-                
+            }
+            catch(e){
+                console.error(e)
+            }
+            finally{
+                this.loading = false;
+            }
         },
         preProcessOEmbed() {
 

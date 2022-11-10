@@ -256,7 +256,7 @@
                 <hr/>
             </div>
             <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">    
-                <cbd-article query="articleQuery" ng-if="articleQuery" hide-cover-image="true"></cbd-article>
+                <cbd-article ng-vue query="articleQuery" v-if="articleQuery" hide-cover-image="true"></cbd-article>
             </div>
             <div class="col-md-12">
                 <div ng-include="'filterButtons'"></div>  
