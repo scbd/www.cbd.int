@@ -119,11 +119,6 @@ function send404(req, res) {
 }
 
 function whiteListIframeUrls(req, res, next){
-    // short circuit
-    const [ appUrlRegEx, apiUrlRegEx ] = [ /^\/app\//, /^\/api\// ]
-
-    if(appUrlRegEx.test(req.url) || apiUrlRegEx.test(req.url)) return next();
-
     // white list
     const iframeAllowedUrls = [
         /^\/conferences\/(.*)\/schedules\?(viewOnly\=true|viewOnly)/,
