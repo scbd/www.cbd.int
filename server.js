@@ -121,8 +121,8 @@ function send404(req, res) {
 function whiteListIframeUrls(req, res, next){
     // white list
     const iframeAllowedUrls = [
-        /^\/conferences\/(.*)\/schedules\?(viewOnly\=true|viewOnly)/,
-        /^\/conferences\/(.*)\/(.*)\/documents\?(viewOnly\=true|viewOnly)/
+        /^\/conferences\/(.*)\/schedules\?viewOnly.*/,
+        /^\/conferences\/(.*)\/(.*)\/documents\?viewOnly.*/
     ]
 
     for (const urlRegEx of iframeAllowedUrls)
