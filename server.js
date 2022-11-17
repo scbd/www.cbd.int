@@ -32,12 +32,14 @@ console.info(`info: IS DEV: ${process.env.IS_DEV}`);
 app.set('views', `${__dirname}/app`);
 app.set('view engine', 'ejs');
 app.use(require('morgan')('dev'));
+app.use(whiteListIframeUrls);
 app.use(function(req, res, next) {  if(req.url.indexOf(".geojson")>0) res.contentType('application/json'); next(); } ); // override contentType for geojson files
 
 // Configure static files to serve
 app.use('/favicon.png',  express.static(__dirname + '/app/images/favicon.png',   { maxAge: oneDay }));
 app.use('/app',          express.static(__dirname + '/dist',                     { setHeaders: setChunkCacheControl  }));
 app.use('/app',          express.static(__dirname + '/app',                      { setHeaders: setCustomCacheControl }));
+
 app.all('/app/*', send404);
 
 app.get('/doc/*', function(req, res) { proxy.web(req, res, { target: "https://www.cbd.int:443", secure: false } ); } );
@@ -114,4 +116,18 @@ function setCustomCacheControl(res, path) {
 
 function send404(req, res) { 
   res.status(404).send(); 
+}
+
+function whiteListIframeUrls(req, res, next){
+    // white list
+    const iframeAllowedUrls = [
+        /^\/conferences\/(.*)\/schedules\?viewOnly.*/,
+        /^\/conferences\/(.*)\/(.*)\/documents\?viewOnly.*/
+    ]
+
+    for (const urlRegEx of iframeAllowedUrls)
+        if(urlRegEx.test(req.url))
+            res.setHeader('X-Frame-Options', 'ALLOW')
+
+    next();
 }

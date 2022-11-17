@@ -69,7 +69,6 @@ export default ['$scope', '$http', 'documents','$rootScope', 'allowBack','$windo
         $scope.success='download'
         event.preventDefault()
         event.stopPropagation()
-        console.log(selectedLinks(true))
         $window.parent.postMessage({type:'saveFiles',data:selectedLinks(true)},'*');
       } else if(!$scope.downloadLink){
         event.preventDefault()
