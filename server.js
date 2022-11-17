@@ -22,8 +22,6 @@ const apiUrl     =  process.env.API_URL || 'https://api.cbddev.xyz';
 const gitVersion = (process.env.COMMIT  || 'UNKNOWN').substr(0, 8);
 const siteAlert  =  process.env.SITE_ALERT || '';
 
-const iframeAllowedUrls = [ /^\/conferences\/(.*)\/(schedules\?|(.*\/documents\?))(viewOnly\=true|viewOnly)/]
-
 console.info(`info: www.cbd.int`);
 console.info(`info: Git version: ${gitVersion}`);
 console.info(`info: API address: ${apiUrl}`);
