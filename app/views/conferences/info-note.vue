@@ -81,13 +81,6 @@ export default {
             }, 100);
         }
     },
-    methods:{
-        onArticlesLoad(articles){           
-            if(articles.length){
-            //    this.lastModifiedOn = sortByOrder(articles, o=>o.meta.modifiedOn, 'desc')[0].meta.modifiedOn;
-            }
-        }
-    },
     filters: {
         formatDate
     }
