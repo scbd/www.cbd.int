@@ -6,10 +6,13 @@
                 <div class="card-header collapsed" :id="article._id" data-toggle="collapse" :data-target="'#' + article.hashTitle"
                             aria-expanded="true" aria-controls="collapseOne">
                     <h5 class="mb-0">
+                        
                         <i class="fa fa-chevron-up pull-right"></i>
                         <span class="pull-right" style="font-size: 70%;font-weight: 300;" v-if="article.meta.modifiedOn">Updated: {{article.meta.modifiedOn | formatDate('dd LLL')}}</span>
-                        {{ article.title | lstring($locale)  }}
+                        
+                        {{ article.title | lstring($locale)  }}<span class="badge badge-danger label-new" v-if="article.showNewLabel">New</span>
                     </h5>
+                    
                 </div>
 
                 <div :id="article.hashTitle" class="collapse" :aria-labelledby="article._id" data-parent="#accordion">
@@ -25,6 +28,7 @@
 
 <script>
 
+import moment from 'moment'
 import 'css!cdn!npm/@scbd/ckeditor5-build-inline-full@35.0.0/build/content-style.css';
 import ArticlesApi from '../../api/articles';
 import cbdAddNewArticle from './cbd-add-new-article.vue';
@@ -36,12 +40,13 @@ export default {
     name: 'articlesAccordion',
     components : { cbdAddNewArticle },
     props: {
-        query: { type: Object, required: true }
+        query: { type: Object, required: true },
+        showNew : { type: Boolean, required: false, default:false },
     },
     data() {
         return {
             articles: [],
-            showEditButton : false
+            showEditButton : false            
         }
     },
     created() {
@@ -53,9 +58,12 @@ export default {
     },
     methods: {
         async loadArticles() {
+            const today = moment().add(-7, 'day')
+            
             const query = this.query;
             const articles = await this.ArticlesApi.queryArticles(query);
             this.articles = articles.map(e=>{
+                e.showNewLabel = moment(e.meta.modifiedOn) > today
                 e.hashTitle = lstring(e.title, this.$locale).replace(/[^a-z0-9]/gi, '-').replace(/-+/g, '-');
                 return e;
             });
@@ -89,4 +97,7 @@ export default {
         margin-bottom: 10px!important;
     }
     
+    .label-new{
+        margin-left : 5px;
+    }
 </style>
