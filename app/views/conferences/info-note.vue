@@ -8,13 +8,20 @@
         </br>
         <div class="row"  >
             <div class="col-sm-12">
-                 <!-- <span class="pull-right mb-1" style="font-size: 70%;font-weight: 300;margin-right:2.5%" v-if="lastModifiedOn">Last update: {{lastModifiedOn | formatDate('yyyy-LL-dd HH:mm')}}</span> -->
                 <cbd-add-new-article v-if="showEditButton" :admin-tags="infoNoteAdminTags" target="_self" class="btn btn-default pull-left mb-1">
                     <slot><i class="fa fa-edit"></i>  Add info note</slot>
                 </cbd-add-new-article>
+
+                <div class="pull-right">
+                    Sort by 
+                    <select v-model="sortBy" @change="onSortChange()">
+                        <option value="title">Title</option>
+                        <option value="modifiedOn">Last updated</option>
+                    </select>
+                </div>
             </div>
-            <div class="col-sm-12">
-                <articles-accordion :query="query" @onArticlesLoad="onArticlesLoad" ></articles-accordion>        
+            <div class="col-sm-12" v-if="showAccordion">
+                <articles-accordion :query="query" @onArticlesLoad="onArticlesLoad" :show-new="true" ></articles-accordion>        
             </div>
         </div>
     </div>
@@ -34,7 +41,8 @@ export default {
             introAdminTags : ['conferences', 'info-note', 'introduction', encodeURIComponent(this.$route.params.code)],
             infoNoteAdminTags : ['conferences', 'info-note', 'accordion', encodeURIComponent(this.$route.params.code)],
             showEditButton : false,
-            lastModifiedOn : null
+            sortBy : 'title',
+            showAccordion:true
         }
     },
     mounted(){
@@ -45,28 +53,38 @@ export default {
 
             const ag = [];
             ag.push({"$match":{ "$and" : [{"adminTags":{"$all":['conferences', 'info-note', 'accordion', this.$route.params.code] }}]}});
-                        
+              
+            if(this.sortBy == 'modifiedOn')            
+                ag.push({$sort : {'meta.modifiedOn':-1 }});
+            else 
+                ag.push({$sort : {'title.en':1 }}); 
+                
+            ag.push({"$project" : { title:1, content:1, 'meta.modifiedOn':1}});
+            ag.push({"$limit":1000});
+
+                
+            return { ag : JSON.stringify(ag) };
+        },
+        articleQuery(){
+            const ag = [];
+            ag.push({"$match":{ "$and" : [{"adminTags":{"$all":['conferences', 'introduction', 'info-note', encodeURIComponent(this.$route.params.code)] }}]}});
             ag.push({$sort : {'title.en':1 }});
             ag.push({"$project" : { title:1, content:1, 'meta.modifiedOn':1}});
             ag.push({"$limit":1000});
 
             return { ag : JSON.stringify(ag) };
         },
-        articleQuery(){
-            const ag = [];
-            ag.push({"$match":{ "$and" : [{"adminTags":{"$all":['conferences', 'introduction', 'info-note', encodeURIComponent(this.$route.params.code)] }}]}});
-                        
-            ag.push({$sort : {'title.en':1 }});
-            ag.push({"$project" : { title:1, content:1, 'meta.modifiedOn':1}});
-            ag.push({"$limit":1000});
-
-            return { ag : JSON.stringify(ag) };
+        onSortChange(){
+            this.showAccordion = false;
+            setTimeout(() => {
+                this.showAccordion = true;
+            }, 100);
         }
     },
     methods:{
         onArticlesLoad(articles){           
             if(articles.length){
-               this.lastModifiedOn = sortByOrder(articles, o=>o.meta.modifiedOn, 'desc')[0].meta.modifiedOn;
+            //    this.lastModifiedOn = sortByOrder(articles, o=>o.meta.modifiedOn, 'desc')[0].meta.modifiedOn;
             }
         }
     },
