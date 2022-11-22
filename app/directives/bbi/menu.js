@@ -2,6 +2,7 @@ import app from '~/app'
 import templateHtml from './menu.html'
 import _ from 'lodash'
 import '~/providers/locale'
+import '~/filters/lstring'
 
     //============================================================
     //
