@@ -29,7 +29,9 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
         _ctrl.CALENDAR    = CALENDAR_SETTINGS;
         _ctrl.now         = now;
         _ctrl.getTimezone = getTimezone;
-        
+        _ctrl.expandSection = expandSection;
+        _ctrl.expandAllSections = expandAllSections,
+        _ctrl.allSectionExpanded= false
         load();
 
 		//========================================
@@ -85,7 +87,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 
                 const hasRole = isAdmin()
 
-                _ctrl.frames.forEach(function(f){
+                _ctrl.frames.forEach(function(f, i){
 
                     if(!f.reservations)
                         return;
@@ -101,9 +103,23 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                             r.adminVideoUrl = r.videoUrl || r.room.videoUrl;
                         }
 
+                        const isDateToday = isToday(r.start);
+                        const isDateTomorrow = isTomorrow(r.start);
+
+                        r.groupDateText =  moment(r.start).tz(getTimezone()).format('dddd, MMMM DD');
+                        if(isDateToday)
+                            r.groupDateText = `Today ${r.groupDateText}`
+                        else if(isDateTomorrow)
+                            r.groupDateText = `Tomorrow ${r.groupDateText}`
+
                         return _.defaults(r, { open : !(types[r.type]||{}).closed });
 
                     }).sortBy(sortKey).value();
+
+                    if(i ==0){
+                        expandSection(f.reservations[0], f.reservations)
+                    }
+
                 });
             });
 
@@ -156,6 +172,44 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
         }
         _ctrl.getMeetingNames = getMeetingNames
 
+        function expandSection(groupReservation, reservations){
 
+            groupReservation.expand = !groupReservation.expand
 
+            reservations.filter(e=>e.groupDateText == groupReservation.groupDateText).map(e=>e.expand = groupReservation.expand);
+        }
+
+        function expandAllSections(){  
+            _ctrl.allSectionExpanded = !_ctrl.allSectionExpanded;
+
+            _.forEach(_ctrl.frames, (frame)=>{
+                if(!frame.reservations)
+                    return;
+                frame.reservations.forEach(r=>{
+                    r.expand = _ctrl.allSectionExpanded
+                })
+            })
+            //always keep the first one open
+            // _ctrl.frames[0].reservations[0].expand = false;
+            // expandSection(_ctrl.frames[0].reservations[0], _ctrl.frames[0].reservations)
+        }
+
+        function isToday(testDateTime){
+
+            const test = moment.tz(testDateTime, getTimezone()).startOf('day');
+            const now  = moment.tz(new Date(), getTimezone()).startOf('day');
+  
+            return test.format('X') === now.format('X')
+        }
+
+        function isTomorrow(testDateTime){
+
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate()+1);
+
+            const test = moment.tz(testDateTime, getTimezone()).startOf('day');
+            const now  = moment.tz(tomorrow, getTimezone()).startOf('day');
+  
+            return test.format('X') === now.format('X')
+        }
 	}];
