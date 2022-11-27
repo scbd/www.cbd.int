@@ -17,7 +17,8 @@ export default {
     components: { UploadDialog },
     props: { 
         route: { type: Object, required: false },
-        show : { type: Boolean, required: false }
+        show : { type: Boolean, required: false },
+        filterByMeetingAgenda: { type: Object, required: false }
     },
     data: function() { 
         return {
@@ -29,10 +30,10 @@ export default {
         const dialog = new (Vue.extend(UploadDialog))({
             propsData : { 
                 route: this.route,
-                show: this.showDialog 
+                show: this.showDialog,
+                filterByMeetingAgenda:this.filterByMeetingAgenda
             }
         });
-
         dialog.$on("notify",      (v) => this.$emit('notify', v));
         this.$watch('show',       (v) => this.showDialog = v);
         this.$watch('showDialog', (v) => dialog.$props.show = v);

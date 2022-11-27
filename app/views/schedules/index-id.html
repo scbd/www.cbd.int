@@ -68,7 +68,7 @@
               </p>
                 
               <table class="table table-striped table-bordered">
-                    <tr ng-repeat-start="r in frame.reservations | filter:search track by $index" style="background-color:#fcf8e3;"
+                    <tr ng-repeat-start="r in frame.reservations | filter:search track by $index" style="background-color:#fbfbfa;"
                     ng-if="($index == 0 || r.groupDateText!= frame.reservations[$index-1].groupDateText)">
                         <td  ng-click="scheduleCtrl.expandSection(r, frame.reservations)" style="cursor: pointer">
                             <strong>{{r.groupDateText}}</strong>
@@ -134,7 +134,10 @@
                                               </a> 
                                           </div>
                                           <schedule-agenda-dynamic-connect-button  :reservation="r" :schedule="schedule" ng-vue/>
-                                          <reservation-links  :reservation="r" :schedule="schedule" ng-vue/>
+                                          <reservation-links  :reservation="r" :schedule="schedule" ng-vue/>  
+                                            <div ng-if="agendaCtrl.uploadStatement && r.uploadStatementFilter">
+                                             <upload-statement-button  ng-vue :route="route" :filter-by-meeting-agenda="r.uploadStatementFilter"></upload-statement-button>
+                                            </div>                                      
                                       </div>
 
                                       <div class="schedule-item-title" style="font-weight:bold">

@@ -179,7 +179,8 @@ export default {
     i18n,
     props: { 
         route: { type: Object, required: false },
-        show : { type: Boolean, required: false }
+        show : { type: Boolean, required: false },
+        filterByMeetingAgenda: { type: Object, required: false }
     },
     data:  function(){
         return {
@@ -255,6 +256,18 @@ export default {
 
             this.meetings = this.meetings.filter(o=>o.uploadStatement);
 
+            if(this.filterByMeetingAgenda){
+                console.log(this.filterByMeetingAgenda)
+                const filterMeetings = Object.keys(this.filterByMeetingAgenda);
+                this.meetings = this.meetings
+                                .filter(o=>{ //filter by meetings
+                                    return filterMeetings.includes(o.EVT_SHT_NM)
+                                })
+                                .map(o=>{
+                                    o.agenda.items = o.agenda.items.filter(i=>this.filterByMeetingAgenda[o.EVT_SHT_NM].includes(i.item))
+                                    return o;
+                                })
+            }
             recaptchaWidgetId = grecaptcha.render('g-recaptcha', {
                 'sitekey' : captchaSiteKeyV2,
                 'callback' : this.recaptchaCallback,

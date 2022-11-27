@@ -19,11 +19,13 @@ export { default as template } from './index-id.html';
         sameElse: 'dddd, D MMMM YYYY'
     };
 
-export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService', '$rootScope', function($scope, $http, $route, $q, defaultStreamId, conferenceService, $rootScope) {
+export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService', '$rootScope', '$location',
+    function($scope, $http, $route, $q, defaultStreamId, conferenceService, $rootScope, $location) {
         const _ctrl = $scope.scheduleCtrl =  this;
 
         Vue.component('ScheduleAgendaDynamicConnectButton', ScheduleAgendaDynamicConnectButton)
         Vue.component('ReservationLinks',ReservationLinks);
+
         let _streamData;
 
         _ctrl.CALENDAR    = CALENDAR_SETTINGS;
@@ -32,6 +34,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
         _ctrl.expandSection = expandSection;
         _ctrl.expandAllSections = expandAllSections,
         _ctrl.allSectionExpanded= false
+        $scope.route       = { params : $route.current.params, query: $location.search() }
         load();
 
 		//========================================
@@ -48,16 +51,22 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
             
                 return conferenceService.getActiveConference(code);
 
-            }).then(function(conf){
+            }).then(async function(conf){
                 _ctrl.conferenceTimezone = conf.timezone;
                 _ctrl.code               = conf.code
                 _ctrl.all                = conf.schedule.all
                 _ctrl.showRooms          = conf.schedule.showRooms
+                _ctrl.uploadStatement    = conf.uploadStatement;
 
                 $scope.schedule = conf.schedule
 
                 if($route.current.params.datetime)
                     options.params.datetime = _ctrl.now();
+                
+                if(_ctrl.uploadStatement) {
+                    const uploadStatementButton = await import('~/components/meetings/upload-statement-button.vue')
+                    Vue.component('uploadStatementButton', uploadStatementButton.default);
+                }
                 
             }).then(function(){
                 const url = _ctrl.all?  `/api/v2016/cctv-streams/${streamId}/all` : 
@@ -110,7 +119,16 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                         if(isDateToday)
                             r.groupDateText = `Today ${r.groupDateText}`
                         else if(isDateTomorrow)
-                            r.groupDateText = `Tomorrow ${r.groupDateText}`
+                            r.groupDateText = `Tomorrow ${r.groupDateText}`;
+
+                        if(r.agenda?.items?.length){
+                            const group = _.groupBy(r.agenda.items, 'meeting')                            
+                            r.uploadStatementFilter =  {};
+                            _.each(group, (items, key)=>{
+                                r.uploadStatementFilter[key] = items.map(i=>i.item);
+                            })
+                        }
+                        // 
 
                         return _.defaults(r, { open : !(types[r.type]||{}).closed });
 

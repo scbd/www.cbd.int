@@ -132,8 +132,12 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             }
 
             var reservations, now;
-            var event = conferenceService.getConference(eventId).then(function(conf) {
+            var event = conferenceService.getConference(eventId).then(async function(conf) {
 
+                if(conf.uploadStatement || 1==1) {
+                    const uploadStatementButton = await import('~/components/meetings/upload-statement-button.vue')
+                    Vue.component('uploadStatementButton', uploadStatementButton.default);
+                }
                 _ctrl.event = event = conf;
                 _ctrl.conferenceTimezone = event.timezone
                 processScheduleDates();               
@@ -270,6 +274,14 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                     });
 
                     r.agenda.showStatus = !!_(r.agenda.items).map('status').compact().uniq().size();
+
+                    if(r.agenda?.items?.length){
+                        const group = _.groupBy(r.agenda.items, 'meeting')                            
+                        r.uploadStatementFilter =  {};
+                        _.each(group, (items, key)=>{
+                            r.uploadStatementFilter[key] = items.map(i=>i.item);
+                        })
+                    }
                 });
 
                 _ctrl.documents = _(meetingDocuments).map('documents').flatten().value();
