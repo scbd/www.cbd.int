@@ -2,7 +2,7 @@
 <template>
     <div class="articles-accordion">
         <div id="accordion">
-            <div class="card item" v-for="article in articles" :key="article._id">
+            <div class="card item" v-for="article in articles" :key="article._id" :id="'cardItem_'+article._id">
                 <div class="card-header collapsed" :id="article._id" data-toggle="collapse" :data-target="'#' + article.hashTitle"
                             aria-expanded="true" aria-controls="collapseOne">
                     <h5 class="mb-0">
@@ -17,8 +17,9 @@
 
                 <div :id="article.hashTitle" class="collapse" :aria-labelledby="article._id" data-parent="#accordion">
                     <div class="card-body">
-                         <cbd-add-new-article v-if="showEditButton" :id="article._id" target="_self" class="btn btn-default pull-right"></cbd-add-new-article>
-                         <div v-html="$options.filters.lstring(article.content, $locale)" class="ck-content"></div>
+                        <cbd-add-new-article v-if="showEditButton" :id="article._id" target="_self" class="btn btn-default pull-right"></cbd-add-new-article>
+                        <button class="btn btn-info pull-right btn-print" @click="print('cardItem_'+article._id, article)" style="cursor:pointer"><i class="fa fa-print"></i> Print</button>
+                        <div v-html="$options.filters.lstring(article.content, $locale)" class="ck-content"></div>
                      </div>
                 </div>
             </div>
@@ -34,7 +35,7 @@ import ArticlesApi from '../../api/articles';
 import cbdAddNewArticle from './cbd-add-new-article.vue';
 import { format as formatDate } from '~/components/meetings/datetime';
 import {lstring } from '~/filters/vue-filters'
-
+import 'printThis'
 
 export default {
     name: 'articlesAccordion',
@@ -42,6 +43,7 @@ export default {
     props: {
         query: { type: Object, required: true },
         showNew : { type: Boolean, required: false, default:false },
+        printHeader : { type: String, required: false },
     },
     data() {
         return {
@@ -58,7 +60,7 @@ export default {
     },
     methods: {
         async loadArticles() {
-            const today = moment().add(-7, 'day')
+            const today = moment().add(-2, 'day')
             
             const query = this.query;
             const articles = await this.ArticlesApi.queryArticles(query);
@@ -68,6 +70,19 @@ export default {
                 return e;
             });
             this.$emit('onArticlesLoad', this.articles);
+        },
+        print(section, article){
+            $('#'+section).printThis({
+                debug:false,
+                printContainer:true,
+                importCSS:true,
+                importStyle : true,
+                pageTitle :  lstring(article.title, this.$locale),
+                // loadCSS : '/app/css/print-friendly.css',
+                header : this.printHeader||'',
+                // footer : footer
+            });	
+
         }
     },
     filters: {
@@ -99,5 +114,11 @@ export default {
     
     .label-new{
         margin-left : 5px;
+    }
+
+    @media print {
+        .fa-chevron-up, .fa-print, .label-new, .btn-print{
+            display: none;
+        }
     }
 </style>
