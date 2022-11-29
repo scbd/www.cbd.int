@@ -63,6 +63,7 @@ export default function bootApp(window, require, defineX) {
           'mark'              : `${cdnUrl}npm/mark.js@8.11.1/dist/mark.min`,
           'vue-tippy'         : `${cdnUrl}npm/vue-tippy@4.10.0/dist/vue-tippy.umd`,
           'angular-vue-plugins': `${cdnUrl}npm/@scbd/angular-vue@3.1.0/dist/angular-vue-plugins.min`,
+          'printThis'           : `${cdnUrl}npm/print-this@1.9.0/printThis`
       },
       shim: {
           'ngDialog'             : { deps : ['angular', `css!${cdnUrl}combine/npm/ng-dialog@0.6.1/css/ngDialog.min.css,npm/ng-dialog@0.6.1/css/ngDialog-theme-default.min.css`] },
@@ -84,6 +85,7 @@ export default function bootApp(window, require, defineX) {
           'amchart/themes/light' : { deps : ['amchart'] },
           'amchart/pie'          : { deps : ['amchart'] },
           'angular-grid'         : { deps : ['angular'] },
+          'printThis'                : { deps : ['angular', 'vue'] },
       },
       packages: [
           { name: 'amchart', main: 'amcharts.min', location : cdnUrl+'npm/amcharts3@3.21.15/amcharts' },

@@ -21,7 +21,8 @@
                 </div>
             </div>
             <div class="col-sm-12" v-if="showAccordion">
-                <articles-accordion :query="query" @onArticlesLoad="onArticlesLoad" :show-new="true" ></articles-accordion>        
+                <articles-accordion :query="query" @onArticlesLoad="onArticlesLoad" :show-new="true"
+                    :print-header="printHeader" ></articles-accordion>        
             </div>
         </div>
     </div>
@@ -33,6 +34,8 @@ import cbdArticle     from '~/directives/articles/cbd-article.vue';
 import cbdAddNewArticle from '~/directives/articles/cbd-add-new-article.vue';
 import { format as formatDate } from '~/components/meetings/datetime';
 import { sortByOrder } from 'lodash'
+import Api  from '~/components/meetings/api.js'
+import remapCode  from '~/components/meetings/sessions/re-map.js'
 
 export default {
     components : { articlesAccordion, cbdArticle, cbdAddNewArticle },
@@ -42,11 +45,16 @@ export default {
             infoNoteAdminTags : ['conferences', 'info-note', 'accordion', encodeURIComponent(this.$route.params.code)],
             showEditButton : false,
             sortBy : 'title',
-            showAccordion:true
+            showAccordion:true,
+            printHeader:''
         }
+    },
+    created() {
+        this.api = new Api() //anonymous 
     },
     mounted(){
         this.showEditButton = this.$auth.hasScope(['oasisArticleEditor', 'Administrator']);
+        this.init();
     },
     computed:{
         query (){
@@ -73,12 +81,24 @@ export default {
             ag.push({"$limit":1000});
 
             return { ag : JSON.stringify(ag) };
-        },
+        }
+    },
+    methods:{
         onSortChange(){
             this.showAccordion = false;
             setTimeout(() => {
                 this.showAccordion = true;
             }, 100);
+        },
+        async init(){
+            const $route = this.$options.parent.route
+            if($route?.params?.code){
+                const conferenceCode = remapCode($route.params.code);
+                const conference     = await this.api.getConference(conferenceCode);
+                this.printHeader     = conference.conference.customHeader||'';
+
+                console.log(this.printHeader)
+            }
         }
     },
     filters: {
