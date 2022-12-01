@@ -264,7 +264,7 @@ export default {
                                     return filterMeetings.includes(o. normalizedSymbol)
                                 })
                                 .map(o=>{
-                                    o.agenda.items = o.agenda.items.filter(i=>this.filterByMeetingAgenda[o.EVT_SHT_NM].includes(i.item))
+                                    o.agenda.items = o.agenda.items.filter(i=>this.filterByMeetingAgenda[o.normalizedSymbol].includes(i.item))
                                     return o;
                                 })
             }
