@@ -261,7 +261,7 @@ export default {
                 const filterMeetings = Object.keys(this.filterByMeetingAgenda);
                 this.meetings = this.meetings
                                 .filter(o=>{ //filter by meetings
-                                    return filterMeetings.includes(o.EVT_SHT_NM)
+                                    return filterMeetings.includes(o. normalizedSymbol)
                                 })
                                 .map(o=>{
                                     o.agenda.items = o.agenda.items.filter(i=>this.filterByMeetingAgenda[o.EVT_SHT_NM].includes(i.item))
