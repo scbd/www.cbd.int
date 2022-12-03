@@ -1,8 +1,8 @@
 <template>
     <span>
-        <button type="button" class="btn btn-success" @click="showDialog = !showDialog">
+        <button type="button" class="btn btn-success" @click="showDialog = !showDialog" title="Upload statement">
             <i class="fa fa-upload"></i>
-            Upload statements
+            Statement
         </button>
         <!-- <upload-dialog :show.sync="showDialog" :route="route" @notify="$emit('notify')" /> -->
     </span>

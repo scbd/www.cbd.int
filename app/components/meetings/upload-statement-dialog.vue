@@ -128,7 +128,7 @@
                             <div class="form-group row">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-9 input-group">
-                                    <div id="g-recaptcha"></div>
+                                    <div ref="gRecaptcha"></div>
                                     <div class="invalid-feedback captcha" v-if="!grecaptchaToken" >Please check the box to proceed.</div>
                                 </div>
                             </div>  
@@ -172,7 +172,6 @@ import Api  from './api.js'
 import remapCode  from './sessions/re-map.js'
 
 const captchaSiteKeyV2 = (document && document.documentElement.attributes['captcha-site-key-v2'].value);
-let recaptchaWidgetId;
 
 export default {
     name: 'uploadStatement',
@@ -203,6 +202,12 @@ export default {
         this.api = new Api() //anonymous 
     },
     mounted(){
+
+        this.recaptchaWidgetId = grecaptcha.render(this.$refs.gRecaptcha, {
+            'sitekey': captchaSiteKeyV2,
+            'callback': this.recaptchaCallback,
+        });
+
         $('[data-toggle="tooltip"]').tooltip();
         this.openDialog(this.show);
     },
@@ -257,7 +262,6 @@ export default {
             this.meetings = this.meetings.filter(o=>o.uploadStatement);
 
             if(this.filterByMeetingAgenda){
-                console.log(this.filterByMeetingAgenda)
                 const filterMeetings = Object.keys(this.filterByMeetingAgenda);
                 this.meetings = this.meetings
                                 .filter(o=>{ //filter by meetings
@@ -268,10 +272,8 @@ export default {
                                     return o;
                                 })
             }
-            recaptchaWidgetId = grecaptcha.render('g-recaptcha', {
-                'sitekey' : captchaSiteKeyV2,
-                'callback' : this.recaptchaCallback,
-            });
+
+            try { grecaptcha.reset(); } catch(e) {}
         },
 
         open()  { this.openDialog(true) },
@@ -338,7 +340,7 @@ export default {
           } catch(err) {
               if(err.code=='forbidden') this.$refs.participantIdentity.setCustomValidity("Invalid badge or priority-pass number")
               this.error = err
-              grecaptcha.reset(recaptchaWidgetId);
+              grecaptcha.reset(this.recaptchaWidgetId);
               this.grecaptchaToken = undefined;
           } finally {
             this.progress = null;
@@ -368,8 +370,8 @@ export default {
             }
 
             this.grecaptchaToken = undefined;
-            if(recaptchaWidgetId!=undefined){
-                grecaptcha.reset(recaptchaWidgetId);
+            if(this.recaptchaWidgetId!=undefined){
+                grecaptcha.reset(this.recaptchaWidgetId);
             }
 
         },
