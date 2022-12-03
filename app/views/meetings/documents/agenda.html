@@ -88,6 +88,7 @@
             <div ng-repeat="(day, dayParts) in type.days">
                 <div ng-if="type.loaded || agendaCtrl.currentTab==type._id">
                     <h3 style="padding-top: 5px;">{{::day|moment:'tz':agendaCtrl.getTimezone()|moment:'calendar':(undefined|moment):agendaCtrl.CALENDAR}}</h3>
+                    
                     <table class="table table-sm table-bordered" ng-repeat="(dayPart, reservations) in dayParts">
                         <thead class="thead-light">
                             <tr>
@@ -117,7 +118,7 @@
 
                             <td class="text-center text-nowrap text-primary" style="width:1px;border-right:solid 1px #ddd">
                                 <b title="{{agendaCtrl.getTimezone()}}">{{::res.start|moment:'tz':agendaCtrl.getTimezone()|moment:'format':'HH:mm'}}</b>
-
+                                
                                 <schedule-agenda-dynamic-connect-button :is-badge="true" :reservation="res" :schedule="schedule" ng-vue/>
 
                                 <div  ng-if="!scheduleCtrl.all || scheduleCtrl.showRooms" style="padding-top:3px;">
@@ -135,6 +136,9 @@
                                     </a> 
                                 </div>
                                 <reservation-links :reservation="res" :schedule="schedule" position="right" ng-vue/>
+                                <div ng-if="res.uploadStatementFilter">
+                                    <upload-statement-button  ng-vue :route="route" :filter-by-meeting-agenda="res.uploadStatementFilter"></upload-statement-button>
+                                </div> 
                             </td>
 
                             <td style="padding:0px;" >

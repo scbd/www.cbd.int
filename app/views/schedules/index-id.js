@@ -19,17 +19,22 @@ export { default as template } from './index-id.html';
         sameElse: 'dddd, D MMMM YYYY'
     };
 
-export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService', '$rootScope', function($scope, $http, $route, $q, defaultStreamId, conferenceService, $rootScope) {
+export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService', '$rootScope', '$location',
+    function($scope, $http, $route, $q, defaultStreamId, conferenceService, $rootScope, $location) {
         const _ctrl = $scope.scheduleCtrl =  this;
 
         Vue.component('ScheduleAgendaDynamicConnectButton', ScheduleAgendaDynamicConnectButton)
         Vue.component('ReservationLinks',ReservationLinks);
+
         let _streamData;
 
         _ctrl.CALENDAR    = CALENDAR_SETTINGS;
         _ctrl.now         = now;
         _ctrl.getTimezone = getTimezone;
-        
+        _ctrl.expandSection = expandSection;
+        _ctrl.expandAllSections = expandAllSections,
+        _ctrl.allSectionExpanded= false
+        $scope.route       = { params : $route.current.params, query: $location.search() }
         load();
 
 		//========================================
@@ -46,16 +51,22 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
             
                 return conferenceService.getActiveConference(code);
 
-            }).then(function(conf){
+            }).then(async function(conf){
                 _ctrl.conferenceTimezone = conf.timezone;
                 _ctrl.code               = conf.code
                 _ctrl.all                = conf.schedule.all
                 _ctrl.showRooms          = conf.schedule.showRooms
+                _ctrl.uploadStatement    = conf.uploadStatement;
 
                 $scope.schedule = conf.schedule
 
                 if($route.current.params.datetime)
                     options.params.datetime = _ctrl.now();
+                
+                if(_ctrl.uploadStatement) {
+                    const uploadStatementButton = await import('~/components/meetings/upload-statement-button.vue')
+                    Vue.component('uploadStatementButton', uploadStatementButton.default);
+                }
                 
             }).then(function(){
                 const url = _ctrl.all?  `/api/v2016/cctv-streams/${streamId}/all` : 
@@ -74,18 +85,30 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                     $http.get('/api/v2016/venue-rooms', { cache : true, params: { q: { venue : venueId, 'meta.status': { $nin : ['deleted','archived'] } }, f: { title: 1, location: 1, videoUrl:1 }, cache:true } })
                 ]);
 
+            })
+            .then(function(res){
+
+                var meetingCodes = _(_streamData.frames).map('reservations').flatten().map('agenda.items').flatten().map('meeting').uniq().value();
+
+                var meetings = $http.get('/api/v2016/meetings', { params: { q: { EVT_CD: { $in: meetingCodes } }, f : { EVT_TIT_EN:1, EVT_CD:1, printSmart:1 , agenda:1, uploadStatement:1 }, cache: true } })
+                                
+                return meetings.then(function(m){
+                    return [...res, m];
+                });
             }).then(function(res) {
 
                 var types = _.reduce(res[0].data, function(ret, r){ ret[r._id] = r; return ret; }, {});
                 var rooms = _.reduce(res[1].data, function(ret, r){ ret[r._id] = r; return ret; }, {});
+                const meetings = res[2].data
 
                 _ctrl.conferenceTimezone = _streamData.eventGroup.timezone;
                 _ctrl.event              = _streamData.eventGroup;
                 _ctrl.frames             = _streamData.frames;
 
                 const hasRole = isAdmin()
-
-                _ctrl.frames.forEach(function(f){
+                const statementEnabledMeetings = meetings.filter(m=>m.uploadStatement).map(m=>m.EVT_CD);
+                
+                _ctrl.frames.forEach(function(f, i){
 
                     if(!f.reservations)
                         return;
@@ -101,9 +124,39 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                             r.adminVideoUrl = r.videoUrl || r.room.videoUrl;
                         }
 
+                        const isDateToday = isToday(r.start);
+                        const isDateTomorrow = isTomorrow(r.start);
+
+                        r.groupDateText =  moment(r.start).tz(getTimezone()).format('dddd, MMMM DD');
+                        if(isDateToday)
+                            r.groupDateText = `Today ${r.groupDateText}`
+                        else if(isDateTomorrow)
+                            r.groupDateText = `Tomorrow ${r.groupDateText}`;
+
+                        if(r.agenda?.meetings && r.agenda?.items?.length){ 
+
+                            const group = _(r.agenda.items)
+                                            .filter(e=>{
+                                                return statementEnabledMeetings.includes(e.meeting)
+                                            })
+                                            .groupBy('meeting').value();   
+                                            
+                            if(Object.keys(group).length){
+                                r.uploadStatementFilter =  {};
+                                _.each(group, (items, key)=>{
+                                    r.uploadStatementFilter[key] = items.map(i=>i.item);
+                                })
+                            }
+                        }
+
                         return _.defaults(r, { open : !(types[r.type]||{}).closed });
 
                     }).sortBy(sortKey).value();
+
+                    if(i ==0){
+                        expandSection(f.reservations[0], f.reservations)
+                    }
+
                 });
             });
 
@@ -156,6 +209,44 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
         }
         _ctrl.getMeetingNames = getMeetingNames
 
+        function expandSection(groupReservation, reservations){
 
+            groupReservation.expand = !groupReservation.expand
 
+            reservations.filter(e=>e.groupDateText == groupReservation.groupDateText).map(e=>e.expand = groupReservation.expand);
+        }
+
+        function expandAllSections(){  
+            _ctrl.allSectionExpanded = !_ctrl.allSectionExpanded;
+
+            _.forEach(_ctrl.frames, (frame)=>{
+                if(!frame.reservations)
+                    return;
+                frame.reservations.forEach(r=>{
+                    r.expand = _ctrl.allSectionExpanded
+                })
+            })
+            //always keep the first one open
+            // _ctrl.frames[0].reservations[0].expand = false;
+            // expandSection(_ctrl.frames[0].reservations[0], _ctrl.frames[0].reservations)
+        }
+
+        function isToday(testDateTime){
+
+            const test = moment.tz(testDateTime, getTimezone()).startOf('day');
+            const now  = moment.tz(new Date(), getTimezone()).startOf('day');
+  
+            return test.format('X') === now.format('X')
+        }
+
+        function isTomorrow(testDateTime){
+
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate()+1);
+
+            const test = moment.tz(testDateTime, getTimezone()).startOf('day');
+            const now  = moment.tz(tomorrow, getTimezone()).startOf('day');
+  
+            return test.format('X') === now.format('X')
+        }
 	}];

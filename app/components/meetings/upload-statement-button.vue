@@ -1,8 +1,8 @@
 <template>
     <span>
-        <button type="button" class="btn btn-success" @click="showDialog = !showDialog">
+        <button type="button" class="btn btn-success" @click="showDialog = !showDialog" title="Upload statement">
             <i class="fa fa-upload"></i>
-            Upload statements
+            Statement
         </button>
         <!-- <upload-dialog :show.sync="showDialog" :route="route" @notify="$emit('notify')" /> -->
     </span>
@@ -17,7 +17,8 @@ export default {
     components: { UploadDialog },
     props: { 
         route: { type: Object, required: false },
-        show : { type: Boolean, required: false }
+        show : { type: Boolean, required: false },
+        filterByMeetingAgenda: { type: Object, required: false }
     },
     data: function() { 
         return {
@@ -29,10 +30,10 @@ export default {
         const dialog = new (Vue.extend(UploadDialog))({
             propsData : { 
                 route: this.route,
-                show: this.showDialog 
+                show: this.showDialog,
+                filterByMeetingAgenda:this.filterByMeetingAgenda
             }
         });
-
         dialog.$on("notify",      (v) => this.$emit('notify', v));
         this.$watch('show',       (v) => this.showDialog = v);
         this.$watch('showDialog', (v) => dialog.$props.show = v);

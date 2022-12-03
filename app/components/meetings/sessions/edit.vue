@@ -285,7 +285,7 @@ function isInFuture({ date } ={}){
 
 </script>
 <style scoped>
-  .sticky-date { top: 155px; background-color: white; }
+  .sticky-date { top: 5px; background-color: white; z-index: 1 }
   @media screen and (max-width: 768px) {
     .sticky-date { top: 30px; }
   }

@@ -132,8 +132,12 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             }
 
             var reservations, now;
-            var event = conferenceService.getConference(eventId).then(function(conf) {
+            var event = conferenceService.getConference(eventId).then(async function(conf) {
 
+                if(conf.uploadStatement) {
+                    const uploadStatementButton = await import('~/components/meetings/upload-statement-button.vue')
+                    Vue.component('uploadStatementButton', uploadStatementButton.default);
+                }
                 _ctrl.event = event = conf;
                 _ctrl.conferenceTimezone = event.timezone
                 processScheduleDates();               
@@ -175,7 +179,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
 
                 var meetingCodes = _(reservations).map('agenda.items').flatten().map('meeting').uniq().value();
 
-                var meetings = $http.get('/api/v2016/meetings', { params: { q: { EVT_CD: { $in: meetingCodes } }, f : { EVT_TIT_EN:1, EVT_CD:1, printSmart:1 , agenda:1 }, cache: true } }).then(function(res){
+                var meetings = $http.get('/api/v2016/meetings', { params: { q: { EVT_CD: { $in: meetingCodes } }, f : { EVT_TIT_EN:1, EVT_CD:1, printSmart:1 , agenda:1, uploadStatement:1 }, cache: true } }).then(function(res){
                     return _ctrl.meetings  = _.forEach(res.data, function(m){
                         m.code  = m.EVT_CD;
                         m.title = m.EVT_TIT_EN;
@@ -217,6 +221,8 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                 var meetings         = res[0];
                 var meetingDocuments = res[1];
                 var reservationTypes = res[2];
+
+                const statementEnabledMeetings = meetings.filter(m=>m.uploadStatement).map(m=>m.EVT_CD);
 
                 reservations.forEach(function(r) {
 
@@ -270,6 +276,22 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                     });
 
                     r.agenda.showStatus = !!_(r.agenda.items).map('status').compact().uniq().size();
+
+                    if(r.agenda?.meetings && r.agenda?.items?.length){ 
+ 
+                        const group = _(r.agenda.items)
+                                        .filter(e=>{
+                                            return statementEnabledMeetings.includes(e.meeting)
+                                        })
+                                        .groupBy('meeting').value();   
+                                        
+                        if(Object.keys(group).length){
+                            r.uploadStatementFilter =  {};
+                            _.each(group, (items, key)=>{
+                                r.uploadStatementFilter[key] = items.map(i=>i.item);
+                            })
+                        }
+                    }
                 });
 
                 _ctrl.documents = _(meetingDocuments).map('documents').flatten().value();
