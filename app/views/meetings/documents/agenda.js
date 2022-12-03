@@ -13,6 +13,9 @@ import ScheduleAgendaDynamicConnectButton from '~/components/meetings/schedule-a
 import ReservationLinks from '~/components/meetings/reservation-links.vue'
 import Vue from 'vue'
 import 'angular-vue'
+import UploadStatementButton from '~/components/meetings/upload-statement-button.vue'
+
+Vue.component('uploadStatementButton', UploadStatementButton);
 
 export { default as template } from './agenda.html'
 
@@ -85,11 +88,6 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             load();
             timeTimer    = $interval(updateTime, 30*1000);
             refreshTimer = $interval(refresh, 10*60*1000);
-
-            if(meeting.uploadStatement) {
-                registerComponents({uploadStatementButton : await import('~/components/meetings/upload-statement-button.vue') });
-            }
-
         })
 
         $scope.$on("$destroy", function() {
@@ -133,11 +131,6 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
 
             var reservations, now;
             var event = conferenceService.getConference(eventId).then(async function(conf) {
-
-                if(conf.uploadStatement) {
-                    const uploadStatementButton = await import('~/components/meetings/upload-statement-button.vue')
-                    Vue.component('uploadStatementButton', uploadStatementButton.default);
-                }
                 _ctrl.event = event = conf;
                 _ctrl.conferenceTimezone = event.timezone
                 processScheduleDates();               
