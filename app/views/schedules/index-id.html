@@ -135,7 +135,7 @@
                                           </div>
                                           <schedule-agenda-dynamic-connect-button  :reservation="r" :schedule="schedule" ng-vue/>
                                           <reservation-links  :reservation="r" :schedule="schedule" ng-vue/>  
-                                            <div ng-if="agendaCtrl.uploadStatement && r.uploadStatementFilter">
+                                            <div ng-if="r.uploadStatementFilter">
                                              <upload-statement-button  ng-vue :route="route" :filter-by-meeting-agenda="r.uploadStatementFilter"></upload-statement-button>
                                             </div>                                      
                                       </div>

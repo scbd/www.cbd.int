@@ -85,17 +85,29 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                     $http.get('/api/v2016/venue-rooms', { cache : true, params: { q: { venue : venueId, 'meta.status': { $nin : ['deleted','archived'] } }, f: { title: 1, location: 1, videoUrl:1 }, cache:true } })
                 ]);
 
+            })
+            .then(function(res){
+
+                var meetingCodes = _(_streamData.frames).map('reservations').flatten().map('agenda.items').flatten().map('meeting').uniq().value();
+
+                var meetings = $http.get('/api/v2016/meetings', { params: { q: { EVT_CD: { $in: meetingCodes } }, f : { EVT_TIT_EN:1, EVT_CD:1, printSmart:1 , agenda:1, uploadStatement:1 }, cache: true } })
+                                
+                return meetings.then(function(m){
+                    return [...res, m];
+                });
             }).then(function(res) {
 
                 var types = _.reduce(res[0].data, function(ret, r){ ret[r._id] = r; return ret; }, {});
                 var rooms = _.reduce(res[1].data, function(ret, r){ ret[r._id] = r; return ret; }, {});
+                const meetings = res[2].data
 
                 _ctrl.conferenceTimezone = _streamData.eventGroup.timezone;
                 _ctrl.event              = _streamData.eventGroup;
                 _ctrl.frames             = _streamData.frames;
 
                 const hasRole = isAdmin()
-
+                const statementEnabledMeetings = meetings.filter(m=>m.uploadStatement).map(m=>m.EVT_CD);
+                
                 _ctrl.frames.forEach(function(f, i){
 
                     if(!f.reservations)
@@ -121,14 +133,21 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                         else if(isDateTomorrow)
                             r.groupDateText = `Tomorrow ${r.groupDateText}`;
 
-                        if(r.agenda?.items?.length){
-                            const group = _.groupBy(r.agenda.items, 'meeting')                            
-                            r.uploadStatementFilter =  {};
-                            _.each(group, (items, key)=>{
-                                r.uploadStatementFilter[key] = items.map(i=>i.item);
-                            })
+                        if(r.agenda?.meetings && r.agenda?.items?.length){ 
+
+                            const group = _(r.agenda.items)
+                                            .filter(e=>{
+                                                return statementEnabledMeetings.includes(e.meeting)
+                                            })
+                                            .groupBy('meeting').value();   
+                                            
+                            if(Object.keys(group).length){
+                                r.uploadStatementFilter =  {};
+                                _.each(group, (items, key)=>{
+                                    r.uploadStatementFilter[key] = items.map(i=>i.item);
+                                })
+                            }
                         }
-                        // 
 
                         return _.defaults(r, { open : !(types[r.type]||{}).closed });
 

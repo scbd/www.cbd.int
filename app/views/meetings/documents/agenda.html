@@ -136,7 +136,7 @@
                                     </a> 
                                 </div>
                                 <reservation-links :reservation="res" :schedule="schedule" position="right" ng-vue/>
-                                <div ng-if="agendaCtrl.meeting.uploadStatement && res.uploadStatementFilter">
+                                <div ng-if="res.uploadStatementFilter">
                                     <upload-statement-button  ng-vue :route="route" :filter-by-meeting-agenda="res.uploadStatementFilter"></upload-statement-button>
                                 </div> 
                             </td>
