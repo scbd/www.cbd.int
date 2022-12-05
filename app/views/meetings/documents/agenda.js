@@ -14,6 +14,7 @@ import ReservationLinks from '~/components/meetings/reservation-links.vue'
 import Vue from 'vue'
 import 'angular-vue'
 import UploadStatementButton from '~/components/meetings/upload-statement-button.vue'
+import { allowedMeetingTypeForStatement } from '~/util/meetings-data'
 
 Vue.component('uploadStatementButton', UploadStatementButton);
 
@@ -270,19 +271,22 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
 
                     r.agenda.showStatus = !!_(r.agenda.items).map('status').compact().uniq().size();
 
-                    if(r.agenda?.meetings && r.agenda?.items?.length){ 
- 
-                        const group = _(r.agenda.items)
-                                        .filter(e=>{
-                                            return statementEnabledMeetings.includes(e.meeting)
-                                        })
-                                        .groupBy('meeting').value();   
-                                        
-                        if(Object.keys(group).length){
-                            r.uploadStatementFilter =  {};
-                            _.each(group, (items, key)=>{
-                                r.uploadStatementFilter[key] = items.map(i=>i.item);
-                            })
+                    const allowedTypeForStatementsIds = allowedMeetingTypeForStatement.map(e=>e._id);
+                    if(allowedTypeForStatementsIds.includes(r.type._id || r.type)){
+                        if(r.agenda?.meetings && r.agenda?.items?.length){ 
+    
+                            const group = _(r.agenda.items)
+                                            .filter(e=>{
+                                                return statementEnabledMeetings.includes(e.meeting)
+                                            })
+                                            .groupBy('meeting').value();   
+                                            
+                            if(Object.keys(group).length){
+                                r.uploadStatementFilter =  {};
+                                _.each(group, (items, key)=>{
+                                    r.uploadStatementFilter[key] = items.map(i=>i.item);
+                                })
+                            }
                         }
                     }
                 });
