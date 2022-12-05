@@ -7,6 +7,7 @@ import 'angular-vue'
 import '~/filters/moment'
 import '~/filters/html-sanitizer'
 import '~/services/conference-service'
+import { allowedMeetingTypeForStatement } from '~/util/meetings-data';
 
 export { default as template } from './index-id.html';
 
@@ -132,8 +133,10 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                             r.groupDateText = `Today ${r.groupDateText}`
                         else if(isDateTomorrow)
                             r.groupDateText = `Tomorrow ${r.groupDateText}`;
-
-                        if(r.agenda?.meetings && r.agenda?.items?.length){ 
+                        
+                        const allowedTypeForStatementsIds = allowedMeetingTypeForStatement.map(e=>e._id);
+                        if(allowedTypeForStatementsIds.includes(r.type._id) && 
+                            r.agenda?.meetings && r.agenda?.items?.length){ 
 
                             const group = _(r.agenda.items)
                                             .filter(e=>{
@@ -146,6 +149,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                                 _.each(group, (items, key)=>{
                                     r.uploadStatementFilter[key] = items.map(i=>i.item);
                                 })
+
                             }
                         }
 
