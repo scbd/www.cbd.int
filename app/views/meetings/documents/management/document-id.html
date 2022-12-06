@@ -450,7 +450,9 @@
 
                 <div class="input-group-prepend" style="min-width:75px">   
                     <div>
-                        <span class="badge label agenda CBD {{::editCtrl.meeting.agenda.prefix}}">{{::editCtrl.meeting.agenda.prefix}} {{::item}}</span>
+                        <span class="badge label agenda CBD {{::editCtrl.meeting.agenda.prefix}}">{{::editCtrl.meeting.agenda.prefix}} 
+                            {{::((editCtrl.meeting.agenda.items|filter:{item:item}:true)[0].code||item)}}
+                        </span>
                     </div>
                 </div>
                 <span class="form-control" style="overflow:auto;background-color:#eeeeee" >{{(editCtrl.meeting.agenda.items|filter:{item:item}:true)[0].title}}</span>

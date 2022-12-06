@@ -146,7 +146,7 @@
                                 <table ng-if="res.agenda.visible && res.agenda.items && res.agenda.items.length" class="table" style="margin:0px">
                                     <tr  ng-repeat="agendaItem in res.agenda.items" style="cursor:default">
                                         <td class="hidden-xs" style="width:55px" ng-click="agendaItem.expanded=!agendaItem.expanded">
-                                            <span ng-style="{ 'background-color' : agendaItem.color}" class="badge label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::agendaItem.item}}</span>
+                                            <span ng-style="{ 'background-color' : agendaItem.color}" class="badge label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::(agendaItem.code||agendaItem.item)}}</span>
                                         </td>
                                         <td>
                                             <div ng-click="agendaItem.expanded=!agendaItem.expanded" >
@@ -170,7 +170,7 @@
                                                         <span ng-switch-when="l">L</span>
                                                     </span>
                                                 </div>
-                                                <span class="visible-xs-inline-block badge label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::agendaItem.item}}</span>
+                                                <span class="visible-xs-inline-block badge label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::(agendaItem.code||agendaItem.item) }}</span>
                                                 <span class="title agenda">
                                                     <span ng-if="::!agendaItem.text">
                                                         <span class="hidden-xs" >{{::agendaItem.title}}</span>

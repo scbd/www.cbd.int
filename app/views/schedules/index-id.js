@@ -152,6 +152,15 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 
                             }
                         }
+                        
+                        r.agenda?.items?.forEach(function(rItem) {
+
+                            var mAgenda        = _(meetings)     .where({ EVT_CD:     rItem.meeting }).map('agenda').flatten().first();
+                            var mItem          = _(mAgenda?.items).where({ item:     rItem.item    }).first();
+
+                            rItem.code      = mItem?.code;
+                        
+                        });
 
                         return _.defaults(r, { open : !(types[r.type]||{}).closed });
 
