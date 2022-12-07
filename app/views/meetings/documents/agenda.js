@@ -217,7 +217,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                 var reservationTypes = res[2];
 
                 const statementEnabledMeetings = meetings.filter(m=>m.uploadStatement).map(m=>m.EVT_CD);
-
+                
                 reservations.forEach(function(r) {
 
                     var startOfDay = moment(r.start).tz(getTimezone()).startOf('day').toISOString();
@@ -259,12 +259,12 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                                 return buildSortKey(d, types);
                             }).value();
                         }
-
                         rItem.color     = (mAgenda||{}).color;
                         rItem.prefix    = (mAgenda||{}).prefix;
                         rItem.title     = (mItem||{}).title;
                         rItem.shortTitle= (mItem||{}).shortTitle;
                         rItem.scopes    = (mItem||{}).scopes;
+                        rItem.code      = mItem?.code;
                         rItem.documents = mItemDocuments; //todo
                         rItem.status    = rItem.status||undefined;
                     });

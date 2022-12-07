@@ -89,7 +89,11 @@
                         <td style="width:10px">
                             <strong class="text-nowrap">{{($index+1)}}.</strong>
                             <span ng-repeat="item in ::document.agendaItems|orderBy">
-                                <span class="badge label agenda {{::$ctrl.meetings[document.meeting].agenda.prefix}}">{{::$ctrl.meetings[document.meeting].agenda.prefix}} {{::item}}</span>
+                                <span class="badge label agenda {{::$ctrl.meetings[document.meeting].agenda.prefix}}">
+                                    {{::$ctrl.meetings[document.meeting].agenda.prefix}} 
+                                    <!-- {{::item}} -->
+                                    {{::($ctrl.meetings[document.meeting].agenda.items|filter:{item:item}:true)[0].code||item)}}
+                                </span>
                             </span>
 
                         </td>
@@ -102,7 +106,11 @@
                                 <span class="badge label agenda">Linked</span>
                             </div>
                             <div ng-repeat="item in document.agendaItems|orderBy">
-                                <span class="badge label agenda {{::$ctrl.meeting.agenda.prefix}}">{{::$ctrl.meeting.agenda.prefix}} {{::item}}</span>
+                                <span class="badge label agenda {{::$ctrl.meeting.agenda.prefix}}">
+                                    {{::$ctrl.meeting.agenda.prefix}} 
+                                    {{::($ctrl.meeting.agenda.items|filter:{item:item}:true)[0].code||item)}}
+                                    <!-- {{::item}} -->
+                                </span>
                             </div>
                         </td>
 

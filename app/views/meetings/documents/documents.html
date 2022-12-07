@@ -202,11 +202,11 @@
 
                         <tr ng-repeat="item in type.agenda.items|orderBy:'item' track by item.item">
                             <td class="hidden-xs" style="width:1px">
-                                <span class="badge label agenda {{::documentsCtrl.agenda.prefix}}">{{::documentsCtrl.agenda.prefix}} {{::item.item}}</span>
+                                <span class="badge label agenda {{::documentsCtrl.agenda.prefix}}">{{::documentsCtrl.agenda.prefix}} {{::(item.code||item.item)}}</span>
                             </td>
                             <td>
                                 <div>
-                                    <span class="visible-xs-inline-block badge label agenda {{::documentsCtrl.agenda.prefix}}">{{::documentsCtrl.agenda.prefix}} {{::item.item}}</span>
+                                    <span class="visible-xs-inline-block badge label agenda {{::documentsCtrl.agenda.prefix}}">{{::documentsCtrl.agenda.prefix}} {{::(item.code||item.item)}}</span>
 
                                     <span class="title agenda">
                                         <span class="hidden-xs" >{{::item.title}}</span>
