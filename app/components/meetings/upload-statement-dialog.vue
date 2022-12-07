@@ -56,9 +56,9 @@
                                 <div class="col-sm-9">
                                     <select :disabled="!!progress" class="form-control" id="agendaItem"  v-model="selectedAgendaItem" required>
                                         <optgroup v-for="{ _id: meetingId, agenda, normalizedSymbol } in meetings" :key="meetingId" :label="normalizedSymbol">
-                                            <option v-for="{ item, shortTitle, title } in agenda.items" :key="item" :value="{ meetingId, item }">
+                                            <option v-for="{ item, code, shortTitle, title } in agenda.items" :key="item" :value="{ meetingId, item }">
                                                 {{ meetings.length>1 ? (agenda.prefix||'') : '' }}
-                                                {{ item }} - {{ shortTitle || title }} 
+                                                {{ code || item }} - {{ shortTitle || title }} 
                                             </option>
                                         </optgroup>
                                     </select>
