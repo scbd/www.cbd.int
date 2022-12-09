@@ -53,8 +53,11 @@ export default ["$scope", "$route", "$http", '$q', '$location', 'authentication'
             }).then(function(conference){
             
                 var query, fields;
+                let meetingIds = conference.MajorEventIDs;
+                //Temp for COP15
+                meetingIds = meetingIds.filter(e=>e!='52000000cbd0495c00001876');
 
-                var ids = _.map(conference.MajorEventIDs, function(id){
+                var ids = _.map(meetingIds, function(id){
                     return { $oid: id };
                 });
 

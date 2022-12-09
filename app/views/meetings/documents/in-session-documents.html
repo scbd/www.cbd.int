@@ -92,7 +92,7 @@
                                 <span class="badge label agenda {{::$ctrl.meetings[document.meeting].agenda.prefix}}">
                                     {{::$ctrl.meetings[document.meeting].agenda.prefix}} 
                                     <!-- {{::item}} -->
-                                    {{::($ctrl.meetings[document.meeting].agenda.items|filter:{item:item}:true)[0].code||item)}}
+                                    {{::(($ctrl.meetings[document.meeting].agenda.items|filter:{item:item}:true)[0].code||item)}}
                                 </span>
                             </span>
 
