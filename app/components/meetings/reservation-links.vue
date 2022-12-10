@@ -1,7 +1,7 @@
 <template>
   <div  v-if="isVisible">
-    <div v-if="youTubeLinks.length" class="position-relative" :class="{'dropleft': this.position==='left', 'dropright': this.position==='right' }">
-      <a class="badge badge-dark dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <div v-if="youTubeLinks.length" class="position-relative m-1" :class="{'dropleft': this.position==='left', 'dropright': this.position==='right' }">
+      <a class="btn btn-dark dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Watch <i class="fa fa-video-camera"></i>
       </a>
 
@@ -10,8 +10,8 @@
       </div>
     </div>
 
-    <div v-if="nonYouTubeLinks.length" class="position-relative"  :class="{'dropleft': this.position==='left', 'dropright': this.position==='right' }">
-      <a class="badge badge-info dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <div v-if="nonYouTubeLinks.length" class="position-relative m-1"  :class="{'dropleft': this.position==='left', 'dropright': this.position==='right' }">
+      <a class="btn btn-info dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Links <i ref="caret" class="fa fa-caret-down"></i>
       </a>
 

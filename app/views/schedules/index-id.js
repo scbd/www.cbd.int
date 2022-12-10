@@ -20,10 +20,10 @@ export { default as template } from './index-id.html';
         sameElse: 'dddd, D MMMM YYYY'
     };
 
-export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService', '$rootScope', '$location',
-    function($scope, $http, $route, $q, defaultStreamId, conferenceService, $rootScope, $location) {
+export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceService', '$rootScope', '$location', '$timeout',
+    function($scope, $http, $route, $q, defaultStreamId, conferenceService, $rootScope, $location, $timeout) {
         const _ctrl = $scope.scheduleCtrl =  this;
-
+        var sinceLastReload = new moment();
         Vue.component('ScheduleAgendaDynamicConnectButton', ScheduleAgendaDynamicConnectButton)
         Vue.component('ReservationLinks',ReservationLinks);
 
@@ -43,10 +43,14 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 		//========================================
         function load() {
 
+            const expandedReservations = _(_ctrl.frames||[]).map(e=>{
+               return e?.reservations?.filter(e=>e.expand)
+            }).flatten().value();
+
             var streamId = $route.current.params.streamId || defaultStreamId;
             var options  = { params : { cache:true } };
          
-            $q.when($route.current.params.code).then(function(code){
+            return $q.when($route.current.params.code).then(function(code){
 
                 if(!code) return;
             
@@ -162,37 +166,40 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                         
                         });
 
+                        r.expand = expandedReservations?.find(er=>er?._id == r._id && er?.expand)
+
                         return _.defaults(r, { open : !(types[r.type]||{}).closed });
 
                     }).sortBy(sortKey).value();
-
-                    if(i ==0){
+                    
+                    if(!expandedReservations.length && i ==0){
                         expandSection(f.reservations[0], f.reservations)
                     }
-
                 });
+                refreshPage();
             });
 
-            function isAdmin(){
-              if(!$rootScope.user) return false
+        }
 
-              return _.intersection($rootScope.user.roles, [ 'EunoAdministrator']).length > 0;
-            }
+        function isAdmin(){
+            if(!$rootScope.user) return false
 
-            //========================================
-            //
-            //========================================
-            function sortKey(r) {
+            return _.intersection($rootScope.user.roles, [ 'EunoAdministrator']).length > 0;
+        }
 
-                if(!r)
-                    return "zzz";
+        //========================================
+        //
+        //========================================
+        function sortKey(r) {
 
-                var typePriority =  ((r.type.priority || 999999)+1000000).toString().substr(1);
-                var roomPriority =  r.room.title+' ';
-                var timePriority =  moment.tz(r.start, getTimezone()).format("MM:DD:HH:mm");
+            if(!r)
+                return "zzz";
 
-                return (timePriority + '-' + typePriority + '-' + roomPriority + '-' + (r.title||'')).toLowerCase();
-            }
+            var typePriority =  ((r.type.priority || 999999)+1000000).toString().substr(1);
+            var roomPriority =  r.room.title+' ';
+            var timePriority =  moment.tz(r.start, getTimezone()).format("MM:DD:HH:mm");
+
+            return (timePriority + '-' + typePriority + '-' + roomPriority + '-' + (r.title||'')).toLowerCase();
         }
 
         function now() {
@@ -262,4 +269,15 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
   
             return test.format('X') === now.format('X')
         }
+
+        function refreshPage(){
+            $timeout(function(){
+                if(moment().diff(sinceLastReload, 'hours') > 1){
+                    window.location.reload();
+                    return;
+                }
+                load();
+            }, 5*60*1000)
+        }
+
 	}];
