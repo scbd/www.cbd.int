@@ -116,7 +116,7 @@
                         </thead>
                         <tr ng-repeat="res in reservations">
 
-                            <td class="text-center text-nowrap text-primary" style="width:1px;border-right:solid 1px #ddd">
+                            <td class="text-center text-primary" style="width:200px;border-right:solid 1px #ddd">
                                 <b title="{{agendaCtrl.getTimezone()}}">{{::res.start|moment:'tz':agendaCtrl.getTimezone()|moment:'format':'HH:mm'}}</b>
                                 
                                 <schedule-agenda-dynamic-connect-button :is-badge="true" :reservation="res" :schedule="schedule" ng-vue/>
