@@ -1,6 +1,4 @@
-
-export const allowedMeetingTypeForStatement = [
-    {"_id":"570fd1ac2e3fa5cfa61d90f5","title":"Plenary"},
-    {"_id":"58379a233456cf0001550cac","title":"Working Group I"},
-    {"_id":"58379a293456cf0001550cad","title":"Working Group II"},
-]
+export const Plenary        = "570fd1ac2e3fa5cfa61d90f5"
+export const WorkingGroupI  = "58379a233456cf0001550cac"
+export const WorkingGroupII = "58379a293456cf0001550cad"
+export const ContactGroups  = "570fd1552e3fa5cfa61d90f0"
