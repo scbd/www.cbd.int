@@ -1,7 +1,7 @@
 <template>
   <div  v-if="isVisible">
     <div v-if="youTubeLinks.length" class="position-relative m-1" :class="{'dropleft': this.position==='left', 'dropright': this.position==='right' }">
-      <a class="btn btn-dark dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <a class="btn btn-dark dropdown-toggle" :class="{'btn-xs':size=='xs'}" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Watch <i class="fa fa-video-camera"></i>
       </a>
 
@@ -34,6 +34,7 @@
     props     : {
                   reservation: { type: Object, required: true },
                   schedule   : { type: Object, required: true },
+                  size       : { type: String, required: false },
                   position   : { type: String, default: ''}
                 },
     computed  : { isVisible, youTubeLinks, nonYouTubeLinks, displayLinksImmediately },

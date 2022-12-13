@@ -200,7 +200,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                 var resQuery = {
                     schema:'reservations',
                     _id : {
-                        $in : _(reservations).map('type').uniq().map(function(id) { return { $oid:id }; }).value()
+                        $in : _(reservations).map('type').uniq().compact().map(function(id) { return { $oid:id }; }).value()
                     }
                 };
 

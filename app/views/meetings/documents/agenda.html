@@ -8,6 +8,17 @@
         font-weight: bold !important;
         background: #f5c0c0 !important;
       }
+
+      .meeting-agenda td.col-width {
+        width:175px;
+      }
+
+      .no-border-left {
+        border-left: none !important;
+      }      
+      .no-border-right {
+        border-right: none !important;
+      }
     </style>
     <!-- <time-zone-feature-alert ng-if="agendaCtrl.all && agendaCtrl.loaded && agendaCtrl.getTimezones().length" ng-cloak/> -->
 
@@ -26,6 +37,7 @@
                         <span ng-switch-when="58379a233456cf0001550cac">WG.1</span>
                         <span ng-switch-when="58379a293456cf0001550cad">WG.2</span>
                         <span ng-switch-when="570fd1552e3fa5cfa61d90f0">Contact Groups</span>
+                        <span ng-switch-when="5aff32171a0ff600010c28a8">High Level Segment</span>
                         <span ng-switch-default>{{::type.title}}</span>
                     </span>
                 </a>
@@ -116,15 +128,19 @@
                         </thead>
                         <tr ng-repeat="res in reservations">
 
-                            <td class="text-center text-primary" style="width:200px;border-right:solid 1px #ddd">
+                            <td class="text-center text-primary col-width" style="border-right:solid 1px #ddd">
                                 <b title="{{agendaCtrl.getTimezone()}}">{{::res.start|moment:'tz':agendaCtrl.getTimezone()|moment:'format':'HH:mm'}}</b>
                                 
-                                <schedule-agenda-dynamic-connect-button :is-badge="true" :reservation="res" :schedule="schedule" ng-vue/>
-
                                 <div  ng-if="!scheduleCtrl.all || scheduleCtrl.showRooms" style="padding-top:3px;">
                                     <em>{{:: res.room.title}}</em>
                                     <em ng-if="res.room.location"><br>{{::res.room.location}}</em>
                                 </div>
+
+                                <schedule-agenda-dynamic-connect-button :is-badge="false" :reservation="res" :schedule="schedule" size="xs" ng-vue/>
+                                <reservation-links :reservation="res" :schedule="schedule" position="right" size="xs" ng-vue/>
+                                <div ng-if="res.uploadStatementFilter">
+                                    <upload-statement-button  ng-vue :route="route" :filter-by-meeting-agenda="res.uploadStatementFilter" size="xs"></upload-statement-button>
+                                </div> 
 
                                 <div ng-show="res.videoUrl">
                                     <a ng-if="::!agendaCtrl.all" class="badge badge-dark"  title="video stream" target="_blank" ng-href="{{::res.videoUrl}}">
@@ -134,21 +150,17 @@
                                     <a  ng-if="::!agendaCtrl.all" class="badge badge-danger" ng-if="::(res.start <= agendaCtrl.now.toISOString())" target="_blank" ng-href="{{::res.videoUrl}}">
                                         Live
                                     </a> 
-                                </div>
-                                <reservation-links :reservation="res" :schedule="schedule" position="right" ng-vue/>
-                                <div ng-if="res.uploadStatementFilter">
-                                    <upload-statement-button  ng-vue :route="route" :filter-by-meeting-agenda="res.uploadStatementFilter"></upload-statement-button>
-                                </div> 
+                                </div>                                
                             </td>
 
                             <td style="padding:0px;" >
                               <div style="padding: 10px;"><b>{{::res.title}}</b></div>
                                 <table ng-if="res.agenda.visible && res.agenda.items && res.agenda.items.length" class="table" style="margin:0px">
                                     <tr  ng-repeat="agendaItem in res.agenda.items" style="cursor:default">
-                                        <td class="hidden-xs" style="width:55px" ng-click="agendaItem.expanded=!agendaItem.expanded">
+                                        <td class="hidden-xs no-border-left" style="width:55px" ng-click="agendaItem.expanded=!agendaItem.expanded">
                                             <span ng-style="{ 'background-color' : agendaItem.color}" class="badge label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::(agendaItem.code||agendaItem.item)}}</span>
                                         </td>
-                                        <td>
+                                        <td class="no-border-right">
                                             <div ng-click="agendaItem.expanded=!agendaItem.expanded" >
                                                 <div class="pull-right">
 
