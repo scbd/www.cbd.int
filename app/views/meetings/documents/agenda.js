@@ -14,7 +14,7 @@ import ReservationLinks from '~/components/meetings/reservation-links.vue'
 import Vue from 'vue'
 import 'angular-vue'
 import UploadStatementButton from '~/components/meetings/upload-statement-button.vue'
-import { Plenary, WorkingGroupI, WorkingGroupII, ContactGroups  } from '~/util/meetings-data'
+import { Plenary, WorkingGroupI, WorkingGroupII, ContactGroups, HighLevelSegment  } from '~/util/meetings-data'
 
 Vue.component('uploadStatementButton', UploadStatementButton);
 
@@ -271,7 +271,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
 
                     r.agenda.showStatus = !!_(r.agenda.items).map('status').compact().uniq().size();
 
-                    const allowedTypeForStatementsIds = [Plenary, WorkingGroupI, WorkingGroupII, ContactGroups];
+                    const allowedTypeForStatementsIds = [Plenary, WorkingGroupI, WorkingGroupII, HighLevelSegment];
                     if(allowedTypeForStatementsIds.includes(r.type._id || r.type)){
                         if(r.agenda?.meetings && r.agenda?.items?.length){ 
     
@@ -364,7 +364,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                     { $or:[
                         { 'agenda.items': { $exists: true, $ne: [] }},
                         {
-                            'type' : { $in : [Plenary, WorkingGroupI, WorkingGroupII, ContactGroups ] }
+                            'type' : { $in : [Plenary, WorkingGroupI, WorkingGroupII, ContactGroups, HighLevelSegment ] }
                         }
                     ]},
                     {'meta.status': { $ne : 'deleted' }},
