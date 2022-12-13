@@ -184,19 +184,19 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
           <div style="display:<%=siteAlert ? 'block' : 'none'%>" class="alert alert-danger mb-0"><%=siteAlert%></div>
           <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeaderFixed" ></vue-component>                  
           <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeader" ></vue-component> -->
-          <vue-component name="ScbdHeader" ></vue-component>
+          <vue-component ng-if="!templateCtrl.viewOnly" name="ScbdHeader" ></vue-component>
           <!-- CONTENT -->
           <div class="page-content">
               <div id="conferenceHeader"></div>
               <div class="container">
-                  <bread-crumbs></bread-crumbs>
+                  <bread-crumbs ng-if="!templateCtrl.viewOnly"></bread-crumbs>
                   <ng-view autoscroll="true"></ng-view>
               </div>                                
               <a href="#" class="go-to-top-btn"></a>
           </div>
           <!-- FOOTER -->
           <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="PageFooter" ></vue-component> -->
-          <vue-component name="ScbdFooter" ></vue-component>
+          <vue-component ng-if="!templateCtrl.viewOnly" name="ScbdFooter" ></vue-component>
       </div>
   </div>
 
