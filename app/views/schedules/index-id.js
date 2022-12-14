@@ -7,7 +7,7 @@ import 'angular-vue'
 import '~/filters/moment'
 import '~/filters/html-sanitizer'
 import '~/services/conference-service'
-import { allowedMeetingTypeForStatement } from '~/util/meetings-data';
+import { Plenary, WorkingGroupI, WorkingGroupII, HighLevelSegment   } from '~/util/meetings-data';
 
 export { default as template } from './index-id.html';
 
@@ -138,7 +138,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                         else if(isDateTomorrow)
                             r.groupDateText = `Tomorrow ${r.groupDateText}`;
                         
-                        const allowedTypeForStatementsIds = allowedMeetingTypeForStatement.map(e=>e._id);
+                        const allowedTypeForStatementsIds = [ Plenary, WorkingGroupI, WorkingGroupII, HighLevelSegment ];
                         if(allowedTypeForStatementsIds.includes(r.type._id) && 
                             r.agenda?.meetings && r.agenda?.items?.length){ 
 

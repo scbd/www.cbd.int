@@ -14,7 +14,7 @@ import ReservationLinks from '~/components/meetings/reservation-links.vue'
 import Vue from 'vue'
 import 'angular-vue'
 import UploadStatementButton from '~/components/meetings/upload-statement-button.vue'
-import { allowedMeetingTypeForStatement } from '~/util/meetings-data'
+import { Plenary, WorkingGroupI, WorkingGroupII, ContactGroups, HighLevelSegment  } from '~/util/meetings-data'
 
 Vue.component('uploadStatementButton', UploadStatementButton);
 
@@ -200,7 +200,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                 var resQuery = {
                     schema:'reservations',
                     _id : {
-                        $in : _(reservations).map('type').uniq().map(function(id) { return { $oid:id }; }).value()
+                        $in : _(reservations).map('type').uniq().compact().map(function(id) { return { $oid:id }; }).value()
                     }
                 };
 
@@ -271,7 +271,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
 
                     r.agenda.showStatus = !!_(r.agenda.items).map('status').compact().uniq().size();
 
-                    const allowedTypeForStatementsIds = allowedMeetingTypeForStatement.map(e=>e._id);
+                    const allowedTypeForStatementsIds = [Plenary, WorkingGroupI, WorkingGroupII, HighLevelSegment];
                     if(allowedTypeForStatementsIds.includes(r.type._id || r.type)){
                         if(r.agenda?.meetings && r.agenda?.items?.length){ 
     
@@ -360,10 +360,17 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             const fields = { start : 1, end : 1, agenda :1, type: 1, title: 1, video:1, videoUrl:1, location: 1, links: 1, videoUrlMinutes: 1, displayLinksImmediately: 1 };
             var sort   = { start : 1, end : 1 };
             var query  = {
-                'agenda.items': { $exists: true, $ne: [] },
-                'meta.status': { $ne : 'deleted' },
-                start : { $lte: { $date: end   } },
-                end   : { $gte: { $date: start } },
+                $and : [ 
+                    { $or:[
+                        { 'agenda.items': { $exists: true, $ne: [] }},
+                        {
+                            'type' : { $in : [Plenary, WorkingGroupI, WorkingGroupII, ContactGroups, HighLevelSegment ] }
+                        }
+                    ]},
+                    {'meta.status': { $ne : 'deleted' }},
+                    {start : { $lte: { $date: end   } }},
+                    {end   : { $gte: { $date: start } }}
+                ],
                 $or : [
                     { confirmed : { $exists: false } },
                     { confirmed : true }

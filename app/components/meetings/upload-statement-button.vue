@@ -1,6 +1,6 @@
 <template>
     <span>
-        <button type="button" class="btn btn-success" @click="showDialog = !showDialog" title="Upload statement">
+        <button type="button" class="btn btn-success" :class="{'btn-xs':size=='xs'}"  @click="showDialog = !showDialog" title="Upload statement">
             <i class="fa fa-upload"></i>
             Statement
         </button>
@@ -16,8 +16,9 @@ export default {
     name: 'uploadStatementButton',
     components: { UploadDialog },
     props: { 
-        route: { type: Object, required: false },
+        route: { type: Object,  required: false },
         show : { type: Boolean, required: false },
+        size : { type: String,  required: false },
         filterByMeetingAgenda: { type: Object, required: false }
     },
     data: function() { 

@@ -1,10 +1,10 @@
 <template>
   <div v-if="isVisible">
-    <a v-if="!canConnect" :class="{ 'badge': isBadge , 'badge-dark': isBadge, 'btn-dark': !isBadge, 'btn': !isBadge  }" :content="canConnectMsg" v-tippy="{ placement : 'top',  arrow: true, size: 'large', allowHTML: true }" class="not-allowed" href="javascript:void(0)">
+    <a v-if="!canConnect" class="btn btn-dark not-allowed" :class="{ 'btn-xs': size=='xs'}" :content="canConnectMsg" v-tippy="{ placement : 'top',  arrow: true, size: 'large', allowHTML: true }"  href="javascript:void(0)">
       Connect <ScheduleConnectIcon :size="iconSize"/>
     </a>
 
-    <a v-if="canConnect" :href="reservation.videoUrl" :class="{ 'badge': isBadge , 'badge-danger': isBadge, 'btn': !isBadge, 'btn-danger': !isBadge }" class="btn" target="_blank" >
+    <a v-if="canConnect" :href="reservation.videoUrl" class="btn btn-danger" :class="{ 'btn-xs': size=='xs'}" target="_blank" >
       <div> 
         Connect
         <span v-if="isConnectionTestingInProgress">now</span>
@@ -14,9 +14,9 @@
 
       <div v-if="isConnectionTestingInProgress">
         <small> Meeting will start in </small>
-        <small v-if="isBadge"><br> {{willStartTimeText}} </small>
+        <small v-if="size=='xs'"><br> {{willStartTimeText}} </small>
       </div>
-      <div v-if="!isBadge && isConnectionTestingInProgress" class="progress-text"><small> {{willStartTimeText}} </small></div>
+      <div v-if="size!='xs' && isConnectionTestingInProgress" class="progress-text"><small> {{willStartTimeText}} </small></div>
     </a>
   </div>
 </template>
@@ -35,7 +35,7 @@
     props     : {  
                   reservation: { type: Object, required: true },
                   schedule   : { type: Object, required: true },
-                  isBadge    : { type: Boolean, required: false, default: false },
+                  size       : { type: String, required: false },
                 },
     computed  : { isDailySchedule, canConnectMsg, isVisible, willStartTimeText, iconSize },
     methods   : { refresher, clearRefresher },
@@ -87,7 +87,7 @@
   /* vue computed
   /****************/
 
-  function iconSize(){ return this.isBadge? '18' : '22' }
+  function iconSize(){ return this.size=='xs'? '15' : '22' }
 
   function isVisible(){
     return !this.isDailySchedule && this.hasConnection && !this.isConnectionDone
