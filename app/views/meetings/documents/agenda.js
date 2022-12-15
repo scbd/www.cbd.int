@@ -357,7 +357,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             const   start      = moment(now).startOf('minute').toDate(); // start of minute to avois cache busting
             const   end        = _ctrl.all?  eventEnd : tomorrow// to tomorrow
 
-            const fields = { start : 1, end : 1, agenda :1, type: 1, title: 1, video:1, videoUrl:1, location: 1, links: 1, videoUrlMinutes: 1, displayLinksImmediately: 1 };
+            const fields = { start : 1, end : 1, agenda :1, type: 1, title: 1, video:1, videoUrl:1, location: 1, links: 1, videoUrlMinutes: 1, displayLinksImmediately: 1, message: 1 };
             var sort   = { start : 1, end : 1 };
             var query  = {
                 $and : [ 

@@ -209,6 +209,9 @@
                                     <span ng-if="value" ng-style="{ 'background-color' : agendaCtrl.getColor(key)}" class="badge label agenda {{item.prefix}}" style="min-width:51px">{{::key}}</span>
                                   </span>
                                 </div>
+
+                                <div ng-if="::res.message.text" class="alert alert-{{res.message.level}}" style="border-radius: 0; margin-bottom: 0px;"><b>{{::res.message.text}}</b></div>
+
                             </td>
                         </tr>
                     </table>
