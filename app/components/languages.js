@@ -9,5 +9,6 @@ export const UN = {
 }
 
 export default {
-  ...UN
+  ...UN,
+  'tr': 'Türkçe' //Türkçe – Turkish
 } 
