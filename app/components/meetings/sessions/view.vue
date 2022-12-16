@@ -16,8 +16,6 @@
             </span>
             ({{count}})
             
-            <i class="loading text-muted tiny">{{date | setTimezone(timezone) | format('z')}}</i>
-
             <i class="text-muted fa fa-caret-up"/>
             <i class="text-muted fa fa-caret-down"/>
             <i class="text-muted help tiny">click to expand</i>
@@ -28,6 +26,11 @@
               <VideoLink class="pull-right" :videos="videos" title="Full session webcast"/>
             </span>
 
+            <br> <small class="text-muted">
+              {{ date | setTimezone(timezone) | format('cccc, d MMMM yyyy - T') }}
+              <i class="tiny">{{ timezone }}</i>
+            </small>
+            
           </h5>
 
         </div>
