@@ -13,7 +13,6 @@ const interpretersPanelView  = { component: ()=>import('~/components/meetings/se
 
 const importTranslationsView = { component: ()=>import('~/views/meetings/documents/management/translations') }
 const editDocumentIdView     = { component: ()=>import('~/views/meetings/documents/management/document-id') }
-const documentsProgress      = { component: ()=>import('~/views/meetings/documents/documents-progress') }
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
@@ -23,7 +22,6 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     $routeProvider
 //  .when('/:meeting/documents/status',    { templateUrl : 'views/meetings/documents/documents-progress.html',      resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService", "ScbdStaff"]) } })
     .when('/import-translations',          { ...mapView(angularViewWrapper),   resolve : { ...importTranslationsView, user : securize(["Administrator","EditorialService"]) } })
-    .when('/:meeting/documents/progress',  { ...mapView(angularViewWrapper),   resolve : { ...documentsProgress,      user : securize(["Administrator","EditorialService", "ScbdStaff"]) },  reloadOnSearch:false })
     .when('/:meeting/documents/:id',       { ...mapView(angularViewWrapper),   resolve : { ...editDocumentIdView,     user : securize(["Administrator","EditorialService"]) },  reloadOnSearch:false })
     .when('/:meeting/sessions',            { ...mapView(vueViewWrapper),       resolve : { ...sessionListView,        user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
     .when('/:meeting/sessions/:sessionId', { ...mapView(vueViewWrapper),       resolve : { ...sessionIdView,          user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
