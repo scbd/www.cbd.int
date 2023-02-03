@@ -11,7 +11,9 @@
         { code : 'WGRI' ,                 title: 'WGRI',       group : 'Subsidiary Body' },
         { code : 'WG8J' ,                 title: 'WG8J',       group : 'Subsidiary Body' },
         { code : 'WGABS' ,                title: 'WGABS',      group : 'Subsidiary Body' },
-        { code : 'WGABS' ,                title: 'WGABS',      group : 'Subsidiary Body' },
+        { code : 'CP-MOP' ,               title: 'CP-MOP',     group : 'Subsidiary Body' },
+        { code : 'NP-MOP' ,               title: 'NP-MOP',     group : 'Subsidiary Body' },
+
 
         { code : 'GEF' ,                     title: 'Global Environment Facility',                                                             group : 'UN Agencies and Conventions' },
         { code : 'IPLC' ,                    title: 'Indigenous Peoples and Local Communities',                                                group : 'UN Agencies and Conventions' },
@@ -28,6 +30,9 @@
         { code : 'RAMSAR',                   title: 'Convention on Wetlands',                                                                  group : 'UN Agencies and Conventions' },
         { code : 'WHC',                      title: 'World Heritage Convention',                                                               group : 'UN Agencies and Conventions' },
         { code : 'IPPC',                     title: 'International Plant Protection Convention',                                               group : 'UN Agencies and Conventions' },
+        { code : 'IPBES',                    title: 'Intergovernmental Science-Policy Platform on Biodiversity and Ecosystem Services (IPBES)',group : 'UN Agencies and Conventions' },
+        { code : 'WHO',                      title: 'World Health Organization (WHO)',                                                         group : 'UN Agencies and Conventions' },
+        { code : 'IUCN',                     title: 'International Union for Conservation of Nature',                                          group : 'UN Agencies and Conventions' },
 
         { code : 'organizations',            title: 'Relevant organizations',                      group : 'Others' },
         { code : 'economic-organizations',   title: 'Regional economic integration organizations', group : 'Others' },
