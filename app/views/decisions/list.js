@@ -21,6 +21,7 @@ import './directives/header-decisions';
         load();
 
         $scope.edit = edit;
+        $scope.pad0 = pad;
         $scope.body = body;
         $scope.session = session;
         $scope.canComment = canComment();
@@ -34,6 +35,10 @@ import './directives/header-decisions';
             return $http.get('/api/v2016/decision-texts', { params : { q : { treaty:treaty.code,  body: body, session: session }, s: { decision:1 }, f: { session: 1, decision: 1 , symbol: 1, title: 1, meeting: 1, body: 1, code: 1 } } }).then(function(res){
 
                 $scope.decisions = res.data;
+
+                $scope.decisions.forEach(function(d){
+                    d.symbolText = pad(d.session) + '/' + pad(d.decision);
+                });
 
                 return $http.get('/api/v2015/treaties/'+treaty.code, { cache: true } );
 
@@ -77,6 +82,12 @@ import './directives/header-decisions';
             if(hash)
                 $location.hash(hash);
 
+        }
+
+        function pad(input) {
+            var output = (input || '').toString();
+            while(output.length<2) output = '0' + output;
+            return output;
         }
     }];
 

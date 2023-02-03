@@ -63,7 +63,9 @@ export default function bootApp(window, require, defineX) {
           'mark'              : `${cdnUrl}npm/mark.js@8.11.1/dist/mark.min`,
           'vue-tippy'         : `${cdnUrl}npm/vue-tippy@4.10.0/dist/vue-tippy.umd`,
           'angular-vue-plugins': `${cdnUrl}npm/@scbd/angular-vue@3.1.0/dist/angular-vue-plugins.min`,
-          'printThis'           : `${cdnUrl}npm/print-this@1.9.0/printThis`
+          'printThis'           : `${cdnUrl}npm/print-this@1.9.0/printThis`,
+          'vue-tour'          : `${cdnUrl}npm/vue-tour@2.0.0/dist/vue-tour.umd.min`
+
       },
       shim: {
           'ngDialog'             : { deps : ['angular', `css!${cdnUrl}combine/npm/ng-dialog@0.6.1/css/ngDialog.min.css,npm/ng-dialog@0.6.1/css/ngDialog-theme-default.min.css`] },

@@ -34,12 +34,14 @@
     </style>
 
     <header-decisions>
-        <h1>Search Decisions</h1>
+        <span class="float-right">
+            <decision-search-help ng-vue="vueOptions" title="Help" />
+        </span>
+        <h1><span id="step1">Search Decisions</h1></span>
     </header-decisions>
-
+    
     <div class="row">
         <div class="col-md-12">
-
             <div class="card">
                 <div class="card-header">
                     Filters
@@ -49,75 +51,97 @@
                     <div class="row" ng-if="selectedFilter" style="border-bottom:1px solid #eee; padding-bottom:10px">
                         <div class="col-md-12">
                             <span ng-repeat="(key, filters) in selectedFilter">
-                                <span class="badge badge-primary chip" ng-repeat="value in filters" ng-click="removeFilter(value, key)">
-                                    {{value.title|lstring}}
-                                    <i class="fa fa-minus-circle"></i>
+                                <span ng-repeat="value in filters">
+                                    <i 
+                                        ng-if="!['freeText', 'session'].includes(key)"
+                                        class="fa fa-exclamation-circle" 
+                                        ng-class="{'text-warning': value.notInclude}" 
+                                        ng-click="toggleNotInclude(value, key)"
+                                    >
+                                    </i>
+                                    <span class="badge chip" ng-class="{ 'badge-primary': !value.notInclude, 'badge-danger': value.notInclude}">
+                                        {{value.title|lstring}}
+                                        <i class="fa fa-minus-circle" ng-click="removeFilter(value, key)"></i>
+                                    </span>
                                 </span>
                             </span>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <label>Session</label>
-                            <select class="form-control"  ng-model="selectedSession" 
-                            ng-options="item.code as (item.title|lstring) group by item.group for item in collections.session"
-                                ng-change="search(selectedSession, 'session'); selectedSession=''">
-                                <option value="">search a session</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label>Type</label>
-                            <select class="form-control"  ng-model="selectedType" 
-                            ng-options="item.code as item.title for item in collections.elementType"
-                                ng-change="search(selectedType, 'elementType'); selectedType=''">
-                                <option value="">search a type</option>
-                            </select>
-                        </div>
-                    </div>
-                    </br>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label>CBD Subjects</label>
-                            <select class="form-control"  ng-model="selectedSubject" 
-                            ng-options="subject.identifier as (subject.title|lstring) group by collections.subjects[subject.broaderTerms[0]].name for subject in collections.subjectsMap|filter:noNarrower"
-                                ng-change="search(selectedSubject, 'subjects'); selectedSubject=''">
-                                <option value="">search a subject</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label>Aichi Targets</label>
-                            <select class="form-control"  ng-model="selectedTarget" ng-options="target.identifier as (target.title|lstring) group by collections.aichiTargets[target.broaderTerms[0]].name for target in collections.aichiTargetsMap|filter:noNarrower"
-                                ng-change="search(selectedTarget, 'aichiTargets'); selectedTarget=''">
-                                <option value="">search a target</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label>Actors</label>
-                            <select class="form-control"  ng-model="selectedActor" ng-options="actor.code as actor.title group by actor.group for actor in collections.actors"
-                                ng-change="search(selectedActor, 'actors'); selectedActor=''">
-                                <option value="">search an actor</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label>Status</label>
-                            <select class="form-control"  ng-model="selectedStatus" ng-options="status.code as status.title for status in collections.statuses"
-                                ng-change="search(selectedStatus, 'statuses'); selectedStatus=''">
-                                <option value="">search a status</option>
-                            </select>
-                        </div>
-                    </div>
-                    </br>
-                    <div class="row">
                         <div class="col-md-12">
                             <label>Free text</label>
-                            <input class="form-control" ng-model="freeText" 
+                            <input class="form-control" ng-model="freeText" id="step2"
                             ng-change="freeTextSearch(freeText, 'freeText');updateQueryString();"
                             ng-model-options="{
                                 updateOn: 'default blur',
                                 debounce: { 'default': 500, 'blur': 0, '*': 1000 }
                               }">
                         </div>
-
+                    </div>
+                    <div class="row" style="margin-top: 10px">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header" style="background-color: transparent">
+                                    <a data-toggle="collapse" href="#advanceSearch" id="step3" aria-expanded="false" aria-controls="advanceSearch">Advanced Search</a>
+                                </div>
+                                <div id="advanceSearch" class="collapse">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Meeting</label>
+                                                <select class="form-control"  ng-model="selectedSession" 
+                                                ng-options="item.code as (item.title|lstring) group by item.group for item in collections.session"
+                                                    ng-change="search(selectedSession, 'session'); selectedSession=''">
+                                                    <option value="">all meetings</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Decision Type</label>
+                                                <select class="form-control"  ng-model="selectedType" 
+                                                ng-options="item.code as item.title for item in collections.elementType"
+                                                    ng-change="search(selectedType, 'elementType'); selectedType=''">
+                                                    <option value="">all decision types</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label>CBD Subjects</label>
+                                                <select class="form-control"  ng-model="selectedSubject" 
+                                                ng-options="subject.identifier as (subject.title|lstring) group by collections.subjects[subject.broaderTerms[0]].name for subject in collections.subjectsMap|filter:noNarrower"
+                                                    ng-change="search(selectedSubject, 'subjects'); selectedSubject=''">
+                                                    <option value="">all subjects</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>Targets</label>
+                                                <select class="form-control"  ng-model="selectedTarget" ng-options="target.identifier as (target.title|lstring) group by collections.aichiTargets[target.broaderTerms[0]].name for target in collections.aichiTargetsMap|filter:noNarrower"
+                                                    ng-change="search(selectedTarget, 'aichiTargets'); selectedTarget=''">
+                                                    <option value="">all targets</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>Actors</label>
+                                                <select class="form-control"  ng-model="selectedActor" ng-options="actor.code as actor.title group by actor.group for actor in collections.actors"
+                                                    ng-change="search(selectedActor, 'actors'); selectedActor=''">
+                                                    <option value="">all actors</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label>Status</label>
+                                                <select class="form-control"  ng-model="selectedStatus" ng-options="status.code as status.title for status in collections.statuses"
+                                                    ng-change="search(selectedStatus, 'statuses'); selectedStatus=''">
+                                                    <option value="">all statuses</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
                         <div class="col-md-12">
                             <br/>
                             <button class="btn btn-primary  float-right" ng-click="search()">

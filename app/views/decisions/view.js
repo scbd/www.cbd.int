@@ -9,12 +9,17 @@ import './directives/header-decisions'
 import app from '~/app'
 import _   from 'lodash'
 import ng  from 'angular'
+import ViewElement from '~/components/decisions/view-element.vue'
+import 'angular-vue'
 
 export { default as template } from './view.html'
 
-export default ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', 'user', '$filter',
-    function($scope, $http, $route, $location, $compile, $anchorScroll, user, $filter) {
+export default ['$scope', '$http', '$route', '$location', '$compile', '$anchorScroll', 'user', '$filter', '$q',
+    function($scope, $http, $route, $location, $compile, $anchorScroll, user, $filter, $q) {
 
+        $scope.vueOptions = {
+            components : {ViewElement}
+        };
         var treaty    = null ;
         var body      = $route.current.params.body.toUpperCase();
         var session   = parseInt($route.current.params.session);
@@ -44,6 +49,7 @@ export default ['$scope', '$http', '$route', '$location', '$compile', '$anchorSc
         $scope.statusCounts  = { implemented: 0, superseded: 0, elapsed: 0, active: 0 };
         $scope.actorCounts   = { };
         $scope.actors        = [];
+        $scope.newDecision = {};
 
      //   ng.element("#decision-meta").affix({ offset: { top: 295, bottom:350 } });
 
@@ -54,11 +60,17 @@ export default ['$scope', '$http', '$route', '$location', '$compile', '$anchorSc
 
             treaty = res.data;
 
-            return $http.get('/api/v2016/decision-texts', { params : { q: { treaty:treaty.code, body: body, session: session, decision: number }, fo: 1 }, cache:true });
+            const code = treaty.acronym+'/'+body+'/'+pad(session)+'/'+pad(number);
+
+            return $q.all([
+                $http.get('/api/v2016/decision-texts', { params : { q: { treaty:treaty.code, body: body, session: session, decision: number }, fo: 1 }, cache:true }),
+                $http.get(`/api/v2021/decisions/${encodeURIComponent(code)}/tree`, { cache:true })
+            ]);
 
         }).then(function(res) {
 
-            $scope.decision = decision = res.data;
+            $scope.decision = decision = res[0].data;
+            $scope.newDecision = res[1].data;
 
             var link    = $compile(decision.content);
             var content = link($scope);
