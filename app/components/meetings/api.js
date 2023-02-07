@@ -272,6 +272,26 @@ export default class Api
     await axios.put(url, file, config);
   }
 
+  async getMeetingDocuments(options) {
+    const documents = await this.http.get(`/api/v2016/documents`, options).then(res => res.data).catch(tryCastToApiError);
+    return documents;
+  } 
+
+  async getMeetings(options) {
+    const meetings = await this.http.get(`/api/v2016/meetings`, options).then(res => res.data).catch(tryCastToApiError);
+    return meetings;
+  }
+
+  async getNotifications(options) {
+    const notifications = await this.http.get('/api/v2013/index', options).then(res => res.data).catch(tryCastToApiError);
+    return notifications;
+  }
+
+  async getDecisions(options) {
+    const decisions = await this.http.get('/api/v2016/decision-texts', options).then(res => res.data).catch(tryCastToApiError);
+    return decisions;
+  }
+
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   //             TO REVIEW
