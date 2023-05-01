@@ -25,9 +25,9 @@ export default {
 				{
 					target: '#step1',
 					header: {
-						title: 'Title',
+						title: 'Decision number',
 					},
-					content: `Decision!`,
+					content: `Find the decision number here.`,
 			        params: { 
 						enableScrolling: false,
 						placement: 'top',
@@ -36,9 +36,9 @@ export default {
 				{
 					target: '#step2',
 					header: {
-						title: 'Title',
+						title: 'Decision Title',
 					},
-					content: `Decision Title!`,
+					content: `Here is the decision title.`,
 			        params: { 
 						enableScrolling: false,
 						placement: 'top',
