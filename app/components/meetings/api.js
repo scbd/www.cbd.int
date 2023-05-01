@@ -307,7 +307,7 @@ export default class Api
   }
 
   async getDecisions(options) {
-    const decisions = await this.http.get('/api/v2016/decision-texts', options).then(res => res.data).catch(tryCastToApiError);
+    const decisions = await this.http.get('/api/v2021/decisions', options).then(res => res.data).catch(tryCastToApiError);
     return decisions;
   }
 
