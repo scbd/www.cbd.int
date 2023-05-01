@@ -283,7 +283,26 @@ export default class Api
   }
 
   async getNotifications(options) {
-    const notifications = await this.http.get('/api/v2013/index', options).then(res => res.data).catch(tryCastToApiError);
+
+    const options = {
+      
+      params : {
+          q : `symbol_s (${codes.map(solr.escape).join(' or ')})`,
+          fl : "id, symbol_s,reference_s,title_t,date_dt,url_ss",
+      }
+    }
+    const notifications = await api.queryNotifications(options).then(res => res.data).catch(tryCastToApiError);
+    return notifications;
+  }
+
+  async queryNotifications({q: userQ, ...otherParams}) {
+    let q = 'schema_s:notification'
+
+    if(userQ) q = `${q} AND (${userQ})`;
+
+    const params = { ...otherParams, q };
+
+    const notifications = await this.http.get('/api/v2013/index', { params }).then(res => res.data).catch(tryCastToApiError);
     return notifications;
   }
 
