@@ -284,14 +284,14 @@ export default class Api
 
   async getNotifications(options) {
 
-    const options = {
+    const queryParameters = {
       
       params : {
           q : `symbol_s (${codes.map(solr.escape).join(' or ')})`,
           fl : "id, symbol_s,reference_s,title_t,date_dt,url_ss",
       }
     }
-    const notifications = await api.queryNotifications(options).then(res => res.data).catch(tryCastToApiError);
+    const notifications = await api.queryNotifications(queryParameters).then(res => res.data).catch(tryCastToApiError);
     return notifications;
   }
 
