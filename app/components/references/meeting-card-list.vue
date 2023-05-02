@@ -68,8 +68,8 @@ async function lookupMeetings(codes) {
 
     const results = _.map(res, function(m) {
         return _.defaults(m, {
-            url:       `/meetings/${encodeURIComponent(m.symbol || m.EVT_CD || m.code || '')}`,
-            symbol:    m.EVT_CD || m.symbol,
+            url:       `/meetings/${encodeURIComponent(m.normalizedSymbol || m.EVT_CD || m.code || '')}`,
+            symbol:    m.EVT_CD || m.normalizedSymbol,
             startDate: m.EVT_FROM_DT,
             endDate:   m.EVT_TO_DT,
         });
