@@ -54,9 +54,7 @@ async function lookupNotifications(codes) {
     if(!codes || codes.length === 0) return [];
 
     const options = {
-        // cache: true,
         params : {
-            // q : `schema_s:notification AND symbol_s (${codes.map(solr.escape).join(' or ')})`,
             q : `symbol_s (${codes.map(solr.escape).join(' or ')})`,
             fl : "id, symbol_s,reference_s,title_t,date_dt,url_ss",
         }
