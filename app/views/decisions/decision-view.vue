@@ -4,10 +4,10 @@
 	<header-decisions>
 		<span class="float-right">
 			<decision-view-help title="Help" />
-			<a href="javascript:void(0)" v-if="canComment" class="btn btn-default" @click="edit('comment')" style="margin-top:2px;color:inherit">
+			<a href="#" v-if="canComment" class="btn btn-default" @click.prevent="edit('comment')" style="margin-top:2px;color:inherit">
 				<i class="fa fa-comment-o" aria-hidden="true"></i>
 			</a>
-			<a href="javascript:void(0)" v-if="canEdit" class="btn btn-default" @click="edit()" style="margin-top:2px;color:inherit">
+			<a href="#" v-if="canEdit" class="btn btn-default" @click.prevent="edit()" style="margin-top:2px;color:inherit">
 				<i class="fa fa-edit" aria-hidden="true"></i>
 			</a>
 		</span>						
@@ -30,7 +30,7 @@
 							</option>
 						</select>
 
-						<a href="javascript:void(0)" v-if="filters && Object.keys(filters).length > 0" class="badge badge-info" @click="filters = {}" style="margin-top:2px">
+						<a href="#" v-if="filters && Object.keys(filters).length > 0" class="badge badge-info" @click.prevent="filters = {}" style="margin-top:2px">
 							<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> filtered <i class="fa fa-times" aria-hidden="true"></i>
 						</a>
 					</div>
@@ -70,16 +70,16 @@
 
 							<dt>Elements of decision</dt>
 							<dd v-if="sum(counts.types)>0"> 
-								<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
-									@click="toggleFilters({ types: null })" 
+								<a href="#" class="badge badge-secondary text-nowrap" 
+									@click.prevent="toggleFilters({ types: null })" 
 									:class="{ disabled : filters && filters.types }">
 									{{ sum(counts.types) }} 
 									<i v-if="filters && filters.types" class="fa fa-times" aria-hidden="true"></i>
 								</a>
 								<a v-for="type in allFilters.types" :key="type.code"
-									href="javascript:void(0)" class="badge text-nowrap" 
+									href="#" class="badge text-nowrap" 
 									style="margin-right:3px;"
-									@click="toggleFilters({ types: [type.code] })" 
+									@click.prevent="toggleFilters({ types: [type.code] })" 
 									:class="`${!isFilterSelected('types', type.code) && 'disabled'} ${type.class || 'badge-secondary'}`" >
 									{{ counts.types[type.code] || 0 }} {{type.title}} 
 									<i class="fa fa-filter" aria-hidden="true"></i>
@@ -87,17 +87,17 @@
 							</dd>
 
 							<dd v-if="sum(counts.statuses)>0"> 
-								<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
-									@click="toggleFilters({ statuses : null })" 
+								<a href="#" class="badge badge-secondary text-nowrap" 
+									@click.prevent="toggleFilters({ statuses : null })" 
 									:class="{ disabled : filters && filters.statuses }">
 									{{ sum(counts.statuses) }}
 									<i v-if="filters && filters.statuses" class="fa fa-times" aria-hidden="true"></i>
 								</a>
 								<a 
 									v-for="status in allFilters.statuses" :key="status.code"
-									href="javascript:void(0)" class="badge text-nowrap" 
+									href="#" class="badge text-nowrap" 
 									style="margin-right:3px;"
-									@click="toggleFilters({ statuses : [status.code]})"
+									@click.prevent="toggleFilters({ statuses : [status.code]})"
 									:class="`${!isFilterSelected('statuses', status.code) && 'disabled'} ${status.class || 'badge-secondary'}`" >
 									{{ counts.statuses[status.code] || 0 }} {{ status.title }} 
 									<i class="fa fa-filter" aria-hidden="true"></i>
@@ -108,17 +108,17 @@
 						<div v-if="sum(counts.actors)>0"> 
 							<dt>Actors</dt>
 							<dd>
-								<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
-									@click="toggleFilters({ actors : null })" 
+								<a href="#" class="badge badge-secondary text-nowrap" 
+									@click.prevent="toggleFilters({ actors : null })" 
 									:class="{ disabled : filters &&  filters.actors }">
 									{{ sum(counts.actors) }} 
 									<i v-if="filters && filters.actors" class="fa fa-times" aria-hidden="true"></i>
 								</a>
 								<a
 									v-for="actor in allFilters.actors" :key="actor.code"
-									href="javascript:void(0)" class="badge text-nowrap" 
+									href="#" class="badge text-nowrap" 
 									style="margin-right:3px;"
-									@click="toggleFilters({ actors : [actor.code] })" 
+									@click.prevent="toggleFilters({ actors : [actor.code] })" 
 									:class="`${!isFilterSelected('actors', actor.code) && 'disabled'} ${actor.class || 'badge-secondary'}`" >
 									{{counts.actors[actor.code]}} {{actor.title}} 
 									<i class="fa fa-filter" aria-hidden="true"></i>
@@ -129,8 +129,8 @@
 						<div v-if="sum(counts.aichiTargets)>0"> 
 							<dt>AICHI targets</dt>
 							<dd>
-								<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
-									@click="toggleFilters({ aichiTargets : null })" 
+								<a href="#" class="badge badge-secondary text-nowrap" 
+									@click.prevent="toggleFilters({ aichiTargets : null })" 
 									:class="{ disabled : filters &&  filters.aichiTargets }">
 									{{sum(counts.aichiTargets)}} 
 									<i v-if="filters && filters.aichiTargets" class="fa fa-times" aria-hidden="true"></i>
@@ -150,18 +150,18 @@
 						<div v-if="sum(counts.subjects)>0">
 							<dt>Subjects</dt>
 							<dd>
-								<a href="javascript:void(0)" class="badge badge-secondary text-nowrap" 
-									@click="toggleFilters({ subjects : null })" 
+								<a href="#" class="badge badge-secondary text-nowrap" 
+									@click.prevent="toggleFilters({ subjects : null })" 
 									:class="{ disabled : filters &&  filters.subjects }">
 									{{sum(counts.subjects)}} 
 									<i v-if="filters && filters.subjects" class="fa fa-times" aria-hidden="true"></i>
 								</a>
 
-								<a href="javascript:void(0)" class="badge text-nowrap" 
+								<a href="#" class="badge text-nowrap" 
 									v-for="subject in allFilters.subjects" 
 									:key="subject.code"
 									style="margin-right:3px;"
-									@click="toggleFilters({ subjects : [subject.code] })" 
+									@click.prevent="toggleFilters({ subjects : [subject.code] })" 
 									:class="`${!isFilterSelected('subjects', subject.code) && 'disabled'} ${subject.class || 'badge-secondary'}`" >
 									{{counts.subjects[subject.code]}} {{subject.title}}
 								</a> 
