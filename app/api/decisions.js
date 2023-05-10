@@ -50,11 +50,6 @@ export default class DecisionApi extends ApiBase
     return result;
   }
 
-  async getDecisionDocuments(params) {
-    const result = await api.queryDecisionDocuments({ params }).then(res => res.data).catch(tryCastToApiError);
-    return result;
-  }
-
   async queryDecisionDocuments({q: userQ, ...otherParams}) {
     let q = 'schema_s:schema_s:(decision recommendation)'
 
