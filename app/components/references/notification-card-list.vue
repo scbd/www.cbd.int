@@ -58,7 +58,7 @@ async function lookupNotifications(codes) {
 
     const res = await this.api.getNotifications({ q, fl, cache: true });
 
-    const results = _.map(res.response.docs, function(n) {
+    const results = _.map(res, function(n) {
         return _.defaults(n, {
             _id: n.id,
             symbol: n.reference_s || n.symbol_s,

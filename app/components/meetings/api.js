@@ -305,15 +305,17 @@ export default class Api
 
     const params = { ...otherParams, q };
 
-    const notifications = await this.http.get('/api/v2013/index', { params, cache }).then(res => res.data).catch(tryCastToApiError);
+    const notifications = await this.http.get('/api/v2013/index', { params, cache }).then(res => res.data.response.docs).catch(tryCastToApiError);
     return notifications;
   }
   
+  /*
   async getDecisions({ cache, ...params }) {
     cache = !!cache;
     const decisions = await this.http.get('/api/v2021/decisions', { params, cache }).then(res => res.data).catch(tryCastToApiError);
     return decisions;
   }
+  */
 
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
