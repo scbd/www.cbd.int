@@ -60,16 +60,21 @@ async function lookupDecisions(codes) {
 
     const elementCodes = codes.map(c => getElementCode(c));
 
+    /*
     const options = {
-        cache: true,
-        params: {
+            cache: true,
+                params: {
             q:  { $or: [ { 'code' : { $in: [...codes] } }, { 'elements.code' : { $in: [ ...elementCodes] } } ]},
             //f:  { "code":1, "symbol":1, "treaty":1, "body":1, "session":1, "decision":1, "meeting":1, "title":1, "elements.code":1, "elements.section":1, "elements.paragraph":1, "elements.item":1, "elements.subitem":1, "elements.text":1 },
             //l: 1
         }
     }
+    */
+    
+    const q = { $or: [ { 'code' : { $in: [...codes] } }, { 'elements.code' : { $in: [ ...elementCodes] } } ]}
+    const results = await this.api.getDecisions({ q, cache: true });
 
-    const results = await this.api.getDecisions(options);
+    // const results = await this.api.getDecisions(options);
     
     if(!results || results.length === 0) return [];
 

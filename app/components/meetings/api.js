@@ -309,8 +309,9 @@ export default class Api
     return notifications;
   }
   
-  async getDecisions(options) {
-    const decisions = await this.http.get('/api/v2021/decisions', options).then(res => res.data).catch(tryCastToApiError);
+  async getDecisions({ cache, ...params }) {
+    cache = !!cache;
+    const decisions = await this.http.get('/api/v2021/decisions', { params, cache }).then(res => res.data).catch(tryCastToApiError);
     return decisions;
   }
 
