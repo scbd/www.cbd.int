@@ -282,12 +282,7 @@ export default class Api
     return meetings;
   }
 
-  async getNotifications(options) {
-    const notifications = await api.queryNotifications(options).then(res => res.data).catch(tryCastToApiError);
-    return notifications;
-  }
-
-  async queryNotifications({q: userQ, ...otherParams}) {
+  async getNotifications({q: userQ, ...otherParams}) {
     let q = 'schema_s:notification'
 
     if(userQ) q = `${q} AND (${userQ})`;
@@ -297,7 +292,7 @@ export default class Api
     const notifications = await this.http.get('/api/v2013/index', { params }).then(res => res.data).catch(tryCastToApiError);
     return notifications;
   }
-
+  
   async getDecisions(options) {
     const decisions = await this.http.get('/api/v2021/decisions', options).then(res => res.data).catch(tryCastToApiError);
     return decisions;
