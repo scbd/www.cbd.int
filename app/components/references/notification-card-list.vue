@@ -53,14 +53,10 @@ async function refresh() {
 async function lookupNotifications(codes) {
     if(!codes || codes.length === 0) return [];
 
-    const options = {
-        params : {
-            q : `symbol_s (${codes.map(solr.escape).join(' or ')})`,
-            fl : "id, symbol_s,reference_s,title_t,date_dt,url_ss",
-        }
-    }
+    const q = `symbol_s (${codes.map(solr.escape).join(' or ')})`
+    const fl = "id, symbol_s,reference_s,title_t,date_dt,url_ss"
 
-    const res = await this.api.getNotifications(options);
+    const res = await this.api.getNotifications({ q, fl, cache: true });
 
     const results = _.map(res.response.docs, function(n) {
         return _.defaults(n, {

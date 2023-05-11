@@ -296,14 +296,16 @@ export default class Api
     return documents;
   } 
 
-  async getNotifications({q: userQ, ...otherParams}) {
+  async getNotifications({q: userQ, cache, ...otherParams}) {
     let q = 'schema_s:notification'
+
+    cache = !!cache;
 
     if(userQ) q = `${q} AND (${userQ})`;
 
     const params = { ...otherParams, q };
 
-    const notifications = await this.http.get('/api/v2013/index', { params }).then(res => res.data).catch(tryCastToApiError);
+    const notifications = await this.http.get('/api/v2013/index', { params, cache }).then(res => res.data).catch(tryCastToApiError);
     return notifications;
   }
   
