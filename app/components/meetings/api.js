@@ -290,6 +290,12 @@ export default class Api
     return meetings;
   }
 
+  async queryMeetings({cache, ...params}) {
+    cache = !!cache;
+    const documents = await this.http.get(`/api/v2016/meetings`, { params, cache }).then(res => res.data).catch(tryCastToApiError);
+    return documents;
+  } 
+
   async getNotifications({q: userQ, ...otherParams}) {
     let q = 'schema_s:notification'
 

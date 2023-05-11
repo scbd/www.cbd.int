@@ -56,6 +56,7 @@ async function lookupMeetings(codes) {
 
     codes = codes.map(c => c.toUpperCase());
 
+    /*
     const options = { 
         cache: true,
         params: { 
@@ -63,8 +64,14 @@ async function lookupMeetings(codes) {
             f: { symbol:1, EVT_CD:1, EVT_FROM_DT:1, EVT_TO_DT:1, title:1, dateText:1, venueText:1 } 
         }
     }
+    */
 
-    const res = await this.api.getMeetings(options);
+    const q = { normalizedSymbol :{ $in :[...codes] } }
+    const f = { symbol:1, EVT_CD:1, EVT_FROM_DT:1, EVT_TO_DT:1, title:1, dateText:1, venueText:1 } 
+
+    const res = await this.api.queryMeetings({ q, f, cache: true });
+
+    // const res = await this.api.getMeetings(options);
 
     const results = _.map(res, function(m) {
         return _.defaults(m, {
