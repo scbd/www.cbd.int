@@ -51,7 +51,7 @@ export default class DecisionApi extends ApiBase
   }
 
   async queryDecisionDocuments({q: userQ, ...otherParams}) {
-    let q = 'schema_s:schema_s:(decision recommendation)'
+    let q = 'schema_s:(decision recommendation)'
 
     if(userQ) q = `${q} AND (${userQ})`;
 
