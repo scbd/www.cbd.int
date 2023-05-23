@@ -129,7 +129,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
 
                 treaty   = res[2].data;
 
-                const code = treaty.acronym+'/'+body+'/'+pad(session)+'/'+pad(decision);
+                const code = treaty.acronym+'/'+encodeURIComponent(body)+'/'+encodeURIComponent(pad(session))+'/'+encodeURIComponent(pad(decision));
                 return $scope.api.queryDecisionTree(code);
 
             }).then(function(res){
