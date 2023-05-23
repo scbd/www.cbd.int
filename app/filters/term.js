@@ -40,7 +40,7 @@ export default function lookupTermText(term, locale) {
 
   if(!cachedValue) {
 
-    return cacheMap[term.identifier] = api.http.get("/api/v2013/thesaurus/terms?termCode=" + encodeURIComponent(term.identifier)).then(function (result) {
+    return cacheMap[term.identifier] = api.http.get("/api/v2013/thesaurus/terms?termCode=" + encodeURIComponent(term.identifier), {cache:true}).then(function (result) {
 
       cacheMap[term.identifier] = result.data;
   
