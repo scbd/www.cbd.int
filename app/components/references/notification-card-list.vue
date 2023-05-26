@@ -81,9 +81,9 @@ function urlToFiles(url_ss) {
         var mime;
         var locale;
 
-        if(/\.pdf$/ .test(url)) mime = 'application/pdf';
-        if(/\.doc$/ .test(url)) mime = 'application/msword';
-        if(/\.docx$/.test(url)) mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        if(/\.pdf$/    .test(url)) mime = 'application/pdf';
+        if(/\.doc$/    .test(url)) mime = 'application/msword';
+        if(/\.docx$/   .test(url)) mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
         if(/-ar\.\w+$/ .test(url)) locale = 'ar';
         if(/-en\.\w+$/ .test(url)) locale = 'en';
@@ -92,10 +92,12 @@ function urlToFiles(url_ss) {
         if(/-ru\.\w+$/ .test(url)) locale = 'ru';
         if(/-zh\.\w+$/ .test(url)) locale = 'zh';
 
+        const url_clean = new URL(url, 'https://www.cbd.int').href;
+
         return {
             type : mime,
             language: locale,
-            url : 'https://www.cbd.int'+url
+            url : url_clean
         };
     });
 }
