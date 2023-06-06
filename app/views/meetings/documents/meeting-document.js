@@ -4,6 +4,7 @@ import html from './meeting-document.html'
 import '~/directives/meetings/documents/document-files'
 import '~/directives/checkbox'
 import '~/filters/html-sanitizer'
+import '~/filters/to-display-symbol'; 
 
     var LANGUAGES = { ar : "العربية", en : "English", es : "Español", fr : "Français", ru : "Русский", zh : "中文" };
     var ONLINE = 'text/html';
