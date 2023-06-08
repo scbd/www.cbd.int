@@ -21,7 +21,7 @@
                             </span>
 
                             <strong ng-switch-default="default">
-                                <span class="break-word">{{::document.symbol}}</span>
+                                <span class="break-word">{{::document.symbol | toDisplaySymbol }}</span>
                             </strong>
                         </a>
                     </div>
@@ -37,7 +37,7 @@
             </div>
 
             <div ng-if="::document.metadata.superseded">
-				<div><em>Superseded by {{::document.metadata.superseded}}</em></div>
+				<div><em>Superseded by {{::document.metadata.superseded | toDisplaySymbol }}</em></div>
             </div>
 
             <div>
@@ -59,7 +59,7 @@
 
             <div ng-if="::document.recipient_ss.length">Notification to: <span ng-repeat="recipient in ::document.recipient_ss"> {{::recipient}}</div>
             <div ng-if="::document.subject_ss.length">Subjects to: {{::document.subject_ss}}</div>
-            <div ng-if="::document.actionDate_dt" class="text-danger">Action required by {{::document.actionDate_dt|moment:'add':23.9:'hours'|moment:'toDate'|date:'yyyy-MM-dd HH:mm'}}</div>
+            <div ng-if="::document.actionDate_dt" class="text-danger">Action required by {{::document.actionDate_dt|moment:'add':23.9:'hours'|moment:'toDate'|date:'yyyy-MM-dd'}}</div>
 
             <table class="statistics xtable table-bordered table-condensed hidden-xs hidden-sm" ng-if="showStatistics" >
                 <tr><th ng-repeat="(locale, name) in ::LANGUAGES" class="text-muted">{{name}}</th></tr>
