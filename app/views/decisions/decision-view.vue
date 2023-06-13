@@ -477,7 +477,7 @@ async function loadDecisionDocuments(decision) {
 
 	const result = await this.api.queryDecisionDocuments(params);
 	
-	return _(result.data.response.docs).map(function(n) {
+	return _(result.response.docs).map(function(n) {
 		const doc = _.defaults(n, {
 			_id: n.id,
 			symbol: n.symbol_s,

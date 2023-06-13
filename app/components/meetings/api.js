@@ -272,23 +272,11 @@ export default class Api
     await axios.put(url, file, config);
   }
 
-  /*
-  async getMeetingDocuments(options) {
-    const documents = await this.http.get(`/api/v2016/documents`, options).then(res => res.data).catch(tryCastToApiError);
-    return documents;
-  }
-  */
-
   async queryMeetingDocuments({cache, ...params}) {
     cache = !!cache;
     const documents = await this.http.get(`/api/v2016/documents`, { params, cache }).then(res => res.data).catch(tryCastToApiError);
     return documents;
   } 
-
-  async getMeetings(options) {
-    const meetings = await this.http.get(`/api/v2016/meetings`, options).then(res => res.data).catch(tryCastToApiError);
-    return meetings;
-  }
 
   async queryMeetings({cache, ...params}) {
     cache = !!cache;
@@ -309,14 +297,6 @@ export default class Api
     return notifications;
   }
   
-  /*
-  async getDecisions({ cache, ...params }) {
-    cache = !!cache;
-    const decisions = await this.http.get('/api/v2021/decisions', { params, cache }).then(res => res.data).catch(tryCastToApiError);
-    return decisions;
-  }
-  */
-
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   //             TO REVIEW

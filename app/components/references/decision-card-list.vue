@@ -15,6 +15,8 @@
 <script>
 import DecisionCard from '~/components/references/decision-card.vue'
 import Api from '~/components/meetings/api.js';
+import DecisionApi from '~/api/decisions.js';
+
 import _ from 'lodash';
 
 export default {
@@ -28,6 +30,7 @@ export default {
     },
     data() {
         return {
+            decisionapi: new DecisionApi(),
             api: new Api(),
             decisionList: [],
         }
@@ -60,29 +63,14 @@ async function lookupDecisions(codes) {
 
     const elementCodes = codes.map(c => getElementCode(c));
 
-    /*
-    const options = {
-            cache: true,
-                params: {
-            q:  { $or: [ { 'code' : { $in: [...codes] } }, { 'elements.code' : { $in: [ ...elementCodes] } } ]},
-            //f:  { "code":1, "symbol":1, "treaty":1, "body":1, "session":1, "decision":1, "meeting":1, "title":1, "elements.code":1, "elements.section":1, "elements.paragraph":1, "elements.item":1, "elements.subitem":1, "elements.text":1 },
-            //l: 1
-        }
-    }
-    */
-    
     const q = { $or: [ { 'code' : { $in: [...codes] } }, { 'elements.code' : { $in: [ ...elementCodes] } } ]}
-    const results = await this.api.getDecisions({ q, cache: true });
+    const results = await this.decisionapi.getDecisions({ q, cache: true });
 
-    // const results = await this.api.getDecisions(options);
-    
     if(!results || results.length === 0) return [];
 
-    //TODO need to do for same decision multiple paragraph
     results.forEach(d => {
         d.url = '/decisions/'+encodeURIComponent(d.body.toLowerCase())+'/'+encodeURIComponent(d.session)+'/'+encodeURIComponent(d.decision);
         d.elements = d.elements.filter(e => codes.some(c => e.code === getElementCode(c)));
-        //d.elements = d.elements.filter(e => e.code === getElementCode(d.code));
 
         if(d.elements[0]) {
             const ele = d.elements[0];
