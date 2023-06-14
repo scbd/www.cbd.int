@@ -69,8 +69,9 @@ import ScbdFooter from '~/components/nav/footer.vue'
         //
         //=====================
         function updateAnalytics() {
-            $window.ga('set',  'page', basePath+$location.path());
-            $window.ga('send', 'pageview');
+            $window.gtag('event', 'page_view', {
+                'page_location' : basePath+$location.path()
+            });
         }
 
         //=====================

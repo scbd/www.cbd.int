@@ -112,8 +112,11 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
 
                 if(!generateOnly){  
                     if(~document.location.hostname.indexOf('cbd.int')){
-                        $window.ga('set',  'page', basePath+$location.path() + '?name='+$scope.text[$scope.language.code].name+'&language='+$scope.language.code);
-                        $window.ga('send', 'pageview');
+                        $window.gtag('event', 'page_view', {
+                            'page_location' : basePath+$location.path(),
+                            'name': $scope.text[$scope.language.code].name,
+                            'language': $scope.language.code
+                        });
                     }
                      uploadImage()
                     .then(function(blob){
