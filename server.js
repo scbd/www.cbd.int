@@ -21,7 +21,7 @@ if(!process.env.API_URL) {
 const apiUrl     =  process.env.API_URL || 'https://api.cbddev.xyz';
 const gitVersion = (process.env.COMMIT  || 'UNKNOWN').substr(0, 8);
 const siteAlert  =  process.env.SITE_ALERT || '';
-const googleAnalyticsCode      =  process.env.GOOGLE_ANALYTICS_CODE || 'NOT_SET';
+const googleAnalyticsCode      =  process.env.GOOGLE_ANALYTICS_CODE || '';
 
 console.info(`info: www.cbd.int`);
 console.info(`info: Git version: ${gitVersion}`);

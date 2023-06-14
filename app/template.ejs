@@ -3,7 +3,11 @@
 captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
 <head>
     <base href="/">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<%=googleAnalyticsCode%>"></script>
+    <% if(googleAnalyticsCode) { %>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=<%=googleAnalyticsCode%>"></script>
+    <% } else { %>
+        <script>console.warn('Google Analytics key not set.');</script>
+    <% } %>
     <script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments)};gtag("js", new Date());gtag("set", "developer_id.dMDhkMT", true);gtag("config", "<%=googleAnalyticsCode%>", {"groups":"default","page_placeholder":"PLACEHOLDER_page_location","allow_ad_personalization_signals":false});</script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es2019%2Ces2015%2Ces2016%2Ces2017%2Ces2018%2Ces5%2Ces6%2Ces7%2CHTMLCanvasElement.prototype.toBlob%2Cconsole"></script>
     <script src="<%=`${cdnUrl}combine/${[
