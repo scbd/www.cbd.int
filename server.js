@@ -59,9 +59,6 @@ app.get('/robots.txt', (req, res) => {
     res.end(text);
 });
 
-app.get('/insession',    function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
-app.get('/insession/*',  function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
-
 app.get('/idb/*',                  function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
 app.get('/biobridge*',             function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
 app.get('/aichi-targets*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
