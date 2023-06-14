@@ -72,7 +72,7 @@ app.use(require('./libs/prerender')); // set env PRERENDER_SERVICE_URL
 
 app.get('/*', function(req, res) {
     res.setHeader('Cache-Control', 'public');
-    res.render('template', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, siteAlert, gaKey }); 
+    res.render('template', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, siteAlert, googleAnalyticsCode }); 
 });
 app.all('/*', send404);
 
