@@ -16,8 +16,8 @@
                                 </option>
                             </select>
                             <span class="float-right" style="background: white" v-show="isEditorOpen">
-                                <a href="javascript:void(0)" class="text-success mx-1" @click="saveAll"><i class="fa fa-check"></i></a>
-                                <a href="javascript:void(0)" class="text-danger mx-1" @click="cancelAll"><i class="fa fa-times"></i></a>
+                                <a href="#" class="text-success mx-1" @click.prevent="saveAll"><i class="fa fa-check"></i></a>
+                                <a href="#" class="text-danger mx-1" @click.prevent="cancelAll"><i class="fa fa-times"></i></a>
                             </span>
                         </td>
                     </tr>
