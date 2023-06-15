@@ -50,11 +50,21 @@ export default class DecisionApi extends ApiBase
     return result;
   }
 
-  async getDecisionDocuments(params) {
-    
-    const result = await this.http.get('api/v2013/index', { params });
+  async queryDecisionDocuments({q: userQ, ...otherParams}) {
+    let q = 'schema_s:(decision recommendation)'
 
-    return result;
+    if(userQ) q = `${q} AND (${userQ})`;
+
+    const params = { ...otherParams, q }
+
+    const documents = await this.http.get('/api/v2013/index', { params }).then(res => res.data).catch(tryCastToApiError);
+    return documents;
+  }
+
+  async getDecisions({ cache, ...params }) {
+    cache = !!cache;
+    const decisions = await this.http.get('/api/v2021/decisions', { params, cache }).then(res => res.data).catch(tryCastToApiError);
+    return decisions;
   }
 
   async getRelatedDecisions(params) {

@@ -65,7 +65,7 @@ export default function bootApp(window, require, defineX) {
           'vue-ckeditor5'     : `${cdnUrl}npm/@ckeditor/ckeditor5-vue2@1.0.5/dist/ckeditor.min`,
           'vue-tippy'         : `${cdnUrl}npm/vue-tippy@4.10.0/dist/vue-tippy.umd`,
           'angular-vue-plugins': `${cdnUrl}npm/@scbd/angular-vue@3.1.0/dist/angular-vue-plugins.min`,
-          'printThis'           : `${cdnUrl}npm/print-this@1.9.0/printThis`,
+          'printThis'         : `${cdnUrl}npm/print-this@1.9.0/printThis`,
           'vue-tour'          : `${cdnUrl}npm/vue-tour@2.0.0/dist/vue-tour.umd.min`
 
       },
@@ -85,11 +85,12 @@ export default function bootApp(window, require, defineX) {
           'PageFooter'           : { deps : ['ngVue'] },
           'PageHeader'           : { deps : ['ngVue'] },
           'vue-multiselect'      : { deps : [`css!${cdnUrl}npm/vue-multiselect@2.1.6/dist/vue-multiselect.min.css`] },
+          'vue-tour'             : { deps : [`css!${cdnUrl}npm/vue-tour@2.0.0/dist/vue-tour.css`] },
           'ammap/themes/light'   : { deps : ['ammap'] },
           'amchart/themes/light' : { deps : ['amchart'] },
           'amchart/pie'          : { deps : ['amchart'] },
           'angular-grid'         : { deps : ['angular'] },
-          'printThis'                : { deps : ['angular', 'vue'] },
+          'printThis'            : { deps : ['angular', 'vue'] },
       },
       packages: [
           { name: 'amchart', main: 'amcharts.min', location : cdnUrl+'npm/amcharts3@3.21.15/amcharts' },

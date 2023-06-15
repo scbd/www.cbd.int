@@ -8,8 +8,8 @@
     	</div>
     	<div>
             <i class="fa fa-fw fa-calendar" aria-hidden="true"></i>
-            <span ng-if="(meeting.startDate|moment:'month')==(meeting.endDate|moment:'month') && (meeting.startDate|moment:'day')==(meeting.endDatet|moment:'day')">{{meeting.endDate|moment:'format':'D MMMM, YYYY'}}</span>
-            <span ng-if="(meeting.startDate|moment:'month')==(meeting.endDate|moment:'month') && (meeting.startDate|moment:'day')!=(meeting.endDatet|moment:'day')">{{meeting.startDate|moment:'format':'D'}} - {{meeting.endDate|moment:'format':'D MMMM, YYYY'}}</span>
+            <span ng-if="(meeting.startDate|moment:'month')==(meeting.endDate|moment:'month') && (meeting.startDate|moment:'day')==(meeting.endDate|moment:'day')">{{meeting.endDate|moment:'format':'D MMMM, YYYY'}}</span>
+            <span ng-if="(meeting.startDate|moment:'month')==(meeting.endDate|moment:'month') && (meeting.startDate|moment:'day')!=(meeting.endDate|moment:'day')">{{meeting.startDate|moment:'format':'D'}} - {{meeting.endDate|moment:'format':'D MMMM, YYYY'}}</span>
             <span ng-if="(meeting.startDate|moment:'month')!=(meeting.endDate|moment:'month')">{{meeting.startDate|moment:'format':'D MMM'}} - {{meeting.endDate|moment:'format':'D MMM, YYYY'}}</span>
         </<div>
     	<div><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i>{{::meeting.venueText|lstring}}</<div>

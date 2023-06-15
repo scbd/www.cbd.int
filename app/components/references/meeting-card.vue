@@ -38,18 +38,16 @@ export default {
     computed: {
         meetingDate() {
             const {meeting} = this;
-            const {startDate, endDate, endDatet} = meeting;
+            const {startDate, endDate} = meeting;
             const mStartDate = moment(startDate);
             const mEndDate = moment(endDate);
-            const mEndDatet = moment(endDatet);
 
             if(mStartDate.month() === mEndDate.month()) {
-                if(mStartDate.day() === mEndDatet.day()) {
+                if(mStartDate.day() === mEndDate.day()) {
                     return mEndDate.format('D MMMM, YYYY');
                 }
                 return `${mStartDate.format('D')} - ${mEndDate.format('D MMMM, YYYY')}`;
             }
-
             return `${mStartDate.format('D MMM')} - ${mEndDate.format('D MMM, YYYY')}`;
         }
     }

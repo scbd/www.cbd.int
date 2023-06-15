@@ -5,8 +5,9 @@
             :files="notification.files"
             class="visible-xs pull-right" 
             style="padding-top:10px" />
-        <b>{{ notification.symbol }}</b> 
-        <i v-if="notification.number">({{ notification.number }})</i>
+        <b v-if="notification.number">({{ notification.number }})</b>
+        <i>{{ notification.symbol }}</i> 
+        <!-- <i v-if="notification.number">({{ notification.number }})</i> -->
         <div
             v-html="$options.filters.lstring(notification.title)"
             :title="notification.title | lstring"

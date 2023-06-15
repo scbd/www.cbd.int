@@ -272,26 +272,31 @@ export default class Api
     await axios.put(url, file, config);
   }
 
-  async getMeetingDocuments(options) {
-    const documents = await this.http.get(`/api/v2016/documents`, options).then(res => res.data).catch(tryCastToApiError);
+  async queryMeetingDocuments({cache, ...params}) {
+    cache = !!cache;
+    const documents = await this.http.get(`/api/v2016/documents`, { params, cache }).then(res => res.data).catch(tryCastToApiError);
     return documents;
   } 
 
-  async getMeetings(options) {
-    const meetings = await this.http.get(`/api/v2016/meetings`, options).then(res => res.data).catch(tryCastToApiError);
-    return meetings;
-  }
+  async queryMeetings({cache, ...params}) {
+    cache = !!cache;
+    const documents = await this.http.get(`/api/v2016/meetings`, { params, cache }).then(res => res.data).catch(tryCastToApiError);
+    return documents;
+  } 
 
-  async getNotifications(options) {
-    const notifications = await this.http.get('/api/v2013/index', options).then(res => res.data).catch(tryCastToApiError);
+  async getNotifications({q: userQ, cache, ...otherParams}) {
+    let q = 'schema_s:notification'
+
+    cache = !!cache;
+
+    if(userQ) q = `${q} AND (${userQ})`;
+
+    const params = { ...otherParams, q };
+
+    const notifications = await this.http.get('/api/v2013/index', { params, cache }).then(res => res.data.response.docs).catch(tryCastToApiError);
     return notifications;
   }
-
-  async getDecisions(options) {
-    const decisions = await this.http.get('/api/v2016/decision-texts', options).then(res => res.data).catch(tryCastToApiError);
-    return decisions;
-  }
-
+  
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   //             TO REVIEW

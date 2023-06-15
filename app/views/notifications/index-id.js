@@ -105,7 +105,7 @@ export { default as template } from './index-id.html'
             var options = {
                 cache   : true,
                 params  : {
-                    q   : "schema_s: submission AND notifications_ss: "+solr.escape(id),
+                    q   : "_state_s:public AND schema_s: submission AND notifications_ss: "+solr.escape(id),
                     fl  : "_id:id, government:government_s, title_t, submittedDate:date_dt, referenceRecord_info_ss, url_ss, files_ss",
                     sort: "date_dt asc, title_s asc",
                     rows: 500

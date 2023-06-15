@@ -131,7 +131,7 @@ async function created() {
 
 	treaty = await this.api.getTreaties(treaty.code);
 
-	const code = treaty.acronym+'/'+body+'/'+pad(session)+'/'+pad(number);
+	const code = treaty.acronym+'/'+encodeURIComponent(body)+'/'+encodeURIComponent(pad(session))+'/'+encodeURIComponent(pad(number));
 
 
     const decision = await this.api.getDecision(code);

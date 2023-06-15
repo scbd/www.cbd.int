@@ -25,9 +25,9 @@ export default {
 				{
 					target: '#step1',
 					header: {
-						title: 'Title',
+						title: 'Search',
 					},
-					content: `Search Decisions!`,
+					content: 'Here you can search the decisions.',
 			        params: { 
 						enableScrolling: false,
 						placement: 'top',

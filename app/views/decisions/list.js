@@ -37,7 +37,7 @@ import './directives/header-decisions';
                 $scope.decisions = res.data;
 
                 $scope.decisions.forEach(function(d){
-                    d.symbolText = pad(d.session) + '/' + pad(d.decision);
+                    d.symbolText = encodeURIComponent(pad(d.session)) + '/' + encodeURIComponent(pad(d.decision));
                 });
 
                 return $http.get('/api/v2015/treaties/'+treaty.code, { cache: true } );

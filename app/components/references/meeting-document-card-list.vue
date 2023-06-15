@@ -65,11 +65,8 @@ async function lookupMeetingDocuments(codes) {
 
     codes = codes.map(c => c.toUpperCase());
 
-    const options = { 
-        cache : true, 
-        params : { q : { symbol: { $in: [...codes] } }} 
-    }
-    const documents = await this.api.getMeetingDocuments(options);
+    const q = { symbol: { $in: [...codes] } } 
+    const documents = await this.api.queryMeetingDocuments({ q, cache: true });
     return documents;
 }
 

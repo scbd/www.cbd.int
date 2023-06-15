@@ -21,6 +21,7 @@ if(!process.env.API_URL) {
 const apiUrl     =  process.env.API_URL || 'https://api.cbddev.xyz';
 const gitVersion = (process.env.COMMIT  || 'UNKNOWN').substr(0, 8);
 const siteAlert  =  process.env.SITE_ALERT || '';
+const googleAnalyticsCode      =  process.env.GOOGLE_ANALYTICS_CODE || '';
 
 console.info(`info: www.cbd.int`);
 console.info(`info: Git version: ${gitVersion}`);
@@ -58,20 +59,17 @@ app.get('/robots.txt', (req, res) => {
     res.end(text);
 });
 
-app.get('/insession',    function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
-app.get('/insession/*',  function(req, res) { res.redirect('/conferences/2016/cop-13/documents'); });
-
-app.get('/idb/*',                  function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); });
-app.get('/biobridge*',             function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); });
-app.get('/aichi-targets*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); });
-app.get('/kronos/media-requests*', function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); });
-app.get('/participation*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key  }); });
+app.get('/idb/*',                  function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
+app.get('/biobridge*',             function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
+app.get('/aichi-targets*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
+app.get('/kronos/media-requests*', function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
+app.get('/participation*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
 
 app.use(require('./libs/prerender')); // set env PRERENDER_SERVICE_URL
 
 app.get('/*', function(req, res) {
     res.setHeader('Cache-Control', 'public');
-    res.render('template', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, siteAlert  }); 
+    res.render('template', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, siteAlert, googleAnalyticsCode }); 
 });
 app.all('/*', send404);
 
