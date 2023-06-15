@@ -61,9 +61,13 @@ export default function bootApp(window, require, defineX) {
           'html-to-image'     :  `${cdnUrl}npm/html-to-image@1.9.0/dist/html-to-image`,
           'angular-grid'      : `${cdnUrl}npm/angulargrid@0.6.5/angulargrid.min`,
           'mark'              : `${cdnUrl}npm/mark.js@8.11.1/dist/mark.min`,
+          'ckeditor5'         : `${cdnUrl}npm/@ckeditor/ckeditor5-build-classic@27.1.0/build/ckeditor.min`,
+          'vue-ckeditor5'     : `${cdnUrl}npm/@ckeditor/ckeditor5-vue2@1.0.5/dist/ckeditor.min`,
           'vue-tippy'         : `${cdnUrl}npm/vue-tippy@4.10.0/dist/vue-tippy.umd`,
           'angular-vue-plugins': `${cdnUrl}npm/@scbd/angular-vue@3.1.0/dist/angular-vue-plugins.min`,
-          'printThis'           : `${cdnUrl}npm/print-this@1.9.0/printThis`
+          'printThis'         : `${cdnUrl}npm/print-this@1.9.0/printThis`,
+          'vue-tour'          : `${cdnUrl}npm/vue-tour@2.0.0/dist/vue-tour.umd.min`
+
       },
       shim: {
           'ngDialog'             : { deps : ['angular', `css!${cdnUrl}combine/npm/ng-dialog@0.6.1/css/ngDialog.min.css,npm/ng-dialog@0.6.1/css/ngDialog-theme-default.min.css`] },
@@ -81,11 +85,12 @@ export default function bootApp(window, require, defineX) {
           'PageFooter'           : { deps : ['ngVue'] },
           'PageHeader'           : { deps : ['ngVue'] },
           'vue-multiselect'      : { deps : [`css!${cdnUrl}npm/vue-multiselect@2.1.6/dist/vue-multiselect.min.css`] },
+          'vue-tour'             : { deps : [`css!${cdnUrl}npm/vue-tour@2.0.0/dist/vue-tour.css`] },
           'ammap/themes/light'   : { deps : ['ammap'] },
           'amchart/themes/light' : { deps : ['amchart'] },
           'amchart/pie'          : { deps : ['amchart'] },
           'angular-grid'         : { deps : ['angular'] },
-          'printThis'                : { deps : ['angular', 'vue'] },
+          'printThis'            : { deps : ['angular', 'vue'] },
       },
       packages: [
           { name: 'amchart', main: 'amcharts.min', location : cdnUrl+'npm/amcharts3@3.21.15/amcharts' },

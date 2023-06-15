@@ -1,46 +1,65 @@
 import app from '~/app'
-import './lstring'
+import lstring from './lstring';
+import ApiBase from '~/api/api-base';
 
-  //============================================================
-  //
-  //
-  //
-  //============================================================
-  app.filter("term", ["$http", '$filter', function ($http, $filter) {
-    var cacheMap = {};
+const api = new ApiBase();
+const cacheMap = {};
 
-    return function (term, locale) {
+//============================================================
+//
+//
+//
+//============================================================
+app.filter("term", [function () {
 
-      if (!term)
-        return "";
+  return (...args) => {
+    const ret = lookupTermText(...args);
 
-      if (term && angular.isString(term))
-        term = {
-          identifier: term
-        };
+    if(ret && ret.then) return;
 
-      locale = locale || "en";
+    return ret;
+  }
+}]);
 
-      if (term.customValue)
-        return $filter("lstring")(term.customValue, locale);
+export default function lookupTermText(term, locale) {
 
-      if (cacheMap[term.identifier])
-        return $filter("lstring")(cacheMap[term.identifier].title, locale);
+  if (!term)
+    return "";
 
-      cacheMap[term.identifier] = $http.get("/api/v2013/thesaurus/terms?termCode=" + encodeURIComponent(term.identifier), {
-        cache: true
-      }).then(function (result) {
-
-        cacheMap[term.identifier] = result.data;
-
-        return $filter("lstring")(cacheMap[term.identifier].title, locale);
-
-      }).catch(function () {
-
-        cacheMap[term.identifier] = term.identifier;
-
-        return term.identifier;
-
-      });
+  if (term && angular.isString(term))
+    term = {
+      identifier: term
     };
-  }]);
+
+  locale = locale || "en";
+
+  if (term.customValue)
+    return lstring(term.customValue, locale);
+
+  const cachedValue = cacheMap[term.identifier];
+
+  if(!cachedValue) {
+
+    return cacheMap[term.identifier] = api.http.get("/api/v2013/thesaurus/terms?termCode=" + encodeURIComponent(term.identifier), {cache:true}).then(function (result) {
+
+      cacheMap[term.identifier] = result.data;
+  
+      return lstring(cacheMap[term.identifier].title, locale);
+  
+    }).catch(function () {
+  
+      cacheMap[term.identifier] = { 
+        title: { en : term.identifier },
+        ...term
+      }
+  
+      return term.identifier;
+  
+    });
+  }
+
+  if (cachedValue.then)
+    return cachedValue; // return pending promise;
+  
+  return lstring(cachedValue.title || term.identifier, locale);
+}

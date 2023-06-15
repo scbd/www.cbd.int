@@ -8,31 +8,48 @@ import './directives/notification'
 import './directives/meeting-document'
 import './directives/meeting'
 import './directives/decision-reference'
+import '~/directives/checkbox'
 import _       from 'lodash'
 import ng      from 'angular'
-import rangy   from 'rangy'
 import $       from 'jquery'
-import roman         from './data/romans'
+import annexList     from './data/annexes'
 import sectionList   from './data/sections'
 import paragraphList from './data/paragraphes'
 import itemList      from './data/items'
 import subItemList   from './data/sub-items'
 import actorList     from './data/actors'
 import statusesList  from './data/statuses'
+import EditElement from '~/components/decisions/edit-element.vue'
+import DecisionApi from '~/api/decisions.js'
+import areEquals from '~/filters/areEquals'
+import 'angular-vue'
 
 export { default as template } from './edit.html'
 
-export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$compile', 'ngDialog', 'user', '$anchorScroll', function($scope, $http, $route, $location, $filter, $q, $compile, ngDialog, user, $anchorScroll) {
+export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'user', '$anchorScroll','apiToken', function($scope, $http, $route, $location, $q, ngDialog, user, $anchorScroll, apiToken) {
+
+        $scope.tokenReader = function(){ return apiToken.get()}
+        $scope.route       = { params : $route.current.params, query: $location.search() }
+        $scope.vueOptions = {
+            components : {EditElement}
+        };
+        $scope.api = new DecisionApi($scope.tokenReader);
+        $scope.decision = {};
 
         var treaty        = null;
         var body          = $route.current.params.body.toUpperCase();
         var session       = parseInt($route.current.params.session);
         var decision      = parseInt($route.current.params.decision);
-        var selectedElement = null;
 
-             if(body=='COP') treaty = { code : "XXVII8" } ;
-    //  else if(body=='CP')  treaty = "XXVII8a";
-    //  else if(body=='NP')  treaty = "XXVII8b";
+        $scope.selectedNode = null;
+        $scope.updateSelectedNode = updateSelectedNode;
+        $scope.updateDecision = load;
+        $scope.editComment = editComment;
+        $scope.allowAddNodes = false;
+
+        if(body=='COP') treaty = { code : "XXVII8" } ;
+        //  else if(body=='CP')  treaty = "XXVII8a";
+        //  else if(body=='NP')  treaty = "XXVII8b";
 
         if(!treaty) {
             alert('ONLY "COP" DECISIONS ARE SUPPORTED');
@@ -45,33 +62,30 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         var data = { content: 'loading...' };
 
         $scope.self    = $scope;
+        $scope.isDisabled = isDisabled,
+        $scope.contentEdited = contentEdited,
         $scope.canEdit = canEdit();
         $scope.canView = canView();
         $scope.canDebug = canDebug();
         $scope.user   = _.pick(user, ['userID', 'name']);
         $scope.close  = close;
         $scope.save   = save;
+        $scope.cancel   = cancel;
         $scope.upload = upload;
         $scope.comments    = {};
         $scope.commentResources = [];
-        $scope.buildFileUrl = buildFileUrl;
         $scope.selectDecision = selectDecision;
         $scope.selectMeeting  = selectMeeting;
         $scope.selectMeetingDocument = selectMeetingDocument;
-        $scope.selectNotification = selectNotification;
         $scope.actionEdit  = edit;
         $scope.isEditable  = isEditable;
-        $scope.tag         = tag;
-        $scope.actionBox   = surroundSelection;
-        $scope.actionUnbox = unsurroundSelection;
-        $scope.actionClean = removeSelectionFormatting;
-        $scope.jumpTo      = jumpTo;
-        $scope.initials=function(t) { return _.startCase(t).replace(/[^A-Z]/g, ''); };
         $scope.addTo       = addTo;
         $scope.removeFrom  = removeFrom;
+        $scope.element = {};
 
         $scope.noNarrower = function(t) { return !t.narrowerTerms || !t.narrowerTerms.length; };
         $scope.collections = {
+            annexes     : annexList,
             sections    : sectionList,
             paragraphes : paragraphList,
             items       : itemList,
@@ -89,16 +103,11 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
 
         return this;
 
-        //************************************************************
-        //************************************************************
-        //************************************************************
-        //************************************************************
-
         //==============================
         //
         //==============================
         function close() {
-            $location.url(('/'+body+'/'+session+'/'+decision).toLowerCase());
+            $location.url(('/'+body+'/'+pad(session)+'/'+pad(decision)).toLowerCase());
         }
 
 
@@ -120,48 +129,21 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
 
                 treaty   = res[2].data;
 
-                return $http.get('/api/v2016/decision-texts', { params : { q : { $or: [{ decision: roman[session] + '/' + decision}, { treaty:treaty.code,  body: body, session: session, decision: decision }]}, fo: 1 }});
+                const code = treaty.acronym+'/'+encodeURIComponent(body)+'/'+encodeURIComponent(pad(session))+'/'+encodeURIComponent(pad(decision));
+                return $scope.api.queryDecisionTree(code);
 
             }).then(function(res){
 
-                data = res.data || {
-                    treaty  : treaty.code,
-                    body    : body,
-                    session : session,
-                    decision: decision,
-                    meeting : body+'-'+ pad(session),
-                    subjects : [],
-                    aichiTargets : [],
-                    content: 'paste here'
-                };
+                $scope.decision = res;
+                $scope.subjects = _.cloneDeep(res.subjects|| []);
+                $scope.aichiTargets = _.cloneDeep(res.aichiTargets || []);
 
-                data = _.defaults(data, {
-                    symbol : data.decision,
-                    body   : body,
-                    treaty : treaty.code,
-                    subjects : [],
-                    aichiTargets : []
-                });
-
-                if(typeof(data.decision)=='string') {
-                    data.decision = parseInt(data.symbol.replace(/.*\/(\d+)$/, '$1'));
+                if(!_.isEmpty($scope.selectedNode)) {
+                    updateSelectedNode(findNode($scope.decision, $scope.selectedNode._id));
                 }
-
-                $scope.subjects     = data.subjects     = (data.subjects     || []);
-                $scope.aichiTargets = data.aichiTargets = (data.aichiTargets || []);
-
-                $('#content').html(data.content);
-
-
-                clean($('#content')[0]);
-                clean($('#content')[0]);
-                clean($('#content')[0]);
-
-                $('#content,element').mousedown(mousedown_selectNode);
 
             }).then(function(){
 
-                lazyRetag();
                 loadComments();
 
             }).catch(function(err){
@@ -177,84 +159,78 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
             });
         }
 
-        function lazyRetag(paragraphes) {
-            if(paragraphes && paragraphes.length==0) {
-                selectNode(null);
+        function updateSelectedNode(newNode) {
+
+            if(!newNode) {
+                $scope.selectedNode = null;
+                $scope.element = {};
+                $scope.commentResources = [];
                 return;
             }
+            
+            const selectedNode = _.cloneDeep(newNode);
+            selectedNode.nodeType = selectedNode.annex ? 'annex' : 'paragraph';
+            selectedNode.documents = selectedNode.documents || [];
+            
+            $scope.selectedNode = selectedNode;
+            $scope.element = _.cloneDeep(selectedNode);
 
-            paragraphes = paragraphes || $('#content element').toArray();
+            $scope.commentResources = _.compact([data.code, $scope.element.code]);
+        }
 
-            var el = paragraphes.shift();
-
-            $scope.$applyAsync(function(){ selectNode(el);         });
-            $scope.$applyAsync(function(){ tag();                  });
-            $scope.$applyAsync(function(){ lazyRetag(paragraphes); });
+        function editComment(node) {
+            if(!$scope.selectedNode || $scope.selectedNode._id !== node._id) updateSelectedNode(node);
+            $scope.$applyAsync(() => {
+                document.querySelector('a[name="comment"]').scrollIntoView({
+                    block: 'center',
+                    behavior: "smooth"
+                });
+            });
         }
 
         //===========================
         //
         //===========================
-        function save() {
 
+        async function save() {
             if(!canEdit()) {
                 alert("Unauthorized to save");
                 throw new Error("unauthorized to save");
             }
 
-            var selectedNode = selectedElement;
+            const {selectedNode, element, decision, subjects, aichiTargets} = $scope;
 
-            selectNode(null);
+            const decisionId = decision._id;
+            var saved = false;
+            if(!areEquals(subjects, decision.subjects) || !areEquals(aichiTargets, decision.aichiTargets)) {
+                const {title} = decision;
+                const params = {title, subjects, aichiTargets};
+                await $scope.api.updateDecision(decisionId, params);
+                saved = true;
+            }
 
-            //Cleanup data;
+            if(selectedNode) {
+                if(element.nodeType !== 'annex') element.annex = null;
+                else element.annex = element.annex || annexList[0].value;
 
-            clearCommentButton();
+                await $scope.api.updateDecisionNode(decisionId, element._id, element);
+                load();
+                updateSelectedNode(selectedNode);
+                saved = true;
+            }
+            if(saved) alert( "Your document has been successfully saved." );
+        }
 
-            $('#content element').each(function() {
-                var info = $(this).data('info');
-
-                if(info && info.type!='paragraph') {
-                    delete info.data;
-                    $(this).attr('data-info', ng.toJson(info));
-                }
-            });
-
-            // Save
-
-            data.content = $('#content').html();
-
-            updateCommentButton();
-
-            var req = {
-                method : data._id ? 'PUT' : 'POST',
-                url    : '/api/v2016/decision-texts' + (data._id ? '/'+data._id : ''),
-                data   : _.pick(data, "_id","treaty","body","session","decision","meeting","content","subjects","aichiTargets")
-            };
-
-
-            $http(req).then(function(res){
-
-                data._id = data._id || res.data._id;
-
-                selectNode(selectedNode);
-
-                alert( "Your document has been successfully saved." );
-
-            }).catch(function(err){
-
-                err = (err||{}).data || err;
-
-                console.error(err);
-
-                alert(err.message||JSON.stringify(err, null, ' '));
-            });
+        function cancel() {
+            $scope.subjects = _.cloneDeep($scope.decision.subjects);
+            $scope.aichiTargets = _.cloneDeep($scope.decision.aichiTargets);
+            updateSelectedNode($scope.selectedNode);
         }
 
         //===========================
         //
         //===========================
         function loadComments() {
-
             return $http.get('/api/v2017/comments', { params : { q: { type:'decision', resources: data.code } } }).then(function(res){
 
                 var comments = res.data;
@@ -268,45 +244,9 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                     });
                 });
 
-                updateCommentButton();
-
             }).catch(console.error);
         }
         
-        updateCommentButton();
-
-        //===========================
-        //
-        //===========================
-        function clearCommentButton() {
-            ng.element('#content button.comment').remove();
-        }
-
-        //===========================
-        //
-        //===========================
-        function updateCommentButton() {
-
-            clearCommentButton();
-
-            $scope.$applyAsync(function(){
-
-                ng.element('#content element[data-type^=paragraph]').each(function(){
-
-                    var $this = ng.element(this);
-                    var info =  $this.data('info');
-                    var btn   = $compile('<button class="btn btn-link comment" ng-click="jumpTo(\'comment\')"><span class="fa fa-comment-o"></span><span class="fa fa-comments-o"></span></button>')($scope);
-
-                    if(($scope.comments[info.code]||[]).length)
-                        btn.addClass('has-comments');
-
-                    $this.append(btn);
-                });
-
-            });
-
-        }
-
         //===========================
         //
         //===========================
@@ -345,155 +285,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         //===========================
         //
         //===========================
-        function tag() {
-            
-            if(!selectedElement) return;
-            if(!$scope.element)  return;
-
-            var element = $scope.element;
-
-            element.section   = element.type=='paragraph' ? (element.section  || undefined) : undefined;
-            element.paragraph = element.type=='paragraph' ? (element.paragraph|| undefined) : undefined;
-            element.item      = element.type=='paragraph' ? (element.item     || undefined) : undefined;
-            element.subitem   = element.type=='paragraph' ? (element.subitem  || undefined) : undefined;
-
-            var data = element.data = element.data || { };
-
-            data.section   = element.section   && element.section.toUpperCase();
-            data.paragraph = element.paragraph && parseInt(element.paragraph);
-            data.item      = element.item      && element.item.charCodeAt(0) - 'a'.charCodeAt(0) + 1;
-            data.subitem   = element.subitem   && roman.indexOf(element.subitem.toUpperCase());
-
-            // tag
-            var tag = element.type || '';
-
-            if(element.section)   tag += ' ' + element.section;
-            if(element.paragraph) tag += ' ' + element.paragraph;
-            if(element.item)      tag += ''  + element.item;
-            if(element.subitem)   tag += ' (' + element.subitem + ')';
-
-            if(tag) $(selectedElement).attr('data-type', tag);
-            else    $(selectedElement).removeAttr('data-type');
-            
-            updateCommentButton();
-        }
-
-        //===========================
-        //
-        //===========================
-        function surroundSelection(tag) {
-
-            var range = window.getSelection().getRangeAt(0);
-
-            var commonAncestor = $(range.commonAncestorContainer);
-
-            if(!commonAncestor.is("#content") && !commonAncestor.parents('#content').length) {
-                alert('Please select text from the decision');
-                return;
-            }
-
-            var span = document.createElement(tag);
-            var content = range.extractContents();
-
-            span.appendChild(content);
-            range.insertNode(span);
-
-            clean($('#content')[0]);
-            clean($('#content')[0]);
-            clean($('#content')[0]);
-
-            $(span).mousedown(mousedown_selectNode);
-
-            selectNode(span);
-        }
-
-        //===========================
-        //
-        //===========================
-        function unsurroundSelection() {
-
-            if(!selectedElement) return alert('no selectedElement');
-
-            $(selectedElement).contents().unwrap();
-
-            selectedElement = null;
-        }
-
-        //===========================
-        //
-        //===========================
-        function selectNode(node) {
-
-            delete $scope.formattingLocked;
-
-            $(selectedElement).attr('data-info', ng.toJson(cleanup($scope.element, true)));
-
-            $(selectedElement).removeClass('selected');
-
-            delete $scope.element;
-
-            selectedElement = node;
-
-            if(!selectedElement) {
-                $scope.commentResources = [];
-                return;
-            }
-
-            $(selectedElement).addClass('selected');
-
-            $scope.element = cleanup($(selectedElement).data('info') || {});
-
-            if(($scope.element.data||{}).type == 'information')
-                $scope.element.data.type = 'informational';
-
-            if($scope.element.data) {
-                $scope.element.data.statusInfo = $scope.element.data.statusInfo || $scope.element.elementStatusDetails;
-                delete $scope.element.elementStatusDetails;
-            }
-
-            $scope.formattingLocked = !!$scope.element.type;
-            $scope.commentResources = _.compact([data.code, $scope.element.code]);
-        }
-
-        //===========================
-        //
-        //===========================
-        function cleanup(element, deleteEmpty) {
-
-            if(element && element.data) {
-
-                element.data.subjects      = _(element.data.subjects     ||[]).uniq().value();
-                element.data.aichiTargets  = _(element.data.aichiTargets ||[]).uniq().value();
-                element.data.actors        = _(element.data.actors       ||[]).uniq().value();
-                element.data.statuses      = _(element.data.statuses     ||[]).uniq().value();
-                element.data.decisions     = _(element.data.decisions    ||[]).uniq().value();
-                element.data.notifications = _(element.data.notifications||[]).uniq().value();
-                element.data.documents     = _(element.data.documents    ||[]).uniq().value();
-                element.data.meetings      = _(element.data.meetings     ||[]).uniq().map(mettingUrlToCode).value();
-
-                if(deleteEmpty) { // Remove empty fields/arrays
-
-                    for(var key in element.data) {
-
-                        var val = element.data[key];
-
-                        if(val===undefined) { delete element.data[key]; continue; }
-                        if(val===null)      { delete element.data[key]; continue; }
-                        if(val==="")        { delete element.data[key]; continue; }
-
-                        if(_.isArray(val) && !val.length) {
-                            delete element.data[key]; continue;
-                        }
-                    }
-                }
-            }
-
-            return element;
-        }
-
-        //===========================
-        //
-        //===========================
         function mettingUrlToCode(m) {
 
             var meetingUrlRE = /^https?:\/\/www.cbd.int\/meetings\/([a-zA-Z0-9\-]+)$/;
@@ -502,47 +293,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                 m = m.replace(meetingUrlRE, '$1');
 
             return m;
-        }
-
-
-        //===========================
-        //
-        //===========================
-        function mousedown_selectNode(event) {
-
-            var node = this; // jshint ignore: line
-
-            event.stopPropagation();
-
-            jumpTo('top');
-
-            $scope.$applyAsync(function(){
-                selectNode(node);
-            });
-        }
-
-        //===========================
-        //
-        //===========================
-        function clean(node) {
-
-            for(var n = 0; n < node.childNodes.length; n ++) {
-
-                var child = node.childNodes[n];
-
-                if(child.nodeType === 8 || (child.nodeType === 3 && !/\S/.test(child.nodeValue))) {
-
-                    node.removeChild(child);
-                    n --;
-
-                } else if(child.nodeType === 1) {
-
-                    clean(child);
-
-                    if(!child.innerHTML)
-                        node.removeChild(child);
-                }
-            }
         }
 
         //===========================
@@ -613,7 +363,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                 filename : file.name,
                 metadata : {
                     source  : 'dtt',
-                    paragraph : $scope.element.data.code
+                    paragraph : $scope.element.code
                 }
             };
 
@@ -640,8 +390,8 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                 while(~(index = $scope.uploads.indexOf(fileInfo)))
                     $scope.uploads.splice(index, 1);
 
-                $scope.element.data.files = $scope.element.data.files||[];
-                $scope.element.data.files.push(fileInfo);
+                $scope.element.files = $scope.element.files||[];
+                $scope.element.files.push(fileInfo);
 
             }).catch(function(err) {
 
@@ -652,20 +402,6 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
             });
         }
 
-        //===========================
-        //
-        //===========================
-        function buildFileUrl(item) {
-            return '/api/v2016/decision-texts/'+data._id+'/attachments/'+item.hash+'/stream';
-        }
-
-        ////////////////////
-        // DIALOGS
-        ////////////////////
-
-        //===========================
-        //
-        //===========================
         function selectMeetingDocument() {
 
             openDialog(import('./select-document-dialog'), { showClose: false }).then(function(dialog){
@@ -675,7 +411,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                     if(!res.value)
                         return;
 
-                    addTo(res.value, $scope.element.data.documents);
+                    addTo(res.value, $scope.element.documents);
                 });
             });
         }
@@ -692,24 +428,7 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                     if(!res.value)
                         return;
 
-                    addTo(res.value, $scope.element.data.decisions);
-                });
-            });
-        }
-
-        //===========================
-        //
-        //===========================
-        function selectNotification() {
-
-            openDialog(import('./select-notification-dialog'), { showClose: false }).then(function(dialog){
-
-                dialog.closePromise.then(function(res){
-
-                    if(!res.value)
-                        return;
-
-                    addTo(res.value.symbol, $scope.element.data.notifications);
+                    addTo(res.value, $scope.element.decisions);
                 });
             });
         }
@@ -726,7 +445,9 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
                     if(!res.value)
                         return;
 
-                    addTo(mettingUrlToCode(res.value.symbol), $scope.element.data.meetings);
+                    $scope.element.outcomes = $scope.element.outcomes || [];
+
+                    addTo(mettingUrlToCode(res.value.symbol), $scope.element.outcomes);
                 });
             });
         }
@@ -761,112 +482,39 @@ export default ['$scope', '$http', '$route', '$location', '$filter', '$q', '$com
         function canDebug() { return !!_.intersection(user.roles, ["Administrator"]).length; }
         function canEdit()  { return !!_.intersection(user.roles, ["DecisionTrackingTool"]).length; }
         function canView()  { return !!_.intersection(user.roles, ["Administrator","DecisionTrackingTool", "ScbdStaff"]).length; }
+        function isDisabled(parentId, field) { return !!(findNode($scope.decision, parentId) || {})[field];}
+        function contentEdited() {
+            const {element, selectedNode, subjects, aichiTargets, decision} = $scope;
 
-        //==============================
-        //
-        //==============================
-        function jumpTo(hash) {
+            if(subjects && decision.subjects && !areEquals(subjects, decision.subjects)) return true;
+            if(aichiTargets && decision.aichiTargets && !areEquals(aichiTargets, decision.aichiTargets)) return true;
+            
+            const a = _.pick(element, (e) => !!e);
+            const b = _.pick(selectedNode, (e) => !!e);
 
-            if(!hash)
-                return;
+            if(!areEquals(a, b)) return true;
 
-            $scope.$applyAsync(function() {
-                $anchorScroll(hash);
-            });
+            return false;
+        }
+
+        function findNode(collection, id) {
+            if(collection && collection._id && collection._id === id) {
+                return collection;
+            } else if (!_.isEmpty(collection.nodes)) {
+                let result = null;
+                collection.nodes.forEach(node => {
+                    if(result) return;
+                    result = findNode(node, id);
+                });
+                return result;
+            }
+            return null;
         }
     }];
 
     //===========================
     //
     //===========================
-    function replaceWithOwnChildren(el) {
-        var parent = el.parentNode;
-        while (el.hasChildNodes()) {
-            parent.insertBefore(el.firstChild, el);
-        }
-        parent.removeChild(el);
-    }
-
-    //===========================
-    //
-    //===========================
-    function removeSelectionFormatting() {
-        var range, sel = rangy.getSelection();
-
-        if(sel.isCollapsed)
-            return;
-
-        for (var r = 0; r < sel.rangeCount; ++r) {
-
-            var commonAncestor = $(sel.getRangeAt(r).commonAncestorContainer);
-
-            if(!commonAncestor.is("#content") && !commonAncestor.parents('#content').length) {
-                alert('Please select text only from the decision');
-                return;
-            }
-        }
-
-        for (var i = 0; i < sel.rangeCount; ++i) {
-            range = sel.getRangeAt(i);
-
-            // Split partially selected nodes
-            range.splitBoundaries();
-
-            // Get formatting elements. For this example, we'll count any
-            // element with display: inline, except <br>s.
-            var formattingEls = range.getNodes([1], function(el) {
-                return el.tagName != "BR";
-            });
-
-            // Remove the formatting elements
-            for (var j = 0; j<formattingEls.length; j++) {
-                replaceWithOwnChildren(formattingEls[j]);
-            }
-        }
-    }
-
-    //===========================
-    //
-    //===========================
     function resData(res) {
         return res.data;
-    }
-
-    //========================================
-    //
-    //
-    //========================================
-    function solrEscape(value) {
-
-        if(value===undefined) throw "Value is undefined";
-        if(value===null)      throw "Value is null";
-        if(value==="")        throw "Value is null";
-
-        if(_.isNumber(value)) value = value.toString();
-        if(_.isDate  (value)) value = value.toISOString();
-
-        //TODO add more types
-
-        value = value.toString();
-
-        value = value.replace(/\\/g,   '\\\\');
-        value = value.replace(/\+/g,   '\\+');
-        value = value.replace(/\-/g,   '\\-');
-        value = value.replace(/\&\&/g, '\\&&');
-        value = value.replace(/\|\|/g, '\\||');
-        value = value.replace(/\!/g,   '\\!');
-        value = value.replace(/\(/g,   '\\(');
-        value = value.replace(/\)/g,   '\\)');
-        value = value.replace(/\{/g,   '\\{');
-        value = value.replace(/\}/g,   '\\}');
-        value = value.replace(/\[/g,   '\\[');
-        value = value.replace(/\]/g,   '\\]');
-        value = value.replace(/\^/g,   '\\^');
-        value = value.replace(/\"/g,   '\\"');
-        value = value.replace(/\~/g,   '\\~');
-        value = value.replace(/\*/g,   '\\*');
-        value = value.replace(/\?/g,   '\\?');
-        value = value.replace(/\:/g,   '\\:');
-
-        return value;
     }
