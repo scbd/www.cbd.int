@@ -1,6 +1,6 @@
 <template>
 	<span style="display:inline-block;">
-		<a href="javascript:void(0)" @click="startTour">{{title}}</a>
+		<a href="#" @click.prevent="startTour">{{title}}</a>
 		<v-tour name="decision-view-tour" :steps="steps"></v-tour>
 	</span>
 </template>
