@@ -3,23 +3,12 @@
 captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
 <head>
     <base href="/">
-    <script> //Analytics
-        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-
-        if(~document.location.hostname.indexOf('cbd.int')){
-            ga('create', 'UA-1996573-1', 'auto');
-            ga('set',    'hostname', window.location.hostname);
-            ga('set',    'location', undefined);
-
-            //tag manager
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-NL82D37');
-        }
-    </script>
-
+    <% if(googleAnalyticsCode) { %>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=<%=googleAnalyticsCode%>"></script>
+    <% } else { %>
+        <script>console.warn('Google Analytics key not set.');</script>
+    <% } %>
+    <script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments)};gtag("js", new Date());gtag("set", "developer_id.dMDhkMT", true);gtag("config", "<%=googleAnalyticsCode%>", {"groups":"default","page_placeholder":"PLACEHOLDER_page_location","allow_ad_personalization_signals":false});</script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es2019%2Ces2015%2Ces2016%2Ces2017%2Ces2018%2Ces5%2Ces6%2Ces7%2CHTMLCanvasElement.prototype.toBlob%2Cconsole"></script>
     <script src="<%=`${cdnUrl}combine/${[
         'npm/jquery@2.2.4/dist/jquery.min.js',
@@ -37,7 +26,6 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
         });
     </script>
     <script src="https://www.recaptcha.net/recaptcha/api.js"></script>
-    <script async src='https://www.google-analytics.com/analytics.js'></script>
     <title>Convention on Biological Diversity</title>
     <meta property="og:site_name" content="Convention on Biological Diversity" />
     <meta charset="utf-8">
