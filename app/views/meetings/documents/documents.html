@@ -12,7 +12,7 @@
 
     <h1 class="visible-print" style="color:black;position:absolute;top:0px;right:0px"> {{::documentsCtrl.meeting.code}} <em><small>{{documentsCtrl.currentTabX.title}}</small></em></h1>
 
-    <h1 ng-if="::documentsCtrl.showMeeting" class="hidden-print hidden-xs">Meeting Documents</h1>
+    <h1 ng-if="::documentsCtrl.showMeeting" class="hidden-print hidden-xs">Meeting documents</h1>
     <h3 ng-if="::documentsCtrl.showMeeting" class="hidden-print visible-xs pull-left">{{::documentsCtrl.meeting.code|lstring}}</h3>
     <h3 ng-if="::documentsCtrl.showMeeting" class="hidden-print hidden-xs">{{::documentsCtrl.meeting.title|lstring}}</h3>
     <h5 ng-if="::documentsCtrl.showMeeting" class="hidden-print hidden-xs">
@@ -146,12 +146,12 @@
 
                 <h3 ng-if="::documentsCtrl.noTabs">
                     <span ng-bind="::type.title"></span>
-                    <small class="text-muted" ng-if="::type.insession" style="font-variant: small-caps">(In-Session)</small>
+                    <small class="text-muted" ng-if="::type.insession">(in session)</small>
                 </h3>
 
                 <div class="clearfix"></div>
 
-                <div style="padding:10px;" ng-if="::!type.length">No in-session documents have yet been posted.</div>
+                <div style="padding:10px;" ng-if="::!type.length">No in session documents have yet been posted.</div>
 
                 <div ng-repeat="section in type.sections track by section.code">
 
