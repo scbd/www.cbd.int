@@ -53,10 +53,10 @@ export { default as template } from './document-id.html';
             { code : "official",             title: "Official" },
             { code : "information",          title: "Information" },
             { code : "other",                title: "Other" },
-            { code : "in-session/statement", title: "Statement (In-Session)" },
-            { code : "in-session/non-paper", title: "Non Paper (In-Session)" },
-            { code : "in-session/crp",       title: "CRP (In-Session}" },
-            { code : "in-session/limited",   title: "L (In-Session)" },
+            { code : "in-session/statement", title: "Statement (in session)" },
+            { code : "in-session/non-paper", title: "Non Paper (in session)" },
+            { code : "in-session/crp",       title: "CRP (in session}" },
+            { code : "in-session/limited",   title: "L (in session)" },
             { code : "draft-decision",       title: "Draft Decision/Recommendation" },
         ]
 

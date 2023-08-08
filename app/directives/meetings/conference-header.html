@@ -1,4 +1,4 @@
-﻿<div class="conference-header" ng-class="{ [conference.code]: conference.code, ['_'+conference.code]: conference.code }">
+<div class="conference-header" ng-class="{ [conference.code]: conference.code, ['_'+conference.code]: conference.code }">
     <!-- in case if conf code begins with number add _ for css standard., keep old for backward compatibility -->
 
     <!-- MEETING HEADER -->
@@ -441,7 +441,7 @@
                         </div> 
                         <div class="visible-xs">
                             <i ng-if=":: menu.icon" class="fa {{::menu.icon||'fa-files-o'}}" aria-hidden="true" style="font-size:24px"></i>
-                            <div ng-if="::!menu.icon" style="margin-top:2px" ng-bind-html="::menu.shortTitle|lstring"></div>
+                            <div ng-if="::!menu.icon" style="margin-top:2px" ng-bind-html="::(menu.shortTitle||menu.title)|lstring"></div>
                         </div> 
                         
                     </div>
