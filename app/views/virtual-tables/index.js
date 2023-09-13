@@ -54,6 +54,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     $scope.isPublication = $route.current.params.type == 'publication';
 
     $scope.isAdmin = (user.roles||[]).find(r=>['administrator', 'oasisArticleEditor'].includes(r))!=undefined;
+    $scope.introductionArticleTags = ['virtual-table', 'introduction', encodeURIComponent($route.current.params.code)]
     $scope.vueOptions = {
         components : {cbdAddNewArticle}
     }
@@ -164,7 +165,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
 
     function buildQuery(){
         var ag   = [];
-        var tags = ['virtual-table', 'introduction', encodeURIComponent($route.current.params.code)];
+        var tags = [...$scope.introductionArticleTags];
         
         
         var match = { "adminTags" : { $all: _(tags).map(kebabCase).value() }};
