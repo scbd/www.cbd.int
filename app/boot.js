@@ -9,7 +9,7 @@ export const baseLibs = [
     'npm/lodash@3.10.1/index.min.js',
     'npm/moment@2.29.1/min/moment.min.js',
     'npm/moment-timezone@0.5.33/builds/moment-timezone-with-data-2012-2022.min.js',
-    'npm/vue@2.6.12/dist/vue.min.js',
+    'npm/vue@2.7.14/dist/vue.min.js',
 ];
 
 export default function bootApp(window, require, defineX) {
