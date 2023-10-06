@@ -140,7 +140,6 @@ function preProcessAnchors() {
     console.log(headings)
 
     headings.forEach((heading)=>{
-        console.log(heading.tagName, heading.innerText);
 
         const name = heading.innerText
                     .replace(/[^a-z0-9-_]/gim, '-')
