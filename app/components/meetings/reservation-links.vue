@@ -27,7 +27,7 @@
 
 <script>
   import * as ResService from '~/services/reservation'
-  import langsMap        from '../languages'
+  import { getLanguageName } from '~/data/languages'
 
   export default {
     name      : 'ReservationLinks',
@@ -39,7 +39,7 @@
                 },
     computed  : { isVisible, youTubeLinks, nonYouTubeLinks, displayLinksImmediately },
     methods   : { refresher, clearRefresher },
-    filters   : { langText },
+    filters   : { langText: getLanguageName },
     data, created, mounted, beforeDestroy
   }
 
@@ -105,10 +105,5 @@
 
     return displayLinksImmediately || this.isConnectionDone
   }
-
-  /*****************/
-  /* vue filtered
-  /****************/
-  function langText(code){ return langsMap[code] }
 
 </script>

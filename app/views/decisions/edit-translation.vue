@@ -65,7 +65,7 @@
 import DecisionApi from '~/api/decisions.js';
 import { cloneDeep, isEmpty } from 'lodash'
 import TextEditor, { EditorTypes } from '~/components/text-editor.vue';
-import languages from '~/data/languages.js';
+import { UN as languages } from '~/data/languages.js';
 
 export default {
     name: 'DecisionEditTranslations',
