@@ -8,6 +8,24 @@ export const UN = {
  'zh': '中文',
 }
 
+export const Floor = {
+  xx : 'Floor'    
+}
+
 export default {
-  ...UN
+  ...UN,
 } 
+
+const allLanguages = {
+  ...UN,
+  ...Floor
+};
+
+export function getLanguageName(code) {
+
+  if(!code) return null;
+
+  const name = allLanguages[code];
+
+  return name || code.toUpperCase();
+}
