@@ -11,7 +11,7 @@
                     class="btn btn-default"></cbd-add-new-article>
                 <br/>    
             </div>
-            <div v-if="article" v-html="$options.filters.lstring(article.content, $locale)" class="ck-content"></div>
+            <div v-if="article" ref="container" v-html="$options.filters.lstring(article.content, $locale)" class="ck-content"></div>
             <div v-if="!article" class="ck-content">No information is available for this section at the moment.</div>
         </div>
         <div v-if="loading">Loading section content<i class="fa fa-spinner fa-spin"></i></div>
@@ -27,6 +27,7 @@ import ArticlesApi from '../../api/articles';
 import cbdAddNewArticle from './cbd-add-new-article.vue';
 // import { getAuthToken, getUser } from '~/authentication'
 import '~/filters/vue-filters.js'
+import jumpToAnchor from '~/services/jump-to-anchor';
 
 export default {
     name: 'cbdArticle',
@@ -55,6 +56,21 @@ export default {
         if(!this.article)
             this.loadArticle();
     },
+    watch:{
+        article: function() {
+
+            this.$nextTick(()=>{
+                const { container } = this.$refs;
+
+                if(!container) return;
+
+                preProcessAnchors.call(this);
+                preProcessOEmbed.call(this);
+            });
+
+            this.$nextTick(jumpToAnchor);
+        }
+    },
     methods: {
         async loadArticle() {
             try{
@@ -64,8 +80,6 @@ export default {
      
                 if(article.length){
                     this.article = article[0];
-
-                    this.preProcessOEmbed();
 
                     if(this.article.coverImage?.url){
                         //sometime the file name has space/special chars, use new URL's href prop which encodes the special chars
@@ -94,25 +108,50 @@ export default {
                 this.loading = false;
             }
         },
-        preProcessOEmbed() {
-
-            setTimeout(function(){
-
-                document.querySelectorAll( 'oembed[url]' ).forEach(async function(element) {
-                    var url = element.attributes.url.value;
-                    var params = {
-                        url : encodeURI(url),
-                    }
-
-                    const response = await axios.get('/api/v2020/oembed', {params:params});                    
-                    var embedHtml = '<div class="ck-media__wrapper" style="width:100%">' + response.data.html +'</div>'
-                    element.insertAdjacentHTML("afterend", embedHtml);
-                    
-                });
-
-            }, 200)
-        }
     }
+}
+
+function preProcessOEmbed() {
+
+    const { container } = this.$refs;
+
+    container.querySelectorAll( 'oembed[url]' ).forEach(async function(element) {
+        var url = element.attributes.url.value;
+        var params = {
+            url : encodeURIComponent(url),
+        }
+
+        const response = await axios.get('/api/v2020/oembed', {params:params});                    
+        var embedHtml = '<div class="ck-media__wrapper" style="width:100%">' + response.data.html +'</div>'
+        element.insertAdjacentHTML("afterend", embedHtml);
+        
+    });
+}
+
+//============================================
+//
+//============================================
+function preProcessAnchors() {
+
+    const { container } = this.$refs;
+
+    const headings = container.querySelectorAll('h1,h2,h3,h4,h5,h6');
+
+
+    headings.forEach((heading)=>{
+
+        const name = heading.innerText
+                    .replace(/[^a-z0-9-_]/gim, '-')
+                    .replace(/_{2,}/gim, '-')
+                    .replace(/(^-+|-+$)/gim, '')
+                    .toLowerCase();
+        
+        const anchor = document.createElement('a');
+
+        anchor.setAttribute('name', name);
+
+        heading.parentElement.insertBefore(anchor, heading);
+    });
 }
 </script>
     

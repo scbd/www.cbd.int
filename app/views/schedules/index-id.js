@@ -60,7 +60,8 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                 _ctrl.conferenceTimezone = conf.timezone;
                 _ctrl.code               = conf.code
                 _ctrl.all                = conf.schedule.all
-                _ctrl.showRooms          = conf.schedule.showRooms
+                _ctrl.showRooms          = conf.schedule.showRooms!==false
+                debugger
                 _ctrl.uploadStatement    = conf.uploadStatement;
 
                 $scope.schedule = conf.schedule

@@ -23,6 +23,7 @@ import EditElement from '~/components/decisions/edit-element.vue'
 import DecisionApi from '~/api/decisions.js'
 import areEquals from '~/filters/areEquals'
 import 'angular-vue'
+import Vue from 'vue'
 
 export { default as template } from './edit.html'
 
@@ -33,7 +34,8 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         $scope.vueOptions = {
             components : {EditElement}
         };
-        $scope.api = new DecisionApi($scope.tokenReader);
+        $scope.api = new DecisionApi({ token: Vue.prototype.$auth.strategy.token.get() });
+        $scope.decision = {};
         $scope.decision = {};
 
         var treaty        = null;

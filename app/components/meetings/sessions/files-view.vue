@@ -36,7 +36,7 @@
 
 <script>
 
-import languages from '../../languages.js';
+import languages from '~/data/languages';
 import { showPreview } from './text-preview-dialog.vue'; 
 
 const   MIMES = {

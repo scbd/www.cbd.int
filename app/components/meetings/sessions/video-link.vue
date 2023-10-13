@@ -13,7 +13,7 @@
       </button>
       <div class="dropdown-menu">
         <a class="fix dropdown-item text-nowrap" :href="url" v-for="{ language, url } in entries" :key="url" target="video">
-          <i class="fa fa-play-circle" aria-hidden="true"></i> {{language | languageName }}
+          <i class="fa fa-play-circle" aria-hidden="true"></i> {{language | getLanguageName }}
         </a>
       </div>
     </div>    
@@ -25,7 +25,7 @@
 
 import { Duration } from 'luxon'
 import { asDateTime } from '../datetime.js'
-import languages from '../../languages.js'
+import { getLanguageName } from '~/data/languages'
 
 const Types = { 
   youtube : { param : "t", format: "s" }
@@ -37,7 +37,7 @@ export default {
     videos  : { type: Array,         required: true, default:[] },
     startAt : { type: [String,Date], required: false },
   },
-  filters : { languageName: (l)=>languages[l] || l },
+  filters : { getLanguageName },
   computed: {
     entries
   }
