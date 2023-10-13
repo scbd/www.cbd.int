@@ -114,7 +114,7 @@ export default {
 }
 
 async function created() {
-    this.api = new DecisionApi(this.tokenReader);
+    this.api = new DecisionApi({ token: this.$auth.strategy.token.get() });
 
 	let treaty    = null ;
     const { route } = this;

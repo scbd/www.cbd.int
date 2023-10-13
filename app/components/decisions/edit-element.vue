@@ -168,7 +168,7 @@ function label(type, value) {
 }
 
 function load() {
-  this.api = new DecisionApi(this.tokenReader);
+  this.api = new DecisionApi({ token: this.$auth.strategy.token.get() });
 }
 
 async function addNode(parentId, nextTo) {

@@ -379,7 +379,7 @@ function findNode(collection, code) {
 async function load() {
 	const { $route: route, $router: router } = this;
 
-	this.api = new DecisionApi(this.tokenReader);
+	this.api = new DecisionApi({ token: this.$auth.strategy.token.get() });
 	
 	let treaty    = null ;
 	const body      = route.params.body.toUpperCase();
