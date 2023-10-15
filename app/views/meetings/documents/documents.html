@@ -69,7 +69,7 @@
             </ul>
         </span>
     
-        <print-smart-checkout ng-if="documentsCtrl.documents.length" style="display:inline-block" documents="documentsCtrl.documents|filter:{selected:true}:true" allow-print="documentsCtrl.meeting.printSmart"></print-smart-checkout>
+        <print-smart-checkout ng-if="documentsCtrl.documents.length" style="display:inline-block" documents="documentsCtrl.selectedDocuments()" allow-print="documentsCtrl.meeting.printSmart"></print-smart-checkout>
     </div>
 
 
