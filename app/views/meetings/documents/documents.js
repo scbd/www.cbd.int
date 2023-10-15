@@ -24,6 +24,7 @@ export { default as template } from './documents.html';
         var meetingCode = $route.current.params.meeting.toUpperCase();
         var hardTab = false;
         var httpCache = initCache();
+        let allDocuments = [];
         var currentUser;
 
 
@@ -60,6 +61,8 @@ export { default as template } from './documents.html';
         _ctrl.notify = function(msg) {
             $scope.$emit("showInfo", msg);
         }
+
+        _ctrl.selectedDocuments = () => allDocuments.filter(o => o.selected);
 
         $scope.$watch('documentsCtrl.sort', function(s){
             $location.hash(s=='agenda' ? 'agenda' : null);
@@ -410,6 +413,8 @@ export { default as template } from './documents.html';
 
             if(!docs || !docs.length)
                 return;
+
+            docs.forEach((d) => allDocuments.push(d));
 
             options = _.defaults(options||{}, {
                 section: null,

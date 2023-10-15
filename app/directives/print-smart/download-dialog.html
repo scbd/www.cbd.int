@@ -92,7 +92,7 @@
 
 				<button type="button" ng-hide="success || !allowBack"  class="btn btn-default hidden-xs" ng-click="close('checkout')"><i class="fa fa-arrow-left"></i> Back</button>
 
-				<a      target="_self" ng-show="!success" class="btn btn-success" style="color: #fff;"  ng-click="download($event)" ng-disabled="!downloadLink" href="{{downloadLink}}"><i class="fa fa-arrow-circle-down"></i> Download</a>
+				<a      target="_self" ng-show="!success" class="btn btn-success" style="color: #fff;"  ng-click="download($event)" ng-class="{ disabled: !downloadLink }" ng-disabled="!downloadLink" href="{{downloadLink}}"><i class="fa fa-arrow-circle-down"></i> Download</a>
 				<button type="button"  ng-show="!success && canDropbox()" class="btn btn-primary" ng-disabled="!downloadLink" ng-click="sendToDropbox()"><i class="fa fa-dropbox"></i> Dropbox</button>
 
 				<button type="button" class="btn btn-default" ng-click="close(success && 'clear')"><i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
