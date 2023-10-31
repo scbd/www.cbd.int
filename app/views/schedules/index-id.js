@@ -57,6 +57,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                 return conferenceService.getActiveConference(code);
 
             }).then(async function(conf){
+                _ctrl.institution        = conf.institution;
                 _ctrl.conferenceTimezone = conf.timezone;
                 _ctrl.code               = conf.code
                 _ctrl.all                = conf.schedule.all
@@ -125,8 +126,8 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                         r.videoUrl = r.video && (r.videoUrl || r.room.videoUrl)
 
                         if(hasRole) {
-                            r.editUrl       = `https://eunomia.cbd.int/schedule/${encodeURIComponent(_ctrl.code)}?day=${encodeURIComponent(r.start)}&edit=${encodeURIComponent(r._id)}`
-                            r.adminVideoUrl = r.videoUrl || r.room.videoUrl;
+                            r.editUrl       = `https://eunomia.cbd.int/${encodeURIComponent(_ctrl.institution)}/${encodeURIComponent(_ctrl.code)}/schedule?day=${encodeURIComponent(r.start)}&edit=${encodeURIComponent(r._id)}`
+                            r.adminVideoUrl = r?.videoUrl || r?.room?.videoUrl;
                         }
 
                         const isDateToday = isToday(r.start);
@@ -195,11 +196,12 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
             if(!r)
                 return "zzz";
 
-            var typePriority =  ((r.type.priority || 999999)+1000000).toString().substr(1);
-            var roomPriority =  r.room.title+' ';
-            var timePriority =  moment.tz(r.start, getTimezone()).format("MM:DD:HH:mm");
+            var typePriority =  `${r?.type?.priority || 999999}`.padStart(6, '0');
+            var timePriority =  moment.tz(r.start, getTimezone()).toISOString();
+            var roomPriority =  r?.room?.title || '';
+            var titlePriority=  r?.title || '';
 
-            return (timePriority + '-' + typePriority + '-' + roomPriority + '-' + (r.title||'')).toLowerCase();
+            return `${timePriority}-${typePriority}-${roomPriority}-${titlePriority}`.toLowerCase();
         }
 
         function now() {
