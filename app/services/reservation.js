@@ -13,17 +13,17 @@ export const hasConnection = (reservation) => {
 }
 
 export const isConnectionDone = (reservation, schedule) => {
-  if(!reservation || !schedule) throw new Error(`isConnectionDone: reservation or schedule not passed to function`)
+  if(!reservation) throw new Error(`isConnectionDone: reservation or schedule not passed to function`)
 
-  const { end, videoUrlMinutes } = reservation
-  const { closeAccessDelayTime } = schedule?.connection
-  const   endDate                = moment.tz(end, getTimezone()).add(videoUrlMinutes || closeAccessDelayTime || defaultCloseTime, 'minutes').toDate();
+  const { end, videoUrlMinutes } = reservation;
+  const { closeAccessDelayTime } = schedule?.connection || { };
+  const endDate                  = moment.tz(end, getTimezone()).add(videoUrlMinutes || closeAccessDelayTime || defaultCloseTime || 0, 'minutes').toDate();
 
   return now() > endDate
 }
 
 export const getConnectionInitPreStartMinutes = (reservation, schedule) => {
-  if(!reservation || !schedule || !schedule.connection) throw new Error(`getConnectionInitPreStartMinutes: reservation or schedule not passed to function`)
+  if(!reservation || !schedule?.connection)  return 0;
 
   const { type }         = reservation
   const { initTimes }    = schedule.connection
