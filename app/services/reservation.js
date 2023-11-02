@@ -1,8 +1,7 @@
 import   moment        from 'moment-timezone'
-import { getTimezone } from './time-zone'
 
 const defaultCloseTime = 15 // minutes
-export const now              = () => moment.tz(new Date(), getTimezone()).toDate()
+export const now              = () => new Date()
 
 export const hasConnection = (reservation) => {
   if(!reservation ) throw new Error(`hasConnection: reservation not passed to function`)
@@ -17,7 +16,7 @@ export const isConnectionDone = (reservation, schedule) => {
 
   const { end, videoUrlMinutes } = reservation;
   const { closeAccessDelayTime } = schedule?.connection || { };
-  const endDate                  = moment.tz(end, getTimezone()).add(videoUrlMinutes || closeAccessDelayTime || defaultCloseTime || 0, 'minutes').toDate();
+  const endDate                  = moment(end).add(videoUrlMinutes || closeAccessDelayTime || defaultCloseTime || 0, 'minutes').toDate();
 
   return now() > endDate
 }
@@ -40,7 +39,7 @@ export const getNowToConnectInitDuration = (reservation, schedule) => {
   const { type, start }      = reservation
   const   minutesDefault     = getConnectionInitPreStartMinutes({ type }, schedule)
   const   canConnectTime     = moment(start).subtract(minutesDefault, 'm')
-  const   dateTimeDifference = canConnectTime.diff(moment.tz(new Date(), getTimezone()))
+  const   dateTimeDifference = canConnectTime.diff(new Date())
 
   return getDurationPlainObject(dateTimeDifference)
 }
@@ -49,7 +48,7 @@ export const getNowToStartDuration = (reservation) => {
 
   const { start       }      = reservation
   const   startMoment        = moment(start)
-  const   dateTimeDifference = startMoment.diff(moment.tz(new Date(), getTimezone()))
+  const   dateTimeDifference = startMoment.diff(new Date())
 
   return getDurationPlainObject(dateTimeDifference)
 }
@@ -63,16 +62,16 @@ export const canConnect = (reservation, schedule) => {
 }
 
 export const isInProgress = ({ start, end }) => {
-  const startDate = moment.tz(start, getTimezone()).toDate()
-  const endDate   = moment.tz(end  , getTimezone()).toDate()
+  const startDate = moment(start).toDate()
+  const endDate   = moment(end).toDate()
 
   return startDate <= now()  && now()  <= endDate
 }
 
 export const isConnectionTestingInProgress = ({ start, type }, { connection }) => { //params: reservation, t_event_group.schedule
   const   connectionTestingPreStart   = getConnectionInitPreStartMinutes({ type }, { connection })
-  const   startDate                   = moment.tz(start    , getTimezone())
-  const   testingStart                = moment.tz(startDate, getTimezone()).subtract(connectionTestingPreStart || 0, 'minutes')
+  const   startDate                   = moment(start)
+  const   testingStart                = moment(startDate).subtract(connectionTestingPreStart || 0, 'minutes')
 
   return testingStart.toDate() <= now() && now()  <= startDate.toDate()
 }

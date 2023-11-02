@@ -16,6 +16,7 @@ import 'angular-vue'
 import UploadStatementButton from '~/components/meetings/upload-statement-button.vue'
 import { Plenary, WorkingGroupI, WorkingGroupII, ContactGroups, HighLevelSegment  } from '~/util/meetings-data'
 import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
+import ScheduleTime from '../../schedules/schedule-time.vue';
 
 Vue.component('uploadStatementButton', UploadStatementButton);
 
@@ -63,7 +64,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
 
         $scope.route       = { params : $route.current.params, query: $location.search() }
         $scope.vueOptions  = {
-            components: { AgendaItem },
+            components: { AgendaItem, ScheduleTime },
             i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
         };
 
@@ -134,7 +135,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             var reservations, now;
             var event = conferenceService.getConference(eventId).then(async function(conf) {
                 _ctrl.event = event = conf;
-                _ctrl.conferenceTimezone = event.timezone
+                $scope.timezone = conf.timezone;
                 processScheduleDates();               
                 return conferenceService.getAgendas(conf.MajorEventIDs)
             }).then(function(agendas){
@@ -176,7 +177,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
 
                 prepopulateTabs(reservations);
 
-                var meetingCodes = _(reservations).map('agenda.items').flatten().map('meeting').uniq().value();
+                var meetingCodes = _(reservations).map('agenda.items').flatten().map('meeting').compact().uniq().value();
 
                 var meetings = $http.get('/api/v2016/meetings', { params: { q: { EVT_CD: { $in: meetingCodes } }, f : { EVT_TIT_EN:1, EVT_CD:1, printSmart:1 , agenda:1, uploadStatement:1 }, cache: true } }).then(function(res){
                     return _ctrl.meetings  = _.forEach(res.data, function(m){
@@ -230,7 +231,8 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
 
                     r.day     = startOfDay;
                     r.dayPart = _(DAY_PARTS).find(function(p) { return startTime < p.end; }).code;
-                    r.agenda.items.forEach(function(rItem) {
+
+                    r.agenda?.items?.forEach(function(rItem) {
 
                         var types;
 
@@ -545,39 +547,9 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         }
 
         function getTimezone() {
-          if(!_ctrl.all) return _ctrl.conferenceTimezone
-
-
-          return  localStorage.getItem('timezone') || Intl.DateTimeFormat().resolvedOptions().timeZone
+          return _ctrl.event?.timezone
         }
         _ctrl.getTimezone = getTimezone
-
-        function getTimezones() {
-          const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
-
-          if(_ctrl.conferenceTimezone === browserTimezone) {
-            if(localStorage.getItem('timezone') !== _ctrl.conferenceTimezone){
-              localStorage.setItem('timezone', _ctrl.conferenceTimezone)
-              load()
-            }
-            return [] 
-          }
-
-          if(getTimezone() === _ctrl.conferenceTimezone) return [browserTimezone]
-
-          return [_ctrl.conferenceTimezone]
-        }
-        _ctrl.getTimezones = getTimezones
-
-        function timezoneChanged(zone) {
-          const tz         = localStorage.getItem('timezone')
-          const selectedTz = zone || tz || Intl.DateTimeFormat().resolvedOptions().timeZone
-
-          localStorage.setItem('timezone', selectedTz )
-
-          load()
-        }
-        _ctrl.timezoneChanged = timezoneChanged
 
         function getColor(code) {
           return  _ctrl.colorMap[code]
@@ -590,7 +562,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         _ctrl.getReservationTypeName = getReservationTypeName
 
         function canConnect({ type, start }) {
-          const now            = moment.tz(new Date(), getTimezone()).toDate();
+          const now            = new Date();
           const minutes        = minutesBefore({ type })
           const canConnectTime = moment(start).subtract(minutes, 'm').toDate();
 
