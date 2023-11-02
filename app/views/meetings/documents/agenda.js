@@ -156,7 +156,11 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                     return reservations;
                 
                 //Lookup for first reservation
-                var query  = { 'agenda.items': { $exists: true, $ne: [] }, 'meta.status': { $ne : 'deleted' } };
+                var query  = { 
+                    'agenda.items': { $exists: true, $ne: [] }, 
+                    'meta.status': { $ne : 'deleted' },
+                    'location.conference': _ctrl.event._id
+                };
 
                 return $http.get('/api/v2016/reservations', { params: { q : query, f : { start : 1 }, s: { start : 1 }, fo:1, cache: true } }).then(function(res){
 
@@ -374,7 +378,8 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                 $or : [
                     { confirmed : { $exists: false } },
                     { confirmed : true }
-                ]
+                ],
+                'location.conference': _ctrl.event._id
             };
 
             var rooms = loadRooms();
