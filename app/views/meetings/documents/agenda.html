@@ -158,7 +158,7 @@
                                 <table ng-if="res.agenda.visible && res.agenda.items && res.agenda.items.length" class="table" style="margin:0px">
                                     <tr  ng-repeat="agendaItem in res.agenda.items" style="cursor:default">
                                         <td class="hidden-xs no-border-left" style="width:55px" ng-click="agendaItem.expanded=!agendaItem.expanded">
-                                            <span ng-style="{ 'background-color' : agendaItem.color}" class="badge label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::(agendaItem.code||agendaItem.item)}}</span>
+                                            <agenda-item ng-vue="vueOptions" :item="agendaItem" />
                                         </td>
                                         <td class="no-border-right">
                                             <div ng-click="agendaItem.expanded=!agendaItem.expanded" >
@@ -182,7 +182,7 @@
                                                         <span ng-switch-when="l">L</span>
                                                     </span>
                                                 </div>
-                                                <span class="visible-xs-inline-block badge label agenda {{::agendaItem.prefix}}">{{::agendaItem.prefix}} {{::(agendaItem.code||agendaItem.item) }}</span>
+                                                <agenda-item class="visible-xs-inline-block" ng-vue="vueOptions" :item="agendaItem" />
                                                 <span class="title agenda">
                                                     <span ng-if="::!agendaItem.text">
                                                         <span class="hidden-xs" >{{::agendaItem.title}}</span>
@@ -204,9 +204,10 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <div style="padding-left: 10px;"  ng-if="!res.agenda.visible || !res.agenda.items || !res.agenda.items.length">
+                                <div style="padding-left: 10px;"  ng-ifX="!res.agenda.visible || !res.agenda.items || !res.agenda.items.length">
                                   <span ng-repeat="(key, value) in res.agenda.meetings">
-                                    <span ng-if="value" ng-style="{ 'background-color' : agendaCtrl.getColor(key)}" class="badge label agenda {{item.prefix}}" style="min-width:51px">{{::key}}</span>
+                                    <!-- TODO ADD SUPPORT TO COLOR USING next ng-vue verison -->
+                                    <agenda-item v-if="value" ng-vue="vueOptions" ng-vue-expose="key,value" :item="{ prefix:key }" /> 
                                   </span>
                                 </div>
 

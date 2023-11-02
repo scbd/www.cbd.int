@@ -6,6 +6,8 @@ import 'angular-cache'
 import '~/services/conference-service'
 import _  from 'lodash'
 import ng from 'angular'
+import { normalizeMeeting } from '~/services/meetings';
+import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
 
 export { default as template }  from './in-session-documents.html'
 
@@ -28,6 +30,8 @@ export default ["$scope", "$route", "$http", '$q', '$location', 'authentication'
         $ctrl.edit = edit;
         $ctrl.add  = add;
 
+        $scope.vueOptions = { components: { AgendaItem } };
+
         load();
         initAffix();
 
@@ -44,13 +48,11 @@ export default ["$scope", "$route", "$http", '$q', '$location', 'authentication'
         //====================================
         function load() {
 
-            var meetings;
-            
             return $q.when(httpCache.reValidate()).then(function(){
 
                 return conferenceService.getActiveConference(conferenceCode);
 
-            }).then(function(conference){
+            }).then(async function(conference){
             
                 var query, fields;
                 let meetingIds = conference.MajorEventIDs;
@@ -66,22 +68,28 @@ export default ["$scope", "$route", "$http", '$q', '$location', 'authentication'
                 query  = { _id: { $in : ids } };
                 fields = { EVT_CD:1, agenda:1, printSmart:1 };
 
-                meetings = $http.get("/api/v2016/meetings", { params: { q: query, f: fields, cache:true } }).then(resData);
+                const qMeetings = $http.get("/api/v2016/meetings", { params: { q: query, f: fields, cache:true } }).then(resData).then(meetings=>meetings.map(normalizeMeeting));
 
                 // load documents
 
-                var query = {
+                query = {
                     meeting: { $in : ids },
                     status:  'public',
                     type:    'in-session',
                     nature: { $in : ['non-paper', 'crp', 'limited'] }
                 };
 
-                return $http.get('/api/v2016/documents', { params: { q: query, cache:!$ctrl.isEditor }, cache: httpCache }).then(resData);
+                const qDocuments = $http.get('/api/v2016/documents', { params: { q: query, cache:!$ctrl.isEditor }, cache: httpCache }).then(resData);
 
-            }).then(function(documents){
-                
+                const meetings = await qMeetings;
+                const documents = await qDocuments;
+
                 var tabs = _(documents).sortBy(buildSortKey).reduce(function(tabs, d){
+
+                    d.agendaItems = (d.agendaItems||[]).map(i=>{
+                        const meeting = meetings.find(m=>m._id == d.meeting);
+                        return meeting?.agenda?.items?.find(({item}) => item == i) || { item: i };
+                    })
 
                     d.metadata = _.defaults(d.metadata||{}, { //Normalize
                         printable: true,
@@ -107,15 +115,10 @@ export default ["$scope", "$route", "$http", '$q', '$location', 'authentication'
                 if($ctrl.currentTab)
                     $ctrl.currentTab.loaded = true;
 
-                $ctrl.documents = documents;
-
-                //resolve meetings
-                return meetings;
-
-            }).then(function(meetings){
 
                 var ids = _.map(meetings, '_id');
 
+                $ctrl.documents  = documents;
                 $ctrl.meetings   = _.zipObject(ids, meetings);
                 $ctrl.printSmart = _.some(meetings, {printSmart:true});
                 

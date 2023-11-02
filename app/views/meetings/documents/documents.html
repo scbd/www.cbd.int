@@ -178,10 +178,10 @@
 
                             <td ng-if="documentsCtrl.editMode" style="width:10px">
                                 <div ng-if="::document.linkedToId">
-                                    <span class="badge label agenda">Linked</span>
+                                    <agenda-item ng-vue="vueOptions" :item="{ code: 'Linked', color:'#a0a0a0' }"/>
                                 </div>
                                 <div ng-repeat="item in document.agendaItems|orderBy">
-                                    <span class="badge label agenda {{::documentsCtrl.meeting.agenda.prefix}}">{{::documentsCtrl.meeting.agenda.prefix}} {{::item}}</span>
+                                    <agenda-item ng-vue="vueOptions" :item="item" />
                                 </div>
                             </td>
 
@@ -202,11 +202,11 @@
 
                         <tr ng-repeat="item in type.agenda.items|orderBy:'item' track by item.item">
                             <td class="hidden-xs" style="width:1px">
-                                <span class="badge label agenda {{::documentsCtrl.agenda.prefix}}">{{::documentsCtrl.agenda.prefix}} {{::(item.code||item.item)}}</span>
+                                <agenda-item ng-vue="vueOptions" :item="item" />
                             </td>
                             <td>
                                 <div>
-                                    <span class="visible-xs-inline-block badge label agenda {{::documentsCtrl.agenda.prefix}}">{{::documentsCtrl.agenda.prefix}} {{::(item.code||item.item)}}</span>
+                                    <agenda-item class="hidden visible-xs-inline-bloc" ng-vue="vueOptions" :item="item" />
 
                                     <span class="title agenda">
                                         <span class="hidden-xs" >{{::item.title}}</span>
@@ -234,12 +234,13 @@
 
                         <tr ng-if="type.agenda.otherDocuments.length">
                             <td class="hidden-xs" style="width:1px">
-                                <span class="badge label agenda">Other</span>
+                                <agenda-item ng-vue="vueOptions" :item="{ code: 'Other'}" />
                             </td>
                             <td>
                                 <div>
                                     <span class="title agenda">
-                                        <span class="visible-xs badge agenda">Other</span> <i>Document(s) not associated to an agenda item</i>
+                                        <agenda-item class="visible-xs" ng-vue="vueOptions" :item="{ code: 'Other'}" />
+                                        <i>Document(s) not associated to an agenda item</i>
                                     </span>
                                 </div>
                                 <table class="table table-striped table-hover" style="margin:10px 0px -5px 0px;">

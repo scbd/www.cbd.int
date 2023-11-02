@@ -15,6 +15,7 @@ import Vue from 'vue'
 import 'angular-vue'
 import UploadStatementButton from '~/components/meetings/upload-statement-button.vue'
 import { Plenary, WorkingGroupI, WorkingGroupII, ContactGroups, HighLevelSegment  } from '~/util/meetings-data'
+import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
 
 Vue.component('uploadStatementButton', UploadStatementButton);
 
@@ -62,7 +63,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
 
         $scope.route       = { params : $route.current.params, query: $location.search() }
         $scope.vueOptions  = {
-            components: { },
+            components: { AgendaItem },
             i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
         };
 
@@ -225,7 +226,6 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
 
                     r.day     = startOfDay;
                     r.dayPart = _(DAY_PARTS).find(function(p) { return startTime < p.end; }).code;
-
                     r.agenda.items.forEach(function(rItem) {
 
                         var types;
