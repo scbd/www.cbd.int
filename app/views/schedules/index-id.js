@@ -8,6 +8,7 @@ import '~/filters/moment'
 import '~/filters/html-sanitizer'
 import '~/services/conference-service'
 import { Plenary, WorkingGroupI, WorkingGroupII, HighLevelSegment   } from '~/util/meetings-data';
+import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
 
 export { default as template } from './index-id.html';
 
@@ -36,6 +37,8 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
         _ctrl.expandAllSections = expandAllSections,
         _ctrl.allSectionExpanded= false
         $scope.route       = { params : $route.current.params, query: $location.search() }
+        $scope.vueOptions  = { components: { AgendaItem } };
+        
         load();
 
 		//========================================

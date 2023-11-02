@@ -12,6 +12,9 @@ import ng from 'angular'
 import moment from 'moment'
 import displayGroups from './display-groups'
 import * as meta from '~/services/meta'
+import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
+import { normalizeMeeting } from '~/services/meetings'
+
 
 export { default as template } from './documents.html';
 
@@ -31,7 +34,7 @@ export { default as template } from './documents.html';
         $scope.tokenReader = function(){ return apiToken.get()}
         $scope.route       = { params : $route.current.params, query: $location.search() }
         $scope.vueOptions  = {
-          components: { },
+          components: { AgendaItem },
           i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
         };
 
@@ -81,7 +84,7 @@ export { default as template } from './documents.html';
             let documents = null;
             _ctrl.inSessionEnabled = false; //to adjust the height for non insession case
             const meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, uploadStatement:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, alerts:1, displayGroups:1 }, cache:true } }).then(async function(res){
-                const meeting = _.defaults(res.data, {
+                const meeting = normalizeMeeting(res.data, {
                     code: res.data.EVT_CD,
                     agenda: { items: [] },
                     printSmart : false,
@@ -140,18 +143,26 @@ export { default as template } from './documents.html';
                 if(!meeting)
                     return;
 
-                var agendaMap = _.reduce(meeting.agenda.items, function(r,v) { r[v.item] = v;  return r; }, {});
+                const { agenda } = meeting;
+                const { color, prefix } = agenda;
 
-                documents.forEach(function(d) {
-                    (d.agendaItems||[]).forEach(function(item) {
+                documents.forEach(function(doc) {
 
-                        if(!agendaMap[item]) {
-                            meeting.agenda.items.push(agendaMap[item] = { item: item, title: d.title.en + " (AUTO) "}); // LAZY during dev
+                    const docItems = doc.agendaItems||[];
+
+                    doc.agendaItems = docItems.map(dItem=>{
+                        let item = agenda.items.find(i=>i.item == dItem);
+
+                        if(!item) {
+                            item = { prefix, color, item : dItem };
+                            agenda.items.push(item)
                         }
 
-                        agendaMap[item].documents = agendaMap[item].documents||[];
-                        agendaMap[item].documents.push(d);
-                    });
+                        item.documents = item.documents || [];
+                        item.documents.push(doc);
+
+                        return item;
+                    })
                 });
 
                 for(var group in groups) {
@@ -160,7 +171,7 @@ export { default as template } from './documents.html';
                     if(!docs.length)
                         continue;
 
-                    var itemIds = _(docs).map('agendaItems').flatten().uniq().value();
+                    var itemIds = _(docs).map('agendaItems').flatten().map(o=>o.item).uniq().value();
                     var items   = _(meeting.agenda.items).filter(function(item) {
                         return ~itemIds.indexOf(item.item);
                     }).map(function(item){

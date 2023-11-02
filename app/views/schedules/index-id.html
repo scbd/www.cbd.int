@@ -157,10 +157,10 @@
 
                                       <div ng-if="::(r.agenda.visible && r.agenda.items.length)">
                                           <span ng-repeat="item in r.agenda.items">
-                                              <span ng-style="{ 'background-color' : item.color}" class="badge label agenda {{::item.prefix}}" title="{{::item.title}}" style="min-width:51px">{{::item.prefix}} {{::(item.code||item.item)}}</span>
-                                              <span ng-if="(item.title+item.text) != (r.agenda.items[$index+1].title+r.agenda.items[$index+1].text)">
-                                                  {{item.title}} <span ng-if="::item.text"> - <b>{{item.text}}</b></span> <br>
-                                              </span>
+                                            <agenda-item ng-vue="vueOptions" :item="item" />
+                                            <span ng-if="(item.title+item.text) != (r.agenda.items[$index+1].title+r.agenda.items[$index+1].text)">
+                                                {{item.title}} <span ng-if="::item.text"> - <b>{{item.text}}</b></span> <br>
+                                            </span>
                                           </span>
                                       </div>
                                       <div ng-if="!r.agenda.visible || !r.agenda.items || !r.agenda.items.length">

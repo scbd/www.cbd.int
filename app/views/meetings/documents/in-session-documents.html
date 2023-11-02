@@ -89,11 +89,7 @@
                         <td style="width:10px">
                             <strong class="text-nowrap">{{($index+1)}}.</strong>
                             <span ng-repeat="item in ::document.agendaItems|orderBy">
-                                <span class="badge label agenda {{::$ctrl.meetings[document.meeting].agenda.prefix}}">
-                                    {{::$ctrl.meetings[document.meeting].agenda.prefix}} 
-                                    <!-- {{::item}} -->
-                                    {{::(($ctrl.meetings[document.meeting].agenda.items|filter:{item:item}:true)[0].code||item)}}
-                                </span>
+                                <agenda-item ng-vue="vueOptions" :item="item" />
                             </span>
 
                         </td>
@@ -103,14 +99,10 @@
 
                         <td ng-if="$ctrl.editMode" style="width:10px">
                             <div ng-if="::document.linkedToId">
-                                <span class="badge label agenda">Linked</span>
+                                <agenda-item ng-vue="vueOptions" :item="{ code:'Linked', color:'#a0a0a0'}" />
                             </div>
-                            <div ng-repeat="item in document.agendaItems|orderBy">
-                                <span class="badge label agenda {{::$ctrl.meeting.agenda.prefix}}">
-                                    {{::$ctrl.meeting.agenda.prefix}} 
-                                    {{::($ctrl.meeting.agenda.items|filter:{item:item}:true)[0].code||item)}}
-                                    <!-- {{::item}} -->
-                                </span>
+                            <div ng-repeat="item in ::document.agendaItems|orderBy">
+                                <agenda-item ng-vue="vueOptions" :item="item" />
                             </div>
                         </td>
 
