@@ -204,7 +204,7 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <div style="padding-left: 10px;"  ng-ifX="!res.agenda.visible || !res.agenda.items || !res.agenda.items.length">
+                                <div style="padding-left: 10px;"  ng-if="!res.agenda.visible || !res.agenda.items || !res.agenda.items.length">
                                   <span ng-repeat="(key, value) in res.agenda.meetings">
                                     <!-- TODO ADD SUPPORT TO COLOR USING next ng-vue verison -->
                                     <agenda-item v-if="value" ng-vue="vueOptions" ng-vue-expose="key,value" :item="{ prefix:key }" /> 
