@@ -20,7 +20,6 @@
         border-right: none !important;
       }
     </style>
-    <!-- <time-zone-feature-alert ng-if="agendaCtrl.all && agendaCtrl.loaded && agendaCtrl.getTimezones().length" ng-cloak/> -->
 
     <!-- Nav tabs -->
     <nav class="nav-{{::deviceSize}}">
@@ -51,19 +50,10 @@
             </li>
             
             <li class="nav-item ml-0" ng-if="agendaCtrl.now">
-                <a  ng-if="::agendaCtrl.getTimezones().length" ng-class="{'dropdown-toggle': agendaCtrl.getTimezones().length }"  class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-href="#" style="border:1px solid #f5efef">
+                <a class="nav-link disabled" ng-href="#" style="border:1px solid #f5efef">
                     <i class="fa fa-globe"></i>
                     <span class="small">{{agendaCtrl.getTimezone()}}</span>
                 </a>
-                <span  ng-if="::!agendaCtrl.getTimezones().length" class="nav-link" style="border:1px solid #f5efef">
-                  <i class="fa fa-globe"></i>
-                  <span class="small">{{agendaCtrl.getTimezone()}}</span>
-                </span>
-                <div ng-show="agendaCtrl.getTimezones().length" class="dropdown-menu dropdown-menu-right">
-                  <a class="text-nowrap dropdown-item" href="#" ng-repeat="item in agendaCtrl.getTimezones()" ng-click="agendaCtrl.timezoneChanged(item)">
-                    <i class="fa fa-globe"></i> <span class="small">{{item}}</span>
-                  </a>
-                </div>
             </li>
                 <li class="nav-item dropdown ml-0">
                     <a class="nav-link btn dropdown-toggle" ng-class="{ 'btn-danger' : agendaCtrl.isDateOverride }" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-href="#" style="border:1px solid #f5efef">
@@ -83,7 +73,7 @@
         </ul>
     </nav>
 
-    <div  class="float-right hidden-print" style="padding-top:8px;padding-bottom:2px">
+    <div  class="float-right hidden-print" style="padding-top:8px;padding-bottom:2px;position: sticky;top: 0px;">
         <div id="print-smart-checkout">
             <print-smart-checkout ng-cloak ng-show="agendaCtrl.types.length && agendaCtrl.currentTab!='cctv'" documents="agendaCtrl.documents|filter:{selected:true}:true" allow-print="agendaCtrl.meetings[0].printSmart"></print-smart-checkout>
         </div>
@@ -128,8 +118,9 @@
                         </thead>
                         <tr ng-repeat="res in reservations">
 
-                            <td class="text-center text-primary col-width" style="border-right:solid 1px #ddd">
-                                <b title="{{agendaCtrl.getTimezone()}}">{{::res.start|moment:'tz':agendaCtrl.getTimezone()|moment:'format':'HH:mm'}}</b>
+                            <td class="text-center col-width" style="border-right:solid 1px #ddd">
+
+                                <schedule-time ng-vue="vueOptions" ng-vue-expose="res" :start="res.start" :end="res.end" :timezone="timezone" />
                                 
                                 <div  ng-if="!scheduleCtrl.all || scheduleCtrl.showRooms" style="padding-top:3px;">
                                     <em>{{:: res.room.title}}</em>
@@ -151,6 +142,7 @@
                                         Live
                                     </a> 
                                 </div>                                
+                        
                             </td>
 
                             <td style="padding:0px;" >
