@@ -297,18 +297,22 @@ export { default as template } from './documents.html';
         //==============================
         //
         //==============================
-        function loadSessions() {
+        async function loadSessions() {
 
-            const f = { count: 1 };
-            const q = { 
-                meetingIds: { $in :[ { $oid: _ctrl.meeting._id }] }, 
-                count:      { $gt: 0 } 
-            };
+            try {
 
-            $http.get('/api/v2021/meeting-sessions', { params: { q, f } }).then(async function(res){
+                const f = { count: 1 };
+                const q = { 
+                    meetingIds: { $in :[ { $oid: _ctrl.meeting._id }] }, 
+                    count:      { $gt: 0 } 
+                };
 
-                const sessions = res.data;
-                const count    = sessions.reduce((a,s)=>a+s.count, 0);
+                var pSessions = $http.get('/api/v2021/meeting-sessions', { params: { q, f } }).then(res=>res.data);
+                var pPending  = $http.get('/api/v2021/meeting-interventions', { params: { q: { meetingId : { $oid: _ctrl.meeting._id }, status:{ $ne: "public"} }, c:1 } }).then(res=>res.data);
+
+                const sessions = [...(await pSessions), ...(await pPending)];
+
+                const count = sessions.reduce((a,s)=>a+s.count, 0);;
 
                 if(!count) return;
 
@@ -317,9 +321,13 @@ export { default as template } from './documents.html';
 
                 registerComponents({ sessions : await import('~/components/meetings/sessions/view.vue') });
 
-                injectTab('statement', fakeDocs, { component:'sessions' });
-
-            }).catch(console.error);
+                $scope.$applyAsync(()=>{
+                    injectTab('statement', fakeDocs, { component:'sessions' });
+                })
+            }
+            catch(e) {
+                console.error(e)
+            };
         }
 
         //==============================
