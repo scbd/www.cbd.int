@@ -32,7 +32,7 @@
         </span>
     </div>
 
-    <div ng-if="!documentsCtrl.error" id="print-smart-checkout" ng-cloak class="pull-right hidden-print">
+    <div ng-if="!documentsCtrl.error" id="print-smart-checkout" ng-cloak class="pull-right hidden-print" ng-class="{ 'text-nowrap': documentsCtrl.isXs }">
 
         <span ng-if="documentsCtrl.edit" class="edit">
             <button type="button" class="btn btn-light" ng-click="documentsCtrl.edit(null)"><i class="fa fa-plus"></i></button>
@@ -42,11 +42,11 @@
         <button type="button" ng-if="documentsCtrl.isStaff" class="btn btn-light" ng-class="{active:documentsCtrl.statsMode, 'btn-info': documentsCtrl.statsMode }" ng-click="documentsCtrl.statsMode=!documentsCtrl.statsMode && documentsCtrl.isStaff"><i class="fa fa-bar-chart"></i></button>
 
         <span ng-if="documentsCtrl.meeting.uploadStatement">
-            <upload-statement-button ng-vue="vueOptions" :show.sync="documentsCtrl.uploadStatement" :route="route" @notify="documentsCtrl.notify" />
+            <upload-statement-button ng-vue="vueOptions" :show.sync="documentsCtrl.uploadStatement" :route="route" @notify="documentsCtrl.notify" :size="documentsCtrl.isXs"/>
         </span>
 
-        <span class="mobile-app-hidden hidden-print btn-group" ng-if="::documentsCtrl.meeting.links.length || documentsCtrl.meeting.EVT_WEB || documentsCtrl.meeting.EVT_INFO_PART_URL || documentsCtrl.meeting.isMontreal || documentsCtrl.meeting.EVT_REG_NOW_YN" class="btn-group">
-          <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="mobile-app-hidden hidden-print btn-group" ng-class="{ 'btn-group-xs' : $root.deviceSize === 'xs' }" ng-if="::documentsCtrl.meeting.links.length || documentsCtrl.meeting.EVT_WEB || documentsCtrl.meeting.EVT_INFO_PART_URL || documentsCtrl.meeting.isMontreal || documentsCtrl.meeting.EVT_REG_NOW_YN" style="min-height: 24px;">
+          <button type="button" class="btn btn-info dropdown-toggle" ng-class="{ 'btn-xs' : $root.deviceSize === 'xs' }" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Info links
           </button>
           <ul class="dropdown-menu">
@@ -59,7 +59,7 @@
         </span>
       
         <!-- Sort/Display -->
-        <span ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length" class="hidden-print btn-group">
+        <span ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length" class="hidden-print btn-group" ng-class="{ 'hidden' : $root.deviceSize === 'xs' }" >
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 Sort By
             </button>

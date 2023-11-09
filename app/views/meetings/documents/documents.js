@@ -30,6 +30,7 @@ export { default as template } from './documents.html';
         let allDocuments = [];
         var currentUser;
 
+        _ctrl.isXs = $rootScope.deviceSize === 'xs'? 'xs' : '';
 
         $scope.tokenReader = function(){ return apiToken.get()}
         $scope.route       = { params : $route.current.params, query: $location.search() }
