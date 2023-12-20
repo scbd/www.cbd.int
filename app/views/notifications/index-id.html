@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="row" ng-if="::notifCtrl.submissions.length">
+    <div class="row pb-2" ng-if="::notifCtrl.submissions.length">
         <div class="col-sm-12">
             <i>
                 {{notifCtrl.submissions.length}} submissions received for this notification.
@@ -26,7 +26,17 @@
 
             <div ng-switch-when="article">
                 <cbd-article article="notifCtrl.preview.article" hide-cover-image="true"></cbd-article>
-                <p ng-if="::notifCtrl.notification.recipients.length">To: 
+                <p class="pt-1" ng-if="::notifCtrl.notification.recipients.length">To: 
+                    <em ng-repeat="recipient in ::notifCtrl.notification.recipients track by $index">
+                        {{::recipient}}<span ng-if="!$last">,</span>
+                    </em>
+                </p>
+            </div>
+
+            <div ng-switch-when="text">
+                <p style="white-space:pre-line;" ng-bind-html="notifCtrl.preview.html"></p> 
+                <p class="pt-1" >{{notifCtrl.notification.from_t}}</p> 
+                <p class="pt-1" ng-if="::notifCtrl.notification.recipients.length">To: 
                     <em ng-repeat="recipient in ::notifCtrl.notification.recipients track by $index">
                         {{::recipient}}<span ng-if="!$last">,</span>
                     </em>

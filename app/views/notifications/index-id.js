@@ -7,6 +7,7 @@ import '~/filters/lstring'
 import '~/filters/term'
 import ArticlesApi from '~/api/articles'
 import jumpTo from '~/services/jump-to-anchor'
+import { textToHtml } from '~/util/html'
 
 export { default as template } from './index-id.html'
 
@@ -43,7 +44,7 @@ export { default as template } from './index-id.html'
                 cache   : true,
                 params  : {
                     q   : "schema_s: notification AND symbol_s: "+solr.escape(code),
-                    fl  : "_id:id, symbol:symbol_s, reference:reference_s, title_t, date:date_dt,url_ss, files_ss, actionDate:actionDate_dt, recipients:recipient_ss, thematicAreas:thematicAreas_EN_txt",
+                    fl  : "_id:id, symbol:symbol_s, reference:reference_s, title_t, fulltext_t, from_t, title_t, date:date_dt,url_ss, files_ss, actionDate:actionDate_dt, recipients:recipient_ss, thematicAreas:thematicAreas_EN_txt",
                     rows: 1
                 }
             };
@@ -176,10 +177,12 @@ export { default as template } from './index-id.html'
             embed = embed || _.findWhere(_ctrl.notification.files, { type : 'application/pdf', language: 'es' });
             embed = embed || _.findWhere(_ctrl.notification.files, { type : 'application/pdf', language: 'fr' });
             
+            const hasFulltext = !!_ctrl?.notification?.fulltext_t;
             _ctrl.preview = { type: "none" };
 
-                 if(article) _ctrl.preview = { type: "article",  article: article   };
-            else if(embed)   _ctrl.preview = { type: "embed",    url:     embed.url };
+                 if(article)     _ctrl.preview = { type: "article",  article: article   };
+            else if(hasFulltext) _ctrl.preview = { type: "text",     html:    textToHtml(_ctrl?.notification?.fulltext_t, {preserveNewLine:false}) };
+            else if(embed)       _ctrl.preview = { type: "embed",    url:     embed.url };
         }
 
         //========================
