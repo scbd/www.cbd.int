@@ -5,6 +5,8 @@ import '~/directives/articles/cbd-article'
 import '~/directives/meetings/documents/document-files'
 import '~/filters/lstring'
 import '~/filters/term'
+import ArticlesApi from '~/api/articles'
+import jumpTo from '~/services/jump-to-anchor'
 
 export { default as template } from './index-id.html'
 
@@ -25,7 +27,7 @@ export { default as template } from './index-id.html'
         var code   = $route.current.params.symbol;
         var _ctrl  = $scope.notifCtrl = this;
 
-        _ctrl.onArticleLoad  = onArticleLoad;
+        _ctrl.jumpTo = jumpTo;
 
         $scope.MIMES = MIMES;
 
@@ -35,36 +37,39 @@ export { default as template } from './index-id.html'
         //===========================
         //
         //===========================
-        function loadNotification (code) {
+        async function loadNotification (code) {
             
-            var result = { code : code };
-
-            var options = {
+            const options = {
                 cache   : true,
                 params  : {
                     q   : "schema_s: notification AND symbol_s: "+solr.escape(code),
-                    fl  : "_id:id, symbol:symbol_s, reference:reference_s, title_t, date:date_dt,url_ss, actionDate:actionDate_dt, recipients:recipient_ss, thematicAreas:thematicAreas_EN_txt",
+                    fl  : "_id:id, symbol:symbol_s, reference:reference_s, title_t, date:date_dt,url_ss, files_ss, actionDate:actionDate_dt, recipients:recipient_ss, thematicAreas:thematicAreas_EN_txt",
                     rows: 1
                 }
             };
 
-            return $http.get("/api/v2013/index", options).then(function(res){
+            const qArticle      = loadArticle(code);
+            const qNotification = $http.get("/api/v2013/index", options).then(function(res){
 
                 var results = _.map(res.data.response.docs, function(n) {
                     return _.defaults(n, {
                         title     : { en: n.title_t },
-                        files     : urlToFiles(n.url_ss)
+                        files     : JSON.parse(n.files_ss) // urlToFiles(n.url_ss)
                     });
                 });
 
                 return results.length ? results[0] : null;
 
-            }).then(function(n) {
+            });
+            
+            const [ notification, article ] = await Promise.all([qNotification, qArticle])
 
-                 _ctrl.notification = n;
+            $scope.$apply(()=>{
 
-                 loadSubmissions(code);
-                 loadArticle(code);
+                _ctrl.notification = notification;
+                onArticleLoad(article);
+                 
+                loadSubmissions(code);
             });
         }
 
@@ -121,6 +126,8 @@ export { default as template } from './index-id.html'
                         submitterType   : getSubmitterType(s)
                     });
                 });
+
+                $scope.$applyAsync(()=>jumpTo());
             });
         }    
 
@@ -141,20 +148,23 @@ export { default as template } from './index-id.html'
         //===========================
         //
         //===========================
-        function loadArticle(code){
+        async function loadArticle(code){
             
-            var match = { "adminTags" : { $all: ['notification', kebabCase(code)]}};     
+            const q = { "adminTags" : { $all: ['notification', kebabCase(code)]}};     
+            const s = { "meta.updatedOn":-1 };
+            const fo = 1;
 
-            _ctrl.articleQuery = [
-                {"$match"   : match },
-                {"$sort"    : { "meta.updatedOn":-1}},
-                {"$limit"   : 1 }
-            ];
+            const api = new ArticlesApi();
+
+            const article = await api.queryArticles({ q, s, fo });
+
+            return article;
         }
 
         function kebabCase(val){
             return val.toLowerCase().replace(/\s/g, '-')
         }
+
         //===========================
         //
         //===========================

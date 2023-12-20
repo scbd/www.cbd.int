@@ -335,17 +335,19 @@ export { default as template } from './documents.html';
         //==============================
         function loadNotifications() {
 
-            $http.get('/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'id,symbol:symbol_s,reference:reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
+            $http.get('/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'id,symbol:symbol_s,reference:reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss,files_ss', rows:999 } }).then(function(res){
 
                 return _(res.data.response.docs).map(function(n) {
+                    const [webUrl] = n.url_ss;;
+
                     return normalizeDocument(_.defaults(n, {
                         _id: n.id,
                         date:   n.date_dt,
                         type:  'notification',
-                        url: '/notifications/'+encodeURIComponent(n.symbol),
+                        url: webUrl,
                         status : 'public',
                         title : { en : n.title_t },
-                        files : urlToFiles(n.url_ss)
+                        files : [...urlToFiles([webUrl]), ...JSON.parse(n.files_ss)]//  urlToFiles(n.url_ss)
                     }));
                 }).sortByOrder(['symbol', 'reference'], ['desc', 'asc']).value();
 
@@ -604,9 +606,9 @@ export { default as template } from './documents.html';
         function urlToFiles(url_ss) {
 
             return _.map(url_ss||[], function(url){
-
-                var mime;
-                var locale;
+console.log(url)
+                var mime = 'text/html';
+                var locale = 'en';
 
                 if(/\.pdf$/ .test(url)) mime = 'application/pdf';
                 if(/\.doc$/ .test(url)) mime = 'application/msword';
