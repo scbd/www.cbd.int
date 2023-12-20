@@ -43,7 +43,7 @@ export { default as template } from './index-id.html'
                 cache   : true,
                 params  : {
                     q   : "schema_s: notification AND symbol_s: "+solr.escape(code),
-                    fl  : "_id:id, symbol:symbol_s, reference:reference_s, title_t, date:date_dt,url_ss, actionDate:actionDate_dt, recipients:recipient_ss, thematicAreas:thematicAreas_EN_txt",
+                    fl  : "_id:id, symbol:symbol_s, reference:reference_s, title_t, date:date_dt,url_ss, files_ss, actionDate:actionDate_dt, recipients:recipient_ss, thematicAreas:thematicAreas_EN_txt",
                     rows: 1
                 }
             };
@@ -54,7 +54,7 @@ export { default as template } from './index-id.html'
                 var results = _.map(res.data.response.docs, function(n) {
                     return _.defaults(n, {
                         title     : { en: n.title_t },
-                        files     : urlToFiles(n.url_ss)
+                        files     : JSON.parse(n.files_ss) // urlToFiles(n.url_ss)
                     });
                 });
 
