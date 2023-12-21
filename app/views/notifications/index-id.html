@@ -56,7 +56,7 @@
                     <div>
                         <p><i class="fa fa-calendar fa-fw"></i> {{::notifCtrl.notification.date|date:'yyyy-MM-dd'}}</p>
                         <p ng-if="::notifCtrl.notification.actionDate" class="text-danger"> <i class="fa fa-calendar-check-o fa-fw"></i> Action required by {{::notifCtrl.notification.actionDate | date:'yyyy-MM-dd'}}</p>
-                        <p ng-if="::notifCtrl.submissions.length"><i class="fa fa-caret-square-o-up fa-fw"></i> <a href="#" ng-click="notifCtrl.jumpTo('submission')" style="color: inherit;">Submission received: {{::notifCtrl.submissions.length}}</a></p>
+                        <p ng-if="::notifCtrl.submissions.length"><i class="fa fa-caret-square-o-up fa-fw"></i> <a href="#" ng-click="notifCtrl.jumpTo('submission')">Submission received: {{::notifCtrl.submissions.length}}</a></p>
                         <p ng-if="::notifCtrl.notification.thematicAreas.length"><strong>Subject(s): </strong>
                             <em ng-repeat="thematicArea in ::notifCtrl.notification.thematicAreas track by $index">
                                 {{::thematicArea}}<span ng-if="!$last">,</span>
