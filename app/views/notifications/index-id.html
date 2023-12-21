@@ -66,8 +66,8 @@
                     <div>
                         <table>
                             <tr>
-                                <th class="pr-1">Full text:</th>
-                                <td class="p-1">
+                                <th class="pr-1" style="vertical-align: top;">Full text:</th>
+                                <td class="p-1" style="vertical-align: top;">
                                     <div ng-repeat="file in notifCtrl.notification.files track by file.name">
                                         <i class="fa {{::(MIMES[file.type]||MIMES.default).icon}}" ng-style="::{ color: MIMES[file.type].color}"></i> <a class="list-inline-item" ng-href="{{file.url}}" target="_blank">
                                             {{getLanguageName(file.language) || file.name}}
