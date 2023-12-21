@@ -7,22 +7,13 @@ import '~/filters/lstring'
 import '~/filters/term'
 import ArticlesApi from '~/api/articles'
 import jumpTo from '~/services/jump-to-anchor'
+import { textToHtml } from '~/util/html'
+import MIMES from '~/data/file-types'
+import { getLanguageName } from '~/data/languages';
 
 export { default as template } from './index-id.html'
 
-    var MIMES = {
-        'application/pdf':                                                            { priority: 10,  color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' :   { priority: 20,  color: 'blue',   btn: 'btn-primary', icon: 'fa-file-word-o'  },
-        'application/msword':                                                         { priority: 30,  color: 'blue',   btn: 'btn-primary', icon: 'fa-file-word-o'  },
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' :         { priority: 40,  color: 'green',  btn: 'btn-success', icon: 'fa-file-excel-o' },
-        'application/vnd.ms-excel':                                                   { priority: 50,  color: 'green',  btn: 'btn-success', icon: 'fa-file-excel-o' },
-        'application/vnd.openxmlformats-officedocument.presentationml.presentation' : { priority: 60,  color: 'orange', btn: 'btn-warning', icon: 'fa-file-powerpoint-o' },
-        'application/vnd.ms-powerpoint':                                              { priority: 70,  color: 'orange', btn: 'btn-warning', icon: 'fa-file-powerpoint-o' },
-        'application/zip':                                                            { priority: 80,  color: '',       btn: 'btn-default', icon: 'fa-file-archive-o' },
-        'text/html':                                                                  { priority: 80,  color: '',       btn: 'btn-default', icon: 'fa-link' },
-        'default':                                                                    { priority:999,  color: 'orange', btn: 'btn-default', icon: 'fa-file-o' }
-    };
-    export default ['$scope', '$route','$http', '$q','$sce', 'articleService', function ($scope, $route, $http, $q, $sce, articleService) {
+export default ['$scope', '$route','$http', '$q','$sce', 'articleService', function ($scope, $route, $http, $q, $sce, articleService) {
 
         var code   = $route.current.params.symbol;
         var _ctrl  = $scope.notifCtrl = this;
@@ -30,6 +21,7 @@ export { default as template } from './index-id.html'
         _ctrl.jumpTo = jumpTo;
 
         $scope.MIMES = MIMES;
+        $scope.getLanguageName = getLanguageName;
 
         loadCountries();
         loadNotification(code);
@@ -43,7 +35,7 @@ export { default as template } from './index-id.html'
                 cache   : true,
                 params  : {
                     q   : "schema_s: notification AND symbol_s: "+solr.escape(code),
-                    fl  : "_id:id, symbol:symbol_s, reference:reference_s, title_t, date:date_dt,url_ss, files_ss, actionDate:actionDate_dt, recipients:recipient_ss, thematicAreas:thematicAreas_EN_txt",
+                    fl  : "_id:id, symbol:symbol_s, reference:reference_s, title_t, fulltext_t, from_t, title_t, date:date_dt,url_ss, files_ss, actionDate:actionDate_dt, recipients:recipient_ss, thematicAreas:thematicAreas_EN_txt",
                     rows: 1
                 }
             };
@@ -176,10 +168,12 @@ export { default as template } from './index-id.html'
             embed = embed || _.findWhere(_ctrl.notification.files, { type : 'application/pdf', language: 'es' });
             embed = embed || _.findWhere(_ctrl.notification.files, { type : 'application/pdf', language: 'fr' });
             
+            const hasFulltext = !!_ctrl?.notification?.fulltext_t;
             _ctrl.preview = { type: "none" };
 
-                 if(article) _ctrl.preview = { type: "article",  article: article   };
-            else if(embed)   _ctrl.preview = { type: "embed",    url:     embed.url };
+                 if(article)     _ctrl.preview = { type: "article",  article: article   };
+            else if(hasFulltext) _ctrl.preview = { type: "text",     html:    textToHtml(_ctrl?.notification?.fulltext_t, {preserveNewLine:false}) };
+            else if(embed)       _ctrl.preview = { type: "embed",    url:     embed.url };
         }
 
         //========================

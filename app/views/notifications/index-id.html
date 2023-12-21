@@ -1,4 +1,4 @@
-<div  ng-if="notifCtrl.notification">
+<div  ng-if="notifCtrl.notification" class="container-fluid">
     <div class="row">
         <div class="col-sm-9">
              <h1>Notification <small><i>{{::notifCtrl.notification.symbol}}</i></small></h1>
@@ -11,26 +11,27 @@
         </div>
     </div>
 
-    <div class="row" ng-if="::notifCtrl.submissions.length">
-        <div class="col-sm-12">
-            <i>
-                {{notifCtrl.submissions.length}} submissions received for this notification.
-                <a href="#submission" ng-click="notifCtrl.jumpTo('submission')">Jump to the submissions...</a>
-            </i>
-        </div>
-    </div>
-
-
     <div class="row" >
-        <div ng-switch on="notifCtrl.preview.type"  class="col-12 col-md-9">    
+        <div ng-switch on="notifCtrl.preview.type"  class="col-12 col-lg-8">    
 
             <div ng-switch-when="article">
                 <cbd-article article="notifCtrl.preview.article" hide-cover-image="true"></cbd-article>
-                <p ng-if="::notifCtrl.notification.recipients.length">To: 
+                <p class="pt-1" ng-if="::notifCtrl.notification.recipients.length">To: 
                     <em ng-repeat="recipient in ::notifCtrl.notification.recipients track by $index">
                         {{::recipient}}<span ng-if="!$last">,</span>
                     </em>
                 </p>
+            </div>
+
+            <div ng-switch-when="text">
+                <p style="white-space:pre-line;" ng-bind-html="notifCtrl.preview.html"></p> 
+                <p class="pt-1" >{{notifCtrl.notification.from_t}}</p> 
+                <p class="pt-1" ng-if="::notifCtrl.notification.recipients.length">To: 
+                    <em ng-repeat="recipient in ::notifCtrl.notification.recipients track by $index">
+                        {{::recipient}}<span ng-if="!$last">,</span>
+                    </em>
+                </p>
+
             </div>
 
             <div ng-switch-when="embed">
@@ -49,24 +50,32 @@
             </div>
 
         </div> 
-        <div class="col-12 order-first col-md-3 order-md-last">
+        <div class="col-12 order-first col-lg-4 order-lg-last mb-4">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div class="container-fuild">
-                        <div class="row">
-                            <div class="col-8 col-md-12">
-                                <p><i class="fa fa-calendar fa-fw"></i> {{::notifCtrl.notification.date|date:'yyyy-MM-dd'}}</p>
-                                <p ng-if="::notifCtrl.notification.actionDate" class="text-danger"> <i class="fa fa-calendar-check-o fa-fw"></i> Action required by {{::notifCtrl.notification.actionDate | date:'yyyy-MM-dd'}}</p>
-                                <p ng-if="::notifCtrl.notification.thematicAreas.length"><strong>Subject(s): </strong>
-                                    <em ng-repeat="thematicArea in ::notifCtrl.notification.thematicAreas track by $index">
-                                        {{::thematicArea}}<span ng-if="!$last">,</span>
-                                    </em>
-                                </p>
-                            </div>
-                            <div class="col-4 col-md-12">
-                                <document-files files="notifCtrl.notification.files"></document-files>
-                            </div>
-                        </div>
+                    <div>
+                        <p><i class="fa fa-calendar fa-fw"></i> {{::notifCtrl.notification.date|date:'yyyy-MM-dd'}}</p>
+                        <p ng-if="::notifCtrl.notification.actionDate" class="text-danger"> <i class="fa fa-calendar-check-o fa-fw"></i> Action required by {{::notifCtrl.notification.actionDate | date:'yyyy-MM-dd'}}</p>
+                        <p ng-if="::notifCtrl.submissions.length"><i class="fa fa-caret-square-o-up fa-fw"></i> <a href="#" ng-click="notifCtrl.jumpTo('submission')" style="color: inherit;">Submission received: {{::notifCtrl.submissions.length}}</a></p>
+                        <p ng-if="::notifCtrl.notification.thematicAreas.length"><strong>Subject(s): </strong>
+                            <em ng-repeat="thematicArea in ::notifCtrl.notification.thematicAreas track by $index">
+                                {{::thematicArea}}<span ng-if="!$last">,</span>
+                            </em>
+                        </p>
+                    </div>
+                    <div>
+                        <table>
+                            <tr>
+                                <th class="pr-1">Full text:</th>
+                                <td class="p-1">
+                                    <div ng-repeat="file in notifCtrl.notification.files track by file.name">
+                                        <i class="fa {{::(MIMES[file.type]||MIMES.default).icon}}" ng-style="::{ color: MIMES[file.type].color}"></i> <a class="list-inline-item" ng-href="{{file.url}}" target="_blank">
+                                            {{getLanguageName(file.language) || file.name}}
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
