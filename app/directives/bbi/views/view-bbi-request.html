@@ -218,7 +218,7 @@
             </div>
         </div>
         <!-- Linkages to CBD Initiatives -->
-                <div ng-show="document.cbdSubjects || document.aichiTargets">
+                <div ng-show="document.cbdSubjects || document.gbfTargets || document.aichiTargets">
                     <legend class="view">Linkages to CBD Initiatives</legend>
 
                     <div ng-if="document.cbdSubjects">
@@ -227,6 +227,16 @@
                             <div ng-repeat="term in document.cbdSubjects">{{term | term:locale}}</div>
                         </div>
                     </div>
+                    
+                    <div ng-if="document.gbfTargets">
+                        <label class="view">Related Kunming-Montreal Global Biodiversity Framework Target(s)</label>
+                        <div class="km-value">
+                            <div ng-repeat="term in document.gbfTargets">
+                                {{term | term:locale}}
+                            </div>
+                        </div>
+                    </div>
+
                     <div ng-if="document.aichiTargets">
                         <label class="view">Related Aichi Biodiversity Target(s)</label>
                         <div class="km-value">

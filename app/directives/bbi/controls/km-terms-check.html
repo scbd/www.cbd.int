@@ -1,7 +1,7 @@
 ﻿<ul>
 	<script type="text/ng-template"  id="term-check-tree-renderer.html">
 		<label>
-			<input type="checkbox" ng-model="identifiers[term.identifier]" ng-click="save()" ng-required="IsRequired()" value="{{term.identifier}}" />
+			<input type="checkbox" ng-model="identifiers[term.identifier]" ng-change="save()" ng-click="save()" ng-required="IsRequired()" value="{{term.identifier}}" />
 				{{term.title||term.name | lstring:locale}}			
 		</label>
 		<div class="km-select-description" ng-if="showDescription && term.description" 
