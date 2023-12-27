@@ -1,6 +1,7 @@
 import links from '~/data/bbi/links.json'
 import '~/directives/bbi/menu'
 import '~/directives/bbi/auto-linker'
+import '~/directives/articles/cbd-article'
 
 export { default as template } from './index-proj.html'
 

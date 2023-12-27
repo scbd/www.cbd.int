@@ -12,6 +12,9 @@ import ng from 'angular'
 import moment from 'moment'
 import displayGroups from './display-groups'
 import * as meta from '~/services/meta'
+import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
+import { normalizeMeeting } from '~/services/meetings'
+
 
 export { default as template } from './documents.html';
 
@@ -24,13 +27,14 @@ export { default as template } from './documents.html';
         var meetingCode = $route.current.params.meeting.toUpperCase();
         var hardTab = false;
         var httpCache = initCache();
+        let allDocuments = [];
         var currentUser;
 
 
         $scope.tokenReader = function(){ return apiToken.get()}
         $scope.route       = { params : $route.current.params, query: $location.search() }
         $scope.vueOptions  = {
-          components: { },
+          components: { AgendaItem },
           i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
         };
 
@@ -61,6 +65,8 @@ export { default as template } from './documents.html';
             $scope.$emit("showInfo", msg);
         }
 
+        _ctrl.selectedDocuments = () => allDocuments.filter(o => o.selected);
+
         $scope.$watch('documentsCtrl.sort', function(s){
             $location.hash(s=='agenda' ? 'agenda' : null);
         });
@@ -78,7 +84,7 @@ export { default as template } from './documents.html';
             let documents = null;
             _ctrl.inSessionEnabled = false; //to adjust the height for non insession case
             const meeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, uploadStatement:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, alerts:1, displayGroups:1 }, cache:true } }).then(async function(res){
-                const meeting = _.defaults(res.data, {
+                const meeting = normalizeMeeting(res.data, {
                     code: res.data.EVT_CD,
                     agenda: { items: [] },
                     printSmart : false,
@@ -137,18 +143,26 @@ export { default as template } from './documents.html';
                 if(!meeting)
                     return;
 
-                var agendaMap = _.reduce(meeting.agenda.items, function(r,v) { r[v.item] = v;  return r; }, {});
+                const { agenda } = meeting;
+                const { color, prefix } = agenda;
 
-                documents.forEach(function(d) {
-                    (d.agendaItems||[]).forEach(function(item) {
+                documents.forEach(function(doc) {
 
-                        if(!agendaMap[item]) {
-                            meeting.agenda.items.push(agendaMap[item] = { item: item, title: d.title.en + " (AUTO) "}); // LAZY during dev
+                    const docItems = doc.agendaItems||[];
+
+                    doc.agendaItems = docItems.map(dItem=>{
+                        let item = agenda.items.find(i=>i.item == dItem);
+
+                        if(!item) {
+                            item = { prefix, color, item : dItem };
+                            agenda.items.push(item)
                         }
 
-                        agendaMap[item].documents = agendaMap[item].documents||[];
-                        agendaMap[item].documents.push(d);
-                    });
+                        item.documents = item.documents || [];
+                        item.documents.push(doc);
+
+                        return item;
+                    })
                 });
 
                 for(var group in groups) {
@@ -157,7 +171,7 @@ export { default as template } from './documents.html';
                     if(!docs.length)
                         continue;
 
-                    var itemIds = _(docs).map('agendaItems').flatten().uniq().value();
+                    var itemIds = _(docs).map('agendaItems').flatten().map(o=>o.item).uniq().value();
                     var items   = _(meeting.agenda.items).filter(function(item) {
                         return ~itemIds.indexOf(item.item);
                     }).map(function(item){
@@ -283,18 +297,22 @@ export { default as template } from './documents.html';
         //==============================
         //
         //==============================
-        function loadSessions() {
+        async function loadSessions() {
 
-            const f = { count: 1 };
-            const q = { 
-                meetingIds: { $in :[ { $oid: _ctrl.meeting._id }] }, 
-                count:      { $gt: 0 } 
-            };
+            try {
 
-            $http.get('/api/v2021/meeting-sessions', { params: { q, f } }).then(async function(res){
+                const f = { count: 1 };
+                const q = { 
+                    meetingIds: { $in :[ { $oid: _ctrl.meeting._id }] }, 
+                    count:      { $gt: 0 } 
+                };
 
-                const sessions = res.data;
-                const count    = sessions.reduce((a,s)=>a+s.count, 0);
+                var pSessions = $http.get('/api/v2021/meeting-sessions', { params: { q, f } }).then(res=>res.data);
+                var pPending  = $http.get('/api/v2021/meeting-interventions', { params: { q: { meetingId : { $oid: _ctrl.meeting._id }, status:{ $ne: "public"} }, c:1 } }).then(res=>res.data);
+
+                const sessions = [...(await pSessions), ...(await pPending)];
+
+                const count = sessions.reduce((a,s)=>a+s.count, 0);;
 
                 if(!count) return;
 
@@ -303,9 +321,13 @@ export { default as template } from './documents.html';
 
                 registerComponents({ sessions : await import('~/components/meetings/sessions/view.vue') });
 
-                injectTab('statement', fakeDocs, { component:'sessions' });
-
-            }).catch(console.error);
+                $scope.$applyAsync(()=>{
+                    injectTab('statement', fakeDocs, { component:'sessions' });
+                })
+            }
+            catch(e) {
+                console.error(e)
+            };
         }
 
         //==============================
@@ -313,17 +335,19 @@ export { default as template } from './documents.html';
         //==============================
         function loadNotifications() {
 
-            $http.get('/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'id,symbol:symbol_s,reference:reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss', rows:999 } }).then(function(res){
+            $http.get('/api/v2013/index', { params: { q : 'schema_s:notification AND meeting_ss:'+meetingCode, fl: 'id,symbol:symbol_s,reference:reference_s,meeting_ss,sender_s,title_*,date_dt,actionDate_dt,recipient_ss,url_ss,files_ss', rows:999 } }).then(function(res){
 
                 return _(res.data.response.docs).map(function(n) {
+                    const [webUrl] = n.url_ss;;
+
                     return normalizeDocument(_.defaults(n, {
                         _id: n.id,
                         date:   n.date_dt,
                         type:  'notification',
-                        url: '/notifications/'+encodeURIComponent(n.symbol),
+                        url: webUrl,
                         status : 'public',
                         title : { en : n.title_t },
-                        files : urlToFiles(n.url_ss)
+                        files : [...urlToFiles([webUrl]), ...JSON.parse(n.files_ss)]//  urlToFiles(n.url_ss)
                     }));
                 }).sortByOrder(['symbol', 'reference'], ['desc', 'asc']).value();
 
@@ -410,6 +434,8 @@ export { default as template } from './documents.html';
 
             if(!docs || !docs.length)
                 return;
+
+            docs.forEach((d) => allDocuments.push(d));
 
             options = _.defaults(options||{}, {
                 section: null,
@@ -580,9 +606,9 @@ export { default as template } from './documents.html';
         function urlToFiles(url_ss) {
 
             return _.map(url_ss||[], function(url){
-
-                var mime;
-                var locale;
+console.log(url)
+                var mime = 'text/html';
+                var locale = 'en';
 
                 if(/\.pdf$/ .test(url)) mime = 'application/pdf';
                 if(/\.doc$/ .test(url)) mime = 'application/msword';

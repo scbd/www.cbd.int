@@ -7,7 +7,9 @@
 
         .conference-header{
             padding-bottom: 0px;
+            font-family: Arial, Helvetica, sans-serif;
         }
+
        .meetingnav {
            /*text-rendering:optimizeLegibility;*/
            -webkit-font-smoothing: antialiased;
@@ -194,9 +196,11 @@
             height: 100%;
             
         }
-        .conference-header .menu-title{
+        .conference-header .menu-title,
+        .conference-header .menu-title > a
+        {
             color: #fff;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
         }
         .dropdown-item:focus, .dropdown-item:hover {
@@ -210,7 +214,6 @@
 
         .webcast .menu-title{
             background-color:#ee4242;
-            font-size:12px;
             font-weight:bold;
             padding-top:6px;
             padding-bottom:6px;
@@ -449,16 +452,18 @@
                     <img ng-src="/app/images/{{::menu.image}}" ng-if="::!menu.title && !menu.icon && menu.image" style="width:44px;height:44px;">
                 </a>
                 <div ng-if="::!menu.url && !menu.xsUrl" data-toggle="{{::(menu.links ? 'dropdown' : '')}}">
+                    <a href="#">
                     <div class="visible-md visible-lg">
-                        <div style="font-weight:bold" ng-bind-html="::menu.title|lstring"></div>
+                        <div class="menu-title" style="font-weight:bold" ng-bind-html="::menu.title|lstring"></div>
                     </div> 
                     <div class="visible-sm">
-                        <div style="margin-top:2px" ng-bind-html="::(menu.shortTitle||menu.title)|lstring"></div>
+                        <div  class="menu-title" style="margin-top:2px" ng-bind-html="::(menu.shortTitle||menu.title)|lstring"></div>
                     </div> 
                     <div class="visible-xs">
                         <i ng-if=":: menu.icon" class="fa {{::menu.icon||'fa-files-o'}}" aria-hidden="true" style="font-size:24px"></i>
                         <img ng-src="/app/images/{{::menu.image}}" ng-if="::!menu.icon && menu.image" style="width:44px;height:44px">
                     </div> 
+                </a>
                 </div>
                                               
                 <ul class="dropdown-menu dropdown-menu-right">

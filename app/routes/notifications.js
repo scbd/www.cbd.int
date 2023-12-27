@@ -11,5 +11,17 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
     $routeProvider
     .when('/:symbol', { ...mapView(notificationIdView) })
-    .otherwise({redirectTo: '/404'});
+    .when('/', { controller: ["$rootScope", autoReload], template:'Loading...<br><a href="/notifications" target="_self">Please click here if your are not automatically redirected...</a>' })
+    .otherwise({redirectTo: '/'});
 }]);
+
+app.run(['$rootScope', function($rootScope){
+    $rootScope.$on('$routeChangeSuccess', (evnt, current, previous)=>{
+        $rootScope.allowHardReload = !!previous && previous.$$route != current.$$route
+    })
+}])
+
+function autoReload($rootScope) {
+    if($rootScope.allowHardReload)
+        window.location.reload();
+}

@@ -21,7 +21,7 @@ function getPaths($location){
     var port   = ($location.port() == 443 || $location.port() == 80)? '/' : ':' +$location.port() + '/'
     var host   = $location.protocol() + '://' + $location.host() + port
 
-    var path   = $location.absUrl().replace(host, '')
+    var path   = $location.absUrl().split('#')[0].replace(host, '')
 
     path.split('/').forEach(function(element) {
         crumbs.push({

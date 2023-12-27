@@ -16,6 +16,7 @@
             </span>
             ({{count}})
             
+            <i v-if="_id=='pending'" class="text-muted fa fa-eye-slash" title="Visible to staff only"></i>
             <i class="text-muted fa fa-caret-up"/>
             <i class="text-muted fa fa-caret-down"/>
             <i class="text-muted help tiny">click to expand</i>
@@ -96,6 +97,19 @@ async function created(){
     const [ session ] = sessions; 
     this.loadInterventions(session._id)
   }
+
+  //Inject virtual session with Pending Statement... for staff
+  const [pendingSession] = await this.api.queryInterventions({ q: { meetingId : { $oid: meeting._id }, status:{ $ne: "public"} }, c:1 });
+
+  if(pendingSession?.count){
+    this.sessions.unshift({
+      _id: 'pending',
+      title: `${meeting.EVT_CD} - Pending statements`,
+      count: pendingSession.count,
+      meetingId: meeting._id,
+      interventions : null,
+    });  
+  }
 }
 
 async function loadInterventions(sessionId){
@@ -104,7 +118,15 @@ async function loadInterventions(sessionId){
 
     if(!session) return;
 
-    session.interventions = await this.api.queryInterventions({ s: { datetime:  1 }, q: { sessionId : { $oid: sessionId }, status:"public" } });
+    let q = { sessionId: { $oid: sessionId }, status: "public" };
+    let s = { datetime: 1 };
+
+    if(session._id=='pending') {
+      q = { meetingId : { $oid: session.meetingId }, status:{ $ne: "public"} };
+      s = { agendaItem: 1, title:1 };
+    }
+
+    session.interventions = await this.api.queryInterventions({ q, s });
 }
 
 function numberOfSessions(){

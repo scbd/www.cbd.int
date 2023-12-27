@@ -1,6 +1,7 @@
 import app    from '~/app'
 import _      from 'lodash'
 import moment from 'moment-timezone'
+import { normalizeMeeting, normalizeAgenda } from './meetings';
 
 import 'angular-cache'
 
@@ -136,33 +137,20 @@ import 'angular-cache'
               )
             }
             function getMeetings(ids){
-              var oidArray=[];
+              const oidArray = ids.map(id => ({ '$oid': id }) );
 
-              for (var i=0; i<ids.length; i++) {
-                oidArray.push({
-                    '$oid': ids[i]
-                });
-              }
               var query = {
                             _id:{$in:oidArray}
                           }
-              return  $http.get('/api/v2016/meetings', { cache:httpCache, params: { q : query,f : { EVT_CD:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1 }, cache: true  } })
+              return  $http.get('/api/v2016/meetings', { cache:httpCache, params: { q : query,f : { EVT_CD:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, printSmart:1, agenda:1 }, cache: true  } })
               .then(function(res){
-                  return res.data
+                  return res.data.map(normalizeMeeting);
                 }
               )
             }
 
             function getAgendas(ids){
-              const oidArray= ids.map(id => ({ '$oid': id }) );
-              var query = {
-                            _id:{$in:oidArray}
-                          }
-              return  $http.get('/api/v2016/meetings', { cache:httpCache, params: { q : query,f : { EVT_CD:1, agenda: 1 }  } })
-              .then(function(res){
-                  return res.data
-                }
-              )
+              return getMeetings(ids);
             }
             return {
                 getAgendas,

@@ -8,7 +8,7 @@
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif!important;
 }
 b,strong { 
-    font-weight:600;
+    font-weight:bold;
 }
 
 table.table-striped table tr { background-color: transparent!important;}

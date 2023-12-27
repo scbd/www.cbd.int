@@ -1,4 +1,4 @@
-<div  ng-if="notifCtrl.notification">
+<div  ng-if="notifCtrl.notification" class="container-fluid">
     <div class="row">
         <div class="col-sm-9">
              <h1>Notification <small><i>{{::notifCtrl.notification.symbol}}</i></small></h1>
@@ -11,46 +11,74 @@
         </div>
     </div>
 
-    <div class="row" ng-show="notifCtrl.preview.type=='article'">
-        <div class="col-sm-9">    
-            <cbd-article query="notifCtrl.articleQuery" ng-if="notifCtrl.articleQuery" on-load="notifCtrl.onArticleLoad(article)" hide-cover-image="true"></cbd-article>
-            <p ng-if="::notifCtrl.notification.recipients.length">To: 
-                <em ng-repeat="recipient in ::notifCtrl.notification.recipients track by $index">
-                    {{::recipient}}<span ng-if="!$last">,</span>
-                </em>
-            </p>
-        </div> 
-        <div class="col-sm-3">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <p><i class="fa fa-calendar fa-fw"></i> {{::notifCtrl.notification.date|date:'yyyy-MM-dd'}}</p>
-                    <p ng-if="::notifCtrl.notification.actionDate" class="text-danger"> <i class="fa fa-calendar-check-o fa-fw"></i> Action required by {{::notifCtrl.notification.actionDate | date:'yyyy-MM-dd'}}</p>
-                    <p ng-if="::notifCtrl.notification.thematicAreas.length"><strong>Subject(s): </strong>
-                        <em ng-repeat="thematicArea in ::notifCtrl.notification.thematicAreas track by $index">
-                            {{::thematicArea}}<span ng-if="!$last">,</span>
-                        </em>
-                    </p>
-                    <document-files files="notifCtrl.notification.files"></document-files>
-                </div>
+    <div class="row" >
+        <div ng-switch on="notifCtrl.preview.type"  class="col-12 col-lg-8">    
+
+            <div ng-switch-when="article">
+                <cbd-article article="notifCtrl.preview.article" hide-cover-image="true"></cbd-article>
+                <p class="pt-1" ng-if="::notifCtrl.notification.recipients.length">To: 
+                    <em ng-repeat="recipient in ::notifCtrl.notification.recipients track by $index">
+                        {{::recipient}}<span ng-if="!$last">,</span>
+                    </em>
+                </p>
             </div>
-        </div>
-    </div>
-    <div class="row" ng-if="notifCtrl.preview.type=='embed'">
-        <div class="col-sm-12">    
-            <iframe ng-src="{{notifCtrl.preview.url}}"  style="width:100%;height:650px"></iframe>
-        </div>
-    </div>
-    <div class="row" ng-if="notifCtrl.preview.type=='none'">
-        <div class="col-sm-12">    
+
+            <div ng-switch-when="text">
+                <p style="white-space:pre-line;" ng-bind-html="notifCtrl.preview.html"></p> 
+                <p class="pt-1" >{{notifCtrl.notification.from_t}}</p> 
+                <p class="pt-1" ng-if="::notifCtrl.notification.recipients.length">To: 
+                    <em ng-repeat="recipient in ::notifCtrl.notification.recipients track by $index">
+                        {{::recipient}}<span ng-if="!$last">,</span>
+                    </em>
+                </p>
+
+            </div>
+
+            <div ng-switch-when="embed">
+                <iframe ng-src="{{notifCtrl.preview.url}}"  style="width:100%;height:650px"></iframe>
+            </div>
+
+            <div ng-switch-default>
                 <p><i>Sorry, no preview available.</i></p>
                 <p>Please download the Notification text file.</p>
-
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <document-files files="notifCtrl.notification.files"></document-files>
+    
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <document-files files="notifCtrl.notification.files"></document-files>
+                    </div>
                 </div>
             </div>
 
+        </div> 
+        <div class="col-12 order-first col-lg-4 order-lg-last mb-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div>
+                        <p><i class="fa fa-calendar fa-fw"></i> {{::notifCtrl.notification.date|date:'yyyy-MM-dd'}}</p>
+                        <p ng-if="::notifCtrl.notification.actionDate" class="text-danger"> <i class="fa fa-calendar-check-o fa-fw"></i> Action required by {{::notifCtrl.notification.actionDate | date:'yyyy-MM-dd'}}</p>
+                        <p ng-if="::notifCtrl.submissions.length"><i class="fa fa-caret-square-o-up fa-fw"></i> <a href="#" ng-click="notifCtrl.jumpTo('submission')">Submission received: {{::notifCtrl.submissions.length}}</a></p>
+                        <p ng-if="::notifCtrl.notification.thematicAreas.length"><strong>Subject(s): </strong>
+                            <em ng-repeat="thematicArea in ::notifCtrl.notification.thematicAreas track by $index">
+                                {{::thematicArea}}<span ng-if="!$last">,</span>
+                            </em>
+                        </p>
+                    </div>
+                    <div>
+                        <table>
+                            <tr>
+                                <th class="pr-1" style="vertical-align: top;">Full text:</th>
+                                <td class="p-1" style="vertical-align: top;">
+                                    <div ng-repeat="file in notifCtrl.notification.files track by file.name">
+                                        <i class="fa {{::(MIMES[file.type]||MIMES.default).icon}}" ng-style="::{ color: MIMES[file.type].color}"></i> <a class="list-inline-item" ng-href="{{file.url}}" target="_blank">
+                                            {{getLanguageName(file.language) || file.name}}
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
             
