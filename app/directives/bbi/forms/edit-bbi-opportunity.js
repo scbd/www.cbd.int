@@ -78,6 +78,7 @@ import '~/directives/bbi/controls/km-control-group';
 							return $filter('orderBy')(_.union(o[0].data, o[1].data), 'name');
 						});
 					},
+					gbfTargets:   function() { return $http.get("/api/v2013/thesaurus/domains/GBF-TARGETS/terms", { cache: true }).then(function(o){ return o.data; }); },
 					aichiTargets: function() {
 						return $http.get("/api/v2013/thesaurus/domains/AICHI-TARGETS/terms", {
 							cache: true

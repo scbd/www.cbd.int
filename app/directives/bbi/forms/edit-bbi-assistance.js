@@ -57,6 +57,7 @@ import '../views/view-bbi-request';
 							return $filter('orderBy')(o.data, 'name');
 						});
 					},
+					gbfTargets:   function() { return $http.get("/api/v2013/thesaurus/domains/GBF-TARGETS/terms", { cache: true }).then(function(o){ return o.data; }); },
 					aichiTargets: function() {
 						return $http.get("/api/v2013/thesaurus/domains/AICHI-TARGETS/terms", {
 							cache: true
