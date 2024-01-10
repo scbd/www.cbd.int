@@ -33,12 +33,15 @@ import '~/filters/lstring';
       },
       link: function($scope, $element, $attrs, ngModelController) {
 
+        if($attrs.list==="") $attrs.list = "true";
+
         $scope.identifier = null;
         $scope.rootItems = null;
         $scope.attr = $attrs;
         $scope.multiple = $attrs.multiple !== undefined && $attrs.multiple !== null;
         $scope.watchItems = $attrs.watchItems !== undefined && $attrs.watchItems !== null;
-        $scope.displayCount = 3;
+				$scope.list       = $scope.multiple && $attrs.list==="true"
+				$scope.displayCount = ($scope.multiple && $scope.list) ? 0 : 3;
 
         if ($scope.showDescription === undefined)
           $scope.showDescription = 'false';

@@ -52,7 +52,7 @@
 
 	<span>
 		<div class="btn-group" >
-			<button style="button" class="btn btn-default dropdown-toggle" ng-click="autoInit()" ng-class="{disabled:ngDisabledFn(), 'btn-info' : hasSelectedItems() }" data-toggle="dropdown">
+			<button type="button" class="btn btn-default dropdown-toggle" ng-click="autoInit()" ng-class="{disabled:ngDisabledFn(), 'btn-info' : hasSelectedItems() }" data-toggle="dropdown">
 				{{getTitle(displayCount, true)}}
 				<span class="caret"></span>
 			</button>
@@ -81,4 +81,17 @@
 			width:  1px !important;
 		}
 	</style>
+
+	<ul class="list-group" ng-if="list && getSelectedItems().length" style="margin-top:10px">
+		<li class="list-group-item" ng-repeat="item in getSelectedItems()">
+			<table style="width:100%">
+				<tr>
+					<td>{{item.title | lstring:locale}}</td>
+					<td style="white-space:nowrap;text-align:right;vertical-align:top">
+						<button type="button" class="btn btn-default" ng-click="clicked(item)"><i class="fa fa-trash-o"></i></button>
+					</td>
+				</tr>
+			</table>
+		</li>
+	</ul>	
 </span>
