@@ -24,7 +24,6 @@
             </div>
 
             <div ng-switch-when="text">
-                <p style="white-space:pre-line;">Dear Sir or Madam,</p> 
                 <p style="white-space:pre-line;" ng-bind-html="notifCtrl.preview.html"></p> 
                 <p class="pt-1" >{{notifCtrl.notification.from_t}}</p> 
                 <p class="pt-1" ng-if="::notifCtrl.notification.recipients.length">To: 
