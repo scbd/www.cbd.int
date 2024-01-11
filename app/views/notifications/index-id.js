@@ -5,6 +5,7 @@ import '~/directives/articles/cbd-article'
 import '~/directives/meetings/documents/document-files'
 import '~/filters/lstring'
 import '~/filters/term'
+import '~/filters/moment'
 import ArticlesApi from '~/api/articles'
 import jumpTo from '~/services/jump-to-anchor'
 import { textToHtml } from '~/util/html'
@@ -208,4 +209,3 @@ export default ['$scope', '$route','$http', '$q','$sce', 'articleService', funct
             return 'observer';
         }
     }];
-
