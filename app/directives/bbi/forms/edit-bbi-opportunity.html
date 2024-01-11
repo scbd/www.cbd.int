@@ -217,10 +217,17 @@
   </div>
 
   <div class="row">
-      <div class="col-md-10">
-          <div class="km-control-group" required name="aichiTargets" caption="Related Aichi Biodiversity Target(s)">
+    <div class="col-md-10">
+        <div class="km-control-group" required name="gbfTargets" caption="Related Kunming-Montreal Global Biodiversity Framework Target(s)">
+            <div km-select required multiple list name="gbfTargets" ng-model="document.gbfTargets" items="options.gbfTargets()" binding-type="term[]"></div>
+        </div>
+    </div>
+  </div>
 
-              <div km-term-check required name="aichiTargets" required ng-model="document.aichiTargets" terms="options.aichiTargets()" binding-type="term[]"></div>
+  <div class="row" ng-if="document.aichiTargets && document.aichiTargets.length">
+      <div class="col-md-10">
+          <div class="km-control-group" name="aichiTargets" caption="Related Aichi Biodiversity Target(s)">
+              <div km-term-check required name="aichiTargets" ng-model="document.aichiTargets" terms="options.aichiTargets()" binding-type="term[]"></div>
           </div>
       </div>
   </div>
