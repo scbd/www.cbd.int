@@ -356,6 +356,7 @@ import '../views/view-bbi-contact';
 
 					_.each(document,function(property,name){
 							if(_.isEmpty(document[name])) delete(document[name]);
+							if(document.gbfTargets) delete(document.gbfTargets);
 					});
 					if (!document)
 						return $q.when(true);
@@ -450,6 +451,7 @@ import '../views/view-bbi-contact';
 					if (clone !== false)
 						oDocument = angular.fromJson(angular.toJson(oDocument));
 
+					if(oDocument.gbfTargets) delete(oDocument.gbfTargets);
 					return $scope.cleanUp(oDocument).then(function(cleanUpError) {
 						return storage.documents.validate(oDocument).then(
 							function(success) {
