@@ -40,7 +40,6 @@
           :node="child"
           :selected-node.sync="selectedNode"
           :comments="comments"
-          :token-reader="tokenReader"
           :allow-add-nodes="allowAddNodes"
           @change="$emit('change', $event)"
           @update:selected-node="$emit('update:selected-node', $event)"
@@ -77,7 +76,6 @@ export default {
         }
     },
     props: {
-      tokenReader: { type: Function, required: false },
       decisionId: {
         type: String,
         default: '',
@@ -168,7 +166,7 @@ function label(type, value) {
 }
 
 function load() {
-  this.api = new DecisionApi(this.tokenReader);
+  this.api = new DecisionApi();
 }
 
 async function addNode(parentId, nextTo) {

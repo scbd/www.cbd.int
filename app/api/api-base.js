@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import axios from 'axios'
 import { isFunction } from 'lodash'
 
@@ -8,7 +9,12 @@ if(/\.cbddev\.xyz$/i.test(window.location.hostname)) sitePrefixUrl= 'https://api
 if(/\localhost$/i   .test(window.location.hostname)) sitePrefixUrl= '/';
 
 const cache          = new Map()
-const defaultOptions = { prefixUrl: sitePrefixUrl, timeout  : 30 * 1000 }
+const defaultOptions = () => ({ 
+  prefixUrl: 
+  sitePrefixUrl, 
+  timeout  : 30 * 1000,
+  token : Vue?.prototype?.$auth?.strategy?.token?.get()
+});
 
 export default class ApiBase
 {
@@ -18,13 +24,11 @@ export default class ApiBase
 
     if(isFunction(options)) options = { token : options }
 
-    const { token, prefixUrl, timeout, tokenType } = { ...defaultOptions, ...options }
-
+    const { token, prefixUrl, timeout } = { ...defaultOptions(), ...options }
 
     const baseConfig = {
       baseURL : prefixUrl,
       timeout,
-      tokenType,
       token
     }
 
@@ -53,7 +57,7 @@ async function loadAsyncHeaders(baseConfig) {
   const headers = { ...(config.headers || {}) };
 
   if(token) {
-      headers.Authorization = `${tokenType||'Bearer'} ${token}`;
+      headers.Authorization = `${token}`;
   }
 
   return axios.create({ ...config, headers } );
