@@ -13,7 +13,7 @@ const defaultOptions = () => ({
   prefixUrl: 
   sitePrefixUrl, 
   timeout  : 30 * 1000,
-  token : Vue?.prototype?.$auth?.strategy?.token?.get()
+  token : ()=>Vue?.prototype?.$auth?.strategy?.token?.get()
 });
 
 export default class ApiBase
@@ -52,15 +52,30 @@ export default class ApiBase
 
 async function loadAsyncHeaders(baseConfig) {
 
-  const { token, tokenType, ...config } = baseConfig || {}
+  const { token, ...config } = baseConfig || {}
 
   const headers = { ...(config.headers || {}) };
 
+  for(let key of Object.keys(config)) {
+    headers[key] = await evaluate(headers[key]);
+  }
+
   if(token) {
-      headers.Authorization = `${token}`;
+      let authorization = await evaluate(token);
+
+      if(authorization && !/^[a-z]+\s/i.test(authorization||''))
+        authorization = `Bearer ${authorization}`;
+
+      headers.Authorization = authorization;
   }
 
   return axios.create({ ...config, headers } );
+}
+
+function evaluate(expr) {
+  if(typeof expr === 'function') expr = expr();
+
+  return expr;
 }
 
 //////////////////////////
