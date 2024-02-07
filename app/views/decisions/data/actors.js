@@ -22,6 +22,7 @@
         { code : 'executive-director' ,      title: 'Executive Director of the United Nations Environment Programme',                          group : 'UN Agencies and Conventions' },
         { code : 'FAO',                      title: 'Food and Agriculture Organization of the United Nations',                                 group : 'UN Agencies and Conventions' },
         { code : 'UNESCO',                   title: 'United Nations Educational, Scientific and Cultural Organization',                        group : 'UN Agencies and Conventions' },
+        { code : 'UNDP',                     title: 'United Nations Development Programme',                                                    group : 'UN Agencies and Conventions' },
         { code : 'WTO',                      title: 'World Trade Organization',                                                                group : 'UN Agencies and Conventions' },
         { code : 'WIPO',                     title: 'World Intellectual Property Organization',                                                group : 'UN Agencies and Conventions' },
         { code : 'CITES',                    title: 'Convention on International Trade in Endangered Species of Wild Fauna and Flora (CITES)', group : 'UN Agencies and Conventions' },
@@ -40,8 +41,8 @@
         { code : 'inter-gov-organizations',  title: 'Intergovernmental organizations',             group : 'Others' },
         { code : 'private-sector',           title: 'Private sector',                              group : 'Others' },
         { code : 'donors',                   title: 'Donors',                                      group : 'Others' },
-        { code : 'Businesses',               title: 'Businesses',                                  group : 'Others' },
-        { code : 'Others' ,                  title: 'Stakeholder(s)' ,                             group : 'Others' },
+        { code : 'businesses',               title: 'Businesses',                                  group : 'Others' },
+        { code : 'stakeholders' ,            title: 'Stakeholder(s)' ,                             group : 'Others' },
 
     ];
 
