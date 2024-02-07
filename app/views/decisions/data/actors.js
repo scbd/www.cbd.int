@@ -43,6 +43,8 @@
         { code : 'donors',                   title: 'Donors',                                      group : 'Others' },
         { code : 'businesses',               title: 'Businesses',                                  group : 'Others' },
         { code : 'stakeholders' ,            title: 'Stakeholder(s)' ,                             group : 'Others' },
+        { code : 'youth' ,                   title: 'Youth' ,                                      group : 'Others' },
+        { code : 'women' ,                   title: 'Women' ,                                      group : 'Others' },
 
     ];
 
