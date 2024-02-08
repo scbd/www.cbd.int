@@ -70,10 +70,7 @@ import { UN as languages } from '~/data/languages.js';
 export default {
     name: 'DecisionEditTranslations',
     components : { TextEditor },
-    props: {
-        tokenReader: { type: Function, required: false },
-		route: { type: Object, required: false }
-    },
+    props: { },
     data() {
         return {
             selectedLanguage: 'fr',
@@ -114,13 +111,13 @@ export default {
 }
 
 async function created() {
-    this.api = new DecisionApi(this.tokenReader);
+    this.api = new DecisionApi();
 
 	let treaty    = null ;
-    const { route } = this;
-	const body      = route.params.body.toUpperCase();
-	const session   = parseInt(route.params.session);
-	const number    = parseInt(route.params.decision);
+    const { $route } = this;
+	const body      = $route.params.body.toUpperCase();
+	const session   = parseInt($route.params.session);
+	const number    = parseInt($route.params.decision);
 
 	if(body=='COP') treaty = { code : "XXVII8" } ;
 

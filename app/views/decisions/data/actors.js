@@ -34,6 +34,7 @@
         { code : 'IPBES',                    title: 'Intergovernmental Science-Policy Platform on Biodiversity and Ecosystem Services (IPBES)',group : 'UN Agencies and Conventions' },
         { code : 'WHO',                      title: 'World Health Organization (WHO)',                                                         group : 'UN Agencies and Conventions' },
         { code : 'IUCN',                     title: 'International Union for Conservation of Nature',                                          group : 'UN Agencies and Conventions' },
+        { code : 'IPCC',                     title: 'Intergovernmental Panel on Climate Change',                                               group : 'UN Agencies and Conventions' },
 
         { code : 'organizations',            title: 'Relevant organizations',                      group : 'Others' },
         { code : 'economic-organizations',   title: 'Regional economic integration organizations', group : 'Others' },

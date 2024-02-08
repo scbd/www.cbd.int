@@ -256,9 +256,6 @@ export default {
         }
     },
     props: {
-		route: { type: Object, required: false },
-		router: { type: Object, required: false },
-		tokenReader: { type: Function, required: false },
 		user: { type: Object, required: false}
 	},
 	data() {
@@ -377,12 +374,12 @@ function findNode(collection, code) {
 }
 
 async function load() {
-	const { $route: route, $router: router } = this;
+	const { $route, $router } = this;
 
-	this.api = new DecisionApi(this.tokenReader);
+	this.api = new DecisionApi();
 	
 	let treaty    = null ;
-	const body      = route.params.body.toUpperCase();
+	const body      = $route.params.body.toUpperCase();
 
 	if(body=='COP') treaty = { code : "XXVII8" } ;
 
@@ -393,10 +390,10 @@ async function load() {
 
 	const pathParser = /^(?<dec>\d+)(?:\/(?<para>.*))?/;
 
-	if(!pathParser.test(route.params.decision)) throw Error("Invalid path")
+	if(!pathParser.test($route.params.decision)) throw Error("Invalid path")
 
-	const parsed = pathParser.exec(route.params.decision);
-	const session = parseInt(route.params.session);
+	const parsed = pathParser.exec($route.params.decision);
+	const session = parseInt($route.params.session);
 	const number  = parseInt(parsed.groups.dec);
 	const para    = parsed.groups?.para?.toUpperCase();
 
@@ -421,8 +418,8 @@ async function load() {
 			element.scrollIntoView(scrollOptions);
 		}
 		else {
-			const path = route.path.substring(0, route.path.lastIndexOf("/"));
-			router.replace({path}); //TODO
+			const path = $route.path.substring(0, $route.path.lastIndexOf("/"));
+			$router.replace({path}); //TODO
 		}
 	}
 }
@@ -457,16 +454,16 @@ async function loadFilters() {
 }
 
 async function onChangeSelectedNode(selectedNode) {
-	const {decision, $route: route, $router: router} = this;
+	const {decision, $route, $router} = this;
 
 	await this.loadFilters();
 
-	const body = route.params.body.toUpperCase();
+	const body = $route.params.body.toUpperCase();
 
 	const {code} = findNode(decision, selectedNode) || decision;
 
 	const path = `${code.substring(code.indexOf(body))}`.toLowerCase();
-	router.replace({path});
+	$router.replace({path});
 }
 
 async function loadDecisionDocuments(decision) {
@@ -534,16 +531,16 @@ function toggleFilters(newFilters) {
 function edit(hash) {
 	const pathParser = /^(?<dec>\d+)(?:\/(?<para>.*))?/;
 
-	const {$route: route, $router: router} = this;
+	const {$route, $router} = this;
 	
-	const body = route.params.body.toUpperCase();
-	const parsed = pathParser.exec(route.params.decision);
-	const session = parseInt(route.params.session);
+	const body = $route.params.body.toUpperCase();
+	const parsed = pathParser.exec($route.params.decision);
+	const session = parseInt($route.params.session);
 	const decision  = parseInt(parsed.groups.dec);
 
 	hash = hash ? `#${hash}` : '';
 	const path = `${body}/${pad(session)}/${pad(decision)}/edit${hash}`.toLowerCase();
-	router.push({path});
+	$router.push({path});
 }
 
 function pad(input) {

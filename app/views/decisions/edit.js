@@ -69,6 +69,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         $scope.canDebug = canDebug();
         $scope.user   = _.pick(user, ['userID', 'name']);
         $scope.close  = close;
+        $scope.translate = translate;
         $scope.save   = save;
         $scope.cancel   = cancel;
         $scope.upload = upload;
@@ -108,6 +109,13 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         //==============================
         function close() {
             $location.url(('/'+body+'/'+pad(session)+'/'+pad(decision)).toLowerCase());
+        }
+
+        //==============================
+        //
+        //==============================
+        function translate() {
+            $location.url(('/'+body+'/'+pad(session)+'/'+pad(decision)).toLowerCase()+'/edit/translation');
         }
 
 

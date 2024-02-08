@@ -137,8 +137,8 @@
 
     select.btn { max-width: 125px;}
 
-    .edit-decision .bg-orange{
-        background-color:#6F5495!important;
+    .edit-decision .bg-green{
+        background-color:#1c473b!important;
         /* background-color:#fa6938!important; */
         color:white!important;
         font-family: "Helvetica Neue", Helvetica, sans-serif, "Trebuchet MS";
@@ -187,7 +187,8 @@
             <button class="btn btn-default pull-right" ng-click="close()">Close</button>
             <button class="btn btn-success" ng-if="::canEdit" ng-disabled="!contentEdited()" ng-click="save()">Save</button> &nbsp; &nbsp;
             <button class="btn btn-default" ng-if="::canEdit" ng-disabled="!contentEdited()" ng-click="cancel()">Cancel</button> &nbsp; &nbsp;
-            <checkbox ng-model="allowAddNodes" style="font-size:20px"></checkbox> Allow add nodes
+            <checkbox ng-model="allowAddNodes" style="font-size:20px"></checkbox> Allow add nodes &nbsp;&nbsp;
+            <button class="btn btn-default" ng-click="translate()">Translate</button>
         </div>
 
         <div class="row" style="margin-top:60px;height:100%">
@@ -228,7 +229,7 @@
                 </div>
 
                 <div ng-if="decision" ng-disabled="contentEdited()" class="decision-nodes-div">
-                    <div class="bg-orange">Decision {{symbol}}</div>
+                    <div class="bg-green">Decision {{symbol}}</div>
                     <div class="document" style="height:calc(100vh - 260px);overflow-y:scroll;padding:5px">
                         <h1>{{decision.title|lstring}}</h1>
                         <div ng-repeat="node in decision.nodes">
@@ -350,7 +351,7 @@
     		    	<select class="form-control" id="elementType" ng-model="element.type"  ng-disabled="!canEdit || element.nodeType!='paragraph'">
                         <option></option>
     					<option value="operational">Operational</option>
-    					<option value="informational">For‎ information</option>
+    					<option value="informational">For information</option>
     				</select>
     		  	</div>
 
