@@ -139,7 +139,6 @@
 
     .edit-decision .bg-green{
         background-color:#1c473b!important;
-        /* background-color:#fa6938!important; */
         color:white!important;
         font-family: "Helvetica Neue", Helvetica, sans-serif, "Trebuchet MS";
         font-size: 14px;
@@ -194,8 +193,9 @@
         <div class="row" style="margin-top:60px;height:100%">
             <div class="col-sm-6 edit-decision" style="height:86%">
 
+                <!--
             	<div class="row" style="height: 150px; overflow-y: scroll">
-            		<div class="col-sm-6">
+                    <div class="col-sm-6">
 
                         <div class="form-group">
             		    	<label for="elementSubject">CBD Subjects</label><br>
@@ -227,6 +227,7 @@
             		  	</div>
                     </div>
                 </div>
+                -->
 
                 <div ng-if="decision" ng-disabled="contentEdited()" class="decision-nodes-div">
                     <div class="bg-green">Decision {{symbol}}</div>
@@ -239,7 +240,6 @@
                                 :node="node" 
                                 :comments="comments" 
                                 :selected-node="selectedNode"
-                                :token-reader="tokenReader"
                                 :allow-add-nodes="allowAddNodes"
                                 @update:selected-node="updateSelectedNode"
                                 @change="updateDecision"
@@ -411,22 +411,40 @@
 
         <hr ng-if="element.nodeType=='paragraph'"/>
     	<div ng-if="element.nodeType=='paragraph'" class="row">
-    		<div class="col-sm-6">
+    		<div class="col-sm-4">
 
                 <div class="form-group">
-    		    	<label for="elementSubject">CBD Subjects</label><br>
-                    <div ng-repeat="item in element.subjects" class="input-group" style="margin-bottom:2px;overflow-y:hidden" title="" ng-disabled="element.nodeType!='paragraph'">
-                         <span class="form-control">{{(collections.subjectsMap[item].title|lstring)||item}}</span>
+    		    	<label for="elementSubject">GBF Goals</label><br>
+                    <div ng-repeat="item in element.gbfGoals" class="input-group" style="margin-bottom:2px;overflow-y:hidden" title="" ng-disabled="element.nodeType!='paragraph'">
+                         <span class="form-control">{{(collections.gbfGoalsMap[item].shortTitle|lstring)||item}}</span>
                          <div class="input-group-append">
-                            <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.subjects)" ng-disabled="element.nodeType!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                            <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.gbfGoals)" ng-disabled="element.nodeType!='paragraph'"><i class="fa fa-minus-circle"></i></button>
                         </div>
                      </div>
-    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedSubject" ng-options="subject.identifier as (subject.title|lstring) group by collections.subjectsMap[subject.broaderTerms[0]].name for subject in collections.subjects|filter:noNarrower" ng-change="addTo(selectedSubject, element.subjects); selectedSubject=''" ng-disabled="element.nodeType!='paragraph'">
-                        <option value="">add a subject</option>
+    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedTarget" ng-options="target.identifier as (target.shortTitle|lstring) group by collections.gbfGoalsMap[target.broaderTerms[0]].name for target in collections.gbfGoals|filter:noNarrower" ng-change="addTo(selectedTarget, element.gbfGoals); selectedTarget=''" ng-disabled="element.nodeType!='paragraph'">
+                        <option value="">add a goal</option>
     				</select>
     		  	</div>
+                
             </div>
-    		<div class="col-sm-6">
+            
+            <div class="col-sm-4">
+
+                <div class="form-group">
+    		    	<label for="elementSubject">GBF Targets</label><br>
+                    <div ng-repeat="item in element.gbfTargets" class="input-group" style="margin-bottom:2px;overflow-y:hidden" title="" ng-disabled="element.nodeType!='paragraph'">
+                         <span class="form-control">{{(collections.gbfTargetsMap[item].shortTitle|lstring)||item}}</span>
+                         <div class="input-group-append">
+                            <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.gbfTargets)" ng-disabled="element.nodeType!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                        </div>
+                     </div>
+    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedTarget" ng-options="target.identifier as (target.shortTitle|lstring) group by collections.gbfTargetsMap[target.broaderTerms[0]].name for target in collections.gbfTargets|filter:noNarrower" ng-change="addTo(selectedTarget, element.gbfTargets); selectedTarget=''" ng-disabled="element.nodeType!='paragraph'">
+                        <option value="">add a target</option>
+    				</select>
+    		  	</div>
+                
+            </div>
+    		<div class="col-sm-4">
 
                 <div class="form-group">
     		    	<label for="elementSubject">Aichi Targets</label><br>
