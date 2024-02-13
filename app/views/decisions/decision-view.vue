@@ -147,6 +147,27 @@
 							</dd>
 						</div>
 
+						<div v-if="sum(counts.gbfTargets)>0"> 
+							<dt>GBF targets</dt>
+							<dd>
+								<a href="#" class="badge badge-secondary text-nowrap" 
+									@click.prevent="toggleFilters({ gbfTargets : null })" 
+									:class="{ disabled : filters &&  filters.gbfTargets }">
+									{{sum(counts.gbfTargets)}} 
+									<i v-if="filters && filters.gbfTargets" class="fa fa-times" aria-hidden="true"></i>
+								</a>
+								<span class="chip-sm" 
+									v-for="gbfTarget in allFilters.gbfTargets" 
+									:key="gbfTarget" 
+									@click="toggleFilters({ gbfTargets : [gbfTarget] })" 
+									:class="`${!isFilterSelected('gbfTargets', gbfTarget) && 'disabled'} 'badge-secondary'`" >
+										<img :title="gbfTarget.description" 
+										:src="`/app/images/gbf-targets/gbf-${gbfTarget.replace('GBF-TARGET-','')}-64.png`" 
+										width="20" style="margin: 1px 1px 1px 1px;">
+								</span>
+							</dd>
+						</div>
+
 						<div v-if="sum(counts.subjects)>0">
 							<dt>Subjects</dt>
 							<dd>
@@ -222,6 +243,8 @@ import actors from '~/views/decisions/data/actors.js';
 import romanChars from '~/views/decisions/data/romans.js';
 import statuses from '~/views/decisions/data/statuses.js';
 import aichiTargets from '~/data/reports/aichiTargets.json';
+import gbfTargets from '~/data/gbf-targets/targets.json';
+import gbfGoals from '~/data/gbf-targets/goals.json';
 import DocumentFiles from '~/components/references/document-files.vue';
 import DecisionCardList from '~/components/references/decision-card-list.vue';
 import MeetingCardList from '~/components/references/meeting-card-list.vue';
@@ -275,6 +298,8 @@ export default {
         statuses() { return statuses},
         romans() { return romanChars},
 		aichiTargets() { return aichiTargets},
+		gbfTargets() { return gbfTargets},
+		gbfGoals() { return gbfGoals},
 		languages() {
 			const {decision} = this;
 			if(!decision) return [];
@@ -299,13 +324,15 @@ export default {
 		counts() {
 			const {decision, selectedNode} = this;
 			
-			const src = findNode(decision, selectedNode) || decision;
-			let counts = {};
-			counts.types = _.countBy(getTags(src, "type", true));
-			counts.statuses = _.countBy(getTags(src, "statuses", true));
-			counts.actors = _.countBy(getTags(src, "actors", true));
+			const src 			= findNode(decision, selectedNode) || decision;
+			let counts 			= {};
+			counts.types 		= _.countBy(getTags(src, "type", true));
+			counts.statuses 	= _.countBy(getTags(src, "statuses", true));
+			counts.actors 		= _.countBy(getTags(src, "actors", true));
 			counts.aichiTargets = _.countBy(getTags(src, "aichiTargets", true));
-			counts.subjects = _.countBy(getTags(src, "subjects", true));
+			counts.gbfTargets 	= _.countBy(getTags(src, "gbfTargets", true));
+			counts.gbfGoals 	= _.countBy(getTags(src, "gbfGoals", true));
+			counts.subjects 	= _.countBy(getTags(src, "subjects", true));
 			return counts;
 		},
 		documents() {
@@ -440,6 +467,7 @@ async function loadFilters() {
 	allFilters.statuses = getTags(collection, "statuses").map(tag => statuses.find(item => item.code === tag) || tag);
 	allFilters.actors = getTags(collection, "actors").map(tag => actors.find(item => item.code === tag) || tag);
 	allFilters.aichiTargets = getTags(collection, "aichiTargets").map(tag => aichiTargets.find(item => item.index === tag) || tag);
+	allFilters.gbfTargets = getTags(collection, "gbfTargets").map(tag => gbfTargets.find(item => item.index === tag) || tag);
 
 	//load subjects
 	const codes = getTags(collection, 'subjects');

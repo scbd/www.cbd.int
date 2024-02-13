@@ -33,6 +33,7 @@
                     <i class="fa fa-user" aria-hidden="true"></i>
                     <span>{{actorName(actor)}}</span>
                 </span>
+
                 <p v-if="node.type==='paragraph'">
                     <a class="btn btn-primary btn-sm" role="button" v-if="showDecision"
                         :href="`/decisions/${node.body}/${node.session}/${node.decision}`">
@@ -156,12 +157,13 @@ export default {
 
             let match = true;
 
-            const {actors, statuses, types, aichiTargets, subjects} = filters;
+            const {actors, statuses, types, aichiTargets, gbfTargets, subjects} = filters;
 
             if(match && actors) match = _(actors).intersection(node.actors).some();
             if(match && statuses) match = _(statuses).intersection(node.statuses).some();
             if(match && types) match = _(types).intersection([node.type]).some();
             if(match && aichiTargets) match = _(aichiTargets).intersection(node.aichiTargets).some();
+            if(match && gbfTargets) match = _(gbfTargets).intersection(node.gbfTargets).some();
             if(match && subjects) match = _(subjects).intersection(node.subjects).some();
 
             return match;
