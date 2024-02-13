@@ -116,14 +116,14 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <label>GBF Goals</label>
-                                                <select class="form-control"  ng-model="selectedTarget" ng-options="target.identifier as (target.title|lstring) group by collections.gbfGoals[target.broaderTerms[0]].name for target in collections.gbfGoalsMap|filter:noNarrower"
+                                                <select class="form-control"  ng-model="selectedTarget" ng-options="target.identifier as (target.shortTitle|lstring) group by collections.gbfGoals[target.broaderTerms[0]].name for target in collections.gbfGoalsMap|filter:noNarrower"
                                                     ng-change="search(selectedTarget, 'gbfGoals'); selectedTarget=''">
                                                     <option value="">all GBF goals</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
                                                 <label>GBF Targets</label>
-                                                <select class="form-control"  ng-model="selectedTarget" ng-options="target.identifier as (target.title|lstring) group by collections.gbfTargets[target.broaderTerms[0]].name for target in collections.gbfTargetsMap|filter:noNarrower"
+                                                <select class="form-control"  ng-model="selectedTarget" ng-options="target.identifier as (target.shortTitle|lstring) group by collections.gbfTargets[target.broaderTerms[0]].name for target in collections.gbfTargetsMap|filter:noNarrower"
                                                     ng-change="search(selectedTarget, 'gbfTargets'); selectedTarget=''">
                                                     <option value="">all GBF targets</option>
                                                 </select>
