@@ -104,8 +104,9 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <br />
                                         <div class="row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <label>CBD Subjects</label>
                                                 <select class="form-control"  ng-model="selectedSubject" 
                                                 ng-options="subject.identifier as (subject.title|lstring) group by collections.subjects[subject.broaderTerms[0]].name for subject in collections.subjectsMap|filter:noNarrower"
@@ -113,21 +114,35 @@
                                                     <option value="">all subjects</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-3">
-                                                <label>Targets</label>
-                                                <select class="form-control"  ng-model="selectedTarget" ng-options="target.identifier as (target.title|lstring) group by collections.aichiTargets[target.broaderTerms[0]].name for target in collections.aichiTargetsMap|filter:noNarrower"
-                                                    ng-change="search(selectedTarget, 'aichiTargets'); selectedTarget=''">
-                                                    <option value="">all targets</option>
+                                            <div class="col-md-2">
+                                                <label>GBF Goals</label>
+                                                <select class="form-control"  ng-model="selectedTarget" ng-options="target.identifier as (target.title|lstring) group by collections.gbfGoals[target.broaderTerms[0]].name for target in collections.gbfGoalsMap|filter:noNarrower"
+                                                    ng-change="search(selectedTarget, 'gbfGoals'); selectedTarget=''">
+                                                    <option value="">all GBF goals</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
+                                                <label>GBF Targets</label>
+                                                <select class="form-control"  ng-model="selectedTarget" ng-options="target.identifier as (target.title|lstring) group by collections.gbfTargets[target.broaderTerms[0]].name for target in collections.gbfTargetsMap|filter:noNarrower"
+                                                    ng-change="search(selectedTarget, 'gbfTargets'); selectedTarget=''">
+                                                    <option value="">all GBF targets</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label>Aichi Targets</label>
+                                                <select class="form-control"  ng-model="selectedTarget" ng-options="target.identifier as (target.title|lstring) group by collections.aichiTargets[target.broaderTerms[0]].name for target in collections.aichiTargetsMap|filter:noNarrower"
+                                                    ng-change="search(selectedTarget, 'aichiTargets'); selectedTarget=''">
+                                                    <option value="">all AICHI targets</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
                                                 <label>Actors</label>
                                                 <select class="form-control"  ng-model="selectedActor" ng-options="actor.code as actor.title group by actor.group for actor in collections.actors"
                                                     ng-change="search(selectedActor, 'actors'); selectedActor=''">
                                                     <option value="">all actors</option>
                                                 </select>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <label>Status</label>
                                                 <select class="form-control"  ng-model="selectedStatus" ng-options="status.code as status.title for status in collections.statuses"
                                                     ng-change="search(selectedStatus, 'statuses'); selectedStatus=''">

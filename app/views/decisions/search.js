@@ -28,6 +28,8 @@ export default ['$scope', '$http', '$q', '$location', '$compile', '$timeout', '$
             elementType     : [],
             subjects        : [], 
             aichiTargets    : [],
+            gbfTargets      : [],
+            gbfGoals        : [],
             actors          : [],
             statuses        : [],
             freeText        : []            
@@ -257,13 +259,19 @@ export default ['$scope', '$http', '$q', '$location', '$compile', '$timeout', '$
 
             var q0 = $http.get('/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms',  { cache: true } );
             var q1 = $http.get('/api/v2013/thesaurus/domains/AICHI-TARGETS/terms', { cache: true } );
+            var q2 = $http.get('/api/v2013/thesaurus/domains/GBF-TARGETS/terms', { cache: true } );
+            var q3 = $http.get('/api/v2013/thesaurus/domains/GBF-GOALS/terms', { cache: true } );
 
-            $q.all([q0, q1]).then(function(res) {
+            $q.all([q0, q1, q2, q3]).then(function(res) {
 
                 $scope.collections.subjectsMap          =   res[0].data;
                 $scope.collections.aichiTargetsMap      =   res[1].data;
+                $scope.collections.gbfTargetsMap        =   res[2].data;
+                $scope.collections.gbfGoalsMap          =   res[3].data;
                 $scope.collections.subjects             = _(res[0].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
                 $scope.collections.aichiTargets         = _(res[1].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
+                $scope.collections.gbfTargets           = _(res[2].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
+                $scope.collections.gbfGoals             = _(res[3].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
 
                 readQueryString();
                 if($scope.selectedFilter){
