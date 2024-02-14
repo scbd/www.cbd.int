@@ -26,13 +26,13 @@ export default ['$scope', '$http', '$q', '$location', '$compile', '$timeout', '$
         $scope.selectedFilter = {
             session         : [],
             elementType     : [],
-            subjects        : [], 
+            subjects        : [],
             aichiTargets    : [],
             gbfTargets      : [],
             gbfGoals        : [],
             actors          : [],
             statuses        : [],
-            freeText        : []            
+            freeText        : []
         };
 
         $scope.vueOptions = {

@@ -16,7 +16,7 @@
 
 
         { code : 'GEF' ,                     title: 'Global Environment Facility',                                                             group : 'UN Agencies and Conventions' },
-        { code : 'IPLC' ,                    title: 'Indigenous Peoples and Local Communities',                                                group : 'UN Agencies and Conventions' },
+        { code : 'IPLC' ,                    title: 'Indigenous peoples and local communities',                                                group : 'UN Agencies and Conventions' },
         { code : 'UNGA',                     title: 'United Nations General Assembly',                                                         group : 'UN Agencies and Conventions' },
         { code : 'UNEP',                     title: 'United Nations Environment Programme',                                                    group : 'UN Agencies and Conventions' },
         { code : 'executive-director' ,      title: 'Executive Director of the United Nations Environment Programme',                          group : 'UN Agencies and Conventions' },
