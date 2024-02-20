@@ -127,10 +127,11 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             var q2 = $http.get('/api/v2015/treaties/'+ encodeURIComponent(treaty.code), { cache: true } );
             var q3 = $http.get('/api/v2013/thesaurus/domains/GBF-TARGETS/terms', { cache: true } );
             var q4 = $http.get('/api/v2013/thesaurus/domains/GBF-GOALS/terms', { cache: true } );
+            var q5 = $http.get('/api/v2013/thesaurus/domains/GBF-TARGETS-CONSIDERATIONS/terms', { cache: true } );
 
-            $q.all([q0, q1, q2, q3, q4]).then(function(res) {
+            $q.all([q0, q1, q2, q3, q4, q5]).then(function(res) {
 
-                $scope.collections.subjects        =   res[0].data;
+                $scope.collections.subjects        =   res[5].data.concat(res[0].data);
                 $scope.collections.aichiTargets    =   res[1].data;
                 $scope.collections.gbfTargets      =   res[3].data;
                 $scope.collections.gbfGoals        =   res[4].data;

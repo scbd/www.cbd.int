@@ -77,7 +77,7 @@
 
 <script>
 import actors from '~/views/decisions/data/actors.js';
-import romans from '~/views/decisions/data/romans.js';
+// import romans from '~/views/decisions/data/romans.js';
 import statuses from '~/views/decisions/data/statuses.js';
 import _ from 'lodash';
 import lstring from '~/filters/lstring.js';
@@ -118,7 +118,7 @@ export default {
     computed: {
         actors() { return actors},
         statuses() { return statuses},
-        romans() { return romans},
+        // romans() { return romans},
         name() {
             const { node } = this;
 

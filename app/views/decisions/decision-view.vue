@@ -11,7 +11,7 @@
 				<i class="fa fa-edit" aria-hidden="true"></i>
 			</a>
 		</span>						
-		<h1><span id="step1">Decision {{decision.body | uppercase}} {{romans[decision.session]}}/{{decision.decision}}</span></h1>
+		<h1><span id="step1">{{ pageTitle }}</span></h1>
 	</header-decisions>
 
     <div class="view-decision row">
@@ -235,12 +235,13 @@
 </template>
 
 <script>
+import roman from 'romans';
 import _ from 'lodash';
 import DecisionApi from '~/api/decisions.js';
 import ViewElement from '~/components/decisions/view-element.vue';
 import types from '~/views/decisions/data/types.js';
 import actors from '~/views/decisions/data/actors.js';
-import romanChars from '~/views/decisions/data/romans.js';
+/* import romanChars from '~/views/decisions/data/romans.js'; */
 import statuses from '~/views/decisions/data/statuses.js';
 import aichiTargets from '~/data/reports/aichiTargets.json';
 import gbfTargets from '~/data/gbf-targets/targets.json';
@@ -296,10 +297,18 @@ export default {
 		types() { return types},
 		actors() { return actors},
         statuses() { return statuses},
-        romans() { return romanChars},
 		aichiTargets() { return aichiTargets},
 		gbfTargets() { return gbfTargets},
 		gbfGoals() { return gbfGoals},
+		pageTitle() {
+			if(!this.decision) return '';
+			let { body, session, decision } = this.decision;
+			if(body == 'COP' && session < 14) {
+				session = roman.romanize(session);
+			}
+
+			return `Decision ${body} ${session}/${decision}`;
+		},
 		languages() {
 			const {decision} = this;
 			if(!decision) return [];
