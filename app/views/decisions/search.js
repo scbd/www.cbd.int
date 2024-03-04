@@ -261,10 +261,12 @@ export default ['$scope', '$http', '$q', '$location', '$compile', '$timeout', '$
             var q1 = $http.get('/api/v2013/thesaurus/domains/AICHI-TARGETS/terms', { cache: true } );
             var q2 = $http.get('/api/v2013/thesaurus/domains/GBF-TARGETS/terms',   { cache: true } );
             var q3 = $http.get('/api/v2013/thesaurus/domains/GBF-GOALS/terms',     { cache: true } );
+            var q4 = $http.get('/api/v2013/thesaurus/domains/GBF-TARGETS-CONSIDERATIONS/terms',     { cache: true } );
 
-            $q.all([q0, q1, q2, q3]).then(function(res) {
 
-                $scope.collections.subjectsMap          = res[0].data;
+            $q.all([q0, q1, q2, q3, q4]).then(function(res) {
+
+                $scope.collections.subjectsMap          = res[4].data.concat(res[0].data);
                 $scope.collections.aichiTargetsMap      = _.sortBy(res[1].data, 'identifier');
                 $scope.collections.gbfTargetsMap        = _.sortBy(res[2].data, 'identifier');
                 $scope.collections.gbfGoalsMap          = _.sortBy(res[3].data, 'identifier');

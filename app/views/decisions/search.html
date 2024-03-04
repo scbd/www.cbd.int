@@ -107,7 +107,7 @@
                                         <br />
                                         <div class="row">
                                             <div class="col-md-2">
-                                                <label>CBD Subjects</label>
+                                                <label>Subjects</label>
                                                 <select class="form-control"  ng-model="selectedSubject" 
                                                 ng-options="subject.identifier as (subject.title|lstring) group by collections.subjects[subject.broaderTerms[0]].name for subject in collections.subjectsMap|filter:noNarrower"
                                                     ng-change="search(selectedSubject, 'subjects'); selectedSubject=''">
