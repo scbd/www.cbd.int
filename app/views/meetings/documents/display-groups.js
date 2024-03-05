@@ -2,6 +2,7 @@ export default {
     'outcome'        : { position:  1000 , title : 'Outcomes'      },
     'official'       : { position:  2000 , title : 'Official'      },
     'information'    : { position:  3000 , title : 'Information'   },
+    'reference'      : { position:  4000 , title : 'Reference'     },
     'notification'   : { position:  5000 , title : 'Notifications' },
     'other'          : { position:  6000 , title : 'Other'         },
     'in-session'     : { position: 10000 , title : 'Plenary',         insession: true },
