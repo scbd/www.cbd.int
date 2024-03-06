@@ -41,8 +41,8 @@
             style="margin-top: 15px">
             <a ng-hre="/conferences/{{conference.code}}" style="display: none"></a>
             <div class="card bg-light">
-                <img class="card-img-top" src="{{conference.article.url_300}}" alt="{{conference.Title|lstring}}"
-                    ng-click="showConference(conference.code)" style="cursor: pointer;max-height:200px;">
+                <img class="card-img-top" ng-if="conference.article.url_300" src="{{conference.article.url_300}}" alt="{{conference.Title|lstring}}"
+                    ng-click="showConference(conference.code)" style="cursor: pointer;">
                 <div class="card-body">
                     <strong>
                         <div ng-click="showConference(conference.code)" style="cursor: pointer;"
