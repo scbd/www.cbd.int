@@ -241,7 +241,6 @@ import DecisionApi from '~/api/decisions.js';
 import ViewElement from '~/components/decisions/view-element.vue';
 import types from '~/views/decisions/data/types.js';
 import actors from '~/views/decisions/data/actors.js';
-/* import romanChars from '~/views/decisions/data/romans.js'; */
 import statuses from '~/views/decisions/data/statuses.js';
 import aichiTargets from '~/data/reports/aichiTargets.json';
 import gbfTargets from '~/data/gbf-targets/targets.json';
