@@ -52,6 +52,7 @@ export { default as template } from './document-id.html';
         const type_natures = [
             { code : "official",             title: "Official" },
             { code : "information",          title: "Information" },
+            { code : "reference",            title: "Reference" },
             { code : "other",                title: "Other" },
             { code : "in-session/statement", title: "Statement (in session)" },
             { code : "in-session/non-paper", title: "Non Paper (in session)" },
@@ -684,6 +685,7 @@ export { default as template } from './document-id.html';
 
             if(doc.type=='official')       return 'official';
             if(doc.type=='information')    return 'information';
+            if(doc.type=='reference')      return 'reference';
             if(doc.type=='draft-decision') return 'draft-decision';
             if(doc.type=='in-session') {
 

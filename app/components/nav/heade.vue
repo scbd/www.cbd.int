@@ -181,7 +181,7 @@
                             <ul class="navbar-nav">
                                 <li class="nav-item" v-if="!isAuthenticated">
                                     <a id="accountsLink-SNE"
-                                        v-bind:href="$accountsBaseUrl+'/signin?returnUrl='+returnUrl"
+                                        v-bind:href="$accountsBaseUrl+`/signin?returnUrl=${encodeURIComponent(returnUrl)}`"
                                         class="nav-link login di"> 
                                         <span>Login </span>
                                         <span v-if="isAuthenticated">
@@ -221,8 +221,8 @@
 
                                     <div class="Languages dropdown-menu">
                                         <div class="dropdown-item-container">
-                                            <a v-for="(lang, key) in languages" v-bind:href="'language-switch/'+key+'?returnUrl='+returnUrl" 
-                                                v-bind:title="lang" class="dropdown-item"> <span
+                                            <a v-for="(lang, key) in languages" v-bind:href="`/language-switch?lg=${encodeURIComponent(key)}&returnUrl=${encodeURIComponent(returnUrl)}`" 
+                                                v-bind:title="lang" class="dropdown-item" :key="lang"> <span
                                                     class="dropdown-item-label">{{lang}}</span></a>
                                         </div>
                                     </div>
