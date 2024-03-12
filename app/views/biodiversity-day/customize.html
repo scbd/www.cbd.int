@@ -6,9 +6,18 @@
             padding-right: 15px;
         }
         @font-face{
-            font-family: "Impact";
-            src: url("/app/fonts/impact.ttf") format("truetype");
+            font-family: "Giorgio Sans";
+            font-style: normal;
+            font-weight: 700;
+            src: url("/app/fonts/GiorgioSans-Bold.otf")  format("opentype");
         }
+        @font-face{
+            font-family: "Giorgio Sans";
+            font-style : normal;
+            font-weight: 275;
+            src: url("/app/fonts/GiorgioSans-ExtraLight.otf")  format("opentype");
+        }
+        /* url("/app/fonts/GiorgioSans-ExtraLight.otf") */
         .boxGenerate{
             /* border:2px solid #222; */
             /* width: 800px; */
@@ -17,12 +26,24 @@
         }
 
         .boxIncon img{
-            height: 235px;
+            height: 275px;
             /* padding-right: 5px; */
             padding-left: 5px;
         }    
         .impact-font{
             font-family: Impact
+        }
+        .giorgio-font{
+            font-family: 'Giorgio Sans', sans-serif;
+            font-weight:700;
+            line-height: 50px;
+            font-size: 55px;
+        }
+        .giorgio-font-light{
+            font-family: 'Giorgio Sans', sans-serif;
+            font-weight:275;
+            line-height: 45px;
+            font-size: 50px;
         }
         .margin-nve-25{
             margin-top: -25px;
@@ -109,7 +130,7 @@
             height:245px;
         }
         .boxGenerate .text-box-width{
-            width: 428.016px;
+            width: 365px;
         }
 
         /* .zh .boxGenerate .box-size, */
@@ -282,6 +303,20 @@
         /* #newImage img{
             width:500px
         } */
+
+        .is-rtl{
+            direction: rtl;
+            text-align: right;
+            padding-left:57px;
+        }
+        .is-ltr{
+            direction: ltr;
+            text-align: left;
+            padding-right:57px;
+        }
+        .debug{
+            border: 1px solid red;
+        }
     </style>
 
     <div class="row" id="idb2020Logo">
@@ -333,31 +368,30 @@
                 </div>
             </div>
         </div>
-        <div  class="col-lg-9 logo-box {{language.code}}" style="padding-left:5%">
+        <div  class="col-lg-9 logo-box {{language.code}}" style="padding-left:10%">
             <div style="opacity: 0010;padding-top: 20px;" >
                 <div class="boxGenerate box-size" id="mainImageBox">
                     <div class="boxIncon box-size" id="imgGenerator">
-                        <div class="row box-size">
-                            <div class="col-lg-51">
-                                <img src="/app/images/idb-celebrations/idb-logo.png"  class="img-fluid idb-logo pull-right" id="logoImg"/>
+                        <div class="row box-size ps-1">
+                            <div class="col-lg-51 p-0">
+                                <img src="/app/images/idb-celebrations/gbf-logo-ball.png"  class="img-fluid idb-logo pull-right" id="logoImg"/>
                             </div>
-                            <div class="impact-font col-lg-71 text-box-width" style="padding-left: 5px;" ng-if="language.code" >   
-                                
-                                <div id="bigtext" class="impact-font " style="max-width: 100%;">                                
-                                    <div class="border-green1 color-blue" id="line1" >
+                            <div class="col-lg-71 " style=" display: flex; align-items: center;" ng-if="language.code" >
+                                <!-- padding-right:57px; -->
+                                <div class="text-box-width" ng-class="{'is-rtl':isRightToLeft, 'is-ltr':!isRightToLeft,}" style="padding-left: 5px; " >
+                                    <div id="bigtext" class="" style="max-width: 100%;">  
+                                        <div class="giorgio-font text-nowrap" id="customText">
+                                            <!-- <span ng-if="language.code=='zh'">呵护自然, </span>  -->
+                                            <span id="customName" ng-bind="text[language.code].name"></span> 
+                                        </div>                             
+                                    </div>
+                                    <div id="line1" class="giorgio-font"  >
                                         <span id="line1_part1" ng-if="language.code!='ar1'" ng-bind="text[language.code].line1_part1" class="{{text[language.code].line1_part1_css}}"></span>
-                                        <span id="line1_part2" ng-if="language.code!='ar1'" ng-bind="text[language.code].line1_part2" class="{{text[language.code].line1_part2_css}}"></span>
-                                        <!-- <span  ng-if="language.code=='ar'">٢٢ أيار<span style="font-family: auto;">/</span>مايو ٢٠٢١</span> -->
-                                        
                                     </div>
-                                    <div id="line2" class="border-blue1 color-blue">
-                                        <span id="line2_part1" id="line2_part1" ng-bind="text[language.code].line2_part1" class="{{text[language.code].line2_part1_css}}"></span>
-                                        <span id="line2_part2" id="line2_part2" ng-bind="text[language.code].line2_part2" class="{{text[language.code].line2_part2_css}}"></span>
-                                    </div>
-                                    <div class="color-blue border-red1 pull-left" id="customText" >
-                                        <span ng-if="language.code=='zh'">呵护自然, </span> 
-                                        <span ng-bind="text[language.code].name"></span> 
-                                        <span ng-bind="text[language.code].hashTag"></span>
+                                    <div id="static" class="giorgio-font-light text-nowrap">
+                                        <p class="m-0" ng-bind="text[language.code].line1_part2"></p>
+                                        <p class="m-0" ng-bind="text[language.code].line2_part1"></p>
+                                        <p class="m-0" ng-bind="text[language.code].line2_part2"></p>
                                     </div>
                                 </div>
                             </div>
@@ -367,7 +401,6 @@
                 </div>
             </div>
         </div>   
-       
     </div>
     
     <div  style="opacity: 0001;display: none1;" class="col-lg-23">

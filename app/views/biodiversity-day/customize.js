@@ -25,61 +25,52 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         ]
         $scope.text = {
             en : {
-                line1_part1         : 'BIODIVERSITY',
-                line2_part1         : 'Day',
-                line2_part2         : '22 MAY',
-                line2_part2_css     : 'outline-text',
-                hashTag             : '#ForNature', 
+                line1_part1         : 'IS PART OF THE PLAN',
+                line1_part2         : 'International Day',
+                line2_part1         : `for Biodiversity`,
+                line2_part2         : `${ new Date().getFullYear() }`,
                 name:'Name', 
-                isUNLanguage:true,
-                line2CutOffMargin : 17,
-                line3CutOffMargin : 13 
+                isUNLanguage:true
             },
             es:{
-                line1_part1         : '22 DE MAYO',
-                line1_part2         : 'DÍA DE LA',
-                line2_part1         : 'BIODIVERSIDAD',
-                line1_part1_css     : 'outline-text',
-                hashTag             : '#PorLaNaturaleza', name:'Nombre', isUNLanguage:true,
-                line2CutOffMargin : 17,
-                line3CutOffMargin : 5 
+                line1_part1         : 'IS PART OF THE PLAN',
+                line1_part2         : 'Día Internacional',
+                line2_part1         : 'de la Biodiversidad',
+                line2_part2         : `${ new Date().getFullYear() }`,
+                name:'Nombre',
+                isUNLanguage:true
             },
             fr:{
-                line1_part1         : '22 MAI',
-                line1_part2         : 'JOURNÉE DE LA',
-                line2_part1         : 'BIODIVERSITÉ',
-                line1_part1_css     : 'outline-text',
-                hashTag             : '#PourLaNature', name:'Nom', isUNLanguage:true,
-                line2CutOffMargin : 18,
-                line3CutOffMargin : 4 
+                line1_part1         : 'Contribuez au Plan',
+                line1_part2         : 'Journée Internationale',
+                line2_part1         : 'de la Biodiversité',
+                line2_part2         : `${ new Date().getFullYear() }`,
+                name:'Nom', 
+                isUNLanguage:true
             },
             ru:{
-                line1_part1         : '22 МАЯ',
-                line1_part2         : 'ДЕНЬ',
-                line2_part1         : 'БИОРАЗНООБРАЗИЯ',
-                line1_part1_css     : 'outline-text',
-                hashTag             : '#ЗаПрироду', name:'Имя', isUNLanguage:true,
-                line2CutOffMargin : 35,
-                line3CutOffMargin : -5 
+                line1_part1         : 'Стань частью плана',
+                line1_part2         : 'День биологического',
+                line2_part1         : `разнообразия`,
+                line2_part2         : `${ new Date().getFullYear() }`,
+                name:'Имя',
+                isUNLanguage:true
             },
             zh:{
-                line1_part1         : '生物多样性日',                
-                line2_part2         : '5月22日',
-                line2_part2_css     : 'outline-text',
-                hashTag             : '有份', name:'姓名', isUNLanguage:true,
-                line2CutOffMargin : 19,
-                line3CutOffMargin : 8 
+                line1_part1         : '加入我们',
+                line1_part2         : '国际生物多样性日',
+                line2_part1         : `${ new Date().getFullYear() } 年`,
+                name:'姓名',
+                isUNLanguage:true
             },
             ar:{
-                line1_part1         : 'يوم',
-                line1_part2         : '٢٢ أيار/مايو',
-                line2_part1         : 'يوم التنوع البيولوجي',
-                line1_part2_css     : 'outline-text',
-                hashTag             : 'من#_أجل_الطبيعة', name:'اسم', isUNLanguage:true,
-                line2CutOffMargin : 13,
-                line3CutOffMargin : 1 
+                line1_part1         : 'جزء من الخطة',
+                line1_part2        : 'اليوم الدولي للتنوع البيولوجي',
+                line2_part1         : `${ new Date().getFullYear() }`,
+                name:'اسم',
+                isUNLanguage:true
             },
-            ...languageTranslation            
+            // ...languageTranslation            
         }
         $scope.rtlLanguages = {
             ar	: 'Arabic',
@@ -151,15 +142,23 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         }
 
         $scope.fitText = function(selector){
+            const isRightToLeft = $scope.rtlLanguages[$scope.language.code];
 
-            if($scope.rtlLanguages[$scope.language.code])
+            $scope.isRightToLeft = isRightToLeft;
+            if(isRightToLeft)
                 $('.boxIncon').css('direction', 'rtl')
             else
                 $('.boxIncon').css('direction', 'ltr')
 
+            const customTextWidth = $('#customName').width();
+            const lineOneWidth = $('#line1_part1').width();
+
+
+            if(customTextWidth < lineOneWidth && customTextWidth > 30) return;
+
             selector = selector||'.fit'
             $timeout(function(){
-                let maxFontSize;// = 120;
+                let maxFontSize = 60;// = 120;
                 if(['zh'].includes($scope.language.code))
                     maxFontSize = 140;
 
@@ -230,10 +229,10 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             var idbLogo    = $('.boxGenerate #logoImg');
 
             var line1      = $('#bigtext #line1');
-            var line1_part1= $('#bigtext #line1_part1');
-            var line1_part2= $('#bigtext #line1_part2');
-            var line2_part1= $('#bigtext #line2_part1')
-            var line2_part2= $('#bigtext #line2_part2')
+            // var line1_part1= $('#bigtext #line1_part1');
+            // var line1_part2= $('#bigtext #line1_part2');
+            // var line2_part1= $('#bigtext #line2_part1')
+            // var line2_part2= $('#bigtext #line2_part2')
             var line2      = $('#bigtext #line2')
             var customText = $('#bigtext #customText')
 
@@ -252,7 +251,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             line1       .css("height", line1fontSize     +'px')
             line2       .css("height", line2fontSize     +'px')           
             customText  .css("height", customTextfontSize+'px')
-            
+            customText  .css("line-height", customTextfontSize+'px')
 
             var totalFontSize = line1fontSize +
                                 line2fontSize  +
@@ -272,7 +271,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
 
             line1       .css('margin-top', `-${margin_line1}px`);            
             line2       .css('margin-top', `${(-margin_line2+equalMargin)+languageDetails.line2CutOffMargin}px`)
-            customText  .css('margin-top', `${equalMargin+languageDetails.line3CutOffMargin}px`)
+            //customText  .css('margin-top', `${equalMargin+languageDetails.line3CutOffMargin}px`)
 
             logs = {
                 ...logs,
@@ -387,7 +386,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         }, 200);
 
 
-        loadLanguages();
+        // loadLanguages();
         buildQuery();
 
 }]
