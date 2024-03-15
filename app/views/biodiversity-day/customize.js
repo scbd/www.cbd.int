@@ -34,8 +34,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         ]
         $scope.text = {
             en : {
-                line1_part1         : 'IS PART OF THE PLAN',
-                line1_part1_alt     : 'ARE PART OF THE PLAN',
+                line1_part1         : '#PartOfThePlan',
+                line1_part1_alt     : '#PartOfThePlan',
                 line1_part2         : 'International Day',
                 line2_part1         : `for Biodiversity`,
                 line2_part2         : `${ new Date().getFullYear() }`,
@@ -46,8 +46,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 charLimit: 45
             },
             es:{
-                line1_part1         : 'ES PARTE DEL PLAN',
-                line1_part1_alt     : 'SON PARTE DEL PLAN',
+                line1_part1         : '#ParteDelPlan',
+                line1_part1_alt     : '#ParteDelPlan',
                 line1_part2         : 'Día Internacional',
                 line2_part1         : 'de la Biodiversidad',
                 line2_part2         : `${ new Date().getFullYear() }`,
@@ -57,8 +57,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 isUNLanguage:true
             },
             fr:{
-                line1_part1         : 'Contribuez au Plan',
-                line1_part1_alt     : 'AFONT PARTIE DU PLAN',
+                line1_part1         : '#ContribueAuPlan',
+                line1_part1_alt     : '#ContribueAuPlan',
                 line1_part2         : 'Journée Internationale',
                 line2_part1         : 'de la Biodiversité',
                 line2_part2         : `${ new Date().getFullYear() }`,
@@ -69,8 +69,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 charLimit: 35
             },
             ru:{
-                line1_part1         : 'Стань частью плана',
-                line1_part1_alt     : 'ЯВЛЯЮТСЯ ЧАСТЬЮ ПЛАНА',
+                line1_part1         : '#ЧастьПлана',
+                line1_part1_alt     : '#ЧастьПлана',
                 line1_part2         : 'День биологического',
                 line2_part1         : `разнообразия`,
                 line2_part2         : `${ new Date().getFullYear() }`,
@@ -81,8 +81,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 charLimit: 45
             },
             zh:{
-                line1_part1         : '加入我们',
-                line1_part1_alt     : '是计划的一部分',
+                line1_part1         : '#加入我们',
+                line1_part1_alt     : '#加入我们',
                 line1_part2         : '国际生物多样性日',
                 line2_part1         : `${ new Date().getFullYear() } 年`,
                 name:'姓名',
@@ -91,8 +91,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 isUNLanguage:true
             },
             ar:{
-                line1_part1         : 'جزء من الخطة',
-                line1_part1_alt     : 'هي جزء من الخطة',
+                line1_part1         : 'جزء_من_الخطة#',
+                line1_part1_alt     : 'جزء_من_الخطة#',
                 line1_part2        : 'اليوم الدولي للتنوع البيولوجي',
                 line2_part1         : `${ new Date().getFullYear() }`,
                 name:'اسم',
