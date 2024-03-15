@@ -334,7 +334,9 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 code: $scope.language.code,
                 ...$scope.text[$scope.language.code]
             }
-
+            delete data.individual;
+            delete data.collective;
+            
             return $http.post('/api/v2021/idb-logos', data, {responseType: "arraybuffer", headers: {'x-captcha-v2-token':$scope.grecaptchaToken}})
             .then(function(success) {
                 $scope.showSuccessMessage = true;
