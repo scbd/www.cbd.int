@@ -61,7 +61,7 @@ phases:
     commands:
       - |
         pattern="((DEV|dev|stg).*)|master"
-        if [ "$CODEBUILD_GIT_BRANCH" =~ $pattern ];
+        if [[ "$CODEBUILD_GIT_BRANCH" =~ $pattern ]];
         then
           echo pushing branch to docker ...
           docker tag output $CODEBUILD_GIT_ORG/$CODEBUILD_GIT_REPO:$CODEBUILD_GIT_BRANCH
