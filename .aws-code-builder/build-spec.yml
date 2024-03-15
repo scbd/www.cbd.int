@@ -60,6 +60,7 @@ phases:
     on-failure: ABORT
     commands:
       - |
+        echo "test: $CODEBUILD_GIT_BRANCH  "
         pattern="((DEV|dev|stg).*)|master"
         echo "test: $CODEBUILD_GIT_BRANCH =~ $pattern "
         if [[ "$CODEBUILD_GIT_BRANCH" =~ $pattern ]];
