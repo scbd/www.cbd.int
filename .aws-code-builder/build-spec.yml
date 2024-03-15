@@ -25,6 +25,7 @@ phases:
         export CODEBUILD_GIT_MOST_RECENT_TAG="$(git describe --tags --abbrev=0)"
         export CODEBUILD_GIT_REPO="$(basename -s .git `git config --get remote.origin.url`)"
         export CODEBUILD_GIT_ORG="$(git remote get-url origin | cut -d/ -f4)"
+
         echo "==> AWS CodeBuild Extra Environment Variables:"
         echo "==> CI = $CI"
         echo "==> CODEBUILD = $CODEBUILD"
@@ -42,6 +43,7 @@ phases:
         echo "==> CODEBUILD_PROJECT = $CODEBUILD_PROJECT"
         echo "==> CODEBUILD_PULL_REQUEST = $CODEBUILD_PULL_REQUEST"
         echo "==> CODEBUILD_GIT_REPO = $CODEBUILD_GIT_REPO"
+        echo "==> CODEBUILD_GIT_ORG = $CODEBUILD_GIT_ORG"
 
   pre_build:
     on-failure: ABORT
