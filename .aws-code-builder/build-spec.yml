@@ -61,6 +61,7 @@ phases:
     commands:
       - |
         echo "test: $CODEBUILD_GIT_BRANCH  "
+        echo "test: ${#CODEBUILD_GIT_BRANCH}  "
         pattern="((DEV|dev|stg).*)|master"
         echo "test: $CODEBUILD_GIT_BRANCH =~ $pattern "
         if [[ "$CODEBUILD_GIT_BRANCH" =~ $pattern ]]
