@@ -3,18 +3,27 @@ import 'file-saverjs';
 import 'bigText';
 import _ from 'lodash';
 import languageTranslation from './other-langugages.json';
-import '~/directives/articles/cbd-article';
+// import '~/directives/articles/cbd-article';
+import Vue from 'vue'
+import 'ngVue'
+import '~/services/article-service'
 // import * as htmlToImage from 'html-to-image'
-      
+import CbdArticle from '~/directives/articles/cbd-article.vue';
+
+
 export { default as template  } from './customize.html';
 
 export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ngDialog', 'captchaSiteKeyV2',  function( $location, user,$http, $scope,  $timeout, $window, ngDialog, captchaSiteKeyV2) {
         var recaptchaWidgetId;
 
+        Vue.component('CbdArticle', CbdArticle);
+
+
         $scope.$root.page={
             title : "International Biodiversity Day logo : customize",
             description : $('#logo-description').text()
         };
+
         $scope.defaultLanguages = [
             {code:'ar', language            : 'Arabic'  , group:'UN languages'},
             {code:'en', language            : 'English' , group:'UN languages'},
@@ -26,49 +35,71 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         $scope.text = {
             en : {
                 line1_part1         : 'IS PART OF THE PLAN',
+                line1_part1_alt     : 'ARE PART OF THE PLAN',
                 line1_part2         : 'International Day',
                 line2_part1         : `for Biodiversity`,
                 line2_part2         : `${ new Date().getFullYear() }`,
                 name:'Name', 
-                isUNLanguage:true
+                individual:'Name',
+                collective:'Organization',
+                isUNLanguage:true,
+                charLimit: 45
             },
             es:{
-                line1_part1         : 'IS PART OF THE PLAN',
+                line1_part1         : 'ES PARTE DEL PLAN',
+                line1_part1_alt     : 'SON PARTE DEL PLAN',
                 line1_part2         : 'Día Internacional',
                 line2_part1         : 'de la Biodiversidad',
                 line2_part2         : `${ new Date().getFullYear() }`,
                 name:'Nombre',
+                individual:'Nombre',
+                collective:'Organización',
                 isUNLanguage:true
             },
             fr:{
                 line1_part1         : 'Contribuez au Plan',
+                line1_part1_alt     : 'AFONT PARTIE DU PLAN',
                 line1_part2         : 'Journée Internationale',
                 line2_part1         : 'de la Biodiversité',
                 line2_part2         : `${ new Date().getFullYear() }`,
-                name:'Nom', 
-                isUNLanguage:true
+                name:'Nom',
+                individual:'Nom',
+                collective:'Organisation',
+                isUNLanguage:true,
+                charLimit: 35
             },
             ru:{
                 line1_part1         : 'Стань частью плана',
+                line1_part1_alt     : 'ЯВЛЯЮТСЯ ЧАСТЬЮ ПЛАНА',
                 line1_part2         : 'День биологического',
                 line2_part1         : `разнообразия`,
                 line2_part2         : `${ new Date().getFullYear() }`,
                 name:'Имя',
-                isUNLanguage:true
+                individual:'Имя',
+                collective:'Организация',
+                isUNLanguage:true,
+                charLimit: 45
             },
             zh:{
                 line1_part1         : '加入我们',
+                line1_part1_alt     : '是计划的一部分',
                 line1_part2         : '国际生物多样性日',
                 line2_part1         : `${ new Date().getFullYear() } 年`,
                 name:'姓名',
+                individual:'姓名',
+                collective:'组织',
                 isUNLanguage:true
             },
             ar:{
                 line1_part1         : 'جزء من الخطة',
+                line1_part1_alt     : 'هي جزء من الخطة',
                 line1_part2        : 'اليوم الدولي للتنوع البيولوجي',
                 line2_part1         : `${ new Date().getFullYear() }`,
                 name:'اسم',
-                isUNLanguage:true
+                individual:'اسم',
+                collective:'منظمة',
+                isUNLanguage:true,
+                charLimit: 45
             },
             // ...languageTranslation            
         }
@@ -93,13 +124,6 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             $scope.fitText();
             $scope.showSuccessMessage = false;
             $scope.uploading = true;
-            // var node =document.getElementById("imgGenerator");
-
-            // htmlToImage.toPng(node)
-            // .then(function (dataUrl) {
-            //     var img = new Image();
-            //     img.src = dataUrl;
-                // $('#newImage').empty().append(img);
 
                 if(!generateOnly){  
                     if(~document.location.hostname.indexOf('cbd.int')){
@@ -142,6 +166,18 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         }
 
         $scope.fitText = function(selector){
+            if(!$scope.customText){
+                $scope.customText = _.clone($scope.text[$scope.language.code]);
+                $scope.customText.logoType =  'individual';
+            }
+
+            const isCollective = $scope.customText.logoType == 'collective';
+
+            if(isCollective){
+                const individualName = $scope.text[$scope.language.code].individual;
+                const collectiveName = $scope.text[$scope.language.code].collective;
+                $scope.text[$scope.language.code].name = `${individualName} & ${collectiveName}`
+            }
             const isRightToLeft = $scope.rtlLanguages[$scope.language.code];
 
             $scope.isRightToLeft = isRightToLeft;
@@ -171,8 +207,6 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         }
         
         $scope.customLanguage = function(lang){
-
-            return;
             $scope.customText = _.clone($scope.text[lang]);
             if(! $scope.customText){
                 $scope.customText = $scope.text[lang] = _.clone($scope.text['en']);
@@ -187,10 +221,12 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 scope: $scope,
             });
         };
+
         $scope.closeDialog = function(){
             $scope.customText = undefined;
             ngDialog.close();
         }
+        
         $scope.applyTranslation = function(translation){
 
             if(!translation.language){
@@ -223,16 +259,13 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             var logs = {};
             
             const languageDetails = $scope.text[$scope.language.code];
+            
             languageDetails.line2CutOffMargin = languageDetails.line2CutOffMargin || 14;
             languageDetails.line3CutOffMargin = languageDetails.line3CutOffMargin || 9;
 
             var idbLogo    = $('.boxGenerate #logoImg');
 
             var line1      = $('#bigtext #line1');
-            // var line1_part1= $('#bigtext #line1_part1');
-            // var line1_part2= $('#bigtext #line1_part2');
-            // var line2_part1= $('#bigtext #line2_part1')
-            // var line2_part2= $('#bigtext #line2_part2')
             var line2      = $('#bigtext #line2')
             var customText = $('#bigtext #customText')
 
@@ -358,7 +391,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         function buildQuery(){
             var ag   = [];
             var tags = ['biodiversity-day', 'logo', 'customize', 'introduction'];
-            
+            $scope.articleAdminTags = tags;
             
             var match = { "adminTags" : { $all: tags }};
 
@@ -378,6 +411,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         $timeout(function(){
             $scope.fitText();           
 
+            if($scope.isAdmin) return
             recaptchaWidgetId = grecaptcha.render('g-recaptcha', {
                 'sitekey' : captchaSiteKeyV2,
                 'callback' : recaptchaCallback,
@@ -386,7 +420,30 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         }, 200);
 
 
+
+        $scope.onArticleLoad = function(article){               
+            
+            $scope.article = article;
+            $scope.isLoading = false;
+        } 
+        $scope.isCollective = function(){
+            return $scope?.customText?.logoType == 'collective';
+        }
+
+        $scope.onTypeChange = function(){
+            $scope.fitText();
+            $timeout(function(){
+            $scope.fitText();}, 300);
+        }
+
+        $scope.charLimit = function(){
+            return $scope.text[$scope.language.code].charLimit || 45;
+        }
+        $scope.isCharLimitExceeded = function(){
+            const limit =  $scope.text[$scope.language.code].charLimit || 45;
+
+            return limit < $scope.text[$scope.language.code].name.length;
+        }
         // loadLanguages();
         buildQuery();
-
 }]
