@@ -78,7 +78,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 individual:'Имя',
                 collective:'Организация',
                 isUNLanguage:true,
-                charLimit: 45
+                charLimit: 30
             },
             zh:{
                 line1_part1         : '#加入我们',
