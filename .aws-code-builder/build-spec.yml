@@ -61,7 +61,7 @@ phases:
     commands:
       - |
         pattern="((DEV|dev|stg).*)|master"
-        echo "test: $CODEBUILD_GIT_BRANCH =~ $pattern = ${$CODEBUILD_GIT_BRANCH =~ $pattern}"
+        echo "test: $CODEBUILD_GIT_BRANCH =~ $pattern "
         if [[ "$CODEBUILD_GIT_BRANCH" =~ $pattern ]];
         then
           echo pushing branch to docker ...
