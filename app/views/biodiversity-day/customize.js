@@ -411,7 +411,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         $timeout(function(){
             $scope.fitText();           
 
-            if($scope.isAdmin) return
+
             recaptchaWidgetId = grecaptcha.render('g-recaptcha', {
                 'sitekey' : captchaSiteKeyV2,
                 'callback' : recaptchaCallback,
