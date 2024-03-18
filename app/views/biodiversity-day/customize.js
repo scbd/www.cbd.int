@@ -2,7 +2,7 @@
 import 'file-saverjs';
 import 'bigText';
 import _ from 'lodash';
-import languageTranslation from './other-langugages.json';
+import languageTranslation from './other-langugages.js';
 // import '~/directives/articles/cbd-article';
 import Vue from 'vue'
 import 'ngVue'
@@ -37,11 +37,12 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 line1_part1         : '#PartOfThePlan',
                 line1_part1_alt     : '#PartOfThePlan',
                 line1_part2         : 'International Day',
-                line2_part1         : `for Biodiversity`,
-                line2_part2         : `${ new Date().getFullYear() }`,
+                line2_part1         : 'for Biodiversity',
                 name:'Name', 
                 individual:'Name',
                 collective:'Organization',
+                line2_part2         : `${ new Date().getFullYear() }`,
+
                 isUNLanguage:true,
                 charLimit: 45
             },
@@ -101,7 +102,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 isUNLanguage:true,
                 charLimit: 45
             },
-            // ...languageTranslation            
+            ...languageTranslation            
         }
         $scope.rtlLanguages = {
             ar	: 'Arabic',
@@ -448,7 +449,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
 
             return limit < $scope.text[$scope.language.code].name.length;
         }
-        // loadLanguages();
+        loadLanguages();
         buildQuery();
 
 
