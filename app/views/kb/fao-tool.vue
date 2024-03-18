@@ -2,7 +2,7 @@
     <div>
         <a name="top"></a>
         <div class="bg-white pt-2" style="position: sticky; top:0px;z-index: 1">
-            <h1>PoC FAO Tool based on CLearinh-Houses Virtual Library (VLR)</h1>
+            <h1>PoC FAO Tool based on Clearing-Houses Virtual Library (VLR)</h1>
             <div v-if="records!==null" class="container-fluid">
                 <div class="row">
                     <div class="col-12 col-sm-6 col-lg-3">
