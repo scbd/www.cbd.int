@@ -2,7 +2,7 @@
     <div>
         <a name="top"></a>
         <h1>Proof of Concept - FAO equivalent Tool based on CBD Clearing-Houses Virtual Library (VLR)</h1>
-        <div class="bg-white pt-2" style="position: sticky; top:0px;z-index: 1">
+        <div class="bg-white pt-2" >
             <div v-if="records!==null" class="container-fluid">
                 <div class="row">
                     <div class="col-12 col-sm-6 col-lg-3">
