@@ -307,7 +307,9 @@ const langs =  {
     }
 };
 
-export default addLine();
+const ands = { "hy": { "and": "և" }, "bs": { "and": "i" }, "am": { "and": "እና" }, "az": { "and": "və" }, "eu": { "and": "eta" }, "bn": { "and": "এবং" }, "bg": { "and": "и" }, "cs": { "and": "a" }, "ca": { "and": "i" }, "et": { "and": "ja" }, "hr": { "and": "i" }, "fi": { "and": "ja" }, "gl": { "and": "e" }, "ka": { "and": "და" }, "ht": { "and": "epi" }, "de": { "and": "Und" }, "el": { "and": "και" }, "hi": { "and": "और" }, "hu": { "and": "és" }, "ga": { "and": "agus" }, "is": { "and": "og" }, "it": { "and": "E" }, "lv": { "and": "un" }, "ja": { "and": "そして" }, "ko": { "and": "그리고" }, "ms": { "and": "dan" }, "lt": { "and": "ir" }, "mr": { "and": "आणि" }, "pl": { "and": "I" }, "ne": { "and": "र" }, "pt": { "and": "e" }, "sl": { "and": "in" }, "ro": { "and": "și" }, "sr": { "and": "и" }, "gd": { "and": "agus" }, "sk": { "and": "a" }, "tr": { "and": "Ve" }, "uk": { "and": "і" } };
+
+export default addAnds(addLine());
 
 function addLine(){
   for (let lang in langs) {
@@ -315,4 +317,12 @@ function addLine(){
   }
 
   return langs;
+}
+
+function addAnds(languages){
+  for (let lang in languages) {
+    languages[lang].and = ands[lang].and || "and";
+  }
+
+  return languages;
 }

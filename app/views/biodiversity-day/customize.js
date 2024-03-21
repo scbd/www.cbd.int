@@ -44,7 +44,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 line2_part2         : `${ new Date().getFullYear() }`,
 
                 isUNLanguage:true,
-                charLimit: 45
+                charLimit: 45,
+                and:'and'
             },
             es:{
                 line1_part1         : '#ParteDelPlan',
@@ -55,7 +56,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 name:'Nombre',
                 individual:'Nombre',
                 collective:'Organización',
-                isUNLanguage:true
+                isUNLanguage:true,
+                and:'y'
             },
             fr:{
                 line1_part1         : '#ContribueAuPlan',
@@ -67,7 +69,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 individual:'Nom',
                 collective:'Organisation',
                 isUNLanguage:true,
-                charLimit: 35
+                charLimit: 35,
+                and:'et'
             },
             ru:{
                 line1_part1         : '#ЧастьПлана',
@@ -79,7 +82,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 individual:'Имя',
                 collective:'Организация',
                 isUNLanguage:true,
-                charLimit: 30
+                charLimit: 30,
+                and:'и'
             },
             zh:{
                 line1_part1         : '#加入我们',
@@ -89,7 +93,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 name:'姓名',
                 individual:'姓名',
                 collective:'组织',
-                isUNLanguage:true
+                isUNLanguage:true,
+                and:'和'
             },
             ar:{
                 line1_part1         : 'جزء_من_الخطة#',
@@ -100,7 +105,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 individual:'اسم',
                 collective:'منظمة',
                 isUNLanguage:true,
-                charLimit: 45
+                charLimit: 45,
+                and:'و'
             },
             ...languageTranslation            
         }
@@ -114,6 +120,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             ps	: 'Pashto',
             ur	: 'Urdu',
             ji	: 'Yiddish',
+            
         }
         
         $scope.language = { code : 'en' }
@@ -177,7 +184,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             if(isCollective){
                 const individualName = $scope.text[$scope.language.code].individual;
                 const collectiveName = $scope.text[$scope.language.code].collective;
-                $scope.text[$scope.language.code].name = `${individualName} & ${collectiveName}`
+                const and = $scope.text[$scope.language.code].and || 'and';
+                $scope.text[$scope.language.code].name = `${individualName} ${and} ${collectiveName}`
             }
             const isRightToLeft = $scope.rtlLanguages[$scope.language.code];
 
