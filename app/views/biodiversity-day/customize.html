@@ -181,7 +181,7 @@
             <!-- <cbd-article query="articleQuery" ng-if="articleQuery" hide-cover-image="true"></cbd-article> -->
             
             <hr/>
-            <cbd-article ng-vue ng-vue-expose="&onArticleLoad" :query="articleQuery" v-if="articleQuery" :admin-tags="articleAdminTags" 
+            <cbd-article  ng-vue="vueOptions"  ng-vue-expose="&onArticleLoad" :query="articleQuery" v-if="articleQuery" :admin-tags="articleAdminTags" 
             @load="onArticleLoad($event)" hide-cover-image="true" show-edit="true"></cbd-article>
             <hr/>
         </div>

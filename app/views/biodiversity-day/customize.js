@@ -9,15 +9,14 @@ import 'ngVue'
 import '~/services/article-service'
 // import * as htmlToImage from 'html-to-image'
 import CbdArticle from '~/directives/articles/cbd-article.vue';
-
+import 'angular-vue'
 
 export { default as template  } from './customize.html';
 
 export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ngDialog', 'captchaSiteKeyV2',  function( $location, user,$http, $scope,  $timeout, $window, ngDialog, captchaSiteKeyV2) {
         var recaptchaWidgetId;
 
-        Vue.component('CbdArticle', CbdArticle);
-
+        $scope.vueOptions  = { components: { CbdArticle } };
 
         $scope.$root.page={
             title : "International Biodiversity Day logo : customize",
@@ -413,7 +412,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             ag.push({"$sort"    : { "meta.updatedOn":-1}});
             ag.push({"$limit"   : 1 });
 
-            $scope.articleQuery = ag;
+
+            $scope.articleQuery = {ag: JSON.stringify(ag)};
         }
 
         angular.element($window).on('resize', onResize);
@@ -457,8 +457,10 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
 
             return limit < $scope.text[$scope.language.code].name.length;
         }
-        loadLanguages();
+
         buildQuery();
+        loadLanguages();
+        
 
 
         const search = $location.search()||{};
