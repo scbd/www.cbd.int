@@ -3,6 +3,7 @@ import ng from 'angular';
 import html from './conference-header.html';
 import '~/services/conference-service';
 import '~/filters/lstring';
+import '~/filters/html-sanitizer.js';
 
     export default app.directive('conferenceHeader', ['$location', 'conferenceService', '$q', '$rootScope',
      function($location, conferenceService, $q, $rootScope){

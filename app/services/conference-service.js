@@ -54,11 +54,6 @@ import 'angular-cache'
                                               normalizeMenus(meeting.conference.menus, meeting)
 
                                             }
-
-                                            if(meeting.conference.customHeader){
-                                              meeting.conference.customHeader = $sce.trustAsHtml(meeting.conference.customHeader);
-                                            }
-
                                         }
 
                                         return meeting;
