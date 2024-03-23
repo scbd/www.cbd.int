@@ -2,6 +2,7 @@
   "name": "www-cbd-int",
   "description": "Website of the Convention on Biological Diversity",
   "dependencies": {
+    "dompurify": "^3.0.11",
     "ejs": "2.5.5",
     "esm": "3.2.25",
     "express": "^4.16.3",
