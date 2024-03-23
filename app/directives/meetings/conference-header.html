@@ -263,7 +263,8 @@
    </style>
    <!-- NAVIGATION BAR -->
    <div ng-cloak ng-if="meeting && meetingNavCtrl.isSelected()" class="meetingnav hidden-print">
-        <div class="menu-header" ng-if="meeting.conference.customHeader" ng-bind-html="meeting.conference.customHeader">
+        <style ng-if="meeting.conference.customHeader.style" ng-bind="meeting.conference.customHeader.style"></style>
+        <div class="menu-header" ng-if="meeting.conference.customHeader" ng-bind-html="meeting.conference.customHeader.html | lstring | safeHtml">
         </div>
        <div>
            <div class="menu-gradient">

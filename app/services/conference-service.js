@@ -52,14 +52,34 @@ import 'angular-cache'
 
                                             if((meeting.conference.menus||[]).length){
                                               normalizeMenus(meeting.conference.menus, meeting)
-
                                             }
 
-                                            if(meeting.conference.customHeader){
-                                              meeting.conference.customHeader = $sce.trustAsHtml(meeting.conference.customHeader);
-                                            }
+                                            // vvvv YOU CAN SAFELY DELETE THIS CODE AFTER 2024-04-30 OR BEFORE IF MIGRATION COMPLETED vvvv //
+                                            if(meeting.conference.customHeader && typeof(meeting.conference.customHeader) == "string" ){
+                                              
+                                              // convert customHeader raw Html string to 
+                                              // customHeader : {
+                                              //   style : "css content"
+                                              //   html : lstring
+                                              // }
 
-                                        }
+                                              const html  = document.createElement('div');
+
+                                              html.innerHTML = meeting.conference.customHeader;
+
+                                              const style = html.querySelector('style');
+
+                                              if(style!=null) style.parentNode.removeChild(style); // remove from parent;
+
+                                              meeting.conference.customHeader = {
+                                                style: style && style.innerText,
+                                                html: { 
+                                                  en: html.innerHTML.trim() 
+                                                }
+                                              }
+                                            }                                            
+                                            // ^^^^ YOU CAN SAFELY DELETE THIS CODE AFTER 2024-04-30 OR BEFORE IF MIGRATION COMPLETED ^^^^ //
+                                          }
 
                                         return meeting;
                                     });
