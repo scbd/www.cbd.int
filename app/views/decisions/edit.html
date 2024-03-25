@@ -137,9 +137,8 @@
 
     select.btn { max-width: 125px;}
 
-    .edit-decision .bg-orange{
-        background-color:#6F5495!important;
-        /* background-color:#fa6938!important; */
+    .edit-decision .bg-green{
+        background-color:#1c473b!important;
         color:white!important;
         font-family: "Helvetica Neue", Helvetica, sans-serif, "Trebuchet MS";
         font-size: 14px;
@@ -187,48 +186,15 @@
             <button class="btn btn-default pull-right" ng-click="close()">Close</button>
             <button class="btn btn-success" ng-if="::canEdit" ng-disabled="!contentEdited()" ng-click="save()">Save</button> &nbsp; &nbsp;
             <button class="btn btn-default" ng-if="::canEdit" ng-disabled="!contentEdited()" ng-click="cancel()">Cancel</button> &nbsp; &nbsp;
-            <checkbox ng-model="allowAddNodes" style="font-size:20px"></checkbox> Allow add nodes
+            <checkbox ng-model="allowAddNodes" style="font-size:20px"></checkbox> Allow add nodes &nbsp;&nbsp;
+            <button class="btn btn-default" ng-click="translate()">Translate</button>
         </div>
 
         <div class="row" style="margin-top:60px;height:100%">
             <div class="col-sm-6 edit-decision" style="height:86%">
-
-            	<div class="row" style="height: 150px; overflow-y: scroll">
-            		<div class="col-sm-6">
-
-                        <div class="form-group">
-            		    	<label for="elementSubject">CBD Subjects</label><br>
-                            <div ng-repeat="item in self.subjects" class="input-group" style="margin-bottom:2px;overflow-y:hidden" title="">
-                                 <span class="form-control">{{(collections.subjectsMap[item].title|lstring)||item}}</span>
-                                 <div class="input-group-append">
-                                    <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, self.subjects)"><i class="fa fa-minus-circle"></i></button>
-                                </div>
-                            </div>
-            		    	<select ng-if="::canEdit" class="btn btn-primary btn-sm" id="elementDirectedTo" ng-model="selectedSubject" ng-options="subject.identifier as (subject.title|lstring) group by collections.subjectsMap[subject.broaderTerms[0]].name for subject in collections.subjects|filter:noNarrower" ng-change="addTo(selectedSubject, self.subjects); selectedSubject=''">
-                                <option value="">add a subject</option>
-            				</select>
-            		  	</div>
-                    </div>
-            		<div class="col-sm-6">
-
-                        <div class="form-group">
-            		    	<label for="elementSubject">Aichi Targets</label><br>
-
-                            <div ng-repeat="item in self.aichiTargets" class="input-group" style="margin-bottom:2px;overflow-y:hidden">
-                                <span class="form-control"> {{(collections.aichiTargetsMap[item].title|lstring)||item}}</span>
-                                <div class="input-group-append">
-                                   <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, self.aichiTargets)"><i class="fa fa-minus-circle"></i></button>
-                               </div>
-                             </div>
-            		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedTarget" ng-options="target.identifier as (target.title|lstring) group by collections.aichiTargetsMap[target.broaderTerms[0]].name for target in collections.aichiTargets|filter:noNarrower" ng-change="addTo(selectedTarget, self.aichiTargets); selectedTarget=''">
-                                <option value="">add a target</option>
-            				</select>
-            		  	</div>
-                    </div>
-                </div>
-
+                
                 <div ng-if="decision" ng-disabled="contentEdited()" class="decision-nodes-div">
-                    <div class="bg-orange">Decision {{symbol}}</div>
+                    <div class="bg-green">Decision {{symbol}}</div>
                     <div class="document" style="height:calc(100vh - 260px);overflow-y:scroll;padding:5px">
                         <h1>{{decision.title|lstring}}</h1>
                         <div ng-repeat="node in decision.nodes">
@@ -238,7 +204,6 @@
                                 :node="node" 
                                 :comments="comments" 
                                 :selected-node="selectedNode"
-                                :token-reader="tokenReader"
                                 :allow-add-nodes="allowAddNodes"
                                 @update:selected-node="updateSelectedNode"
                                 @change="updateDecision"
@@ -350,7 +315,7 @@
     		    	<select class="form-control" id="elementType" ng-model="element.type"  ng-disabled="!canEdit || element.nodeType!='paragraph'">
                         <option></option>
     					<option value="operational">Operational</option>
-    					<option value="informational">For‎ information</option>
+    					<option value="informational">For information</option>
     				</select>
     		  	</div>
 
@@ -374,7 +339,20 @@
     		    	<textarea class="form-control" id="elementStatusDetails" ng-disabled="!canEdit" ng-model="element.statusInfo"></textarea>
     		  	</div>
 
-    		</div>
+                <div class="form-group">
+                    <label for="elementSubject">Subjects</label><br>
+                    <div ng-repeat="item in self.subjects" class="input-group" style="margin-bottom:2px;overflow-y:hidden" title="">
+                         <span class="form-control">{{(collections.subjectsMap[item].title|lstring)||item}}</span>
+                         <div class="input-group-append">
+                            <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, self.subjects)"><i class="fa fa-minus-circle"></i></button>
+                        </div>
+                    </div>
+                    <select ng-if="::canEdit" class="btn btn-primary btn-sm" id="elementDirectedTo" ng-model="selectedSubject" ng-options="subject.identifier as (subject.title|lstring) group by collections.subjectsMap[subject.broaderTerms[0]].name for subject in collections.subjects|filter:noNarrower" ng-change="addTo(selectedSubject, self.subjects); selectedSubject=''">
+                        <option value="">add a subject</option>
+                    </select>
+                </div>
+
+            </div>
 
             <div class="col-sm-6">
 
@@ -410,22 +388,40 @@
 
         <hr ng-if="element.nodeType=='paragraph'"/>
     	<div ng-if="element.nodeType=='paragraph'" class="row">
-    		<div class="col-sm-6">
+    		<div class="col-sm-4">
 
                 <div class="form-group">
-    		    	<label for="elementSubject">CBD Subjects</label><br>
-                    <div ng-repeat="item in element.subjects" class="input-group" style="margin-bottom:2px;overflow-y:hidden" title="" ng-disabled="element.nodeType!='paragraph'">
-                         <span class="form-control">{{(collections.subjectsMap[item].title|lstring)||item}}</span>
+    		    	<label for="elementSubject">GBF Goals</label><br>
+                    <div ng-repeat="item in element.gbfGoals" class="input-group" style="margin-bottom:2px;overflow-y:hidden" title="" ng-disabled="element.nodeType!='paragraph'">
+                         <span class="form-control">{{(collections.gbfGoalsMap[item].shortTitle|lstring)||item}}</span>
                          <div class="input-group-append">
-                            <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.subjects)" ng-disabled="element.nodeType!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                            <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.gbfGoals)" ng-disabled="element.nodeType!='paragraph'"><i class="fa fa-minus-circle"></i></button>
                         </div>
                      </div>
-    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedSubject" ng-options="subject.identifier as (subject.title|lstring) group by collections.subjectsMap[subject.broaderTerms[0]].name for subject in collections.subjects|filter:noNarrower" ng-change="addTo(selectedSubject, element.subjects); selectedSubject=''" ng-disabled="element.nodeType!='paragraph'">
-                        <option value="">add a subject</option>
+    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedTarget" ng-options="target.identifier as (target.shortTitle|lstring) group by collections.gbfGoalsMap[target.broaderTerms[0]].name for target in collections.gbfGoals|filter:noNarrower" ng-change="addTo(selectedTarget, element.gbfGoals); selectedTarget=''" ng-disabled="element.nodeType!='paragraph'">
+                        <option value="">add a goal</option>
     				</select>
     		  	</div>
+                
             </div>
-    		<div class="col-sm-6">
+            
+            <div class="col-sm-4">
+
+                <div class="form-group">
+    		    	<label for="elementSubject">GBF Targets</label><br>
+                    <div ng-repeat="item in element.gbfTargets" class="input-group" style="margin-bottom:2px;overflow-y:hidden" title="" ng-disabled="element.nodeType!='paragraph'">
+                         <span class="form-control">{{(collections.gbfTargetsMap[item].shortTitle|lstring)||item}}</span>
+                         <div class="input-group-append">
+                            <button ng-if="::canEdit" class="btn btn-outline-danger" ng-click="removeFrom(item, element.gbfTargets)" ng-disabled="element.nodeType!='paragraph'"><i class="fa fa-minus-circle"></i></button>
+                        </div>
+                     </div>
+    		    	<select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo" ng-model="selectedTarget" ng-options="target.identifier as (target.shortTitle|lstring) group by collections.gbfTargetsMap[target.broaderTerms[0]].name for target in collections.gbfTargets|filter:noNarrower" ng-change="addTo(selectedTarget, element.gbfTargets); selectedTarget=''" ng-disabled="element.nodeType!='paragraph'">
+                        <option value="">add a target</option>
+    				</select>
+    		  	</div>
+                
+            </div>
+    		<div class="col-sm-4">
 
                 <div class="form-group">
     		    	<label for="elementSubject">Aichi Targets</label><br>

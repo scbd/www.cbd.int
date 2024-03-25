@@ -55,7 +55,6 @@ async function refresh() {
     const decisionList = [...decisions, ...urlCodes];
 
     this.decisionList = decisionList;
-    //this.decisionList = codes.map(c => decisionList.find(dl => dl.code === c || dl.elements.some(e => e.code === getElementCode(c))) || {code: c, elements: []});
 }
 
 async function lookupDecisions(codes) {
@@ -70,12 +69,6 @@ async function lookupDecisions(codes) {
 
     results.forEach(d => {
         d.url = '/decisions/'+encodeURIComponent(d.body.toLowerCase())+'/'+encodeURIComponent(d.session)+'/'+encodeURIComponent(d.decision);
-        d.elements = d.elements.filter(e => codes.some(c => e.code === getElementCode(c)));
-
-        if(d.elements[0]) {
-            const ele = d.elements[0];
-            d.url += '/'+(ele.section || '')+ele.paragraph;
-        }
     });
 
     return results || [];
