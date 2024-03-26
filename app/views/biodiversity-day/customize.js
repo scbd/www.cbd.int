@@ -107,7 +107,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 charLimit: 45,
                 and:'و'
             },
-            // ...languageTranslation            
+            ...languageTranslation            
         }
         $scope.rtlLanguages = {
             ar	: 'Arabic',
