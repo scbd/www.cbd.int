@@ -3,11 +3,9 @@ import 'file-saverjs';
 import 'bigText';
 import _ from 'lodash';
 import languageTranslation from './other-langugages.js';
-// import '~/directives/articles/cbd-article';
 import Vue from 'vue'
 import 'ngVue'
 import '~/services/article-service'
-// import * as htmlToImage from 'html-to-image'
 import CbdArticle from '~/directives/articles/cbd-article.vue';
 import 'angular-vue'
 
