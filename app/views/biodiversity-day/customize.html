@@ -6,208 +6,65 @@
             padding-right: 15px;
         }
         @font-face{
-            font-family: "Impact";
-            src: url("/app/fonts/impact.ttf") format("truetype");
+            font-family: "Giorgio Sans";
+            font-style: normal;
+            font-weight: 700;
+            src: url("/app/fonts/GiorgioSans-Bold.otf")  format("opentype");
         }
-        .boxGenerate{
-            /* border:2px solid #222; */
-            /* width: 800px; */
-            /* height: 320px; */
-            padding: 0px;
+        @font-face{
+            font-family: "Giorgio Sans";
+            font-style : normal;
+            font-weight: 275;
+            src: url("/app/fonts/GiorgioSans-el.otf")  format("opentype");
         }
 
         .boxIncon img{
-            height: 235px;
-            /* padding-right: 5px; */
-            padding-left: 5px;
-        }    
-        .impact-font{
-            font-family: Impact
-        }
-        .margin-nve-25{
-            margin-top: -25px;
-        }   
-        
-        .margin-nve-20{
-            margin-top: -20px;
-        }  
-        .margin-nve-15{
-            margin-top: -15px;
+            height: 275px;
         }    
 
-        .margin-nve-10{
-            margin-top: -10px;
-        }  
-        .font-size{
-            font-size: 65px!important;
+        .giorgio-font{
+            font-family: 'Giorgio Sans', sans-serif;
+            font-weight:700;
+            line-height: 50px;
+            font-size: 57px;
         }
-        .margin-pve-10{
-            margin-top: 10px;
-        }
-
-        .color-blue{
-            color: rgb(0, 134, 183)!important;
-        }
-        .color-green{
-            color: rgb(0, 155, 72)!important
+        .giorgio-font-light{
+            font-family: 'Giorgio Sans', sans-serif;
+            font-weight:275;
+            line-height: 45px;
+            font-size: 50px;
         }
 
-        .dynamic-text-none{
-            position: absolute;
-            bottom: -25px;
-        }
-
-        .dynamic-text-3{
-            position: absolute;
-            bottom: -10px;
-        }
-
-        .border-green{
-            border:1px solid green;
-        }
-        .border-blue{
-            border:1px solid blue;
-        }
-        .border-orange{
-            border:1px solid orange;
-        }
-        .border-red{
-            border:1px solid red;
-        }
-        #newImage canvas{
+        /* #newImage canvas{
             width: 100%;
             height: 100%;
-            /* margin-top: -20px; */
-        }
-        @media (max-width: 1440px){
-            .margin-nve-25{
-                margin-top: -15px;
-            }   
-            
-            .margin-nve-20{
-                margin-top: -10px;
-            }  
-            .margin-nve-15{
-                margin-top: -15px;
-            }    
+      
+        } */
 
-            .margin-nve-10{
-                margin-top: -10px;
-            }  
-            .margin-pve-10{
-                margin-top: 10px;
-            }
-        }
 
         .padding{
-            padding: 5px;
+            padding: 5px 20px 5px 5px;
         }
-        
+        .p-0{
+            padding: 0 0 0 0;
+        }     
+
+
+        .logo-box{
+            background-color: #fff;
+        }
         .logo-box,
         .boxGenerate .box-size{
-            width:716.484px;
-            height:245px;
-        }
-        .boxGenerate .text-box-width{
-            width: 428.016px;
+            width:800px;
+            height:280px;
         }
 
-        /* .zh .boxGenerate .box-size, */
-        .ru .boxGenerate .box-size,
-        .fr .boxGenerate .box-size,
-        .es .boxGenerate .box-size{
-            width:816.484px;
-            height:245px;
+        .boxGenerate .text-box-width{
+            width: 345px;
         }
 
         .boxGenerate .box-size{
             padding-top: 3px;
-        }
-        .mr .boxGenerate .box-size{
-            padding-bottom: 3px;
-        }
-        /* .ru.logo-box,
-        .ru .boxIncon img, */
-        .ru .boxGenerate .box-size {
-            /* width: 100%!important; */
-            height:250px!important;
-        }
-        .zh.logo-box,
-        .zh .boxIncon img,
-        .zh .boxGenerate .box-size {
-            /* width: 100%!important; */
-            height:280px;
-        }
-
-        /* .zh .boxGenerate .text-box-width, */
-        .ru .boxGenerate .text-box-width,
-        .fr .boxGenerate .text-box-width,
-        .es .boxGenerate .text-box-width{
-            width: 528.016px;
-        }
-
-
-        .bn.logo-box,
-        .bn .boxIncon img,
-        .bn .boxGenerate .box-size,
-        .mr.logo-box,
-        .mr .boxIncon img,
-        .mr .boxGenerate .box-size,
-        .hi.logo-box,
-        .hi .boxIncon img,
-        .hi .boxGenerate .box-size,
-        .ko.logo-box,
-        .ko .boxIncon img,
-        .ko .boxGenerate .box-size {
-            /* width: 100%!important; */
-            height:250px;
-        }
-
-        .bg .boxGenerate .box-size,
-        .ca .boxGenerate .box-size,
-        .hr .boxGenerate .box-size,
-        .cs .boxGenerate .box-size,
-        .fi .boxGenerate .box-size,
-        .gl .boxGenerate .box-size,
-        .de .boxGenerate .box-size,
-        .el .boxGenerate .box-size,
-        .is .boxGenerate .box-size,
-        .ga .boxGenerate .box-size,
-        .fl .boxGenerate .box-size,
-        .it .boxGenerate .box-size,
-        .pl .boxGenerate .box-size,
-        .pt .boxGenerate .box-size,
-        .ro .boxGenerate .box-size,
-        .sr .boxGenerate .box-size,
-        .uk .boxGenerate .box-size,
-        .eu .boxGenerate .box-size,
-        .az .boxGenerate .box-size{
-            width:816.484px;
-        }
-        .bg .boxGenerate .text-box-width,
-        .ca .boxGenerate .text-box-width,
-        .hr .boxGenerate .text-box-width,
-        .cs .boxGenerate .text-box-width,
-        .fi .boxGenerate .text-box-width,
-        .gl .boxGenerate .text-box-width,
-        .de .boxGenerate .text-box-width,
-        .el .boxGenerate .text-box-width,
-        .is .boxGenerate .text-box-width,
-        .ga .boxGenerate .text-box-width,
-        .fl .boxGenerate .text-box-width,
-        .it .boxGenerate .text-box-width,
-        .pl .boxGenerate .text-box-width,
-        .pt .boxGenerate .text-box-width,
-        .ro .boxGenerate .text-box-width,
-        .sr .boxGenerate .text-box-width,
-        .uk .boxGenerate .text-box-width,
-        .eu .boxGenerate .text-box-width,
-        .az .boxGenerate .text-box-width{
-            width: 528.016px;
-        }
-
-        .ar .impact-font{
-            padding-right: 5px;
         }
 
         .zh #line1{
@@ -252,72 +109,139 @@
             -webkit-text-stroke-color: #0086b7;
         }
 
-        #customText{
-            /* position: absolute;
-            bottom: 0px; */
-        }
-        #line2{
-            /* position: absolute; */
-        }
         #idb2020Logo hr {
             width: 100%;
         }
 
-        #imgGenerator{
+        /* #imgGenerator{
             padding-left:10px;
+        } */
+
+        .ar{ padding-left: 40px; }
+        .hy .boxGenerate .text-box-width{ width: 500px; }
+        .bn .boxGenerate .text-box-width{ width: 450px; }
+        .bg .boxGenerate .text-box-width{ width: 500px; }
+        .et .boxGenerate .text-box-width{ width: 400px; }
+        .fi .boxGenerate .text-box-width{ width: 400px; }
+        .ka .boxGenerate .text-box-width{ width: 500px; }
+        .el .boxGenerate .text-box-width{ width: 500px; }
+        .hi .boxGenerate .text-box-width{ width: 375px; }
+        .is .boxGenerate .text-box-width{ width: 375px; }
+        .ja .boxGenerate .text-box-width{ width: 450px; }
+        .ko .boxGenerate .text-box-width{ width: 400px; }
+        .ms .boxGenerate .text-box-width{ width: 500px; }
+        .ne .boxGenerate .text-box-width{ width: 475px; }
+        .pl .boxGenerate .text-box-width{ width: 430px; }
+        .sr .boxGenerate .text-box-width{ width: 500px; }
+        .uk .boxGenerate .text-box-width{ width: 500px; }
+
+
+        .ar .boxGenerate .text-box-width{ width: 475px; }
+        .fr .boxGenerate .text-box-width{ width: 355px; }
+        .ru .boxGenerate .text-box-width{ width: 450px; }
+        .es .boxGenerate .text-box-width{ width: 325px; }
+        .zh .boxGenerate .text-box-width{ width: 400px; }
+
+        .am .giorgio-font{ line-height: 55px; }
+        .hy .giorgio-font{ line-height: 50px; font-size: 50px; }
+        .hy .giorgio-font-light{ line-height: 33px; font-size: 33px; }
+        .bg .giorgio-font-light{ line-height: 44px; font-size: 44px; }
+        .fi .giorgio-font-light{ line-height: 40px; font-size: 40px; }
+        .ka .giorgio-font-light{ line-height: 32px; font-size: 32px; }
+        .el .giorgio-font{ line-height: 50px; font-size: 50px; }
+        .el .giorgio-font-light{ line-height: 40px; font-size: 40px; }
+        .ko .giorgio-font{ line-height: 57px; }
+        .ko .giorgio-font-light{ line-height: 48px;  }
+        .ms .giorgio-font{ line-height: 50px; font-size: 50px; }
+
+        .ru .giorgio-font{ font-size: 45px; }
+        .ru .giorgio-font-light{ font-size: 40px; }
+
+        .is-rtl{
+            direction: rtl;
+            text-align: right;
+            padding-left:57px;
         }
-        .fr #imgGenerator{
-            padding-top: 10px;
-            padding-bottom: 5px;
-        }
-        .ar #imgGenerator{
-            padding-right:10px;
-            padding-left:unset;
+        .is-ltr{
+            direction: ltr;
+            text-align: left;
+            padding-right:57px;
         }
 
-        .az .impact-font,
-        .ro .impact-font{
-            font-family:Arial!important;
-        }
-        /* #newImage img{
-            width:500px
-        } */
+        /* .debug{ border: 1px solid red; }
+        .debug2{ border: 1px solid blue; }  */
     </style>
 
-    <div class="row" id="idb2020Logo">
+    <div class="row" id="idb2020Logo" >
         
         <div  class="col-lg-12">
-            <h2>Customize your Biodiversity Day logo!
-            </h2>
+            <h2>Customize your Biodiversity Day logo! </h2>
+        </div>
+        <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12 p-0" >                   
+            <!-- <cbd-article query="articleQuery" ng-if="articleQuery" hide-cover-image="true"></cbd-article> -->
+            
+            <hr/>
+            <cbd-article  ng-vue="vueOptions"  ng-vue-expose="&onArticleLoad" :query="articleQuery" v-if="articleQuery" :admin-tags="articleAdminTags" 
+            @load="onArticleLoad($event)" hide-cover-image="true" show-edit="true"></cbd-article>
             <hr/>
         </div>
-        <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
-            <cbd-article query="articleQuery" ng-if="articleQuery" hide-cover-image="true"></cbd-article>
-        </div>
-        
-        <hr/>
-        <!-- <code>{{logs|json}}</code> -->
-        <div class="col-lg-3" ng-class="{'overlay-wrapper':uploading}">
+
+        <div class="col" ng-class="{'overlay-wrapper':uploading}">
             <div class="overlay" ng-if="uploading" >                
                 <span style="margin:35%;font-size: 18px;color: #fff;position: absolute;"><i class="fa fa-spin fa-spinner"></i> Generating your logo...</span>
             </div>
-            <div class="row">
-                <div class="col-lg-12 col-md-6 col-sm-6 padding">
-                    <label for="language">Select logo language</label>
+            <div class="row debug2">
+                <div class="col-lg-12 padding">
+                    <label for="language">Select logo language ({{language.code}})</label>
                     <div class="input-group">
                         <select class="form-control" ng-model="language" ng-change="onLanguageChange();" 
                             ng-options="option.language group by option.group for option in defaultLanguages track by option.code">
                         </select>      
-                        <!-- <div class="input-group-append">
-                            <input type="button" class=" btn btn-primary btn-xs  btn-sm" style="z-index: auto;" id="btnCustomLang" value="Edit" ng-click="customLanguage(language.code)" ng-disabled="uploading || text[language.code].isUNLanguage"/>   
-                        </div> -->
                     </div> 
                 </div>
-                <div class="col-lg-12  col-md-6 col-sm-6 padding">
-                    <label for="name">Name to appear in the logo</label>
-                    <input type="text" class="form-control" id="name" placeholder="Your name here" ng-model="text[language.code].name" ng-change="fitText()">
-                </div>
                 <div class="col-lg-12 padding">
+                    <label for="logotype">Is your logo for an individual or Individual & Organization?</label>
+                    <div class="input-group">
+                        <select class="form-control" ng-model="customText.logoType" ng-change="onTypeChange();" >
+                            <option value="collective">Individual & Organization</option>
+                            <option value="individual" selected>Individual</option>
+                        </select>
+                    </div> 
+                </div>
+                <div ng-if="customText.logoType==='individual'" class="col-lg-12 padding">
+                    <label for="name">Name to appear in the logo </label>
+                    <span ng-if="text[language.code].name.length" class="pull-right text-muted small" ng-class="{'alert-danger': isCharLimitExceeded()}">Length: {{text[language.code].name.length}}</span>
+
+                    <input type="text" class="form-control" id="name" placeholder="Your name here" ng-model="text[language.code].name" ng-change="fitText()">
+                    <div  ng-if="text[language.code].name.length > charLimit()" class="alert alert-danger" role="alert">
+                        <p> The character limit cannot exceed {{charLimit()}}. Total: {{text[language.code].name.length}}</p>
+                    </div>
+                </div>
+                <div ng-if="customText.logoType==='collective'" class="col-lg-12 padding">
+                    <label for="name">Individual  Name to appear in the logo </label>
+                    <span ng-if="text[language.code].individual.length" class="pull-right text-muted small" ng-class="{'alert-danger': isCharLimitExceeded()}">Length: {{text[language.code].individual.length}}</span>
+
+                    <input type="text" class="form-control" id="individual" placeholder="Your name here" ng-model="text[language.code].individual" ng-change="fitText()">
+                    <div  ng-if="isCharLimitExceeded()" class="alert alert-danger" role="alert">
+                        <p> The total character limit cannot exceed {{charLimit()}}.</p>
+                        <p> Individual: {{text[language.code].individual.length}}. </p>
+                        <p> Organization: {{text[language.code].collective.length}}. </p>
+                        <p> Total: {{text[language.code].name.length}}</p>
+                    </div>
+                </div>
+                <div ng-if="customText.logoType==='collective'" class="col-lg-12 padding">
+                    <label for="collective">Organization to appear in the logo </label>
+                    <span ng-if="text[language.code].collective.length" class="pull-right text-muted small" ng-class="{'alert-danger': isCharLimitExceeded()}">Length: {{text[language.code].collective.length}}</span>
+
+                    <input type="text" class="form-control" id="collective" placeholder="Your collective name here" ng-model="text[language.code].collective" ng-change="fitText()">
+                    <div  ng-if="isCharLimitExceeded()" class="alert alert-danger" role="alert">
+                        <p> The total character limit cannot exceed {{charLimit()}}.</p>
+                        <p> Individual: {{text[language.code].individual.length}}. </p>
+                        <p> Organization: {{text[language.code].collective.length}}. </p>
+                        <p> Total: {{text[language.code].name.length}}</p>
+                    </div>
+                </div>
+                <div  class="col-lg-12 padding">
                     <div id="g-recaptcha"></div>
                     <label ng-if="!grecaptchaToken" style="color:red;font-size:small;">Please check the box to proceed.</label>
                     <div ng-if="error" class="alert alert-danger" role="alert">
@@ -325,39 +249,41 @@
                         <p>{{error}}</p>
                     </div>
                 </div>
-                <div class="col-lg-12 padding btn-group">
-                    <!-- <input type="button" class=" btn btn-primary btn-xs  btn-sm" id="btnSave" value="Update" ng-click="saveImage(true)">    -->
-                    <input type="button" class=" btn btn-primary btn-xs  btn-sm" id="btnSave" value="Download" ng-click="saveImage()" ng-disabled="!grecaptchaToken || uploading"/>                    
-                    <a class="btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/logo/collage">View published logos</a>
-                    <a class="btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/logo/collage/draft" ng-if="isAdmin">Approve logos</a>         
+                <div class="col-lg-12 padding text-center">
+                    <div class=" btn-group text-center">
+                        <input type="button" class=" btn btn-primary btn-xs  btn-sm" id="btnSave" value="Download" ng-click="saveImage()" ng-disabled="!grecaptchaToken || uploading"/>                    
+                        <a class="btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/logo/collage">View published logos</a>
+                    </div>
                 </div>
+                <div class="col-lg-12 padding  text-center">
+                    <a class="btn btn-primary btn-xs btn-sm" ng-href="{{basePath}}/logo/collage/draft" ng-if="isAdmin">Approve logos</a>  
+                </div>
+                
             </div>
         </div>
-        <div  class="col-lg-9 logo-box {{language.code}}" style="padding-left:5%">
-            <div style="opacity: 0010;padding-top: 20px;" >
+        <div  class="col-lg-9 logo-box {{language.code}}">
+            <div style="opacity: 0010;" >
                 <div class="boxGenerate box-size" id="mainImageBox">
                     <div class="boxIncon box-size" id="imgGenerator">
-                        <div class="row box-size">
-                            <div class="col-lg-51">
-                                <img src="/app/images/idb-celebrations/idb-logo.png"  class="img-fluid idb-logo pull-right" id="logoImg"/>
+                        <div class="row box-size ps-1" style="display: flex; flex-wrap: wrap;">
+                            <div class="col-lg-51 p-0 debug">
+                                <img src="/app/images/idb-celebrations/gbf-logo-ball.png"  class="img-fluid idb-logo pull-right" id="logoImg"/>
                             </div>
-                            <div class="impact-font col-lg-71 text-box-width" style="padding-left: 5px;" ng-if="language.code" >   
-                                
-                                <div id="bigtext" class="impact-font " style="max-width: 100%;">                                
-                                    <div class="border-green1 color-blue" id="line1" >
-                                        <span id="line1_part1" ng-if="language.code!='ar1'" ng-bind="text[language.code].line1_part1" class="{{text[language.code].line1_part1_css}}"></span>
-                                        <span id="line1_part2" ng-if="language.code!='ar1'" ng-bind="text[language.code].line1_part2" class="{{text[language.code].line1_part2_css}}"></span>
-                                        <!-- <span  ng-if="language.code=='ar'">٢٢ أيار<span style="font-family: auto;">/</span>مايو ٢٠٢١</span> -->
-                                        
+                            <div class="col-lg-71 debug" style=" display: flex; align-items: center;" ng-if="language.code" >
+                                <div class="text-box-width" ng-class="{ 'is-rtl':isRightToLeft, 'is-ltr':!isRightToLeft }" >
+                                    <div id="bigtext" >  
+                                        <div class="giorgio-font text-nowrap" id="customText">
+                                            <span id="customName" ng-bind="text[language.code].name"></span> 
+                                        </div>                             
                                     </div>
-                                    <div id="line2" class="border-blue1 color-blue">
-                                        <span id="line2_part1" id="line2_part1" ng-bind="text[language.code].line2_part1" class="{{text[language.code].line2_part1_css}}"></span>
-                                        <span id="line2_part2" id="line2_part2" ng-bind="text[language.code].line2_part2" class="{{text[language.code].line2_part2_css}}"></span>
+                                    <div id="line1" class="giorgio-font text-nowrap"  >
+                                        <span ng-if="!isCollective()" id="line1_part1" ng-if="language.code!='ar1'" ng-bind="text[language.code].line1_part1" ></span>
+                                        <span ng-if="isCollective()" id="line1_part1" ng-if="language.code!='ar1'" ng-bind="text[language.code].line1_part1_alt" ></span>
                                     </div>
-                                    <div class="color-blue border-red1 pull-left" id="customText" >
-                                        <span ng-if="language.code=='zh'">呵护自然, </span> 
-                                        <span ng-bind="text[language.code].name"></span> 
-                                        <span ng-bind="text[language.code].hashTag"></span>
+                                    <div id="static" class="giorgio-font-light text-nowrap">
+                                        <p  class="m-0" ng-bind="text[language.code].line1_part2"></p>
+                                        <p class="m-0" ng-bind="text[language.code].line2_part1"></p>
+                                        <p class="m-0" ng-bind="text[language.code].line2_part2"></p>
                                     </div>
                                 </div>
                             </div>
@@ -367,9 +293,9 @@
                 </div>
             </div>
         </div>   
-       
     </div>
-    
+
+
     <div  style="opacity: 0001;display: none1;" class="col-lg-23">
         <div id="newImage"></div>
     </div>
@@ -380,53 +306,5 @@
     <div class="col-lg-12" style="display: none;">
         <div id="myimage"></div>
     </div>
-    <script type="text/ng-template" id="customLanguage">
-        <div class="modal-header">
-            <h3 class="modal-title">
-                Logo in your language
-            </h3>
-        </div>
-        <div class="modal-body custom-language-text">	
-            <div class="row {{customText.language.code}}">
-                <div class="col-lg-6 padding">
-                        <label>Language</label>
-                        <!-- <label ng-if="customText.missingLanguage" style="color:red;font-size:small;">Please select your language</label>
-                        <select class="form-control" id="language" placeholder="Language" ng-model="customText.language"
-                            ng-options="option.language group by option.group for option in languages track by option.code">
-                        </select> -->
-                        <input type="text" class="form-control disabled" disabled id="language" ng-value="customText.language.language" ng-blur="capitalize()">
-                </div>
-                <div class="col-lg-6 padding">
-                        <label>22 MAY 2021</label>
-                        <input type="text" class="form-control" id="date" placeholder="date" ng-model="customText.date" ng-blur="capitalize()">
-                </div>
-                <div class="col-lg-6 padding">
-                        <label>Biodiversity Day</label><input type="text" class="form-control" id="day" placeholder="day" ng-model="customText.day" ng-blur="capitalize()">
-                </div>
-                <div class="col-lg-6 padding">
-                    <label for="logotype">Is your logo for an individual or a collective?</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="logotype" placeholder="tag line" ng-if="customText.logoType=='collective'" ng-model="customText.collectiveTagline"  ng-blur="capitalize()">
-                        <input type="text" class="form-control" id="logotype" placeholder="tag line" ng-if="customText.logoType=='individual'" ng-model="customText.individualTagline"  ng-blur="capitalize()">                           
-                        <div class="input-group-append">  
-                             <select class="form-control" ng-model="customText.logoType"  ng-blur="capitalize()">
-                                <option value="collective">Collective</option>
-                                <option value="individual" selected>Individual</option>
-                            </select>
-                        </div>
-                    </div> 
-                </div>
-                <div class="col-lg-6 padding"><label>#ForNature</label>
-                        <input type="text" class="form-control" id="hashtag" placeholder="hashtag" ng-model="customText.hashTag">
-                </div>
-                <div class="col-lg-6 padding"><label>Name to appear in the logo</label>
-                    <input type="text" class="form-control" id="name" placeholder="Name" ng-model="customText.name">
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class=" btn btn-primary btn-xs  btn-sm" id="btnSave" ng-click="applyTranslation(customText)">Apply</button>
-            <button type="button" class="btn btn-default" aria-label="Close" ng-click="closeDialog()" >Cancel</button>
-        </div>      
-    </script>
+
 </div>
