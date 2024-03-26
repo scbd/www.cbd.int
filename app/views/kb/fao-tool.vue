@@ -1,6 +1,7 @@
 <template>
     <div>
         <a name="top"></a>
+
         <h1>Proof of Concept - FAO equivalent Tool based on CBD Clearing-Houses Virtual Library (VLR)</h1>
         <div class="bg-white pt-2" >
             <div v-if="records!==null" class="container-fluid">
@@ -48,7 +49,41 @@
         </div>
 
         <div  ref="results" v-if="records!==null" class="container-fluid">
-            <div class="row">
+            <div class="row" v-if="display=='row'">
+                <div class="col-12" v-for="record in records" :key="record.id">
+                    <div class="container-fluid  border">
+                        <div class="row">
+                            <div class="col-2" style="max-height:150px; overflow:hidden">
+                                <a :href="record.url_ss[0]" target="CHM">
+                                <img :src="`https://picsum.photos/seed/${record.id}/200/150`" alt="...">
+                                </a>
+                            </div>
+                            <div class="col-6" style="max-height:150px; overflow:hidden">
+                                <h5 >{{record.title_t}}</h5>
+                                <p>
+                                    {{record.summary_t}}
+                                </p>
+                            </div>
+                            <div class="col-4" style="max-height:150px; overflow:auto">
+                                <a :href="record.url_ss[0]" class="btn btn-primary float-right m-2" target="CHM">View record</a>
+                                <div v-if="record.publicationDate_dt">
+                                </div> 
+                                <div v-if="record.cbdSubjects_EN_txt">
+                                    <b>Subject</b>: {{ record.cbdSubjects_EN_txt.join(', ') }}
+                                </div>
+                                <div v-if="record.gbfTargets_ii">
+                                    <b>Target(s):</b>
+                                    <a target="target" :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(target)}`" v-for="target in record.gbfTargets_ii" :key="target">Target {{ target }}</a>
+                                </div>
+                                <div v-if="record.resourceTypes_EN_txt">
+                                    <b>Resource Type</b>: {{ record.resourceTypes_EN_txt.join(', ') }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" v-else>
                 <div class="col-12 col-sm-6 col-lg-4 mb-1" v-for="record in records" :key="record.id">
                     <div class="card">
                         <img :src="`https://picsum.photos/seed/${record.id}/300/200`" class="card-img-top" alt="...">
@@ -99,6 +134,7 @@ export default {
     components : {  },
     data(){
         return{
+            display: (window.location.hash||'').replace(/^#/, ''),
             records: null,
             recordCount: null,
             pageSize: 9,
