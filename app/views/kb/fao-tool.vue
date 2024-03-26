@@ -60,18 +60,19 @@
                             <a :href="record.url_ss[0]" class="btn btn-primary" target="CHM">View record</a>
                         </div>
                         <div class="card-footer">
-                            <span v-if="record.publicationDate_dt">
-                                <b>Published</b>: {{ record.publicationDate_dt.substr(0, 10) }}<br>
-                            </span> 
-                            <span v-if="record.cbdSubjects_EN_txt">
-                                <b>Subject</b>: {{ record.cbdSubjects_EN_txt.join(', ') }}<br>
-                            </span>
-                            <span v-if="record.aichiTargets_EN_txt">
-                                <b>Target</b>: {{ record.gbfTargets_EN_txt.join(', ') }}<br>
-                            </span>
-                            <span v-if="record.resourceTypes_EN_txt">
-                                <b>Resource Type</b>: {{ record.resourceTypes_EN_txt.join(', ') }}<br>
-                            </span>
+                            <div v-if="record.publicationDate_dt">
+                                <b>Published</b>: {{ record.publicationDate_dt.substr(0, 10) }}
+                            </div> 
+                            <div v-if="record.cbdSubjects_EN_txt">
+                                <b>Subject</b>: {{ record.cbdSubjects_EN_txt.join(', ') }}
+                            </div>
+                            <div v-if="record.gbfTargets_ii">
+                                <b>Target(s):</b>
+                                <a target="target" :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(target)}`" v-for="target in record.gbfTargets_ii" :key="target">Target {{ target }}</a>
+                            </div>
+                            <div v-if="record.resourceTypes_EN_txt">
+                                <b>Resource Type</b>: {{ record.resourceTypes_EN_txt.join(', ') }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -161,7 +162,11 @@ async function search() {
 
     this.recordCount = response.numFound;
     this.records = response.docs.map(o=>{
-        o.gbfTargets_EN_txt = o.gbfTargets_EN_txt || o.aichiTargets_REL_ss
+        o.gbfTargets_ss = o.gbfTargets_ss || o.aichiTargets_REL_ss?.filter(o=>/^GBF-TARGET-/.test(o));
+
+        o.gbfTargets_ii = o.gbfTargets_ss.map(o=>parseInt(o.replace(/^GBF-TARGET-/, '')));
+        
+        o.gbfTargets_EN_txt = o.gbfTargets_EN_txt || o.gbfTargets_ss
             ?.filter(o=>/^GBF-TARGET-/.test(o))
             ?.map   (o=>this.lists.gbfTargets.find(t=>t.identifier==o).title.en)
         return o;
