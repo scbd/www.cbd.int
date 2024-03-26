@@ -9,11 +9,11 @@
                         <input class="form-control"  type="text" v-model.trim="filters.freeText" placeholder="Search by text..." @input="debouncedSearch()">
                     </div>
                     <div class="col-12 col-sm-6 col-lg-3">
-                        <select class="form-control" v-model="filters.aichiTargets" placeholder="Aichi Targets" @change="debouncedSearch()">
-                            <option :value="null">Aichi Targets...</option>
-                            <option v-for="({identifier, title}) in lists.aichiTargets.filter(({identifier})=>facets.aichiTargets[identifier])" :key="identifier" :value="identifier">
+                        <select class="form-control" v-model="filters.gbfTargets" placeholder="GBF Targets" @change="debouncedSearch()">
+                            <option :value="null">KM-GBF Targets...</option>
+                            <option v-for="({identifier, title}) in lists.gbfTargets.filter(({identifier})=>facets.gbfTargets[identifier])" :key="identifier" :value="identifier">
                                 {{ title.en || title }}
-                                ({{ facets.aichiTargets[identifier] }})
+                                ({{ facets.gbfTargets[identifier] }})
                             </option>
                         </select>
                     </div>
@@ -67,7 +67,7 @@
                                 <b>Subject</b>: {{ record.cbdSubjects_EN_txt.join(', ') }}<br>
                             </span>
                             <span v-if="record.aichiTargets_EN_txt">
-                                <b>Target</b>: {{ record.aichiTargets_EN_txt.join(', ') }}<br>
+                                <b>Target</b>: {{ record.gbfTargets_EN_txt.join(', ') }}<br>
                             </span>
                             <span v-if="record.resourceTypes_EN_txt">
                                 <b>Resource Type</b>: {{ record.resourceTypes_EN_txt.join(', ') }}<br>
@@ -102,18 +102,18 @@ export default {
             recordCount: null,
             pageSize: 9,
             facets: {
-                aichiTargets: {},
+                gbfTargets: {},
                 cbdSubjects: {},
                 resourceTypes: {}
             },
             filters: {
                 freeText: "",
-                aichiTargets: null,
+                gbfTargets: null,
                 cbdSubjects: null,
                 resourceTypes: null,
             },
             lists: {
-                aichiTargets: [],
+                gbfTargets: [],
                 cbdSubjects: [],
                 resourceTypes: []
             }
@@ -139,7 +139,7 @@ async function search() {
     const queryEntries = [];
 
 
-    if(!_.isEmpty(filters.aichiTargets))  queryEntries.push(`aichiTargets_ss:  (${_.flatten([filters.aichiTargets]).join(' ')})`);
+    if(!_.isEmpty(filters.gbfTargets))    queryEntries.push(`aichiTargets_REL_ss:  (${_.flatten([filters.gbfTargets]).join(' ')})`);
     if(!_.isEmpty(filters.cbdSubjects))   queryEntries.push(`cbdSubjects_ss:   (${_.flatten([filters.cbdSubjects]).join(' ')})`);
     if(!_.isEmpty(filters.resourceTypes)) queryEntries.push(`resourceTypes_ss: (${_.flatten([filters.resourceTypes]).join(' ')})`);
     if(!_.isEmpty(filters.freeText)) {
@@ -160,7 +160,12 @@ async function search() {
     const response = await queryIndex(query, { l: this.pageSize });
 
     this.recordCount = response.numFound;
-    this.records = response.docs;
+    this.records = response.docs.map(o=>{
+        o.gbfTargets_EN_txt = o.gbfTargets_EN_txt || o.aichiTargets_REL_ss
+            ?.filter(o=>/^GBF-TARGET-/.test(o))
+            ?.map   (o=>this.lists.gbfTargets.find(t=>t.identifier==o).title.en)
+        return o;
+    });
 }
 
 
@@ -170,20 +175,20 @@ async function search() {
 async function created() {
 
     let facets        = getFacets();
-    let aichiTargets  = getDomainTerms('AICHI-TARGETS');
+    let gbfTargets    = getDomainTerms('GBF-TARGETS');
     let cbdSubjects   = getDomainTerms('CBD-SUBJECTS');
     let resourceTypes = getDomainTerms('A762DF7E-B8D1-40D6-9DAC-D25E48C65528');
     
     facets        = await facets;
-    aichiTargets  = await aichiTargets;
+    gbfTargets    = await gbfTargets;
     cbdSubjects   = await cbdSubjects;
     resourceTypes = await resourceTypes;
 
-    this.facets.aichiTargets  = facets.aichiTargets_ss;
+    this.facets.gbfTargets    = facets.aichiTargets_REL_ss;
     this.facets.cbdSubjects   = facets.cbdSubjects_ss;
     this.facets.resourceTypes = facets.resourceTypes_ss;
     
-    this.lists.aichiTargets   = aichiTargets
+    this.lists.gbfTargets     = gbfTargets
     this.lists.cbdSubjects    = cbdSubjects
     this.lists.resourceTypes  = resourceTypes
 
@@ -197,7 +202,7 @@ async function getDomainTerms(code) {
     return await api.get(`/api/v2013/thesaurus/domains/${encodeURIComponent(code)}/terms`).then(toData);
 }
 
-const baseIndexQuery = 'schema_s:resource AND realm_ss:(CHM BCH ABSCH)';
+const baseIndexQuery = 'schema_s:resource AND realm_ss:(CHM BCH ABSCH) AND aichiTargets_REL_ss:GBF-TARGET-*';
 
 //===========================================
 //
@@ -205,7 +210,7 @@ const baseIndexQuery = 'schema_s:resource AND realm_ss:(CHM BCH ABSCH)';
 async function queryIndex(query, { sk, l} = {}) {
 
     const params = {
-        q  : [baseIndexQuery, query].filter(o=>!!o).join(' AND '),
+        q  : _.compact([baseIndexQuery, query]).filter(o=>!!o).join(' AND '),
         start: sk,
         rows: l
     }
@@ -223,7 +228,7 @@ async function getFacets(query) {
     const params = {
         q    : [baseIndexQuery, query].filter(o=>!!o).join(' AND '),
         facet: 'true',
-        'facet.field': ['cbdSubjects_ss','resourceTypes_ss','aichiTargets_ss'],
+        'facet.field': ['cbdSubjects_ss','resourceTypes_ss','aichiTargets_REL_ss'],
         rows : 0,
     }
 
