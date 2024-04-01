@@ -24,9 +24,6 @@ export default ['$location','$scope','$timeout', '$route', '$sce', 'conferenceSe
             $scope.code = $route.current.params.code
             $scope.articleAdminTags = ['conferences', 'home-page', 'introduction', encodeURIComponent($scope.code)];
             
-            $scope.trustedHtml = function (plainText) {
-                return $sce.trustAsHtml(plainText);
-            }
             $q.when(conferenceService.getActiveConference())
             .then(function(meeting){
                 $scope.meeting = meeting;

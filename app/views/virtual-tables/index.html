@@ -286,7 +286,7 @@
                         <div class="inside">    
                             <div class="image-wrapper1" >                                    
                                 <h3>{{::article.title|lstring}}</h3>
-                                <div class="description" ng-bind-html="::article.summary |lstring | limitTo:100|unsafe"></div>
+                                <div class="description" ng-bind-html="::article.summary | lstring | limitTo:100 | safeHtml"></div>
                                 
                             </div>    
                             <span class="article-date">{{article.meta.createdOn|moment:'toDate'|date:'yyyy-MM-dd':'UTC'}}</span>

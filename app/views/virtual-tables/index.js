@@ -2,6 +2,7 @@ import app from '~/app';
 import 'angular-grid';
 import _ from 'lodash';
 import '~/services/article-service'
+import '~/filters/html-sanitizer'
 import 'ngInfiniteScroll'
 import 'ngDialog';
 import '../articles';
@@ -204,7 +205,3 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     loadMeetingTypes().then(fetchPosterArticles);
 
 }];
-
-app.filter('unsafe', function ($sce) {
-    return $sce.trustAsHtml;
-});

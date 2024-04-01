@@ -23,6 +23,6 @@
             <i class="fa fa-edit"></i> Add content</a>    
         <br/>    
     </div>
-    <div ng-bind-html="trustedHtml(article.content|lstring)" class="ck-content"></div>
+    <div ng-bind-html="article.content | lstring | safeHtml" class="ck-content"></div>
 
 </div>
