@@ -9,8 +9,8 @@
         <i>{{ notification.symbol }}</i> 
         <!-- <i v-if="notification.number">({{ notification.number }})</i> -->
         <div
-            v-html="$options.filters.lstring(notification.title)"
-            :title="notification.title | lstring"
+            v-html="titleHtml"
+            :title="title"
             style="max-height:50px;overflow:hidden" />
         <div v-if="notification.date">
             <i class="fa fa-calendar fa-fw"></i> 
@@ -27,6 +27,7 @@
 import DocumentFiles from '~/components/references/document-files.vue';
 import moment from 'moment-timezone';
 import lstring from '~/filters/lstring.js';
+import { sanitizeHtml } from '~/services/html';
 
 export default {
     name: 'NotificationCard',
@@ -38,6 +39,15 @@ export default {
         }
     },
     computed: {
+        title() {
+            const div = document.createElement('div')
+            div.innerHTML = this.titleHtml;
+            return div.innerText;
+        },
+        titleHtml() {
+            const html = lstring(notification.title);
+            return sanitizeHtml(html);
+        },
         fmtNotificationDate() {
             const { notification } = this;
             if(notification && notification.date) {

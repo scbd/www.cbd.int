@@ -24,7 +24,7 @@
                 </thead>
                 <tbody>
                     <tr v-if="decision && decision.title && decision.title.en">
-                        <td class="border border-grey p-2"><span v-html="decision.title.en" /></td>
+                        <td class="border border-grey p-2"><span v-html="sanitizeHtml(decision.title.en)" /></td>
                         <td class="border border-grey p-2">
                             <div v-if="decision.editor">
                                 <input type="text" class="w-100 p-2" :locale="selectedLanguage" v-model="decision.editorHtml" />
@@ -34,13 +34,13 @@
                                 </div>
                             </div>
                             <div v-else class="paragraph" @click="edit(decision, true)">
-                                <span v-if="decision.title[selectedLanguage]" :lang="selectedLanguage" v-html="decision.title[selectedLanguage]" />
+                                <span v-if="decision.title[selectedLanguage]" :lang="selectedLanguage" v-html="sanitizeHtml(decision.title[selectedLanguage])" />
                                 <span v-else class="text-muted">&lt;click to add translation&gt;</span>
                             </div>
                         </td>
                     </tr>
                     <tr v-for="(row, index) in rows" :key="index" v-show="!isEmpty(row.html)">
-                        <td class="border border-grey p-2"><span v-html="row.html.en" /></td>
+                        <td class="border border-grey p-2"><span v-html="sanitizeHtml(row.html.en)" /></td>
                         <td class="border border-grey p-2">
                             <div v-if="rows[index].editor">
                                 <text-editor :html.sync="row.editorHtml" :locale="selectedLanguage" />
@@ -50,7 +50,7 @@
                                 </div>
                             </div>
                             <div v-else class="paragraph" @click="edit(row)">
-                                <span v-if="row.html[selectedLanguage]" :lang="selectedLanguage" v-html="row.html[selectedLanguage]" />
+                                <span v-if="row.html[selectedLanguage]" :lang="selectedLanguage" v-html="sanitizeHtml(row.html[selectedLanguage])" />
                                 <span v-else class="text-muted">&lt;click to add translation&gt;</span>
                             </div>
                         </td>
@@ -66,6 +66,7 @@ import DecisionApi from '~/api/decisions.js';
 import { cloneDeep, isEmpty } from 'lodash'
 import TextEditor, { EditorTypes } from '~/components/text-editor.vue';
 import { UN as languages } from '~/data/languages.js';
+import { sanitizeHtml } from '~/services/html';
 
 export default {
     name: 'DecisionEditTranslations',
@@ -83,6 +84,7 @@ export default {
         }
     },
     computed: {
+        sanitizeHtml,
         EditorTypes() { return EditorTypes},
         editorConfig() {
             return {
