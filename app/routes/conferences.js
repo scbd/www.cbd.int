@@ -60,12 +60,15 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
 app.run(['$compile', '$rootScope','$location', async function($compile, $rootScope, $location){
 
-    if($location.search().viewOnly) return;
-    if($location.path()=='/')       return;
+
+    $rootScope.showConferenceHeader = ()=>{
+        if($location.search().viewOnly) return;
+        if($location.path()=='/')       return;
+        return true;
+    }
 
     var conferenceHeader = angular.element("#conferenceHeader");
-    conferenceHeader.css('display', 'block');
-    conferenceHeader.html('').append('<conference-header><conference-header>')
+    conferenceHeader.html('').append('<conference-header ng-if="showConferenceHeader()"><conference-header>')
     $compile(conferenceHeader.contents())($rootScope);
 }]);
 

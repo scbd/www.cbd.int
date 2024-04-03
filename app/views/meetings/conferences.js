@@ -1,4 +1,4 @@
-﻿import _   from 'lodash'
+import _   from 'lodash'
 import app from '~/app'
 import '~/services/article-service'
 import '~/services/conference-service'
@@ -12,9 +12,6 @@ export { default as template } from './conferences.html'
 export default ['$location','$scope', '$rootScope', 'conferenceService', '$q', '$compile', 'articleService',
         function ($location,$scope, $rootScope, conferenceService, $q, $compile, articleService) {
        
-            var conferenceHeader = angular.element("#conferenceHeader");
-            conferenceHeader.css('display', 'none');
-            conferenceHeader.html('')
 			var _ctrl = this;
                 // institution:'CBD',
             var query = {
