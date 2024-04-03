@@ -32,10 +32,6 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
     $routeProvider
     //legacy redirect
-    .when('/2016/cop-13-hls/documents',   { redirectTo    : '/2016/cop13-hls/documents'})
-    .when('/2016/cp-mop-08/documents',    { redirectTo    : '/2016/mop-08/documents'})
-    .when('/2016/cp-mop-8/documents',     { redirectTo    : '/2016/mop-08/documents'})
-
     .when('/',                                    { ...mapView(conferencesView) })
     .when('/language-switch/:langCode',           { ...mapView(angularViewWrapper), "label":"language switch","resolve":{ ...lang_switch, },"resolveController":true})
     .when('/:code',                               { ...mapView(conferencesIdView),   resolve: { }, reloadOnSearch:false })
@@ -49,6 +45,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:code/virtual-tables/events',         { ...mapView(angularViewWrapper),  resolve: { ...virtualTableView, user:currentUser(), routePrams: injectRouteParams({type:'event'}) }, reloadOnSearch:false})
     .when('/:code/info-note',                     { ...mapView(vueViewWrapper),      resolve: { ...infoNote, user:currentUser(),        }, reloadOnSearch:false })
     .when('/:code/schedules',                     { ...mapView(angularViewWrapper),  resolve: { ...scheduleView }, reloadOnSearch:true })
+    .when('/:code/schedule',                      { redirectTo : '/:code/schedules'})
     .when('/:code/insession',                     { ...mapView(angularViewWrapper),  resolve: { ...inSessionView }, reloadOnSearch:false })
     .when('/:code/sessions',                      { ...mapView(vueViewWrapper),      resolve: { ...sessionListView,        user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
     .when('/:code/sessions/:sessionId',           { ...mapView(vueViewWrapper),      resolve: { ...sessionIdView,          user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
