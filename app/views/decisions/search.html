@@ -213,7 +213,7 @@
                                                 <i class="fa fa-search" aria-hidden="true"></i> decision UNEP/CBD/COP/DEC/{{romanize(result.session)}}/{{result.decision}}
                                             </a>
                                     </p>
-                                    <div ng-bind-html="::trustedHtml(result.content)" class="searchResultElement" id="el{{$index}}">                                            
+                                    <div ng-bind-html="::(result.content | safeHtml)" class="searchResultElement" id="el{{$index}}">                                            
                                     </div>
                                 </div>
                             </div>

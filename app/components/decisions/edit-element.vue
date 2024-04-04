@@ -63,6 +63,7 @@ import sectionList from '~/views/decisions/data/sections.js';
 import paragraphList from '~/views/decisions/data/paragraphes.js';
 import itemList from '~/views/decisions/data/items.js';
 import subItemList from '~/views/decisions/data/sub-items.js';
+import { sanitizeHtml } from '~/services/html';
 
 export default {
     name: 'EditElement',
@@ -133,8 +134,8 @@ export default {
       },
       htmlText() {
         const {node} = this;
-        
-        return this.$options.filters.lstring(node.html, 'en');
+        const html = this.$options.filters.lstring(node.html, 'en');
+        return sanitizeHtml(html);
       },
       nodeComments() {
         const {node, comments} = this;
