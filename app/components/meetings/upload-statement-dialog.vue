@@ -107,6 +107,7 @@
                                 </div>        
                             </div>       
                             
+                            <!-- DISABLED
                             <div class="form-group row">
                                 <label for="allowPublic" class="col-sm-3 col-form-label">Do you allow public access?</label>
                                 <div class="col-sm-9">
@@ -124,7 +125,7 @@
                                     </div>
                                 </div>
                             </div>  
-
+                            -->
                             <div class="form-group row">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-9 input-group">
@@ -189,7 +190,7 @@ export default {
             selectedLanguage   : "en",
             selectedRegion     : null,
             isRegional         : false,
-            allowPublic        : null,
+            allowPublic        : true,
             participantIdentity: '',
             rememberMe         : false,
             wasValidated       : false,
@@ -357,7 +358,7 @@ export default {
             this.selectedLanguage    = "en",
             this.selectedRegion      = null;
             this.isRegional          = false;
-            this.allowPublic         = null;
+            this.allowPublic         = true;
             this.persistIdentity(); 
 
             if(localStorage.participantIdentity) {
