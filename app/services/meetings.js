@@ -32,3 +32,7 @@ export function normalizeAgenda(agenda) {
 
     return { ...agenda, items }
 }
+
+export function normalizeDocumentSymbol(symbol) {
+    return symbol.toUpperCase().replace(/[^A-Z0-9\/\-\*]/gi, '').replace(/\/$/g, '');
+}

@@ -14,7 +14,7 @@
         <small ng-if="!editCtrl.document._id">(NEW)</small></h1>
     <h3 ng-if="editCtrl.document.linkedToId">
         <em>Linked To:
-            <a ng-href="/meetings/{{editCtrl.document.linkedTo.meetingCode}}/documents?tabFor={{editCtrl.document.linkedToId}}" target="_blank">{{editCtrl.document.linkedTo.meetingCode}}</a>
+            <a ng-href="/meetings/{{editCtrl.document.linkedTo.meetingCode}}/documents?doc={{editCtrl.document.linkedToId}}" target="_blank">{{editCtrl.document.linkedTo.meetingCode}}</a>
             -
             <a ng-href="/meetings/{{editCtrl.document.linkedTo.meetingCode}}/documents/{{editCtrl.document.linkedToId}}" target="_blank">
                 {{(editCtrl.document.linkedTo.symbol || (editCtrl.document.linkedTo.title|lstring | truncate:30:'...') || editCtrl.document.linkedToId)}}
@@ -39,7 +39,7 @@
                     <b ng-if="::dup.meetingDuplicate">This symbol is already used by a document in this meeting!</b>
             
                     <p>
-                        <a ng-href="/meetings/{{dup.meetingCode}}/documents?tabFor={{dup._id}}" target="_blank"><b>{{dup.meetingCode}}</b></a>
+                        <a ng-href="/meetings/{{dup.meetingCode}}/documents?doc={{dup._id}}" target="_blank"><b>{{dup.meetingCode}}</b></a>
                         -
                         <a ng-href="/meetings/{{dup.meetingCode}}/documents/{{dup._id}}" target="_blank">
                             {{dup.symbol}} <em>{{dup.title|lstring}}</em>
@@ -492,7 +492,7 @@
 
                 <small ng-if="editCtrl.document.linkedToId">
                     Upload is not available - Linked to: 
-                    <a ng-href="/meetings/{{editCtrl.document.linkedTo.meetingCode}}/documents?tabFor={{editCtrl.document.linkedToId}}" target="_blank">{{editCtrl.document.linkedTo.meetingCode}}</a>
+                    <a ng-href="/meetings/{{editCtrl.document.linkedTo.meetingCode}}/documents?doc={{editCtrl.document.linkedToId}}" target="_blank">{{editCtrl.document.linkedTo.meetingCode}}</a>
                     -
                     <a ng-href="/meetings/{{editCtrl.document.linkedTo.meetingCode}}/documents/{{editCtrl.document.linkedToId}}" target="_blank">
                         {{editCtrl.document.linkedTo.symbol || (editCtrl.document.linkedTo.title|lstring) || editCtrl.document.linkedToId}}

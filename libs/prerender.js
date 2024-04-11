@@ -1,11 +1,12 @@
-﻿let redis, client;
+﻿import redis from 'redis';
+import prerenderNode from 'prerender-node';
 
-function prerender(req, res, next) {
+let client;
+
+export default function prerender(req, res, next) {
 
     if(!process.env.PRERENDER_SERVICE_URL) 
         return next();
-
-    let prerenderNode = require('prerender-node');
 
     prerenderNode.blacklisted([]);//'^/paths to ignore'
     prerenderNode.extensionsToIgnore.push('.html');
@@ -17,8 +18,7 @@ function prerender(req, res, next) {
 
     if(process.env.REDIS_URL){
 
-        if(!redis){
-            redis = require("redis")
+        if(!client){
             client = redis.createClient(process.env.REDIS_URL);
         }
         
@@ -35,4 +35,3 @@ function prerender(req, res, next) {
     return prerenderNode(req, res, next)
 
 }
-module.exports = prerender;
