@@ -1,4 +1,4 @@
-module.exports = `User-agent: *
+export default `User-agent: *
 Allow: /core/*.css$
 Allow: /core/*.css?
 Allow: /core/*.js$

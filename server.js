@@ -1,12 +1,19 @@
 'use strict'; // jshint node: true, browser: false, esnext: true
-require           = require("esm")(module)
-const express     = require('express');
-const httpProxy   = require('http-proxy');
+//import { normalizeDocumentSymbol } from './app/services/meetings.js';
+import express  from 'express';
+import morgan from 'morgan';
+import httpProxy from 'http-proxy';
+import handleDocuments from './middlewares/meeting-documents.js';
+import robotsTxt from './robots.js';
+import { baseLibs, cdnUrl } from './app/boot.js';
+import prerender from './libs/prerender.js'; // set env PRERENDER_SERVICE_URL
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+    
+const __dirname = dirname(fileURLToPath(import.meta.url));
 // Create server & proxy
 const app         = express();
 const proxy       = httpProxy.createProxyServer({});
-const robotsTxt   = require('./robots');
-const { baseLibs, cdnUrl } = require('./app/boot');
 
 const captchaV2key  = process.env.CAPTCHA_V2_KEY;
 const captchaV3key  = process.env.CAPTCHA_V3_KEY;
@@ -32,7 +39,7 @@ console.info(`info: IS DEV: ${process.env.IS_DEV}`);
 
 app.set('views', `${__dirname}/app`);
 app.set('view engine', 'ejs');
-app.use(require('morgan')('dev'));
+app.use(morgan('dev'));
 app.use(whiteListIframeUrls);
 app.use(function(req, res, next) {  if(req.url.indexOf(".geojson")>0) res.contentType('application/json'); next(); } ); // override contentType for geojson files
 
@@ -43,7 +50,8 @@ app.use('/app',          express.static(__dirname + '/app',                     
 
 app.all('/app/*', send404);
 
-app.get('/doc/*', function(req, res) { proxy.web(req, res, { target: "https://www.cbd.int:443", secure: false } ); } );
+app.get('/doc',   handleDocuments);
+app.get('/doc/*', handleDocuments);
 app.all('/doc/*', send404);
 
 // Configure routes
@@ -65,7 +73,7 @@ app.get('/aichi-targets*',         function(req, res) { res.render('template-201
 app.get('/kronos/media-requests*', function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
 app.get('/participation*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
 
-app.use(require('./libs/prerender')); // set env PRERENDER_SERVICE_URL
+app.use(prerender); // set env PRERENDER_SERVICE_URL
 
 app.get('/*', function(req, res) {
     res.setHeader('Cache-Control', 'public');

@@ -24,13 +24,22 @@
                                 <span class="break-word">{{::document.symbol | toDisplaySymbol }}</span>
                             </strong>
                         </a>
+
+                        <copy-Link ng-vue="vueOptions" :link="document.url"></copy-Link>
                     </div>
                     <div>
                         <span ng-if="document.nature=='statement' && document.statementSource.date" class="pull-right badge">
                             <span  ng-bind="document.statementSource.date | moment:'format':'ddd DD'"></span>
                             <span  ng-bind="document.statementSource.session"></span>
                         </span>
+                    
+                        <a ng-href="{{document.symbol ? null : document.url}}" style="color: inherit;">
                             {{::document.title|lstring}}
+                        </a> 
+
+                        <span ng-if="!document.symbol && document.url">
+                            <copy-Link ng-vue="vueOptions" v-if="!document.symbol && document.url" :link="document.url"></copy-Link>
+                        </span>
                     </div>
                     <div>{{::document.description|lstring}}</div>
                 </div>
