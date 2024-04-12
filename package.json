@@ -2,8 +2,8 @@
   "name": "www-cbd-int",
   "description": "Website of the Convention on Biological Diversity",
   "type": "module",
-  "engines" : { 
-    "node" : ">=20.11"
+  "engines": {
+    "node": ">=20.11"
   },
   "dependencies": {
     "copy-to-clipboard": "^3.3.3",
