@@ -11,7 +11,7 @@
                     class="btn btn-default"></cbd-add-new-article>
                 <br/>    
             </div>
-            <div v-if="article" ref="container" v-html="$options.filters.lstring(article.content, $locale)" class="ck-content"></div>
+            <div v-if="article" ref="container" v-html="contentHtml" class="ck-content"></div>
             <div v-if="!article" class="ck-content">No information is available for this section at the moment.</div>
         </div>
         <div v-if="loading">Loading section content<i class="fa fa-spinner fa-spin"></i></div>
@@ -28,6 +28,7 @@ import cbdAddNewArticle from './cbd-add-new-article.vue';
 // import { getAuthToken, getUser } from '~/authentication'
 import '~/filters/vue-filters.js'
 import jumpToAnchor from '~/services/jump-to-anchor';
+import { sanitizeHtml } from '~/services/html';
 
 export default {
     name: 'cbdArticle',
@@ -47,6 +48,19 @@ export default {
             returnUrl       : window.location.href,
             hasEditRights   : false,
             loading         : false
+        }
+    },
+    computed : {
+        contentHtml() {
+            const { article, $locale, $options } = this;
+            const { lstring } = $options.filters
+
+            if(!article?.content) return null;
+
+            const html     = lstring(article.content, $locale);
+            const safeHtml = sanitizeHtml(html);
+
+            return safeHtml;
         }
     },
     created() {

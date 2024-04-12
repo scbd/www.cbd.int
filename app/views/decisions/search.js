@@ -1,5 +1,6 @@
 import '~/filters/lodash'
 import '~/filters/lstring'
+import '~/filters/html-sanitizer'
 import '~/filters/term'
 import './view-element'
 import 'css!./view.css'
@@ -239,10 +240,6 @@ export default ['$scope', '$http', '$q', '$location', '$compile', '$timeout', '$
             $scope.currentPage = pageIndex;
             updateQueryString();
             $scope.search(undefined, undefined, undefined, $scope.searchCount);
-        }
-
-        $scope.trustedHtml = function (plainText) {
-            return $sce.trustAsHtml(plainText);            
         }
 
         $scope.term = function(code){

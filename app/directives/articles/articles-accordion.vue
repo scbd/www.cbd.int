@@ -19,7 +19,7 @@
                     <div class="card-body">
                         <cbd-add-new-article v-if="showEditButton" :id="article._id" target="_self" class="btn btn-default pull-right"></cbd-add-new-article>
                         <button class="btn btn-info pull-right btn-print" @click="print('cardItem_'+article._id, article)" style="cursor:pointer"><i class="fa fa-print"></i> Print</button>
-                        <div v-html="$options.filters.lstring(article.content, $locale)" class="ck-content"></div>
+                        <div v-html="sanitizeHtml($options.filters.lstring(article.content, $locale))" class="ck-content"></div>
                      </div>
                 </div>
             </div>
@@ -36,6 +36,8 @@ import cbdAddNewArticle from './cbd-add-new-article.vue';
 import { format as formatDate } from '~/components/meetings/datetime';
 import {lstring } from '~/filters/vue-filters'
 import 'printThis'
+import { sanitizeHtml } from '~/services/html';
+
 
 export default {
     name: 'articlesAccordion',
@@ -59,6 +61,7 @@ export default {
         this.showEditButton = this.$auth.hasScope(['oasisArticleEditor', 'Administrator']);
     },
     methods: {
+        sanitizeHtml,
         async loadArticles() {
             const today = moment().add(-2, 'day')
             

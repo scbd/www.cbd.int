@@ -14,7 +14,7 @@ import { getLanguageName } from '~/data/languages';
 
 export { default as template } from './index-id.html'
 
-export default ['$scope', '$route','$http', '$q','$sce', 'articleService', function ($scope, $route, $http, $q, $sce, articleService) {
+export default ['$scope', '$route','$http', '$q','$sce', 'articleService', 'locale', function ($scope, $route, $http, $q, $sce, articleService, locale) {
 
         var code   = $route.current.params.symbol;
         var _ctrl  = $scope.notifCtrl = this;
@@ -31,12 +31,15 @@ export default ['$scope', '$route','$http', '$q','$sce', 'articleService', funct
         //
         //===========================
         async function loadNotification (code) {
-            
+
+            const LOCALE = locale.toUpperCase();
+            const titleField = `title_${LOCALE}_t`;
+
             const options = {
                 cache   : true,
                 params  : {
                     q   : "schema_s: notification AND symbol_s: "+solr.escape(code),
-                    fl  : "_id:id, symbol:symbol_s, reference:reference_s, title_t, fulltext_t, from_t, title_t, date:date_dt,url_ss, files_ss, actionDate:actionDate_dt, recipients:recipient_ss, thematicAreas:thematicAreas_EN_txt",
+                    fl  : `_id:id, symbol:symbol_s, reference:reference_s, title_t, ${titleField}, fulltext_t, from_t, date:date_dt,url_ss, files_ss, actionDate:actionDate_dt, recipients:recipient_ss, thematicAreas:thematicAreas_EN_txt`,
                     rows: 1
                 }
             };
@@ -46,13 +49,12 @@ export default ['$scope', '$route','$http', '$q','$sce', 'articleService', funct
 
                 var results = _.map(res.data.response.docs, function(n) {
                     return _.defaults(n, {
-                        title     : { en: n.title_t },
+                        title     : { en: n.title_t, [locale] : n[titleField] || n.title_t },
                         files     : JSON.parse(n.files_ss) // urlToFiles(n.url_ss)
                     });
                 });
 
                 return results.length ? results[0] : null;
-
             });
             
             const [ notification, article ] = await Promise.all([qNotification, qArticle])
