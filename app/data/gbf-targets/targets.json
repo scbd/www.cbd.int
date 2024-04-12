@@ -1,0 +1,462 @@
+[
+    {
+        "termId": 7398,
+        "identifier": "GBF-TARGET-01",
+        "name": "GBF-T01. All areas are planned or managed to bring loss of areas of high biodiversity importance close to zero",
+        "title": {
+            "en": "GBF-T01. All areas are planned or managed to bring loss of areas of high biodiversity importance close to zero"
+        },
+        "shortTitle": {
+            "en": "GBF-T01. Plan and Manage all Areas To Reduce Biodiversity Loss"
+        },
+        "description": "Ensure that all areas are under participatory, integrated, and biodiversity inclusive spatial planning and/or effective management processes addressing land and sea use change, to bring the loss of areas of high biodiversity importance, including ecosystems of high ecological integrity, close to zero by 2030, while respecting the rights of indigenous peoples and local communities.",
+        "longDescription": {
+            "en": "Ensure that all areas are under participatory, integrated, and biodiversity inclusive spatial planning and/or effective management processes addressing land and sea use change, to bring the loss of areas of high biodiversity importance, including ecosystems of high ecological integrity, close to zero by 2030, while respecting the rights of indigenous peoples and local communities."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7399,
+        "identifier": "GBF-TARGET-02",
+        "name": "GBF-T02. 30% of degraded areas are under effective restoration",
+        "title": {
+            "en": "GBF-T02. 30% of degraded areas are under effective restoration"
+        },
+        "shortTitle": {
+            "en": "GBF-T02. Restore 30% of all Degraded Ecosystems"
+        },
+        "description": "Ensure that by 2030 at least 30 per cent of areas of degraded terrestrial, inland water, and coastal and marine ecosystems are under effective restoration, in order to enhance biodiversity and ecosystem functions and services, ecological integrity and connectivity.",
+        "longDescription": {
+            "en": "Ensure that by 2030 at least 30 per cent of areas of degraded terrestrial, inland water, and coastal and marine ecosystems are under effective restoration, in order to enhance biodiversity and ecosystem functions and services, ecological integrity and connectivity."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7400,
+        "identifier": "GBF-TARGET-03",
+        "name": "GBF-T03. 30% of areas are effectively conserved",
+        "title": {
+            "en": "GBF-T03. 30% of areas are effectively conserved"
+        },
+        "shortTitle": {
+            "en": "GBF-T03. Conserve 30% of Land, Waters and Seas"
+        },
+        "description": "Ensure and enable that by 2030 at least 30 per cent of terrestrial, inland water, and of coastal and marine areas, especially areas of particular importance for biodiversity and ecosystem functions and services, are effectively conserved and managed through ecologically representative, well-connected and equitably governed systems of protected areas and other effective area-based conservation measures, recognizing indigenous and traditional territories where applicable, and integrated into wider landscapes, seascapes and the ocean, while ensuring that any sustainable use, where appropriate in such areas, is fully consistent with conservation outcomes, recognizing and respecting the rights of indigenous peoples and local communities, including over their traditional territories.",
+        "longDescription": {
+            "en": "Ensure and enable that by 2030 at least 30 per cent of terrestrial, inland water, and of coastal and marine areas, especially areas of particular importance for biodiversity and ecosystem functions and services, are effectively conserved and managed through ecologically representative, well-connected and equitably governed systems of protected areas and other effective area-based conservation measures, recognizing indigenous and traditional territories where applicable, and integrated into wider landscapes, seascapes and the ocean, while ensuring that any sustainable use, where appropriate in such areas, is fully consistent with conservation outcomes, recognizing and respecting the rights of indigenous peoples and local communities, including over their traditional territories."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7401,
+        "identifier": "GBF-TARGET-04",
+        "name": "GBF-T04. Threatened species are recovering, genetic diversity is being maintained and human-wildlife conflict is being managed",
+        "title": {
+            "en": "GBF-T04. Threatened species are recovering, genetic diversity is being maintained and human-wildlife conflict is being managed"
+        },
+        "shortTitle": {
+            "en": "GBF-T04. Halt Species Extinction, Protect Genetic Diversity, and Manage Human-Wildlife Conflicts"
+        },
+        "description": "Ensure urgent management actions to halt human induced extinction of known threatened species and for the recovery and conservation of species, in particular threatened species, to significantly reduce extinction risk, as well as to maintain and restore the genetic diversity within and between populations of native, wild and domesticated species to maintain their adaptive potential, including through in situ and ex situ conservation and sustainable management practices, and effectively manage human-wildlife interactions to minimize human-wildlife conflict for coexistence.",
+        "longDescription": {
+            "en": "Ensure urgent management actions to halt human induced extinction of known threatened species and for the recovery and conservation of species, in particular threatened species, to significantly reduce extinction risk, as well as to maintain and restore the genetic diversity within and between populations of native, wild and domesticated species to maintain their adaptive potential, including through in situ and ex situ conservation and sustainable management practices, and effectively manage human-wildlife interactions to minimize human-wildlife conflict for coexistence."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7402,
+        "identifier": "GBF-TARGET-05",
+        "name": "GBF-T05. Use, harvesting and trade of wild species is sustainable, safe and legal",
+        "title": {
+            "en": "GBF-T05. Use, harvesting and trade of wild species is sustainable, safe and legal"
+        },
+        "shortTitle": {
+            "en": "GBF-T05. Ensure Sustainable, Safe and Legal Harvesting and Trade of Wild Species"
+        },
+        "description": "Ensure that the use, harvesting and trade of wild species is sustainable, safe and legal, preventing overexploitation, minimizing impacts on non-target species and ecosystems, and reducing the risk of pathogen spill-over, applying the ecosystem approach, while respecting and protecting customary sustainable use by indigenous peoples and local communities.",
+        "longDescription": {
+            "en": "Ensure that the use, harvesting and trade of wild species is sustainable, safe and legal, preventing overexploitation, minimizing impacts on non-target species and ecosystems, and reducing the risk of pathogen spill-over, applying the ecosystem approach, while respecting and protecting customary sustainable use by indigenous peoples and local communities."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7403,
+        "identifier": "GBF-TARGET-06",
+        "name": "GBF-T06. Reduce rates of introduction and establishment of invasive alien species by 50%",
+        "title": {
+            "en": "GBF-T06. Reduce rates of introduction and establishment of invasive alien species by 50%"
+        },
+        "shortTitle": {
+            "en": "GBF-T06. Reduce the Introduction of Invasive Alien Species by 50% and Minimize Their Impact"
+        },
+        "description": "Eliminate, minimize, reduce and or mitigate the impacts of invasive alien species on biodiversity and ecosystem services by identifying and managing pathways of the introduction of alien species, preventing the introduction and establishment of priority invasive alien species, reducing the rates of introduction and establishment of other known or potential invasive alien species by at least 50 per cent, by 2030, eradicating or controlling invasive alien species especially in priority sites, such as islands. ",
+        "longDescription": {
+            "en": "Eliminate, minimize, reduce and or mitigate the impacts of invasive alien species on biodiversity and ecosystem services by identifying and managing pathways of the introduction of alien species, preventing the introduction and establishment of priority invasive alien species, reducing the rates of introduction and establishment of other known or potential invasive alien species by at least 50 per cent, by 2030, eradicating or controlling invasive alien species especially in priority sites, such as islands. "
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7404,
+        "identifier": "GBF-TARGET-07",
+        "name": "GBF-T07. Pollution reduced, halving nutrient loss and pesticide risk",
+        "title": {
+            "en": "GBF-T07. Pollution reduced, halving nutrient loss and pesticide risk"
+        },
+        "shortTitle": {
+            "en": "GBF-T07. Reduce Pollution to Levels That Are Not Harmful to Biodiversity"
+        },
+        "description": "Reduce pollution risks and the negative impact of pollution from all sources, by 2030, to levels that are not harmful to biodiversity and ecosystem functions and services, considering cumulative effects, including: reducing excess nutrients lost to the environment by at least half including through more efficient nutrient cycling and use; reducing the overall risk from pesticides and highly hazardous chemicals by at least half including through integrated pest management, based on science, taking into account food security and livelihoods; and also preventing, reducing, and working towards eliminating plastic pollution.",
+        "longDescription": {
+            "en": "Reduce pollution risks and the negative impact of pollution from all sources, by 2030, to levels that are not harmful to biodiversity and ecosystem functions and services, considering cumulative effects, including: reducing excess nutrients lost to the environment by at least half including through more efficient nutrient cycling and use; reducing the overall risk from pesticides and highly hazardous chemicals by at least half including through integrated pest management, based on science, taking into account food security and livelihoods; and also preventing, reducing, and working towards eliminating plastic pollution."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7405,
+        "identifier": "GBF-TARGET-08",
+        "name": "GBF-T08. Minimize impacts of climate change and ocean acidification including through nature-based solutions and/or ecosystem-based approaches",
+        "title": {
+            "en": "GBF-T08. Minimize impacts of climate change and ocean acidification including through nature-based solutions and/or ecosystem-based approaches"
+        },
+        "shortTitle": {
+            "en": "GBF-T08. Minimize the Impacts of Climate Change on Biodiversity and Build Resilience"
+        },
+        "description": "Minimize the impact of climate change and ocean acidification on biodiversity and increase its resilience through mitigation, adaptation, and disaster risk reduction actions, including through nature-based solution and/or ecosystem-based approaches, while minimizing negative and fostering positive impacts of climate action on biodiversity. ",
+        "longDescription": {
+            "en": "Minimize the impact of climate change and ocean acidification on biodiversity and increase its resilience through mitigation, adaptation, and disaster risk reduction actions, including through nature-based solution and/or ecosystem-based approaches, while minimizing negative and fostering positive impacts of climate action on biodiversity. "
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7406,
+        "identifier": "GBF-TARGET-09",
+        "name": "GBF-T09. Management of wild species is sustainable and benefits people",
+        "title": {
+            "en": "GBF-T09. Management of wild species is sustainable and benefits people"
+        },
+        "shortTitle": {
+            "en": "GBF-T09. Manage Wild Species Sustainably To Benefit People"
+        },
+        "description": "Ensure that the management and use of wild species are sustainable, thereby providing social, economic and environmental benefits for people, especially those in vulnerable situations and those most dependent on biodiversity, including through sustainable biodiversity-based activities, products and services that enhance biodiversity, and protecting and encouraging customary sustainable use by indigenous peoples and local communities.",
+        "longDescription": {
+            "en": "Ensure that the management and use of wild species are sustainable, thereby providing social, economic and environmental benefits for people, especially those in vulnerable situations and those most dependent on biodiversity, including through sustainable biodiversity-based activities, products and services that enhance biodiversity, and protecting and encouraging customary sustainable use by indigenous peoples and local communities."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7407,
+        "identifier": "GBF-TARGET-10",
+        "name": "GBF-T10. Areas under agriculture, aquaculture, fisheries and forestry are managed sustainably",
+        "title": {
+            "en": "GBF-T10. Areas under agriculture, aquaculture, fisheries and forestry are managed sustainably"
+        },
+        "shortTitle": {
+            "en": "GBF-T10. Enhance Biodiversity and Sustainability in Agriculture, Aquaculture, Fisheries, and Forestry"
+        },
+        "description": "Ensure that areas under agriculture, aquaculture, fisheries and forestry are managed sustainably, in particular through the sustainable use of biodiversity, including through a substantial increase of the application of biodiversity friendly practices, such as sustainable intensification, agroecological and other innovative approaches contributing to the resilience and long-term efficiency and productivity of these production systems and to food security, conserving and restoring biodiversity and maintaining nature’s contributions to people, including ecosystem functions and services .",
+        "longDescription": {
+            "en": "Ensure that areas under agriculture, aquaculture, fisheries and forestry are managed sustainably, in particular through the sustainable use of biodiversity, including through a substantial increase of the application of biodiversity friendly practices, such as sustainable intensification, agroecological and other innovative approaches contributing to the resilience and long-term efficiency and productivity of these production systems and to food security, conserving and restoring biodiversity and maintaining nature’s contributions to people, including ecosystem functions and services ."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7408,
+        "identifier": "GBF-TARGET-11",
+        "name": "GBF-T11. Nature’s contributions to people are restored, maintained and enhanced",
+        "title": {
+            "en": "GBF-T11. Nature’s contributions to people are restored, maintained and enhanced"
+        },
+        "shortTitle": {
+            "en": "GBF-T11. Restore, Maintain and Enhance Nature’s Contributions to People"
+        },
+        "description": "Restore, maintain and enhance nature’s contributions to people, including ecosystem functions and services, such as regulation of air, water, and climate, soil health, pollination and reduction of disease risk, as well as protection from natural hazards and disasters, through nature-based solutions and/or ecosystem-based approaches for the benefit of all people and nature. ",
+        "longDescription": {
+            "en": "Restore, maintain and enhance nature’s contributions to people, including ecosystem functions and services, such as regulation of air, water, and climate, soil health, pollination and reduction of disease risk, as well as protection from natural hazards and disasters, through nature-based solutions and/or ecosystem-based approaches for the benefit of all people and nature. "
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7409,
+        "identifier": "GBF-TARGET-12",
+        "name": "GBF-T12. Urban green and blue spaces enhanced for human well-being",
+        "title": {
+            "en": "GBF-T12. Urban green and blue spaces enhanced for human well-being"
+        },
+        "shortTitle": {
+            "en": "GBF-T12. Enhance Green Spaces and Urban Planning for Human Well-Being and Biodiversity"
+        },
+        "description": "Significantly increase the area and quality and connectivity of, access to, and benefits from green and blue spaces in urban and densely populated areas sustainably, by mainstreaming the conservation and sustainable use of biodiversity, and ensure biodiversity-inclusive urban planning, enhancing native biodiversity, ecological connectivity and integrity, and improving human health and well-being and connection to nature and contributing to inclusive and sustainable urbanization and the provision of ecosystem functions and services.",
+        "longDescription": {
+            "en": "Significantly increase the area and quality and connectivity of, access to, and benefits from green and blue spaces in urban and densely populated areas sustainably, by mainstreaming the conservation and sustainable use of biodiversity, and ensure biodiversity-inclusive urban planning, enhancing native biodiversity, ecological connectivity and integrity, and improving human health and well-being and connection to nature and contributing to inclusive and sustainable urbanization and the provision of ecosystem functions and services."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7410,
+        "identifier": "GBF-TARGET-13",
+        "name": "GBF-T13. Fair and equitable sharing of benefits from genetic resources, digital sequence information and associated traditional knowledge",
+        "title": {
+            "en": "GBF-T13. Fair and equitable sharing of benefits from genetic resources, digital sequence information and associated traditional knowledge"
+        },
+        "shortTitle": {
+            "en": "GBF-T13. Increase the Sharing of Benefits From Genetic Resources, Digital Sequence Information and Traditional Knowledge"
+        },
+        "description": "Take effective legal, policy, administrative and capacity-building measures at all levels, as appropriate, to ensure the fair and equitable sharing of benefits that arise from the utilization of genetic resources and from digital sequence information on genetic resources, as well as traditional knowledge associated with genetic resources, and facilitating appropriate access to genetic resources, and by 2030 facilitating a significant increase of the benefits shared, in accordance with applicable international access and benefit-sharing instruments.",
+        "longDescription": {
+            "en": "Take effective legal, policy, administrative and capacity-building measures at all levels, as appropriate, to ensure the fair and equitable sharing of benefits that arise from the utilization of genetic resources and from digital sequence information on genetic resources, as well as traditional knowledge associated with genetic resources, and facilitating appropriate access to genetic resources, and by 2030 facilitating a significant increase of the benefits shared, in accordance with applicable international access and benefit-sharing instruments."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7411,
+        "identifier": "GBF-TARGET-14",
+        "name": "GBF-T14. The multiple values of biodiversity are integrated into decision-making at all levels",
+        "title": {
+            "en": "GBF-T14. The multiple values of biodiversity are integrated into decision-making at all levels"
+        },
+        "shortTitle": {
+            "en": "GBF-T14. Integrate Biodiversity in Decision-Making at Every Level"
+        },
+        "description": "Ensure the full integration of biodiversity and its multiple values into policies, regulations, planning and development processes, poverty eradication strategies, strategic environmental assessments, environmental impact assessments and, as appropriate, national accounting, within and across all levels of government and across all sectors, in particular those with significant impacts on biodiversity, progressively aligning all relevant public and private activities, fiscal and financial flows with the goals and targets of this framework.",
+        "longDescription": {
+            "en": "Ensure the full integration of biodiversity and its multiple values into policies, regulations, planning and development processes, poverty eradication strategies, strategic environmental assessments, environmental impact assessments and, as appropriate, national accounting, within and across all levels of government and across all sectors, in particular those with significant impacts on biodiversity, progressively aligning all relevant public and private activities, fiscal and financial flows with the goals and targets of this framework."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7412,
+        "identifier": "GBF-TARGET-15",
+        "name": "GBF-T15. Businesses assess and disclose biodiversity dependencies, impacts and risks, and reduce negative impacts",
+        "title": {
+            "en": "GBF-T15. Businesses assess and disclose biodiversity dependencies, impacts and risks, and reduce negative impacts"
+        },
+        "shortTitle": {
+            "en": "GBF-T15. Businesses Assess, Disclose and Reduce Biodiversity-Related Risks and Negative Impacts"
+        },
+        "description": "Take legal, administrative or policy measures to encourage and enable business, and in particular to ensure that large and transnational companies and financial institutions: \n\n(a) Regularly monitor, assess, and transparently disclose their risks, dependencies and impacts on biodiversity, including with requirements for all large as well as transnational companies and financial institutions along their operations, supply and value chains and portfolios;\n\n(b) Provide information needed to consumers to promote sustainable consumption patterns; \n\n(c) Report on compliance with access and benefit-sharing regulations and measures, as applicable;\n\nin order to progressively reduce negative impacts on biodiversity, increase positive impacts, reduce biodiversity-related risks to business and financial institutions, and promote actions to ensure sustainable patterns of production.",
+        "longDescription": {
+            "en": "Take legal, administrative or policy measures to encourage and enable business, and in particular to ensure that large and transnational companies and financial institutions: \n\n(a) Regularly monitor, assess, and transparently disclose their risks, dependencies and impacts on biodiversity, including with requirements for all large as well as transnational companies and financial institutions along their operations, supply and value chains and portfolios;\n\n(b) Provide information needed to consumers to promote sustainable consumption patterns; \n\n(c) Report on compliance with access and benefit-sharing regulations and measures, as applicable;\n\nin order to progressively reduce negative impacts on biodiversity, increase positive impacts, reduce biodiversity-related risks to business and financial institutions, and promote actions to ensure sustainable patterns of production."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7413,
+        "identifier": "GBF-TARGET-16",
+        "name": "GBF-T16. Sustainable consumption choices are enabled, and food waste reduced by half",
+        "title": {
+            "en": "GBF-T16. Sustainable consumption choices are enabled, and food waste reduced by half"
+        },
+        "shortTitle": {
+            "en": "GBF-T16. Enable Sustainable Consumption Choices To Reduce Waste and Overconsumption"
+        },
+        "description": "Ensure that people are encouraged and enabled to make sustainable consumption choices including by establishing supportive policy, legislative or regulatory frameworks, improving education and access to relevant and accurate information and alternatives, and by 2030, reduce the global footprint of consumption in an equitable manner, including through halving global food waste, significantly reducing overconsumption and substantially reducing waste generation, in order for all people to live well in harmony with Mother Earth.",
+        "longDescription": {
+            "en": "Ensure that people are encouraged and enabled to make sustainable consumption choices including by establishing supportive policy, legislative or regulatory frameworks, improving education and access to relevant and accurate information and alternatives, and by 2030, reduce the global footprint of consumption in an equitable manner, including through halving global food waste, significantly reducing overconsumption and substantially reducing waste generation, in order for all people to live well in harmony with Mother Earth."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7414,
+        "identifier": "GBF-TARGET-17",
+        "name": "GBF-T17. Strengthen biosafety and distribute benefits of biotechnology",
+        "title": {
+            "en": "GBF-T17. Strengthen biosafety and distribute benefits of biotechnology"
+        },
+        "shortTitle": {
+            "en": "GBF-T17. Strengthen Biosafety and Distribute the Benefits of Biotechnology"
+        },
+        "description": "Establish, strengthen capacity for, and implement in all countries biosafety measures as set out in Article 8(g) of the Convention on Biological Diversity and measures for the handling of biotechnology and distribution of its benefits as set out in Article 19 of the Convention.",
+        "longDescription": {
+            "en": "Establish, strengthen capacity for, and implement in all countries biosafety measures as set out in Article 8(g) of the Convention on Biological Diversity and measures for the handling of biotechnology and distribution of its benefits as set out in Article 19 of the Convention."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7415,
+        "identifier": "GBF-TARGET-18",
+        "name": "GBF-T18. Reduce harmful incentives by at least $500 billion per year",
+        "title": {
+            "en": "GBF-T18. Reduce harmful incentives by at least $500 billion per year"
+        },
+        "shortTitle": {
+            "en": "GBF-T18. Reduce Harmful Incentives by at Least $500 Billion per Year, and Scale Up Positive Incentives for Biodiversity"
+        },
+        "description": "Identify by 2025, and eliminate, phase out or reform incentives, including subsidies, harmful for biodiversity, in a proportionate, just, fair, effective and equitable way, while substantially and progressively reducing them by at least 500 billion United States dollars per year by 2030, starting with the most harmful incentives, and scale up positive incentives for the conservation and sustainable use of biodiversity.",
+        "longDescription": {
+            "en": "Identify by 2025, and eliminate, phase out or reform incentives, including subsidies, harmful for biodiversity, in a proportionate, just, fair, effective and equitable way, while substantially and progressively reducing them by at least 500 billion United States dollars per year by 2030, starting with the most harmful incentives, and scale up positive incentives for the conservation and sustainable use of biodiversity."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7416,
+        "identifier": "GBF-TARGET-19",
+        "name": "GBF-T19. Financial resources increased to $200 billion per year, including $ 30 billion through international finance",
+        "title": {
+            "en": "GBF-T19. Financial resources increased to $200 billion per year, including $ 30 billion through international finance"
+        },
+        "shortTitle": {
+            "en": "GBF-T19. Mobilize $200 Billion per Year for Biodiversity From all Sources, Including $30 Billion Through International Finance"
+        },
+        "description": "Substantially and progressively increase the level of financial resources from all sources, in an effective, timely and easily accessible manner, including domestic, international, public and private resources, in accordance with Article 20 of the Convention, to implement national biodiversity strategies and action plans, by 2030 mobilizing at least 200 billion United States dollars per year, including by:\n\n(a) Increasing total biodiversity related international financial resources from developed countries, including official development assistance, and from countries that voluntarily assume obligations of developed country Parties, to developing countries, in particular the least developed countries and small island developing States, as well as countries with economies in transition, to at least US$ 20 billion per year by 2025, and to at least US$ 30 billion per year by 2030;\n\n(b) Significantly increasing domestic resource mobilization, facilitated by the preparation and implementation of national biodiversity finance plans or similar instruments according to national needs, priorities and circumstances;\n\n(c) Leveraging private finance, promoting blended finance, implementing strategies for raising new and additional resources, and encouraging the private sector to invest in biodiversity, including through impact funds and other instruments;\n\n(d) Stimulating innovative schemes such as payment for ecosystem services, green bonds, biodiversity offsets and credits, benefit-sharing mechanisms, with environmental and social safeguards;\n\n(e) Optimizing co-benefits and synergies of finance targeting the biodiversity and climate crises;\n\n(f) Enhancing the role of collective actions, including by indigenous peoples and local communities, Mother Earth centric actions[1]  and non-market-based approaches including community based natural resource management and civil society cooperation and solidarity aimed at the conservation of biodiversity;\n\n(g) Enhancing the effectiveness, efficiency and transparency of resource provision and use.\n\n***\n\n[1] Mother Earth-centric actions: Ecocentric and rights-based approach enabling the implementation of actions towards harmonic and complementary relationships between peoples and nature, promoting the continuity of all living beings and their communities and ensuring the non-commodification of environmental functions of Mother Earth.",
+        "longDescription": {
+            "en": "Substantially and progressively increase the level of financial resources from all sources, in an effective, timely and easily accessible manner, including domestic, international, public and private resources, in accordance with Article 20 of the Convention, to implement national biodiversity strategies and action plans, by 2030 mobilizing at least 200 billion United States dollars per year, including by:\n\n(a) Increasing total biodiversity related international financial resources from developed countries, including official development assistance, and from countries that voluntarily assume obligations of developed country Parties, to developing countries, in particular the least developed countries and small island developing States, as well as countries with economies in transition, to at least US$ 20 billion per year by 2025, and to at least US$ 30 billion per year by 2030;\n\n(b) Significantly increasing domestic resource mobilization, facilitated by the preparation and implementation of national biodiversity finance plans or similar instruments according to national needs, priorities and circumstances;\n\n(c) Leveraging private finance, promoting blended finance, implementing strategies for raising new and additional resources, and encouraging the private sector to invest in biodiversity, including through impact funds and other instruments;\n\n(d) Stimulating innovative schemes such as payment for ecosystem services, green bonds, biodiversity offsets and credits, benefit-sharing mechanisms, with environmental and social safeguards;\n\n(e) Optimizing co-benefits and synergies of finance targeting the biodiversity and climate crises;\n\n(f) Enhancing the role of collective actions, including by indigenous peoples and local communities, Mother Earth centric actions[1]  and non-market-based approaches including community based natural resource management and civil society cooperation and solidarity aimed at the conservation of biodiversity;\n\n(g) Enhancing the effectiveness, efficiency and transparency of resource provision and use.\n\n***\n\n[1] Mother Earth-centric actions: Ecocentric and rights-based approach enabling the implementation of actions towards harmonic and complementary relationships between peoples and nature, promoting the continuity of all living beings and their communities and ensuring the non-commodification of environmental functions of Mother Earth."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7417,
+        "identifier": "GBF-TARGET-20",
+        "name": "GBF-T20. Capacity-building and development, technology transfer, and technical and scientific cooperation for implementation is strengthened",
+        "title": {
+            "en": "GBF-T20. Capacity-building and development, technology transfer, and technical and scientific cooperation for implementation is strengthened"
+        },
+        "shortTitle": {
+            "en": "GBF-T20. Strengthen Capacity-Building, Technology Transfer, and Scientific and Technical Cooperation for Biodiversity"
+        },
+        "description": "Strengthen capacity-building and development, access to and transfer of technology, and promote development of and access to innovation and technical and scientific cooperation, including through South-South, North-South and triangular cooperation, to meet the needs for effective implementation, particularly in developing countries, fostering joint technology development and joint scientific research programmes for the conservation and sustainable use of biodiversity and strengthening scientific research and monitoring capacities, commensurate with the ambition of the goals and targets of the framework.",
+        "longDescription": {
+            "en": "Strengthen capacity-building and development, access to and transfer of technology, and promote development of and access to innovation and technical and scientific cooperation, including through South-South, North-South and triangular cooperation, to meet the needs for effective implementation, particularly in developing countries, fostering joint technology development and joint scientific research programmes for the conservation and sustainable use of biodiversity and strengthening scientific research and monitoring capacities, commensurate with the ambition of the goals and targets of the framework."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7418,
+        "identifier": "GBF-TARGET-21",
+        "name": "GBF-T21. Data, information and knowledge for decision-making is available",
+        "title": {
+            "en": "GBF-T21. Data, information and knowledge for decision-making is available"
+        },
+        "shortTitle": {
+            "en": "GBF-T21. Ensure That Knowledge Is Available and Accessible To Guide Biodiversity Action"
+        },
+        "description": "Ensure that the best available data, information and knowledge, are accessible to decision makers, practitioners and the public to guide effective and equitable governance, integrated and participatory management of biodiversity, and to strengthen communication, awareness-raising, education, monitoring, research and knowledge management and, also in this context, traditional knowledge, innovations, practices and technologies of indigenous peoples and local communities should only be accessed with their free, prior and informed consent[1], in accordance with national legislation.\n\n***\n\n[1] Free, prior and informed consent refers to the tripartite terminology of “prior and informed consent” or “free, prior and informed consent” or “approval and involvement.",
+        "longDescription": {
+            "en": "Ensure that the best available data, information and knowledge, are accessible to decision makers, practitioners and the public to guide effective and equitable governance, integrated and participatory management of biodiversity, and to strengthen communication, awareness-raising, education, monitoring, research and knowledge management and, also in this context, traditional knowledge, innovations, practices and technologies of indigenous peoples and local communities should only be accessed with their free, prior and informed consent[1], in accordance with national legislation.\n\n***\n\n[1] Free, prior and informed consent refers to the tripartite terminology of “prior and informed consent” or “free, prior and informed consent” or “approval and involvement."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7419,
+        "identifier": "GBF-TARGET-22",
+        "name": "GBF-T22. Ensure participation, justice, and rights for indigenous peoples and local communities, women, youth persons with disabilities and environmental defenders",
+        "title": {
+            "en": "GBF-T22. Ensure participation, justice, and rights for indigenous peoples and local communities, women, youth persons with disabilities and environmental defenders"
+        },
+        "shortTitle": {
+            "en": "GBF-T22. Ensure Participation in Decision-Making and Access to Justice and Information Related to Biodiversity for all"
+        },
+        "description": "Ensure the full, equitable, inclusive, effective and gender-responsive representation and participation in decision-making, and access to justice and information related to biodiversity by indigenous peoples and local communities, respecting their cultures and their rights over lands, territories, resources, and traditional knowledge, as well as by women and girls, children and youth, and persons with disabilities and ensure the full protection of environmental human rights defenders.",
+        "longDescription": {
+            "en": "Ensure the full, equitable, inclusive, effective and gender-responsive representation and participation in decision-making, and access to justice and information related to biodiversity by indigenous peoples and local communities, respecting their cultures and their rights over lands, territories, resources, and traditional knowledge, as well as by women and girls, children and youth, and persons with disabilities and ensure the full protection of environmental human rights defenders."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    },
+    {
+        "termId": 7420,
+        "identifier": "GBF-TARGET-23",
+        "name": "GBF-T23. Implementation follows a gender-responsive approach",
+        "title": {
+            "en": "GBF-T23. Implementation follows a gender-responsive approach"
+        },
+        "shortTitle": {
+            "en": "GBF-T23. Ensure Gender Equality and a Gender-Responsive Approach for Biodiversity Action"
+        },
+        "description": "Ensure gender equality in the implementation of the framework through a gender-responsive approach where all women and girls have equal opportunity and capacity to contribute to the three objectives of the Convention, including by recognizing their equal rights and access to land and natural resources and their full, equitable, meaningful and informed participation and leadership at all levels of action, engagement, policy and decision-making related to biodiversity.",
+        "longDescription": {
+            "en": "Ensure gender equality in the implementation of the framework through a gender-responsive approach where all women and girls have equal opportunity and capacity to contribute to the three objectives of the Convention, including by recognizing their equal rights and access to land and natural resources and their full, equitable, meaningful and informed participation and leadership at all levels of action, engagement, policy and decision-making related to biodiversity."
+        },
+        "source": "",
+        "broaderTerms": [],
+        "narrowerTerms": [],
+        "relatedTerms": [],
+        "nonPreferedTerms": []
+    }
+]

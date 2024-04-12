@@ -11,7 +11,7 @@
 				<i class="fa fa-edit" aria-hidden="true"></i>
 			</a>
 		</span>						
-		<h1><span id="step1">Decision {{decision.body | uppercase}} {{romans[decision.session]}}/{{decision.decision}}</span></h1>
+		<h1><span id="step1">{{ pageTitle }}</span></h1>
 	</header-decisions>
 
     <div class="view-decision row">
@@ -147,6 +147,27 @@
 							</dd>
 						</div>
 
+						<div v-if="sum(counts.gbfTargets)>0"> 
+							<dt>GBF targets</dt>
+							<dd>
+								<a href="#" class="badge badge-secondary text-nowrap" 
+									@click.prevent="toggleFilters({ gbfTargets : null })" 
+									:class="{ disabled : filters &&  filters.gbfTargets }">
+									{{sum(counts.gbfTargets)}} 
+									<i v-if="filters && filters.gbfTargets" class="fa fa-times" aria-hidden="true"></i>
+								</a>
+								<span class="chip-sm" 
+									v-for="gbfTarget in allFilters.gbfTargets" 
+									:key="gbfTarget" 
+									@click="toggleFilters({ gbfTargets : [gbfTarget] })" 
+									:class="`${!isFilterSelected('gbfTargets', gbfTarget) && 'disabled'} 'badge-secondary'`" >
+										<img :title="gbfTarget.description" 
+										:src="`/app/images/gbf-targets/gbf-${gbfTarget.replace('GBF-TARGET-','')}-64.png`" 
+										width="20" style="margin: 1px 1px 1px 1px;">
+								</span>
+							</dd>
+						</div>
+
 						<div v-if="sum(counts.subjects)>0">
 							<dt>Subjects</dt>
 							<dd>
@@ -214,14 +235,16 @@
 </template>
 
 <script>
+import roman from 'romans';
 import _ from 'lodash';
 import DecisionApi from '~/api/decisions.js';
 import ViewElement from '~/components/decisions/view-element.vue';
 import types from '~/views/decisions/data/types.js';
 import actors from '~/views/decisions/data/actors.js';
-import romanChars from '~/views/decisions/data/romans.js';
 import statuses from '~/views/decisions/data/statuses.js';
 import aichiTargets from '~/data/reports/aichiTargets.json';
+import gbfTargets from '~/data/gbf-targets/targets.json';
+import gbfGoals from '~/data/gbf-targets/goals.json';
 import DocumentFiles from '~/components/references/document-files.vue';
 import DecisionCardList from '~/components/references/decision-card-list.vue';
 import MeetingCardList from '~/components/references/meeting-card-list.vue';
@@ -256,9 +279,6 @@ export default {
         }
     },
     props: {
-		route: { type: Object, required: false },
-		router: { type: Object, required: false },
-		tokenReader: { type: Function, required: false },
 		user: { type: Object, required: false}
 	},
 	data() {
@@ -276,8 +296,18 @@ export default {
 		types() { return types},
 		actors() { return actors},
         statuses() { return statuses},
-        romans() { return romanChars},
 		aichiTargets() { return aichiTargets},
+		gbfTargets() { return gbfTargets},
+		gbfGoals() { return gbfGoals},
+		pageTitle() {
+			if(!this.decision) return '';
+			let { body, session, decision } = this.decision;
+			if(body == 'COP' && session < 14) {
+				session = roman.romanize(session);
+			}
+
+			return `Decision ${body} ${session}/${decision}`;
+		},
 		languages() {
 			const {decision} = this;
 			if(!decision) return [];
@@ -302,13 +332,15 @@ export default {
 		counts() {
 			const {decision, selectedNode} = this;
 			
-			const src = findNode(decision, selectedNode) || decision;
-			let counts = {};
-			counts.types = _.countBy(getTags(src, "type", true));
-			counts.statuses = _.countBy(getTags(src, "statuses", true));
-			counts.actors = _.countBy(getTags(src, "actors", true));
+			const src 			= findNode(decision, selectedNode) || decision;
+			let counts 			= {};
+			counts.types 		= _.countBy(getTags(src, "type", true));
+			counts.statuses 	= _.countBy(getTags(src, "statuses", true));
+			counts.actors 		= _.countBy(getTags(src, "actors", true));
 			counts.aichiTargets = _.countBy(getTags(src, "aichiTargets", true));
-			counts.subjects = _.countBy(getTags(src, "subjects", true));
+			counts.gbfTargets 	= _.countBy(getTags(src, "gbfTargets", true));
+			counts.gbfGoals 	= _.countBy(getTags(src, "gbfGoals", true));
+			counts.subjects 	= _.countBy(getTags(src, "subjects", true));
 			return counts;
 		},
 		documents() {
@@ -377,12 +409,12 @@ function findNode(collection, code) {
 }
 
 async function load() {
-	const { $route: route, $router: router } = this;
+	const { $route, $router } = this;
 
-	this.api = new DecisionApi(this.tokenReader);
+	this.api = new DecisionApi();
 	
 	let treaty    = null ;
-	const body      = route.params.body.toUpperCase();
+	const body      = $route.params.body.toUpperCase();
 
 	if(body=='COP') treaty = { code : "XXVII8" } ;
 
@@ -393,10 +425,10 @@ async function load() {
 
 	const pathParser = /^(?<dec>\d+)(?:\/(?<para>.*))?/;
 
-	if(!pathParser.test(route.params.decision)) throw Error("Invalid path")
+	if(!pathParser.test($route.params.decision)) throw Error("Invalid path")
 
-	const parsed = pathParser.exec(route.params.decision);
-	const session = parseInt(route.params.session);
+	const parsed = pathParser.exec($route.params.decision);
+	const session = parseInt($route.params.session);
 	const number  = parseInt(parsed.groups.dec);
 	const para    = parsed.groups?.para?.toUpperCase();
 
@@ -421,8 +453,8 @@ async function load() {
 			element.scrollIntoView(scrollOptions);
 		}
 		else {
-			const path = route.path.substring(0, route.path.lastIndexOf("/"));
-			router.replace({path}); //TODO
+			const path = $route.path.substring(0, $route.path.lastIndexOf("/"));
+			$router.replace({path}); //TODO
 		}
 	}
 }
@@ -443,6 +475,7 @@ async function loadFilters() {
 	allFilters.statuses = getTags(collection, "statuses").map(tag => statuses.find(item => item.code === tag) || tag);
 	allFilters.actors = getTags(collection, "actors").map(tag => actors.find(item => item.code === tag) || tag);
 	allFilters.aichiTargets = getTags(collection, "aichiTargets").map(tag => aichiTargets.find(item => item.index === tag) || tag);
+	allFilters.gbfTargets = getTags(collection, "gbfTargets").map(tag => gbfTargets.find(item => item.index === tag) || tag);
 
 	//load subjects
 	const codes = getTags(collection, 'subjects');
@@ -457,16 +490,16 @@ async function loadFilters() {
 }
 
 async function onChangeSelectedNode(selectedNode) {
-	const {decision, $route: route, $router: router} = this;
+	const {decision, $route, $router} = this;
 
 	await this.loadFilters();
 
-	const body = route.params.body.toUpperCase();
+	const body = $route.params.body.toUpperCase();
 
 	const {code} = findNode(decision, selectedNode) || decision;
 
 	const path = `${code.substring(code.indexOf(body))}`.toLowerCase();
-	router.replace({path});
+	$router.replace({path});
 }
 
 async function loadDecisionDocuments(decision) {
@@ -534,16 +567,16 @@ function toggleFilters(newFilters) {
 function edit(hash) {
 	const pathParser = /^(?<dec>\d+)(?:\/(?<para>.*))?/;
 
-	const {$route: route, $router: router} = this;
+	const {$route, $router} = this;
 	
-	const body = route.params.body.toUpperCase();
-	const parsed = pathParser.exec(route.params.decision);
-	const session = parseInt(route.params.session);
+	const body = $route.params.body.toUpperCase();
+	const parsed = pathParser.exec($route.params.decision);
+	const session = parseInt($route.params.session);
 	const decision  = parseInt(parsed.groups.dec);
 
 	hash = hash ? `#${hash}` : '';
 	const path = `${body}/${pad(session)}/${pad(decision)}/edit${hash}`.toLowerCase();
-	router.push({path});
+	$router.push({path});
 }
 
 function pad(input) {
