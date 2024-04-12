@@ -10,7 +10,7 @@ const proxy       = httpProxy.createProxyServer({ target: wwwUrl, secure: false,
 
 const documentsCache = new LRUCache({ max: 2000 });
 const meetingsCache  = new LRUCache({ max:  200 }); //doc/meeting ratio 10:1
-const documentSymbolRe = /^(UNEP\/)?CBD(\/[a-zA-Z0-9-.]+)+$/gi;
+const documentSymbolRe = /^(UNEP\/)?CBD(\/[a-zA-Z0-9-.]+)+$/i;
 
 function isSymbol(symbol) {
     return documentSymbolRe.test(symbol)
