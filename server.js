@@ -7,13 +7,11 @@ import handleDocuments from './middlewares/meeting-documents.js';
 import robotsTxt from './robots.js';
 import { baseLibs, cdnUrl } from './app/boot.js';
 import prerender from './libs/prerender.js'; // set env PRERENDER_SERVICE_URL
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
     
-const __dirname = dirname(fileURLToPath(import.meta.url));
 // Create server & proxy
 const app         = express();
 const proxy       = httpProxy.createProxyServer({});
+const __dirname   = import.meta.dirname
 
 const captchaV2key  = process.env.CAPTCHA_V2_KEY;
 const captchaV3key  = process.env.CAPTCHA_V3_KEY;
