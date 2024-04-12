@@ -2,36 +2,44 @@ import { LRUCache } from 'lru-cache'
 import request from 'superagent';
 import { normalizeDocumentSymbol } from '../app/services/meetings.js'
 import { mapObjectId, isObjectId } from '../app/services/object-id.js'
+import httpProxy from 'http-proxy';
 
 const apiUrl     =  process.env.API_URL || 'https://api.cbddev.xyz';
+const proxy       = httpProxy.createProxyServer({ target: "https://www.cbd.int", secure: false, changeOrigin:true });
 
 const documentsCache = new LRUCache({ max: 2000 });
 const meetingsCache  = new LRUCache({ max:  200 }); //doc/meeting ratio 10:1
+const documentSymbolRe = /^(UNEP\/)?CBD(\/[a-zA-Z0-9-.]+)+$/gi;
+
+function isSymbol(symbol) {
+    return documentSymbolRe.test(symbol)
+}
+
+function isMeetingDocument(idOrSymbol) {
+    return isSymbol  (idOrSymbol) || isObjectId(idOrSymbol);
+}
 
 export default async function handleDocuments(req, res, next) { 
 
+    const idOrSymbol = req.params[0] || '';
 
-    if(req.params[0]) {
-
-        const idOrSymbol = req.params[0];
+    if(idOrSymbol && isMeetingDocument(idOrSymbol)) { // Maybe we can drop this `isMeetingDocument()` check if nginx do it. 
 
         try {
-
             const document = await getDocument(idOrSymbol);
             const meeting  = await getMeeting (document.meeting);
 
             const url = `/meetings/${encodeURIComponent(meeting.symbol)}?doc=${encodeURIComponent(document.symbol || document._id)}`
 
             res.redirect(url);
+            return;
         }
         catch(e) {
-            console.error(e);
-            res.redirect(302, `/meetings?doc=${encodeURIComponent(idOrSymbol)}&not-found=1}`);
+            // console.error(e);
         }
-        return;
     }
     
-    proxy.web(req, res, { target: "https://www.cbd.int", secure: false, changeOrigin:true } );
+    proxy.web(req, res);
 }
 
 async function getDocument(idOrSymbol) {
