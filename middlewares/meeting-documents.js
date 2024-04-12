@@ -4,9 +4,9 @@ import { normalizeDocumentSymbol } from '../app/services/meetings.js'
 import { mapObjectId, isObjectId } from '../app/services/object-id.js'
 import httpProxy from 'http-proxy';
 
-const apiUrl     =  process.env.API_URL || 'https://api.cbddev.xyz';
-const wwwUrl     =  process.env.WWW_URL || 'https://www.cbd.int';
-const proxy       = httpProxy.createProxyServer({ target: wwwUrl, secure: false, changeOrigin:true });
+const apiUrl =  process.env.API_URL || 'https://api.cbddev.xyz';
+const wwwUrl =  process.env.WWW_URL || 'https://www.cbd.int';
+const proxy  = httpProxy.createProxyServer({ target: wwwUrl, secure: false, changeOrigin:true });
 
 const documentsCache = new LRUCache({ max: 2000 });
 const meetingsCache  = new LRUCache({ max:  200 }); //doc/meeting ratio 10:1
