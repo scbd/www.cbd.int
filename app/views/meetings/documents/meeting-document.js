@@ -5,6 +5,7 @@ import '~/directives/meetings/documents/document-files'
 import '~/directives/checkbox'
 import '~/filters/html-sanitizer'
 import '~/filters/to-display-symbol'; 
+import copyLink from '~/components/link.vue';
 
     var LANGUAGES = { ar : "العربية", en : "English", es : "Español", fr : "Français", ru : "Русский", zh : "中文" };
     var ONLINE = 'text/html';
@@ -37,6 +38,7 @@ import '~/filters/to-display-symbol';
                 $scope.breakSymbol    = breakSymbol;
                 $scope.downloadble    = canDownload();
                 $scope.LANGUAGES      = LANGUAGES
+                $scope.vueOptions = { components: { copyLink } } ;
 
                 //==============================
                 //

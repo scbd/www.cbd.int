@@ -1,4 +1,4 @@
-FROM node:12.13.1-alpine3.10
+FROM node:20.12.2-alpine3.19
 
 RUN apk update  -q && \
     apk upgrade -q && \
@@ -9,7 +9,7 @@ RUN apk add --update curl && \
 
 WORKDIR /usr/src/app
 
-COPY package.json .npmrc ./
+COPY package.json package-lock.json .npmrc ./
 
 RUN npm install -q
 
