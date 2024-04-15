@@ -4,6 +4,7 @@ import _ from 'lodash'
 import './cbd-article-cover-image'
 import '~/services/article-service'
 import '~/authentication'
+import '~/filters/html-sanitizer'
 
 import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@35.0.0/build/content-style.css');
 
@@ -24,9 +25,6 @@ import('css!https://cdn.cbd.int/@scbd/ckeditor5-build-inline-full@35.0.0/build/c
 				$scope.hideCoverImage = $attr.hideCoverImage||false;
 				$scope.returnUrl	  = $location.absUrl();
 				$scope.locale 		  = locale;
-				$scope.trustedHtml = function (plainText) {
-					return $sce.trustAsHtml(plainText);
-				}
 				
 				function loadArticle(){
 					var promiseQ = articleService.query({ "ag" : JSON.stringify($scope.query) })

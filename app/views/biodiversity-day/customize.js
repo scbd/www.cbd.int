@@ -2,19 +2,25 @@
 import 'file-saverjs';
 import 'bigText';
 import _ from 'lodash';
-import languageTranslation from './other-langugages.json';
-import '~/directives/articles/cbd-article';
-// import * as htmlToImage from 'html-to-image'
-      
+import languageTranslation from './other-langugages.js';
+import Vue from 'vue'
+import 'ngVue'
+import '~/services/article-service'
+import CbdArticle from '~/directives/articles/cbd-article.vue';
+import 'angular-vue'
+
 export { default as template  } from './customize.html';
 
 export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ngDialog', 'captchaSiteKeyV2',  function( $location, user,$http, $scope,  $timeout, $window, ngDialog, captchaSiteKeyV2) {
         var recaptchaWidgetId;
 
+        $scope.vueOptions  = { components: { CbdArticle } };
+
         $scope.$root.page={
             title : "International Biodiversity Day logo : customize",
             description : $('#logo-description').text()
         };
+
         $scope.defaultLanguages = [
             {code:'ar', language            : 'Arabic'  , group:'UN languages'},
             {code:'en', language            : 'English' , group:'UN languages'},
@@ -25,59 +31,73 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         ]
         $scope.text = {
             en : {
-                line1_part1         : 'BIODIVERSITY',
-                line2_part1         : 'Day',
-                line2_part2         : '22 MAY',
-                line2_part2_css     : 'outline-text',
-                hashTag             : '#ForNature', 
+                line1_part1         : '#PartOfThePlan',
+                line1_part2         : 'International Day',
+                line2_part1         : 'for Biodiversity',
                 name:'Name', 
+                individual:'Name',
+                collective:'Organization',
+                line2_part2         : `${ new Date().getFullYear() }`,
+
                 isUNLanguage:true,
-                line2CutOffMargin : 17,
-                line3CutOffMargin : 13 
+                charLimit: 45,
+                and:'and'
             },
             es:{
-                line1_part1         : '22 DE MAYO',
-                line1_part2         : 'DÍA DE LA',
-                line2_part1         : 'BIODIVERSIDAD',
-                line1_part1_css     : 'outline-text',
-                hashTag             : '#PorLaNaturaleza', name:'Nombre', isUNLanguage:true,
-                line2CutOffMargin : 17,
-                line3CutOffMargin : 5 
+                line1_part1         : '#SéParteDelPlan',
+                line1_part2         : 'Día Internacional',
+                line2_part1         : 'de la Biodiversidad',
+                line2_part2         : `${ new Date().getFullYear() }`,
+                name:'Nombre',
+                individual:'Nombre',
+                collective:'Organización',
+                isUNLanguage:true,
+                and:'y'
             },
             fr:{
-                line1_part1         : '22 MAI',
-                line1_part2         : 'JOURNÉE DE LA',
-                line2_part1         : 'BIODIVERSITÉ',
-                line1_part1_css     : 'outline-text',
-                hashTag             : '#PourLaNature', name:'Nom', isUNLanguage:true,
-                line2CutOffMargin : 18,
-                line3CutOffMargin : 4 
+                line1_part1         : '#ContribueAuPlan',
+                line1_part2         : 'Journée Internationale',
+                line2_part1         : 'de la Biodiversité',
+                line2_part2         : `${ new Date().getFullYear() }`,
+                name:'Nom',
+                individual:'Nom',
+                collective:'Organisation',
+                isUNLanguage:true,
+                charLimit: 35,
+                and:'et'
             },
             ru:{
-                line1_part1         : '22 МАЯ',
-                line1_part2         : 'ДЕНЬ',
-                line2_part1         : 'БИОРАЗНООБРАЗИЯ',
-                line1_part1_css     : 'outline-text',
-                hashTag             : '#ЗаПрироду', name:'Имя', isUNLanguage:true,
-                line2CutOffMargin : 35,
-                line3CutOffMargin : -5 
+                line1_part1         : '#ЧастьПлана',
+                line1_part2         : 'День биологического',
+                line2_part1         : `разнообразия`,
+                line2_part2         : `${ new Date().getFullYear() }`,
+                name:'Имя',
+                individual:'Имя',
+                collective:'Организация',
+                isUNLanguage:true,
+                charLimit: 30,
+                and:'и'
             },
             zh:{
-                line1_part1         : '生物多样性日',                
-                line2_part2         : '5月22日',
-                line2_part2_css     : 'outline-text',
-                hashTag             : '有份', name:'姓名', isUNLanguage:true,
-                line2CutOffMargin : 19,
-                line3CutOffMargin : 8 
+                line1_part1         : '#加入我们',
+                line1_part2         : '国际生物多样性日',
+                line2_part1         : `${ new Date().getFullYear() } 年`,
+                name:'姓名',
+                individual:'姓名',
+                collective:'组织',
+                isUNLanguage:true,
+                and:'和'
             },
             ar:{
-                line1_part1         : 'يوم',
-                line1_part2         : '٢٢ أيار/مايو',
-                line2_part1         : 'يوم التنوع البيولوجي',
-                line1_part2_css     : 'outline-text',
-                hashTag             : 'من#_أجل_الطبيعة', name:'اسم', isUNLanguage:true,
-                line2CutOffMargin : 13,
-                line3CutOffMargin : 1 
+                line1_part1         : '#جزء_من_الخطة',
+                line1_part2        : 'اليوم الدولي للتنوع البيولوجي',
+                line2_part1         : `${ new Date().getFullYear() }`,
+                name:'اسم',
+                individual:'اسم',
+                collective:'منظمة',
+                isUNLanguage:true,
+                charLimit: 45,
+                and:'و'
             },
             ...languageTranslation            
         }
@@ -91,6 +111,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             ps	: 'Pashto',
             ur	: 'Urdu',
             ji	: 'Yiddish',
+            
         }
         
         $scope.language = { code : 'en' }
@@ -102,13 +123,6 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             $scope.fitText();
             $scope.showSuccessMessage = false;
             $scope.uploading = true;
-            // var node =document.getElementById("imgGenerator");
-
-            // htmlToImage.toPng(node)
-            // .then(function (dataUrl) {
-            //     var img = new Image();
-            //     img.src = dataUrl;
-                // $('#newImage').empty().append(img);
 
                 if(!generateOnly){  
                     if(~document.location.hostname.indexOf('cbd.int')){
@@ -151,15 +165,38 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         }
 
         $scope.fitText = function(selector){
+            if(!$scope.customText){
+                $scope.customText = _.clone($scope.text[$scope.language.code]);
+                $scope.customText.logoType =  'individual';
+            }
 
-            if($scope.rtlLanguages[$scope.language.code])
+            const isCollective = $scope.customText.logoType == 'collective';
+
+            if(isCollective){
+                const individualName = $scope.text[$scope.language.code].individual;
+                const collectiveName = $scope.text[$scope.language.code].collective;
+                const and = $scope.text[$scope.language.code].and || 'and';
+                $scope.text[$scope.language.code].name = `${individualName} ${and} ${collectiveName}`
+            }else{
+                $scope.text[$scope.language.code].name = $scope.text[$scope.language.code].individual;
+            }
+            const isRightToLeft = $scope.rtlLanguages[$scope.language.code];
+
+            $scope.isRightToLeft = isRightToLeft;
+            if(isRightToLeft)
                 $('.boxIncon').css('direction', 'rtl')
             else
                 $('.boxIncon').css('direction', 'ltr')
 
+            const customTextWidth = $('#customName').width();
+            const lineOneWidth = $('#line1_part1').width();
+
+
+            if(customTextWidth < lineOneWidth && customTextWidth > 30) return;
+
             selector = selector||'.fit'
             $timeout(function(){
-                let maxFontSize;// = 120;
+                let maxFontSize = 60;// = 120;
                 if(['zh'].includes($scope.language.code))
                     maxFontSize = 140;
 
@@ -172,8 +209,6 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         }
         
         $scope.customLanguage = function(lang){
-
-            return;
             $scope.customText = _.clone($scope.text[lang]);
             if(! $scope.customText){
                 $scope.customText = $scope.text[lang] = _.clone($scope.text['en']);
@@ -188,10 +223,12 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 scope: $scope,
             });
         };
+
         $scope.closeDialog = function(){
             $scope.customText = undefined;
             ngDialog.close();
         }
+        
         $scope.applyTranslation = function(translation){
 
             if(!translation.language){
@@ -224,16 +261,13 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             var logs = {};
             
             const languageDetails = $scope.text[$scope.language.code];
+            
             languageDetails.line2CutOffMargin = languageDetails.line2CutOffMargin || 14;
             languageDetails.line3CutOffMargin = languageDetails.line3CutOffMargin || 9;
 
             var idbLogo    = $('.boxGenerate #logoImg');
 
             var line1      = $('#bigtext #line1');
-            var line1_part1= $('#bigtext #line1_part1');
-            var line1_part2= $('#bigtext #line1_part2');
-            var line2_part1= $('#bigtext #line2_part1')
-            var line2_part2= $('#bigtext #line2_part2')
             var line2      = $('#bigtext #line2')
             var customText = $('#bigtext #customText')
 
@@ -252,7 +286,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             line1       .css("height", line1fontSize     +'px')
             line2       .css("height", line2fontSize     +'px')           
             customText  .css("height", customTextfontSize+'px')
-            
+            customText  .css("line-height", customTextfontSize+'px')
 
             var totalFontSize = line1fontSize +
                                 line2fontSize  +
@@ -272,7 +306,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
 
             line1       .css('margin-top', `-${margin_line1}px`);            
             line2       .css('margin-top', `${(-margin_line2+equalMargin)+languageDetails.line2CutOffMargin}px`)
-            customText  .css('margin-top', `${equalMargin+languageDetails.line3CutOffMargin}px`)
+            //customText  .css('margin-top', `${equalMargin+languageDetails.line3CutOffMargin}px`)
 
             logs = {
                 ...logs,
@@ -302,6 +336,10 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 code: $scope.language.code,
                 ...$scope.text[$scope.language.code]
             }
+            delete data.individual;
+            delete data.collective;
+            delete data.charLimit;
+            delete data.line1_part1_alt;
 
             return $http.post('/api/v2021/idb-logos', data, {responseType: "arraybuffer", headers: {'x-captcha-v2-token':$scope.grecaptchaToken}})
             .then(function(success) {
@@ -359,7 +397,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         function buildQuery(){
             var ag   = [];
             var tags = ['biodiversity-day', 'logo', 'customize', 'introduction'];
-            
+            $scope.articleAdminTags = tags;
             
             var match = { "adminTags" : { $all: tags }};
 
@@ -368,7 +406,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             ag.push({"$sort"    : { "meta.updatedOn":-1}});
             ag.push({"$limit"   : 1 });
 
-            $scope.articleQuery = ag;
+
+            $scope.articleQuery = {ag: JSON.stringify(ag)};
         }
 
         angular.element($window).on('resize', onResize);
@@ -379,6 +418,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         $timeout(function(){
             $scope.fitText();           
 
+
             recaptchaWidgetId = grecaptcha.render('g-recaptcha', {
                 'sitekey' : captchaSiteKeyV2,
                 'callback' : recaptchaCallback,
@@ -387,7 +427,47 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         }, 200);
 
 
-        loadLanguages();
-        buildQuery();
 
+        $scope.onArticleLoad = function(article){               
+            
+            $scope.article = article;
+            $scope.isLoading = false;
+        } 
+        $scope.isCollective = function(){
+            return $scope?.customText?.logoType == 'collective';
+        }
+
+        $scope.onTypeChange = function(){
+            $scope.fitText();
+            $timeout(function(){
+            $scope.fitText();}, 300);
+        }
+
+        $scope.charLimit = function(){
+            return $scope.text[$scope.language.code].charLimit || 45;
+        }
+        $scope.isCharLimitExceeded = function(){
+            const limit =  $scope.text[$scope.language.code].charLimit || 45;
+
+            return limit < $scope.text[$scope.language.code].name.length;
+        }
+
+        buildQuery();
+        loadLanguages();
+        
+
+
+        const search = $location.search()||{};
+        if(search.lang){ 
+            if(_.find($scope.defaultLanguages, {code : search.lang}))
+                $scope.language = { code : search.lang }
+        }
+    
+        if(search.name)
+            $scope.text[$scope.language.code].name = search.name
+        
+        if(search.type)
+            $scope.customText.logoType = search.type;
+
+        $scope.isPrerender = search.prerender=='true';
 }]

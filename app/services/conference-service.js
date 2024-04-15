@@ -52,14 +52,8 @@ import 'angular-cache'
 
                                             if((meeting.conference.menus||[]).length){
                                               normalizeMenus(meeting.conference.menus, meeting)
-
                                             }
-
-                                            if(meeting.conference.customHeader){
-                                              meeting.conference.customHeader = $sce.trustAsHtml(meeting.conference.customHeader);
-                                            }
-
-                                        }
+                                          }
 
                                         return meeting;
                                     });

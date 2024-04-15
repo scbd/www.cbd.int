@@ -80,6 +80,7 @@ import actors from '~/views/decisions/data/actors.js';
 import statuses from '~/views/decisions/data/statuses.js';
 import _ from 'lodash';
 import lstring from '~/filters/lstring.js';
+import { sanitizeHtml } from '~/services/html';
 
 export default {
     name: 'ViewElement',
@@ -175,8 +176,9 @@ export default {
         },
         htmlText() {
             const {node, locale} = this;
+            const html = this.$options.filters.lstring(node.html, locale);
             
-            return this.$options.filters.lstring(node.html, locale);
+            return sanitizeHtml(html);
         }
     },
     methods: {
