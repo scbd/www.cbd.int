@@ -2,29 +2,33 @@ import { LRUCache } from 'lru-cache'
 import request from 'superagent';
 import { normalizeDocumentSymbol } from '../app/services/meetings.js'
 import { mapObjectId, isObjectId } from '../app/services/object-id.js'
-import httpProxy from 'http-proxy';
+import express from 'express';
+import asyncMiddleware from './async-middleware.js'
 
-const apiUrl     =  process.env.API_URL || 'https://api.cbddev.xyz';
-const wwwUrl     =  process.env.WWW_URL || 'https://www.cbd.int';
-const proxy       = httpProxy.createProxyServer({ target: wwwUrl, secure: false, changeOrigin:true });
+const apiUrl =  process.env.API_URL || 'https://api.cbddev.xyz';
 
 const documentsCache = new LRUCache({ max: 2000 });
 const meetingsCache  = new LRUCache({ max:  200 }); //doc/meeting ratio 10:1
-const documentSymbolRe = /^(UNEP\/)?CBD(\/[a-zA-Z0-9-.]+)+$/i;
 
-function isSymbol(symbol) {
-    return documentSymbolRe.test(symbol)
+//===========================================
+//
+//===========================================
+export default function() { //router constructor 
+    const router = express.Router();
+
+    router.get('/*', asyncMiddleware(handleDocuments));
+
+    return router;
 }
 
-function isMeetingDocument(idOrSymbol) {
-    return isSymbol  (idOrSymbol) || isObjectId(idOrSymbol);
-}
-
-export default async function handleDocuments(req, res, next) { 
+//===========================================
+//
+//===========================================
+async function handleDocuments(req, res) { 
 
     const idOrSymbol = req.params[0] || '';
 
-    if(idOrSymbol && isMeetingDocument(idOrSymbol)) { // Maybe we can drop this `isMeetingDocument()` check if nginx do it. 
+    if(idOrSymbol) {
 
         try {
             const document = await getDocument(idOrSymbol);
@@ -32,17 +36,20 @@ export default async function handleDocuments(req, res, next) {
 
             const url = `/meetings/${encodeURIComponent(meeting.symbol)}?doc=${encodeURIComponent(document.symbol || document._id)}`
 
-            res.redirect(url);
+            res.redirect(302, url);
             return;
         }
         catch(e) {
             // console.error(e);
         }
     }
-    
-    proxy.web(req, res);
+
+    res.redirect(302, `/meetings?doc=${encodeURIComponent(idOrSymbol)}&not-found=1}`);
 }
 
+//===========================================
+//
+//===========================================
 async function getDocument(idOrSymbol) {
 
     const normalizedSymbol = normalizeDocumentSymbol(idOrSymbol);
@@ -68,7 +75,9 @@ async function getDocument(idOrSymbol) {
     return document;
 }
 
-
+//===========================================
+//
+//===========================================
 async function getMeeting(id) {
 
     if(meetingsCache.get(id)) return meetingsCache.get(id);

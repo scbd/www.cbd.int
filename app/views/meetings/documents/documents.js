@@ -14,7 +14,7 @@ import displayGroups from './display-groups'
 import * as meta from '~/services/meta'
 import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
 import { normalizeMeeting, normalizeDocumentSymbol } from '~/services/meetings'
-import toDisplaySymbol from '~/filters/to-display-symbol';
+import '~/filters/to-display-symbol';
 
 export { default as template } from './documents.html';
 
@@ -138,7 +138,7 @@ export { default as template } from './documents.html';
                     .map(normalizeDocument)
                     .map((d)=>{
                         const code = d.normalizedSymbol || d.symbol || d._id;
-                        const url  = `/doc/${code}`;
+                        const url  = `/documents/${code}`;
                         
                         return { url , ...d };
                     })                    
