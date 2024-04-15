@@ -3,10 +3,11 @@
 import express  from 'express';
 import morgan from 'morgan';
 import httpProxy from 'http-proxy';
-import handleDocuments from './middlewares/meeting-documents.js';
+import meetingDocuments from './middlewares/meeting-documents.js';
 import robotsTxt from './robots.js';
 import { baseLibs, cdnUrl } from './app/boot.js';
 import prerender from './libs/prerender.js'; // set env PRERENDER_SERVICE_URL
+import onError from './middlewares/global-error-handler.js';
     
 // Create server & proxy
 const app         = express();
@@ -24,6 +25,7 @@ if(!process.env.API_URL) {
 }
 
 const apiUrl     =  process.env.API_URL || 'https://api.cbddev.xyz';
+const wwwUrl     =  process.env.WWW_URL || 'https://www.cbd.int';
 const gitVersion = (process.env.COMMIT  || 'UNKNOWN').substr(0, 8);
 const siteAlert  =  process.env.SITE_ALERT || '';
 const googleAnalyticsCode      =  process.env.GOOGLE_ANALYTICS_CODE || '';
@@ -48,9 +50,10 @@ app.use('/app',          express.static(__dirname + '/app',                     
 
 app.all('/app/*', send404);
 
-app.get('/doc',   handleDocuments);
-app.get('/doc/*', handleDocuments);
+app.get('/doc/*', function(req, res) { proxy.web(req, res, { target: wwwUrl, secure: false } ); } );
 app.all('/doc/*', send404);
+
+app.use('/documents', meetingDocuments());
 
 // Configure routes
 app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiUrl, secure: false, changeOrigin:true } ); } );
@@ -80,6 +83,7 @@ app.get('/*', function(req, res) {
 app.all('/*', send404);
 
 // START HTTP SERVER
+app.use(onError);
 
 app.listen(process.env.PORT || 2000, '0.0.0.0', function(){
     console.info('info: Listening on %j', this.address());
