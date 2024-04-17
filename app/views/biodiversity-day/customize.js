@@ -177,9 +177,8 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 const collectiveName = $scope.text[$scope.language.code].collective;
                 const and = $scope.text[$scope.language.code].and || 'and';
                 $scope.text[$scope.language.code].name = `${individualName} ${and} ${collectiveName}`
-            }else{
-                $scope.text[$scope.language.code].name = $scope.text[$scope.language.code].individual;
             }
+
             const isRightToLeft = $scope.rtlLanguages[$scope.language.code];
 
             $scope.isRightToLeft = isRightToLeft;
@@ -441,6 +440,9 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             $scope.fitText();
             $timeout(function(){
             $scope.fitText();}, 300);
+
+            if($scope.customText.logoType === 'individual')
+                $scope.text[$scope.language.code].name = $scope.text[$scope.language.code].individual;
         }
 
         $scope.charLimit = function(){
