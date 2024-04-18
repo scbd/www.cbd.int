@@ -13,8 +13,8 @@ import moment from 'moment'
 import displayGroups from './display-groups'
 import * as meta from '~/services/meta'
 import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
-import { normalizeMeeting } from '~/services/meetings'
-
+import { normalizeMeeting, normalizeDocumentSymbol } from '~/services/meetings'
+import '~/filters/to-display-symbol';
 
 export { default as template } from './documents.html';
 
@@ -134,7 +134,17 @@ export { default as template } from './documents.html';
 
             }).then(function(res) {
 
-                _ctrl.documents = documents = _(res.data).map(normalizeDocument).filter(isDocumentVisible).sortBy(sortKey).value();
+                _ctrl.documents = documents = _(res.data)
+                    .map(normalizeDocument)
+                    .map((d)=>{
+                        const code = d.normalizedSymbol || d.symbol || d._id;
+                        const url  = `/documents/${code}`;
+                        
+                        return { url , ...d };
+                    })                    
+                    .filter(isDocumentVisible)
+                    .sortBy(sortKey)
+                    .value();
 
                 return meeting; // force resolve
 
@@ -191,15 +201,25 @@ export { default as template } from './documents.html';
                         };
                     }
                 }
-                
+
                 updateMaxTabCount();
-                loadReport();
-                loadDecisions();
-                loadNotifications();
-                loadSessions();
+                
+                return $q.all([
+                    loadReport(),
+                    loadDecisions(),
+                    loadNotifications(),
+                    loadSessions(),
+                ]);
 
             }).then(function(){
                 switchTab();
+
+                if($scope.focusDocumentId) {
+                    const id = $scope.focusDocumentId;
+                    const tr = document.querySelector(`tr[document-id="${id}"]`);
+                    tr?.scrollIntoView({ block: "center", behavior: "smooth" });
+                }
+
             }).catch(console.error).finally(function(){ _ctrl.loaded = true; });
         }
 
@@ -389,7 +409,7 @@ export { default as template } from './documents.html';
                injectTab('outcome',  _.where(docs, { type : 'decision'}),       { section: 'decision' });
                injectTab('outcome',  _.where(docs, { type : 'recommendation'}), { section: 'recommendation' });
 
-                switchTab(!hardTab ? findTab('outcome') : null);
+               switchTab(null);
 
             }).catch(console.error);
         }
@@ -423,7 +443,7 @@ export { default as template } from './documents.html';
                     return;
 
                 injectTab('outcome', [report], { section: 'report' });
-                switchTab(!hardTab ? findTab('outcome') : null);
+                switchTab(null);
             });
         }
 
@@ -511,17 +531,21 @@ export { default as template } from './documents.html';
         //
         //==============================
         function switchTabDirect(tab, extra) {
-
-            if(!tab && $location.search().tabFor) {
-                tab = _(_ctrl.tabs).find(function(t) {
-                    return _(t.sections).map('documents').flatten().some({_id:$location.search().tabFor});
+            if(!tab && $location.search().doc) {
+                const id     = $location.search().doc;
+                const symbol = normalizeDocumentSymbol($location.search().doc);
+                let focusDocumentId = null;
+                tab = _(_ctrl.tabs).find((t) => {
+                    const doc = _(t.sections).map('documents').flatten().find(d => d._id == id || d.symbol == symbol)
+                    focusDocumentId = doc?._id;
+                    return !!doc;
                 });
+
+                $scope.focusDocumentId = focusDocumentId;
+                $location.search({doc:null});
             }
 
             hardTab = hardTab || !!tab;
-
-            if(tab && $location.search().tabFor)
-                $location.search({tabFor:null});
 
             if(!tab && !_ctrl.currentTab)
                 tab = _ctrl.tabs[0];
@@ -606,7 +630,7 @@ export { default as template } from './documents.html';
         function urlToFiles(url_ss) {
 
             return _.map(url_ss||[], function(url){
-console.log(url)
+
                 var mime = 'text/html';
                 var locale = 'en';
 

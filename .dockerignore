@@ -11,4 +11,3 @@ Dockerfile
 deploy.sh
 dist
 node_modules
-package-lock.json
