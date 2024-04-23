@@ -244,9 +244,6 @@ export { default as template } from './documents.html';
         //==============================
         function normalizeDocument(d){
             
-            if(!d.normalizedSymbol && d.symbol)
-                d.normalizedSymbol = normalizeDocumentSymbol(d.symbol);
-
             d.status = d.status||'public';
 
             d.metadata = _.defaults(d.metadata||{}, { 
@@ -539,7 +536,7 @@ export { default as template } from './documents.html';
                 const symbol = normalizeDocumentSymbol($location.search().doc);
                 let focusDocumentId = null;
                 tab = _(_ctrl.tabs).find((t) => {
-                    const doc = _(t.sections).map('documents').flatten().find(d => d._id == id || d.normalizedSymbol == symbol)
+                    const doc = _(t.sections).map('documents').flatten().find(d => d._id == id || normalizeDocumentSymbol(d.symbol) == symbol)
                     focusDocumentId = doc?._id;
                     return !!doc;
                 });
