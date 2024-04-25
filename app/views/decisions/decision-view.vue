@@ -168,6 +168,28 @@
 							</dd>
 						</div>
 
+						<div v-if="sum(counts.gbfGoals)>0"> 
+							<dt>GBF goals</dt>
+							<dd>
+								<a href="#" class="badge badge-secondary text-nowrap" 
+									@click.prevent="toggleFilters({ gbfGoals : null })" 
+									:class="{ disabled : filters &&  filters.gbfGoals }">
+									{{sum(counts.gbfGoals)}} 
+									<i v-if="filters && filters.gbfGoals" class="fa fa-times" aria-hidden="true"></i>
+								</a>
+								<span class="chip-sm" 
+									v-for="gbfGoal in allFilters.gbfGoals" 
+									:key="gbfGoal" 
+									@click="toggleFilters({ gbfGoals : [gbfGoal] })" 
+									:class="`${!isFilterSelected('gbfGoals', gbfGoal) && 'disabled'} 'badge-secondary'`" >
+										<img :title="gbfGoal.description" 
+										:src="`/app/images/gbf-goals/gbf-${gbfGoal.replace('GBF-GOAL-','')}-64.png`" 
+										width="20" style="margin: 1px 1px 1px 1px;">
+								</span>
+							</dd>
+						</div>
+
+
 						<div v-if="sum(counts.subjects)>0">
 							<dt>Subjects</dt>
 							<dd>
@@ -476,6 +498,7 @@ async function loadFilters() {
 	allFilters.actors = getTags(collection, "actors").map(tag => actors.find(item => item.code === tag) || tag);
 	allFilters.aichiTargets = getTags(collection, "aichiTargets").map(tag => aichiTargets.find(item => item.index === tag) || tag);
 	allFilters.gbfTargets = getTags(collection, "gbfTargets").map(tag => gbfTargets.find(item => item.index === tag) || tag);
+	allFilters.gbfGoals = getTags(collection, "gbfGoals").map(tag => gbfGoals.find(item => item.index === tag) || tag);
 
 	//load subjects
 	const codes = getTags(collection, 'subjects');
