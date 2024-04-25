@@ -34,7 +34,7 @@ async function handleDocuments(req, res) {
             const document = await getDocument(idOrSymbol);
             const meeting  = await getMeeting (document.meeting);
 
-            const url = `/meetings/${encodeURIComponent(meeting.symbol)}?doc=${encodeURIComponent(document.symbol || document._id)}`
+            const url = `/meetings/${encodeURIComponent(meeting.symbol)}?doc=${encodeURIComponent(document._id)}`
 
             res.redirect(302, url);
             return;
