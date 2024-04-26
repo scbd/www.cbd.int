@@ -183,7 +183,7 @@
 									@click="toggleFilters({ gbfGoals : [gbfGoal] })" 
 									:class="`${!isFilterSelected('gbfGoals', gbfGoal) && 'disabled'} 'badge-secondary'`" >
 										<img :title="gbfGoal.description" 
-										:src="`/app/images/gbf-goals/gbf-${gbfGoal.replace('GBF-GOAL-','').toLowerCase()}-64.png`" 
+										:src="`/app/images/gbf-goals/gbf-${gbfGoal.replace('GBF-GOAL-','').toLowerCase()}-64.png`"
 										width="20" style="margin: 1px 1px 1px 1px;">
 								</span>
 							</dd>
