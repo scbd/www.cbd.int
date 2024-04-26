@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import { isFunction } from 'lodash'
+export { mapObjectId, isObjectId } from '../services/object-id';
 
 let sitePrefixUrl = 'https://api.cbd.int';
 
@@ -90,12 +91,4 @@ export function tryCastToApiError(error) {
   }
 
   throw error
-}
-
-export function mapObjectId(id){
-  return isObjectId(id)? { $oid: id } : id
-}
-
-export function isObjectId(id){
-  return /^[a-f0-9]{24}/i.test(id);
 }

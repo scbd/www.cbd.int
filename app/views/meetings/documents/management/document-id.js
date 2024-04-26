@@ -8,6 +8,7 @@ import '../meeting-document';
 import _ from 'lodash';
 import moment from 'moment';
 import displayGroups from '../display-groups';
+import { normalizeDocumentSymbol as normalizeSymbol } from '~/services/meetings';
 
 export { default as template } from './document-id.html';
 
@@ -872,7 +873,7 @@ export { default as template } from './document-id.html';
         function close() {
 
             if(_ctrl.document._id) {
-                $location.search({ tabFor: _ctrl.document._id});
+                $location.search({ doc: _ctrl.document._id});
             }
 
             var base = encodeURIComponent($route.current.params.code || '');
@@ -886,13 +887,6 @@ export { default as template } from './document-id.html';
         function clearErrors() {
             delete _ctrl.error;
             delete _ctrl.fileError;
-        }
-
-        //==============================
-        //
-        //==============================
-        function normalizeSymbol(symbol) {
-            return symbol.toUpperCase().replace(/[^A-Z0-9\/\-\*]/gi, '').replace(/\/$/g, '');
         }
 
         //==============================
