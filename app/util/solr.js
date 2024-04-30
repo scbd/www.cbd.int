@@ -1,4 +1,5 @@
 import app from '~/app';
+import { escape as solrEscape } from '~/api/solr';
 import _ from 'lodash'; 
 
 	var _exports = {
@@ -11,41 +12,6 @@ import _ from 'lodash';
 
 	export default _exports;
 	
-	function solrEscape(value) {
-
-		if(value===undefined) throw "Value is undefined";
-		if(value===null)      throw "Value is null";
-		if(value==="")        throw "Value is null";
-
-		if(_.isNumber(value)) value = value.toString();
-		if(_.isDate  (value)) value = value.toISOString();
-
-		//TODO add more types
-
-		value = value.toString();
-
-		value = value.replace(/\\/g,   '\\\\');
-		value = value.replace(/\+/g,   '\\+');
-		value = value.replace(/\-/g,   '\\-');
-		value = value.replace(/\&\&/g, '\\&&');
-		value = value.replace(/\|\|/g, '\\||');
-		value = value.replace(/\!/g,   '\\!');
-		value = value.replace(/\(/g,   '\\(');
-		value = value.replace(/\)/g,   '\\)');
-		value = value.replace(/\{/g,   '\\{');
-		value = value.replace(/\}/g,   '\\}');
-		value = value.replace(/\[/g,   '\\[');
-		value = value.replace(/\]/g,   '\\]');
-		value = value.replace(/\^/g,   '\\^');
-		value = value.replace(/\"/g,   '\\"');
-		value = value.replace(/\~/g,   '\\~');
-		value = value.replace(/\*/g,   '\\*');
-		value = value.replace(/\?/g,   '\\?');
-		value = value.replace(/\:/g,   '\\:');
-
-		return value;
-	}
-
 	function andOr(query, sep) {
 
 		sep = sep || 'AND';

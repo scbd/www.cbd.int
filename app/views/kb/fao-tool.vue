@@ -10,34 +10,87 @@
                         <input class="form-control"  type="text" v-model.trim="filters.freeText" placeholder="Search by text..." @input="debouncedSearch()">
                     </div>
                     <div class="col-12 col-sm-6 col-lg-3">
-                        <select class="form-control" v-model="filters.gbfTargets" placeholder="GBF Targets" @change="debouncedSearch()">
-                            <option :value="null">KM-GBF Targets...</option>
-                            <option v-for="({identifier, title}) in lists.gbfTargets.filter(({identifier})=>facets.gbfTargets[identifier])" :key="identifier" :value="identifier">
-                                {{ title.en || title }}
-                                ({{ facets.gbfTargets[identifier] }})
-                            </option>
-                        </select>
+                        <multiselect 
+                            v-model="filters.gbfTargets" 
+                            :options="lists.gbfTargets" 
+                            placeholder="KM-GBF Targets..." 
+                            label="name" 
+                            track-by="identifier" 
+                            @select="debouncedSearch()"
+                            :multiple="true" 
+                            :close-on-select="false" 
+                            :clear-on-select="false"
+                            :taggable="true"
+                            :preserve-search="true">
+                            <template #selection="{ values, isOpen }">
+                                <span class="multiselect__single"
+                                    v-if="values.length"
+                                    v-show="!isOpen">{{ values.length }} target(s) selected</span>
+                            </template>
+
+                            <template #option="{ option }">
+                                <div class="option__desc">
+                                    <span class="option__title">
+                                        {{ option.name }}
+                                        <i>({{ facets.gbfTargets[option.identifier] }})</i>
+                                    </span>
+                                </div>
+                            </template>                            
+                        </multiselect>      
                     </div>
                     <div class="col-12 col-sm-6 col-lg-3">
-                        <select class="form-control" v-model="filters.cbdSubjects" placeholder="Subjects" @change="debouncedSearch()">
-                            <option :value="null">Subjects...</option>
-                            <option v-for="({identifier, title}) in lists.cbdSubjects.filter(({identifier})=>facets.cbdSubjects[identifier])" :key="identifier" :value="identifier">
-                                {{ title.en || title }}
-                                ({{ facets.cbdSubjects[identifier] }})
-                            </option>
-                        </select>
-                    </div>
-                    <div class="col-12 col-sm-6 col-lg-3">
-                        <select class="form-control" v-model="filters.resourceTypes" placeholder="Type of Resouces" @change="debouncedSearch()">
-                            <option :value="null">Resource Types...</option>
-                            <option v-for="({identifier, title}) in lists.resourceTypes.filter(({identifier})=>facets.resourceTypes[identifier])" :key="identifier" :value="identifier">
-                                {{ title.en || title }}
-                                ({{ facets.resourceTypes[identifier] }})
-                            </option>
-                        </select>
+                        <multiselect 
+                            v-model="filters.resourceTypes" 
+                            :options="lists.resourceTypes" 
+                            placeholder="Resource Types..." 
+                            label="name" 
+                            track-by="identifier" 
+                            @select="debouncedSearch()"
+                            :multiple="true" 
+                            :close-on-select="false" 
+                            :clear-on-select="false"
+                            :taggable="true"
+                            :preserve-search="true">
+                            <template #selection="{ values, isOpen }">
+                                <span class="multiselect__single"
+                                    v-if="values.length"
+                                    v-show="!isOpen">{{ values.length }} resource type(s) selected</span>
+                            </template>
+                            <template #option="{ option }">
+                                <div class="option__desc">
+                                    <span class="option__title">
+                                        {{ option.name }}
+                                        <i>({{ facets.resourceTypes[option.identifier] }})</i>
+                                    </span>
+                                </div>
+                            </template>                            
+                        </multiselect>      
                     </div>
                 </div>
             </div>
+
+
+            <div v-if="filters.freeText || selectGbfTargets.length || selectResourceTypes.length">
+                <hr>
+
+
+                <span v-if="filters.freeText" class="badge badge-info mr-2">
+                    {{filters.freeText}}
+                    <a href="#" @click.prevent="filters.freeText = ''">&times;</a>
+                </span>
+
+
+                <span v-for="{ identifier, target, name }  of filters.gbfTargets" :key="identifier" :title="name" class="badge badge-info mr-2">
+                    Target {{ target }}
+                    <a href="#" @click.prevent="filters.gbfTargets = filters.gbfTargets.filter(t=>t.identifier !== identifier); debouncedSearch()">&times;</a>
+                </span>
+
+                <span v-for="{ identifier, name }  of filters.resourceTypes" :key="identifier" class="badge badge-info mr-2">
+                    {{ name }}
+                    <a href="#" class="text-danger" @click.prevent="filters.resourceTypes = filters.resourceTypes.filter(t=>t.identifier !== identifier); debouncedSearch()">&times;</a>
+                </span>
+
+            </div>                
 
             <hr>
             
@@ -68,12 +121,9 @@
                                 <a :href="record.url_ss[0]" class="btn btn-primary float-right m-2" target="CHM">View record</a>
                                 <div v-if="record.publicationDate_dt">
                                 </div> 
-                                <div v-if="record.cbdSubjects_EN_txt">
-                                    <b>Subject</b>: {{ record.cbdSubjects_EN_txt.join(', ') }}
-                                </div>
                                 <div v-if="record.gbfTargets_ii">
                                     <b>Target(s):</b>
-                                    <a target="target" :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(target)}`" v-for="target in record.gbfTargets_ii" :key="target">Target {{ target }}</a>
+                                    <a class="mr-4" target="target" :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(target)}`" v-for="target in record.gbfTargets_ii" :key="target">{{ target }}</a>
                                 </div>
                                 <div v-if="record.resourceTypes_EN_txt">
                                     <b>Resource Type</b>: {{ record.resourceTypes_EN_txt.join(', ') }}
@@ -98,12 +148,9 @@
                             <div v-if="record.publicationDate_dt">
                                 <b>Published</b>: {{ record.publicationDate_dt.substr(0, 10) }}
                             </div> 
-                            <div v-if="record.cbdSubjects_EN_txt">
-                                <b>Subject</b>: {{ record.cbdSubjects_EN_txt.join(', ') }}
-                            </div>
                             <div v-if="record.gbfTargets_ii">
                                 <b>Target(s):</b>
-                                <a target="target" :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(target)}`" v-for="target in record.gbfTargets_ii" :key="target">Target {{ target }}</a>
+                                <a class="mr-2" target="target" :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(target)}`" v-for="target in record.gbfTargets_ii" :key="target">{{ target }}</a>
                             </div>
                             <div v-if="record.resourceTypes_EN_txt">
                                 <b>Resource Type</b>: {{ record.resourceTypes_EN_txt.join(', ') }}
@@ -124,14 +171,17 @@
 </template>
 
 <script>
-import axios from 'axios'
+import SolrApi from '../../api/solr';
+import ThesaurusApi from '../../api/thesaurus';
 import _ from 'lodash';
+import Multiselect from 'vue-multiselect'
 
-const api = axios.create({ baseURL: 'https://api.cbd.int/'});
 
+const solr = new SolrApi();
+const thesaurus = new ThesaurusApi();
 
 export default {
-    components : {  },
+    components : { Multiselect },
     data(){
         return{
             display: (window.location.hash||'').replace(/^#/, ''),
@@ -140,21 +190,22 @@ export default {
             pageSize: 9,
             facets: {
                 gbfTargets: {},
-                cbdSubjects: {},
                 resourceTypes: {}
             },
             filters: {
                 freeText: "",
-                gbfTargets: null,
-                cbdSubjects: null,
-                resourceTypes: null,
+                gbfTargets: [],
+                resourceTypes: [],
             },
             lists: {
                 gbfTargets: [],
-                cbdSubjects: [],
                 resourceTypes: []
             }
         }
+    },
+    computed : {
+        selectGbfTargets()    {  return this.filters.gbfTargets   .map(o=>o.identifier).sort(); },
+        selectResourceTypes() {  return this.filters.resourceTypes.map(o=>o.identifier); }
     },
     created,
     methods: {
@@ -163,7 +214,7 @@ export default {
             this.pageSize = 9;
             await this.search();
             document.body.scrollIntoView({ behavior:'smooth'});
-        }, 250)
+        }, 250),
     }
 }
 
@@ -172,15 +223,14 @@ export default {
 //===========================================
 async function search() {
 
-    const { filters } = this;
+    const { filters, selectGbfTargets, selectResourceTypes } = this;
     const queryEntries = [];
 
 
-    if(!_.isEmpty(filters.gbfTargets))    queryEntries.push(`aichiTargets_REL_ss:  (${_.flatten([filters.gbfTargets]).join(' ')})`);
-    if(!_.isEmpty(filters.cbdSubjects))   queryEntries.push(`cbdSubjects_ss:   (${_.flatten([filters.cbdSubjects]).join(' ')})`);
-    if(!_.isEmpty(filters.resourceTypes)) queryEntries.push(`resourceTypes_ss: (${_.flatten([filters.resourceTypes]).join(' ')})`);
+    if(!_.isEmpty(selectGbfTargets))    queryEntries.push(`aichiTargets_REL_ss: (${selectGbfTargets   .map(code=>solr.escape(code)).join(' ')})`);
+    if(!_.isEmpty(selectResourceTypes)) queryEntries.push(`resourceTypes_ss:    (${selectResourceTypes.map(code=>solr.escape(code)).join(' ')})`);
     if(!_.isEmpty(filters.freeText)) {
-        const words = filters.freeText.split(' ').filter(w=>!!w).map(w=> `${w}~`); // ~ => fuzzy search (mispelled)
+        const words = filters.freeText.split(' ').filter(w=>!!w).map(w=> `${solr.escape(w)}~`); // ~ => fuzzy search (mispelled)
         const fields = [
             'title_t', 
             'summary_t', 
@@ -194,7 +244,7 @@ async function search() {
 
     const query = queryEntries.join(' AND ');
 
-    const response = await queryIndex(query, { l: this.pageSize });
+    const { response } = await queryIndex(query, { l: this.pageSize });
 
     this.recordCount = response.numFound;
     this.records = response.docs.map(o=>{
@@ -217,30 +267,34 @@ async function created() {
 
     let facets        = getFacets();
     let gbfTargets    = getDomainTerms('GBF-TARGETS');
-    let cbdSubjects   = getDomainTerms('CBD-SUBJECTS');
     let resourceTypes = getDomainTerms('A762DF7E-B8D1-40D6-9DAC-D25E48C65528');
     
     facets        = await facets;
     gbfTargets    = await gbfTargets;
-    cbdSubjects   = await cbdSubjects;
     resourceTypes = await resourceTypes;
 
     this.facets.gbfTargets    = facets.aichiTargets_REL_ss;
-    this.facets.cbdSubjects   = facets.cbdSubjects_ss;
     this.facets.resourceTypes = facets.resourceTypes_ss;
     
-    this.lists.gbfTargets     = gbfTargets
-    this.lists.cbdSubjects    = cbdSubjects
-    this.lists.resourceTypes  = resourceTypes
+    this.lists.gbfTargets     = gbfTargets   .map((t=>({ ...t, name: termName(t), target : targetCodeToNumber(t.identifier) })));
+    this.lists.resourceTypes  = resourceTypes.map((t=>({ ...t, name: termName(t) })));
 
     await this.search();
+}
+
+function termName(term) {
+    return term.shortTitle.en || term.title?.en || term.name || term.identifier;
+}
+
+function targetCodeToNumber(code) {
+    return parseInt(code.replace(/.*?(\d+)$/, '$1'));
 }
 
 //===========================================
 //
 //===========================================
 async function getDomainTerms(code) {
-    return await api.get(`/api/v2013/thesaurus/domains/${encodeURIComponent(code)}/terms`).then(toData);
+    return await thesaurus.getDomainTerms(code);
 }
 
 const baseIndexQuery = 'schema_s:resource AND realm_ss:(CHM BCH ABSCH) AND aichiTargets_REL_ss:GBF-TARGET-*';
@@ -248,17 +302,13 @@ const baseIndexQuery = 'schema_s:resource AND realm_ss:(CHM BCH ABSCH) AND aichi
 //===========================================
 //
 //===========================================
-async function queryIndex(query, { sk, l} = {}) {
+async function queryIndex(query, { sk: start, l: rows} = {}) {
 
-    const params = {
-        q  : _.compact([baseIndexQuery, query]).filter(o=>!!o).join(' AND '),
-        start: sk,
-        rows: l
-    }
+    query = _.compact([baseIndexQuery, query]).filter(o=>!!o).join(' AND ');
 
-    const result = await api.get(`/api/v2013/index`, { params }).then(toData);
+    const result = await solr.query(query, { start , rows });
 
-    return result?.response;
+    return result;
 }
 
 //===========================================
@@ -266,14 +316,14 @@ async function queryIndex(query, { sk, l} = {}) {
 //===========================================
 async function getFacets(query) {
 
-    const params = {
-        q    : [baseIndexQuery, query].filter(o=>!!o).join(' AND '),
-        facet: 'true',
-        'facet.field': ['cbdSubjects_ss','resourceTypes_ss','aichiTargets_REL_ss'],
+    query = [baseIndexQuery, query].filter(o=>!!o).join(' AND ');
+
+    const options = {
+        facetField: ['resourceTypes_ss','aichiTargets_REL_ss'],
         rows : 0,
     }
 
-    const result = await api.get(`/api/v2013/index`, { params }).then(toData);
+    const result = await solr.query(query, options);
     const rawfacets = result?.facet_counts?.facet_fields;
     const keyPairs = Object.entries(rawfacets);
     const facets = {};
@@ -283,9 +333,9 @@ async function getFacets(query) {
         facets[key] = {};
 
         for(let i=0; i<value.length; i+=2) {
-            const indentifier = value[i];
+            const identifier = value[i];
             const count       = value[i+1];
-            facets[key][indentifier] = count;
+            facets[key][identifier] = count;
         }
     });
 
@@ -304,4 +354,14 @@ function toData({data}) {
     .w-20 {
         width: 20%
     }
+</style>
+
+<style lang="css">
+    .multiselect .multiselect__content-wrapper {
+        min-width: 100%;
+        width: auto;
+        border: none;
+        box-shadow: 4px 4px 10px 0 rgba(0,0,0,.1);
+    }
+
 </style>
