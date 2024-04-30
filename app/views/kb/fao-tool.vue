@@ -76,13 +76,13 @@
 
                 <span v-if="filters.freeText" class="badge badge-info mr-2">
                     {{filters.freeText}}
-                    <a href="#" @click.prevent="filters.freeText = ''">&times;</a>
+                    <a href="#" class="text-danger" @click.prevent="filters.freeText = ''">&times;</a>
                 </span>
 
 
                 <span v-for="{ identifier, target, name }  of filters.gbfTargets" :key="identifier" :title="name" class="badge badge-info mr-2">
                     Target {{ target }}
-                    <a href="#" @click.prevent="filters.gbfTargets = filters.gbfTargets.filter(t=>t.identifier !== identifier); debouncedSearch()">&times;</a>
+                    <a href="#" class="text-danger" @click.prevent="filters.gbfTargets = filters.gbfTargets.filter(t=>t.identifier !== identifier); debouncedSearch()">&times;</a>
                 </span>
 
                 <span v-for="{ identifier, name }  of filters.resourceTypes" :key="identifier" class="badge badge-info mr-2">
