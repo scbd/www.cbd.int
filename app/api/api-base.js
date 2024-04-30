@@ -92,3 +92,21 @@ export function tryCastToApiError(error) {
 
   throw error
 }
+
+export function stringifyUrlParam(value) {
+  if (value instanceof(Date))   {return value.toISOString()}    
+  if (value instanceof(Object)) {return JSON.stringify(value)}  
+  return value; 
+}
+
+export function stringifyUrlParams(valueObj) {
+  const returnObj = {};
+
+  for (const [key, value] of Object.entries(valueObj)) {
+    if (isValid(value)){
+      returnObj[key] = stringifyUrlParam(value);
+    }
+  }
+  
+  return returnObj;
+}
