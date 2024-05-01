@@ -189,11 +189,10 @@ import ThesaurusApi from '../../api/thesaurus';
 import _ from 'lodash';
 import Multiselect from 'vue-multiselect'
 import FilterTag from './knowledge-hub/filter-tag.vue'
-import uploadStatementButtonVue from '../../components/meetings/upload-statement-button.vue';
 
 
-const solr = new SolrApi();
-const thesaurus = new ThesaurusApi();
+const solr = new SolrApi({prefixUrl:'https://api.cbd.int/'});
+const thesaurus = new ThesaurusApi({prefixUrl:'https://api.cbd.int/'});
 
 export default {
     components : { Multiselect, FilterTag },
