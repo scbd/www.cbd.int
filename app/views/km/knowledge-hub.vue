@@ -271,17 +271,12 @@ function getQueryParts() {
     let type = null;
     let freeText = null;
 
-    if(!_.isEmpty(selectGbfTargets))    gbf  = `aichiTargets_REL_ss:  (${selectGbfTargets   .map(code=>solr.escape(code)).join(' ')})`;
-    if(!_.isEmpty(selectResourceTypes)) type = `resourceTypes_REL_ss: (${selectResourceTypes.map(code=>solr.escape(code)).join(' ')})`;
+    if(!_.isEmpty(selectGbfTargets))    gbf  = `aichiTargets_REL_ss:(${selectGbfTargets   .map(code=>solr.escape(code)).join(' ')})`;
+    if(!_.isEmpty(selectResourceTypes)) type = `resourceTypes_REL_ss:(${selectResourceTypes.map(code=>solr.escape(code)).join(' ')})`;
     if(!_.isEmpty(filters.freeText)) {
-        const words = filters.freeText.split(' ').filter(w=>!!w).map(w=> `${solr.escape(w)}~`); // ~ => fuzzy search (mispelled)
-        const fields = [
-            'title_t', 
-            'summary_t', 
-            //'text_EN_txt'
-        ];
-        const wordQueries = fields.map(f=> `${f} : (${ AND(...words) }`);
-        freeText = `(${OR(wordQueries)})`;
+        const andWords = AND(...filters.freeText.split(' ').filter(w=>!!w).map(w=> `${solr.escape(w)}~`)); // ~ => fuzzy search (mispelled)
+        
+        freeText = OR(`title_t:${andWords}`, `summary_t:${andWords}`, `text_EN_txt:${andWords}`);
     }
 
     return { gbf, type, freeText };
@@ -342,8 +337,8 @@ async function queryIndex(query, { sk: start, l: rows} = {}) {
     return result;
 }
 
-function AND(...parts) { parts = (parts||[]).filter(o=>o); return parts.length ? `( ${parts.join(' AND ' )} )` : null; }
-function OR (...parts) { parts = (parts||[]).filter(o=>o); return parts.length ? `( ${parts.join(' OR '  )} )` : null; }
+function AND(...parts) { parts = (parts||[]).filter(o=>o); return parts.length ? `(${parts.join(' AND ' )})` : null; }
+function OR (...parts) { parts = (parts||[]).filter(o=>o); return parts.length ? `(${parts.join(' OR '  )})` : null; }
 
 //===========================================
 //
