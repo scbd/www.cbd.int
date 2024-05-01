@@ -2,14 +2,14 @@
     <div>
         <a name="top"></a>
 
-        <h1>Proof of Concept - FAO equivalent Tool based on CBD Clearing-Houses Virtual Library (VLR)</h1>
+        <h1>KM-GBF Resources hub</h1>
         <div class="bg-white pt-2" >
             <div v-if="records!==null" class="container-fluid">
                 <div class="row">
-                    <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="col-12 col-sm-6 col-lg-4">
                         <input class="form-control"  type="text" v-model.trim="filters.freeText" placeholder="Search by text..." @input="debouncedSearch()">
                     </div>
-                    <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="col-12 col-sm-6 col-lg-4">
                         <multiselect 
                             v-model="filters.gbfTargets" 
                             :options="lists.gbfTargets" 
@@ -32,16 +32,16 @@
                                 <div class="option__desc">
                                     <span class="option__title">
                                         {{ option.name }}
-                                        <i>({{ facets.gbfTargets[option.identifier] }})</i>
+                                        <i>({{ facets[option.identifier] || 0 }})</i>
                                     </span>
                                 </div>
                             </template>                            
                         </multiselect>      
                     </div>
-                    <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="col-12 col-sm-6 col-lg-4">
                         <multiselect 
                             v-model="filters.resourceTypes" 
-                            :options="lists.resourceTypes" 
+                            :options="lists.resourceTypes.filter(o=>!o.broaderTerms || !o.broaderTerms.length)" 
                             placeholder="Resource Types..." 
                             label="name" 
                             track-by="identifier" 
@@ -60,7 +60,7 @@
                                 <div class="option__desc">
                                     <span class="option__title">
                                         {{ option.name }}
-                                        <i>({{ facets.resourceTypes[option.identifier] }})</i>
+                                        <i>({{ facets[option.identifier] || 0 }})</i>
                                     </span>
                                 </div>
                             </template>                            
@@ -74,22 +74,18 @@
                 <hr>
 
 
-                <span v-if="filters.freeText" class="badge badge-info mr-2">
+                <filter-tag v-if="filters.freeText" @remove="filters.freeText = ''">
                     {{filters.freeText}}
-                    <a href="#" class="text-danger" @click.prevent="filters.freeText = ''">&times;</a>
-                </span>
+                </filter-tag>
 
 
-                <span v-for="{ identifier, target, name }  of filters.gbfTargets" :key="identifier" :title="name" class="badge badge-info mr-2">
+                <filter-tag v-for="{ identifier, target, name }  of filters.gbfTargets" :key="identifier" :title="name" @remove="filters.gbfTargets = filters.gbfTargets.filter(t=>t.identifier !== identifier); debouncedSearch()">
                     Target {{ target }}
-                    <a href="#" class="text-danger" @click.prevent="filters.gbfTargets = filters.gbfTargets.filter(t=>t.identifier !== identifier); debouncedSearch()">&times;</a>
-                </span>
+                </filter-tag>
 
-                <span v-for="{ identifier, name }  of filters.resourceTypes" :key="identifier" class="badge badge-info mr-2">
+                <filter-tag v-for="{ identifier, name }  of filters.resourceTypes" :key="identifier" @remove="filters.resourceTypes = filters.resourceTypes.filter(t=>t.identifier !== identifier); debouncedSearch()">
                     {{ name }}
-                    <a href="#" class="text-danger" @click.prevent="filters.resourceTypes = filters.resourceTypes.filter(t=>t.identifier !== identifier); debouncedSearch()">&times;</a>
-                </span>
-
+                </filter-tag>
             </div>                
 
             <hr>
@@ -123,10 +119,19 @@
                                 </div> 
                                 <div v-if="record.gbfTargets_ii">
                                     <b>Target(s):</b>
-                                    <a class="mr-4" target="target" :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(target)}`" v-for="target in record.gbfTargets_ii" :key="target">{{ target }}</a>
+                                    <ul class="csv">
+                                        <li class="csv" v-for="target in record.gbfTargets_ii" :key="target">
+                                            <a target="target" :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(target)}`">{{ target }}</a>
+                                        </li> 
+                                    </ul>
                                 </div>
                                 <div v-if="record.resourceTypes_EN_txt">
-                                    <b>Resource Type</b>: {{ record.resourceTypes_EN_txt.join(', ') }}
+                                    <b>Resource Type</b>: 
+                                    <ul class="csv">
+                                        <li class="csv" v-for="resource in record.resourceTypes_EN_txt" :key="resource">
+                                            {{ resource }}
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -136,7 +141,8 @@
             <div class="row" v-else>
                 <div class="col-12 col-sm-6 col-lg-4 mb-1" v-for="record in records" :key="record.id">
                     <div class="card">
-                        <img :src="`https://picsum.photos/seed/${record.id}/300/200`" class="card-img-top" alt="...">
+                        <img :src="`https://fakeimg.pl/385x250/cccccc/777777?text=${encodeURIComponent((record.resourceTypes_EN_txt||[]).join(',\n'))}`" class="card-img-top" alt="...">
+                        <!-- <img :src="`https://picsum.photos/seed/${record.id}/300/200`" class="card-img-top" alt="..."> -->
                         <div class="card-body">
                             <h5 class="card-title">{{record.title_t}}</h5>
                             <p class="card-text" style="max-height:200px;min-height:50px; overflow:auto">
@@ -150,10 +156,17 @@
                             </div> 
                             <div v-if="record.gbfTargets_ii">
                                 <b>Target(s):</b>
-                                <a class="mr-2" target="target" :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(target)}`" v-for="target in record.gbfTargets_ii" :key="target">{{ target }}</a>
+                                <ul class="csv">
+                                    <li class="csv" v-for="target in record.gbfTargets_ii" :key="target">
+                                        <a target="target" :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(target)}`">{{ target }}</a>
+                                    </li>
+                                </ul>   
                             </div>
                             <div v-if="record.resourceTypes_EN_txt">
-                                <b>Resource Type</b>: {{ record.resourceTypes_EN_txt.join(', ') }}
+                                <b>Resource Type</b>: 
+                                <ul class="csv">
+                                    <li class="csv" v-for="resource in record.resourceTypes_EN_txt" :key="resource">{{ resource }}</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -175,23 +188,22 @@ import SolrApi from '../../api/solr';
 import ThesaurusApi from '../../api/thesaurus';
 import _ from 'lodash';
 import Multiselect from 'vue-multiselect'
+import FilterTag from './knowledge-hub/filter-tag.vue'
+import uploadStatementButtonVue from '../../components/meetings/upload-statement-button.vue';
 
 
 const solr = new SolrApi();
 const thesaurus = new ThesaurusApi();
 
 export default {
-    components : { Multiselect },
+    components : { Multiselect, FilterTag },
     data(){
         return{
             display: (window.location.hash||'').replace(/^#/, ''),
             records: null,
             recordCount: null,
             pageSize: 9,
-            facets: {
-                gbfTargets: {},
-                resourceTypes: {}
-            },
+            facets: {},
             filters: {
                 freeText: "",
                 gbfTargets: [],
@@ -210,9 +222,12 @@ export default {
     created,
     methods: {
         search,
+        updateFacets,
+        getQueryParts,
         debouncedSearch :  _.debounce(async function(){
             this.pageSize = 9;
             await this.search();
+            await this.updateFacets();
             document.body.scrollIntoView({ behavior:'smooth'});
         }, 250),
     }
@@ -223,26 +238,14 @@ export default {
 //===========================================
 async function search() {
 
-    const { filters, selectGbfTargets, selectResourceTypes } = this;
-    const queryEntries = [];
+    const queryParts   = this.getQueryParts();
+    const queryEntries = Object.values(queryParts).filter(o=>o);
+
+    const tmpFilter = `resourceTypes_REL_ss: ( ${ this.lists.resourceTypes.map(o=>o.identifier).join(' ') } )`
+
+    const query = AND(...queryEntries, tmpFilter);
 
 
-    if(!_.isEmpty(selectGbfTargets))    queryEntries.push(`aichiTargets_REL_ss: (${selectGbfTargets   .map(code=>solr.escape(code)).join(' ')})`);
-    if(!_.isEmpty(selectResourceTypes)) queryEntries.push(`resourceTypes_ss:    (${selectResourceTypes.map(code=>solr.escape(code)).join(' ')})`);
-    if(!_.isEmpty(filters.freeText)) {
-        const words = filters.freeText.split(' ').filter(w=>!!w).map(w=> `${solr.escape(w)}~`); // ~ => fuzzy search (mispelled)
-        const fields = [
-            'title_t', 
-            'summary_t', 
-            //'text_EN_txt'
-        ];
-
-        const OR = fields.map(f=> `${f} : (${ words.join(' AND ')})`);
-
-        queryEntries.push(`(${OR.join(' OR ')})`);
-    }      
-
-    const query = queryEntries.join(' AND ');
 
     const { response } = await queryIndex(query, { l: this.pageSize });
 
@@ -255,33 +258,54 @@ async function search() {
         o.gbfTargets_EN_txt = o.gbfTargets_EN_txt || o.gbfTargets_ss
             ?.filter(o=>/^GBF-TARGET-/.test(o))
             ?.map   (o=>this.lists.gbfTargets.find(t=>t.identifier==o).title.en)
+
+            o.resourceTypes_EN_txt = o.resourceTypes_REL_ss.map(id=> this.lists.resourceTypes.find(o=>o.identifier == id) ).filter(o=>o).map(o=>o.name);
         return o;
     });
 }
 
+function getQueryParts() {
+    const { filters, selectGbfTargets, selectResourceTypes } = this;
+
+    let gbf  = null;
+    let type = null;
+    let freeText = null;
+
+    if(!_.isEmpty(selectGbfTargets))    gbf  = `aichiTargets_REL_ss:  (${selectGbfTargets   .map(code=>solr.escape(code)).join(' ')})`;
+    if(!_.isEmpty(selectResourceTypes)) type = `resourceTypes_REL_ss: (${selectResourceTypes.map(code=>solr.escape(code)).join(' ')})`;
+    if(!_.isEmpty(filters.freeText)) {
+        const words = filters.freeText.split(' ').filter(w=>!!w).map(w=> `${solr.escape(w)}~`); // ~ => fuzzy search (mispelled)
+        const fields = [
+            'title_t', 
+            'summary_t', 
+            //'text_EN_txt'
+        ];
+        const wordQueries = fields.map(f=> `${f} : (${ AND(...words) }`);
+        freeText = `(${OR(wordQueries)})`;
+    }
+
+    return { gbf, type, freeText };
+}
 
 //===========================================
 //
 //===========================================
 async function created() {
 
-    let facets        = getFacets();
+    const qFacets     = this.updateFacets();
     let gbfTargets    = getDomainTerms('GBF-TARGETS');
-    let resourceTypes = getDomainTerms('A762DF7E-B8D1-40D6-9DAC-D25E48C65528');
+    let resourceTypes = getDomainTerms('663C02F8-78C2-4A27-A45D-1AD27F920363'); // KM Hub types
+    //resourceTypes = getDomainTerms('A762DF7E-B8D1-40D6-9DAC-D25E48C65528'); // VLR types 
     
-    facets        = await facets;
     gbfTargets    = await gbfTargets;
     resourceTypes = await resourceTypes;
-
-    this.facets.gbfTargets    = facets.aichiTargets_REL_ss;
-    this.facets.resourceTypes = facets.resourceTypes_ss;
+    await qFacets;
     
     this.lists.gbfTargets     = gbfTargets   .map((t=>({ ...t, name: termName(t), target : targetCodeToNumber(t.identifier) })));
     this.lists.resourceTypes  = resourceTypes.map((t=>({ ...t, name: termName(t) })));
 
     await this.search();
 }
-
 function termName(term) {
     return term.shortTitle.en || term.title?.en || term.name || term.identifier;
 }
@@ -294,48 +318,71 @@ function targetCodeToNumber(code) {
 //
 //===========================================
 async function getDomainTerms(code) {
-    return await thesaurus.getDomainTerms(code);
+    let terms = await thesaurus.getDomainTerms(code);
+
+    terms.forEach((term)=>{
+        term.broaderTerms  = term.broaderTerms .map(id => terms.find(t=> t.identifier == id)).filter(o=>o);
+        term.narrowerTerms = term.narrowerTerms.map(id => terms.find(t=> t.identifier == id)).filter(o=>o);
+    })
+
+    return terms;
 }
 
-const baseIndexQuery = 'schema_s:resource AND realm_ss:(CHM BCH ABSCH) AND aichiTargets_REL_ss:GBF-TARGET-*';
+const baseIndexQuery = AND('schema_s:resource', 'realm_ss:(CHM BCH ABSCH)', 'aichiTargets_REL_ss:GBF-TARGET-*', 'resourceTypes_REL_ss:*');
 
 //===========================================
 //
 //===========================================
 async function queryIndex(query, { sk: start, l: rows} = {}) {
 
-    query = _.compact([baseIndexQuery, query]).filter(o=>!!o).join(' AND ');
+    query = AND(baseIndexQuery, query);
 
     const result = await solr.query(query, { start , rows });
 
     return result;
 }
 
+function AND(...parts) { parts = (parts||[]).filter(o=>o); return parts.length ? `( ${parts.join(' AND ' )} )` : null; }
+function OR (...parts) { parts = (parts||[]).filter(o=>o); return parts.length ? `( ${parts.join(' OR '  )} )` : null; }
+
 //===========================================
 //
 //===========================================
-async function getFacets(query) {
+async function updateFacets() {
 
-    query = [baseIndexQuery, query].filter(o=>!!o).join(' AND ');
+const { gbf, type, freeText }  = this.getQueryParts();
+
+let gbfFacets  = getFacets(AND(freeText, type), 'aichiTargets_REL_ss');
+let typeFacets = getFacets(AND(freeText,  gbf), 'resourceTypes_REL_ss');
+
+gbfFacets  = await gbfFacets;
+typeFacets = await typeFacets;
+
+this.facets = { ...gbfFacets, ...typeFacets };
+}
+
+
+//===========================================
+//
+//===========================================
+async function getFacets(query, field) {
+
+    query = AND(baseIndexQuery, query);
 
     const options = {
-        facetField: ['resourceTypes_ss','aichiTargets_REL_ss'],
+        facetField: [field],
         rows : 0,
     }
 
     const result = await solr.query(query, options);
     const rawfacets = result?.facet_counts?.facet_fields;
-    const keyPairs = Object.entries(rawfacets);
     const facets = {};
 
-    keyPairs.forEach(([key, value]) => {
-
-        facets[key] = {};
-
+    Object.values(rawfacets).forEach((value) => {
         for(let i=0; i<value.length; i+=2) {
             const identifier = value[i];
             const count       = value[i+1];
-            facets[key][identifier] = count;
+            facets[identifier] = count;
         }
     });
 
@@ -363,5 +410,20 @@ function toData({data}) {
         border: none;
         box-shadow: 4px 4px 10px 0 rgba(0,0,0,.1);
     }
+
+    ul.csv {
+        display:inline;  
+        list-style:none; 
+        padding-left: 0px;       
+        padding-right: 0px;       
+    }
+
+    ul.csv > li {
+        display:inline;  
+    }
+
+    li.csv ~ li.csv::before {
+         content: ", ";
+      }
 
 </style>
