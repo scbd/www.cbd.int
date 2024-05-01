@@ -14,8 +14,6 @@ const interpretersPanelView  = { component: ()=>import('~/components/meetings/se
 const importTranslationsView = { component: ()=>import('~/views/meetings/documents/management/translations') }
 const editDocumentIdView     = { component: ()=>import('~/views/meetings/documents/management/document-id') }
 
-const faoTool  = { component: ()=>import('~/views/kb/fao-tool.vue') }
-
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
     $locationProvider.html5Mode(true);
@@ -29,7 +27,6 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:meeting/sessions/:sessionId', { ...mapView(vueViewWrapper),       resolve : { ...sessionIdView,          user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
     .when('/:meeting/interpreter-panel',   { ...mapView(vueViewWrapper),       resolve : { ...interpretersPanelView,  user : securize(["Administrator","EditorialService", "StatementAdmin", "ScbdStaff", "Interpreters"]) }, reloadOnSearch:false })
     .when('/:meeting/documents',           { redirectTo  : '/:meeting'} )
-    .when('/fao-tool',                     { ...mapView(vueViewWrapper),       resolve : { ...faoTool }, reloadOnSearch:false })
     .when('/:meeting',                     { ...mapView(documentsView),        resolve : { showMeeting : resolveLiteral(true) }, reloadOnSearch:false })
     .otherwise({redirectTo: '/404'});
 }]);
