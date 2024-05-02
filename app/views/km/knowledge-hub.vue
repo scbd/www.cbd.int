@@ -128,7 +128,7 @@
                                 <div v-if="record.resourceTypes_EN_txt">
                                     <b>Resource Type</b>: 
                                     <ul class="csv">
-                                        <li class="csv" v-for="resource in record.resourceTypes_EN_txt" :key="resource">
+                                        <li class="csv" v-for="resource in record.kmHubResourceType_EN_txt" :key="resource">
                                             {{ resource }}
                                         </li>
                                     </ul>
@@ -141,7 +141,7 @@
             <div class="row" v-else>
                 <div class="col-12 col-sm-6 col-lg-4 mb-1" v-for="record in records" :key="record.id">
                     <div class="card">
-                        <img :src="`https://fakeimg.pl/385x250/cccccc/777777?text=${encodeURIComponent((record.resourceTypes_EN_txt||[]).join(',\n'))}`" class="card-img-top" alt="...">
+                        <img :src="`https://fakeimg.pl/385x250/cccccc/777777?text=${encodeURIComponent((record.kmHubResourceType_EN_txt||[]).join(',\n'))}`" class="card-img-top" alt="...">
                         <!-- <img :src="`https://picsum.photos/seed/${record.id}/300/200`" class="card-img-top" alt="..."> -->
                         <div class="card-body">
                             <h5 class="card-title">{{record.title_t}}</h5>
@@ -162,10 +162,10 @@
                                     </li>
                                 </ul>   
                             </div>
-                            <div v-if="record.resourceTypes_EN_txt">
+                            <div v-if="record.kmHubResourceType_EN_txt">
                                 <b>Resource Type</b>: 
                                 <ul class="csv">
-                                    <li class="csv" v-for="resource in record.resourceTypes_EN_txt" :key="resource">{{ resource }}</li>
+                                    <li class="csv" v-for="resource in record.kmHubResourceType_EN_txt" :key="resource">{{ resource }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -193,6 +193,9 @@ import FilterTag from './knowledge-hub/filter-tag.vue'
 
 const solr = new SolrApi({prefixUrl:'https://api.cbd.int/'});
 const thesaurus = new ThesaurusApi({prefixUrl:'https://api.cbd.int/'});
+
+const baseIndexQuery = AND('schema_s:resource', 'realm_ss:(CHM BCH ABSCH)', 'kmHubResourceType_REL_ss:*');
+
 
 export default {
     components : { Multiselect, FilterTag },
@@ -238,27 +241,19 @@ export default {
 async function search() {
 
     const queryParts   = this.getQueryParts();
-    const queryEntries = Object.values(queryParts).filter(o=>o);
-
-    const tmpFilter = `resourceTypes_REL_ss: ( ${ this.lists.resourceTypes.map(o=>o.identifier).join(' ') } )`
-
-    const query = AND(...queryEntries, tmpFilter);
-
-
+    const query = AND(...Object.values(queryParts));
 
     const { response } = await queryIndex(query, { l: this.pageSize });
 
     this.recordCount = response.numFound;
     this.records = response.docs.map(o=>{
-        o.gbfTargets_ss = o.gbfTargets_ss || o.aichiTargets_REL_ss?.filter(o=>/^GBF-TARGET-/.test(o));
+        o.gbfTargets_ss = o.gbfTargets_ss || o.gbfTargets_REL_ss?.filter(o=>/^GBF-TARGET-/.test(o));
 
         o.gbfTargets_ii = o.gbfTargets_ss.map(o=>parseInt(o.replace(/^GBF-TARGET-/, '')));
         
         o.gbfTargets_EN_txt = o.gbfTargets_EN_txt || o.gbfTargets_ss
             ?.filter(o=>/^GBF-TARGET-/.test(o))
             ?.map   (o=>this.lists.gbfTargets.find(t=>t.identifier==o).title.en)
-
-            o.resourceTypes_EN_txt = o.resourceTypes_REL_ss.map(id=> this.lists.resourceTypes.find(o=>o.identifier == id) ).filter(o=>o).map(o=>o.name);
         return o;
     });
 }
@@ -270,8 +265,8 @@ function getQueryParts() {
     let type = null;
     let freeText = null;
 
-    if(!_.isEmpty(selectGbfTargets))    gbf  = `aichiTargets_REL_ss:(${selectGbfTargets   .map(code=>solr.escape(code)).join(' ')})`;
-    if(!_.isEmpty(selectResourceTypes)) type = `resourceTypes_REL_ss:(${selectResourceTypes.map(code=>solr.escape(code)).join(' ')})`;
+    if(!_.isEmpty(selectGbfTargets))    gbf  = `gbfTargets_REL_ss:(${selectGbfTargets   .map(code=>solr.escape(code)).join(' ')})`;
+    if(!_.isEmpty(selectResourceTypes)) type = `kmHubResourceType_REL_ss:(${selectResourceTypes.map(code=>solr.escape(code)).join(' ')})`;
     if(!_.isEmpty(filters.freeText)) {
         const andWords = AND(...filters.freeText.split(' ').filter(w=>!!w).map(w=> `${solr.escape(w)}~`)); // ~ => fuzzy search (mispelled)
         
@@ -289,7 +284,6 @@ async function created() {
     const qFacets     = this.updateFacets();
     let gbfTargets    = getDomainTerms('GBF-TARGETS');
     let resourceTypes = getDomainTerms('663C02F8-78C2-4A27-A45D-1AD27F920363'); // KM Hub types
-    //resourceTypes = getDomainTerms('A762DF7E-B8D1-40D6-9DAC-D25E48C65528'); // VLR types 
     
     gbfTargets    = await gbfTargets;
     resourceTypes = await resourceTypes;
@@ -322,7 +316,6 @@ async function getDomainTerms(code) {
     return terms;
 }
 
-const baseIndexQuery = AND('schema_s:resource', 'realm_ss:(CHM BCH ABSCH)', 'aichiTargets_REL_ss:GBF-TARGET-*', 'resourceTypes_REL_ss:*');
 
 //===========================================
 //
@@ -346,8 +339,8 @@ async function updateFacets() {
 
 const { gbf, type, freeText }  = this.getQueryParts();
 
-let gbfFacets  = getFacets(AND(freeText, type), 'aichiTargets_REL_ss');
-let typeFacets = getFacets(AND(freeText,  gbf), 'resourceTypes_REL_ss');
+let gbfFacets  = getFacets(AND(freeText, type), 'gbfTargets_REL_ss');
+let typeFacets = getFacets(AND(freeText,  gbf), 'kmHubResourceType_REL_ss');
 
 gbfFacets  = await gbfFacets;
 typeFacets = await typeFacets;
