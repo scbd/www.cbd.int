@@ -11,6 +11,7 @@ import * as paragraphView    from '~/views/decisions/paragraph'
 
 // On-demand views
 const decisionView        = { component: ()=>import('~/views/decisions/decision-view.vue').catch(logError) }
+const decisionSearch      = { component: ()=>import('~/views/decisions/decision-search.vue').catch(logError) }
 const editDecisionView    = { component: ()=>import('~/views/decisions/edit').catch(logError) }
 const editTranslationView = { component: ()=>import('~/views/decisions/edit-translation.vue').catch(logError) }
 
@@ -22,6 +23,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     $routeProvider
     .when('/',                                    { ...mapView(redirectView),           resolve: { } })
     .when('/search',                              { ...mapView(searchView) ,            resolve: { user : currentUser() }, reloadOnSearch : false } )
+    .when('/search-new',                           { ...mapView(vueViewWrapper),        resolve: { ...decisionSearch, user : currentUser() }, reloadOnSearch : false } )
     .when('/:body',                               { ...mapView(redirectView),           resolve: { } })
     .when('/:body/:session',                      { ...mapView(decisionListView),       resolve: { user : currentUser() } } )
     .when('/:body/:session/:decision/edit',       { ...mapView(angularViewWrapper),     resolve: { ...editDecisionView, user : securize(["Administrator","DecisionTrackingTool", "ScbdStaff"]) } } )
