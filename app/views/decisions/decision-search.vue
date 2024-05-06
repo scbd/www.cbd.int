@@ -217,7 +217,6 @@
 
 <script>
 import _ from 'lodash';
-import axios from 'axios'
 import lstring from '~/filters/lstring.js';
 import SolrApi from '../../api/solr.js';
 import ThesaurusApi from '../../api/thesaurus.js';
