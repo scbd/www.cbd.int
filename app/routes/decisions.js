@@ -22,8 +22,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     
     $routeProvider
     .when('/',                                    { ...mapView(redirectView),           resolve: { } })
-    .when('/search',                              { ...mapView(searchView) ,            resolve: { user : currentUser() }, reloadOnSearch : false } )
-    .when('/search-new',                           { ...mapView(vueViewWrapper),        resolve: { ...decisionSearch, user : currentUser() }, reloadOnSearch : false } )
+    .when('/search',                              { ...mapView(vueViewWrapper),         resolve: { ...decisionSearch, user : currentUser() }, reloadOnSearch : false } )
     .when('/:body',                               { ...mapView(redirectView),           resolve: { } })
     .when('/:body/:session',                      { ...mapView(decisionListView),       resolve: { user : currentUser() } } )
     .when('/:body/:session/:decision/edit',       { ...mapView(angularViewWrapper),     resolve: { ...editDecisionView, user : securize(["Administrator","DecisionTrackingTool", "ScbdStaff"]) } } )
