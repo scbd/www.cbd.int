@@ -46,6 +46,7 @@
                             </span>
                         </div>
                         <div class="col-md-8">
+                            <!--
                             <span class="float-right">
                                 <div class="float-left">
                                     Items per page:
@@ -68,6 +69,7 @@
                                     </select>
                                 </div>
                             </span>
+                            -->
                         </div>
                     </div>
                 </div>
@@ -82,19 +84,29 @@
                     </div>
                     <div class="card-body" v-for="record in records" :key="record.id">
                         <ul>
-                            <li v-for="item in record.dtt_gbfGoal_ss" :key="item">
+                            <li v-for="item in record.dtt_gbfGoal_ii" :key="item">
+                                <a href="https://www.cbd.int/gbf/goals/" target="_blank">
                                 <img 
-                                    :src="`/app/images/gbf-goals/gbf-${item.replace('GBF-GOAL-','').toLowerCase()}-64.png`"
+                                    :src="`/app/images/gbf-goals/gbf-${item}-64.png`"
 									width="20" style="margin: 1px 1px 1px 1px;">
+                                </a>
                             </li>
-                            <li v-for="item in record.dtt_gbfTarget_ss" :key="item">
+                            <li v-for="item in record.dtt_gbfTarget_ii" :key="item">
+                                <a :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(parseInt(item))}`" target="_blank">
                                 <img 
-                                    :src="`/app/images/gbf-targets/gbf-${item.replace('GBF-TARGET-','')}-64.png`" 
+                                    :src="`/app/images/gbf-targets/gbf-${item}-64.png`" 
 									width="20" style="margin: 1px 1px 1px 1px;">
+                                </a>
                             </li>
                         </ul>
-                        {{ record.dtt_code_s }} : {{ record.dtt_paragraphCode_s }} - {{ record.title_s }}<br />
+                        <i class="fa fa-search" aria-hidden="true"></i> Decision <a 
+                            :href="`/decisions/${record.dtt_codeUrl_ii}`"
+                            target="_blank">
+                                {{ record.dtt_code_s }}
+                        </a> - {{ record.title_s }}
+                        <hr />
                     </div>
+                    Debug:<br />
                     <pre>{{ record }}</pre>
                 
                 </div>
@@ -179,8 +191,13 @@ export default {
                 this.records = response.docs;
 
                 this.record = response.docs.map(o=>{
-                    o.dtt_gbfTarget_ss = o.dtt_gbfTarget_ss?.filter(o=>/^GBF-TARGET-/.test(o));
-                    o.dtt_gbfTarget_ii = o.dtt_gbfTarget_ss?.map(o=>(o.replace(/^GBF-TARGET-/, '')));
+                    o.dtt_gbfTarget_ss  = o.dtt_gbfTarget_ss?.filter(o=>/^GBF-TARGET-/.test(o));
+                    o.dtt_gbfTarget_ii  = o.dtt_gbfTarget_ss?.map(o=>(o.replace(/^GBF-TARGET-/, '')));
+
+                    o.dtt_gbfGoal_ss    = o.dtt_gbfGoal_ss?.filter(o=>/^GBF-GOAL-/.test(o));
+                    o.dtt_gbfGoal_ii    = o.dtt_gbfGoal_ss?.map(o=>(o.replace(/^GBF-GOAL-/, '')).toLowerCase());
+
+                    o.dtt_codeUrl_ii    = (o.dtt_paragraphCode_s || o.dtt_code_s).replace(/^CBD\//, '').toLowerCase();
                     return o;
                 });
             }
