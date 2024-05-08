@@ -84,14 +84,31 @@
                     </div>
                     <div class="card-body" v-for="record in records" :key="record.id">
                         <span v-for="item in record.dtt_type_REL_ss" :key="item">
-                            <span v-if="item=='operational'" class="pull-right badge ng-scope badge-info" style="opacity:0.5;margin-right:1px;">
-                                <span class="ng-scope"><i class="fa fa-cog"></i> operational</span>
+                            <span v-if="item=='operational'" class="pull-right badge ng-scope badge-info" style="opacity:0.5; margin-right: 6px;">
+                                <span><i class="fa fa-cog"></i> operational</span>
                             </span>
 
-                            <span v-if="item=='informational'" class="pull-right badge ng-scope badge-secondary" style="opacity:0.5;margin-right:1px;">
-                                <span ng-switch-when="informational" class="ng-scope"><i class="fa fa-info-circle"></i> informational</span>
+                            <span v-if="item=='informational'" class="pull-right badge ng-scope badge-secondary" style="opacity:0.5; margin-right: 6px;">
+                                <span><i class="fa fa-info-circle"></i> informational</span>
                             </span>
                         </span>
+
+
+                        <span v-for="item in record.dtt_status_ss" :key="item">
+                            <span 
+                                v-for="item in record.dtt_status_ss" 
+                                :key="item"
+                                class="pull-right badge" 
+                                :class="item === 'active' ? 'badge-success' : 'badge-secondary'"
+                                style="opacity:0.5;margin-right:6px"
+                            >
+                            <i class="fa fa-info-circle"></i> 
+                            <span>{{ item }}</span>
+                            </span>
+                        </span>
+
+                        
+
                         <ul>
                             <li v-for="item in record.dtt_gbfGoal_ii" :key="item">
                                 <a href="https://www.cbd.int/gbf/goals/" target="_blank">
@@ -193,7 +210,9 @@ export default {
     {
         async search() {
             if (this.freeText.trim() !== '') {
+                // Improve the handling of special characters
                 const query = `title_t:*${this.freeText.toLowerCase().replace(/^\*+|\*+$/g, '')}*`;
+
                 const { response } = await queryIndex(query);
 
                 this.recordsFound = (response.numFound !== '') ? true : false;
