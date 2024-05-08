@@ -83,6 +83,15 @@
                         <b>{{ recordsCount }}</b> records found.
                     </div>
                     <div class="card-body" v-for="record in records" :key="record.id">
+                        <span v-for="item in record.dtt_type_REL_ss" :key="item">
+                            <span v-if="item=='operational'" class="pull-right badge ng-scope badge-info" style="opacity:0.5;margin-right:1px;">
+                                <span class="ng-scope"><i class="fa fa-cog"></i> operational</span>
+                            </span>
+
+                            <span v-if="item=='informational'" class="pull-right badge ng-scope badge-secondary" style="opacity:0.5;margin-right:1px;">
+                                <span ng-switch-when="informational" class="ng-scope"><i class="fa fa-info-circle"></i> informational</span>
+                            </span>
+                        </span>
                         <ul>
                             <li v-for="item in record.dtt_gbfGoal_ii" :key="item">
                                 <a href="https://www.cbd.int/gbf/goals/" target="_blank">
@@ -99,6 +108,7 @@
                                 </a>
                             </li>
                         </ul>
+
                         <i class="fa fa-search" aria-hidden="true"></i> Decision <a 
                             :href="`/decisions/${record.dtt_codeUrl_ii}`"
                             target="_blank">
