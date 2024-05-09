@@ -85,11 +85,11 @@
                     <div class="card-body" v-for="record in records" :key="record.id">
                         <span v-for="item in record.dtt_type_REL_ss" :key="item">
                             <span v-if="item=='operational'" class="pull-right badge ng-scope badge-info" style="opacity:0.5; margin-right: 6px;">
-                                <span><i class="fa fa-cog"></i> operational</span>
+                                <span><i class="fa fa-cog"></i> Operational</span>
                             </span>
 
                             <span v-if="item=='informational'" class="pull-right badge ng-scope badge-secondary" style="opacity:0.5; margin-right: 6px;">
-                                <span><i class="fa fa-info-circle"></i> informational</span>
+                                <span><i class="fa fa-info-circle"></i> Informational</span>
                             </span>
                         </span>
 
@@ -103,7 +103,7 @@
                                 style="opacity:0.5;margin-right:6px"
                             >
                             <i class="fa fa-info-circle"></i> 
-                            <span>{{ item }}</span>
+                            <span>{{ capitalize(item) }}</span>
                             </span>
                         </span>
 
@@ -163,9 +163,7 @@ import '~/filters/term.js'
 import './view-element.js'
 import '~/directives/aichi-targets/pagination.js'
 import './directives/header-decisions.js'
-import { sanitizeHtml } from '~/services/html';
 import DecisionSearchHelp from '~/components/decisions/decision-search-help.vue'
-
 
 // ====================================
 // Update this when deploying to 
@@ -230,7 +228,8 @@ export default {
                     return o;
                 });
             }
-        }
+        },
+        capitalize
     }
 }
 
@@ -265,6 +264,18 @@ function targetCodeToNumber(code) {
 function termName(term) {
     return term.shortTitle.en || term.title?.en || term.name || term.identifier;
 }
+
+function capitalize(text) {
+    const lowerText = this.$options.filters.lowercase(text);
+    var capitalized = []
+    lowerText.split(' ').forEach(word => {
+        capitalized.push(
+            word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        )
+    })
+    return capitalized.join(' ')
+}
+
 </script>
 
 <style scoped>
