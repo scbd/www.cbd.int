@@ -22,6 +22,92 @@
                         </div>
                     </div>
                     
+                    <!-- Filters -->
+                    <div class="row" style="margin-top: 10px">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header" style="background-color: transparent">
+                                    <a data-toggle="collapse" href="#advanceSearch" id="step3" aria-expanded="false" aria-controls="advanceSearch">Advanced Search</a>
+                                </div>
+                                <div id="advanceSearch" class="collapse">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Meeting</label>
+                                                <select class="form-control" v-model="selectedSession">
+                                                    <option value="">all meetings</option>
+                                                    <optgroup v-for="(session, sessionName) in lists.sessions" :label="sessionName" :key="sessionName">
+                                                    <option v-for="item in session" :value="item.title" :key="item.code">{{ item.title }}</option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>Decision Type</label>
+
+                                                <select class="form-control" v-model="selectedType">
+                                                    <option value="">all decision types</option>
+                                                    <option v-for="item in lists.types" :value="item.title" :key="item.code">{{ item.title }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label>Subjects</label>
+
+                                                <select class="form-control" v-model="selectedSubject">
+                                                    <option value="">all subjects</option>
+                                                    <optgroup v-for="group in lists.subjects" :key="group.name" :label="group.name">
+                                                        <option v-for="subject in group.subjects" :key="subject.identifier" :value="subject">{{ subject.name }}</option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label>GBF Goals</label>
+                                                <select class="form-control" v-model="selectedGBFTarget">
+                                                    <option value="">all GBF goals</option>
+                                                    <option v-for="item in lists.gbfGoals" :key="item.identifier" :value="item">{{ item.name }}</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label>GBF Targets</label>
+                                                <select class="form-control" v-model="selectedGBFTarget">
+                                                    <option value="">all GBF targets</option>
+                                                    <option v-for="item in lists.gbfTargets" :key="item.identifier" :value="item">{{ item.name }}</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label>Aichi Targets</label>
+                                                <select class="form-control" v-model="selectedAichiTarget">
+                                                <option value="">all AICHI targets</option>
+                                                    <option v-for="item in lists.aichiTargets" :key="item.identifier" :value="item">{{ item.name }}</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label>Actors</label>
+                                                <select class="form-control" v-model="selectedActor">
+                                                    <option value="">all actors</option>
+                                                    <optgroup v-for="group in lists.actors" :key="group.identifier" :label="group.name">
+                                                        <option v-for="actor in group.actors" :key="actor.identifier" :value="actor">{{ actor.name }}</option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label>Status</label>
+                                                <select class="form-control" v-model="selectedStatus">
+                                                <option value="">all statuses</option>
+                                                    <option v-for="item in lists.statuses" :key="item.code" :value="item">{{ item.title }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    
                     <div class="row">
                         <div class="col-md-12">
                             <br/>
@@ -94,20 +180,15 @@
                         </span>
 
 
-                        <span v-for="item in record.dtt_status_ss" :key="item">
-                            <span 
-                                v-for="item in record.dtt_status_ss" 
-                                :key="item"
-                                class="pull-right badge" 
-                                :class="item === 'active' ? 'badge-success' : 'badge-secondary'"
-                                style="opacity:0.5;margin-right:6px"
-                            >
+                        <span 
+                            v-for="item in records.dtt_status_ss" 
+                            :key="item"
+                            class="pull-right badge" 
+                            :class="item === 'active' ? 'badge-success' : 'badge-secondary'"
+                            style="opacity:0.5;margin-right:6px">
                             <i class="fa fa-info-circle"></i> 
                             <span>{{ capitalize(item) }}</span>
-                            </span>
                         </span>
-
-                        
 
                         <ul>
                             <li v-for="item in record.dtt_gbfGoal_ii" :key="item">
@@ -133,8 +214,9 @@
                         </a> - {{ record.title_s }}
                         <hr />
                     </div>
+                    
                     Debug:<br />
-                    <pre>{{ record }}</pre>
+                    <pre>{{ lists.actors }}</pre>
                 
                 </div>
 
@@ -155,15 +237,19 @@
 
 <script>
 import _ from 'lodash';
-import axios from 'axios'
+import axios from 'axios';
 import lstring from '~/filters/lstring.js';
 import SolrApi from '../../api/solr.js';
 import ThesaurusApi from '../../api/thesaurus.js';
-import '~/filters/term.js'
-import './view-element.js'
-import '~/directives/aichi-targets/pagination.js'
-import './directives/header-decisions.js'
-import DecisionSearchHelp from '~/components/decisions/decision-search-help.vue'
+import '~/filters/term.js';
+import './view-element.js';
+import '~/directives/aichi-targets/pagination.js';
+import './directives/header-decisions.js';
+import sessionsList from './data/sessions.js';
+import typesList from './data/types.js';
+import actorsList from './data/actors.js';
+import statusesList from './data/statuses.js';
+import DecisionSearchHelp from '~/components/decisions/decision-search-help.vue';
 
 // ====================================
 // Update this when deploying to 
@@ -193,42 +279,30 @@ export default {
                 aichiTargets    : [],
                 gbfGoals        : [],
                 gbfTargets      : [],
+                sessions        : [],
+                statuses        : [],
+                subjects        : []
+            },
+            filters: {
+                actors          : [],
+                aichiTargets    : [],
+                gbfGoals        : [],
+                gbfTargets      : [],
+                sessions        : [],
                 statuses        : [],
                 subjects        : []
             },
             records: null,
-            record: null,
             recordsCount: null,
             recordsFound: false,
             pageSize: 10,
             freeText: '',
         }
     },
+    created,
     methods:
     {
-        async search() {
-            if (this.freeText.trim() !== '') {
-                // Improve the handling of special characters
-                const query = `title_t:*${this.freeText.toLowerCase().replace(/^\*+|\*+$/g, '')}*`;
-
-                const { response } = await queryIndex(query);
-
-                this.recordsFound = (response.numFound !== '') ? true : false;
-                this.recordsCount = response.numFound;
-                this.records = response.docs;
-
-                this.record = response.docs.map(o=>{
-                    o.dtt_gbfTarget_ss  = o.dtt_gbfTarget_ss?.filter(o=>/^GBF-TARGET-/.test(o));
-                    o.dtt_gbfTarget_ii  = o.dtt_gbfTarget_ss?.map(o=>(o.replace(/^GBF-TARGET-/, '')));
-
-                    o.dtt_gbfGoal_ss    = o.dtt_gbfGoal_ss?.filter(o=>/^GBF-GOAL-/.test(o));
-                    o.dtt_gbfGoal_ii    = o.dtt_gbfGoal_ss?.map(o=>(o.replace(/^GBF-GOAL-/, '')).toLowerCase());
-
-                    o.dtt_codeUrl_ii    = (o.dtt_paragraphCode_s || o.dtt_code_s).replace(/^CBD\//, '').toLowerCase();
-                    return o;
-                });
-            }
-        },
+        search,
         capitalize
     }
 }
@@ -236,6 +310,92 @@ export default {
 // ====================================
 // 
 // ====================================
+
+async function created() {
+    let aichiTargetsList    = getDomainTerms('AICHI-TARGETS');
+    let subjectList         = getDomainTerms('CBD-SUBJECTS');
+    let gbfTargetsList      = getDomainTerms('GBF-TARGETS');
+    let gbfGoalsList        = getDomainTerms('GBF-GOALS');
+
+    aichiTargetsList        = await aichiTargetsList;
+    subjectList             = await subjectList;
+    gbfTargetsList          = await gbfTargetsList;
+    gbfGoalsList            = await gbfGoalsList;
+
+    this.lists.types        = typesList;
+    // this.lists.actors       = _(actorsList)         .reduce(function(r,v){ r[v.code] = v; return r; }, {}),
+    this.lists.sessions     = _(sessionsList)       .reduce((r,v) => { if (!r[v.group]) { r[v.group] = []; } r[v.group].push(v); return r; }, {});
+    this.lists.statuses     = _(statusesList)       .reduce((r,v) => { r[v.code] = v; return r; }, {});
+    this.lists.gbfTargets   = _(gbfTargetsList)     .reduce((r,v) => { r[v.identifier] = v; return r; }, {});
+    this.lists.gbfGoals     = _(gbfGoalsList)       .reduce((r,v) => { r[v.identifier] = v; return r; }, {});
+    this.lists.aichiTargets = _(aichiTargetsList)   .reduce((r,v) => { r[v.identifier] = v; return r; }, {});
+    this.lists.actors       = _(actorsList)         .reduce((groups, actors) => {
+        const key = actors.group;
+
+        const title = actorsList.find(item => item.group === key);
+
+        if(!groups[key]) {
+            groups[key] = {
+                key: key,
+                name: termName(title),
+                actors: []
+            };
+        }
+
+        groups[key].actors.push({
+            identifier: actors.code,
+            name: actors.title
+        });
+        return groups;
+    }, {});
+
+    this.lists.subjects     = _(subjectList)        .reduce((groups, subject) => {
+        subject.broaderTerms.forEach(bt => {
+            const key = bt.identifier;
+            const title = subjectList.find(item => item.identifier === key);
+
+            if (!groups[key]) {
+                groups[key] = {
+                    key: key,
+                    name: termName(title),
+                    subjects: []
+                };
+            }
+            groups[key].subjects.push({
+                termId: subject.termId,
+                identifier: targetCodeToNumber(subject.identifier),
+                name: subject.name,
+                title: subject.title
+            });
+        });
+        return groups;
+    }, {});
+    
+}
+
+async function search() {
+    if (!_.isEmpty(this.freeText)) {
+
+        const andWords = AND(this.freeText.toLowerCase().split(' ').filter(w=>!!w).map(w=> `${solr.escape(w)}~`));
+        const query = `title_t:${andWords}`;
+
+        const { response } = await queryIndex(query);
+
+        this.recordsFound = (response.numFound !== '') ? true : false;
+        this.recordsCount = response.numFound;
+
+        this.records = response.docs.map(o=>{
+            o.dtt_gbfTarget_ss  = o.dtt_gbfTarget_ss?.filter(o=>/^GBF-TARGET-/.test(o));
+            o.dtt_gbfTarget_ii  = o.dtt_gbfTarget_ss?.map(o=>(o.replace(/^GBF-TARGET-/, '')));
+
+            o.dtt_gbfGoal_ss    = o.dtt_gbfGoal_ss?.filter(o=>/^GBF-GOAL-/.test(o));
+            o.dtt_gbfGoal_ii    = o.dtt_gbfGoal_ss?.map(o=>(o.replace(/^GBF-GOAL-/, '')).toLowerCase());
+
+            o.dtt_codeUrl_ii    = (o.dtt_paragraphCode_s || o.dtt_code_s).replace(/^CBD\//, '').toLowerCase();
+            return o;
+        });
+    }
+}
 
 async function queryIndex(query, { sk: start, l: rows } = {}) {
     query = AND(baseIndexQuery, query);
@@ -262,7 +422,7 @@ function targetCodeToNumber(code) {
 }
 
 function termName(term) {
-    return term.shortTitle.en || term.title?.en || term.name || term.identifier;
+    return term.shortTitle?.en || term.title?.en || term.name || term.identifier || term.group;
 }
 
 function capitalize(text) {
