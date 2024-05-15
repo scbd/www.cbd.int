@@ -250,8 +250,10 @@
                         </a> - {{ record.title_s }}
                         <hr />
                     </div>
+                    <!--
                     Debug:<br />
                     <pre>{{ filters }}</pre>
+                    -->
                 </div>
 
             </div>
@@ -498,9 +500,9 @@ function getQueryParts(filters) {
     if(!_.isEmpty(filters.sessions))        sessions        = `dtt_code_s:${filters.sessions.map(o => `CBD/COP/${o}/*`).join(' OR ')}`; // find solution because solr.escape is including \ before *
     if(!_.isEmpty(filters.types))           types           = `dtt_type_REL_ss:(${filters.types.map(o => o.toLowerCase()).map(s=> solr.escape(s)).join(' OR ')})`;
     if(!_.isEmpty(filters.subjects))        subjects        = `dtt_subject_REL_ss:(${filters.subjects.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.gbfGoals))        gbfGoals        = `dtt_gbfGoal_REL_ss:(${filters.gbfGoals.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.gbfTargets))      gbfTargets      = `dtt_gbfTarget_REL_ss:(${filters.gbfTargets.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.aichiTargets))    aichiTargets    = `dtt_aichiTarget_REL_ss:(${filters.aichiTargets.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.gbfGoals))        gbfGoals        = `dtt_gbfGoal_ss:(${filters.gbfGoals.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.gbfTargets))      gbfTargets      = `dtt_gbfTarget_ss:(${filters.gbfTargets.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.aichiTargets))    aichiTargets    = `dtt_aichiTarget_ss:(${filters.aichiTargets.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
     if(!_.isEmpty(filters.actors))          actors          = `dtt_actor_REL_ss:(${filters.actors.map(s=> s.toLowerCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
     if(!_.isEmpty(filters.statuses))        statuses        = `dtt_status_REL_ss:(${filters.statuses.map(s=> s).join(' OR ')})`; // find solution because solr.escape is including \ before -
 
