@@ -15,6 +15,69 @@
                 </div>
                 <div class="card-body">
 
+                    <div class="row" v-if="filters" style="border-bottom:1px solid #eee; padding-bottom:10px">
+                        <div class="col-md-12">
+                            <span>
+                                <span v-for="session in filters.sessions" :key="session">
+                                    <span class="badge chip badge-primary">
+                                        COP {{session|lstring}}
+                                        <i class="fa fa-minus-circle" @click="updateFilters('sessions', session);"></i>
+                                    </span>
+                                </span>
+
+                                <span v-for="type in filters.types" :key="type">
+                                    <span class="badge chip badge-primary">
+                                        {{type|lstring}}
+                                        <i class="fa fa-minus-circle" @click="updateFilters('types', type);"></i>
+                                    </span>
+                                </span>
+
+                                <span v-for="subject in filters.subjects" :key="subject">
+                                    <span class="badge chip badge-primary">
+                                        {{subject|lstring}}
+                                        <i class="fa fa-minus-circle" @click="updateFilters('subjects', subject);"></i>
+                                    </span>
+                                </span>
+
+                                <span v-for="gbfGoal in filters.gbfGoals" :key="gbfGoal">
+                                    <span class="badge chip badge-primary">
+                                        {{gbfGoal|lstring}}
+                                        <i class="fa fa-minus-circle" @click="updateFilters('gbfGoals', gbfGoal);"></i>
+                                    </span>
+                                </span>
+
+                                <span v-for="gbfTarget in filters.gbfTargets" :key="gbfTarget">
+                                    <span class="badge chip badge-primary">
+                                        {{gbfTarget|lstring}}
+                                        <i class="fa fa-minus-circle" @click="updateFilters('gbfTargets', gbfTarget);"></i>
+                                    </span>
+                                </span>
+
+                                <span v-for="aichiTarget in filters.aichiTargets" :key="aichiTarget">
+                                    <span class="badge chip badge-primary">
+                                        {{aichiTarget|lstring}}
+                                        <i class="fa fa-minus-circle" @click="updateFilters('aichiTargets', aichiTarget);"></i>
+                                    </span>
+                                </span>
+
+                                <span v-for="actor in filters.actors" :key="actor">
+                                    <span class="badge chip badge-primary">
+                                        {{actor|lstring}}
+                                        <i class="fa fa-minus-circle" @click="updateFilters('actors', actor);"></i>
+                                    </span>
+                                </span>
+
+                                <span v-for="status in filters.statuses" :key="status">
+                                    <span class="badge chip badge-primary">
+                                        {{capitalize(status)|lstring}}
+                                        <i class="fa fa-minus-circle" @click="updateFilters('statuses', status);"></i>
+                                    </span>
+                                </span>
+
+                            </span>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-12">
                             <label for="step2">Free text</label>
@@ -34,7 +97,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label>Meeting</label>
-                                                <select class="form-control" v-model="selectedSession">
+                                                <select class="form-control" v-model="selectedSession" @change="updateFilters('sessions', filterName(selectedSession));">
                                                     <option value="">all meetings</option>
                                                     <optgroup v-for="(session, sessionName) in lists.sessions" :label="sessionName" :key="sessionName">
                                                     <option v-for="item in session" :value="item.title" :key="item.code">{{ item.title }}</option>
@@ -43,8 +106,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <label>Decision Type</label>
-
-                                                <select class="form-control" v-model="selectedType">
+                                                <select class="form-control" v-model="selectedType" @change="updateFilters('types', filterName(selectedType));">
                                                     <option value="">all decision types</option>
                                                     <option v-for="item in lists.types" :value="item.title" :key="item.code">{{ item.title }}</option>
                                                 </select>
@@ -54,8 +116,7 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <label>Subjects</label>
-
-                                                <select class="form-control" v-model="selectedSubject">
+                                                <select class="form-control" v-model="selectedSubject" @change="updateFilters('subjects', filterName(selectedSubject));">
                                                     <option value="">all subjects</option>
                                                     <optgroup v-for="group in lists.subjects" :key="group.name" :label="group.name">
                                                         <option v-for="subject in group.subjects" :key="subject.identifier" :value="subject">{{ subject.name }}</option>
@@ -64,28 +125,28 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <label>GBF Goals</label>
-                                                <select class="form-control" v-model="selectedGBFTarget">
+                                                <select class="form-control" v-model="selectedGBFGoal" @change="updateFilters('gbfGoals', filterName(selectedGBFGoal));">
                                                     <option value="">all GBF goals</option>
                                                     <option v-for="item in lists.gbfGoals" :key="item.identifier" :value="item">{{ item.name }}</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
                                                 <label>GBF Targets</label>
-                                                <select class="form-control" v-model="selectedGBFTarget">
+                                                <select class="form-control" v-model="selectedGBFTarget" @change="updateFilters('gbfTargets', filterName(selectedGBFTarget));">
                                                     <option value="">all GBF targets</option>
                                                     <option v-for="item in lists.gbfTargets" :key="item.identifier" :value="item">{{ item.name }}</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
                                                 <label>Aichi Targets</label>
-                                                <select class="form-control" v-model="selectedAichiTarget">
+                                                <select class="form-control" v-model="selectedAichiTarget" @change="updateFilters('aichiTargets', filterName(selectedAichiTarget));">
                                                 <option value="">all AICHI targets</option>
                                                     <option v-for="item in lists.aichiTargets" :key="item.identifier" :value="item">{{ item.name }}</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
                                                 <label>Actors</label>
-                                                <select class="form-control" v-model="selectedActor">
+                                                <select class="form-control" v-model="selectedActor" @change="updateFilters('actors', filterName(selectedActor));">
                                                     <option value="">all actors</option>
                                                     <optgroup v-for="group in lists.actors" :key="group.identifier" :label="group.name">
                                                         <option v-for="actor in group.actors" :key="actor.identifier" :value="actor">{{ actor.name }}</option>
@@ -94,7 +155,7 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <label>Status</label>
-                                                <select class="form-control" v-model="selectedStatus">
+                                                <select class="form-control" v-model="selectedStatus" @change="updateFilters('statuses', filterName(selectedStatus));">
                                                 <option value="">all statuses</option>
                                                     <option v-for="item in lists.statuses" :key="item.code" :value="item">{{ item.title }}</option>
                                                 </select>
@@ -131,32 +192,7 @@
                                 <i class="fa fa-clone" ng-class="icon"></i> Search results
                             </span>
                         </div>
-                        <div class="col-md-8">
-                            <!--
-                            <span class="float-right">
-                                <div class="float-left">
-                                    Items per page:
-                                    <select ng-model="itemsPerPage">
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="100">100</option>
-                                        <option value="200">200</option>
-                                        <option value="300">300</option>
-                                    </select>
-                                </div>
-                                <div class="float-right" style="padding-left: 10px;">
-                                    Sort by:
-                                    <select ng-model="pageSort">
-                                        <option value="">Relevance</option>
-                                        <option value="session">Session</option>
-                                        <option value="statuses">Status</option>
-                                        <option value="types">Type</option>
-                                    </select>
-                                </div>
-                            </span>
-                            -->
-                        </div>
+                        <div class="col-md-8"></div>
                     </div>
                 </div>
                 <!-- Result -->
@@ -214,10 +250,8 @@
                         </a> - {{ record.title_s }}
                         <hr />
                     </div>
-                    
                     Debug:<br />
-                    <pre>{{ lists.actors }}</pre>
-                
+                    <pre>{{ filters }}</pre>
                 </div>
 
             </div>
@@ -274,6 +308,24 @@ export default {
     },
     data() {
         return {
+            selected: {
+                actors          : [],
+                aichiTargets    : [],
+                gbfGoals        : [],
+                gbfTargets      : [],
+                sessions        : [],
+                statuses        : [],
+                subjects        : [],
+                types           : []
+            },
+            selectedActor       : '',
+            selectedAichiTarget : '',
+            selectedGBFTarget   : '',
+            selectedGBFGoal     : '',
+            selectedSession     : '',
+            selectedSubject     : '',
+            selectedStatus      : '',
+            selectedType        : '',
             lists: {
                 actors          : [],
                 aichiTargets    : [],
@@ -281,7 +333,8 @@ export default {
                 gbfTargets      : [],
                 sessions        : [],
                 statuses        : [],
-                subjects        : []
+                subjects        : [],
+                types           : []
             },
             filters: {
                 actors          : [],
@@ -290,7 +343,8 @@ export default {
                 gbfTargets      : [],
                 sessions        : [],
                 statuses        : [],
-                subjects        : []
+                subjects        : [],
+                types           : []
             },
             records: null,
             recordsCount: null,
@@ -303,7 +357,10 @@ export default {
     methods:
     {
         search,
-        capitalize
+        capitalize,
+        updateFilters,
+        filterName,
+        getQueryParts
     }
 }
 
@@ -322,8 +379,7 @@ async function created() {
     gbfTargetsList          = await gbfTargetsList;
     gbfGoalsList            = await gbfGoalsList;
 
-    this.lists.types        = typesList;
-    // this.lists.actors       = _(actorsList)         .reduce(function(r,v){ r[v.code] = v; return r; }, {}),
+    this.lists.types        = _(typesList)          .reduce((r,v) => { r[v.code] = v; return r; }, {});
     this.lists.sessions     = _(sessionsList)       .reduce((r,v) => { if (!r[v.group]) { r[v.group] = []; } r[v.group].push(v); return r; }, {});
     this.lists.statuses     = _(statusesList)       .reduce((r,v) => { r[v.code] = v; return r; }, {});
     this.lists.gbfTargets   = _(gbfTargetsList)     .reduce((r,v) => { r[v.identifier] = v; return r; }, {});
@@ -363,7 +419,7 @@ async function created() {
             }
             groups[key].subjects.push({
                 termId: subject.termId,
-                identifier: targetCodeToNumber(subject.identifier),
+                identifier: subject.identifier,
                 name: subject.name,
                 title: subject.title
             });
@@ -376,9 +432,10 @@ async function created() {
 async function search() {
     if (!_.isEmpty(this.freeText)) {
 
-        const andWords = AND(this.freeText.toLowerCase().split(' ').filter(w=>!!w).map(w=> `${solr.escape(w)}~`));
-        const query = `title_t:${andWords}`;
-
+        const words = `title_t:${this.freeText.toLowerCase().split(' ').filter(w=>!!w).map(w=> `${solr.escape(w)}~`)}`;
+        const filter = getQueryParts(this.filters);
+        const query = AND(words, filter.sessions, filter.types, filter.subjects, filter.gbfGoals, filter.gbfTargets, filter.aichiTargets, filter.actors, filter.statuses);
+        
         const { response } = await queryIndex(query);
 
         this.recordsFound = (response.numFound !== '') ? true : false;
@@ -414,6 +471,42 @@ async function getDomainTerms(code) {
     return terms;
 }
 
+function updateFilters(section, value) {
+    if(value === '') {
+        this.filters[section] = []; 
+    } else {
+        const index = this.filters[section].indexOf(value);
+        if (index !== -1) {
+            this.filters[section].splice(index, 1);
+        } else {
+            this.filters[section].push(value);
+        }
+    }
+}
+
+function getQueryParts(filters) {
+
+    let sessions        = null;
+    let types           = null;
+    let subjects        = null;
+    let gbfGoals        = null;
+    let gbfTargets      = null;
+    let aichiTargets    = null;
+    let actors          = null;
+    let statuses        = null;
+
+    if(!_.isEmpty(filters.sessions))        sessions        = `dtt_code_s:${filters.sessions.map(o => `CBD/COP/${o}/*`).join(' OR ')}`; // find solution because solr.escape is including \ before *
+    if(!_.isEmpty(filters.types))           types           = `dtt_type_REL_ss:(${filters.types.map(o => o.toLowerCase()).map(s=> solr.escape(s)).join(' OR ')})`;
+    if(!_.isEmpty(filters.subjects))        subjects        = `dtt_subject_REL_ss:(${filters.subjects.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.gbfGoals))        gbfGoals        = `dtt_gbfGoal_REL_ss:(${filters.gbfGoals.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.gbfTargets))      gbfTargets      = `dtt_gbfTarget_REL_ss:(${filters.gbfTargets.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.aichiTargets))    aichiTargets    = `dtt_aichiTarget_REL_ss:(${filters.aichiTargets.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.actors))          actors          = `dtt_actor_REL_ss:(${filters.actors.map(s=> s.toLowerCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.statuses))        statuses        = `dtt_status_REL_ss:(${filters.statuses.map(s=> s).join(' OR ')})`; // find solution because solr.escape is including \ before -
+
+    return { sessions, types, subjects, gbfGoals, gbfTargets, aichiTargets, actors, statuses }
+}
+
 function AND(...parts) { parts = (parts||[]).filter(o=>o); return parts.length ? `(${parts.join(' AND ' )})` : null; }
 function OR (...parts) { parts = (parts||[]).filter(o=>o); return parts.length ? `(${parts.join(' OR '  )})` : null; }
 
@@ -423,6 +516,10 @@ function targetCodeToNumber(code) {
 
 function termName(term) {
     return term.shortTitle?.en || term.title?.en || term.name || term.identifier || term.group;
+}
+
+function filterName(term) {
+    return term.identifier || term.code || term;
 }
 
 function capitalize(text) {
