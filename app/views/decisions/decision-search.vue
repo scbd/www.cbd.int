@@ -497,7 +497,7 @@ function getQueryParts(filters) {
     let actors          = null;
     let statuses        = null;
 
-    if(!_.isEmpty(filters.sessions))        sessions        = `dtt_code_s:${filters.sessions.map(o => `CBD/COP/${o}/*`).join(' OR ')}`; // find solution because solr.escape is including \ before *
+    if(!_.isEmpty(filters.sessions))        sessions        = `dtt_code_s:(${filters.sessions.map(o => `CBD/COP/${o.padStart(2,0)}/*`).join(' OR ')})`; // find solution because solr.escape is including \ before *
     if(!_.isEmpty(filters.types))           types           = `dtt_type_REL_ss:(${filters.types.map(o => o.toLowerCase()).map(s=> solr.escape(s)).join(' OR ')})`;
     if(!_.isEmpty(filters.subjects))        subjects        = `dtt_subject_REL_ss:(${filters.subjects.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
     if(!_.isEmpty(filters.gbfGoals))        gbfGoals        = `dtt_gbfGoal_ss:(${filters.gbfGoals.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
