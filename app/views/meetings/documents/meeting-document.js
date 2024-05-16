@@ -30,7 +30,8 @@ import copyLink from '~/components/link.vue';
 			scope: {
                 document:"<",
                 enableSelection:"<",
-                showStatistics:"<"
+                showStatistics:"<",
+                jumpTo:"<"
             },
 			link: function ($scope) {
 
