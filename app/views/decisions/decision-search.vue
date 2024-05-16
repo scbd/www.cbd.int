@@ -62,7 +62,7 @@
 
                                 <span v-for="actor in filters.actors" :key="actor">
                                     <span class="badge chip badge-primary">
-                                        {{actor|lstring}}
+                                        {{termDescription('actors', actor)|lstring}}
                                         <i class="fa fa-minus-circle" @click="updateFilters('actors', actor);"></i>
                                     </span>
                                 </span>
@@ -81,9 +81,10 @@
                     <div class="row">
                         <div class="col-md-12">
                             <label for="step2">Free text</label>
-                            <input class="form-control" type="text" v-model="freeText" @keyup.enter="search">
+                            <input class="form-control" type="text" v-model="freeText" @keyup.enter="search" :class="{'warning-border': freeTextEmpty}">
                         </div>
                     </div>
+                    <div v-if="freeTextEmpty" class="col-md-12 alert alert-warning">Please enter text to search.</div>
                     
                     <!-- Filters -->
                     <div class="row" style="margin-top: 10px">
@@ -252,7 +253,7 @@
                     </div>
                     <!--
                     Debug:<br />
-                    <pre>{{ filters }}</pre>
+                    <pre>{{ lists }}</pre>
                     -->
                 </div>
 
@@ -310,16 +311,6 @@ export default {
     },
     data() {
         return {
-            selected: {
-                actors          : [],
-                aichiTargets    : [],
-                gbfGoals        : [],
-                gbfTargets      : [],
-                sessions        : [],
-                statuses        : [],
-                subjects        : [],
-                types           : []
-            },
             selectedActor       : '',
             selectedAichiTarget : '',
             selectedGBFTarget   : '',
@@ -353,6 +344,7 @@ export default {
             recordsFound: false,
             pageSize: 10,
             freeText: '',
+            freeTextEmpty: false
         }
     },
     created,
@@ -362,7 +354,8 @@ export default {
         capitalize,
         updateFilters,
         filterName,
-        getQueryParts
+        getQueryParts,
+        termDescription
     }
 }
 
@@ -432,7 +425,9 @@ async function created() {
 }
 
 async function search() {
-    if (!_.isEmpty(this.freeText)) {
+    this.freeTextEmpty = _.isEmpty(this.freeText);
+    
+    if (!this.freeTextEmpty) {
 
         const words = `title_t:${this.freeText.toLowerCase().split(' ').filter(w=>!!w).map(w=> `${solr.escape(w)}~`)}`;
         const filter = getQueryParts(this.filters);
@@ -516,6 +511,12 @@ function targetCodeToNumber(code) {
     return parseInt(code.replace(/.*?(\d+)$/, '$1'));
 }
 
+function termDescription(section, term) {
+    let result = null;
+    if(section == 'actors') result = actorsList.find(item => item.code === term)
+    return result.title;
+}
+
 function termName(term) {
     return term.shortTitle?.en || term.title?.en || term.name || term.identifier || term.group;
 }
@@ -569,6 +570,10 @@ function capitalize(text) {
 }
 .para-tags{
     width:98.8%;
+}
+
+.warning-border {
+    border: 2px solid red;
 }
 
 ul {
