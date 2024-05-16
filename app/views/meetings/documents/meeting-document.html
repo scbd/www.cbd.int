@@ -46,7 +46,11 @@
             </div>
 
             <div ng-if="::document.metadata.superseded">
-				<div><em>Superseded by {{::document.metadata.superseded | toDisplaySymbol }}</em></div>
+				<div>
+                    <em>
+                    Superseded by <a href="#" ng-click="$event.stopPropagation(); $event.preventDefault(); jumpTo(document.metadata.superseded)">{{::document.metadata.superseded | toDisplaySymbol }}</a>
+                    </em>
+                </div>
             </div>
 
             <div>
