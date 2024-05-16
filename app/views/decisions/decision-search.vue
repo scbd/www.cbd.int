@@ -251,19 +251,20 @@
                         </a> - {{ record.title_s }}
                         <hr />
                     </div>
-                    <!--
-                    Debug:<br />
-                    <pre>{{ lists }}</pre>
-                    -->
                 </div>
 
             </div>
         </div>
         <br />
 
-        <div class="card-body view-decision" id="searchResultSection">
+        <div class="card-body view-decision col-md-12" id="searchResultSection">
             <div>
                 <!-- Pagination -->
+                <div class="pagination">
+                    <button :disabled="currentPage <= 1" @click="previousPage()">Previous</button>
+                    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+                    <button :disabled="currentPage >= totalPages" @click="nextPage()">Next</button>
+                </div>
             </div>
         </div>
     </div>
@@ -342,15 +343,19 @@ export default {
             records: null,
             recordsCount: null,
             recordsFound: false,
-            pageSize: 10,
             freeText: '',
-            freeTextEmpty: false
+            freeTextEmpty: false,
+            pageSize: 10,
+            currentPage: 1,
+            totalPages: 0
         }
     },
     created,
     methods:
     {
         search,
+        previousPage,
+        nextPage,
         capitalize,
         updateFilters,
         filterName,
@@ -433,10 +438,13 @@ async function search() {
         const filter = getQueryParts(this.filters);
         const query = AND(words, filter.sessions, filter.types, filter.subjects, filter.gbfGoals, filter.gbfTargets, filter.aichiTargets, filter.actors, filter.statuses);
         
-        const { response } = await queryIndex(query);
+        const start = (this.currentPage - 1) * this.pageSize;
+        
+        const { response } = await queryIndex(query, { sk: start, l: this.pageSize });
 
         this.recordsFound = (response.numFound !== '') ? true : false;
         this.recordsCount = response.numFound;
+        this.totalPages = Math.ceil(response.numFound / this.pageSize);
 
         this.records = response.docs.map(o=>{
             o.dtt_gbfTarget_ss  = o.dtt_gbfTarget_ss?.filter(o=>/^GBF-TARGET-/.test(o));
@@ -451,10 +459,25 @@ async function search() {
     }
 }
 
-async function queryIndex(query, { sk: start, l: rows } = {}) {
+
+async function queryIndex(query, { sk: start = 0, l: rows = 10 } = {}) {
     query = AND(baseIndexQuery, query);
-    const result = await solr.query(query, {start , rows});
+    const result = await solr.query(query, { start, rows });
     return result;
+}
+
+function previousPage() {
+    if (this.currentPage > 1) {
+        this.currentPage--;
+        this.search();
+    }
+}
+
+function nextPage() {
+    if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+        this.search();
+    }
 }
 
 async function getDomainTerms(code) {
@@ -518,6 +541,8 @@ function getTermDescription(section, term) {
     if(section == 'gbfTargets')     result.title    = term.replace(/^GBF-TARGET-/, 'GBF - Target ');
     if(section == 'gbfGoals')       result.title    = term.replace(/^GBF-GOAL-/, 'GBF - Goal ');
     if(section == 'aichiTargets')   result.title    = term.replace(/^AICHI-TARGET-/, 'Aichi - Target ');
+    // if(section == 'subjects')       result          = subjectList.find(item => item.identifier === term);
+    
     return result.name || result.title;
 }
 
@@ -578,6 +603,44 @@ function capitalize(text) {
 
 .warning-border {
     border: 2px solid red;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.pagination button {
+    padding: 5px 15px;
+    margin: 0 10px;
+    font-size: 16px;
+    color: #495057;
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    cursor: pointer;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.pagination button:disabled {
+    color: #6c757d;
+    cursor: not-allowed;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.pagination span {
+    font-size: 16px;
+    color: #495057;
 }
 
 ul {
