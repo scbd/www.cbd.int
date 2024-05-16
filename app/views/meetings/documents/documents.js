@@ -13,7 +13,7 @@ import moment from 'moment'
 import displayGroups from './display-groups'
 import * as meta from '~/services/meta'
 import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
-import { normalizeMeeting, normalizeDocumentSymbol } from '~/services/meetings'
+import { normalizeMeeting, normalizeDocumentSymbol, documentSortKey as sortKey } from '~/services/meetings'
 import '~/filters/to-display-symbol';
 
 export { default as template } from './documents.html';
@@ -21,7 +21,8 @@ export { default as template } from './documents.html';
     //'css!./agenda.css' // moved to template
     var STATISTICS = {}; 
 
-	export default ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', '$cookies', 'apiToken', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting, CacheFactory, $cookies, apiToken) {
+	export default ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', '$cookies', 'apiToken', 'locale', 
+           function ($scope,   $route,   $http,   $q,   $location,   $rootScope,   authentication,   showMeeting,   CacheFactory,   $cookies,   apiToken,   locale) {
 
         var _ctrl = $scope.documentsCtrl = this;
         var meetingCode = $route.current.params.meeting.toUpperCase();
@@ -134,16 +135,25 @@ export { default as template } from './documents.html';
 
             }).then(function(res) {
 
+                const sortKeyOptions = {
+                    baseSymbol : _ctrl.meeting.EVT_UN_CD,
+                    locale
+                }
+
                 _ctrl.documents = documents = _(res.data)
                     .map(normalizeDocument)
                     .map((d)=>{
                         const code = d.normalizedSymbol || d.symbol || d._id;
                         const url  = `/documents/${code}`;
                         
-                        return { url , ...d };
+                        return { 
+                            url, 
+                            sortKey : sortKey(d, sortKeyOptions),
+                            ...d 
+                        };
                     })                    
                     .filter(isDocumentVisible)
-                    .sortBy(sortKey)
+                    .sortBy((d) => d.sortKey)
                     .value();
 
                 return meeting; // force resolve
@@ -603,25 +613,6 @@ export { default as template } from './documents.html';
 
             });
         }, 100);
-        }
-
-        //==============================
-        //
-        //==============================
-        function sortKey(d) {
-
-            var parts = [];
-
-            if(d.nature=='statement')    
-                parts.push(((d.statementSource||{}).date||'9999-12-31')+"T99:99")
-
-
-            parts.push(("000000000" + (d.displayPosition||9999)).slice(-9))
-            parts.push((d.symbol||"").replace(/\b(\d)\b/g, '0$1')
-                                     .replace(/(\/REV)/gi, '0$1')
-                                     .replace(/(\/ADD)/gi, '1$1'));
-
-            return parts.join('_');
         }
 
         //==============================
