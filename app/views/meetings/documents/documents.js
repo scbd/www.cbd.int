@@ -56,6 +56,7 @@ export { default as template } from './documents.html';
             'outcome/recommendation': { position: 2000 , title : 'Recommendations' },
         };
 
+        _ctrl.jumpTo = jumpTo;
         _ctrl.showMeeting = showMeeting===undefined ? true : !!showMeeting;
         _ctrl.uploadStatement = false;
         _ctrl.sort = $location.hash() == 'agenda' ? 'agenda' : 'document';
@@ -224,11 +225,9 @@ export { default as template } from './documents.html';
             }).then(function(){
                 switchTab();
 
-                if($scope.focusDocumentId) {
-                    const id = $scope.focusDocumentId;
-                    const tr = document.querySelector(`tr[document-id="${id}"]`);
-                    tr?.scrollIntoView({ block: "center", behavior: "smooth" });
-                }
+                if($scope.focusDocumentId) 
+                    jumpTo($scope.focusDocumentId);
+
 
             }).catch(console.error).finally(function(){ _ctrl.loaded = true; });
         }
@@ -540,18 +539,61 @@ export { default as template } from './documents.html';
         //==============================
         //
         //==============================
-        function switchTabDirect(tab, extra) {
-            if(!tab && $location.search().doc) {
-                const id     = $location.search().doc;
-                const symbol = normalizeDocumentSymbol($location.search().doc);
-                let focusDocumentId = null;
-                tab = _(_ctrl.tabs).find((t) => {
-                    const doc = _(t.sections).map('documents').flatten().find(d => d._id == id || normalizeDocumentSymbol(d.symbol) == symbol)
-                    focusDocumentId = doc?._id;
-                    return !!doc;
-                });
+        function lookupFor(documentCodeOrId) {
 
-                $scope.focusDocumentId = focusDocumentId;
+            const id     = documentCodeOrId;
+            const symbol = normalizeDocumentSymbol(documentCodeOrId);
+
+            let document = null;
+
+            const tab = _(_ctrl.tabs).find((t) => {
+                document = _(t.sections).map('documents').flatten().compact().find((d) => {
+                    return d._id == id 
+                        || normalizeDocumentSymbol(d.symbol) == symbol
+                        || d?.metadata?.patterns?.includes(id)
+                })
+                return !!document;
+            });
+
+            if(document) return { document, tab };
+
+            return null;
+        }
+
+        //==============================
+        //
+        //==============================
+        function jumpTo(documentCodeOrId) {
+
+            const result = lookupFor(documentCodeOrId);
+
+            if(!result) return;
+
+            const id = result.document._id;
+            
+            switchTabDirect(result.tab);
+            
+            setTimeout(()=> {
+                $scope.$apply(()=>{
+                    $scope.focusDocumentId = id
+                    const tr = document.querySelector(`tr[document-id="${id}"]`);
+                    tr?.scrollIntoView({ block: "center", behavior: "smooth" });
+                })
+            }, 100);
+        }
+
+        //==============================
+        //
+        //==============================
+        function switchTabDirect(tab, extra) {
+
+            if(!tab && $location.search().doc) {
+
+                const result = lookupFor($location.search().doc);
+
+                $scope.focusDocumentId = result?.document?._id;
+                tab = result?.tab;
+
                 $location.search({doc:null});
             }
 
