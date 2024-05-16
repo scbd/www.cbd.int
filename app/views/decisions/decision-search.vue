@@ -429,7 +429,7 @@ async function search() {
     
     if (!this.freeTextEmpty) {
 
-        const words = `title_t:${this.freeText.toLowerCase().split(' ').filter(w=>!!w).map(w=> `${solr.escape(w)}~`)}`;
+        const words = `title_t:${this.freeText.toLowerCase().split(' ').filter(w=>!!w).map(w=> `${solr.escape(w)}`)}`;
         const filter = getQueryParts(this.filters);
         const query = AND(words, filter.sessions, filter.types, filter.subjects, filter.gbfGoals, filter.gbfTargets, filter.aichiTargets, filter.actors, filter.statuses);
         
