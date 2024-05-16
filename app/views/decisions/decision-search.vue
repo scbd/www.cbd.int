@@ -41,28 +41,28 @@
 
                                 <span v-for="gbfGoal in filters.gbfGoals" :key="gbfGoal">
                                     <span class="badge chip badge-primary">
-                                        {{gbfGoal|lstring}}
+                                        {{getTermDescription('gbfGoals', gbfGoal)|lstring}}
                                         <i class="fa fa-minus-circle" @click="updateFilters('gbfGoals', gbfGoal);"></i>
                                     </span>
                                 </span>
 
                                 <span v-for="gbfTarget in filters.gbfTargets" :key="gbfTarget">
                                     <span class="badge chip badge-primary">
-                                        {{gbfTarget|lstring}}
+                                        {{getTermDescription('gbfTargets', gbfTarget)|lstring}}
                                         <i class="fa fa-minus-circle" @click="updateFilters('gbfTargets', gbfTarget);"></i>
                                     </span>
                                 </span>
 
                                 <span v-for="aichiTarget in filters.aichiTargets" :key="aichiTarget">
                                     <span class="badge chip badge-primary">
-                                        {{aichiTarget|lstring}}
+                                        {{getTermDescription('aichiTargets', aichiTarget)|lstring}}
                                         <i class="fa fa-minus-circle" @click="updateFilters('aichiTargets', aichiTarget);"></i>
                                     </span>
                                 </span>
 
                                 <span v-for="actor in filters.actors" :key="actor">
                                     <span class="badge chip badge-primary">
-                                        {{termDescription('actors', actor)|lstring}}
+                                        {{getTermDescription('actors', actor)|lstring}}
                                         <i class="fa fa-minus-circle" @click="updateFilters('actors', actor);"></i>
                                     </span>
                                 </span>
@@ -355,7 +355,7 @@ export default {
         updateFilters,
         filterName,
         getQueryParts,
-        termDescription
+        getTermDescription
     }
 }
 
@@ -511,10 +511,14 @@ function targetCodeToNumber(code) {
     return parseInt(code.replace(/.*?(\d+)$/, '$1'));
 }
 
-function termDescription(section, term) {
-    let result = null;
-    if(section == 'actors') result = actorsList.find(item => item.code === term)
-    return result.title;
+function getTermDescription(section, term) {
+    let result = [];
+
+    if(section == 'actors')         result          = actorsList.find(item => item.code === term);
+    if(section == 'gbfTargets')     result.title    = term.replace(/^GBF-TARGET-/, 'GBF - Target ');
+    if(section == 'gbfGoals')       result.title    = term.replace(/^GBF-GOAL-/, 'GBF - Goal ');
+    if(section == 'aichiTargets')   result.title    = term.replace(/^AICHI-TARGET-/, 'Aichi - Target ');
+    return result.name || result.title;
 }
 
 function termName(term) {
