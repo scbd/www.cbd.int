@@ -1,4 +1,4 @@
-import lstring from '../filters/lstring.js';
+import lstring from '../services/lstring.js';
 
 //==============================
 //
