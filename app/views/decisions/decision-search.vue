@@ -154,7 +154,7 @@
 
                                 <span v-for="session in filters.sessions" :key="session">
                                     <span class="badge chip badge-primary">
-                                        {{ session | lstring }}
+                                        {{ getTitle(sessionsList, session) | lstring }}
                                         <i class="fa fa-minus-circle"
                                             @click="removeFilters('sessions', session); search({ page: 0 })"></i>
                                     </span>
@@ -162,7 +162,7 @@
 
                                 <span v-for="type in filters.types" :key="type">
                                     <span class="badge chip badge-primary">
-                                        {{ type | lstring }}
+                                        {{ getTitle(typesList, type) | lstring }}
                                         <i class="fa fa-minus-circle"
                                             @click="removeFilters('types', type); search({ page: 0 })"></i>
                                     </span>
@@ -170,7 +170,7 @@
 
                                 <span v-for="subject in filters.subjects" :key="subject">
                                     <span class="badge chip badge-primary">
-                                        {{ subject | lstring }}
+                                        {{ getTitle(subjectList, subject) | lstring }}
                                         <i class="fa fa-minus-circle"
                                             @click="removeFilters('subjects', subject); search({ page: 0 })"></i>
                                     </span>
@@ -178,7 +178,7 @@
 
                                 <span v-for="gbfGoal in filters.gbfGoals" :key="gbfGoal">
                                     <span class="badge chip badge-primary">
-                                        {{ getTermDescription('gbfGoals', gbfGoal) | lstring }}
+                                        {{ getTitle(gbfGoalsList, gbfGoal) | lstring }}
                                         <i class="fa fa-minus-circle"
                                             @click="removeFilters('gbfGoals', gbfGoal); search({ page: 0 })"></i>
                                     </span>
@@ -186,7 +186,7 @@
 
                                 <span v-for="gbfTarget in filters.gbfTargets" :key="gbfTarget">
                                     <span class="badge chip badge-primary">
-                                        {{ getTermDescription('gbfTargets', gbfTarget) | lstring }}
+                                        {{ getTitle(gbfTargetsList, gbfTarget) | lstring }}
                                         <i class="fa fa-minus-circle"
                                             @click="removeFilters('gbfTargets', gbfTarget); search({ page: 0 })"></i>
                                     </span>
@@ -194,7 +194,7 @@
 
                                 <span v-for="aichiTarget in filters.aichiTargets" :key="aichiTarget">
                                     <span class="badge chip badge-primary">
-                                        {{ getTermDescription('aichiTargets', aichiTarget) | lstring }}
+                                        {{ getTitle(aichiTargetsList, aichiTarget) | lstring }}
                                         <i class="fa fa-minus-circle"
                                             @click="removeFilters('aichiTargets', aichiTarget); search({ page: 0 })"></i>
                                     </span>
@@ -202,7 +202,7 @@
 
                                 <span v-for="actor in filters.actors" :key="actor">
                                     <span class="badge chip badge-primary">
-                                        {{ getTermDescription('actors', actor) | lstring }}
+                                        {{ getTitle(actorsList, actor) | lstring }}
                                         <i class="fa fa-minus-circle"
                                             @click="removeFilters('actors', actor); search({page:0})"></i>
                                     </span>
@@ -210,7 +210,7 @@
 
                                 <span v-for="status in filters.statuses" :key="status">
                                     <span class="badge chip badge-primary">
-                                        {{capitalize(status)|lstring}}
+                                        {{ getTitle(statusesList, status) | lstring}}
                                         <i class="fa fa-minus-circle"
                                             @click="removeFilters('statuses', status); search({page:0})"></i>
                                     </span>
@@ -264,7 +264,7 @@
                                 :class="item === 'active' ? 'badge-success' : 'badge-secondary'"
                                 style="opacity:0.5;margin-right:6px">
                                 <i class="fa fa-info-circle"></i>
-                                <span>{{ capitalize(item) }}</span>
+                                <span>{{ getTitle(statusesList, item) }}</span>
                             </span>
 
                             <ul>
@@ -312,7 +312,6 @@
 
 <script>
 import _ from 'lodash';
-import axios from 'axios';
 import lstring from '~/filters/lstring.js';
 import SolrApi from '../../api/solr.js';
 import ThesaurusApi from '../../api/thesaurus.js';
@@ -324,7 +323,6 @@ import sessionsList from './data/sessions.js';
 import typesList from './data/types.js';
 import actorsList from './data/actors.js';
 import statusesList from './data/statuses.js';
-import DecisionSearchHelp from '~/components/decisions/decision-search-help.vue';
 
 // ====================================
 // Update this when deploying to 
@@ -374,7 +372,7 @@ export default {
                 sessions        : [],
                 statuses        : [],
                 subjects        : [],
-                types           : []
+                types           : [],
             },
             filters: {
                 actors          : [],
@@ -401,11 +399,9 @@ export default {
         search,
         previousPage,
         nextPage,
-        capitalize,
         addFilters,
         removeFilters,
-        filterName,
-        getTermDescription
+        getTitle
     }
 }
 
@@ -419,10 +415,20 @@ async function created() {
     let gbfTargetsList      = getDomainTerms('GBF-TARGETS');
     let gbfGoalsList        = getDomainTerms('GBF-GOALS');
 
-    aichiTargetsList        = await aichiTargetsList;
-    subjectList             = await subjectList;
-    gbfTargetsList          = await gbfTargetsList;
-    gbfGoalsList            = await gbfGoalsList;
+    aichiTargetsList  = await aichiTargetsList;
+    subjectList       = await subjectList;
+    gbfTargetsList    = await gbfTargetsList;
+    gbfGoalsList      = await gbfGoalsList;
+
+    this.aichiTargetsList = aichiTargetsList;
+    this.subjectList      = subjectList;
+    this.gbfTargetsList   = gbfTargetsList;
+    this.gbfGoalsList     = gbfGoalsList;
+    this.typesList        = typesList;
+    this.sessionsList     = sessionsList;
+    this.statusesList     = statusesList;
+    this.actorsList       = actorsList;
+
 
     this.lists.types        = _(typesList)          .reduce((r,v) => { r[v.code] = v; return r; }, {});
     this.lists.sessions     = _(sessionsList)       .reduce((r,v) => { if (!r[v.group]) { r[v.group] = []; } r[v.group].push(v); return r; }, {});
@@ -472,6 +478,10 @@ async function created() {
         return groups;
     }, {});
     
+}
+
+function getTitle(list, code) {
+    return list.find(o=>o.identifier==code || o.code == code)?.title || code;
 }
 
 async function search({page}={}) {
@@ -590,35 +600,8 @@ function padInt(c) {
     return c && `${c}`.replace(/\d+/g, d=>d.padStart(2,c));
 }
 
-function getTermDescription(section, term) {
-    let result = [];
-
-    if(section == 'actors')         result          = actorsList.find(item => item.code === term);
-    if(section == 'gbfTargets')     result.title    = term.replace(/^GBF-TARGET-/, 'GBF - Target ');
-    if(section == 'gbfGoals')       result.title    = term.replace(/^GBF-GOAL-/, 'GBF - Goal ');
-    if(section == 'aichiTargets')   result.title    = term.replace(/^AICHI-TARGET-/, 'Aichi - Target ');
-    // if(section == 'subjects')       result          = subjectList.find(item => item.identifier === term);
-    
-    return result.name || result.title;
-}
-
 function termName(term) {
     return term.shortTitle?.en || term.title?.en || term.name || term.identifier || term.group;
-}
-
-function filterName(term) {
-    return term.identifier || term.code || term;
-}
-
-function capitalize(text) {
-    const lowerText = this.$options.filters.lowercase(text);
-    var capitalized = []
-    lowerText.split(' ').forEach(word => {
-        capitalized.push(
-            word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-        )
-    })
-    return capitalized.join(' ')
 }
 
 </script>
