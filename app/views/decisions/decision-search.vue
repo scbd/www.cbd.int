@@ -479,13 +479,14 @@ async function search({page}={}) {
     this.searched = true;
     if(page!==undefined) this.currentPage = page;
 
-    this.records = null;
-    this.recordsCount = null;
-    this.totalPages = 0;
-
     const { queryParts, currentPage, pageSize } = this;
 
-    if(!queryParts.length) return;
+    if(!queryParts.length) { 
+        this.records = null;
+        this.recordsCount = null;
+        this.totalPages = 0;
+        return;
+    }
 
     const query = AND(queryParts);
     
@@ -518,12 +519,12 @@ async function queryIndex(query, { sk: start = 0, l: rows = 10 } = {}) {
 
 function previousPage() {
     if (this.currentPage > 0) 
-        this.search(this.currentPage-1);
+        this.search({ page: this.currentPage-1 });
 }
 
 function nextPage() {
     if (this.currentPage < this.totalPages-1)
-        this.search(this.currentPage+1);
+        this.search({ page: this.currentPage+1 });
 }
 
 async function getDomainTerms(code) {
