@@ -597,7 +597,7 @@ function targetCodeToNumber(code) {
 }
 
 function padInt(c) {
-    return c && `${c}`.replace(/\d+/g, d=>d.padStart(2,c));
+    return c && `${c}`.replace(/\d+/g, d=>d.padStart(2,0));
 }
 
 function termName(term) {
