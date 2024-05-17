@@ -154,7 +154,7 @@
 
                                 <span v-for="session in filters.sessions" :key="session">
                                     <span class="badge chip badge-primary">
-                                        COP {{ session | lstring }}
+                                        {{ session | lstring }}
                                         <i class="fa fa-minus-circle"
                                             @click="removeFilters('sessions', session); search({ page: 0 })"></i>
                                     </span>
