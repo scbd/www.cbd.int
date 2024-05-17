@@ -1,275 +1,313 @@
 <template>
-<div class="decision-tracking">
-    <header-decisions>
-        <span class="float-right">
-            <decision-search-help ng-vue="vueOptions" title="Help" />
-        </span>
-        <h1><span id="step1">Search Decisions</span></h1>
-    </header-decisions>
+    <div class="decision-tracking">
+        <header-decisions>
+            <span class="float-right">
+                <decision-search-help ng-vue="vueOptions" title="Help" />
+            </span>
+            <h1><span id="step1">Search Decisions</span></h1>
+        </header-decisions>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    Filters
-                </div>
-                <div class="card-body">
-
-                    <div class="row" v-if="filters" style="border-bottom:1px solid #eee; padding-bottom:10px">
-                        <div class="col-md-12">
-                            <span>
-                                <span v-for="session in filters.sessions" :key="session">
-                                    <span class="badge chip badge-primary">
-                                        COP {{session|lstring}}
-                                        <i class="fa fa-minus-circle" @click="removeFilters('sessions', session); search({page:0})"></i>
-                                    </span>
-                                </span>
-
-                                <span v-for="type in filters.types" :key="type">
-                                    <span class="badge chip badge-primary">
-                                        {{type|lstring}}
-                                        <i class="fa fa-minus-circle" @click="removeFilters('types', type); search({page:0})"></i>
-                                    </span>
-                                </span>
-
-                                <span v-for="subject in filters.subjects" :key="subject">
-                                    <span class="badge chip badge-primary">
-                                        {{subject|lstring}}
-                                        <i class="fa fa-minus-circle" @click="removeFilters('subjects', subject); search({page:0})"></i>
-                                    </span>
-                                </span>
-
-                                <span v-for="gbfGoal in filters.gbfGoals" :key="gbfGoal">
-                                    <span class="badge chip badge-primary">
-                                        {{getTermDescription('gbfGoals', gbfGoal)|lstring}}
-                                        <i class="fa fa-minus-circle" @click="removeFilters('gbfGoals', gbfGoal); search({page:0})"></i>
-                                    </span>
-                                </span>
-
-                                <span v-for="gbfTarget in filters.gbfTargets" :key="gbfTarget">
-                                    <span class="badge chip badge-primary">
-                                        {{getTermDescription('gbfTargets', gbfTarget)|lstring}}
-                                        <i class="fa fa-minus-circle" @click="removeFilters('gbfTargets', gbfTarget); search({page:0})"></i>
-                                    </span>
-                                </span>
-
-                                <span v-for="aichiTarget in filters.aichiTargets" :key="aichiTarget">
-                                    <span class="badge chip badge-primary">
-                                        {{getTermDescription('aichiTargets', aichiTarget)|lstring}}
-                                        <i class="fa fa-minus-circle" @click="removeFilters('aichiTargets', aichiTarget); search({page:0})"></i>
-                                    </span>
-                                </span>
-
-                                <span v-for="actor in filters.actors" :key="actor">
-                                    <span class="badge chip badge-primary">
-                                        {{getTermDescription('actors', actor)|lstring}}
-                                        <i class="fa fa-minus-circle" @click="removeFilters('actors', actor); search({page:0})"></i>
-                                    </span>
-                                </span>
-
-                                <span v-for="status in filters.statuses" :key="status">
-                                    <span class="badge chip badge-primary">
-                                        {{capitalize(status)|lstring}}
-                                        <i class="fa fa-minus-circle" @click="removeFilters('statuses', status); search({page:0})"></i>
-                                    </span>
-                                </span>
-
-                            </span>
-                        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Filters
                     </div>
+                    <div class="card-body">
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label for="step2">Free text</label>
-                            <input class="form-control" type="text" v-model="freeText" @keyup.enter="search" :class="{'warning-border': freeTextEmpty}">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="step2">Free text</label>
+                                <input class="form-control" type="text" v-model.lazy="freeText" @change="search({page:0})"
+                                    :class="{'warning-border': freeTextEmpty}">
+                            </div>
                         </div>
-                    </div>
-                    <div v-if="freeTextEmpty" class="col-md-12 alert alert-warning">Please enter text to search.</div>
-                    
-                    <!-- Filters -->
-                    <div class="row" style="margin-top: 10px">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header" style="background-color: transparent">
-                                    <a data-toggle="collapse" href="#advanceSearch" id="step3" aria-expanded="false" aria-controls="advanceSearch">Advanced Search</a>
-                                </div>
-                                <div id="advanceSearch" class="collapse">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Meeting</label>
-                                                <select class="form-control" v-model="selectedSession" @change="addFilters('sessions', selectedSession); selectedSession=''; search({page:0})">
-                                                    <option value="">all meetings</option>
-                                                    <optgroup v-for="(session, sessionName) in lists.sessions" :label="sessionName" :key="sessionName">
-                                                    <option v-for="item in session" :value="item.code" :key="item.code">{{ item.title }}</option>
-                                                    </optgroup>
-                                                </select>
+                        <div v-if="freeTextEmpty" class="col-md-12 alert alert-warning">Please enter text to search.
+                        </div>
+
+                        <!-- Filters -->
+                        <div class="row" style="margin-top: 10px">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header" style="background-color: transparent">
+                                        <a data-toggle="collapse" href="#advanceSearch" id="step3" aria-expanded="false"
+                                            aria-controls="advanceSearch">Advanced Search</a>
+                                    </div>
+                                    <div id="advanceSearch" class="collapse">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>Meeting</label>
+                                                    <select class="form-control" v-model="selectedSession"
+                                                        @change="addFilters('sessions', selectedSession); selectedSession=''; search({page:0})">
+                                                        <option value="">Select...</option>
+                                                        <option v-if="filters.sessions.length" value="{CLEAR}">any meetings</option>
+                                                        <optgroup v-for="(session, sessionName) in lists.sessions"
+                                                            :label="sessionName" :key="sessionName">
+                                                            <option v-for="item in session" :value="item.code"
+                                                                :key="item.code">{{ item.title }}</option>
+                                                        </optgroup>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Decision Type</label>
+                                                    <select class="form-control" v-model="selectedType"
+                                                        @change="addFilters('types', selectedType); selectedType=''; search({page:0})">
+                                                        <option value="">Select...</option>
+                                                        <option v-if="filters.types.length" value="{CLEAR}">any decision types</option>
+                                                        <option v-for="item in lists.types" :value="item.code"
+                                                            :key="item.code">{{ item.title }}</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label>Decision Type</label>
-                                                <select class="form-control" v-model="selectedType" @change="addFilters('types', selectedType); selectedType=''; search({page:0})">
-                                                    <option value="">all decision types</option>
-                                                    <option v-for="item in lists.types" :value="item.code" :key="item.code">{{ item.title }}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <br />
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label>Subjects</label>
-                                                <select class="form-control" v-model="selectedSubject" @change="addFilters('subjects', selectedSubject); selectedSubject=''; search({page:0})">
-                                                    <option value="">all subjects</option>
-                                                    <optgroup v-for="group in lists.subjects" :key="group.name" :label="group.name">
-                                                        <option v-for="subject in group.subjects" :key="subject.identifier" :value="subject.identifier">{{ subject.name }}</option>
-                                                    </optgroup>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label>GBF Goals</label>
-                                                <select class="form-control" v-model="selectedGBFGoal" @change="addFilters('gbfGoals', selectedGBFGoal); selectedGBFGoal=''; search({page:0})">
-                                                    <option value="">all GBF goals</option>
-                                                    <option v-for="item in lists.gbfGoals" :key="item.identifier" :value="item.identifier">{{ item.name }}</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label>GBF Targets</label>
-                                                <select class="form-control" v-model="selectedGBFTarget" @change="addFilters('gbfTargets', selectedGBFTarget); selectedGBFTarget=''; search({page:0})">
-                                                    <option value="">all GBF targets</option>
-                                                    <option v-for="item in lists.gbfTargets" :key="item.identifier" :value="item.identifier">{{ item.name }}</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label>Aichi Targets</label>
-                                                <select class="form-control" v-model="selectedAichiTarget" @change="addFilters('aichiTargets', selectedAichiTarget); selectedAichiTarget=''; search({page:0})">
-                                                <option value="">all AICHI targets</option>
-                                                    <option v-for="item in lists.aichiTargets" :key="item.identifier" :value="item.identifier">{{ item.name }}</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label>Actors</label>
-                                                <select class="form-control" v-model="selectedActor" @change="addFilters('actors', selectedActor); selectedActor=''; search({page:0})">
-                                                    <option value="">all actors</option>
-                                                    <optgroup v-for="group in lists.actors" :key="group.identifier" :label="group.name">
-                                                        <option v-for="actor in group.actors" :key="actor.identifier" :value="actor.identifier">{{ actor.name }}</option>
-                                                    </optgroup>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label>Status</label>
-                                                <select class="form-control" v-model="selectedStatus" @change="addFilters('statuses', selectedStatus); selectedStatus=''; search({page:0})">
-                                                <option value="">all statuses</option>
-                                                    <option v-for="item in lists.statuses" :key="item.code" :value="item.code">{{ item.title }}</option>
-                                                </select>
+                                            <br />
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <label>Subjects</label>
+                                                    <select class="form-control" v-model="selectedSubject"
+                                                        @change="addFilters('subjects', selectedSubject); selectedSubject=''; search({page:0})">
+                                                        <option value="">Select...</option>
+                                                        <option v-if="filters.subjects.length" value="{CLEAR}">any subjects</option>
+                                                        <optgroup v-for="group in lists.subjects" :key="group.name"
+                                                            :label="group.name">
+                                                            <option v-for="subject in group.subjects"
+                                                                :key="subject.identifier" :value="subject.identifier">{{
+                                                                subject.name }}</option>
+                                                        </optgroup>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>GBF Goals</label>
+                                                    <select class="form-control" v-model="selectedGBFGoal"
+                                                        @change="addFilters('gbfGoals', selectedGBFGoal); selectedGBFGoal=''; search({page:0})">
+                                                        <option value="">Select...</option>
+                                                        <option v-if="filters.gbfGoals.length" value="{CLEAR}">any goals</option>
+                                                        <option v-for="item in lists.gbfGoals" :key="item.identifier"
+                                                            :value="item.identifier">{{ item.name }}</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>GBF Targets</label>
+                                                    <select class="form-control" v-model="selectedGBFTarget"
+                                                        @change="addFilters('gbfTargets', selectedGBFTarget); selectedGBFTarget=''; search({page:0})">
+                                                        <option value="">Select...</option>
+                                                        <option v-if="filters.gbfTargets.length" value="{CLEAR}">any GBF targets</option>
+                                                        <option v-for="item in lists.gbfTargets" :key="item.identifier"
+                                                            :value="item.identifier">{{ item.name }}</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>Aichi Targets</label>
+                                                    <select class="form-control" v-model="selectedAichiTarget"
+                                                        @change="addFilters('aichiTargets', selectedAichiTarget); selectedAichiTarget=''; search({page:0})">
+                                                        <option value="">Select.....</option>
+                                                        <option v-if="filters.aichiTargets.length" value="{CLEAR}">any AICHI targets</option>
+                                                        <option v-for="item in lists.aichiTargets"
+                                                            :key="item.identifier" :value="item.identifier">{{ item.name
+                                                            }}</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>Actors</label>
+                                                    <select class="form-control" v-model="selectedActor"
+                                                        @change="addFilters('actors', selectedActor); selectedActor=''; search({page:0})">
+                                                        <option value="">Select...</option>
+                                                        <option v-if="filters.actors.length" value="{CLEAR}">any actors</option>
+                                                        <optgroup v-for="group in lists.actors" :key="group.identifier"
+                                                            :label="group.name">
+                                                            <option v-for="actor in group.actors"
+                                                                :key="actor.identifier" :value="actor.identifier">{{
+                                                                actor.name }}</option>
+                                                        </optgroup>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label>Status</label>
+                                                    <select class="form-control" v-model="selectedStatus"
+                                                        @change="addFilters('statuses', selectedStatus); selectedStatus = ''; search({ page: 0 })">
+                                                        <option value="">Select...</option>
+                                                        <option v-if="filters.statuses.length" value="{CLEAR}">any statuses</option>
+                                                        <option v-for="item in lists.statuses" :key="item.code"
+                                                            :value="item.code">{{ item.title }}</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Filters -->
-                    
-                    <div class="row">
-                        <div class="col-md-12">
-                            <br/>
-                            <button class="btn btn-primary  float-right" @click="search({page: 0})">Search</button>
+                        <!-- Filters -->
+
+                        <div class="row pt-2">
+
+                            <div class="col-md-11 pt-2">
+
+                                <span v-if="words.length">
+                                    <span class="badge chip badge-primary">
+                                        {{words.join(' ')}}
+                                        <i class="fa fa-minus-circle"
+                                            @click="freeText = ''; search({page: 0})"></i>
+                                    </span>
+                                </span>
+
+                                <span v-for="session in filters.sessions" :key="session">
+                                    <span class="badge chip badge-primary">
+                                        COP {{ session | lstring }}
+                                        <i class="fa fa-minus-circle"
+                                            @click="removeFilters('sessions', session); search({ page: 0 })"></i>
+                                    </span>
+                                </span>
+
+                                <span v-for="type in filters.types" :key="type">
+                                    <span class="badge chip badge-primary">
+                                        {{ type | lstring }}
+                                        <i class="fa fa-minus-circle"
+                                            @click="removeFilters('types', type); search({ page: 0 })"></i>
+                                    </span>
+                                </span>
+
+                                <span v-for="subject in filters.subjects" :key="subject">
+                                    <span class="badge chip badge-primary">
+                                        {{ subject | lstring }}
+                                        <i class="fa fa-minus-circle"
+                                            @click="removeFilters('subjects', subject); search({ page: 0 })"></i>
+                                    </span>
+                                </span>
+
+                                <span v-for="gbfGoal in filters.gbfGoals" :key="gbfGoal">
+                                    <span class="badge chip badge-primary">
+                                        {{ getTermDescription('gbfGoals', gbfGoal) | lstring }}
+                                        <i class="fa fa-minus-circle"
+                                            @click="removeFilters('gbfGoals', gbfGoal); search({ page: 0 })"></i>
+                                    </span>
+                                </span>
+
+                                <span v-for="gbfTarget in filters.gbfTargets" :key="gbfTarget">
+                                    <span class="badge chip badge-primary">
+                                        {{ getTermDescription('gbfTargets', gbfTarget) | lstring }}
+                                        <i class="fa fa-minus-circle"
+                                            @click="removeFilters('gbfTargets', gbfTarget); search({ page: 0 })"></i>
+                                    </span>
+                                </span>
+
+                                <span v-for="aichiTarget in filters.aichiTargets" :key="aichiTarget">
+                                    <span class="badge chip badge-primary">
+                                        {{ getTermDescription('aichiTargets', aichiTarget) | lstring }}
+                                        <i class="fa fa-minus-circle"
+                                            @click="removeFilters('aichiTargets', aichiTarget); search({ page: 0 })"></i>
+                                    </span>
+                                </span>
+
+                                <span v-for="actor in filters.actors" :key="actor">
+                                    <span class="badge chip badge-primary">
+                                        {{ getTermDescription('actors', actor) | lstring }}
+                                        <i class="fa fa-minus-circle"
+                                            @click="removeFilters('actors', actor); search({page:0})"></i>
+                                    </span>
+                                </span>
+
+                                <span v-for="status in filters.statuses" :key="status">
+                                    <span class="badge chip badge-primary">
+                                        {{capitalize(status)|lstring}}
+                                        <i class="fa fa-minus-circle"
+                                            @click="removeFilters('statuses', status); search({page:0})"></i>
+                                    </span>
+                                </span>
+                            </div>
+
+                            <div class="col-md-1">
+                                <button class="btn btn-primary  float-right" @click="search({page: 0})">Search</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <br />
+        <br />
 
-    <div class="row" id="searchResult" v-if="recordsFound && recordsFound==true">
+        <div class="row" id="searchResult" v-if="records">
             <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-md-4">
-
-                            <span class="float-left">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12">
                                 <i class="fa fa-clone" ng-class="icon"></i> Search results
-                            </span>
+                            </div>
                         </div>
-                        <div class="col-md-8"></div>
                     </div>
-                </div>
-                <!-- Result -->
-                <div v-if="records && recordsCount==0"  style="position: sticky; top:0px">
-                    <div class="card-body">No results found.</div>
-                </div>
+                    <!-- Result -->
+                    <div v-if="recordsCount==0" style="position: sticky; top:0px">
+                        <div class="card-body">No results found.</div>
+                    </div>
 
-                <div v-if="records && recordsCount>=1"  style="position: sticky; top:0px">
-                    <div class="card-body">
-                        <b>{{ recordsCount }}</b> records found.
-                    </div>
-                    <div class="card-body" v-for="record in records" :key="record.id">
-                        <span v-for="item in record.dtt_type_REL_ss" :key="item">
-                            <span v-if="item=='operational'" class="pull-right badge ng-scope badge-info" style="opacity:0.5; margin-right: 6px;">
-                                <span><i class="fa fa-cog"></i> Operational</span>
+                    <div v-if="recordsCount>=1" style="position: sticky; top:0px">
+                        <div class="card-body">
+                            <b>{{ recordsCount }}</b> records found.
+                        </div>
+                        <div class="card-body" v-for="record in records" :key="record.id">
+                            <span v-for="item in record.dtt_type_REL_ss" :key="item">
+                                <span v-if="item=='operational'" class="pull-right badge ng-scope badge-info"
+                                    style="opacity:0.5; margin-right: 6px;">
+                                    <span><i class="fa fa-cog"></i> Operational</span>
+                                </span>
+
+                                <span v-if="item=='informational'" class="pull-right badge ng-scope badge-secondary"
+                                    style="opacity:0.5; margin-right: 6px;">
+                                    <span><i class="fa fa-info-circle"></i> Informational</span>
+                                </span>
                             </span>
 
-                            <span v-if="item=='informational'" class="pull-right badge ng-scope badge-secondary" style="opacity:0.5; margin-right: 6px;">
-                                <span><i class="fa fa-info-circle"></i> Informational</span>
+
+                            <span v-for="item in records.dtt_status_ss" :key="item" class="pull-right badge"
+                                :class="item === 'active' ? 'badge-success' : 'badge-secondary'"
+                                style="opacity:0.5;margin-right:6px">
+                                <i class="fa fa-info-circle"></i>
+                                <span>{{ capitalize(item) }}</span>
                             </span>
-                        </span>
 
+                            <ul>
+                                <li v-for="item in record.dtt_gbfGoal_ii" :key="item">
+                                    <a href="https://www.cbd.int/gbf/goals/" target="_blank">
+                                        <img :src="`/app/images/gbf-goals/gbf-${item}-64.png`" width="20"
+                                            style="margin: 1px 1px 1px 1px;">
+                                    </a>
+                                </li>
+                                <li v-for="item in record.dtt_gbfTarget_ii" :key="item">
+                                    <a :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(parseInt(item))}`"
+                                        target="_blank">
+                                        <img :src="`/app/images/gbf-targets/gbf-${item}-64.png`" width="20"
+                                            style="margin: 1px 1px 1px 1px;">
+                                    </a>
+                                </li>
+                            </ul>
 
-                        <span 
-                            v-for="item in records.dtt_status_ss" 
-                            :key="item"
-                            class="pull-right badge" 
-                            :class="item === 'active' ? 'badge-success' : 'badge-secondary'"
-                            style="opacity:0.5;margin-right:6px">
-                            <i class="fa fa-info-circle"></i> 
-                            <span>{{ capitalize(item) }}</span>
-                        </span>
-
-                        <ul>
-                            <li v-for="item in record.dtt_gbfGoal_ii" :key="item">
-                                <a href="https://www.cbd.int/gbf/goals/" target="_blank">
-                                <img 
-                                    :src="`/app/images/gbf-goals/gbf-${item}-64.png`"
-									width="20" style="margin: 1px 1px 1px 1px;">
-                                </a>
-                            </li>
-                            <li v-for="item in record.dtt_gbfTarget_ii" :key="item">
-                                <a :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(parseInt(item))}`" target="_blank">
-                                <img 
-                                    :src="`/app/images/gbf-targets/gbf-${item}-64.png`" 
-									width="20" style="margin: 1px 1px 1px 1px;">
-                                </a>
-                            </li>
-                        </ul>
-
-                        <i class="fa fa-search" aria-hidden="true"></i> Decision <a 
-                            :href="`/decisions/${record.dtt_codeUrl_ii}`"
-                            target="_blank">
+                            <i class="fa fa-search" aria-hidden="true"></i> Decision <a
+                                :href="`/decisions/${record.dtt_codeUrl_ii}`" target="_blank">
                                 {{ record.dtt_code_s }}
-                        </a> - {{ record.title_s }}
-                        <hr />
+                            </a> - {{ record.title_s }}
+                            <hr />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div v-if="totalPages" class="card-body view-decision col-md-12" id="searchResultSection">
+                <div>
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <button :disabled="currentPage < 1" @click="previousPage()">Previous</button>
+                        <span>Page {{ currentPage+1 }} of {{ totalPages }}</span>
+                        <button :disabled="currentPage >= totalPages-1" @click="nextPage()">Next</button>
                     </div>
                 </div>
-
             </div>
         </div>
+        <br /><br />
 
-        <div v-if="totalPages" class="card-body view-decision col-md-12" id="searchResultSection">
-            <div>
-                <!-- Pagination -->
-                <div class="pagination">
-                    <button :disabled="currentPage < 1" @click="previousPage()">Previous</button>
-                    <span>Page {{ currentPage+1 }} of {{ totalPages }}</span>
-                    <button :disabled="currentPage >= totalPages-1" @click="nextPage()">Next</button>
-                </div>
-            </div>
-        </div>
     </div>
-    <br /><br />
-
-</div>
 </template>
 
 <script>
@@ -500,6 +538,12 @@ async function getDomainTerms(code) {
 }
 
 function addFilters(section, value) {
+
+    if(value=='{CLEAR}') {
+        this.filters[section] = [];
+        return;
+    }
+
     this.filters[section] = _(this.filters[section]).union([value]).compact().value();
 }
 
@@ -522,7 +566,7 @@ function queryParts() {
     let statuses        = null;
 
     if(!_.isEmpty(words))                freetext     = 'title_t:'           + AND(words.map(w=>`${solr.escape(w)}~`)); // find solution because solr.escape is including \ before *
-    if(!_.isEmpty(filters.sessions))     sessions     = 'dtt_code_s:'         + OR(filters.sessions    .map(o => `CBD/COP/${o.padStart(2,0)}/`).map(solr.escape).map(o=>o+'*')); // find solution because solr.escape is including \ before *
+    if(!_.isEmpty(filters.sessions))     sessions     = 'dtt_code_s:'         + OR(filters.sessions    .map(o => `CBD/${padInt(o).replace(/-/g, '\/')}/`).map(solr.escape).map(o=>o+'*')); // find solution because solr.escape is including \ before *
     if(!_.isEmpty(filters.types))        types        = 'dtt_type_REL_ss:'    + OR(filters.types       .map(solr.escape));
     if(!_.isEmpty(filters.subjects))     subjects     = 'dtt_subject_REL_ss:' + OR(filters.subjects    .map(solr.escape)); // find solution because solr.escape is including \ before -
     if(!_.isEmpty(filters.gbfGoals))     gbfGoals     = 'dtt_gbfGoal_ss:'     + OR(filters.gbfGoals    .map(solr.escape)); // find solution because solr.escape is including \ before -
@@ -539,6 +583,10 @@ function OR (parts) { parts = (parts||[]).filter(o=>o); return parts.length ? `(
 
 function targetCodeToNumber(code) {
     return parseInt(code.replace(/.*?(\d+)$/, '$1'));
+}
+
+function padInt(c) {
+    return c && `${c}`.replace(/\d+/g, d=>d.padStart(2,c));
 }
 
 function getTermDescription(section, term) {
