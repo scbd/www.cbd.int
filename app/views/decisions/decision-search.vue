@@ -21,56 +21,56 @@
                                 <span v-for="session in filters.sessions" :key="session">
                                     <span class="badge chip badge-primary">
                                         COP {{session|lstring}}
-                                        <i class="fa fa-minus-circle" @click="updateFilters('sessions', session);"></i>
+                                        <i class="fa fa-minus-circle" @click="removeFilters('sessions', session); search({page:0})"></i>
                                     </span>
                                 </span>
 
                                 <span v-for="type in filters.types" :key="type">
                                     <span class="badge chip badge-primary">
                                         {{type|lstring}}
-                                        <i class="fa fa-minus-circle" @click="updateFilters('types', type);"></i>
+                                        <i class="fa fa-minus-circle" @click="removeFilters('types', type); search({page:0})"></i>
                                     </span>
                                 </span>
 
                                 <span v-for="subject in filters.subjects" :key="subject">
                                     <span class="badge chip badge-primary">
                                         {{subject|lstring}}
-                                        <i class="fa fa-minus-circle" @click="updateFilters('subjects', subject);"></i>
+                                        <i class="fa fa-minus-circle" @click="removeFilters('subjects', subject); search({page:0})"></i>
                                     </span>
                                 </span>
 
                                 <span v-for="gbfGoal in filters.gbfGoals" :key="gbfGoal">
                                     <span class="badge chip badge-primary">
                                         {{getTermDescription('gbfGoals', gbfGoal)|lstring}}
-                                        <i class="fa fa-minus-circle" @click="updateFilters('gbfGoals', gbfGoal);"></i>
+                                        <i class="fa fa-minus-circle" @click="removeFilters('gbfGoals', gbfGoal); search({page:0})"></i>
                                     </span>
                                 </span>
 
                                 <span v-for="gbfTarget in filters.gbfTargets" :key="gbfTarget">
                                     <span class="badge chip badge-primary">
                                         {{getTermDescription('gbfTargets', gbfTarget)|lstring}}
-                                        <i class="fa fa-minus-circle" @click="updateFilters('gbfTargets', gbfTarget);"></i>
+                                        <i class="fa fa-minus-circle" @click="removeFilters('gbfTargets', gbfTarget); search({page:0})"></i>
                                     </span>
                                 </span>
 
                                 <span v-for="aichiTarget in filters.aichiTargets" :key="aichiTarget">
                                     <span class="badge chip badge-primary">
                                         {{getTermDescription('aichiTargets', aichiTarget)|lstring}}
-                                        <i class="fa fa-minus-circle" @click="updateFilters('aichiTargets', aichiTarget);"></i>
+                                        <i class="fa fa-minus-circle" @click="removeFilters('aichiTargets', aichiTarget); search({page:0})"></i>
                                     </span>
                                 </span>
 
                                 <span v-for="actor in filters.actors" :key="actor">
                                     <span class="badge chip badge-primary">
                                         {{getTermDescription('actors', actor)|lstring}}
-                                        <i class="fa fa-minus-circle" @click="updateFilters('actors', actor);"></i>
+                                        <i class="fa fa-minus-circle" @click="removeFilters('actors', actor); search({page:0})"></i>
                                     </span>
                                 </span>
 
                                 <span v-for="status in filters.statuses" :key="status">
                                     <span class="badge chip badge-primary">
                                         {{capitalize(status)|lstring}}
-                                        <i class="fa fa-minus-circle" @click="updateFilters('statuses', status);"></i>
+                                        <i class="fa fa-minus-circle" @click="removeFilters('statuses', status); search({page:0})"></i>
                                     </span>
                                 </span>
 
@@ -98,18 +98,18 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label>Meeting</label>
-                                                <select class="form-control" v-model="selectedSession" @change="updateFilters('sessions', filterName(selectedSession));">
+                                                <select class="form-control" v-model="selectedSession" @change="addFilters('sessions', selectedSession); selectedSession=''; search({page:0})">
                                                     <option value="">all meetings</option>
                                                     <optgroup v-for="(session, sessionName) in lists.sessions" :label="sessionName" :key="sessionName">
-                                                    <option v-for="item in session" :value="item.title" :key="item.code">{{ item.title }}</option>
+                                                    <option v-for="item in session" :value="item.code" :key="item.code">{{ item.title }}</option>
                                                     </optgroup>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
                                                 <label>Decision Type</label>
-                                                <select class="form-control" v-model="selectedType" @change="updateFilters('types', filterName(selectedType));">
+                                                <select class="form-control" v-model="selectedType" @change="addFilters('types', selectedType); selectedType=''; search({page:0})">
                                                     <option value="">all decision types</option>
-                                                    <option v-for="item in lists.types" :value="item.title" :key="item.code">{{ item.title }}</option>
+                                                    <option v-for="item in lists.types" :value="item.code" :key="item.code">{{ item.title }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -117,48 +117,48 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <label>Subjects</label>
-                                                <select class="form-control" v-model="selectedSubject" @change="updateFilters('subjects', filterName(selectedSubject));">
+                                                <select class="form-control" v-model="selectedSubject" @change="addFilters('subjects', selectedSubject); selectedSubject=''; search({page:0})">
                                                     <option value="">all subjects</option>
                                                     <optgroup v-for="group in lists.subjects" :key="group.name" :label="group.name">
-                                                        <option v-for="subject in group.subjects" :key="subject.identifier" :value="subject">{{ subject.name }}</option>
+                                                        <option v-for="subject in group.subjects" :key="subject.identifier" :value="subject.identifier">{{ subject.name }}</option>
                                                     </optgroup>
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
                                                 <label>GBF Goals</label>
-                                                <select class="form-control" v-model="selectedGBFGoal" @change="updateFilters('gbfGoals', filterName(selectedGBFGoal));">
+                                                <select class="form-control" v-model="selectedGBFGoal" @change="addFilters('gbfGoals', selectedGBFGoal); selectedGBFGoal=''; search({page:0})">
                                                     <option value="">all GBF goals</option>
-                                                    <option v-for="item in lists.gbfGoals" :key="item.identifier" :value="item">{{ item.name }}</option>
+                                                    <option v-for="item in lists.gbfGoals" :key="item.identifier" :value="item.identifier">{{ item.name }}</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
                                                 <label>GBF Targets</label>
-                                                <select class="form-control" v-model="selectedGBFTarget" @change="updateFilters('gbfTargets', filterName(selectedGBFTarget));">
+                                                <select class="form-control" v-model="selectedGBFTarget" @change="addFilters('gbfTargets', selectedGBFTarget); selectedGBFTarget=''; search({page:0})">
                                                     <option value="">all GBF targets</option>
-                                                    <option v-for="item in lists.gbfTargets" :key="item.identifier" :value="item">{{ item.name }}</option>
+                                                    <option v-for="item in lists.gbfTargets" :key="item.identifier" :value="item.identifier">{{ item.name }}</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
                                                 <label>Aichi Targets</label>
-                                                <select class="form-control" v-model="selectedAichiTarget" @change="updateFilters('aichiTargets', filterName(selectedAichiTarget));">
+                                                <select class="form-control" v-model="selectedAichiTarget" @change="addFilters('aichiTargets', selectedAichiTarget); selectedAichiTarget=''; search({page:0})">
                                                 <option value="">all AICHI targets</option>
-                                                    <option v-for="item in lists.aichiTargets" :key="item.identifier" :value="item">{{ item.name }}</option>
+                                                    <option v-for="item in lists.aichiTargets" :key="item.identifier" :value="item.identifier">{{ item.name }}</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
                                                 <label>Actors</label>
-                                                <select class="form-control" v-model="selectedActor" @change="updateFilters('actors', filterName(selectedActor));">
+                                                <select class="form-control" v-model="selectedActor" @change="addFilters('actors', selectedActor); selectedActor=''; search({page:0})">
                                                     <option value="">all actors</option>
                                                     <optgroup v-for="group in lists.actors" :key="group.identifier" :label="group.name">
-                                                        <option v-for="actor in group.actors" :key="actor.identifier" :value="actor">{{ actor.name }}</option>
+                                                        <option v-for="actor in group.actors" :key="actor.identifier" :value="actor.identifier">{{ actor.name }}</option>
                                                     </optgroup>
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
                                                 <label>Status</label>
-                                                <select class="form-control" v-model="selectedStatus" @change="updateFilters('statuses', filterName(selectedStatus));">
+                                                <select class="form-control" v-model="selectedStatus" @change="addFilters('statuses', selectedStatus); selectedStatus=''; search({page:0})">
                                                 <option value="">all statuses</option>
-                                                    <option v-for="item in lists.statuses" :key="item.code" :value="item">{{ item.title }}</option>
+                                                    <option v-for="item in lists.statuses" :key="item.code" :value="item.code">{{ item.title }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -173,7 +173,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <br/>
-                            <button class="btn btn-primary  float-right" @click="search()">Search</button>
+                            <button class="btn btn-primary  float-right" @click="search({page: 0})">Search</button>
                         </div>
                     </div>
                 </div>
@@ -255,15 +255,14 @@
 
             </div>
         </div>
-        <br />
 
-        <div class="card-body view-decision col-md-12" id="searchResultSection">
+        <div v-if="totalPages" class="card-body view-decision col-md-12" id="searchResultSection">
             <div>
                 <!-- Pagination -->
                 <div class="pagination">
-                    <button :disabled="currentPage <= 1" @click="previousPage()">Previous</button>
-                    <span>Page {{ currentPage }} of {{ totalPages }}</span>
-                    <button :disabled="currentPage >= totalPages" @click="nextPage()">Next</button>
+                    <button :disabled="currentPage < 1" @click="previousPage()">Previous</button>
+                    <span>Page {{ currentPage+1 }} of {{ totalPages }}</span>
+                    <button :disabled="currentPage >= totalPages-1" @click="nextPage()">Next</button>
                 </div>
             </div>
         </div>
@@ -310,8 +309,17 @@ export default {
             return (text??'').toString().toLowerCase()
         }
     },
+    computed: {
+        words() { return this.freeText.split(' ').filter(w=>!!w) },
+        freeTextEmpty() {
+            const hasFilters = _(Object.values(this.filters)).flatten().compact().size()>0
+            return this.searched && !hasFilters && !this.words.length;
+        },
+        queryParts
+    },
     data() {
         return {
+            searched : false,
             selectedActor       : '',
             selectedAichiTarget : '',
             selectedGBFTarget   : '',
@@ -344,9 +352,8 @@ export default {
             recordsCount: null,
             recordsFound: false,
             freeText: '',
-            freeTextEmpty: false,
             pageSize: 10,
-            currentPage: 1,
+            currentPage: 0,
             totalPages: 0
         }
     },
@@ -357,9 +364,9 @@ export default {
         previousPage,
         nextPage,
         capitalize,
-        updateFilters,
+        addFilters,
+        removeFilters,
         filterName,
-        getQueryParts,
         getTermDescription
     }
 }
@@ -429,55 +436,56 @@ async function created() {
     
 }
 
-async function search() {
-    this.freeTextEmpty = _.isEmpty(this.freeText);
+async function search({page}={}) {
+
+    this.searched = true;
+    if(page!==undefined) this.currentPage = page;
+
+    this.records = null;
+    this.recordsCount = null;
+    this.totalPages = 0;
+
+    const { queryParts, currentPage, pageSize } = this;
+
+    if(!queryParts.length) return;
+
+    const query = AND(queryParts);
     
-    if (!this.freeTextEmpty) {
+    const start = currentPage * pageSize;
+    
+    const { response } = await queryIndex(query, { sk: start, l: pageSize });
 
-        const words = `title_t:${this.freeText.toLowerCase().split(' ').filter(w=>!!w).map(w=> `${solr.escape(w)}`)}`;
-        const filter = getQueryParts(this.filters);
-        const query = AND(words, filter.sessions, filter.types, filter.subjects, filter.gbfGoals, filter.gbfTargets, filter.aichiTargets, filter.actors, filter.statuses);
-        
-        const start = (this.currentPage - 1) * this.pageSize;
-        
-        const { response } = await queryIndex(query, { sk: start, l: this.pageSize });
+    this.recordsFound = (response.numFound !== '') ? true : false;
+    this.recordsCount = response.numFound;
+    this.totalPages = Math.ceil(response.numFound / this.pageSize);
 
-        this.recordsFound = (response.numFound !== '') ? true : false;
-        this.recordsCount = response.numFound;
-        this.totalPages = Math.ceil(response.numFound / this.pageSize);
+    this.records = response.docs.map(o=>{
+        o.dtt_gbfTarget_ss  = o.dtt_gbfTarget_ss?.filter(o=>/^GBF-TARGET-/.test(o));
+        o.dtt_gbfTarget_ii  = o.dtt_gbfTarget_ss?.map(o=>(o.replace(/^GBF-TARGET-/, '')));
 
-        this.records = response.docs.map(o=>{
-            o.dtt_gbfTarget_ss  = o.dtt_gbfTarget_ss?.filter(o=>/^GBF-TARGET-/.test(o));
-            o.dtt_gbfTarget_ii  = o.dtt_gbfTarget_ss?.map(o=>(o.replace(/^GBF-TARGET-/, '')));
+        o.dtt_gbfGoal_ss    = o.dtt_gbfGoal_ss?.filter(o=>/^GBF-GOAL-/.test(o));
+        o.dtt_gbfGoal_ii    = o.dtt_gbfGoal_ss?.map(o=>(o.replace(/^GBF-GOAL-/, '')).toLowerCase());
 
-            o.dtt_gbfGoal_ss    = o.dtt_gbfGoal_ss?.filter(o=>/^GBF-GOAL-/.test(o));
-            o.dtt_gbfGoal_ii    = o.dtt_gbfGoal_ss?.map(o=>(o.replace(/^GBF-GOAL-/, '')).toLowerCase());
-
-            o.dtt_codeUrl_ii    = (o.dtt_paragraphCode_s || o.dtt_code_s).replace(/^CBD\//, '').toLowerCase();
-            return o;
-        });
-    }
+        o.dtt_codeUrl_ii    = (o.dtt_paragraphCode_s || o.dtt_code_s).replace(/^CBD\//, '').toLowerCase();
+        return o;
+    });
 }
 
 
 async function queryIndex(query, { sk: start = 0, l: rows = 10 } = {}) {
-    query = AND(baseIndexQuery, query);
+    query = AND([baseIndexQuery, query]);
     const result = await solr.query(query, { start, rows });
     return result;
 }
 
 function previousPage() {
-    if (this.currentPage > 1) {
-        this.currentPage--;
-        this.search();
-    }
+    if (this.currentPage > 0) 
+        this.search(this.currentPage-1);
 }
 
 function nextPage() {
-    if (this.currentPage < this.totalPages) {
-        this.currentPage++;
-        this.search();
-    }
+    if (this.currentPage < this.totalPages-1)
+        this.search(this.currentPage+1);
 }
 
 async function getDomainTerms(code) {
@@ -491,21 +499,19 @@ async function getDomainTerms(code) {
     return terms;
 }
 
-function updateFilters(section, value) {
-    if(value === '') {
-        this.filters[section] = []; 
-    } else {
-        const index = this.filters[section].indexOf(value);
-        if (index !== -1) {
-            this.filters[section].splice(index, 1);
-        } else {
-            this.filters[section].push(value);
-        }
-    }
+function addFilters(section, value) {
+    this.filters[section] = _(this.filters[section]).union([value]).compact().value();
 }
 
-function getQueryParts(filters) {
+function removeFilters(section, value) {
+    this.filters[section] = _(this.filters[section]).without(value).compact().value();
+}
 
+function queryParts() {
+
+    const { filters, words } = this;
+
+    let freetext        = null;
     let sessions        = null;
     let types           = null;
     let subjects        = null;
@@ -515,20 +521,21 @@ function getQueryParts(filters) {
     let actors          = null;
     let statuses        = null;
 
-    if(!_.isEmpty(filters.sessions))        sessions        = `dtt_code_s:(${filters.sessions.map(o => `CBD/COP/${o.padStart(2,0)}/*`).join(' OR ')})`; // find solution because solr.escape is including \ before *
-    if(!_.isEmpty(filters.types))           types           = `dtt_type_REL_ss:(${filters.types.map(o => o.toLowerCase()).map(s=> solr.escape(s)).join(' OR ')})`;
-    if(!_.isEmpty(filters.subjects))        subjects        = `dtt_subject_REL_ss:(${filters.subjects.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.gbfGoals))        gbfGoals        = `dtt_gbfGoal_ss:(${filters.gbfGoals.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.gbfTargets))      gbfTargets      = `dtt_gbfTarget_ss:(${filters.gbfTargets.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.aichiTargets))    aichiTargets    = `dtt_aichiTarget_ss:(${filters.aichiTargets.map(s=> s.toUpperCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.actors))          actors          = `dtt_actor_REL_ss:(${filters.actors.map(s=> s.toLowerCase()).join(' OR ')})`; // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.statuses))        statuses        = `dtt_status_REL_ss:(${filters.statuses.map(s=> s).join(' OR ')})`; // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(words))                freetext     = 'title_t:'           + AND(words.map(w=>`${solr.escape(w)}~`)); // find solution because solr.escape is including \ before *
+    if(!_.isEmpty(filters.sessions))     sessions     = 'dtt_code_s:'         + OR(filters.sessions    .map(o => `CBD/COP/${o.padStart(2,0)}/`).map(solr.escape).map(o=>o+'*')); // find solution because solr.escape is including \ before *
+    if(!_.isEmpty(filters.types))        types        = 'dtt_type_REL_ss:'    + OR(filters.types       .map(solr.escape));
+    if(!_.isEmpty(filters.subjects))     subjects     = 'dtt_subject_REL_ss:' + OR(filters.subjects    .map(solr.escape)); // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.gbfGoals))     gbfGoals     = 'dtt_gbfGoal_ss:'     + OR(filters.gbfGoals    .map(solr.escape)); // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.gbfTargets))   gbfTargets   = 'dtt_gbfTarget_ss:'   + OR(filters.gbfTargets  .map(solr.escape)); // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.aichiTargets)) aichiTargets = 'dtt_aichiTarget_ss:' + OR(filters.aichiTargets.map(solr.escape)); // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.actors))       actors       = 'dtt_actor_REL_ss:'   + OR(filters.actors      .map(solr.escape)); // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.statuses))     statuses     = 'dtt_status_REL_ss:'  + OR(filters.statuses    .map(solr.escape)); // find solution because solr.escape is including \ before -
 
-    return { sessions, types, subjects, gbfGoals, gbfTargets, aichiTargets, actors, statuses }
+    return _.compact([freetext, sessions, types, subjects, gbfGoals, gbfTargets, aichiTargets, actors, statuses])
 }
 
-function AND(...parts) { parts = (parts||[]).filter(o=>o); return parts.length ? `(${parts.join(' AND ' )})` : null; }
-function OR (...parts) { parts = (parts||[]).filter(o=>o); return parts.length ? `(${parts.join(' OR '  )})` : null; }
+function AND(parts) { parts = (parts||[]).filter(o=>o); return parts.length ? `(${parts.join(' AND ' )})` : null; }
+function OR (parts) { parts = (parts||[]).filter(o=>o); return parts.length ? `(${parts.join(' OR '  )})` : null; }
 
 function targetCodeToNumber(code) {
     return parseInt(code.replace(/.*?(\d+)$/, '$1'));
