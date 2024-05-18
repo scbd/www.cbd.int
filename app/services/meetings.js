@@ -93,10 +93,10 @@ export function documentSortKey(d, { baseSymbol, locale } ) {
     parts.push(normalizedSymbol || pad('', 'Z'));
     
     parts.push(`TITLE`);
-    parts.push(lstring(d.title, locale).replace(/\s/g, '').toUpperCase());
+    parts.push((lstring(d.title, locale)||'').replace(/\s/g, '').toUpperCase());
 
     parts.push(`ID`);
-    parts.push(d._id.toUpperCase());
+    parts.push((d._id||'').toUpperCase());
 
     const key = parts.join('-').replace(/\d+/g, (t)=>pad(t));;
 
