@@ -1,4 +1,5 @@
 import lstring from '../services/lstring.js';
+import {isEmpty} from 'lodash';
 
 //==============================
 //
@@ -92,8 +93,10 @@ export function documentSortKey(d, { baseSymbol, locale } ) {
     parts.push(`SYMBOL`);
     parts.push(normalizedSymbol || pad('', 'Z'));
     
-    parts.push(`TITLE`);
-    parts.push(lstring(d.title, locale).replace(/\s/g, '').toUpperCase());
+    if(!isEmpty(d.title)){
+        parts.push(`TITLE`);
+        parts.push(lstring(d.title, locale).replace(/\s/g, '').toUpperCase());
+    }
 
     parts.push(`ID`);
     parts.push(d._id.toUpperCase());
