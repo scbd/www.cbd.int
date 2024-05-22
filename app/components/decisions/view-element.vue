@@ -33,6 +33,7 @@
                     <i class="fa fa-user" aria-hidden="true"></i>
                     <span>{{actorName(actor)}}</span>
                 </span>
+
                 <p v-if="node.type==='paragraph'">
                     <a class="btn btn-primary btn-sm" role="button" v-if="showDecision"
                         :href="`/decisions/${node.body}/${node.session}/${node.decision}`">
@@ -76,7 +77,6 @@
 
 <script>
 import actors from '~/views/decisions/data/actors.js';
-import romans from '~/views/decisions/data/romans.js';
 import statuses from '~/views/decisions/data/statuses.js';
 import _ from 'lodash';
 import lstring from '~/filters/lstring.js';
@@ -118,7 +118,6 @@ export default {
     computed: {
         actors() { return actors},
         statuses() { return statuses},
-        romans() { return romans},
         name() {
             const { node } = this;
 
@@ -157,12 +156,14 @@ export default {
 
             let match = true;
 
-            const {actors, statuses, types, aichiTargets, subjects} = filters;
+            const {actors, statuses, types, aichiTargets, gbfTargets, gbfGoals, subjects} = filters;
 
             if(match && actors) match = _(actors).intersection(node.actors).some();
             if(match && statuses) match = _(statuses).intersection(node.statuses).some();
             if(match && types) match = _(types).intersection([node.type]).some();
             if(match && aichiTargets) match = _(aichiTargets).intersection(node.aichiTargets).some();
+            if(match && gbfTargets) match = _(gbfTargets).intersection(node.gbfTargets).some();
+            if(match && gbfGoals) match = _(gbfGoals).intersection(node.gbfGoals).some();
             if(match && subjects) match = _(subjects).intersection(node.subjects).some();
 
             return match;

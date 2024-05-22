@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import axios from 'axios'
 import { isFunction } from 'lodash'
 export { mapObjectId, isObjectId } from '../services/object-id';
@@ -9,7 +10,12 @@ if(/\.cbddev\.xyz$/i.test(window.location.hostname)) sitePrefixUrl= 'https://api
 if(/\localhost$/i   .test(window.location.hostname)) sitePrefixUrl= '/';
 
 const cache          = new Map()
-const defaultOptions = { prefixUrl: sitePrefixUrl, timeout  : 30 * 1000 }
+const defaultOptions = () => ({ 
+  prefixUrl: 
+  sitePrefixUrl, 
+  timeout  : 30 * 1000,
+  token : ()=>Vue?.prototype?.$auth?.strategy?.token?.get()
+});
 
 export default class ApiBase
 {
@@ -19,13 +25,11 @@ export default class ApiBase
 
     if(isFunction(options)) options = { token : options }
 
-    const { token, prefixUrl, timeout, tokenType } = { ...defaultOptions, ...options }
-
+    const { token, prefixUrl, timeout } = { ...defaultOptions(), ...options }
 
     const baseConfig = {
       baseURL : prefixUrl,
       timeout,
-      tokenType,
       token
     }
 
@@ -49,15 +53,30 @@ export default class ApiBase
 
 async function loadAsyncHeaders(baseConfig) {
 
-  const { token, tokenType, ...config } = baseConfig || {}
+  const { token, ...config } = baseConfig || {}
 
   const headers = { ...(config.headers || {}) };
 
+  for(let key of Object.keys(config)) {
+    headers[key] = await evaluate(headers[key]);
+  }
+
   if(token) {
-      headers.Authorization = `${tokenType||'Bearer'} ${token}`;
+      let authorization = await evaluate(token);
+
+      if(authorization && !/^[a-z]+\s/i.test(authorization||''))
+        authorization = `Bearer ${authorization}`;
+
+      headers.Authorization = authorization;
   }
 
   return axios.create({ ...config, headers } );
+}
+
+function evaluate(expr) {
+  if(typeof expr === 'function') expr = expr();
+
+  return expr;
 }
 
 //////////////////////////
@@ -72,4 +91,22 @@ export function tryCastToApiError(error) {
   }
 
   throw error
+}
+
+export function stringifyUrlParam(value) {
+  if (value instanceof(Date))   {return value.toISOString()}    
+  if (value instanceof(Object)) {return JSON.stringify(value)}  
+  return value; 
+}
+
+export function stringifyUrlParams(valueObj) {
+  const returnObj = {};
+
+  for (const [key, value] of Object.entries(valueObj)) {
+    if (isValid(value)){
+      returnObj[key] = stringifyUrlParam(value);
+    }
+  }
+  
+  return returnObj;
 }

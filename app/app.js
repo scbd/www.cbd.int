@@ -1,5 +1,12 @@
 import angular from 'angular'
 import 'toastr'
+import { 
+  AngularVueRouterPlugin, 
+  AngularVueRoutePlugin, 
+  AngularVuePlugin,
+  AngularVueDirective,
+  AngularVueAuthPlugin
+} from 'angular-vue';
 
 const app = angular.module('app', angular.defineModules(
          ['ngRoute', 'ngCookies', 'ngDialog', 'ngSanitize','infinite-scroll','smoothScroll','toastr','ngVue', 'angular-cache', 'angularVue', 'angularGrid']));
@@ -120,5 +127,23 @@ const app = angular.module('app', angular.defineModules(
       }
     }
   }
+
+  app.directive('ngVue', AngularVueDirective);
+
+  app.run(["$injector", "authentication", function($injector, authentication) {
+
+    const vueRootApp = new Vue({});
+
+    window.Vue.use(new AngularVuePlugin({ $injector, ngApp: app, vueApp: vueRootApp }));
+    window.Vue.use(new AngularVueRoutePlugin());
+    window.Vue.use(new AngularVueRouterPlugin());
+    window.Vue.use(new AngularVueAuthPlugin({
+      fetchUser() { return authentication.getUser(); },
+      logout() {},
+      async login() {}
+    }));
+
+  }]);
+
 
 export default app;

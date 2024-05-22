@@ -28,12 +28,10 @@ export { default as template } from './edit.html'
 
 export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'user', '$anchorScroll','apiToken', function($scope, $http, $route, $location, $q, ngDialog, user, $anchorScroll, apiToken) {
 
-        $scope.tokenReader = function(){ return apiToken.get()}
-        $scope.route       = { params : $route.current.params, query: $location.search() }
         $scope.vueOptions = {
             components : {EditElement}
         };
-        $scope.api = new DecisionApi($scope.tokenReader);
+        $scope.api = new DecisionApi();
         $scope.decision = {};
 
         var treaty        = null;
@@ -69,6 +67,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         $scope.canDebug = canDebug();
         $scope.user   = _.pick(user, ['userID', 'name']);
         $scope.close  = close;
+        $scope.translate = translate;
         $scope.save   = save;
         $scope.cancel   = cancel;
         $scope.upload = upload;
@@ -110,6 +109,13 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             $location.url(('/'+body+'/'+pad(session)+'/'+pad(decision)).toLowerCase());
         }
 
+        //==============================
+        //
+        //==============================
+        function translate() {
+            $location.url(('/'+body+'/'+pad(session)+'/'+pad(decision)).toLowerCase()+'/edit/translation');
+        }
+
 
         //===========================
         //
@@ -119,13 +125,20 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             var q0 = $http.get('/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms',  { cache: true } );
             var q1 = $http.get('/api/v2013/thesaurus/domains/AICHI-TARGETS/terms', { cache: true } );
             var q2 = $http.get('/api/v2015/treaties/'+ encodeURIComponent(treaty.code), { cache: true } );
+            var q3 = $http.get('/api/v2013/thesaurus/domains/GBF-TARGETS/terms', { cache: true } );
+            var q4 = $http.get('/api/v2013/thesaurus/domains/GBF-GOALS/terms', { cache: true } );
+            var q5 = $http.get('/api/v2013/thesaurus/domains/GBF-TARGETS-CONSIDERATIONS/terms', { cache: true } );
 
-            $q.all([q0, q1, q2]).then(function(res) {
+            $q.all([q0, q1, q2, q3, q4, q5]).then(function(res) {
 
-                $scope.collections.subjects        =   res[0].data;
+                $scope.collections.subjects        =   res[5].data.concat(res[0].data);
                 $scope.collections.aichiTargets    =   res[1].data;
+                $scope.collections.gbfTargets      =   res[3].data;
+                $scope.collections.gbfGoals        =   res[4].data;
                 $scope.collections.subjectsMap     = _(res[0].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
                 $scope.collections.aichiTargetsMap = _(res[1].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
+                $scope.collections.gbfTargetsMap   = _(res[3].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
+                $scope.collections.gbfGoalsMap     = _(res[4].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
 
                 treaty   = res[2].data;
 
@@ -134,9 +147,11 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
 
             }).then(function(res){
 
-                $scope.decision = res;
-                $scope.subjects = _.cloneDeep(res.subjects|| []);
+                $scope.decision     = res;
+                $scope.subjects     = _.cloneDeep(res.subjects|| []);
                 $scope.aichiTargets = _.cloneDeep(res.aichiTargets || []);
+                $scope.gbfTargets   = _.cloneDeep(res.gbfTargets || []);
+                $scope.gbfGoals     = _.cloneDeep(res.gbfGoals || []);
 
                 if(!_.isEmpty($scope.selectedNode)) {
                     updateSelectedNode(findNode($scope.decision, $scope.selectedNode._id));
@@ -198,13 +213,13 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
                 throw new Error("unauthorized to save");
             }
 
-            const {selectedNode, element, decision, subjects, aichiTargets} = $scope;
+            const {selectedNode, element, decision, subjects, aichiTargets, gbfTargets, gbfGoals} = $scope;
 
             const decisionId = decision._id;
             var saved = false;
-            if(!areEquals(subjects, decision.subjects) || !areEquals(aichiTargets, decision.aichiTargets)) {
+            if(!areEquals(subjects, decision.subjects) || !areEquals(aichiTargets, decision.aichiTargets) || !areEquals(gbfTargets, decision.gbfTargets) || !areEquals(gbfGoals, decision.gbfGoals)) {
                 const {title} = decision;
-                const params = {title, subjects, aichiTargets};
+                const params = {title, subjects, aichiTargets, gbfTargets, gbfGoals};
                 await $scope.api.updateDecision(decisionId, params);
                 saved = true;
             }
@@ -222,8 +237,10 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         }
 
         function cancel() {
-            $scope.subjects = _.cloneDeep($scope.decision.subjects);
+            $scope.subjects     = _.cloneDeep($scope.decision.subjects);
             $scope.aichiTargets = _.cloneDeep($scope.decision.aichiTargets);
+            $scope.gbfTargets   = _.cloneDeep($scope.decision.gbfTargets);
+            $scope.gbfGoals     = _.cloneDeep($scope.decision.gbfGoals);
             updateSelectedNode($scope.selectedNode);
         }
 
@@ -484,10 +501,12 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         function canView()  { return !!_.intersection(user.roles, ["Administrator","DecisionTrackingTool", "ScbdStaff"]).length; }
         function isDisabled(parentId, field) { return !!(findNode($scope.decision, parentId) || {})[field];}
         function contentEdited() {
-            const {element, selectedNode, subjects, aichiTargets, decision} = $scope;
+            const {element, selectedNode, subjects, aichiTargets, gbfTargets, gbfGoals, decision} = $scope;
 
             if(subjects && decision.subjects && !areEquals(subjects, decision.subjects)) return true;
             if(aichiTargets && decision.aichiTargets && !areEquals(aichiTargets, decision.aichiTargets)) return true;
+            if(gbfTargets && decision.gbfTargets && !areEquals(gbfTargets, decision.gbfTargets)) return true;
+            if(gbfGoals && decision.gbfGoals && !areEquals(gbfGoals, decision.gbfGoals)) return true;
             
             const a = _.pick(element, (e) => !!e);
             const b = _.pick(selectedNode, (e) => !!e);
