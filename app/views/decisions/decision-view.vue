@@ -341,15 +341,9 @@ export default {
 		},
 		canEdit() {
 			return true;
-			// const { $auth } = this;
-			// const { user } = $auth;
-			// return _.intersection(user.roles, ["Administrator","DecisionTrackingTool"]).length>0
 		},
 		canComment() {
 			return true;
-			// const { $auth } = this;
-			// const { user } = $auth;
-			// return canEdit || _.intersection(user.roles, ["ScbdStaff"]).length>0;
 		},
 		counts() {
 			const {decision, selectedNode} = this;
@@ -435,7 +429,8 @@ async function load() {
 
 	this.api = new DecisionApi();
 	
-	let treaty    = null ;
+	let treaty    	= null;
+
 	const body      = $route.params.body.toUpperCase();
 
 	if(body=='COP') treaty = { code : "XXVII8" } ;
@@ -454,7 +449,7 @@ async function load() {
 	const number  = parseInt(parsed.groups.dec);
 	const para    = parsed.groups?.para?.toUpperCase();
 
-	treaty = await this.api.getTreaties(treaty.code);
+	treaty 			= await this.api.getTreaties(treaty.code);
 
 	const code = treaty.acronym+'/'+body+'/'+pad(session)+'/'+pad(number);
 
@@ -499,6 +494,7 @@ async function loadFilters() {
 	allFilters.aichiTargets = getTags(collection, "aichiTargets").map(tag => aichiTargets.find(item => item.index === tag) || tag);
 	allFilters.gbfTargets = getTags(collection, "gbfTargets").map(tag => gbfTargets.find(item => item.index === tag) || tag);
 	allFilters.gbfGoals = getTags(collection, "gbfGoals").map(tag => gbfGoals.find(item => item.index === tag) || tag);
+	
 
 	//load subjects
 	const codes = getTags(collection, 'subjects');
