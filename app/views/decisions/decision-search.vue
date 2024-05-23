@@ -247,7 +247,7 @@
                             <b>{{ recordsCount }}</b> records found.
                         </div>
                         <div class="card-body" v-for="record in records" :key="record.id">
-                            <span v-for="item in record.dtt_type_REL_ss" :key="item">
+                            <span v-for="item in record.dttType_REL_ss" :key="item">
                                 <span v-if="item=='operational'" class="pull-right badge ng-scope badge-info"
                                     style="opacity:0.5; margin-right: 6px;">
                                     <span><i class="fa fa-cog"></i> Operational</span>
@@ -260,7 +260,7 @@
                             </span>
 
 
-                            <span v-for="item in records.dtt_status_ss" :key="item" class="pull-right badge"
+                            <span v-for="item in records.dttStatus_ss" :key="item" class="pull-right badge"
                                 :class="item === 'active' ? 'badge-success' : 'badge-secondary'"
                                 style="opacity:0.5;margin-right:6px">
                                 <i class="fa fa-info-circle"></i>
@@ -268,13 +268,13 @@
                             </span>
 
                             <ul>
-                                <li v-for="item in record.dtt_gbfGoal_ii" :key="item">
+                                <li v-for="item in record.dttGbfGoal_ii" :key="item">
                                     <a href="https://www.cbd.int/gbf/goals/" target="_blank">
                                         <img :src="`/app/images/gbf-goals/gbf-${item}-64.png`" width="20"
                                             style="margin: 1px 1px 1px 1px;">
                                     </a>
                                 </li>
-                                <li v-for="item in record.dtt_gbfTarget_ii" :key="item">
+                                <li v-for="item in record.dttGbfTarget_ii" :key="item">
                                     <a :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(parseInt(item))}`"
                                         target="_blank">
                                         <img :src="`/app/images/gbf-targets/gbf-${item}-64.png`" width="20"
@@ -284,8 +284,8 @@
                             </ul>
 
                             <i class="fa fa-search" aria-hidden="true"></i> Decision <a
-                                :href="`/decisions/${record.dtt_codeUrl_ii}`" target="_blank">
-                                {{ record.dtt_code_s }}
+                                :href="`/decisions/${record.dttCodeUrl_ii}`" target="_blank">
+                                {{ record.dttCode_s }}
                             </a> - {{ record.title_s }}
                             <hr />
                         </div>
@@ -509,13 +509,13 @@ async function search({page}={}) {
     this.totalPages = Math.ceil(response.numFound / this.pageSize);
 
     this.records = response.docs.map(o=>{
-        o.dtt_gbfTarget_ss  = o.dtt_gbfTarget_ss?.filter(o=>/^GBF-TARGET-/.test(o));
-        o.dtt_gbfTarget_ii  = o.dtt_gbfTarget_ss?.map(o=>(o.replace(/^GBF-TARGET-/, '')));
+        o.dttGbfTarget_ss  = o.dttGbfTarget_ss?.filter(o=>/^GBF-TARGET-/.test(o));
+        o.dttGbfTarget_ii  = o.dttGbfTarget_ss?.map(o=>(o.replace(/^GBF-TARGET-/, '')));
 
-        o.dtt_gbfGoal_ss    = o.dtt_gbfGoal_ss?.filter(o=>/^GBF-GOAL-/.test(o));
-        o.dtt_gbfGoal_ii    = o.dtt_gbfGoal_ss?.map(o=>(o.replace(/^GBF-GOAL-/, '')).toLowerCase());
+        o.dttGbfGoal_ss    = o.dttGbfGoal_ss?.filter(o=>/^GBF-GOAL-/.test(o));
+        o.dttGbfGoal_ii    = o.dttGbfGoal_ss?.map(o=>(o.replace(/^GBF-GOAL-/, '')).toLowerCase());
 
-        o.dtt_codeUrl_ii    = (o.dtt_paragraphCode_s || o.dtt_code_s).replace(/^CBD\//, '').toLowerCase();
+        o.dttCodeUrl_ii    = (o.dttParagraphCode_s || o.dttCode_s).replace(/^CBD\//, '').toLowerCase();
         return o;
     });
 }
@@ -577,14 +577,14 @@ function queryParts() {
     let statuses        = null;
 
     if(!_.isEmpty(words))                freetext     = 'title_t:'           + AND(words.map(w=>`${solr.escape(w)}~`)); // find solution because solr.escape is including \ before *
-    if(!_.isEmpty(filters.sessions))     sessions     = 'dtt_code_s:'         + OR(filters.sessions    .map(o => `CBD/${padInt(o).replace(/-/g, '\/')}/`).map(solr.escape).map(o=>o+'*')); // find solution because solr.escape is including \ before *
-    if(!_.isEmpty(filters.types))        types        = 'dtt_type_REL_ss:'    + OR(filters.types       .map(solr.escape));
-    if(!_.isEmpty(filters.subjects))     subjects     = 'dtt_subject_REL_ss:' + OR(filters.subjects    .map(solr.escape)); // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.gbfGoals))     gbfGoals     = 'dtt_gbfGoal_ss:'     + OR(filters.gbfGoals    .map(solr.escape)); // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.gbfTargets))   gbfTargets   = 'dtt_gbfTarget_ss:'   + OR(filters.gbfTargets  .map(solr.escape)); // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.aichiTargets)) aichiTargets = 'dtt_aichiTarget_ss:' + OR(filters.aichiTargets.map(solr.escape)); // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.actors))       actors       = 'dtt_actor_REL_ss:'   + OR(filters.actors      .map(solr.escape)); // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.statuses))     statuses     = 'dtt_status_REL_ss:'  + OR(filters.statuses    .map(solr.escape)); // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.sessions))     sessions     = 'dttCode_s:'         + OR(filters.sessions    .map(o => `CBD/${padInt(o).replace(/-/g, '\/')}/`).map(solr.escape).map(o=>o+'*')); // find solution because solr.escape is including \ before *
+    if(!_.isEmpty(filters.types))        types        = 'dttType_REL_ss:'    + OR(filters.types       .map(solr.escape));
+    if(!_.isEmpty(filters.subjects))     subjects     = 'dttSubject_REL_ss:' + OR(filters.subjects    .map(solr.escape)); // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.gbfGoals))     gbfGoals     = 'dttGbfGoal_ss:'     + OR(filters.gbfGoals    .map(solr.escape)); // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.gbfTargets))   gbfTargets   = 'dttGbfTarget_ss:'   + OR(filters.gbfTargets  .map(solr.escape)); // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.aichiTargets)) aichiTargets = 'dttAichiTarget_ss:' + OR(filters.aichiTargets.map(solr.escape)); // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.actors))       actors       = 'dttActor_REL_ss:'   + OR(filters.actors      .map(solr.escape)); // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.statuses))     statuses     = 'dttStatus_REL_ss:'  + OR(filters.statuses    .map(solr.escape)); // find solution because solr.escape is including \ before -
 
     return _.compact([freetext, sessions, types, subjects, gbfGoals, gbfTargets, aichiTargets, actors, statuses])
 }
