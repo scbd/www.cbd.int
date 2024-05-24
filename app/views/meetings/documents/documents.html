@@ -172,7 +172,7 @@
                                 <div ng-if="documentsCtrl.editMode && (type.code!='outcome')"><i class="fa fa-bars handle" aria-hidden="true"></i></div>
                             </td>
                             <td>
-                                <meeting-document document="document" enable-selection="!documentsCtrl.editMode" show-statistics="documentsCtrl.statsMode"></meeting-document>
+                                <meeting-document document="document" jump-to="documentsCtrl.jumpTo" enable-selection="!documentsCtrl.editMode" show-statistics="documentsCtrl.statsMode"></meeting-document>
                             </td>
 
                             <td ng-if="documentsCtrl.editMode" style="width:10px">

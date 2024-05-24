@@ -5,7 +5,6 @@ import * as angularViewWrapper from '~/views/angular-view-wrapper'
 
 // Static views
 import * as redirectView     from '~/views/redirect'
-import * as searchView       from '~/views/decisions/search'
 import * as decisionListView from '~/views/decisions/list'
 import * as paragraphView    from '~/views/decisions/paragraph'
 

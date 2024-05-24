@@ -13,7 +13,7 @@ import moment from 'moment'
 import displayGroups from './display-groups'
 import * as meta from '~/services/meta'
 import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
-import { normalizeMeeting, normalizeDocumentSymbol } from '~/services/meetings'
+import { normalizeMeeting, normalizeDocumentSymbol, documentSortKey as sortKey } from '~/services/meetings'
 import '~/filters/to-display-symbol';
 
 export { default as template } from './documents.html';
@@ -21,7 +21,8 @@ export { default as template } from './documents.html';
     //'css!./agenda.css' // moved to template
     var STATISTICS = {}; 
 
-	export default ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', '$cookies', 'apiToken', function ($scope, $route, $http, $q, $location, $rootScope, authentication, showMeeting, CacheFactory, $cookies, apiToken) {
+	export default ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', '$cookies', 'apiToken', 'locale', 
+           function ($scope,   $route,   $http,   $q,   $location,   $rootScope,   authentication,   showMeeting,   CacheFactory,   $cookies,   apiToken,   locale) {
 
         var _ctrl = $scope.documentsCtrl = this;
         var meetingCode = $route.current.params.meeting.toUpperCase();
@@ -55,6 +56,7 @@ export { default as template } from './documents.html';
             'outcome/recommendation': { position: 2000 , title : 'Recommendations' },
         };
 
+        _ctrl.jumpTo = jumpTo;
         _ctrl.showMeeting = showMeeting===undefined ? true : !!showMeeting;
         _ctrl.uploadStatement = false;
         _ctrl.sort = $location.hash() == 'agenda' ? 'agenda' : 'document';
@@ -134,16 +136,25 @@ export { default as template } from './documents.html';
 
             }).then(function(res) {
 
+                const sortKeyOptions = {
+                    baseSymbol : _ctrl.meeting.EVT_UN_CD,
+                    locale
+                }
+
                 _ctrl.documents = documents = _(res.data)
                     .map(normalizeDocument)
                     .map((d)=>{
                         const code = d.normalizedSymbol || d.symbol || d._id;
                         const url  = `/documents/${code}`;
                         
-                        return { url , ...d };
+                        return { 
+                            url, 
+                            sortKey : sortKey(d, sortKeyOptions),
+                            ...d 
+                        };
                     })                    
                     .filter(isDocumentVisible)
-                    .sortBy(sortKey)
+                    .sortBy((d) => d.sortKey)
                     .value();
 
                 return meeting; // force resolve
@@ -214,11 +225,9 @@ export { default as template } from './documents.html';
             }).then(function(){
                 switchTab();
 
-                if($scope.focusDocumentId) {
-                    const id = $scope.focusDocumentId;
-                    const tr = document.querySelector(`tr[document-id="${id}"]`);
-                    tr?.scrollIntoView({ block: "center", behavior: "smooth" });
-                }
+                if($scope.focusDocumentId) 
+                    jumpTo($scope.focusDocumentId);
+
 
             }).catch(console.error).finally(function(){ _ctrl.loaded = true; });
         }
@@ -530,18 +539,61 @@ export { default as template } from './documents.html';
         //==============================
         //
         //==============================
-        function switchTabDirect(tab, extra) {
-            if(!tab && $location.search().doc) {
-                const id     = $location.search().doc;
-                const symbol = normalizeDocumentSymbol($location.search().doc);
-                let focusDocumentId = null;
-                tab = _(_ctrl.tabs).find((t) => {
-                    const doc = _(t.sections).map('documents').flatten().find(d => d._id == id || normalizeDocumentSymbol(d.symbol) == symbol)
-                    focusDocumentId = doc?._id;
-                    return !!doc;
-                });
+        function lookupFor(documentCodeOrId) {
 
-                $scope.focusDocumentId = focusDocumentId;
+            const id     = documentCodeOrId;
+            const symbol = normalizeDocumentSymbol(documentCodeOrId);
+
+            let document = null;
+
+            const tab = _(_ctrl.tabs).find((t) => {
+                document = _(t.sections).map('documents').flatten().compact().find((d) => {
+                    return d._id == id 
+                        || normalizeDocumentSymbol(d.symbol) == symbol
+                        || d?.metadata?.patterns?.includes(id)
+                })
+                return !!document;
+            });
+
+            if(document) return { document, tab };
+
+            return null;
+        }
+
+        //==============================
+        //
+        //==============================
+        function jumpTo(documentCodeOrId) {
+
+            const result = lookupFor(documentCodeOrId);
+
+            if(!result) return;
+
+            const id = result.document._id;
+            
+            switchTabDirect(result.tab);
+            
+            setTimeout(()=> {
+                $scope.$apply(()=>{
+                    $scope.focusDocumentId = id
+                    const tr = document.querySelector(`tr[document-id="${id}"]`);
+                    tr?.scrollIntoView({ block: "center", behavior: "smooth" });
+                })
+            }, 100);
+        }
+
+        //==============================
+        //
+        //==============================
+        function switchTabDirect(tab, extra) {
+
+            if(!tab && $location.search().doc) {
+
+                const result = lookupFor($location.search().doc);
+
+                $scope.focusDocumentId = result?.document?._id;
+                tab = result?.tab;
+
                 $location.search({doc:null});
             }
 
@@ -603,25 +655,6 @@ export { default as template } from './documents.html';
 
             });
         }, 100);
-        }
-
-        //==============================
-        //
-        //==============================
-        function sortKey(d) {
-
-            var parts = [];
-
-            if(d.nature=='statement')    
-                parts.push(((d.statementSource||{}).date||'9999-12-31')+"T99:99")
-
-
-            parts.push(("000000000" + (d.displayPosition||9999)).slice(-9))
-            parts.push((d.symbol||"").replace(/\b(\d)\b/g, '0$1')
-                                     .replace(/(\/REV)/gi, '0$1')
-                                     .replace(/(\/ADD)/gi, '1$1'));
-
-            return parts.join('_');
         }
 
         //==============================

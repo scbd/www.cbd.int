@@ -44,9 +44,12 @@ export default class DecisionApi extends ApiBase
   }
 
   async getTreaties(code) {
-    
     const result = await this.http.get(`api/v2015/treaties/${encodeURIComponent(code)}`, { cache: true }).then(res => res.data).catch(tryCastToApiError);
+    return result;
+  }
 
+  async getThesaurus(code) {
+    const result = await this.http.get(`api/v2013/thesaurus/domains/${encodeURIComponent(code)}/terms`, { cache: true }).then(res => res.data).catch(tryCastToApiError);
     return result;
   }
 

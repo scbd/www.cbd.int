@@ -6,14 +6,12 @@ import 'angular-cache'
 import '~/services/conference-service'
 import _  from 'lodash'
 import ng from 'angular'
-import { normalizeMeeting } from '~/services/meetings';
+import { normalizeMeeting, documentSortKey as buildSortKey } from '~/services/meetings';
 import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
 
 export { default as template }  from './in-session-documents.html'
 
-var CRP = /.*\/CRP(\d+)(?:$|\/[A-Z]+\d+$)/i
-var REV = /.*\/REV(\d+)$/i
-var ADD = /.*\/ADD(\d+)$/i
+
 var STATISTICS = {}; 
 
 export default ["$scope", "$route", "$http", '$q', '$location', 'authentication', 'conferenceService', '$filter', 'CacheFactory', function(
@@ -155,64 +153,6 @@ export default ["$scope", "$route", "$http", '$q', '$location', 'authentication'
             ];
 
             $location.path('/'+_.map(parts, encodeURIComponent).join('/'));
-        }
-
-        //====================================
-        //
-        //====================================
-        function buildSortKey(d) {
-
-            var sortKey = [];
-
-            if((d.metadata||{}).superseded) sortKey.push("B");
-            else                            sortKey.push("A");
-
-                 if(d.nature=="limited")    sortKey.push("A");
-            else if(d.nature=="crp")        sortKey.push("B");
-            else if(d.nature=="non-paper")  sortKey.push("C");
-            else                            sortKey.push("Z");
-
-            var normalizedSymbol = (d.symbol || 'ZZZ').replace(/\d+/g, pad);
-
-            if(d.nature=="limited") {
-                sortKey.push(pad("0")) //TODO: Meeting index
-                sortKey.push(normalizedSymbol)
-            }
-            else {
-
-                var crp = parseInt(getNumber(normalizedSymbol, CRP) || 9999);
-                var rev = parseInt(getNumber(normalizedSymbol, REV) ||    0);
-                var add = parseInt(getNumber(normalizedSymbol, ADD) ||    0);
-
-                sortKey.push(pad(crp));
-                sortKey.push(pad(9999-rev));
-                sortKey.push(pad(add));
-            }
-
-            sortKey.push((normalizedSymbol || lstring(d.title)).toUpperCase());
-
-            return sortKey.join('-')
-        }
-        
-        function getNumber(symbol, re) {
-
-            if(re.test(symbol)) 
-                return symbol.replace(re, "$1");
-
-            return "";
-        }
-
-        //====================================
-        //
-        //====================================
-        function pad(t) {
-
-            t = (t||'').toString();
-
-            while(t.length<4)
-                t = '0'+t;
-
-            return t;
         }
 
         //====================================
