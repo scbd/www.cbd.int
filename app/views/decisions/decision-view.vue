@@ -429,8 +429,7 @@ async function load() {
 
 	this.api = new DecisionApi();
 	
-	let treaty    = null ;
-	const body      = $route.params.body.toUpperCase();
+	let treaty    	= null;
 
 	const body      = $route.params.body.toUpperCase();
 
