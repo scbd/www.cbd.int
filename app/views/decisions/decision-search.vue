@@ -576,15 +576,15 @@ function queryParts() {
     let actors          = null;
     let statuses        = null;
 
-    if(!_.isEmpty(words))                freetext     = 'title_t:'           + AND(words.map(w=>`${solr.escape(w)}~`)); // find solution because solr.escape is including \ before *
-    if(!_.isEmpty(filters.sessions))     sessions     = 'dttCode_s:'         + OR(filters.sessions    .map(o => `CBD/${padInt(o).replace(/-/g, '\/')}/`).map(solr.escape).map(o=>o+'*')); // find solution because solr.escape is including \ before *
+    if(!_.isEmpty(words))                freetext     = 'title_t:'           + AND(words.map(w=>`${solr.escape(w)}~`));
+    if(!_.isEmpty(filters.sessions))     sessions     = 'dttCode_s:'         + OR(filters.sessions    .map(o => `CBD/${padInt(o).replace(/-/g, '\/')}/`).map(solr.escape).map(o=>o+'*'));
     if(!_.isEmpty(filters.types))        types        = 'dttType_REL_ss:'    + OR(filters.types       .map(solr.escape));
-    if(!_.isEmpty(filters.subjects))     subjects     = 'dttSubject_REL_ss:' + OR(filters.subjects    .map(solr.escape)); // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.gbfGoals))     gbfGoals     = 'dttGbfGoal_ss:'     + OR(filters.gbfGoals    .map(solr.escape)); // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.gbfTargets))   gbfTargets   = 'dttGbfTarget_ss:'   + OR(filters.gbfTargets  .map(solr.escape)); // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.aichiTargets)) aichiTargets = 'dttAichiTarget_ss:' + OR(filters.aichiTargets.map(solr.escape)); // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.actors))       actors       = 'dttActor_REL_ss:'   + OR(filters.actors      .map(solr.escape)); // find solution because solr.escape is including \ before -
-    if(!_.isEmpty(filters.statuses))     statuses     = 'dttStatus_REL_ss:'  + OR(filters.statuses    .map(solr.escape)); // find solution because solr.escape is including \ before -
+    if(!_.isEmpty(filters.subjects))     subjects     = 'dttSubject_REL_ss:' + OR(filters.subjects    .map(solr.escape));
+    if(!_.isEmpty(filters.gbfGoals))     gbfGoals     = 'dttGbfGoal_ss:'     + OR(filters.gbfGoals    .map(solr.escape));
+    if(!_.isEmpty(filters.gbfTargets))   gbfTargets   = 'dttGbfTarget_ss:'   + OR(filters.gbfTargets  .map(solr.escape));
+    if(!_.isEmpty(filters.aichiTargets)) aichiTargets = 'dttAichiTarget_ss:' + OR(filters.aichiTargets.map(solr.escape));
+    if(!_.isEmpty(filters.actors))       actors       = 'dttActor_REL_ss:'   + OR(filters.actors      .map(solr.escape));
+    if(!_.isEmpty(filters.statuses))     statuses     = 'dttStatus_REL_ss:'  + OR(filters.statuses    .map(solr.escape));
 
     return _.compact([freetext, sessions, types, subjects, gbfGoals, gbfTargets, aichiTargets, actors, statuses])
 }
