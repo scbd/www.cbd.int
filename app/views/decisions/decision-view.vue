@@ -494,7 +494,6 @@ async function loadFilters() {
 	allFilters.aichiTargets = getTags(collection, "aichiTargets").map(tag => aichiTargets.find(item => item.index === tag) || tag);
 	allFilters.gbfTargets = getTags(collection, "gbfTargets").map(tag => gbfTargets.find(item => item.index === tag) || tag);
 	allFilters.gbfGoals = getTags(collection, "gbfGoals").map(tag => gbfGoals.find(item => item.index === tag) || tag);
-	
 
 	//load subjects
 	const codes = getTags(collection, 'subjects');
