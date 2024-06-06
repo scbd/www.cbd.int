@@ -577,7 +577,7 @@ function queryParts() {
     let statuses        = null;
 
     if(!_.isEmpty(words))                freetext     = 'title_t:'           + AND(words.map(w=>`${solr.escape(w)}~`));
-    if(!_.isEmpty(filters.sessions))     sessions     = 'dttCode_s:'         + OR(filters.sessions    .map(o => `CBD/${padInt(o).replace(/-/g, '\/')}/`).map(solr.escape).map(o=>o+'*'));
+    if(!_.isEmpty(filters.sessions))     sessions     = `dttCode_s: (${filters.sessions    .map(o => `CBD/${padInt(o).replace(/-/g, '\/')}/`).map(solr.escape).map(o=>o+'*')})`;
     if(!_.isEmpty(filters.types))        types        = 'dttType_REL_ss:'    + OR(filters.types       .map(solr.escape));
     if(!_.isEmpty(filters.subjects))     subjects     = 'dttSubject_REL_ss:' + OR(filters.subjects    .map(solr.escape));
     if(!_.isEmpty(filters.gbfGoals))     gbfGoals     = 'dttGbfGoal_ss:'     + OR(filters.gbfGoals    .map(solr.escape));
