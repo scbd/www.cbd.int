@@ -222,9 +222,55 @@
             <div class="row" style="margin-top:60px;height:100%">
                 <div class="col-sm-6 edit-decision" style="height:86%">
 
+                    <div class="row" style="height: 150px; overflow-y: scroll">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="elementSubject">CBD Subjects</label><br>
+                                <div ng-repeat="item in self.subjects" class="input-group"
+                                    style="margin-bottom:2px;overflow-y:hidden" title="">
+                                    <span
+                                        class="form-control">{{(collections.subjectsMap[item].title|lstring)||item}}</span>
+                                    <div class="input-group-append">
+                                        <button ng-if="::canEdit" class="btn btn-outline-danger"
+                                            ng-click="removeFrom(item, self.subjects)"><i
+                                                class="fa fa-minus-circle"></i></button>
+                                    </div>
+                                </div>
+                                <select ng-if="::canEdit" class="btn btn-primary btn-sm" id="elementDirectedTo"
+                                    ng-model="selectedSubject"
+                                    ng-options="subject.identifier as (subject.title|lstring) group by collections.subjectsMap[subject.broaderTerms[0]].name for subject in collections.subjects|filter:noNarrower"
+                                    ng-change="addTo(selectedSubject, self.subjects); selectedSubject=''">
+                                    <option value="">add a subject</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="elementSubject">Aichi Targets</label><br>
+                                <div ng-repeat="item in self.aichiTargets" class="input-group"
+                                    style="margin-bottom:2px;overflow-y:hidden">
+                                    <span class="form-control">
+                                        {{(collections.aichiTargetsMap[item].title|lstring)||item}}</span>
+                                    <div class="input-group-append">
+                                        <button ng-if="::canEdit" class="btn btn-outline-danger"
+                                            ng-click="removeFrom(item, self.aichiTargets)"><i
+                                                class="fa fa-minus-circle"></i></button>
+                                    </div>
+                                </div>
+                                <select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo"
+                                    ng-model="selectedTarget"
+                                    ng-options="target.identifier as (target.title|lstring) group by collections.aichiTargetsMap[target.broaderTerms[0]].name for target in collections.aichiTargets|filter:noNarrower"
+                                    ng-change="addTo(selectedTarget, self.aichiTargets); selectedTarget=''">
+                                    <option value="">add a target</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div ng-if="decision" ng-disabled="contentEdited()" class="decision-nodes-div">
                         <div class="bg-green">Decision {{symbol}}</div>
-                        <div class="document" style="height:calc(100vh - 100px);overflow-y:scroll;padding:5px">
+                        <div class="document" style="height:calc(100vh - 260px);overflow-y:scroll;padding:5px">
                             <h1>{{decision.title|lstring}}</h1>
                             <div ng-repeat="node in decision.nodes">
                                 <edit-element ng-vue="vueOptions" :decision-id="decision._id" :node="node"
