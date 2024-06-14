@@ -136,7 +136,7 @@ import 'angular-cache'
               var query = {
                             _id:{$in:oidArray}
                           }
-              return  $http.get('/api/v2016/meetings', { cache:httpCache, params: { q : query,f : { EVT_CD:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, printSmart:1, agenda:1 }, cache: true  } })
+              return  $http.get('/api/v2016/meetings', { cache:httpCache, params: { q : query,f : { EVT_CD:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, printSmart:1, agenda:1, titleShort:1 }, cache: true  } })
               .then(function(res){
                   return res.data.map(normalizeMeeting);
                 }

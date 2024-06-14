@@ -1,14 +1,15 @@
 import app from '~/app';
 import ng from 'angular';
 import fileDropTemplate from './file.html'; 
+import sharedT from '~/i18n/shared/index.js';
 
-	app.directive('type', ['$http', '$parse', function($http, $parse) {
+	app.directive('type', ['$http', '$parse','translationService', function($http, $parse, $i18n) {
 	    return {
 	        restrict: 'A',
 	        replace: true,
             require: '?ngModel', 
 	        link: function($scope, element, attr, ctrl) {
-
+                $i18n.set('sharedT', sharedT );
                 if(element.prop("tagName")!=="INPUT") return;
                 if(attr.type              !=="file")  return;
 

@@ -2,16 +2,19 @@ import _ from  'lodash'
 import '~/filters/lstring'
 import '~/filters/moment'
 import '~/services/conference-service'
+import '~/services/translation-service'
+import participationT from '~/i18n/participation/index.js';
 
 export { default as template } from './requests.html'
 
-export default ['$http', '$route', '$location', 'conferenceService', 'user', function($http, $route, $location, conferenceService, user) {
+export default ['$http', '$route', '$location', 'conferenceService', 'user','translationService',  function($http, $route, $location, conferenceService, user, $i18n) {
 
     var _ctrl = this;
 
     _ctrl.edit = edit;
 
-
+    $i18n.set('participationT', participationT);
+    
     load();
 
     //====================================

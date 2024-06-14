@@ -18,7 +18,8 @@
     "redis": "^2.8.0",
     "romans": "^2.0.15",
     "superagent": "^8.1.2",
-    "vue-multiselect": "^2.1.9"
+    "vue-multiselect": "^2.1.9",
+    "change-case": "5.4.4"
   },
   "peerDependencies": {
     "vue": "2.7.14"

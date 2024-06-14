@@ -5,47 +5,52 @@ import '~/directives/kronos/participant'
 import '~/directives/kronos/user-messages'
 import '~/filters/term'
 import '~/directives/file'
+import '~/services/translation-service'
+import participationT from '~/i18n/participation/index.js';
 
+import { camelCase } from 'change-case';
 export { default as template } from './participation-form.html'
 
-export default ['$scope','$http','conferenceService','$filter','$route','$location','locale','user','$timeout','$document','$q','smoothScroll', function( $scope,$http,conferenceService,$filter,$route,$location,locale,user,$timeout,$document,$q,smoothScroll) {
+export default ['$scope','$http','conferenceService','$filter','$route','$location','locale','user','$timeout','$document','$q','smoothScroll','translationService', function( $scope,$http,conferenceService,$filter,$route,$location,locale,user,$timeout,$document,$q,smoothScroll,$i18n) {
 
-		var _ctrl = this
+		const _ctrl = this
+
+    $i18n.set('participationT', participationT);
 
     var orgTypes = {media:[
-      {'identifier':'Educational/Public', 'title':'Educational/Public'},
-      {'identifier':'Government/State',   'title':'Government/State'},
-      {'identifier':'Private',            'title':'Private'},
-      {'identifier':'Other',              'title':'Other'}],
+      {'identifier':'Educational/Public', 'title': $i18n.get(camelCase('Educational/Public'), 'participationT')},
+      {'identifier':'Government/State',   'title': $i18n.get(camelCase('Government/State'), 'participationT') },
+      {'identifier':'Private',            'title': $i18n.get(camelCase('Private'), 'participationT') },
+      {'identifier':'Other',              'title': $i18n.get(camelCase('Other'), 'participationT') }],
       observer:[]
     }
 
     var mediums = [
-      {'identifier':'Print',                  'title':'Print'},
-      {'identifier':'News agency/service',    'title':'News agency/service'},
-      {'identifier':'Radio',                  'title':'Radio'},
-      {'identifier':'Photo/visual',           'title':'Photo/visual'},
-      {'identifier':'Television',             'title':'Television'},
+      {'identifier':'Print',                  'title': $i18n.get(camelCase('Print'), 'participationT') },
+      {'identifier':'News agency/service',    'title': $i18n.get(camelCase('newsAgencyService'), 'participationT') },
+      {'identifier':'Radio',                  'title': $i18n.get(camelCase('Radio'), 'participationT') },
+      {'identifier':'Photo/visual',           'title': $i18n.get(camelCase('photoVisual'), 'participationT') },
+      {'identifier':'Television',             'title': $i18n.get(camelCase('Television'), 'participationT') },
 
-      {'identifier':'Independent broadcast or film production',             'title':'Independent broadcast or film production'},
-      {'identifier':'Weekly publication',     'title':'Weekly publication'},
-      {'identifier':'Web publication',     'title':'Web publication'},
-      {'identifier':'Online journal',     'title':'Online journal'},
-      {'identifier':'Blog',                   'title':'Blog'},
-      {'identifier':'Other online media',     'title':'Other online media'},
-      {'identifier':'Freelance journalist',     'title':'Freelance journalist'},
-      {'identifier':'Other',                  'title':'Other'},
+      {'identifier':'Independent broadcast or film production', 'title': $i18n.get(camelCase('Independent broadcast or film production'), 'participationT') },
+      {'identifier':'Weekly publication'                      , 'title': $i18n.get(camelCase('Weekly publication'), 'participationT'                      ) },
+      {'identifier':'Web publication'                         , 'title': $i18n.get(camelCase('Web publication' ), 'participationT'                        ) },
+      {'identifier':'Online journal'                          , 'title': $i18n.get(camelCase('Online journal'), 'participationT'                          ) },
+      {'identifier':'Blog'                                    , 'title': $i18n.get(camelCase('Blog'), 'participationT'                                    ) },
+      {'identifier':'Other online media'                      , 'title': $i18n.get(camelCase('Other online media') , 'participationT'                     ) },
+      {'identifier':'Freelance journalist'                    , 'title': $i18n.get(camelCase('Freelance journalist') , 'participationT'                   ) },
+      {'identifier':'Other'                                   , 'title': $i18n.get(camelCase('Other') , 'participationT'                                  ) },
     ]
 
     var MIMES = {
-        'application/pdf':                                                            { title: 'PDF',               color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' :   { title: 'Word (docx)',       color: 'blue',   btn: 'btn-primary', icon: 'fa-file-word-o'  },
-        'application/msword':                                                         { title: 'Word (doc)',        color: 'blue',   btn: 'btn-primary', icon: 'fa-file-word-o'  },
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' :         { title: 'Excel (xlsx)',      color: 'green',  btn: 'btn-success', icon: 'fa-file-excel-o' },
-        'application/vnd.ms-excel':                                                   { title: 'Excel (xls)',       color: 'green',  btn: 'btn-success', icon: 'fa-file-excel-o' },
-        'application/vnd.openxmlformats-officedocument.presentationml.presentation' : { title: 'PowerPoint (pptx)', color: 'orange', btn: 'btn-warning', icon: 'fa-file-powerpoint-o' },
-        'application/vnd.ms-powerpoint':                                              { title: 'PowerPoint (ppt)',  color: 'orange', btn: 'btn-warning', icon: 'fa-file-powerpoint-o' },
-        'application/zip':                                                            { title: 'Zip',               color: '',       btn: 'btn-default', icon: 'fa-file-archive-o' },
+        'application/pdf':                                                            { title: $i18n.get(camelCase('PDF'), 'participationT'),               color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' :   { title: $i18n.get(camelCase('Word (docx)'), 'participationT'),       color: 'blue',   btn: 'btn-primary', icon: 'fa-file-word-o'  },
+        'application/msword':                                                         { title: $i18n.get(camelCase('Word (doc)'), 'participationT'),        color: 'blue',   btn: 'btn-primary', icon: 'fa-file-word-o'  },
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' :         { title: $i18n.get(camelCase('Excel (xlsx)'), 'participationT'),      color: 'green',  btn: 'btn-success', icon: 'fa-file-excel-o' },
+        'application/vnd.ms-excel':                                                   { title: $i18n.get(camelCase('Excel (xls)'), 'participationT'),       color: 'green',  btn: 'btn-success', icon: 'fa-file-excel-o' },
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation' : { title: $i18n.get(camelCase('PowerPoint (pptx)'), 'participationT'), color: 'orange', btn: 'btn-warning', icon: 'fa-file-powerpoint-o' },
+        'application/vnd.ms-powerpoint':                                              { title: $i18n.get(camelCase('PowerPoint (ppt)'), 'participationT'),  color: 'orange', btn: 'btn-warning', icon: 'fa-file-powerpoint-o' },
+        'application/zip':                                                            { title: $i18n.get(camelCase('Zip'), 'participationT'),               color: '',       btn: 'btn-default', icon: 'fa-file-archive-o' },
         'default':                                                                    { title: '',                  color: 'orange', btn: 'btn-default', icon: 'fa-file-o' }
     }
 
@@ -294,7 +299,12 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
     function initStepsOrganization(){
      return $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms',{ cache: true })
       .then(function(res){
+
+        for (const aLang of res.data)
+          aLang.name = aLang.title[locale]
+
         _ctrl.languages = res.data
+
         return getOrg()
       })
     }
@@ -537,7 +547,7 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
         }
         save().then(function(isSaved){
           if(isSaved){
-            $scope.$emit('showSuccess', 'Checklist saved');
+            $scope.$emit('showSuccess', i18n.get('checklistSaved', 'participationT'));
             resetForms()
             changeStep('organization')
           }
@@ -550,7 +560,7 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
 
         save().then(function(isSaved){
           if(isSaved){
-            $scope.$emit('showSuccess', 'Contacts saved');
+            $scope.$emit('showSuccess', $i18n.get('contactsSaved', 'participationT'));
             resetForms();
             changeStep('participants')
           }
@@ -575,7 +585,9 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
       if(_ctrl.editFormOrg && (_ctrl.editFormOrg.$invalid || !_ctrl.findAttachement(_ctrl.organization.attachment,'letterOfAssignment')))
       {
         _ctrl.editFormOrg.$submitted=true
-        return $scope.$emit('showError', 'Your form has errors');
+
+        _ctrl.error = { status: 4000 }
+        return $scope.$emit('showError', $i18n.get('badRequestTitle', 'participationT'));
       }
 
       if(!_ctrl.organization.requestId)
@@ -591,7 +603,7 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
                 .then(function(isSaved){
                   if(isSaved){
 
-                    $scope.$emit('showSuccess', 'Organization saved');
+                    $scope.$emit('showSuccess', $i18n.get('orgSaved', 'participationT'));
                     resetForms()
                     changeStep('contacts')
                   }
@@ -615,7 +627,7 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
                 .then(function(isSaved){
                   if(isSaved){
 
-                    $scope.$emit('showSuccess', 'Organization saved');
+                    $scope.$emit('showSuccess', $i18n.get('orgSaved', 'participationT'));
                     resetForms()
                     changeStep('contacts')
                   }

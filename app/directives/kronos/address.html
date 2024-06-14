@@ -1,65 +1,65 @@
-<section>
+<section >
 
-        <section >
-          <ng-form name="addressEditForm">
+        <ng-form name="addressEditForm">
+          <div class="row">
           <div class="col-md-2">
             <div class="form-group" ng-class="{'has-error': (addressEditForm.streetnumber.$invalid && (addressEditForm.streetnumber.$touched || addressEditForm.$submitted)) }">
-              <label class="control-label" for="title">Street number</label>
+              <label class="control-label" for="title">{{::('participationT.streetNumber'|$translate)}}</label>
               <input required ng-model="binding.streetNumber" type="text" class="form-control" id="streetnumber" name="streetnumber" ng-maxlength="25">
-              <p ng-show="addressEditForm.streetnumber.$invalid && (addressEditForm.streetnumber.$touched || addressEditForm.$submitted)" class="help-block text-danger">street number is required.</p>
-                      <p class="help-block text-danger small" ng-show="(editForm.phone.$error.maxlength ) && (editForm.phone.$touched || editForm.$submitted)">Street number is too large. Max 25 chars.</span>
+              <p ng-show="addressEditForm.streetnumber.$invalid && (addressEditForm.streetnumber.$touched || addressEditForm.$submitted)" class="help-block text-danger">{{::('participationT.streetNumberIsRequired'|$translate)}}</p>
+                      <p class="help-block text-danger small" ng-show="(editForm.phone.$error.maxlength ) && (editForm.phone.$touched || editForm.$submitted)">{{::('participationT.streetNumberIsTooLargeMax_25Chars'|$translate)}}</span>
             </div>
           </div>
           <div class="col-md-8">
             <div class="form-group" ng-class="{'has-error': (addressEditForm.street.$invalid && (addressEditForm.street.$touched || addressEditForm.$submitted)) }">
-              <label class="control-label" for="title">Street</label>
+              <label class="control-label" for="title">{{::('participationT.street'|$translate)}}</label>
 
               <input required ng-model="binding.street"  type="text" class="form-control" id="street" name="street" >
-              <p ng-show="addressEditForm.street.$invalid && (addressEditForm.street.$touched || addressEditForm.$submitted)" class="help-block text-danger">street is required.</p>
+              <p ng-show="addressEditForm.street.$invalid && (addressEditForm.street.$touched || addressEditForm.$submitted)" class="help-block text-danger">{{::('participationT.streetIsRequired'|$translate)}}</p>
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-group">
-              <label class="control-label" for="title">Unit number</label>
+              <label class="control-label" for="title">{{::('participationT.unitNumber'|$translate)}}</label>
               <input  ng-model="binding.unitNumber" type="text" class="form-control" id="unitNumber" >
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group" ng-class="{'has-error': (addressEditForm.locality.$invalid && (addressEditForm.locality.$touched || addressEditForm.$submitted)) }">
-              <label class="control-label" for="locality">Locality <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="City, town or villiage" help></i></label>
+              <label class="control-label" for="locality">{{::('participationT.locality'|$translate)}} <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="{{::('participationT.locality'|$translate)}} " help></i></label>
               <input required ng-model="binding.locality"  type="text" class="form-control" id="locality" name="locality" >
-              <p ng-show="addressEditForm.locality.$invalid && (addressEditForm.locality.$touched || addressEditForm.$submitted)" class="help-block text-danger">locality is required.</p>
+              <p ng-show="addressEditForm.locality.$invalid && (addressEditForm.locality.$touched || addressEditForm.$submitted)" class="help-block text-danger">{{::('participationT.localityIsRequired'|$translate)}}</p>
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label class="control-label" for="title">State or province <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="First level administrative area within the country.  Usually province or state." help></i></label>
+              <label class="control-label" for="title">{{::('participationT.stateOrProvince'|$translate)}}  <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="{{::('participationT.stateOrProvinceHelp'|$translate)}}" help></i></label>
               <input ng-model="binding.administrativeArea" type="text" class="form-control" id="administrativeArea" >
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group">
-              <label class="control-label" for="title">Postal/Zip Code </label>
+              <label class="control-label" for="title">{{::('participationT.postalZipCode'|$translate)}} </label>
               <input  ng-model="binding.postalCode" type="text" class="form-control" id="postalCode" >
             </div>
           </div>
           <div class="col-md-6">
             <div class="form-group" ng-class="{'has-error': (addressEditForm.country.$invalid && (addressEditForm.country.$touched || addressEditForm.$submitted)) }">
-              <label class="control-label" for="country">Country </label>
+              <label class="control-label" for="country">{{::('participationT.country'|$translate)}} </label>
               <select
 
                 required
                 id="country"
                 name="country"
                 class="form-control"
-                ng-options="country.code as country.name.en for country in countries"
+                ng-options="country.code as country.title for country in countries"
                 ng-model="binding.country"
                 >
               </select>
-              <p ng-show="addressEditForm.country.$invalid && (addressEditForm.country.$touched || addressEditForm.$submitted)" class="help-block text-danger">country is required.</p>
+              <p ng-show="addressEditForm.country.$invalid && (addressEditForm.country.$touched || addressEditForm.$submitted)" class="help-block text-danger">{{::('participationT.countryIsRequired'|$translate)}}</p>
 
             </div>
           </div>
+        </div>
         </ng-form>
-        </section>
 </section>

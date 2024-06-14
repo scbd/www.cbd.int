@@ -245,3 +245,7 @@
   line-height: .5;
   border-radius: .2rem;
 }
+
+.pull-right {
+  float: right !important;
+}
