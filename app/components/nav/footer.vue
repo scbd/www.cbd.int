@@ -58,7 +58,7 @@
                             <h5 class="h4 text-uppercase">{{$t('quickLinks')}}</h5>
                             <hr>
                             <div class="footer-links two-column">
-                                <a href="https://absch.cbd.int/" :title="$t('asb')">{{$t('asb')}}</a>
+                                <a href="https://absch.cbd.int/" :title="$t('accessAndBenefitSharingClearingHouse')">{{$t('accessAndBenefitSharingClearingHouse')}}</a>
                                 <a href="https://bch.cbd.int/" :title="$t('biosafetyClearingHouse')">{{$t('biosafetyClearingHouse')}}</a>
                                 <a href="https://chm.cbd.int/" :title="$t('clearingHouseMechanism')">{{$t('clearingHouseMechanism')}}</a>
                                 <a href="https://www.cbd.int/contributions" :title="$t('contributions')">{{$t('contributions')}}</a>
