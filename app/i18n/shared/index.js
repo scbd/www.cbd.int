@@ -1,9 +1,9 @@
-import en from './en.js';
-import ar from './ar.js';
-import es from './es.js';
-import fr from './fr.js';
-import ru from './ru.js';
-import zh from './zh.js';
+import en from './en.json' assert { type: 'json' };
+import ar from './ar.json' assert { type: 'json' };
+import es from './es.json' assert { type: 'json' };
+import fr from './fr.json' assert { type: 'json' };
+import ru from './ru.json' assert { type: 'json' };
+import zh from './zh.json' assert { type: 'json' };
 
 export default {
     en,
