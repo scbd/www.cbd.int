@@ -1,4 +1,4 @@
-FROM node:20.12.2-alpine3.19
+FROM node:22.3.0-alpine3.20
 
 RUN apk update  -q && \
     apk upgrade -q && \

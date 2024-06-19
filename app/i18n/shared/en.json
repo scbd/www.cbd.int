@@ -1,4 +1,4 @@
-export default {
+{
   "infoCaps":"INFORMATION",
   "iplcs":"Indigenous Peoples and Local Communities",
   "bwy":"Business, Women, Youth and other Stakeholders",
@@ -133,5 +133,5 @@ export default {
   "byClicking":"by clicking here",
   "orDragIt":"or drag it here",
   "orDragThem":"or drag them here",
-  "fileEncrypted":"File will be encrypted",
+  "fileEncrypted":"File will be encrypted"
 }

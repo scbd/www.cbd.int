@@ -18,40 +18,40 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
     $i18n.set('participationT', participationT);
 
     var orgTypes = {media:[
-      {'identifier':'Educational/Public', 'title': $i18n.get(camelCase('Educational/Public'), 'participationT')},
-      {'identifier':'Government/State',   'title': $i18n.get(camelCase('Government/State'), 'participationT') },
-      {'identifier':'Private',            'title': $i18n.get(camelCase('Private'), 'participationT') },
-      {'identifier':'Other',              'title': $i18n.get(camelCase('Other'), 'participationT') }],
+      {'identifier':'Educational/Public', 'title': $i18n.get('educationalPublic', 'participationT')},
+      {'identifier':'Government/State',   'title': $i18n.get('governmentState', 'participationT') },
+      {'identifier':'Private',            'title': $i18n.get('private', 'participationT') },
+      {'identifier':'Other',              'title': $i18n.get('other', 'participationT') }],
       observer:[]
     }
 
     var mediums = [
-      {'identifier':'Print',                  'title': $i18n.get(camelCase('Print'), 'participationT') },
-      {'identifier':'News agency/service',    'title': $i18n.get(camelCase('newsAgencyService'), 'participationT') },
-      {'identifier':'Radio',                  'title': $i18n.get(camelCase('Radio'), 'participationT') },
-      {'identifier':'Photo/visual',           'title': $i18n.get(camelCase('photoVisual'), 'participationT') },
-      {'identifier':'Television',             'title': $i18n.get(camelCase('Television'), 'participationT') },
+      {'identifier':'Print',                  'title': $i18n.get('print', 'participationT') },
+      {'identifier':'News agency/service',    'title': $i18n.get('newsAgencyService', 'participationT') },
+      {'identifier':'Radio',                  'title': $i18n.get('radio', 'participationT') },
+      {'identifier':'Photo/visual',           'title': $i18n.get('photoVisual', 'participationT') },
+      {'identifier':'Television',             'title': $i18n.get('television', 'participationT') },
 
-      {'identifier':'Independent broadcast or film production', 'title': $i18n.get(camelCase('Independent broadcast or film production'), 'participationT') },
-      {'identifier':'Weekly publication'                      , 'title': $i18n.get(camelCase('Weekly publication'), 'participationT'                      ) },
-      {'identifier':'Web publication'                         , 'title': $i18n.get(camelCase('Web publication' ), 'participationT'                        ) },
-      {'identifier':'Online journal'                          , 'title': $i18n.get(camelCase('Online journal'), 'participationT'                          ) },
-      {'identifier':'Blog'                                    , 'title': $i18n.get(camelCase('Blog'), 'participationT'                                    ) },
-      {'identifier':'Other online media'                      , 'title': $i18n.get(camelCase('Other online media') , 'participationT'                     ) },
-      {'identifier':'Freelance journalist'                    , 'title': $i18n.get(camelCase('Freelance journalist') , 'participationT'                   ) },
-      {'identifier':'Other'                                   , 'title': $i18n.get(camelCase('Other') , 'participationT'                                  ) },
+      {'identifier':'Independent broadcast or film production', 'title': $i18n.get('independentBroadcastOrFilmProduction', 'participationT') },
+      {'identifier':'Weekly publication'                      , 'title': $i18n.get('weeklyPublication', 'participationT') },
+      {'identifier':'Web publication'                         , 'title': $i18n.get('webPublication', 'participationT') },
+      {'identifier':'Online journal'                          , 'title': $i18n.get('onlineJournal', 'participationT') },
+      {'identifier':'Blog'                                    , 'title': $i18n.get('blog', 'participationT') },
+      {'identifier':'Other online media'                      , 'title': $i18n.get('otherOnlineMedia', 'participationT') },
+      {'identifier':'Freelance journalist'                    , 'title': $i18n.get('freelanceJournalist', 'participationT') },
+      {'identifier':'Other'                                   , 'title': $i18n.get('other', 'participationT') },
     ]
 
     var MIMES = {
-        'application/pdf':                                                            { title: $i18n.get(camelCase('PDF'), 'participationT'),               color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' :   { title: $i18n.get(camelCase('Word (docx)'), 'participationT'),       color: 'blue',   btn: 'btn-primary', icon: 'fa-file-word-o'  },
-        'application/msword':                                                         { title: $i18n.get(camelCase('Word (doc)'), 'participationT'),        color: 'blue',   btn: 'btn-primary', icon: 'fa-file-word-o'  },
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' :         { title: $i18n.get(camelCase('Excel (xlsx)'), 'participationT'),      color: 'green',  btn: 'btn-success', icon: 'fa-file-excel-o' },
-        'application/vnd.ms-excel':                                                   { title: $i18n.get(camelCase('Excel (xls)'), 'participationT'),       color: 'green',  btn: 'btn-success', icon: 'fa-file-excel-o' },
-        'application/vnd.openxmlformats-officedocument.presentationml.presentation' : { title: $i18n.get(camelCase('PowerPoint (pptx)'), 'participationT'), color: 'orange', btn: 'btn-warning', icon: 'fa-file-powerpoint-o' },
-        'application/vnd.ms-powerpoint':                                              { title: $i18n.get(camelCase('PowerPoint (ppt)'), 'participationT'),  color: 'orange', btn: 'btn-warning', icon: 'fa-file-powerpoint-o' },
-        'application/zip':                                                            { title: $i18n.get(camelCase('Zip'), 'participationT'),               color: '',       btn: 'btn-default', icon: 'fa-file-archive-o' },
-        'default':                                                                    { title: '',                  color: 'orange', btn: 'btn-default', icon: 'fa-file-o' }
+        'application/pdf':                                                            { title: $i18n.get('pdf', 'participationT'),               color: 'red',    btn: 'btn-danger',  icon: 'fa-file-pdf-o'   },
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' :   { title: $i18n.get('wordDocx)', 'participationT'),         color: 'blue',   btn: 'btn-primary', icon: 'fa-file-word-o'  },
+        'application/msword':                                                         { title: $i18n.get('wordDoc)', 'participationT'),          color: 'blue',   btn: 'btn-primary', icon: 'fa-file-word-o'  },
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' :         { title: $i18n.get('excelXlsx', 'participationT'),         color: 'green',  btn: 'btn-success', icon: 'fa-file-excel-o' },
+        'application/vnd.ms-excel':                                                   { title: $i18n.get('excelXls', 'participationT'),          color: 'green',  btn: 'btn-success', icon: 'fa-file-excel-o' },
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation' : { title: $i18n.get('powerPointPptx', 'participationT'),    color: 'orange', btn: 'btn-warning', icon: 'fa-file-powerpoint-o' },
+        'application/vnd.ms-powerpoint':                                              { title: $i18n.get('powerPointPpt', 'participationT'),     color: 'orange', btn: 'btn-warning', icon: 'fa-file-powerpoint-o' },
+        'application/zip':                                                            { title: $i18n.get('zip', 'participationT'),               color: '',       btn: 'btn-default', icon: 'fa-file-archive-o' },
+        'default':                                                                    { title: '',                                               color: 'orange', btn: 'btn-default', icon: 'fa-file-o' }
     }
 
     //route params

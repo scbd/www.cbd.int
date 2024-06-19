@@ -1,11 +1,10 @@
-export default {
+{
   "infoCaps": "INFORMATION",
   "iplcs": "Peuples autochtones et communautés locales",
   "bwy": "Entreprises, femmes, jeunes et autres parties prenantes",
   "docs": "Documents du Secrétariat",
   "signOut": "se déconnecter",
   "pp": "politique de confidentialité",
-  "asb": "Centre d’échange sur l’accès et le partage des avantages",
   "nbspas": "Stratégies et plans d'action nationaux pour la biodiversité (SPANB)",
   "es": "Secrétaire exécutif",
   "doingBiz": "Faire des affaires avec le CBD",
