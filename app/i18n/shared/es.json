@@ -1,11 +1,10 @@
-export default {
+{
   "infoCaps": "INFORMACIÓN",
   "iplcs": "Pueblos Indígenas y Comunidades Locales",
   "bwy": "Empresas, mujeres, jóvenes y otras partes interesadas",
   "docs": "Documentos de la Secretaría",
   "signOut": "desconectar",
   "pp": "política de privacidad",
-  "asb": "Centro de Intercambio de Información sobre Acceso y Participación en los Beneficios",
   "nbspas": "Estrategias y planes de acción nacionales en materia de biodiversidad (EPANB)",
   "es": "Secretario Ejecutivo",
   "doingBiz": "Haciendo negocios con el CDB",

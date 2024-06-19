@@ -1,4 +1,4 @@
-export default {
+{
     "streetNumber": "número de calle",
     "streetNumberIsRequired": "Se requiere el número de calle.",
     "streetNumberIsTooLargeMax_25Chars": "El número de la calle es demasiado grande. Máximo 25 caracteres.",
@@ -80,7 +80,6 @@ export default {
     "attachments": "Archivos adjuntos",
     "next": "Próximo",
     "thankYouForYourMediaAccreditationSubmission": "Gracias por enviar su acreditación de medios. Tenga en cuenta que su solicitud se procesará dentro de los 7 días en circunstancias normales. Si no recibe una respuesta dentro de este plazo, comuníquese con el equipo de medios en .",
-    "secretariatCbdInt": "secretariat@cbd.int",
     "returnToRequestsDashboard": "Volver al panel de solicitudes",
     "role": "Role",
     "headOfOrganization": "jefe de organizacion",

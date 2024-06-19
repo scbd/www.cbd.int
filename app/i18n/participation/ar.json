@@ -1,4 +1,4 @@
-export default  {
+{
     "streetNumber": "رقم الشارع",
     "streetNumberIsRequired": "رقم الشارع مطلوب",
     "streetNumberIsTooLargeMax_25Chars": "رقم الشارع كبير جدًا. الحد الأقصى 25 حرفًا.",
@@ -80,7 +80,6 @@ export default  {
     "attachments": "المرفقات",
     "next": "التالي",
     "thankYouForYourMediaAccreditationSubmission": "نشكرك على تقديم الاعتماد الإعلامي. يرجى ملاحظة أنه ستتم معالجة طلبك خلال 7 أيام في الظروف العادية. إذا لم تتلق ردًا خلال هذا الإطار الزمني، فيرجى الاتصال بالفريق الإعلامي على .",
-    "secretariatCbdInt": "سكرتارية@cbd.int",
     "returnToRequestsDashboard": "العودة إلى لوحة الطلبات",
     "role": "دور",
     "headOfOrganization": "رئيس المنظمة",

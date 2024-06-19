@@ -251,7 +251,6 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
             if(conference && conference.MajorEventIDs)
             conferenceService.getMeetings(conference.MajorEventIDs)
               .then(function(meetings){
-                console.log('meetings',meetings)
 
                 for (const aMeeting of meetings) {
                   const title = aMeeting.title[locale] || aMeeting.title['en'];
@@ -404,7 +403,7 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
                           c.title = c.name[locale] || c.name['en']
           
                         $scope.countries = data
-          console.log('$scope.countries', locale)
+  
                         return data
                       }
 

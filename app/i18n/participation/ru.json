@@ -1,4 +1,4 @@
-export default {
+{
     "streetNumber": "номер улицы",
     "streetNumberIsRequired": "нужен номер улицы.",
     "streetNumberIsTooLargeMax_25Chars": "Номер улицы слишком велик. Макс. 25 символов.",
@@ -80,7 +80,6 @@ export default {
     "attachments": "Вложения",
     "next": "Следующий",
     "thankYouForYourMediaAccreditationSubmission": "Благодарим вас за подачу заявления на аккредитацию СМИ. Обратите внимание, что ваш запрос будет обработан в течение 7 дней при обычных обстоятельствах. Если вы не получили ответа в течение этого времени, свяжитесь со службой поддержки СМИ по адресу .",
-    "secretariatCbdInt": "секретариат@cbd.int",
     "returnToRequestsDashboard": "Вернуться к панели запросов",
     "role": "Роль",
     "headOfOrganization": "Руководитель организации",

@@ -1,4 +1,4 @@
-export default {
+{
     "streetNumber": "街牌号码",
     "streetNumberIsRequired": "街道号码为必填项。",
     "streetNumberIsTooLargeMax_25Chars": "街道号码太大。最多 25 个字符。",
@@ -80,7 +80,6 @@ export default {
     "attachments": "附件",
     "next": "下一个",
     "thankYouForYourMediaAccreditationSubmission": "感谢您提交媒体认证申请。请注意，正常情况下您的申请将在 7 天内处理。如果您在此期限内未收到回复，请联系媒体团队。",
-    "secretariatCbdInt": "secretariat@cbd.int",
     "returnToRequestsDashboard": "返回请求仪表板",
     "role": "角色",
     "headOfOrganization": "组织负责人",

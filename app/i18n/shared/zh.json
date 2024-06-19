@@ -1,11 +1,10 @@
-export default {
+{
   "infoCaps": "信息",
   "iplcs": "原住民和当地社区",
   "bwy": "商界、妇女、青年和其他利益相关者",
   "docs": "秘书处文件",
   "signOut": "登出",
   "pp": "隐私政策",
-  "asb": "获取和利益分享信息交换所",
   "nbspas": "国家生物多样性战略和行动计划（NBSAP）",
   "es": "行政秘书",
   "doingBiz": "与 CBD 做生意",
