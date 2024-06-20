@@ -1,7 +1,8 @@
 import app from '~/app';
 import html from './user-messages.html'; 
+import participationT from '~/i18n/participation/index.js';
 
-	export default app.directive('userMessage', ['$interpolate',function($interpolate) {
+	export default app.directive('userMessage', ['$interpolate','translationService',function($interpolate, $i18n) {
 		return {
 			restrict : "E",
 			template : html,
@@ -12,11 +13,14 @@ import html from './user-messages.html';
       },
 			link: function ($scope) {
         $scope.remove = remove
-
+        $i18n.set('participationT', participationT );
 
 
         $scope.$watch('error',function(){
             if(!$scope.error) return
+
+            if($scope.error.status==4000)
+              createMsg('BAD_REQUEST', $scope.error)
 
             if($scope.error.status==-1)
               createMsg('NO_SERVICE',$scope.error)

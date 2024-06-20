@@ -1,43 +1,43 @@
 <section>
-  <div class="col-xs-12">
-    <h2 ng-if="!participationCtrl.addContact">Contacts</h2>
+  <div class="col-12">
+    <h2 ng-if="!participationCtrl.addContact">{{::('participationT.contacts'|$translate)}}</h2>
     <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
   </div>
-  <div class="col-xs-12 " ng-if="!participationCtrl.addContact" ng-init="participationCtrl.initStepsContacts()">
+  <div class="col-12 " ng-if="!participationCtrl.addContact" ng-init="participationCtrl.initStepsContacts()">
     <div class="table-responsive" >
       <table class="table table-condensed table-hover" >
         <tr>
-          <th>Role</th>
-          <th>Name</th>
-          <th>Position/Email</th>
+          <th>{{::('participationT.role'|$translate)}}</th>
+          <th>{{::('participationT.name'|$translate)}}</th>
+          <th>{{::('participationT.positionEmail'|$translate)}}</th>
           <th>&nbsp;</th>
         </tr>
         <tr>
-          <td >Head of organization</td>
+          <td >{{::('participationT.headOfOrganization'|$translate)}}</td>
           <td >{{participationCtrl.head.title}} {{participationCtrl.head.firstName}} {{participationCtrl.head.lastName}}</td>
           <td >
             {{participationCtrl.head.designation}}<br>
             <a ng-href="{{participationCtrl.head.email}}">{{participationCtrl.head.email}}</a>
           </td>
           <td >
-            <button ng-if="participationCtrl.hasHead()" ng-click="participationCtrl.activeParticipant=participationCtrl.head;  participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Edit   </button>
-            <button ng-if="!participationCtrl.hasHead()" ng-click="participationCtrl.activeParticipant=participationCtrl.head; participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">Add Head   </button>
+            <button ng-if="participationCtrl.hasHead()" ng-click="participationCtrl.activeParticipant=participationCtrl.head;  participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">{{::('participationT.edit'|$translate)}}  </button>
+            <button ng-if="!participationCtrl.hasHead()" ng-click="participationCtrl.activeParticipant=participationCtrl.head; participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">{{::('participationT.addHead'|$translate)}}   </button>
           </td>
         </tr>
         <tr>
-          <td >Main contact</td>
+          <td >{{::('participationT.mainContact'|$translate)}} </td>
           <td >{{participationCtrl.focalPoint.title}} {{participationCtrl.focalPoint.firstName}} {{participationCtrl.focalPoint.lastName}}</td>
           <td >
             {{participationCtrl.focalPoint.designation}}<br>
             <a ng-href="{{participationCtrl.head.email}}">{{participationCtrl.focalPoint.email}}</a>
           </td>
           <td >
-            <button ng-if="participationCtrl.hasFocalPoint() && !participationCtrl.config.sameAsHead" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-default btn-xs">Edit   </button>
-            <button ng-if="!participationCtrl.hasFocalPoint() && !participationCtrl.config.sameAsHead" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-default btn-xs">Add main    </button>
+            <button ng-if="participationCtrl.hasFocalPoint() && !participationCtrl.config.sameAsHead" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-default btn-xs">{{::('participationT.edit'|$translate)}}   </button>
+            <button ng-if="!participationCtrl.hasFocalPoint() && !participationCtrl.config.sameAsHead" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-default btn-xs">{{::('participationT.addMain'|$translate)}}   </button>
 
             <span class="checkbox" style="display:inline;" ng-show="participationCtrl.doc.head">
                <label>
-                <input type="checkbox" ng-model="participationCtrl.config.sameAsHead" ng-change="participationCtrl.toggleMainIsHead()"> Same as head
+                <input type="checkbox" ng-model="participationCtrl.config.sameAsHead" ng-change="participationCtrl.toggleMainIsHead()"> {{::('participationT.sameAsHead'|$translate)}}
                </label>
             </span>
           </td>
@@ -46,10 +46,10 @@
 
     </div>
   </div>
-  <participant is-contact="true" request-id="participationCtrl.doc._id" conference-code="participationCtrl.conferenceCode" organization="participationCtrl.organization" ng-model="participationCtrl.activeParticipant" ng-show="participationCtrl.addContact" show-contact="participationCtrl.addContact" typee="participationCtrl.type"></participant>
-  <div class="col-xs-12 " ng-if="!participationCtrl.addContact">
+  <participant is-contact="true" request-id="participationCtrl.doc._id" msg="participationCtrl.msg" error="participationCtrl.error" conference-code="participationCtrl.conferenceCode" organization="participationCtrl.organization" ng-model="participationCtrl.activeParticipant" ng-show="participationCtrl.addContact" show-contact="participationCtrl.addContact" typee="participationCtrl.type"></participant>
+  <div class="col-12 " ng-if="!participationCtrl.addContact">
       <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
-    <button ng-click="participationCtrl.changeStep('organization')" ng-disabled="false" type="button" class="btn btn-default">Previous</button>
-    <button ng-click="participationCtrl.saveContacts()" ng-disabled="!participationCtrl.hasHead() || !participationCtrl.hasFocalPoint()" type="button" class="btn btn-success pull-right">Next</button>
+    <button ng-click="participationCtrl.changeStep('organization')" ng-disabled="false" type="button" class="btn btn-default">{{::('participationT.previous'|$translate)}}</button>
+    <button ng-click="participationCtrl.saveContacts()" ng-disabled="!participationCtrl.hasHead() || !participationCtrl.hasFocalPoint()" type="button" class="btn btn-success pull-right">{{::('participationT.next'|$translate)}}</button>
   </div>
 </section>

@@ -24,10 +24,27 @@
         }
     </style>
     <div class="container-fluid">
-        <div class="col-xs-12">
+        <div class="col-xs-8">
             <h2 class="marginless ">
-                Media Requests <i ng-if="mediaRequestCtrl.loading" class="fa fa-spinner fa-spin"></i>
+                Media Requests - {{mediaRequestCtrl.conference.Title.en}}<i ng-if="mediaRequestCtrl.loading" class="fa fa-spinner fa-spin"></i>
             </h2>
+        </div>
+        <div class="col-xs-4">
+            <div class="form-group" style="margin-top: 2rem;">
+                <select
+  
+
+                  id="conference"
+                  name="conference"
+                  class="form-control"
+                  ng-options="conference.Title.en for conference in mediaRequestCtrl.conferences"
+                  ng-model="mediaRequestCtrl.conference"
+                  ng-change="mediaRequestCtrl.changeConference(mediaRequestCtrl.conference)"
+
+                  >
+                </select>
+
+              </div>
         </div>
         <div class="col-xs-12 panel  panel-default">
             <div class="panel-body">

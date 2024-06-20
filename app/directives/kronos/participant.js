@@ -6,9 +6,9 @@ import './address'
 import '~/services/conference-service'
 import '~/directives/kronos/user-messages'
 import '~/directives/file'
+import participationT from '~/i18n/participation/index.js';
 
-
-app.directive('participant', ['$http','$timeout','conferenceService','$filter','$q',function($http,$timeout,conferenceService,$filter,$q) {
+app.directive('participant', ['$http','$timeout','conferenceService','$filter','$q','translationService','locale',function($http,$timeout,conferenceService,$filter,$q, $i18n, locale) {
 
     return {
 			restrict : "E",
@@ -21,9 +21,12 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
         organization  : "=organization"  ,
         conferenceCode: "=conferenceCode",
         requestId     : "=requestId"     ,
-        isContact     : "=isContact"
+        isContact     : "=isContact",
+        error         : "=error",
+        msg: '=msg',
       },
       link:function($scope){
+        $i18n.set('participationT', participationT );
         $timeout(function(){
           $("[help]").tooltip();
         },3000)
@@ -178,7 +181,8 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
           validateRequireUploads()
           if($scope.editForm.$invalid) {
             $scope.editForm.$submitted=true
-            return $scope.$emit('showError', 'You have errors in your form. ');
+            $scope.error = { status: 4000 }
+            return $scope.$emit('showError', $i18n.get('badRequestTitle', 'participationT'));
           }
           if($scope.binding && $scope.binding.meeting && !$scope.binding.meeting.length)
             delete($scope.binding.meeting)
@@ -194,7 +198,7 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
                 .then(function(res){
                   $scope.binding._id = res.data.id
                   $scope.showContact=false;
-                  $scope.$emit('showSuccess', 'Participant saved ');
+                  $scope.$emit('showSuccess', $i18n.get('participantSaved', 'participationT') );
                 }).catch(function(err){
                   $scope.error = err
                   console.error(err)
@@ -203,7 +207,7 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
             return $http.put('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent($scope.binding._id),$scope.binding,{headers:{requestId:$scope.requestId,conferenceCode:$scope.conferenceCode}})
                 .then(function(res){
                   $scope.showContact=false;
-                  $scope.$emit('showSuccess', 'Participant saved ');
+                  $scope.$emit('showSuccess', $i18n.get('participantSaved', 'participationT') );
                 })
                 .catch(function(err){
                   $scope.error = err
@@ -247,6 +251,13 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
             if(conference && conference.MajorEventIDs)
             conferenceService.getMeetings(conference.MajorEventIDs)
               .then(function(meetings){
+
+                for (const aMeeting of meetings) {
+                  const title = aMeeting.title[locale] || aMeeting.title['en'];
+                  const code = aMeeting.titleShort || aMeeting.EVT_CD;
+
+                  aMeeting.name = `${code} - ${title}`
+                }
                 $scope.meetings = meetings
                 selectAllMeetings()
                 initRegOptions()
@@ -373,15 +384,31 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
           }
 
         $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms',{ cache: true })
-            .then(function(res){$scope.languages = res.data})
+            .then(function(res){
+              
+
+              for (const aLang of res.data)
+                aLang.name = aLang.title[locale] || aLang.title['en']
+              
+              $scope.languages = res.data
+            })
 
         var params = {
-                        s:{'name.en':1},
-                        f:{'name.en':1,code:1}
+                        s:{[`name.${locale}`]:1},
+                        f:{'name':1,code:1}
+                      }
+
+                      function localizeCountry(data){
+                        for (const c of data)
+                          c.title = c.name[locale] || c.name['en']
+          
+                        $scope.countries = data
+  
+                        return data
                       }
 
         $http.get('/api/v2015/countries',{ params : params })
-            .then(function(res){$scope.countries = res.data})
+            .then(function(res){return res.data}).then(localizeCountry)
 			}
 		};
 	}]);

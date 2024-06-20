@@ -4,421 +4,429 @@
         cursor: pointer;
       }
     </style>
-    <div class="col-xs-12 ">
+    <div class="col-12 ">
       <h2>
-        <span ng-if="binding._id">Edit</span>
-        <span ng-if="!binding._id">Add</span>
-        <span ng-if="isContact">Contact</span>
-        <span ng-if="!isContact">Participant</span>
+        <span ng-if="binding._id">{{::('participationT.edit'|$translate)}}</span>
+        <span ng-if="!binding._id">{{::('participationT.add'|$translate)}}</span>
+        <span ng-if="isContact">{{::('participationT.contact'|$translate)}}</span>
+        <span ng-if="!isContact">{{::('participationT.participant'|$translate)}}</span>
       </h2>
     </div>
 
-    <div class="col-xs-12 " >
+    <div class="col-12 mb-3" >
       <div class="pull-right">
 
-        <button ng-click="cancel()" ng-disabled="false" type="button" class="btn btn-default">Cancel</button>
-        <button ng-click="save()"   type="button" class="btn btn-primary">Save</button>
+        <button ng-click="cancel()" ng-disabled="false" type="button" class="btn btn-default">{{::('participationT.cancel'|$translate)}}</button>
+        <button ng-click="save()"   type="button" class="btn btn-primary">{{::('participationT.save'|$translate)}}</button>
       </div>
 
     </div>
+
     <form  name="editForm"  novalidate>
-    <div class="col-xs-12 ">
-      <label>Participation</label>
+      <div class="col-12  mb-3">
+        <label>{{::('participationT.participation'|$translate)}}</label>
 
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div class="col-md-12" ng-if="isContact">
-            <div class="form-group">
-              <label class="control-label" for="needAccredidation">Does this person intend on attending the conference?</label>
-              <div class="radio">
-                <label>
-                  <input ng-change="clearMeetings()" ng-model="attending.val" type="radio" name="needAccredidation" ng-value="false" checked>
-                  No
-                </label>
-              </div>
-              <div class="radio">
-                <label>
-                  <input ng-model="attending.val" type="radio" name="needAccredidation"  ng-value="true" ng-change="selectAllMeetings()">
-                  Yes
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-12" >
-          <div ng-show="attending.val" class="form-group" ng-class="{'has-error': (!binding.meeting.length && (editForm.meeting.$touched || editForm.$submitted)) }">
-            <label  class="control-label" for="meeting">Related Meetings <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-html="true" data-title="<b>To select more than one choice:</b><br><br>windows: ctrl & click <br> mac: cmd & click" help></i> </label>
-            <select
-              multiple
-              name='meeting'
-              id="meeting"
-              class="form-control"
-              ng-model="binding.meeting"
-              ng-options="m._id as m.title.en for m in meetings"
-              disabled
-              >
-              </select>
-              <p ng-show="!binding.meeting.length && (editForm.meeting.$touched || editForm.$submitted)" class="help-block text-danger small">A meeting selection is required.</p>
-          </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-xs-12 ">
-      <label>Identification</label>
-
-      <div class="panel panel-default">
-        <div class="panel-body">
-
-          <div class="col-md-2">
-            <div class="form-group">
-              <label class="control-label" for="title">Title</label>
-              <select class="form-control" ng-model="binding.title">
-                <option value=" " selected>&nbsp;</option>
-                <option value="Ms.">Ms.</option>
-                <option value="Mr.">Mr.</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-5">
-            <div class="form-group">
-              <label class="control-label" for="title">First name</label>
-              <input type="text" class="form-control" ng-model="binding.firstName" id="firstName" >
-            </div>
-          </div>
-          <div class="col-md-5">
-            <div class="form-group" ng-class="{'has-error': (!binding.lastName && (editForm.lastName.$touched || editForm.$submitted)) }">
-              <label class="control-label" for="lastName">Last name</label>
-              <input required type="text" class="form-control" ng-model="binding.lastName" id="lastName" name="lastName">
-              <p ng-show="!binding.lastName && (editForm.lastName.$touched || editForm.$submitted)" class="help-block text-danger small">A last name is required.</p>
-            </div>
-          </div>
-
-          <div class="col-md-6" ng-if="typee==='media'">
-            <div class="form-group" ng-class="{'has-error': (!binding.designation && (editForm.designation.$touched || editForm.$submitted)) }">
-              <label class="control-label" for="designation">Job title</label>
-              <select required ng-model="binding.designation" class="form-control" id="designation" name="designation">
-                <option value=" "> &nbsp;</option>
-                <option value="Cameraperson">Cameraperson</option>
-                <option value="Correspondent">Correspondent</option>
-                <option value="Director">Director</option>
-                <option value="Editor">Editor</option>
-                <option value="Photographer">Photographer</option>
-                <option value="Producer">Producer</option>
-                <option value="Reporter">Reporter</option>
-                <option value="Technician">Technician</option>
-                <option value="Other">Other</option>
-              </select>
-              <p ng-show="!binding.designation && (editForm.designation.$touched || editForm.$submitted)" class="help-block text-danger small">A job title is required.</p>
-
-            </div>
-          </div>
-          <div class="col-md-6" ng-if="binding.designation==='Other'">
-            <div class="form-group" ng-class="{'has-error': (!binding.designationOther && (editForm.designationOther.$touched || editForm.$submitted)) }">
-              <label class="control-label" for="designationOther">Job title other</label>
-              <input required ng-model="binding.designationOther" type="text" class="form-control" id="designationOther" name="designationOther">
-              <p ng-show="!binding.designationOther && (editForm.designationOther.$touched || editForm.$submitted)" class="help-block text-danger small">A written job title is required.</p>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group" ng-class="{'has-error': (!binding.department && (editForm.department.$touched || editForm.$submitted)) }">
-              <label class="control-label" for="department">Department, division or unit (with the organization)</label>
-              <input required ng-model="binding.department" type="text" class="form-control" id="department" name="department">
-              <p ng-show="!binding.department && (editForm.department.$touched || editForm.$submitted)" class="help-block text-danger small">A department, division or unit is required.</p>
-            </div>
-          </div>
-        <div class="col-md-6" ng-if="binding.meeting.length" >
-          <div class="form-group" ng-class="{'has-error': (!binding.dateOfBirth && (editForm.dateOfBirth.$touched || editForm.$submitted)) }">
-            <label class="control-label" for="dateOfBirth">Date of birth </label>
-            <input required ng-pattern="dobRegex" ng-model="binding.dateOfBirth" type="input" class="form-control" id="dateOfBirth" name="dateOfBirth" placeholder="YYYY-MM-DD">
-            <p ng-show="!binding.dateOfBirth && (!editForm.dateOfBirth.$error.pattern && editForm.dateOfBirth.$touched || editForm.$submitted)" class="help-block text-danger small">Date of birth is required.</p>
-            <p ng-show="editForm.dateOfBirth.$error.pattern && (editForm.dateOfBirth.$touched || editForm.$submitted)" class="help-block text-danger small">Date of birth is not valid.  YYYY-MM-DD</p>
-
-          </div>
-        </div>
-        <div class="col-md-6" ng-show="binding.meeting.length">
-          <div class="form-group" ng-class="{'has-error': (!binding.nationality && (editForm.nationality.$touched || editForm.$submitted)) }">
-            <label class="control-label" for="nationality">Citizenship</label>
-            <select ng-disable="useOrgs"
-              ng-required="binding.meeting.length"
-              id="nationality"
-              name="nationality"
-              class="form-control"
-              ng-model="binding.nationality"
-              >
-              <option ng-repeat="country in countries   track by country.code" ng-selected="!!(country.code===binding.nationality)" ng-value="country.code">{{country.name.en}}</option>
-            </select>
-            <p ng-show="!binding.nationality && (editForm.nationality.$touched || editForm.$submitted)" class="help-block text-danger small">Nationality is required.</p>
-          </div>
-        </div>
-
-        <div class="col-md-6" ng-if="binding.meeting.length && typee==='media'">
-          <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'pressCard').url) && (editForm.passportNumber.$touched || editForm.$submitted) }">
-            <label class="control-label" for="pressCard"  >Press card / work pass</label>
-          </div>
-          <file-drop danger="!findAttachement(binding.attachment,'pressCard').url && (editForm.passportNumber.$touched || editForm.$submitted) " encrypt="true" metadata="{requestid:requestId,conferencecode:conferenceCode}" class="xs" style="height:90px;" on-upload="onUpload({tag:'pressCard',container:binding},file,error)" ng-model="pressCard"  class="form-control" id="pressCard" ></file-drop>
-          <p ng-if="!isTemp(viewAttachment(findAttachement(binding.attachment,'pressCard').url))"><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'pressCard').url)}}">{{findAttachement(binding.attachment,'pressCard').title}}</a> <i ng-show="findAttachement(binding.attachment,'pressCard')"  class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'pressCard'))"></i></p>
-          <p ng-if="isTemp(viewAttachment(findAttachement(binding.attachment,'pressCard').url))">{{findAttachement(binding.attachment,'pressCard').title}} <i ng-show="findAttachement(binding.attachment,'pressCard')"  class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'pressCard'))"></i></p>
-          <p ng-show="!findAttachement(binding.attachment,'pressCard').url && (editForm.passportNumber.$touched || editForm.$submitted)" class="text-danger small">Press card / work pass is required.</p>
-      </div>
-
-      <div class="col-md-6" ng-if="binding.meeting.length && typee==='media'">
-          <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'passport').url && (editForm.passportNumber.$touched || editForm.$submitted)) }">
-            <label class="control-label" for="passport">Passport</label>
-          </div>
-
-          <file-drop danger="!findAttachement(binding.attachment,'passport').url && (editForm.passportNumber.$touched || editForm.$submitted)" encrypt="true"   class="xs" style="height:90px;" on-upload="onUpload({tag:'passport',container:binding},file,error)" ng-model="passport"  class="form-control" id="passport" ></file-drop>
-          <p ng-if="!isTemp(viewAttachment(findAttachement(binding.attachment,'passport').url))"><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'passport').url)}}" >{{findAttachement(binding.attachment,'passport').title}}</a> <i ng-show="findAttachement(binding.attachment,'passport')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'passport'))"></i></p>
-          <p ng-if="isTemp(viewAttachment(findAttachement(binding.attachment,'passport').url))">{{findAttachement(binding.attachment,'passport').title}} <i ng-show="findAttachement(binding.attachment,'passport')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'passport'))"></i></p>
-          <p ng-show="!findAttachement(binding.attachment,'passport').url && (editForm.passportNumber.$touched || editForm.$submitted) " class="text-danger small">Passport is required.</p>
-
-      </div>
-
-      <div class="col-md-6" ng-if="binding.meeting.length">
-        <div class="form-group" ng-class="{'has-error':!binding.passportNumber && (editForm.passportNumber.$touched || editForm.$submitted)}" >
-          <label class="control-label" for="passportNumber">Passport number </label>
-          <input required ng-model="binding.passportNumber" type="input" class="form-control" name="passportNumber" id="passportNumber" />
-          <p ng-show="!binding.passportNumber && (editForm.passportNumber.$touched || editForm.$submitted)" class="text-danger small">Passport number is required.</p>
-        </div>
-      </div>
-      <div class="col-md-6" ng-show="binding.meeting.length">
-        <div class="form-group">
-          <label class="control-label" for="organizationName">Organization name <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="(if different from nominating organization)" help></i> </label>
-          <input ng-model="binding.organizationName" type="text" class="form-control" id="organizationName" >
-        </div>
-      </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-xs-12 ">
-    <label>Contact</label>
-    <div class="panel panel-default">
-      <div class="panel-body">
-
-    <div class="col-md-6">
-      <div class="form-group" ng-class="{'has-error': (!binding.phone && (editForm.phone.$touched || editForm.$submitted)) }">
-        <label class="control-label" for="phone">Phone </label>
-        <input required ng-model="binding.phone" type="text" class="form-control" id="phone" name="phone" ng-minlength="8" ng-maxlength="35" placeholder="example: +1 514.288.2220">
-        <p ng-show="!binding.phone && !editForm.phone.$error.pattern && (editForm.phone.$touched || editForm.$submitted)" class="help-block text-danger small">Phone number is required.</p>
-        <p class="help-block text-danger small" ng-show="(editForm.phone.$error.minlength || editForm.phone.$error.maxlength ) && (editForm.phone.$touched || editForm.$submitted)">Please match pattern [+91-036-78658 || 91-036-78658 || 514 287 6670]</span>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="form-group" ng-class="{'has-error': (!binding.mobile && (editForm.mobile.$touched || editForm.$submitted)) }">
-        <label class="control-label" for="mobile">Mobile </label>
-        <!-- <span  class="help-block"><small>First level administrative area within the country.  Usually province or state.</small></span> -->
-        <input ng-model="binding.mobile" type="text" name="mobile" class="form-control" id="mobile" ng-minlength="8" ng-maxlength="35" placeholder="example: +1 514.288.2220">
-        <p class="help-block text-danger small" ng-show="(editForm.mobile.$error.minlength || editForm.mobile.$error.maxlength ) && (editForm.mobile.$touched || editForm.$submitted)">Please match pattern [+91-036-78658 || 91-036-78658 || 514 287 6670]</span>
-
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="form-group" ng-class="{'has-error': (!binding.email && (editForm.email.$touched || editForm.$submitted)) }">
-        <label class="control-label" for="email">Email </label>
-        <input ng-model="binding.email" type="email" class="form-control" id="email" name="email">
-        <p ng-show="!binding.phone && (editForm.phone.$touched || editForm.$submitted)" class="help-block text-danger small">Email is required.</p>
-        <p ng-show="editForm.email.$error.email && (editForm.email.$touched || editForm.$submitted)" class="text-danger small">Email is not valid.</p>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="form-group" >
-        <label class="control-label" for="title">Email CCs </label>
-        <input ng-model="binding.emailCc" type="text" class="form-control" id="emailCc" >
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="form-group" ng-class="{'has-error': (!binding.language && (editForm.language.$touched || editForm.$submitted)) }">
-        <label class="control-label" for="language">Language </label>
-        <select
-          id="language"
-          required
-          name="language"
-          class="form-control"
-
-          ng-model="binding.language"
-          >
-          <option ng-repeat="language in languages   track by language.identifier" ng-selected="!!(language.identifier===binding.language)" ng-value="language.identifier">{{language.title.en}}</option>
-        </select>
-        <p ng-show="!binding.language && (editForm.language.$touched || editForm.$submitted)" class="help-block text-danger small">Language is required.</p>
-      </div>
-    </div>
-  </div>
- </div>
-</div>
-<div class="col-xs-12 " >
-  <label >Address</label>
-  <div class="panel panel-default" >
-    <div class="panel-body">
-      <div class="col-md-12">
-        <p ng-class="{'has-error': ((!binding.useOrganizationAddress && !binding.address) && ( editForm.$submitted)) }" ng-show="((!binding.useOrganizationAddress && !binding.address) && (editForm.$submitted))" class="help-block text-danger small">Address is required.</p>
-        <div class="form-group" ng-class="{'has-error': ((!binding.useOrganizationAddress && !binding.address) && ( editForm.$submitted)) }">
-          <div class="checkbox">
-           <label>
-             <input type="checkbox" ng-model="binding.useOrganizationAddress" ng-checked="true" value="true" checked> <b>Use organization's address</b>
-           </label>
-         </div>
-       </div>
-      </div>
-
-      <section ng-if="!binding.useOrganizationAddress" ng-class="{'has-error': ((!binding.useOrganizationAddress && !binding.address) && ( editForm.$submitted)) }">
-        <address is-submitted="editForm.$submitted" ng-model="binding.address"></address>
-      </section>
-    </div>
-  </div>
-</div>
-<div class="col-xs-12" ng-if="binding.meeting && binding.meeting.length">
-  <label>Attachments <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Any other related files you would like to submit, supporting this person's accreditation." help></i></label>
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <div class="col-md-12">
-        <file-drop multiple class="xs" style="height:90px;" on-upload="onUpload({container:binding},file,error)"
-          ng-model="attachment" class="form-control" id="attachments"></file-drop>
-        <p ng-repeat="att in binding.attachment track by $index" ng-if="!att.tag">
-          <a target="_blank" ng-href="{{viewAttachment(att.url)}}">{{att.title}}</a>
-          <i ng-show="att.url"  class="fa fa-times-circle-o pointer" ng-click="removeAttachement(att)"></i>
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-<section ng-show="binding.meeting.length">
-
-
-      <div class="col-xs-12" >
-          <label>During Meeting</label>
-          <div class="panel panel-default">
-            <div class="panel-body">
-              <div class="col-md-6" ng-class="{'has-error': (editForm.phoneDuringMeeting.$error.minlength || editForm.phoneDuringMeeting.$error.maxlength ) && (  editForm.$submitted) }">
-                <div class="form-group">
-                  <label class="control-label" for="phoneDuringMeeting">Phone <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Phone number you can be reached during the meeting." help></i></label>
-                  <input ng-if="binding.meeting.length" ng-model="binding.phoneDuringMeeting" type="text" class="form-control" id="phoneDuringMeeting" name="phoneDuringMeeting" ng-minlength="8" ng-maxlength="35" placeholder="example: +1 514.288.2220">
-
-                  <p class="help-block text-danger small" ng-if="(editForm.phoneDuringMeeting.$error.minlength || editForm.phoneDuringMeeting.$error.maxlength ) && (  editForm.$submitted)">Please match pattern [+1 514.288.2220]</span>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="col-12" ng-if="isContact">
+              <div class="form-group">
+                <label class="control-label" for="needAccredidation">{{::('participationT.doesThisPersonIntendOnAttendingTheConference'|$translate)}}</label>
+                <div class="radio">
+                  <label>
+                    <input ng-change="clearMeetings()" ng-model="attending.val" type="radio" name="needAccredidation" ng-value="false" checked>
+                    {{::('participationT.no'|$translate)}}
+                  </label>
                 </div>
-              </div>
-              <div class="col-md-12">
-                <button  ng-click="showAddressDuringMeeting=!showAddressDuringMeeting" type="button" class="btn btn-default btn-xs">Add address during meeting </button> <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Address where you will be staying during the meeting (if known)" help></i>
-                <div class="row" ng-if="showAddressDuringMeeting" style="margin-top:20px;">
-                  <address  is-submitted="editForm.$submitted" ng-model="binding.addressDuringMeeting"></address>
-
+                <div class="radio">
+                  <label>
+                    <input ng-model="attending.val" type="radio" name="needAccredidation"  ng-value="true" ng-change="selectAllMeetings()">
+                    {{::('participationT.yes'|$translate)}}
+                  </label>
                 </div>
               </div>
             </div>
+            <div class="col-md-12" >
+            <div ng-show="attending.val" class="form-group" ng-class="{'has-error': (!binding.meeting.length && (editForm.meeting.$touched || editForm.$submitted)) }">
+              <label  class="control-label" for="meeting">{{::('participationT.relatedMeetings'|$translate)}} <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-html="true" data-title="{{::('participationT.helpPop'|$translate)}}" help></i> </label>
+              <select
+                multiple
+                name='meeting'
+                id="meeting"
+                class="form-control"
+                ng-model="binding.meeting"
+                ng-options="m._id as m.name for m in meetings"
+                disabled
+                >
+                </select>
+                <p ng-show="!binding.meeting.length && (editForm.meeting.$touched || editForm.$submitted)" class="help-block text-danger small">{{::('participationT.aMeetingSelectionIsRequired'|$translate)}}</p>
+            </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="col-xs-12" ng-if="isMedia('Print') || isMedia('Radio') || isMedia('Television') || isDesignation('Photographer')">
-        <label>Media Requirements </label>
+      <div class="col-12 mb-3">
+        <label>{{::('participationT.identification'|$translate)}}</label>
+
         <div class="panel panel-default">
             <div class="panel-body">
-                <div class="col-md-6" ng-show="isMedia('Print')">
-                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'byLineArticleOne').url && (  editForm.$submitted)) }">
-                        <label class="control-label" for="byLineArticleOne">Bylined article 1 <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A Bylined article dated within the past four months" help></i></label>
-                    </div>
-                    <file-drop danger="(!findAttachement(binding.attachment,'byLineArticleOne').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'byLineArticleOne',container:binding},file,error)" ng-model="byLineArticleOne"  class="form-control" id="byLineArticleOne" ></file-drop>
-                    <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'byLineArticleOne').url)}}">{{findAttachement(binding.attachment,'byLineArticleOne').title}}</a> <i ng-show="findAttachement(binding.attachment,'byLineArticleOne')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'byLineArticleOne'))"></i></p>
-                    <p ng-if="(!findAttachement(binding.attachment,'byLineArticleOne').url && (  editForm.$submitted))" class="text-danger small">Bylined article one  is required.</p>
-                </div>
-
-                <div class="col-md-6" ng-show="isMedia('Print')">
-                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'byLineArticleTwo').url && (  editForm.$submitted)) }">
-                        <label class="control-label" for="byLineArticleTwo">Bylined article 2 <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A Bylined article dated within the past four months" help></i></label>
-                      </div>
-                    <file-drop danger="(!findAttachement(binding.attachment,'byLineArticleTwo').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'byLineArticleTwo',container:binding},file,error)" ng-model="byLineArticleTwo"  class="form-control" id="byLineArticleTwo" ></file-drop>
-                    <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'byLineArticleTwo').url)}}">{{findAttachement(binding.attachment,'byLineArticleTwo').title}}</a> <i ng-show="findAttachement(binding.attachment,'byLineArticleTwo')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'byLineArticleTwo'))"></i></p>
-                    <p ng-show="(!findAttachement(binding.attachment,'byLineArticleTwo').url && (  editForm.$submitted))" class="text-danger small">Bylined article two  is required.</p>
-                </div>
-
-                <div class="col-md-6" ng-show="isMedia('Print')">
-                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'publicationCopy').url && (  editForm.$submitted)) }">
-                        <label class="control-label" for="publicationCopy">Publication copy <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A copy of the publication containing one of the bylined articles " help></i></label>
-                      </div>
-                    <file-drop danger=" (!findAttachement(binding.attachment,'publicationCopy').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'publicationCopy',container:binding},file,error)" ng-model="publicationCopy"  class="form-control" id="publicationCopy" ></file-drop>
-                    <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'publicationCopy').url)}}">{{findAttachement(binding.attachment,'publicationCopy').title}}</a> <i ng-show="findAttachement(binding.attachment,'publicationCopy')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'publicationCopy'))"></i></p>
-                    <p ng-show="(!findAttachement(binding.attachment,'publicationCopy').url && (  editForm.$submitted))" class="text-danger small">Publication copy required.</p>
-
-                </div>
-
-                <div class="col-md-6" ng-show="isMedia('Radio') || isMedia('Television')">
-                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'reportRecordingOne').url && (  editForm.$submitted)) }">
-                        <label class="control-label" for="reportRecordingOne">Report recording 1 <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" title="A report recording dated within the past four months" help></i></label>
-                      </div>
-                    <file-drop danger="(!findAttachement(binding.attachment,'reportRecordingOne').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'reportRecordingOne',container:binding},file,error)" ng-model="reportRecordingOne"  class="form-control" id="reportRecordingOne" ></file-drop>
-                    <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'reportRecordingOne').url)}}">{{findAttachement(binding.attachment,'reportRecordingOne').title}}</a> <i ng-show="findAttachement(binding.attachment,'reportRecordingOne')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'reportRecordingOne'))"></i></p>
-                    <p ng-show="(!findAttachement(binding.attachment,'reportRecordingOne').url && (  editForm.$submitted))" class="text-danger small">Report recording one required.</p>
-
-                </div>
-
-                <div class="col-md-6" ng-show="isMedia('Radio') || isMedia('Television')">
-                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'reportRecordingTwo').url && (  editForm.$submitted))}">
-                        <label class="control-label" for="reportRecordingTwo">Report recording 2 <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="A report recording dated within the past four months" help></i></label>
-                      </div>
-                    <file-drop danger="(!findAttachement(binding.attachment,'reportRecordingTwo').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'reportRecordingTwo',container:binding},file,error)" ng-model="reportRecordingTwo"  class="form-control" id="reportRecordingTwo" ></file-drop>
-                    <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'reportRecordingTwo').url)}}">{{findAttachement(binding.attachment,'reportRecordingTwo').title}}</a> <i ng-show="findAttachement(binding.attachment,'reportRecordingTwo')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'reportRecordingTwo'))"></i></p>
-                    <p ng-show="(!findAttachement(binding.attachment,'reportRecordingTwo').url && (  editForm.$submitted))" class="text-danger small">Report recording two required.</p>
-                </div>
-
-                <div class="col-md-6" ng-show="isDesignation('Photographer') || isMedia('Photo/visual')">
-                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (  editForm.$submitted))}">
-                        <label class="control-label" for="tearSheetOrPhotoOne">Tear sheet or photo 1 <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
-                      </div>
-                    <file-drop danger="(!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'tearSheetOrPhotoOne',container:binding},file,error)" ng-model="tearSheetOrPhotoOne"  class="form-control" id="tearSheetOrPhotoOne" ></file-drop>
-                    <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'tearSheetOrPhotoOne').url)}}">{{findAttachement(binding.attachment,'tearSheetOrPhotoOne').title}}</a> <i ng-show="findAttachement(binding.attachment,'tearSheetOrPhotoOne')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'tearSheetOrPhotoOne'))"></i></p>
-                    <p ng-show="(!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (  editForm.$submitted))" class="text-danger small">Tear sheet or photo one is  required.</p>
-                </div>
-
-                <div class="col-md-6" ng-show="isDesignation('Photographer') || isMedia('Photo/visual')">
-                    <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (  editForm.$submitted))}">
-                        <label class="control-label" for="tearSheetOrPhotoTwo">Tear sheet or photo 2 <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="Original tear sheet or a photo with credits of the issuing organization" help></i></label>
-                      </div>
-                    <file-drop danger="(!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'tearSheetOrPhotoTwo',container:binding},file,error)" ng-model="tearSheetOrPhotoTwo"  class="form-control" id="tearSheetOrPhotoTwo" ></file-drop>
-                    <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url)}}">{{findAttachement(binding.attachment,'tearSheetOrPhotoTwo').title}}</a> <i ng-show="findAttachement(binding.attachment,'tearSheetOrPhotoTwo')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'tearSheetOrPhotoTwo'))"></i></p>
-                    <p ng-show="(!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (  editForm.$submitted))" class="text-danger small">Tear sheet or photo two is  required.</p>
-                </div>
-
-
-          </div>
-        </div>
-      </div>
-
-      <div class="col-xs-12" >
-        <label>Registration </label>
-        <div ng-repeat="regOption in registrationOptions track by regOption.title">
-            <div ng-show="regOption.enabled" class="row">
-              <div class="col-xs-12">
-                <div  class="panel panel-default">
-                  <div class="panel-body">
-                    <div class="form-group" style="margin-bottom: 0;">
-                    <label class="control-label">{{ regOption.title }}</label> 
-                    <p style="white-space: pre-wrap;" ng-bind-html="regOption.description" />
-                    <br/>
-                    <select
-                      ng-model="regOption.selectedOption"
-                      class="form-control"
-
-                      ng-change="updateRegOptions()"
-                      >
-                      <option ng-repeat="option in regOption.options track by option.value" ng-value="option.value" ng-selected="option.value===regOption.selectedOption">{{option.label}}</option>
+              <div class="row">
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <label class="control-label" for="title">{{::('participationT.title'|$translate)}}</label>
+                    <select class="form-control" ng-model="binding.title">
+                      <option value=" " selected>&nbsp;</option>
+                      <option value="Ms.">{{::('participationT.ms'|$translate)}}</option>
+                      <option value="Mr.">{{::('participationT.mr'|$translate)}}</option>
                     </select>
-                    <br ng-show="regOption.optionNotes"/>
-                    <p ng-show="regOption.optionNotes" class="small muted" style="white-space: pre-wrap;" ng-bind-html="regOption.optionNotes" />
                   </div>
                 </div>
+                <div class="col-md-5">
+                  <div class="form-group">
+                    <label class="control-label" for="title">{{::('participationT.firstName'|$translate)}}</label>
+                    <input type="text" class="form-control" ng-model="binding.firstName" id="firstName" >
+                  </div>
+                </div>
+                <div class="col-md-5">
+                  <div class="form-group" ng-class="{'has-error': (!binding.lastName && (editForm.lastName.$touched || editForm.$submitted)) }">
+                    <label class="control-label" for="lastName">{{::('participationT.lastName'|$translate)}}</label>
+                    <input required type="text" class="form-control" ng-model="binding.lastName" id="lastName" name="lastName">
+                    <p ng-show="!binding.lastName && (editForm.lastName.$touched || editForm.$submitted)" class="help-block text-danger small">{{::('participationT.aLastNameIsRequired'|$translate)}}</p>
+                  </div>
+                </div>
+
+                <div class="col-md-6" ng-if="typee==='media'">
+                  <div class="form-group" ng-class="{'has-error': (!binding.designation && (editForm.designation.$touched || editForm.$submitted)) }">
+                    <label class="control-label" for="designation">{{::('participationT.jobTitle'|$translate)}}</label>
+                    <select required ng-model="binding.designation" class="form-control" id="designation" name="designation">
+                      <option value=" "> &nbsp;</option>
+                      <option value="Cameraperson">{{::('participationT.cameraperson'|$translate)}}</option>
+                      <option value="Correspondent">{{::('participationT.correspondent'|$translate)}}</option>
+                      <option value="Director">{{::('participationT.director'|$translate)}}</option>
+                      <option value="Editor">{{::('participationT.editor'|$translate)}}</option>
+                      <option value="Photographer">{{::('participationT.photographer'|$translate)}}</option>
+                      <option value="Producer">{{::('participationT.producer'|$translate)}}</option>
+                      <option value="Reporter">{{::('participationT.reporter'|$translate)}}</option>
+                      <option value="Technician">{{::('participationT.technician'|$translate)}}</option>
+                      <option value="Other">{{::('participationT.other'|$translate)}}</option>
+                    </select>
+                    <p ng-show="!binding.designation && (editForm.designation.$touched || editForm.$submitted)" class="help-block text-danger small">{{::('participationT.aJobTitleIsRequired'|$translate)}}</p>
+
+                  </div>
+                </div>
+                <div class="col-md-6" ng-if="binding.designation==='Other'">
+                  <div class="form-group" ng-class="{'has-error': (!binding.designationOther && (editForm.designationOther.$touched || editForm.$submitted)) }">
+                    <label class="control-label" for="designationOther">{{::('participationT.jobTitleOther'|$translate)}}</label>
+                    <input required ng-model="binding.designationOther" type="text" class="form-control" id="designationOther" name="designationOther">
+                    <p ng-show="!binding.designationOther && (editForm.designationOther.$touched || editForm.$submitted)" class="help-block text-danger small">{{::('participationT.aWrittenJobTitleIsRequired'|$translate)}}</p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group" ng-class="{'has-error': (!binding.department && (editForm.department.$touched || editForm.$submitted)) }">
+                    <label class="control-label" for="department">{{::('participationT.departmentDivisionOrUnitWithTheOrganization'|$translate)}}</label>
+                    <input required ng-model="binding.department" type="text" class="form-control" id="department" name="department">
+                    <p ng-show="!binding.department && (editForm.department.$touched || editForm.$submitted)" class="help-block text-danger small">{{::('participationT.aDepartmentDivisionOrUnitIsRequired'|$translate)}}</p>
+                  </div>
+                </div>
+              <div class="col-md-6" ng-if="binding.meeting.length" >
+                <div class="form-group" ng-class="{'has-error': (!binding.dateOfBirth && (editForm.dateOfBirth.$touched || editForm.$submitted)) }">
+                  <label class="control-label" for="dateOfBirth">{{::('participationT.dateOfBirth'|$translate)}} </label>
+                  <input required ng-pattern="dobRegex" ng-model="binding.dateOfBirth" type="input" class="form-control" id="dateOfBirth" name="dateOfBirth" placeholder="YYYY-MM-DD">
+                  <p ng-show="!binding.dateOfBirth && (!editForm.dateOfBirth.$error.pattern && editForm.dateOfBirth.$touched || editForm.$submitted)" class="help-block text-danger small">{{::('participationT.dateOfBirthIsRequired'|$translate)}}</p>
+                  <p ng-show="editForm.dateOfBirth.$error.pattern && (editForm.dateOfBirth.$touched || editForm.$submitted)" class="help-block text-danger small">{{::('participationT.dateOfBirthIsNotValidYyyyMmDd'|$translate)}}</p>
+
+                </div>
+              </div>
+              <div class="col-md-6" ng-show="binding.meeting.length">
+                <div class="form-group" ng-class="{'has-error': (!binding.nationality && (editForm.nationality.$touched || editForm.$submitted)) }">
+                  <label class="control-label" for="nationality">{{::('participationT.citizenship'|$translate)}}</label>
+                  <select ng-disable="useOrgs"
+                    ng-required="binding.meeting.length"
+                    id="nationality"
+                    name="nationality"
+                    class="form-control"
+                    ng-model="binding.nationality"
+                    >
+                    <option ng-repeat="country in countries   track by country.code" ng-selected="!!(country.code===binding.nationality)" ng-value="country.code">{{country.title}}</option>
+                  </select>
+                  <p ng-show="!binding.nationality && (editForm.nationality.$touched || editForm.$submitted)" class="help-block text-danger small">{{::('participationT.nationalityIsRequired'|$translate)}}</p>
+                </div>
+              </div>
+
+              <div class="col-md-6" ng-if="binding.meeting.length && typee==='media'">
+                <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'pressCard').url) && (editForm.passportNumber.$touched || editForm.$submitted) }">
+                  <label class="control-label" for="pressCard"  >{{::('participationT.pressCardWorkPass'|$translate)}}</label>
+                </div>
+                <file-drop danger="!findAttachement(binding.attachment,'pressCard').url && (editForm.passportNumber.$touched || editForm.$submitted) " encrypt="true" metadata="{requestid:requestId,conferencecode:conferenceCode}" class="xs" style="height:90px;" on-upload="onUpload({tag:'pressCard',container:binding},file,error)" ng-model="pressCard"  class="form-control" id="pressCard" ></file-drop>
+                <p ng-if="!isTemp(viewAttachment(findAttachement(binding.attachment,'pressCard').url))"><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'pressCard').url)}}">{{findAttachement(binding.attachment,'pressCard').title}}</a> <i ng-show="findAttachement(binding.attachment,'pressCard')"  class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'pressCard'))"></i></p>
+                <p ng-if="isTemp(viewAttachment(findAttachement(binding.attachment,'pressCard').url))">{{findAttachement(binding.attachment,'pressCard').title}} <i ng-show="findAttachement(binding.attachment,'pressCard')"  class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'pressCard'))"></i></p>
+                <p ng-show="!findAttachement(binding.attachment,'pressCard').url && (editForm.passportNumber.$touched || editForm.$submitted)" class="text-danger small">{{::('participationT.pressCardWorkPassIsRequired'|$translate)}}</p>
+              </div>
+
+              <div class="col-md-6" ng-if="binding.meeting.length && typee==='media'">
+                  <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'passport').url && (editForm.passportNumber.$touched || editForm.$submitted)) }">
+                    <label class="control-label" for="passport">{{::('participationT.passport'|$translate)}}</label>
+                  </div>
+
+                  <file-drop danger="!findAttachement(binding.attachment,'passport').url && (editForm.passportNumber.$touched || editForm.$submitted)" encrypt="true"   class="xs" style="height:90px;" on-upload="onUpload({tag:'passport',container:binding},file,error)" ng-model="passport"  class="form-control" id="passport" ></file-drop>
+                  <p ng-if="!isTemp(viewAttachment(findAttachement(binding.attachment,'passport').url))"><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'passport').url)}}" >{{findAttachement(binding.attachment,'passport').title}}</a> <i ng-show="findAttachement(binding.attachment,'passport')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'passport'))"></i></p>
+                  <p ng-if="isTemp(viewAttachment(findAttachement(binding.attachment,'passport').url))">{{findAttachement(binding.attachment,'passport').title}} <i ng-show="findAttachement(binding.attachment,'passport')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'passport'))"></i></p>
+                  <p ng-show="!findAttachement(binding.attachment,'passport').url && (editForm.passportNumber.$touched || editForm.$submitted) " class="text-danger small">{{::('participationT.passportIsRequired'|$translate)}}</p>
+
+              </div>
+
+              <div class="col-md-6" ng-if="binding.meeting.length">
+                <div class="form-group" ng-class="{'has-error':!binding.passportNumber && (editForm.passportNumber.$touched || editForm.$submitted)}" >
+                  <label class="control-label" for="passportNumber">{{::('participationT.passportNumber'|$translate)}} </label>
+                  <input required ng-model="binding.passportNumber" type="input" class="form-control" name="passportNumber" id="passportNumber" />
+                  <p ng-show="!binding.passportNumber && (editForm.passportNumber.$touched || editForm.$submitted)" class="text-danger small">{{::('participationT.passportNumberIsRequired'|$translate)}}</p>
+                </div>
+              </div>
+              <div class="col-md-6" ng-show="binding.meeting.length">
+                <div class="form-group">
+                  <label class="control-label" for="organizationName">{{::('participationT.orgName'|$translate)}} <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="{{::('participationT.ifDiffFromNom'|$translate)}}"   help></i> </label>
+                  <input ng-model="binding.organizationName" type="text" class="form-control" id="organizationName" >
+                </div>
+              </div>
             </div>
           </div>
-
         </div>
-        
       </div>
-    </div>
+
+      <div class="col-12  mb-3">
+        <label>{{::('participationT.contact'|$translate)}}</label>
+        <div class="panel panel-default">
+          <div class="panel-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group" ng-class="{'has-error': (!binding.phone && (editForm.phone.$touched || editForm.$submitted)) }">
+                    <label class="control-label" for="phone">{{::('participationT.phone'|$translate)}} </label>
+                    <input required ng-model="binding.phone" type="text" class="form-control" id="phone" name="phone" ng-minlength="8" ng-maxlength="35" placeholder="{{::('participationT.example'|$translate)}}: +1 514.288.2220">
+                    <p ng-show="!binding.phone && !editForm.phone.$error.pattern && (editForm.phone.$touched || editForm.$submitted)" class="help-block text-danger small">{{::('participationT.phoneNumberIsRequired'|$translate)}}</p>
+                    <p class="help-block text-danger small" ng-show="(editForm.phone.$error.minlength || editForm.phone.$error.maxlength ) && (editForm.phone.$touched || editForm.$submitted)">{{::('participationT.pleaseMatchPattern_91_036_78658_91_036_78658_514_287_6670'|$translate)}}</span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group" ng-class="{'has-error': (!binding.mobile && (editForm.mobile.$touched || editForm.$submitted)) }">
+                    <label class="control-label" for="mobile">{{::('participationT.mobile'|$translate)}} </label>
+                    <!-- <span  class="help-block"><small>First level administrative area within the country.  Usually province or state.</small></span> -->
+                    <input ng-model="binding.mobile" type="text" name="mobile" class="form-control" id="mobile" ng-minlength="8" ng-maxlength="35" placeholder="{{::('participationT.example'|$translate)}}: +1 514.288.2220">
+                    <p class="help-block text-danger small" ng-show="(editForm.mobile.$error.minlength || editForm.mobile.$error.maxlength ) && (editForm.mobile.$touched || editForm.$submitted)">{{::('participationT.pleaseMatchPattern_91_036_78658_91_036_78658_514_287_6670'|$translate)}}</span>
+
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group" ng-class="{'has-error': (!binding.email && (editForm.email.$touched || editForm.$submitted)) }">
+                    <label class="control-label" for="email">{{::('participationT.email'|$translate)}} </label>
+                    <input ng-model="binding.email" type="email" class="form-control" id="email" name="email">
+                    <p ng-show="!binding.phone && (editForm.phone.$touched || editForm.$submitted)" class="help-block text-danger small">{{::('participationT.emailIsRequired'|$translate)}}</p>
+                    <p ng-show="editForm.email.$error.email && (editForm.email.$touched || editForm.$submitted)" class="text-danger small">{{::('participationT.emailIsNotValid'|$translate)}}</p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group" >
+                    <label class="control-label" for="title">{{::('participationT.emailCCs'|$translate)}} </label>
+                    <input ng-model="binding.emailCc" type="text" class="form-control" id="emailCc" >
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group" ng-class="{'has-error': (!binding.language && (editForm.language.$touched || editForm.$submitted)) }">
+                    <label class="control-label" for="language">{{::('participationT.language'|$translate)}} </label>
+                    <select
+                      id="language"
+                      required
+                      name="language"
+                      class="form-control"
+
+                      ng-model="binding.language"
+                      >
+                      <option ng-repeat="language in languages   track by language.identifier" ng-selected="!!(language.identifier===binding.language)" ng-value="language.identifier">{{language.name}}</option>
+                    </select>
+                    <p ng-show="!binding.language && (editForm.language.$touched || editForm.$submitted)" class="help-block text-danger small">{{::('participationT.languageIsRequired'|$translate)}}</p>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 mb-3" >
+        <label >{{::('participationT.address'|$translate)}}</label>
+        <div class="panel panel-default" >
+          <div class="panel-body">
+            <div class="col-md-12">
+              <p ng-class="{'has-error': ((!binding.useOrganizationAddress && !binding.address) && ( editForm.$submitted)) }" ng-show="((!binding.useOrganizationAddress && !binding.address) && (editForm.$submitted))" class="help-block text-danger small">{{::('participationT.addressIsRequired'|$translate)}}</p>
+              <div class="form-group" ng-class="{'has-error': ((!binding.useOrganizationAddress && !binding.address) && ( editForm.$submitted)) }">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" ng-model="binding.useOrganizationAddress" ng-checked="true" value="true" checked> <b>{{::('participationT.useOrganizationSAddress'|$translate)}}</b>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <section ng-if="!binding.useOrganizationAddress" ng-class="{'has-error': ((!binding.useOrganizationAddress && !binding.address) && ( editForm.$submitted)) }">
+              <address is-submitted="editForm.$submitted" ng-model="binding.address"></address>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 mb-3" ng-if="binding.meeting && binding.meeting.length">
+        <label>{{::('participationT.attachments'|$translate)}} <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="{{::('participationT.anyOtherRelated'|$translate)}}" help></i></label>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="col-md-12">
+              <file-drop multiple class="xs" style="height:90px;" on-upload="onUpload({container:binding},file,error)"
+                ng-model="attachment" class="form-control" id="attachments"></file-drop>
+              <p ng-repeat="att in binding.attachment track by $index" ng-if="!att.tag">
+                <a target="_blank" ng-href="{{viewAttachment(att.url)}}">{{att.title}}</a>
+                <i ng-show="att.url"  class="fa fa-times-circle-o pointer" ng-click="removeAttachement(att)"></i>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  <section ng-show="binding.meeting.length">
+
+
+        <div class="col-12" >
+            <label>{{::('participationT.duringMeeting'|$translate)}}</label>
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="col-md-6" ng-class="{'has-error': (editForm.phoneDuringMeeting.$error.minlength || editForm.phoneDuringMeeting.$error.maxlength ) && (  editForm.$submitted) }">
+                  <div class="form-group">
+                    <label class="control-label" for="phoneDuringMeeting">{{::('participationT.phone'|$translate)}} <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="{{::('participationT.phoneAtMeeting'|$translate)}}" help></i></label>
+                    <input ng-if="binding.meeting.length" ng-model="binding.phoneDuringMeeting" type="text" class="form-control" id="phoneDuringMeeting" name="phoneDuringMeeting" ng-minlength="8" ng-maxlength="35" placeholder="{{::('participationT.example'|$translate)}}: +1 514.288.2220"> 
+
+                    <p class="help-block text-danger small" ng-if="(editForm.phoneDuringMeeting.$error.minlength || editForm.phoneDuringMeeting.$error.maxlength ) && (  editForm.$submitted)">{{::('participationT.pleaseMatchPattern_1_514_288_2220'|$translate)}}</span>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <button  ng-click="showAddressDuringMeeting=!showAddressDuringMeeting" type="button" class="btn btn-secondary btn-xs">{{::('participationT.addAddressDuringMeeting'|$translate)}} </button> <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="{{::('participationT.addressAtMeeting'|$translate)}}" help></i>
+                  <div class="row" ng-if="showAddressDuringMeeting" style="margin-top:20px;">
+                    <address  is-submitted="editForm.$submitted" ng-model="binding.addressDuringMeeting"></address>
+
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+
+        <div class="col-12" ng-if="isMedia('Print') || isMedia('Radio') || isMedia('Television') || isDesignation('Photographer')">
+          <label>{{::('participationT.mediaRequirements'|$translate)}} </label>
+          <div class="panel panel-default">
+              <div class="panel-body">
+                  <div class="col-md-6" ng-show="isMedia('Print')">
+                      <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'byLineArticleOne').url && (  editForm.$submitted)) }">
+                          <label class="control-label" for="byLineArticleOne">{{::('participationT.bylinedArticleOne'|$translate)}}<i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="{{::('participationT.byLinePop'|$translate)}}" help></i></label>
+                      </div>
+                      <file-drop danger="(!findAttachement(binding.attachment,'byLineArticleOne').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'byLineArticleOne',container:binding},file,error)" ng-model="byLineArticleOne"  class="form-control" id="byLineArticleOne" ></file-drop>
+                      <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'byLineArticleOne').url)}}">{{findAttachement(binding.attachment,'byLineArticleOne').title}}</a> <i ng-show="findAttachement(binding.attachment,'byLineArticleOne')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'byLineArticleOne'))"></i></p>
+                      <p ng-if="(!findAttachement(binding.attachment,'byLineArticleOne').url && (  editForm.$submitted))" class="text-danger small">{{::('participationT.bylinedArticleOneIsRequired'|$translate)}}</p>
+                  </div>
+
+                  <div class="col-md-6" ng-show="isMedia('Print')">
+                      <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'byLineArticleTwo').url && (  editForm.$submitted)) }">
+                          <label class="control-label" for="byLineArticleTwo">{{::('participationT.bylinedArticleTwo'|$translate)}}<i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="{{::('participationT.byLinePop'|$translate)}}" help></i></label>
+                        </div>
+                      <file-drop danger="(!findAttachement(binding.attachment,'byLineArticleTwo').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'byLineArticleTwo',container:binding},file,error)" ng-model="byLineArticleTwo"  class="form-control" id="byLineArticleTwo" ></file-drop>
+                      <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'byLineArticleTwo').url)}}">{{findAttachement(binding.attachment,'byLineArticleTwo').title}}</a> <i ng-show="findAttachement(binding.attachment,'byLineArticleTwo')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'byLineArticleTwo'))"></i></p>
+                      <p ng-show="(!findAttachement(binding.attachment,'byLineArticleTwo').url && (  editForm.$submitted))" class="text-danger small">{{::('participationT.bylinedArticleTwoIsRequired'|$translate)}}</p>
+                  </div>
+
+                  <div class="col-md-6" ng-show="isMedia('Print')">
+                      <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'publicationCopy').url && (  editForm.$submitted)) }">
+                          <label class="control-label" for="publicationCopy">{{::('participationT.publicationCopy'|$translate)}} <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="{{::('participationT.byLinePopArticle'|$translate)}}" help></i></label>
+                        </div>
+                      <file-drop danger=" (!findAttachement(binding.attachment,'publicationCopy').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'publicationCopy',container:binding},file,error)" ng-model="publicationCopy"  class="form-control" id="publicationCopy" ></file-drop>
+                      <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'publicationCopy').url)}}">{{findAttachement(binding.attachment,'publicationCopy').title}}</a> <i ng-show="findAttachement(binding.attachment,'publicationCopy')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'publicationCopy'))"></i></p>
+                      <p ng-show="(!findAttachement(binding.attachment,'publicationCopy').url && (  editForm.$submitted))" class="text-danger small">{{::('participationT.publicationCopyRequired'|$translate)}}</p>
+
+                  </div>
+
+                  <div class="col-md-6" ng-show="isMedia('Radio') || isMedia('Television')">
+                      <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'reportRecordingOne').url && (  editForm.$submitted)) }">
+                          <label class="control-label" for="reportRecordingOne">{{::('participationT.reportRecordingOne'|$translate)}} <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" title="A report recording dated within the past four months" help></i></label>
+                        </div>
+                      <file-drop danger="(!findAttachement(binding.attachment,'reportRecordingOne').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'reportRecordingOne',container:binding},file,error)" ng-model="reportRecordingOne"  class="form-control" id="reportRecordingOne" ></file-drop>
+                      <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'reportRecordingOne').url)}}">{{findAttachement(binding.attachment,'reportRecordingOne').title}}</a> <i ng-show="findAttachement(binding.attachment,'reportRecordingOne')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'reportRecordingOne'))"></i></p>
+                      <p ng-show="(!findAttachement(binding.attachment,'reportRecordingOne').url && (  editForm.$submitted))" class="text-danger small">{{::('participationT.reportRecordingOneRequired'|$translate)}}</p>
+
+                  </div>
+
+                  <div class="col-md-6" ng-show="isMedia('Radio') || isMedia('Television')">
+                      <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'reportRecordingTwo').url && (  editForm.$submitted))}">
+                          <label class="control-label" for="reportRecordingTwo">{{::('participationT.reportRecordingTwo'|$translate)}}  <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="{{::('participationT.recordingPop'|$translate)}}" help></i></label>
+                        </div>
+                      <file-drop danger="(!findAttachement(binding.attachment,'reportRecordingTwo').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'reportRecordingTwo',container:binding},file,error)" ng-model="reportRecordingTwo"  class="form-control" id="reportRecordingTwo" ></file-drop>
+                      <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'reportRecordingTwo').url)}}">{{findAttachement(binding.attachment,'reportRecordingTwo').title}}</a> <i ng-show="findAttachement(binding.attachment,'reportRecordingTwo')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'reportRecordingTwo'))"></i></p>
+                      <p ng-show="(!findAttachement(binding.attachment,'reportRecordingTwo').url && (  editForm.$submitted))" class="text-danger small">{{::('participationT.reportRecordingTwoRequired'|$translate)}}</p>
+                  </div>
+
+                  <div class="col-md-6" ng-show="isDesignation('Photographer') || isMedia('Photo/visual')">
+                      <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (  editForm.$submitted))}">
+                          <label class="control-label" for="tearSheetOrPhotoOne">{{::('participationT.tearSheetOrPhotoOne'|$translate)}} <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="{{::('participationT.originalTearPop'|$translate)}}" help></i></label>
+                        </div>
+                      <file-drop danger="(!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'tearSheetOrPhotoOne',container:binding},file,error)" ng-model="tearSheetOrPhotoOne"  class="form-control" id="tearSheetOrPhotoOne" ></file-drop>
+                      <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'tearSheetOrPhotoOne').url)}}">{{findAttachement(binding.attachment,'tearSheetOrPhotoOne').title}}</a> <i ng-show="findAttachement(binding.attachment,'tearSheetOrPhotoOne')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'tearSheetOrPhotoOne'))"></i></p>
+                      <p ng-show="(!findAttachement(binding.attachment,'tearSheetOrPhotoOne').url && (  editForm.$submitted))" class="text-danger small">{{::('participationT.tearSheetOrPhotoOneIsRequired'|$translate)}}</p>
+                  </div>
+
+                  <div class="col-md-6" ng-show="isDesignation('Photographer') || isMedia('Photo/visual')">
+                      <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (  editForm.$submitted))}">
+                          <label class="control-label" for="tearSheetOrPhotoTwo">{{::('participationT.tearSheetOrPhotoTwo'|$translate)}}<i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="{{::('participationT.originalTearPop'|$translate)}}" help></i></label>
+                        </div>
+                      <file-drop danger="(!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (  editForm.$submitted))" class="xs" style="height:90px;" on-upload="onUpload({tag:'tearSheetOrPhotoTwo',container:binding},file,error)" ng-model="tearSheetOrPhotoTwo"  class="form-control" id="tearSheetOrPhotoTwo" ></file-drop>
+                      <p><a target="_blank" ng-href="{{viewAttachment(findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url)}}">{{findAttachement(binding.attachment,'tearSheetOrPhotoTwo').title}}</a> <i ng-show="findAttachement(binding.attachment,'tearSheetOrPhotoTwo')" class="fa fa-times-circle-o pointer" ng-click="removeAttachement(findAttachement(binding.attachment,'tearSheetOrPhotoTwo'))"></i></p>
+                      <p ng-show="(!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (  editForm.$submitted))" class="text-danger small">{{::('participationT.tearSheetOrPhotoTwoIsRequired'|$translate)}}</p>
+                  </div>
+
+
+            </div>
+          </div>
+        </div>
+
+        <div ng-show="regOption.enabled" class="col-12" >
+          <label>{{::('participationT.registration'|$translate)}} </label>
+          <div ng-repeat="regOption in registrationOptions track by regOption.title">
+              <div ng-show="regOption.enabled" class="row">
+                <div class="col-12">
+                  <div  class="panel panel-default">
+                    <div class="panel-body">
+                      <div class="form-group" style="margin-bottom: 0;">
+                      <label class="control-label">{{ regOption.title }}</label> 
+                      <p style="white-space: pre-wrap;" ng-bind-html="regOption.description" />
+                      <br/>
+                      <select
+                        ng-model="regOption.selectedOption"
+                        class="form-control"
+
+                        ng-change="updateRegOptions()"
+                        >
+                        <option ng-repeat="option in regOption.options track by option.value" ng-value="option.value" ng-selected="option.value===regOption.selectedOption">{{option.label}}</option>
+                      </select>
+                      <br ng-show="regOption.optionNotes"/>
+                      <p ng-show="regOption.optionNotes" class="small muted" style="white-space: pre-wrap;" ng-bind-html="regOption.optionNotes" />
+                    </div>
+                  </div>
+              </div>
+            </div>
+
+          </div>
+          
+        </div>
+      </div>
   </section>
 </form>
-      <div class="col-xs-12 ">
+      <div class="col-12 mt-3">
+        <user-message error="error" msg="msg" ></user-message>
         <div class="pull-right" >
-
-          <button ng-click="cancel()" ng-disabled="false" type="button" class="btn btn-default">Cancel</button>
-          <button ng-click="save()" type="button" class="btn btn-primary">Save</button>
+          
+          <button ng-click="cancel()" ng-disabled="false" type="button" class="btn btn-default">{{::('participationT.cancel'|$translate)}}</button>
+          <button ng-click="save()" type="button" class="btn btn-primary">{{::('participationT.save'|$translate)}}</button>
         </div>
 
       </div>

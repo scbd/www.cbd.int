@@ -8,9 +8,10 @@ export { default as template } from './index.html'
 
     var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
 
-export default ['$http', 'user', 'kronos', '$q','$scope', function($http, user, kronos, $q, $scope) {
+export default ['$http', 'user', 'kronos', '$q','$scope','$routeParams','$route','$location' ,function($http, user, kronos, $q, $scope, $routeParams, $route, $location) {
         var _ctrl = this;
 
+        
         _ctrl.toggle                = toggle;
         _ctrl.selectRequest         = selectRequest;
         _ctrl.selectParticipant     = selectRequest;
@@ -35,7 +36,7 @@ export default ['$http', 'user', 'kronos', '$q','$scope', function($http, user, 
         _ctrl.createKronosContact               = createKronosContact;  
         _ctrl.refreshRequestList                = LoadRequests;         
         _ctrl.loading                           = true;
-
+        _ctrl.changeConference                  = changeConference;
         load();
         
         //===================================
@@ -47,17 +48,16 @@ export default ['$http', 'user', 'kronos', '$q','$scope', function($http, user, 
             
             return $http.get('/api/v2016/conferences', { 
                 params: {
-                    f: { code:1, Title:1, MajorEventIDs:1, active:1,StartDate:1 }, 
-                    q: { timezone: { $exists:true }, venueId: { $exists:true } },
-                    s: { StartDate:-1 } 
+                    f: { code:1, Title:1, MajorEventIDs:1, active:1, StartDate:1 }, 
+                    q: { timezone: { $exists:true }, venueId: { $exists:true }, institution: 'CBD' },
+                    s: { active: -1, StartDate:-1 } 
                 }
             }).then(resData).then(function(conferences) {
 
+                const { code } = $routeParams
                 _ctrl.conferences = conferences;
 
-                _ctrl.conference  = _.findWhere(conferences, {active:true});
-                if(!_ctrl.conference)
-                    _ctrl.conference  = conferences[0];
+                _ctrl.conference  = code? _.findWhere(conferences, { code }) : conferences[0];
 
                 return _ctrl.conference
 
@@ -84,6 +84,14 @@ export default ['$http', 'user', 'kronos', '$q','$scope', function($http, user, 
 
             })
         }
+
+        function changeConference(conference){
+            const { code } = $routeParams
+
+            if(code) $route.updateParams({ code: conference.code });
+            else     $location.path('/media-requests/'+conference.code)
+        }
+
 
         function LoadRequests(status){
 
