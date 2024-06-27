@@ -210,7 +210,7 @@
 
                                     <div class="Languages dropdown-menu">
                                         <div class="dropdown-item-container">
-                                            <a v-for="(lang, key) in languages" v-bind:href="`/language-switch?lg=${encodeURIComponent(key)}&returnUrl=${encodeURIComponent(returnUrl)}`" 
+                                            <a v-for="(lang, key) in languages" v-bind:href="`/language-switch?lg=${encodeURIComponent(key)}&returnUrl=${encodeURIComponent(getReturnUrl(key))}`" 
                                                 v-bind:title="lang" class="dropdown-item" :key="lang"> <span
                                                     class="dropdown-item-label">{{lang}}</span></a>
                                         </div>
@@ -343,6 +343,12 @@ export default {
         }, 1000);
     },
     methods:{
+        getReturnUrl(locale){
+            if(window.location.search)
+                return window.location.href + `&lg=${locale}`;
+            
+            return window.location.href + `?lg=${locale}`;
+        },
         async logout(){
             await Vue?.prototype.$auth.logout();
             window.location.reload();
