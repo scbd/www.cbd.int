@@ -131,7 +131,7 @@ const app = angular.module('app', angular.defineModules(
     window.Vue.use(new AngularVueRouterPlugin());
     window.Vue.use(new AngularVueAuthPlugin({
       fetchUser() { return authentication.getUser(); },
-      logout() {},
+      logout()    { return authentication.signOut()},
       async login() {}
     }));
 

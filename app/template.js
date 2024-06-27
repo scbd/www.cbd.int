@@ -119,7 +119,7 @@ import ScbdFooter from '~/components/nav/footer.vue'
                     return;
                 
                 authentication.signOut();
-                $window.location.href = '/';
+             //   $window.location.href = '/';
             });
         }
 
