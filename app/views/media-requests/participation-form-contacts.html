@@ -14,7 +14,12 @@
         </tr>
         <tr>
           <td >{{::('participationT.headOfOrganization'|$translate)}}</td>
-          <td >{{participationCtrl.head.title}} {{participationCtrl.head.firstName}} {{participationCtrl.head.lastName}}</td>
+          <td >
+            <span ng-if="participationCtrl.head.title">
+              <span ng-if="participationCtrl.head.title == 'Ms.'">{{::('participationT.ms'|$translate)}}</span>
+              <span ng-if="participationCtrl.head.title == 'Mr.'">{{::('participationT.mr'|$translate)}}</span>
+            </span>
+            {{participationCtrl.head.firstName}} {{participationCtrl.head.lastName}}</td>
           <td >
             {{participationCtrl.head.designation}}<br>
             <a ng-href="{{participationCtrl.head.email}}">{{participationCtrl.head.email}}</a>
@@ -26,7 +31,12 @@
         </tr>
         <tr>
           <td >{{::('participationT.mainContact'|$translate)}} </td>
-          <td >{{participationCtrl.focalPoint.title}} {{participationCtrl.focalPoint.firstName}} {{participationCtrl.focalPoint.lastName}}</td>
+          <td >
+            <span ng-if="participationCtrl.focalPoint.title">
+              <span ng-if="participationCtrl.focalPoint.title == 'Ms.'">{{::('participationT.ms'|$translate)}}</span>
+              <span ng-if="participationCtrl.focalPoint.title == 'Mr.'">{{::('participationT.mr'|$translate)}}</span>
+            </span>            
+            {{participationCtrl.focalPoint.firstName}} {{participationCtrl.focalPoint.lastName}}</td>
           <td >
             {{participationCtrl.focalPoint.designation}}<br>
             <a ng-href="{{participationCtrl.head.email}}">{{participationCtrl.focalPoint.email}}</a>

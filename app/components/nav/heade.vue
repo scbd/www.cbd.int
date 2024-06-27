@@ -307,6 +307,8 @@
 </template>
 <script>
 import messages from '~/i18n/shared/index.js'
+import { UN as UNlanguages }  from '~/data/languages.js'
+
 export default {
     name: 'ScbdHeader',
     data() {
@@ -314,7 +316,7 @@ export default {
             isAuthenticated : false,
             user            : undefined,
             returnUrl       : undefined,
-            languages       : []
+            languages       : { ... UNlanguages } 
         }
     }, 
     i18n: {
@@ -327,14 +329,6 @@ export default {
         }
     },
     mounted() {      
-        this.languages = {
-            ar : 'العربية',
-            es : 'Español',
-            en : 'English',
-            fr : 'Français',
-            ru : 'Русский',
-            zg : '中文'
-        }
         this.returnUrl = window.location.href;   
         setTimeout(async() => {
             const user = await Vue?.prototype.$auth.fetchUser()

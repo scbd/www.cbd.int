@@ -174,7 +174,10 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
           <div style="display:<%=siteAlert ? 'block' : 'none'%>" class="alert alert-danger mb-0"><%=siteAlert%></div>
           <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeaderFixed" ></vue-component>                  
           <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeader" ></vue-component> -->
-          <vue-component ng-if="!templateCtrl.viewOnly" name="ScbdHeader" ></vue-component>
+          <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="ScbdHeader" ></vue-component> -->
+          <div ng-if="!templateCtrl.viewOnly">
+            <scbd-header ng-vue></scbd-header>
+          </div>
           <!-- CONTENT -->
           <div class="page-content">
               <div id="conferenceHeader"></div>
@@ -186,7 +189,10 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
           </div>
           <!-- FOOTER -->
           <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="PageFooter" ></vue-component> -->
-          <vue-component ng-if="!templateCtrl.viewOnly" name="ScbdFooter" ></vue-component>
+          <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="ScbdFooter" ></vue-component> -->
+          <div ng-if="!templateCtrl.viewOnly">
+            <scbd-footer ng-vue></scbd-footer>
+        </div>
       </div>
   </div>
 
