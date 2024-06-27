@@ -72,6 +72,8 @@ app.get('/idb/*',                  function(req, res) { res.render('template-201
 app.get('/biobridge*',             function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
 app.get('/aichi-targets*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
 app.get('/kronos/media-requests*', function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
+app.get('/language-switch',        cmsLanguageSwitch);
+
 
 app.use(prerender); // set env PRERENDER_SERVICE_URL
 
@@ -137,4 +139,16 @@ function whiteListIframeUrls(req, res, next){
             res.setHeader('X-Frame-Options', 'ALLOW')
 
     next();
+}
+
+function cmsLanguageSwitch(req, res) {
+    const locale    = req.query?.lg;
+    const returnUrl = req.query?.returnUrl;
+
+    if(!/^[a-z]{2,3}$/.test(locale)) { return res.status(400).send({message:"Invalid locale"});}
+    if(!returnUrl)                   { return res.status(400).send({message:"Invalid returnUrl"});}
+
+
+    res.cookie("Preferences", `Locale=${locale}`, {path:'/', expires: new Date(Date.now() + (1000*3600*24*365))}); //expire in one year
+    res.redirect(returnUrl);
 }
