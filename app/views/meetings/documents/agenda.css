@@ -21,6 +21,9 @@
 .label.agenda.CP   { color:#fff; background: #A05800; }
 .label.agenda.NP   { color:#fff; background: #0086B7; }
 
+.narrow >     .label.agenda, 
+.narrow > * > .label.agenda {  min-width: unset; }
+
 .title.agenda      {     }
 .handle  { cursor: all-scroll }
 /*

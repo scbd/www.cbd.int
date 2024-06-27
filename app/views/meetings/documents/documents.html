@@ -172,15 +172,12 @@
                                 <div ng-if="documentsCtrl.editMode && (type.code!='outcome')"><i class="fa fa-bars handle" aria-hidden="true"></i></div>
                             </td>
                             <td>
-                                <meeting-document document="document" jump-to="documentsCtrl.jumpTo" enable-selection="!documentsCtrl.editMode" show-statistics="documentsCtrl.statsMode"></meeting-document>
+                                <meeting-document document="document" show-items="documentsCtrl.sort!='agenda'" jump-to="documentsCtrl.jumpTo" enable-selection="!documentsCtrl.editMode" show-statistics="documentsCtrl.statsMode"></meeting-document>
                             </td>
 
                             <td ng-if="documentsCtrl.editMode" style="width:10px">
                                 <div ng-if="::document.linkedToId">
                                     <agenda-item ng-vue="vueOptions" :item="{ code: 'Linked', color:'#a0a0a0' }"/>
-                                </div>
-                                <div ng-repeat="item in document.agendaItems|orderBy">
-                                    <agenda-item ng-vue="vueOptions" :item="item" />
                                 </div>
                             </td>
 
