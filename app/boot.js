@@ -116,7 +116,6 @@ export default function bootApp(window, require, defineX) {
   defineX('vue',     ['vue-i18n', 'cdn!npm/@scbd/sso-vue-plugin-scbd@1.0.5/dist/legacy/umd/index.umd.min.js'],  (i18n, ssoSCBD)=>{
       window.VueI18n = i18n;
       window.ssoSCBD = ssoSCBD;
-      window.Vue.use(window.VueI18n);
       window.Vue.use(window.ssoSCBD);
       return window.Vue;
   });

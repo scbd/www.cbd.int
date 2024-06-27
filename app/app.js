@@ -13,21 +13,7 @@ const app = angular.module('app', angular.defineModules(
 
 
     app.provider('$ngVue', $ngVueProvider) // create own ngVue provider as theirs was broken
-    app.config(['$ngVueProvider', function($ngVueProvider) {
-      
-      angular.injector(['ngCookies']).invoke(['$cookies', function($cookies) {
-       
-        const locale = $cookies.get('locale') || 'en';
-        var i18n = new window.VueI18n({
-          locale        : locale,
-          fallbackLocale: 'en',
-          messages      : { en:{} }
-        })
-        $ngVueProvider.setRootVueInstanceProps({ i18n: i18n })
-
-      }]);
-    }])
-    
+        
     app.config(['$httpProvider','toastrConfig', function($httpProvider,toastrConfig) {
         angular.extend(toastrConfig, {
           autoDismiss: true,
@@ -130,9 +116,15 @@ const app = angular.module('app', angular.defineModules(
 
   app.directive('ngVue', AngularVueDirective);
 
-  app.run(["$injector", "authentication", function($injector, authentication) {
+  app.run(["$injector", "authentication", 'locale', function($injector, authentication, locale) {
 
-    const vueRootApp = new Vue({});
+    var i18n = new window.VueI18n({
+      locale        : locale,
+      fallbackLocale: 'en',
+    })
+    window.Vue.use(i18n)
+
+    const vueRootApp = new Vue({i18n});
 
     window.Vue.use(new AngularVuePlugin({ $injector, ngApp: app, vueApp: vueRootApp }));
     window.Vue.use(new AngularVueRoutePlugin());
@@ -142,6 +134,8 @@ const app = angular.module('app', angular.defineModules(
       logout() {},
       async login() {}
     }));
+
+  window.locale = locale;
 
   }]);
 
