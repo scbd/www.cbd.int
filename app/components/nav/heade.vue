@@ -195,7 +195,7 @@
                                                     class="dropdown-item-label">{{$t('profile')}}</span></a>
                                             <a v-bind:href="$accountsBaseUrl+'/password'" :title="$t('password')" class="dropdown-item"> <span
                                                     class="dropdown-item-label">{{$t('password')}}</span></a>
-                                            <a href="" v-on:click="logout()" title="Sign Out" class="dropdown-item"> <span
+                                            <a href="" v-on:click.stop.prevent="logout()" title="Sign Out" class="dropdown-item"> <span
                                                     class="dropdown-item-label">{{$t('signOut')}}</span></a>
                                         </div>
                                     </div>  
@@ -339,7 +339,6 @@ export default {
     methods:{
         async logout(){
             await Vue?.prototype.$auth.logout();
-            window.location.reload();
         }
     }
 }
