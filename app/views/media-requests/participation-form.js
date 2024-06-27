@@ -5,7 +5,6 @@ import '~/directives/kronos/participant'
 import '~/directives/kronos/user-messages'
 import '~/filters/term'
 import '~/directives/file'
-import '~/services/translation-service'
 import participationT from '~/i18n/participation/index.js';
 
 import { camelCase } from 'change-case';

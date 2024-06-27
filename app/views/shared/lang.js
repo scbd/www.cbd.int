@@ -1,7 +1,6 @@
 import app from '~/app';
 import '~/providers/locale';
 import sharedT from '~/i18n/shared/index.js';
-import '~/services/translation-service'
 
 export { default as template } from './lang.html';
 export default ["$scope", "$location", "locale","$timeout", "$window", "$routeParams", "$cookies", 'translationService',

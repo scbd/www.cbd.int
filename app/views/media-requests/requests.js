@@ -2,7 +2,6 @@ import _ from  'lodash'
 import '~/filters/lstring'
 import '~/filters/moment'
 import '~/services/conference-service'
-import '~/services/translation-service'
 import participationT from '~/i18n/participation/index.js';
 
 export { default as template } from './requests.html'

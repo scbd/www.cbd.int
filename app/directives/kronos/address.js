@@ -1,6 +1,5 @@
 import app from '~/app';
 import html from './address.html';
-import '~/services/translation-service'
 import participationT from '~/i18n/participation/index.js';
 
 	export default app.directive('address', ['$http','$filter','translationService','locale',function($http,$filter, $i18n, locale) {
