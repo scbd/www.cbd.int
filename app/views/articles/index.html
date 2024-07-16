@@ -12,10 +12,19 @@
         </div>
         <div class="col-lg-8 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;">                   
             <cbd-article ng-vue ng-vue-expose="&onArticleLoad" :query="articleQuery" v-if="articleQuery" :admin-tags="articleAdminTags" 
-            @load="onArticleLoad($event)" hide-cover-image="true" show-edit="true"></cbd-article>
+                @load="onArticleLoad($event)" hide-cover-image="true" show-edit="true"></cbd-article>
+
+            <div ng-if="showAccordion && accordionQuery">
+                <articles-accordion ng-vue ng-vue-expose="&onArticlesLoad" :query="accordionQuery"
+                    @onArticlesLoad="onArticlesLoad" :admin-tags="accordionTags"
+                    :show-new="true" :show-date="false" :show-new-label="false" :show-print="false">
+                </articles-accordion>        
+            </div>
         </div>
+
+       
         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="padding-top:15px;">
-            <social-media></social-media>
+            <!-- <social-media></social-media> -->
         </div>
     </div>
 </div>
