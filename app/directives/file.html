@@ -1,19 +1,36 @@
-<form class="uploadForm alert"  ng-class="{ 'alert-default': isDisabled(), 'alert-info': !dragOver && !isDisabled(), 'alert-success': dragOver && !isDisabled(), 'alert-danger':danger}" method="post" action="" enctype="multipart/form-data" style="">
-    <label class="text-center" style="display:block;" ng-style="{ cursor:  (isDisabled() ? 'default' : 'pointer') }">
-        
-        <i class="fa fa-cloud-upload" aria-hidden="true"></i><br>
-        
+
+
+<form class="uploadForm alert "  ng-class="{ 'alert-default': isDisabled(), 'alert-info': !dragOver && !isDisabled(), 'alert-success': dragOver && !isDisabled(), 'alert-danger':danger||hasError}" method="post" action="" enctype="multipart/form-data" >
+    <i ng-show="hasError" ng-click="removeError()" class="fa fa-close pull-right pointer" aria-hidden="true"></i>
+    <label  class="text-center" style="display:block;" ng-style="{ cursor:  (isDisabled() ? 'default' : 'pointer') }">
+
+        <i ng-show="!loading && !hasError" class="fa fa-cloud-upload" aria-hidden="true"></i>
+        <i ng-show="loading && !hasError" class="fa fa-spinner fa-spin fa-2x"></i>
+
+        <br>
+
         <span ng-if="caption">{{caption}}</span>
-        <span ng-if="!caption">
+        <span ng-if="!caption && !hasError">
             <span ng-if="!isMutiple()"><strong>{{::('sharedT.chooseAFile'|$translate)}} </strong> <span ng-if="!allowDragDrop">{{::('sharedT.byClicking'|$translate)}}</span> <span ng-if="allowDragDrop">{{::('sharedT.orDragIt'|$translate)}}</span></span>
             <span ng-if=" isMutiple()"><strong>{{::('sharedT.chooseFiles'|$translate)}}</strong>  <span ng-if="!allowDragDrop">{{::('sharedT.byClicking'|$translate)}}</span><span ng-if="allowDragDrop">{{::('sharedT.orDragThem'|$translate)}}</span></span>
+
+            <small ng-if="isEncrypted()" class="text-muted" style="font-weight: normal"><br><i class="fa fa-lock" aria-hidden="true"></i> <em>{{::('sharedT.fileEncrypted'|$translate)}}</em></small>
+            <br>
         </span>
-        <small ng-if="isEncrypted()" class="text-muted" style="font-weight: normal"><br><i class="fa fa-lock" aria-hidden="true"></i> <em>{{::('sharedT.fileEncrypted'|$translate)}}</em></small>
+
         
-        
+        <span ng-if="hasError">
+            <strong>{{hasError.msg.title}}</strong>
+            {{hasError.msg.body}}
+        </span>
+
     </label>
-    
+
+
     <style>
+        .uploadForm{
+            min-height: 100px;
+        }
         .uploadForm.drop.dragover {
             background-color: white;
             border: 2px dashed black;
@@ -26,5 +43,7 @@
         .uploadForm.sm > label > i.fa-cloud-upload { font-size:48px; }
         .uploadForm.xs > label > i.fa-cloud-upload { font-size:32px; }
         
-    </style>    
+        .pointer{ cursor: pointer;}
+    </style> 
 </form>
+
