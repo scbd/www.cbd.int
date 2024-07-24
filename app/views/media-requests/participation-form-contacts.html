@@ -1,7 +1,6 @@
 <section>
   <div class="col-12">
     <h2 ng-if="!participationCtrl.addContact">{{::('participationT.contacts'|$translate)}}</h2>
-    <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
   </div>
   <div class="col-12 " ng-if="!participationCtrl.addContact" ng-init="participationCtrl.initStepsContacts()">
     <div class="table-responsive" >
@@ -58,7 +57,6 @@
   </div>
   <participant is-contact="true" request-id="participationCtrl.doc._id" msg="participationCtrl.msg" error="participationCtrl.error" conference-code="participationCtrl.conferenceCode" organization="participationCtrl.organization" ng-model="participationCtrl.activeParticipant" ng-show="participationCtrl.addContact" show-contact="participationCtrl.addContact" typee="participationCtrl.type"></participant>
   <div class="col-12 " ng-if="!participationCtrl.addContact">
-      <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
     <button ng-click="participationCtrl.changeStep('organization')" ng-disabled="false" type="button" class="btn btn-success">{{::('participationT.previous'|$translate)}}</button>
     <button ng-click="participationCtrl.saveContacts()" ng-disabled="!participationCtrl.hasHead() || !participationCtrl.hasFocalPoint()" type="button" class="btn btn-success pull-right">{{::('participationT.next'|$translate)}}</button>
   </div>

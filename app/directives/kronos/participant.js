@@ -184,7 +184,7 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
 
           if($scope.editForm.$invalid) {
             $scope.editForm.$submitted=true;
-            $scope.error = { status: 4000 };
+            $scope.error = { };
             return $scope.$emit('showError', $i18n.get('badRequestTitle', 'participationT'));
           }
           

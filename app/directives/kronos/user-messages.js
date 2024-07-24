@@ -19,7 +19,7 @@ import participationT from '~/i18n/participation/index.js';
         $scope.$watch('error',function(){
             if(!$scope.error) return
 
-            if($scope.error.status==4000)
+            if(!$scope.error.status)
               createMsg('BAD_REQUEST', $scope.error)
 
             if($scope.error.status==-1)

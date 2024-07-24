@@ -55,7 +55,7 @@ import sharedT from '~/i18n/shared/index.js';
 
                                 onUpload(htmlFile, res.data, null);
 
-                                $scope.loading = false;
+                                
                                 return res.data;
 
                             }).catch(function(err){
@@ -70,9 +70,7 @@ import sharedT from '~/i18n/shared/index.js';
 
                                 onUpload(htmlFile, null, err);
 
-                                $scope.loading = false;
-
-                            });
+                            }).finally(()=>$scope.loading = false);
                         }
                     }
                     else {
@@ -86,7 +84,7 @@ import sharedT from '~/i18n/shared/index.js';
                 function translateError(err){
                     if(!err) return 
 
-                    if(!_.isPlainObject(err)) err = { code : "serviceUnavailable", message: "Service is unavailable", statusCode: 502};
+                    if(!_.isPlainObject(err) || err.status == 502) err = { code : "serviceUnavailable", message: "Service is unavailable", statusCode: 502};
 
                     const title = $i18n.get(err.code, 'sharedT').includes('sharedT')? err.code : $i18n.get(err.code, 'sharedT');
                     const body = $i18n.get(err.code, 'sharedT').includes('sharedT')? err.message : '';
@@ -171,7 +169,7 @@ import sharedT from '~/i18n/shared/index.js';
                 $scope.proxyOnChange = function() { 
                     ngModelCtrl.$setViewValue($scope.files); 
 
-                    if($scope.onChange) $scope.onChange();
+                    if($scope.onChange && !$scope.hasError) $scope.onChange();
                 };
                 
                 var div = document.createElement('div');
