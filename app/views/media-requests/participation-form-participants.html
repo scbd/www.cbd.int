@@ -38,6 +38,14 @@
 <div class="col-12 " ng-if="!participationCtrl.addContact">
   <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
   <br>
+
+  <div class="col-xs-12">
+    <div ng-if="!participationCtrl.participants.length" class="bs-callout bs-callout-danger">
+
+      <h4>{{::('participationT.onePart'|$translate)}}</h4>
+      <p >{{::('participationT.onePartBody'|$translate)}}</p>
+    </div>
+  </div>
   <button ng-click="participationCtrl.changeStep('contacts')" ng-disabled="false" type="button" class="btn btn-secondary">{{::('participationT.previous'|$translate)}}</button>
-  <button ng-click="participationCtrl.submit()" ng-disabled="participationCtrl.numParticipants()" type="button" class="btn btn-primary pull-right">{{::('participationT.submit'|$translate)}}</button>
+  <button ng-click="participationCtrl.submit()" ng-disabled="!participationCtrl.participants.length" type="button" class="btn btn-primary pull-right">{{::('participationT.submit'|$translate)}}</button>
 </div>
