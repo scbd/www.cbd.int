@@ -6,6 +6,7 @@ import './address'
 import '~/services/conference-service'
 import '~/directives/kronos/user-messages'
 import '~/directives/file'
+import '~/directives/link-or-file'
 import participationT from '~/i18n/participation/index.js';
 
 app.directive('participant', ['$http','$timeout','conferenceService','$filter','$q','translationService','locale',function($http,$timeout,conferenceService,$filter,$q, $i18n, locale) {
@@ -22,10 +23,11 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
         conferenceCode: "=conferenceCode",
         requestId     : "=requestId"     ,
         isContact     : "=isContact",
-        error         : "=error",
-        msg: '=msg',
+        error         : "=?error",
+        msg: '=?msg',
       },
       link:function($scope){
+
         $i18n.set('participationT', participationT );
         $timeout(function(){
           $("[help]").tooltip();
@@ -179,11 +181,13 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
 
         function save(){
           validateRequireUploads()
+
           if($scope.editForm.$invalid) {
-            $scope.editForm.$submitted=true
-            $scope.error = { status: 4000 }
+            $scope.editForm.$submitted=true;
+            $scope.error = { };
             return $scope.$emit('showError', $i18n.get('badRequestTitle', 'participationT'));
           }
+          
           if($scope.binding && $scope.binding.meeting && !$scope.binding.meeting.length)
             delete($scope.binding.meeting)
 
@@ -200,8 +204,8 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
                   $scope.showContact=false;
                   $scope.$emit('showSuccess', $i18n.get('participantSaved', 'participationT') );
                 }).catch(function(err){
-                  $scope.error = err
-                  console.error(err)
+                  $scope.error = err;
+                  console.error(err);
                 })
           else
             return $http.put('/api/v2018/kronos/participation-request/participants/'+encodeURIComponent($scope.binding._id),$scope.binding,{headers:{requestId:$scope.requestId,conferenceCode:$scope.conferenceCode}})
@@ -210,8 +214,8 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
                   $scope.$emit('showSuccess', $i18n.get('participantSaved', 'participationT') );
                 })
                 .catch(function(err){
-                  $scope.error = err
-                  console.error(err)
+                  $scope.error = err;
+                  console.error(err);
                 })
         }
 
@@ -267,6 +271,7 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
           $scope.onUpload=onUpload
 
           function onUpload (params, file, error){
+            if(error) return
             var exists = findAttachement(params.container.attachment,params.tag)
 
             if(!exists){

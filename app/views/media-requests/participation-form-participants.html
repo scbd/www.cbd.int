@@ -1,10 +1,13 @@
 <section>
   <div class="col-12">
-    <h2>{{::('participationT.participantS'|$translate)}}<</h2>
+    <h2>{{::('participationT.participantS'|$translate)}}</h2>
     <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
   </div>
   <div class="col-12 " ng-if="!participationCtrl.addContact">
-    <h3><button ng-if="!participationCtrl.addContact" ng-click="participationCtrl.activeParticipant={};participationCtrl.addContact=true" type="button" class="btn btn-default btn-xs">{{::('participationT.addParticipant'|$translate)}}</button>
+    <h3 class="text-right"><button ng-if="!participationCtrl.addContact" ng-click="participationCtrl.activeParticipant={};participationCtrl.addContact=true" type="button" class="btn btn-outline-dark btn-sm">
+      <i class="fa fa-plus"></i>
+      {{::('participationT.addParticipant'|$translate)}}
+    </button>
     </h3>
     <div class="table-responsive">
       <table class="table table-condensed table-hover">
@@ -20,7 +23,11 @@
             <span ng-if="p.designation==='Other'">{{p.designationOther}}<span ng-if="p.organizationName">,</span> {{p.organizationName}}<br></span>
             <a ng-href="{{participationCtrl.head.email}}">{{p.email}}</a>
           </td>
-          <td ><button ng-click="participationCtrl.loadParticipantForm(p)" type="button" class="btn btn-default btn-xs">{{::('participationT.edit'|$translate)}}</button></td>
+          <td >
+            <button ng-click="participationCtrl.loadParticipantForm(p)" type="button" class="btn btn-outline-dark btn-xs">
+              <i class="fa fa-edit"></i> {{::('participationT.edit'|$translate)}}
+            </button>
+          </td>
         </tr>
 
       </table>
@@ -31,6 +38,14 @@
 <div class="col-12 " ng-if="!participationCtrl.addContact">
   <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
   <br>
-  <button ng-click="participationCtrl.changeStep('contacts')" ng-disabled="false" type="button" class="btn btn-default">{{::('participationT.previous'|$translate)}}</button>
-  <button ng-click="participationCtrl.submit()" ng-disabled="participationCtrl.numParticipants()" type="button" class="btn btn-primary pull-right">{{::('participationT.submit'|$translate)}}</button>
+
+  <div class="col-xs-12">
+    <div ng-if="!participationCtrl.participants.length" class="bs-callout bs-callout-danger">
+
+      <h4>{{::('participationT.onePart'|$translate)}}</h4>
+      <p >{{::('participationT.onePartBody'|$translate)}}</p>
+    </div>
+  </div>
+  <button ng-click="participationCtrl.changeStep('contacts')" ng-disabled="false" type="button" class="btn btn-secondary">{{::('participationT.previous'|$translate)}}</button>
+  <button ng-click="participationCtrl.submit()" ng-disabled="!participationCtrl.participants.length" type="button" class="btn btn-primary pull-right">{{::('participationT.submit'|$translate)}}</button>
 </div>

@@ -237,5 +237,7 @@
     "serviceNotAvailableOrDocumentWasNotFound": "Service not available or document was not found",
     "serviceIsNotAvailableOrNotFound": "Service is not available or not found  at ",
     "theDataPassedToTheServerIsNotInTheRequiredFormat": "The data passed to the server is not in the required format",
-    "pleaseContactTheScbdItUnitToReportThisErrorItCbdInt": "Please contact the SCBD IT unit to report this error"
+    "pleaseContactTheScbdItUnitToReportThisErrorItCbdInt": "Please contact the SCBD IT unit to report this error",
+    "onePart":"You must create a participant to complete the request",
+    "onePartBody":"At least one person must be chosen to participate, in order to complete the application."
   }

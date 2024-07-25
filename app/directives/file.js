@@ -14,7 +14,7 @@ import sharedT from '~/i18n/shared/index.js';
                 if(attr.type              !=="file")  return;
 
                 if(!ctrl) return;
-
+                $scope.removeError = removeError;
                 var onUploadHandler = attr.onUpload && $parse(attr.onUpload);
 
                 $scope.$on('$destroy', function(){
@@ -22,7 +22,7 @@ import sharedT from '~/i18n/shared/index.js';
                 });                
                 
 	            element.on('change', function() {
-
+                    $scope.loading = true;
                     increaseChange();
 
                     var htmlFiles = element[0].files;
@@ -49,18 +49,20 @@ import sharedT from '~/i18n/shared/index.js';
                                 headers: {'Content-Type': undefined}
 
                             }).then(function(res){
-
                                 files = files.concat([res.data]);
 
                                 setViewValue(files);
 
                                 onUpload(htmlFile, res.data, null);
 
+                                
                                 return res.data;
 
                             }).catch(function(err){
 
                                 err = err.data || err;
+
+                                $scope.hasError=translateError(err);
 
                                 files = files.concat([{ error: err }]);
 
@@ -68,8 +70,7 @@ import sharedT from '~/i18n/shared/index.js';
 
                                 onUpload(htmlFile, null, err);
 
-                                res.data;
-                            });
+                            }).finally(()=>$scope.loading = false);
                         }
                     }
                     else {
@@ -80,6 +81,18 @@ import sharedT from '~/i18n/shared/index.js';
                         reset();
                 });
 
+                function translateError(err){
+                    if(!err) return 
+
+                    if(!_.isPlainObject(err) || err.status == 502) err = { code : "serviceUnavailable", message: "Service is unavailable", statusCode: 502};
+
+                    const title = $i18n.get(err.code, 'sharedT').includes('sharedT')? err.code : $i18n.get(err.code, 'sharedT');
+                    const body = $i18n.get(err.code, 'sharedT').includes('sharedT')? err.message : '';
+
+                    err.msg = { title, body};
+
+                    return err
+                }
                 function isMutiple() { 
                     return element.attr('multiple')!==undefined; 
                 }
@@ -89,7 +102,6 @@ import sharedT from '~/i18n/shared/index.js';
                 }  
                 
                 function onUpload(htmlFile, file, err) { 
-
                     if(!onUploadHandler)
                         return;
 
@@ -115,6 +127,10 @@ import sharedT from '~/i18n/shared/index.js';
                 function increaseChange() {
                     element.data('changeCount', (element.data('changeCount')||0) + 1);
                 }
+
+                function removeError(){
+                    $scope.hasError = false;
+                }
 	        }
 	    };
 	}]);
@@ -129,6 +145,7 @@ import sharedT from '~/i18n/shared/index.js';
                 autoReset: '<autoReset',
                 caption: '@caption',
                 onUpload : "&onUpload",
+                onChange : "&onChange",
                 danger : "=?"
             },
 	        link: function($scope, form, attr, ngModelCtrl) {
@@ -139,18 +156,21 @@ import sharedT from '~/i18n/shared/index.js';
                 if(attr.accept  !==undefined) inputFile.attr('accept',   attr.accept);
                 if(attr.encrypt !==undefined) inputFile.attr('encrypt',   "");
                 if(attr.onUpload!==undefined) inputFile.attr('on-upload', "proxyOnUpload({ htmlFile: htmlFile, file: file, error: error})");
-                
+
                 inputFile = $compile(inputFile.parent().html())($scope);
 
                 form.find('label').append(inputFile);
 
                 //////////////////////
-
                 $scope.isMutiple  = isMutiple;
                 $scope.isDisabled = isDisabled;
                 $scope.isEncrypted = function() { return attr.encrypt !== undefined };
                 $scope.proxyOnUpload = $scope.onUpload;
-                $scope.proxyOnChange = function() { ngModelCtrl.$setViewValue($scope.files); };
+                $scope.proxyOnChange = function() { 
+                    ngModelCtrl.$setViewValue($scope.files); 
+
+                    if($scope.onChange && !$scope.hasError) $scope.onChange();
+                };
                 
                 var div = document.createElement('div');
 

@@ -1,0 +1,43 @@
+<div class="alert py-5" style="min-height:65px; display:block;"  ng-class="{ 'alert-dark':!danger || (showUrl || showFile), 'alert-danger': danger && (!showUrl && !showFile) }" >
+
+    <div  ng-show="(!showUrl && !showFile) && (multiple || (!listData().length && !multiple))">
+        <button ng-click="toggleUrl()" class="btn btn-secondary">{{::('sharedT.addLink'|$translate)}}</button>
+        <button ng-click="toggleFile()" class="btn btn-secondary">{{::('sharedT.addFile'|$translate)}}</button>
+    </div>
+
+    <button ng-show="showUrl || showFile" ng-click="closeAll()"  ng-disabled="false" type="button" class="btn btn-sm btn-outline-dark pull-right   pointer">
+        <i class="fa fa-close" aria-hidden="true"></i>
+    </button>
+
+    <form ng-if="showUrl" name="urlForm" class="my-3" novalidate>
+        <div class="col-12">
+            <div class="form-group" ng-class="{'has-error': (!urlSet.title && (urlForm.urlName.$touched || urlForm.$submitted)) }">
+                <label class="control-label" for="urlName">{{::('sharedT.title'|$translate)}} </label>
+                <input ng-model="urlSet.title" type="text" class="form-control mb-1" id="urlName" name="urlName">
+                <p ng-show="!urlSet.title && (urlForm.urlName.$touched || urlForm.$submitted)" class="help-block text-danger small">{{::('sharedT.titleIsRequired'|$translate)}}</p>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group mb-4" >
+                <label class="control-label" for="urlLink">{{::('sharedT.url'|$translate)}} </label>
+                <input ng-model="urlSet.url" type="text" class="form-control mb-1" id="urlLink" name="urlLink">
+                <p ng-show="!urlSet.url && (urlForm.urlLink.$touched || urlForm.$submitted)" class="help-block text-danger small">{{::('sharedT.urlIsRequired'|$translate)}}</p>
+                <p ng-show="urlSet.url && !isUrlValid(urlSet.url)" class="help-block text-danger small">{{::('sharedT.badUrl'|$translate)}}</p>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group pull-right mb-3" >
+                <input ng-if="tag" ng-model="urlSet.tag"  type="hidden" >
+                <button ng-disabled="!isValidForm()" class="btn btn-sm btn-secondary" type="submit" ng-click="submitForm()">{{::('sharedT.save'|$translate)}} </button>
+                <button class="btn btn-sm btn-outline-dark" type="button" ng-click="closeAll()">{{::('sharedT.cancel'|$translate)}} </button>
+            </div>
+        </div>
+    </form>
+    <div ng-show="showFile" id="holder" style="margin-top: 3rem;"><file-drop urls multiple="{{$attr.multiple}}" ng-model="binding" id="file-drop-{{attr.id}}" on-change="onChange()" on-upload="proxyOnUpload({ htmlFile: htmlFile, file: file, error: error})"></file-drop></div>
+    <div ng-if="listData().length" class="mt-3">
+        <p ng-repeat="att in listData() track by $index" >
+            <a target="_blank" ng-href="{{att.url}}">{{att.title}}</a>
+            <i ng-show="att.url"  class="fa fa-times-circle-o pointer" ng-click="remove(att)"></i>
+        </p>
+    </div>
+</div>

@@ -164,7 +164,7 @@
   
     <div class="col-12 mt-3">
         <user-message error="participationCtrl.error" msg="participationCtrl.msg" ></user-message>
-        <button ng-click="participationCtrl.editFormOrg=editFormOrg;participationCtrl.changeStep('checklist')" ng-disabled="false" type="button" class="btn btn-default">{{::('participationT.previous'|$translate)}}</button>
+        <button ng-click="participationCtrl.editFormOrg=editFormOrg;participationCtrl.changeStep('checklist')" ng-disabled="false" type="button" class="btn  btn-success">{{::('participationT.previous'|$translate)}}</button>
         <button ng-click="editFormOrg.$submitted=true;participationCtrl.editFormOrg=editFormOrg;participationCtrl.saveOrganization()" type="button" class="btn btn-success pull-right">{{::('participationT.next'|$translate)}}</button>
     </div>
 </section>

@@ -95,7 +95,7 @@
   "email": "Correo electrónico",
   "emailIsRequired": "El correo electrónico es un requisito.",
   "emailIsNotValid": "El correo electrónico no es una dirección válida",
-  "emailCCs": "Destinatarios en copia del correo electrónico",
+  "emailCCs": "Destinatario en copia del correo electrónico",
   "website": "Sitio de Internet",
   "websiteUrlNotCorrectFormatSuchAsHttpsWwwCbdInt": "el formato del url del sitio web no es correcto, debe ser como el del ejemplo: https://www.cbd.int ",
   "language": "Idioma",
