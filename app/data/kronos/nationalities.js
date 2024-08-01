@@ -671,7 +671,7 @@ export default [
         "shortName": "Georgia"
     },
     {
-        "code": "DEU",
+        "code": "D",
         "name": "Germany",
         "groups": [
             "nationality",
