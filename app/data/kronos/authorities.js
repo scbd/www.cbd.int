@@ -601,7 +601,7 @@ export default [
         "shortName": "Ethiopia"
     },
     {
-        "code": "EUR",
+        "code": "EUE",
         "name": "European Union",
         "groups": [
             "nationality",
