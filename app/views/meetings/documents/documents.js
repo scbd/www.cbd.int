@@ -599,7 +599,7 @@ export { default as template } from './documents.html';
 
             hardTab = hardTab || !!tab;
 
-            if(!tab && !_ctrl.currentTab)
+            if(!tab && !hardTab)
                 tab = _ctrl.tabs[0];
 
             if(!tab && _ctrl.currentTab)
