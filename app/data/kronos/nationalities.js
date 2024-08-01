@@ -601,16 +601,6 @@ export default [
         "shortName": "Ethiopia"
     },
     {
-        "code": "EUE",
-        "name": "European Union",
-        "groups": [
-            "nationality",
-            "authority"
-        ],
-        "isParty": false,
-        "shortName": "European Union"
-    },
-    {
         "code": "FJI",
         "name": "Fiji",
         "groups": [
