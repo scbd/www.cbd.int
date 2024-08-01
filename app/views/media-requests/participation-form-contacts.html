@@ -41,8 +41,8 @@
             <a ng-href="{{participationCtrl.head.email}}">{{participationCtrl.focalPoint.email}}</a>
           </td>
           <td >
-            <button ng-if="participationCtrl.hasFocalPoint() && !participationCtrl.config.sameAsHead" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-default btn-xs">{{::('participationT.edit'|$translate)}}   </button>
-            <button ng-if="!participationCtrl.hasFocalPoint() && !participationCtrl.config.sameAsHead" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-default btn-xs">{{::('participationT.addMain'|$translate)}}   </button>
+            <button ng-if="participationCtrl.hasFocalPoint() && !participationCtrl.config.sameAsHead" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-primary btn-sm">{{::('participationT.edit'|$translate)}}   </button>
+            <button ng-if="!participationCtrl.hasFocalPoint() && !participationCtrl.config.sameAsHead" ng-click="participationCtrl.activeParticipant=participationCtrl.focalPoint; participationCtrl.addContact=true"  type="button" class="btn btn-primary btn-sm">{{::('participationT.addMain'|$translate)}}   </button>
 
             <span class="checkbox" style="display:inline;" ng-show="participationCtrl.doc.head">
                <label>

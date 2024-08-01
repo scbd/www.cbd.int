@@ -6,6 +6,7 @@
     "node": ">=20.11"
   },
   "dependencies": {
+    "change-case": "5.4.4",
     "copy-to-clipboard": "^3.3.3",
     "dompurify": "^3.0.11",
     "ejs": "2.5.5",
@@ -13,13 +14,13 @@
     "express": "^4.16.3",
     "http-proxy": "1.13.3",
     "lru-cache": "^10.2.0",
+    "mime": "^4.0.4",
     "morgan": "^1.9.0",
     "prerender-node": "^3.2.4",
     "redis": "^2.8.0",
     "romans": "^2.0.15",
     "superagent": "^8.1.2",
-    "vue-multiselect": "^2.1.9",
-    "change-case": "5.4.4"
+    "vue-multiselect": "^2.1.9"
   },
   "peerDependencies": {
     "vue": "2.7.14"
