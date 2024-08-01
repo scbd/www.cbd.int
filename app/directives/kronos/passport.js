@@ -24,9 +24,10 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
       },
       link:function($scope){
         $scope.binding ={};
+        $scope.nationalities = nationalities;
+        $scope.authorities   = authorities;
 
         $http.get('/api/v2015/countries',{ params: {f:{code3:1,code:1} } }) .then(({data})=> $scope.countries = data) .then(loadBinding);
-        
 
         $i18n.set('participationT', participationT );
 
@@ -118,21 +119,11 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
           const { kronosId:contactId, firstName, lastName, dateOfBirth:dob, nationality:n, passportNumber:number } = $scope.participant
 
           const dateOfBirth      = dob? new Date(`${dob}\n`): undefined;
-          const nationality      =  getCode3(n);
-          const issuingAuthority = nationality;
 
-          if(!nationality)
-            $scope.binding = { ...$scope.binding, number,conferenceId, contactId, firstName, lastName, birthDate: dateOfBirth }
-          else
-            $scope.binding = { ...$scope.binding, number,nationality, issuingAuthority, conferenceId, contactId, firstName, lastName, birthDate: dateOfBirth }
-        }
-
-        function getCode3(c){
-          const country = $scope.countries?.find(({code})=> code === c);
-
-          return country?.code3
+          $scope.binding = { ...$scope.binding, number,conferenceId, contactId, firstName, lastName, birthDate: dateOfBirth }
 
         }
+
 
         function mapDataToFieldsKronos(data, imageSrc ){
           const { birthDate: bd, expirationDate: ed, } = data;
@@ -150,6 +141,7 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
 
           button.click()
         }
+
         $scope.previewImage = async (picture) =>{
           let objUrl = null;
           try {
@@ -163,6 +155,7 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
             if (objUrl) { URL.revokeObjectURL(objUrl); }
           }
         }
+
       }
 		};
 	}]);

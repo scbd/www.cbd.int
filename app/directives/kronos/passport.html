@@ -51,7 +51,7 @@
                     class="form-control"
                     ng-model="binding.nationality"
                     >
-                    <option ng-repeat="country in countries   track by country.code" ng-selected="!!(country.code===binding.nationality)" ng-value="country.code">{{country.title}}</option>
+                    <option ng-repeat="country in nationalities   track by country.code" ng-selected="!!(country.code===binding.nationality)" ng-value="country.code">{{country.name}}</option>
                   </select>
                   <p ng-show="!binding.nationality && (passportForm.nationality.$touched || passportForm.$submitted)" class="help-block text-danger small">{{::('participationT.nationalityIsRequired'|$translate)}}</p>
                 </div>
@@ -67,7 +67,7 @@
                     class="form-control"
                     ng-model="binding.issuingAuthority"
                     >
-                    <option ng-repeat="country in countries   track by country.code" ng-selected="!!(country.code===binding.issuingAuthority)" ng-value="country.code">{{country.title}}</option>
+                    <option ng-repeat="country in authorities   track by country.code" ng-selected="!!(country.code===binding.issuingAuthority)" ng-value="country.code">{{country.name}}</option>
                   </select>
                   <p ng-show="!binding.issuingAuthority && (passportForm.issuingAuthority.$touched || passportForm.$submitted)" class="help-block text-danger small">{{::('participationT.issuingAuthorityIsRequired'|$translate)}}</p>
                 </div>
