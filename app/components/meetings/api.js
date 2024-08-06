@@ -2,11 +2,7 @@
 import axios from 'axios'
 import { isFunction, isEmpty, cloneDeep } from 'lodash'
 
-let sitePrefixUrl = 'https://api.cbd.int';
-
-if(/\.cbd\.int$/i   .test(window.location.hostname)) sitePrefixUrl= 'https://api.cbd.int';
-if(/\.cbddev\.xyz$/i.test(window.location.hostname)) sitePrefixUrl= 'https://api.cbddev.xyz';
-if(/\localhost$/i   .test(window.location.hostname)) sitePrefixUrl= '/';
+let sitePrefixUrl = window.scbd.apiUrl;
 
 const cache          = new Map()
 const defaultOptions = { prefixUrl: sitePrefixUrl, timeout  : 30 * 1000 }

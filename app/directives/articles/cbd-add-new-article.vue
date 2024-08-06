@@ -21,10 +21,9 @@
         computed: {
             newArticleUrl : function(){
 
-                const domain = window.location.hostname.replace(/[^\.]+\./, '');
-				let baseUrl = 'https://www.cbd.int/management'
+				let baseUrl = 'https://oasis.cbd.int'
 
-				if(domain=='localhost' || domain == 'cbddev.xyz')
+				if(~window.scbd.apiUrl.indexOf('.cbddev.xyz'))
             		baseUrl = 'https://oasis.cbddev.xyz';
 
 				const queryString = [];
