@@ -3,11 +3,7 @@ import axios from 'axios'
 import { isFunction } from 'lodash'
 export { mapObjectId, isObjectId } from '../services/object-id';
 
-let sitePrefixUrl = 'https://api.cbd.int';
-
-if(/\.cbd\.int$/i   .test(window.location.hostname)) sitePrefixUrl= 'https://api.cbd.int';
-if(/\.cbddev\.xyz$/i.test(window.location.hostname)) sitePrefixUrl= 'https://api.cbddev.xyz';
-if(/\localhost$/i   .test(window.location.hostname)) sitePrefixUrl= '/';
+let sitePrefixUrl = window.scbd.apiUrl;
 
 const cache          = new Map()
 const defaultOptions = () => ({ 
