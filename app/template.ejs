@@ -24,6 +24,10 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
             var bootFn = boot.default || boot;
             bootFn(window, require, define);
         });
+        window.scbd = {
+            accountsUrl : '<%=accountsUrl %>',
+            apiUrl      : '<%=apiUrl %>'
+        }
     </script>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=BenchNine:300,400,600,900" media="all" />
