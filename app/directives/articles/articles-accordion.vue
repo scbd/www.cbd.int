@@ -1,7 +1,7 @@
 
 <template>
     <div class="articles-accordion">
-        <div class="row" v-if="showAddNew || showSort">
+        <div class="row" v-if="showAddNew">
             <div class="col-sm-12">
                 <cbd-add-new-article v-if="showAddNew && adminTags" :admin-tags="adminTags" target="_self"
                     class="btn btn-default pull-left mb-1">
@@ -75,7 +75,6 @@ export default {
         this.loadArticles();
         this.$auth.fetchUser().then(()=>{
             this.showEditButton = this.$auth.hasScope(['oasisArticleEditor', 'Administrator']);
-            console.log(this.showEditButton)
         })
 
     },
