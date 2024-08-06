@@ -25,6 +25,10 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
             var bootFn = boot.default || boot;
             bootFn(window, require, define);
         });
+        window.scbd = {
+            accountsUrl : '<%=accountsUrl %>',
+            apiUrl      : '<%=apiUrl %>'
+        }
     </script>
     <script src="https://www.recaptcha.net/recaptcha/api.js"></script>
     <title>Convention on Biological Diversity</title>
