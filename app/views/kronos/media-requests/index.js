@@ -466,8 +466,8 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
             const freeText                      = searchText || `${firstName || ''} ${lastName || ''}` || '';
             const limit                         = 25;
             const hasKronosLinksAndNoSearchText = !searchText && contactId;
-            const organizationIds               = organization.kronosIds;
-            const textQuery                     = organizationIds? { freeText, limit, organizationIds } : { freeText, limit }
+         
+            const textQuery                     = { freeText, limit };
             const query                         = hasKronosLinksAndNoSearchText? { contactId } : textQuery 
 
             var _kronos = participant.kronos = participant.kronos || {};

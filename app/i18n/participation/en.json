@@ -246,7 +246,7 @@
     "officialTypePassport":"Official",
     "diplomaticTypePassport":"Diplomatic",
     "unlpTypePassport":"United Nations Laissez-Passer",
-    "otherTypePassport":"Regular",
+    "otherTypePassport":"Other",
     "expirationDate":"Expiration date",
     "expirationDateIsRequired":"Expiration date is required",
     "gender": "Gender",
