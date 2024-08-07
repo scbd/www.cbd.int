@@ -329,8 +329,8 @@ import statusesList from './data/statuses.js';
 // production.
 // ====================================
 
-const solr = new SolrApi({prefixUrl:'https://api.cbddev.xyz/'});
-const thesaurus = new ThesaurusApi({prefixUrl:'https://api.cbddev.xyz/'});
+const solr = new SolrApi({prefixUrl:window.scbd.apiUrl});
+const thesaurus = new ThesaurusApi({prefixUrl:window.scbd.apiUrl});
 
 const baseIndexQuery = 'schema_s:decision-text';
 
