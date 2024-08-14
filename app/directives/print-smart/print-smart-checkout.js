@@ -33,6 +33,17 @@ import ng from 'angular'
 		        $scope.printableDocuments = printableDocuments;
 		        $scope.downloadableDocuments = downloadableDocuments;
                 $scope.displayText = displayText;
+                $scope.getButtonSize = getButtonSize;
+
+				//==============================================
+				//
+				//
+				//==============================================
+                function getButtonSize() {
+                    const isSmall = ['xs', 'sm'].includes($scope.deviceSize);
+        
+                    return { 'btn-xs': isSmall };
+                }
 
 				//==============================================
 				//
@@ -265,5 +276,6 @@ import ng from 'angular'
         function resolver(value) {
             return function() { return value; };
         }
+
 
 	}]);
