@@ -41,6 +41,7 @@ import ng from 'angular'
 				//==============================================
                 function getButtonSize() {
                     const isSmall = ['xs', 'sm'].includes($scope.deviceSize);
+                    const isSmall = ['xs', 'sm'].includes($scope.$root.deviceSize);
         
                     return { 'btn-xs': isSmall };
                 }
