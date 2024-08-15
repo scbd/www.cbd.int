@@ -22,13 +22,14 @@ import sharedT from '~/i18n/shared/index.js';
                 });                
                 
 	            element.on('change', function() {
-                    $scope.loading = true;
+                    
                     increaseChange();
 
                     var htmlFiles = element[0].files;
 
                     if(isAutoUpload())
                     {
+                        $scope.loading = true;
                         var files = [];
 
                         for(var i=0; i<htmlFiles.length; ++i) {
