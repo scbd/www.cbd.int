@@ -103,12 +103,15 @@ import 'angular-cache'
 
             }
 
-            function getFuture(){
+            function getFuture(passedFields){
+              const hasFields     = passedFields && _.isPlainObject(passedFields) && !_.isEmpty(passedFields);
+              const defaultFields = { StartDate:1,MajorEventIDs:1,Title:1,Venue:1,code:1,Description:1}
+              const fields        = passedFields? _.assign({}, defaultFields, passedFields) : defaultFields;
               var query = {
                             EndDate:{ $gt: { $date: new Date()  } },
                             institution:"CBD"
                           }
-              return $http.get('/api/v2016/conferences', {params : { q : query, f:{ StartDate:1,MajorEventIDs:1,Title:1,Venua:1,code:1,Description:1}, s: { StartDate: 1}, cache: true}, cache:httpCache}).then(
+              return $http.get('/api/v2016/conferences', {params : { q : query, f:fields, s: { StartDate: 1}, cache: true}, cache:httpCache}).then(
                 function(res){
 
                   return res.data
