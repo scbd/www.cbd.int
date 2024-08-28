@@ -211,9 +211,10 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
     }
 
     function initSteps(){
+      const { canEdit } = _ctrl?.conference?.apps?.mediaRequests || {};
 
-      if(_ctrl.doc.requested && !~user.roles.indexOf('SCBDMedia'))
-       return changeStep('finished',_ctrl.type)
+      if(_ctrl.doc.requested && !~user.roles.indexOf('SCBDMedia') && !canEdit)
+        return changeStep('finished',_ctrl.type)
 
       if(_ctrl.step==='checklist')
         initStepsChecklist()
@@ -244,7 +245,7 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
     }
 
     function initStepRequest(){
-      return conferenceService.getFuture()
+      return conferenceService.getFuture({ apps: 1 })
           .then(function(confrences){
             _ctrl.conferences=confrences
           }).then(function(){
@@ -256,6 +257,7 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
         if(_ctrl.conferences[i].code===_ctrl.conferenceCode){
           _ctrl.conferenceId   = _ctrl.conferences[i]._id
           _ctrl.doc.conference = _ctrl.conferences[i]._id
+          _ctrl.conference = _ctrl.conferences[i]
         }
     }
     function getConference(id){
@@ -618,7 +620,7 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
               console.error(err)
             })
       else
-        return $http.put('/api/v2018/kronos/participation-request/organizations/'+encodeURIComponent(_ctrl.organization._id),_ctrl.organization,{headers:{requestId:_ctrl.doc._id,conferenceCode:_ctrl.conferenceCode}})
+        return $http.put('/api/v2018/kronos/participation-request/organizations/'+encodeURIComponent(_ctrl.organization._id),cleanRecord(_ctrl.organization),{headers:{requestId:_ctrl.doc._id,conferenceCode:_ctrl.conferenceCode}})
             .then(function(res){
               _ctrl.doc.nominatingOrganization = _ctrl.organization._id
               _ctrl.doc.currentStep = 'contacts'
@@ -642,6 +644,14 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
             })
     }
 
+    function cleanRecord(record){
+      delete record.accredited;
+      delete record.kronosIds;
+      delete record.rejected;
+
+      return record
+    }
+
     function save(){
 
       if(!_ctrl.doc._id)
@@ -661,7 +671,7 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
               return false
     				})
       else
-        return $http.put('/api/v2018/kronos/participation-requests/'+encodeURIComponent(_ctrl.doc._id),_ctrl.doc)
+        return $http.put('/api/v2018/kronos/participation-requests/'+encodeURIComponent(_ctrl.doc._id),cleanRecord(_ctrl.doc))
             .then(function(res){
               resetForms()
               return true

@@ -180,6 +180,10 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
         }
 
         function save(){
+          delete $scope.binding.accredited
+          delete $scope.binding.kronosId
+          delete $scope.binding.rejected
+
           validateRequireUploads()
 
           if($scope.editForm.$invalid) {
