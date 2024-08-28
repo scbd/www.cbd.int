@@ -6,7 +6,7 @@ import '~/directives/kronos/user-messages'
 import '~/filters/term'
 import '~/directives/file'
 import participationT from '~/i18n/participation/index.js';
-
+import _ from  'lodash'
 import { camelCase } from 'change-case';
 export { default as template } from './participation-form.html'
 
@@ -645,11 +645,13 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
     }
 
     function cleanRecord(record){
-      delete record.accredited;
-      delete record.kronosIds;
-      delete record.rejected;
+      const clone = _.cloneDeep(record)
 
-      return record
+      delete clone.accredited;
+      delete clone.kronosIds;
+      delete clone.rejected;
+
+      return clone
     }
 
     function save(){
