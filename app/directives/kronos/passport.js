@@ -57,9 +57,23 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
               const blob = tBlob.slice(0, tBlob.size, type );
 
               
-              if(type.startsWith('image')) $scope.image = await toDataUrl(blob);
+              let imgSrc = type.startsWith('image')? await toDataUrl(blob) : blob;
+              if(type.startsWith('image')) { // try reduce image size
+                  const maxSize = 1100;
+                  let { width, height } = await getSize(imgSrc);
+              
+                  if (width > height) {
+                    width = Math.min(width, maxSize); height = 0;
+                  } else {
+                    height = Math.min(height, maxSize); width = 0;
+                  }
+              
+                  imgSrc = await resize(imgSrc, { width, height });
+                }
+              
+              if(type.startsWith('image')) $scope.image = imgSrc;
 
-              const body    =  await toFile(blob, passportObj.title, { type });
+              const body    =  await toFile(imgSrc, passportObj.title, { type });
               const headers = { 'Content-type':  body.type };
 
               if(type.startsWith('image')) $scope.binding.imageSrc = $scope.image;
@@ -159,4 +173,46 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
       }
 		};
 	}]);
+  async function resize (imgData, { width, height } = {}) {
+    if (!width && !height) return imgData;
+  
+    const img = await toImageElement(imgData);
+  
+    if (!height) height = img.height * width / img.width;
+    if (!width) width = img.width * height / img.height;
+  
+    const canvas = document.createElement('canvas');
+  
+    canvas.width = width; // destination canvas size
+    canvas.height = height;
+  
+    const ctx = canvas.getContext('2d');
+  
+    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height);
+  
+    const resisedImageData = canvas.toDataURL('image/jpeg', 0.85);
+  
+    return resisedImageData;
+  }
+  
+  async function getSize (imgData) {
+    const img = await toImageElement(imgData);
+  
+    const { width, height } = img;
+  
+    return { width, height };
+  }
 
+  async function toImageElement (imgData) {
+    const imgSrc = await toDataUrl(imgData);
+  
+    return new Promise((resolve, reject) => {
+      const img = document.createElement('img');
+  
+      img.onload = () => {
+        resolve(img);
+      };
+  
+      img.src = imgSrc;
+    });
+  }
