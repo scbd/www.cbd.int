@@ -313,8 +313,7 @@
               </div>
           </div>
         </div>
-
-        <div class="col-12" ng-if="isMedia('Print') || isMedia('Radio') || isMedia('Television') || isDesignation('Photographer')">
+        <div class="col-12" ng-if="isMedia('Print') || isMedia('Radio') || isMedia('Television') || isDesignation('Photographer') || isMedia('Photo/visual')">
           <label>{{::('participationT.mediaRequirements'|$translate)}} </label>
           <div class="panel panel-default">
               <div class="panel-body">
@@ -381,7 +380,7 @@
 
                   <div class="col-md-6" ng-show="isDesignation('Photographer') || isMedia('Photo/visual')">
                       <div class="form-group" ng-class="{'has-error': (!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && (  editForm.$submitted))}">
-                          <label class="control-label" for="tearSheetOrPhotoTwo">{{::('participationT.tearSheetOrPhotoTwo'|$translate)}}<i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="{{::('participationT.originalTearPop'|$translate)}}" help></i></label>
+                          <label class="control-label" for="tearSheetOrPhotoTwo">{{::('participationT.tearSheetOrPhotoTwo'|$translate)}} <i class="fa fa-info-circle" data-toggle="tooltip"   data-placement="top" data-title="{{::('participationT.originalTearPop'|$translate)}}" help></i></label>
                       </div>
 
                       <link-or-file danger="(!findAttachement(binding.attachment,'tearSheetOrPhotoTwo').url && editForm.$submitted )"  tag="'tearSheetOrPhotoTwo'" on-upload="onUpload({tag:'tearSheetOrPhotoTwo', container:binding},file,error)" ng-model="binding.attachment" id="tearSheetOrPhotoTwo"></link-or-file>
