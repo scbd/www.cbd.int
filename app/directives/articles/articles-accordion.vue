@@ -29,9 +29,7 @@
                         <cbd-add-new-article v-if="showEditButton" :id="article._id" target="_self" class="btn btn-default pull-right"></cbd-add-new-article>
                         <button class="btn btn-info pull-right btn-print" @click="print('cardItem_'+article._id, article)" 
                             style="cursor:pointer" v-if="showPrint"><i class="fa fa-print"></i> Print</button>
-                            vvv
-                        <cbd-article :article="article" :show-edit="true" :hide-cover-image="true"></cbd-article>
-                        ^^^
+                        <cbd-article :article="article" :show-edit="true" :hide-cover-image="true"></cbd-article>                        
                      </div>
                 </div>
             </div>
