@@ -97,7 +97,6 @@ export default {
                 const conference     = await this.api.getConference(conferenceCode);
                 this.printHeader     = conference.conference.customHeader||'';
 
-                console.log(this.printHeader)
             }
         }
     },

@@ -1,8 +1,8 @@
-<div class="row">
-  <div class="col-xs-12">
-    <h1>Accreditation requests</h1>
+<div class="debug row">
+  <div class="col-12">
+    <h1>{{::('participationT.accreditationRequests'|$translate)}}</h1>
   </div>
-  <div class="col-xs-12">
+  <div class="col-12">
 
       <input class="pull-right form-control" type="text" ng-model="search.$" style="width:auto" placeholder="Search"/>
     <h3>{{requestsCtrl.conference.Title|lstring}}</h3>
@@ -10,10 +10,10 @@
     
     <table class="table table-striped">
       <tr>
-        <th>Organization</th>
-        <th style="width:50px" class="text-nowrap text-center">Progress</th>
-        <th style="width:50px" class="text-nowrap text-center">Submited</th>
-        <th style="width:50px" class="text-nowrap text-center">Status</th>
+        <th>{{::('participationT.organization'|$translate)}}</th>
+        <th style="width:50px" class="text-nowrap text-center">{{::('participationT.progress'|$translate)}}</th>
+        <th style="width:50px" class="text-nowrap text-center">{{::('participationT.submitted'|$translate)}}</th>
+        <th style="width:50px" class="text-nowrap text-center">{{::('participationT.status'|$translate)}}</th>
         <th style="width:50px" class="text-nowrap text-right">
           <button class="btn btn-default btn-sm" type="button" ng-click="requestsCtrl.edit(null)"><i class="fa fa-plus fa-fw" aria-hidden="true"></i></button>
         </th>
@@ -21,7 +21,7 @@
       <tr ng-repeat="request in requestsCtrl.requests|filter:search">
         <td>
             {{request.organization.title}}
-            <span ng-if="!request.organization.title">N/A</span>
+            <span ng-if="!request.organization.title">{{::('participationT.nA'|$translate)}}</span>
           <em ng-if="request.organization.acronym">({{request.organization.acronym}})</em>
 
           <div><span ng-repeat="m in request.medium|orderBy"> <span class="label label-default">{{m}}</span> </span></div>
@@ -33,7 +33,7 @@
             <span ng-switch-when="organization">25%</span>
             <span ng-switch-when="contacts">50%</span>
             <span ng-switch-when="participants">75%</span>
-            <span ng-switch-when="finished">Submitted</span>
+            <span ng-switch-when="finished">{{::('participationT.submitted'|$translate)}}</span>
           </span>
         </td>
 
@@ -42,10 +42,10 @@
             <div class="text-muted">{{request.requested|date:'MMM dd HH:mm'}}</div>
         </td>
         <td class="text-nowrap text-center">
-            <span class="text-muted"          ng-if="request.currentStep!='finished'">Incomplete</span>
-            <span class="text-muted"          ng-if="request.currentStep=='finished' && !request.accredited && !request.rejected">Pending</span>
-            <span class="label label-success" ng-if="request.accredited">Accredited</span>
-            <span class="label label-danger"  ng-if="request.rejected">Rejected</span>
+            <span class="text-muted"          ng-if="request.currentStep!='finished'">{{::('participationT.incomplete'|$translate)}}</span>
+            <span class="text-muted"          ng-if="request.currentStep=='finished' && !request.accredited && !request.rejected">{{::('participationT.pending'|$translate)}}</span>
+            <span class="label label-success" ng-if="request.accredited">{{::('participationT.accredited'|$translate)}}</span>
+            <span class="label label-danger"  ng-if="request.rejected">{{::('participationT.rejected'|$translate)}}</span>
         </td>
         <td class="text-right">
           <button class="btn btn-default btn-sm" type="button" ng-click="requestsCtrl.edit(request)">
@@ -56,8 +56,8 @@
       </tr>
       <tr ng-if="requestsCtrl.requests.length===0">
         <td colspan="5">
-          No request.<br><br>
-          <button class="btn btn-primary" type="button" ng-click="requestsCtrl.edit(null)"><i class="fa fa-plus" aria-hidden="true"></i> Create a new request for accreditation</button>
+          {{::('participationT.noRequest'|$translate)}}<br><br>
+          <button class="btn btn-primary" type="button" ng-click="requestsCtrl.edit(null)"><i class="fa fa-plus" aria-hidden="true"></i> {{::('participationT.createANewRequestForAccreditation'|$translate)}}</button>
         </td>
       </tr>
     </table>

@@ -9,13 +9,15 @@ import * as meta from '~/services/meta'
 import 'css!cdn!npm/angular-toastr@1.3.0/dist/angular-toastr.css'
 import 'ngVue'
 import '~/providers/realm'
+import '~/services/translation-service'
 import './directives/bread-crumbs'
 import ScbdHeader from '~/components/nav/heade.vue'
 import ScbdFooter from '~/components/nav/footer.vue'
               
     loadHeaderFooter()
-    app.controller('TemplateController', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$location', 
-                                  function($rootScope,   $window,   $browser,   $document,   authentication,   $q,  toastr,  $templateCache,   $location) {
+    app.controller('TemplateController', ['$rootScope', '$window', '$browser', '$document', 'authentication', '$q','toastr','$templateCache', '$location','locale', 
+                                  function($rootScope,   $window,   $browser,   $document,   authentication,   $q,  toastr,  $templateCache,   $location, locale) {
+
 
         $templateCache.put("directives/toast/toast.html", toastTemplate);
 
@@ -24,7 +26,7 @@ import ScbdFooter from '~/components/nav/footer.vue'
         var basePath  = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
 
         // exports: 
-
+        this.dir = locale === 'ar' ? 'rtl' : 'ltr';
         this.viewOnly = $rootScope.viewOnly = !!$location.search().viewOnly;
 
         this.getEncodedReturnUrl = function() { return encodeURIComponent(getReturnUrl()); };
@@ -117,7 +119,7 @@ import ScbdFooter from '~/components/nav/footer.vue'
                     return;
                 
                 authentication.signOut();
-                $window.location.href = '/';
+             //   $window.location.href = '/';
             });
         }
 

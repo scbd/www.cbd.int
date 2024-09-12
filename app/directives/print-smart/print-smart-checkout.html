@@ -76,14 +76,15 @@
             margin-bottom: 120px;
         }
     </style>
-    <div class="btn-group">
+    <div ng-class="{ 'btn-group' : $root.deviceSize!='xs' }">
 
         <button id="checkout" ng-hide="disabled" type="button" class="btn btn-primary" ng-click="checkout()" data-toggle="popover" title="Document selection" data-content="Please select document(s) using the checkbox!">
-            <ng-pluralize class="hidden-xs"         count="documents().length||0" when="{'0' : 'No document selected', '1': 'Get the document »', 'other': 'Get the {{documents().length}} documents »'}"></ng-pluralize>
-            <ng-pluralize class="visible-xs-inline" count="documents().length||0" when="{'0' : 'No document',          '1': 'Get document',       'other': 'Get {{documents().length}} documents »'}"></ng-pluralize>
+            <i class="visible-xs-inline fa fa-arrow-circle-down"></i>
+            <ng-pluralize class="hidden-xs hidden-sm" count="documents().length||0" when="{'0' : 'No document selected', '1': 'Get the document »', 'other': 'Get the {{documents().length}} documents »'}"></ng-pluralize>
+            <ng-pluralize class="visible-sm-inline"   count="documents().length||0" when="{'0' : 'No document',          '1': 'Get document',       'other': 'Get {{documents().length}} documents »'}"></ng-pluralize>
         </button>
 
-        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">            
+        <button type="button" class="hidden-xs btn btn-primary dropdown-toggle" data-toggle="dropdown">            
         </button>
         <ul class="dropdown-menu dropdown-menu-right text-left" role="menu">
 

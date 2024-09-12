@@ -1,19 +1,20 @@
 import app from '~/app';
 import ng from 'angular';
 import fileDropTemplate from './file.html'; 
+import sharedT from '~/i18n/shared/index.js';
 
-	app.directive('type', ['$http', '$parse', function($http, $parse) {
+	app.directive('type', ['$http', '$parse','translationService', function($http, $parse, $i18n) {
 	    return {
 	        restrict: 'A',
 	        replace: true,
             require: '?ngModel', 
 	        link: function($scope, element, attr, ctrl) {
-
+                $i18n.set('sharedT', sharedT );
                 if(element.prop("tagName")!=="INPUT") return;
                 if(attr.type              !=="file")  return;
 
                 if(!ctrl) return;
-
+                $scope.removeError = removeError;
                 var onUploadHandler = attr.onUpload && $parse(attr.onUpload);
 
                 $scope.$on('$destroy', function(){
@@ -21,13 +22,14 @@ import fileDropTemplate from './file.html';
                 });                
                 
 	            element.on('change', function() {
-
+                    
                     increaseChange();
 
                     var htmlFiles = element[0].files;
 
                     if(isAutoUpload())
                     {
+                        $scope.loading = true;
                         var files = [];
 
                         for(var i=0; i<htmlFiles.length; ++i) {
@@ -48,18 +50,20 @@ import fileDropTemplate from './file.html';
                                 headers: {'Content-Type': undefined}
 
                             }).then(function(res){
-
                                 files = files.concat([res.data]);
 
                                 setViewValue(files);
 
                                 onUpload(htmlFile, res.data, null);
 
+                                
                                 return res.data;
 
                             }).catch(function(err){
 
                                 err = err.data || err;
+
+                                $scope.hasError=translateError(err);
 
                                 files = files.concat([{ error: err }]);
 
@@ -67,8 +71,7 @@ import fileDropTemplate from './file.html';
 
                                 onUpload(htmlFile, null, err);
 
-                                res.data;
-                            });
+                            }).finally(()=>$scope.loading = false);
                         }
                     }
                     else {
@@ -79,6 +82,18 @@ import fileDropTemplate from './file.html';
                         reset();
                 });
 
+                function translateError(err){
+                    if(!err) return 
+
+                    if(!_.isPlainObject(err) || err.status == 502) err = { code : "serviceUnavailable", message: "Service is unavailable", statusCode: 502};
+
+                    const title = $i18n.get(err.code, 'sharedT').includes('sharedT')? err.code : $i18n.get(err.code, 'sharedT');
+                    const body = $i18n.get(err.code, 'sharedT').includes('sharedT')? err.message : '';
+
+                    err.msg = { title, body};
+
+                    return err
+                }
                 function isMutiple() { 
                     return element.attr('multiple')!==undefined; 
                 }
@@ -88,7 +103,6 @@ import fileDropTemplate from './file.html';
                 }  
                 
                 function onUpload(htmlFile, file, err) { 
-
                     if(!onUploadHandler)
                         return;
 
@@ -114,6 +128,10 @@ import fileDropTemplate from './file.html';
                 function increaseChange() {
                     element.data('changeCount', (element.data('changeCount')||0) + 1);
                 }
+
+                function removeError(){
+                    $scope.hasError = false;
+                }
 	        }
 	    };
 	}]);
@@ -128,6 +146,7 @@ import fileDropTemplate from './file.html';
                 autoReset: '<autoReset',
                 caption: '@caption',
                 onUpload : "&onUpload",
+                onChange : "&onChange",
                 danger : "=?"
             },
 	        link: function($scope, form, attr, ngModelCtrl) {
@@ -138,18 +157,21 @@ import fileDropTemplate from './file.html';
                 if(attr.accept  !==undefined) inputFile.attr('accept',   attr.accept);
                 if(attr.encrypt !==undefined) inputFile.attr('encrypt',   "");
                 if(attr.onUpload!==undefined) inputFile.attr('on-upload', "proxyOnUpload({ htmlFile: htmlFile, file: file, error: error})");
-                
+
                 inputFile = $compile(inputFile.parent().html())($scope);
 
                 form.find('label').append(inputFile);
 
                 //////////////////////
-
                 $scope.isMutiple  = isMutiple;
                 $scope.isDisabled = isDisabled;
                 $scope.isEncrypted = function() { return attr.encrypt !== undefined };
                 $scope.proxyOnUpload = $scope.onUpload;
-                $scope.proxyOnChange = function() { ngModelCtrl.$setViewValue($scope.files); };
+                $scope.proxyOnChange = function() { 
+                    ngModelCtrl.$setViewValue($scope.files); 
+
+                    if($scope.onChange && !$scope.hasError) $scope.onChange();
+                };
                 
                 var div = document.createElement('div');
 

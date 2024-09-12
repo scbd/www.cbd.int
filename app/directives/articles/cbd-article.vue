@@ -69,19 +69,13 @@ export default {
     mounted() {
         if(!this.article)
             this.loadArticle();
+        else
+            initPreProcessors();
     },
     watch:{
         article: function() {
 
-            this.$nextTick(()=>{
-                const { container } = this.$refs;
-
-                if(!container) return;
-
-                preProcessAnchors.call(this);
-                preProcessOEmbed.call(this);
-            });
-
+            initPreProcessors();
             this.$nextTick(jumpToAnchor);
         }
     },
@@ -122,6 +116,18 @@ export default {
                 this.loading = false;
             }
         },
+
+        initPreProcessors(){
+            this.$nextTick(()=>{
+                const { container } = this.$refs;                
+                if(!container) return;
+
+                preProcessAnchors.call(this);
+                preProcessOEmbed.call(this);
+            });
+
+        }
+        }
     }
 }
 
@@ -132,7 +138,7 @@ function preProcessOEmbed() {
     container.querySelectorAll( 'oembed[url]' ).forEach(async function(element) {
         var url = element.attributes.url.value;
         var params = {
-            url : encodeURIComponent(url),
+            url
         }
 
         const response = await axios.get('/api/v2020/oembed', {params:params});                    

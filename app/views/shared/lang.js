@@ -1,12 +1,12 @@
 import app from '~/app';
-import langT from '~/app-text/views/shared/lang.json';
-import '~/services/translation-service'
+import '~/providers/locale';
+import sharedT from '~/i18n/shared/index.js';
 
 export { default as template } from './lang.html';
 export default ["$scope", "$location", "locale","$timeout", "$window", "$routeParams", "$cookies", 'translationService',
 		function ($scope, $location, locale, $timeout, $window, $routeParams, $cookies, translationService){
 
-				translationService.set('langT', langT);
+				translationService.set('sharedT', sharedT);
 				
 			    let lang = 'en';
 				if($routeParams.langCode)
@@ -23,7 +23,7 @@ export default ["$scope", "$location", "locale","$timeout", "$window", "$routePa
 					// if(!langRegex.test(returnUrl)){
 					// 	returnUrl = '/' + lang + '/' + returnUrl.replace(/^\//, ''); 
 					// }
-					$window.location.href = returnUrl;
+//					$window.location.href = returnUrl;
 
 				}, 1000);
 		}];

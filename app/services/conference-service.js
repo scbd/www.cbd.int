@@ -103,12 +103,15 @@ import 'angular-cache'
 
             }
 
-            function getFuture(){
+            function getFuture(passedFields){
+              const hasFields     = passedFields && _.isPlainObject(passedFields) && !_.isEmpty(passedFields);
+              const defaultFields = { StartDate:1,MajorEventIDs:1,Title:1,Venue:1,code:1,Description:1}
+              const fields        = passedFields? _.assign({}, defaultFields, passedFields) : defaultFields;
               var query = {
                             EndDate:{ $gt: { $date: new Date()  } },
                             institution:"CBD"
                           }
-              return $http.get('/api/v2016/conferences', {params : { q : query, f:{ StartDate:1,MajorEventIDs:1,Title:1,Venua:1,code:1,Description:1}, s: { StartDate: 1}, cache: true}, cache:httpCache}).then(
+              return $http.get('/api/v2016/conferences', {params : { q : query, f:fields, s: { StartDate: 1}, cache: true}, cache:httpCache}).then(
                 function(res){
 
                   return res.data
@@ -136,7 +139,7 @@ import 'angular-cache'
               var query = {
                             _id:{$in:oidArray}
                           }
-              return  $http.get('/api/v2016/meetings', { cache:httpCache, params: { q : query,f : { EVT_CD:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, printSmart:1, agenda:1 }, cache: true  } })
+              return  $http.get('/api/v2016/meetings', { cache:httpCache, params: { q : query,f : { EVT_CD:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, printSmart:1, agenda:1, titleShort:1 }, cache: true  } })
               .then(function(res){
                   return res.data.map(normalizeMeeting);
                 }

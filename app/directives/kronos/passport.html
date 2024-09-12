@@ -1,0 +1,160 @@
+
+<form  name="passportForm"  novalidate>
+<style>
+  .debug {
+    background-color: #f4c0d0;
+    border: 1px solid red;
+    /* border-radius: 0.25rem;
+    padding: 0.75rem 1.25rem;
+    margin: 0 0 1rem 0; */
+  }
+  .passport-form{
+    padding: rem;
+  }
+</style>
+  <div class="col-12 mb-3 passport-form ">
+    <label>{{::('participationT.passport'|$translate)}}</label>
+
+    <div class="panel panel-danger">
+        <div class="panel-body p-3">
+          <div class="row" >
+            <div class="col-6 d-flex align-items-center justify-content-center" ng-click="previewImage(image)">
+                <img class="img-fluid " ng-show="image" ng-src="{{image}}" >
+            
+                <i ng-show="!image" class="fa fa-spinner fa-spin fa-4x"></i>
+            </div>
+
+            <div class="col-6 ">
+              <div class="row pt-5">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="control-label" for="title">{{::('participationT.firstName'|$translate)}}</label>
+                  <input required type="text" class="form-control" ng-model="binding.firstName" id="firstName" ng-change="onFirstNameChange()">
+                  <p ng-show="!binding.firstName && (passportForm.firstName.$touched || passportForm.$submitted)" class="help-block text-danger small">{{::('participationT.firstNameIsRequired'|$translate)}}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group" ng-class="{'has-error': (!binding.lastName && (passportForm.lastName.$touched || passportForm.$submitted)) }">
+                  <label class="control-label" for="lastName">{{::('participationT.lastName'|$translate)}}</label>
+                  <input required type="text" class="form-control" ng-model="binding.lastName" id="lastName" name="lastName" ng-change="onLastNameChange()">
+                  <p ng-show="!binding.lastName && (passportForm.lastName.$touched || passportForm.$submitted)" class="help-block text-danger small">{{::('participationT.aLastNameIsRequired'|$translate)}}</p>
+                </div>
+              </div>
+
+              <div class="col-md-6" >
+                <div class="form-group" ng-class="{'has-error': (!binding.nationality && (passportForm.nationality.$touched || passportForm.$submitted)) }">
+                  <label class="control-label" for="nationality">{{::('participationT.nationality'|$translate)}}</label>
+                  <select 
+                  
+                    id="nationality"
+                    name="nationality"
+                    class="form-control"
+                    ng-model="binding.nationality"
+                    >
+                    <option ng-repeat="country in nationalities   track by country.code" ng-selected="!!(country.code===binding.nationality)" ng-value="country.code">{{country.name}}</option>
+                  </select>
+                  <p ng-show="!binding.nationality && (passportForm.nationality.$touched || passportForm.$submitted)" class="help-block text-danger small">{{::('participationT.nationalityIsRequired'|$translate)}}</p>
+                </div>
+              </div>
+
+              <div class="col-md-6" >
+                <div class="form-group" ng-class="{'has-error': (!binding.issuingAuthority && (passportForm.issuingAuthority.$touched || passportForm.$submitted)) }">
+                  <label class="control-label" for="issuingAuthority">{{::('participationT.issuingAuthority'|$translate)}}</label>
+                  <select 
+              
+                    id="issuingAuthority"
+                    name="issuingAuthority"
+                    class="form-control"
+                    ng-model="binding.issuingAuthority"
+                    >
+                    <option ng-repeat="country in authorities   track by country.code" ng-selected="!!(country.code===binding.issuingAuthority)" ng-value="country.code">{{country.name}}</option>
+                  </select>
+                  <p ng-show="!binding.issuingAuthority && (passportForm.issuingAuthority.$touched || passportForm.$submitted)" class="help-block text-danger small">{{::('participationT.issuingAuthorityIsRequired'|$translate)}}</p>
+                </div>
+              </div>
+
+              <div class="col-md-6" >
+                <div class="form-group" ng-class="{'has-error':!binding.number && (passportForm.number.$touched || passportForm.$submitted)}" >
+                  <label class="control-label" for="passportNumber">{{::('participationT.passportNumber'|$translate)}} </label>
+                  <input required ng-model="binding.number" type="input" class="form-control" name="passportNumber" id="passportNumber" />
+                  <p ng-show="!binding.number && (passportForm.number.$touched || passportForm.$submitted)" class="text-danger small">{{::('participationT.passportNumberIsRequired'|$translate)}}</p>
+                </div>
+              </div>
+
+              <div class="col-md-6" >
+                <div class="form-group" ng-class="{'has-error': (!binding.gender && (passportForm.gender.$touched || passportForm.$submitted)) }">
+                  <label class="control-label" for="gender">{{::('participationT.gender'|$translate)}}</label>
+                  <select 
+          
+                    id="gender"
+                    name="gender"
+                    class="form-control"
+                    ng-model="binding.gender"
+                    >
+                    <option  ng-selected="!!('female'===binding.gender)" ng-value="'female'">{{::('participationT.female'|$translate)}}</option>
+                    <option  ng-selected="!!('male'===binding.gender)" ng-value="'male'">{{::('participationT.male'|$translate)}}</option>
+                  </select>
+                  <p ng-show="!binding.gender && (passportForm.gender.$touched || passportForm.$submitted)" class="help-block text-danger small">{{::('participationT.genderIsRequired'|$translate)}}</p>
+                </div>
+              </div>
+
+              <div class="col-md-6" >
+                <div class="form-group" ng-class="{'has-error': (!binding.type && (passportForm.type.$touched || passportForm.$submitted)) }">
+                  <label class="control-label" for="type">{{::('participationT.typePassport'|$translate)}}</label>
+                  <select 
+                  
+                    id="type"
+                    name="type"
+                    class="form-control"
+                    ng-model="binding.type"
+                    >
+
+
+                    <option  ng-selected="!!('regular'===binding.type)" ng-value="'regular'">{{::('participationT.regularTypePassport'|$translate)}}</option>
+                    <option  ng-selected="!!('official'===binding.type)" ng-value="'official'">{{::('participationT.officialTypePassport'|$translate)}}</option>
+                    <option  ng-selected="!!('diplomatic'===binding.type)" ng-value="'diplomatic'">{{::('participationT.diplomaticTypePassport'|$translate)}}</option>
+                    <option  ng-selected="!!('unlp'===binding.type)" ng-value="'unlp'">{{::('participationT.unlpTypePassport'|$translate)}}</option>
+                    <option  ng-selected="!!('other'===binding.type)" ng-value="'other'">{{::('participationT.otherTypePassport'|$translate)}}</option>
+                  </select>
+                  <p ng-show="!binding.type && (passportForm.type.$touched || passportForm.$submitted)" class="help-block text-danger small">{{::('participationT.typePassportIsRequired'|$translate)}}</p>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="form-group" ng-class="{'has-error': (!binding.birthDate && (passportForm.birthDate.$touched || passportForm.$submitted)) }">
+                  <label class="control-label" for="birthDate">{{::('participationT.dateOfBirth'|$translate)}}</label>
+                  <input required ng-pattern="dobRegex" type="date" class="form-control" ng-model="binding.birthDate" id="birthDate" name="birthDate"  >
+                  <p ng-show="!binding.birthDate && (passportForm.birthDate.$touched || passportForm.$submitted)" class="help-block text-danger small">{{::('participationT.dateOfBirthIsRequired'|$translate)}}</p>
+                  <p ng-show="passportForm.birthDate.$error.pattern && (passportForm.birthDate.$touched || passportForm.$submitted)" class="help-block text-danger small">{{::('participationT.dateOfBirthIsNotValidYyyyMmDd'|$translate)}}</p>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group" ng-class="{'has-error': (!binding.expirationDate && (passportForm.expirationDate.$touched || passportForm.$submitted)) }">
+                  <label class="control-label" for="expirationDate">{{::('participationT.expirationDate'|$translate)}}</label>
+                  <input required type="date" class="form-control" ng-model="binding.expirationDate" id="expirationDate" name="expirationDate">
+                  <p ng-show="!binding.expirationDate && (passportForm.expirationDate.$touched || passportForm.$submitted)" class="help-block text-danger small">{{::('participationT.expirationDateIsRequired'|$translate)}}</p>
+                </div>
+              </div>
+
+            </div>
+            </div>
+            <div class="col-12">
+
+
+              <div ng-if="!valid && image && passportForm.$invalid" class="alert alert-danger mx-3">
+                There was a difficulty to read the passport. Please fill the form manually.
+              </div>
+              <div class="pull-right" >
+          
+                <button ng-click="show=false;" ng-disabled="false" type="button" class="btn btn-outline-dark">{{::('participationT.cancel'|$translate)}}</button>
+                <button  ng-click="save()" type="submit" class="btn btn-primary" id="save">{{::('participationT.save'|$translate)}}</button>
+              </div>
+          </div>
+        </div>
+    </div>
+ 
+
+  </div>
+
+</form>

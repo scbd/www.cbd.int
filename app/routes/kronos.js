@@ -13,5 +13,6 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     $routeProvider
     .when('/',                     { ...mapView(indexView),          controllerAs: 'indexCtrl',         resolve: { user : currentUser() }  })
     .when('/media-requests',       { ...mapView(angularViewWrapper), controllerAs: 'mediaRequestCtrl',  resolve: { component:()=>import('~/views/kronos/media-requests/index'),       user : securize(["Administrator","Kronos-FullAccess","SCBDMedia"]) }  })
+    .when('/media-requests/:code', { ...mapView(angularViewWrapper), controllerAs: 'mediaRequestCtrl',  resolve: { component:()=>import('~/views/kronos/media-requests/index'),       user : securize(["Administrator","Kronos-FullAccess","SCBDMedia"]) }  })
     .otherwise({redirectTo: '/404'});
 }]);

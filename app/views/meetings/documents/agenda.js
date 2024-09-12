@@ -65,7 +65,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         $scope.route       = { params : $route.current.params, query: $location.search() }
         $scope.vueOptions  = {
             components: { AgendaItem, ScheduleTime },
-            i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
+            // i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
         };
 
         function registerComponents(components) {

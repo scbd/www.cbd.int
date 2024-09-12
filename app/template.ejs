@@ -9,7 +9,7 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
         <script>console.warn('Google Analytics key not set.');</script>
     <% } %>
     <script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments)};gtag("js", new Date());gtag("set", "developer_id.dMDhkMT", true);gtag("config", "<%=googleAnalyticsCode%>", {"groups":"default","page_placeholder":"PLACEHOLDER_page_location","allow_ad_personalization_signals":false});</script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es2019%2Ces2015%2Ces2016%2Ces2017%2Ces2018%2Ces5%2Ces6%2Ces7%2CHTMLCanvasElement.prototype.toBlob%2Cconsole"></script>
+    <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?version=4.8.0&features=es2019%2Ces2015%2Ces2016%2Ces2017%2Ces2018%2Ces5%2Ces6%2Ces7%2CHTMLCanvasElement.prototype.toBlob%2Cconsole"></script>
     <script src="<%=`${cdnUrl}combine/${[
         'npm/jquery@3.4.1/dist/jquery.slim.min.js'
         ].concat(baseLibs).concat([
@@ -167,14 +167,17 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
     </style> 
     <link rel="stylesheet" href="app/css/article-cover-image.css">   
 </head>
-<body class="ltr bootstrap4 phoenix" ng-class="::{ 'mobile-app' : templateCtrl.viewOnly }">
+<body class="ltr bootstrap4 phoenix" ng-class="::{ 'mobile-app' : templateCtrl.viewOnly }" dir="{{::templateCtrl.dir}}">
  <div id="page-wrapper">
       <div id="page">
         <!-- HEADER -->
           <div style="display:<%=siteAlert ? 'block' : 'none'%>" class="alert alert-danger mb-0"><%=siteAlert%></div>
           <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeaderFixed" ></vue-component>                  
           <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeader" ></vue-component> -->
-          <vue-component ng-if="!templateCtrl.viewOnly" name="ScbdHeader" ></vue-component>
+          <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="ScbdHeader" ></vue-component> -->
+          <div ng-if="!templateCtrl.viewOnly">
+            <scbd-header ng-vue></scbd-header>
+          </div>
           <!-- CONTENT -->
           <div class="page-content">
               <div id="conferenceHeader"></div>
@@ -186,7 +189,10 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
           </div>
           <!-- FOOTER -->
           <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="PageFooter" ></vue-component> -->
-          <vue-component ng-if="!templateCtrl.viewOnly" name="ScbdFooter" ></vue-component>
+          <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="ScbdFooter" ></vue-component> -->
+          <div ng-if="!templateCtrl.viewOnly">
+            <scbd-footer ng-vue></scbd-footer>
+        </div>
       </div>
   </div>
 

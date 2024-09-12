@@ -2,7 +2,7 @@
     <span>
         <button type="button" class="btn btn-success" :class="{'btn-xs':size=='xs'}"  @click="showDialog = !showDialog" title="Upload statement">
             <i class="fa fa-upload"></i>
-            Statement
+            <span class="hidden-xs">Statement</span>
         </button>
         <!-- <upload-dialog :show.sync="showDialog" :route="route" @notify="$emit('notify')" /> -->
     </span>

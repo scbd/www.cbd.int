@@ -11,6 +11,6 @@ import 'css!https://cdn.cbd.int/vue-multiselect@2.1.6/dist/vue-multiselect.min.c
         $scope.route       = { params : $route.current.params }
         $scope.vueOptions  = {
           components: { sessionEdit: sessionEdit },
-          i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
+          // i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
         };
     }];
