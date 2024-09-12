@@ -11,6 +11,7 @@
                     class="btn btn-default"></cbd-add-new-article>
                 <br/>    
             </div>
+            {{ contentHtml }}
             <div v-if="article" ref="container" v-html="contentHtml" class="ck-content"></div>
             <div v-if="!article" class="ck-content">No information is available for this section at the moment.</div>
         </div>
@@ -69,6 +70,17 @@ export default {
     mounted() {
         if(!this.article)
             this.loadArticle();
+        else {
+            this.$nextTick(()=>{
+                const { container } = this.$refs;
+console.log('container', container)
+                if(!container) return;
+
+                preProcessAnchors.call(this);
+                preProcessOEmbed.call(this);
+            });
+
+        }
     },
     watch:{
         article: function() {

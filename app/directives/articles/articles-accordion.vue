@@ -29,7 +29,9 @@
                         <cbd-add-new-article v-if="showEditButton" :id="article._id" target="_self" class="btn btn-default pull-right"></cbd-add-new-article>
                         <button class="btn btn-info pull-right btn-print" @click="print('cardItem_'+article._id, article)" 
                             style="cursor:pointer" v-if="showPrint"><i class="fa fa-print"></i> Print</button>
-                        <div v-html="sanitizeHtml($options.filters.lstring(article.content, $locale))" class="ck-content"></div>
+                            vvv
+                        <cbd-article :article="article" :show-edit="true" :hide-cover-image="true"></cbd-article>
+                        ^^^
                      </div>
                 </div>
             </div>
@@ -42,6 +44,7 @@
 import moment from 'moment'
 import 'css!cdn!npm/@scbd/ckeditor5-build-inline-full@35.0.0/build/content-style.css';
 import ArticlesApi from '../../api/articles';
+import cbdArticle from './cbd-article.vue'
 import cbdAddNewArticle from './cbd-add-new-article.vue';
 import { format as formatDate } from '~/components/meetings/datetime';
 import {lstring } from '~/filters/vue-filters'
@@ -51,7 +54,7 @@ import { sanitizeHtml } from '~/services/html';
 
 export default {
     name: 'articlesAccordion',
-    components : { cbdAddNewArticle },
+    components : { cbdAddNewArticle, cbdArticle },
     props: {
         query: { type: Object, required: true },
         showAddNew : { type: Boolean, required: false, default:false },
