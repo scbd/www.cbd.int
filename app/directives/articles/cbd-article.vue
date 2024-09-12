@@ -70,12 +70,12 @@ export default {
         if(!this.article)
             this.loadArticle();
         else
-            initPreProcessors();
+            this.initPreProcessors();
     },
     watch:{
         article: function() {
 
-            initPreProcessors();
+            this.initPreProcessors();
             this.$nextTick(jumpToAnchor);
         }
     },
@@ -126,7 +126,6 @@ export default {
                 preProcessOEmbed.call(this);
             });
 
-        }
         }
     }
 }
