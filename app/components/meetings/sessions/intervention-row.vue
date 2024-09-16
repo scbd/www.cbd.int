@@ -35,9 +35,10 @@
           </span>
         </div>
 
+        {{ showPreviewAsButton }}
 
         <slot>
-            <FilesPreview v-if="isPending(intervention.status)" :files="intervention.files" />
+            <FilesPreview v-if="isPending(intervention.status)" :files="intervention.files"/>
         </slot>
 
         <div>
@@ -49,7 +50,7 @@
     </td>
 
     <td class="files-col" style="text-align: center; vertical-align: middle;">
-        <FilesView :files="intervention.files"/>
+        <FilesView :files="intervention.files" :show-preview-as-button="showPreviewAsButton"/>
     </td>
 
     <td class="controls-col" >
@@ -78,6 +79,7 @@ export default {
                   showTime    : { type: Boolean, required: false, default: true },
                   publicView  : { type: Boolean, required: false, default: false },
                   timezone    : { type: String,  required: false, default: 'local' },
+                  showPreviewAsButton : { type: Boolean, default: false }
               },
   methods   : { getOrgType, isPending },
   filters   : { formatDate, setTimezone },

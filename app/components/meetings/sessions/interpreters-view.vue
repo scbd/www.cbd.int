@@ -28,7 +28,7 @@
 
     <div class="card mb-3" v-if="interventions.length">
       <Session>
-        <InterventionRow class="interpreter-view" :class="{ 'table-secondary': intervention.files[0].language!=='en' }" v-for="(intervention, index) in interventions" v-bind="{intervention, index}" v-bind:key="intervention._id"/>
+        <InterventionRow class="interpreter-view" :class="{ 'table-secondary': intervention.files[0].language!=='en' }" v-for="(intervention, index) in interventions" v-bind="{intervention, index}" v-bind:key="intervention._id" :show-preview-as-button="true" />
       </Session>
     </div>
   
