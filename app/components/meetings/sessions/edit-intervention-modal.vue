@@ -105,6 +105,31 @@
                                 </div>
                             </div>
 
+                            <hr>
+
+                            <div :v-if="meta" class="form-group row">
+                                <label for="CreatedBy" class="col-sm-3 col-form-label">Created by </label>
+                                <div class="col-sm-9">
+                                    <a 
+                                        v-if="isUserKronos(this.meta.createdBy.id)"
+                                        :href="`https://cbd.kronos-events.net/organizations/000000000000000000000000/contacts/${this.meta.createdBy.id}`"
+                                        target="_blank">{{ this.meta.createdBy.name }}</a>
+                                    <span v-else>{{ this.meta.createdBy.name }}</span> 
+                                    on {{ this.meta.createdOn }}
+                                </div>
+
+                                <label for="UpdatedBy" class="col-sm-3 col-form-label">Updated by </label>
+                                <div class="col-sm-9">
+                                    <a 
+                                        v-if="isUserKronos(this.meta.updatedBy.id)"
+                                        :href="`https://cbd.kronos-events.net/organizations/000000000000000000000000/contacts/${this.meta.updatedBy.id}`"
+                                        target="_blank">{{ this.meta.updatedBy.name }}</a>
+                                    <span v-else>{{ this.meta.updatedBy.name }}</span> 
+                                    on {{ this.meta.updatedOn }}
+                                </div>
+                            </div> 
+
+
                             <div class="alert alert-warning" role="alert" v-if="error">
                                 <span>{{error.message||'Unknown error'}}</span>
                             </div> 
