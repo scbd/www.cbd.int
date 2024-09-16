@@ -5,7 +5,7 @@
     <div class="document-files">
         <div v-for=" {language, text, contentType, url, public: isPublic, allowPublic, _id} in files" v-bind:key="_id" >
           <span class="d-none d-md-inline">
-            <a @click="showPreview(text, language)" :style="{ visibility: (text?'visible':'hidden') }" :class="{ 'btn': showPreviewAsButton, 'btn-lg': showPreviewAsButton, 'btn-outline-dark': showPreviewAsButton }">
+            <a @click="showPreview(text, language)" :style="{ visibility: (text?'visible':'hidden') }" :class="{ 'btn btn-lg btn-outline-dark': showPreviewAsButton}">
               <i :style="{ visibility: (text?'visible':'hidden') }" class="fa fa-file-text-o" aria-hidden="true"></i>
             </a>
             <a target="_blank" :href="url">
