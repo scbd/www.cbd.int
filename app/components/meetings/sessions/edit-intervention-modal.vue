@@ -96,14 +96,39 @@
                                         <div class="form-check">
                                             <input :disabled="!!progress || !file.allowPublic"  type="checkbox" class="form-check-input" id="public" v-model="file.public" >
                                             <label class="form-check-label" for="public">Visible on website</label>
-                                        </div>                                        
+                                        </div>
                                         <div class="form-check">
                                             <input :disabled="!!progress || !!file._id"  type="checkbox" class="form-check-input" id="allowPublic" v-model="file.allowPublic" >
                                             <label class="form-check-label" for="allowPublic">Participant allowed publication</label>
-                                        </div>                                        
+                                        </div>
                                     </div>
                                 </div>
-                            </div>  
+                            </div>
+
+                            <hr>
+
+                            <div :v-if="meta" class="form-group row">
+                                <label for="CreatedBy" class="col-sm-3 col-form-label">Created by </label>
+                                <div class="col-sm-9">
+                                    <a 
+                                        v-if="isUserKronos(this.meta.createdBy.id)"
+                                        :href="`https://cbd.kronos-events.net/organizations/000000000000000000000000/contacts/${this.meta.createdBy.id}`"
+                                        target="_blank">{{ this.meta.createdBy.name }}</a>
+                                    <span v-else>{{ this.meta.createdBy.name }}</span> 
+                                    on {{ this.meta.createdOn }}
+                                </div>
+
+                                <label for="UpdatedBy" class="col-sm-3 col-form-label">Updated by </label>
+                                <div class="col-sm-9">
+                                    <a 
+                                        v-if="isUserKronos(this.meta.updatedBy.id)"
+                                        :href="`https://cbd.kronos-events.net/organizations/000000000000000000000000/contacts/${this.meta.updatedBy.id}`"
+                                        target="_blank">{{ this.meta.updatedBy.name }}</a>
+                                    <span v-else>{{ this.meta.updatedBy.name }}</span> 
+                                    on {{ this.meta.updatedOn }}
+                                </div>
+                            </div> 
+
 
                             <div class="alert alert-warning" role="alert" v-if="error">
                                 <span>{{error.message||'Unknown error'}}</span>
@@ -154,6 +179,7 @@ export default {
             government:          this.intervention.government,
             datetime:            this.datetime || this.intervention.datetime || new Date(),
             files:               cloneDeep(this.intervention.files||[]),
+            meta:                cloneDeep(this.intervention.meta||[]),
             agendaItem:          { meetingId : this.intervention.meetingId, item: this.intervention.agendaItem },
             organizationTypes  : [],
             organization : null,
@@ -162,7 +188,7 @@ export default {
         }
     },
     computed: { canUpdateStatus, canPublish },
-    methods: { open, close, clearError, save, onOrganizationChange},
+    methods: { open, close, clearError, save, onOrganizationChange, isUserKronos},
     created,
     mounted, 
 }
@@ -211,6 +237,16 @@ function onOrganizationChange(o) {
     this.organizationId     = o.organizationTypeId;
     this.organizationTypeId = o.organizationTypeId;
     this.title              = `${o.name} ${(o.acronym||'') && `(${o.acronym})`}`;
+}
+
+function isUserKronos(id) {
+    const pattern = /^[a-fA-F0-9]{24}$/;
+
+    if(pattern.test(id)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 async function save(publish=false){
