@@ -35,8 +35,6 @@
           </span>
         </div>
 
-        {{ showPreviewAsButton }}
-
         <slot>
             <FilesPreview v-if="isPending(intervention.status)" :files="intervention.files"/>
         </slot>
