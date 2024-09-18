@@ -237,11 +237,7 @@ function onOrganizationChange(o) {
 function isUserKronos(id) {
     const pattern = /^[a-fA-F0-9]{24}$/;
 
-    if(pattern.test(id)) {
-        return true;
-    } else {
-        return false;
-    }
+    return pattern.test(id);
 }
 
 async function save(publish=false){
