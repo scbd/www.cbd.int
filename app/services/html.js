@@ -6,5 +6,5 @@ export function encodeHtml(html) {
 }
 
 export function sanitizeHtml(unsafeHtml) {
-    return DOMPurify.sanitize(unsafeHtml); // only there to prevent XSS not to enforce html styling
+    return DOMPurify.sanitize(unsafeHtml, {ADD_TAGS: ['oembed'], ADD_ATTR: ['url'] }); // only there to prevent XSS not to enforce html styling
 };
