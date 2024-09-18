@@ -4,9 +4,10 @@
     <!-- Medium view and above -->
     <div class="document-files">
         <div v-for=" {language, text, contentType, url, public: isPublic, allowPublic, _id} in files" v-bind:key="_id" >
-
           <span class="d-none d-md-inline">
-            <i :style="{ visibility: (text?'visible':'hidden') }" class="fa fa-file-text-o" aria-hidden="true" @click="showPreview(text, language)"></i>
+            <a @click="showPreview(text, language)" :style="{ visibility: (text?'visible':'hidden') }" :class="{ 'btn btn-lg btn-outline-dark': showPreviewAsButton}">
+              <i class="fa fa-file-text-o" aria-hidden="true"></i>
+            </a>
             <a target="_blank" :href="url">
               <i :class="[getMimeConfig(contentType).icon, getMimeConfig(contentType).color]" class="fa"/>
                 <span class="language">
@@ -55,7 +56,8 @@ const   MIMES = {
 export default {
   name    :  'FilesView',
   props   : {
-              files: { type: Object, required: false }
+              files: { type: Object, required: false },
+              showPreviewAsButton: { type: Boolean, default: false }
             },
   methods : { getMimeConfig, showPreview },
   filters : { langTextFilter },
@@ -95,6 +97,10 @@ function getMimeConfig(mimeType){
 .document-files {
   text-align: left;
   padding-left: 25px;
-} 
+}
+
+.btn-outline-dark:hover {
+  color: #fff !important;
+}
 
 </style>
