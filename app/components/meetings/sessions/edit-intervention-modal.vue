@@ -117,7 +117,7 @@
                             <small>
                                 Created by 
                                 <a 
-                                    v-if="isUserKronos(this.meta.createdBy.id)"
+                                    v-if="isKronosUser(this.meta.createdBy.id)"
                                     :href="`https://cbd.kronos-events.net/organizations/000000000000000000000000/contacts/${encodeURIComponent(this.meta.createdBy.id)}`"
                                     target="_blank">{{ this.meta.createdBy.name }}</a>
                                 <span v-else>{{ this.meta.createdBy.name }}</span> 
@@ -125,7 +125,7 @@
 
                                 Updated by
                                 <a 
-                                    v-if="isUserKronos(this.meta.updatedBy.id)"
+                                    v-if="isKronosUser(this.meta.updatedBy.id)"
                                     :href="`https://cbd.kronos-events.net/organizations/000000000000000000000000/contacts/${encodeURIComponent(this.meta.updatedBy.id)}`"
                                     target="_blank">{{ this.meta.updatedBy.name }}</a>
                                 <span v-else>{{ this.meta.updatedBy.name }}</span> 
@@ -183,7 +183,7 @@ export default {
         }
     },
     computed: { canUpdateStatus, canPublish },
-    methods: { open, close, clearError, save, onOrganizationChange, isUserKronos, formatDate },
+    methods: { open, close, clearError, save, onOrganizationChange, isKronosUser, formatDate },
     created,
     mounted, 
 }
@@ -234,7 +234,7 @@ function onOrganizationChange(o) {
     this.title              = `${o.name} ${(o.acronym||'') && `(${o.acronym})`}`;
 }
 
-function isUserKronos(id) {
+function isKronosUser(id) {
     const pattern = /^[a-fA-F0-9]{24}$/;
 
     return pattern.test(id);
