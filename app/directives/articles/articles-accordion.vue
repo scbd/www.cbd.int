@@ -1,9 +1,9 @@
 
 <template>
     <div class="articles-accordion">
-        <div class="row" v-if="showAddNew">
+        <div class="row" v-if="showAddNew && adminTags && showAddNewButton">
             <div class="col-sm-12">
-                <cbd-add-new-article v-if="showAddNew && adminTags" :admin-tags="adminTags" target="_self"
+                <cbd-add-new-article :admin-tags="adminTags" target="_self"
                     class="btn btn-default pull-left mb-1">
                     <slot name="addNewTitle"><i class="fa fa-plus"></i>  Add new</slot>
                 </cbd-add-new-article>
@@ -26,7 +26,7 @@
 
                 <div :id="article.hashTitle" class="collapse" :aria-labelledby="article._id" data-parent="#accordion">
                     <div class="card-body">
-                        <cbd-add-new-article v-if="showEditButton" :id="article._id" target="_self" class="btn btn-default pull-right"></cbd-add-new-article>
+                        <cbd-add-new-article v-if="showAddNewButton" :id="article._id" target="_self" class="btn btn-default pull-right"></cbd-add-new-article>
                         <button class="btn btn-info pull-right btn-print" @click="print('cardItem_'+article._id, article)" 
                             style="cursor:pointer" v-if="showPrint"><i class="fa fa-print"></i> Print</button>
                         <cbd-article :article="article" :show-edit="true" :hide-cover-image="true"></cbd-article>                        
@@ -66,7 +66,7 @@ export default {
     data() {
         return {
             articles: [],
-            showEditButton : false            
+            showAddNewButton : false            
         }
     },
     created() {
@@ -75,7 +75,7 @@ export default {
     mounted() {
         this.loadArticles();
         this.$auth.fetchUser().then(()=>{
-            this.showEditButton = this.$auth.hasScope(['oasisArticleEditor', 'Administrator']);
+            this.showAddNewButton = this.$auth.hasScope(['oasisArticleEditor', 'Administrator']);
         })
 
     },
