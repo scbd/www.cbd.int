@@ -23,7 +23,7 @@ const oneYear = oneDay*365;
 if(!process.env.API_URL) {
     console.warn('warning: environment API_URL not set. USING default (https://api.cbd.int:443)');
 }
-
+const accountsUrl=  process.env.ACCOUNTS_URL   || 'https://accounts.cbddev.xyz';
 const apiUrl     =  process.env.API_URL || 'https://api.cbddev.xyz';
 const wwwUrl     =  process.env.WWW_URL || 'https://www.cbd.int';
 const gitVersion = (process.env.COMMIT  || 'UNKNOWN').substr(0, 8);
@@ -31,10 +31,11 @@ const siteAlert  =  process.env.SITE_ALERT || '';
 const googleAnalyticsCode      =  process.env.GOOGLE_ANALYTICS_CODE || '';
 
 console.info(`info: www.cbd.int`);
-console.info(`info: Git version: ${gitVersion}`);
-console.info(`info: API address: ${apiUrl}`);
-console.info(`info: CDN address: ${cdnUrl}`);
-console.info(`info: IS DEV: ${process.env.IS_DEV}`);
+console.info(`info: Git version     : ${gitVersion}`);
+console.info(`info: API address     : ${apiUrl}`);
+console.info(`info: CDN address     : ${cdnUrl}`);
+console.info(`info: Accounts address: ${accountsUrl}`);
+console.info(`info: IS DEV          : ${process.env.IS_DEV}`);
 // Configure options
 
 app.set('views', `${__dirname}/app`);
@@ -78,7 +79,7 @@ app.use(prerender); // set env PRERENDER_SERVICE_URL
 
 app.get('/*', function(req, res) {
     res.setHeader('Cache-Control', 'public');
-    res.render('template', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, siteAlert, googleAnalyticsCode }); 
+    res.render('template', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, siteAlert, googleAnalyticsCode, accountsUrl, apiUrl }); 
 });
 app.all('/*', send404);
 
