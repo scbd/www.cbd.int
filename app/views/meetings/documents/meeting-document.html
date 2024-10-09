@@ -4,6 +4,12 @@
         <td ng-click="enableSelection && downloadble && (document.selected=!document.selected);" style="vertical-align:top;">
             <div ng-class="::{ superseded : document.metadata.superseded }">
                 <div>
+                    <div ng-if="showItems && document.agendaItems" class="pull-right">
+                        <span ng-repeat="item in document.agendaItems" ng-class="{narrow: document.agendaItems.length > 2 }">
+                            <agenda-item ng-vue="vueOptions" :show-prefix="false" :item="item" /> 
+                        </span>
+                    </div>
+
                     <div ng-if="::document.symbol" title="{{::document.publishedOn|date:'yyyy-MM-dd':'UTC'}}">
                         <a ng-href="{{::document.url}}" style="color:inherit" ng-switch="::document.type">
 
@@ -25,7 +31,9 @@
                             </strong>
                         </a>
 
-                        <copy-Link ng-vue="vueOptions" :link="document.url"></copy-Link>
+                        <span ng-if="document.url">
+                            <copy-Link ng-vue="vueOptions" :link="document.url"></copy-Link>
+                        </span>
                     </div>
                     <div>
                         <span ng-if="document.nature=='statement' && document.statementSource.date" class="pull-right badge">
