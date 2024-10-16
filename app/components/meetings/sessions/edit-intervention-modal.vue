@@ -113,25 +113,6 @@
                     </div>
                 
                     <div class="modal-footer">
-                        <div :v-if="meta" class="w-100">
-                            <small>
-                                Created by 
-                                <a 
-                                    v-if="isKronosUser(this.meta.createdBy.id)"
-                                    :href="`https://cbd.kronos-events.net/organizations/000000000000000000000000/contacts/${encodeURIComponent(this.meta.createdBy.id)}`"
-                                    target="_blank">{{ this.meta.createdBy.name }}</a>
-                                <span v-else>{{ this.meta.createdBy.name }}</span> 
-                                on {{ formatDate(this.meta.createdOn, 'yyyy-LL-dd HH:mm:ss') }}<br />
-
-                                Updated by
-                                <a 
-                                    v-if="isKronosUser(this.meta.updatedBy.id)"
-                                    :href="`https://cbd.kronos-events.net/organizations/000000000000000000000000/contacts/${encodeURIComponent(this.meta.updatedBy.id)}`"
-                                    target="_blank">{{ this.meta.updatedBy.name }}</a>
-                                <span v-else>{{ this.meta.updatedBy.name }}</span> 
-                                on {{ formatDate(this.meta.updatedOn, 'yyyy-LL-dd HH:mm:ss') }}
-                            </small>
-                        </div>
                         <i v-if="!!progress" class="fa fa-cog fa-spin"></i>
                         <button v-if=" canPublish" :disabled="!!progress" type="submit" class="btn btn-success" @click="save(true)"><i class="fa fa-microphone"></i> <span>Publish</span></button>
                         <button v-if="!canPublish" :disabled="!!progress" type="submit" class="btn btn-primary" @click="save()"><i class="fa fa-save"></i> <span>Save</span></button>

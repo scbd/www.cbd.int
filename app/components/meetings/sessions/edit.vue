@@ -9,7 +9,7 @@
       </small>
     </h1>
 
-    <h3 :class="{ 'bg-warning text-dark p-1': isInPast(session), 'bg-danger text-white p-1': isInFuture(session) }" class="position-sticky sticky-date"> 
+    <h3  v-if="session" :class="{ 'bg-warning text-dark p-1': isInPast(session), 'bg-danger text-white p-1': isInFuture(session) }" class="position-sticky sticky-date"> 
                   {{ (session || {}).date | timezone(session.timezone) | formatDate('d MMMM yyyy (cccc) T') }}
         <small><i>{{ (session || {}).date | timezone(session.timezone) | formatDate('(z)') }}</i></small>
     </h3>
