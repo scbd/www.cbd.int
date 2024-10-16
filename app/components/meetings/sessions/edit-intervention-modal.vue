@@ -113,6 +113,26 @@
                     </div>
                 
                     <div class="modal-footer">
+                        <div v-if="intervention.meta" class="w-100">
+                            <small v-if="intervention.meta.createdBy">
+                                Created by 
+                                <a 
+                                    v-if="isKronosUser(intervention.meta.createdBy.id)"
+                                    :href="`https://cbd.kronos-events.net/organizations/000000000000000000000000/contacts/${encodeURIComponent(intervention.meta.createdBy.id)}`"
+                                    target="_blank">{{ intervention.meta.createdBy.name }}</a>
+                                <span v-else>{{ intervention.meta.createdBy.name }}</span> 
+                                on {{ formatDate(intervention.meta.createdOn, 'yyyy-LL-dd HH:mm:ss') }}
+                            </small><br />
+                            <small v-if="intervention.meta.createdBy.id">
+                                Updated by
+                                <a 
+                                    v-if="isKronosUser(intervention.meta.updatedBy)"
+                                    :href="`https://cbd.kronos-events.net/organizations/000000000000000000000000/contacts/${encodeURIComponent(intervention.meta.updatedBy.id)}`"
+                                    target="_blank">{{ intervention.meta.updatedBy.name }}</a>
+                                <span v-else>{{ intervention.meta.updatedBy.name }}</span> 
+                                on {{ formatDate(intervention.meta.updatedOn, 'yyyy-LL-dd HH:mm:ss') }}
+                            </small>
+                        </div>
                         <i v-if="!!progress" class="fa fa-cog fa-spin"></i>
                         <button v-if=" canPublish" :disabled="!!progress" type="submit" class="btn btn-success" @click="save(true)"><i class="fa fa-microphone"></i> <span>Publish</span></button>
                         <button v-if="!canPublish" :disabled="!!progress" type="submit" class="btn btn-primary" @click="save()"><i class="fa fa-save"></i> <span>Save</span></button>
@@ -155,7 +175,6 @@ export default {
             government:          this.intervention.government,
             datetime:            this.datetime || this.intervention.datetime || new Date(),
             files:               cloneDeep(this.intervention.files||[]),
-            meta:                cloneDeep(this.intervention.meta||[]),
             agendaItem:          { meetingId : this.intervention.meetingId, item: this.intervention.agendaItem },
             organizationTypes  : [],
             organization : null,
