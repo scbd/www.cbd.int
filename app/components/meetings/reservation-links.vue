@@ -1,7 +1,14 @@
 <template>
   <div  v-if="isVisible">
     <div v-if="videoLinks.length" class="position-relative m-1" :class="{'dropleft': this.position==='left', 'dropright': this.position==='right' }">
-      <a class="btn btn-dark dropdown-toggle" :class="{'btn-xs':size=='xs'}" href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <a class="btn btn-dark" 
+        :class="{'dropdown-toggle':!defaultVideoUrl,'btn-xs':size=='xs'}" 
+        :href="defaultVideoUrl||'#'" 
+        :data-toggle="!defaultVideoUrl ? 'dropdown' : null" 
+        target="video"
+        aria-haspopup="true" 
+        aria-expanded="false"
+      >
         Watch <i class="fa fa-video-camera"></i>
       </a>
 
@@ -48,7 +55,7 @@
                   size       : { type: String, required: false },
                   position   : { type: String, default: ''}
                 },
-    computed  : { isVisible, videoLinks, nonVideoLinks, displayLinksImmediately },
+    computed  : { isVisible, defaultVideoUrl, videoLinks, nonVideoLinks, displayLinksImmediately },
     methods   : { refresher, clearRefresher },
     filters   : { langText: getLanguageName },
     data, created, mounted, beforeDestroy
@@ -93,6 +100,11 @@
     const { displayLinksImmediately } = this.reservation
 
     return displayLinksImmediately
+  }
+
+  function defaultVideoUrl() {
+    let links = this.videoLinks || [];
+    return links[0]?.url;
   }
 
   function videoLinks(){
