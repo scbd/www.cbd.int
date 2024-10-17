@@ -126,7 +126,7 @@
                             <small v-if="intervention.meta.createdBy.id">
                                 Updated by
                                 <a 
-                                    v-if="isKronosUser(intervention.meta.updatedBy)"
+                                    v-if="isKronosUser(intervention.meta.updatedBy.id)"
                                     :href="`https://cbd.kronos-events.net/organizations/000000000000000000000000/contacts/${encodeURIComponent(intervention.meta.updatedBy.id)}`"
                                     target="_blank">{{ intervention.meta.updatedBy.name }}</a>
                                 <span v-else>{{ intervention.meta.updatedBy.name }}</span> 
