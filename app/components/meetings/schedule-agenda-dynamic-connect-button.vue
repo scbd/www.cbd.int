@@ -10,10 +10,10 @@
         <span v-if="isConnectionTestingInProgress">now</span>
         <ScheduleConnectIcon :size="iconSize"/> 
       </div>
-      <div v-if="isInProgress"><small> (Meeting In Progress) </small></div>
+      <div v-if="isInProgress"><small> (Event in progress) </small></div>
 
       <div v-if="isConnectionTestingInProgress">
-        <small> Meeting will start in </small>
+        <small> Event will start in </small>
         <small v-if="size=='xs'"><br> {{willStartTimeText}} </small>
       </div>
       <div v-if="size!='xs' && isConnectionTestingInProgress" class="progress-text"><small> {{willStartTimeText}} </small></div>
