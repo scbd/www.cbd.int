@@ -1,7 +1,7 @@
 import   moment        from 'moment-timezone'
 
 const defaultCloseTime = 15 // minutes
-export const now              = () => new Date()
+export const now  = () => new Date(new URL(location).searchParams.get('datetime') || new Date());
 
 export const hasConnection = (reservation) => {
   if(!reservation ) throw new Error(`hasConnection: reservation not passed to function`)
@@ -39,7 +39,7 @@ export const getNowToConnectInitDuration = (reservation, schedule) => {
   const { type, start }      = reservation
   const   minutesDefault     = getConnectionInitPreStartMinutes({ type }, schedule)
   const   canConnectTime     = moment(start).subtract(minutesDefault, 'm')
-  const   dateTimeDifference = canConnectTime.diff(new Date())
+  const   dateTimeDifference = canConnectTime.diff(now())
 
   return getDurationPlainObject(dateTimeDifference)
 }
@@ -48,7 +48,7 @@ export const getNowToStartDuration = (reservation) => {
 
   const { start       }      = reservation
   const   startMoment        = moment(start)
-  const   dateTimeDifference = startMoment.diff(new Date())
+  const   dateTimeDifference = startMoment.diff(now())
 
   return getDurationPlainObject(dateTimeDifference)
 }
