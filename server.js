@@ -38,6 +38,8 @@ console.info(`info: Accounts address: ${accountsUrl}`);
 console.info(`info: IS DEV          : ${process.env.IS_DEV}`);
 // Configure options
 
+const appTemplateParams = { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, siteAlert, googleAnalyticsCode, accountsUrl, apiUrl }
+
 app.set('views', `${__dirname}/app`);
 app.set('view engine', 'ejs');
 app.use(morgan('dev'));
@@ -69,9 +71,9 @@ app.get('/robots.txt', (req, res) => {
     res.end(text);
 });
 
-app.get('/idb/*',                  function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
-app.get('/biobridge*',             function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
-app.get('/aichi-targets*',         function(req, res) { res.render('template-2011', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, googleAnalyticsCode }); });
+app.get('/idb/*',                  function(req, res) { res.render('template-2011', {...appTemplateParams}); });
+app.get('/biobridge*',             function(req, res) { res.render('template-2011', {...appTemplateParams}); });
+app.get('/aichi-targets*',         function(req, res) { res.render('template-2011', {...appTemplateParams}); });
 app.get('/language-switch',        cmsLanguageSwitch);
 
 
@@ -79,7 +81,7 @@ app.use(prerender); // set env PRERENDER_SERVICE_URL
 
 app.get('/*', function(req, res) {
     res.setHeader('Cache-Control', 'public');
-    res.render('template', { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, siteAlert, googleAnalyticsCode, accountsUrl, apiUrl }); 
+    res.render('template', {...appTemplateParams}); 
 });
 app.all('/*', send404);
 
