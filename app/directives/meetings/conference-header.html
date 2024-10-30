@@ -276,7 +276,7 @@
                             <td class="meetingnav-buttongroup menu {{::(cssClass(mainMenu.code) + ' ' + mainMenu.cssClass)}}" ng-repeat="mainMenu in meeting.conference.menus" 
                                 ng-class="{'single-menu' : (!(mainMenu.menus||[]).length || (mainMenu.isExpandable && !mainMenu.isExpanded)), 
                                     'no-left-border':$index==0, 'hidden': mainMenu.isHidden,
-                                    selected:meetingNavCtrl.isSelected('{{::mainMenu.url}}', {{::mainMenu.exactSelection}}) }" 
+                                    selected:!mainMenu.menus.length && meetingNavCtrl.isSelected('{{::mainMenu.url}}', {{::mainMenu.exactSelection}}) }" 
                                 style="vertical-align:middle"  ng-style="mainMenu.style">
                                 
                                 <div ng-if="(!mainMenu.menus.length && (mainMenu.title || mainMenu.icon || mainMenu.image)) || (mainMenu.isExpandable && !mainMenu.isExpanded)" 
