@@ -15,7 +15,9 @@
         { code : 'COP-12',     title: 'COP 12',              group: 'COP'     },
         { code : 'COP-13',     title: 'COP 13',              group: 'COP'     },
         { code : 'COP-14',     title: 'COP 14',              group: 'COP'     },
-        { code : 'COP-15',     title: 'COP 15',              group: 'COP'     }
+        { code : 'COP-15',     title: 'COP 15',              group: 'COP'     },
+        { code : 'COP-16',     title: 'COP 16',              group: 'COP'     }
+
     ];
         // { code : 'SBSTTA',  title: '',              group: 'SBSTTA'     },
         // { code : 'SBI',     title: '',              group: 'SBI'        }
