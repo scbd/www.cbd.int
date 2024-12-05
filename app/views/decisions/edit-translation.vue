@@ -81,7 +81,6 @@ export default {
         }
     },
     computed: {
-        sanitizeHtml,
         EditorTypes() { return EditorTypes},
         editorConfig() {
             return {
@@ -108,7 +107,8 @@ export default {
         cancelAll,
         save, 
         cancel,
-        isEmpty
+        isEmpty,
+        sanitizeHtml
     }
 }
 
