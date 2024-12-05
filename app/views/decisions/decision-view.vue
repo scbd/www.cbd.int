@@ -162,7 +162,7 @@
 									@click="toggleFilters({ gbfTargets : [gbfTarget] })" 
 									:class="`${!isFilterSelected('gbfTargets', gbfTarget) && 'disabled'} 'badge-secondary'`" >
 										<img :title="gbfTarget.description" 
-										:src="`https://www.cbd.int/gbf/images/targets/target-${gbfTarget.replace('GBF-TARGET-','')}.png`" 
+										:src="`/gbf/images/targets/target-${gbfTarget.replace('GBF-TARGET-','')}.png`" 
 										width="20" style="margin: 1px 1px 1px 1px;">
 								</span>
 							</dd>
