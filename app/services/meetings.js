@@ -66,6 +66,9 @@ export function documentSortKey(d, { baseSymbol, locale } ) {
     if((d.metadata||{}).superseded) parts.push(1);
     else                            parts.push(0);
 
+    parts.push(`PINNED`);
+    parts.push(d.pinned ? 0 : 1); 
+
     parts.push(`TYPE`);
     parts.push(Priorities_Type[d.type] || pad('', 9)); 
 
