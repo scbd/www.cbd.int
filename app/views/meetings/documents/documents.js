@@ -724,6 +724,7 @@ export { default as template } from './documents.html';
 
                 if(_ctrl.isEditor) {
                     _ctrl.edit       = edit;
+                    _ctrl.togglePin  = togglePin;
                     _ctrl.editMode   = $scope.$root.documentEditMode;
 
                     $scope.$watch('documentsCtrl.editMode', function(n,o){
@@ -745,6 +746,31 @@ export { default as template } from './documents.html';
             var base = encodeURIComponent($route.current.params.code || '');
 
             $location.url([base, encodeURIComponent(_ctrl.meeting.code), 'documents', encodeURIComponent(id)].join('/'));
+        }
+
+        //==============================
+        //
+        //==============================
+        function togglePin(doc) {
+            const { pinned, _id }  = doc;
+
+            $http({ 
+                method: pinned ? 'DELETE' : 'PUT',
+                url:`/api/v2016/documents/${encodeURIComponent(_id)}/pin`
+            }).then(({data})=>{
+                doc.pinned = data.pinned;
+
+                doc.sortKey = sortKey(doc, {
+                    baseSymbol : _ctrl.meeting?.EVT_UN_CD,
+                    locale
+                });
+                
+                _ctrl.tabs.forEach(tab=>{
+                    tab.sections.forEach(section=>{
+                        section.documents = _.sortBy(section.documents, (d) => d.sortKey);
+                    })
+                })
+            });
         }
 
         //==============================
