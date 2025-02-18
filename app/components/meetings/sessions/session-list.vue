@@ -26,7 +26,7 @@
             {{ date | tz(timezone) | formatDate('d MMMM yyyy - cccc T (z)') }}
             </td>
           <td>
-            <i v-for="({ symbol }) in meetings" :key="symbol">{{symbol}}</i>
+            <i v-for="({ symbol }) in meetings" :key="symbol">{{symbol}}, </i>
           </td>
           <td>
             {{title}}

@@ -17,6 +17,7 @@ import UploadStatementButton from '~/components/meetings/upload-statement-button
 import { Plenary, WorkingGroupI, WorkingGroupII, ContactGroups, HighLevelSegment  } from '~/util/meetings-data'
 import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
 import ScheduleTime from '../../schedules/schedule-time.vue';
+import remapCode  from '~/components/meetings/sessions/re-map.js'
 
 Vue.component('uploadStatementButton', UploadStatementButton);
 
@@ -75,18 +76,18 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             });
         }
         
-        $q.when(conferenceService.getActiveConference())
-        .then(async function(meeting){
-            const { schedule }        = meeting || {};
+        $q.when(conferenceService.getActiveConference(remapCode($route.current.params.code)))
+        .then(async function(conference){
+            const { schedule }        = conference || {};
             const { all, connection } = schedule;
 
             $scope.schedule      = schedule;
             _ctrl.all            = all;
             _ctrl.connectionInit = connection?.initTimes
-            eventId              = meeting._id;
-            streamId             = meeting?.conference?.streamId;
+            eventId              = conference._id;
+            streamId             = conference?.conference?.streamId;
             _ctrl.streamId       = streamId;
-            _ctrl.meeting        = meeting;
+            _ctrl.meeting        = conference;
             
             load();
             timeTimer    = $interval(updateTime, 30*1000);
