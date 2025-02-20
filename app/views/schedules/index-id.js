@@ -33,6 +33,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 
         _ctrl.CALENDAR    = CALENDAR_SETTINGS;
         _ctrl.now         = now;
+        _ctrl.all         = true; //Always show full schedule now. non-full is for CCTV only
         _ctrl.getTimezone = getTimezone;
         _ctrl.expandSection = expandSection;
         _ctrl.expandAllSections = expandAllSections,
@@ -53,17 +54,23 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
             var streamId = $route.current.params.streamId || defaultStreamId;
             var options  = { params : { cache:true } };
          
-            return $q.when($route.current.params.code).then(function(code){
+            return $q.when().then(async function(code){
 
-                if(!code) return;
-            
-                return conferenceService.getActiveConference(code);
+                const url = _ctrl.all
+                          ? `/api/v2016/cctv-streams/${encodeURIComponent(streamId)}/all`
+                          : `/api/v2016/cctv-streams/${encodeURIComponent(streamId)}`; 
+
+                const { data } = await $http.get(url, options);
+                const { eventGroup : conference } = data;
+
+                _streamData = data;
+
+                return conference;
 
             }).then(async function(conf){
                 _ctrl.institution        = conf.institution;
                 _ctrl.conferenceTimezone = conf.timezone;
                 _ctrl.code               = conf.code
-                _ctrl.all                = conf.schedule.all
                 _ctrl.showRooms          = conf.schedule.showRooms
                 _ctrl.uploadStatement    = conf.uploadStatement;
 
@@ -79,14 +86,6 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                 }
                 
             }).then(function(){
-                const url = _ctrl.all?  `/api/v2016/cctv-streams/${streamId}/all` : 
-                                        `/api/v2016/cctv-streams/${streamId}`
-
-                return $http.get(url, options);
-
-            }).then(function(res) {
-
-                _streamData = res.data;
 
                 var venueId = _streamData.eventGroup.venueId;
 
