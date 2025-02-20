@@ -22,6 +22,10 @@ body {
     border-width: 0.3rem;
 }
 
+.meeting-documents tr.pin-end-mark > td {
+    border-bottom: 2px solid #777 !important;
+}
+
 .mobile-app .mobile-spacer{
   height:96vh;
   overflow-y: auto;
