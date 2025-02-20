@@ -51,11 +51,12 @@
 </template>
 
 <script>
-import   Api               from '../api.js'
+import   Api, { mapObjectId } from '../api.js'
 import   Session           from './session.vue'
 import   InterventionRow   from './intervention-row.vue'
 import   VideoLink         from './video-link.vue'
 import { format, timezone as setTimezone } from '../datetime.js'
+import remapCode from './re-map.js'
 
 export default {
   name       : 'SessionsView',
@@ -79,9 +80,10 @@ function data(){
 async function created(){
   this.api = new Api(this.tokenReader);
 
-  const meetingCode = this.route.params.meeting;
-  const meeting     = await this.api.getMeetingByCode(meetingCode)
-  const sessions    = await this.api.querySessions({ s: { date: -1 }, q: { 'meetingIds': { $oid: meeting._id }, count: { $gt: 0 } } });
+  const meetingCode  = this.route.params.meeting;
+  let   meeting      = await this.api.getMeetingByCode(meetingCode)
+  const altMeetingId = remapCode(meeting._id)
+  const sessions     = await this.api.querySessions({ s: { date: -1 }, q: { 'meetingIds': { $in : [mapObjectId(meeting._id), mapObjectId(altMeetingId)] }, count: { $gt: 0 } } });
 
   this.sessions = sessions.map(session => {
     const { date: startDate } = session;
@@ -99,7 +101,11 @@ async function created(){
   }
 
   //Inject virtual session with Pending Statement... for staff
-  const [pendingSession] = await this.api.queryInterventions({ q: { meetingId : { $oid: meeting._id }, status:{ $ne: "public"} }, c:1 });
+
+  if(meeting._id != altMeetingId) //Rempap Meeting
+    meeting = await this.api.getMeetingById(altMeetingId);
+
+  const [pendingSession] = await this.api.queryInterventions({ q: { meetingId : mapObjectId(meeting._id), status:{ $ne: "public"} }, c:1 });
 
   if(pendingSession?.count){
     this.sessions.unshift({

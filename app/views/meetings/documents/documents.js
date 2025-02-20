@@ -105,11 +105,13 @@ export { default as template } from './documents.html';
                 _ctrl.meeting = meeting;
                 _ctrl.agenda  = meeting.agenda;
 
-                margeToGroups(meeting.displayGroups||{});
+                let position = groups.outcome.position || 1000;
+
+                mergeToGroups(meeting.displayGroups||{});
 
                 if(meeting.insession) { // Quick insession fix
 
-                    let position        = groups.outcome.position || 1000;
+//                    let position        = groups.outcome.position || 1000;
                     let inSessionGroups = _(groups).filter((o)=>!!o.insession).sortBy((o)=>o.position).value();
 
                     inSessionGroups.forEach(g=>g.position = (++position));
@@ -237,7 +239,7 @@ export { default as template } from './documents.html';
         //==============================
         //
         //==============================
-        function margeToGroups(meetingDisplayGroups) {
+        function mergeToGroups(meetingDisplayGroups) {
 
             const keys = Object.keys(meetingDisplayGroups || {});
 
@@ -724,7 +726,7 @@ export { default as template } from './documents.html';
 
                 if(_ctrl.isEditor) {
                     _ctrl.edit       = edit;
-                    _ctrl.togglePin  = togglePin;
+                    _ctrl.togglePin  = togglePin;                    
                     _ctrl.editMode   = $scope.$root.documentEditMode;
 
                     $scope.$watch('documentsCtrl.editMode', function(n,o){
@@ -767,7 +769,7 @@ export { default as template } from './documents.html';
                 
                 _ctrl.tabs.forEach(tab=>{
                     tab.sections.forEach(section=>{
-                        section.documents = _.sortBy(section.documents, (d) => d.sortKey);
+                        section.documents = _.sortBy(section.documents, (d) => d?.sortKey);
                     })
                 })
             });

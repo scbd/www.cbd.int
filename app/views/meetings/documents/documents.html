@@ -181,7 +181,7 @@
                                 <div ng-if="(type.code!='outcome' && type.code!='notification' )">
                                     <i  ng-if="document.pinned || documentsCtrl.editMode"
                                         class="fa fa-thumb-tack" 
-                                        ng-class="{ 'text-danger': document.pinned && documentsCtrl.editMode, pointer: documentsCtrl.editMode }" 
+                                        ng-class="{ 'text-dark': document.pinned && !documentsCtrl.editMode, 'text-danger': document.pinned && documentsCtrl.editMode, pointer: documentsCtrl.editMode }" 
                                         ng-click="documentsCtrl.editMode && documentsCtrl.togglePin(document)"
                                     ></i>
                                 </div>
@@ -226,6 +226,13 @@
                                 </div>
                                 <table class="table table-striped table-hover" style="margin:10px 0px -5px 0px;">
                                     <tr ng-repeat="document in item.documents" ng-class="{ info : document.selected, warning: document.metadata.visible===false }" style="cursor:default">
+                                        <td class="m-0 pl-1 pr-1" style="width: 1px;">
+                                            <i  ng-if="document.pinned || documentsCtrl.editMode"
+                                                class="fa fa-thumb-tack" 
+                                                ng-class="{ 'text-dark': document.pinned && !documentsCtrl.editMode, 'text-danger': document.pinned && documentsCtrl.editMode, pointer: documentsCtrl.editMode }" 
+                                                ng-click="documentsCtrl.editMode && documentsCtrl.togglePin(document)"
+                                            ></i>
+                                        </td>
                                         <td>
                                             <meeting-document document="document" enable-selection="!documentsCtrl.editMode"></meeting-document>
                                         </td>

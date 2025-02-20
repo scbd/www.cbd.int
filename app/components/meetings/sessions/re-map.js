@@ -1,24 +1,32 @@
-export default function remap(code) {
+// THIS FILE IS TO FIX PROBLEM 
+// WHEN CURRENT MEETINGs ARE NOT USING
+// THE SAME MEETING FOR REGISTRATION. 
 
-    // THIS FILE IS TO FIX PROBLEM 
-    // WHEN CURRENT MEETINGs ARE NOT USING
-    // THE SAME MEETING FOR REGISTRATION. 
+// Mapping should be deleted after the end of the meeting
 
-    var normalizedCode = (code||'').toLocaleUpperCase();
+const mappings = {
 
-    //conferences
-
-    if(normalizedCode == 'POST2020')    return 'wg2020-04';
+    //Conferences 
+    ['2024'] : '2024-r2',
 
     //Meetings
+    ['COP-16']                   : 'COP-16-R2',
+    ['52000000cbd0495c000018e9'] : '52000000cbd0495c00001975',
 
-    // if(normalizedCode == 'COP-15')    return 'COP-15-PART1';
-    // if(normalizedCode == 'CP-MOP-10') return 'CP-MOP-10-PART1';
-    // if(normalizedCode == 'NP-MOP-10') return 'NP-MOP-04-PART1';
+    ['CP-MOP-11']                : 'CP-MOP-11-R2',
+    ['52000000cbd0495c000018ea'] : '52000000cbd0495c00001976',
+    
+    ['NP-MOP-05']                : 'NP-MOP-05-R2',
+    ['52000000cbd0495c000018eb'] : '52000000cbd0495c00001977',
+}
 
-    // if(normalizedCode == '52000000CBD0495C00001741') return '52000000cbd0495c00001821'; // 'COP-15'    => 'COP-15-PART1';    
-    // if(normalizedCode == '52000000CBD0495C00001742') return '52000000cbd0495c00001822'; // 'CP-MOP-10' => 'CP-MOP-10-PART1';
-    // if(normalizedCode == '52000000CBD0495C00001743') return '52000000cbd0495c00001823'; // 'NP-MOP-10' => 'NP-MOP-04-PART1';
+
+export default function remap(code) {
+    const normalizedCode = (code||'').toLocaleUpperCase();
+
+    for(let [key, value] of Object.entries(mappings)) {
+        if(key.toLocaleUpperCase() == normalizedCode) return value;
+    }
 
     return code;
 }
