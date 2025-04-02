@@ -181,7 +181,7 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
  <div id="page-wrapper">
       <div id="page">
         <!-- HEADER -->
-          <div style="display:<%=siteAlert ? 'block' : 'none'%>" class="alert alert-danger mb-0"><%=siteAlert%></div>
+          <div style="display:<%=siteAlert ? 'block' : 'none'%>" class="alert alert-<%=siteAlertWarning%> mb-0"><%=siteAlert%></div>
           <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeaderFixed" ></vue-component>                  
           <vue-component ng-if="!templateCtrl.viewOnly" name="PageHeader" ></vue-component> -->
           <!-- <vue-component ng-if="!templateCtrl.viewOnly" name="ScbdHeader" ></vue-component> -->
