@@ -286,15 +286,12 @@
                                             <span id="customName" ng-bind="text[language.code].name"></span> 
                                         </div>                             
                                     </div>
-                                    <div id="line1" class="giorgio-font-light text-nowrap"  >
-                                        <span id="line1_part1" ng-if="language.code!='ar1'" ng-bind="text[language.code].line1_part1" ></span>
+                                    <div id="line1" class="giorgio-font-light text-nowrap {{language.code}} "  >
+                                        <span id="line1_part1" ng-bind="text[language.code].line1_part1" ></span>
                                     </div>
-                                    <div id="static" class="giorgio-font text-nowrap">
+                                    <div id="static" class="giorgio-font text-nowrap {{language.code}}">
                                         <p  class="m-0" ng-bind="text[language.code].line1_part2.toUpperCase()"></p>
                                         <p class="m-0" ng-bind="text[language.code].line2_part1.toUpperCase()"></p>
-                                        <p class="m-0" ng-bind="text[language.code].line2_part2"></p>
-                                    </div>
-                                    <div id="static" class="{{language.code}}  text-nowrap">
                                         <p class="apex-new-book-font m-0" ng-bind="text[language.code].line2_part2"></p>
                                     </div>
                                 </div>
