@@ -360,7 +360,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                             language: lang.title.en,
                             group:'Other Languages',
                         }
-                        //$scope.defaultLanguages.push(lang)
+
                         return lang;
                     }
                 });                
