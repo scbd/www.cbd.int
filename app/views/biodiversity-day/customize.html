@@ -18,6 +18,13 @@
             src: url("/app/fonts/GiorgioSans-el.otf")  format("opentype");
         }
 
+ 
+        @font-face{
+            font-family: "Apex New Book";
+            font-style : normal;
+            font-weight: 400;
+            src: url("/app/fonts/apex-new-book.otf")  format("opentype");
+        }
         .boxIncon img{
             height: 275px;
         }    
@@ -25,8 +32,8 @@
         .giorgio-font{
             font-family: 'Giorgio Sans', sans-serif;
             font-weight:700;
-            line-height: 50px;
-            font-size: 57px;
+            line-height: 70px;
+            font-size: 80px;
         }
         .giorgio-font-light{
             font-family: 'Giorgio Sans', sans-serif;
@@ -34,7 +41,13 @@
             line-height: 45px;
             font-size: 50px;
         }
-
+        .apex-new-book-font{
+            font-family: 'Apex New Book', sans-serif;
+            font-weight:400;
+            line-height: 60px;
+            font-size: 28px;
+        }
+        
         /* #newImage canvas{
             width: 100%;
             height: 100%;
@@ -136,7 +149,7 @@
         .ar .boxGenerate .text-box-width{ width: 475px; }
         .fr .boxGenerate .text-box-width{ width: 355px; }
         .ru .boxGenerate .text-box-width{ width: 450px; }
-        .es .boxGenerate .text-box-width{ width: 325px; }
+        .es .boxGenerate .text-box-width{ width: 400px; }
         .zh .boxGenerate .text-box-width{ width: 400px; }
 
         .am .giorgio-font{ line-height: 55px; }
@@ -151,11 +164,16 @@
         .ko .giorgio-font-light{ line-height: 48px;  }
         .ms .giorgio-font{ line-height: 50px; font-size: 50px; }
 
-        .ru .giorgio-font{ font-size: 45px; }
-        .ru .giorgio-font-light{ font-size: 40px; }
-        .zh .giorgio-font{ line-height: 50px; font-size: 50px; }
-        .zh .giorgio-font-light{ line-height: 46px; font-size: 46px; }
+        .ar .giorgio-font{ line-height: 60px; font-size: 50px; }
+        .ar .apex-new-book-font{ line-height: 55px; font-size: 40px; }
 
+        .ru .giorgio-font{ line-height: 65px; font-size: 65px; }
+        .ru .giorgio-font-light{ line-height: 46px; font-size: 46px; }
+        .ru .apex-new-book-font{ line-height: 60px; font-size: 40px; }
+
+        .zh .giorgio-font{ line-height: 80px; font-size: 65px; }
+        .zh .giorgio-font-light{ line-height: 46px; font-size: 46px; }
+        .zh .apex-new-book-font{ line-height: 65px; font-size: 45px; }
         .is-rtl{
             direction: rtl;
             text-align: right;
@@ -259,22 +277,25 @@
                     <div class="boxIncon box-size" id="imgGenerator">
                         <div class="row box-size ps-1" style="display: flex; flex-wrap: wrap;">
                             <div class="col-lg-51 p-0 debug">
-                                <img src="/app/images/idb-celebrations/gbf-logo-ball.png"  class="img-fluid idb-logo pull-right" id="logoImg"/>
+                                <img src="/app/images/idb-celebrations/idb-ball.png"  class="img-fluid idb-logo pull-right" id="logoImg"/>
                             </div>
                             <div class="col-lg-71 debug" style=" display: flex; align-items: center;" ng-if="language.code" >
                                 <div class="text-box-width" ng-class="{ 'is-rtl':isRightToLeft, 'is-ltr':!isRightToLeft }" >
                                     <div id="bigtext" >  
-                                        <div class="giorgio-font text-nowrap" id="customText">
+                                        <div class="giorgio-font-light text-nowrap" id="customText">
                                             <span id="customName" ng-bind="text[language.code].name"></span> 
                                         </div>                             
                                     </div>
-                                    <div id="line1" class="giorgio-font text-nowrap"  >
+                                    <div id="line1" class="giorgio-font-light text-nowrap"  >
                                         <span id="line1_part1" ng-if="language.code!='ar1'" ng-bind="text[language.code].line1_part1" ></span>
                                     </div>
-                                    <div id="static" class="giorgio-font-light text-nowrap">
-                                        <p  class="m-0" ng-bind="text[language.code].line1_part2"></p>
-                                        <p class="m-0" ng-bind="text[language.code].line2_part1"></p>
+                                    <div id="static" class="giorgio-font text-nowrap">
+                                        <p  class="m-0" ng-bind="text[language.code].line1_part2.toUpperCase()"></p>
+                                        <p class="m-0" ng-bind="text[language.code].line2_part1.toUpperCase()"></p>
                                         <p class="m-0" ng-bind="text[language.code].line2_part2"></p>
+                                    </div>
+                                    <div id="static" class="{{language.code}}  text-nowrap">
+                                        <p class="apex-new-book-font m-0" ng-bind="text[language.code].line2_part2"></p>
                                     </div>
                                 </div>
                             </div>

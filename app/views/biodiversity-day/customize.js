@@ -31,23 +31,23 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
         ]
         $scope.text = {
             en : {
-                line1_part1         : '#PartOfThePlan',
+                line1_part1         : '',
                 line1_part2         : 'International Day',
-                line2_part1         : 'for Biodiversity',
+                line2_part1         : `for Biodiversity ${new Date().getFullYear()}`,
                 name:'Name', 
                 individual:'Name',
                 collective:'Organization',
-                line2_part2         : `${ new Date().getFullYear() }`,
+                line2_part2         : `Harmony with nature and sustainable development`,
 
                 isUNLanguage:true,
                 charLimit: 45,
                 and:'and'
             },
             es:{
-                line1_part1         : '#SéParteDelPlan',
+                line1_part1         : '',
                 line1_part2         : 'Día Internacional',
-                line2_part1         : 'de la Biodiversidad',
-                line2_part2         : `${ new Date().getFullYear() }`,
+                line2_part1         : `de la Biodiversidad ${new Date().getFullYear()}`,
+                line2_part2         : `Armonía con la naturaleza y desarrollo sostenible`,
                 name:'Nombre',
                 individual:'Nombre',
                 collective:'Organización',
@@ -55,10 +55,10 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 and:'y'
             },
             fr:{
-                line1_part1         : '#ContribueAuPlan',
+                line1_part1         : '',
                 line1_part2         : 'Journée Internationale',
-                line2_part1         : 'de la Biodiversité',
-                line2_part2         : `${ new Date().getFullYear() }`,
+                line2_part1         : `de la Biodiversité ${ new Date().getFullYear() }`,
+                line2_part2         : `Harmonie avec la nature et développement durable`,
                 name:'Nom',
                 individual:'Nom',
                 collective:'Organisation',
@@ -66,11 +66,11 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 charLimit: 35,
                 and:'et'
             },
-            ru:{
-                line1_part1         : '#ЧастьПлана',
-                line1_part2         : 'День биологического',
-                line2_part1         : `разнообразия`,
-                line2_part2         : `${ new Date().getFullYear() }`,
+            ru:{ 
+                line1_part1         : '',
+                line1_part2         : 'МЕЖДУНАРОДНЫЙ ДЕНЬ',
+                line2_part1         : `БИОРАЗНООБРАЗИЯ ${ new Date().getFullYear() } Г.`,
+                line2_part2         : `Гармония с природой и устойчивое развитие`,
                 name:'Имя',
                 individual:'Имя',
                 collective:'Организация',
@@ -79,9 +79,9 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 and:'и'
             },
             zh:{
-                line1_part1         : '#加入我们',
-                line1_part2         : '国际生物多样性日',
-                line2_part1         : `${ new Date().getFullYear() } 年`,
+                line1_part1         : '',
+                line1_part2         : `${ new Date().getFullYear() }年国际生物多样性日`,
+                line2_part2         : `与自然和谐相处和可持续发展`,
                 name:'姓名',
                 individual:'姓名',
                 collective:'组织',
@@ -89,9 +89,9 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 and:'和'
             },
             ar:{
-                line1_part1         : '#جزء_من_الخطة',
-                line1_part2        : 'اليوم الدولي للتنوع البيولوجي',
-                line2_part1         : `${ new Date().getFullYear() }`,
+                line1_part2         : 'اليوم الدولي',
+                line2_part1         : `للتنوع البيولوجي ${ new Date().getFullYear()}`,
+                line2_part2         : `االانسجام مع الطبيعة والتنمية المستدامة`,
                 name:'اسم',
                 individual:'اسم',
                 collective:'منظمة',
@@ -99,7 +99,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 charLimit: 45,
                 and:'و'
             },
-            ...languageTranslation            
+            // ...languageTranslation            
         }
         $scope.rtlLanguages = {
             ar	: 'Arabic',
@@ -197,7 +197,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             $timeout(function(){
                 let maxFontSize = 60;// = 120;
                 if(['zh'].includes($scope.language.code))
-                    maxFontSize = 140;
+                    maxFontSize = 100;
 
                 $('#bigtext').bigtext({
                     maxfontsize:maxFontSize
@@ -360,7 +360,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                             language: lang.title.en,
                             group:'Other Languages',
                         }
-                        $scope.defaultLanguages.push(lang)
+                        //$scope.defaultLanguages.push(lang)
                         return lang;
                     }
                 });                
