@@ -287,11 +287,11 @@
                                         </div>                             
                                     </div>
                                     <div id="line1" class="giorgio-font-light text-nowrap {{language.code}} "  >
-                                        <span id="line1_part1" ng-bind="text[language.code].line1_part1" ></span>
-                                    </div>
-                                    <div id="static" class="giorgio-font text-nowrap {{language.code}}">
-                                        <p  class="m-0" ng-bind="text[language.code].line1_part2.toUpperCase()"></p>
+                                        <!-- <span id="line1_part1" ng-bind="text[language.code].line1_part1" ></span> -->
+                                        <p  id="line1_part1"  class="m-0" ng-bind="text[language.code].line1_part2.toUpperCase()"></p>
                                         <p class="m-0" ng-bind="text[language.code].line2_part1.toUpperCase()"></p>
+                                    </div>
+                                    <div id="static" class="text-nowrap {{language.code}}">
                                         <p class="apex-new-book-font m-0" ng-bind="text[language.code].line2_part2"></p>
                                     </div>
                                 </div>
