@@ -27,8 +27,19 @@
         }
         .boxIncon img{
             height: 275px;
+            width: 275px;
         }    
 
+        .ru .boxIncon img{
+            margin-top:25px;
+            height: 225px;
+            width: 225px;
+        }   
+        .es .boxIncon img{
+            margin-top:25px;
+            height: 225px;
+            width: 225px;
+        }   
         .giorgio-font{
             font-family: 'Giorgio Sans', sans-serif;
             font-weight:700;
@@ -38,8 +49,8 @@
         .giorgio-font-light{
             font-family: 'Giorgio Sans', sans-serif;
             font-weight:275;
-            line-height: 45px;
-            font-size: 50px;
+            line-height: 65px;
+            font-size: 65px;
         }
         .apex-new-book-font{
             font-family: 'Apex New Book', sans-serif;
@@ -48,12 +59,6 @@
             font-size: 28px;
         }
         
-        /* #newImage canvas{
-            width: 100%;
-            height: 100%;
-      
-        } */
-
 
         .padding{
             padding: 5px 20px 5px 5px;
@@ -73,7 +78,7 @@
         }
 
         .boxGenerate .text-box-width{
-            width: 345px;
+            width: 600px;
         }
 
         .boxGenerate .box-size{
@@ -127,53 +132,28 @@
         }
 
 
-        .ar{ padding-left: 40px; }
-        .hy .boxGenerate .text-box-width{ width: 500px; }
-        .bn .boxGenerate .text-box-width{ width: 450px; }
-        .bg .boxGenerate .text-box-width{ width: 500px; }
-        .et .boxGenerate .text-box-width{ width: 400px; }
-        .fi .boxGenerate .text-box-width{ width: 400px; }
-        .ka .boxGenerate .text-box-width{ width: 500px; }
-        .el .boxGenerate .text-box-width{ width: 500px; }
-        .hi .boxGenerate .text-box-width{ width: 375px; }
-        .is .boxGenerate .text-box-width{ width: 375px; }
-        .ja .boxGenerate .text-box-width{ width: 450px; }
-        .ko .boxGenerate .text-box-width{ width: 400px; }
-        .ms .boxGenerate .text-box-width{ width: 500px; }
-        .ne .boxGenerate .text-box-width{ width: 475px; }
-        .pl .boxGenerate .text-box-width{ width: 430px; }
-        .sr .boxGenerate .text-box-width{ width: 500px; }
-        .uk .boxGenerate .text-box-width{ width: 500px; }
+        .ar{ padding-left: 80px; margin-right: 40px; }
 
 
-        .ar .boxGenerate .text-box-width{ width: 475px; }
-        .fr .boxGenerate .text-box-width{ width: 355px; }
-        .ru .boxGenerate .text-box-width{ width: 450px; }
-        .es .boxGenerate .text-box-width{ width: 400px; }
-        .zh .boxGenerate .text-box-width{ width: 400px; }
 
-        .am .giorgio-font{ line-height: 55px; }
-        .hy .giorgio-font{ line-height: 50px; font-size: 50px; }
-        .hy .giorgio-font-light{ line-height: 33px; font-size: 33px; }
-        .bg .giorgio-font-light{ line-height: 44px; font-size: 44px; }
-        .fi .giorgio-font-light{ line-height: 40px; font-size: 40px; }
-        .ka .giorgio-font-light{ line-height: 32px; font-size: 32px; }
-        .el .giorgio-font{ line-height: 50px; font-size: 50px; }
-        .el .giorgio-font-light{ line-height: 40px; font-size: 40px; }
-        .ko .giorgio-font{ line-height: 57px; }
-        .ko .giorgio-font-light{ line-height: 48px;  }
-        .ms .giorgio-font{ line-height: 50px; font-size: 50px; }
+        .ar .boxGenerate .text-box-width{ width: 500px;}
+        .fr .boxGenerate .text-box-width{ width: 600px; }
+        .ru .boxGenerate .text-box-width{ width: 715px;}
+        .es .boxGenerate .text-box-width{ width: 600px;}
+        .zh .boxGenerate .text-box-width{ width: 800px; }
+
+
 
         .ar .giorgio-font{ line-height: 60px; font-size: 50px; }
-        .ar .apex-new-book-font{ line-height: 55px; font-size: 40px; }
+        .ar .apex-new-book-font{ line-height: 40px; font-size: 30px; }
 
-        .ru .giorgio-font{ line-height: 65px; font-size: 65px; }
-        .ru .giorgio-font-light{ line-height: 46px; font-size: 46px; }
-        .ru .apex-new-book-font{ line-height: 60px; font-size: 40px; }
+        .ru .giorgio-font{ line-height: 45px; font-size: 45px; }
+        .ru .giorgio-font-light{ line-height: 45px; font-size: 30px; }
+        .ru .apex-new-book-font{ line-height: 45px; font-size: 35px; }
 
-        .zh .giorgio-font{ line-height: 80px; font-size: 65px; }
-        .zh .giorgio-font-light{ line-height: 46px; font-size: 46px; }
-        .zh .apex-new-book-font{ line-height: 65px; font-size: 45px; }
+        .zh .giorgio-font{ line-height: 85px; font-size: 70px; }
+        .zh .giorgio-font-light{ line-height: 55px; font-size: 55px; }
+        .zh .apex-new-book-font{ line-height: 45px; font-size: 45px; }
         .is-rtl{
             direction: rtl;
             text-align: right;
@@ -273,11 +253,11 @@
         </div>
         <div  class="col-lg-9 logo-box {{language.code}}">
             <div style="opacity: 0010;" >
-                <div class="boxGenerate box-size" id="mainImageBox">
+                <div class="boxGenerate box-size {{language.code}}" id="mainImageBox">
                     <div class="boxIncon box-size" id="imgGenerator">
-                        <div class="row box-size ps-1" style="display: flex; flex-wrap: wrap;">
-                            <div class="col-lg-51 p-0 debug">
-                                <img src="/app/images/idb-celebrations/idb-ball.png"  class="img-fluid idb-logo pull-right" id="logoImg"/>
+                        <div class="row box-size ps-1" style="display: flex; flex-wrap: nowrap;">
+                            <div class="col-lg-51 p-0 debug {{language.code}}">
+                                <img src="/app/images/idb-celebrations/idb-ball.png"  class=" idb-logo " id="logoImg"/>
                             </div>
                             <div class="col-lg-71 debug" style=" display: flex; align-items: center;" ng-if="language.code" >
                                 <div class="text-box-width" ng-class="{ 'is-rtl':isRightToLeft, 'is-ltr':!isRightToLeft }" >
@@ -286,12 +266,11 @@
                                             <span id="customName" ng-bind="text[language.code].name"></span> 
                                         </div>                             
                                     </div>
-                                    <div id="line1" class="giorgio-font-light text-nowrap {{language.code}} "  >
-                                        <span id="line1_part1" ng-bind="text[language.code].line1_part1" ></span>
-                                    </div>
-                                    <div id="static" class="giorgio-font text-nowrap {{language.code}}">
-                                        <p  class="m-0" ng-bind="text[language.code].line1_part2.toUpperCase()"></p>
+                                    <div id="line1" class="giorgio-font text-nowrap  "  >
+                                        <p  id="line1_part1"  class="m-0" ng-bind="text[language.code].line1_part2.toUpperCase()"></p>
                                         <p class="m-0" ng-bind="text[language.code].line2_part1.toUpperCase()"></p>
+                                    </div>
+                                    <div id="static" class="text-nowrap">
                                         <p class="apex-new-book-font m-0" ng-bind="text[language.code].line2_part2"></p>
                                     </div>
                                 </div>
