@@ -197,7 +197,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             $timeout(function(){
                 let maxFontSize = 70;// = 120;
                 if(['zh'].includes($scope.language.code))
-                    maxFontSize = 100;
+                    maxFontSize = 80;
 
                 $('#bigtext').bigtext({
                     maxfontsize:maxFontSize
