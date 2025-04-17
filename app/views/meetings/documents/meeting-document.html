@@ -82,9 +82,9 @@
             <div ng-if="::document.subject_ss.length">Subjects to: {{::document.subject_ss}}</div>
             <div ng-if="::document.actionDate_dt" class="text-danger">Action required by {{::document.actionDate_dt|moment:'add':23.9:'hours'|moment:'toDate'|date:'yyyy-MM-dd'}}</div>
 
-            <table class="statistics xtable table-bordered table-condensed hidden-xs hidden-sm" ng-if="showStatistics" >
-                <tr><th ng-repeat="(locale, name) in ::LANGUAGES" class="text-muted">{{name}}</th></tr>
-                <tr><td ng-repeat="(locale, name) in ::LANGUAGES" class="text-muted text-nowrap">{{(document.file_stats[locale]|date:'yyyy-MM-dd HH:mm':'UTC') || 'N/A'}}</td></tr>
+            <table class="statistics xtable table-bordered table-condensed hidden-xs hidden-sm" ng-if="showStatistics" style="font-size:12px" >
+                <tr><th ng-repeat="(locale, name) in ::LANGUAGES" class="text-muted p-1">{{name}}</th></tr>
+                <tr><td ng-repeat="(locale, name) in ::LANGUAGES" class="text-muted p-1 text-nowrap border" title="{{::'UTC'+(document.file_stats[locale]|date:'Z')}}">{{(document.file_stats[locale]|date:dateFormat()) || 'N/A'}}</td></tr>
             </table>
 
 

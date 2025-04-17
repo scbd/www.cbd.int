@@ -42,6 +42,7 @@ import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
                 $scope.downloadble    = canDownload();
                 $scope.LANGUAGES      = LANGUAGES
                 $scope.vueOptions = { components: { copyLink, AgendaItem } } ;
+                $scope.dateFormat = ()=>$scope.showStatistics=='full' ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd';
 
                 //==============================
                 //
