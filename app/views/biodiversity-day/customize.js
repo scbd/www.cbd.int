@@ -2,7 +2,7 @@
 import 'file-saverjs';
 import 'bigText';
 import _ from 'lodash';
-import languageTranslation from './other-langugages.js';
+import languageTranslation from './other-langugages-2025.js';
 import Vue from 'vue'
 import 'ngVue'
 import '~/services/article-service'
@@ -29,6 +29,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             {code:'es', language            : 'Spanish' , group:'UN languages'},
             {code:'zh', language            : 'Chinese' , group:'UN languages'},
         ]
+
         $scope.text = {
             en : {
                 line1_part1         : '',
@@ -99,7 +100,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                 charLimit: 45,
                 and:'و'
             },
-            // ...languageTranslation            
+            ...languageTranslation            
         }
         $scope.rtlLanguages = {
             ar	: 'Arabic',
@@ -353,6 +354,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
             $http.get('/api/v2013/thesaurus/domains/ISO639-2/terms', {cache:true}).then(function(data){
                 data.data.forEach(function(lang){
                     var code = lang.identifier.replace('lang-', '')
+                    console.warn('code',languageTranslation[code])
                     if(languageTranslation[code] && !_.find($scope.defaultLanguages, {code : code})){
                         var lang = {
                             ...languageTranslation[code],
@@ -360,7 +362,7 @@ export default ['$location', 'user','$http','$scope', '$timeout', '$window', 'ng
                             language: lang.title.en,
                             group:'Other Languages',
                         }
-
+                        $scope.defaultLanguages.push(lang)
                         return lang;
                     }
                 });                
