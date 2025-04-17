@@ -38,7 +38,7 @@
             <button type="button" class="btn btn-light" ng-class="{active:documentsCtrl.editMode, 'btn-info': documentsCtrl.editMode }" ng-click="documentsCtrl.editMode=!documentsCtrl.editMode"><i class="fa fa-edit"></i></button>
         </span>
 
-        <button type="button" ng-if="documentsCtrl.isStaff" class="btn btn-light" ng-class="{active:documentsCtrl.statsMode, 'btn-info': documentsCtrl.statsMode }" ng-click="documentsCtrl.statsMode=!documentsCtrl.statsMode && documentsCtrl.isStaff"><i class="fa fa-bar-chart"></i></button>
+        <button type="button" class="btn btn-light hidden-xs hidden-sm" ng-class="{active:documentsCtrl.statsMode, 'btn-info': documentsCtrl.statsMode }" ng-click="documentsCtrl.toggleStatsMode()"><i class="fa fa-bar-chart"></i></button>
 
         <span ng-if="documentsCtrl.meeting.uploadStatement">
             <upload-statement-button ng-vue="vueOptions" :show.sync="documentsCtrl.uploadStatement" :route="route" @notify="documentsCtrl.notify" />

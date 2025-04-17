@@ -58,6 +58,7 @@ export { default as template } from './documents.html';
 
         _ctrl.jumpTo = jumpTo;
         _ctrl.showMeeting = showMeeting===undefined ? true : !!showMeeting;
+        _ctrl.statsMode = null;
         _ctrl.uploadStatement = false;
         _ctrl.sort = $location.hash() == 'agenda' ? 'agenda' : 'document';
         _ctrl.tabs = [];
@@ -66,7 +67,11 @@ export { default as template } from './documents.html';
         _ctrl.notify = function(msg) {
             $scope.$emit("showInfo", msg);
         }
-
+        _ctrl.toggleStatsMode = () => {
+            if(_ctrl.statsMode) _ctrl.statsMode = null;
+            else                _ctrl.statsMode = _ctrl.isStaff ? 'full' : 'simple';
+        }
+        
         _ctrl.selectedDocuments = () => allDocuments.filter(o => o.selected);
 
         $scope.$watch('documentsCtrl.sort', function(s){
