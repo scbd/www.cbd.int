@@ -4,10 +4,17 @@ import app from '~/app'
 
         $get : ["$location", function($location) {
 
-            if($location.$$host!= "www.cbd.int"){
-                return 'CHM-DEV';
-            }
-            return 'CHM';
+            const isBbi = $location.$$absUrl.includes('/biobridge');
+
+            if($location.$$host!= "www.cbd.int")
+                if(!isBbi)
+                    return 'CHM-DEV';
+                else 
+                    return 'BBI-DEV';
+            else if(!isBbi)
+                return 'CHM';
+            else
+                return 'BBI';
         }]
     });
 

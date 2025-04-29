@@ -22,7 +22,7 @@ import '~/directives/bbi/controls/km-terms-check';
 import '~/providers/locale';
 import '~/directives/bbi/views/view-organization'; 
 
-app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility',  'IStorage', '$route','$timeout','locale','userSettings','ngDialog',  function ($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route,$timeout,locale,userSettings,ngDialog) {
+app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter", "$q", "guid", "$location", "Thesaurus", 'authentication', 'editFormUtility',  'IStorage', '$route','$timeout','locale','userSettings','ngDialog','realm', function ($http, $rootScope, Enumerable, $filter, $q, guid, $location, thesaurus, authentication, editFormUtility, storage, $route,$timeout,locale,userSettings,ngDialog, realm) {
 	return {
 		restrict   : 'E',
 		template   : template,
@@ -257,9 +257,9 @@ app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter"
       function getCustomConfig(document){
         if(document && document.header && document.header.schema == 'organization'){
           return editFormUtility.getRealm(document.header.identifier)
-                    .then(function(realm){
-                      if(realm && realm.trim()!=''){
-                        return {headers: {realm:realm}}
+                    .then(function(r){
+                      if(r && r.trim()!=''){
+                        return {headers: {realm:r}}
                       }
                     });
         }
@@ -502,9 +502,9 @@ app.directive('editOrganization', ['$http',"$rootScope", "Enumerable", "$filter"
 				if(identifier && identifier!=='new'){
 					$scope.editExisting = true;
 					promise = editFormUtility.getRealm(identifier)
-					.then(function(realm){
-						$scope.documentRealm =  realm;
-						return editFormUtility.load(identifier, "organization", {headers: {realm: realm}});
+					.then(function(r){
+						$scope.documentRealm =  r;
+						return editFormUtility.load(identifier, "organization", {headers: {realm: r}});
 					});
 				}
 				else
