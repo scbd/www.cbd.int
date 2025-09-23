@@ -262,6 +262,13 @@ export default {
 
             this.meetings = this.meetings.filter(o=>o.uploadStatement);
 
+            // Only allow agenda items that are configured for statement submission
+            // If none are configured, allow all agenda items
+            this.meetings.filter(({ statementAgendaItems })=>statementAgendaItems?.length)
+                         .forEach(({ agenda, statementAgendaItems }) => {
+                            agenda.items = agenda.items.filter(i => statementAgendaItems.includes(i.item));
+                         })
+
             if(this.filterByMeetingAgenda){
                 const filterMeetings = Object.keys(this.filterByMeetingAgenda);
                 this.meetings = this.meetings
