@@ -84,6 +84,8 @@ async function created(){
     const meetings       = await Promise.all(meetingIds.map(id=>this.api.getMeetingById(id)));
 
     this.meetings = meetings.filter(o=>!!o.agenda);
+
+    if(this.meetings.length===0) console.warn("InterpretersView: no meetings set with agenda ");
   }
 }
 
