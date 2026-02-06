@@ -91,7 +91,7 @@ app.all('/*', send404);
 app.use(onError);
 
 app.listen(process.env.PORT || 2000, '0.0.0.0', function(){
-    console.info('info: Listening on %j', this.address());
+    console.info(`info: Listening on    : http://localhost:${this.address().port}`);
 });
 
 // Handle proxy errors ignore
