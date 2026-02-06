@@ -226,6 +226,12 @@ export default class Api
     return intervention;
   }
 
+  async moveInterventionToSession(targetSessionId, interventionId) {
+
+    const intervention = await this.http.put(`api/v2021/meeting-sessions/${encodeURIComponent(targetSessionId)}/interventions/${encodeURIComponent(interventionId)}/move`).then(res => res.data).catch(tryCastToApiError);
+
+    return intervention;
+  }
 
   async getSessionById(sessionId, includeInterventions=false) {
 

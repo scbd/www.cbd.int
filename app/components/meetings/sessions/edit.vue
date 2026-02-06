@@ -213,7 +213,10 @@ function replace(_id, intervention) {
   if( i>=0) this.interventions       .splice( i, 1);
   if(pi>=0) this.pendingInterventions.splice(pi, 1);
 
-  if(intervention) {
+  // Only re-add if intervention exists and belongs to this session
+  const belongsToThisSession = intervention && intervention.sessionId === this.sessionId;
+
+  if(intervention && belongsToThisSession) {
     if( i>=0 && intervention.status=='pending')  i=-1;
     if(pi>=0 && intervention.status=='public' ) pi=-1;
 
