@@ -60,14 +60,50 @@
                                         <option value="public">Delivered</option>
                                         <option value="pending" selected>Uploaded / Pending</option>
                                     </select>
-                                </div>        
-                            </div>       
+                                </div>
+                            </div>
+
+                            <!-- Move to Session -->
+                            <div class="form-group row" v-if="canMove">
+                                <label class="col-sm-3 col-form-label">Session</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <!-- Read-only display when not editing -->
+                                        <input v-if="!moveEnabled" type="text" class="form-control" readonly
+                                               :value="currentSessionDisplay" />
+
+                                        <!-- Editable select when enabled -->
+                                        <select v-else :disabled="!!progress || sessionsLoading"
+                                                class="form-control" v-model="selectedSessionId">
+                                            <option v-if="sessionsLoading" disabled value="">Loading sessions...</option>
+                                            <option v-if="sessionsError" disabled value="">Error loading sessions</option>
+                                            <option v-for="session in availableSessions" :key="session._id"
+                                                    :value="session._id">
+                                                {{ formatSessionOption(session) }}{{ session._id === sessionId ? ' (current)' : '' }}
+                                            </option>
+                                        </select>
+
+                                        <!-- Pencil edit button -->
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                    :disabled="!!progress"
+                                                    @click="toggleMoveEnabled"
+                                                    :title="moveEnabled ? 'Cancel move' : 'Move to different session'">
+                                                <i :class="moveEnabled ? 'fa fa-times' : 'fa fa-pencil'"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <small class="form-text text-warning" v-if="moveEnabled && sessionHasChanged">
+                                        <i class="fa fa-exclamation-triangle"></i> Intervention will be moved when you save.
+                                    </small>
+                                </div>
+                            </div>
 
                             <div class="form-group row">
                                 <label for="status" class="col-sm-3 col-form-label">Date / Time</label>
                                 <div class="col-sm-9">
                                     <DateTimeSelector :disabled="!!progress" v-model="datetime" :timezone="timezone"/>
-                                </div>        
+                                </div>
                             </div>       
 
                             <h5>Files</h5>
@@ -148,10 +184,10 @@
 <script>
 import { cloneDeep } from 'lodash'
 import $    from 'jquery';
-import Api  from '../api.js'
+import Api, { mapObjectId }  from '../api.js'
 import OrganizationSearch from './organization-search.vue'
 import DateTimeSelector   from './datetime-selector.vue'
-import { format as formatDate } from '../datetime.js'
+import { format as formatDate, timezone } from '../datetime.js'
 
 export default {
     name: 'uploadStatement',
@@ -180,10 +216,16 @@ export default {
             organization : null,
             progress: null,
             error : null,
+            // Move intervention functionality
+            availableSessions: [],
+            selectedSessionId: this.sessionId,
+            moveEnabled: false,
+            sessionsLoading: false,
+            sessionsError: null,
         }
     },
-    computed: { canUpdateStatus, canPublish },
-    methods: { open, close, clearError, save, onOrganizationChange, isKronosUser, formatDate },
+    computed: { canUpdateStatus, canPublish, canMove, sessionHasChanged, currentSessionDisplay },
+    methods: { open, close, clearError, save, onOrganizationChange, isKronosUser, formatDate, loadAvailableSessions, formatSessionOption, toggleMoveEnabled },
     created,
     mounted, 
 }
@@ -221,9 +263,25 @@ function canUpdateStatus() {
          (!this.intervention._id || this.intervention.status=='pending');
 }
 
-function canPublish() { 
-    return this.status=='public' &&  
+function canPublish() {
+    return this.status=='public' &&
            this.status!=this.intervention.status;
+}
+
+function canMove() {
+    return !!this.intervention._id && !!this.intervention.sessionId;
+}
+
+function sessionHasChanged() {
+    return this.selectedSessionId && this.selectedSessionId !== this.sessionId;
+}
+
+function currentSessionDisplay() {
+    if (!this.availableSessions.length) {
+        return 'Current session';
+    }
+    const session = this.availableSessions.find(s => s._id === this.sessionId);
+    return session ? this.formatSessionOption(session) : 'Current session';
 }
 
 function onOrganizationChange(o) {
@@ -240,12 +298,49 @@ function isKronosUser(id) {
     return pattern.test(id);
 }
 
+async function loadAvailableSessions() {
+    if (this.availableSessions.length > 0) return;
+
+    try {
+        this.sessionsLoading = true;
+        this.sessionsError = null;
+        const meetingIds = this.meetings.map(m => mapObjectId(m._id));
+        this.availableSessions = await this.api.querySessions({
+            q: { meetingIds: { $in: meetingIds } },
+            s: { date: -1 }
+        });
+    } catch (err) {
+        this.sessionsError = err;
+    } finally {
+        this.sessionsLoading = false;
+    }
+}
+
+function formatSessionOption(session) {
+    const date = formatDate(timezone(session.date, session.timezone), 'd LLL yyyy (cccc) T');
+    return session.title ? `${session.title} - ${date}` : date;
+}
+
+function toggleMoveEnabled() {
+    this.moveEnabled = !this.moveEnabled;
+    if (this.moveEnabled) {
+        this.loadAvailableSessions();
+    } else {
+        this.selectedSessionId = this.sessionId;
+    }
+}
+
 async function save(publish=false){
   try {
 
       this.progress = true;
 
     let   interventionId     = this.interventionId;
+
+    // Move intervention if session changed (BEFORE other operations)
+    if (this.sessionHasChanged && interventionId) {
+        await this.api.moveInterventionToSession(this.selectedSessionId, interventionId);
+    }
     const title              = this.title;
     const status             = this.status;
     const organizationId     = this.organizationId;

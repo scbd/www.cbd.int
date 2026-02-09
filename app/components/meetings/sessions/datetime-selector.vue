@@ -17,6 +17,18 @@
     <span class="form-control">
       <i>{{datetime | formatDate('z')}}</i>
     </span>
+    <div class="input-group-append">
+      <button type="button" class="btn btn-outline-secondary dropdown-toggle"
+              :disabled="disabled"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-menu dropdown-menu-right">
+        <a class="dropdown-item" href="#" @click.prevent="setToNow">
+          <i class="fa fa-clock-o"></i> Set to now
+        </a>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -50,6 +62,7 @@ export default {
     setMinutePart,
     emitUpdate,
     addMinutes,
+    setToNow,
   },
   filters: {
     formatDate
@@ -106,6 +119,12 @@ function addMinutes(offset) {
   date = date.plus({ minutes: offset });
 
   this.emitUpdate(date)
+}
+
+function setToNow() {
+  // Get current time in the target timezone
+  const now = setTimezone(new Date(), this.timezone);
+  this.emitUpdate(now);
 }
 
 function emitUpdate(date) {

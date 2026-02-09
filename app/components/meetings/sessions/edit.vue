@@ -8,6 +8,8 @@
         </span>
       </small>
     </h1>
+{{ session && session.title }}
+    <h2 v-if="session">{{ session.title }}</h2>
 
     <h3  v-if="session" :class="{ 'bg-warning text-dark p-1': isInPast(session), 'bg-danger text-white p-1': isInFuture(session) }" class="position-sticky sticky-date"> 
                   {{ (session || {}).date | timezone(session.timezone) | formatDate('d MMMM yyyy (cccc) T') }}
@@ -213,7 +215,10 @@ function replace(_id, intervention) {
   if( i>=0) this.interventions       .splice( i, 1);
   if(pi>=0) this.pendingInterventions.splice(pi, 1);
 
-  if(intervention) {
+  // Only re-add if intervention exists and belongs to this session
+  const belongsToThisSession = intervention && intervention.sessionId === this.sessionId;
+
+  if(intervention && belongsToThisSession) {
     if( i>=0 && intervention.status=='pending')  i=-1;
     if(pi>=0 && intervention.status=='public' ) pi=-1;
 
