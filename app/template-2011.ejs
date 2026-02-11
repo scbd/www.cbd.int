@@ -18,7 +18,7 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
         'npm/bootstrap@3.4.1/dist/js/bootstrap.min.js',
         'npm/requirejs@2.3.6/require.min.js',
         'npm/regenerator-runtime@0.14.1/runtime.min.js'
-    ]).join(',')}`%>"></script>
+    ]).join(',')}?app=www`%>"></script>
     <script>
         require.config({ waitSeconds: 30, baseUrl : '/app/', urlArgs: 'v=<%=gitVersion%>' });
         require(["boot"], function(boot){
