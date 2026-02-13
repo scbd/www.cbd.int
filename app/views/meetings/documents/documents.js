@@ -13,6 +13,8 @@ import moment from 'moment'
 import displayGroups from './display-groups'
 import * as meta from '~/services/meta'
 import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
+import UploadStatementButton from '~/components/meetings/upload-statement-button.vue'
+import SessionsView from '~/components/meetings/sessions/view.vue'
 import { normalizeMeeting, normalizeDocumentSymbol, documentSortKey as sortKey } from '~/services/meetings'
 import '~/filters/to-display-symbol';
 
@@ -101,7 +103,7 @@ export { default as template } from './documents.html';
                 meta.title(`${meeting.code} - Documents`);
 
                 if(meeting.uploadStatement) {
-                    registerComponents({uploadStatementButton : await import('~/components/meetings/upload-statement-button.vue') });
+                    registerComponents({uploadStatementButton : UploadStatementButton });
                 }
 
                 meeting.alerts = _(meeting.alerts||[]).map(fixAlertHash).filter(isAlertVisible).value();
@@ -357,7 +359,7 @@ export { default as template } from './documents.html';
                 var fakeDocs = []; 
                 fakeDocs.length = count;
 
-                registerComponents({ sessions : await import('~/components/meetings/sessions/view.vue') });
+                registerComponents({ sessions : SessionsView });
 
                 $scope.$applyAsync(()=>{
                     injectTab('statement', fakeDocs, { component:'sessions' });
