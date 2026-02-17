@@ -51,9 +51,9 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 
             const expandedReservationIds = _(_ctrl.frames).map(f=>f.reservations||[]).flatten().filter(r=>r.expand).map(r=>r._id).value();
 
-            const dateTimeSting = $route.current.params.datetime || $location.search().datetime; 
-            const dateTime      = dateTimeSting ? moment.tz(dateTimeSting, getTimezone()).startOf('day').toISOString() : null;
-            var streamId        = $route.current.params.streamId || defaultStreamId;
+            const dateTimeString = $route.current.params.datetime || $location.search().datetime; 
+            const dateTime       = dateTimeString ? moment.tz(dateTimeString, getTimezone()).startOf('day').toISOString() : null;
+            var streamId         = $route.current.params.streamId || defaultStreamId;
 
             var options  = dateTime ? { params : { cache:true, datetime: dateTime } } : { params : { cache:true } };
          
