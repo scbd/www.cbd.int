@@ -537,7 +537,7 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
             _ctrl.types[0].loaded = false;
             _ctrl.currentTab = undefined;
 
-            $location.search({ datetime: date });
+            $location.search({ datetime: date, timezone: getTimezone() });
 
             load();
             _ctrl.currentTab = tab;
