@@ -51,12 +51,13 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 
             const expandedReservationIds = _(_ctrl.frames).map(f=>f.reservations||[]).flatten().filter(r=>r.expand).map(r=>r._id).value();
 
-            const dateTimeString = $route.current.params.datetime || $location.search().datetime; 
-            const dateTime       = dateTimeString ? moment.tz(dateTimeString, getTimezone()).startOf('day').toISOString() : null;
-            var streamId         = $route.current.params.streamId || defaultStreamId;
+            const timezone       = $route.current.params?.timezone || $location.search()?.timezone || getTimezone();
+            const dateTimeString = $route.current.params?.datetime || $location.search()?.datetime; 
+            const dateTime       = dateTimeString ? moment.tz(dateTimeString, timezone).startOf('day').toISOString() : null;
+            const streamId       = $route.current.params.streamId || defaultStreamId;
 
-            var options  = dateTime ? { params : { cache:true, datetime: dateTime } } : { params : { cache:true } };
-         
+            const options  = dateTime ? { params : { cache:true, datetime:dateTime } } : { params : { cache:true } };
+
             return $q.when().then(async function(code){
 
                 const url = _ctrl.all
@@ -230,7 +231,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
         }
 
         function getTimezone() {
-          return  _ctrl.conferenceTimezone 
+            return $route.current.params?.timezone || $location.search()?.timezone || _ctrl.conferenceTimezone
         }
         _ctrl.getTimezone = getTimezone
 
