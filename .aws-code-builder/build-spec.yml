@@ -1,0 +1,144 @@
+# =============================================================================
+# build-spec.yml — AWS CodeBuild pipeline for scbd/www.cbd.int
+# =============================================================================
+#
+# Migrated from CircleCI. Replicates all CI/CD scenarios:
+#   1. Non-deploy branches  → build + test only (no push)
+#   2. master / dev / stg / dev-* / stg-*
+#                            → build + test + push scbd/www.cbd.int:<branch>
+#   3. stg/*                 → build + test + push scbd/www.cbd.int:stg-<name>
+#   4. release/*             → build + test + push scbd/www.cbd.int:release-<version>
+#   5. v-semver tags (scbd)  → build + test + push scbd/www.cbd.int:<version> + latest
+#
+# Required environment variables (set in CodeBuild project or Secrets Manager):
+#   DOCKER_USER  — Docker Hub username for image push
+#   DOCKER_PASS  — Docker Hub password / access token
+#
+# Git metadata variables (populated by extra-vars.sh at build time):
+#   CODEBUILD_GIT_BRANCH       — branch name        (CircleCI: CIRCLE_BRANCH)
+#   CODEBUILD_GIT_TAG          — tag name if present (CircleCI: CIRCLE_TAG)
+#   CODEBUILD_GIT_COMMIT       — full SHA            (CircleCI: CIRCLE_SHA1)
+#   CODEBUILD_GIT_SHORT_COMMIT — short SHA
+#   CODEBUILD_GIT_REPO         — repository name     (CircleCI: CIRCLE_PROJECT_REPONAME)
+#   CODEBUILD_GIT_ORG          — org / owner name    (CircleCI: CIRCLE_PROJECT_USERNAME)
+#
+# All phases use on-failure: ABORT so a test failure prevents image push.
+# =============================================================================
+
+version: 0.2
+
+phases:
+  # ---------------------------------------------------------------------------
+  # INSTALL — Start Docker-in-Docker and fetch SCBD build conventions
+  # ---------------------------------------------------------------------------
+  # CodeBuild runs in privileged mode. We start dockerd manually and then pull
+  # the shared extra-vars.sh script from the SCBD template repo. That script
+  # exports CODEBUILD_GIT_* variables derived from CodeBuild's native env.
+  # ---------------------------------------------------------------------------
+  install:
+    on-failure: ABORT
+    commands:
+      # Start Docker daemon (DinD) with overlay2 storage driver
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+      # Fetch and source SCBD shared build variables (populates CODEBUILD_GIT_*)
+      - curl -fsSL https://raw.githubusercontent.com/scbd/aws-code-builder-template/master/extra-vars.sh >> extras.sh
+      - . ./extras.sh
+
+  # ---------------------------------------------------------------------------
+  # PRE_BUILD — Authenticate with Docker Hub and build the application image
+  # ---------------------------------------------------------------------------
+  pre_build:
+    on-failure: ABORT
+    commands:
+      - echo Logging in to Docker Hub...
+      - docker login --username $DOCKER_USER --password $DOCKER_PASS
+      - echo Building Docker image...
+      - docker build -t output --build-arg COMMIT=$CODEBUILD_GIT_COMMIT .
+
+  # ---------------------------------------------------------------------------
+  # BUILD — Run integration tests inside the built image
+  # ---------------------------------------------------------------------------
+  # Starts the application container on port 8000 and verifies key endpoints
+  # respond successfully, matching the CircleCI test configuration.
+  # ---------------------------------------------------------------------------
+  build:
+    on-failure: ABORT
+    commands:
+      - echo Starting application container...
+      - docker run --name www -d -p 8000:8000 output
+      - sleep 10
+      - echo Running integration tests...
+      - docker exec www curl --retry 10 --retry-delay 5 -v http://localhost:8000/insession/
+      - docker exec www curl --retry 10 --retry-delay 5 -v http://localhost:8000/reports/map/
+      - docker kill www || true
+
+  # ---------------------------------------------------------------------------
+  # POST_BUILD — Conditionally push images to Docker Hub
+  # ---------------------------------------------------------------------------
+  # Only reached if tests pass (on-failure: ABORT on build phase).
+  # Evaluates 5 push scenarios matching the original CircleCI workflows:
+  #
+  # Scenario 1: Deploy branches (master, dev, stg, dev-*, stg-*)
+  #   → push scbd/www.cbd.int:<branch>
+  #
+  # Scenario 2: Staging sub-branches (stg/*)
+  #   → push scbd/www.cbd.int:stg-<name>
+  #
+  # Scenario 3: Release branches (release/*)
+  #   → push scbd/www.cbd.int:release-<version>
+  #
+  # Scenario 4: Version tags (v*) from scbd org
+  #   → push scbd/www.cbd.int:<version> + scbd/www.cbd.int:latest
+  #
+  # Scenario 5: Non-deploy branches / tags from forks
+  #   → no push (implicit — none of the conditions match)
+  # ---------------------------------------------------------------------------
+  post_build:
+    on-failure: ABORT
+    commands:
+      - echo Build succeeded — evaluating deploy conditions...
+
+      # Scenario 1: Deploy branches (master, dev, stg, dev-*, stg-*)
+      - |
+        if echo "$CODEBUILD_GIT_BRANCH" | grep -qE '^(master|dev|stg)$' || \
+           echo "$CODEBUILD_GIT_BRANCH" | grep -qE '^(dev|stg)-'; then
+          echo "Deploying branch $CODEBUILD_GIT_BRANCH to Docker Hub..."
+          docker tag output scbd/$CODEBUILD_GIT_REPO:$CODEBUILD_GIT_BRANCH
+          docker push scbd/$CODEBUILD_GIT_REPO:$CODEBUILD_GIT_BRANCH
+        fi
+
+      # Scenario 2: Staging sub-branches (stg/*)
+      - |
+        if echo "$CODEBUILD_GIT_BRANCH" | grep -qE '^stg/'; then
+          STG_NAME="${CODEBUILD_GIT_BRANCH#stg/}"
+          echo "Deploying staging branch stg-$STG_NAME to Docker Hub..."
+          docker tag output scbd/$CODEBUILD_GIT_REPO:stg-$STG_NAME
+          docker push scbd/$CODEBUILD_GIT_REPO:stg-$STG_NAME
+        fi
+
+      # Scenario 3: Release branches (release/*)
+      - |
+        if echo "$CODEBUILD_GIT_BRANCH" | grep -qE '^release/'; then
+          RELEASE_VER="${CODEBUILD_GIT_BRANCH#release/}"
+          echo "Deploying release $RELEASE_VER to Docker Hub..."
+          docker tag output scbd/$CODEBUILD_GIT_REPO:release-$RELEASE_VER
+          docker push scbd/$CODEBUILD_GIT_REPO:release-$RELEASE_VER
+        fi
+
+      # Scenario 4: Version tags (v*) — only pushed for scbd org
+      - |
+        if [ -n "$CODEBUILD_GIT_TAG" ] && [ "$CODEBUILD_GIT_ORG" = "scbd" ]; then
+          TAG_VER="${CODEBUILD_GIT_TAG#v}"
+          echo "Deploying tag $TAG_VER to Docker Hub..."
+          docker tag output scbd/$CODEBUILD_GIT_REPO:$TAG_VER
+          docker tag output scbd/$CODEBUILD_GIT_REPO:latest
+          docker push scbd/$CODEBUILD_GIT_REPO:$TAG_VER
+          docker push scbd/$CODEBUILD_GIT_REPO:latest
+        elif [ -n "$CODEBUILD_GIT_TAG" ] && [ "$CODEBUILD_GIT_ORG" != "scbd" ]; then
+          echo "Tag build from org '$CODEBUILD_GIT_ORG' — skipping push (only scbd tags allowed)"
+        fi
+
+cache:
+  paths:
+    - node_modules/**/*
