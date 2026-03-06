@@ -131,24 +131,24 @@ import ScbdFooter from '~/components/nav/footer.vue'
 
                 $rootScope.user = user;
 
-                import("~/js/slaask").then(function({ default: _slaask }) {
+                // import("~/js/slaask").then(function({ default: _slaask }) {
 
-                    if (user.isAuthenticated) {
-                        _slaask.identify(user.name, {
-                            'user-id' : user.userID,
-                            'name' : user.name,
-                            'email' : user.email,
-                        });
+                //     if (user.isAuthenticated) {
+                //         _slaask.identify(user.name, {
+                //             'user-id' : user.userID,
+                //             'name' : user.name,
+                //             'email' : user.email,
+                //         });
 
-                        if(_slaask.initialized && _slaask.slaaskSendUserInfos) {
-                            _slaask.slaaskSendUserInfos();
-                        }
-                    }
+                //         if(_slaask.initialized && _slaask.slaaskSendUserInfos) {
+                //             _slaask.slaaskSendUserInfos();
+                //         }
+                //     }
 
-                    if(!_slaask.initialized) {
-                        _slaask.init('ae83e21f01860758210a799872e12ac4');
-                    }
-                });                    
+                //     if(!_slaask.initialized) {
+                //         _slaask.init('ae83e21f01860758210a799872e12ac4');
+                //     }
+                // });                    
             });
         }
 
