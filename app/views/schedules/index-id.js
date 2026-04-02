@@ -54,7 +54,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
             const timezone       = $route.current.params?.timezone || $location.search()?.timezone || getTimezone();
             const dateTimeString = $route.current.params?.datetime || $location.search()?.datetime; 
             const dateTime       = dateTimeString ? moment.tz(dateTimeString, timezone).startOf('day').toISOString() : null;
-            const streamId       = $route.current.params.streamId || defaultStreamId;
+            const streamId       = $route.current.params?.streamId || defaultStreamId;
 
             const options  = dateTime ? { params : { cache:true, datetime:dateTime } } : { params : { cache:true } };
 
