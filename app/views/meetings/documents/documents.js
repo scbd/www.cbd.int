@@ -13,6 +13,7 @@ import moment from 'moment'
 import displayGroups from './display-groups'
 import * as meta from '~/services/meta'
 import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
+import EditorialRequestButton from '~/components/meetings/editorial-request-button.vue'
 import UploadStatementButton from '~/components/meetings/upload-statement-button.vue'
 import SessionsView from '~/components/meetings/sessions/view.vue'
 import { normalizeMeeting, normalizeDocumentSymbol, documentSortKey as sortKey } from '~/services/meetings'
@@ -37,7 +38,7 @@ export { default as template } from './documents.html';
         $scope.tokenReader = function(){ return apiToken.get()}
         $scope.route       = { params : $route.current.params, query: $location.search() }
         $scope.vueOptions  = {
-          components: { AgendaItem },
+          components: { AgendaItem, EditorialRequestButton }, // PUT COMPONENT HERE
         //   i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
         };
 

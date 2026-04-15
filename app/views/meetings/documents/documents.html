@@ -31,7 +31,14 @@
         </span>
     </div>
 
+    <!-- {{ documentsCtrl.selectedDocuments() && documentsCtrl.selectedDocuments()[0] && documentsCtrl.selectedDocuments()[0]}} -->
+
     <div ng-if="!documentsCtrl.error" id="print-smart-checkout" ng-cloak class="pull-right hidden-print">
+
+        <!-- TODO uncomment to only show to staff -->
+        <!-- <span ng-if="!documentsCtrl.isEditor"> -->
+            <editorial-request-button ng-vue="vueOptions" ng-vue-expose="documentsCtrl" :meeting-id="documentsCtrl.meeting._id" />
+        <!-- </span> -->
 
         <span ng-if="documentsCtrl.edit" class="edit">
             <button type="button" class="btn btn-light" ng-click="documentsCtrl.edit(null)"><i class="fa fa-plus"></i></button>
@@ -41,6 +48,7 @@
         <button type="button" class="btn btn-light hidden-xs hidden-sm" ng-class="{active:documentsCtrl.statsMode, 'btn-info': documentsCtrl.statsMode }" ng-click="documentsCtrl.toggleStatsMode()"><i class="fa fa-bar-chart"></i></button>
 
         <span ng-if="documentsCtrl.meeting.uploadStatement">
+            <!-- more interesting -->
             <upload-statement-button ng-vue="vueOptions" :show.sync="documentsCtrl.uploadStatement" :route="route" @notify="documentsCtrl.notify" />
         </span>
 
@@ -192,6 +200,7 @@
 
                             <td ng-if="documentsCtrl.editMode" style="width:10px">
                                 <div ng-if="::document.linkedToId">
+                                    <!-- HERE -->
                                     <agenda-item ng-vue="vueOptions" :item="{ code: 'Linked', color:'#a0a0a0' }"/>
                                 </div>
                             </td>
