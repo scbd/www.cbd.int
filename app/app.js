@@ -4,7 +4,7 @@ import {
   AngularVueRouterPlugin, 
   AngularVueRoutePlugin, 
   AngularVuePlugin,
-  AngularVueDirective,
+  AngularVue2Directive as AngularVueDirective,
   AngularVueAuthPlugin
 } from 'angular-vue';
 
