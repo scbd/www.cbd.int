@@ -25,8 +25,8 @@ if(!process.env.API_URL) {
 }
 const accountsUrl=  process.env.ACCOUNTS_URL   || 'https://accounts.cbddev.xyz';
 const apiUrl     =  process.env.API_URL || 'https://api.cbddev.xyz';
-const wwwUrl     = process.env.WWW_URL || 'https://www.cbd.int';
-const strataUrl  = process.env.STRATA_URL || 'https://strata.cbddev.xyz'; 
+const wwwUrl     =  process.env.WWW_URL || 'https://www.cbd.int';
+const strataUrl  =  process.env.STRATA_URL || 'https://strata.cbddev.xyz'; 
 const gitVersion = (process.env.COMMIT  || 'UNKNOWN').substr(0, 8);
 const siteAlert  =  process.env.SITE_ALERT || '';
 const siteAlertWarning = process.env.SITE_ALERT_LEVEL || 'danger';
