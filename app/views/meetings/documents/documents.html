@@ -37,7 +37,7 @@
 
         <!-- TODO uncomment to only show to staff -->
         <!-- <span ng-if="!documentsCtrl.isEditor"> -->
-            <editorial-request-button ng-vue="vueOptions" ng-vue-expose="documentsCtrl" :meeting-id="documentsCtrl.meeting._id" />
+            <editorial-request-button ng-vue="vueOptions" :meeting-id="documentsCtrl.meeting._id" />
         <!-- </span> -->
 
         <span ng-if="documentsCtrl.edit" class="edit">
