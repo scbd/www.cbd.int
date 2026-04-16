@@ -38,7 +38,7 @@ export { default as template } from './documents.html';
         $scope.tokenReader = function(){ return apiToken.get()}
         $scope.route       = { params : $route.current.params, query: $location.search() }
         $scope.vueOptions  = {
-          components: { AgendaItem, EditorialRequestButton }, // PUT COMPONENT HERE
+          components: { AgendaItem, EditorialRequestButton },
         //   i18n: new VueI18n({ locale: 'en', fallbackLocale: 'en', messages: { en: {} } })
         };
 

@@ -19,7 +19,6 @@ export default {
     requestId: { type: String, required: false },
   },
   computed: {
-    // build the new URL here and return
     requestUrl() {
       const url = new URL(window.scbd.strataUrl);
 
