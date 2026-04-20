@@ -33,6 +33,10 @@
 
     <div ng-if="!documentsCtrl.error" id="print-smart-checkout" ng-cloak class="pull-right hidden-print">
 
+        <span ng-if="!documentsCtrl.isEditor">
+            <editorial-request-button ng-vue="vueOptions" :meeting-id="documentsCtrl.meeting._id" />
+        </span>
+
         <span ng-if="documentsCtrl.edit" class="edit">
             <button type="button" class="btn btn-light" ng-click="documentsCtrl.edit(null)"><i class="fa fa-plus"></i></button>
             <button type="button" class="btn btn-light" ng-class="{active:documentsCtrl.editMode, 'btn-info': documentsCtrl.editMode }" ng-click="documentsCtrl.editMode=!documentsCtrl.editMode"><i class="fa fa-edit"></i></button>
