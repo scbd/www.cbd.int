@@ -4,7 +4,6 @@ import 'bigText';
 import _ from 'lodash';
 import languageTranslation from './other-langugages-2025.js';
 import Vue from 'vue'
-import 'ngVue'
 import '~/services/article-service'
 import CbdArticle from '~/directives/articles/cbd-article.vue';
 import 'angular-vue'

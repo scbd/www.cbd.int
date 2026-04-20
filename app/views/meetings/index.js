@@ -3,7 +3,6 @@ import _ from 'lodash'
 import Vue from 'vue'
 import ConferenceCalComp from 'conferenceCal'
 
-import 'ngVue'
 import '~/services/conference-service'
 import '~/services/article-service'
 import '~/directives/social-media'
