@@ -208,7 +208,7 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
 
                     if(!$scope.counts) $scope.counts = {}
 
-                    if(!_.isEmpty(_ctrl.requests))
+                    if(!_.isEmpty(_ctrl.requests) && _ctrl.requests.count)
                     {
                         for (const request of _ctrl.requests)
                             if(!request.participants) continue;
