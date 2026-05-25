@@ -197,7 +197,8 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
                             })
                         }
 
-                        _ctrl.requests = _ctrl.sort.dir==='desc'? _ctrl.requests.sort(compare).reverse() : _ctrl.requests.sort(compare);
+                        if(_ctrl.requests?.length)
+                            _ctrl.requests = _ctrl.sort.dir==='desc'? _ctrl.requests.sort(compare).reverse() : _ctrl.requests.sort(compare);
 
                     })
 
@@ -207,42 +208,43 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
             }).finally(() => { 
 
                     if(!$scope.counts) $scope.counts = {}
-                    for (const request of _ctrl.requests)
-                        if(!request.participants) continue;
-                        else{
-                            for (const participant of request.participants ) 
-                                participant.showPassportForm = false;
-                            request.contactsOnlyError = hasContactsOnlyError(request.participants) 
-                            request.accreditationInProgress = request.accredited? isAccreditationInProgress(request) : false
+                    if(_ctrl.requests?.length){
+                        for (const request of _ctrl.requests)
+                            if(!request.participants) continue;
+                            else{
+                                for (const participant of request.participants ) 
+                                    participant.showPassportForm = false;
+                                request.contactsOnlyError = hasContactsOnlyError(request.participants) 
+                                request.accreditationInProgress = request.accredited? isAccreditationInProgress(request) : false
+                            }
+
+
+                            if(_ctrl.requestStatus === '' || status === ''){
+                                $scope.counts.error                   =  _ctrl.requests.filter(r => r.contactsOnlyError).length;  
+                                $scope.counts.accreditationInProgress =  _ctrl.requests.filter(r => !r.contactsOnlyError && r.accreditationInProgress).length;  
+                                $scope.counts.accredited =  _ctrl.requests.filter(r => !r.contactsOnlyError && !r.accreditationInProgress && r.accredited).length;  
+                            }
+
+                        if(_ctrl.requestStatus === 'error' || status === 'error'){
+                            $scope.counts.accreditationInProgress =  _ctrl.requests.filter(r => !r.contactsOnlyError && r.accreditationInProgress  && r.accredited).length;  
+                            $scope.counts.accredited =  _ctrl.requests.filter(r => !r.contactsOnlyError && !r.accreditationInProgress && r.accredited).length; 
+                            _ctrl.requests = _ctrl.requests.filter(r => r.contactsOnlyError );
+                            $scope.counts.error = _ctrl.requests.length
                         }
-
-
-                        if(_ctrl.requestStatus === '' || status === ''){
+                        if(_ctrl.requestStatus === 'accreditationInProgress' || status === 'accreditationInProgress'){
+                            $scope.counts.error                   =  _ctrl.requests.filter(r => r.contactsOnlyError).length;  
+                            $scope.counts.accredited =  _ctrl.requests.filter(r => !r.contactsOnlyError && !r.accreditationInProgress && r.accredited).length;  
+                            _ctrl.requests = _ctrl.requests.filter(r => !r.contactsOnlyError && r.accreditationInProgress && r.accredited );
+                            $scope.counts.accreditationInProgress = _ctrl.requests.length
+                        }
+                        if(_ctrl.requestStatus === 'accredited' || status === 'accredited'){
                             $scope.counts.error                   =  _ctrl.requests.filter(r => r.contactsOnlyError).length;  
                             $scope.counts.accreditationInProgress =  _ctrl.requests.filter(r => !r.contactsOnlyError && r.accreditationInProgress).length;  
-                            $scope.counts.accredited =  _ctrl.requests.filter(r => !r.contactsOnlyError && !r.accreditationInProgress && r.accredited).length;  
+
+                            _ctrl.requests = _ctrl.requests.filter(r => !r.accreditationInProgress && !r.contactsOnlyError  && r.accredited); //accredited
+                            $scope.counts.accredited = _ctrl.requests.length
                         }
-
-                    if(_ctrl.requestStatus === 'error' || status === 'error'){
-                        $scope.counts.accreditationInProgress =  _ctrl.requests.filter(r => !r.contactsOnlyError && r.accreditationInProgress  && r.accredited).length;  
-                        $scope.counts.accredited =  _ctrl.requests.filter(r => !r.contactsOnlyError && !r.accreditationInProgress && r.accredited).length; 
-                        _ctrl.requests = _ctrl.requests.filter(r => r.contactsOnlyError );
-                        $scope.counts.error = _ctrl.requests.length
                     }
-                    if(_ctrl.requestStatus === 'accreditationInProgress' || status === 'accreditationInProgress'){
-                        $scope.counts.error                   =  _ctrl.requests.filter(r => r.contactsOnlyError).length;  
-                        $scope.counts.accredited =  _ctrl.requests.filter(r => !r.contactsOnlyError && !r.accreditationInProgress && r.accredited).length;  
-                        _ctrl.requests = _ctrl.requests.filter(r => !r.contactsOnlyError && r.accreditationInProgress && r.accredited );
-                        $scope.counts.accreditationInProgress = _ctrl.requests.length
-                    }
-                    if(_ctrl.requestStatus === 'accredited' || status === 'accredited'){
-                        $scope.counts.error                   =  _ctrl.requests.filter(r => r.contactsOnlyError).length;  
-                        $scope.counts.accreditationInProgress =  _ctrl.requests.filter(r => !r.contactsOnlyError && r.accreditationInProgress).length;  
-
-                        _ctrl.requests = _ctrl.requests.filter(r => !r.accreditationInProgress && !r.contactsOnlyError  && r.accredited); //accredited
-                        $scope.counts.accredited = _ctrl.requests.length
-                    }
-
                 _ctrl.loading  = false;
 
             })
@@ -294,18 +296,20 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
             const selectedRequests = [] ;
 
             const passportRequests = [];
-            for (const r of _ctrl.requests) {
-                r.participants = participants.filter((p) => p.requestId === r._id)
+            if(_ctrl.requests?.length){
+                for (const r of _ctrl.requests) {
+                    r.participants = participants.filter((p) => p.requestId === r._id)
 
-                for (const participant of r.participants ) {
-                    participant.showPassportForm = false;
-                    const { conference:conferenceId, nominatingOrganization:organizationId } = r;
-                    const { kronosId } = participant;
+                    for (const participant of r.participants ) {
+                        participant.showPassportForm = false;
+                        const { conference:conferenceId, nominatingOrganization:organizationId } = r;
+                        const { kronosId } = participant;
 
-                    if(!kronosId || !conferenceId || !organizationId) continue;
+                        if(!kronosId || !conferenceId || !organizationId) continue;
 
-                    passportRequests.push(queryPassports({ contactIds: [kronosId], conferenceId })
-                    .then(({ data }) => {  participant.passport = data?.records[0] } ))
+                        passportRequests.push(queryPassports({ contactIds: [kronosId], conferenceId })
+                        .then(({ data }) => {  participant.passport = data?.records[0] } ))
+                    }
                 }
             }
             return Promise.allSettled( passportRequests)
