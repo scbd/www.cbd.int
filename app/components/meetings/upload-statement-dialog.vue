@@ -274,7 +274,7 @@ export default {
                 error = { message : "Invalid status: No Meeting or Conference"}
             }
 
-            this.meetings = this.meetings.map(o=>({...o, uploadStatement: true})).filter(o=>o.uploadStatement);
+            this.meetings = this.meetings.filter(o=>o.uploadStatement);
 
             // Only allow agenda items that are configured for statement submission
             // If none are configured, allow all agenda items
