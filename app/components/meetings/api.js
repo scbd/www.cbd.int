@@ -165,14 +165,14 @@ export default class Api
     return slot;
   }
 
-  async commitInterventionFileSlot(slotId, passCode, meetingId){
+  async commitInterventionFileSlot(slotId, passCode, meetingId, { earlyPublish } = {}){
     if(!slotId) throw new Error("slotId is empty")
 
     const headers = {
       Authorization : `Pass ${passCode}`
     }
 
-    const data = { meetingId:  meetingId };
+    const data = { meetingId, earlyPublish: !!earlyPublish };
 
     const intervention = await this.http.put(`api/v2021/meeting-interventions/slot/${encodeURIComponent(slotId)}/commit`, data, { headers }).catch(tryCastToApiError);
 

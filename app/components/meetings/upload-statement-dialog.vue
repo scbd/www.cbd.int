@@ -17,10 +17,15 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        
+
                         <p v-if="false">TODO Instructions....</p>
 
-                        <form  id="statement-submission-form" @submit.prevent="submitForm" enctype="multipart/form-data" ref="form" novalidate :class="{ 'was-validated': wasValidated }">
+                        <div v-if="confirmEarlyPublish" class="text-center py-4">
+                            <p class="lead">Allow publishing early statement right away?</p>
+                            <small class="text-muted">(Statement will be publicly visible upon submission)</small>
+                        </div>
+
+                        <form v-show="!confirmEarlyPublish" id="statement-submission-form" @submit.prevent="submitForm" enctype="multipart/form-data" ref="form" novalidate :class="{ 'was-validated': wasValidated }">
 
                             <div class="form-group row">
                                 <label for="participantIdentity" class="col-sm-3 col-form-label">Priority-Pass or Badge Code</label>
@@ -156,8 +161,14 @@
                             </div>
                         </span>
 
-                        <button :disabled="!!progress" type="submit" class="btn btn-success" @click="submitForm"><i class="fa fa-upload"></i> <span>Submit</span></button>
-                        <button :disabled="!!progress" type="button" class="btn btn-default" @click="close()"><i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
+                        <template v-if="!confirmEarlyPublish">
+                            <button :disabled="!!progress" type="submit" class="btn btn-success" @click="submitForm"><i class="fa fa-upload"></i> <span>Submit</span></button>
+                            <button :disabled="!!progress" type="button" class="btn btn-default" @click="close()"><i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
+                        </template>
+                        <template v-else>
+                            <button type="button" class="btn btn-success" @click="answerEarlyPublish(true)"><i class="fa fa-check"></i> Yes</button>
+                            <button type="button" class="btn btn-default" @click="answerEarlyPublish(false)"><i class="fa fa-times"></i> No</button>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -184,19 +195,22 @@ export default {
     },
     data:  function(){
         return {
-            file               : null,
-            meetings           : [],
-            selectedAgendaItem : null,
-            selectedLanguage   : "en",
-            selectedRegion     : null,
-            isRegional         : false,
-            allowPublic        : true,
-            participantIdentity: '',
-            rememberMe         : false,
-            wasValidated       : false,
-            progress           : null,
-            error              : null,
-            grecaptchaToken    : undefined
+            file                : null,
+            meetings            : [],
+            selectedAgendaItem  : null,
+            selectedLanguage    : "en",
+            selectedRegion      : null,
+            isRegional          : false,
+            allowPublic         : true,
+            participantIdentity : '',
+            rememberMe          : false,
+            wasValidated        : false,
+            progress            : null,
+            error               : null,
+            grecaptchaToken     : undefined,
+            confirmEarlyPublish : false,
+            slot                : null,
+            uploadPromise       : null
         }
     },
     created() {
@@ -328,37 +342,74 @@ export default {
 
             this.progress = { message: "Preparing..." };
 
-            const slot    = await this.api.createInterventionFileSlot(passCode, data, this.grecaptchaToken);
+            this.slot = await this.api.createInterventionFileSlot(passCode, data, this.grecaptchaToken);
 
-            this.progress = { message: "Uploading...", percent: 0 };
+            const { contentType } = this.slot;
+            const onUploadProgress = (...args) => this.onUploadProgress(...args);
 
-            const { contentType } = slot;
-            const onUploadProgress = (...args)=> this.onUploadProgress(...args);
+            this.progress      = { message: "Uploading...", percent: 0 };
+            this.uploadPromise = this.api.uploadTemporaryFile(this.slot.url, this.file, { contentType, onUploadProgress });
 
-            await this.api.uploadTemporaryFile(slot.url, this.file, { contentType, onUploadProgress });
+            if(this.slot.earlySessionOpen && this.slot.delegationType === 'party') {
+                this.confirmEarlyPublish = true;
+                return;
+            }
 
+            await this.uploadPromise;
             this.progress = { message: "Saving...", percent: 100 };
 
-            const intervention = await this.api.commitInterventionFileSlot(slot.uid, passCode, data.meetingId);
+            await this.api.commitInterventionFileSlot(this.slot.uid, passCode, data.meetingId, { earlyPublish: !!this.slot.earlySessionOpen });
 
-            this.$emit("notify", `Your file "${slot.metadata.filename}" has been submitted successfully`);
-
+            this.$emit("notify", `Your file "${this.slot.metadata.filename}" has been submitted successfully`);
+            this.progress     = null;
+            this.wasValidated = false;
             this.close();
 
           } catch(err) {
-              if(err.code=='forbidden') this.$refs.participantIdentity.setCustomValidity("Invalid badge or priority-pass number")
-              this.error = err
-              grecaptcha.reset(this.recaptchaWidgetId);
-              this.grecaptchaToken = undefined;
-          } finally {
-            this.progress = null;
+            if(err.code=='forbidden') this.$refs.participantIdentity.setCustomValidity("Invalid badge or priority-pass number")
+            this.error        = err;
+            this.progress     = null;
             this.wasValidated = false;
+            grecaptcha.reset(this.recaptchaWidgetId);
+            this.grecaptchaToken = undefined;
+          }
+        },
+
+        async answerEarlyPublish(answer) {
+          this.confirmEarlyPublish = false;
+          try {
+            await this.uploadPromise;
+            this.progress = { message: "Saving...", percent: 100 };
+
+            await this.api.commitInterventionFileSlot(
+              this.slot.uid,
+              this.cleanParticipantIdentity,
+              this.selectedAgendaItem.meetingId,
+              { earlyPublish: answer }
+            );
+
+            this.$emit("notify", `Your file "${this.slot.metadata.filename}" has been submitted successfully`);
+            this.progress     = null;
+            this.wasValidated = false;
+            this.close();
+
+          } catch(err) {
+            await this.$nextTick();
+            if(err.code=='forbidden') this.$refs.participantIdentity.setCustomValidity("Invalid badge or priority-pass number")
+            this.error        = err;
+            this.progress     = null;
+            this.wasValidated = false;
+            grecaptcha.reset(this.recaptchaWidgetId);
+            this.grecaptchaToken = undefined;
           }
         },
         resetForm(){
             this.wasValidated        = false;
             this.error               = null;
             this.uploading           = false;
+            this.confirmEarlyPublish = false;
+            this.slot                = null;
+            this.uploadPromise       = null;
             this.$refs.file.value    = null;
             this.file                = null;
             this.selectedAgendaItem  = null;
@@ -366,7 +417,7 @@ export default {
             this.selectedRegion      = null;
             this.isRegional          = false;
             this.allowPublic         = true;
-            this.persistIdentity(); 
+            this.persistIdentity();
 
             if(localStorage.participantIdentity) {
                 this.participantIdentity = localStorage.participantIdentity;
