@@ -21,8 +21,12 @@
                         <p v-if="false">TODO Instructions....</p>
 
                         <div v-if="confirmEarlyPublish" class="text-center py-4">
-                            <p class="lead">Allow publishing early statement right away?</p>
+                            <p class="lead">Allow publication of this statement upon upload?</p>
                             <small class="text-muted">(Statement will be publicly visible upon submission)</small>
+                            <div class="mt-3">
+                                <button type="button" class="btn btn-primary mr-2" @click="answerEarlyPublish(true)"><i class="fa fa-check"></i> Yes</button>
+                                <button type="button" class="btn btn-default" @click="answerEarlyPublish(false)"><i class="fa fa-times"></i> No</button>
+                            </div>
                         </div>
 
                         <form v-show="!confirmEarlyPublish" id="statement-submission-form" @submit.prevent="submitForm" enctype="multipart/form-data" ref="form" novalidate :class="{ 'was-validated': wasValidated }">
@@ -165,10 +169,6 @@
                             <button :disabled="!!progress" type="submit" class="btn btn-success" @click="submitForm"><i class="fa fa-upload"></i> <span>Submit</span></button>
                             <button :disabled="!!progress" type="button" class="btn btn-default" @click="close()"><i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
                         </template>
-                        <template v-else>
-                            <button type="button" class="btn btn-success" @click="answerEarlyPublish(true)"><i class="fa fa-check"></i> Yes</button>
-                            <button type="button" class="btn btn-default" @click="answerEarlyPublish(false)"><i class="fa fa-times"></i> No</button>
-                        </template>
                     </div>
                 </div>
             </div>
@@ -274,7 +274,7 @@ export default {
                 error = { message : "Invalid status: No Meeting or Conference"}
             }
 
-            this.meetings = this.meetings.filter(o=>o.uploadStatement);
+            this.meetings = this.meetings.map(o=>({...o, uploadStatement: true})).filter(o=>o.uploadStatement);
 
             // Only allow agenda items that are configured for statement submission
             // If none are configured, allow all agenda items
@@ -334,7 +334,7 @@ export default {
                 meetingId   : this.selectedAgendaItem.meetingId,
                 filename    : this.file.name,
                 contentType : this.file.type,
-                agendaItem  : ((this.selectedAgendaItem.item || "").toString() || undefined),
+                agendaItem  : Number(this.selectedAgendaItem.item) || undefined,
                 language    : this.selectedLanguage,
                 allowPublic : this.allowPublic===true || this.allowPublic==='true',
                 region      : this.isRegional ? this.selectedRegion : null
@@ -348,7 +348,8 @@ export default {
             const onUploadProgress = (...args) => this.onUploadProgress(...args);
 
             this.progress      = { message: "Uploading...", percent: 0 };
-            this.uploadPromise = this.api.uploadTemporaryFile(this.slot.url, this.file, { contentType, onUploadProgress });
+            this.uploadPromise = this.api.uploadTemporaryFile(this.slot.url, this.file, { contentType, onUploadProgress })
+                                     .then(() => { this.progress = { message: "Upload complete!", percent: 100 }; });
 
             if(this.slot.earlySessionOpen && this.slot.delegationType === 'party') {
                 this.confirmEarlyPublish = true;
