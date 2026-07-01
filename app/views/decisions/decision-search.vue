@@ -248,7 +248,7 @@
                         </div>
                         <div class="card-body" v-for="record in records" :key="record.id">
                             <i class="fa fa-search" aria-hidden="true"></i> Decision <a
-                                :href="`/decisions/${record.dttCodeUrl_ii}`" target="_blank">
+                                :href="`/decisions/${record.dttCodeUrl_ii}`" target="_blank" rel="noopener noreferrer">
                                 {{ record.dttCode_s }}
                             </a> - {{ record.decisionTitle }}
                             <div>- {{ record.title_s }}</div>
@@ -268,13 +268,13 @@
                                 </div>
                                 <div>
                                     <a v-for="item in record.dttGbfGoal_ii" :key="`goal-${item}`"
-                                        href="https://www.cbd.int/gbf/goals/" target="_blank">
+                                        href="https://www.cbd.int/gbf/goals/" target="_blank" rel="noopener noreferrer">
                                         <img :src="`/app/images/gbf-goals/gbf-${item}-64.png`" width="20"
                                             style="margin: 1px 1px 1px 1px;">
                                     </a>
                                     <a v-for="item in record.dttGbfTarget_ii" :key="`target-${item}`"
                                         :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(parseInt(item))}`"
-                                        target="_blank">
+                                        target="_blank" rel="noopener noreferrer">
                                         <img :src="`/app/images/gbf-targets/gbf-${item}-64.png`" width="20"
                                             style="margin: 1px 1px 1px 1px;">
                                     </a>
@@ -542,7 +542,7 @@ async function queryDecisionTitles(codes) {
     codes = _(codes).compact().uniq().value();
     if(!codes.length) return {};
 
-    const query = AND(['schema_s:decision', `dttCode_s:(${codes.map(solr.escape).join(' ')})`]);
+    const query = AND(['schema_s:decision', `dttCode_s:(${codes.map(c => solr.escape(c).replace(/\//g, '\\/')).join(' ')})`]);
     const { response } = await solr.query(query, { rows: codes.length, fl: 'dttCode_s,title_s' });
 
     return _(response.docs).reduce((r, v) => { r[v.dttCode_s] = v.title_s; return r; }, {});
