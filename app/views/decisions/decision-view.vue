@@ -647,9 +647,9 @@ function sum(object) {
 }
 
 .scrollable-section {
-	overflow: scroll;
-	height: 100vh;
-	padding-bottom: 300px;
+	overflow-y: auto;
+	max-height: 100vh;
+	padding-bottom: 30px;
 }
 
 .card-header:first-child {
