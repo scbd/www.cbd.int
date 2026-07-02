@@ -106,7 +106,10 @@ const app = angular.module('app', angular.defineModules(
       locale        : locale,
       fallbackLocale: 'en',
     })
-    window.Vue.use(i18n)
+
+    // Inject the shared i18n into every Vue instance (including each ngVue root),
+    // so components can use $t without vueOptions passing an i18n instance.
+    window.Vue.mixin({ i18n })
 
     const vueRootApp = new Vue({i18n});
 
