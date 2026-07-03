@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import   Api, { mapObjectId } from '../api.js'
+import   Api, { mapObjectId, markSupersededInterventions } from '../api.js'
 import   Session           from './session.vue'
 import   InterventionRow   from './intervention-row.vue'
 import   VideoLink         from './video-link.vue'
@@ -132,7 +132,7 @@ async function loadInterventions(sessionId){
       s = { agendaItem: 1, title:1 };
     }
 
-    session.interventions = await this.api.queryInterventions({ q, s });
+    session.interventions = markSupersededInterventions(await this.api.queryInterventions({ q, s }));
 }
 
 function numberOfSessions(){

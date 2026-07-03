@@ -1,5 +1,5 @@
 <template >
-  <tr :_id="intervention._id" @click="$parent.$emit('select')">
+  <tr :_id="intervention._id" :class="{ superseded: intervention.superseded }" @click="$parent.$emit('select')">
 
     <td scope="row" class="index-col d-none d-lg-table-cell" style="text-align: center; vertical-align: middle;">
         <b  v-if="!isPending(intervention.status)">{{index}}.</b>
@@ -24,6 +24,8 @@
         <span class="float-right text-muted">{{ getOrgType(intervention) }} </span>  
 
         <span class="title">{{ intervention.title }}</span>
+        <span v-if="intervention.superseded" class="badge badge-secondary">{{ $t('Superseded') }}</span>
+        <a v-if="intervention.superseded" href="#" @click.prevent.stop="jumpToCurrent">{{ $t('View current') }}</a>
         <div v-if="intervention.summary" class="text-muted small summary">{{intervention.summary}}</div>
 
         <div class="d-lg-none small">
@@ -79,7 +81,7 @@ export default {
                   timezone    : { type: String,  required: false, default: 'local' },
                   showPreviewAsButton : { type: Boolean, default: false }
               },
-  methods   : { getOrgType, isPending },
+  methods   : { getOrgType, isPending, jumpToCurrent },
   filters   : { formatDate, setTimezone },
   computed  : { tags },
   i18n, 
@@ -101,6 +103,11 @@ function getOrgType({ organizationType }){
 
 function isPending (status){
   return status === 'pending'
+}
+
+function jumpToCurrent() {
+  const el = document.querySelector(`[_id="${this.intervention.supersededById}"]`)
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
 </script>
@@ -155,6 +162,13 @@ table.sessions {
 
 .title {
   font-weight: bold;
+}
+
+tr.superseded {
+  color: #888;
+}
+tr.superseded .title {
+  text-decoration: line-through;
 }
 
 .summary { 

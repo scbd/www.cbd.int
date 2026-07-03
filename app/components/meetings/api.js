@@ -367,6 +367,36 @@ function getAllSessions(interventions){
   return Array.from(new Set(interventions.map(({ sessionId }) => sessionId)))
 }
 
+export function markSupersededInterventions(interventions) {
+  // Group by meetingId + sessionId + agendaItem + partyKey.
+  // partyKey = government || organizationId, else fall back to _id (singleton guard).
+  const groups = new Map()
+  for (const i of interventions) {
+    const partyKey = i.government || i.organizationId || i._id
+    const key = [i.meetingId, i.sessionId, i.agendaItem, partyKey].join('|')
+    if (!groups.has(key)) groups.set(key, [])
+    groups.get(key).push(i)
+  }
+
+  const supersededById = new Map() // _id -> newestId, for the older members
+  for (const group of groups.values()) {
+    if (group.length < 2) continue
+    // newest by datetime = current
+    const sorted = [...group].sort((a, b) => new Date(a.datetime) - new Date(b.datetime))
+    const newest = sorted[sorted.length - 1]
+    for (const i of sorted) {
+      if (i !== newest) supersededById.set(i._id, newest._id)
+    }
+  }
+
+  // Return copies with derived flags; untouched interventions pass through unchanged in shape.
+  return interventions.map(i =>
+    supersededById.has(i._id)
+      ? { ...i, superseded: true, supersededById: supersededById.get(i._id) }
+      : i
+  )
+}
+
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //             TO REVIEW
