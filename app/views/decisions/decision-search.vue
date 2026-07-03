@@ -146,7 +146,7 @@
 
                                 <span v-if="words.length">
                                     <span class="badge chip badge-primary">
-                                        {{words.join(' ')}}
+                                        {{freeText.trim()}}
                                         <i class="fa fa-minus-circle"
                                             @click="freeText = ''; search({page: 0})"></i>
                                     </span>
@@ -247,47 +247,47 @@
                             <b>{{ recordsCount }}</b> records found.
                         </div>
                         <div class="card-body" v-for="record in records" :key="record.id">
-                            <span v-for="item in record.dttType_REL_ss" :key="item">
-                                <span v-if="item=='operational'" class="pull-right badge ng-scope badge-info"
-                                    style="opacity:0.5; margin-right: 6px;">
-                                    <span><i class="fa fa-cog"></i> Operational</span>
-                                </span>
+                            <i class="fa fa-search" aria-hidden="true"></i> Decision <a
+                                :href="`/decisions/${record.dttCodeUrl_ii}`" target="_blank" rel="noopener noreferrer">
+                                {{ record.dttCode_s }}
+                            </a> - {{ record.decisionTitle }}
+                            <div>- {{ record.title_s }}</div>
 
-                                <span v-if="item=='informational'" class="pull-right badge ng-scope badge-secondary"
-                                    style="opacity:0.5; margin-right: 6px;">
-                                    <span><i class="fa fa-info-circle"></i> Informational</span>
-                                </span>
-                            </span>
-
-
-                            <span v-for="item in records.dttStatus_ss" :key="item" class="pull-right badge"
-                                :class="item === 'active' ? 'badge-success' : 'badge-secondary'"
-                                style="opacity:0.5;margin-right:6px">
-                                <i class="fa fa-info-circle"></i>
-                                <span>{{ getTitle(statusesList, item) }}</span>
-                            </span>
-
-                            <ul>
-                                <li v-for="item in record.dttGbfGoal_ii" :key="item">
-                                    <a href="https://www.cbd.int/gbf/goals/" target="_blank">
+                            <div class="pull-right" style="text-align:right; margin-bottom: 10px">
+                                <div>
+                                    <span v-for="item in record.dttType_REL_ss" :key="item">
+                                        <span v-if="item=='operational'" class="badge ng-scope badge-info"
+                                            style="opacity:0.5; margin-left: 6px;">
+                                            <i class="fa fa-cog"></i> Operational
+                                        </span>
+                                        <span v-if="item=='informational'" class="badge ng-scope badge-secondary"
+                                            style="opacity:0.5; margin-left: 6px;">
+                                            <i class="fa fa-info-circle"></i> Informational
+                                        </span>
+                                    </span>
+                                </div>
+                                <div>
+                                    <a v-for="item in record.dttGbfGoal_ii" :key="`goal-${item}`"
+                                        href="https://www.cbd.int/gbf/goals/" target="_blank" rel="noopener noreferrer">
                                         <img :src="`/app/images/gbf-goals/gbf-${item}-64.png`" width="20"
                                             style="margin: 1px 1px 1px 1px;">
                                     </a>
-                                </li>
-                                <li v-for="item in record.dttGbfTarget_ii" :key="item">
-                                    <a :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(parseInt(item))}`"
-                                        target="_blank">
+                                    <a v-for="item in record.dttGbfTarget_ii" :key="`target-${item}`"
+                                        :href="`https://www.cbd.int/gbf/targets/${encodeURIComponent(parseInt(item))}`"
+                                        target="_blank" rel="noopener noreferrer">
                                         <img :src="`/app/images/gbf-targets/gbf-${item}-64.png`" width="20"
                                             style="margin: 1px 1px 1px 1px;">
                                     </a>
-                                </li>
-                            </ul>
+                                </div>
+                            </div>
 
-                            <i class="fa fa-search" aria-hidden="true"></i> Decision <a
-                                :href="`/decisions/${record.dttCodeUrl_ii}`" target="_blank">
-                                {{ record.dttCode_s }}
-                            </a> - {{ record.title_s }}
-                            <hr />
+                            <span v-for="item in record.dttActor_REL_ss" :key="item"
+                                class="badge badge-secondary" style="opacity:0.5;margin-right:6px">
+                                <i class="fa fa-user"></i>
+                                <span>{{ getTitle(actorsList, item) }}</span>
+                            </span>
+
+                            <hr style="clear:both" />
                         </div>
                     </div>
 
@@ -346,7 +346,10 @@ export default {
         }
     },
     computed: {
-        words() { return this.freeText.split(' ').filter(w=>!!w) },
+        // Split on any run of non-letter/non-number chars (spaces, hyphens, slashes, commas…)
+        // so phrases like "capacity-building" tokenize the same way Solr's text analyzer
+        // splits the indexed title_t field. \p{L}=letters, \p{N}=numbers, /u enables unicode.
+        words() { return this.freeText.split(/[^\p{L}\p{N}]+/u).filter(w=>!!w) },
         freeTextEmpty() {
             const hasFilters = _(Object.values(this.filters)).flatten().compact().size()>0
             return this.searched && !hasFilters && !this.words.length;
@@ -508,7 +511,7 @@ async function search({page}={}) {
     this.recordsCount = response.numFound;
     this.totalPages = Math.ceil(response.numFound / this.pageSize);
 
-    this.records = response.docs.map(o=>{
+    const docs = response.docs.map(o=>{
         o.dttGbfTarget_ss  = o.dttGbfTarget_ss?.filter(o=>/^GBF-TARGET-/.test(o));
         o.dttGbfTarget_ii  = o.dttGbfTarget_ss?.map(o=>(o.replace(/^GBF-TARGET-/, '')));
 
@@ -518,6 +521,12 @@ async function search({page}={}) {
         o.dttCodeUrl_ii    = (o.dttParagraphCode_s || o.dttCode_s).replace(/^CBD\//, '').toLowerCase();
         return o;
     });
+
+    // Set decisionTitle before assigning this.records so the property is reactive (Vue 2).
+    const decisionTitles = await queryDecisionTitles(docs.map(o => o.dttCode_s));
+    docs.forEach(o => { o.decisionTitle = decisionTitles[o.dttCode_s]; });
+
+    this.records = docs;
 }
 
 
@@ -525,6 +534,18 @@ async function queryIndex(query, { sk: start = 0, l: rows = 10 } = {}) {
     query = AND([baseIndexQuery, query]);
     const result = await solr.query(query, { start, rows });
     return result;
+}
+
+// Paragraph docs carry the paragraph text in title_s; the decision's own title
+// lives on the parent schema_s:decision doc, looked up here by dttCode_s.
+async function queryDecisionTitles(codes) {
+    codes = _(codes).compact().uniq().value();
+    if(!codes.length) return {};
+
+    const query = AND(['schema_s:decision', `dttCode_s:(${codes.map(c => solr.escape(c).replace(/\//g, '\\/')).join(' ')})`]);
+    const { response } = await solr.query(query, { rows: codes.length, fl: 'dttCode_s,title_s' });
+
+    return _(response.docs).reduce((r, v) => { r[v.dttCode_s] = v.title_s; return r; }, {});
 }
 
 function previousPage() {
