@@ -178,7 +178,7 @@ tr.intervention-child {
 tr.intervention-child .title {
   font-weight: normal;
 }
-tr.intervention-child .files-col {
+tr.intervention-child .files-col a[target="_blank"] {
   text-decoration: line-through;
 }
 
