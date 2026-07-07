@@ -37,9 +37,7 @@
         </div>
       </template>
 
-      <template v-for="(intervention, index) in interventions">
-
-        <InterventionRow v-bind="{intervention}" :timezone="timezone" :index="index+1" :key="intervention._id" :public-view="true"
+      <template v-for="(intervention, index) in interventions" :key="intervention._id">
           @toggle="intervention.expanded = !intervention.expanded">
           <template v-slot:controls>
             <div class="video">

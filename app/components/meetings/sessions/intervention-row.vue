@@ -173,12 +173,12 @@ table.sessions {
 
 /* Collapsed superseded versions, shown dimmed under their current statement */
 tr.intervention-child {
-  color: #999;
+  color: #6c757d;
 }
 tr.intervention-child .title {
   font-weight: normal;
 }
-tr.intervention-child .files-col {
+tr.intervention-child .files-col a[target="_blank"] {
   text-decoration: line-through;
 }
 
