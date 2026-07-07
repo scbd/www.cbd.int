@@ -379,22 +379,26 @@ export function markSupersededInterventions(interventions) {
   }
 
   const supersededById = new Map() // _id -> newestId, for the older members
+  const latestIds      = new Set() // newest ids that superseded at least one older member
   for (const group of groups.values()) {
     if (group.length < 2) continue
     // newest by datetime = current
     const sorted = [...group].sort((a, b) => new Date(a.datetime) - new Date(b.datetime))
     const newest = sorted[sorted.length - 1]
+    latestIds.add(newest._id)
     for (const i of sorted) {
       if (i !== newest) supersededById.set(i._id, newest._id)
     }
   }
 
   // Return copies with derived flags; untouched interventions pass through unchanged in shape.
-  return interventions.map(i =>
-    supersededById.has(i._id)
-      ? { ...i, superseded: true, supersededById: supersededById.get(i._id) }
-      : i
-  )
+  return interventions.map(i => {
+    if (supersededById.has(i._id))
+      return { ...i, superseded: true, supersededById: supersededById.get(i._id) }
+    if (latestIds.has(i._id))
+      return { ...i, latest: true }
+    return i
+  })
 }
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

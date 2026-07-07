@@ -361,6 +361,7 @@ export default {
 
             await this.api.commitInterventionFileSlot(this.slot.uid, passCode, data.meetingId, { earlyPublish: !!this.slot.earlySessionOpen });
 
+            this.persistIdentity();
             this.$emit("notify", `Your file "${this.slot.metadata.filename}" has been submitted successfully`);
             this.progress     = null;
             this.wasValidated = false;
@@ -389,6 +390,7 @@ export default {
               { earlyPublish: answer }
             );
 
+            this.persistIdentity();
             this.$emit("notify", `Your file "${this.slot.metadata.filename}" has been submitted successfully`);
             this.progress     = null;
             this.wasValidated = false;
@@ -418,7 +420,6 @@ export default {
             this.selectedRegion      = null;
             this.isRegional          = false;
             this.allowPublic         = true;
-            this.persistIdentity();
 
             if(localStorage.participantIdentity) {
                 this.participantIdentity = localStorage.participantIdentity;

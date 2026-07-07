@@ -1,5 +1,5 @@
 <template >
-  <tr :_id="intervention._id" :class="{ superseded: intervention.superseded }" @click="$parent.$emit('select')">
+  <tr :_id="intervention._id" :class="{ 'intervention-superseded': intervention.superseded }" @click="$parent.$emit('select')">
 
     <td scope="row" class="index-col d-none d-lg-table-cell" style="text-align: center; vertical-align: middle;">
         <b  v-if="!isPending(intervention.status)">{{index}}.</b>
@@ -21,11 +21,18 @@
     </td>
 
     <td style="vertical-align: middle;"> 
-        <span class="float-right text-muted">{{ getOrgType(intervention) }} </span>  
+        <span class="float-right text-muted">{{ getOrgType(intervention) }} </span>
+
+        <span v-if="intervention.superseded" class="superseded-status float-right">
+          <a href="#" class="view-current small" @click.prevent.stop="jumpToCurrent">{{ $t('View current') }}</a>
+          <span class="badge superseded-badge">{{ $t('Superseded') }}</span>
+        </span>
+
+        <span v-if="intervention.latest" class="superseded-status float-right">
+          <span class="badge badge-success latest-badge">{{ $t('Latest') }}</span>
+        </span>
 
         <span class="title">{{ intervention.title }}</span>
-        <span v-if="intervention.superseded" class="badge badge-secondary">{{ $t('Superseded') }}</span>
-        <a v-if="intervention.superseded" href="#" @click.prevent.stop="jumpToCurrent">{{ $t('View current') }}</a>
         <div v-if="intervention.summary" class="text-muted small summary">{{intervention.summary}}</div>
 
         <div class="d-lg-none small">
@@ -164,11 +171,26 @@ table.sessions {
   font-weight: bold;
 }
 
-tr.superseded {
+tr.intervention-superseded {
   color: #888;
 }
-tr.superseded .title {
+tr.intervention-superseded .files-col {
   text-decoration: line-through;
+}
+
+.superseded-badge {
+  background-color: #f0f0f0;
+  color: #999;
+  font-weight: normal;
+}
+.superseded-status {
+  margin-right: 0.75rem;
+}
+.superseded-status .view-current {
+  margin-right: 0.5rem;
+}
+.latest-badge {
+  font-weight: normal;
 }
 
 .summary { 
