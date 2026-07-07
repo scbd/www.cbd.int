@@ -367,6 +367,52 @@ function getAllSessions(interventions){
   return Array.from(new Set(interventions.map(({ sessionId }) => sessionId)))
 }
 
+// UI-derived superseded lineage (no backend flag). Groups a party's submissions for the same
+// agenda item and folds older versions into the newest one, returning a top-level list where each
+// current statement carries its previous versions as collapsed `supersededChildren`.
+export function markSupersededInterventions(interventions) {
+  // partyKey = government || organizationId, else fall back to _id (singleton guard so legacy rows
+  // missing both fields never wrongly group together).
+  const partyKeyOf = i => i.government || i.organizationId || i._id
+  const keyOf      = i => [i.meetingId, i.sessionId, i.agendaItem, partyKeyOf(i)].join('|')
+
+  const groups = new Map()
+  for (const i of interventions) {
+    const key = keyOf(i)
+    if (!groups.has(key)) groups.set(key, [])
+    groups.get(key).push(i)
+  }
+
+  // newest (by datetime) member per group = the current statement
+  const newestIdByKey = new Map()
+  for (const [key, group] of groups) {
+    const newest = group.reduce((a, b) => new Date(a.datetime) >= new Date(b.datetime) ? a : b)
+    newestIdByKey.set(key, newest._id)
+  }
+
+  // Emit a top-level list in the original (datetime-sorted) order. Older versions are folded into
+  // their newest sibling and travel as reverse-chronological children.
+  const result = []
+  for (const i of interventions) {
+    const key   = keyOf(i)
+    const group = groups.get(key)
+
+    if (group.length < 2) { result.push(i); continue }   // singleton — unchanged
+    if (newestIdByKey.get(key) !== i._id) continue        // older version — folded into its parent
+
+    const children = group
+      .filter(o => o._id !== i._id)
+      .sort((a, b) => new Date(b.datetime) - new Date(a.datetime)) // newest superseded first
+
+    result.push({
+      ...i,
+      expanded          : false,          // reactive collapse state for the public view
+      supersededChildren: children,
+    })
+  }
+  return result
+}
+
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 //             TO REVIEW
