@@ -173,7 +173,7 @@ table.sessions {
 
 /* Collapsed superseded versions, shown dimmed under their current statement */
 tr.intervention-child {
-  color: #999;
+  color: #6c757d;
 }
 tr.intervention-child .title {
   font-weight: normal;
