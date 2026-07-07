@@ -146,7 +146,12 @@ async function loadInterventions(sessionId){
       s = { agendaItem: 1, title:1 };
     }
 
-    session.interventions = markSupersededInterventions(await this.api.queryInterventions({ q, s }));
+    const interventions = await this.api.queryInterventions({ q, s });
+
+    // Superseded lineage only applies to early-submission sessions.
+    session.interventions = session.earlySubmission
+      ? markSupersededInterventions(interventions)
+      : interventions;
 }
 
 function numberOfSessions(){
