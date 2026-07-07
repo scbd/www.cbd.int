@@ -178,6 +178,9 @@ tr.intervention-child {
 tr.intervention-child .title {
   font-weight: normal;
 }
+tr.intervention-child .files-col {
+  text-decoration: line-through;
+}
 
 .superseded-toggle {
   margin-right: 0.75rem;
