@@ -1,5 +1,5 @@
 <template >
-  <tr :_id="intervention._id" :class="{ 'intervention-child': isChild }" @click="$parent.$emit('select')">
+  <tr :_id="intervention._id" :class="{ 'intervention-child': isChild, 'text-muted': isChild }" @click="$parent.$emit('select')">
 
     <td scope="row" class="index-col d-none d-lg-table-cell" style="text-align: center; vertical-align: middle;">
         <small v-if="isChild" class="text-muted lighter">{{ subIndex }}</small>
@@ -24,12 +24,13 @@
     <td style="vertical-align: middle;"> 
         <span class="float-right text-muted">{{ getOrgType(intervention) }} </span>
 
-        <a v-if="hasSuperseded" href="#" class="superseded-toggle float-right"
+        <button type="button" v-if="hasSuperseded" class="superseded-toggle float-right text-muted"
+          role="button" :aria-expanded="intervention.expanded ? 'true' : 'false'"
           :title="intervention.expanded ? $t('Hide previous versions') : $t('Show previous versions')"
           @click.prevent.stop="$emit('toggle')">
           <i class="fa" :class="intervention.expanded ? 'fa-caret-down' : 'fa-caret-right'"></i>
           {{ $t('previous versions') }}
-        </a>
+        </button>
 
         <span class="title">{{ intervention.title }}</span>
         <div v-if="intervention.summary" class="text-muted small summary">{{intervention.summary}}</div>
@@ -172,9 +173,6 @@ table.sessions {
 }
 
 /* Collapsed superseded versions, shown dimmed under their current statement */
-tr.intervention-child {
-  color: #6c757d;
-}
 tr.intervention-child .title {
   font-weight: normal;
 }
@@ -185,8 +183,10 @@ tr.intervention-child .files-col a[target="_blank"] {
 .superseded-toggle {
   margin-right: 0.75rem;
   font-size: 0.85em;
-  color: #6c757d;
   white-space: nowrap;
+  background: none;
+  border: none;
+  padding: 0;
 }
 .superseded-toggle .fa {
   margin-right: 0.25rem;
