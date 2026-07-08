@@ -37,13 +37,27 @@
         </div>
       </template>
 
-      <InterventionRow v-for="(intervention, index) in interventions" v-bind="{intervention}" :timezone="timezone" :index="index+1" v-bind:key="intervention._id" :public-view="true">
-        <template v-slot:controls>
-          <div class="video">
-            <VideoLink :videos="videos" :start-at="intervention.datetime" :title="`Start at intervention of ${intervention.title}`"/>
-          </div>
-        </template>
-      </InterventionRow>
+      <template v-for="(intervention, index) in interventions">
+
+        <InterventionRow v-bind="{intervention}" :timezone="timezone" :index="index+1" :key="intervention._id" :public-view="true"
+          @toggle="intervention.expanded = !intervention.expanded">
+          <template v-slot:controls>
+            <div class="video">
+              <VideoLink :videos="videos" :start-at="intervention.datetime" :title="`Start at intervention of ${intervention.title}`"/>
+            </div>
+          </template>
+        </InterventionRow>
+
+        <InterventionRow v-for="(child, ci) in (intervention.expanded ? intervention.supersededChildren : [])"
+          :intervention="child" :timezone="timezone" :sub-index="`${index+1}.${ci+1}`" :is-child="true" :key="child._id" :public-view="true">
+          <template v-slot:controls>
+            <div class="video">
+              <VideoLink :videos="videos" :start-at="child.datetime" :title="`Start at intervention of ${child.title}`"/>
+            </div>
+          </template>
+        </InterventionRow>
+
+      </template>
 
     </Session>
 
@@ -51,7 +65,7 @@
 </template>
 
 <script>
-import   Api, { mapObjectId } from '../api.js'
+import   Api, { mapObjectId, markSupersededInterventions } from '../api.js'
 import   Session           from './session.vue'
 import   InterventionRow   from './intervention-row.vue'
 import   VideoLink         from './video-link.vue'
@@ -132,7 +146,12 @@ async function loadInterventions(sessionId){
       s = { agendaItem: 1, title:1 };
     }
 
-    session.interventions = await this.api.queryInterventions({ q, s });
+    const interventions = await this.api.queryInterventions({ q, s });
+
+    // Superseded lineage only applies to early-submission sessions.
+    session.interventions = session.earlySubmission
+      ? markSupersededInterventions(interventions)
+      : interventions;
 }
 
 function numberOfSessions(){

@@ -1,8 +1,9 @@
 <template >
-  <tr :_id="intervention._id" @click="$parent.$emit('select')">
+  <tr :_id="intervention._id" :class="{ 'intervention-child': isChild, 'text-muted': isChild }" @click="$parent.$emit('select')">
 
     <td scope="row" class="index-col d-none d-lg-table-cell" style="text-align: center; vertical-align: middle;">
-        <b  v-if="!isPending(intervention.status)">{{index}}.</b>
+        <small v-if="isChild" class="text-muted lighter">{{ subIndex }}</small>
+        <b  v-else-if="!isPending(intervention.status)">{{index}}.</b>
         <small v-if="isPending(intervention.status)" class="text-muted lighter">{{$t('Pending')}}</small>
     </td>
 
@@ -21,7 +22,15 @@
     </td>
 
     <td style="vertical-align: middle;"> 
-        <span class="float-right text-muted">{{ getOrgType(intervention) }} </span>  
+        <span class="float-right text-muted">{{ getOrgType(intervention) }} </span>
+
+        <button type="button" v-if="hasSuperseded" class="superseded-toggle float-right text-muted"
+          role="button" :aria-expanded="intervention.expanded ? 'true' : 'false'"
+          :title="intervention.expanded ? $t('Hide previous versions') : $t('Show previous versions')"
+          @click.prevent.stop="$emit('toggle')">
+          <i class="fa" :class="intervention.expanded ? 'fa-caret-down' : 'fa-caret-right'"></i>
+          {{ $t('previous versions') }}
+        </button>
 
         <span class="title">{{ intervention.title }}</span>
         <div v-if="intervention.summary" class="text-muted small summary">{{intervention.summary}}</div>
@@ -72,6 +81,8 @@ export default {
   components: { AgendaItem, FilesView, FilesPreview },
   props     : { 
                   index       : { type: Number,  required: false, default:null },
+                  subIndex    : { type: String,  required: false, default: null },
+                  isChild     : { type: Boolean, required: false, default: false },
                   intervention: { type: Object,  required: true },
                   showDate    : { type: Boolean, required: false, default: true },
                   showTime    : { type: Boolean, required: false, default: true },
@@ -81,7 +92,7 @@ export default {
               },
   methods   : { getOrgType, isPending },
   filters   : { formatDate, setTimezone },
-  computed  : { tags },
+  computed  : { tags, hasSuperseded },
   i18n, 
 }
 
@@ -93,6 +104,10 @@ function tags() {
     tags = tags.filter(isTagPublic);
 
   return tags.map(tag=>({ tag, title: getTagTitle(tag) }));
+}
+
+function hasSuperseded() {
+  return !!(this.intervention.supersededChildren && this.intervention.supersededChildren.length)
 }
 
 function getOrgType({ organizationType }){
@@ -155,6 +170,26 @@ table.sessions {
 
 .title {
   font-weight: bold;
+}
+
+/* Collapsed superseded versions, shown dimmed under their current statement */
+tr.intervention-child .title {
+  font-weight: normal;
+}
+tr.intervention-child .files-col a[target="_blank"] {
+  text-decoration: line-through;
+}
+
+.superseded-toggle {
+  margin-right: 0.75rem;
+  font-size: 0.85em;
+  white-space: nowrap;
+  background: none;
+  border: none;
+  padding: 0;
+}
+.superseded-toggle .fa {
+  margin-right: 0.25rem;
 }
 
 .summary { 
