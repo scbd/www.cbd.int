@@ -385,8 +385,9 @@ export function markSupersededInterventions(interventions) {
 
   // newest (by datetime) member per group = the current statement
   const newestIdByKey = new Map()
+  const ts = i => { const t = new Date(i.datetime).getTime(); return Number.isNaN(t) ? -Infinity : t }
   for (const [key, group] of groups) {
-    const newest = group.reduce((a, b) => new Date(a.datetime) >= new Date(b.datetime) ? a : b)
+    const newest = group.reduce((a, b) => ts(a) >= ts(b) ? a : b)
     newestIdByKey.set(key, newest._id)
   }
 
@@ -402,7 +403,7 @@ export function markSupersededInterventions(interventions) {
 
     const children = group
       .filter(o => o._id !== i._id)
-      .sort((a, b) => new Date(b.datetime) - new Date(a.datetime)) // newest superseded first
+      .sort((a, b) => ts(b) - ts(a)) // newest superseded first
 
     result.push({
       ...i,
