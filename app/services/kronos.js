@@ -37,22 +37,14 @@ import ng from 'angular';
 
         this.$get = ['$location','$http', function($location,$http) {
 
-            var domain = $location.host();
-
-            var baseUrl = "https://kronos.cbd.int";
-
-            if(/cbddev\.xyz$/i.test(domain)) baseUrl = "https://kronos.cbddev.xyz";
-            if(/localhost$/i  .test(domain)) baseUrl = "https://kronos.cbd.int";
-            if(/local$/i      .test(domain)) baseUrl = "https://kronos.cbddev.xyz";
+            const baseUrl = window.scbd.kronosUrl;
 
 			async function createPassport (contactId, conferenceId, passportInfo) {
 				if (!contactId) throw Error('contactId required');
 				if (!conferenceId) throw Error('conferenceId required');
 				if (!passportInfo) throw Error('passportInfo');
 			
-			
-			
-			
+
 				const data = await $http.post(`${baseUrl}/api/v2018/passports`,  { ...passportInfo, contactId, conferenceId })
 			
 				return data;

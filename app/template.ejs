@@ -27,8 +27,9 @@ captcha-site-key-v2="<%=captchaV2key%>" captcha-site-key-v3="<%=captchaV3key%>">
         
         Object.defineProperty(window, 'scbd', {
             value: Object.freeze({
-                accountsUrl: '<%=accountsUrl %>', 
-                apiUrl     : '<%=apiUrl %>'
+                accountsUrl: '<%=accountsUrl %>',
+                apiUrl     : '<%=apiUrl %>',
+                kronosUrl  : '<%=kronosUrl %>'
             }), // Set the new value you want
             writable: false, // Allow the property to be writable
             configurable: false, // Allow the property to be reconfigured

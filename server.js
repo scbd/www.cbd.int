@@ -26,6 +26,8 @@ if(!process.env.API_URL) {
 const accountsUrl=  process.env.ACCOUNTS_URL   || 'https://accounts.cbddev.xyz';
 const apiUrl     =  process.env.API_URL || 'https://api.cbddev.xyz';
 const wwwUrl     =  process.env.WWW_URL || 'https://www.cbd.int';
+const kronosUrl  =  process.env.KRONOS_URL || 'https://kronos.cbddev.xyz'; //https://kronos.cbd.int
+const kronosCbdEventsUrl  =  process.env.KRONOS_CBD_EVENTS_URL || 'https://cbd.kronos.cbddev.xyz'; //https://cbd.kronos-events.net
 const gitVersion = (process.env.COMMIT  || 'UNKNOWN').substr(0, 8);
 const siteAlert  =  process.env.SITE_ALERT || '';
 const siteAlertWarning = process.env.SITE_ALERT_LEVEL || 'danger';
@@ -37,10 +39,11 @@ console.info(`info: Git version     : ${gitVersion}`);
 console.info(`info: API address     : ${apiUrl}`);
 console.info(`info: CDN address     : ${cdnUrl}`);
 console.info(`info: Accounts address: ${accountsUrl}`);
+console.info(`info: Kronos address  : ${kronosUrl}`);
 console.info(`info: IS DEV          : ${process.env.IS_DEV}`);
 // Configure options
 
-const appTemplateParams = { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, siteAlert, siteAlertWarning, googleAnalyticsCode, accountsUrl, apiUrl }
+const appTemplateParams = { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, siteAlert, siteAlertWarning, googleAnalyticsCode, accountsUrl, apiUrl, kronosUrl }
 
 app.set('views', `${__dirname}/app`);
 app.set('view engine', 'ejs');
@@ -62,6 +65,7 @@ app.use('/documents', meetingDocuments());
 
 // Configure routes
 app.all('/api/*', function(req, res) { proxy.web(req, res, { target: apiUrl, secure: false, changeOrigin:true } ); } );
+app.all('/kronos-cbd-events-api/*', function(req, res) {  proxy.web(req, res, { target: kronosCbdEventsUrl , secure: false, changeOrigin:true } ); } );
 
 // Configure robots.txt
 app.get('/robots.txt', (req, res) => {
