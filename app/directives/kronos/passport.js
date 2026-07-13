@@ -4,6 +4,7 @@ import   mime         from 'mime';
 
 
 import '~/services/conference-service';
+import '~/services/kronos';
 import '~/directives/file';
 import   nationalities               from '~/data/kronos/nationalities.js';
 import   authorities                 from '~/data/kronos/authorities.js'  ;
@@ -79,7 +80,7 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
               if(type.startsWith('image')) $scope.binding.imageSrc = $scope.image;
 
 
-              const { imageSrc, fields, valid } = (await $http.post(`https://cbd.kronos.cbddev.xyz/passports/api/read`, body, { headers })).data;
+              const { imageSrc, fields, valid } = (await $http.post(`${kronos.baseUrl}/passports/api/read`, body, { headers })).data;
 
               if(!valid) $scope.triggerForm();
 
