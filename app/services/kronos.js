@@ -35,31 +35,24 @@ import ng from 'angular';
 
         flexHttpInterceptorProvider.interceptors.push('kronosHttpIntercepter');
 
-        this.$get = ['$location','$http', function($location,$http) {
+        this.$get = ['$http', function($http) {
 
-            var domain = $location.host();
-
-            var baseUrl = "https://kronos.cbd.int";
-
-            if(/cbddev\.xyz$/i.test(domain)) baseUrl = "https://kronos.cbddev.xyz";
-            if(/localhost$/i  .test(domain)) baseUrl = "https://kronos.cbd.int";
-            if(/local$/i      .test(domain)) baseUrl = "https://kronos.cbddev.xyz";
+            const baseUrl = window.scbd.kronosUrl;
+            const kronosCbdEventsUrl = window.scbd.kronosCbdEventsUrl;
 
 			async function createPassport (contactId, conferenceId, passportInfo) {
 				if (!contactId) throw Error('contactId required');
 				if (!conferenceId) throw Error('conferenceId required');
 				if (!passportInfo) throw Error('passportInfo');
 			
-			
-			
-			
+
 				const data = await $http.post(`${baseUrl}/api/v2018/passports`,  { ...passportInfo, contactId, conferenceId })
 			
 				return data;
 			  }
 
             return {
-                baseUrl , createPassport 
+                baseUrl , kronosCbdEventsUrl, createPassport
             }
         }];
     }]);
