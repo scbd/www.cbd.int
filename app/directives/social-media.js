@@ -10,11 +10,6 @@ import 'require'
 			scope: {},
 			link: function ($scope, $element) {
 
-				require(['https://platform.twitter.com/widgets.js'], function(){
-					$window.twttr.widgets.load($element.find('#twitterTimeline')[0]);
-					setServiceReady('twitter');
-				})
-
 				import('~/services/fb').then(function(){
 					setTimeout(() => {
 						if ($window.FB && $window.FB.XFBML){
