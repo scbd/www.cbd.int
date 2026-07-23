@@ -80,7 +80,7 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
               if(type.startsWith('image')) $scope.binding.imageSrc = $scope.image;
 
 
-              const { imageSrc, fields, valid } = (await $http.post(`/kronos-cbd-events-api/passports/api/read`, body, { headers })).data;
+              const { imageSrc, fields, valid } = (await $http.post(`${kronos.kronosCbdEventsUrl}/passports/api/read`, body, { headers })).data;
 
               if(!valid) $scope.triggerForm();
 

@@ -1,34 +1,25 @@
 
 <template >
   <div class="position-relative">
-    <!-- Medium view and above -->
-    <div class="document-files">
-        <div v-for=" {language, text, contentType, url, public: isPublic, allowPublic, _id} in files" v-bind:key="_id" >
-          <span class="d-none d-md-inline">
-            <a @click="showPreview(text, language)" :style="{ visibility: (text?'visible':'hidden') }" :class="{ 'btn btn-lg btn-outline-dark': showPreviewAsButton}">
-              <i class="fa fa-file-text-o" aria-hidden="true"></i>
-            </a>
-            <a target="_blank" :href="url">
-              <i :class="[getMimeConfig(contentType).icon, getMimeConfig(contentType).color]" class="fa"/>
-                <span class="language">
-                    {{ language| langTextFilter }}
-                </span>
-            </a>
+    <div class="document-files" :title="showAiIcon ? $t('aiGeneratedTranslation') : null">
+        <div v-for="group in groups" :key="group[0]._id">
+          <a v-if="allowPreviewText" @click="showPreview(group[0].text, group[0].language)" :style="{ visibility: (group[0].text?'visible':'hidden') }" :class="{ 'btn btn-lg btn-outline-dark': showPreviewAsButton}">
+            <i class="fa fa-file-text-o" aria-hidden="true"></i>
+          </a>
+          <span class="file-icon">
+            <i v-if="showAiIcon" class="fa text-muted fa-magic"/>
+            <i :class="[getMimeConfig(group[0].contentType).icon, getMimeConfig(group[0].contentType).color]" class="fa"/>
           </span>
-
-          <span class="d-md-none">
-            <button class="btn" :class="getMimeConfig('default').btn" :style="{ visibility: (text?'visible':'hidden') }" @click="showPreview(text, language)">
-              <i class="fa fa-file-text-o" aria-hidden="true"></i>
-            </button>
-            <a target="_blank" :href="url" class="btn" :class="getMimeConfig(contentType).btn">
-              <i :class="getMimeConfig(contentType).icon" class="fa"/>
+          <span v-for="file in group" :key="file._id">
+            <a :href="showAiIcon ? '#' : file.url" :target="showAiIcon ? null : '_blank'"
+               @click="onFileClick(file, $event)">
+              <span class="language">
+                <span class="d-none d-lg-inline">{{ file.language| langTextFilter }}</span>
+                <span class="d-lg-none">{{ file.language }}</span>
+              </span>
             </a>
-            <span class="language">
-                {{ language }}
-            </span>
+            <i v-if="!file.public" class="fa fa-eye-slash" :class="{ 'text-success' : file.allowPublic, 'text-muted': !file.allowPublic}"/>
           </span>
-
-          <i v-if="!isPublic" class="fa fa-eye-slash" :class="{ 'text-success' : allowPublic, 'text-muted': !allowPublic}"/>
         </div>
     </div>
   </div>
@@ -38,7 +29,9 @@
 <script>
 
 import languages from '~/data/languages';
-import { showPreview } from './text-preview-dialog.vue'; 
+import i18n               from '../locales.js';
+import { showPreview }    from './text-preview-dialog.vue';
+import { showDisclaimer } from './disclaimer-dialog.vue';
 
 const   MIMES = {
   'application/pdf':                                                            { priority: 10,  btn: 'btn-danger' , icon: 'fa-file-pdf-o'        , color: 'red'    },
@@ -56,23 +49,50 @@ const   MIMES = {
 export default {
   name    :  'FilesView',
   props   : {
-              files: { type: Object, required: false },
-              showPreviewAsButton: { type: Boolean, default: false }
+              files: { type: Array, required: false, default: () => [] },
+              showPreviewAsButton: { type: Boolean, default: false },
+              allowPreviewText: { type: Boolean, default: true },
+              showAiIcon: { type: Boolean, default: false }
             },
-  methods : { getMimeConfig, showPreview },
+  computed: { groups },
+  methods : { getMimeConfig, showPreview, showDisclaimer, onFileClick },
   filters : { langTextFilter },
-  data
+  data,
+  i18n,
 }
 
-function data(){ return { show: false, preview:null, previewLanguage: null } } 
+function data(){ return { show: false, preview:null, previewLanguage: null } }
 
+// Group files sharing the same format so the icon renders once, followed by every
+// matching language for that format on the same line (instead of one icon per language).
+function groups() {
+  const byType = new Map();
 
-function langTextFilter(langCode){ 
-  return languages[langCode] || 'Not Specified' 
+  for(const file of this.files) {
+    const key = file.contentType || 'default';
+    if(!byType.has(key)) byType.set(key, []);
+    byType.get(key).push(file);
+  }
+
+  for(const group of byType.values())
+    group.sort((a, b) => a.language.localeCompare(b.language));
+
+  return [...byType.values()];
+}
+
+function langTextFilter(langCode){
+  return languages[langCode] || 'Not Specified'
 }
 
 function getMimeConfig(mimeType){
   return MIMES[ mimeType ] || MIMES[ 'default' ]
+}
+
+function onFileClick(file, event) {
+  if(this.showAiIcon) {
+    event.preventDefault();
+    this.showDisclaimer(file);
+  }
 }
 
 </script>
@@ -82,25 +102,28 @@ function getMimeConfig(mimeType){
 .blue     { color: blue; }
 .green    { color: green; }
 .orange   { color: orange;}
-.language { display: inline }
-.dropdown-menu{ 
+.language { display: inline; margin-right: 0.4em; }
+.dropdown-menu{
   width: 250px;
-  position: absolute; 
-  will-change: transform; 
-  top: 0px; 
-  left: 0px; 
+  position: absolute;
+  will-change: transform;
+  top: 0px;
+  left: 0px;
   transform: translate3d(-216px, 48px, 0px);
 }
-.d-md-none > .language {
-  text-transform:uppercase;
+.language .d-lg-none {
+  text-transform:lowercase;
 }
 .document-files {
   text-align: left;
-  padding-left: 25px;
 }
 
 .btn-outline-dark:hover {
   color: #fff !important;
+}
+
+.file-icon .fa-magic {
+  margin-right: 0.15em;
 }
 
 </style>

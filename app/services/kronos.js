@@ -35,9 +35,10 @@ import ng from 'angular';
 
         flexHttpInterceptorProvider.interceptors.push('kronosHttpIntercepter');
 
-        this.$get = ['$location','$http', function($location,$http) {
+        this.$get = ['$http', function($http) {
 
             const baseUrl = window.scbd.kronosUrl;
+            const kronosCbdEventsUrl = window.scbd.kronosCbdEventsUrl;
 
 			async function createPassport (contactId, conferenceId, passportInfo) {
 				if (!contactId) throw Error('contactId required');
@@ -51,7 +52,7 @@ import ng from 'angular';
 			  }
 
             return {
-                baseUrl , createPassport 
+                baseUrl , kronosCbdEventsUrl, createPassport
             }
         }];
     }]);

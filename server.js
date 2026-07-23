@@ -20,9 +20,16 @@ const captchaV3key  = process.env.CAPTCHA_V3_KEY;
 const oneDay  = 60*60*24;
 const oneYear = oneDay*365;
 
-if(!process.env.API_URL) {
+if(!process.env.API_URL)
     console.warn('warning: environment API_URL not set. USING default (https://api.cbd.int:443)');
-}
+
+if(!process.env.KRONOS_URL)
+    console.warn('warning: environment KRONOS_URL not set. USING default (https://kronos.cbddev.xyz)');
+
+if(!process.env.KRONOS_CBD_EVENTS_URL)
+    console.warn('warning: environment KRONOS_CBD_EVENTS_URL not set. USING default (https://cbd.kronos.cbddev.xyz)');
+
+
 const accountsUrl=  process.env.ACCOUNTS_URL   || 'https://accounts.cbddev.xyz';
 const apiUrl     =  process.env.API_URL || 'https://api.cbddev.xyz';
 const wwwUrl     =  process.env.WWW_URL || 'https://www.cbd.int';
@@ -40,10 +47,11 @@ console.info(`info: API address     : ${apiUrl}`);
 console.info(`info: CDN address     : ${cdnUrl}`);
 console.info(`info: Accounts address: ${accountsUrl}`);
 console.info(`info: Kronos address  : ${kronosUrl}`);
+console.info(`info: Kronos events   : ${kronosCbdEventsUrl}`);
 console.info(`info: IS DEV          : ${process.env.IS_DEV}`);
 // Configure options
 
-const appTemplateParams = { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, siteAlert, siteAlertWarning, googleAnalyticsCode, accountsUrl, apiUrl, kronosUrl }
+const appTemplateParams = { gitVersion, cdnUrl, baseLibs, captchaV2key, captchaV3key, siteAlert, siteAlertWarning, googleAnalyticsCode, accountsUrl, apiUrl, kronosUrl, kronosCbdEventsUrl }
 
 app.set('views', `${__dirname}/app`);
 app.set('view engine', 'ejs');

@@ -1,6 +1,8 @@
 <template >
   <div>
-    <Session :_id="_id" class="card" 
+    <div v-if="hasAiTranslations" class="alert alert-warning" role="alert">{{ $t('aiDisclaimerText') }}</div>
+
+    <Session :_id="_id" class="card"
       :body-class="{'collapse':true, 'show': numberOfSessions==1 }" 
       :body-id="`sid${_id}`" 
       v-for="{ title, _id, interventions, date, videos, count, timezone } in sessions" :key="_id">
@@ -37,7 +39,9 @@
         </div>
       </template>
 
-      <template v-for="(intervention, index) in interventions" :key="intervention._id">
+      <template v-for="(intervention, index) in interventions">
+
+        <InterventionRow v-bind="{intervention}" :timezone="timezone" :index="index+1" :key="intervention._id" :public-view="true" :show-ai-column="hasAiTranslations"
           @toggle="intervention.expanded = !intervention.expanded">
           <template v-slot:controls>
             <div class="video">
@@ -47,7 +51,7 @@
         </InterventionRow>
 
         <InterventionRow v-for="(child, ci) in (intervention.expanded ? intervention.supersededChildren : [])"
-          :intervention="child" :timezone="timezone" :sub-index="`${index+1}.${ci+1}`" :is-child="true" :key="child._id" :public-view="true">
+          :intervention="child" :timezone="timezone" :sub-index="`${index+1}.${ci+1}`" :is-child="true" :key="child._id" :public-view="true" :show-ai-column="hasAiTranslations">
           <template v-slot:controls>
             <div class="video">
               <VideoLink :videos="videos" :start-at="child.datetime" :title="`Start at intervention of ${child.title}`"/>
@@ -67,20 +71,22 @@ import   Api, { mapObjectId, markSupersededInterventions } from '../api.js'
 import   Session           from './session.vue'
 import   InterventionRow   from './intervention-row.vue'
 import   VideoLink         from './video-link.vue'
+import   i18n              from '../locales.js'
 import { format, timezone as setTimezone } from '../datetime.js'
 import remapCode from './re-map.js'
 
 export default {
   name       : 'SessionsView',
   components : { Session, InterventionRow, VideoLink },
-  props      : { 
+  props      : {
                   route:       { type: Object, required: false },
                   tokenReader: { type: Function, required: false }
                 },
-  computed   : { numberOfSessions },
+  computed   : { numberOfSessions, hasAiTranslations },
   filters    : { format, setTimezone },
   methods    : { loadInterventions },
-  created, data
+  created, data,
+  i18n,
 }
 
 function data(){
@@ -154,6 +160,21 @@ async function loadInterventions(sessionId){
 
 function numberOfSessions(){
   return this.sessions?.length || 0
+}
+
+function normalizeFiles(files) {
+  return Array.isArray(files) ? files : Object.values(files || {});
+}
+
+function hasTranslatedFile(intervention) {
+  return normalizeFiles(intervention.files).some(f => f.autoTranslated);
+}
+
+function hasAiTranslations() {
+  return (this.sessions || []).some(s =>
+    (s.interventions || []).some(i =>
+      hasTranslatedFile(i) ||
+      (i.supersededChildren || []).some(hasTranslatedFile)))
 }
 </script>
 
