@@ -7,7 +7,7 @@
             <i class="fa fa-file-text-o" aria-hidden="true"></i>
           </a>
           <span class="file-icon">
-            <i v-if="showAiIcon" class="fa text-muted fa-magic"/>
+            <i v-if="showAiIcon" class="fa fa-language"/>
             <i :class="[getMimeConfig(group[0].contentType).icon, getMimeConfig(group[0].contentType).color]" class="fa"/>
           </span>
           <span v-for="file in group" :key="file._id">
@@ -122,7 +122,7 @@ function onFileClick(file, event) {
   color: #fff !important;
 }
 
-.file-icon .fa-magic {
+.file-icon .fa-language {
   margin-right: 0.15em;
 }
 
