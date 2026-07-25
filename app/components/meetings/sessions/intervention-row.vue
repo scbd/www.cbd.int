@@ -61,7 +61,7 @@
     </td>
 
     <td class="files-col" style="text-align: center; vertical-align: middle;" v-if="showAiColumn">
-        <FilesView :files="aiFiles" :allow-preview-text="false" :show-ai-icon="true"/>
+        <FilesView :files="aiFiles" :allow-preview-text="false"/>
     </td>
 
     <td class="controls-col" >
@@ -101,16 +101,12 @@ export default {
   i18n,
 }
 
-function normalizeFiles(files) {
-  return Array.isArray(files) ? files : Object.values(files || {});
-}
-
 function nonAiFiles() {
-  return normalizeFiles(this.intervention.files).filter(f => !f.autoTranslated);
+  return this.intervention.files.filter(f => !f.autoTranslated);
 }
 
 function aiFiles() {
-  return normalizeFiles(this.intervention.files).filter(f => f.autoTranslated);
+  return this.intervention.files.filter(f => f.autoTranslated);
 }
 
 function tags() {

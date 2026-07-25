@@ -1,17 +1,17 @@
 
 <template >
   <div class="position-relative">
-    <div class="document-files" :title="showAiIcon ? $t('aiGeneratedTranslation') : null">
+    <div class="document-files" :title="hasAiFiles ? $t('aiGeneratedTranslation') : null">
         <div v-for="group in groups" :key="group[0]._id">
           <a v-if="allowPreviewText" @click="showPreview(group[0].text, group[0].language)" :style="{ visibility: (group[0].text?'visible':'hidden') }" :class="{ 'btn btn-lg btn-outline-dark': showPreviewAsButton}">
             <i class="fa fa-file-text-o" aria-hidden="true"></i>
           </a>
           <span class="file-icon">
-            <i v-if="showAiIcon" class="fa fa-language"/>
+            <i v-if="group[0].autoTranslated" class="fa fa-language"/>
             <i :class="[getMimeConfig(group[0].contentType).icon, getMimeConfig(group[0].contentType).color]" class="fa"/>
           </span>
           <span v-for="file in group" :key="file._id">
-            <a :href="showAiIcon ? '#' : file.url" :target="showAiIcon ? null : '_blank'"
+            <a :href="file.autoTranslated ? '#' : file.url" :target="file.autoTranslated ? null : '_blank'"
                @click="onFileClick(file, $event)">
               <span class="language">
                 <span class="d-none d-lg-inline">{{ file.language| langTextFilter }}</span>
@@ -51,10 +51,9 @@ export default {
   props   : {
               files: { type: Array, required: false, default: () => [] },
               showPreviewAsButton: { type: Boolean, default: false },
-              allowPreviewText: { type: Boolean, default: true },
-              showAiIcon: { type: Boolean, default: false }
+              allowPreviewText: { type: Boolean, default: true }
             },
-  computed: { groups },
+  computed: { groups, hasAiFiles },
   methods : { getMimeConfig, showPreview, showDisclaimer, onFileClick },
   filters : { langTextFilter },
   data,
@@ -80,6 +79,10 @@ function groups() {
   return [...byType.values()];
 }
 
+function hasAiFiles() {
+  return this.files.some(f => f.autoTranslated);
+}
+
 function langTextFilter(langCode){
   return languages[langCode] || 'Not Specified'
 }
@@ -89,7 +92,7 @@ function getMimeConfig(mimeType){
 }
 
 function onFileClick(file, event) {
-  if(this.showAiIcon) {
+  if(file.autoTranslated) {
     event.preventDefault();
     this.showDisclaimer(file);
   }

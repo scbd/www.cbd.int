@@ -162,12 +162,8 @@ function numberOfSessions(){
   return this.sessions?.length || 0
 }
 
-function normalizeFiles(files) {
-  return Array.isArray(files) ? files : Object.values(files || {});
-}
-
 function hasTranslatedFile(intervention) {
-  return normalizeFiles(intervention.files).some(f => f.autoTranslated);
+  return intervention.files.some(f => f.autoTranslated);
 }
 
 function hasAiTranslations() {
