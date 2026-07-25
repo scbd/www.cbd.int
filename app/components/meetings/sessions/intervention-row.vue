@@ -57,7 +57,11 @@
     </td>
 
     <td class="files-col" style="text-align: center; vertical-align: middle;">
-        <FilesView :files="intervention.files" :show-preview-as-button="showPreviewAsButton"/>
+        <FilesView :files="nonAiFiles" :show-preview-as-button="showPreviewAsButton"/>
+    </td>
+
+    <td class="files-col" style="text-align: center; vertical-align: middle;" v-if="showAiColumn">
+        <FilesView :files="aiFiles" :allow-preview-text="false"/>
     </td>
 
     <td class="controls-col" >
@@ -88,12 +92,21 @@ export default {
                   showTime    : { type: Boolean, required: false, default: true },
                   publicView  : { type: Boolean, required: false, default: false },
                   timezone    : { type: String,  required: false, default: 'local' },
-                  showPreviewAsButton : { type: Boolean, default: false }
+                  showPreviewAsButton : { type: Boolean, default: false },
+                  showAiColumn : { type: Boolean, default: false }
               },
   methods   : { getOrgType, isPending },
   filters   : { formatDate, setTimezone },
-  computed  : { tags, hasSuperseded },
-  i18n, 
+  computed  : { tags, hasSuperseded, nonAiFiles, aiFiles },
+  i18n,
+}
+
+function nonAiFiles() {
+  return this.intervention.files.filter(f => !f.autoTranslated);
+}
+
+function aiFiles() {
+  return this.intervention.files.filter(f => f.autoTranslated);
 }
 
 function tags() {
@@ -142,7 +155,6 @@ table.sessions {
   vertical-align: middle;
 }
 .files-col{
-  width:200px;
   text-align: center;
   vertical-align: middle;
   white-space: nowrap;
@@ -205,7 +217,6 @@ tr.intervention-child .files-col a[target="_blank"] {
 }
 @media screen and (max-width: 768px) {
   .files-col{
-    width:65px;
     text-align: center;
     vertical-align: middle;
   }
