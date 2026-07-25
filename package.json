@@ -47,7 +47,6 @@
     "build": "rm -rf ./dist && npx rollup -c",
     "dev": "rm -rf ./dist && npx rollup -c --watch",
     "server": "node server",
-    "eslint": "npx eslint . --fix",
     "clean-reinstall": "rm -rf ./node_modules && rm -rf ./app/libs && npm install"
   }
 }

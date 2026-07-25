@@ -19,6 +19,9 @@
     <Session v-if="session">
       <InterventionRow v-for="(intervention, index) in interventions" :index="index+1" v-bind="{intervention}" :timezone="session.timezone" v-bind:key="intervention._id">
         <template slot="controls">
+          <span v-if="aiFileCount(intervention)" class="text-muted mr-2 text-nowrap" :title="$t('Automatic translations')">
+            <i class="fa fa-language"></i> {{ aiFileCount(intervention) }}
+          </span>
           <TagSelector :selectedTags="intervention.tags" @tag="toggleTag(intervention, $event)"/>
           <div class="btn-group" role="group">
             <button class="btn btn-sm btn-outline-dark" @click="editId(intervention._id, 'edit')"><i class="fa fa-edit"></i></button>
@@ -42,9 +45,12 @@
       <small>{{pendingInterventions.length}} {{$t('Pending statements uploaded')}}</small>
     </caption>
     <Session v-if="pendingInterventions.length" >
-      <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" :timezone="session.timezone" v-bind:key="intervention._id" @dblclick="edit(intervention)" >
+      <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" :timezone="session.timezone" v-bind:key="intervention._id" @dblclick="edit(intervention)">
         <template slot="controls">
           <div class="text-nowrap">
+            <span v-if="aiFileCount(intervention)" class="text-muted mr-2" :title="$t('Automatic translations')">
+              <i class="fa fa-language"></i> {{ aiFileCount(intervention) }}
+            </span>
             <TagSelector :selectedTags="intervention.tags" @tag="toggleTag(intervention, $event)"/>
             <button class="btn btn-sm btn-outline-success" @click="editId(intervention._id, 'publish')"><i class="fa fa-microphone"></i></button>
 
@@ -98,6 +104,7 @@ export default {
   filters   : { formatDate, timezone },
   methods   : {
                 init,
+                aiFileCount,
                 createPendingIntervention, 
                 edit, 
                 editId, 
@@ -167,10 +174,14 @@ async function init(){
     this.pendingInterventions  = await this.queryPendingInterventions();
 }
 
+function aiFileCount(intervention){
+  return intervention.files.filter(f => f.autoTranslated).length;
+}
+
 function createPendingIntervention(){
   this.edit({ 
     status: 'pending',
-    files : [ { language: 'en', allowPublic: false} ]
+    files : [ { language: 'en', allowPublic: true, public: true} ]
   });
 }
 
