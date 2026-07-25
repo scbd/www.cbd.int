@@ -45,7 +45,7 @@
         </div>
 
         <slot>
-            <FilesPreview v-if="isPending(intervention.status)" :files="intervention.files"/>
+            <FilesPreview v-if="isPending(intervention.status)" :files="nonAiFiles"/>
         </slot>
 
         <div>
