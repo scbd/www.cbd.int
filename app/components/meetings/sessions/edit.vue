@@ -226,18 +226,22 @@ function replace(_id, intervention) {
   if( i>=0) this.interventions       .splice( i, 1);
   if(pi>=0) this.pendingInterventions.splice(pi, 1);
 
-  // Only re-add if intervention exists and belongs to this session
-  const belongsToThisSession = intervention && intervention.sessionId === this.sessionId;
+  // The two lists have different scopes: `interventions` holds this session's delivered
+  // statements, `pendingInterventions` holds every uploaded statement of the meeting - a
+  // pending one carries no sessionId (api.createPendingIntervention drops it).
+  if(intervention) {
+    const isDeliveredHere = intervention.status=='public' && intervention.sessionId === this.sessionId;
+    const isPending       = intervention.status=='pending';
 
-  if(intervention && belongsToThisSession) {
-    if( i>=0 && intervention.status=='pending')  i=-1;
-    if(pi>=0 && intervention.status=='public' ) pi=-1;
+    if(isDeliveredHere) {
+      if( i>=0) this.interventions.splice(i, 0, intervention);
+      else      this.interventions.push(intervention);
+    }
 
-    if( i>=0) this.interventions       .splice( i, 0, intervention);
-    if(pi>=0) this.pendingInterventions.splice(pi, 0, intervention);
-
-    if( i < 0 && intervention.status=='public')  this.interventions       .push(intervention);
-    if(pi < 0 && intervention.status=='pending') this.pendingInterventions.unshift(intervention);
+    if(isPending) {
+      if(pi>=0) this.pendingInterventions.splice(pi, 0, intervention);
+      else      this.pendingInterventions.unshift(intervention);
+    }
   }
 
   this.interventions = sortBy(this.interventions, o=>o.datetime);
