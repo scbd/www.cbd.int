@@ -19,9 +19,7 @@
     <Session v-if="session">
       <InterventionRow v-for="(intervention, index) in interventions" :index="index+1" v-bind="{intervention}" :timezone="session.timezone" v-bind:key="intervention._id">
         <template slot="controls">
-          <span v-if="aiFileCount(intervention)" class="text-muted mr-2 text-nowrap" :title="$t('Automatic translations')">
-            <i class="fa fa-language"></i> {{ aiFileCount(intervention) }}
-          </span>
+          <AiTranslationBadge v-bind="{intervention}"/>
           <TagSelector :selectedTags="intervention.tags" @tag="toggleTag(intervention, $event)"/>
           <div class="btn-group" role="group">
             <button class="btn btn-sm btn-outline-dark" @click="editId(intervention._id, 'edit')"><i class="fa fa-edit"></i></button>
@@ -48,9 +46,7 @@
       <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" :timezone="session.timezone" v-bind:key="intervention._id" @dblclick="edit(intervention)">
         <template slot="controls">
           <div class="text-nowrap">
-            <span v-if="aiFileCount(intervention)" class="text-muted mr-2" :title="$t('Automatic translations')">
-              <i class="fa fa-language"></i> {{ aiFileCount(intervention) }}
-            </span>
+            <AiTranslationBadge v-bind="{intervention}"/>
             <TagSelector :selectedTags="intervention.tags" @tag="toggleTag(intervention, $event)"/>
             <button class="btn btn-sm btn-outline-success" @click="editId(intervention._id, 'publish')"><i class="fa fa-microphone"></i></button>
 
@@ -86,6 +82,7 @@ import   InterventionRow                    from './intervention-row.vue'
 import   Session                            from './session.vue'
 import   EditRow                            from './edit-row.vue'
 import   TagSelector                        from './tag-selector.vue'
+import   AiTranslationBadge                 from './ai-translation-badge.vue'
 import   moment                             from 'moment'
 import   remapCode                          from './re-map.js'
 import remap from './re-map.js'
@@ -96,7 +93,7 @@ export default {
                 route      : { type: Object,   required: false },
                 tokenReader: { type: Function, required: false }
               },
-  components: { Session, EditRow, InterventionRow, EditInterventionModal, TagSelector },
+  components: { Session, EditRow, InterventionRow, EditInterventionModal, TagSelector, AiTranslationBadge },
   computed  : { 
                 agendaItems, 
                 sessionId() { return this.session._id } 
@@ -104,8 +101,7 @@ export default {
   filters   : { formatDate, timezone },
   methods   : {
                 init,
-                aiFileCount,
-                createPendingIntervention, 
+                createPendingIntervention,
                 edit, 
                 editId, 
                 editClose,
@@ -172,10 +168,6 @@ async function init(){
     this.session               = session;
     this.interventions         = interventions;
     this.pendingInterventions  = await this.queryPendingInterventions();
-}
-
-function aiFileCount(intervention){
-  return intervention.files.filter(f => f.autoTranslated).length;
 }
 
 function createPendingIntervention(){
