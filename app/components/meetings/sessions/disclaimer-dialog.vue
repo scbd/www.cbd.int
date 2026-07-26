@@ -1,6 +1,6 @@
 
 <template >
-  <div class="modal fade" ref="dialog" tabindex="-1" role="dialog" aria-labelledby="aiDisclaimerModalLabel" aria-hidden="true">
+  <div class="modal fade" ref="dialog" tabindex="-1" role="dialog" aria-labelledby="aiDisclaimerModalLabel" aria-hidden="true" :dir="dir" :lang="file.language">
 
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -17,7 +17,7 @@
         </div>
         <div class="modal-footer">
           <a class="btn btn-primary" :href="file.url" target="_blank" @click="close()">{{ $t('download') }}</a>
-          <button type="button" class="btn" data-dismiss="modal">Close</button>
+          <button type="button" class="btn" data-dismiss="modal">{{ $t('close') }}</button>
         </div>
       </div>
     </div>
@@ -35,10 +35,22 @@ const DisclaimerDialog = {
               file: { type: Object,  required: true  },
               show: { type: Boolean, required: false, default: false }
             },
+  computed: { dir },
   methods: { open, close },
   watch:   { show: open },
+  created,
   mounted,
   i18n,
+}
+
+// The disclaimer is about the file being opened, so it reads in that file's language rather than
+// the interface language. `i18n` is a component-local instance, so this touches this dialog alone.
+function created() {
+  if(this.file.language) this.$i18n.locale = this.file.language;
+}
+
+function dir() {
+  return this.file.language=='ar' ? 'rtl' : 'ltr';
 }
 
 function open(visible) {
@@ -94,5 +106,16 @@ export function showDisclaimer(file) {
 .modal-content p {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: normal;
+}
+
+/* The page aligns text left, so Arabic needs it stated outright - inheriting `direction` from the
+   dir attribute is not enough. The footer mirrors itself: it is flex, justified to the end. */
+[dir="rtl"] .modal-content {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .modal-header .close {
+  margin: -1rem auto -1rem -1rem;
 }
 </style>
