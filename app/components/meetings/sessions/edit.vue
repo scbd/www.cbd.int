@@ -19,6 +19,7 @@
     <Session v-if="session">
       <InterventionRow v-for="(intervention, index) in interventions" :index="index+1" v-bind="{intervention}" :timezone="session.timezone" v-bind:key="intervention._id">
         <template slot="controls">
+          <AiTranslationBadge v-bind="{intervention}"/>
           <TagSelector :selectedTags="intervention.tags" @tag="toggleTag(intervention, $event)"/>
           <div class="btn-group" role="group">
             <button class="btn btn-sm btn-outline-dark" @click="editId(intervention._id, 'edit')"><i class="fa fa-edit"></i></button>
@@ -42,9 +43,10 @@
       <small>{{pendingInterventions.length}} {{$t('Pending statements uploaded')}}</small>
     </caption>
     <Session v-if="pendingInterventions.length" >
-      <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" :timezone="session.timezone" v-bind:key="intervention._id" @dblclick="edit(intervention)" >
+      <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" :timezone="session.timezone" v-bind:key="intervention._id" @dblclick="edit(intervention)">
         <template slot="controls">
           <div class="text-nowrap">
+            <AiTranslationBadge v-bind="{intervention}"/>
             <TagSelector :selectedTags="intervention.tags" @tag="toggleTag(intervention, $event)"/>
             <button class="btn btn-sm btn-outline-success" @click="editId(intervention._id, 'publish')"><i class="fa fa-microphone"></i></button>
 
@@ -80,6 +82,7 @@ import   InterventionRow                    from './intervention-row.vue'
 import   Session                            from './session.vue'
 import   EditRow                            from './edit-row.vue'
 import   TagSelector                        from './tag-selector.vue'
+import   AiTranslationBadge                 from './ai-translation-badge.vue'
 import   moment                             from 'moment'
 import   remapCode                          from './re-map.js'
 import remap from './re-map.js'
@@ -90,7 +93,7 @@ export default {
                 route      : { type: Object,   required: false },
                 tokenReader: { type: Function, required: false }
               },
-  components: { Session, EditRow, InterventionRow, EditInterventionModal, TagSelector },
+  components: { Session, EditRow, InterventionRow, EditInterventionModal, TagSelector, AiTranslationBadge },
   computed  : { 
                 agendaItems, 
                 sessionId() { return this.session._id } 
@@ -98,7 +101,7 @@ export default {
   filters   : { formatDate, timezone },
   methods   : {
                 init,
-                createPendingIntervention, 
+                createPendingIntervention,
                 edit, 
                 editId, 
                 editClose,
@@ -170,7 +173,7 @@ async function init(){
 function createPendingIntervention(){
   this.edit({ 
     status: 'pending',
-    files : [ { language: 'en', allowPublic: false} ]
+    files : [ { language: 'en', allowPublic: true, public: true} ]
   });
 }
 
@@ -215,18 +218,22 @@ function replace(_id, intervention) {
   if( i>=0) this.interventions       .splice( i, 1);
   if(pi>=0) this.pendingInterventions.splice(pi, 1);
 
-  // Only re-add if intervention exists and belongs to this session
-  const belongsToThisSession = intervention && intervention.sessionId === this.sessionId;
+  // The two lists have different scopes: `interventions` holds this session's delivered
+  // statements, `pendingInterventions` holds every uploaded statement of the meeting - a
+  // pending one carries no sessionId (api.createPendingIntervention drops it).
+  if(intervention) {
+    const isDeliveredHere = intervention.status=='public' && intervention.sessionId === this.sessionId;
+    const isPending       = intervention.status=='pending';
 
-  if(intervention && belongsToThisSession) {
-    if( i>=0 && intervention.status=='pending')  i=-1;
-    if(pi>=0 && intervention.status=='public' ) pi=-1;
+    if(isDeliveredHere) {
+      if( i>=0) this.interventions.splice(i, 0, intervention);
+      else      this.interventions.push(intervention);
+    }
 
-    if( i>=0) this.interventions       .splice( i, 0, intervention);
-    if(pi>=0) this.pendingInterventions.splice(pi, 0, intervention);
-
-    if( i < 0 && intervention.status=='public')  this.interventions       .push(intervention);
-    if(pi < 0 && intervention.status=='pending') this.pendingInterventions.unshift(intervention);
+    if(isPending) {
+      if(pi>=0) this.pendingInterventions.splice(pi, 0, intervention);
+      else      this.pendingInterventions.unshift(intervention);
+    }
   }
 
   this.interventions = sortBy(this.interventions, o=>o.datetime);

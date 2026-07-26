@@ -208,6 +208,13 @@ export default class Api
     return file;
   }   
 
+  async requestInterventionFileTranslation(interventionId, fileId, targetLanguage){
+
+    const status = await this.http.post(`api/v2021/meeting-interventions/${encodeURIComponent(interventionId)}/files/${encodeURIComponent(fileId)}/translations`, { targetLanguage }).then(res => res.data).catch(tryCastToApiError);
+
+    return status;
+  }
+
   //////////////////////////
   // Sessions
   ////////////////////////
