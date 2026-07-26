@@ -125,7 +125,7 @@ function onFileClick(file, event) {
   color: #fff !important;
 }
 
-.file-icon .fa-language {
+.file-icon {
   margin-right: 0.15em;
 }
 
