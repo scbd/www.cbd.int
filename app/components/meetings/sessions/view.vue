@@ -1,6 +1,9 @@
 <template >
   <div>
-    <div v-if="hasAiTranslations" class="alert alert-warning" role="alert">{{ $t('aiDisclaimerText') }}</div>
+    <div v-if="hasAiTranslations" class="alert alert-warning" role="alert">
+      <i class="fa fa-language"></i>
+      {{ $t('aiDisclaimerText') }}
+    </div>
 
     <Session :_id="_id" class="card"
       :body-class="{'collapse':true, 'show': numberOfSessions==1 }" 
