@@ -113,7 +113,7 @@
 
                                 <template v-if="row.file">
                                     <label v-if=" row.file._id" class="col-sm-3 col-form-label" :title="row.file.filename">
-                                        <a :href="row.file.url" target="_blank">{{row.file.filename}}</a>
+                                        <a :href="row.file.url" target="_blank">{{row.file.filename}} <i class="fa fa-external-link" aria-hidden="true"></i></a>
                                     </label>
                                     <input :disabled="!!progress" v-if="!row.file._id" type="file" class="col-sm-3 col-form-label" @change="onFileSelect(row.file, $event)" ref="file">
                                 </template>
