@@ -44,7 +44,7 @@ export default { messages: {
     aiTranslationDisclaimer: '人工智能翻译免责声明',
     download: '下载',
     close: '关闭',
-    aiDisclaimerText: '为提高可及性，特提供由人工智能生成的发言译文。秘书处不保证这些译文的准确性、完整性或可靠性。仅以相应提交的发言原文为准。'
+    aiDisclaimerText: '为提供可及性，特提供由人工智能生成的发言译文。秘书处不保证这些译文的准确性、完整性或可靠性。请以相应提交的发言原文为准。'
   }
 }
 }
