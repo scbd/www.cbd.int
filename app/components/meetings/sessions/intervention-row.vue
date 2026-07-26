@@ -58,11 +58,10 @@
 
     <td class="files-col" style="text-align: center; vertical-align: middle;">
         <FilesView :files="nonAiFiles" :show-preview-as-button="showPreviewAsButton"/>
+        <FilesView v-if="showAiColumn" :files="aiFiles" :allow-preview-text="false"/>
     </td>
 
-    <td class="files-col" style="text-align: center; vertical-align: middle;" v-if="showAiColumn">
-        <FilesView :files="aiFiles" :allow-preview-text="false"/>
-    </td>
+  
 
     <td class="controls-col" >
         <slot name="controls"/>
