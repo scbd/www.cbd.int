@@ -54,6 +54,12 @@
       <h4>{{::('participationT.badRequestTitle'|$translate)}}</h4>
       <p >{{::('participationT.badRequestBody'|$translate)}}</p>
     </div>
+    <div ng-if="msg['CONFERENCE_NOT_FOUND']" class="bs-callout bs-callout-warning">
+      <i class="fa fa-times-circle pull-right" aria-hidden="true" ng-click="remove('CONFERENCE_NOT_FOUND')"></i>
+      <h4>{{::('participationT.theConferenceWithTheUrlCode'|$translate)}} "{{msg['CONFERENCE_NOT_FOUND'].error.conferenceCode}}" {{::('participationT.cannotBeFound'|$translate)}}</h4>
+      <p><code>{{msg['CONFERENCE_NOT_FOUND'].error.urlBefore}}<strong>{{msg['CONFERENCE_NOT_FOUND'].error.conferenceCode}}</strong>{{msg['CONFERENCE_NOT_FOUND'].error.urlAfter}}</code></p>
+      <p>{{::('participationT.areYouSureThisIsTheCorrectConferenceCode'|$translate)}}</p>
+    </div>
     <div ng-if="msg['STEP_NOT_COMPLETE']" class="bs-callout bs-callout-danger">
       <i class="fa fa-times-circle pull-right" aria-hidden="true" ng-click="remove('STEP_NOT_COMPLETE')"></i>
       <h4>{{::('participationT.stepIncomplete'|$translate)}}</h4>
