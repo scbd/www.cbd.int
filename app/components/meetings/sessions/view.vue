@@ -8,7 +8,7 @@
     <Session :_id="_id" class="card"
       :body-class="{'collapse':true, 'show': numberOfSessions==1 }" 
       :body-id="`sid${_id}`" 
-      v-for="{ title, _id, interventions, date, videos, count, timezone } in sessions" :key="_id">
+      v-for="{ title, _id, interventions, date, videos, count, timezone, earlySubmission, cutoffDate } in sessions" :key="_id">
 
       <template v-slot:header>
 
@@ -32,8 +32,15 @@
               <VideoLink class="pull-right" :videos="videos" title="Full session webcast"/>
             </span>
 
-            <br> <small class="text-muted">
-              {{ date | setTimezone(timezone) | format('cccc, d MMMM yyyy - T') }}
+            <br> 
+            
+            <small class="text-muted">
+              <template v-if="earlySubmission && cutoffDate">
+                <i>Early statement submissions - Deadline</i>: {{ cutoffDate | setTimezone(timezone) | format('cccc, d MMMM yyyy - T') }}
+              </template>
+              <template v-else>
+                {{ date | setTimezone(timezone) | format('cccc, d MMMM yyyy - T') }}
+              </template>
               <i class="tiny">{{ timezone }}</i>
             </small>
             
