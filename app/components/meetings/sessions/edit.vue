@@ -38,10 +38,23 @@
     </EditRow>
 
     <hr/>
+    <div class="position-sticky sticky-pending clearfix">
+      <div class="text-nowrap float-right">
+        <small>{{pendingInterventions.length}} {{$t('Pending statements uploaded')}}</small>
+      </div>
 
-    <caption class="text-nowrap float-right">
-      <small>{{pendingInterventions.length}} {{$t('Pending statements uploaded')}}</small>
-    </caption>
+      <div class="text-nowrap">
+        <small class="text-muted">
+          <label class="mb-0 font-weight-normal">
+            <input type="checkbox" v-model="autoRefreshPending"/> {{$t('Auto refresh')}}
+          </label>
+          <span v-if="pendingLastUpdated"> - {{$t('last update')}} {{ pendingLastUpdated | formatDate('T') }}</span>
+          <button class="btn btn-sm btn-link p-0 ml-2 text-muted align-baseline" @click="refreshPending" :title="$t('Refresh now')">
+            <i class="fa fa-refresh" :class="{ 'fa-spin': isRefreshingPending }"></i>
+          </button>
+        </small>
+      </div>
+    </div>
     <Session v-if="pendingInterventions.length" >
       <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" :timezone="session.timezone" v-bind:key="intervention._id" @dblclick="edit(intervention)">
         <template slot="controls">
@@ -109,11 +122,12 @@ export default {
                 replace,
                 toggleTag,
                 queryPendingInterventions,
+                refreshPending,
                 onSearch : debounce(onSearch, 400),
                 isInPast, 
                 isInFuture
               },
-  data, created, mounted
+  data, created, mounted, beforeDestroy
 }
 
 function data(){
@@ -125,7 +139,12 @@ function data(){
     maxResultCount      : 250,
     editedIntervention  : null,
     editAction          : null,
-    freeText            : ''
+    freeText            : '',
+    autoRefreshPending  : true,
+    isRefreshingPending : false,
+    pendingLastUpdated  : null,
+    pendingRefreshTimer : null,
+    lastPendingQuery    : {}
   }
 }
 
@@ -135,6 +154,17 @@ async function created(){
 
 function mounted(){
   this.init()
+
+  this.pendingRefreshTimer = setInterval(() => {
+    if(!this.autoRefreshPending) return;
+    if(this.editedIntervention)  return; // don't reshuffle the list under an open modal
+
+    this.refreshPending()
+  }, 60 * 1000)
+}
+
+function beforeDestroy(){
+  if(this.pendingRefreshTimer) clearInterval(this.pendingRefreshTimer)
 }
 
 async function init(){
@@ -254,8 +284,19 @@ function onSearch() {
   this.queryPendingInterventions({t : this.freeText});
 }
 
+async function refreshPending(){
+  if(this.isRefreshingPending) return;
+
+  this.isRefreshingPending = true;
+
+  try     { await this.queryPendingInterventions(this.lastPendingQuery) }
+  finally { this.isRefreshingPending = false }
+}
+
 async function queryPendingInterventions(args={}){
   if(!this.meetings.length) return []
+
+  this.lastPendingQuery = args; // replayed by refreshPending, so filters survive a refresh
 
   const { t, agendaItem } = args;
   const   isPending       = { status: 'pending' };
@@ -267,6 +308,7 @@ async function queryPendingInterventions(args={}){
   const textSearch = t? { t } : {};
   
   this.pendingInterventions = await this.api.queryInterventions({ q, l, ...textSearch  });
+  this.pendingLastUpdated   = new Date();
 
   return this.pendingInterventions;
 }
@@ -297,8 +339,7 @@ function isInFuture({ date } ={}){
 
 </script>
 <style scoped>
-  .sticky-date { top: 5px; background-color: white; z-index: 1 }
-  @media screen and (max-width: 768px) {
-    .sticky-date { top: 30px; }
-  }
+  .sticky-date { top: 0px; background-color: white; z-index: 1 }
+  /* sits right under .sticky-date, which is ~42px tall */
+  .sticky-pending { top: 25px; background-color: white; z-index: 1 }
 </style>
