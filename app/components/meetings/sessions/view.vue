@@ -1,20 +1,15 @@
 <template >
   <div>
-    <div v-if="hasAiTranslations" class="alert alert-warning" role="alert">
-      <i class="fa fa-language"></i>
-      {{ $t('aiDisclaimerText') }}
-    </div>
-
     <Session :_id="_id" class="card"
-      :body-class="{'collapse':true, 'show': numberOfSessions==1 }" 
-      :body-id="`sid${_id}`" 
-      v-for="{ title, _id, interventions, date, videos, count, timezone, earlySubmission, cutoffDate } in sessions" :key="_id">
+      :body-class="{'collapse':true, 'show': numberOfSessions==1 }"
+      :body-id="`sid${_id}`"
+      v-for="{ title, _id, interventions, date, videos, count, timezone, earlySubmission, cutoffDate, lastUpdated, refreshing, hasAiTranslations } in sessions" :key="_id">
 
       <template v-slot:header>
 
-        <div class="card-header" data-toggle="collapse" :data-target="`#sid${_id}`" :class="{ collapsed: numberOfSessions>1 }" >
-          <h5 @click="!interventions && loadInterventions(_id)"
-           :title="date | setTimezone(timezone) | format('z')"> 
+        <div class="card-header" data-toggle="collapse" :data-target="`#sid${_id}`" :class="{ collapsed: numberOfSessions>1 }"
+          @click="!interventions && loadInterventions(_id)">
+          <h5 :title="date | setTimezone(timezone) | format('z')">
             {{ title }}
             <span v-if="!title" >
               {{ date | setTimezone(timezone) | format('cccc, d MMMM yyyy - T') }}
@@ -28,9 +23,15 @@
             <i v-if="!interventions" class="loading text-muted  fa fa-cog fa-spin"></i>
             
 
-            <span class="video" v-if="videos && videos.length">
+            <span class="video" v-if="videos && videos.length" @click.stop>
               <VideoLink class="pull-right" :videos="videos" title="Full session webcast"/>
             </span>
+
+            <small v-if="isStaff && lastUpdated" class="text-muted tiny last-update" title="Auto-refreshed every minute">
+              <i class="fa fa-refresh" :class="{ 'fa-spin': refreshing }" title="Refresh now"
+                 @click.stop="!refreshing && loadInterventions(_id)"></i>
+              last update {{ lastUpdated | format('T') }}
+            </small>
 
             <br> 
             
@@ -46,6 +47,13 @@
             
           </h5>
 
+        </div>
+      </template>
+
+      <template v-slot:body-header>
+        <div v-if="hasAiTranslations" class="alert alert-warning" role="alert">
+          <i class="fa fa-language"></i>
+          {{ $t('aiDisclaimerText') }}
         </div>
       </template>
 
@@ -85,6 +93,8 @@ import   i18n              from '../locales.js'
 import { format, timezone as setTimezone } from '../datetime.js'
 import remapCode from './re-map.js'
 
+const STAFF_ROLES = [ 'ScbdStaff', 'EditorialService' ]; // same definition of "staff" as documents.js
+
 export default {
   name       : 'SessionsView',
   components : { Session, InterventionRow, VideoLink },
@@ -92,16 +102,17 @@ export default {
                   route:       { type: Object, required: false },
                   tokenReader: { type: Function, required: false }
                 },
-  computed   : { numberOfSessions, hasAiTranslations },
+  computed   : { numberOfSessions, isStaff },
   filters    : { format, setTimezone },
-  methods    : { loadInterventions },
-  created, data,
+  methods    : { loadInterventions, refreshOpenSessions },
+  created, mounted, beforeDestroy, data,
   i18n,
 }
 
 function data(){
   return { 
     sessions: [],
+    refreshTimer: null,
   }
 }
 
@@ -119,7 +130,10 @@ async function created(){
     return {
       ...session,
       videos,
-      interventions : null, //Make it reactive
+      interventions     : null, //Make it reactive
+      lastUpdated       : null, //Make it reactive
+      refreshing        : false,//Make it reactive
+      hasAiTranslations : false,//Make it reactive
     }
   });
 
@@ -141,9 +155,29 @@ async function created(){
       title: `${meeting.EVT_CD} - Pending statements`,
       count: pendingSession.count,
       meetingId: meeting._id,
-      interventions : null,
-    });  
+      interventions     : null,
+      lastUpdated       : null,
+      refreshing        : false,
+      hasAiTranslations : false,
+    });
   }
+}
+
+function mounted(){
+  this.refreshTimer = setInterval(this.refreshOpenSessions, 60 * 1000)
+}
+
+function beforeDestroy(){
+  if(this.refreshTimer) clearInterval(this.refreshTimer)
+}
+
+// Staff follow live sessions; reload the ones the reader currently has expanded.
+async function refreshOpenSessions(){
+  if(!this.isStaff) return;
+
+  const isExpanded = ({ _id }) => document.getElementById(`sid${_id}`)?.classList.contains('show');
+
+  await Promise.all(this.sessions.filter(isExpanded).map(s => this.loadInterventions(s._id)));
 }
 
 async function loadInterventions(sessionId){
@@ -160,27 +194,43 @@ async function loadInterventions(sessionId){
       s = { agendaItem: 1, title:1 };
     }
 
-    const interventions = await this.api.queryInterventions({ q, s });
+    session.refreshing = true;
 
-    // Superseded lineage only applies to early-submission sessions.
-    session.interventions = session.earlySubmission
-      ? markSupersededInterventions(interventions)
-      : interventions;
+    try {
+      const interventions = await this.api.queryInterventions({ q, s }) || [];
+
+      // Superseded lineage only applies to early-submission sessions.
+      session.interventions = session.earlySubmission
+        ? markSupersededInterventions(interventions)
+        : interventions;
+
+      session.hasAiTranslations = hasAiTranslations(session.interventions);
+      session.lastUpdated       = new Date();
+    }
+    catch(e) {
+      console.error(e);
+      session.interventions = session.interventions || []; // never leave the header spinning
+    }
+    finally { session.refreshing = false }
 }
 
 function numberOfSessions(){
   return this.sessions?.length || 0
 }
 
-function hasTranslatedFile(intervention) {
-  return intervention.files.some(f => f.autoTranslated);
+// The Angular route resolves the user before this component is created.
+function isStaff(){
+  return !!this.$auth?.hasScope(STAFF_ROLES)
 }
 
-function hasAiTranslations() {
-  return (this.sessions || []).some(s =>
-    (s.interventions || []).some(i =>
-      hasTranslatedFile(i) ||
-      (i.supersededChildren || []).some(hasTranslatedFile)))
+function hasTranslatedFile(intervention) {
+  return intervention.files?.some(f => f.autoTranslated);
+}
+
+function hasAiTranslations(interventions) {
+  return (interventions || []).some(i =>
+    hasTranslatedFile(i) ||
+    (i.supersededChildren || []).some(hasTranslatedFile))
 }
 </script>
 
@@ -190,10 +240,15 @@ function hasAiTranslations() {
   .card-header .video { float: right; color: #404040; }
   .card-header .video { margin-right: -7px; }
 
+  .card-header .last-update { float: right; margin-left: 10px; }
+  .card-header .last-update .fa-refresh { cursor: pointer; }
+
   h5 { color: #009b48;}
 
   .card        { border: none; }
-  .card-header { cursor: default; }
+
+  /* Sticks while its own session is on screen, then the next header pushes it out. */
+  .card-header { cursor: default; position: sticky; top: 0; z-index: 2; background-color: #f7f7f7; }
 
   .card-header           .fa-caret-up   { display: none; }
   .card-header.collapsed .fa-caret-up   { display: inline; }
