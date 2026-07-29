@@ -119,7 +119,7 @@ function tags() {
 }
 
 function hasSuperseded() {
-  return !!(this.intervention?.supersededChildren && this.intervention.supersededChildren.length)
+  return !!(this.intervention?.supersededChildren?.length)
 }
 
 function getOrgType({ organizationType }){
