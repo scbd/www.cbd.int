@@ -4,6 +4,8 @@
     <slot name="header"/>
 
     <div :class="bodyClass" :id="bodyId" >
+      <slot name="body-header"/>
+
       <table class="table table-striped table-hover no-border-first-row sessions">
         <tbody>
           <slot>
