@@ -7,9 +7,9 @@
 
       <template v-slot:header>
 
-        <div class="card-header" data-toggle="collapse" :data-target="`#sid${_id}`" :class="{ collapsed: numberOfSessions>1 }" >
-          <h5 @click="!interventions && loadInterventions(_id)"
-           :title="date | setTimezone(timezone) | format('z')"> 
+        <div class="card-header" data-toggle="collapse" :data-target="`#sid${_id}`" :class="{ collapsed: numberOfSessions>1 }"
+          @click="!interventions && loadInterventions(_id)">
+          <h5 :title="date | setTimezone(timezone) | format('z')">
             {{ title }}
             <span v-if="!title" >
               {{ date | setTimezone(timezone) | format('cccc, d MMMM yyyy - T') }}
@@ -197,7 +197,7 @@ async function loadInterventions(sessionId){
     session.refreshing = true;
 
     try {
-      const interventions = await this.api.queryInterventions({ q, s });
+      const interventions = await this.api.queryInterventions({ q, s }) || [];
 
       // Superseded lineage only applies to early-submission sessions.
       session.interventions = session.earlySubmission
@@ -206,6 +206,10 @@ async function loadInterventions(sessionId){
 
       session.hasAiTranslations = hasAiTranslations(session.interventions);
       session.lastUpdated       = new Date();
+    }
+    catch(e) {
+      console.error(e);
+      session.interventions = session.interventions || []; // never leave the header spinning
     }
     finally { session.refreshing = false }
 }
@@ -220,7 +224,7 @@ function isStaff(){
 }
 
 function hasTranslatedFile(intervention) {
-  return intervention.files.some(f => f.autoTranslated);
+  return intervention.files?.some(f => f.autoTranslated);
 }
 
 function hasAiTranslations(interventions) {

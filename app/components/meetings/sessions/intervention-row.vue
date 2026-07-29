@@ -101,11 +101,11 @@ export default {
 }
 
 function nonAiFiles() {
-  return this.intervention.files.filter(f => !f.autoTranslated);
+  return this.intervention?.files?.filter(f => !f.autoTranslated);
 }
 
 function aiFiles() {
-  return this.intervention.files.filter(f => f.autoTranslated);
+  return this.intervention?.files?.filter(f => f.autoTranslated);
 }
 
 function tags() {
@@ -119,7 +119,7 @@ function tags() {
 }
 
 function hasSuperseded() {
-  return !!(this.intervention.supersededChildren && this.intervention.supersededChildren.length)
+  return !!(this.intervention?.supersededChildren && this.intervention.supersededChildren.length)
 }
 
 function getOrgType({ organizationType }){
