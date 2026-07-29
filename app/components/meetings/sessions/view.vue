@@ -23,7 +23,7 @@
             <i v-if="!interventions" class="loading text-muted  fa fa-cog fa-spin"></i>
             
 
-            <span class="video" v-if="videos && videos.length">
+            <span class="video" v-if="videos && videos.length" @click.stop>
               <VideoLink class="pull-right" :videos="videos" title="Full session webcast"/>
             </span>
 
