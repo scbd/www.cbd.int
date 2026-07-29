@@ -33,6 +33,9 @@ import participationT from '~/i18n/participation/index.js';
 
             if($scope.error.status==400)
                 createMsg('INVALID_SCHEMA',$scope.error)
+            if($scope.error.status==='CONFERENCE_NOT_FOUND')
+              createMsg('CONFERENCE_NOT_FOUND',$scope.error)
+
             if($scope.error.status==='STEP_NOT_COMPLETE')
               createMsg('STEP_NOT_COMPLETE',$scope.error)
 

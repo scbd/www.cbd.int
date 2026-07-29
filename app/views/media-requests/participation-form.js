@@ -122,7 +122,11 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
       }
     },true);
 
-    initStepRequest().then(loadParticipationRequest).then(initSteps)
+    initStepRequest().then(function(){
+      if(_ctrl.error && _ctrl.error.status==='CONFERENCE_NOT_FOUND')
+        return initTooltips()
+      return loadParticipationRequest().then(initSteps)
+    })
 
     _ctrl.genMeta=genMeta
     function genMeta(){
@@ -228,6 +232,10 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
         initStepsFinished()
 
       window.scroll(0, 0)
+      initTooltips()
+    }
+
+    function initTooltips(){
       $scope.$applyAsync(function(){
           $("[help]").tooltip();
       })
@@ -259,6 +267,22 @@ export default ['$scope','$http','conferenceService','$filter','$route','$locati
           _ctrl.doc.conference = _ctrl.conferences[i]._id
           _ctrl.conference = _ctrl.conferences[i]
         }
+
+      if(_ctrl.conferenceCode && !_ctrl.conferenceId)
+        _ctrl.error = conferenceNotFoundError()
+    }
+    // An unknown conference code leaves conferenceId undefined, which would
+    // otherwise reach the API as an empty $or and come back as a 400.
+    function conferenceNotFoundError(){
+      var path = document.location.pathname
+      var at   = path.indexOf(_ctrl.conferenceCode)
+
+      return {
+        status         : 'CONFERENCE_NOT_FOUND',
+        conferenceCode : _ctrl.conferenceCode,
+        urlBefore      : at<0 ? path : path.slice(0, at),
+        urlAfter       : at<0 ? ''   : path.slice(at + _ctrl.conferenceCode.length)
+      }
     }
     function getConference(id){
       for(var i=0; i<_ctrl.conferences.length;i++)
