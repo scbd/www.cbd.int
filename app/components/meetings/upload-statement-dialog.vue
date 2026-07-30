@@ -105,15 +105,16 @@
                             <div class="form-group row">
                                 <label for="fileLanguage" class="col-sm-3 col-form-label">Language</label>
                                 <div class="col-sm-9">
-                                    <select :disabled="!!progress" class="form-control" id="fileLanguage" v-model="selectedLanguage">
+                                    <select :disabled="!!progress" class="form-control" id="fileLanguage" v-model="selectedLanguage" required>
                                         <option value="ar">العربية</option>
-                                        <option value="en" selected>English</option>
+                                        <option value="en">English</option>
                                         <option value="es">Español</option>
                                         <option value="fr">Français</option>
                                         <option value="ru">Русский</option>
                                         <option value="zh">中文</option>
                                     </select>
-                                </div>        
+                                    <div class="invalid-feedback">Please select the language of the file.</div>
+                                </div>
                             </div>       
                             
                             <!-- DISABLED
@@ -199,7 +200,7 @@ export default {
             file                : null,
             meetings            : [],
             selectedAgendaItem  : null,
-            selectedLanguage    : "en",
+            selectedLanguage    : null,
             selectedRegion      : null,
             isRegional          : false,
             allowPublic         : true,
@@ -419,7 +420,7 @@ export default {
             this.$refs.file.value    = null;
             this.file                = null;
             this.selectedAgendaItem  = null;
-            this.selectedLanguage    = "en",
+            this.selectedLanguage    = null,
             this.selectedRegion      = null;
             this.isRegional          = false;
             this.allowPublic         = true;
