@@ -13,7 +13,7 @@
           <span v-for="file in group" :key="file._id">
             <a :href="file.autoTranslated ? '#' : file.url" :target="file.autoTranslated ? null : '_blank'"
                @click="onFileClick(file, $event)">
-              <span class="language">
+              <span class="language" :class="{ 'text-muted mr-0': !file.public }">
                 <span class="d-none d-lg-inline">{{ file.language| langTextFilter }}</span>
                 <span class="d-lg-none">{{ file.language }}</span>
               </span>
