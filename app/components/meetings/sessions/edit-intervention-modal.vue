@@ -109,7 +109,7 @@
                             <h5>Files</h5>
                             <hr>
 
-                            <div v-for="row in fileRows" :key="row.key" class="form-group row">
+                            <div v-for="row in fileRows" :key="row.key" class="form-group row border-bottom pb-2">
 
                                 <template v-if="row.file">
                                     <label v-if=" row.file._id" class="col-sm-3 col-form-label" :title="row.file.filename">
@@ -151,18 +151,31 @@
                                     <div v-if="row.file" class="input-group">
                                         <div class="form-check">
                                             <input :disabled="!!progress || !row.file.allowPublic"  type="checkbox" class="form-check-input" :id="`public-${row.key}`" v-model="row.file.public" >
-                                            <label class="form-check-label" :for="`public-${row.key}`">Visible on website</label>
+                                            <label class="form-check-label" :for="`public-${row.key}`">Visible on website
+                                                <i v-if="!row.file.public" class="fa fa-eye-slash text-muted"></i>
+                                            </label>
                                         </div>
                                         <div class="form-check">
                                             <input :disabled="!!progress || !!row.file._id"  type="checkbox" class="form-check-input" :id="`allowPublic-${row.key}`" v-model="row.file.allowPublic" >
                                             <label class="form-check-label" :for="`allowPublic-${row.key}`">Participant allowed publication</label>
                                         </div>
                                     </div>
-                                    <div v-else class="col-form-label text-muted">
-                                        <div :title="row.message">{{ row.message }}</div>
-                                        <small v-if="row.willRequest" class="font-italic">
-                                            <i class="fa fa-exclamation-circle"></i> Translations are requested when you save.
-                                        </small>
+                                    <div v-else>
+                                        <div v-if="row.requestable" class="form-check"
+                                             :title="sourceAllowsPublic ? '' : 'Participant did not allow publication'">
+                                            <input :disabled="!!progress || !sourceAllowsPublic" type="checkbox" class="form-check-input"
+                                                   :id="`public-${row.key}`" :checked="row.public"
+                                                   @change="requestPublic[row.lang] = $event.target.checked">
+                                            <label class="form-check-label" :for="`public-${row.key}`">Visible on website
+                                                <i v-if="!row.public" class="fa fa-eye-slash text-muted"></i>
+                                            </label>
+                                        </div>
+                                        <div class="col-form-label text-muted">
+                                            <div :title="row.message">{{ row.message }}</div>
+                                            <small v-if="row.willRequest" class="font-italic">
+                                                <i class="fa fa-exclamation-circle"></i> Translations are requested when you save.
+                                            </small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -184,6 +197,11 @@
                                             </a>
                                         </div>
                                     </div>
+                                    <button v-if="canAddEnglishForStaff" type="button" class="btn btn-light btn-sm ml-2"
+                                            :disabled="!!progress" @click="addEnglishForStaff"
+                                            title="Request an English translation for internal use - not visible on the website">
+                                        <i class="fa fa-eye-slash"></i> Add English for staff
+                                    </button>
                                 </div>
                             </div>
 
@@ -235,6 +253,7 @@ import OrganizationSearch from './organization-search.vue'
 import DateTimeSelector   from './datetime-selector.vue'
 import { format as formatDate, timezone, asDateTime } from '../datetime.js'
 import { UN, getLanguageName as languageName } from '~/data/languages'
+import { detectFilenameLanguage } from '~/util/language-detect.js'
 
 // A freshly requested translation is left alone: `Request` only reappears on a pending row once the
 // entry is older than this.
@@ -273,6 +292,9 @@ export default {
             translations:   { ...(this.intervention.translations||{}) },
             addedLangs:     [],   // languages added from the dropdown - extra rows, no file
             requestedLangs: [],   // the ticked set, across every requestable row
+            // `Visible on website` per requestable language - every language is seeded so v-model
+            // stays reactive, and a request defaults to public.
+            requestPublic:  Object.fromEntries(Object.keys(UN).map(lang => [lang, true])),
             now:            Date.now(),
             // Move intervention functionality
             availableSessions: [],
@@ -282,9 +304,9 @@ export default {
             sessionsError: null,
         }
     },
-    computed: { fileRows, sourceFile, missingLangs, langsToRequest, hasTranslations, canUpdateStatus, canPublish, canMove, sessionHasChanged, currentSessionDisplay },
+    computed: { fileRows, sourceFile, sourceAllowsPublic, missingLangs, canAddEnglishForStaff, langsToRequest, hasTranslations, canUpdateStatus, canPublish, canMove, sessionHasChanged, currentSessionDisplay },
     methods: { open, close, clearError, save, onOrganizationChange, isKronosUser, formatDate, languageName, loadAvailableSessions, formatSessionOption, toggleMoveEnabled,
-               liveEntry, buildRequestRow, onFileSelect, addLanguage, addAllLanguages, removeLanguage, requestTranslations },
+               liveEntry, buildRequestRow, onFileSelect, addLanguage, addAllLanguages, addEnglishForStaff, removeLanguage, requestTranslations },
     created,
     mounted,
     beforeDestroy,
@@ -329,6 +351,12 @@ function close(intervention){
 // brand-new intervention as soon as a file is picked - save() resolves the real id after upload.
 function sourceFile() {
     return this.files.find(f => !f.autoTranslated && (f._id || f.htmlFile)) || null;
+}
+
+// A translation inherits the source file's publication permission: mapFileData() already clamps a
+// file's `public` to its `allowPublic`, so a request must not ask for more than the original allows.
+function sourceAllowsPublic() {
+    return !!(this.sourceFile && this.sourceFile.allowPublic);
 }
 
 // Display order only - `files` keeps its server order so save() is unaffected. Virtual rows never
@@ -413,7 +441,16 @@ function buildRequestRow(lang, entry) {
         requestable,
         willRequest: requestable && this.requestedLangs.includes(lang),
         removable  : !entry,
+        public     : !!(this.requestPublic[lang] && this.sourceAllowsPublic),
     };
+}
+
+// `missingLangs` already encodes every condition the button needs: it is empty without a source
+// file, and it excludes the source language itself along with any language that already holds a
+// file or a translation entry - so English being in it means there is no English version to clash
+// with. It also drops out once the row has been added.
+function canAddEnglishForStaff() {
+    return this.missingLangs.includes('en');
 }
 
 function missingLangs() {
@@ -429,13 +466,22 @@ function missingLangs() {
 // gated on `requestable`, so a language protected by a human file, a still-fresh pending, or the
 // current source language can never be sent even if it lingers in `requestedLangs`.
 function langsToRequest() {
-    return this.fileRows.filter(r => r.willRequest).map(r => r.lang);
+    return this.fileRows.filter(r => r.willRequest).map(r => ({ lang: r.lang, public: r.public }));
 }
 
 // $set, not assignment: `htmlFile` is absent from a seeded file row, and `sourceFile` - which gates
 // the language dropdown - has to react to the pick.
-function onFileSelect(file, event) {
-    this.$set(file, 'htmlFile', event.target.files[0]);
+async function onFileSelect(file, event) {
+    const htmlFile = event.target.files[0];
+
+    this.$set(file, 'htmlFile', htmlFile);
+
+    if(!htmlFile)            return;
+    if(this.hasTranslations) return;   // the select is locked; changing it would orphan `translations`
+
+    const language = await detectFilenameLanguage(htmlFile.name);
+
+    if(language) file.language = language;
 }
 
 function addLanguage(lang) {
@@ -445,6 +491,13 @@ function addLanguage(lang) {
 
 function addAllLanguages() {
     this.missingLangs.forEach(this.addLanguage);
+}
+
+// Same row the dropdown's `English` entry produces, but hidden from the website: the secretariat
+// reads it internally. The checkbox stays editable, so it can still be published from the row.
+function addEnglishForStaff() {
+    this.addLanguage('en');
+    this.requestPublic.en = false;
 }
 
 function removeLanguage(lang) {
@@ -621,12 +674,12 @@ async function save(publish=false){
 // ids back into `files`, so the source file has an id even on a brand-new intervention.
 async function requestTranslations(interventionId, updatedIntervention) {
 
-    const langs = this.langsToRequest;
+    const requests = this.langsToRequest;
 
-    if(!langs.length) return;
+    if(!requests.length) return;
 
-    const results = await Promise.all(langs.map(lang =>
-        this.api.requestInterventionFileTranslation(interventionId, this.sourceFile._id, lang)
+    const results = await Promise.all(requests.map(({ lang, public: isPublic }) =>
+        this.api.requestInterventionFileTranslation(interventionId, this.sourceFile._id, lang, isPublic)
             .then(status => ({ lang, status }))
             .catch(err   => ({ lang, error: (err && (err.message || err.code)) || 'Request failed' }))
     ));

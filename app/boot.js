@@ -128,6 +128,14 @@ export default function bootApp(window, require, defineX) {
       return xlsx;
   });
 
+  // ESM-only libraries cannot go through requirejs `paths`, which loads a classic script: hand the
+  // URL to the browser's own module loader. Built from a string so the bundler leaves the native
+  // import alone instead of rewriting it into an AMD require.
+  const importEsm = new Function('url', 'return import(url)');
+
+  // A loader, not franc itself: nothing is fetched until the first detection.
+  defineX('franc', [], () => () => importEsm(`${cdnUrl}npm/franc-min@6.2.0/+esm`).then(m => m.franc));
+
   defineX('dropbox-dropins', ['https://www.dropbox.com/static/api/2/dropins.js'], function(){
       if(window.Dropbox)
           window.Dropbox.appKey = "uvo7kuhmckw68pl"; //registration@cbd.int
