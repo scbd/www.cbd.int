@@ -253,6 +253,7 @@ import OrganizationSearch from './organization-search.vue'
 import DateTimeSelector   from './datetime-selector.vue'
 import { format as formatDate, timezone, asDateTime } from '../datetime.js'
 import { UN, getLanguageName as languageName } from '~/data/languages'
+import { detectFilenameLanguage } from '~/util/language-detect.js'
 
 // A freshly requested translation is left alone: `Request` only reappears on a pending row once the
 // entry is older than this.
@@ -470,8 +471,17 @@ function langsToRequest() {
 
 // $set, not assignment: `htmlFile` is absent from a seeded file row, and `sourceFile` - which gates
 // the language dropdown - has to react to the pick.
-function onFileSelect(file, event) {
-    this.$set(file, 'htmlFile', event.target.files[0]);
+async function onFileSelect(file, event) {
+    const htmlFile = event.target.files[0];
+
+    this.$set(file, 'htmlFile', htmlFile);
+
+    if(!htmlFile)            return;
+    if(this.hasTranslations) return;   // the select is locked; changing it would orphan `translations`
+
+    const language = await detectFilenameLanguage(htmlFile.name);
+
+    if(language) file.language = language;
 }
 
 function addLanguage(lang) {

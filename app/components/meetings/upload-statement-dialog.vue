@@ -182,6 +182,7 @@ import $    from 'jquery';
 import i18n from './locales.js'
 import Api  from './api.js'
 import remapCode  from './sessions/re-map.js'
+import { detectFilenameLanguage } from '~/util/language-detect.js'
 
 const captchaSiteKeyV2 = (document && document.documentElement.attributes['captcha-site-key-v2'].value);
 
@@ -313,8 +314,12 @@ export default {
             if(visible) this.init();            
         },
   
-        onFileChange(files) {
+        async onFileChange(files) {
             this.file = files[0]
+
+            const language = this.file && await detectFilenameLanguage(this.file.name);
+
+            if(language) this.selectedLanguage = language;
         },
         clearError() {
             this.$refs.participantIdentity.setCustomValidity("")
