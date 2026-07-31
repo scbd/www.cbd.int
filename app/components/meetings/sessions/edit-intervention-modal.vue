@@ -315,12 +315,11 @@ export default {
 async function created() {
   this.api = new Api(this.tokenReader)
 
+  // Publishing only moves the intervention to `Delivered`: each file keeps the visibility already
+  // set on it, so a file deliberately kept off the website stays off it.
   if(this.action=='publish') {
       this.datetime = new Date();
       this.status   = 'public';
-      this.files.forEach(f => {
-          f.public = !!f.allowPublic;
-      });
   }
 
   this.organizationTypes = await this.api.getInterventionOrganizationTypes();
