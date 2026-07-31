@@ -91,7 +91,7 @@
                                             moment:'tz':scheduleCtrl.getTimezone() | moment:'format':'ddd MMM DD'}}</b></div>
 
 
-                                    <schedule-time ng-vue="vueOptions" ng-vue-expose="r" :start="r.start" :end="r.end" :timezone="timezone" />
+                                    <schedule-time ng-vue="vueOptions" ng-vue-expose="r" :start="r.start" :end="r.end" :timezone="scheduleCtrl.timezone" />
                                     
                                     <div class="small badge" ng-class="{'badge-success':r.open, 'badge-danger':!r.open }">
                                         <span ng-show="r.open" title="Open to everyone">Open</span>

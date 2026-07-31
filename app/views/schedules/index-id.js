@@ -42,7 +42,12 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
         $scope.route      = { params : $route.current.params, query: $location.search() }
         $scope.vueOptions  = { components: { AgendaItem, ScheduleTime } };
 
-        load();
+        // the datetime route param is expressed in conference time, so the timezone must be
+        // known before the first load() parses it. The hosting view has already resolved the
+        // conference, so this is served from the service cache.
+        $q.when(conferenceService.getActiveConference())
+          .then(function(conference){ _ctrl.timezone = conference?.timezone })
+          .then(load);
 
 		//========================================
 		//
@@ -52,7 +57,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
             const expandedReservationIds = _(_ctrl.frames).map(f=>f.reservations||[]).flatten().filter(r=>r.expand).map(r=>r._id).value();
 
             const dateTimeString = $route.current.params.datetime || $location.search().datetime; 
-            const dateTime       = dateTimeString ? moment.tz(dateTimeString, getTimezone()).startOf('day').toISOString() : null;
+            const dateTime       = dateTimeString ? moment.tz(dateTimeString, getTimezone()).toISOString() : null;
             var streamId         = $route.current.params.streamId || defaultStreamId;
 
             var options  = dateTime ? { params : { cache:true, datetime: dateTime } } : { params : { cache:true } };
@@ -72,13 +77,12 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
 
             }).then(async function(conf){
                 _ctrl.institution        = conf.institution;
-                _ctrl.conferenceTimezone = conf.timezone;
+                _ctrl.timezone           = conf.timezone;
                 _ctrl.code               = conf.code
                 _ctrl.showRooms          = conf.schedule.showRooms
                 _ctrl.uploadStatement    = conf.uploadStatement;
 
                 $scope.schedule = conf.schedule
-                $scope.timezone = conf.timezone
 
                 if($route.current.params.datetime)
                     options.params.datetime = _ctrl.now();
@@ -113,10 +117,8 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                 var rooms = _.reduce(res[1].data, function(ret, r){ ret[r._id] = r; return ret; }, {});
                 const meetings = res[2].data
 
-                _ctrl.conferenceTimezone = _streamData.eventGroup.timezone;
                 _ctrl.event              = _streamData.eventGroup;
                 _ctrl.frames             = _streamData.frames;
-                _ctrl.timezone           = _streamData.eventGroup.timezone;
 
                 const hasRole = isAdmin()
                 const statementEnabledMeetings = meetings.filter(m=>m.uploadStatement).map(m=>m.EVT_CD);
@@ -230,7 +232,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
         }
 
         function getTimezone() {
-          return  _ctrl.conferenceTimezone 
+          return  _ctrl.timezone
         }
         _ctrl.getTimezone = getTimezone
 

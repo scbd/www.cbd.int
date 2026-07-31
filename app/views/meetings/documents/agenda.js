@@ -121,6 +121,17 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
         }
 
         //==============================
+        // a date-only override lands on midnight, so it carries no time worth showing
+        //==============================
+        function dateOverrideFormat() {
+
+            var atMidnight = moment.tz(_ctrl.now, getTimezone()).format('HH:mm:ss') == '00:00:00';
+
+            return atMidnight ? 'MMM Do' : 'MMM Do H:mm';
+        }
+        _ctrl.dateOverrideFormat = dateOverrideFormat
+
+        //==============================
         //
         //==============================
         function load() {
