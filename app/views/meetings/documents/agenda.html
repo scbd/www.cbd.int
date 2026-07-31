@@ -59,7 +59,7 @@
                     <a class="nav-link btn dropdown-toggle" ng-class="{ 'btn-danger' : agendaCtrl.isDateOverride }" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-href="#" style="border:1px solid #f5efef">
                         <em class="visible-xs-inline1 fa fa-clock-o"></em> 
                         <b ng-if="!agendaCtrl.isDateOverride" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':'H:mm'"></b>
-                        <b ng-if=" agendaCtrl.isDateOverride" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':'MMM Do'"></b>
+                        <b ng-if=" agendaCtrl.isDateOverride" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':agendaCtrl.dateOverrideFormat()"></b>
                     </a>
             		<div class="dropdown-menu dropdown-menu-right">
             			<a class="text-nowrap dropdown-item" href="#" ng-repeat="item in agendaCtrl.scheduleDates" ng-click="agendaCtrl.scheduleDateChanged(item.value)">
