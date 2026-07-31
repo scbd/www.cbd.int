@@ -117,25 +117,6 @@
                                 </div>
                             </div>       
                             
-                            <!-- DISABLED
-                            <div class="form-group row">
-                                <label for="allowPublic" class="col-sm-3 col-form-label">Do you allow public access?</label>
-                                <div class="col-sm-9">
-                                    <div class="input-group">
-                                        <select :disabled="!!progress" class="form-control" id="allowPublic" v-model="allowPublic" required> 
-                                            <optgroup>
-                                                <option value="true">Yes - I allow publication of this file on the CBD website (publicly available upon validation)</option>
-                                                <option value="false">No  - Do not publish this file on CBD website (Secretariat and interpreters access only)</option>
-                                            </optgroup>
-                                        </select>                                    
-                                        <div class="input-group-append">
-                                            <span class="input-group-text" data-toggle="tooltip" data-placement="auto" title="If you select `yes` you grant permission to the Secretariat to publish this document publicly on its website"><i class="fa fa-question-circle"></i></span>
-                                        </div>      
-                                        <div class="invalid-feedback">Please select if you allow publication of you file on website.</div>
-                                    </div>
-                                </div>
-                            </div>  
-                            -->
                             <div class="form-group row">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-9 input-group">
@@ -203,7 +184,6 @@ export default {
             selectedLanguage    : null,
             selectedRegion      : null,
             isRegional          : false,
-            allowPublic         : true,
             participantIdentity : '',
             rememberMe          : false,
             wasValidated        : false,
@@ -247,8 +227,7 @@ export default {
                 && !!this.cleanParticipantIdentity
                 && !!this.selectedAgendaItem
                 && !!this.selectedLanguage
-                && (!this.isRegional || !!this.selectedRegion)
-                &&   this.allowPublic!==null;
+                && (!this.isRegional || !!this.selectedRegion);
         },
         cleanParticipantIdentity(){ 
             return this.participantIdentity.replace(/[^a-z0-9]/gi, "").toUpperCase();
@@ -342,7 +321,6 @@ export default {
                 contentType : this.file.type,
                 agendaItem  : Number(this.selectedAgendaItem.item) || undefined,
                 language    : this.selectedLanguage,
-                allowPublic : this.allowPublic===true || this.allowPublic==='true',
                 region      : this.isRegional ? this.selectedRegion : null
             }
 
@@ -423,7 +401,6 @@ export default {
             this.selectedLanguage    = null,
             this.selectedRegion      = null;
             this.isRegional          = false;
-            this.allowPublic         = true;
             this.persistIdentity();
 
             if(localStorage.participantIdentity) {
