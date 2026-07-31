@@ -29,7 +29,12 @@
                             </div>
                         </div>
 
-                        <form v-show="!confirmEarlyPublish" id="statement-submission-form" @submit.prevent="submitForm" enctype="multipart/form-data" ref="form" novalidate :class="{ 'was-validated': wasValidated }">
+                        <div v-if="submitted" class="text-center py-4">
+                            <p class="lead"><i class="fa fa-check-circle text-success"></i> Your statement has been uploaded successfully.</p>
+                            <small class="text-muted">{{ submittedFilename }}</small>
+                        </div>
+
+                        <form v-show="!confirmEarlyPublish && !submitted" id="statement-submission-form" @submit.prevent="submitForm" enctype="multipart/form-data" ref="form" novalidate :class="{ 'was-validated': wasValidated }">
 
                             <div class="form-group row">
                                 <label for="participantIdentity" class="col-sm-3 col-form-label">Priority-Pass or Badge Code</label>
@@ -117,25 +122,6 @@
                                 </div>
                             </div>       
                             
-                            <!-- DISABLED
-                            <div class="form-group row">
-                                <label for="allowPublic" class="col-sm-3 col-form-label">Do you allow public access?</label>
-                                <div class="col-sm-9">
-                                    <div class="input-group">
-                                        <select :disabled="!!progress" class="form-control" id="allowPublic" v-model="allowPublic" required> 
-                                            <optgroup>
-                                                <option value="true">Yes - I allow publication of this file on the CBD website (publicly available upon validation)</option>
-                                                <option value="false">No  - Do not publish this file on CBD website (Secretariat and interpreters access only)</option>
-                                            </optgroup>
-                                        </select>                                    
-                                        <div class="input-group-append">
-                                            <span class="input-group-text" data-toggle="tooltip" data-placement="auto" title="If you select `yes` you grant permission to the Secretariat to publish this document publicly on its website"><i class="fa fa-question-circle"></i></span>
-                                        </div>      
-                                        <div class="invalid-feedback">Please select if you allow publication of you file on website.</div>
-                                    </div>
-                                </div>
-                            </div>  
-                            -->
                             <div class="form-group row">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-9 input-group">
@@ -166,7 +152,9 @@
                             </div>
                         </span>
 
-                        <template v-if="!confirmEarlyPublish">
+                        <button v-if="submitted" type="button" class="btn btn-default" @click="close()"><i class="fa fa-power-off"></i> <span>Close ({{closeCountdown}})</span></button>
+
+                        <template v-else-if="!confirmEarlyPublish">
                             <button :disabled="!!progress" type="submit" class="btn btn-success" @click="submitForm"><i class="fa fa-upload"></i> <span>Submit</span></button>
                             <button :disabled="!!progress" type="button" class="btn btn-default" @click="close()"><i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
                         </template>
@@ -203,7 +191,6 @@ export default {
             selectedLanguage    : null,
             selectedRegion      : null,
             isRegional          : false,
-            allowPublic         : true,
             participantIdentity : '',
             rememberMe          : false,
             wasValidated        : false,
@@ -211,6 +198,9 @@ export default {
             error               : null,
             grecaptchaToken     : undefined,
             confirmEarlyPublish : false,
+            submitted           : false,
+            submittedFilename   : '',
+            closeCountdown      : 0,
             slot                : null,
             uploadPromise       : null
         }
@@ -227,6 +217,9 @@ export default {
 
         $('[data-toggle="tooltip"]').tooltip();
         this.openDialog(this.show);
+    },
+    beforeDestroy(){
+        clearInterval(this.closeTimer);
     },
     watch: {
         show(visible) { this.openDialog(visible) },
@@ -247,8 +240,7 @@ export default {
                 && !!this.cleanParticipantIdentity
                 && !!this.selectedAgendaItem
                 && !!this.selectedLanguage
-                && (!this.isRegional || !!this.selectedRegion)
-                &&   this.allowPublic!==null;
+                && (!this.isRegional || !!this.selectedRegion);
         },
         cleanParticipantIdentity(){ 
             return this.participantIdentity.replace(/[^a-z0-9]/gi, "").toUpperCase();
@@ -342,7 +334,6 @@ export default {
                 contentType : this.file.type,
                 agendaItem  : Number(this.selectedAgendaItem.item) || undefined,
                 language    : this.selectedLanguage,
-                allowPublic : this.allowPublic===true || this.allowPublic==='true',
                 region      : this.isRegional ? this.selectedRegion : null
             }
 
@@ -370,7 +361,7 @@ export default {
             this.$emit("notify", `Your file "${this.slot.metadata.filename}" has been submitted successfully`);
             this.progress     = null;
             this.wasValidated = false;
-            this.close();
+            this.showSubmitted();
 
           } catch(err) {
             if(err.code=='forbidden') this.$refs.participantIdentity.setCustomValidity("Invalid badge or priority-pass number")
@@ -398,7 +389,7 @@ export default {
             this.$emit("notify", `Your file "${this.slot.metadata.filename}" has been submitted successfully`);
             this.progress     = null;
             this.wasValidated = false;
-            this.close();
+            this.showSubmitted();
 
           } catch(err) {
             await this.$nextTick();
@@ -410,7 +401,22 @@ export default {
             this.grecaptchaToken = undefined;
           }
         },
+        // The name of the file the participant picked, not the server's - which may have renamed it.
+        // It is copied because resetForm() clears `file` when the dialog closes, and the confirmation
+        // stays on screen until then.
+        showSubmitted(){
+            this.submitted         = true;
+            this.submittedFilename = this.file.name || this.slot.metadata.filename;
+            this.closeCountdown    = 10;
+
+            clearInterval(this.closeTimer);
+            this.closeTimer = setInterval(() => {
+                if(--this.closeCountdown <= 0) this.close();   // close() resets the form, clearing this timer
+            }, 1000);
+        },
         resetForm(){
+            clearInterval(this.closeTimer);
+            this.submitted           = false;
             this.wasValidated        = false;
             this.error               = null;
             this.uploading           = false;
@@ -423,7 +429,6 @@ export default {
             this.selectedLanguage    = null,
             this.selectedRegion      = null;
             this.isRegional          = false;
-            this.allowPublic         = true;
             this.persistIdentity();
 
             if(localStorage.participantIdentity) {

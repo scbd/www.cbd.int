@@ -150,20 +150,15 @@
                                 <div class="col-sm-5">
                                     <div v-if="row.file" class="input-group">
                                         <div class="form-check">
-                                            <input :disabled="!!progress || !row.file.allowPublic"  type="checkbox" class="form-check-input" :id="`public-${row.key}`" v-model="row.file.public" >
+                                            <input :disabled="!!progress"  type="checkbox" class="form-check-input" :id="`public-${row.key}`" v-model="row.file.public" >
                                             <label class="form-check-label" :for="`public-${row.key}`">Visible on website
                                                 <i v-if="!row.file.public" class="fa fa-eye-slash text-muted"></i>
                                             </label>
                                         </div>
-                                        <div class="form-check">
-                                            <input :disabled="!!progress || !!row.file._id"  type="checkbox" class="form-check-input" :id="`allowPublic-${row.key}`" v-model="row.file.allowPublic" >
-                                            <label class="form-check-label" :for="`allowPublic-${row.key}`">Participant allowed publication</label>
-                                        </div>
                                     </div>
                                     <div v-else>
-                                        <div v-if="row.requestable" class="form-check"
-                                             :title="sourceAllowsPublic ? '' : 'Participant did not allow publication'">
-                                            <input :disabled="!!progress || !sourceAllowsPublic" type="checkbox" class="form-check-input"
+                                        <div v-if="row.requestable" class="form-check">
+                                            <input :disabled="!!progress" type="checkbox" class="form-check-input"
                                                    :id="`public-${row.key}`" :checked="row.public"
                                                    @change="requestPublic[row.lang] = $event.target.checked">
                                             <label class="form-check-label" :for="`public-${row.key}`">Visible on website
@@ -304,7 +299,7 @@ export default {
             sessionsError: null,
         }
     },
-    computed: { fileRows, sourceFile, sourceAllowsPublic, missingLangs, canAddEnglishForStaff, langsToRequest, hasTranslations, canUpdateStatus, canPublish, canMove, sessionHasChanged, currentSessionDisplay },
+    computed: { fileRows, sourceFile, missingLangs, canAddEnglishForStaff, langsToRequest, hasTranslations, canUpdateStatus, canPublish, canMove, sessionHasChanged, currentSessionDisplay },
     methods: { open, close, clearError, save, onOrganizationChange, isKronosUser, formatDate, languageName, loadAvailableSessions, formatSessionOption, toggleMoveEnabled,
                liveEntry, buildRequestRow, onFileSelect, addLanguage, addAllLanguages, addEnglishForStaff, removeLanguage, requestTranslations },
     created,
@@ -315,12 +310,11 @@ export default {
 async function created() {
   this.api = new Api(this.tokenReader)
 
+  // Publishing only moves the intervention to `Delivered`: each file keeps the visibility already
+  // set on it, so a file deliberately kept off the website stays off it.
   if(this.action=='publish') {
       this.datetime = new Date();
       this.status   = 'public';
-      this.files.forEach(f => {
-          f.public = !!f.allowPublic;
-      });
   }
 
   this.organizationTypes = await this.api.getInterventionOrganizationTypes();
@@ -351,12 +345,6 @@ function close(intervention){
 // brand-new intervention as soon as a file is picked - save() resolves the real id after upload.
 function sourceFile() {
     return this.files.find(f => !f.autoTranslated && (f._id || f.htmlFile)) || null;
-}
-
-// A translation inherits the source file's publication permission: mapFileData() already clamps a
-// file's `public` to its `allowPublic`, so a request must not ask for more than the original allows.
-function sourceAllowsPublic() {
-    return !!(this.sourceFile && this.sourceFile.allowPublic);
 }
 
 // Display order only - `files` keeps its server order so save() is unaffected. Virtual rows never
@@ -441,7 +429,7 @@ function buildRequestRow(lang, entry) {
         requestable,
         willRequest: requestable && this.requestedLangs.includes(lang),
         removable  : !entry,
-        public     : !!(this.requestPublic[lang] && this.sourceAllowsPublic),
+        public     : !!this.requestPublic[lang],
     };
 }
 
@@ -697,16 +685,12 @@ async function requestTranslations(interventionId, updatedIntervention) {
                       + failed.map(f => `${languageName(f.lang)} (${f.error})`).join(', '));
 }
 
+// `allowPublic` is stripped along with the local-only fields: files fetched from the server may still
+// carry the retired flag, and it must not be echoed back.
 function mapFileData(file) {
-    let { allowPublic, public: isPublic } = file;
-
-    allowPublic = allowPublic || false;
-    isPublic    = isPublic    && allowPublic;
-
     const data = {
         ...file,
-        allowPublic,
-        public : isPublic,
+        allowPublic: undefined,
         htmlFile: undefined,
         text: undefined
     }

@@ -203,7 +203,7 @@ async function init(){
 function createPendingIntervention(){
   this.edit({ 
     status: 'pending',
-    files : [ { language: 'en', allowPublic: true, public: true} ]
+    files : [ { language: 'en', public: true} ]
   });
 }
 

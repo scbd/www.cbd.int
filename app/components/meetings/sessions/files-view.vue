@@ -18,7 +18,7 @@
                 <span class="d-lg-none">{{ file.language }}</span>
               </span>
             </a>
-            <i v-if="!file.public" class="fa fa-eye-slash" :class="{ 'text-success' : file.allowPublic, 'text-muted': !file.allowPublic}"/>
+            <i v-if="!file.public" class="fa fa-eye-slash text-muted"/>
           </span>
         </div>
     </div>
