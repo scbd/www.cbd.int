@@ -29,7 +29,12 @@
                             </div>
                         </div>
 
-                        <form v-show="!confirmEarlyPublish" id="statement-submission-form" @submit.prevent="submitForm" enctype="multipart/form-data" ref="form" novalidate :class="{ 'was-validated': wasValidated }">
+                        <div v-if="submitted" class="text-center py-4">
+                            <p class="lead"><i class="fa fa-check-circle text-success"></i> Your statement has been uploaded successfully.</p>
+                            <small class="text-muted">{{ submittedFilename }}</small>
+                        </div>
+
+                        <form v-show="!confirmEarlyPublish && !submitted" id="statement-submission-form" @submit.prevent="submitForm" enctype="multipart/form-data" ref="form" novalidate :class="{ 'was-validated': wasValidated }">
 
                             <div class="form-group row">
                                 <label for="participantIdentity" class="col-sm-3 col-form-label">Priority-Pass or Badge Code</label>
@@ -147,7 +152,9 @@
                             </div>
                         </span>
 
-                        <template v-if="!confirmEarlyPublish">
+                        <button v-if="submitted" type="button" class="btn btn-default" @click="close()"><i class="fa fa-power-off"></i> <span>Close ({{closeCountdown}})</span></button>
+
+                        <template v-else-if="!confirmEarlyPublish">
                             <button :disabled="!!progress" type="submit" class="btn btn-success" @click="submitForm"><i class="fa fa-upload"></i> <span>Submit</span></button>
                             <button :disabled="!!progress" type="button" class="btn btn-default" @click="close()"><i class="fa fa-power-off"></i> <span class="hidden-xs">Close</span></button>
                         </template>
@@ -191,6 +198,9 @@ export default {
             error               : null,
             grecaptchaToken     : undefined,
             confirmEarlyPublish : false,
+            submitted           : false,
+            submittedFilename   : '',
+            closeCountdown      : 0,
             slot                : null,
             uploadPromise       : null
         }
@@ -207,6 +217,9 @@ export default {
 
         $('[data-toggle="tooltip"]').tooltip();
         this.openDialog(this.show);
+    },
+    beforeDestroy(){
+        clearInterval(this.closeTimer);
     },
     watch: {
         show(visible) { this.openDialog(visible) },
@@ -348,7 +361,7 @@ export default {
             this.$emit("notify", `Your file "${this.slot.metadata.filename}" has been submitted successfully`);
             this.progress     = null;
             this.wasValidated = false;
-            this.close();
+            this.showSubmitted();
 
           } catch(err) {
             if(err.code=='forbidden') this.$refs.participantIdentity.setCustomValidity("Invalid badge or priority-pass number")
@@ -376,7 +389,7 @@ export default {
             this.$emit("notify", `Your file "${this.slot.metadata.filename}" has been submitted successfully`);
             this.progress     = null;
             this.wasValidated = false;
-            this.close();
+            this.showSubmitted();
 
           } catch(err) {
             await this.$nextTick();
@@ -388,7 +401,22 @@ export default {
             this.grecaptchaToken = undefined;
           }
         },
+        // The name of the file the participant picked, not the server's - which may have renamed it.
+        // It is copied because resetForm() clears `file` when the dialog closes, and the confirmation
+        // stays on screen until then.
+        showSubmitted(){
+            this.submitted         = true;
+            this.submittedFilename = this.file.name || this.slot.metadata.filename;
+            this.closeCountdown    = 10;
+
+            clearInterval(this.closeTimer);
+            this.closeTimer = setInterval(() => {
+                if(--this.closeCountdown <= 0) this.close();   // close() resets the form, clearing this timer
+            }, 1000);
+        },
         resetForm(){
+            clearInterval(this.closeTimer);
+            this.submitted           = false;
             this.wasValidated        = false;
             this.error               = null;
             this.uploading           = false;
