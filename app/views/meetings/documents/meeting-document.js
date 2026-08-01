@@ -41,6 +41,7 @@ import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
                 $scope.breakSymbol    = breakSymbol;
                 $scope.downloadble    = canDownload();
                 $scope.linkOnly       = isLinkOnly();
+                $scope.symbolUrl      = symbolUrl();
                 $scope.titleUrl       = titleUrl();
                 $scope.LANGUAGES      = LANGUAGES
                 $scope.vueOptions = { components: { copyLink, AgendaItem } } ;
@@ -68,12 +69,26 @@ import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
                 }
 
                 //==============================
+                // The symbol is not clickable in view-only
+                //==============================
+                function symbolUrl() {
+
+                    if($scope.viewOnly)
+                        return '';
+
+                    return $scope.document.url;
+                }
+
+                //==============================
                 // With nothing to download, the target is the link itself
                 //==============================
                 function titleUrl() {
 
                     if($scope.linkOnly)
                         return $scope.document.files[0].url;
+
+                    if($scope.viewOnly)
+                        return '';
 
                     return $scope.document.symbol ? null : $scope.document.url;
                 }
