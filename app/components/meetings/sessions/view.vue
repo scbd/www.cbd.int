@@ -23,6 +23,10 @@
             <i v-if="!interventions" class="loading text-muted  fa fa-cog fa-spin"></i>
             
 
+            <span class="admin-link" v-if="isStatementAdmin && _id!='pending'" @click.stop>
+              <a class="btn btn-sm btn-outline-dark" :href="adminUrl(_id)" title="Session preparation"><i class="fa fa-list"></i></a>
+            </span>
+
             <span class="video" v-if="videos && videos.length" @click.stop>
               <VideoLink class="pull-right" :videos="videos" title="Full session webcast"/>
             </span>
@@ -62,6 +66,7 @@
         <InterventionRow v-bind="{intervention}" :timezone="timezone" :index="index+1" :key="intervention._id" :public-view="true" :show-ai-column="hasAiTranslations"
           @toggle="intervention.expanded = !intervention.expanded">
           <template v-slot:controls>
+            <button v-if="isStatementAdmin" class="btn btn-sm btn-outline-dark" title="Edit statement" @click.stop="editId(intervention._id, _id)"><i class="fa fa-edit"></i></button>
             <div class="video">
               <VideoLink :videos="videos" :start-at="intervention.datetime" :title="`Start at intervention of ${intervention.title}`"/>
             </div>
@@ -71,6 +76,7 @@
         <InterventionRow v-for="(child, ci) in (intervention.expanded ? intervention.supersededChildren : [])"
           :intervention="child" :timezone="timezone" :sub-index="`${index+1}.${ci+1}`" :is-child="true" :key="child._id" :public-view="true" :show-ai-column="hasAiTranslations">
           <template v-slot:controls>
+            <button v-if="isStatementAdmin" class="btn btn-sm btn-outline-dark" title="Edit statement" @click.stop="editId(child._id, _id)"><i class="fa fa-edit"></i></button>
             <div class="video">
               <VideoLink :videos="videos" :start-at="child.datetime" :title="`Start at intervention of ${child.title}`"/>
             </div>
@@ -80,6 +86,16 @@
       </template>
 
     </Session>
+
+    <EditInterventionModal v-if="isStatementAdmin && editedIntervention"
+      :intervention="editedIntervention"
+      :sessionId="editSession._id=='pending' ? undefined : editSession._id"
+      :timezone="editSession.timezone"
+      :meetings="meetings"
+      :route="route"
+      :tokenReader="tokenReader"
+      @close="editClose"
+    ></EditInterventionModal>
 
   </div>
 </template>
@@ -92,27 +108,35 @@ import   VideoLink         from './video-link.vue'
 import   i18n              from '../locales.js'
 import { format, timezone as setTimezone } from '../datetime.js'
 import remapCode from './re-map.js'
+import { STATEMENT_ADMIN_ROLES } from './roles.js'
 
 const STAFF_ROLES = [ 'ScbdStaff', 'EditorialService' ]; // same definition of "staff" as documents.js
 
 export default {
   name       : 'SessionsView',
-  components : { Session, InterventionRow, VideoLink },
+  // The edit modal is admin-only: keep it out of the public bundle, fetched on first open.
+  // The AMD chunk carries no `__esModule` flag, so unwrap `default` ourselves.
+  components : { Session, InterventionRow, VideoLink,
+                 EditInterventionModal: ()=>import('./edit-intervention-modal.vue').then(m=>m.default || m) },
   props      : {
                   route:       { type: Object, required: false },
                   tokenReader: { type: Function, required: false }
                 },
   computed   : { numberOfSessions, isStaff },
   filters    : { format, setTimezone },
-  methods    : { loadInterventions, refreshOpenSessions },
+  methods    : { loadInterventions, refreshOpenSessions, adminUrl, editId, editClose },
   created, mounted, beforeDestroy, data,
   i18n,
 }
 
 function data(){
-  return { 
+  return {
     sessions: [],
     refreshTimer: null,
+    meetings          : [],
+    isStatementAdmin  : false,
+    editedIntervention: null,
+    editSession       : null,
   }
 }
 
@@ -122,7 +146,13 @@ async function created(){
   const meetingCode  = this.route.params.meeting;
   let   meeting      = await this.api.getMeetingByCode(meetingCode)
   const altMeetingId = remapCode(meeting._id)
+
+  this.meetings = [ meeting ]; // agenda & organization lookups of the edit modal - keep the un-remapped meeting
+
   const sessions     = await this.api.querySessions({ s: { date: -1 }, q: { 'meetingIds': { $in : [mapObjectId(meeting._id), mapObjectId(altMeetingId)] }, count: { $gt: 0 } } });
+
+  // Read once the surrounding page has had time to resolve the user; `$auth.user` is not reactive.
+  this.isStatementAdmin = !!this.$auth?.hasScope(STATEMENT_ADMIN_ROLES);
 
   this.sessions = sessions.map(session => {
     const { date: startDate } = session;
@@ -173,7 +203,8 @@ function beforeDestroy(){
 
 // Staff follow live sessions; reload the ones the reader currently has expanded.
 async function refreshOpenSessions(){
-  if(!this.isStaff) return;
+  if(!this.isStaff)           return;
+  if(this.editedIntervention) return; // don't reshuffle the list under an open modal
 
   const isExpanded = ({ _id }) => document.getElementById(`sid${_id}`)?.classList.contains('show');
 
@@ -214,6 +245,28 @@ async function loadInterventions(sessionId){
     finally { session.refreshing = false }
 }
 
+// Same admin page the session list links to.
+function adminUrl(sessionId){
+  const { code, meeting } = this.route?.params || {};
+
+  if(code) return `/conferences/${encodeURIComponent(code)}/sessions/${encodeURIComponent(sessionId)}`
+  else     return `/meetings/${encodeURIComponent(meeting)}/sessions/${encodeURIComponent(sessionId)}`;
+}
+
+async function editId(interventionId, sessionId){
+  this.editSession        = this.sessions.find(o=>o._id == sessionId);
+  this.editedIntervention = await this.api.getInterventionById(interventionId);
+}
+
+function editClose(intervention){
+  const { editSession } = this;
+
+  this.editedIntervention = null;
+  this.editSession        = null;
+
+  if(intervention) this.loadInterventions(editSession._id);
+}
+
 function numberOfSessions(){
   return this.sessions?.length || 0
 }
@@ -240,6 +293,7 @@ function hasAiTranslations(interventions) {
   .card-header .video { float: right; color: #404040; }
   .card-header .video { margin-right: -7px; }
 
+  .card-header .admin-link  { float: right; margin-left: 10px; }
   .card-header .last-update { float: right; margin-left: 10px; }
   .card-header .last-update .fa-refresh { cursor: pointer; }
 
