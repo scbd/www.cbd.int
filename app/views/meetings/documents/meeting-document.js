@@ -40,6 +40,8 @@ import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
                 $scope.viewOnly       = $rootScope.viewOnly
                 $scope.breakSymbol    = breakSymbol;
                 $scope.downloadble    = canDownload();
+                $scope.linkOnly       = isLinkOnly();
+                $scope.titleUrl       = titleUrl();
                 $scope.LANGUAGES      = LANGUAGES
                 $scope.vueOptions = { components: { copyLink, AgendaItem } } ;
                 $scope.dateFormat = ()=>$scope.showStatistics=='full' ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd';
@@ -56,6 +58,24 @@ import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
                 //==============================
                 function canDownload() {
                     return $scope.document.files && $scope.document.files.length && _.some($scope.document.files, function(f) { return f.type!=ONLINE; });
+                }
+
+                //==============================
+                //
+                //==============================
+                function isLinkOnly() {
+                    return Boolean($scope.document.files && $scope.document.files.length && !$scope.downloadble);
+                }
+
+                //==============================
+                // With nothing to download, the target is the link itself
+                //==============================
+                function titleUrl() {
+
+                    if($scope.linkOnly)
+                        return $scope.document.files[0].url;
+
+                    return $scope.document.symbol ? null : $scope.document.url;
                 }
 			}
 		};
