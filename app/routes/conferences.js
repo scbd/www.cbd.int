@@ -1,6 +1,7 @@
 import '~/directives/meetings/conference-header'
 import app from '~/app';
 import { securize, resolveLiteral, injectRouteParams, mapView, currentUser } from './mixin';
+import { STATEMENT_ADMIN_ROLES } from '~/components/meetings/sessions/roles';
 import * as angularViewWrapper from '~/views/angular-view-wrapper'
 import * as vueViewWrapper     from '~/views/vue-view-wrapper'
 
@@ -47,9 +48,9 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:code/schedules',                     { ...mapView(angularViewWrapper),  resolve: { ...scheduleView }, reloadOnSearch:true })
     .when('/:code/schedule',                      { redirectTo : '/:code/schedules'})
     .when('/:code/insession',                     { ...mapView(angularViewWrapper),  resolve: { ...inSessionView }, reloadOnSearch:false })
-    .when('/:code/sessions',                      { ...mapView(vueViewWrapper),      resolve: { ...sessionListView,        user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
-    .when('/:code/sessions/:sessionId',           { ...mapView(vueViewWrapper),      resolve: { ...sessionIdView,          user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
-    .when('/:code/interpreter-panel',             { ...mapView(vueViewWrapper),      resolve: { ...interpretersPanelView,  user : securize(["Administrator","EditorialService", "StatementAdmin", "ScbdStaff", "Interpreters"]) }, reloadOnSearch:false })
+    .when('/:code/sessions',                      { ...mapView(vueViewWrapper),      resolve: { ...sessionListView,        user : securize(STATEMENT_ADMIN_ROLES) }, reloadOnSearch:false })
+    .when('/:code/sessions/:sessionId',           { ...mapView(vueViewWrapper),      resolve: { ...sessionIdView,          user : securize(STATEMENT_ADMIN_ROLES) }, reloadOnSearch:false })
+    .when('/:code/interpreter-panel',             { ...mapView(vueViewWrapper),      resolve: { ...interpretersPanelView,  user : securize([ ...STATEMENT_ADMIN_ROLES, "ScbdStaff", "Interpreters"]) }, reloadOnSearch:false })
     .when('/:code/:meeting',                      { ...mapView(introductionView),    resolve: { routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) } })
     .when('/:code/:meeting/documents',            { ...mapView(documentsView),       resolve: { showMeeting : resolveLiteral(false) },                    reloadOnSearch:false })
     .when('/:code/:meeting/documents/:id',        { ...mapView(angularViewWrapper),  resolve: { ...documentIdView, user : securize(["Administrator","EditorialService"]) },  reloadOnSearch:false })

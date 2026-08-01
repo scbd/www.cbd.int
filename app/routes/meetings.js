@@ -1,5 +1,6 @@
 import app from '~/app';
 import { securize, resolveLiteral, mapView } from './mixin';
+import { STATEMENT_ADMIN_ROLES } from '~/components/meetings/sessions/roles';
 import * as vueViewWrapper     from '~/views/vue-view-wrapper'
 import * as angularViewWrapper from '~/views/angular-view-wrapper'
 
@@ -23,9 +24,9 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 //  .when('/:meeting/documents/status',    { templateUrl : 'views/meetings/documents/documents-progress.html',      resolveController : true, reloadOnSearch:false, resolve : { user : securize(["Administrator","EditorialService", "ScbdStaff"]) } })
     .when('/import-translations',          { ...mapView(angularViewWrapper),   resolve : { ...importTranslationsView, user : securize(["Administrator","EditorialService"]) } })
     .when('/:meeting/documents/:id',       { ...mapView(angularViewWrapper),   resolve : { ...editDocumentIdView,     user : securize(["Administrator","EditorialService"]) },  reloadOnSearch:false })
-    .when('/:meeting/sessions',            { ...mapView(vueViewWrapper),       resolve : { ...sessionListView,        user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
-    .when('/:meeting/sessions/:sessionId', { ...mapView(vueViewWrapper),       resolve : { ...sessionIdView,          user : securize(["Administrator","EditorialService", "StatementAdmin"]) }, reloadOnSearch:false })
-    .when('/:meeting/interpreter-panel',   { ...mapView(vueViewWrapper),       resolve : { ...interpretersPanelView,  user : securize(["Administrator","EditorialService", "StatementAdmin", "ScbdStaff", "Interpreters"]) }, reloadOnSearch:false })
+    .when('/:meeting/sessions',            { ...mapView(vueViewWrapper),       resolve : { ...sessionListView,        user : securize(STATEMENT_ADMIN_ROLES) }, reloadOnSearch:false })
+    .when('/:meeting/sessions/:sessionId', { ...mapView(vueViewWrapper),       resolve : { ...sessionIdView,          user : securize(STATEMENT_ADMIN_ROLES) }, reloadOnSearch:false })
+    .when('/:meeting/interpreter-panel',   { ...mapView(vueViewWrapper),       resolve : { ...interpretersPanelView,  user : securize([ ...STATEMENT_ADMIN_ROLES, "ScbdStaff", "Interpreters"]) }, reloadOnSearch:false })
     .when('/:meeting/documents',           { redirectTo  : '/:meeting'} )
     .when('/:meeting',                     { ...mapView(documentsView),        resolve : { showMeeting : resolveLiteral(true) }, reloadOnSearch:false })
     .otherwise({redirectTo: '/404'});
