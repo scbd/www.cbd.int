@@ -8,6 +8,7 @@ import '~/filters/moment'
 import '~/filters/html-sanitizer'
 import '~/services/conference-service'
 import { Plenary, WorkingGroupI, WorkingGroupII, HighLevelSegment   } from '~/util/meetings-data';
+import { SORT_KEY_SEPARATOR } from '~/services/meetings';
 import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
 import ScheduleTime from './schedule-time.vue';
 
@@ -216,7 +217,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
             var roomPriority =  r?.room?.title || '';
             var titlePriority=  r?.title || '';
 
-            return `${timePriority}-${typePriority}-${roomPriority}-${titlePriority}`.toLowerCase();
+            return [timePriority, typePriority, roomPriority, titlePriority].join(SORT_KEY_SEPARATOR).toLowerCase();
         }
 
         function now() {

@@ -39,6 +39,10 @@ export function normalizeDocumentSymbol(symbol) {
     return symbol.toUpperCase().replace(/[^A-Z0-9\/\-\*]/gi, '').replace(/\/$/g, '');
 }
 
+// Sorts below every printable character and cannot occur in symbols, titles or ids,
+// so a field boundary always compares lower than field content.
+export const SORT_KEY_SEPARATOR = '\u0001';
+
 const Priorities_Type = {
     'official'       : 1,
     'information'    : 2,
@@ -101,7 +105,7 @@ export function documentSortKey(d, { baseSymbol, locale } ) {
     parts.push(`ID`);
     parts.push((d._id||'').toUpperCase());
 
-    const key = parts.join('-').replace(/\d+/g, (t)=>pad(t));;
+    const key = parts.join(SORT_KEY_SEPARATOR).replace(/\d+/g, (t)=>pad(t));
 
     // d.title.en = key;
 

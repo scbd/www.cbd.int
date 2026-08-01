@@ -14,8 +14,8 @@ export { default as template }  from './in-session-documents.html'
 
 var STATISTICS = {}; 
 
-export default ["$scope", "$route", "$http", '$q', '$location', 'authentication', 'conferenceService', '$filter', 'CacheFactory', function(
-              $scope,   $route,   $http,   $q,   $location,   authentication,   conferenceService,   $filter,   CacheFactory) {
+export default ["$scope", "$route", "$http", '$q', '$location', 'authentication', 'conferenceService', '$filter', 'CacheFactory', 'locale', function(
+              $scope,   $route,   $http,   $q,   $location,   authentication,   conferenceService,   $filter,   CacheFactory,   locale) {
         
         var $ctrl = $scope.$ctrl = this;
         var lstring  = $filter('lstring');
@@ -82,7 +82,8 @@ export default ["$scope", "$route", "$http", '$q', '$location', 'authentication'
                 const meetings = await qMeetings;
                 const documents = await qDocuments;
 
-                var tabs = _(documents).sortBy(buildSortKey).reduce(function(tabs, d){
+                // Documents span every meeting of the conference, so there is no single baseSymbol
+                var tabs = _(documents).sortBy(d => buildSortKey(d, { locale })).reduce(function(tabs, d){
 
                     d.agendaItems = (d.agendaItems||[]).map(i=>{
                         const meeting = meetings.find(m=>m._id == d.meeting);

@@ -8,7 +8,7 @@ import '../meeting-document';
 import _ from 'lodash';
 import moment from 'moment';
 import displayGroups from '../display-groups';
-import { normalizeDocumentSymbol as normalizeSymbol } from '~/services/meetings';
+import { normalizeDocumentSymbol as normalizeSymbol, SORT_KEY_SEPARATOR } from '~/services/meetings';
 
 export { default as template } from './document-id.html';
 
@@ -1020,10 +1020,10 @@ export { default as template } from './document-id.html';
             else if(d.type=="other")                                 typePos = 60;
             else if(d.type=='in-session' && d.nature=="statement")   typePos = 70;
 
-            return ("000000000" + (typePos   ||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
-                   (d.group||'') + '_' +
-                 //  ((d.metadata||{}).superseded ? '1' : '0') + '_' +
-                   ("000000000" + (d.displayPosition||9999)).slice(-9) + '_' + // pad with 0 eg: 150  =>  000000150
+            return ("000000000" + (typePos   ||9999)).slice(-9) + SORT_KEY_SEPARATOR + // pad with 0 eg: 150  =>  000000150
+                   (d.group||'') + SORT_KEY_SEPARATOR +
+                 //  ((d.metadata||{}).superseded ? '1' : '0') + SORT_KEY_SEPARATOR +
+                   ("000000000" + (d.displayPosition||9999)).slice(-9) + SORT_KEY_SEPARATOR + // pad with 0 eg: 150  =>  000000150
                    (d.symbol||"").replace(/\b(\d)\b/g, '0$1')
                                  .replace(/(\/REV)/gi, '0$1')
                                  .replace(/(\/ADD)/gi, '1$1');
