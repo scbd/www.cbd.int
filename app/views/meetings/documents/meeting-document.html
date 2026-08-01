@@ -11,7 +11,7 @@
                     </div>
 
                     <div ng-if="::document.symbol" title="{{::document.publishedOn|date:'yyyy-MM-dd':'UTC'}}">
-                        <a ng-href="{{::document.url}}" style="color:inherit" ng-switch="::document.type">
+                        <a ng-href="{{::symbolUrl}}" target="_blank" style="color:inherit" ng-switch="::document.type">
 
                             <strong ng-switch-when="decision">
                                 Decision <span class="break-word">{{::document.symbol}}</span>
@@ -31,7 +31,7 @@
                             </strong>
                         </a>
 
-                        <span ng-if="document.url">
+                        <span ng-if="!viewOnly && document.url">
                             <copy-Link ng-vue="vueOptions" :link="document.url"></copy-Link>
                         </span>
                     </div>
@@ -41,11 +41,11 @@
                             <span  ng-bind="document.statementSource.session"></span>
                         </span>
                     
-                        <a ng-href="{{titleUrl}}" style="color: inherit;">
+                        <a ng-href="{{::titleUrl}}" target="_blank" style="color: inherit;">
                             {{::document.title|lstring}}
                         </a> 
 
-                        <span ng-if="!document.symbol && document.url">
+                        <span ng-if="!viewOnly && !document.symbol && document.url">
                             <copy-Link ng-vue="vueOptions" v-if="!document.symbol && document.url" :link="document.url"></copy-Link>
                         </span>
                     </div>
