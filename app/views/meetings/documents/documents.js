@@ -62,7 +62,7 @@ export { default as template } from './documents.html';
         _ctrl.showMeeting = showMeeting===undefined ? true : !!showMeeting;
         _ctrl.statsMode = null;
         _ctrl.uploadStatement = false;
-        _ctrl.sort = $location.hash() == 'agenda' ? 'agenda' : 'document';
+        _ctrl.sort = $location.search().sort == 'agenda' ? 'agenda' : 'document';
         _ctrl.tabs = [];
         _ctrl.switchTab  = switchTab;
         _ctrl.hideAlert  = hideAlert;
@@ -77,7 +77,7 @@ export { default as template } from './documents.html';
         _ctrl.selectedDocuments = () => allDocuments.filter(o => o.selected);
 
         $scope.$watch('documentsCtrl.sort', function(s){
-            $location.hash(s=='agenda' ? 'agenda' : null);
+            $location.search('sort', s=='agenda' ? 'agenda' : null);
         });
 
         $scope.$watch('$root.deviceSize', updateMaxTabCount);
@@ -542,6 +542,9 @@ export { default as template } from './documents.html';
         //
         //==============================
         function switchTab(tab, extra) {
+
+            if(tab) $location.hash(tab.code); // only an explicit selection owns the fragment
+
             $scope.$applyAsync(function(){
                 switchTabDirect(tab, extra);
             });
@@ -605,8 +608,11 @@ export { default as template } from './documents.html';
                 $scope.focusDocumentId = result?.document?._id;
                 tab = result?.tab;
 
-                $location.search({doc:null});
+                $location.search('doc', null);
             }
+
+            if(!tab)
+                tab = findTab($location.hash());
 
             hardTab = hardTab || !!tab;
 

@@ -147,7 +147,7 @@
     <!-- Tab panes -->
     <div class="tab-content" style="padding-top:5px">
 
-        <div ng-repeat="type in documentsCtrl.tabs track by type.code" ng-class="{ active: (documentsCtrl.currentTab==type.code || documentsCtrl.noTabs) }" role="tabpanel" class="tab-pane" id="{{::type.code}}">
+        <div ng-repeat="type in documentsCtrl.tabs track by type.code" ng-class="{ active: (documentsCtrl.currentTab==type.code || documentsCtrl.noTabs) }" role="tabpanel" class="tab-pane" id="tab-{{::type.code}}">
 
             <div ng-if="type.loaded || documentsCtrl.currentTab==type.code || documentsCtrl.noTabs">
 
