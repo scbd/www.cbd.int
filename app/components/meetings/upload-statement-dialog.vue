@@ -169,11 +169,16 @@
 <script>
 import $    from 'jquery';
 import i18n from './locales.js'
-import Api  from './api.js'
+import Api, { mapObjectId }  from './api.js'
 import remapCode  from './sessions/re-map.js'
 import { detectFilenameLanguage } from '~/util/language-detect.js'
 
 const captchaSiteKeyV2 = (document && document.documentElement.attributes['captcha-site-key-v2'].value);
+
+// Registration sometimes runs on a remapped meeting record - match either id.
+function remappedIds({ _id }) {
+    return [...new Set([_id, remapCode(_id)])];
+}
 
 export default {
     name: 'uploadStatement',
@@ -270,12 +275,19 @@ export default {
 
             this.meetings = this.meetings.filter(o=>o.uploadStatement);
 
-            // Only allow agenda items that are configured for statement submission
-            // If none are configured, allow all agenda items
-            this.meetings.filter(({ statementAgendaItems })=>statementAgendaItems?.length)
-                         .forEach(({ agenda, statementAgendaItems }) => {
-                            agenda.items = agenda.items.filter(i => statementAgendaItems.includes(i.item));
-                         })
+            // Advance submissions are restricted to the agenda items whose early-submission
+            // session is open right now; with none open, every agenda item stays available.
+            const openSessions = await this.openEarlySubmissionSessions();
+
+            this.meetings.forEach(meeting => {
+                const ids   = remappedIds(meeting);
+                const items = openSessions.filter(s => s.meetingIds?.some(id => ids.includes(id)))
+                                          .map(s => s.agendaItem)
+                                          .filter(item => item != null);
+
+                if(items.length)
+                    meeting.agenda.items = meeting.agenda.items.filter(i => items.includes(i.item));
+            })
 
             if(this.filterByMeetingAgenda){
                 const filterMeetings = Object.keys(this.filterByMeetingAgenda);
@@ -290,6 +302,25 @@ export default {
             }
 
             try { grecaptcha.reset(); } catch(e) {}
+        },
+
+        // The window and the projection are both pushed to the server - only open sessions come
+        // back, carrying just what the agenda-item filter reads.
+        async openEarlySubmissionSessions(){
+
+            const ids = [...new Set(this.meetings.flatMap(remappedIds))];
+
+            if(!ids.length) return [];
+
+            const now = new Date().toISOString();
+            const q   = {
+                earlySubmission : true,
+                meetingIds      : { $in: ids.map(mapObjectId) },
+                date            : { $lte: { $date: now } },
+                cutoffDate      : { $gte: { $date: now } },
+            };
+
+            return await this.api.querySessions({ q, f: { meetingIds: 1, agendaItem: 1 } }) || [];
         },
 
         open()  { this.openDialog(true) },
