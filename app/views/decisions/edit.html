@@ -275,8 +275,8 @@
                             <div ng-repeat="node in decision.nodes">
                                 <edit-element ng-vue="vueOptions" :decision-id="decision._id" :node="node"
                                     :comments="comments" :selected-node="selectedNode" :allow-add-nodes="allowAddNodes"
-                                    @update:selected-node="updateSelectedNode" @change="updateDecision"
-                                    @edit-comment="editComment" />
+                                    @update:selected-node="updateSelectedNode($event)" @change="updateDecision()"
+                                    @edit-comment="editComment($event)" />
                             </div>
                         </div>
                     </div>
