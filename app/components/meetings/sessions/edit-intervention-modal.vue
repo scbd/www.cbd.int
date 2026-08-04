@@ -213,7 +213,7 @@
                                 Created by 
                                 <a 
                                     v-if="isKronosUser(intervention.meta.createdBy.id)"
-                                    :href="`https://cbd.kronos-events.net/organizations/000000000000000000000000/contacts/${encodeURIComponent(intervention.meta.createdBy.id)}`"
+                                    :href="`https://cbd.kronos-events.net/contacts/${encodeURIComponent(intervention.meta.createdBy.id)}`"
                                     target="_blank">{{ intervention.meta.createdBy.name }}</a>
                                 <span v-else>{{ intervention.meta.createdBy.name }}</span> 
                                 on {{ formatDate(intervention.meta.createdOn, 'yyyy-LL-dd HH:mm:ss') }}
@@ -222,7 +222,7 @@
                                 Updated by
                                 <a 
                                     v-if="isKronosUser(intervention.meta.updatedBy.id)"
-                                    :href="`https://cbd.kronos-events.net/organizations/000000000000000000000000/contacts/${encodeURIComponent(intervention.meta.updatedBy.id)}`"
+                                    :href="`https://cbd.kronos-events.net/contacts/${encodeURIComponent(intervention.meta.updatedBy.id)}`"
                                     target="_blank">{{ intervention.meta.updatedBy.name }}</a>
                                 <span v-else>{{ intervention.meta.updatedBy.name }}</span> 
                                 on {{ formatDate(intervention.meta.updatedOn, 'yyyy-LL-dd HH:mm:ss') }}
