@@ -70,9 +70,9 @@
                                 <div class="col-sm-9">
                                     <select :disabled="!!progress" class="form-control" id="agendaItem"  v-model="selectedAgendaItem" required>
                                         <optgroup v-for="{ _id: meetingId, agenda, normalizedSymbol } in meetings" :key="meetingId" :label="normalizedSymbol">
-                                            <option v-for="{ item, code, shortTitle, title } in agenda.items" :key="item" :value="{ meetingId, item }">
+                                            <option v-for="{ item, code, shortTitle, title } in agenda.items" :key="item" :value="{ meetingId, item }" :disabled="hasSubItems(agenda.items, item)">
                                                 {{ meetings.length>1 ? (agenda.prefix||'') : '' }}
-                                                {{ code || item }} - {{ shortTitle || title }} 
+                                                {{ hasParentItem(agenda.items, item) ? '&nbsp; ' : '' }}{{ code || item }} - {{ shortTitle || title }}
                                             </option>
                                         </optgroup>
                                     </select>
@@ -321,6 +321,18 @@ export default {
             };
 
             return await this.api.querySessions({ q, f: { meetingIds: 1, agendaItem: 1 } }) || [];
+        },
+
+        // Sub-items carry a fractional number (6.1, 6.2) under their parent (6); when they are on
+        // the agenda the parent is only a heading, so it cannot be picked.
+        hasSubItems(items, item){
+            return items.some(i => Math.floor(i.item) == item && i.item != item);
+        },
+
+        // Indent a sub-item only under a parent that is itself on the agenda - some agendas list
+        // 1.1 and 1.2 without a 1.
+        hasParentItem(items, item){
+            return item != Math.floor(item) && items.some(i => i.item == Math.floor(item));
         },
 
         open()  { this.openDialog(true) },
