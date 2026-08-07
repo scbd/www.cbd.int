@@ -632,6 +632,9 @@
     <pre ng-if="editCtrl.error" class="alert alert-danger">{{editCtrl.error|json}}</pre>
 
     <div class="pull-right" role="group" aria-label="..." style="margin-bottom:10px">
+      <label class="form-check-label" style="margin-right:15px" title="Generate a PDF rendition of the uploaded files">
+        <input ng-disabled="uploading" type="checkbox" ng-model="editCtrl.generatePdf"> Generate PDF
+      </label>
       <button ng-disabled="uploading || !editCtrl.document._id" type="button" class="btn btn-danger"  ng-click="editCtrl.del()">Delete</button>
       &nbsp;&nbsp;
       <button ng-disabled="uploading || editCtrl.duplicates.length" type="button" class="btn btn-primary" ng-click="editCtrl.save()">Save</button>

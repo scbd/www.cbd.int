@@ -85,6 +85,7 @@ export { default as template } from './document-id.html';
         _ctrl.computeStatementDate       = computeStatementDate;
         _ctrl.addLink                    = addLink;
         _ctrl.documentLink = { language: 'en' }
+        _ctrl.generatePdf  = true;
         _ctrl.type_natures = [ ...type_natures ]
 
         $scope.$watch('editCtrl.document.type_nature', applyTypeNature);
@@ -342,7 +343,7 @@ export { default as template } from './document-id.html';
                 });
 
                 var newQ = _.map(filesToCreate, function(f){
-                    return $http.post('/api/v2016/documents/'+docId+'/files', { url : f.url, generatePdf: true, language:f.language });
+                    return $http.post('/api/v2016/documents/'+docId+'/files', { url : f.url, generatePdf: !!_ctrl.generatePdf, language:f.language });
                 });
 
                 return $q.all(delQ.concat(newQ));
