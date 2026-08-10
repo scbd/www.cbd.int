@@ -31,32 +31,37 @@
 
     <hr/>
 
-    <EditRow v-if="session || pendingInterventions.length" v-on:penging-query="queryPendingInterventions" v-bind="$props" :timezone="session.timezone" :meetings="meetings" @new-intervention="init">
-      <template slot="controls">
-        <button class="btn" @click="createPendingIntervention()"><i class="fa fa-upload"></i></button>
-      </template>
-    </EditRow>
+    <div class="position-sticky sticky-toolbar">
+      <EditRow v-if="session || pendingInterventions.length" v-on:penging-query="queryPendingInterventions" v-bind="$props" :timezone="session.timezone" :meetings="meetings" @new-intervention="init">
+        <template slot="controls">
+          <button class="btn" @click="createPendingIntervention()"><i class="fa fa-upload"></i></button>
+        </template>
+      </EditRow>
 
-    <hr/>
-    <div class="position-sticky sticky-pending clearfix">
-      <div class="text-nowrap float-right">
-        <small>{{pendingInterventions.length}} {{$t('Pending statements uploaded')}}</small>
-      </div>
+      <hr/>
+      <div class="clearfix">
+        <div class="text-nowrap float-right">
+          <small>{{pendingInterventions.length}} {{$t('Pending statements uploaded')}}</small>
+        </div>
 
-      <div class="text-nowrap">
-        <small class="text-muted">
-          <label class="mb-0 font-weight-normal">
-            <input type="checkbox" v-model="autoRefreshPending"/> {{$t('Auto refresh')}}
-          </label>
-          <span v-if="pendingLastUpdated"> - {{$t('last update')}} {{ pendingLastUpdated | formatDate('T') }}</span>
-          <button class="btn btn-sm btn-link p-0 ml-2 text-muted align-baseline" @click="refreshPending" :title="$t('Refresh now')">
-            <i class="fa fa-refresh" :class="{ 'fa-spin': isRefreshingPending }"></i>
-          </button>
-        </small>
+        <div class="text-nowrap">
+          <small class="text-muted">
+            <label class="mb-0 font-weight-normal">
+              <input type="checkbox" v-model="autoRefreshPending"/> {{$t('Auto refresh')}}
+            </label>
+            <span v-if="pendingLastUpdated"> - {{$t('last update')}} {{ pendingLastUpdated | formatDate('T') }}</span>
+            <button class="btn btn-sm btn-link p-0 ml-2 text-muted align-baseline" @click="refreshPending" :title="$t('Refresh now')">
+              <i class="fa fa-refresh" :class="{ 'fa-spin': isRefreshingPending }"></i>
+            </button>
+            <button class="btn btn-sm btn-link p-0 ml-2 text-muted align-baseline" @click="pendingSortAsc = !pendingSortAsc" :title="$t('Sort by time')">
+              {{$t('Time received')}} <i class="fa" :class="pendingSortAsc ? 'fa-caret-up' : 'fa-caret-down'"></i>
+            </button>
+          </small>
+        </div>
       </div>
     </div>
     <Session v-if="pendingInterventions.length" >
-      <InterventionRow v-for="intervention in pendingInterventions" v-bind="{intervention}" :timezone="session.timezone" v-bind:key="intervention._id" @dblclick="edit(intervention)">
+      <InterventionRow v-for="intervention in sortedPendingInterventions" v-bind="{intervention}" :timezone="session.timezone" v-bind:key="intervention._id" @dblclick="edit(intervention)">
         <template slot="controls">
           <div class="text-nowrap">
             <AiTranslationBadge v-bind="{intervention}"/>
@@ -107,9 +112,10 @@ export default {
                 tokenReader: { type: Function, required: false }
               },
   components: { Session, EditRow, InterventionRow, EditInterventionModal, TagSelector, AiTranslationBadge },
-  computed  : { 
-                agendaItems, 
-                sessionId() { return this.session._id } 
+  computed  : {
+                agendaItems,
+                sortedPendingInterventions,
+                sessionId() { return this.session._id }
               },
   filters   : { formatDate, timezone },
   methods   : {
@@ -144,6 +150,7 @@ function data(){
     isRefreshingPending : false,
     pendingLastUpdated  : null,
     pendingRefreshTimer : null,
+    pendingSortAsc      : false,
     lastPendingQuery    : {}
   }
 }
@@ -313,6 +320,12 @@ async function queryPendingInterventions(args={}){
   return this.pendingInterventions;
 }
 
+function sortedPendingInterventions() {
+  const sorted = sortBy(this.pendingInterventions, o=>o.datetime);
+
+  return this.pendingSortAsc ? sorted : sorted.reverse();
+}
+
 function agendaItems() {
   return this.meetings.map(m=>{
     const prefix = withPrefix ? (m.agenda.prefix||'') : '';
@@ -341,5 +354,5 @@ function isInFuture({ date } ={}){
 <style scoped>
   .sticky-date { top: 0px; background-color: white; z-index: 1 }
   /* sits right under .sticky-date, which is ~42px tall */
-  .sticky-pending { top: 25px; background-color: white; z-index: 1 }
+  .sticky-toolbar { top: 26px; background-color: white; z-index: 2 }
 </style>
