@@ -38,8 +38,9 @@ import sharedT from '~/i18n/shared/index.js';
                             $scope.hasError = err;
                         });
 
-                        if(isAutoReset())
-                            reset();
+                        setViewValue([]); // drop any previously-selected file from the model
+
+                        reset(); // always clear a rejected selection so the same file can be re-picked
 
                         return;
                     }
