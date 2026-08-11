@@ -25,9 +25,8 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
         _ctrl.selectedRequest       = null;
         _ctrl.selectedParticipant   = null;
         _ctrl.requestStatus = ''
-        _ctrl.search        = initialSearch.q || '';
-        _ctrl.matchesSearch  = matchesSearch;
-        _ctrl.onSearchChange = onSearchChange;
+        _ctrl.search        = '';
+        _ctrl.matchesSearch = matchesSearch;
 
         _ctrl.linkKronsOrganization             = linkKronsOrganization;
         _ctrl.removeKronsOrganization           = removeKronsOrganization;
@@ -95,10 +94,6 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
                 _ctrl.error = err.data || err;
             })
             .finally(()=>$scope.$applyAsync(()=>{_ctrl.requestStatus = initialStatus; }))
-        }
-
-        function onSearchChange(){
-            $location.search('q', _ctrl.search || null);
         }
 
         function matchesSearch(request){
