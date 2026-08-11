@@ -33,7 +33,7 @@ import sharedT from '~/i18n/shared/index.js';
 
                     if(invalidFile) {
                         $scope.$applyAsync(function(){
-                            var err = translateError({ code: "invalidFileType", message: invalidFile.name, statusCode: 415 });
+                            var err = translateError({ code: attr.acceptError || "invalidFileType", message: invalidFile.name, statusCode: 415 });
                             err.msg.body = invalidFile.name;
                             $scope.hasError = err;
                         });
@@ -199,6 +199,7 @@ import sharedT from '~/i18n/shared/index.js';
 
                 if(attr.multiple!==undefined) inputFile.attr('multiple', '');
                 if(attr.accept  !==undefined) inputFile.attr('accept',   attr.accept);
+                if(attr.acceptError!==undefined) inputFile.attr('accept-error', attr.acceptError);
                 if(attr.encrypt !==undefined) inputFile.attr('encrypt',   "");
                 if(attr.onUpload!==undefined) inputFile.attr('on-upload', "proxyOnUpload({ htmlFile: htmlFile, file: file, error: error})");
 
