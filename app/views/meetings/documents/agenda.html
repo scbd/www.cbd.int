@@ -49,23 +49,20 @@
                 <upload-statement-button ng-vue="vueOptions" ng-vue-expose="agendaCtrl" :route="route" @notify="agendaCtrl.notify" />
             </li>
             
-            <li class="nav-item ml-0" ng-if="agendaCtrl.now">
-                <a class="nav-link disabled" ng-href="#" style="border:1px solid #f5efef">
-                    <i class="fa fa-globe"></i>
-                    <span class="small">{{agendaCtrl.getTimezone()}}</span>
-                </a>
-            </li>
                 <li class="nav-item dropdown ml-0">
-                    <a class="nav-link btn dropdown-toggle" ng-class="{ 'btn-danger' : agendaCtrl.isDateOverride }" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-href="#" style="border:1px solid #f5efef">
-                        <em class="visible-xs-inline1 fa fa-clock-o"></em> 
-                        <b ng-if="!agendaCtrl.isDateOverride" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':'H:mm'"></b>
-                        <b ng-if=" agendaCtrl.isDateOverride" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':agendaCtrl.dateOverrideFormat()"></b>
+                    <a class="nav-link btn dropdown-toggle" ng-class="{ 'btn-danger' : agendaCtrl.isDateOverride }" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-href="#" style="border:1px solid #f5efef"
+                        title="Timezone at venue: {{agendaCtrl.getTimezone()}}">
+                        <em class="visible-xs-inline1 fa fa-calendar"></em>
+                        <b ng-if="agendaCtrl.isDateOverride" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':'MMM Do'"></b>
+                        <em class="visible-xs-inline1 fa fa-clock-o" ng-if="agendaCtrl.hasTime()"></em>
+                        <b ng-if="agendaCtrl.hasTime()" ng-bind="agendaCtrl.now | moment:'tz':agendaCtrl.getTimezone() | moment:'format':'H:mm'"></b>
                     </a>
             		<div class="dropdown-menu dropdown-menu-right">
             			<a class="text-nowrap dropdown-item" href="#" ng-repeat="item in agendaCtrl.scheduleDates" ng-click="agendaCtrl.scheduleDateChanged(item.value)">
                             <span ng-if=" item.value" class="hidden-xs hidden-sm"  >{{item.text || (item.value|moment:'format':'DD MMM YYYY (ddd)')}}</span>
                             <span ng-if=" item.value" class="visible-xs visible-sm">{{item.text || (item.value|moment:'format':'ddd Do')}}</span>
                             <b    ng-if="!item.value">Now</b>
+                            <em   ng-if="!item.value" class="small text-muted"><i class="fa fa-globe"></i> {{agendaCtrl.getTimezone()}}</em>
                         </a>
             		</div>
             	</li>
