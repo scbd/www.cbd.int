@@ -25,13 +25,17 @@ import sharedT from '~/i18n/shared/index.js';
                     
                     increaseChange();
 
+                    $scope.$applyAsync(function(){ $scope.hasError = false; });
+
                     var htmlFiles = element[0].files;
 
                     var invalidFile = firstInvalidFile(htmlFiles);
 
                     if(invalidFile) {
                         $scope.$applyAsync(function(){
-                            $scope.hasError = translateError({ code: "invalidFileType", message: invalidFile.name, statusCode: 415 });
+                            var err = translateError({ code: "invalidFileType", message: invalidFile.name, statusCode: 415 });
+                            err.msg.body = invalidFile.name;
+                            $scope.hasError = err;
                         });
 
                         if(isAutoReset())
@@ -127,7 +131,7 @@ import sharedT from '~/i18n/shared/index.js';
                     var name = (file.name||'').toLowerCase();
 
                     return rules.some(function(rule){
-                        if(rule.charAt(0)==='.')   return name.slice(-rule.length)===rule;
+                        if(rule.charAt(0)==='.')   return name.length>rule.length && name.slice(-rule.length)===rule;
                         if(rule.slice(-2)==='/*')  return type.indexOf(rule.slice(0,-1))===0;
                         return type===rule;
                     });

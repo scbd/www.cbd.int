@@ -101,9 +101,10 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
 
               $scope.error = error.data || error;
 
+              // error bodies may echo the processed image as {data:{data:{imageSrc}}} or {data:{imageSrc}}
               const imageSrc = error?.data?.data?.imageSrc || error?.data?.imageSrc || $scope.binding.imageSrc;
 
-              if(imageSrc)
+              if(imageSrc && /^data:image\//.test(imageSrc))
                 $scope.$applyAsync(()=>{
                                     $scope.image = imageSrc;
                                     $scope.binding.imageSrc = imageSrc;
