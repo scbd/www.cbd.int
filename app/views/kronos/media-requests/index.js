@@ -18,6 +18,7 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
 
         var initialState  = stateFromSearch($location.search());
         var initialStatus = initialState.status;
+        var initialised   = false; // true once load() finishes; gates URL write-back
 
         _ctrl.requests              = [];
         _ctrl.sort                  = initialState.sort;
@@ -114,7 +115,7 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
             .catch(function(err) {
                 _ctrl.error = err.data || err;
             })
-            .finally(()=>$scope.$applyAsync(()=>{_ctrl.requestStatus = initialStatus; }))
+            .finally(()=>$scope.$applyAsync(()=>{ _ctrl.requestStatus = initialStatus; initialised = true; }))
         }
 
         function stateFromSearch(search){
@@ -167,7 +168,7 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
 
                 status = _ctrl.requestStatus || status;
 
-                if(!_ctrl.loading){
+                if(initialised){
                     $location.search('status',  status === ''? 'all' : (status === 'new'? null : status || null));
                     $location.search('sortBy',  _ctrl.sort.prop === 'meta.createdOn'? null : _ctrl.sort.prop);
                     $location.search('sortDir', _ctrl.sort.dir  === 'asc'?            null : _ctrl.sort.dir);
