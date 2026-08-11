@@ -25,6 +25,9 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
         _ctrl.selectedRequest       = null;
         _ctrl.selectedParticipant   = null;
         _ctrl.requestStatus = ''
+        _ctrl.search        = initialSearch.q || '';
+        _ctrl.matchesSearch  = matchesSearch;
+        _ctrl.onSearchChange = onSearchChange;
 
         _ctrl.linkKronsOrganization             = linkKronsOrganization;
         _ctrl.removeKronsOrganization           = removeKronsOrganization;
@@ -92,6 +95,25 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
                 _ctrl.error = err.data || err;
             })
             .finally(()=>$scope.$applyAsync(()=>{_ctrl.requestStatus = initialStatus; }))
+        }
+
+        function onSearchChange(){
+            $location.search('q', _ctrl.search || null);
+        }
+
+        function matchesSearch(request){
+            var text = (_ctrl.search || '').toLowerCase().trim();
+
+            if(!text) return true;
+
+            var org    = request.organization || {};
+            var fields = [ org.title, org.acronym, org.address && org.address.country ];
+
+            (request.participants || []).forEach(function(p){
+                fields.push(p.firstName, p.lastName, (p.firstName || '') + ' ' + (p.lastName || ''), p.email, p.emailCc);
+            });
+
+            return fields.some(function(v){ return (v || '').toLowerCase().indexOf(text) !== -1; });
         }
 
         function changeConference(conference){
