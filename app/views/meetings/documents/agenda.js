@@ -222,8 +222,9 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                     }
                 };
 
-                var reservationTypes = $http.get('/api/v2016/types', { params: { q: resQuery, f: { title:1 }, s:{priority:1, title:1} }, cache:true }).then(function(res){
-                    return res.data;
+                var reservationTypes = $http.get('/api/v2016/types', { params: { q: resQuery, f: { title:1, priority:1 }, s:{priority:1, title:1} }, cache:true }).then(function(res){
+                    // tab order must follow the type priority, so it cannot rely on the response order alone
+                    return _.sortBy(res.data, typeSortKey);
                 });
 
                 return $q.all([meetings, meetingDocuments, reservationTypes]);
@@ -427,6 +428,17 @@ export default ["$scope", "$route", "$http", '$q', '$interval', 'conferenceServi
                     return ret; 
                 }, {});
             })
+        }
+
+        //==============================
+        //
+        //==============================
+        function typeSortKey(type) {
+
+            // priority 0 is a valid, highest-ranking value, so only a missing one falls back
+            var priority = ("000000" + (type.priority == null ? 999999 : type.priority)).slice(-6);
+
+            return priority + '_' + (type.title || '').toLowerCase();
         }
 
         //==============================
