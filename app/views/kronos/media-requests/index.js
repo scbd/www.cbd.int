@@ -28,9 +28,13 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
         _ctrl.attachmentUrl         = attachmentUrl
         _ctrl.selectedRequest       = null;
         _ctrl.selectedParticipant   = null;
-        _ctrl.requestStatus = ''
-        _ctrl.search        = '';
-        _ctrl.matchesSearch = matchesSearch;
+        _ctrl.requestStatus    = ''
+        _ctrl.search           = '';
+        _ctrl.filteredRequests = [];
+
+        $scope.$watchGroup([ function(){ return _ctrl.search; }, function(){ return _ctrl.requests; } ], function(){
+            _ctrl.filteredRequests = (_ctrl.requests || []).filter(matchesSearch);
+        });
 
         _ctrl.linkKronsOrganization             = linkKronsOrganization;
         _ctrl.removeKronsOrganization           = removeKronsOrganization;

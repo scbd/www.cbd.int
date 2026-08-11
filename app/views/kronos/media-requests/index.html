@@ -518,7 +518,7 @@ a.label:focus {
 
                     <hr>
 
-                    <div class="panel  " ng-repeat="request in (mediaRequestCtrl.filteredRequests = (mediaRequestCtrl.requests | filter:mediaRequestCtrl.matchesSearch))" ng-class="{'panel-info': request.organization._id == mediaRequestCtrl.selectedRequest.organization._id , 'panel-danger': request.contactsOnlyError, 'panel-default': '!request.contactsOnlyError'}">
+                    <div class="panel  " ng-repeat="request in mediaRequestCtrl.filteredRequests" ng-class="{'panel-info': request.organization._id == mediaRequestCtrl.selectedRequest.organization._id , 'panel-danger': request.contactsOnlyError, 'panel-default': '!request.contactsOnlyError'}">
                         <div class="panel-heading" style="cursor:pointer" ng-click="mediaRequestCtrl.selectRequest(request==mediaRequestCtrl.selectedRequest?null:request); mediaRequestCtrl.selectedRequest.organization.kronosIds.length && mediaRequestCtrl.lookUpKronosOrganizations()">
                             <i class="eco-plus-circled"></i><strong> {{request.organization.title}} </strong>,  
                             <span ng-if="request.organization.acronym">({{request.organization.acronym}}),</span>
