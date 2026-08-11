@@ -78,7 +78,7 @@
   "invalid_token":"invalid token passed",
   "expired_token":"expired token",
   "serviceUnavailable":"The service is temporarily unavailable",
-  "invalidFileType":"Only PDF and image files are accepted.",
+  "invalidFileType":"This file type is not accepted.",
   "serviceNotAvailable": "Service not available",
   "serviceIsNotAvailableAt": "Service is not available at",
   "serviceNotAvailableOrDocumentWasNotFound": "Service not available or document was not found",

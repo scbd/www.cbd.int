@@ -70,5 +70,5 @@
   "orDragIt": "o arrastrándolo aquí",
   "orDragThem": "o arrastrándolos aquí",
   "fileEncrypted": "El archivo será encriptado.",
-  "invalidFileType": "Solo se aceptan archivos PDF e imágenes."
+  "invalidFileType": "Este tipo de archivo no es aceptado."
 }
