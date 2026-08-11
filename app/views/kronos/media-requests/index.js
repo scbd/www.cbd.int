@@ -49,6 +49,19 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
         _ctrl.loading                           = true;
         _ctrl.changeConference                  = changeConference;
         load();
+
+        $scope.$on('$routeUpdate', function(){
+            var state = stateFromSearch($location.search());
+
+            var changed = state.status    !== _ctrl.requestStatus
+                       || state.sort.prop !== _ctrl.sort.prop
+                       || state.sort.dir  !== _ctrl.sort.dir;
+
+            if(!changed) return;
+
+            _ctrl.sort = state.sort;
+            LoadRequests(state.status);
+        });
         
         //===================================
         //
