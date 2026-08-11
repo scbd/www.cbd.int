@@ -72,12 +72,14 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
                   imgSrc = await resize(imgSrc, { width, height });
                 }
               
-              if(type.startsWith('image')) $scope.image = imgSrc;
+              if(type.startsWith('image'))
+                $scope.$applyAsync(()=>{
+                  $scope.image             = imgSrc;
+                  $scope.binding.imageSrc  = imgSrc;
+                });
 
               const body    =  await toFile(imgSrc, passportObj.title, { type });
               const headers = { 'Content-type':  body.type };
-
-              if(type.startsWith('image')) $scope.binding.imageSrc = $scope.image;
 
 
               const { imageSrc, fields, valid } = (await $http.post(`${kronos.kronosCbdEventsUrl}/api/passports/read`, body, { headers })).data;
@@ -99,10 +101,13 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
 
               $scope.error = error.data || error;
 
-              if(error?.data?.imageSrc)
-                $scope.$applyAsync(()=>{ 
-                                    $scope.image = error.data.imageSrc;
-                                    $scope.binding.imageSrc = error.data.imageSrc;
+              // error bodies may echo the processed image as {data:{data:{imageSrc}}} or {data:{imageSrc}}
+              const imageSrc = error?.data?.data?.imageSrc || error?.data?.imageSrc || $scope.binding.imageSrc;
+
+              if(imageSrc && /^data:image\//.test(imageSrc))
+                $scope.$applyAsync(()=>{
+                                    $scope.image = imageSrc;
+                                    $scope.binding.imageSrc = imageSrc;
                                   });
 
             }

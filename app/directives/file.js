@@ -25,7 +25,25 @@ import sharedT from '~/i18n/shared/index.js';
                     
                     increaseChange();
 
+                    $scope.$applyAsync(function(){ $scope.hasError = false; });
+
                     var htmlFiles = element[0].files;
+
+                    var invalidFile = firstInvalidFile(htmlFiles);
+
+                    if(invalidFile) {
+                        $scope.$applyAsync(function(){
+                            var err = translateError({ code: attr.acceptError || "invalidFileType", message: invalidFile.name, statusCode: 415 });
+                            err.msg.body = invalidFile.name;
+                            $scope.hasError = err;
+                        });
+
+                        setViewValue([]); // drop any previously-selected file from the model
+
+                        reset(); // always clear a rejected selection so the same file can be re-picked
+
+                        return;
+                    }
 
                     if(isAutoUpload())
                     {
@@ -94,7 +112,33 @@ import sharedT from '~/i18n/shared/index.js';
 
                     return err
                 }
-                function isMutiple() { 
+                function firstInvalidFile(files) {
+                    var accept = element.attr('accept');
+
+                    if(!accept) return null;
+
+                    var rules = accept.split(',').map(function(r){ return r.trim().toLowerCase(); }).filter(Boolean);
+
+                    for(var i=0; i<files.length; ++i) {
+                        if(!isAccepted(files[i], rules))
+                            return files[i];
+                    }
+
+                    return null;
+                }
+
+                function isAccepted(file, rules) {
+                    var type = (file.type||'').toLowerCase();
+                    var name = (file.name||'').toLowerCase();
+
+                    return rules.some(function(rule){
+                        if(rule.charAt(0)==='.')   return name.length>rule.length && name.slice(-rule.length)===rule;
+                        if(rule.slice(-2)==='/*')  return type.indexOf(rule.slice(0,-1))===0;
+                        return type===rule;
+                    });
+                }
+
+                function isMutiple() {
                     return element.attr('multiple')!==undefined; 
                 }
                 
@@ -155,6 +199,7 @@ import sharedT from '~/i18n/shared/index.js';
 
                 if(attr.multiple!==undefined) inputFile.attr('multiple', '');
                 if(attr.accept  !==undefined) inputFile.attr('accept',   attr.accept);
+                if(attr.acceptError!==undefined) inputFile.attr('accept-error', attr.acceptError);
                 if(attr.encrypt !==undefined) inputFile.attr('encrypt',   "");
                 if(attr.onUpload!==undefined) inputFile.attr('on-upload', "proxyOnUpload({ htmlFile: htmlFile, file: file, error: error})");
 

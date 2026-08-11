@@ -69,5 +69,7 @@
   "byClicking": "haciendo clic aquí",
   "orDragIt": "o arrastrándolo aquí",
   "orDragThem": "o arrastrándolos aquí",
-  "fileEncrypted": "El archivo será encriptado."
+  "fileEncrypted": "El archivo será encriptado.",
+  "invalidFileType": "Este tipo de archivo no es aceptado.",
+  "invalidPassportFileType": "Solo se aceptan archivos PDF, JPG, PNG y TIFF."
 }
