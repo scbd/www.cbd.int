@@ -12,8 +12,11 @@ export { default as template } from './index.html'
 export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter) {
         var _ctrl = this;
 
+        var initialSearch = $location.search();
+        var initialStatus = initialSearch.status === 'all'? '' : (initialSearch.status || 'new');
+
         _ctrl.requests              = [];
-        _ctrl.sort                  = { prop: 'meta.createdOn', dir:'asc' };
+        _ctrl.sort                  = { prop: initialSearch.sortBy || 'meta.createdOn', dir: initialSearch.sortDir || 'asc' };
         _ctrl.toggle                = toggle;
         _ctrl.selectRequest         = selectRequest;
         _ctrl.selectParticipant     = selectRequest;
@@ -83,12 +86,12 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
             .then(function(){
                 loadCounts() 
 
-                return LoadRequests().then(()=>LoadRequests('new'))     
+                return LoadRequests().then(()=>LoadRequests(initialStatus))
             })
             .catch(function(err) {
                 _ctrl.error = err.data || err;
             })
-            .finally(()=>$scope.$applyAsync(()=>{_ctrl.requestStatus = 'new'; }))
+            .finally(()=>$scope.$applyAsync(()=>{_ctrl.requestStatus = initialStatus; }))
         }
 
         function changeConference(conference){
@@ -101,9 +104,17 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
 
         async function LoadRequests(status, countOnly = false){
 
-            if(_ctrl.requestStatus !== status) _ctrl.requestStatus = status;
+            if(!countOnly){
+                if(_ctrl.requestStatus !== status) _ctrl.requestStatus = status;
 
-            status = _ctrl.requestStatus || status;
+                status = _ctrl.requestStatus || status;
+
+                if(!_ctrl.loading){
+                    $location.search('status',  status === ''? 'all' : (status === 'new'? null : status || null));
+                    $location.search('sortBy',  _ctrl.sort.prop === 'meta.createdOn'? null : _ctrl.sort.prop);
+                    $location.search('sortDir', _ctrl.sort.dir  === 'asc'?            null : _ctrl.sort.dir);
+                }
+            }
 
             var requestQuery = { 
                 nominatingOrganization : { $exists: 1 },
@@ -138,9 +149,7 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
             return $http.get('/api/v2018/kronos/participation-requests', { params })
             .then(resData)
             .then(function(mediaRequests) { 
-                const { count } = mediaRequests;
-
-                if(count && status !== 'error') return count;
+                if(countOnly) return mediaRequests.count || 0;
 
                 _ctrl.requests = mediaRequests;
 
@@ -205,7 +214,9 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
             }).catch(function(err) {
                 _ctrl.error   = err.data || err;
                 _ctrl.loading = false;
-            }).finally(() => { 
+            }).finally(() => {
+
+                    if(countOnly) return;
 
                     if(!$scope.counts) $scope.counts = {}
                     if(_ctrl.requests?.length){

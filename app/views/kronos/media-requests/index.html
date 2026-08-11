@@ -482,12 +482,12 @@ a.label:focus {
                         <div class="col-sm-3">
                             <select class="form-control" ng-change="mediaRequestCtrl.refreshRequestList(mediaRequestCtrl.requestStatus)" ng-model="mediaRequestCtrl.requestStatus">
                                 <option  value="">All ({{counts.total}})</option>
-                                <option value="new">New ({{counts.newRequests}})</option>
-                                <option  value="accredited">Accredited ({{counts.accredited}})</option>
-                                <option  value="accreditationInProgress">Accreditation in progress ({{counts.accreditationInProgress}})</option>
-                                <option  value="rejected">Rejected ({{counts.rejected}})</option>
-                                <option  value="draft">Draft (user)({{counts.draft}})</option>
-                                <option  value="error">In Error State</option>
+                                <option ng-if="counts.newRequests" value="new">New ({{counts.newRequests}})</option>
+                                <option ng-if="counts.accredited" value="accredited">Accredited ({{counts.accredited}})</option>
+                                <option ng-if="counts.accreditationInProgress" value="accreditationInProgress">Accreditation in progress ({{counts.accreditationInProgress}})</option>
+                                <option ng-if="counts.rejected" value="rejected">Rejected ({{counts.rejected}})</option>
+                                <option ng-if="counts.draft" value="draft">Draft (in progress)({{counts.draft}})</option>
+                                <option ng-if="counts.error" value="error">In Error State ({{counts.error}})</option>
                             </select>
                         </div>
                         <div class="col-sm-3">
