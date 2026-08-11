@@ -69,5 +69,6 @@
   "byClicking": "haciendo clic aquí",
   "orDragIt": "o arrastrándolo aquí",
   "orDragThem": "o arrastrándolos aquí",
-  "fileEncrypted": "El archivo será encriptado."
+  "fileEncrypted": "El archivo será encriptado.",
+  "invalidFileType": "Solo se aceptan archivos PDF e imágenes."
 }

@@ -70,5 +70,6 @@
     "byClicking": "通过单击这里",
     "orDragIt": "或将单个文件拖动到这里",
     "orDragThem": "或将多个文件拖动到这里",
-    "fileEncrypted": "文件将加密"
+    "fileEncrypted": "文件将加密",
+    "invalidFileType": "仅接受 PDF 和图片文件"
   }

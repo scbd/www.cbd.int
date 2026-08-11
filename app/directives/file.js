@@ -27,6 +27,19 @@ import sharedT from '~/i18n/shared/index.js';
 
                     var htmlFiles = element[0].files;
 
+                    var invalidFile = firstInvalidFile(htmlFiles);
+
+                    if(invalidFile) {
+                        $scope.$applyAsync(function(){
+                            $scope.hasError = translateError({ code: "invalidFileType", message: invalidFile.name, statusCode: 415 });
+                        });
+
+                        if(isAutoReset())
+                            reset();
+
+                        return;
+                    }
+
                     if(isAutoUpload())
                     {
                         $scope.loading = true;
@@ -94,7 +107,33 @@ import sharedT from '~/i18n/shared/index.js';
 
                     return err
                 }
-                function isMutiple() { 
+                function firstInvalidFile(files) {
+                    var accept = element.attr('accept');
+
+                    if(!accept) return null;
+
+                    var rules = accept.split(',').map(function(r){ return r.trim().toLowerCase(); }).filter(Boolean);
+
+                    for(var i=0; i<files.length; ++i) {
+                        if(!isAccepted(files[i], rules))
+                            return files[i];
+                    }
+
+                    return null;
+                }
+
+                function isAccepted(file, rules) {
+                    var type = (file.type||'').toLowerCase();
+                    var name = (file.name||'').toLowerCase();
+
+                    return rules.some(function(rule){
+                        if(rule.charAt(0)==='.')   return name.slice(-rule.length)===rule;
+                        if(rule.slice(-2)==='/*')  return type.indexOf(rule.slice(0,-1))===0;
+                        return type===rule;
+                    });
+                }
+
+                function isMutiple() {
                     return element.attr('multiple')!==undefined; 
                 }
                 
