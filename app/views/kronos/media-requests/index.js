@@ -33,9 +33,11 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
         _ctrl.search           = '';
         _ctrl.filteredRequests = [];
 
-        $scope.$watchGroup([ function(){ return _ctrl.search; }, function(){ return _ctrl.requests; } ], function(){
-            _ctrl.filteredRequests = (_ctrl.requests || []).filter(matchesSearch);
-        });
+$scope.$watch(function(){
+    return { search: _ctrl.search, requests: _ctrl.requests };
+}, function(){
+    _ctrl.filteredRequests = (_ctrl.requests || []).filter(matchesSearch);
+}, true);
 
         _ctrl.linkKronsOrganization             = linkKronsOrganization;
         _ctrl.removeKronsOrganization           = removeKronsOrganization;
