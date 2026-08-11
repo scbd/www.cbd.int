@@ -12,11 +12,15 @@ export { default as template } from './index.html'
 export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter) {
         var _ctrl = this;
 
-        var initialSearch = $location.search();
-        var initialStatus = initialSearch.status === 'all'? '' : (initialSearch.status || 'new');
+        var SORT_PROPS = ['meta.createdOn', 'organization.title', 'meta.modifiedOn'];
+        var SORT_DIRS  = ['asc', 'desc'];
+        var STATUSES   = ['new', 'accredited', 'accreditationInProgress', 'rejected', 'draft', 'error'];
+
+        var initialState  = stateFromSearch($location.search());
+        var initialStatus = initialState.status;
 
         _ctrl.requests              = [];
-        _ctrl.sort                  = { prop: initialSearch.sortBy || 'meta.createdOn', dir: initialSearch.sortDir || 'asc' };
+        _ctrl.sort                  = initialState.sort;
         _ctrl.toggle                = toggle;
         _ctrl.selectRequest         = selectRequest;
         _ctrl.selectParticipant     = selectRequest;
@@ -94,6 +98,20 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
                 _ctrl.error = err.data || err;
             })
             .finally(()=>$scope.$applyAsync(()=>{_ctrl.requestStatus = initialStatus; }))
+        }
+
+        function stateFromSearch(search){
+            var status = search.status === 'all'? '' : search.status;
+
+            if(status !== '' && STATUSES.indexOf(status) === -1) status = 'new';
+
+            return {
+                status : status,
+                sort   : {
+                    prop: SORT_PROPS.indexOf(search.sortBy)  !== -1? search.sortBy  : 'meta.createdOn',
+                    dir : SORT_DIRS .indexOf(search.sortDir) !== -1? search.sortDir : 'asc'
+                }
+            };
         }
 
         function matchesSearch(request){
