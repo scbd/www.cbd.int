@@ -2,7 +2,7 @@ import app from '~/app'
 import _ from 'lodash'
 import moment from 'moment'
 import '~/services/kronos'
-import '~/filters/term';
+import lookupTermText from '~/filters/term';
 import '~/filters/moment';
 import '~/directives/kronos/passport'
 export { default as template } from './index.html'
@@ -132,8 +132,14 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
 
             if(!text) return true;
 
-            var org    = request.organization || {};
-            var fields = [ org.title, org.acronym, org.address && org.address.country ];
+            var org     = request.organization || {};
+            var country = org.address && org.address.country;
+
+            // resolved country label is sync once the term cache is primed (load() primes it); skip while pending
+            var countryLabel = country? lookupTermText(country.toLowerCase()) : '';
+            if(countryLabel && countryLabel.then) countryLabel = '';
+
+            var fields = [ org.title, org.acronym, country, countryLabel ];
 
             (request.participants || []).forEach(function(p){
                 fields.push(p.firstName, p.lastName, (p.firstName || '') + ' ' + (p.lastName || ''), p.email, p.emailCc);
