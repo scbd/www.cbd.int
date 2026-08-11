@@ -508,10 +508,10 @@ a.label:focus {
                     <div class="row" style="margin-top:1rem;">
                         <div class="col-sm-6">
                             <div style="position:relative;">
-                                <input type="text" class="form-control" style="padding-right:30px;" placeholder="Search by organization, country, participant name or email" ng-model="mediaRequestCtrl.search" ng-model-options="{ debounce: 300 }">
-                                <a href="" ng-if="mediaRequestCtrl.search" ng-click="mediaRequestCtrl.search=''" title="Clear search" style="position:absolute; top:0; right:0; padding:6px 10px; color:#999; text-decoration:none;">
+                                <input type="text" class="form-control" style="padding-right:30px;" placeholder="Search by organization, country, participant name or email" aria-label="Search media requests" ng-model="mediaRequestCtrl.search" ng-model-options="{ debounce: 300 }">
+                                <button type="button" aria-label="Clear search" ng-if="mediaRequestCtrl.search" ng-click="mediaRequestCtrl.search=''" style="position:absolute; top:0; right:0; padding:6px 10px; color:#999; background:none; border:0;">
                                     <i class="fa fa-times" aria-hidden="true"></i>
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>
