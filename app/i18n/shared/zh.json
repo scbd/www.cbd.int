@@ -72,5 +72,5 @@
     "orDragThem": "或将多个文件拖动到这里",
     "fileEncrypted": "文件将加密",
     "invalidFileType": "不接受此文件类型",
-    "invalidPassportFileType": "仅接受 PDF 和图片文件（JPG、PNG、HEIC、TIFF）"
+    "invalidPassportFileType": "仅接受 PDF、JPG、PNG 和 TIFF 文件"
   }

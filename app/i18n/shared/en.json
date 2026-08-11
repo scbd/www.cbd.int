@@ -79,7 +79,7 @@
   "expired_token":"expired token",
   "serviceUnavailable":"The service is temporarily unavailable",
   "invalidFileType":"This file type is not accepted.",
-  "invalidPassportFileType":"Only PDF and image files (JPG, PNG, HEIC, TIFF) are accepted.",
+  "invalidPassportFileType":"Only PDF, JPG, PNG and TIFF files are accepted.",
   "serviceNotAvailable": "Service not available",
   "serviceIsNotAvailableAt": "Service is not available at",
   "serviceNotAvailableOrDocumentWasNotFound": "Service not available or document was not found",
