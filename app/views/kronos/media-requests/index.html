@@ -483,11 +483,11 @@ a.label:focus {
                             <select class="form-control" ng-change="mediaRequestCtrl.refreshRequestList(mediaRequestCtrl.requestStatus)" ng-model="mediaRequestCtrl.requestStatus">
                                 <option  value="">All ({{counts.total}})</option>
                                 <option value="new">New ({{counts.newRequests}})</option>
-                                <option  value="accredited">Accredited ({{counts.accredited}})</option>
-                                <option  value="accreditationInProgress">Accreditation in progress ({{counts.accreditationInProgress}})</option>
-                                <option  value="rejected">Rejected ({{counts.rejected}})</option>
-                                <option  value="draft">Draft (user)({{counts.draft}})</option>
-                                <option  value="error">In Error State</option>
+                                <option ng-if="counts.accredited" value="accredited">Accredited ({{counts.accredited}})</option>
+                                <option value="accreditationInProgress">Accreditation in progress ({{counts.accreditationInProgress}})</option>
+                                <option ng-if="counts.rejected" value="rejected">Rejected ({{counts.rejected}})</option>
+                                <option ng-if="counts.draft" value="draft">Draft (in progress)({{counts.draft}})</option>
+                                <option value="error">In Error State ({{counts.error}})</option>
                             </select>
                         </div>
                         <div class="col-sm-3">
@@ -503,12 +503,22 @@ a.label:focus {
                                 <option  ng-selected="'desc' === mediaRequestCtrl.sort.dir" ng-value="'desc'">Descending</option>
                             </select>
                         </div>
-                        <div class="col-3 text-right" ng-if="mediaRequestCtrl.requests.length">Total : {{mediaRequestCtrl.requests.length}}</div>
+                        <div class="col-3 text-right" ng-if="mediaRequestCtrl.requests.length">Total : {{mediaRequestCtrl.filteredRequests.length}}</div>
+                    </div>
+                    <div class="row" style="margin-top:1rem;">
+                        <div class="col-sm-6">
+                            <div style="position:relative;">
+                                <input type="text" class="form-control" style="padding-right:30px;" placeholder="Search by organization, country, participant name or email" aria-label="Search media requests" ng-model="mediaRequestCtrl.search" ng-model-options="{ debounce: 300 }">
+                                <button type="button" aria-label="Clear search" ng-if="mediaRequestCtrl.search" ng-click="mediaRequestCtrl.search=''" style="position:absolute; top:0; right:0; padding:6px 10px; color:#999; background:none; border:0;">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <hr>
 
-                    <div class="panel  " ng-repeat="request in mediaRequestCtrl.requests" ng-class="{'panel-info': request.organization._id == mediaRequestCtrl.selectedRequest.organization._id , 'panel-danger': request.contactsOnlyError, 'panel-default': '!request.contactsOnlyError'}">
+                    <div class="panel  " ng-repeat="request in mediaRequestCtrl.filteredRequests" ng-class="{'panel-info': request.organization._id == mediaRequestCtrl.selectedRequest.organization._id , 'panel-danger': request.contactsOnlyError, 'panel-default': '!request.contactsOnlyError'}">
                         <div class="panel-heading" style="cursor:pointer" ng-click="mediaRequestCtrl.selectRequest(request==mediaRequestCtrl.selectedRequest?null:request); mediaRequestCtrl.selectedRequest.organization.kronosIds.length && mediaRequestCtrl.lookUpKronosOrganizations()">
                             <i class="eco-plus-circled"></i><strong> {{request.organization.title}} </strong>,  
                             <span ng-if="request.organization.acronym">({{request.organization.acronym}}),</span>
