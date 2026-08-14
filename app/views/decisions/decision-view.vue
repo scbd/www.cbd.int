@@ -234,7 +234,7 @@
 						</div>
 
 						<div v-if="documents && documents.length > 0">
-							<dt>Documents</dt>
+							<dt>Related documents</dt>
 							<dd>
 								<meeting-document-card-list :documents="documents"></meeting-document-card-list>
 							</dd>
