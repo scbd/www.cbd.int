@@ -255,7 +255,7 @@
 
                             <div class="pull-right" style="text-align:right; margin-bottom: 10px">
                                 <div>
-                                    <span v-for="item in record.dttType_REL_ss" :key="item">
+                                    <span v-for="item in record.dttType_ss" :key="item">
                                         <span v-if="item=='operational'" class="badge ng-scope badge-info"
                                             style="opacity:0.5; margin-left: 6px;">
                                             <i class="fa fa-cog"></i> Operational
@@ -281,7 +281,7 @@
                                 </div>
                             </div>
 
-                            <span v-for="item in record.dttActor_REL_ss" :key="item"
+                            <span v-for="item in record.dttActor_ss" :key="item"
                                 class="badge badge-secondary" style="opacity:0.5;margin-right:6px">
                                 <i class="fa fa-user"></i>
                                 <span>{{ getTitle(actorsList, item) }}</span>
@@ -599,13 +599,13 @@ function queryParts() {
 
     if(!_.isEmpty(words))                freetext     = 'title_t:'            + AND(words.map(w=>`${solr.escape(w)}~`));
     if(!_.isEmpty(filters.sessions))     sessions     = `dttCode_s:           (${filters.sessions      .map(o => `CBD/${padInt(o).replace(/-/g, '\/')}/`).map(solr.escape).map(o=>o+'*').join(' ')})`;
-    if(!_.isEmpty(filters.types))        types        = `dttType_REL_ss:      (${filters.types         .map(solr.escape).join(' ')})`;
-    if(!_.isEmpty(filters.subjects))     subjects     = `dttSubject_REL_ss:   (${filters.subjects      .map(solr.escape).join(' ')})`;
+    if(!_.isEmpty(filters.types))        types        = `dttType_ss:          (${filters.types         .map(solr.escape).join(' ')})`;
+    if(!_.isEmpty(filters.subjects))     subjects     = `dttSubject_ss:       (${filters.subjects      .map(solr.escape).join(' ')})`;
     if(!_.isEmpty(filters.gbfGoals))     gbfGoals     = `dttGbfGoal_ss:       (${filters.gbfGoals      .map(solr.escape).join(' ')})`;
     if(!_.isEmpty(filters.gbfTargets))   gbfTargets   = `dttGbfTarget_ss:     (${filters.gbfTargets    .map(solr.escape).join(' ')})`;
     if(!_.isEmpty(filters.aichiTargets)) aichiTargets = `dttAichiTarget_ss:   (${filters.aichiTargets  .map(solr.escape).join(' ')})`;
-    if(!_.isEmpty(filters.actors))       actors       = `dttActor_REL_ss:     (${filters.actors        .map(solr.escape).join(' ')})`;
-    if(!_.isEmpty(filters.statuses))     statuses     = `dttStatus_REL_ss:    (${filters.statuses      .map(solr.escape).join(' ')})`;
+    if(!_.isEmpty(filters.actors))       actors       = `dttActor_ss:         (${filters.actors        .map(solr.escape).join(' ')})`;
+    if(!_.isEmpty(filters.statuses))     statuses     = `dttStatus_ss:        (${filters.statuses      .map(solr.escape).join(' ')})`;
 
     return _.compact([freetext, sessions, types, subjects, gbfGoals, gbfTargets, aichiTargets, actors, statuses])
 }
