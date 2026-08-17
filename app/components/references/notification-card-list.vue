@@ -67,14 +67,15 @@ async function lookupNotifications(codes) {
             type:  'notification',
             status : 'public',
             title : { en : n.title_t },
-            files : urlToFiles(n.url_ss)
+            files : webUrlToFiles(n.url_ss)
         });
     });
     
     return results || [];
 }
 
-function urlToFiles(url_ss) {
+// url_ss is the notification landing page; documents live in files_ss (not fetched here).
+function webUrlToFiles(url_ss) {
 
     return _.map(url_ss||[], function(url){
 
