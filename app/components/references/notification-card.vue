@@ -5,7 +5,7 @@
             :files="notification.files"
             class="visible-xs pull-right" 
             style="padding-top:10px" />
-        <i>{{ notification.number }} - {{ notification.symbol }}</i> 
+        <i>{{ (notification.number && notification.number !== notification.symbol) ? (notification.number + ' - ') : '' }}{{ notification.symbol }}</i>
         <div
             v-html="titleHtml"
             :title="title"
