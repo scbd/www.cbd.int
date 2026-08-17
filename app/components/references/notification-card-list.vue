@@ -78,27 +78,7 @@ function urlToFiles(url_ss) {
 
     return _.map(url_ss||[], function(url){
 
-        var mime;
-        var locale;
-
-        if(/\.pdf$/    .test(url)) mime = 'application/pdf';
-        if(/\.doc$/    .test(url)) mime = 'application/msword';
-        if(/\.docx$/   .test(url)) mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-
-        if(/-ar\.\w+$/ .test(url)) locale = 'ar';
-        if(/-en\.\w+$/ .test(url)) locale = 'en';
-        if(/-es\.\w+$/ .test(url)) locale = 'es';
-        if(/-fr\.\w+$/ .test(url)) locale = 'fr';
-        if(/-ru\.\w+$/ .test(url)) locale = 'ru';
-        if(/-zh\.\w+$/ .test(url)) locale = 'zh';
-
-        const url_clean = new URL(url, 'https://www.cbd.int').href;
-
-        return {
-            type : mime,
-            language: locale,
-            url : url_clean
-        };
+        return { language: 'en', type: 'text/html', url : new URL(url, 'https://www.cbd.int').href };
     });
 }
 
