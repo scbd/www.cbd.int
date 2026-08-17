@@ -48,6 +48,14 @@ export default ['$scope', '$http', '$timeout', '$q', function ($scope, $http, $t
 
                 $scope.results = results;
                 $scope.meeting = results.numFound ? results.docs[0] : null;
+            })
+            .catch(function(){
+
+                if(pending !== text) return; // stale response
+
+                searching = null;
+
+                $scope.results = { numFound : 0, docs : [] };
             });
         }
 
