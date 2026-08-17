@@ -5,9 +5,7 @@
             :files="notification.files"
             class="visible-xs pull-right" 
             style="padding-top:10px" />
-        <b v-if="notification.number">({{ notification.number }})</b>
-        <i>{{ notification.symbol }}</i> 
-        <!-- <i v-if="notification.number">({{ notification.number }})</i> -->
+        <i>{{ notification.number }} - {{ notification.symbol }}</i> 
         <div
             v-html="titleHtml"
             :title="title"
@@ -45,7 +43,8 @@ export default {
             return div.innerText;
         },
         titleHtml() {
-            const html = lstring(notification.title);
+            const { notification } = this;
+            const html = lstring((notification||{}).title);
             return sanitizeHtml(html);
         },
         fmtNotificationDate() {

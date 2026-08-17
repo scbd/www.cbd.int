@@ -47,7 +47,7 @@ async function refresh() {
 
     const notificationList = await this.lookupNotifications(codes);
     
-    this.notificationList = codes.map(c => notificationList.find(n => n.symbol === c) || {symbol: c, files: []})
+    this.notificationList = codes.map(c => notificationList.find(n => n.number === c || n.symbol === c) || {symbol: c, files: []})
 }
 
 async function lookupNotifications(codes) {
