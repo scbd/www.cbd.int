@@ -31,6 +31,15 @@
           </div>
         </div>
 
+        <div class="card bg-warning" ng-if="results && !results.numFound">
+          <div class="card-header">
+            <h3 class="card-title">{{symbol}}</h3>
+          </div>
+          <div class="card-body">
+            Notification not found
+          </div>
+        </div>
+
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" aria-label="Close" ng-click="closeThisDialog()">Cancel</button>

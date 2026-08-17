@@ -7,6 +7,7 @@ export default ['$scope', '$http', '$timeout', '$q', function ($scope, $http, $t
         $timeout(function(){ $('form #symbol').focus(); }, 100);
 
         var searching = null;
+        var pending;
 
         $scope.search = search;
         $scope.save = function() { $q.when(searching).then(save); } ;
@@ -18,21 +19,26 @@ export default ['$scope', '$http', '$timeout', '$q', function ($scope, $http, $t
 
             searching = null;
 
-            if(!text) {
-                $scope.results = null;
-                $scope.notification = null;
-            }
+            $scope.results = null;
+            $scope.notification = null;
 
-            text = solrEscape(text).toUpperCase();
+            pending = text = (text||'').trim();
+
+            if(!text)
+                return;
+
+            var query = solrEscape(text).toUpperCase();
 
             var qsParams = {
-                q : "schema_s:notification AND (symbol_s:"+text+"* OR reference_t:"+text+"*)" + " AND (symbol_t:*)",
+                q : "schema_s:notification AND (symbol_s:"+query+"* OR reference_t:"+query+"*)" + " AND (symbol_t:*)",
                 fl : "symbol_?,reference_?,title_?",
                 sort: "symbol_s ASC",
                 rows: 1
             };
 
             searching = $http.get("/api/v2013/index", { params : qsParams, cache : true }).then(function(res){
+
+                if(pending !== text) return; // stale response
 
                 searching = null;
                 var results = res.data.response;
