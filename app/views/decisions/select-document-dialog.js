@@ -1,5 +1,8 @@
 import $ from 'jquery'
 
+import '~/filters/lstring'
+import '~/directives/meetings/documents/document-files'
+
 export { default as template } from './select-document-dialog.html'
 
 export default ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
@@ -9,6 +12,8 @@ export default ['$scope', '$http', '$timeout', function ($scope, $http, $timeout
         $scope.search = search;
         $scope.save = save;
 
+        var pending;
+
 		//==========================
 		//
 		//==========================
@@ -16,30 +21,38 @@ export default ['$scope', '$http', '$timeout', function ($scope, $http, $timeout
 
             delete $scope.document;
 
-            if(/^http[s]?\:/.test(text)) {
+            var symbol = (text||'').trim();
+
+            pending = symbol;
+
+            if(!symbol)
+                return;
+
+            if(/^http[s]?\:/i.test(symbol)) {
 
                 $scope.document = {
-                    symbol_s : text,
-                    url : text
+                    symbol : symbol,
+                    files  : [{ language : 'en', url : symbol, type : 'text/html' }]
                 }
 
                 return;
             }
 
-            var qsParams = {
-                q : "schema_s:meetingDocument AND symbol_s:"+solrEscape(text.toUpperCase()),
-                fl : "symbol_?,reference_?,title_?,date_*,url_*",
-                sort: "symbol_s ASC",
-                rows: 1
-            };
+            symbol = symbol.toUpperCase();
 
-            $http.get("/api/v2013/index", { params : qsParams, cache : true }).then(function(res){
+            $http.get("/api/v2016/documents", { cache : true, params : { q : { symbol : symbol }, fo : 1 } })
+                .then(function(res){
 
-                var results = res.data.response;
+                    if(pending.toUpperCase() !== symbol) return; // stale response
 
-                if(results.numFound) $scope.document = results.docs[0];
-                else                 $scope.document = { symbol_s : text.toUpperCase(), notFound : true };
-            });
+                    $scope.document = res.data;
+                })
+                .catch(function(){
+
+                    if(pending.toUpperCase() !== symbol) return; // stale response
+
+                    $scope.document = { symbol : symbol, notFound : true };
+                });
         }
 
 		//==========================
@@ -47,47 +60,9 @@ export default ['$scope', '$http', '$timeout', function ($scope, $http, $timeout
 		//==========================
         function save() {
 
-            if(!$scope.document)
+            if(!$scope.document || $scope.document.notFound)
                 return;
 
-            $scope.closeThisDialog($scope.document.symbol_s || $scope.document)
+            $scope.closeThisDialog($scope.document.symbol)
         }
-
-		//==========================
-		//
-		//==========================
-		function solrEscape(value) {
-
-			if(value===undefined) throw "Value is undefined";
-			if(value===null)      throw "Value is null";
-			if(value==="")        throw "Value is null";
-
-			if(typeof(value) == "number") value = value.toString();
-			if(value instanceof Date)     value = value.toISOString();
-
-			//TODO add more types
-
-			value = value.toString();
-
-			value = value.replace(/\\/g,   '\\\\');
-			value = value.replace(/\+/g,   '\\+');
-			value = value.replace(/\-/g,   '\\-');
-			value = value.replace(/\&\&/g, '\\&&');
-			value = value.replace(/\|\|/g, '\\||');
-			value = value.replace(/\!/g,   '\\!');
-			value = value.replace(/\(/g,   '\\(');
-			value = value.replace(/\)/g,   '\\)');
-			value = value.replace(/\{/g,   '\\{');
-			value = value.replace(/\}/g,   '\\}');
-			value = value.replace(/\[/g,   '\\[');
-			value = value.replace(/\]/g,   '\\]');
-			value = value.replace(/\^/g,   '\\^');
-			value = value.replace(/\"/g,   '\\"');
-			value = value.replace(/\~/g,   '\\~');
-			value = value.replace(/\*/g,   '\\*');
-			value = value.replace(/\?/g,   '\\?');
-			value = value.replace(/\:/g,   '\\:');
-
-			return value;
-		}
 	}];

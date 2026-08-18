@@ -75,6 +75,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         $scope.commentResources = [];
         $scope.selectDecision = selectDecision;
         $scope.selectMeeting  = selectMeeting;
+        $scope.selectNotification = selectNotification;
         $scope.selectMeetingDocument = selectMeetingDocument;
         $scope.actionEdit  = edit;
         $scope.isEditable  = isEditable;
@@ -453,7 +454,9 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         //===========================
         //
         //===========================
-        function selectMeeting() {
+        function selectMeeting(field) {
+
+            field = field || 'outcomes';
 
             openDialog(import('./select-meeting-dialog'), { showClose: false }).then(function(dialog){
 
@@ -462,9 +465,28 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
                     if(!res.value)
                         return;
 
-                    $scope.element.outcomes = $scope.element.outcomes || [];
+                    $scope.element[field] = $scope.element[field] || [];
 
-                    addTo(mettingUrlToCode(res.value.symbol), $scope.element.outcomes);
+                    addTo(mettingUrlToCode(res.value.symbol), $scope.element[field]);
+                });
+            });
+        }
+
+        //===========================
+        //
+        //===========================
+        function selectNotification() {
+
+            openDialog(import('./select-notification-dialog'), { showClose: false }).then(function(dialog){
+
+                dialog.closePromise.then(function(res){
+
+                    if(!res.value)
+                        return;
+
+                    $scope.element.notifications = $scope.element.notifications || [];
+
+                    addTo(res.value.symbol, $scope.element.notifications);
                 });
             });
         }

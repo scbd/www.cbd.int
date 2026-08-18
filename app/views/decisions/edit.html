@@ -601,8 +601,40 @@
                                     </div>
                                 </div>
                                 <button ng-if="::canEdit" class="btn btn-primary btn-xs"
-                                    ng-disabled="element.nodeType!='paragraph'" ng-click="selectMeeting()">add an
+                                    ng-disabled="element.nodeType!='paragraph'" ng-click="selectMeeting('outcomes')">add an
                                     outcome</button>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Related meetings</label><br>
+                                <div class="panel panel-default" style="margin-bottom:4px"
+                                    ng-repeat="item in element.meetings|orderBy">
+                                    <div class="panel-body" style="padding:12px;font-size:0.9em">
+                                        <button ng-if="::canEdit" class="btn btn-outline-danger btn-xs pull-right"
+                                            style="margin: -9px;" ng-click="removeFrom(item, element.meetings)"><i
+                                                class="fa fa-minus-circle"></i></button>
+                                        <decision-meeting symbol="item"></decision-meeting>
+                                    </div>
+                                </div>
+                                <button ng-if="::canEdit" class="btn btn-primary btn-xs"
+                                    ng-disabled="element.nodeType!='paragraph'" ng-click="selectMeeting('meetings')">add a
+                                    meeting</button>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Related notifications</label><br>
+                                <div class="panel panel-default" style="margin-bottom:4px"
+                                    ng-repeat="item in element.notifications|orderBy">
+                                    <div class="panel-body" style="padding:12px;font-size:0.9em">
+                                        <button ng-if="::canEdit" class="btn btn-outline-danger btn-xs pull-right"
+                                            style="margin: -9px;" ng-click="removeFrom(item, element.notifications)"><i
+                                                class="fa fa-minus-circle"></i></button>
+                                        <decision-notification symbol="item"></decision-notification>
+                                    </div>
+                                </div>
+                                <button ng-if="::canEdit" class="btn btn-primary btn-xs"
+                                    ng-disabled="element.nodeType!='paragraph'" ng-click="selectNotification()">add a
+                                    notification</button>
                             </div>
 
                         </div>

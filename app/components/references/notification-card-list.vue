@@ -47,14 +47,14 @@ async function refresh() {
 
     const notificationList = await this.lookupNotifications(codes);
     
-    this.notificationList = codes.map(c => notificationList.find(n => n.symbol === c) || {symbol: c, files: []})
+    this.notificationList = codes.map(c => notificationList.find(n => n.number === c || n.symbol === c) || {symbol: c, files: []})
 }
 
 async function lookupNotifications(codes) {
     if(!codes || codes.length === 0) return [];
 
     const q = `symbol_s: (${codes.map(solr.escape).join(' or ')})`
-    const fl = "id, symbol_s,reference_s,title_t,date_dt,url_ss"
+    const fl = "id, symbol_s,reference_s,title_t,date_dt,url_ss,files_ss"
 
     const res = await this.api.getNotifications({ q, fl, cache: true });
 
@@ -67,39 +67,42 @@ async function lookupNotifications(codes) {
             type:  'notification',
             status : 'public',
             title : { en : n.title_t },
-            files : urlToFiles(n.url_ss)
+            url :   absoluteUrl((n.url_ss||[])[0]),
+            files : parseFiles(n.files_ss)
         });
     });
-    
+
     return results || [];
 }
 
-function urlToFiles(url_ss) {
+// files_ss holds a single JSON string containing the array of document descriptors.
+// The landing page (url_ss) is not a file — it is linked from the card itself.
+function parseFiles(files_ss) {
 
-    return _.map(url_ss||[], function(url){
+    const [json] = files_ss || [];
 
-        var mime;
-        var locale;
+    if(!json) return [];
 
-        if(/\.pdf$/    .test(url)) mime = 'application/pdf';
-        if(/\.doc$/    .test(url)) mime = 'application/msword';
-        if(/\.docx$/   .test(url)) mime = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    let files;
 
-        if(/-ar\.\w+$/ .test(url)) locale = 'ar';
-        if(/-en\.\w+$/ .test(url)) locale = 'en';
-        if(/-es\.\w+$/ .test(url)) locale = 'es';
-        if(/-fr\.\w+$/ .test(url)) locale = 'fr';
-        if(/-ru\.\w+$/ .test(url)) locale = 'ru';
-        if(/-zh\.\w+$/ .test(url)) locale = 'zh';
+    try {
+        files = JSON.parse(json);
+    }
+    catch(err) {
+        console.error('Unable to parse notification files_ss', err);
+        return [];
+    }
 
-        const url_clean = new URL(url, 'https://www.cbd.int').href;
+    return _.map(files || [], f => ({
+        ...f,
+        language : f.language || 'en',
+        url      : absoluteUrl(f.url)
+    }));
+}
 
-        return {
-            type : mime,
-            language: locale,
-            url : url_clean
-        };
-    });
+function absoluteUrl(url) {
+
+    return url ? new URL(url, 'https://www.cbd.int').href : undefined;
 }
 
 </script>

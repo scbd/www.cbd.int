@@ -5,9 +5,13 @@
             :files="notification.files"
             class="visible-xs pull-right" 
             style="padding-top:10px" />
-        <b v-if="notification.number">({{ notification.number }})</b>
-        <i>{{ notification.symbol }}</i> 
-        <!-- <i v-if="notification.number">({{ notification.number }})</i> -->
+        <b>
+            <a v-if="notification.url" :href="notification.url" target="_blank">
+                {{ identifier }}
+                <i class="fa fa-external-link" aria-hidden="true"></i>
+            </a>
+            <template v-else>{{ identifier }}</template>
+        </b>
         <div
             v-html="titleHtml"
             :title="title"
@@ -17,8 +21,9 @@
             {{ fmtNotificationDate }}
         </div>
         <document-files
-            :files="notification.files" 
-            class="hidden-xs" 
+            v-if="notification.files.length > 0"
+            :files="notification.files"
+            class="hidden-xs"
             style="padding-top:10px" />
   </div>
 </template>
@@ -39,13 +44,19 @@ export default {
         }
     },
     computed: {
+        identifier() {
+            const { notification } = this;
+            const prefix = (notification.number && notification.number !== notification.symbol) ? (notification.number + ' - ') : '';
+            return prefix + (notification.symbol || '');
+        },
         title() {
             const div = document.createElement('div')
             div.innerHTML = this.titleHtml;
             return div.innerText;
         },
         titleHtml() {
-            const html = lstring(notification.title);
+            const { notification } = this;
+            const html = lstring((notification||{}).title);
             return sanitizeHtml(html);
         },
         fmtNotificationDate() {

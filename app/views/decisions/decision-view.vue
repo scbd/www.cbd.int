@@ -233,8 +233,22 @@
 							</dd>
 						</div>
 
+						<div v-if="meetings && meetings.length > 0">
+							<dt>Related meetings</dt>
+							<dd>
+								<meeting-card-list :meetings="meetings"></meeting-card-list>
+							</dd>
+						</div>
+
+						<div v-if="notifications && notifications.length > 0">
+							<dt>Related notifications</dt>
+							<dd>
+								<notification-card-list :notifications="notifications"></notification-card-list>
+							</dd>
+						</div>
+
 						<div v-if="documents && documents.length > 0">
-							<dt>Documents</dt>
+							<dt>Related documents</dt>
 							<dd>
 								<meeting-document-card-list :documents="documents"></meeting-document-card-list>
 							</dd>
@@ -270,6 +284,7 @@ import gbfGoals from '~/data/gbf-targets/goals.json';
 import DocumentFiles from '~/components/references/document-files.vue';
 import DecisionCardList from '~/components/references/decision-card-list.vue';
 import MeetingCardList from '~/components/references/meeting-card-list.vue';
+import NotificationCardList from '~/components/references/notification-card-list.vue';
 import MeetingDocumentCardList from '~/components/references/meeting-document-card-list.vue';
 import term from '~/filters/term.js';
 import languages from '~/data/languages.js';
@@ -288,6 +303,7 @@ export default {
 		DocumentFiles,
 		DecisionCardList,
 		MeetingCardList,
+		NotificationCardList,
 		MeetingDocumentCardList,
 		DecisionViewHelp
 	},
@@ -375,7 +391,22 @@ export default {
 			const outcomes = getTags(src, 'outcomes') || [];
 
 			return outcomes;
-		},		
+		},
+		meetings() {
+			const {decision, selectedNode} = this;
+
+			const src = findNode(decision, selectedNode) || decision;
+
+			return getTags(src, 'meetings') || [];
+		},
+		notifications() {
+			const {decision, selectedNode} = this;
+
+			const src = findNode(decision, selectedNode) || decision;
+
+			return getTags(src, 'notifications') || [];
+		},
+
 		decisions() {
 			const {decision, selectedNode} = this;
 
