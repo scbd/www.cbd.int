@@ -78,6 +78,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         $scope.selectMeeting  = selectMeeting;
         $scope.selectNotification = selectNotification;
         $scope.selectMeetingDocument = selectMeetingDocument;
+        $scope.selectOutcome = selectOutcome;
         $scope.referenceType = referenceType;
         $scope.actionEdit  = edit;
         $scope.isEditable  = isEditable;
@@ -210,10 +211,36 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         //
         //===========================
 
-        async function save() {
+        function save() {
+
+            return saveChanges().catch(function(err){
+
+                console.error(err);
+
+                alert(apiErrorMessage(err));
+            });
+        }
+
+        //===========================
+        //
+        //===========================
+        function apiErrorMessage(err) {
+
+            var data    = (err||{}).response ? err.response.data : ((err||{}).data || err);
+            var details = ((data||{}).error||{}).details;
+
+            if(details && details.length)
+                return details.map(function(d){ return d.message; }).join('\n');
+
+            return (data||{}).message || (data||{}).error || (err||{}).message || 'Unable to save';
+        }
+
+        //===========================
+        //
+        //===========================
+        async function saveChanges() {
             if(!canEdit()) {
-                alert("Unauthorized to save");
-                throw new Error("unauthorized to save");
+                throw new Error("Unauthorized to save");
             }
 
             const {selectedNode, element, decision, subjects, aichiTargets, gbfTargets, gbfGoals} = $scope;
@@ -422,9 +449,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             });
         }
 
-        function selectMeetingDocument(field) {
-
-            field = field || 'documents';
+        function selectMeetingDocument() {
 
             openDialog(import('./select-document-dialog'), { showClose: false }).then(function(dialog){
 
@@ -433,9 +458,27 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
                     if(!res.value)
                         return;
 
-                    $scope.element[field] = $scope.element[field] || [];
+                    addTo(res.value, $scope.element.documents);
+                });
+            });
+        }
 
-                    addTo(res.value, $scope.element[field]);
+        //===========================
+        // Accepts any outcome reference — meeting, document, notification or link.
+        // The dialog detects the type from the code (see ~/util/reference-type).
+        //===========================
+        function selectOutcome() {
+
+            openDialog(import('./select-outcome-dialog'), { showClose: false }).then(function(dialog){
+
+                dialog.closePromise.then(function(res){
+
+                    if(!res.value)
+                        return;
+
+                    $scope.element.outcomes = $scope.element.outcomes || [];
+
+                    addTo(res.value, $scope.element.outcomes);
                 });
             });
         }
@@ -481,9 +524,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         //===========================
         //
         //===========================
-        function selectNotification(field) {
-
-            field = field || 'notifications';
+        function selectNotification() {
 
             openDialog(import('./select-notification-dialog'), { showClose: false }).then(function(dialog){
 
@@ -492,9 +533,9 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
                     if(!res.value)
                         return;
 
-                    $scope.element[field] = $scope.element[field] || [];
+                    $scope.element.notifications = $scope.element.notifications || [];
 
-                    addTo(res.value.symbol, $scope.element[field]);
+                    addTo(res.value.symbol, $scope.element.notifications);
                 });
             });
         }

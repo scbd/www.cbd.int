@@ -611,14 +611,8 @@
                                     </div>
                                 </div>
                                 <button ng-if="::canEdit" class="btn btn-primary btn-xs"
-                                    ng-disabled="element.nodeType!='paragraph'" ng-click="selectMeeting('outcomes')">add a
-                                    meeting / link</button>
-                                <button ng-if="::canEdit" class="btn btn-primary btn-xs"
-                                    ng-disabled="element.nodeType!='paragraph'" ng-click="selectMeetingDocument('outcomes')">add a
-                                    document</button>
-                                <button ng-if="::canEdit" class="btn btn-primary btn-xs"
-                                    ng-disabled="element.nodeType!='paragraph'" ng-click="selectNotification('outcomes')">add a
-                                    notification</button>
+                                    ng-disabled="element.nodeType!='paragraph'" ng-click="selectOutcome()">add an
+                                    outcome</button>
                             </div>
 
                             <div class="form-group">
