@@ -217,22 +217,10 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
 
                 console.error(err);
 
-                alert(apiErrorMessage(err));
+                var joi = (((err||{}).response||{}).data||{}).error; // validation errors detail the offending field
+
+                alert(joi && joi.details ? joi.details.map(function(d){ return d.message; }).join('\n') : (err.message||err));
             });
-        }
-
-        //===========================
-        //
-        //===========================
-        function apiErrorMessage(err) {
-
-            var data    = (err||{}).response ? err.response.data : ((err||{}).data || err);
-            var details = ((data||{}).error||{}).details;
-
-            if(details && details.length)
-                return details.map(function(d){ return d.message; }).join('\n');
-
-            return (data||{}).message || (data||{}).error || (err||{}).message || 'Unable to save';
         }
 
         //===========================
