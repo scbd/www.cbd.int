@@ -595,14 +595,30 @@
                                     ng-repeat="item in element.outcomes|orderBy">
                                     <div class="panel-body" style="padding:12px;font-size:0.9em">
                                         <button class="btn btn-outline-danger btn-xs pull-right" style="margin: -9px;"
-                                            ng-click="removeFrom(item.symbol_s||item, element.outcomes)"><i
+                                            ng-click="removeFrom(item, element.outcomes)"><i
                                                 class="fa fa-minus-circle"></i></button>
-                                        <decision-meeting symbol="item"></decision-meeting>
+                                        <div ng-switch="referenceType(item)">
+                                            <div ng-switch-when="notification">
+                                                <decision-notification symbol="item"></decision-notification>
+                                            </div>
+                                            <div ng-switch-when="document">
+                                                <decision-meeting-document symbol="item"></decision-meeting-document>
+                                            </div>
+                                            <div ng-switch-default>
+                                                <decision-meeting symbol="item"></decision-meeting>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <button ng-if="::canEdit" class="btn btn-primary btn-xs"
-                                    ng-disabled="element.nodeType!='paragraph'" ng-click="selectMeeting('outcomes')">add an
-                                    outcome</button>
+                                    ng-disabled="element.nodeType!='paragraph'" ng-click="selectMeeting('outcomes')">add a
+                                    meeting / link</button>
+                                <button ng-if="::canEdit" class="btn btn-primary btn-xs"
+                                    ng-disabled="element.nodeType!='paragraph'" ng-click="selectMeetingDocument('outcomes')">add a
+                                    document</button>
+                                <button ng-if="::canEdit" class="btn btn-primary btn-xs"
+                                    ng-disabled="element.nodeType!='paragraph'" ng-click="selectNotification('outcomes')">add a
+                                    notification</button>
                             </div>
 
                             <div class="form-group">

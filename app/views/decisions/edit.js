@@ -22,6 +22,7 @@ import statusesList  from './data/statuses'
 import EditElement from '~/components/decisions/edit-element.vue'
 import DecisionApi from '~/api/decisions.js'
 import areEquals from '~/filters/areEquals'
+import referenceType from '~/util/reference-type'
 import 'angular-vue'
 
 export { default as template } from './edit.html'
@@ -77,6 +78,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         $scope.selectMeeting  = selectMeeting;
         $scope.selectNotification = selectNotification;
         $scope.selectMeetingDocument = selectMeetingDocument;
+        $scope.referenceType = referenceType;
         $scope.actionEdit  = edit;
         $scope.isEditable  = isEditable;
         $scope.addTo       = addTo;
@@ -420,7 +422,9 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             });
         }
 
-        function selectMeetingDocument() {
+        function selectMeetingDocument(field) {
+
+            field = field || 'documents';
 
             openDialog(import('./select-document-dialog'), { showClose: false }).then(function(dialog){
 
@@ -429,7 +433,9 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
                     if(!res.value)
                         return;
 
-                    addTo(res.value, $scope.element.documents);
+                    $scope.element[field] = $scope.element[field] || [];
+
+                    addTo(res.value, $scope.element[field]);
                 });
             });
         }
@@ -475,7 +481,9 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         //===========================
         //
         //===========================
-        function selectNotification() {
+        function selectNotification(field) {
+
+            field = field || 'notifications';
 
             openDialog(import('./select-notification-dialog'), { showClose: false }).then(function(dialog){
 
@@ -484,9 +492,9 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
                     if(!res.value)
                         return;
 
-                    $scope.element.notifications = $scope.element.notifications || [];
+                    $scope.element[field] = $scope.element[field] || [];
 
-                    addTo(res.value.symbol, $scope.element.notifications);
+                    addTo(res.value.symbol, $scope.element[field]);
                 });
             });
         }
