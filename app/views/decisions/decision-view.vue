@@ -398,13 +398,13 @@ export default {
 		// An outcome is a meeting, a document, a notification or a link.
 		// The type is not stored, it is inferred from the code (see ~/util/reference-type).
 		outcomeMeetings() {
-			return this.outcomes.filter(code => ['meeting', 'url'].includes(referenceType(code)));
+			return this.outcomes.filter(code => !!code && ['meeting', 'url'].includes(referenceType(code)));
 		},
 		outcomeDocuments() {
-			return this.outcomes.filter(code => referenceType(code) === 'document');
+ 			return this.outcomes.filter(code => !!code && referenceType(code) === 'document');
 		},
 		outcomeNotifications() {
-			return this.outcomes.filter(code => referenceType(code) === 'notification');
+			return this.outcomes.filter(code => !!code && referenceType(code) === 'notification');
 		},
 		meetings() {
 			const {decision, selectedNode} = this;

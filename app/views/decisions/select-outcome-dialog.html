@@ -9,7 +9,7 @@
         <form name="form" ng-submit="save()" novalidate>
 
             <div class="form-group">
-                <label for="symbol">Meeting, document or notification symbol, or an url</label>
+                <label for="symbol">Meeting, document or notification symbol, or a URL</label>
                 <input type="text" class="form-control" id="symbol" name="symbol" ng-model="symbol"
                     ng-model-options="{ debounce : { 'default': 300, 'blur': 0 } }">
                 <span class="help-block" ng-if="type">Detected: {{type}}</span>
@@ -41,6 +41,7 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" aria-label="Close" ng-click="closeThisDialog()">Cancel</button>
-        <button type="button" class="btn btn-primary" aria-label="Save" ng-click="save()" ng-disabled="!code">Next »</button>
+        <button type="button" class="btn btn-primary" aria-label="Save" ng-click="save()" ng-disabled="!code">Next
+            »</button>
     </div>
 </div>
