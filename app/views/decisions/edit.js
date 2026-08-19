@@ -22,6 +22,7 @@ import statusesList  from './data/statuses'
 import EditElement from '~/components/decisions/edit-element.vue'
 import DecisionApi from '~/api/decisions.js'
 import areEquals from '~/filters/areEquals'
+import referenceType from '~/util/reference-type'
 import 'angular-vue'
 
 export { default as template } from './edit.html'
@@ -77,6 +78,8 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         $scope.selectMeeting  = selectMeeting;
         $scope.selectNotification = selectNotification;
         $scope.selectMeetingDocument = selectMeetingDocument;
+        $scope.selectOutcome = selectOutcome;
+        $scope.referenceType = referenceType;
         $scope.actionEdit  = edit;
         $scope.isEditable  = isEditable;
         $scope.addTo       = addTo;
@@ -209,10 +212,24 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         //
         //===========================
 
-        async function save() {
+        function save() {
+
+            return saveChanges().catch(function(err){
+
+                console.error(err);
+
+                var joi = (((err||{}).response||{}).data||{}).error; // validation errors detail the offending field
+
+                alert(joi && joi.details ? joi.details.map(function(d){ return d.message; }).join('\n') : (err.message||err));
+            });
+        }
+
+        //===========================
+        //
+        //===========================
+        async function saveChanges() {
             if(!canEdit()) {
-                alert("Unauthorized to save");
-                throw new Error("unauthorized to save");
+                throw new Error("Unauthorized to save");
             }
 
             const {selectedNode, element, decision, subjects, aichiTargets, gbfTargets, gbfGoals} = $scope;
@@ -431,6 +448,26 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
                         return;
 
                     addTo(res.value, $scope.element.documents);
+                });
+            });
+        }
+
+        //===========================
+        // Accepts any outcome reference — meeting, document, notification or link.
+        // The dialog detects the type from the code (see ~/util/reference-type).
+        //===========================
+        function selectOutcome() {
+
+            openDialog(import('./select-outcome-dialog'), { showClose: false }).then(function(dialog){
+
+                dialog.closePromise.then(function(res){
+
+                    if(!res.value)
+                        return;
+
+                    $scope.element.outcomes = $scope.element.outcomes || [];
+
+                    addTo(res.value, $scope.element.outcomes);
                 });
             });
         }

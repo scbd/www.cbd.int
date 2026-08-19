@@ -229,7 +229,9 @@
 						<div v-if="outcomes && outcomes.length > 0">
 							<dt>Outcomes</dt>
 							<dd>
-								<meeting-card-list :meetings="outcomes"></meeting-card-list>
+								<meeting-card-list v-if="outcomeMeetings.length > 0" :meetings="outcomeMeetings"></meeting-card-list>
+								<meeting-document-card-list v-if="outcomeDocuments.length > 0" :documents="outcomeDocuments"></meeting-document-card-list>
+								<notification-card-list v-if="outcomeNotifications.length > 0" :notifications="outcomeNotifications"></notification-card-list>
 							</dd>
 						</div>
 
@@ -287,6 +289,7 @@ import MeetingCardList from '~/components/references/meeting-card-list.vue';
 import NotificationCardList from '~/components/references/notification-card-list.vue';
 import MeetingDocumentCardList from '~/components/references/meeting-document-card-list.vue';
 import term from '~/filters/term.js';
+import referenceType from '~/util/reference-type';
 import languages from '~/data/languages.js';
 import lstring from '~/filters/lstring.js';
 import DecisionViewHelp from '~/components/decisions/decision-view-help.vue';
@@ -391,6 +394,17 @@ export default {
 			const outcomes = getTags(src, 'outcomes') || [];
 
 			return outcomes;
+		},
+		// An outcome is a meeting, a document, a notification or a link.
+		// The type is not stored, it is inferred from the code (see ~/util/reference-type).
+		outcomeMeetings() {
+			return this.outcomes.filter(code => !!code && ['meeting', 'url'].includes(referenceType(code)));
+		},
+		outcomeDocuments() {
+ 			return this.outcomes.filter(code => !!code && referenceType(code) === 'document');
+		},
+		outcomeNotifications() {
+			return this.outcomes.filter(code => !!code && referenceType(code) === 'notification');
 		},
 		meetings() {
 			const {decision, selectedNode} = this;
