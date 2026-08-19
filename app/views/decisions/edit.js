@@ -132,11 +132,11 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
 
             $q.all([q0, q1, q2, q3, q4, q5]).then(function(res) {
 
-                $scope.collections.subjects        =   res[5].data.concat(res[0].data);
+                $scope.collections.subjects        =   res[0].data.concat(res[5].data);
                 $scope.collections.aichiTargets    =   res[1].data;
                 $scope.collections.gbfTargets      =   res[3].data;
                 $scope.collections.gbfGoals        =   res[4].data;
-                $scope.collections.subjectsMap     = _(res[0].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
+                $scope.collections.subjectsMap     = _($scope.collections.subjects).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
                 $scope.collections.aichiTargetsMap = _(res[1].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
                 $scope.collections.gbfTargetsMap   = _(res[3].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
                 $scope.collections.gbfGoalsMap     = _(res[4].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
@@ -187,6 +187,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             const selectedNode = _.cloneDeep(newNode);
             selectedNode.nodeType = selectedNode.annex ? 'annex' : 'paragraph';
             selectedNode.documents = selectedNode.documents || [];
+            selectedNode.subjects  = selectedNode.subjects  || [];
             
             $scope.selectedNode = selectedNode;
             $scope.element = _.cloneDeep(selectedNode);
