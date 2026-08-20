@@ -231,7 +231,7 @@
                             <div class="form-group">
                                 <label for="elementSubject">CBD Subjects</label><br>
                                 <div ng-repeat="item in self.subjects" class="input-group"
-                                    style="margin-bottom:2px;overflow-y:hidden" title="">
+                                    style="margin-bottom:2px;overflow-y:hidden" title="{{(collections.subjectsMap[item].title|lstring)||item}}">
                                     <span
                                         class="form-control">{{(collections.subjectsMap[item].title|lstring)||item}}</span>
                                     <div class="input-group-append">
@@ -408,7 +408,7 @@
                             <div class="form-group">
                                 <label for="elementSubject">Subjects</label><br>
                                 <div ng-repeat="item in self.element.subjects" class="input-group"
-                                    style="margin-bottom:2px;overflow-y:hidden" title="">
+                                    style="margin-bottom:2px;overflow-y:hidden" title="{{(collections.subjectsMap[item].title|lstring)||item}}">
                                     <span
                                         class="form-control">{{(collections.subjectsMap[item].title|lstring)||item}}</span>
                                     <div class="input-group-append">
@@ -442,7 +442,7 @@
                                 <div ng-repeat="item in element.actors" class="input-group" style="margin-bottom:2px;"
                                     title="{{collections.actorsMap[item].title||item}}"
                                     ng-disabled="element.nodeType!='paragraph'">
-                                    <span class="form-control">{{collections.actorsMap[item].code||item}}</span>
+                                    <span class="form-control">{{collections.actorsMap[item].title||item}}</span>
                                     <div class="input-group-append">
                                         <button ng-if="::canEdit" class="btn btn-outline-danger"
                                             ng-click="removeFrom(item, element.actors)"
@@ -628,8 +628,8 @@
                         </div>
                     </div>
 
-                    <hr ng-if="element.nodeType=='paragraph'" />
                     <div ng-if="element.nodeType=='paragraph'">
+                        <hr />
                         <div class="form-group">
                             <label for="exampleInputEmail1">Outcomes / proof of implementation</label><br>
                             <div class="panel panel-default" style="margin-bottom:4px"

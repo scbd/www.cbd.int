@@ -190,13 +190,13 @@ export default {
 
 function actorName(text) {
     const lowerText = this.$options.filters.lowercase(text);
-    return actors.find(a => a.code === lowerText)?.title 
+    return actors.find(a => this.$options.filters.lowercase(a.code) === lowerText)?.title 
     || this.$options.filters.uppercase(text);
 }
 
 function statusName(text) {
     const lowerText = this.$options.filters.lowercase(text);
-    return statuses.find(s => s.code === lowerText)?.title 
+    return statuses.find(s => this.$options.filters.lowercase(s.code) === lowerText)?.title 
         || this.$options.filters.uppercase(text);
 }
 
