@@ -3,6 +3,7 @@ import '~/directives/meetings/documents/document-files'
 
 import app from '~/app';
 import template from './meeting-document.html'
+import { documentSymbolQuery } from '~/services/meetings'
 
 	app.directive('decisionMeetingDocument', ['$http', '$q', function($http, $q) {
 		return {
@@ -36,7 +37,7 @@ import template from './meeting-document.html'
                         result.files.push({ language: 'en', url : code, type:'text/html' });
                     }
                     else {
-                        result = $http.get("/api/v2016/documents", { cache : true, params : { q : { symbol: code }, fo: 1 } }).then(function(res){
+                        result = $http.get("/api/v2016/documents", { cache : true, params : { q : documentSymbolQuery(code), fo: 1 } }).then(function(res){
                             return res.data;
                         });
                     }

@@ -3,6 +3,8 @@ import $ from 'jquery'
 import '~/filters/lstring'
 import '~/directives/meetings/documents/document-files'
 
+import { documentSymbolQuery } from '~/services/meetings'
+
 export { default as template } from './select-document-dialog.html'
 
 export default ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
@@ -38,18 +40,17 @@ export default ['$scope', '$http', '$timeout', function ($scope, $http, $timeout
                 return;
             }
 
-            symbol = symbol.toUpperCase();
-
-            $http.get("/api/v2016/documents", { cache : true, params : { q : { symbol : symbol }, fo : 1 } })
+            // keep the symbol as typed - legacy documents are stored mixed case (`Add.1`)
+            $http.get("/api/v2016/documents", { cache : true, params : { q : documentSymbolQuery(symbol), fo : 1 } })
                 .then(function(res){
 
-                    if(pending.toUpperCase() !== symbol) return; // stale response
+                    if(pending.toUpperCase() !== symbol.toUpperCase()) return; // stale response
 
                     $scope.document = res.data;
                 })
                 .catch(function(){
 
-                    if(pending.toUpperCase() !== symbol) return; // stale response
+                    if(pending.toUpperCase() !== symbol.toUpperCase()) return; // stale response
 
                     $scope.document = { symbol : symbol, notFound : true };
                 });

@@ -1,6 +1,6 @@
 import { LRUCache } from 'lru-cache'
 import request from 'superagent';
-import { normalizeDocumentSymbol } from '../app/services/meetings.js'
+import { documentSymbolQuery, normalizeDocumentSymbol } from '../app/services/meetings.js'
 import { mapObjectId, isObjectId } from '../app/services/object-id.js'
 import express from 'express';
 import asyncMiddleware from './async-middleware.js'
@@ -52,17 +52,13 @@ async function handleDocuments(req, res) {
 //===========================================
 async function getDocument(idOrSymbol) {
 
-    const normalizedSymbol = normalizeDocumentSymbol(idOrSymbol);
+    const cacheKey = normalizeDocumentSymbol(idOrSymbol);
 
-    if(documentsCache.get(normalizedSymbol)) return documentsCache.get(normalizedSymbol);
+    if(documentsCache.get(cacheKey)) return documentsCache.get(cacheKey);
 
     const q = isObjectId(idOrSymbol) 
       ? { _id: mapObjectId(idOrSymbol) }
-      : { $or: [ 
-            { normalizedSymbol },
-            // TODO only use normalizedSymbol when implemented on GAIA
-            { symbol:  { $in: [normalizedSymbol, idOrSymbol] } }
-        ]};
+      : documentSymbolQuery(idOrSymbol);
 
     const { body: document }  = await request.get(`${apiUrl}/api/v2016/documents`).accept('json').query({ 
         q: JSON.stringify(q),
@@ -70,7 +66,7 @@ async function getDocument(idOrSymbol) {
         fo: 1
     });
 
-    documentsCache.set(normalizedSymbol, document);
+    documentsCache.set(cacheKey, document);
 
     return document;
 }

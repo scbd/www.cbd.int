@@ -39,6 +39,21 @@ export function normalizeDocumentSymbol(symbol) {
     return symbol.toUpperCase().replace(/[^A-Z0-9\/\-\*]/gi, '').replace(/\/$/g, '');
 }
 
+// Document `symbol` is stored verbatim, so the same document may be recorded as
+// `CBD/SBI/7/3/ADD1` or `CBD/SBI/7/4/Add.1`. Match both the normalized and the raw
+// form. The API query whitelist rejects $regex, so no case-insensitive match here.
+// TODO drop the `symbol` branch once GAIA stores `normalizedSymbol` on documents
+export function documentSymbolQuery(symbols) {
+
+    const raw        = [].concat(symbols).filter(Boolean);
+    const normalized = raw.map(normalizeDocumentSymbol);
+
+    return { $or: [
+        { normalizedSymbol: { $in: normalized } },
+        { symbol:           { $in: [...new Set([...normalized, ...raw])] } },
+    ]};
+}
+
 // Sorts below every printable character and cannot occur in symbols, titles or ids,
 // so a field boundary always compares lower than field content.
 export const SORT_KEY_SEPARATOR = '\u0001';

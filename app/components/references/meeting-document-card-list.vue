@@ -15,6 +15,7 @@
 <script>
 import MeetingDocumentCard from '~/components/references/meeting-document-card.vue'
 import Api from '~/components/meetings/api.js';
+import { documentSymbolQuery } from '~/services/meetings'
 
 export default {
     name: 'MeetingDocumentCardList',
@@ -63,9 +64,8 @@ async function loadDocumentList() {
 async function lookupMeetingDocuments(codes) {
     if (!codes || codes.length === 0) return [];
 
-    codes = codes.map(c => c.toUpperCase());
-
-    const q = { symbol: { $in: [...codes] } } 
+    // keep the codes as stored - legacy documents are stored mixed case (`Add.1`)
+    const q = documentSymbolQuery(codes);
     const documents = await this.api.queryMeetingDocuments({ q, cache: true });
     return documents;
 }
