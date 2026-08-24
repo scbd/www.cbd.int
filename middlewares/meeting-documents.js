@@ -54,7 +54,9 @@ async function getDocument(idOrSymbol) {
 
     const cacheKey = normalizeDocumentSymbol(idOrSymbol);
 
-    if(documentsCache.get(cacheKey)) return documentsCache.get(cacheKey);
+    // ponytail: truthy check — no negative caching, switch to !== undefined if that changes
+    const cached = documentsCache.get(cacheKey);
+    if(cached) return cached;
 
     const q = isObjectId(idOrSymbol) 
       ? { _id: mapObjectId(idOrSymbol) }
@@ -76,7 +78,8 @@ async function getDocument(idOrSymbol) {
 //===========================================
 async function getMeeting(id) {
 
-    if(meetingsCache.get(id)) return meetingsCache.get(id);
+    const cached = meetingsCache.get(id);
+    if(cached) return cached;
 
     const { body }  = await request.get(`${apiUrl}/api/v2016/meetings`).accept('json').query({ 
         q : JSON.stringify({ _id: { $oid: id } }),
