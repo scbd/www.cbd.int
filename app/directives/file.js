@@ -3,7 +3,7 @@ import ng from 'angular';
 import mime from 'mime';
 import fileDropTemplate from './file.html';
 import sharedT from '~/i18n/shared/index.js';
-import { sniffImageType } from '~/services/data-converter.js';
+import { sniffFileType } from '~/services/data-converter.js';
 
 	app.directive('type', ['$http', '$parse','translationService', function($http, $parse, $i18n) {
 	    return {
@@ -152,16 +152,15 @@ import { sniffImageType } from '~/services/data-converter.js';
                             if(rules && !isAccepted(file, rules))
                                 return { file: file, code: attr.acceptError || "invalidFileType" };
 
-                            return sniffImageType(file).then(function(signature){
+                            return sniffFileType(file).then(function(signature){
 
-                                // not an image format we recognise - leave the call to the server
+                                // not a format we recognise - leave the call to the server
                                 if(!signature) return null;
 
                                 var claimed = normalize(mime.getType(file.name));
 
-                                // the name claims nothing, or claims something other than an image,
-                                // so there is no contradiction to act on
-                                if(claimed.indexOf('image/')!==0) return null;
+                                // the name claims nothing, so there is no contradiction to act on
+                                if(!claimed) return null;
 
                                 if(claimed === normalize(signature)) return null;
 

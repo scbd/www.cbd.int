@@ -8,9 +8,10 @@ export const Formats = {
   // image formats this browser can actually decode into an <img>; HEIC/HEIF and TIFF cannot
   export const decodableImageTypes = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'image/avif']);
 
-  // file signatures are the only reliable source of an image's format - phones
-  // routinely upload HEIC photos under a .jpg filename
-  export async function sniffImageType (data) {
+  // file signatures are the only reliable source of a file's format - phones
+  // routinely upload HEIC photos under a .jpg filename. covers the formats a
+  // passport upload accepts (PDF, JPG, PNG) plus the ones people mistakenly send
+  export async function sniffFileType (data) {
     if (!(data instanceof Blob)) return null;
 
     const bytes = new Uint8Array(await data.slice(0, 16).arrayBuffer());
@@ -19,11 +20,15 @@ export const Formats = {
 
     const ascii = (from, to) => String.fromCharCode(...bytes.slice(from, to));
 
+    if (ascii(0, 5) === '%PDF-') return 'application/pdf';
     if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return 'image/jpeg';
     if (bytes[0] === 0x89 && ascii(1, 4) === 'PNG') return 'image/png';
     if (ascii(0, 6) === 'GIF87a' || ascii(0, 6) === 'GIF89a') return 'image/gif';
     if (ascii(0, 2) === 'BM' && bytes[6] === 0 && bytes[7] === 0) return 'image/bmp';
     if (ascii(0, 4) === 'RIFF' && ascii(8, 12) === 'WEBP') return 'image/webp';
+
+    // little- and big-endian TIFF, which also covers most camera raw files
+    if (ascii(0, 4) === 'II\x2a\x00' || ascii(0, 4) === 'MM\x00\x2a') return 'image/tiff';
 
     if (ascii(4, 8) === 'ftyp') {
       const brand = ascii(8, 12);

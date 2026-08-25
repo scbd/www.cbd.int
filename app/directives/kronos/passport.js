@@ -10,7 +10,7 @@ import   nationalities               from '~/data/kronos/nationalities.js';
 import   authorities                 from '~/data/kronos/authorities.js'  ;
 import   participationT              from '~/i18n/participation/index.js' ;
 import { toFile         , toDataUrl,
-         sniffImageType , decodableImageTypes} from '~/services/data-converter.js'  ;
+         sniffFileType , decodableImageTypes} from '~/services/data-converter.js'  ;
 
 app.directive('passport', ['$http','$filter','translationService','locale','kronos',function($http, $filter, $i18n, locale, kronos) {
 
@@ -53,7 +53,7 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
 
               // the stored filename lies about the format often enough (phones upload
               // HEIC photos named .jpg), so trust the bytes and fall back to the extension
-              const type = (await sniffImageType(tBlob)) || mime.getType(passportObj.title);
+              const type = (await sniffFileType(tBlob)) || mime.getType(passportObj.title);
 
               if(!type) throw new Error('No file type given');
 
