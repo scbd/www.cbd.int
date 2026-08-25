@@ -551,6 +551,12 @@ $scope.$watch(function(){
             _kronos.error   = null;
 
             try{
+                if(!hasKronosLinksAndNoSearchText && !organizationIds.length){
+                    _kronos.contacts = [];
+                    _kronos.error    = 'Organization must be linked with kronos before contacts can be searched.';
+                    return;
+                }
+
                 const { records } = hasKronosLinksAndNoSearchText
                     ? await $http.get(kronos.baseUrl+'/api/v2018/contacts', { params: { q: { contactId } } }).then(resData)
                     : await $http.post(kronos.baseUrl+'/api/v2018/contacts/query', {
@@ -562,8 +568,9 @@ $scope.$watch(function(){
                       }).then(resData)
 
                 for (const contact of records){
-                  contact.isLinked = contactId === contact.contactId;
-                  contact.showMore = false
+                  contact.isLinked      = contactId === contact.contactId;
+                  contact.showMore      = false
+                  contact.notInMediaOrg = organizationIds.length && !organizationIds.includes(contactOrganizationId(contact));
                 }
 
                 participant.kronos.contacts = records;
@@ -575,6 +582,10 @@ $scope.$watch(function(){
                 $scope.$digest()
             }
             
+        }
+
+        function contactOrganizationId(contact){
+            return contact.organizationId || contact.organization?.organizationId || contact.organization?._id;
         }
 
         function updateOrganizationStatus(request, status){
