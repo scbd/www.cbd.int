@@ -549,16 +549,20 @@ $scope.$watch(function(){
             var _kronos = participant.kronos = participant.kronos || {};
 
             _kronos.search  = freeText;
-            _kronos.loading = true;
             _kronos.error   = null;
 
-            try{
-                if(!hasKronosLinksAndNoSearchText && !organizationIds.length){
-                    _kronos.contacts = [];
-                    _kronos.error    = 'Organization must be linked with kronos before contacts can be searched.';
-                    return;
-                }
+            // returns before the first await, so $digest() in the finally below would run
+            // inside the caller's digest - use $applyAsync instead of entering the try
+            if(!hasKronosLinksAndNoSearchText && !organizationIds.length){
+                _kronos.contacts = [];
+                _kronos.loading  = false;
+                _kronos.error    = 'Organization must be linked with kronos before contacts can be searched.';
+                return $scope.$applyAsync();
+            }
 
+            _kronos.loading = true;
+
+            try{
                 // the linked-contact lookup is deliberately not scoped by organizationIds,
                 // so a contact sitting under another organization still comes back and can be flagged
                 const query = hasKronosLinksAndNoSearchText
@@ -576,7 +580,7 @@ $scope.$watch(function(){
                 for (const contact of records){
                   contact.isLinked      = contactId === contact.contactId;
                   contact.showMore      = false
-                  contact.notInMediaOrg = organizationIds.length && !organizationIds.includes(contactOrganizationId(contact));
+                  contact.notInMediaOrg = !!organizationIds.length && !organizationIds.includes(contactOrganizationId(contact));
                   contact.registrationMismatch = contact.isLinked && !!eventIds.length &&
                                                  isAccreditedForAllEvents(contact, eventIds) !== !!participant.accredited;
                 }
