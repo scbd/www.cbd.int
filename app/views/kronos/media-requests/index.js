@@ -8,7 +8,6 @@ import '~/directives/kronos/passport'
 export { default as template } from './index.html'
 
     var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
-    var KRONOS_MEDIA_CONTACT_TYPE = '52000000cbd05ebe0000000b';
     var KRONOS_STATUS_ACCREDITED  = 2;
 
 export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter) {
@@ -571,7 +570,7 @@ $scope.$watch(function(){
 
                 const { records } = await $http.post(kronos.baseUrl+'/api/v2018/contacts/query', {
                     ...query,
-                    organizationTypeIds          : [ KRONOS_MEDIA_CONTACT_TYPE ],
+                    organizationTypeIds          : [ KRONOS_MEDIA_TYPE ],
                     registrationStatusForEventIds: eventIds,
                     limit                        : 25,
                     skip                         : 0
