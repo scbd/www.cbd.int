@@ -598,7 +598,7 @@ $scope.$watch(function(){
 
         // kronos registration status: 1 = nominated, 2 = accredited
         function isAccreditedForAllEvents(contact, eventIds){
-            const registrations = (contact.registrationStatusForEventIds || contact.registrationStatus || []).filter(Boolean);
+            const registrations = (contact.registrationStatuses || []).filter(Boolean);
 
             return eventIds.every(eventId => registrations.some(r => r.eventId === eventId && r.status === KRONOS_STATUS_ACCREDITED));
         }
