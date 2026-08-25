@@ -562,7 +562,7 @@ $scope.$watch(function(){
                 // the linked-contact lookup is deliberately not scoped by organizationIds,
                 // so a contact sitting under another organization still comes back and can be flagged
                 const query = hasKronosLinksAndNoSearchText
-                    ? { contactIds: [ contactId ] }
+                    ? { contactId }
                     : { freeText, organizationIds };
 
                 const { records } = await $http.post(kronos.baseUrl+'/api/v2018/contacts/query', {
