@@ -257,7 +257,7 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
           .then(function(c){
             conference=c
             if(conference && conference.MajorEventIDs)
-            conferenceService.getMeetings(conference.MajorEventIDs)
+            conferenceService.getMeetings(includedMeetingIds(conference))
               .then(function(meetings){
 
                 for (const aMeeting of meetings) {
@@ -271,6 +271,15 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
                 initRegOptions()
               })
           })
+
+        // Meetings listed in apps.mediaRequests.excludedMeetings are not open to
+        // media participation, so they never seed the related-meetings selection.
+        function includedMeetingIds(conference){
+          const { excludedMeetings = [] } = conference?.apps?.mediaRequests || {}
+          const excluded = excludedMeetings.map(function(id){ return id?.$oid || id })
+
+          return conference.MajorEventIDs.filter(function(id){ return !excluded.includes(id) })
+        }
 
           $scope.onUpload=onUpload
 
