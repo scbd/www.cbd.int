@@ -4,7 +4,38 @@ export const Formats = {
   };
   
   const dataUrlRe = /^data:([-\w]+\/[-+\w.]+)?(;?\w+=[-\w]+)*(;base64)?,.*/u;
-  
+
+  // image formats this browser can actually decode into an <img>; HEIC/HEIF and TIFF cannot
+  export const decodableImageTypes = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'image/avif']);
+
+  // file signatures are the only reliable source of an image's format - phones
+  // routinely upload HEIC photos under a .jpg filename
+  export async function sniffImageType (data) {
+    if (!(data instanceof Blob)) return null;
+
+    const bytes = new Uint8Array(await data.slice(0, 16).arrayBuffer());
+
+    if (bytes.length < 12) return null;
+
+    const ascii = (from, to) => String.fromCharCode(...bytes.slice(from, to));
+
+    if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return 'image/jpeg';
+    if (ascii(1, 4) === 'PNG') return 'image/png';
+    if (ascii(0, 3) === 'GIF') return 'image/gif';
+    if (ascii(0, 2) === 'BM') return 'image/bmp';
+    if (ascii(0, 4) === 'RIFF' && ascii(8, 12) === 'WEBP') return 'image/webp';
+
+    if (ascii(4, 8) === 'ftyp') {
+      const brand = ascii(8, 12);
+
+      if (['heic', 'heix', 'hevc', 'hevx', 'heim', 'heis', 'hevm', 'hevs'].includes(brand)) return 'image/heic';
+      if (['mif1', 'msf1'].includes(brand)) return 'image/heif';
+      if (['avif', 'avis'].includes(brand)) return 'image/avif';
+    }
+
+    return null;
+  }
+
   export async function toDataUrl (data) {
     if (typeof (data) === 'string' && dataUrlRe.test(data)) return data;
   
