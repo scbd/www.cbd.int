@@ -29,10 +29,14 @@ import { sniffImageType } from '~/services/data-converter.js';
 
                     $scope.$applyAsync(function(){ $scope.hasError = false; });
 
+                    // captured deliberately: a new selection replaces this FileList rather than
+                    // mutating it, so the reference stays valid across the async check below
                     var htmlFiles = element[0].files;
 
-                    // reading the file signature is async, so the rest of the handler waits on it
-                    firstRejectedFile(htmlFiles).then(function(rejected){
+                    // reading the file signature is async, so the rest of the handler waits on it.
+                    // an unreadable file is not evidence of a mismatch - upload it anyway and let
+                    // the upload surface the real error, rather than dropping it silently here
+                    firstRejectedFile(htmlFiles).catch(function(){ return null; }).then(function(rejected){
 
                         if(rejected) {
                             $scope.$applyAsync(function(){
@@ -133,6 +137,13 @@ import { sniffImageType } from '~/services/data-converter.js';
 
                     return chain;
 
+                    // .jfif and friends map to a different name for the same format
+                    function normalize(type) {
+                        type = (type||'').toLowerCase();
+
+                        return type === 'image/pjpeg'? 'image/jpeg' : type;
+                    }
+
                     function check(file) {
                         return function(rejected){
 
@@ -146,7 +157,13 @@ import { sniffImageType } from '~/services/data-converter.js';
                                 // not an image format we recognise - leave the call to the server
                                 if(!signature) return null;
 
-                                if(signature === mime.getType(file.name)) return null;
+                                var claimed = normalize(mime.getType(file.name));
+
+                                // the name claims nothing, or claims something other than an image,
+                                // so there is no contradiction to act on
+                                if(claimed.indexOf('image/')!==0) return null;
+
+                                if(claimed === normalize(signature)) return null;
 
                                 return { file: file, code: "fileTypeDoesNotMatchName" };
                             });

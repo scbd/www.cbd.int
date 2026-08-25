@@ -20,9 +20,9 @@ export const Formats = {
     const ascii = (from, to) => String.fromCharCode(...bytes.slice(from, to));
 
     if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return 'image/jpeg';
-    if (ascii(1, 4) === 'PNG') return 'image/png';
-    if (ascii(0, 3) === 'GIF') return 'image/gif';
-    if (ascii(0, 2) === 'BM') return 'image/bmp';
+    if (bytes[0] === 0x89 && ascii(1, 4) === 'PNG') return 'image/png';
+    if (ascii(0, 6) === 'GIF87a' || ascii(0, 6) === 'GIF89a') return 'image/gif';
+    if (ascii(0, 2) === 'BM' && bytes[6] === 0 && bytes[7] === 0) return 'image/bmp';
     if (ascii(0, 4) === 'RIFF' && ascii(8, 12) === 'WEBP') return 'image/webp';
 
     if (ascii(4, 8) === 'ftyp') {

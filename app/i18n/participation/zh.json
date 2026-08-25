@@ -204,6 +204,8 @@
     "nationalityIsRequired": "国籍是必填项。",
     "pressCardWorkPassIsRequired": "媒体证/工作证是必填项。",
     "passport": "护照",
+    "passportImageFormatNotSupported": "无法显示此护照图像（{type}）。请手动输入相关信息，或请参加者以 JPG 或 PNG 格式重新上传护照。",
+    "passportImageCouldNotBeLoaded": "无法加载此护照图像。请手动输入相关信息。",
     "passportIsRequired": "护照是必填项。",
     "passportNumber": "护照号码",
     "passportNumberIsRequired": "护照号码是必填项。",

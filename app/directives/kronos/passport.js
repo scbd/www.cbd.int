@@ -118,7 +118,8 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
                                     $scope.binding.imageSrc = imageSrc;
                                   });
               else
-                $scope.$applyAsync(()=> $scope.imageError = $scope.imageError || $scope.passportObj?.type || 'unknown');
+                // stop the spinner, but only blame the file when we know the format is the problem
+                $scope.$applyAsync(()=> $scope.loadFailed = !$scope.imageError);
 
             }
             finally{

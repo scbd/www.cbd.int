@@ -205,6 +205,8 @@
   "nationalityIsRequired": "La nacionalidad es un requisito.",
   "pressCardWorkPassIsRequired": "Tarjeta de prensa/pase de trabajo obligatorios.",
   "passport": "Pasaporte",
+  "passportImageFormatNotSupported": "Esta imagen del pasaporte no se puede mostrar ({type}). Introduzca los datos manualmente o pida al participante que vuelva a subir el pasaporte en formato JPG o PNG.",
+  "passportImageCouldNotBeLoaded": "No se pudo cargar esta imagen del pasaporte. Introduzca los datos manualmente.",
   "passportIsRequired": "El pasaporte es un requisito.",
   "passportNumber": "Número de pasaporte",
   "passportNumberIsRequired": "El número de pasaporte es un requisito.",
