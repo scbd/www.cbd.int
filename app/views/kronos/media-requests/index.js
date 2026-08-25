@@ -8,6 +8,7 @@ import '~/directives/kronos/passport'
 export { default as template } from './index.html'
 
     var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
+    var KRONOS_MEDIA_CONTACT_TYPE = '52000000cbd05ebe0000000b';
 
 export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter) {
         var _ctrl = this;
@@ -540,11 +541,8 @@ $scope.$watch(function(){
             const { kronosId: contactId, firstName, lastName } = participant;
 
             const freeText                      = searchText || `${firstName || ''} ${lastName || ''}` || '';
-            const limit                         = 25;
+            const organizationIds               = organization?.kronosIds || [];
             const hasKronosLinksAndNoSearchText = !searchText && contactId;
-         
-            const textQuery                     = { freeText, limit };
-            const query                         = hasKronosLinksAndNoSearchText? { contactId } : textQuery 
 
             var _kronos = participant.kronos = participant.kronos || {};
 
@@ -553,7 +551,15 @@ $scope.$watch(function(){
             _kronos.error   = null;
 
             try{
-                const { records } = await $http.get(kronos.baseUrl+'/api/v2018/contacts', { params: { q: query } }).then(resData)
+                const { records } = hasKronosLinksAndNoSearchText
+                    ? await $http.get(kronos.baseUrl+'/api/v2018/contacts', { params: { q: { contactId } } }).then(resData)
+                    : await $http.post(kronos.baseUrl+'/api/v2018/contacts/query', {
+                        freeText,
+                        organizationIds,
+                        organizationTypeIds : [ KRONOS_MEDIA_CONTACT_TYPE ],
+                        limit               : 25,
+                        skip                : 0
+                      }).then(resData)
 
                 for (const contact of records){
                   contact.isLinked = contactId === contact.contactId;
