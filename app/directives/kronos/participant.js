@@ -79,13 +79,16 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
 
           if(!$scope.binding.meeting)$scope.binding.meeting=[]
           $scope.editForm.meeting.$setValidity('required',true)
-          if($scope.meetings.length === $scope.binding.meeting.length && $scope.attending.val ) return
-          $scope.meetings.forEach(pushMeetingId)
-          
+          if(!$scope.meetings) return
+
+          // Assign rather than push: the selection stays idempotent across the
+          // repeated calls from the binding watch, and a saved id that is no
+          // longer offered (an excluded meeting) drops out instead of persisting.
+          $scope.binding.meeting = $scope.meetings.map(toMeetingId)
         }
-        
-        function pushMeetingId(meeting){
-          $scope.binding.meeting.push(meeting._id)
+
+        function toMeetingId(meeting){
+          return meeting._id
         }
         function resetForm(){
           if($scope.editForm){
@@ -274,11 +277,10 @@ app.directive('participant', ['$http','$timeout','conferenceService','$filter','
 
         // Meetings listed in apps.mediaRequests.excludedMeetings are not open to
         // media participation, so they never seed the related-meetings selection.
-        function includedMeetingIds(conference){
-          const { excludedMeetings = [] } = conference?.apps?.mediaRequests || {}
-          const excluded = excludedMeetings.map(function(id){ return id?.$oid || id })
+        function includedMeetingIds(aConference){
+          const { excludedMeetings = [] } = aConference?.apps?.mediaRequests || {}
 
-          return conference.MajorEventIDs.filter(function(id){ return !excluded.includes(id) })
+          return aConference.MajorEventIDs.filter(function(id){ return !excludedMeetings.includes(id) })
         }
 
           $scope.onUpload=onUpload
