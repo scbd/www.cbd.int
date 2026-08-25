@@ -73,5 +73,5 @@
     "fileEncrypted": "文件将加密",
     "invalidFileType": "不接受此文件类型",
     "invalidPassportFileType": "仅接受 PDF、JPG 和 PNG 文件",
-    "fileTypeDoesNotMatchName": "此文件的格式与其文件名不符（例如以 .jpg 保存的 HEIC 照片）。请转换为 JPG、PNG 或 PDF 后重新上传。"
+    "fileTypeDoesNotMatchName": "此文件的格式与其文件名不符（例如以 .jpg 保存的 HEIC 照片）。请转换为 PDF、JPG 或 PNG 后重新上传。"
   }

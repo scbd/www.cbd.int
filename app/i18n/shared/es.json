@@ -72,5 +72,5 @@
   "fileEncrypted": "El archivo será encriptado.",
   "invalidFileType": "Este tipo de archivo no es aceptado.",
   "invalidPassportFileType": "Solo se aceptan archivos PDF, JPG y PNG.",
-  "fileTypeDoesNotMatchName": "Este archivo no tiene el formato que indica su nombre (por ejemplo, una foto HEIC guardada como .jpg). Conviertalo a JPG, PNG o PDF y vuelva a subirlo."
+  "fileTypeDoesNotMatchName": "Este archivo no tiene el formato que indica su nombre (por ejemplo, una foto HEIC guardada como .jpg). Conviertalo a PDF, JPG o PNG y vuelva a subirlo."
 }
