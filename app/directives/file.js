@@ -125,8 +125,8 @@ import { sniffFileType } from '~/services/data-converter.js';
 
                     return err
                 }
-                // resolves with the first file we refuse - either the accept list rejects it,
-                // or its bytes say it is a different image format than its name claims
+                // resolves with the first file we refuse - the accept list rejects it, its bytes
+                // say a format the accept list does not allow, or its bytes and its name disagree
                 function firstRejectedFile(files) {
                     var accept = element.attr('accept');
                     var rules  = accept? accept.split(',').map(function(r){ return r.trim().toLowerCase(); }).filter(Boolean) : null;
@@ -157,6 +157,11 @@ import { sniffFileType } from '~/services/data-converter.js';
                                 // not a format we recognise - leave the call to the server
                                 if(!signature) return null;
 
+                                // the bytes say it is a format this control does not accept,
+                                // whatever the name and the browser-reported type claim
+                                if(!typeAccepted(normalize(signature), rules))
+                                    return { file: file, code: attr.acceptError || "invalidFileType" };
+
                                 var claimed = normalize(mime.getType(file.name));
 
                                 // the name claims nothing, so there is no contradiction to act on
@@ -168,6 +173,22 @@ import { sniffFileType } from '~/services/data-converter.js';
                             });
                         };
                     }
+                }
+
+                // matches a media type against the media-type rules of an accept list.
+                // extension rules are ignored here - bytes carry no filename - and an accept
+                // list of extensions only cannot contradict a signature, so it accepts
+                function typeAccepted(type, rules) {
+                    if(!rules) return true;
+
+                    var mimeRules = rules.filter(function(rule){ return rule.charAt(0)!=='.'; });
+
+                    if(!mimeRules.length) return true;
+
+                    return mimeRules.some(function(rule){
+                        if(rule.slice(-2)==='/*') return type.indexOf(rule.slice(0,-1))===0;
+                        return type===rule;
+                    });
                 }
 
                 function isAccepted(file, rules) {
