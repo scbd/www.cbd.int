@@ -80,6 +80,7 @@
   "serviceUnavailable":"The service is temporarily unavailable",
   "invalidFileType":"This file type is not accepted.",
   "invalidPassportFileType":"Only PDF, JPG, PNG and TIFF files are accepted.",
+  "fileTypeDoesNotMatchName":"This file is not the format its name claims (for example a HEIC photo saved as .jpg). Please convert it to JPG, PNG or PDF and upload it again.",
   "serviceNotAvailable": "Service not available",
   "serviceIsNotAvailableAt": "Service is not available at",
   "serviceNotAvailableOrDocumentWasNotFound": "Service not available or document was not found",

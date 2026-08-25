@@ -1,7 +1,9 @@
 import app from '~/app';
 import ng from 'angular';
-import fileDropTemplate from './file.html'; 
+import mime from 'mime';
+import fileDropTemplate from './file.html';
 import sharedT from '~/i18n/shared/index.js';
+import { sniffImageType } from '~/services/data-converter.js';
 
 	app.directive('type', ['$http', '$parse','translationService', function($http, $parse, $i18n) {
 	    return {
@@ -29,21 +31,28 @@ import sharedT from '~/i18n/shared/index.js';
 
                     var htmlFiles = element[0].files;
 
-                    var invalidFile = firstInvalidFile(htmlFiles);
+                    // reading the file signature is async, so the rest of the handler waits on it
+                    firstRejectedFile(htmlFiles).then(function(rejected){
 
-                    if(invalidFile) {
-                        $scope.$applyAsync(function(){
-                            var err = translateError({ code: attr.acceptError || "invalidFileType", message: invalidFile.name, statusCode: 415 });
-                            err.msg.body = invalidFile.name;
-                            $scope.hasError = err;
-                        });
+                        if(rejected) {
+                            $scope.$applyAsync(function(){
+                                var err = translateError({ code: rejected.code, message: rejected.file.name, statusCode: 415 });
+                                err.msg.body = rejected.file.name;
+                                $scope.hasError = err;
+                            });
 
-                        setViewValue([]); // drop any previously-selected file from the model
+                            setViewValue([]); // drop any previously-selected file from the model
 
-                        reset(); // always clear a rejected selection so the same file can be re-picked
+                            reset(); // always clear a rejected selection so the same file can be re-picked
 
-                        return;
-                    }
+                            return;
+                        }
+
+                        upload(htmlFiles);
+                    });
+                });
+
+                function upload(htmlFiles) {
 
                     if(isAutoUpload())
                     {
@@ -98,7 +107,7 @@ import sharedT from '~/i18n/shared/index.js';
 
                     if(isAutoReset())
                         reset();
-                });
+                }
 
                 function translateError(err){
                     if(!err) return 
@@ -112,19 +121,37 @@ import sharedT from '~/i18n/shared/index.js';
 
                     return err
                 }
-                function firstInvalidFile(files) {
+                // resolves with the first file we refuse - either the accept list rejects it,
+                // or its bytes say it is a different image format than its name claims
+                function firstRejectedFile(files) {
                     var accept = element.attr('accept');
+                    var rules  = accept? accept.split(',').map(function(r){ return r.trim().toLowerCase(); }).filter(Boolean) : null;
+                    var chain  = Promise.resolve(null);
 
-                    if(!accept) return null;
+                    for(var i=0; i<files.length; ++i)
+                        chain = chain.then(check(files[i]));
 
-                    var rules = accept.split(',').map(function(r){ return r.trim().toLowerCase(); }).filter(Boolean);
+                    return chain;
 
-                    for(var i=0; i<files.length; ++i) {
-                        if(!isAccepted(files[i], rules))
-                            return files[i];
+                    function check(file) {
+                        return function(rejected){
+
+                            if(rejected) return rejected;
+
+                            if(rules && !isAccepted(file, rules))
+                                return { file: file, code: attr.acceptError || "invalidFileType" };
+
+                            return sniffImageType(file).then(function(signature){
+
+                                // not an image format we recognise - leave the call to the server
+                                if(!signature) return null;
+
+                                if(signature === mime.getType(file.name)) return null;
+
+                                return { file: file, code: "fileTypeDoesNotMatchName" };
+                            });
+                        };
                     }
-
-                    return null;
                 }
 
                 function isAccepted(file, rules) {
