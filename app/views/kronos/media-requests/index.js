@@ -9,6 +9,7 @@ export { default as template } from './index.html'
 
     var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
     var KRONOS_MEDIA_CONTACT_TYPE = '52000000cbd05ebe0000000b';
+    var KRONOS_STATUS_ACCREDITED  = 2;
 
 export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter) {
         var _ctrl = this;
@@ -542,6 +543,7 @@ $scope.$watch(function(){
 
             const freeText                      = searchText || `${firstName || ''} ${lastName || ''}` || '';
             const organizationIds               = organization?.kronosIds || [];
+            const eventIds                      = participant.meeting || [];
             const hasKronosLinksAndNoSearchText = !searchText && contactId;
 
             var _kronos = participant.kronos = participant.kronos || {};
@@ -557,20 +559,26 @@ $scope.$watch(function(){
                     return;
                 }
 
-                const { records } = hasKronosLinksAndNoSearchText
-                    ? await $http.get(kronos.baseUrl+'/api/v2018/contacts', { params: { q: { contactId } } }).then(resData)
-                    : await $http.post(kronos.baseUrl+'/api/v2018/contacts/query', {
-                        freeText,
-                        organizationIds,
-                        organizationTypeIds : [ KRONOS_MEDIA_CONTACT_TYPE ],
-                        limit               : 25,
-                        skip                : 0
-                      }).then(resData)
+                // the linked-contact lookup is deliberately not scoped by organizationIds,
+                // so a contact sitting under another organization still comes back and can be flagged
+                const query = hasKronosLinksAndNoSearchText
+                    ? { contactIds: [ contactId ] }
+                    : { freeText, organizationIds };
+
+                const { records } = await $http.post(kronos.baseUrl+'/api/v2018/contacts/query', {
+                    ...query,
+                    organizationTypeIds          : [ KRONOS_MEDIA_CONTACT_TYPE ],
+                    registrationStatusForEventIds: eventIds,
+                    limit                        : 25,
+                    skip                         : 0
+                  }).then(resData)
 
                 for (const contact of records){
                   contact.isLinked      = contactId === contact.contactId;
                   contact.showMore      = false
                   contact.notInMediaOrg = organizationIds.length && !organizationIds.includes(contactOrganizationId(contact));
+                  contact.registrationMismatch = contact.isLinked && !!eventIds.length &&
+                                                 isAccreditedForAllEvents(contact, eventIds) !== !!participant.accredited;
                 }
 
                 participant.kronos.contacts = records;
@@ -586,6 +594,13 @@ $scope.$watch(function(){
 
         function contactOrganizationId(contact){
             return contact.organizationId || contact.organization?.organizationId || contact.organization?._id;
+        }
+
+        // kronos registration status: 1 = nominated, 2 = accredited
+        function isAccreditedForAllEvents(contact, eventIds){
+            const registrations = (contact.registrationStatusForEventIds || contact.registrationStatus || []).filter(Boolean);
+
+            return eventIds.every(eventId => registrations.some(r => r.eventId === eventId && r.status === KRONOS_STATUS_ACCREDITED));
         }
 
         function updateOrganizationStatus(request, status){

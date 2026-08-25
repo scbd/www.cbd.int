@@ -884,7 +884,7 @@ a.label:focus {
                                                         <td ng-show="participant.meeting.length" style="border-left:1px solid #eee">                                                        
                                                             <table class="table table-striped table-hover table-condensed">
                                                                 <tbody ng-repeat="kctc in participant.kronos.contacts">
-                                                                    <tr ng-class="{'active':kctc.isLinked && !kctc.notInMediaOrg, 'danger':kctc.notInMediaOrg}">
+                                                                    <tr ng-class="{'active':kctc.isLinked && !kctc.notInMediaOrg && !kctc.registrationMismatch, 'danger':kctc.notInMediaOrg || kctc.registrationMismatch}">
                                                                         <td>
                                                                             <button type="button" class="btn btn-sm" ng-click="mediaRequestCtrl.toggle(kctc)" ng-if="!kctc.showMore">
                                                                                 <i class="fa fa-chevron-circle-down"></i>
@@ -892,9 +892,12 @@ a.label:focus {
                                                                             <button type="button" class="btn btn-sm" ng-click="mediaRequestCtrl.toggle(kctc)" ng-if="kctc.showMore">
                                                                                 <i class="fa fa-chevron-circle-up"></i>
                                                                             </button>
-                                                                            <span ng-class="{'text-danger':kctc.notInMediaOrg}">{{kctc.firstName}} {{kctc.lastName}}</span>
+                                                                            <span ng-class="{'text-danger':kctc.notInMediaOrg || kctc.registrationMismatch}">{{kctc.firstName}} {{kctc.lastName}}</span>
                                                                             <div ng-if="kctc.notInMediaOrg" class="text-danger">
                                                                                 <i class="fa fa-exclamation-triangle"></i> Contact not in media organization
+                                                                            </div>
+                                                                            <div ng-if="kctc.registrationMismatch" class="text-danger">
+                                                                                <i class="fa fa-exclamation-triangle"></i> Kronos accreditation does not match this request
                                                                             </div></td>
                                                                         <td>{{kctc.country | lowercase | term}}</td>
                                                                         <td>
