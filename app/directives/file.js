@@ -1,7 +1,9 @@
 import app from '~/app';
 import ng from 'angular';
-import fileDropTemplate from './file.html'; 
+import mime from 'mime';
+import fileDropTemplate from './file.html';
 import sharedT from '~/i18n/shared/index.js';
+import { sniffFileType } from '~/services/data-converter.js';
 
 	app.directive('type', ['$http', '$parse','translationService', function($http, $parse, $i18n) {
 	    return {
@@ -27,23 +29,34 @@ import sharedT from '~/i18n/shared/index.js';
 
                     $scope.$applyAsync(function(){ $scope.hasError = false; });
 
+                    // captured deliberately: a new selection replaces this FileList rather than
+                    // mutating it, so the reference stays valid across the async check below
                     var htmlFiles = element[0].files;
 
-                    var invalidFile = firstInvalidFile(htmlFiles);
+                    // reading the file signature is async, so the rest of the handler waits on it.
+                    // an unreadable file is not evidence of a mismatch - upload it anyway and let
+                    // the upload surface the real error, rather than dropping it silently here
+                    firstRejectedFile(htmlFiles).catch(function(){ return null; }).then(function(rejected){
 
-                    if(invalidFile) {
-                        $scope.$applyAsync(function(){
-                            var err = translateError({ code: attr.acceptError || "invalidFileType", message: invalidFile.name, statusCode: 415 });
-                            err.msg.body = invalidFile.name;
-                            $scope.hasError = err;
-                        });
+                        if(rejected) {
+                            $scope.$applyAsync(function(){
+                                var err = translateError({ code: rejected.code, message: rejected.file.name, statusCode: 415 });
+                                err.msg.body = rejected.file.name;
+                                $scope.hasError = err;
+                            });
 
-                        setViewValue([]); // drop any previously-selected file from the model
+                            setViewValue([]); // drop any previously-selected file from the model
 
-                        reset(); // always clear a rejected selection so the same file can be re-picked
+                            reset(); // always clear a rejected selection so the same file can be re-picked
 
-                        return;
-                    }
+                            return;
+                        }
+
+                        upload(htmlFiles);
+                    });
+                });
+
+                function upload(htmlFiles) {
 
                     if(isAutoUpload())
                     {
@@ -98,7 +111,7 @@ import sharedT from '~/i18n/shared/index.js';
 
                     if(isAutoReset())
                         reset();
-                });
+                }
 
                 function translateError(err){
                     if(!err) return 
@@ -112,19 +125,70 @@ import sharedT from '~/i18n/shared/index.js';
 
                     return err
                 }
-                function firstInvalidFile(files) {
+                // resolves with the first file we refuse - the accept list rejects it, its bytes
+                // say a format the accept list does not allow, or its bytes and its name disagree
+                function firstRejectedFile(files) {
                     var accept = element.attr('accept');
+                    var rules  = accept? accept.split(',').map(function(r){ return r.trim().toLowerCase(); }).filter(Boolean) : null;
+                    var chain  = Promise.resolve(null);
 
-                    if(!accept) return null;
+                    for(var i=0; i<files.length; ++i)
+                        chain = chain.then(check(files[i]));
 
-                    var rules = accept.split(',').map(function(r){ return r.trim().toLowerCase(); }).filter(Boolean);
+                    return chain;
 
-                    for(var i=0; i<files.length; ++i) {
-                        if(!isAccepted(files[i], rules))
-                            return files[i];
+                    // .jfif and friends map to a different name for the same format
+                    function normalize(type) {
+                        type = (type||'').toLowerCase();
+
+                        return type === 'image/pjpeg'? 'image/jpeg' : type;
                     }
 
-                    return null;
+                    function check(file) {
+                        return function(rejected){
+
+                            if(rejected) return rejected;
+
+                            if(rules && !isAccepted(file, rules))
+                                return { file: file, code: attr.acceptError || "invalidFileType" };
+
+                            return sniffFileType(file).then(function(signature){
+
+                                // not a format we recognise - leave the call to the server
+                                if(!signature) return null;
+
+                                // the bytes say it is a format this control does not accept,
+                                // whatever the name and the browser-reported type claim
+                                if(!typeAccepted(normalize(signature), rules))
+                                    return { file: file, code: attr.acceptError || "invalidFileType" };
+
+                                var claimed = normalize(mime.getType(file.name));
+
+                                // the name claims nothing, so there is no contradiction to act on
+                                if(!claimed) return null;
+
+                                if(claimed === normalize(signature)) return null;
+
+                                return { file: file, code: "fileTypeDoesNotMatchName" };
+                            });
+                        };
+                    }
+                }
+
+                // matches a media type against the media-type rules of an accept list.
+                // extension rules are ignored here - bytes carry no filename - and an accept
+                // list of extensions only cannot contradict a signature, so it accepts
+                function typeAccepted(type, rules) {
+                    if(!rules) return true;
+
+                    var mimeRules = rules.filter(function(rule){ return rule.charAt(0)!=='.'; });
+
+                    if(!mimeRules.length) return true;
+
+                    return mimeRules.some(function(rule){
+                        if(rule.slice(-2)==='/*') return type.indexOf(rule.slice(0,-1))===0;
+                        return type===rule;
+                    });
                 }
 
                 function isAccepted(file, rules) {

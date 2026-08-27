@@ -1,10 +1,26 @@
+import { fileTypeFromBlob } from 'file-type';
+
 export const Formats = {
     dataUrl: 'dataUrl',
     blob: 'blob'
   };
   
   const dataUrlRe = /^data:([-\w]+\/[-+\w.]+)?(;?\w+=[-\w]+)*(;base64)?,.*/u;
-  
+
+  // image formats this browser can actually decode into an <img>; HEIC/HEIF and TIFF cannot
+  export const decodableImageTypes = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/bmp', 'image/avif']);
+
+  // file signatures are the only reliable source of a file's format - phones
+  // routinely upload HEIC photos under a .jpg filename. detection is file-type's
+  // job; the callers decide what is actually supported
+  export async function sniffFileType (data) {
+    if (!(data instanceof Blob)) return null;
+
+    const type = await fileTypeFromBlob(data).catch(() => null);
+
+    return type?.mime || null;
+  }
+
   export async function toDataUrl (data) {
     if (typeof (data) === 'string' && dataUrlRe.test(data)) return data;
   

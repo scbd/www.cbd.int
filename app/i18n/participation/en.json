@@ -202,6 +202,8 @@
     "pressCardWorkPass": "Press card / work pass",
     "pressCardWorkPassIsRequired": "Press card / work pass is required.",
     "passport": "Passport",
+    "passportImageFormatNotSupported": "This passport image cannot be displayed ({type}). Enter the details manually, or ask the participant to re-upload the passport as a JPG or PNG.",
+    "passportImageCouldNotBeLoaded": "This passport image could not be loaded. Enter the details manually.",
     "passportIsRequired": "Passport is required.",
     "passportNumber": "Passport number",
     "passportNumberIsRequired": "Passport number is required.",

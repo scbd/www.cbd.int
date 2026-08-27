@@ -20,8 +20,18 @@
           <div class="row" >
             <div class="col-6 d-flex align-items-center justify-content-center" ng-click="previewImage(image)">
                 <img class="img-fluid " ng-show="image" ng-src="{{image}}" >
-            
-                <i ng-show="!image" class="fa fa-spinner fa-spin fa-4x"></i>
+
+                <i ng-show="!image && !imageError && !loadFailed" class="fa fa-spinner fa-spin fa-4x"></i>
+
+                <p ng-show="!image && imageError" class="text-danger small text-center m-0">
+                  <i class="fa fa-exclamation-triangle fa-2x d-block mb-2"></i>
+                  {{('participationT.passportImageFormatNotSupported'|$translate).replace('{type}', imageError)}}
+                </p>
+
+                <p ng-show="!image && !imageError && loadFailed" class="text-danger small text-center m-0">
+                  <i class="fa fa-exclamation-triangle fa-2x d-block mb-2"></i>
+                  {{::('participationT.passportImageCouldNotBeLoaded'|$translate)}}
+                </p>
             </div>
 
             <div class="col-6 ">

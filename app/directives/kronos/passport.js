@@ -9,7 +9,8 @@ import '~/directives/file';
 import   nationalities               from '~/data/kronos/nationalities.js';
 import   authorities                 from '~/data/kronos/authorities.js'  ;
 import   participationT              from '~/i18n/participation/index.js' ;
-import { toFile         , toDataUrl} from '~/services/data-converter.js'  ;
+import { toFile         , toDataUrl,
+         sniffFileType , decodableImageTypes} from '~/services/data-converter.js'  ;
 
 app.directive('passport', ['$http','$filter','translationService','locale','kronos',function($http, $filter, $i18n, locale, kronos) {
 
@@ -48,18 +49,25 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
 
               const res = await  fetch(signedUrl.data.url || signedUrl.data.signedUrl );
 
-              const type = mime.getType(passportObj.title);
+              const tBlob = (await res.blob());
+
+              // the stored filename lies about the format often enough (phones upload
+              // HEIC photos named .jpg), so trust the bytes and fall back to the extension
+              const type = (await sniffFileType(tBlob)) || mime.getType(passportObj.title);
 
               if(!type) throw new Error('No file type given');
 
               $scope.passportObj.type = type;
 
-              const tBlob = (await res.blob());
               const blob = tBlob.slice(0, tBlob.size, type );
 
-              
-              let imgSrc = type.startsWith('image')? await toDataUrl(blob) : blob;
-              if(type.startsWith('image')) { // try reduce image size
+              const isImage    = type.startsWith('image');
+              const canPreview = isImage && decodableImageTypes.has(type);
+
+              if(isImage && !canPreview) $scope.$applyAsync(()=> $scope.imageError = type);
+
+              let imgSrc = isImage? await toDataUrl(blob) : blob;
+              if(canPreview) { // try reduce image size
                   const maxSize = 1100;
                   let { width, height } = await getSize(imgSrc);
               
@@ -72,7 +80,7 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
                   imgSrc = await resize(imgSrc, { width, height });
                 }
               
-              if(type.startsWith('image'))
+              if(canPreview)
                 $scope.$applyAsync(()=>{
                   $scope.image             = imgSrc;
                   $scope.binding.imageSrc  = imgSrc;
@@ -109,6 +117,9 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
                                     $scope.image = imageSrc;
                                     $scope.binding.imageSrc = imageSrc;
                                   });
+              else
+                // stop the spinner, but only blame the file when we know the format is the problem
+                $scope.$applyAsync(()=> $scope.loadFailed = !$scope.imageError);
 
             }
             finally{
@@ -218,7 +229,12 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
       img.onload = () => {
         resolve(img);
       };
-  
+
+      // without this the promise never settles on an undecodable image and the caller hangs
+      img.onerror = () => {
+        reject(new Error('Image could not be decoded'));
+      };
+
       img.src = imgSrc;
     });
   }
