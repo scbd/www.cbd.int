@@ -44,12 +44,12 @@ async function refresh() {
 
     const codes = this.decisions.filter(c => !!c);
 
-    const found = await this.lookupDecisions(codes.filter(c => !isUrl(c)));
+    const decisions = await this.lookupDecisions(codes.filter(c => !isUrl(c)));
 
     // Map over the codes, not over the results: two references may point at different
     // paragraphs of the same decision. References that resolve to nothing are dropped.
     this.decisionList = codes.map(code => isUrl(code) ? { code, url: code, elements: null }
-                                                      : toCard(code, found))
+                                                      : toCard(code, decisions))
                              .filter(card => !!card);
 
     // References that resolve to nothing are dropped, so the caller cannot tell from the
@@ -76,11 +76,11 @@ async function lookupDecisions(codes) {
 // Builds the card for one reference code, or null when the reference resolves to no
 // decision. `elements` is the single matched element (decision-card.vue reads it as an
 // object), not the decision's whole element array.
-function toCard(code, found) {
+function toCard(code, decisions) {
 
     const elementCode = getElementCode(code);
 
-    const decision = found.find(d => d.code === code || (d.elements||[]).some(e => e.code === elementCode));
+    const decision = decisions.find(d => d.code === code || (d.elements||[]).some(e => e.code === elementCode));
 
     if(!decision) return null; // nothing to link to and nothing to describe: hide it
 
