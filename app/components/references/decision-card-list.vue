@@ -15,6 +15,7 @@
 <script>
 import DecisionCard from '~/components/references/decision-card.vue'
 import DecisionApi from '~/api/decisions.js';
+import { indexQuery, isIndexMatch } from '~/services/decision-index.js';
 
 export default {
     name: 'DecisionCardList',
@@ -36,7 +37,8 @@ export default {
         decisions: refresh
     },
     methods: {
-        lookupDecisions
+        lookupDecisions,
+        lookupIndexedDecisions
     }
 }
 
@@ -47,10 +49,19 @@ async function refresh() {
     const decisions = await this.lookupDecisions(codes.filter(c => !isUrl(c)));
 
     // Map over the codes, not over the results: two references may point at different
-    // paragraphs of the same decision. References that resolve to nothing are dropped.
-    this.decisionList = codes.map(code => isUrl(code) ? { code, url: code, elements: null }
-                                                      : toCard(code, decisions))
-                             .filter(card => !!card);
+    // paragraphs of the same decision.
+    const cards = codes.map(code => isUrl(code) ? { code, url: code, elements: null }
+                                                : toCard(code, decisions));
+
+    // Only COP decisions live in the decisions collection. Recommendations (SBI, SBSTTA,
+    // WG8J...) exist only in the search index, so resolve the leftovers there.
+    const indexed = await this.lookupIndexedDecisions(codes.filter((code, i) => !cards[i]));
+
+    // References that resolve in neither store are dropped. Several references can collapse
+    // onto one card: an index card has no element data, so every paragraph of a
+    // recommendation resolves to its parent.
+    this.decisionList = dedupe(cards.map((card, i) => card || toIndexCard(codes[i], indexed))
+                                    .filter(card => !!card));
 
     // References that resolve to nothing are dropped, so the caller cannot tell from the
     // codes alone whether anything will render.
@@ -69,6 +80,23 @@ async function lookupDecisions(codes) {
     };
 
     const results = await this.decisionapi.getDecisionTexts(params);
+
+    return results || [];
+}
+
+async function lookupIndexedDecisions(codes) {
+
+    const q = indexQuery(codes);
+
+    if(!q) return [];
+
+    const params = {
+        q,
+        fl : 'id,symbol_s,schema_s,body_s,session_i,decision_i,title_*,url_ss,file_ss',
+        rows: 999
+    };
+
+    const results = await this.decisionapi.queryDecisionDocuments(params);
 
     return results || [];
 }
@@ -92,6 +120,28 @@ function toCard(code, decisions) {
               + elementPath(element);
 
     return { ...decision, elements: element, url };
+}
+
+// Builds the card for a reference the decisions collection does not hold. The index has
+// no element data, so a paragraph-level reference resolves to its parent decision.
+function toIndexCard(code, indexed) {
+
+    const doc = indexed.find(d => isIndexMatch(d, code));
+
+    return doc ? { ...doc, elements: null } : null;
+}
+
+function dedupe(cards) {
+
+    const seen = new Set();
+
+    return cards.filter(card => {
+        if(seen.has(card.url)) return false;
+
+        seen.add(card.url);
+
+        return true;
+    });
 }
 
 function elementPath(element) {
