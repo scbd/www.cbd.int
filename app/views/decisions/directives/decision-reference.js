@@ -30,7 +30,10 @@ import template from './decision-reference.html'
                         return;
                     }
 
-                    var elementCode = code.replace(/(\w+\/\w+\/\w+\/\w+)\/(.+)/, '$1.$2');
+                    // Everything after the decision code is dot-separated: paragraph, item, subitem.
+                    var elementCode = code.replace(/^(\w+\/\w+\/\w+\/\w+)\/(.+)/, function(m, decision, element) {
+                        return decision + '.' + element.replace(/\//g, '.');
+                    });
 
                     $http.get("/api/v2016/decision-texts", {
                         cache: true,
@@ -50,8 +53,13 @@ import template from './decision-reference.html'
                         decision.elements = _.filter(decision.elements||[], { code: elementCode });
 
                         if(decision.elements[0]) {
+                            // Mirrors the tree's node codes: {section}{paragraph}[.{item}[.{subitem}]]
                             var el = decision.elements[0];
-                            url += '/'+(el.section||'')+el.paragraph
+                            var path = [(el.section||'')+(el.paragraph||''), el.item, el.subitem]
+                                       .filter(function(part) { return part !== null && part !== undefined && part !== ''; })
+                                       .join('.');
+
+                            if(path) url += '/'+path;
                         }
 
                         $scope.url = url;

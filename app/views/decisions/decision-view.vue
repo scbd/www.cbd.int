@@ -256,10 +256,10 @@
 							</dd>
 						</div>
 
-						<span v-if="decisions && decisions.length > 0">
+						<span v-show="relatedDecisionCount > 0">
 							<dt>Related decisions</dt>
 							<dd>
-								<decision-card-list :decisions="decisions" />
+								<decision-card-list :decisions="decisions" @update:count="relatedDecisionCount = $event" />
 							</dd>
 							<br>
 						</span>
@@ -330,7 +330,8 @@ export default {
 			filters: {},
 			allFilters: {},
 			selectedNode: null,
-			selectedLocale: 'en'
+			selectedLocale: 'en',
+			relatedDecisionCount: 0
 		}
 	},
     computed: {

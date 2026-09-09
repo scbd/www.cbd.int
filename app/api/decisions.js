@@ -70,6 +70,11 @@ export default class DecisionApi extends ApiBase
     return decisions;
   }
 
+  async getDecisionTexts(params) {
+    const result = await this.http.get('api/v2016/decision-texts', { params, cache: true }).then(res => res.data).catch(tryCastToApiError);
+    return result;
+  }
+
   async getRelatedDecisions(params) {
     
     const result = await this.http.get('api/v2016/decision-texts/search', { params });
