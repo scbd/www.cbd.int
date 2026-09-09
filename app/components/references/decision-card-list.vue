@@ -106,8 +106,7 @@ function elementPath(element) {
 }
 
 function getElementCode(text) {
-    // Everything after the decision code is dot-separated: paragraph, item, subitem.
-    return text.replace(/^(\w+\/\w+\/\w+\/\w+)\/(.+)/, (m, decision, element) => `${decision}.${element.replace(/\//g, '.')}`);
+    return text.replace(/(\w+\/\w+\/\w+\/\w+)\/(.+)/, '$1.$2');
 }
 
 function isUrl(text) {

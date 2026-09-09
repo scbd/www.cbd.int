@@ -30,10 +30,7 @@ import template from './decision-reference.html'
                         return;
                     }
 
-                    // Everything after the decision code is dot-separated: paragraph, item, subitem.
-                    var elementCode = code.replace(/^(\w+\/\w+\/\w+\/\w+)\/(.+)/, function(m, decision, element) {
-                        return decision + '.' + element.replace(/\//g, '.');
-                    });
+                    var elementCode = code.replace(/(\w+\/\w+\/\w+\/\w+)\/(.+)/, '$1.$2');
 
                     $http.get("/api/v2016/decision-texts", {
                         cache: true,
