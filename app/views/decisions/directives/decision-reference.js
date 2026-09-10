@@ -2,6 +2,7 @@ import '~/filters/lstring'
 import _   from 'lodash'
 import app from '~/app'
 import template from './decision-reference.html'
+import { indexQuery } from '~/services/decision-index'
 
 
 	app.directive('decisionReference', ['$http', function($http) {
@@ -41,8 +42,10 @@ import template from './decision-reference.html'
                         }
                     }).then(function(res){
 
+                        // Only COP decisions live in the decisions collection; recommendations
+                        // (SBI, SBSTTA, WG8J...) exist only in the search index.
                         if(!res.data || !res.data.length)
-                            return;
+                            return lookupIndex(code);
 
                         var decision = res.data[0];
                         var url      = '/decisions/'+decision.body.toLowerCase()+'/'+decision.session+'/'+decision.decision;
@@ -50,12 +53,48 @@ import template from './decision-reference.html'
                         decision.elements = _.filter(decision.elements||[], { code: elementCode });
 
                         if(decision.elements[0]) {
+                            // Mirrors the tree's node codes: {section}{paragraph}[.{item}[.{subitem}]]
                             var el = decision.elements[0];
-                            url += '/'+(el.section||'')+el.paragraph
+                            var path = [(el.section||'')+(el.paragraph||''), el.item, el.subitem]
+                                       .filter(function(part) { return part !== null && part !== undefined && part !== ''; })
+                                       .join('.');
+
+                            if(path) url += '/'+path;
                         }
 
                         $scope.url = url;
                         $scope.decision = decision;
+                    });
+                }
+
+                //===========================
+                //
+                //===========================
+                function lookupIndex(code) {
+
+                    var query = indexQuery([code]);
+
+                    if(!query)
+                        return;
+
+                    return $http.get("/api/v2013/index", {
+                        cache: true,
+                        params: {
+                            q  : 'schema_s:(decision recommendation) AND (' + query + ')',
+                            fl : 'symbol_s,body_s,session_i,decision_i,title_t,url_ss',
+                            rows: 1
+                        }
+                    }).then(function(res) {
+
+                        var docs = res.data && res.data.response && res.data.response.docs;
+
+                        if(!docs || !docs.length)
+                            return;
+
+                        // The index has no element data, so a paragraph-level reference
+                        // resolves to its parent decision / recommendation.
+                        $scope.url      = (docs[0].url_ss || [])[0];
+                        $scope.decision = { symbol: docs[0].symbol_s, title: docs[0].title_t };
                     });
                 }
 
