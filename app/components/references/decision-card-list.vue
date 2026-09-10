@@ -1,8 +1,8 @@
 <template>
     <div>
         <div 
-            v-for="(decision, index) in decisionList"
-            :key="index"
+            v-for="decision in decisionList"
+            :key="decision.url"
             class="card" 
             style="margin-bottom:4px">
             <div class="card-body" style="padding:12px;font-size:0.9em">
@@ -30,6 +30,7 @@ export default {
         return {
             decisionapi: new DecisionApi(),
             decisionList: [],
+            refreshToken: 0,
         }
     },
     created:refresh,
@@ -46,6 +47,11 @@ async function refresh() {
 
     const codes = this.decisions.filter(c => !!c);
 
+    const token = ++this.refreshToken;
+
+    this.decisionList = [];
+    this.$emit('update:count', 0);
+
     const decisions = await this.lookupDecisions(codes.filter(c => !isUrl(c)));
 
     // Map over the codes, not over the results: two references may point at different
@@ -56,6 +62,8 @@ async function refresh() {
     // Only COP decisions live in the decisions collection. Recommendations (SBI, SBSTTA,
     // WG8J...) exist only in the search index, so resolve the leftovers there.
     const indexed = await this.lookupIndexedDecisions(codes.filter((code, i) => !cards[i]));
+
+    if(token !== this.refreshToken) return;
 
     // References that resolve in neither store are dropped. Several references can collapse
     // onto one card: an index card has no element data, so every paragraph of a
