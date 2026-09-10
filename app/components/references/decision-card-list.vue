@@ -92,13 +92,13 @@ async function lookupIndexedDecisions(codes) {
 
     const params = {
         q,
-        fl : 'id,symbol_s,schema_s,body_s,session_i,decision_i,title_*,url_ss,file_ss',
+        fl : 'id,symbol_s,body_s,session_i,decision_i,title_t,url_ss',
         rows: 999
     };
 
-    const results = await this.decisionapi.queryDecisionDocuments(params);
+    const result = await this.decisionapi.queryDecisionDocuments(params);
 
-    return results || [];
+    return result?.response?.docs || [];
 }
 
 // Builds the card for one reference code, or null when the reference resolves to no
@@ -127,8 +127,11 @@ function toCard(code, decisions) {
 function toIndexCard(code, indexed) {
 
     const doc = indexed.find(d => isIndexMatch(d, code));
+    const url = (doc?.url_ss || [])[0];
 
-    return doc ? { ...doc, elements: null } : null;
+    if(!url) return null;
+
+    return { _id: doc.id, code, symbol: doc.symbol_s, title: doc.title_t, url, elements: null };
 }
 
 function dedupe(cards) {

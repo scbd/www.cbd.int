@@ -257,7 +257,7 @@
 						</div>
 
 						<span v-show="relatedDecisionCount > 0">
-							<dt>Related decisions</dt>
+							<dt>Related decisions / recommendations</dt>
 							<dd>
 								<decision-card-list :decisions="decisions" @update:count="relatedDecisionCount = $event" />
 							</dd>
