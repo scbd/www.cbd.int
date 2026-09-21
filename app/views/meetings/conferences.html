@@ -10,11 +10,11 @@
     </style>
     <div style="border:1px solid #eee;">
         <div class="row" style="margin:5px">
-            <div class="col-lg-8" style="max-height: 300px;">
+            <div class="col-lg-8" style="max-height: 300px;" ng-if="activeConference.article.url_1200">
                 <cbd-article-cover-image style="max-height: 300px;cursor: pointer;" cover-image="activeConference.article"
                 ng-click="showConference(activeConference.code)" title="{{activeConference.Title|lstring}}"></cbd-article-cover-image>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-4" ng-class="{ 'col-lg-12': !activeConference.article.url_1200 }">
                 <strong>
                     <div ng-click="showConference(activeConference.code)" style="cursor: pointer;"
                         ng-bind="activeConference.Title|lstring"></div>
