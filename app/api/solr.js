@@ -7,12 +7,13 @@ export default class SolrApi extends ApiBase
     super(options);
   }
   
-  async query(q, { start, rows, fl, facetField} = {})  {
+  async query(q, { start, rows, fl, facetField, facetQuery, facetLimit, facetMinCount, sort, group, groupField} = {})  {
     const params = {
       q,
       fl,
       start,
       rows,
+      sort,
     };
 
     if(facetField) {
@@ -20,7 +21,28 @@ export default class SolrApi extends ApiBase
       params['facet.field'] = facetField;
     } 
 
-    const result = await this.http.get(`api/v2013/index`, { params })
+    if(facetQuery) {
+      params.facet = 'true';
+      params['facet.query'] = facetQuery;
+    }
+
+    if(facetLimit    !== undefined) params['facet.limit']    = facetLimit;
+    if(facetMinCount !== undefined) params['facet.mincount'] = facetMinCount;
+
+    if(group) {
+      params.group           = 'true';
+      params['group.field']  = groupField;
+      params['group.ngroups']= 'true';
+      params['group.limit']  = 0;
+    }
+
+    // Facets and groups need repeated keys (`facet.field=a&facet.field=b`); axios' default
+    // serializer emits `facet.field[]=a`, which Solr ignores. Scoped to those calls so the
+    // plain query/paging callers keep axios' encoding untouched.
+    const config = { params };
+    if(facetField || facetQuery) config.paramsSerializer = repeatArrayKeys;
+
+    const result = await this.http.get(`api/v2013/index`, config)
                                   .then(res => res.data)
                                   .catch(tryCastToApiError);
 
@@ -30,6 +52,19 @@ export default class SolrApi extends ApiBase
   escape(value) {
     return escape(value);
   }
+}
+
+function repeatArrayKeys(params) {
+  const parts = [];
+
+  for(const [key, value] of Object.entries(params)) {
+    if(value === undefined || value === null || value === '') continue;
+
+    for(const item of (Array.isArray(value) ? value : [value]))
+      parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(item)}`);
+  }
+
+  return parts.join('&');
 }
 
 export function escape(value) {
