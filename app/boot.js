@@ -87,6 +87,7 @@ export default function bootApp(window, require, defineX) {
           'ammap/themes/light'   : { deps : ['ammap'] },
           'amchart/themes/light' : { deps : ['amchart'] },
           'amchart/pie'          : { deps : ['amchart'] },
+          'amchart/serial'       : { deps : ['amchart'] },
           'angular-grid'         : { deps : ['angular'] },
           'printThis'            : { deps : ['angular', 'vue'] },
       },
