@@ -63,7 +63,10 @@
             <select class="form-control" id="timezone" v-model="timezone" :class="{ 'border-warning': isTimezoneMismatch }" :disabled="saving">
               <option v-for="{ value, text } in timezones" :key="value" :value="value">{{ text }}</option>
             </select>
-            <small v-if="isTimezoneMismatch" class="text-warning"><i class="fa fa-exclamation-triangle"></i> Differs from the conference timezone ({{ conferenceTimezone }})</small>
+            <small v-if="isTimezoneMismatch" class="text-warning">
+              <i class="fa fa-exclamation-triangle"></i> Differs from the conference timezone ({{ conferenceTimezone }})
+              <button type="button" class="btn btn-light btn-xs ml-1" @click="timezone = conferenceTimezone" :disabled="saving" title="Use the conference timezone"><i class="fa fa-undo"></i> Revert</button>
+            </small>
           </div>
         </div>
       </div>
