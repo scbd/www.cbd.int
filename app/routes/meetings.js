@@ -9,7 +9,7 @@ import * as documentsView from '~/views/meetings/documents/documents'
 
 // On-demand views
 const sessionListView        = { component: ()=>import('~/components/meetings/sessions/session-list.vue') }
-const sessionIdView          = { component: ()=>import('~/components/meetings/sessions/edit.vue') }
+const sessionIdView          = { component: ()=>import('~/components/meetings/sessions/manage-interventions.vue') }
 const interpretersPanelView  = { component: ()=>import('~/components/meetings/sessions/interpreters-view.vue') }
 
 const importTranslationsView = { component: ()=>import('~/views/meetings/documents/management/translations') }

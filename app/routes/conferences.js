@@ -21,7 +21,7 @@ const parallelMeetingsView  = { component: ()=>import('~/views/meetings/parallel
 const notificationIdView    = { component: ()=>import('~/views/notifications/index-id')                      .catch(traceError) }
 const virtualTableView      = { component: ()=>import('~/views/virtual-tables/index')                        .catch(traceError) }
 const sessionListView       = { component: ()=>import('~/components/meetings/sessions/session-list.vue')     .catch(traceError) }
-const sessionIdView         = { component: ()=>import('~/components/meetings/sessions/edit.vue')             .catch(traceError) }
+const sessionIdView         = { component: ()=>import('~/components/meetings/sessions/manage-interventions.vue').catch(traceError) }
 const interpretersPanelView = { component: ()=>import('~/components/meetings/sessions/interpreters-view.vue').catch(traceError) }
 const infoNote              = { component: ()=>import('~/views/conferences/info-note.vue')        .catch(traceError) }
 const lang_switch           = { component: ()=>import('~/views/shared/lang')        .catch(traceError) }
