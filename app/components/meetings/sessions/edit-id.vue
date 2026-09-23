@@ -15,6 +15,11 @@
       <small v-if="isNew">(NEW)</small>
     </h1>
 
+    <p v-if="session">
+      <i class="fa fa-microphone"></i> {{ statementCount }} statement(s)
+      - <a :href="`${listUrl()}/${encodeURIComponent(session._id)}`">Manage statements <i class="fa fa-external-link"></i></a>
+    </p>
+
     <div v-if="error" class="alert alert-danger">{{ error }}</div>
     <div v-if="loading" class="text-muted"><i class="fa fa-cog fa-spin"></i> Loading...</div>
     <div v-if="!loading && errors.length" class="text-danger mb-2"><small>{{ errors.join(' - ') }}</small></div>
