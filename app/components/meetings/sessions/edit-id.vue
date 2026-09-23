@@ -75,7 +75,7 @@
           </div>
         </div>
 
-        <div class="card-body" v-if="earlySubmission && earlyMeeting">
+        <div class="pt-3" v-if="earlySubmission && earlyMeeting">
           <div class="row">
             <div class="col-12 col-md-6">
               <!-- Agenda Item -->
