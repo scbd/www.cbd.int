@@ -143,7 +143,12 @@
         <div class="card-body">
           <div class="form-row mb-2" v-for="(video, index) in videos" :key="index">
             <div class="col-12 col-md-6">
-              <input type="url" class="form-control" placeholder="URL" v-model="video.url" :disabled="saving">
+              <div class="input-group">
+                <input type="url" class="form-control" placeholder="URL" v-model="video.url" :disabled="saving">
+                <div class="input-group-append">
+                  <a class="btn btn-light" :class="{ disabled: !/^https?:\/\//i.test(video.url || '') }" :href="video.url" target="_blank" rel="noopener noreferrer" title="Open in a new tab"><i class="fa fa-external-link"></i></a>
+                </div>
+              </div>
             </div>
             <div class="col">
               <select class="form-control" v-model="video.type" :disabled="saving">
