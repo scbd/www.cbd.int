@@ -67,6 +67,28 @@
         </div>
       </div>
 
+      <!-- Title -->
+      <div class="form-group">
+        <label class="control-label" for="title">Title</label>
+        <div class="input-group">
+          <input type="text" class="form-control" id="title" v-model="title" :disabled="saving">
+          <div class="input-group-append">
+            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" :disabled="saving">Generate <i class="fa fa-caret-down"></i></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a v-for="label in titleLabels" :key="label" class="dropdown-item" :class="{ disabled: !checkedMeetings.length }" href="#" @click.prevent="checkedMeetings.length && setTitle(regularTitle(label))">{{ label }}</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" :class="{ disabled: !earlyTitle }" href="#" @click.prevent="earlyTitle && setTitle(earlyTitle)">Early submission</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="form-group">
+        <label class="control-label" for="summary">Summary</label>
+        <textarea class="form-control" id="summary" rows="3" v-model="summary" :disabled="saving"></textarea>
+      </div>
+
       <!-- Early statement submission -->
       <div class="panel panel-default mb-3">
         <div class="card-header d-flex align-items-center" :class="{ 'alert-success': earlySubmission }">
@@ -111,28 +133,6 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Title -->
-      <div class="form-group">
-        <label class="control-label" for="title">Title</label>
-        <div class="input-group">
-          <input type="text" class="form-control" id="title" v-model="title" :disabled="saving">
-          <div class="input-group-append">
-            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" :disabled="saving">Generate <i class="fa fa-caret-down"></i></button>
-            <div class="dropdown-menu dropdown-menu-right">
-              <a v-for="label in titleLabels" :key="label" class="dropdown-item" :class="{ disabled: !checkedMeetings.length }" href="#" @click.prevent="checkedMeetings.length && setTitle(regularTitle(label))">{{ label }}</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" :class="{ disabled: !earlyTitle }" href="#" @click.prevent="earlyTitle && setTitle(earlyTitle)">Early submission</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Summary -->
-      <div class="form-group">
-        <label class="control-label" for="summary">Summary</label>
-        <textarea class="form-control" id="summary" rows="3" v-model="summary" :disabled="saving"></textarea>
       </div>
 
       <!-- Videos -->
