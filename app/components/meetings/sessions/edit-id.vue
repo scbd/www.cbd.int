@@ -86,12 +86,12 @@
 
       <!-- Early Submission -->
       <div class="panel panel-default mb-3">
-        <div class="card-header">
-          <div class="form-check float-right mt-1">
+        <div class="card-header d-flex align-items-center">
+          <h4 style="color:inherit" class="mb-0">Early Submission</h4>
+          <div class="form-check ml-3">
             <input class="form-check-input" type="checkbox" id="earlySubmission" v-model="earlySubmission" :disabled="saving || (!earlySubmission && meetingIds.length !== 1)">
             <label class="form-check-label" for="earlySubmission">Enabled <small class="text-muted">(one meeting only)</small></label>
           </div>
-          <h4 style="color:inherit" class="mb-0">Early Submission</h4>
         </div>
 
         <div class="card-body" v-if="earlySubmission && earlyMeeting">
@@ -129,9 +129,9 @@
 
       <!-- Videos -->
       <div class="panel panel-default mb-3">
-        <div class="card-header">
-          <button type="button" class="btn btn-light float-right" @click="addVideo" :disabled="saving"><i class="fa fa-plus"></i> Add video</button>
+        <div class="card-header d-flex align-items-center justify-content-between">
           <h4 style="color:inherit" class="mb-0">Videos</h4>
+          <button type="button" class="btn btn-light btn-sm" @click="addVideo" :disabled="saving"><i class="fa fa-plus"></i> Add video</button>
         </div>
 
         <div class="card-body">
