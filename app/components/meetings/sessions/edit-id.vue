@@ -71,11 +71,9 @@
       <!-- Meetings -->
       <div class="form-group">
         <label class="control-label">Meeting(s)</label>
-        <div>
-          <div class="form-check form-check-inline" v-for="{ _id, normalizedSymbol } in meetings" :key="_id">
-            <input class="form-check-input" type="checkbox" :id="`meeting-${_id}`" :value="_id" v-model="meetingIds" :disabled="saving">
-            <label class="form-check-label" :for="`meeting-${_id}`">{{ normalizedSymbol }}</label>
-          </div>
+        <div class="form-check" v-for="{ _id, normalizedSymbol, EVT_TIT_EN } in meetings" :key="_id">
+          <input class="form-check-input" type="checkbox" :id="`meeting-${_id}`" :value="_id" v-model="meetingIds" :disabled="saving">
+          <label class="form-check-label" :for="`meeting-${_id}`"><b>{{ normalizedSymbol }}</b> - {{ EVT_TIT_EN }}</label>
         </div>
         <div v-if="otherMeetingIds.length" class="mt-1">
           <small class="text-muted">Other linked meetings (kept):</small>
@@ -84,59 +82,70 @@
       </div>
 
       <!-- Early Submission -->
-      <div class="form-group">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="earlySubmission" v-model="earlySubmission" :disabled="saving || (!earlySubmission && meetingIds.length !== 1)">
-          <label class="form-check-label" for="earlySubmission">Early submission of statements <small class="text-muted">(one meeting only)</small></label>
+      <div class="panel panel-default mb-3">
+        <div class="card-header">
+          <div class="form-check float-right mt-1">
+            <input class="form-check-input" type="checkbox" id="earlySubmission" v-model="earlySubmission" :disabled="saving || (!earlySubmission && meetingIds.length !== 1)">
+            <label class="form-check-label" for="earlySubmission">Enabled <small class="text-muted">(one meeting only)</small></label>
+          </div>
+          <h4 style="color:inherit" class="mb-0">Early Submission</h4>
         </div>
-      </div>
 
-      <div class="row" v-if="earlySubmission && earlyMeeting">
-        <div class="col-12 col-md-6">
-          <!-- Agenda Item -->
-          <div class="form-group">
-            <label class="control-label" for="agendaItem">Agenda Item</label>
-            <select class="form-control" id="agendaItem" v-model="agendaItem" :disabled="saving">
-              <option :value="null">Select an item......</option>
-              <option v-for="i in earlyMeeting.agenda.items" :key="i.item" :value="i.item" :disabled="hasSubItems(earlyMeeting.agenda.items, i.item)">{{ i.code || i.item }} - {{ i.shortTitle || i.title }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-12 col-md-4">
-          <!-- Cutoff Date -->
-          <div class="form-group">
-            <label class="control-label" for="cutoffDate">Cutoff date <small class="text-muted">({{ timezone }})</small></label>
-            <input type="datetime-local" class="form-control" id="cutoffDate" v-model="cutoffDate" :disabled="saving">
-          </div>
-        </div>
-        <div class="col-12 col-md-2">
-          <!-- Grace Period -->
-          <div class="form-group">
-            <label class="control-label" for="cutoffGracePeriod">Grace period</label>
-            <div class="input-group">
-              <input type="number" min="0" step="1" class="form-control" id="cutoffGracePeriod" v-model.number="cutoffGracePeriod" :disabled="saving">
-              <div class="input-group-append"><span class="input-group-text">min</span></div>
+        <div class="card-body" v-if="earlySubmission && earlyMeeting">
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <!-- Agenda Item -->
+              <div class="form-group">
+                <label class="control-label" for="agendaItem">Agenda Item</label>
+                <select class="form-control" id="agendaItem" v-model="agendaItem" :disabled="saving">
+                  <option :value="null">Select an item......</option>
+                  <option v-for="i in earlyMeeting.agenda.items" :key="i.item" :value="i.item" :disabled="hasSubItems(earlyMeeting.agenda.items, i.item)">{{ i.code || i.item }} - {{ i.shortTitle || i.title }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <!-- Cutoff Date -->
+              <div class="form-group">
+                <label class="control-label" for="cutoffDate">Cutoff date <small class="text-muted">({{ timezone }})</small></label>
+                <input type="datetime-local" class="form-control" id="cutoffDate" v-model="cutoffDate" :disabled="saving">
+              </div>
+            </div>
+            <div class="col-12 col-md-2">
+              <!-- Grace Period -->
+              <div class="form-group">
+                <label class="control-label" for="cutoffGracePeriod">Grace period</label>
+                <div class="input-group">
+                  <input type="number" min="0" step="1" class="form-control" id="cutoffGracePeriod" v-model.number="cutoffGracePeriod" :disabled="saving">
+                  <div class="input-group-append"><span class="input-group-text">min</span></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Videos -->
-      <div class="form-group">
-        <label class="control-label">Videos</label>
-        <div class="input-group mb-1" v-for="(video, index) in videos" :key="index">
-          <input type="url" class="form-control" style="flex: 3 1 auto" placeholder="URL" v-model="video.url" :disabled="saving">
-          <select class="form-control" v-model="video.type" :disabled="saving">
-            <option v-for="{ value, text } in videoTypeOptions" :key="value" :value="value">{{ text }}</option>
-          </select>
-          <select class="form-control" v-model="video.language" :disabled="saving">
-            <option v-for="{ value, text } in languageOptions" :key="value" :value="value">{{ text }}</option>
-          </select>
-          <div class="input-group-append">
-            <button type="button" class="btn btn-light" @click="videos.splice(index, 1)" :disabled="saving"><i class="fa fa-times"></i></button>
-          </div>
+      <div class="panel panel-default mb-3">
+        <div class="card-header">
+          <button type="button" class="btn btn-light float-right" @click="addVideo" :disabled="saving"><i class="fa fa-plus"></i> Add video</button>
+          <h4 style="color:inherit" class="mb-0">Videos</h4>
         </div>
-        <button type="button" class="btn btn-light btn-sm" @click="addVideo" :disabled="saving"><i class="fa fa-plus"></i> Add video</button>
+
+        <div class="card-body">
+          <div class="input-group mb-1" v-for="(video, index) in videos" :key="index">
+            <input type="url" class="form-control" style="flex: 3 1 auto" placeholder="URL" v-model="video.url" :disabled="saving">
+            <select class="form-control" v-model="video.type" :disabled="saving">
+              <option v-for="{ value, text } in videoTypeOptions" :key="value" :value="value">{{ text }}</option>
+            </select>
+            <select class="form-control" v-model="video.language" :disabled="saving">
+              <option v-for="{ value, text } in languageOptions" :key="value" :value="value">{{ text }}</option>
+            </select>
+            <div class="input-group-append">
+              <button type="button" class="btn btn-light" @click="videos.splice(index, 1)" :disabled="saving"><i class="fa fa-times"></i></button>
+            </div>
+          </div>
+          <small v-if="!videos.length" class="text-muted">No videos</small>
+        </div>
       </div>
 
     </form>
