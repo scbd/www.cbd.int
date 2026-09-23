@@ -97,7 +97,7 @@
             <input class="form-check-input" type="checkbox" id="earlySubmission" v-model="earlySubmission" :disabled="saving || (!earlySubmission && meetingIds.length !== 1)">
             <label class="form-check-label" for="earlySubmission">
               <span class="badge" :class="earlySubmission ? 'badge-success' : 'badge-secondary'">{{ earlySubmission ? 'Enabled' : 'Disabled' }}</span>
-              <small class="text-muted">(one meeting only)</small>
+              <small v-if="meetingIds.length > 1" class="text-muted">(one meeting only)</small>
             </label>
           </div>
         </div>
