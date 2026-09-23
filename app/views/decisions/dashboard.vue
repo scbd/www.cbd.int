@@ -103,6 +103,8 @@ const thesaurus = new ThesaurusApi({prefixUrl:window.scbd.apiUrl});
 
 const baseIndexQuery = 'schema_s:decision-text';
 
+const MAX_DECISIONS = 1000;   // DTT holds 506 COP decisions today
+
 const TYPE_COLORS = { operational: '#2e7d32', informational: '#ef6c00' };
 
 // dttActor_ss values are case-sensitive and must match the index exactly.
@@ -116,7 +118,7 @@ export default {
     name: 'decisionsDashboard',
     data() {
         return {
-            sessions      : sessionsList,
+            sessions      : [...sessionsList].reverse(),
             selectedSession: '',
             typeFilter    : null,
             subjectFilter : null,
@@ -224,10 +226,12 @@ async function loadTable() {
             this.subjectFilter ? `dttSubject_ss:(${solr.escape(this.subjectFilter)})` : null
         ]);
 
+        // Wanted order is newest COP first but decisions ascending within it, and dttCode_s is
+        // the only sortable field on a paragraph doc — one key cannot do both directions. So pull
+        // every matching decision at once (506 today, ~100KB) and order and page it here.
+        // ponytail: whole set in one request; switch to per-COP paging if the corpus ever outgrows MAX_DECISIONS.
         const { grouped } = await solr.query(query, {
-            rows      : this.pageSize,
-            start     : this.currentPage * this.pageSize,
-            sort      : 'dttCode_s asc',
+            rows      : MAX_DECISIONS,
             group     : true,
             groupField: 'dttCode_s'
         });
@@ -237,15 +241,20 @@ async function loadTable() {
         this.recordsCount = grouped?.dttCode_s?.ngroups || 0;
         this.totalPages   = Math.ceil(this.recordsCount / this.pageSize);
 
-        const decisions = await queryDecisions(groups.map(g => g.groupValue));
+        const ordered = groups
+            .map(({groupValue, doclist}) => ({ ...parseCode(groupValue), code: groupValue, paragraphs: doclist.numFound }))
+            .sort((a, b) => b.session - a.session || a.decision - b.decision || a.code.localeCompare(b.code));
 
-        this.records = groups.map(({groupValue, doclist}) => ({
-            code      : groupValue,
-            paragraphs: doclist.numFound,
-            symbol    : decisions[groupValue]?.symbol_s,
-            title     : decisions[groupValue]?.title_s,
-            session   : groupValue.split('/')[2]?.replace(/^0+/, ''),
-            url       : groupValue.replace(/^CBD\//, '').toLowerCase()
+        const start = this.currentPage * this.pageSize;
+        const page  = ordered.slice(start, start + this.pageSize);
+
+        const decisions = await queryDecisions(page.map(r => r.code));
+
+        this.records = page.map(row => ({
+            ...row,
+            symbol: decisions[row.code]?.symbol_s,
+            title : decisions[row.code]?.title_s,
+            url   : row.code.replace(/^CBD\//, '').toLowerCase()
         }));
     }
     catch(err) { this.error = errorMessage(err, 'Unable to load the decisions.'); }
@@ -409,6 +418,13 @@ function sessionQuery(sessionCode) {
     if(!sessionCode) return null;
 
     return `dttCode_s:${escapePath(`CBD/${padInt(sessionCode).replace(/-/g, '/')}/`)}*`;
+}
+
+// 'CBD/COP/16/01' -> { session: 16, decision: 1 } for ordering; both are zero-padded in the code.
+function parseCode(code) {
+    const [, , session, decision] = (code || '').split('/');
+
+    return { session: parseInt(session, 10) || 0, decision: parseInt(decision, 10) || 0 };
 }
 
 function escapePath(value) { return solr.escape(value).replace(/\//g, '\\/'); }
