@@ -2,7 +2,7 @@
   <div style="background: #eee;padding: 15px;">
 
     <div class="float-right" role="group">
-      <button type="button" class="btn btn-danger" @click="remove" :disabled="loading || saving || isNew || statementCount > 0" :title="statementCount > 0 ? 'Sessions with statements cannot be deleted' : ''">Delete</button>
+      <span class="d-inline-block" :title="deleteTooltip"><button type="button" class="btn btn-danger" @click="remove" :disabled="loading || saving || !!deleteTooltip" :style="deleteTooltip && 'pointer-events: none'">Delete</button></span>
       &nbsp;&nbsp;
       <button type="button" class="btn btn-primary" @click="save" :disabled="loading || saving || errors.length > 0">
         <i v-if="saving" class="fa fa-cog fa-spin"></i> Save
@@ -167,7 +167,7 @@
 
     <div class="clearfix" v-if="!loading">
       <div class="float-right" role="group">
-        <button type="button" class="btn btn-danger" @click="remove" :disabled="saving || isNew || statementCount > 0" :title="statementCount > 0 ? 'Sessions with statements cannot be deleted' : ''">Delete</button>
+        <span class="d-inline-block" :title="deleteTooltip"><button type="button" class="btn btn-danger" @click="remove" :disabled="saving || !!deleteTooltip" :style="deleteTooltip && 'pointer-events: none'">Delete</button></span>
         &nbsp;&nbsp;
         <button type="button" class="btn btn-primary" @click="save" :disabled="saving || errors.length > 0">
           <i v-if="saving" class="fa fa-cog fa-spin"></i> Save
@@ -231,6 +231,7 @@ export default {
                 videoTypeOptions() { return withLoadedValues(VIDEO_TYPES, this.videos.map(v=>v.type)) },
                 languageOptions()  { return withLoadedValues(LANGUAGES,   this.videos.map(v=>v.language)) },
                 statementCount,
+                deleteTooltip,
                 changeWarnings,
                 errors,
               },
@@ -408,6 +409,12 @@ function timezones(){
 
 function statementCount(){
   return Math.max(this.session?.count || 0, this.session?.totalCount || 0);
+}
+
+function deleteTooltip(){
+  if(this.isNew)             return 'The session is not saved yet';
+  if(this.statementCount > 0) return `The session has ${this.statementCount} statement(s) attached and cannot be deleted`;
+  return '';
 }
 
 function changeWarnings(){
