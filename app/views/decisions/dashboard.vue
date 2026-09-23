@@ -378,29 +378,32 @@ function renderTrend(vm, data) {
 // ====================================
 
 function onSessionChange() {
+    this.error = null;
     this.currentPage = 0;
     this.loadCharts();
     this.loadTable();
 }
 
 function toggleType(code) {
+    this.error = null;
     this.typeFilter  = this.typeFilter === code ? null : code;
     this.currentPage = 0;
     this.loadTable();
 }
 
 function toggleSubject(code) {
+    this.error = null;
     this.subjectFilter = this.subjectFilter === code ? null : code;
     this.currentPage   = 0;
     this.loadTable();
 }
 
 function previousPage() {
-    if(this.currentPage > 0) { this.currentPage--; this.loadTable(); }
+    if(this.currentPage > 0) { this.error = null; this.currentPage--; this.loadTable(); }
 }
 
 function nextPage() {
-    if(this.currentPage < this.totalPages-1) { this.currentPage++; this.loadTable(); }
+    if(this.currentPage < this.totalPages-1) { this.error = null; this.currentPage++; this.loadTable(); }
 }
 
 function subjectLabel(code) {
