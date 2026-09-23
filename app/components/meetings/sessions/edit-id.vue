@@ -140,6 +140,17 @@
       </div>
 
     </form>
+
+    <div class="clearfix" v-if="!loading">
+      <div class="float-right" role="group">
+        <button type="button" class="btn btn-danger" @click="remove" :disabled="saving || isNew || statementCount > 0" :title="statementCount > 0 ? 'Sessions with statements cannot be deleted' : ''">Delete</button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-primary" @click="save" :disabled="saving || errors.length > 0">
+          <i v-if="saving" class="fa fa-cog fa-spin"></i> Save
+        </button>
+        <a class="btn btn-light" :href="listUrl()">Close</a>
+      </div>
+    </div>
   </div>
 </template>
 
