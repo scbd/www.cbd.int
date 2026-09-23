@@ -236,7 +236,6 @@ export default {
                 changeWarnings,
                 errors,
               },
-  watch     : { earlyTitle: onEarlyTitle },
   methods   : {
                 load,
                 loadSession,
@@ -377,10 +376,6 @@ function earlyTitle(){
   if(!item) return null;
 
   return `${this.earlyMeeting.normalizedSymbol} – Item ${item.code || item.item}: ${item.shortTitle || item.title} – Advance Statement Submissions`;
-}
-
-function onEarlyTitle(earlyTitle){
-  if(earlyTitle && !this.title.trim()) this.setTitle(earlyTitle);
 }
 
 function regularTitle(label){
