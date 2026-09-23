@@ -1,0 +1,559 @@
+<template >
+  <div>
+    <h1>{{ isNew ? 'New Meeting Session' : 'Edit Meeting Session' }}
+      <small class="text-muted">{{ conference && conference.Title ? conference.Title.en : '' }}</small>
+    </h1>
+
+    <div v-if="error" class="alert alert-danger">{{ error }}</div>
+    <div v-if="loading" class="text-muted"><i class="fa fa-cog fa-spin"></i> Loading...</div>
+
+    <form v-if="!loading && meetings.length" @submit.prevent="save" novalidate>
+
+      <div class="form-group row">
+        <label for="title" class="col-sm-3 col-form-label">Title</label>
+        <div class="col-sm-9">
+          <div class="input-group">
+            <input type="text" class="form-control" id="title" v-model="title" :disabled="saving">
+            <div class="input-group-append">
+              <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" :disabled="saving">Generate</button>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a v-for="label in titleLabels" :key="label" class="dropdown-item" :class="{ disabled: !checkedMeetings.length }" href="#" @click.prevent="checkedMeetings.length && setTitle(regularTitle(label))">{{ label }}</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" :class="{ disabled: !earlyTitle }" href="#" @click.prevent="earlyTitle && setTitle(earlyTitle)">Early submission</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="summary" class="col-sm-3 col-form-label">Summary</label>
+        <div class="col-sm-9">
+          <textarea class="form-control" id="summary" rows="3" v-model="summary" :disabled="saving"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="date" class="col-sm-3 col-form-label">{{ earlySubmission ? 'Submissions open' : 'Date' }}</label>
+        <div class="col-sm-5">
+          <input type="datetime-local" class="form-control" id="date" v-model="date" :disabled="saving">
+        </div>
+        <div class="col-sm-4">
+          <select class="form-control" id="timezone" v-model="timezone" :class="{ 'border-warning': isTimezoneMismatch }" :disabled="saving">
+            <option v-for="tz in timezones" :key="tz" :value="tz">{{ tz }}</option>
+          </select>
+        </div>
+        <div class="offset-sm-3 col-sm-9" v-if="isTimezoneMismatch">
+          <small class="text-warning"><i class="fa fa-exclamation-triangle"></i> Timezone differs from the conference timezone ({{ conferenceTimezone }})</small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Meetings</label>
+        <div class="col-sm-9">
+          <div class="form-check" v-for="{ _id, normalizedSymbol, EVT_TIT_EN } in meetings" :key="_id">
+            <input class="form-check-input" type="checkbox" :id="`meeting-${_id}`" :value="_id" v-model="meetingIds" :disabled="saving">
+            <label class="form-check-label" :for="`meeting-${_id}`"><b>{{ normalizedSymbol }}</b> {{ EVT_TIT_EN }}</label>
+          </div>
+          <div v-if="otherMeetingIds.length" class="mt-1">
+            <small class="text-muted">Other linked meetings (kept):</small>
+            <span v-for="id in otherMeetingIds" :key="id" class="badge badge-secondary mr-1">{{ otherMeetingSymbol(id) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <h4>Early Submission</h4>
+      <div class="form-group row">
+        <div class="offset-sm-3 col-sm-9">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="earlySubmission" v-model="earlySubmission" :disabled="saving || (!earlySubmission && meetingIds.length !== 1)">
+            <label class="form-check-label" for="earlySubmission">Early submission of statements <small class="text-muted">(one meeting only)</small></label>
+          </div>
+        </div>
+      </div>
+
+      <template v-if="earlySubmission && earlyMeeting">
+        <div class="form-group row">
+          <label for="agendaItem" class="col-sm-3 col-form-label">Agenda item</label>
+          <div class="col-sm-9">
+            <select class="form-control" id="agendaItem" v-model="agendaItem" :disabled="saving">
+              <option v-for="i in earlyMeeting.agenda.items" :key="i.item" :value="i.item" :disabled="hasSubItems(earlyMeeting.agenda.items, i.item)">{{ i.code || i.item }} - {{ i.shortTitle || i.title }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="cutoffDate" class="col-sm-3 col-form-label">Cutoff date</label>
+          <div class="col-sm-5">
+            <input type="datetime-local" class="form-control" id="cutoffDate" v-model="cutoffDate" :disabled="saving">
+          </div>
+          <div class="col-sm-4 col-form-label"><small class="text-muted">{{ timezone }}</small></div>
+        </div>
+        <div class="form-group row">
+          <label for="cutoffGracePeriod" class="col-sm-3 col-form-label">Grace period</label>
+          <div class="col-sm-3">
+            <div class="input-group">
+              <input type="number" min="0" step="1" class="form-control" id="cutoffGracePeriod" v-model.number="cutoffGracePeriod" :disabled="saving">
+              <div class="input-group-append"><span class="input-group-text">minutes</span></div>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <h4>Videos</h4>
+      <div class="form-row mb-2" v-for="(video, index) in videos" :key="index">
+        <div class="col-sm-6">
+          <input type="url" class="form-control" placeholder="URL" v-model="video.url" :disabled="saving">
+        </div>
+        <div class="col-sm-2">
+          <select class="form-control" v-model="video.type" :disabled="saving">
+            <option v-for="{ value, text } in videoTypeOptions" :key="value" :value="value">{{ text }}</option>
+          </select>
+        </div>
+        <div class="col-sm-3">
+          <select class="form-control" v-model="video.language" :disabled="saving">
+            <option v-for="{ value, text } in languageOptions" :key="value" :value="value">{{ text }}</option>
+          </select>
+        </div>
+        <div class="col-sm-1">
+          <button type="button" class="btn btn-outline-danger" @click="videos.splice(index, 1)" :disabled="saving"><i class="fa fa-trash"></i></button>
+        </div>
+      </div>
+      <button type="button" class="btn btn-sm btn-outline-dark mb-3" @click="addVideo" :disabled="saving"><i class="fa fa-plus"></i> Add video</button>
+
+      <div v-if="changeWarnings.length" class="alert alert-warning">
+        <i class="fa fa-exclamation-triangle"></i> This session has {{ statementCount }} statement(s) attached. You are changing:
+        <ul class="mb-0"><li v-for="w in changeWarnings" :key="w">{{ w }}</li></ul>
+      </div>
+
+      <hr/>
+      <div class="clearfix">
+        <button v-if="!isNew" type="button" class="btn btn-outline-danger float-right" @click="remove" :disabled="saving || statementCount > 0" :title="statementCount > 0 ? 'Sessions with statements cannot be deleted' : ''">
+          <i class="fa fa-trash"></i> Delete
+        </button>
+        <button type="submit" class="btn btn-primary" :disabled="saving || errors.length > 0">
+          <i class="fa" :class="saving ? 'fa-cog fa-spin' : 'fa-save'"></i> Save
+        </button>
+        <a class="btn btn-outline-dark" :href="listUrl()">Cancel</a>
+        <small v-if="errors.length" class="text-danger ml-2">{{ errors.join(' - ') }}</small>
+      </div>
+    </form>
+  </div>
+</template>
+
+<script>
+import   Api, { mapObjectId } from '../api.js'
+import { DateTime }           from 'luxon'
+import { cloneDeep, sortBy, uniq, isEqual } from 'lodash'
+import   remapCode            from './re-map.js'
+
+const DATETIME_LOCAL = "yyyy-MM-dd'T'HH:mm";
+
+const TITLE_LABELS = [ 'Plenary', 'Working Group I', 'Working Group II', 'High Level Segment' ];
+
+// Eunomia reservation types that carry statements (same as the kronos statements sync)
+const RESERVATION_TYPE_LABELS = {
+  '570fd1ac2e3fa5cfa61d90f5': 'Plenary',
+  '58379a233456cf0001550cac': 'Working Group I',
+  '58379a293456cf0001550cad': 'Working Group II',
+  '5aff32171a0ff600010c28a8': 'High Level Segment',
+};
+
+const VIDEO_PROVIDERS = [
+  { type: 'unWebTv', priority: 0, test: url => /^https?:\/\/webtv\.un\.org\/([a-z]+\/)?asset\//i.test(url) },
+  { type: 'youtube', priority: 1, test: url => /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//i.test(url) },
+];
+
+const VIDEO_TYPES = [ { value: 'unWebTv', text: 'UN Web TV' }, { value: 'youtube', text: 'YouTube' } ];
+const LANGUAGES   = [
+  { value: 'xx', text: 'All (floor)' },
+  { value: 'ar', text: 'Arabic'  },
+  { value: 'zh', text: 'Chinese' },
+  { value: 'en', text: 'English' },
+  { value: 'fr', text: 'French'  },
+  { value: 'ru', text: 'Russian' },
+  { value: 'es', text: 'Spanish' },
+];
+
+export default {
+  name      : 'SessionEditId',
+  props     : {
+                route      : { type: Object,   required: false },
+                tokenReader: { type: Function, required: false }
+              },
+  computed  : {
+                isNew()       { return this.route.params.sessionId === 'new' },
+                titleLabels() { return TITLE_LABELS },
+                checkedMeetings,
+                earlyMeeting,
+                earlyTitle,
+                conferenceTimezone,
+                isTimezoneMismatch,
+                timezones,
+                videoTypeOptions() { return withLoadedValues(VIDEO_TYPES, this.videos.map(v=>v.type)) },
+                languageOptions()  { return withLoadedValues(LANGUAGES,   this.videos.map(v=>v.language)) },
+                statementCount,
+                changeWarnings,
+                errors,
+              },
+  watch     : { earlyTitle: onEarlyTitle },
+  methods   : {
+                load,
+                loadSession,
+                loadReservation,
+                regularTitle,
+                setTitle,
+                otherMeetingSymbol,
+                hasSubItems,
+                addVideo,
+                save,
+                findOverlappingSessions,
+                remove,
+                listUrl,
+              },
+  data, created
+}
+
+function data(){
+  return {
+    loading          : true,
+    saving           : false,
+    error            : null,
+    conference       : null,
+    routeMeeting     : null,
+    meetings         : [],
+    session          : null,
+    title            : '',
+    summary          : '',
+    date             : '',
+    timezone         : '',
+    meetingIds       : [],
+    otherMeetingIds  : [],
+    earlySubmission  : false,
+    agendaItem       : null,
+    cutoffDate       : '',
+    cutoffGracePeriod: 0,
+    videos           : [],
+  }
+}
+
+async function created(){
+  this.api = new Api(this.tokenReader);
+
+  try     { await this.load() }
+  catch(e){ this.error = e.message || `${e}` }
+  finally { this.loading = false }
+}
+
+async function load(){
+  const { code, meeting, sessionId, reservationId } = this.route.params;
+
+  const session = await getSession(this.api, this.isNew ? reservationId : sessionId);
+
+  if(this.isNew && session) return window.location.replace(`${this.listUrl()}/${encodeURIComponent(session._id)}/edit`);
+  if(!this.isNew && !session) throw new Error('Session not found');
+
+  if(code) {
+    this.conference = await this.api.getConference(remapCode(code));
+    if(!this.conference) throw new Error('Conference not found');
+  }
+  else {
+    this.routeMeeting = await this.api.getMeetingByCode(remapCode(meeting));
+    if(!this.routeMeeting) throw new Error('Meeting not found');
+    this.conference = await this.api.getConferenceByMeetingId(this.routeMeeting._id) || null;
+  }
+
+  if(this.conference) {
+    const meetings = await Promise.all(this.conference.MajorEventIDs.map(remapCode).map(id=>this.api.getMeetingById(id)));
+    this.meetings  = meetings.filter(o=>!!o);
+  }
+  else {
+    this.meetings = [ this.routeMeeting ];
+  }
+
+  if(session) return this.loadSession(session);
+
+  this.timezone   = this.conferenceTimezone || '';
+  this.meetingIds = this.routeMeeting ? [ this.routeMeeting._id ] : [];
+
+  if(reservationId) await this.loadReservation(await this.api.getReservation(reservationId));
+}
+
+function loadSession(session){
+  const listIds = this.meetings.map(m=>m._id);
+  const ids     = session.meetingIds || [];
+
+  this.session           = session;
+  this.title             = session.title   || '';
+  this.summary           = session.summary || '';
+  this.timezone          = session.timezone;
+  this.date              = toLocal(session.date, session.timezone);
+  this.meetingIds        = ids.filter(id=> listIds.includes(id));
+  this.otherMeetingIds   = ids.filter(id=>!listIds.includes(id));
+  this.earlySubmission   = !!session.earlySubmission;
+  this.agendaItem        = session.agendaItem ?? null;
+  this.cutoffDate        = toLocal(session.cutoffDate, session.timezone);
+  this.cutoffGracePeriod = session.cutoffGracePeriod ?? 0;
+  this.videos            = cloneDeep(session.videos || []);
+}
+
+// Pre-fill a new session from an Eunomia reservation, the same way the kronos statements sync does
+function loadReservation(reservation){
+  if(!reservation) throw new Error('Reservation not found');
+
+  if(this.conference && reservation.location?.conference !== this.conference._id)
+    throw new Error('Reservation belongs to another conference');
+
+  const { agenda = {} } = reservation;
+  const ids = agenda.meetingIds?.length
+            ? agenda.meetingIds.map(remapCode)
+            : Object.keys(agenda.meetings || {}).map(code=>this.meetings.find(m=>m.normalizedSymbol === remapCode(code).toUpperCase())?._id);
+
+  const meetingIds = ids.filter(id=>this.meetings.some(m=>m._id === id));
+  const label      = RESERVATION_TYPE_LABELS[reservation.type];
+
+  if(meetingIds.length) this.meetingIds = meetingIds;
+
+  this.date    = toLocal(reservation.start, this.timezone);
+  this.summary = (reservation.title || '').replace(/^[\s:]*/, '').trim();
+  this.videos  = toVideos(reservation.links);
+
+  if(label) this.title = this.regularTitle(label);
+}
+
+function checkedMeetings(){
+  return this.meetings.filter(m=>this.meetingIds.includes(m._id));
+}
+
+function earlyMeeting(){
+  return this.checkedMeetings.length === 1 && this.checkedMeetings[0].agenda ? this.checkedMeetings[0] : null;
+}
+
+function earlyTitle(){
+  if(!this.earlySubmission || !this.earlyMeeting) return null;
+
+  const item = this.earlyMeeting.agenda.items.find(i=>i.item === this.agendaItem);
+
+  if(!item) return null;
+
+  return `${this.earlyMeeting.normalizedSymbol} – Item ${item.code || item.item}: ${item.shortTitle || item.title} – Advance Statement Submissions`;
+}
+
+function onEarlyTitle(earlyTitle){
+  if(earlyTitle && !this.title.trim()) this.setTitle(earlyTitle);
+}
+
+function regularTitle(label){
+  return `${this.checkedMeetings.map(m=>m.normalizedSymbol).join(' / ')} - ${label}`;
+}
+
+function setTitle(title){
+  this.title = title;
+
+  if(this.isNew && title === this.earlyTitle && !this.summary.trim()) this.summary = title;
+}
+
+function conferenceTimezone(){
+  return this.conference?.timezone || this.routeMeeting?.timezone;
+}
+
+function isTimezoneMismatch(){
+  return !!this.conferenceTimezone && !!this.timezone && this.timezone !== this.conferenceTimezone;
+}
+
+// The browser list only has canonical zones (no America/Montreal), so the values in use are always added
+function timezones(){
+  const zones = Intl.supportedValuesOf ? Intl.supportedValuesOf('timeZone') : [];
+
+  return sortBy(uniq([ ...zones, this.timezone, this.conferenceTimezone ].filter(o=>!!o)));
+}
+
+function statementCount(){
+  return Math.max(this.session?.count || 0, this.session?.totalCount || 0);
+}
+
+function changeWarnings(){
+  if(!this.session) return [];
+
+  const { session } = this;
+  const warnings    = [];
+  const meetingIds  = [ ...this.meetingIds, ...this.otherMeetingIds ];
+
+  if(!!session.earlySubmission !== this.earlySubmission)
+    warnings.push(this.earlySubmission ? 'Early submission activated' : 'Early submission removed');
+
+  if(session.earlySubmission && this.earlySubmission && (session.agendaItem ?? null) !== this.agendaItem)
+    warnings.push('Agenda item');
+
+  if(!isEqual(sortBy(session.meetingIds || []), sortBy(meetingIds)))
+    warnings.push('Meetings');
+
+  return warnings;
+}
+
+function errors(){
+  const errors = [];
+
+  if(!this.title.trim())          errors.push('Title is required');
+  if(!this.date)                  errors.push('Date is required');
+  if(!this.timezone)              errors.push('Timezone is required');
+  if(!this.meetingIds.length)     errors.push('Select at least one meeting');
+
+  if(this.earlySubmission) {
+    const grace = this.cutoffGracePeriod;
+
+    if(this.meetingIds.length !== 1)                   errors.push('Early submission requires exactly one meeting');
+    if(this.agendaItem === null)                       errors.push('Agenda item is required');
+    if(!this.cutoffDate)                               errors.push('Cutoff date is required');
+    else if(this.date && this.cutoffDate <= this.date) errors.push('Cutoff date must be after the submissions open date');
+    if(!Number.isInteger(grace) || grace < 0)          errors.push('Grace period must be 0 or more minutes');
+  }
+
+  return errors;
+}
+
+function otherMeetingSymbol(id){
+  return (this.session?.meetings || []).find(m=>m._id === id)?.symbol || id;
+}
+
+// Sub-items carry a fractional number (6.1, 6.2) under their parent (6), which is then only a heading
+function hasSubItems(items, item){
+  return items.some(i => Math.floor(i.item) == item && i.item != item);
+}
+
+function addVideo(){
+  this.videos.push({ url: '', type: VIDEO_TYPES[0].value, language: 'xx' });
+}
+
+async function save(){
+  if(this.errors.length) return;
+
+  if(this.changeWarnings.length && !confirm(`This session has ${this.statementCount} statement(s) attached.\nYou are changing: ${this.changeWarnings.join(', ')}.\n\nContinue?`)) return;
+
+  this.saving = true;
+  this.error  = null;
+
+  try {
+    if(this.earlySubmission) {
+      const overlapping = await this.findOverlappingSessions();
+
+      if(overlapping.length && !confirm(`Another early submission session exists for this agenda item with an overlapping period:\n${overlapping.map(s=>s.title).join('\n')}\n\nContinue?`)) return;
+    }
+
+    const { interventions, ...original } = this.session || {};
+    const early = this.earlySubmission;
+
+    const session = {
+      ...original,
+      conferenceId     : this.conference ? this.conference._id : original.conferenceId,
+      meetingIds       : [ ...this.meetingIds, ...this.otherMeetingIds ],
+      title            : this.title.trim(),
+      summary          : this.summary.trim(),
+      date             : toUtc(this.date, this.timezone),
+      timezone         : this.timezone,
+      videos           : this.videos.filter(v=>(v.url||'').trim()).map(v=>({ ...v, url: v.url.trim() })),
+      earlySubmission  : early,
+      agendaItem       : early ? this.agendaItem                          : null,
+      cutoffDate       : early ? toUtc(this.cutoffDate, this.timezone)    : null,
+      cutoffGracePeriod: early ? this.cutoffGracePeriod                   : null,
+    };
+
+    if(this.isNew) await this.api.createSession(session, this.route.params.reservationId || null);
+    else           await this.api.updateSession(this.session._id, session);
+
+    window.location.href = this.listUrl();
+  }
+  catch(e) {
+    this.error = e.message || `${e}`;
+  }
+  finally {
+    this.saving = false;
+  }
+}
+
+async function findOverlappingSessions(){
+  const q = {
+    earlySubmission: true,
+    agendaItem     : this.agendaItem,
+    meetingIds     : { $in: [ mapObjectId(this.earlyMeeting._id) ] },
+  };
+
+  const sessions = await this.api.querySessions({ q, f: { title: 1, date: 1, cutoffDate: 1 } }) || [];
+  const from     = new Date(toUtc(this.date,       this.timezone));
+  const to       = new Date(toUtc(this.cutoffDate, this.timezone));
+
+  return sessions.filter(s=>s._id !== this.session?._id && new Date(s.date) < to && new Date(s.cutoffDate) > from);
+}
+
+async function remove(){
+  if(!confirm(`Delete session "${this.session.title}"?`)) return;
+
+  this.saving = true;
+  this.error  = null;
+
+  try {
+    await this.api.deleteSession(this.session._id);
+
+    window.location.href = this.listUrl();
+  }
+  catch(e) {
+    this.error = e.message || `${e}`;
+  }
+  finally {
+    this.saving = false;
+  }
+}
+
+function listUrl(){
+  const { code, meeting } = this.route.params;
+
+  if(meeting) return `/meetings/${encodeURIComponent(meeting)}/sessions`;
+  else        return `/conferences/${encodeURIComponent(code)}/sessions`;
+}
+
+//////////////////////////
+// Helpers
+////////////////////////
+
+async function getSession(api, sessionId){
+  if(!sessionId) return null;
+
+  try {
+    const { interventions, ...session } = await api.getSessionById(sessionId);
+
+    return session;
+  }
+  catch(e) {
+    if(e?.statusCode === 404) return null;
+    throw e;
+  }
+}
+
+function toLocal(isoDate, timezone){
+  if(!isoDate) return '';
+
+  return DateTime.fromISO(isoDate, { zone: 'utc' }).setZone(timezone || 'local').toFormat(DATETIME_LOCAL);
+}
+
+function toUtc(localDate, timezone){
+  return DateTime.fromISO(localDate, { zone: timezone }).toUTC().toISO();
+}
+
+function toVideos(links){
+  const lookup = url => VIDEO_PROVIDERS.find(({ test }) => test(url));
+
+  const videos = (links || []).filter(({ url }) => lookup(url)).map(({ url, locale }) => ({
+    url,
+    type    : lookup(url).type,
+    language: locale || 'xx',
+  }));
+
+  return sortBy(videos, [ v => lookup(v.url).priority, 'language' ]);
+}
+
+// Values no longer offered (e.g. legacy 'live' video type) are kept as options so they are not lost on save
+function withLoadedValues(options, values){
+  const extra = uniq(values).filter(v=>v && !options.some(o=>o.value === v));
+
+  return [ ...options, ...extra.map(value=>({ value, text: value.charAt(0).toUpperCase() + value.slice(1) })) ];
+}
+</script>

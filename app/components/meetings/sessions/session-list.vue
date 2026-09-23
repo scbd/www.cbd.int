@@ -1,6 +1,7 @@
 <template >
   <div>
 
+    <a class="btn btn-outline-dark float-right" :href="newUrl()"><i class="fa fa-plus"></i> New session</a>
     <h1>Meeting Sessions
       <small class="text-muted">
         <span v-for="{normalizedSymbol} in meetings" :key="normalizedSymbol">
@@ -34,6 +35,7 @@
           <td>
             <div class="btn-group" role="group">
               <a class="btn btn-sm btn-outline-dark" :href="getUrl({ _id, meetings })"><i class="fa fa-list"></i></a>
+              <a class="btn btn-sm btn-outline-dark" :href="getUrl({ _id, meetings }) + '/edit'"><i class="fa fa-edit"></i></a>
             </div>
             
           </td>
@@ -57,7 +59,7 @@ export default {
                   route:       { type: Object, required: false },
                   tokenReader: { type: Function, required: false }
                 },
-  methods    : { getUrl, meetingQuery,conferenceQuery, sessionNumber, isInProgress, now },
+  methods    : { getUrl, newUrl, meetingQuery,conferenceQuery, sessionNumber, isInProgress, now },
   computed   : { now },
   filters    : { formatDate: format, tz: timezone },
   created, 
@@ -78,6 +80,10 @@ function getUrl({ _id, meetings }) {
 
   if(isMeeting) return  `/meetings/${encodeURIComponent(symbol)}/sessions/${encodeURIComponent(_id)}`
   else          return `/conferences/${encodeURIComponent(code)}/sessions/${encodeURIComponent(_id)}`;
+}
+
+function newUrl() {
+  return `${this.getUrl({ _id: 'new' })}/edit`;
 }
 
 async function created(){

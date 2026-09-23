@@ -74,6 +74,22 @@ export default class Api
     return conference
   }
 
+  async getConferenceByMeetingId(meetingId){
+
+    const q = { MajorEventIDs: mapObjectId(meetingId) };
+
+    return this.http.get(`api/v2016/conferences`, { params: { q, fo: 1 } }).then(res => res.data).catch(tryCastToApiError);
+  }
+
+  //////////////////////////
+  // Reservations
+  ////////////////////////
+
+  getReservation(reservationId) {
+
+    return this.http.get(`api/v2016/reservations/${encodeURIComponent(reservationId)}`).then(res => res.data).catch(tryCastToApiError);
+  }
+
   //////////////////////////
   // Interventions
   ////////////////////////
@@ -253,6 +269,22 @@ export default class Api
     interventions = await interventions;
 
     return { ...session, interventions }
+  }
+
+  // sessionId is optional: when set, the session is created with that _id (e.g. an Eunomia reservation _id)
+  createSession(data, sessionId=null) {
+
+    return this.http.post(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId||'')}`, data).then(res => res.data).catch(tryCastToApiError);
+  }
+
+  updateSession(sessionId, data) {
+
+    return this.http.put(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}`, data).then(res => res.data).catch(tryCastToApiError);
+  }
+
+  deleteSession(sessionId) {
+
+    return this.http.delete(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}`).then(res => res.data).catch(tryCastToApiError);
   }
 
   //////////////////////////
