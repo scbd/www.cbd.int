@@ -18,18 +18,18 @@
 
         <div class="row">
             <div class="col-md-4">
-                <h5>Paragraphs by type</h5>
+                <h5>Decision type</h5>
                 <div id="dashboard-type-chart" class="chart chart-sm"></div>
             </div>
             <div class="col-md-8">
-                <h5>Top subjects</h5>
+                <h5>Subjects</h5>
                 <div id="dashboard-subject-chart" class="chart chart-tall"></div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12">
-                <h5>Paragraphs by actor per COP <small class="text-muted">(all COPs — not affected by the filters)</small></h5>
+                <h5>Requests to the Executive Secretariat, SBSTTA and SBI per COP <small class="text-muted">(all COPs — not affected by the filters)</small></h5>
                 <div id="dashboard-trend-chart" class="chart chart-lg"></div>
             </div>
         </div>
@@ -42,11 +42,18 @@
                 </h5>
 
                 <div class="filter-chips" v-if="typeFilter || subjectFilter">
-                    <span class="badge badge-secondary chip" v-if="typeFilter" @click="toggleType(typeFilter)">
-                        {{typeTitle(typeFilter)}} <i class="fa fa-times"></i>
+                    <span v-if="typeFilter">
+                        <span class="badge chip badge-primary">
+                            {{typeTitle(typeFilter)}}
+                            <i class="fa fa-minus-circle" @click="toggleType(typeFilter)"></i>
+                        </span>
                     </span>
-                    <span class="badge badge-secondary chip" v-if="subjectFilter" @click="toggleSubject(subjectFilter)">
-                        {{subjectLabel(subjectFilter)}} <i class="fa fa-times"></i>
+
+                    <span v-if="subjectFilter">
+                        <span class="badge chip badge-primary">
+                            {{subjectLabel(subjectFilter)}}
+                            <i class="fa fa-minus-circle" @click="toggleSubject(subjectFilter)"></i>
+                        </span>
                     </span>
                 </div>
 
@@ -77,9 +84,9 @@
                 </table>
 
                 <div class="pagination" v-if="totalPages>1">
-                    <button class="btn btn-sm btn-outline-dark" :disabled="currentPage < 1" @click="previousPage()">Previous</button>
-                    <span class="px-2">Page {{currentPage+1}} of {{totalPages}}</span>
-                    <button class="btn btn-sm btn-outline-dark" :disabled="currentPage >= totalPages-1" @click="nextPage()">Next</button>
+                    <button :disabled="currentPage < 1" @click="previousPage()">Previous</button>
+                    <span>Page {{currentPage+1}} of {{totalPages}}</span>
+                    <button :disabled="currentPage >= totalPages-1" @click="nextPage()">Next</button>
                 </div>
             </div>
         </div>
@@ -105,11 +112,11 @@ const baseIndexQuery = 'schema_s:decision-text';
 
 const MAX_DECISIONS = 1000;   // DTT holds 506 COP decisions today
 
-const TYPE_COLORS = { operational: '#2e7d32', informational: '#ef6c00' };
+const TYPE_COLORS = { operational: '#17a2b8', informational: '#6c757d', subject: '#449951' };
 
 // dttActor_ss values are case-sensitive and must match the index exactly.
 const TREND_ACTORS = [
-    { code: 'executive-secretary', title: 'Executive Secretary', color: '#2e7d32' },
+    { code: 'executive-secretary', title: 'Executive Secretary', color: '#1c473b' },
     { code: 'SBSTTA',              title: 'SBSTTA',              color: '#1565c0' },
     { code: 'SBI',                 title: 'SBI',                 color: '#ef6c00' }
 ];
@@ -321,8 +328,8 @@ function renderSubjects(vm, data) {
             'valueField' : 'count',
             'fillAlphas' : 0.9,
             'lineAlpha'  : 0.2,
-            'fillColors' : TYPE_COLORS.operational,
-            'lineColor'  : TYPE_COLORS.operational,
+            'fillColors' : TYPE_COLORS.subject,
+            'lineColor'  : TYPE_COLORS.subject,
             'balloonText': '[[category]]: [[value]] paragraphs'
         }],
         'startDuration': 0
@@ -452,6 +459,52 @@ function errorMessage(err, fallback) {
 .chart-sm { height: 300px; }
 .chart-lg { height: 340px; }
 .chart-tall { height: 420px; }
-.chip     { cursor: pointer; margin-right: 4px; }
-.pagination { align-items: center; }
+.chip {
+    display: inline-block;
+    padding: 5px;
+    font-size: 12px;
+    border-radius: 3px;
+    margin: 2px;
+    cursor: pointer;
+}
+.filter-chips { margin-bottom: 12px; }
+
+/* pagination rules copied from decision-search.vue so both pages match */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.pagination button {
+    padding: 5px 15px;
+    margin: 0 10px;
+    font-size: 16px;
+    color: #495057;
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    cursor: pointer;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.pagination button:disabled {
+    color: #6c757d;
+    cursor: not-allowed;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.pagination span {
+    font-size: 16px;
+    color: #495057;
+}
 </style>
