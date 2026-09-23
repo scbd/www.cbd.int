@@ -36,8 +36,8 @@ export default class SolrApi extends ApiBase
       params['group.limit']  = 0;
     }
 
-    // Facets and groups need repeated keys (`facet.field=a&facet.field=b`); axios' default
-    // serializer emits `facet.field[]=a`, which Solr ignores. Scoped to those calls so the
+    // Facets need repeated keys (`facet.field=a&facet.field=b` and `facet.query=x&facet.query=y`); axios' default
+    // serializer emits `facet.field[]=a`, which Solr ignores. Scoped to facet calls so the
     // plain query/paging callers keep axios' encoding untouched.
     const config = { params };
     if(facetField || facetQuery) config.paramsSerializer = repeatArrayKeys;
