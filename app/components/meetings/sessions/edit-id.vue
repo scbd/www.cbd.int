@@ -32,7 +32,7 @@
         <div class="input-group">
           <input type="text" class="form-control" id="title" v-model="title" :disabled="saving">
           <div class="input-group-append">
-            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" :disabled="saving">Generate</button>
+            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" :disabled="saving">Generate <i class="fa fa-caret-down"></i></button>
             <div class="dropdown-menu dropdown-menu-right">
               <a v-for="label in titleLabels" :key="label" class="dropdown-item" :class="{ disabled: !checkedMeetings.length }" href="#" @click.prevent="checkedMeetings.length && setTitle(regularTitle(label))">{{ label }}</a>
               <div class="dropdown-divider"></div>
