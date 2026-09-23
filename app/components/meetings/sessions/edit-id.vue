@@ -93,13 +93,11 @@
       <div class="panel panel-default border rounded mb-3">
         <div class="card-header d-flex align-items-center" :class="{ 'alert-success': earlySubmission }">
           <h4 style="color:inherit" class="mb-0">Early statement submission</h4>
-          <div class="form-check ml-3">
-            <input class="form-check-input" type="checkbox" id="earlySubmission" v-model="earlySubmission" :disabled="saving || (!earlySubmission && meetingIds.length !== 1)">
-            <label class="form-check-label" for="earlySubmission">
-              <span class="badge" :class="earlySubmission ? 'badge-success' : 'badge-secondary'">{{ earlySubmission ? 'Enabled' : 'Disabled' }}</span>
-              <small v-if="meetingIds.length > 1" class="text-muted">(one meeting only)</small>
-            </label>
+          <div class="btn-group btn-group-sm ml-3" role="group">
+            <button type="button" class="btn" :class="earlySubmission ? 'btn-success' : 'btn-light'" @click="earlySubmission = true" :disabled="saving || (!earlySubmission && meetingIds.length !== 1)">On</button>
+            <button type="button" class="btn" :class="!earlySubmission ? 'btn-secondary' : 'btn-light'" @click="earlySubmission = false" :disabled="saving">Off</button>
           </div>
+          <small v-if="meetingIds.length > 1" class="text-muted ml-2">(one meeting only)</small>
         </div>
 
         <div class="card-body" v-if="earlySubmission && earlyMeeting">
