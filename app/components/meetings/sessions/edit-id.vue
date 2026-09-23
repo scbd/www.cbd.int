@@ -61,7 +61,7 @@
           <div class="form-group">
             <label class="control-label" for="timezone">Timezone</label>
             <select class="form-control" id="timezone" v-model="timezone" :class="{ 'border-warning': isTimezoneMismatch }" :disabled="saving">
-              <option v-for="tz in timezones" :key="tz" :value="tz">{{ tz }}</option>
+              <option v-for="{ value, text } in timezones" :key="value" :value="value">{{ text }}</option>
             </select>
             <small v-if="isTimezoneMismatch" class="text-warning"><i class="fa fa-exclamation-triangle"></i> Differs from the conference timezone ({{ conferenceTimezone }})</small>
           </div>
@@ -375,11 +375,16 @@ function isTimezoneMismatch(){
   return !!this.conferenceTimezone && !!this.timezone && this.timezone !== this.conferenceTimezone;
 }
 
-// The browser list only has canonical zones (no America/Montreal), so the values in use are always added
+// The browser list only has canonical zones (no America/Montreal), so the values in use are always added.
+// Offsets are taken at the session date, so they follow daylight saving time.
 function timezones(){
   const zones = Intl.supportedValuesOf ? Intl.supportedValuesOf('timeZone') : [];
+  const at    = this.date || DateTime.now().toFormat(DATETIME_LOCAL);
 
-  return sortBy(uniq([ ...zones, this.timezone, this.conferenceTimezone ].filter(o=>!!o)));
+  return sortBy(uniq([ ...zones, this.timezone, this.conferenceTimezone ].filter(o=>!!o))).map(value=>({
+    value,
+    text: `${value.replace(/_/g, ' ')} (${DateTime.fromISO(at, { zone: value }).toFormat('ZZ')})`,
+  }));
 }
 
 function statementCount(){
