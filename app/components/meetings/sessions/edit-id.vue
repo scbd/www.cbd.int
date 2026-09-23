@@ -200,7 +200,7 @@ const VIDEO_PROVIDERS = [
 
 const VIDEO_TYPES = [ { value: 'unWebTv', text: 'UN Web TV' }, { value: 'youtube', text: 'YouTube' } ];
 const LANGUAGES   = [
-  { value: 'xx', text: 'All (floor)' },
+  { value: 'xx', text: 'All / Embedded' },
   { value: 'ar', text: 'Arabic'  },
   { value: 'zh', text: 'Chinese' },
   { value: 'en', text: 'English' },
