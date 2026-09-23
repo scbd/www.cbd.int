@@ -36,7 +36,7 @@
         <label class="control-label">Meeting(s)</label>
         <div class="form-check" v-for="{ _id, normalizedSymbol, EVT_TIT_EN } in meetings" :key="_id">
           <input class="form-check-input" type="checkbox" :id="`meeting-${_id}`" :value="_id" v-model="meetingIds" :disabled="saving">
-          <label class="form-check-label" :for="`meeting-${_id}`"><b>{{ normalizedSymbol }}</b> - {{ EVT_TIT_EN }}</label>
+          <label class="form-check-label" :for="`meeting-${_id}`" :class="{ 'text-muted': !meetingIds.includes(_id) }"><b>{{ normalizedSymbol }}</b> - {{ EVT_TIT_EN }}</label>
         </div>
         <div v-if="otherMeetingIds.length" class="mt-1">
           <small class="text-muted">Other linked meetings (kept):</small>
