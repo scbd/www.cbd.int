@@ -138,15 +138,21 @@
         </div>
 
         <div class="card-body">
-          <div class="input-group mb-1" v-for="(video, index) in videos" :key="index">
-            <input type="url" class="form-control" style="flex: 3 1 auto" placeholder="URL" v-model="video.url" :disabled="saving">
-            <select class="form-control" v-model="video.type" :disabled="saving">
-              <option v-for="{ value, text } in videoTypeOptions" :key="value" :value="value">{{ text }}</option>
-            </select>
-            <select class="form-control" v-model="video.language" :disabled="saving">
-              <option v-for="{ value, text } in languageOptions" :key="value" :value="value">{{ text }}</option>
-            </select>
-            <div class="input-group-append">
+          <div class="form-row mb-2" v-for="(video, index) in videos" :key="index">
+            <div class="col-12 col-md-6">
+              <input type="url" class="form-control" placeholder="URL" v-model="video.url" :disabled="saving">
+            </div>
+            <div class="col">
+              <select class="form-control" v-model="video.type" :disabled="saving">
+                <option v-for="{ value, text } in videoTypeOptions" :key="value" :value="value">{{ text }}</option>
+              </select>
+            </div>
+            <div class="col">
+              <select class="form-control" v-model="video.language" :disabled="saving">
+                <option v-for="{ value, text } in languageOptions" :key="value" :value="value">{{ text }}</option>
+              </select>
+            </div>
+            <div class="col-auto">
               <button type="button" class="btn btn-light" @click="videos.splice(index, 1)" :disabled="saving"><i class="fa fa-times"></i></button>
             </div>
           </div>
