@@ -106,7 +106,7 @@ import   remapCode                          from './re-map.js'
 import remap from './re-map.js'
 
 export default {
-  name      : 'SessionEdit',
+  name      : 'ManageInterventions',
   props     : {
                 route      : { type: Object,   required: false },
                 tokenReader: { type: Function, required: false }
