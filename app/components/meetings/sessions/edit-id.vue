@@ -1,141 +1,144 @@
 <template >
-  <div>
-    <h1>{{ isNew ? 'New Meeting Session' : 'Edit Meeting Session' }}
-      <small class="text-muted">{{ conference && conference.Title ? conference.Title.en : '' }}</small>
+  <div style="background: #eee;padding: 15px;">
+
+    <div class="float-right" role="group">
+      <button type="button" class="btn btn-danger" @click="remove" :disabled="loading || saving || isNew || statementCount > 0" :title="statementCount > 0 ? 'Sessions with statements cannot be deleted' : ''">Delete</button>
+      &nbsp;&nbsp;
+      <button type="button" class="btn btn-primary" @click="save" :disabled="loading || saving || errors.length > 0">
+        <i v-if="saving" class="fa fa-cog fa-spin"></i> Save
+      </button>
+      <a class="btn btn-light" :href="listUrl()">Close</a>
+    </div>
+
+    <h1>
+      {{ headerCode }} - {{ title || 'Meeting Session' }}
+      <small v-if="isNew">(NEW)</small>
     </h1>
 
     <div v-if="error" class="alert alert-danger">{{ error }}</div>
     <div v-if="loading" class="text-muted"><i class="fa fa-cog fa-spin"></i> Loading...</div>
+    <div v-if="!loading && errors.length" class="text-danger mb-2"><small>{{ errors.join(' - ') }}</small></div>
+
+    <div v-if="changeWarnings.length" class="alert alert-warning">
+      <i class="fa fa-exclamation-triangle"></i> This session has {{ statementCount }} statement(s) attached. You are changing:
+      <ul class="mb-0"><li v-for="w in changeWarnings" :key="w">{{ w }}</li></ul>
+    </div>
 
     <form v-if="!loading && meetings.length" @submit.prevent="save" novalidate>
 
-      <div class="form-group row">
-        <label for="title" class="col-sm-3 col-form-label">Title</label>
-        <div class="col-sm-9">
-          <div class="input-group">
-            <input type="text" class="form-control" id="title" v-model="title" :disabled="saving">
-            <div class="input-group-append">
-              <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" :disabled="saving">Generate</button>
-              <div class="dropdown-menu dropdown-menu-right">
-                <a v-for="label in titleLabels" :key="label" class="dropdown-item" :class="{ disabled: !checkedMeetings.length }" href="#" @click.prevent="checkedMeetings.length && setTitle(regularTitle(label))">{{ label }}</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" :class="{ disabled: !earlyTitle }" href="#" @click.prevent="earlyTitle && setTitle(earlyTitle)">Early submission</a>
-              </div>
+      <!-- Title -->
+      <div class="form-group">
+        <label class="control-label" for="title">Title</label>
+        <div class="input-group">
+          <input type="text" class="form-control" id="title" v-model="title" :disabled="saving">
+          <div class="input-group-append">
+            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" :disabled="saving">Generate</button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a v-for="label in titleLabels" :key="label" class="dropdown-item" :class="{ disabled: !checkedMeetings.length }" href="#" @click.prevent="checkedMeetings.length && setTitle(regularTitle(label))">{{ label }}</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" :class="{ disabled: !earlyTitle }" href="#" @click.prevent="earlyTitle && setTitle(earlyTitle)">Early submission</a>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="form-group row">
-        <label for="summary" class="col-sm-3 col-form-label">Summary</label>
-        <div class="col-sm-9">
-          <textarea class="form-control" id="summary" rows="3" v-model="summary" :disabled="saving"></textarea>
+      <!-- Summary -->
+      <div class="form-group">
+        <label class="control-label" for="summary">Summary</label>
+        <textarea class="form-control" id="summary" rows="3" v-model="summary" :disabled="saving"></textarea>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-4">
+          <!-- Date -->
+          <div class="form-group">
+            <label class="control-label" for="date">{{ earlySubmission ? 'Submissions open' : 'Date' }}</label>
+            <input type="datetime-local" class="form-control" id="date" v-model="date" :disabled="saving">
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <!-- Timezone -->
+          <div class="form-group">
+            <label class="control-label" for="timezone">Timezone</label>
+            <select class="form-control" id="timezone" v-model="timezone" :class="{ 'border-warning': isTimezoneMismatch }" :disabled="saving">
+              <option v-for="tz in timezones" :key="tz" :value="tz">{{ tz }}</option>
+            </select>
+            <small v-if="isTimezoneMismatch" class="text-warning"><i class="fa fa-exclamation-triangle"></i> Differs from the conference timezone ({{ conferenceTimezone }})</small>
+          </div>
         </div>
       </div>
 
-      <div class="form-group row">
-        <label for="date" class="col-sm-3 col-form-label">{{ earlySubmission ? 'Submissions open' : 'Date' }}</label>
-        <div class="col-sm-5">
-          <input type="datetime-local" class="form-control" id="date" v-model="date" :disabled="saving">
-        </div>
-        <div class="col-sm-4">
-          <select class="form-control" id="timezone" v-model="timezone" :class="{ 'border-warning': isTimezoneMismatch }" :disabled="saving">
-            <option v-for="tz in timezones" :key="tz" :value="tz">{{ tz }}</option>
-          </select>
-        </div>
-        <div class="offset-sm-3 col-sm-9" v-if="isTimezoneMismatch">
-          <small class="text-warning"><i class="fa fa-exclamation-triangle"></i> Timezone differs from the conference timezone ({{ conferenceTimezone }})</small>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <label class="col-sm-3 col-form-label">Meetings</label>
-        <div class="col-sm-9">
-          <div class="form-check" v-for="{ _id, normalizedSymbol, EVT_TIT_EN } in meetings" :key="_id">
+      <!-- Meetings -->
+      <div class="form-group">
+        <label class="control-label">Meeting(s)</label>
+        <div>
+          <div class="form-check form-check-inline" v-for="{ _id, normalizedSymbol } in meetings" :key="_id">
             <input class="form-check-input" type="checkbox" :id="`meeting-${_id}`" :value="_id" v-model="meetingIds" :disabled="saving">
-            <label class="form-check-label" :for="`meeting-${_id}`"><b>{{ normalizedSymbol }}</b> {{ EVT_TIT_EN }}</label>
+            <label class="form-check-label" :for="`meeting-${_id}`">{{ normalizedSymbol }}</label>
           </div>
-          <div v-if="otherMeetingIds.length" class="mt-1">
-            <small class="text-muted">Other linked meetings (kept):</small>
-            <span v-for="id in otherMeetingIds" :key="id" class="badge badge-secondary mr-1">{{ otherMeetingSymbol(id) }}</span>
-          </div>
+        </div>
+        <div v-if="otherMeetingIds.length" class="mt-1">
+          <small class="text-muted">Other linked meetings (kept):</small>
+          <span v-for="id in otherMeetingIds" :key="id" class="badge badge-secondary mr-1">{{ otherMeetingSymbol(id) }}</span>
         </div>
       </div>
 
-      <h4>Early Submission</h4>
-      <div class="form-group row">
-        <div class="offset-sm-3 col-sm-9">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="earlySubmission" v-model="earlySubmission" :disabled="saving || (!earlySubmission && meetingIds.length !== 1)">
-            <label class="form-check-label" for="earlySubmission">Early submission of statements <small class="text-muted">(one meeting only)</small></label>
-          </div>
+      <!-- Early Submission -->
+      <div class="form-group">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="earlySubmission" v-model="earlySubmission" :disabled="saving || (!earlySubmission && meetingIds.length !== 1)">
+          <label class="form-check-label" for="earlySubmission">Early submission of statements <small class="text-muted">(one meeting only)</small></label>
         </div>
       </div>
 
-      <template v-if="earlySubmission && earlyMeeting">
-        <div class="form-group row">
-          <label for="agendaItem" class="col-sm-3 col-form-label">Agenda item</label>
-          <div class="col-sm-9">
+      <div class="row" v-if="earlySubmission && earlyMeeting">
+        <div class="col-12 col-md-6">
+          <!-- Agenda Item -->
+          <div class="form-group">
+            <label class="control-label" for="agendaItem">Agenda Item</label>
             <select class="form-control" id="agendaItem" v-model="agendaItem" :disabled="saving">
+              <option :value="null">Select an item......</option>
               <option v-for="i in earlyMeeting.agenda.items" :key="i.item" :value="i.item" :disabled="hasSubItems(earlyMeeting.agenda.items, i.item)">{{ i.code || i.item }} - {{ i.shortTitle || i.title }}</option>
             </select>
           </div>
         </div>
-        <div class="form-group row">
-          <label for="cutoffDate" class="col-sm-3 col-form-label">Cutoff date</label>
-          <div class="col-sm-5">
+        <div class="col-12 col-md-4">
+          <!-- Cutoff Date -->
+          <div class="form-group">
+            <label class="control-label" for="cutoffDate">Cutoff date <small class="text-muted">({{ timezone }})</small></label>
             <input type="datetime-local" class="form-control" id="cutoffDate" v-model="cutoffDate" :disabled="saving">
           </div>
-          <div class="col-sm-4 col-form-label"><small class="text-muted">{{ timezone }}</small></div>
         </div>
-        <div class="form-group row">
-          <label for="cutoffGracePeriod" class="col-sm-3 col-form-label">Grace period</label>
-          <div class="col-sm-3">
+        <div class="col-12 col-md-2">
+          <!-- Grace Period -->
+          <div class="form-group">
+            <label class="control-label" for="cutoffGracePeriod">Grace period</label>
             <div class="input-group">
               <input type="number" min="0" step="1" class="form-control" id="cutoffGracePeriod" v-model.number="cutoffGracePeriod" :disabled="saving">
-              <div class="input-group-append"><span class="input-group-text">minutes</span></div>
+              <div class="input-group-append"><span class="input-group-text">min</span></div>
             </div>
           </div>
         </div>
-      </template>
+      </div>
 
-      <h4>Videos</h4>
-      <div class="form-row mb-2" v-for="(video, index) in videos" :key="index">
-        <div class="col-sm-6">
-          <input type="url" class="form-control" placeholder="URL" v-model="video.url" :disabled="saving">
-        </div>
-        <div class="col-sm-2">
+      <!-- Videos -->
+      <div class="form-group">
+        <label class="control-label">Videos</label>
+        <div class="input-group mb-1" v-for="(video, index) in videos" :key="index">
+          <input type="url" class="form-control" style="flex: 3 1 auto" placeholder="URL" v-model="video.url" :disabled="saving">
           <select class="form-control" v-model="video.type" :disabled="saving">
             <option v-for="{ value, text } in videoTypeOptions" :key="value" :value="value">{{ text }}</option>
           </select>
-        </div>
-        <div class="col-sm-3">
           <select class="form-control" v-model="video.language" :disabled="saving">
             <option v-for="{ value, text } in languageOptions" :key="value" :value="value">{{ text }}</option>
           </select>
+          <div class="input-group-append">
+            <button type="button" class="btn btn-light" @click="videos.splice(index, 1)" :disabled="saving"><i class="fa fa-times"></i></button>
+          </div>
         </div>
-        <div class="col-sm-1">
-          <button type="button" class="btn btn-outline-danger" @click="videos.splice(index, 1)" :disabled="saving"><i class="fa fa-trash"></i></button>
-        </div>
-      </div>
-      <button type="button" class="btn btn-sm btn-outline-dark mb-3" @click="addVideo" :disabled="saving"><i class="fa fa-plus"></i> Add video</button>
-
-      <div v-if="changeWarnings.length" class="alert alert-warning">
-        <i class="fa fa-exclamation-triangle"></i> This session has {{ statementCount }} statement(s) attached. You are changing:
-        <ul class="mb-0"><li v-for="w in changeWarnings" :key="w">{{ w }}</li></ul>
+        <button type="button" class="btn btn-light btn-sm" @click="addVideo" :disabled="saving"><i class="fa fa-plus"></i> Add video</button>
       </div>
 
-      <hr/>
-      <div class="clearfix">
-        <button v-if="!isNew" type="button" class="btn btn-outline-danger float-right" @click="remove" :disabled="saving || statementCount > 0" :title="statementCount > 0 ? 'Sessions with statements cannot be deleted' : ''">
-          <i class="fa fa-trash"></i> Delete
-        </button>
-        <button type="submit" class="btn btn-primary" :disabled="saving || errors.length > 0">
-          <i class="fa" :class="saving ? 'fa-cog fa-spin' : 'fa-save'"></i> Save
-        </button>
-        <a class="btn btn-outline-dark" :href="listUrl()">Cancel</a>
-        <small v-if="errors.length" class="text-danger ml-2">{{ errors.join(' - ') }}</small>
-      </div>
     </form>
   </div>
 </template>
@@ -182,6 +185,7 @@ export default {
               },
   computed  : {
                 isNew()       { return this.route.params.sessionId === 'new' },
+                headerCode()  { return this.conference?.code || this.routeMeeting?.normalizedSymbol || '' },
                 titleLabels() { return TITLE_LABELS },
                 checkedMeetings,
                 earlyMeeting,
