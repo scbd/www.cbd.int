@@ -31,62 +31,71 @@
 
     <form v-if="!loading && meetings.length" @submit.prevent="save" novalidate>
 
-      <!-- Meetings -->
-      <div class="form-group">
-        <label class="control-label">Meeting(s)</label>
-        <div class="form-check" v-for="{ _id, normalizedSymbol, EVT_TIT_EN } in meetings" :key="_id">
-          <input class="form-check-input" type="checkbox" :id="`meeting-${_id}`" :value="_id" v-model="meetingIds" :disabled="saving">
-          <label class="form-check-label" :for="`meeting-${_id}`" :class="{ 'text-muted': !meetingIds.includes(_id) }"><b>{{ normalizedSymbol }}</b> - {{ EVT_TIT_EN }}</label>
+      <!-- General -->
+      <div class="panel panel-default border rounded mb-3">
+        <div class="card-header">
+          <h4 style="color:inherit" class="mb-0">General</h4>
         </div>
-        <div v-if="otherMeetingIds.length" class="mt-1">
-          <small class="text-muted">Other linked meetings (kept):</small>
-          <span v-for="id in otherMeetingIds" :key="id" class="badge badge-secondary mr-1">{{ otherMeetingSymbol(id) }}</span>
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="col-12 col-md-4">
-          <!-- Date -->
+        <div class="card-body">
+          <!-- Meetings -->
           <div class="form-group">
-            <label class="control-label" for="date">{{ earlySubmission ? 'Submissions open' : 'Date' }}</label>
-            <input type="datetime-local" class="form-control" id="date" v-model="date" :disabled="saving">
-          </div>
-        </div>
-        <div class="col-12 col-md-4">
-          <!-- Timezone -->
-          <div class="form-group">
-            <label class="control-label" for="timezone">Timezone</label>
-            <select class="form-control" id="timezone" v-model="timezone" :class="{ 'border-warning': isTimezoneMismatch }" :disabled="saving">
-              <option v-for="{ value, text } in timezones" :key="value" :value="value">{{ text }}</option>
-            </select>
-            <small v-if="isTimezoneMismatch" class="text-warning">
-              <i class="fa fa-exclamation-triangle"></i> Differs from the conference timezone ({{ conferenceTimezone }})
-              <button type="button" class="btn btn-light btn-xs ml-1" @click="timezone = conferenceTimezone" :disabled="saving" title="Use the conference timezone"><i class="fa fa-undo"></i> Revert</button>
-            </small>
-          </div>
-        </div>
-      </div>
-
-      <!-- Title -->
-      <div class="form-group">
-        <label class="control-label" for="title">Title</label>
-        <div class="input-group">
-          <input type="text" class="form-control" id="title" v-model="title" :disabled="saving">
-          <div class="input-group-append">
-            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" :disabled="saving">Generate <i class="fa fa-caret-down"></i></button>
-            <div class="dropdown-menu dropdown-menu-right">
-              <a v-for="label in titleLabels" :key="label" class="dropdown-item" :class="{ disabled: !checkedMeetings.length }" href="#" @click.prevent="checkedMeetings.length && setTitle(regularTitle(label))">{{ label }}</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" :class="{ disabled: !earlyTitle }" href="#" @click.prevent="earlyTitle && setTitle(earlyTitle)">Early submission</a>
+            <label class="control-label">Meeting(s)</label>
+            <div class="form-check" v-for="{ _id, normalizedSymbol, EVT_TIT_EN } in meetings" :key="_id">
+              <input class="form-check-input" type="checkbox" :id="`meeting-${_id}`" :value="_id" v-model="meetingIds" :disabled="saving">
+              <label class="form-check-label" :for="`meeting-${_id}`" :class="{ 'text-muted': !meetingIds.includes(_id) }"><b>{{ normalizedSymbol }}</b> - {{ EVT_TIT_EN }}</label>
+            </div>
+            <div v-if="otherMeetingIds.length" class="mt-1">
+              <small class="text-muted">Other linked meetings (kept):</small>
+              <span v-for="id in otherMeetingIds" :key="id" class="badge badge-secondary mr-1">{{ otherMeetingSymbol(id) }}</span>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Summary -->
-      <div class="form-group">
-        <label class="control-label" for="summary">Summary</label>
-        <textarea class="form-control" id="summary" rows="3" v-model="summary" :disabled="saving"></textarea>
+          <div class="row">
+            <div class="col-12 col-md-4">
+              <!-- Date -->
+              <div class="form-group">
+                <label class="control-label" for="date">{{ earlySubmission ? 'Submissions open' : 'Date' }}</label>
+                <input type="datetime-local" class="form-control" id="date" v-model="date" :disabled="saving">
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <!-- Timezone -->
+              <div class="form-group">
+                <label class="control-label" for="timezone">Timezone</label>
+                <select class="form-control" id="timezone" v-model="timezone" :class="{ 'border-warning': isTimezoneMismatch }" :disabled="saving">
+                  <option v-for="{ value, text } in timezones" :key="value" :value="value">{{ text }}</option>
+                </select>
+                <small v-if="isTimezoneMismatch" class="text-warning">
+                  <i class="fa fa-exclamation-triangle"></i> Differs from the conference timezone ({{ conferenceTimezone }})
+                  <button type="button" class="btn btn-light btn-xs ml-1" @click="timezone = conferenceTimezone" :disabled="saving" title="Use the conference timezone"><i class="fa fa-undo"></i> Revert</button>
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Title -->
+          <div class="form-group">
+            <label class="control-label" for="title">Title</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="title" v-model="title" :disabled="saving">
+              <div class="input-group-append">
+                <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" :disabled="saving">Generate <i class="fa fa-caret-down"></i></button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a v-for="label in titleLabels" :key="label" class="dropdown-item" :class="{ disabled: !checkedMeetings.length }" href="#" @click.prevent="checkedMeetings.length && setTitle(regularTitle(label))">{{ label }}</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" :class="{ disabled: !earlyTitle }" href="#" @click.prevent="earlyTitle && setTitle(earlyTitle)">Early submission</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary -->
+          <div class="form-group">
+            <label class="control-label" for="summary">Summary</label>
+            <textarea class="form-control" id="summary" rows="3" v-model="summary" :disabled="saving"></textarea>
+          </div>
+        </div>
       </div>
 
       <!-- Early statement submission -->
