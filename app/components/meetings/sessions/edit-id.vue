@@ -26,26 +26,17 @@
 
     <form v-if="!loading && meetings.length" @submit.prevent="save" novalidate>
 
-      <!-- Title -->
+      <!-- Meetings -->
       <div class="form-group">
-        <label class="control-label" for="title">Title</label>
-        <div class="input-group">
-          <input type="text" class="form-control" id="title" v-model="title" :disabled="saving">
-          <div class="input-group-append">
-            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" :disabled="saving">Generate <i class="fa fa-caret-down"></i></button>
-            <div class="dropdown-menu dropdown-menu-right">
-              <a v-for="label in titleLabels" :key="label" class="dropdown-item" :class="{ disabled: !checkedMeetings.length }" href="#" @click.prevent="checkedMeetings.length && setTitle(regularTitle(label))">{{ label }}</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" :class="{ disabled: !earlyTitle }" href="#" @click.prevent="earlyTitle && setTitle(earlyTitle)">Early submission</a>
-            </div>
-          </div>
+        <label class="control-label">Meeting(s)</label>
+        <div class="form-check" v-for="{ _id, normalizedSymbol, EVT_TIT_EN } in meetings" :key="_id">
+          <input class="form-check-input" type="checkbox" :id="`meeting-${_id}`" :value="_id" v-model="meetingIds" :disabled="saving">
+          <label class="form-check-label" :for="`meeting-${_id}`"><b>{{ normalizedSymbol }}</b> - {{ EVT_TIT_EN }}</label>
         </div>
-      </div>
-
-      <!-- Summary -->
-      <div class="form-group">
-        <label class="control-label" for="summary">Summary</label>
-        <textarea class="form-control" id="summary" rows="3" v-model="summary" :disabled="saving"></textarea>
+        <div v-if="otherMeetingIds.length" class="mt-1">
+          <small class="text-muted">Other linked meetings (kept):</small>
+          <span v-for="id in otherMeetingIds" :key="id" class="badge badge-secondary mr-1">{{ otherMeetingSymbol(id) }}</span>
+        </div>
       </div>
 
       <div class="row">
@@ -71,17 +62,26 @@
         </div>
       </div>
 
-      <!-- Meetings -->
+      <!-- Title -->
       <div class="form-group">
-        <label class="control-label">Meeting(s)</label>
-        <div class="form-check" v-for="{ _id, normalizedSymbol, EVT_TIT_EN } in meetings" :key="_id">
-          <input class="form-check-input" type="checkbox" :id="`meeting-${_id}`" :value="_id" v-model="meetingIds" :disabled="saving">
-          <label class="form-check-label" :for="`meeting-${_id}`"><b>{{ normalizedSymbol }}</b> - {{ EVT_TIT_EN }}</label>
+        <label class="control-label" for="title">Title</label>
+        <div class="input-group">
+          <input type="text" class="form-control" id="title" v-model="title" :disabled="saving">
+          <div class="input-group-append">
+            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" :disabled="saving">Generate <i class="fa fa-caret-down"></i></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a v-for="label in titleLabels" :key="label" class="dropdown-item" :class="{ disabled: !checkedMeetings.length }" href="#" @click.prevent="checkedMeetings.length && setTitle(regularTitle(label))">{{ label }}</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" :class="{ disabled: !earlyTitle }" href="#" @click.prevent="earlyTitle && setTitle(earlyTitle)">Early submission</a>
+            </div>
+          </div>
         </div>
-        <div v-if="otherMeetingIds.length" class="mt-1">
-          <small class="text-muted">Other linked meetings (kept):</small>
-          <span v-for="id in otherMeetingIds" :key="id" class="badge badge-secondary mr-1">{{ otherMeetingSymbol(id) }}</span>
-        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="form-group">
+        <label class="control-label" for="summary">Summary</label>
+        <textarea class="form-control" id="summary" rows="3" v-model="summary" :disabled="saving"></textarea>
       </div>
 
       <!-- Early Submission -->
