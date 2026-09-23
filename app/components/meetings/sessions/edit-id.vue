@@ -90,7 +90,7 @@
       </div>
 
       <!-- Early statement submission -->
-      <div class="panel panel-default mb-3">
+      <div class="panel panel-default border rounded mb-3">
         <div class="card-header d-flex align-items-center" :class="{ 'alert-success': earlySubmission }">
           <h4 style="color:inherit" class="mb-0">Early statement submission</h4>
           <div class="form-check ml-3">
@@ -102,7 +102,7 @@
           </div>
         </div>
 
-        <div class="pt-3" v-if="earlySubmission && earlyMeeting">
+        <div class="card-body" v-if="earlySubmission && earlyMeeting">
           <div class="row">
             <div class="col-12 col-md-6">
               <!-- Agenda Item -->
@@ -136,7 +136,7 @@
       </div>
 
       <!-- Videos -->
-      <div class="panel panel-default mb-3">
+      <div class="panel panel-default border rounded mb-3">
         <div class="card-header d-flex align-items-center justify-content-between">
           <h4 style="color:inherit" class="mb-0">Videos</h4>
           <button type="button" class="btn btn-light btn-sm" @click="addVideo" :disabled="saving"><i class="fa fa-plus"></i> Add video</button>
