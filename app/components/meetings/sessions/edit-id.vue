@@ -413,7 +413,7 @@ function isTimezoneMismatch(){
 // Offsets are taken at the session date, so they follow daylight saving time.
 function timezones(){
   const zones = Intl.supportedValuesOf ? Intl.supportedValuesOf('timeZone') : [];
-  const at    = this.date || DateTime.local().toFormat(DATETIME_LOCAL);
+  const at    = this.date || DateTime.now().toFormat(DATETIME_LOCAL);
 
   return sortBy(uniq([ ...zones, this.timezone, this.conferenceTimezone ].filter(o=>!!o))).map(value=>({
     value,
