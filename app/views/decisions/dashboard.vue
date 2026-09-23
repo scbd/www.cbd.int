@@ -29,7 +29,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <h5>Paragraphs per COP <small class="text-muted">(all COPs — not affected by the filters)</small></h5>
+                <h5>Cumulative paragraphs by actor <small class="text-muted">(running total across COPs — not affected by the filters)</small></h5>
                 <div id="dashboard-trend-chart" class="chart chart-lg"></div>
             </div>
         </div>
@@ -105,6 +105,13 @@ const baseIndexQuery = 'schema_s:decision-text';
 
 const TYPE_COLORS = { operational: '#2e7d32', informational: '#ef6c00' };
 
+// dttActor_ss values are case-sensitive and must match the index exactly.
+const TREND_ACTORS = [
+    { code: 'executive-secretary', title: 'Executive Secretary', color: '#2e7d32' },
+    { code: 'SBSTTA',              title: 'SBSTTA',              color: '#1565c0' },
+    { code: 'SBI',                 title: 'SBI',                 color: '#ef6c00' }
+];
+
 export default {
     name: 'decisionsDashboard',
     data() {
@@ -178,29 +185,37 @@ async function loadCharts() {
 }
 
 // The per-COP breakdown ignores the COP filter, so it is fetched once. Paragraph docs carry
-// no session field — only dttCode_s — hence one facet.query per COP/type pair rather than a pivot.
+// no session field — only dttCode_s — hence one facet.query per COP/actor pair rather than a pivot.
 async function loadTrend() {
     try {
         const keys       = {};
         const facetQuery = [];
 
         for(const session of sessionsList)
-            for(const type of typesList) {
-                const key = `${session.code.replace(/-/g, '')}_${type.code}`;
-                keys[key] = { session: session.title, type: type.code };
-                facetQuery.push(`{!key=${key}}${sessionQuery(session.code)} AND dttType_ss:${type.code}`);
+            for(const actor of TREND_ACTORS) {
+                // facet keys must be plain identifiers, so strip the dashes the codes carry
+                const key = `${session.code}_${actor.code}`.replace(/-/g, '_');
+                keys[key] = { session: session.title, actor: actor.code };
+                facetQuery.push(`{!key=${key}}${sessionQuery(session.code)} AND dttActor_ss:${solr.escape(actor.code)}`);
             }
 
         const { facet_counts } = await solr.query(baseIndexQuery, { rows: 0, facetQuery });
         const counts = facet_counts?.facet_queries || {};
 
-        const bySession = _.reduce(keys, (rows, {session, type}, key) => {
-            rows[session]       = rows[session] || { session };
-            rows[session][type] = counts[key] || 0;
+        const bySession = _.reduce(keys, (rows, {session, actor}, key) => {
+            rows[session]        = rows[session] || { session };
+            rows[session][actor] = counts[key] || 0;
             return rows;
         }, {});
 
-        renderTrend(this, sessionsList.map(s => bySession[s.title]));
+        // Cumulative: each COP carries the running total of everything up to and including it.
+        const running = {};
+
+        renderTrend(this, sessionsList.map(s => TREND_ACTORS.reduce((row, {code}) => {
+            running[code] = (running[code] || 0) + (bySession[s.title]?.[code] || 0);
+            row[code]     = running[code];
+            return row;
+        }, { session: s.title })));
     }
     catch(err) { this.error = errorMessage(err, 'Unable to load the per-COP breakdown.'); }
 }
@@ -324,22 +339,23 @@ function renderTrend(vm, data) {
         'dataProvider' : data,
         'categoryField': 'session',
         'categoryAxis' : { 'autoGridCount': false, 'gridCount': sessionsList.length, 'labelRotation': 45 },
-        'valueAxes'    : [{ 'stackType': 'regular', 'title': 'Paragraphs' }],
+        'valueAxes'    : [{ 'title': 'Paragraphs', 'minimum': 0 }],
         'legend'       : { 'position': 'top' },
-        'graphs'       : typesList.map(({code, title}) => ({
+        'chartCursor'  : { 'cursorPosition': 'mouse', 'zoomable': false },
+        'graphs'       : TREND_ACTORS.map(({code, title, color}) => ({
             'title'      : title,
-            'type'       : 'column',
+            'type'       : 'line',
             'valueField' : code,
-            'fillAlphas' : 0.9,
-            'lineAlpha'  : 0.2,
-            'fillColors' : TYPE_COLORS[code],
-            'lineColor'  : TYPE_COLORS[code],
-            'balloonText': '[[category]] — [[title]]: [[value]]'
+            'lineThickness': 2,
+            'lineColor'  : color,
+            'bullet'     : 'round',
+            'bulletSize' : 8,
+            'balloonText': '[[title]] up to [[category]]: [[value]] paragraphs'
         })),
         'startDuration': 0
     });
 
-    // Clicking a COP column is the obvious way to drill into that COP.
+    // Clicking a COP point is the obvious way to drill into that COP.
     vm.trend.addListener('clickGraphItem', e => {
         const session = sessionsList.find(s => s.title === e.item.category);
         if(!session) return;
