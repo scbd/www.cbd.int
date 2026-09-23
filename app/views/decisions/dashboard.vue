@@ -29,7 +29,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <h5>Cumulative paragraphs by actor <small class="text-muted">(running total across COPs — not affected by the filters)</small></h5>
+                <h5>Paragraphs by actor per COP <small class="text-muted">(all COPs — not affected by the filters)</small></h5>
                 <div id="dashboard-trend-chart" class="chart chart-lg"></div>
             </div>
         </div>
@@ -208,14 +208,7 @@ async function loadTrend() {
             return rows;
         }, {});
 
-        // Cumulative: each COP carries the running total of everything up to and including it.
-        const running = {};
-
-        renderTrend(this, sessionsList.map(s => TREND_ACTORS.reduce((row, {code}) => {
-            running[code] = (running[code] || 0) + (bySession[s.title]?.[code] || 0);
-            row[code]     = running[code];
-            return row;
-        }, { session: s.title })));
+        renderTrend(this, sessionsList.map(s => bySession[s.title]));
     }
     catch(err) { this.error = errorMessage(err, 'Unable to load the per-COP breakdown.'); }
 }
@@ -350,7 +343,7 @@ function renderTrend(vm, data) {
             'lineColor'  : color,
             'bullet'     : 'round',
             'bulletSize' : 8,
-            'balloonText': '[[title]] up to [[category]]: [[value]] paragraphs'
+            'balloonText': '[[category]] — [[title]]: [[value]] paragraphs'
         })),
         'startDuration': 0
     });
