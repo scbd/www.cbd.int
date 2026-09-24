@@ -9,6 +9,7 @@ export { default as template } from './index.html'
 
     var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
     var KRONOS_STATUS_ACCREDITED  = 2;
+    var KRONOS_TYPE_ID_WIDTH      = 32; // kronos echoes type ids unpadded; compare zero-padded to this width
 
 export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter) {
         var _ctrl = this;
@@ -517,8 +518,9 @@ $scope.$watch(function(){
               const { records }  = await $http.get(kronos.baseUrl+'/api/v2018/organizations', { params: { q: query } }).then(resData)
 
               for (const org of records){
-                org.isLinked = organizationIds.includes(org.organizationId)
-                org.showMore = false
+                org.isLinked        = organizationIds.includes(org.organizationId)
+                org.showMore        = false
+                org.notMediaOrgType = isKnownNonMediaType(org.organizationTypeId)
               }
 
               _kronos.organizations = records.length? records.slice(0,8) : records
@@ -562,24 +564,31 @@ $scope.$watch(function(){
             _kronos.loading = true;
 
             try{
-                // the linked-contact lookup is deliberately not scoped by organizationIds,
-                // so a contact sitting under another organization still comes back and can be flagged
+                // the linked-contact lookup is deliberately scoped by neither organizationIds nor
+                // organizationTypeIds: a contact sitting under another organization - or under one
+                // kronos does not type as media - still has to come back, otherwise the link is
+                // invisible here and can be neither unlinked nor corrected. the notInLinkedOrg and
+                // notMediaOrgType flags surface those two cases instead of hiding the row.
+                // only the free-text search stays scoped to media organizations.
                 const query = hasKronosLinksAndNoSearchText
                     ? { contactId }
-                    : { freeText, organizationIds };
+                    : { freeText, organizationIds, organizationTypeIds: [ KRONOS_MEDIA_TYPE ] };
 
                 const { records } = await $http.post(kronos.baseUrl+'/api/v2018/contacts/query', {
                     ...query,
-                    organizationTypeIds          : [ KRONOS_MEDIA_TYPE ],
                     registrationStatusForEventIds: eventIds,
                     limit                        : 25,
                     skip                         : 0
                   }).then(resData)
 
                 for (const contact of records){
-                  contact.isLinked      = contactId === contact.contactId;
-                  contact.showMore      = false
-                  contact.notInMediaOrg = !!organizationIds.length && !organizationIds.includes(contactOrganizationId(contact));
+                  contact.isLinked        = contactId === contact.contactId;
+                  contact.showMore        = false
+                  // identity, not type: is this contact filed under the same kronos organization
+                  // record the request is linked to. the media type is checked separately below,
+                  // because a contact can sit in the wrong record and a correctly typed one at once
+                  contact.notInLinkedOrg  = !!organizationIds.length && !organizationIds.includes(contactOrganizationId(contact));
+                  contact.notMediaOrgType = isKnownNonMediaType(contact.organization?.organizationTypeId);
                   contact.registrationMismatch = contact.isLinked && !!eventIds.length &&
                                                  isAccreditedForAllEvents(contact, eventIds) !== !!participant.accredited;
                 }
@@ -597,6 +606,19 @@ $scope.$watch(function(){
 
         function contactOrganizationId(contact){
             return contact.organizationId || contact.organization?.organizationId || contact.organization?._id;
+        }
+
+        // the linked lookups are unscoped by type, so they can return a record whose organization
+        // kronos does not type as media - the reason a link like that was invisible here before.
+        // kronos echoes the type id unpadded, so pad both sides and compare the whole value.
+        function normalizeTypeId(typeId){
+            return String(typeId).trim().toLowerCase().padStart(KRONOS_TYPE_ID_WIDTH, '0');
+        }
+
+        function isKnownNonMediaType(typeId){
+            if(!typeId) return false; // kronos not telling us the type is not evidence of a problem
+
+            return normalizeTypeId(typeId) !== normalizeTypeId(KRONOS_MEDIA_TYPE);
         }
 
         // kronos registration status: 1 = nominated, 2 = accredited
