@@ -471,7 +471,7 @@ $scope.$watch(function(){
                 participant.isOnline = (participant.tags || []).includes('online')
               }
 
-              await flagDuplicateParticipants(request.participants);
+              flagDuplicateParticipants(request.participants);
 
               const selectedRequests = [] ;
               for (const participant of request.participants)
@@ -664,6 +664,7 @@ $scope.$watch(function(){
                         delete participant.accredited;
                         participant.rejected = true;
                     }
+                    flagDuplicateParticipants(request.participants);
                 }
             }).catch(function(err) {
                console.log(err)
@@ -674,23 +675,10 @@ $scope.$watch(function(){
         }
         
 
-        // Flags participants whose Kronos contact is also linked to another, non-rejected participant record (www data only, no Kronos call)
-        async function flagDuplicateParticipants(participants = []){
-            const kronosIds = _(participants).map('kronosId').compact().uniq().value();
-
-            if(!kronosIds.length) return;
-
-            try{
-                const q        = { kronosId: { $in: kronosIds }, rejected: { $ne: true } };
-                const { data } = await $http.get('/api/v2018/kronos/participation-request/participants', { params: { q } });
-
-                for (const participant of participants)
-                    participant.duplicateOfParticipants = participant.kronosId ? (data || []).filter(p => p.kronosId === participant.kronosId && p._id !== participant._id) : [];
-
-                $scope.$applyAsync();
-            }catch(err){
-                console.error(err);
-            }
+        // Flags participants of this request whose Kronos contact is also linked to another, non-rejected participant of the same request
+        function flagDuplicateParticipants(participants = []){
+            for (const participant of participants)
+                participant.duplicateOfParticipants = participant.kronosId ? participants.filter(p => p !== participant && !p.rejected && p.kronosId === participant.kronosId).map(p => p._id) : [];
         }
 
         // Rejects a duplicate participant record without removing the Kronos accreditation of the contact it shares
@@ -698,13 +686,8 @@ $scope.$watch(function(){
             delete participant.statusError;
 
             return updateParticipantStatus(participant, request, 'reject-duplicate').then(function(){
-                if(!participant.rejectedAsDuplicate){
+                if(!participant.rejectedAsDuplicate)
                     participant.statusError = 'Could not reject this participant as a duplicate. Please try again.';
-                    return;
-                }
-
-                for (const p of request.participants || [])
-                    p.duplicateOfParticipants = (p.duplicateOfParticipants || []).filter(d => d._id !== participant._id);
             });
         }
 
@@ -757,7 +740,7 @@ $scope.$watch(function(){
                     _.map(participant.kronos.contacts, function(con){con.isLinked=false;})                    
                     participant.kronosId = kcontact.contactId;
                     kcontact.isLinked = participant.isNominated = kcontact.isNominated = true;
-                    return flagDuplicateParticipants(request.participants);
+                    flagDuplicateParticipants(request.participants);
                 }
             }).catch(function(err) {
                console.log(err)
@@ -774,6 +757,7 @@ $scope.$watch(function(){
                 if(result.status == 200){             
                     participant.kronosId = undefined;
                     participant.accredited = participant.isNominated = kcontact.isNominated = kcontact.isLinked = participant.rejected = false;
+                    flagDuplicateParticipants(request.participants);
                 }
             }).catch(function(err) {
                console.log(err)

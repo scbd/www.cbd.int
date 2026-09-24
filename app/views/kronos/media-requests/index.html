@@ -917,7 +917,8 @@ a.label:focus {
                                                                                     <i class="fa fa-square-o"></i>
                                                                                 </button>
                                                                                 <button type="button" class="btn btn-success" ng-click="mediaRequestCtrl.removeKronosContact(request, participant, kctc)"
-                                                                                    ng-if="kctc.isLinked">
+                                                                                    ng-if="kctc.isLinked" ng-disabled="participant.rejectedAsDuplicate || participant.duplicateOfParticipants.length"
+                                                                                    title="{{(participant.rejectedAsDuplicate || participant.duplicateOfParticipants.length) ? 'Unlinking would remove the Kronos accreditation shared with the duplicate record' : ''}}">
                                                                                     <i class="fa fa-check-square"></i>
                                                                                 </button>
                                                                                 &nbsp;
