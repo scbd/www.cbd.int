@@ -9,6 +9,55 @@ export { default as template } from './index.html'
 
     var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
     var KRONOS_STATUS_ACCREDITED  = 2;
+    const KRONOS_STATUS_NOMINATED = 1;
+
+    //===================================
+    // DEV-1276: duplicate person detection across Kronos organizations
+    //===================================
+    function normalizeText(value){
+        return (value || '').normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
+    }
+
+    function dateOnly(value){
+        return value ? String(value).slice(0, 10) : '';
+    }
+
+    // same participant -> kronos country mapping as createKronosContact
+    function participantKronosCountry(participant){
+        return (participant.useOrganizationAddress ? participant.nationality : participant.address?.country) || '';
+    }
+
+    function duplicateKey(person, country){
+        return { lastName: normalizeText(person.lastName), dateOfBirth: dateOnly(person.dateOfBirth), country: normalizeText(country) };
+    }
+
+    // no organizationIds / organizationTypeIds: the same person may sit under any organization
+    function buildDuplicateContactQuery(participant){
+        return { freeText: (participant.lastName || '').trim(), registrationStatusForEventIds: participant.meeting || [], limit: 100, skip: 0 };
+    }
+
+    function isNominatedOrAccreditedForAny(contact, eventIds){
+        return (contact.registrationStatuses || []).filter(Boolean)
+            .some(r => eventIds.includes(r.eventId) && (r.status === KRONOS_STATUS_NOMINATED || r.status === KRONOS_STATUS_ACCREDITED));
+    }
+
+    function findKronosDuplicates(contacts, participant, excludeContactId){
+        const key      = duplicateKey(participant, participantKronosCountry(participant));
+        const eventIds = participant.meeting || [];
+
+        if(!key.lastName || !key.dateOfBirth || !key.country || !eventIds.length) return [];
+
+        return (contacts || []).filter(contact => {
+            const other = duplicateKey(contact, contact.country);
+            return contact.contactId !== excludeContactId
+                && other.lastName === key.lastName && other.dateOfBirth === key.dateOfBirth && other.country === key.country
+                && isNominatedOrAccreditedForAny(contact, eventIds);
+        });
+    }
+
+    function kronosContactUrl(eventsUrl, organizationId, contactId){
+        return `${eventsUrl}/organizations/${encodeURIComponent(organizationId)}/contacts/${encodeURIComponent(contactId)}`;
+    }
 
 export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter) {
         var _ctrl = this;
@@ -606,6 +655,27 @@ $scope.$watch(function(){
             return eventIds.every(eventId => registrations.some(r => r.eventId === eventId && r.status === KRONOS_STATUS_ACCREDITED));
         }
 
+        // rejects (skipping the caller's link/accredit call) when the same person is already
+        // nominated/accredited under another kronos contact, or when the check itself fails
+        function assertNoKronosDuplicates(participant, excludeContactId){
+            participant.kronosDuplicates     = [];
+            participant.kronosDuplicateError = null;
+
+            return $http.post(kronos.baseUrl+'/api/v2018/contacts/query', buildDuplicateContactQuery(participant)).then(resData)
+            .then(function({ records }){
+                participant.kronosDuplicates = findKronosDuplicates(records, participant, excludeContactId).map(contact => ({
+                    name            : `${contact.firstName || ''} ${contact.lastName || ''}`.trim(),
+                    organizationName: contact.organization?.name,
+                    url             : kronosContactUrl(kronos.kronosCbdEventsUrl, contactOrganizationId(contact), contact.contactId)
+                }));
+
+                if(participant.kronosDuplicates.length) throw new Error('Participant already nominated or accredited in Kronos');
+            }, function(err){
+                participant.kronosDuplicateError = 'Could not check Kronos for duplicate contacts, please try again.';
+                throw err;
+            });
+        }
+
         function updateOrganizationStatus(request, status){
             
             return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/' + status)
@@ -641,9 +711,11 @@ $scope.$watch(function(){
             })
         }
         function updateParticipantStatus(participant, request, status){
-            
-            return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
-            '/participants/' + participant._id + '/' + status)            
+
+            const duplicateCheck = status == 'accreditate' ? assertNoKronosDuplicates(participant, participant.kronosId) : $q.resolve();
+
+            return duplicateCheck.then(() => $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id +
+            '/participants/' + participant._id + '/' + status))
             .then(function(result){ 
                 if(result.status == 200){              
                     if(status == 'accreditate'){
@@ -705,8 +777,8 @@ $scope.$watch(function(){
         function linkKronosContact(request, participant, kcontact){
 
             //link KRONOS contact with Media request particiapnt
-            return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
-            '/participants/' + participant._id+ '/link-kronos/' + kcontact.contactId)            
+            return assertNoKronosDuplicates(participant, kcontact.contactId).then(() => $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id +
+            '/participants/' + participant._id+ '/link-kronos/' + kcontact.contactId))
             .then(function(result){    
                 console.log(result)           
                 if(result.status == 200){

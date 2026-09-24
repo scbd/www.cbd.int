@@ -789,6 +789,17 @@ a.label:focus {
                                                                 </div>
                                                             </div>
                                                             <div ng-if="participant.kronos.error" class="text-danger">{{participant.kronos.error}}</div>
+                                                            <div ng-if="participant.kronosDuplicateError" class="text-danger">{{participant.kronosDuplicateError}}</div>
+                                                            <div ng-if="participant.kronosDuplicates.length" class="alert alert-danger text-left">
+                                                                <i class="fa fa-exclamation-triangle"></i> Already nominated or accredited in Kronos (same last name, date of birth and country):
+                                                                <ul>
+                                                                    <li ng-repeat="duplicate in participant.kronosDuplicates">
+                                                                        <a ng-href="{{duplicate.url}}" target="_blank" rel="noopener noreferrer">{{duplicate.name}}</a>
+                                                                        <span ng-if="duplicate.organizationName">({{duplicate.organizationName}})</span>
+                                                                    </li>
+                                                                </ul>
+                                                                <!-- DEV-1284: reject-duplicate button -->
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                     <tr>
