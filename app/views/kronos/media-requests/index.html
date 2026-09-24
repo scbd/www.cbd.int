@@ -756,7 +756,7 @@ a.label:focus {
                                                         <td ng-class="{'active':participant._id == mediaRequestCtrl.selectedParticipant._id, 'text-right': participant.meeting.length}" >
                                                             <h3 ng-if="!participant.meeting.length">Contact Only</h3>
                                                             <div ng-if="participant.meeting.length" role="group" class="btn-group btn-grousm" ng-if="request.currentStep=='finished'">
-                                                                <div ng-if="!participant.kronosId" class="alert alert-danger">
+                                                                <div ng-if="!participant.kronosId && !participant.rejected" class="alert alert-danger">
 
                                                                     <span>Link to kronos before accreditation, <br/>by searching and the check box</span>
                                                                 </div>
