@@ -10,8 +10,10 @@ export { default as template } from './index.html'
     var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
     var KRONOS_STATUS_ACCREDITED  = 2;
 
-export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter) {
+export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter', 'user' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter, user) {
         var _ctrl = this;
+
+        _ctrl.canViewParticipants = ['Administrator', 'SCBDMedia'].some(role => user?.roles?.includes(role));
 
         var SORT_PROPS = ['meta.createdOn', 'organization.title', 'meta.modifiedOn'];
         var SORT_DIRS  = ['asc', 'desc'];

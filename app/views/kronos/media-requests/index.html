@@ -724,9 +724,10 @@ a.label:focus {
 
                             <div class="pull-right">
                                 <div ng-if="!request.organization.kronosIds.length  || !request.organization.accredited" class="alert alert-danger"> Organization must be linked with kronos and accredited, in order to accreditate participants.  </div>
-                                <a ng-href="#" ng-if="request.organization.kronosIds.length && request.organization.accredited" ng-click="mediaRequestCtrl.loadParticipants(request)">Show all</a>
+                                <a ng-href="#" ng-if="(request.organization.kronosIds.length && request.organization.accredited) || mediaRequestCtrl.canViewParticipants" ng-click="mediaRequestCtrl.loadParticipants(request)">Show all</a>
                             </div>
                             <h4>Participants</h4>
+                            <div class="clearfix"></div>
 
                             <div class="panel panel-info" ng-if="(request.participants && request.showParticipants) || request.loadingParticipants" ng-repeat="participant in request.participants" >
         
