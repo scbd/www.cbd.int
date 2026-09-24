@@ -84,6 +84,21 @@ export { default as template } from './index.html'
         return `${eventsUrl}/organizations/${encodeURIComponent(organizationId)}/contacts/${encodeURIComponent(contactId)}`;
     }
 
+    // same contact can appear on two pages if Kronos ordering shifts between requests
+    function dedupeByContactId(contacts){
+        const seen = new Set();
+        return contacts.filter(contact => {
+            if(seen.has(contact.contactId)) return false;
+            seen.add(contact.contactId);
+            return true;
+        });
+    }
+
+    // prefer the server's own record count so a page size below DUPLICATE_PAGE_SIZE doesn't look "short"
+    function hasMoreDuplicatePages(fetched, recordsLength, totalRecordCount){
+        return Number.isFinite(totalRecordCount) ? fetched < totalRecordCount : recordsLength >= DUPLICATE_PAGE_SIZE;
+    }
+
 export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter) {
         var _ctrl = this;
 
@@ -715,12 +730,13 @@ $scope.$watch(function(){
         }
 
         // pages the surname search; fails closed when there are too many namesakes to check
-        function findKronosDuplicatePages(participant, excludeContactIds, page = 0, found = []){
-            return $http.post(kronos.baseUrl+'/api/v2018/contacts/query', buildDuplicateContactQuery(participant, page * DUPLICATE_PAGE_SIZE)).then(resData)
-            .then(function({ records = [] }){
+        function findKronosDuplicatePages(participant, excludeContactIds, skip = 0, page = 0, found = []){
+            return $http.post(kronos.baseUrl+'/api/v2018/contacts/query', buildDuplicateContactQuery(participant, skip)).then(resData)
+            .then(function({ records = [], totalRecordCount }){
                 const duplicates = found.concat(findKronosDuplicates(records, participant, excludeContactIds));
+                const fetched    = skip + records.length;
 
-                if(records.length < DUPLICATE_PAGE_SIZE) return duplicates;
+                if(!hasMoreDuplicatePages(fetched, records.length, totalRecordCount)) return dedupeByContactId(duplicates);
 
                 if(page + 1 >= DUPLICATE_MAX_PAGES){
                     const err = new Error('Too many Kronos contacts to check for duplicates');
@@ -728,7 +744,7 @@ $scope.$watch(function(){
                     throw err;
                 }
 
-                return findKronosDuplicatePages(participant, excludeContactIds, page + 1, duplicates);
+                return findKronosDuplicatePages(participant, excludeContactIds, fetched, page + 1, duplicates);
             });
         }
 
