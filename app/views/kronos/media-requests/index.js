@@ -298,9 +298,9 @@ $scope.$watch(function(){
 
 
                             if(_ctrl.requestStatus === '' || status === ''){
-                                $scope.counts.error                   =  _ctrl.requests.filter(r => r.contactsOnlyError).length;  
-                                $scope.counts.accreditationInProgress =  _ctrl.requests.filter(r => !r.contactsOnlyError && r.accreditationInProgress).length;  
-                                $scope.counts.accredited =  _ctrl.requests.filter(r => !r.contactsOnlyError && !r.accreditationInProgress && r.accredited).length;  
+                                $scope.counts.error                   =  _ctrl.requests.filter(r => r.contactsOnlyError && !r.archived).length;
+                                $scope.counts.accreditationInProgress =  _ctrl.requests.filter(r => !r.contactsOnlyError && r.accreditationInProgress && !r.archived).length;
+                                $scope.counts.accredited =  _ctrl.requests.filter(r => !r.contactsOnlyError && !r.accreditationInProgress && r.accredited && !r.archived).length;
                             }
 
                         if(_ctrl.requestStatus === 'error' || status === 'error'){
