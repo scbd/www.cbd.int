@@ -138,7 +138,8 @@ export default {
             error         : null
         }
     },
-    created,
+    mounted,
+    beforeDestroy,
     methods: {
         onSessionChange, toggleType, toggleSubject,
         previousPage, nextPage,
@@ -151,7 +152,7 @@ export default {
 //
 // ====================================
 
-async function created() {
+async function mounted() {
     try {
         const terms = await thesaurus.getDomainTerms('CBD-SUBJECTS');
 
@@ -165,6 +166,10 @@ async function created() {
     catch(err) { console.log(err); }   // labels fall back to the raw code
 
     await Promise.all([this.loadTrend(), this.loadCharts(), this.loadTable()]);
+}
+
+function beforeDestroy() {
+    [this.donut, this.subjects, this.trend].forEach(chart => chart && chart.clear());
 }
 
 async function loadCharts() {
