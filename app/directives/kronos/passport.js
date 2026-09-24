@@ -117,12 +117,13 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
                                     $scope.image = imageSrc;
                                     $scope.binding.imageSrc = imageSrc;
                                   });
-              else
-                // stop the spinner, but only blame the file when we know the format is the problem
-                $scope.$applyAsync(()=> $scope.loadFailed = !$scope.imageError);
 
             }
             finally{
+              // every exit (no passport attachment, a pdf read without an image back, a failure)
+              // must leave the spinner; only blame the file when we know the format is the problem
+              $scope.$applyAsync(()=> $scope.loadFailed = !$scope.image && !$scope.imageError);
+
               if(!$scope.valid) $scope.passportForm.$submitted = true;
             }
         }
