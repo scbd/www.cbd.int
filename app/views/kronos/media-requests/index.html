@@ -767,7 +767,7 @@ a.label:focus {
                                                                     ng-disabled="participant.accredited || !participant.passport">
                                                                     <i class="fa fa-thumbs-up"></i> Accreditate
                                                                 </button>
-                                                                <button   ng-if="participant.kronosId && !participant.duplicateOfParticipants.length" type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateParticipantStatus(participant, request, 'reject')" 
+                                                                <button   ng-if="participant.kronosId && !participant.duplicateOfParticipants.length && !participant.kronosDuplicates.length" type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateParticipantStatus(participant, request, 'reject')" 
                                                                 ng-disabled="participant.rejected">
                                                                     <i class="fa fa-thumbs-down"></i> Reject
                                                                 </button>
@@ -797,6 +797,22 @@ a.label:focus {
                                                                 </div>
                                                             </div>
                                                             <div ng-if="participant.kronos.error" class="text-danger">{{participant.kronos.error}}</div>
+                                                            <div ng-if="participant.kronosDuplicateError" class="text-danger">{{participant.kronosDuplicateError}}</div>
+                                                            <div ng-if="participant.kronosDuplicateSkipped" class="text-muted small"><i class="fa fa-info-circle"></i> {{participant.kronosDuplicateSkipped}}</div>
+                                                            <div ng-if="participant.kronosDuplicates.length" class="alert alert-danger text-left">
+                                                                <i class="fa fa-exclamation-triangle"></i> Already nominated or accredited in Kronos (same last name, date of birth and country):
+                                                                <ul>
+                                                                    <li ng-repeat="duplicate in participant.kronosDuplicates">
+                                                                        <a ng-if="duplicate.url" ng-href="{{duplicate.url}}" target="_blank" rel="noopener noreferrer">{{duplicate.name}}</a>
+                                                                        <span ng-if="!duplicate.url">{{duplicate.name}}</span>
+                                                                        <span ng-if="duplicate.organizationName">({{duplicate.organizationName}})</span>
+                                                                    </li>
+                                                                </ul>
+                                                                <button type="button" class="btn btn-outline-danger" ng-click="mediaRequestCtrl.rejectDuplicateParticipant(participant, request)"
+                                                                ng-disabled="participant.rejected" title="Rejects this participant only; nothing is changed in Kronos">
+                                                                    <i class="fa fa-clone"></i> Reject duplicate
+                                                                </button>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                     <tr>

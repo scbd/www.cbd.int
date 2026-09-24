@@ -9,6 +9,95 @@ export { default as template } from './index.html'
 
     var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
     var KRONOS_STATUS_ACCREDITED  = 2;
+    const KRONOS_STATUS_NOMINATED = 1;
+    const DUPLICATE_PAGE_SIZE     = 100;
+    const DUPLICATE_MAX_PAGES     = 5;
+
+    //===================================
+    // DEV-1276: duplicate person detection across Kronos organizations
+    //===================================
+    function normalizeText(value){
+        return (value || '').normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
+    }
+
+    // kronos stores DOB as a plain YYYY-MM-DD; a datetime with a zone is compared by its UTC date
+    function dateOnly(value){
+        if(!value) return '';
+        const text = String(value);
+        if(!/T.*(Z|[+-]\d\d:?\d\d)$/i.test(text)) return text.slice(0, 10);
+        const date = new Date(text);
+        return isNaN(date) ? '' : date.toISOString().slice(0, 10);
+    }
+
+    // same participant -> kronos country mapping as createKronosContact
+    function participantKronosCountry(participant){
+        return (participant.useOrganizationAddress ? participant.nationality : participant.address?.country) || '';
+    }
+
+    function duplicateKey(person, country){
+        return { lastName: normalizeText(person.lastName), dateOfBirth: dateOnly(person.dateOfBirth), country: normalizeText(country) };
+    }
+
+    // no organizationIds / organizationTypeIds: the same person may sit under any organization
+    // registrationStatusForEventIds only projects registrationStatuses, it does not filter contacts
+    function buildDuplicateContactQuery(participant, skip = 0){
+        return { freeText: (participant.lastName || '').trim(), registrationStatusForEventIds: participant.meeting || [], limit: DUPLICATE_PAGE_SIZE, skip };
+    }
+
+    function missingDuplicateKeyFields(participant){
+        const key = duplicateKey(participant, participantKronosCountry(participant));
+        return [['last name', key.lastName], ['date of birth', key.dateOfBirth], ['country', key.country]]
+            .filter(([, value]) => !value).map(([label]) => label);
+    }
+
+    function isNominatedOrAccreditedForAny(contact, eventIds){
+        return (contact.registrationStatuses || []).filter(Boolean)
+            .some(r => eventIds.includes(r.eventId) && (r.status === KRONOS_STATUS_NOMINATED || r.status === KRONOS_STATUS_ACCREDITED));
+    }
+
+    function findKronosDuplicates(contacts, participant, excludeContactIds = []){
+        const key      = duplicateKey(participant, participantKronosCountry(participant));
+        const eventIds = participant.meeting || [];
+
+        if(!key.lastName || !key.dateOfBirth || !key.country || !eventIds.length) return [];
+
+        return (contacts || []).filter(contact => {
+            const other = duplicateKey(contact, contact.country);
+            return !excludeContactIds.includes(contact.contactId)
+                && other.lastName === key.lastName && other.dateOfBirth === key.dateOfBirth && other.country === key.country
+                && isNominatedOrAccreditedForAny(contact, eventIds);
+        });
+    }
+
+    // a kronos contact linked only to rejected www participants is a rejected duplicate, not a real block
+    function dropRejectedOnlyContacts(contacts, linkedParticipants){
+        const active   = new Set();
+        const rejected = new Set();
+
+        (linkedParticipants || []).forEach(p => (p.rejected ? rejected : active).add(p.kronosId));
+
+        return contacts.filter(contact => !rejected.has(contact.contactId) || active.has(contact.contactId));
+    }
+
+    function kronosContactUrl(eventsUrl, organizationId, contactId){
+        if(!organizationId || !contactId) return null;
+        return `${eventsUrl}/organizations/${encodeURIComponent(organizationId)}/contacts/${encodeURIComponent(contactId)}`;
+    }
+
+    // same contact can appear on two pages if Kronos ordering shifts between requests
+    function dedupeByContactId(contacts){
+        const seen = new Set();
+        return contacts.filter(contact => {
+            if(seen.has(contact.contactId)) return false;
+            seen.add(contact.contactId);
+            return true;
+        });
+    }
+
+    // prefer the server's own record count so a page size below DUPLICATE_PAGE_SIZE doesn't look "short"
+    function hasMoreDuplicatePages(fetched, recordsLength, totalRecordCount){
+        return Number.isFinite(totalRecordCount) ? fetched < totalRecordCount : recordsLength >= DUPLICATE_PAGE_SIZE;
+    }
 
 export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter) {
         var _ctrl = this;
@@ -610,6 +699,63 @@ $scope.$watch(function(){
             return eventIds.every(eventId => registrations.some(r => r.eventId === eventId && r.status === KRONOS_STATUS_ACCREDITED));
         }
 
+        // rejects (skipping the caller's link/accredit call) when the same person is already
+        // nominated/accredited under another kronos contact, or when the check itself fails
+        function assertNoKronosDuplicates(participant, linkingContactId){
+            const missingFields = missingDuplicateKeyFields(participant);
+
+            participant.kronosDuplicates       = [];
+            participant.kronosDuplicateError   = null;
+            participant.kronosDuplicateSkipped = missingFields.length ? `Duplicate check skipped: missing ${missingFields.join('/')}` : null;
+
+            if(missingFields.length || !(participant.meeting || []).length) return $q.resolve();
+
+            const excludeContactIds = [participant.kronosId, linkingContactId].filter(Boolean);
+
+            return findKronosDuplicatePages(participant, excludeContactIds)
+            .then(candidates => candidates.length ? ignoreRejectedDuplicates(candidates) : candidates)
+            .catch(function(err){
+                participant.kronosDuplicateError = err.duplicateCheckMessage || 'Could not check Kronos for duplicate contacts, please try again.';
+                throw err;
+            })
+            .then(function(duplicates){
+                participant.kronosDuplicates = duplicates.map(contact => ({
+                    name            : `${contact.firstName || ''} ${contact.lastName || ''}`.trim(),
+                    organizationName: contact.organization?.name,
+                    url             : kronosContactUrl(kronos.kronosCbdEventsUrl, contactOrganizationId(contact), contact.contactId)
+                }));
+
+                if(participant.kronosDuplicates.length) throw new Error('Participant already nominated or accredited in Kronos');
+            });
+        }
+
+        // pages the surname search; fails closed when there are too many namesakes to check
+        function findKronosDuplicatePages(participant, excludeContactIds, skip = 0, page = 0, found = []){
+            return $http.post(kronos.baseUrl+'/api/v2018/contacts/query', buildDuplicateContactQuery(participant, skip)).then(resData)
+            .then(function({ records = [], totalRecordCount }){
+                const duplicates = found.concat(findKronosDuplicates(records, participant, excludeContactIds));
+                const fetched    = skip + records.length;
+
+                if(!hasMoreDuplicatePages(fetched, records.length, totalRecordCount)) return dedupeByContactId(duplicates);
+
+                if(page + 1 >= DUPLICATE_MAX_PAGES){
+                    const err = new Error('Too many Kronos contacts to check for duplicates');
+                    err.duplicateCheckMessage = 'Too many Kronos contacts with this last name to check automatically; please verify manually in Kronos that this person is not already nominated or accredited.';
+                    throw err;
+                }
+
+                return findKronosDuplicatePages(participant, excludeContactIds, fetched, page + 1, duplicates);
+            });
+        }
+
+        // asks gaia (never kronos) which candidate contacts are linked only to rejected www participants
+        function ignoreRejectedDuplicates(candidates){
+            const q = { kronosId: { $in: candidates.map(c => c.contactId) } };
+
+            return $http.get('/api/v2018/kronos/participation-request/participants', { params: { q, f: { kronosId: 1, rejected: 1 } } }).then(resData)
+            .then(linkedParticipants => dropRejectedOnlyContacts(candidates, linkedParticipants));
+        }
+
         function updateOrganizationStatus(request, status){
             
             return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/' + status)
@@ -645,9 +791,11 @@ $scope.$watch(function(){
             })
         }
         function updateParticipantStatus(participant, request, status){
-            
-            return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
-            '/participants/' + participant._id + '/' + status)            
+
+            const duplicateCheck = status == 'accreditate' ? assertNoKronosDuplicates(participant) : $q.resolve();
+
+            return duplicateCheck.then(() => $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id +
+            '/participants/' + participant._id + '/' + status))
             .then(function(result){ 
                 if(result.status == 200){              
                     if(status == 'accreditate'){
@@ -659,6 +807,7 @@ $scope.$watch(function(){
                         delete participant.accredited;
                         participant.rejected = true;
                         participant.rejectedAsDuplicate = true;
+                        participant.kronosDuplicates = [];
                     }
                     else {
                         delete participant.accredited;
@@ -729,11 +878,13 @@ $scope.$watch(function(){
             })    
         }
 
-        function linkKronosContact(request, participant, kcontact){
+        function linkKronosContact(request, participant, kcontact, duplicatesChecked){
 
             //link KRONOS contact with Media request particiapnt
-            return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
-            '/participants/' + participant._id+ '/link-kronos/' + kcontact.contactId)            
+            const duplicateCheck = duplicatesChecked ? $q.resolve() : assertNoKronosDuplicates(participant, kcontact.contactId);
+
+            return duplicateCheck.then(() => $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id +
+            '/participants/' + participant._id+ '/link-kronos/' + kcontact.contactId))
             .then(function(result){    
                 console.log(result)           
                 if(result.status == 200){
@@ -849,11 +1000,11 @@ $scope.$watch(function(){
             }
 
             participant.creatingKronosContact = true;
-            return $http.post(kronos.baseUrl+'/api/v2018/organizations/'+organizationId+'/contacts', kronosContact)
+            return assertNoKronosDuplicates(participant).then(() => $http.post(kronos.baseUrl+'/api/v2018/organizations/'+organizationId+'/contacts', kronosContact))
             .then(function(result){               
                 if(result.status == 200){   
                     participant.kronosId = result.data.contactId;
-                    return linkKronosContact(request, participant, result.data).then(function(data){
+                    return linkKronosContact(request, participant, result.data, true).then(function(data){
                         console.log('linked', data)
                         if((participant.kronos.contacts||[]).length)
                             participant.kronos.contacts.push(result.data)
