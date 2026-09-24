@@ -488,6 +488,7 @@ a.label:focus {
                                 <option ng-if="counts.rejected" value="rejected">Rejected ({{counts.rejected}})</option>
                                 <option ng-if="counts.draft" value="draft">Draft (in progress)({{counts.draft}})</option>
                                 <option value="error">In Error State ({{counts.error}})</option>
+                                <option ng-if="counts.archived" value="archived">Archived ({{counts.archived}})</option>
                             </select>
                         </div>
                         <div class="col-sm-3">
@@ -564,6 +565,14 @@ a.label:focus {
                                                           <i class="fa fa-paper-plane"></i> Send Back
                                                       </button>
                                                     </div>
+                                                    <div role="group" class="btn-group btn-group-sm" ng-if="!request.accredited && !request.organization.accredited">
+                                                        <button ng-if="!request.archived" type="button" class="btn btn-outline-secondary" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'archive')">
+                                                            <i class="fa fa-archive"></i> Archive
+                                                        </button>
+                                                        <button ng-if="request.archived" type="button" class="btn btn-outline-secondary" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'unarchive')">
+                                                            <i class="fa fa-undo"></i> Unarchive
+                                                        </button>
+                                                    </div>
                                                     <div ng-if="!request.organization.kronosIds.length" class="alert alert-danger">
                                                       <span>Link to kronos before accreditation <br/>or rejection, by searching and the check box</span>
                                                   </div>
@@ -593,6 +602,7 @@ a.label:focus {
                                                 <div class="pull-right">
                                                     <span class="label label-success" ng-if="request.accredited">Accredited</span>
                                                     <span class="label label-danger" ng-if="request.rejected">Rejected</span>
+                                                    <span class="label label-default" ng-if="request.archived">Archived</span>
                                                     <span class="label label-primary" ng-if="request.organization.kronosIds.length">Linked with kronos</span>
                                                 </div>
                                                 <div ng-if="request.organization.type"></div>
@@ -775,6 +785,11 @@ a.label:focus {
 
                                                                 
                                                             </div>
+                                                            <div ng-if="!participant.kronosId && !participant.archived" role="group" class="btn-group btn-group-sm">
+                                                                <button type="button" class="btn btn-outline-secondary" ng-click="mediaRequestCtrl.updateParticipantStatus(participant, request, 'archive')">
+                                                                    <i class="fa fa-archive"></i> Archive
+                                                                </button>
+                                                            </div>
                                                         </td>
                                                         <td ng-show="participant.meeting.length">
                                                             Kronos Contact
@@ -798,6 +813,7 @@ a.label:focus {
                                                                 <span class="label label-default" ng-if="participant.isOnline">Online</span>
                                                                 <span class="label label-default" ng-if="participant.needsVisa">Visa</span>
                                                                 <span class="label label-success" ng-if="participant.accredited">Accredited</span>
+                                                                <span class="label label-default" ng-if="participant.archived">Archived</span>
                                                                 <span class="label label-danger" ng-if="participant.rejected">Rejected</span>
                                                                 <span class="label label-primary" ng-if="participant.kronosId">Nominated in kronos</span>
                                                                 <span class="label label-primary" ng-if="request.focalPoint == participant._id">Focal point</span>
