@@ -534,6 +534,7 @@ a.label:focus {
                                 <span class="label label-warning" ng-if="request.currentStep!='finished'">Pending</span>
                                 <span class="label label-success" ng-if="request.accredited">Accredited</span>
                                 <span class="label label-danger"  ng-if="request.rejected">Rejected</span>
+                                <span class="label label-default" ng-if="request.archived">Archived</span>
                                 &nbsp;
                                 <i ng-hide="request == mediaRequestCtrl.selectedRequest" class="fa fa-caret-down" aria-hidden="true"></i></a>
                                 <i ng-show="request == mediaRequestCtrl.selectedRequest" class="fa fa-caret-up" aria-hidden="true"></i></a>
