@@ -620,6 +620,14 @@ $scope.$watch(function(){
                     if(status == 'archive' || status == 'unarchive'){
                         request             .archived = status == 'archive';
                         request.organization.archived = status == 'archive';
+
+                        var excludesRequest = status == 'archive'
+                            ? (_ctrl.requestStatus !== '' && _ctrl.requestStatus !== 'archived')
+                            : (_ctrl.requestStatus === 'archived');
+
+                        if(excludesRequest)
+                            _ctrl.requests = _ctrl.requests.filter(r => r !== request);
+
                         return loadCounts().then(() => $scope.$applyAsync());
                     }
 
