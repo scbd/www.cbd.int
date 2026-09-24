@@ -12,7 +12,7 @@ export { default as template } from './index.html'
     const KRONOS_QUERY_CHUNK      = 25; // ids per lookup; an explicit limit is sent with each
     const KRONOS_TYPE_ID_WIDTH    = 32; // kronos echoes type ids unpadded; compare zero-padded to this width
 
-export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter) {
+export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter', '$timeout', '$window' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter, $timeout, $window) {
         var _ctrl = this;
 
         var SORT_PROPS = ['meta.createdOn', 'organization.title', 'meta.modifiedOn'];
@@ -25,9 +25,15 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
         const kronosOrgTypes = {};
         const kronosContacts = {};
 
-        var initialState  = stateFromSearch($location.search());
-        var initialStatus = initialState.status;
-        var initialised   = false; // true once load() finishes; gates URL write-back
+        // participants and passports keep loading after the list first paints, and each one that
+        // lands above the target shifts it down - let the page settle before measuring its position
+        const SCROLL_SETTLE_MS = 1500;
+
+        var initialState     = stateFromSearch($location.search());
+        var initialStatus    = initialState.status;
+        var initialRequestId = initialState.request; // panel to re-open from the URL, consumed once
+        var initialised      = false; // true once load() finishes; gates URL write-back
+        var scrollTimer      = null;
 
         _ctrl.requests              = [];
         _ctrl.sort                  = initialState.sort;
@@ -79,6 +85,8 @@ $scope.$watch(function(){
             _ctrl.sort = state.sort;
             LoadRequests(state.status);
         });
+
+        $scope.$on('$destroy', function(){ $timeout.cancel(scrollTimer); });
         
         //===================================
         //
@@ -127,7 +135,38 @@ $scope.$watch(function(){
             .catch(function(err) {
                 _ctrl.error = err.data || err;
             })
-            .finally(()=>$scope.$applyAsync(()=>{ _ctrl.requestStatus = initialStatus; initialised = true; }))
+            .finally(()=>$scope.$applyAsync(()=>{
+                _ctrl.requestStatus = initialStatus;
+                initialised         = true;
+                restoreExpandedRequest();
+            }))
+        }
+
+        // re-open the panel named by ?request= once the list it lives in has loaded
+        function restoreExpandedRequest(){
+            const requestId = initialRequestId;
+
+            initialRequestId = null; // one-shot: from here on the panel drives the URL, not the reverse
+
+            if(!requestId) return;
+
+            const request = _.find(_ctrl.requests, function(r){ return r._id === requestId; });
+
+            if(!request) return; // filtered out by the current status, or gone
+
+            selectRequest(request);
+
+            const armedAt = $window.pageYOffset;
+
+            scrollTimer = $timeout(function(){
+                // the operator moved on while we waited - collapsed the panel, or scrolled
+                // somewhere themselves. do not pull them back.
+                if(_ctrl.selectedRequest !== request || $window.pageYOffset !== armedAt) return;
+
+                const el = document.getElementById('media-request-' + requestId);
+
+                if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, SCROLL_SETTLE_MS);
         }
 
         function stateFromSearch(search){
@@ -137,6 +176,7 @@ $scope.$watch(function(){
 
             return {
                 status : status,
+                request: search.request || null,
                 sort   : {
                     prop: SORT_PROPS.indexOf(search.sortBy)  !== -1? search.sortBy  : 'meta.createdOn',
                     dir : SORT_DIRS .indexOf(search.sortDir) !== -1? search.sortDir : 'asc'
@@ -517,12 +557,36 @@ $scope.$watch(function(){
             _ctrl.selectedRequest       = request;
             _ctrl.selectedParticipant   = participant;
 
+            // keep the open panel in the URL so the view can be linked and restored
+            if(initialised) $location.search('request', request? request._id : null);
+
             var qChain = $q.when(0);
 
             if(request     && request    !=prevRequest)     qChain = qChain.then(function() { return lookUpKronosOrganizations(request); });
             if(participant && participant!=prevParticipant) qChain = qChain.then(function() { return lookUpKronosContact(participant, request); });
 
             return qChain;
+        }
+
+        // target="_blank" alone is ignored by the embedded browsers this admin screen gets opened
+        // in, so the new tab is opened explicitly. the href stays on the anchor for middle click and
+        // copy-link, and the default is only cancelled once the tab is real.
+        _ctrl.openInKronos = openInKronos;
+        function openInKronos($event){
+            $event.stopPropagation();
+
+            // a modifier click belongs to the browser - cmd/ctrl/shift/alt keep their own meaning
+            if($event.metaKey || $event.ctrlKey || $event.shiftKey || $event.altKey) return;
+
+            const url = $event.currentTarget && $event.currentTarget.href;
+
+            if(!url) return;
+
+            const opened = $window.open(url, '_blank', 'noopener,noreferrer');
+
+            // a blocked open would otherwise leave a dead control; falling through lets the
+            // anchor's own href do what it can
+            if(opened) $event.preventDefault();
         }
 
         //===================================

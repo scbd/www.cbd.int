@@ -14,6 +14,49 @@
             margin-bottom: 2px;
         }
 
+        /* the status labels used to be a floated block, so a long organization title pushed them
+           onto a second line and they painted outside the heading bar. a flex row keeps them
+           aligned right and inside the box, and lets the title wrap in its own column instead. */
+        .request-heading {
+            display: flex;
+            align-items: flex-start;
+            flex-wrap: nowrap;
+        }
+
+        .request-heading-text {
+            flex: 1 1 auto;
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
+
+        /* shrinkable rather than fixed, so on a narrow screen the labels wrap within their own
+           right hand column instead of running past the edge of the bar */
+        .request-heading-labels {
+            flex: 0 1 auto;
+            margin-left: auto;
+            padding-left: 8px;
+            text-align: right;
+        }
+
+        /* its own column so the caret stays pinned to the right of the first line and only the
+           labels beside it wrap */
+        .request-heading-toggle {
+            flex: 0 0 auto;
+            padding-left: 8px;
+        }
+
+        .request-filters-total {
+            white-space: nowrap;
+        }
+
+        /* below the sm breakpoint the filter columns stop sharing a row and stack flush against
+           each other - space them without touching the single row layout above it */
+        @media (max-width: 575.98px) {
+            .request-filters > .col-sm-3 {
+                margin-bottom: 1rem;
+            }
+        }
+
         table tr td {
             max-width: 50%
         }
@@ -477,7 +520,7 @@ a.label:focus {
         <div class="col-12">
             <div class="col-12 panel  panel-default">
                 <div class="panel-body " style="background-color:white;">
-                    <div class="row">
+                    <div class="row request-filters">
                         
                         <div class="col-sm-3">
                             <select class="form-control" ng-change="mediaRequestCtrl.refreshRequestList(mediaRequestCtrl.requestStatus)" ng-model="mediaRequestCtrl.requestStatus">
@@ -503,7 +546,7 @@ a.label:focus {
                                 <option  ng-selected="'desc' === mediaRequestCtrl.sort.dir" ng-value="'desc'">Descending</option>
                             </select>
                         </div>
-                        <div class="col-3 text-right" ng-if="mediaRequestCtrl.requests.length">Total : {{mediaRequestCtrl.filteredRequests.length}}</div>
+                        <div class="col-3 text-right request-filters-total" ng-if="mediaRequestCtrl.requests.length">Total : {{mediaRequestCtrl.filteredRequests.length}}</div>
                     </div>
                     <div class="row" style="margin-top:1rem;">
                         <div class="col-sm-6">
@@ -518,16 +561,16 @@ a.label:focus {
 
                     <hr>
 
-                    <div class="panel  " ng-repeat="request in mediaRequestCtrl.filteredRequests" ng-class="{'panel-info': request.organization._id == mediaRequestCtrl.selectedRequest.organization._id , 'panel-danger': mediaRequestCtrl.hasError(request), 'panel-default': !mediaRequestCtrl.hasError(request)}">
-                        <div class="panel-heading" style="cursor:pointer" ng-click="mediaRequestCtrl.selectRequest(request==mediaRequestCtrl.selectedRequest?null:request); mediaRequestCtrl.selectedRequest.organization.kronosIds.length && mediaRequestCtrl.lookUpKronosOrganizations()">
-                            <i class="eco-plus-circled"></i><strong> {{request.organization.title}} </strong>,  
-                            <span ng-if="request.organization.acronym">({{request.organization.acronym}}),</span>
+                    <div class="panel  " id="media-request-{{request._id}}" ng-repeat="request in mediaRequestCtrl.filteredRequests" ng-class="{'panel-info': request.organization._id == mediaRequestCtrl.selectedRequest.organization._id , 'panel-danger': mediaRequestCtrl.hasError(request), 'panel-default': !mediaRequestCtrl.hasError(request)}">
+                        <div class="panel-heading request-heading" style="cursor:pointer" ng-click="mediaRequestCtrl.selectRequest(request==mediaRequestCtrl.selectedRequest?null:request); mediaRequestCtrl.selectedRequest.organization.kronosIds.length && mediaRequestCtrl.lookUpKronosOrganizations()">
+                            <span class="request-heading-text">
+                                <i class="eco-plus-circled"></i><strong> {{request.organization.title}} </strong>,
+                                <span ng-if="request.organization.acronym">({{request.organization.acronym}}),</span>
+                                <em ng-if="request.meta.createdOn">{{request.meta.createdOn| moment:'format':'YYYY-MM-DD'}},</em>
+                                <em ng-if="request.organization.address.country">&nbsp;&nbsp;{{request.organization.address.country|lowercase|term}} </em>
+                            </span>
 
-
-                            <em ng-if="request.meta.createdOn">{{request.meta.createdOn| moment:'format':'YYYY-MM-DD'}},</em>
-                            <em ng-if="request.organization.address.country">&nbsp;&nbsp;{{request.organization.address.country|lowercase|term}} </em>
-                            
-                            <div class="pull-right ">
+                            <span class="request-heading-labels">
                                 <span class="label label-danger" ng-if="request.orgLinkError">Organization link</span>
                                 <span class="label label-danger" ng-if="request.contactLinkError">Contact link</span>
                                 <span class="label label-default" ng-if="request.needTags">Need Tags</span>
@@ -535,13 +578,12 @@ a.label:focus {
                                 <span class="label label-warning" ng-if="request.currentStep!='finished'">Pending</span>
                                 <span class="label label-success" ng-if="request.accredited">Accredited</span>
                                 <span class="label label-danger"  ng-if="request.rejected">Rejected</span>
-                                &nbsp;
-                                <i ng-hide="request == mediaRequestCtrl.selectedRequest" class="fa fa-caret-down" aria-hidden="true"></i></a>
-                                <i ng-show="request == mediaRequestCtrl.selectedRequest" class="fa fa-caret-up" aria-hidden="true"></i></a>
-                            </div>
-                            <div>
+                            </span>
 
-                            </div>
+                            <span class="request-heading-toggle">
+                                <i ng-hide="request == mediaRequestCtrl.selectedRequest" class="fa fa-caret-down" aria-hidden="true"></i>
+                                <i ng-show="request == mediaRequestCtrl.selectedRequest" class="fa fa-caret-up" aria-hidden="true"></i>
+                            </span>
                         </div>
                         <div class="panel-body" ng-if="request == mediaRequestCtrl.selectedRequest">
 
@@ -681,7 +723,7 @@ a.label:focus {
                                                                             <i class="fa fa-check-square"></i>
                                                                         </button>
                                                                         &nbsp;
-                                                                        <a type="button" class="btn btn-sm btn-outline-dark" ng-click="$event.stopPropagation()" ng-href="https://cbd.kronos-events.net/organizations/{{korg.organizationId}}" target="_blank"><i class="fa fa-external-link"></i></a>
+                                                                        <a type="button" class="btn btn-sm btn-outline-dark" ng-click="mediaRequestCtrl.openInKronos($event)" ng-href="https://cbd.kronos-events.net/organizations/{{korg.organizationId}}" target="_blank" rel="noopener noreferrer"><i class="fa fa-external-link"></i></a>
                                                                     </div>
                                                             
                                                                 </td>
@@ -920,7 +962,7 @@ a.label:focus {
                                                                                     <i class="fa fa-check-square"></i>
                                                                                 </button>
                                                                                 &nbsp;
-                                                                                <a ng-if="kctc.isLinked && request.organization.kronosIds.length" ng-click="$event.stopPropagation()" ng-href="https://cbd.kronos-events.net/organizations/{{request.organization.kronosIds[0]}}/contacts/{{kctc.contactId}}" target="_blank"><i class="fa fa-external-link fa-2x"></i></a>
+                                                                                <a ng-if="kctc.isLinked && request.organization.kronosIds.length" ng-click="mediaRequestCtrl.openInKronos($event)" ng-href="https://cbd.kronos-events.net/organizations/{{request.organization.kronosIds[0]}}/contacts/{{kctc.contactId}}" target="_blank" rel="noopener noreferrer"><i class="fa fa-external-link fa-2x"></i></a>
                                                                             </div>
                                                                             
                                                                         </td>
