@@ -90,6 +90,18 @@ export default class Api
     return this.http.get(`api/v2016/reservations/${encodeURIComponent(reservationId)}`).then(res => res.data).catch(tryCastToApiError);
   }
 
+  queryReservations(params) {
+
+    return this.http.get(`api/v2016/reservations`, { params }).then(res => res.data).catch(tryCastToApiError);
+  }
+
+  queryReservationTypes(typeIds) {
+
+    const q = { schema: 'reservations', _id: { $in: typeIds.map(mapObjectId) } };
+
+    return this.http.get(`api/v2016/types`, { params: { q, f: { title: 1, style: 1 } } }).then(res => res.data).catch(tryCastToApiError);
+  }
+
   //////////////////////////
   // Interventions
   ////////////////////////

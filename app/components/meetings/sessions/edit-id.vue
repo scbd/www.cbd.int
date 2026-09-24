@@ -202,14 +202,6 @@ const DATETIME_LOCAL = "yyyy-MM-dd'T'HH:mm";
 
 const TITLE_LABELS = [ 'Plenary', 'Working Group I', 'Working Group II', 'High Level Segment' ];
 
-// Eunomia reservation types that carry statements (same as the kronos statements sync)
-const RESERVATION_TYPE_LABELS = {
-  '570fd1ac2e3fa5cfa61d90f5': 'Plenary',
-  '58379a233456cf0001550cac': 'Working Group I',
-  '58379a293456cf0001550cad': 'Working Group II',
-  '5aff32171a0ff600010c28a8': 'High Level Segment',
-};
-
 const VIDEO_PROVIDERS = [
   { type: 'unWebTv', priority: 0, test: url => /^https?:\/\/webtv\.un\.org\/([a-z]+\/)?asset\//i.test(url) },
   { type: 'youtube', priority: 1, test: url => /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//i.test(url) },
@@ -350,7 +342,7 @@ function loadSession(session){
 }
 
 // Pre-fill a new session from an Eunomia reservation, the same way the kronos statements sync does
-function loadReservation(reservation){
+async function loadReservation(reservation){
   if(!reservation) throw new Error('Reservation not found');
 
   if(this.conference && reservation.location?.conference !== this.conference._id)
@@ -359,10 +351,10 @@ function loadReservation(reservation){
   const { agenda = {} } = reservation;
   const ids = agenda.meetingIds?.length
             ? agenda.meetingIds.map(remapCode)
-            : Object.keys(agenda.meetings || {}).map(code=>this.meetings.find(m=>m.normalizedSymbol === remapCode(code).toUpperCase())?._id);
+            : Object.keys(agenda.meetings || {}).filter(code=>agenda.meetings[code] === true).map(code=>this.meetings.find(m=>m.normalizedSymbol === remapCode(code).toUpperCase())?._id);
 
   const meetingIds = ids.filter(id=>this.meetings.some(m=>m._id === id));
-  const label      = RESERVATION_TYPE_LABELS[reservation.type];
+  const [ type ]   = reservation.type ? await this.api.queryReservationTypes([ reservation.type ]) : [];
 
   if(meetingIds.length) this.meetingIds = meetingIds;
 
@@ -370,7 +362,7 @@ function loadReservation(reservation){
   this.summary = (reservation.title || '').replace(/^[\s:]*/, '').trim();
   this.videos  = toVideos(reservation.links);
 
-  if(label) this.title = this.regularTitle(label);
+  if(type?.title) this.title = this.regularTitle(type.title);
 }
 
 function checkedMeetings(){
