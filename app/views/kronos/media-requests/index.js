@@ -9,24 +9,31 @@ export { default as template } from './index.html'
 
     var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
     var KRONOS_STATUS_ACCREDITED  = 2;
-    var KRONOS_QUERY_CHUNK        = 25; // ids per lookup, matching the contact query's own page size
-    var KRONOS_TYPE_ID_WIDTH      = 32; // kronos echoes type ids unpadded; compare zero-padded to this width
+    // kronos echoes organization type ids back unpadded (24 chars) while the constant above is the
+    // zero-padded 32 char form the query expects - compare on the significant tail
+    var KRONOS_TYPE_ID_WIDTH = 32; // kronos echoes type ids unpadded; compare zero-padded to this width
+    var KRONOS_QUERY_CHUNK    = 25; // ids per lookup, matching the contact query's own page size
 
-export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter) {
+export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter', '$timeout', '$window' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter, $timeout, $window) {
         var _ctrl = this;
 
         var SORT_PROPS = ['meta.createdOn', 'organization.title', 'meta.modifiedOn'];
         var SORT_DIRS  = ['asc', 'desc'];
         var STATUSES   = ['new', 'accredited', 'accreditationInProgress', 'rejected', 'draft', 'error'];
 
+        // participants and passports keep loading after the list first paints, and each one that
+        // lands above the target shifts it down - let the page settle before measuring its position
+        var SCROLL_SETTLE_MS = 1500;
+
         // kronos records keyed by id, so the heading checks survive a status change without refetching.
         // a miss is cached as null so a dangling link is not looked up again on every reload.
         var kronosOrgTypes = {};
         var kronosContacts = {};
 
-        var initialState  = stateFromSearch($location.search());
-        var initialStatus = initialState.status;
-        var initialised   = false; // true once load() finishes; gates URL write-back
+        var initialState     = stateFromSearch($location.search());
+        var initialStatus    = initialState.status;
+        var initialRequestId = initialState.request; // panel to re-open from the URL, consumed once
+        var initialised      = false; // true once load() finishes; gates URL write-back
 
         _ctrl.requests              = [];
         _ctrl.sort                  = initialState.sort;
@@ -125,7 +132,32 @@ $scope.$watch(function(){
             .catch(function(err) {
                 _ctrl.error = err.data || err;
             })
-            .finally(()=>$scope.$applyAsync(()=>{ _ctrl.requestStatus = initialStatus; initialised = true; }))
+            .finally(()=>$scope.$applyAsync(()=>{
+                _ctrl.requestStatus = initialStatus;
+                initialised         = true;
+                restoreExpandedRequest();
+            }))
+        }
+
+        // re-open the panel named by ?request= once the list it lives in has loaded
+        function restoreExpandedRequest(){
+            var requestId = initialRequestId;
+
+            initialRequestId = null; // one-shot: from here on the panel drives the URL, not the reverse
+
+            if(!requestId) return;
+
+            var request = _.find(_ctrl.requests, function(r){ return r._id === requestId; });
+
+            if(!request) return; // filtered out by the current status, or gone
+
+            selectRequest(request);
+
+            $timeout(function(){
+                var el = document.getElementById('media-request-' + requestId);
+
+                if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, SCROLL_SETTLE_MS);
         }
 
         function stateFromSearch(search){
@@ -135,6 +167,7 @@ $scope.$watch(function(){
 
             return {
                 status : status,
+                request: search.request || null,
                 sort   : {
                     prop: SORT_PROPS.indexOf(search.sortBy)  !== -1? search.sortBy  : 'meta.createdOn',
                     dir : SORT_DIRS .indexOf(search.sortDir) !== -1? search.sortDir : 'asc'
@@ -311,26 +344,26 @@ $scope.$watch(function(){
 
 
                             if(_ctrl.requestStatus === '' || status === ''){
-                                $scope.counts.error                   =  _ctrl.requests.filter(hasError).length;  
-                                $scope.counts.accreditationInProgress =  _ctrl.requests.filter(r => !hasError(r) && r.accreditationInProgress).length;  
-                                $scope.counts.accredited =  _ctrl.requests.filter(r => !hasError(r) && !r.accreditationInProgress && r.accredited).length;  
+                                $scope.counts.error                   =  _ctrl.requests.filter(hasError).length;
+                                $scope.counts.accreditationInProgress =  _ctrl.requests.filter(r => !hasError(r) && r.accreditationInProgress).length;
+                                $scope.counts.accredited =  _ctrl.requests.filter(r => !hasError(r) && !r.accreditationInProgress && r.accredited).length;
                             }
 
                         if(_ctrl.requestStatus === 'error' || status === 'error'){
-                            $scope.counts.accreditationInProgress =  _ctrl.requests.filter(r => !hasError(r) && r.accreditationInProgress  && r.accredited).length;  
-                            $scope.counts.accredited =  _ctrl.requests.filter(r => !hasError(r) && !r.accreditationInProgress && r.accredited).length; 
+                            $scope.counts.accreditationInProgress =  _ctrl.requests.filter(r => !hasError(r) && r.accreditationInProgress  && r.accredited).length;
+                            $scope.counts.accredited =  _ctrl.requests.filter(r => !hasError(r) && !r.accreditationInProgress && r.accredited).length;
                             _ctrl.requests = _ctrl.requests.filter(hasError);
                             $scope.counts.error = _ctrl.requests.length
                         }
                         if(_ctrl.requestStatus === 'accreditationInProgress' || status === 'accreditationInProgress'){
-                            $scope.counts.error                   =  _ctrl.requests.filter(hasError).length;  
-                            $scope.counts.accredited =  _ctrl.requests.filter(r => !hasError(r) && !r.accreditationInProgress && r.accredited).length;  
+                            $scope.counts.error                   =  _ctrl.requests.filter(hasError).length;
+                            $scope.counts.accredited =  _ctrl.requests.filter(r => !hasError(r) && !r.accreditationInProgress && r.accredited).length;
                             _ctrl.requests = _ctrl.requests.filter(r => !hasError(r) && r.accreditationInProgress && r.accredited );
                             $scope.counts.accreditationInProgress = _ctrl.requests.length
                         }
                         if(_ctrl.requestStatus === 'accredited' || status === 'accredited'){
-                            $scope.counts.error                   =  _ctrl.requests.filter(hasError).length;  
-                            $scope.counts.accreditationInProgress =  _ctrl.requests.filter(r => !hasError(r) && r.accreditationInProgress).length;  
+                            $scope.counts.error                   =  _ctrl.requests.filter(hasError).length;
+                            $scope.counts.accreditationInProgress =  _ctrl.requests.filter(r => !hasError(r) && r.accreditationInProgress).length;
 
                             _ctrl.requests = _ctrl.requests.filter(r => !r.accreditationInProgress && !hasError(r)  && r.accredited); //accredited
                             $scope.counts.accredited = _ctrl.requests.length
@@ -431,86 +464,6 @@ $scope.$watch(function(){
             return !!(request.contactsOnlyError || request.orgLinkError || request.contactLinkError);
         }
 
-        // a panel heading has to show a link problem without being opened, so the checks the expanded
-        // view runs per organization and per contact are resolved once, for the whole list, up front
-        async function flagLinkErrors(requests){
-            try{
-                const orgIds     = collectIds(requests, function(r){ return r.organization?.kronosIds; });
-                const contactIds = collectIds(requests, function(r){ return (r.participants || []).map(function(p){ return p.kronosId; }); });
-
-                await Promise.all([ cacheOrganizationTypes(orgIds), cacheContacts(contactIds) ]);
-
-                for (const request of requests){
-                    const linkedOrgIds = request.organization?.kronosIds || [];
-
-                    request.orgLinkError     = linkedOrgIds.some(function(id){ return isKnownNonMediaType(kronosOrgTypes[id]); });
-                    request.contactLinkError = (request.participants || []).some(function(participant){
-                        const contact = participant.kronosId && kronosContacts[participant.kronosId];
-
-                        if(!contact) return false;
-
-                        return isKnownNonMediaType(contact.organization?.organizationTypeId)
-                            || (!!linkedOrgIds.length && !linkedOrgIds.includes(contactOrganizationId(contact)));
-                    });
-                }
-            }catch(err){
-                // a heading hint is not worth failing the list over - the expanded view still flags it
-                console.error('could not resolve kronos link errors', err && err.status, err && err.data);
-            }
-        }
-
-        function collectIds(requests, pick){
-            return _.uniq(_.compact(_.flatten(requests.map(pick))));
-        }
-
-        function chunkIds(ids){
-            const chunks = [];
-
-            for (let i = 0; i < ids.length; i += KRONOS_QUERY_CHUNK) chunks.push(ids.slice(i, i + KRONOS_QUERY_CHUNK));
-
-            return chunks;
-        }
-
-        async function cacheOrganizationTypes(organizationIds){
-            const missing = organizationIds.filter(function(id){ return !(id in kronosOrgTypes); });
-
-            await Promise.all(chunkIds(missing).map(async function(chunk){
-                const records = await $http.get(kronos.baseUrl+'/api/v2018/organizations', { params: { q: { organizationIds: chunk } } })
-                                          .then(resData).then(function(r){ return r.records || []; });
-
-                if(!isScopedToChunk(records, chunk, 'organizations')) return;
-
-                for (const id  of chunk  ) kronosOrgTypes[id]                  = null;
-                for (const org of records) kronosOrgTypes[org.organizationId]  = org.organizationTypeId;
-            }));
-        }
-
-        async function cacheContacts(contactIds){
-            const missing = contactIds.filter(function(id){ return !(id in kronosContacts); });
-
-            await Promise.all(chunkIds(missing).map(async function(chunk){
-                const records = await $http.post(kronos.baseUrl+'/api/v2018/contacts/query', { contactIds: chunk, limit: chunk.length, skip: 0 })
-                                          .then(resData).then(function(r){ return r.records || []; });
-
-                if(!isScopedToChunk(records, chunk, 'contacts')) return;
-
-                for (const id      of chunk  ) kronosContacts[id]                 = null;
-                for (const contact of records) kronosContacts[contact.contactId]  = contact;
-            }));
-        }
-
-        // these lookups filter by a list of ids. if the endpoint were to ignore that filter it would
-        // answer with arbitrary records instead, and caching them would quietly mis-report every
-        // heading. anything outside the ids we asked for means the response is not ours to trust.
-        function isScopedToChunk(records, chunk, what){
-            const asked  = new Set(chunk);
-            const scoped = records.every(function(r){ return asked.has(r.organizationId || r.contactId); });
-
-            if(!scoped) console.error('kronos ' + what + ' lookup ignored its id filter; not caching');
-
-            return scoped;
-        }
-
         //===================================
         //
         //===================================
@@ -524,12 +477,32 @@ $scope.$watch(function(){
             _ctrl.selectedRequest       = request;
             _ctrl.selectedParticipant   = participant;
 
+            // keep the open panel in the URL so the view can be linked and restored
+            if(initialised) $location.search('request', request? request._id : null);
+
             var qChain = $q.when(0);
 
             if(request     && request    !=prevRequest)     qChain = qChain.then(function() { return lookUpKronosOrganizations(request); });
             if(participant && participant!=prevParticipant) qChain = qChain.then(function() { return lookUpKronosContact(participant, request); });
 
             return qChain;
+        }
+
+        // target="_blank" alone is ignored by the embedded browsers this admin screen gets opened in,
+        // so the new tab is opened explicitly. the href stays on the anchor for middle click and
+        // copy-link, and the default is cancelled so a normal browser still opens exactly one tab.
+        _ctrl.openInKronos = openInKronos;
+        function openInKronos($event){
+            $event.stopPropagation();
+
+            // a modifier click is the browser's to handle - cmd/ctrl/shift keep their own meaning
+            if($event.metaKey || $event.ctrlKey || $event.shiftKey) return;
+
+            $event.preventDefault();
+
+            const url = $event.currentTarget && $event.currentTarget.href;
+
+            if(url) $window.open(url, '_blank', 'noopener,noreferrer');
         }
 
         //===================================
@@ -719,7 +692,7 @@ $scope.$watch(function(){
 
         // the linked lookups are unscoped by type, so they can return a record whose organization
         // kronos does not type as media - the reason a link like that was invisible here before.
-        // kronos echoes the type id unpadded, so pad both sides and compare the whole value.
+        // an unknown type is not evidence of a problem, so only flag what kronos actually told us.
         function normalizeTypeId(typeId){
             return String(typeId).trim().toLowerCase().padStart(KRONOS_TYPE_ID_WIDTH, '0');
         }
@@ -728,6 +701,86 @@ $scope.$watch(function(){
             if(!typeId) return false; // kronos not telling us the type is not evidence of a problem
 
             return normalizeTypeId(typeId) !== normalizeTypeId(KRONOS_MEDIA_TYPE);
+        }
+
+        // a panel heading has to show a link problem without being opened, so the checks the expanded
+        // view runs per organization and per contact are resolved once, for the whole list, up front
+        async function flagLinkErrors(requests){
+            try{
+                const orgIds     = collectIds(requests, function(r){ return r.organization?.kronosIds; });
+                const contactIds = collectIds(requests, function(r){ return (r.participants || []).map(function(p){ return p.kronosId; }); });
+
+                await Promise.all([ cacheOrganizationTypes(orgIds), cacheContacts(contactIds) ]);
+
+                for (const request of requests){
+                    const linkedOrgIds = request.organization?.kronosIds || [];
+
+                    request.orgLinkError     = linkedOrgIds.some(function(id){ return isKnownNonMediaType(kronosOrgTypes[id]); });
+                    request.contactLinkError = (request.participants || []).some(function(participant){
+                        const contact = participant.kronosId && kronosContacts[participant.kronosId];
+
+                        if(!contact) return false;
+
+                        return isKnownNonMediaType(contact.organization?.organizationTypeId)
+                            || (!!linkedOrgIds.length && !linkedOrgIds.includes(contactOrganizationId(contact)));
+                    });
+                }
+            }catch(err){
+                // a heading hint is not worth failing the list over - the expanded view still flags it
+                console.error('could not resolve kronos link errors', err && err.status, err && err.data);
+            }
+        }
+
+        function collectIds(requests, pick){
+            return _.uniq(_.compact(_.flatten(requests.map(pick))));
+        }
+
+        function chunkIds(ids){
+            const chunks = [];
+
+            for (var i = 0; i < ids.length; i += KRONOS_QUERY_CHUNK) chunks.push(ids.slice(i, i + KRONOS_QUERY_CHUNK));
+
+            return chunks;
+        }
+
+        async function cacheOrganizationTypes(organizationIds){
+            const missing = organizationIds.filter(function(id){ return !(id in kronosOrgTypes); });
+
+            await Promise.all(chunkIds(missing).map(async function(chunk){
+                const records = await $http.get(kronos.baseUrl+'/api/v2018/organizations', { params: { q: { organizationIds: chunk } } })
+                                          .then(resData).then(function(r){ return r.records || []; });
+
+                if(!isScopedToChunk(records, chunk, 'organizations')) return;
+
+                for (const id  of chunk  ) kronosOrgTypes[id]                  = null;
+                for (const org of records) kronosOrgTypes[org.organizationId]  = org.organizationTypeId;
+            }));
+        }
+
+        async function cacheContacts(contactIds){
+            const missing = contactIds.filter(function(id){ return !(id in kronosContacts); });
+
+            await Promise.all(chunkIds(missing).map(async function(chunk){
+                const records = await $http.post(kronos.baseUrl+'/api/v2018/contacts/query', { contactIds: chunk, limit: chunk.length, skip: 0 })
+                                          .then(resData).then(function(r){ return r.records || []; });
+
+                if(!isScopedToChunk(records, chunk, 'contacts')) return;
+
+                for (const id      of chunk  ) kronosContacts[id]                 = null;
+                for (const contact of records) kronosContacts[contact.contactId]  = contact;
+            }));
+        }
+
+        // these lookups filter by a list of ids. if the endpoint were to ignore that filter it would
+        // answer with arbitrary records instead, and caching them would quietly mis-report every
+        // heading. anything outside the ids we asked for means the response is not ours to trust.
+        function isScopedToChunk(records, chunk, what){
+            const asked  = new Set(chunk);
+            const scoped = records.every(function(r){ return asked.has(r.organizationId || r.contactId); });
+
+            if(!scoped) console.error('kronos ' + what + ' lookup ignored its id filter; not caching');
+
+            return scoped;
         }
 
         // kronos registration status: 1 = nominated, 2 = accredited
@@ -820,7 +873,7 @@ $scope.$watch(function(){
         function removeKronsOrganization(request, korg){
             
             return $http.delete('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/link-kronos/' + korg.organizationId,)
-            .then(function(result){               
+            .then(function(result){
                 if(result.status == 200){
                     // this already runs inside the $http digest, so drop the link synchronously:
                     // deferring the splice to $applyAsync leaves the refresh below reading the old ids
@@ -830,7 +883,7 @@ $scope.$watch(function(){
 
                     korg.isLinked = false;
 
-                    delete kronosOrgTypes[korg.organizationId]; // the heading must re-read this link
+                    delete kronosOrgTypes[korg.organizationId]; // re-read it, do not trust the cached type
 
                     // while an organization is linked it is fetched by id, whatever type kronos gives
                     // it, so the link stays visible and correctable. once unlinked the list has to go
@@ -850,10 +903,9 @@ $scope.$watch(function(){
             //link KRONOS contact with Media request particiapnt
             return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
             '/participants/' + participant._id+ '/link-kronos/' + kcontact.contactId)            
-            .then(function(result){    
-                console.log(result)           
+            .then(function(result){
                 if(result.status == 200){
-                    _.map(participant.kronos.contacts, function(con){con.isLinked=false;})                    
+                    _.map(participant.kronos.contacts, function(con){con.isLinked=false;})
                     participant.kronosId = kcontact.contactId;
                     kcontact.isLinked = participant.isNominated = kcontact.isNominated = true;
 
