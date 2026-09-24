@@ -552,12 +552,12 @@ a.label:focus {
                                             <div class="col-6" >
                                                 <div class="pull-right">
 
-                                                    <div  role="group" class="btn-group btn-group-sm" ng-if="request.currentStep=='finished' && request.organization">
-                                                        <button  ng-if="request.organization.kronosIds.length" type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'accreditate')"
+                                                    <div  role="group" class="btn-group btn-group-sm" ng-if="request.currentStep=='finished'">
+                                                        <button  ng-if="request.organization && request.organization.kronosIds.length" type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'accreditate')"
                                                             ng-disabled="request.organization.accredited">
                                                             <i class="fa fa-thumbs-up"></i> Accreditate
                                                         </button>
-                                                        <button type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'reject')" ng-disabled="request.organization.rejected">
+                                                        <button ng-if="request.organization" type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'reject')" ng-disabled="request.organization.rejected">
                                                             <i class="fa fa-thumbs-down"></i> Reject
                                                         </button>
                                                         <button  ng-if="!request.organization.kronosIds.length" type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.sendBack(request)" >
