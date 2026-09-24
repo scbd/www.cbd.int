@@ -767,7 +767,7 @@ a.label:focus {
                                                                     ng-disabled="participant.accredited || !participant.passport">
                                                                     <i class="fa fa-thumbs-up"></i> Accreditate
                                                                 </button>
-                                                                <button   ng-if="participant.kronosId && !participant.duplicateOfParticipants.length" type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateParticipantStatus(participant, request, 'reject')" 
+                                                                <button   ng-if="participant.kronosId && !participant.duplicateOfParticipants.length && !participant.kronosDuplicates.length" type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateParticipantStatus(participant, request, 'reject')" 
                                                                 ng-disabled="participant.rejected">
                                                                     <i class="fa fa-thumbs-down"></i> Reject
                                                                 </button>
@@ -806,7 +806,10 @@ a.label:focus {
                                                                         <span ng-if="duplicate.organizationName">({{duplicate.organizationName}})</span>
                                                                     </li>
                                                                 </ul>
-                                                                <!-- DEV-1284: reject-duplicate button -->
+                                                                <button type="button" class="btn btn-outline-danger" ng-click="mediaRequestCtrl.rejectDuplicateParticipant(participant, request)"
+                                                                ng-disabled="participant.rejected" title="Rejects this participant only; nothing is changed in Kronos">
+                                                                    <i class="fa fa-clone"></i> Reject duplicate
+                                                                </button>
                                                             </div>
                                                         </td>
                                                     </tr>

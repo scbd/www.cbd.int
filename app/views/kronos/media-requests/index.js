@@ -731,6 +731,7 @@ $scope.$watch(function(){
                         delete participant.accredited;
                         participant.rejected = true;
                         participant.rejectedAsDuplicate = true;
+                        participant.kronosDuplicates = [];
                     }
                     else {
                         delete participant.accredited;
