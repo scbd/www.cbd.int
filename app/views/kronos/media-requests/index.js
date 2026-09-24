@@ -774,10 +774,12 @@ $scope.$watch(function(){
             })    
         }
 
-        function linkKronosContact(request, participant, kcontact){
+        function linkKronosContact(request, participant, kcontact, duplicatesChecked){
 
             //link KRONOS contact with Media request particiapnt
-            return assertNoKronosDuplicates(participant, kcontact.contactId).then(() => $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id +
+            const duplicateCheck = duplicatesChecked ? $q.resolve() : assertNoKronosDuplicates(participant, kcontact.contactId);
+
+            return duplicateCheck.then(() => $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id +
             '/participants/' + participant._id+ '/link-kronos/' + kcontact.contactId))
             .then(function(result){    
                 console.log(result)           
@@ -892,11 +894,11 @@ $scope.$watch(function(){
             }
 
             participant.creatingKronosContact = true;
-            return $http.post(kronos.baseUrl+'/api/v2018/organizations/'+organizationId+'/contacts', kronosContact)
+            return assertNoKronosDuplicates(participant).then(() => $http.post(kronos.baseUrl+'/api/v2018/organizations/'+organizationId+'/contacts', kronosContact))
             .then(function(result){               
                 if(result.status == 200){   
                     participant.kronosId = result.data.contactId;
-                    return linkKronosContact(request, participant, result.data).then(function(data){
+                    return linkKronosContact(request, participant, result.data, true).then(function(data){
                         console.log('linked', data)
                         if((participant.kronos.contacts||[]).length)
                             participant.kronos.contacts.push(result.data)
