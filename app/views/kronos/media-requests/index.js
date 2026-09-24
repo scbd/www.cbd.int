@@ -9,7 +9,7 @@ export { default as template } from './index.html'
 
     var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
     var KRONOS_STATUS_ACCREDITED  = 2;
-    var KRONOS_TYPE_ID_WIDTH      = 32; // kronos echoes type ids unpadded; compare zero-padded to this width
+    const KRONOS_TYPE_ID_WIDTH    = 32; // kronos echoes type ids unpadded; compare zero-padded to this width
 
 export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter) {
         var _ctrl = this;
@@ -618,7 +618,14 @@ $scope.$watch(function(){
         function isKnownNonMediaType(typeId){
             if(!typeId) return false; // kronos not telling us the type is not evidence of a problem
 
-            return normalizeTypeId(typeId) !== normalizeTypeId(KRONOS_MEDIA_TYPE);
+            const normalized = normalizeTypeId(typeId);
+
+            // only an id we recognise as a kronos type can be judged. anything else - a different id
+            // format, a truncated value - would otherwise normalise to "not the media type" and
+            // accuse a perfectly good media organization, so leave it unflagged too.
+            if(!/^[0-9a-f]{32}$/.test(normalized)) return false;
+
+            return normalized !== normalizeTypeId(KRONOS_MEDIA_TYPE);
         }
 
         // kronos registration status: 1 = nominated, 2 = accredited
