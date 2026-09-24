@@ -334,7 +334,7 @@ $scope.$watch(function(){
 
             const participants = _.cloneDeep(request.participants||[]).filter(p => p?.meeting?.length);
 
-            return !!participants.filter(p => (!p.accredited || !p.passport || !p.kronosId) && !p.rejected ).length
+            return !!participants.filter(p => (!p.accredited || !p.passport || !p.kronosId) && !p.rejected && !p.archived ).length
         }
 
         function compare( a, b ) {
