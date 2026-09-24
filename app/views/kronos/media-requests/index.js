@@ -349,6 +349,11 @@ $scope.$watch(function(){
             return request?.organization?.kronosIds?.length
         }
 
+        _ctrl.canActOnParticipants = canActOnParticipants;
+        function canActOnParticipants(request){
+            return !!(hasLinkedOrgs(request) && request.organization.accredited);
+        }
+
         async function loadAllParticipants(results){
             let requests = _.clone(results)
             const mediaRequestQueries = []
@@ -643,6 +648,8 @@ $scope.$watch(function(){
             })
         }
         function updateParticipantStatus(participant, request, status){
+
+            if(!canActOnParticipants(request)) return $q.resolve();
             
             return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
             '/participants/' + participant._id + '/' + status)            
@@ -706,6 +713,8 @@ $scope.$watch(function(){
 
         function linkKronosContact(request, participant, kcontact){
 
+            if(!canActOnParticipants(request)) return $q.resolve();
+
             //link KRONOS contact with Media request particiapnt
             return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
             '/participants/' + participant._id+ '/link-kronos/' + kcontact.contactId)            
@@ -724,6 +733,8 @@ $scope.$watch(function(){
         }
 
         function removeKronosContact(request, participant, kcontact){
+
+            if(!canActOnParticipants(request)) return $q.resolve();
             
             return $http.delete('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
             '/participants/' + participant._id+ '/link-kronos/' + kcontact.contactId)
@@ -782,7 +793,7 @@ $scope.$watch(function(){
         
         function createKronosContact(participant, request){
 
-            if((request.organization.kronosIds||[]).length == 0){
+            if(!canActOnParticipants(request)){
                return;
             }
 
