@@ -518,7 +518,7 @@ a.label:focus {
 
                     <hr>
 
-                    <div class="panel  " ng-repeat="request in mediaRequestCtrl.filteredRequests" ng-class="{'panel-info': request.organization._id == mediaRequestCtrl.selectedRequest.organization._id , 'panel-danger': request.contactsOnlyError, 'panel-default': '!request.contactsOnlyError'}">
+                    <div class="panel  " ng-repeat="request in mediaRequestCtrl.filteredRequests" ng-class="{'panel-info': request.organization._id == mediaRequestCtrl.selectedRequest.organization._id , 'panel-danger': mediaRequestCtrl.hasError(request), 'panel-default': !mediaRequestCtrl.hasError(request)}">
                         <div class="panel-heading" style="cursor:pointer" ng-click="mediaRequestCtrl.selectRequest(request==mediaRequestCtrl.selectedRequest?null:request); mediaRequestCtrl.selectedRequest.organization.kronosIds.length && mediaRequestCtrl.lookUpKronosOrganizations()">
                             <i class="eco-plus-circled"></i><strong> {{request.organization.title}} </strong>,  
                             <span ng-if="request.organization.acronym">({{request.organization.acronym}}),</span>
@@ -528,6 +528,8 @@ a.label:focus {
                             <em ng-if="request.organization.address.country">&nbsp;&nbsp;{{request.organization.address.country|lowercase|term}} </em>
                             
                             <div class="pull-right ">
+                                <span class="label label-danger" ng-if="request.orgLinkError">Organization link</span>
+                                <span class="label label-danger" ng-if="request.contactLinkError">Contact link</span>
                                 <span class="label label-default" ng-if="request.needTags">Need Tags</span>
                                 <span class="label label-info" ng-if="request.currentStep=='finished' && !request.accredited && !request.rejected">New</span>
                                 <span class="label label-warning" ng-if="request.currentStep!='finished'">Pending</span>
