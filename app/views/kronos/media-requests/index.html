@@ -681,7 +681,7 @@ a.label:focus {
                                                                             <i class="fa fa-check-square"></i>
                                                                         </button>
                                                                         &nbsp;
-                                                                        <a type="button" class="btn btn-sm btn-outline-dark" ng-href="https://cbd.kronos-events.net/organizations/{{korg.organizationId}}" target="_blank"><i class="fa fa-external-link"></i></a>
+                                                                        <a type="button" class="btn btn-sm btn-outline-dark" ng-click="$event.stopPropagation()" ng-href="https://cbd.kronos-events.net/organizations/{{korg.organizationId}}" target="_blank"><i class="fa fa-external-link"></i></a>
                                                                     </div>
                                                             
                                                                 </td>
@@ -912,15 +912,15 @@ a.label:focus {
                                                                         <td>
 
                                                                             <div role="group" class="btn-group btn-group-sm pull-right text-nowrap">
-                                                                                <button type="button" class="btn" ng-click="mediaRequestCtrl.linkKronosContact(request, participant, kctc)" ng-if="!kctc.isLinked">
+                                                                                <button type="button" class="btn" ng-click="$event.stopPropagation(); mediaRequestCtrl.linkKronosContact(request, participant, kctc)" ng-if="!kctc.isLinked">
                                                                                     <i class="fa fa-square-o"></i>
                                                                                 </button>
-                                                                                <button type="button" class="btn btn-success" ng-click="mediaRequestCtrl.removeKronosContact(request, participant, kctc)"
+                                                                                <button type="button" class="btn btn-success" ng-click="$event.stopPropagation(); mediaRequestCtrl.removeKronosContact(request, participant, kctc)"
                                                                                     ng-if="kctc.isLinked">
                                                                                     <i class="fa fa-check-square"></i>
                                                                                 </button>
                                                                                 &nbsp;
-                                                                                <a ng-if="kctc.isLinked && request.organization.kronosIds.length" ng-href="https://cbd.kronos-events.net/organizations/{{request.organization.kronosIds[0]}}/contacts/{{kctc.contactId}}" target="_blank"><i class="fa fa-external-link fa-2x"></i></a>
+                                                                                <a ng-if="kctc.isLinked && request.organization.kronosIds.length" ng-click="$event.stopPropagation()" ng-href="https://cbd.kronos-events.net/organizations/{{request.organization.kronosIds[0]}}/contacts/{{kctc.contactId}}" target="_blank"><i class="fa fa-external-link fa-2x"></i></a>
                                                                             </div>
                                                                             
                                                                         </td>

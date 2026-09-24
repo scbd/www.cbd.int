@@ -689,7 +689,9 @@ $scope.$watch(function(){
                   }).then(resData)
 
                 for (const contact of records){
-                  contact.isLinked        = contactId === contact.contactId;
+                  // read the participant's link as it stands now, not as it was when this lookup
+                  // started: an unlink resolving mid-flight would otherwise be painted as linked
+                  contact.isLinked        = !!participant.kronosId && participant.kronosId === contact.contactId;
                   contact.showMore        = false
                   // identity, not type: is this contact filed under the same kronos organization
                   // record the request is linked to. the media type is checked separately below,
@@ -820,13 +822,21 @@ $scope.$watch(function(){
             return $http.delete('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + '/link-kronos/' + korg.organizationId,)
             .then(function(result){               
                 if(result.status == 200){
-                    $scope.$applyAsync(()=>{
-                    var index =  _.indexOf(request.organization.kronosIds, korg.organizationId)
-                    request.organization.kronosIds.splice(index, 1);
-                    korg.isLinked=false;
+                    // this already runs inside the $http digest, so drop the link synchronously:
+                    // deferring the splice to $applyAsync leaves the refresh below reading the old ids
+                    const index = _.indexOf(request.organization.kronosIds, korg.organizationId);
+
+                    if(index !== -1) request.organization.kronosIds.splice(index, 1);
+
+                    korg.isLinked = false;
 
                     delete kronosOrgTypes[korg.organizationId]; // the heading must re-read this link
-                    })
+
+                    // while an organization is linked it is fetched by id, whatever type kronos gives
+                    // it, so the link stays visible and correctable. once unlinked the list has to go
+                    // back to the media only search, or the unlinked organization sits in the results
+                    // looking like a match for a search that would never have returned it
+                    return lookUpKronosOrganizations(request);
                 }
             }).catch(function(err) {
                console.log(err)
@@ -848,6 +858,8 @@ $scope.$watch(function(){
                     kcontact.isLinked = participant.isNominated = kcontact.isNominated = true;
 
                     delete kronosContacts[kcontact.contactId]; // the heading must re-read this link
+
+                    return refreshParticipantPassport(participant, request);
                 }
             }).catch(function(err) {
                console.log(err)
@@ -857,21 +869,65 @@ $scope.$watch(function(){
         }
 
         function removeKronosContact(request, participant, kcontact){
-            
-            return $http.delete('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
+
+            var _kronos = participant.kronos = participant.kronos || {};
+
+            _kronos.error = null;
+
+            return $http.delete('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id +
             '/participants/' + participant._id+ '/link-kronos/' + kcontact.contactId)
-            .then(function(result){               
-                if(result.status == 200){             
+            .then(function(result){
+                if(result.status == 200){
                     participant.kronosId = undefined;
                     participant.accredited = participant.isNominated = kcontact.isNominated = kcontact.isLinked = participant.rejected = false;
 
                     delete kronosContacts[kcontact.contactId]; // the heading must re-read this link
+
+                    return refreshParticipantPassport(participant, request);
                 }
             }).catch(function(err) {
-               console.log(err)
-            }).finally(function(){
-                // delete _kronos.loading;
-            })    
+                console.error('unlink failed', err && err.status, err && err.data);
+
+                return describeUnlinkFailure(err, participant, kcontact)
+                    .then(function(reason){ $scope.$applyAsync(function(){ _kronos.error = reason; }); });
+            })
+        }
+
+        // the unlink endpoint removes the kronos accreditation inside the same call, so it fails
+        // outright when that registration has already been removed in kronos - and the click then
+        // looks like it simply did nothing. name the cause instead of leaving it silent.
+        async function describeUnlinkFailure(err, participant, kcontact){
+            // the server's own words win whenever it has any. the probe below exists only for the
+            // empty-bodied 500 this endpoint returns when it cannot remove the kronos accreditation,
+            // and must not put that explanation on a rejection that said something else.
+            const served = err?.data?.message || (typeof err?.data === 'string' ? err.data : '');
+
+            if(served) return served;
+
+            const generic  = 'Could not unlink this contact. Please try again.';
+            const eventIds = participant.meeting || [];
+
+            if(!participant.accredited || !eventIds.length) return generic;
+
+            try{
+                const { records } = await $http.post(kronos.baseUrl+'/api/v2018/contacts/query', {
+                    contactId                    : kcontact.contactId,
+                    registrationStatusForEventIds: eventIds,
+                    limit                        : 1,
+                    skip                         : 0
+                  }).then(resData);
+
+                const registrations = (records?.[0]?.registrationStatuses || []).filter(Boolean);
+
+                if(!registrations.length)
+                    return 'Still accredited here, but the registration no longer exists in Kronos, so the '
+                         + 'accreditation cannot be removed and the unlink is refused. Restore the Kronos '
+                         + 'registration, or have the accreditation cleared here first, then unlink.';
+            }catch(err){
+                console.error('could not read the kronos registration', err && err.status, err && err.data);
+            }
+
+            return generic;
         }
         
         function createKronosOrg(request){
@@ -992,6 +1048,26 @@ $scope.$watch(function(){
         //
         //===================================
         function resData(res) {  return res.data; }
+
+        // the passport badge is read from kronos for whichever contact the participant is linked to,
+        // so it has to be re-read whenever that link changes. left alone, the previous contact's
+        // passport is still reported against the new one, which hides the form for adding a passport
+        // and leaves the participant unprocessable until the screen is reloaded.
+        async function refreshParticipantPassport(participant, request){
+
+            const conferenceId = request?.conference;
+            const contactId    = participant.kronosId;
+
+            // resolve before assigning: blanking it up front flashes the add-passport form on
+            // screen for the whole round trip
+            const passports = contactId && conferenceId
+                ? await queryPassports({ contactIds: [ contactId ], conferenceId })
+                : null;
+
+            participant.passport = passports?.data?.records?.[0];
+
+            return $scope.$applyAsync();
+        }
 
         async function queryPassports (q) {
 
