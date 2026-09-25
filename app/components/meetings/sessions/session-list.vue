@@ -151,7 +151,7 @@ async function loadCandidates({ all = false } = {}){
   ];
   const f = { start: 1, type: 1, title: 1, 'agenda.meetings': 1, 'agenda.meetingIds': 1 };
 
-  const reservations = await this.api.queryReservations({ q, f, s: { start: -1 } }) || [];
+  const reservations = await this.api.queryReservations({ q, f, s: { start: 1 } }) || [];
   const sessionIds   = new Set(this.sessions.map(o=>o._id));
 
   const candidates = reservations.filter(r=>{
