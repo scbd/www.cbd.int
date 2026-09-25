@@ -7,12 +7,13 @@ export default class SolrApi extends ApiBase
     super(options);
   }
   
-  async query(q, { start, rows, fl, facetField, facetQuery, facetLimit, facetMinCount, group, groupField} = {})  {
+  async query(q, { start, rows, fl, facetField, facetQuery, facetLimit, facetMinCount, sort, group, groupField} = {})  {
     const params = {
       q,
       fl,
       start,
-      rows
+      rows,
+      sort
     };
 
     if(facetField) {
