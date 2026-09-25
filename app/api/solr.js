@@ -26,8 +26,8 @@ export default class SolrApi extends ApiBase
       params['facet.query'] = facetQuery;
     }
 
-    if(facetLimit    !== undefined) params['facet.limit']    = facetLimit;
-    if(facetMinCount !== undefined) params['facet.mincount'] = facetMinCount;
+    if(Boolean(facetLimit)) params['facet.limit']    = facetLimit;
+    if(Boolean(facetMinCount)) params['facet.mincount'] = facetMinCount;
 
     if(group) {
       params.group           = 'true';
