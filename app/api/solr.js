@@ -7,12 +7,13 @@ export default class SolrApi extends ApiBase
     super(options);
   }
   
-  async query(q, { start, rows, fl, facetField} = {})  {
+  async query(q, { start, rows, fl, facetField, facetQuery, facetLimit, facetMinCount, sort, group, groupField} = {})  {
     const params = {
       q,
       fl,
       start,
       rows,
+      sort
     };
 
     if(facetField) {
@@ -20,7 +21,28 @@ export default class SolrApi extends ApiBase
       params['facet.field'] = facetField;
     } 
 
-    const result = await this.http.get(`api/v2013/index`, { params })
+    if(facetQuery) {
+      params.facet = 'true';
+      params['facet.query'] = facetQuery;
+    }
+
+    if(Boolean(facetLimit)) params['facet.limit']    = facetLimit;
+    if(Boolean(facetMinCount)) params['facet.mincount'] = facetMinCount;
+
+    if(group) {
+      params.group           = 'true';
+      params['group.field']  = groupField;
+      params['group.ngroups']= 'true';
+      params['group.limit']  = 0;
+    }
+
+    // Facets need repeated keys (`facet.field=a&facet.field=b` and `facet.query=x&facet.query=y`); axios' default
+    // serializer emits `facet.field[]=a`, which Solr ignores. Scoped to facet calls so the
+    // plain query/paging callers keep axios' encoding untouched.
+    const config = { params };
+    if(facetField || facetQuery) config.paramsSerializer = serializeSolrParams;
+
+    const result = await this.http.get(`api/v2013/index`, config)
                                   .then(res => res.data)
                                   .catch(tryCastToApiError);
 
@@ -30,6 +52,16 @@ export default class SolrApi extends ApiBase
   escape(value) {
     return escape(value);
   }
+}
+
+function serializeSolrParams(params) {
+  const params = new URLSearchParams();
+  for(const [key, value] of Object.entries(params)) {
+    if(value === undefined || value === null || value === '') continue;
+    for(const item of (Array.isArray(value) ? value : [value]))
+      params.append(key, item);
+  }
+  return params.toString()
 }
 
 export function escape(value) {

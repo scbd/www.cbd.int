@@ -17,6 +17,7 @@ const outputDir = 'dist';
 let externals = [
   'require', 
   'amchart/pie',
+  'amchart/serial',
   'ammap/themes/light',
   'amchart/themes/light', 
   'https://cdn.slaask.com/chat.js',
