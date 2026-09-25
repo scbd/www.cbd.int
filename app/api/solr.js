@@ -55,16 +55,13 @@ export default class SolrApi extends ApiBase
 }
 
 function repeatArrayKeys(params) {
-  const parts = [];
-
+  const params = new URLSearchParams();
   for(const [key, value] of Object.entries(params)) {
     if(value === undefined || value === null || value === '') continue;
-
     for(const item of (Array.isArray(value) ? value : [value]))
-      parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(item)}`);
+      params.append(key, item);
   }
-
-  return parts.join('&');
+  return params.toString()
 }
 
 export function escape(value) {
