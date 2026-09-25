@@ -767,14 +767,22 @@ a.label:focus {
                                                                     ng-disabled="participant.accredited || !participant.passport">
                                                                     <i class="fa fa-thumbs-up"></i> Accreditate
                                                                 </button>
-                                                                <button   ng-if="participant.kronosId " type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateParticipantStatus(participant, request, 'reject')" 
+                                                                <button   ng-if="participant.kronosId && !participant.duplicateOfParticipants.length" type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateParticipantStatus(participant, request, 'reject')" 
                                                                 ng-disabled="participant.rejected">
                                                                     <i class="fa fa-thumbs-down"></i> Reject
+                                                                </button>
+                                                                <button   ng-if="participant.duplicateOfParticipants.length" type="button" class="btn btn-outline-danger" ng-click="mediaRequestCtrl.rejectDuplicateParticipant(participant, request)"
+                                                                ng-disabled="participant.rejected" title="Keeps the Kronos accreditation of the linked contact">
+                                                                    <i class="fa fa-clone"></i> Reject duplicate
                                                                 </button>
 
 
                                                                 
                                                             </div>
+                                                            <div ng-if="participant.duplicateOfParticipants.length && !participant.rejected" class="text-muted small">
+                                                                Same Kronos contact as {{participant.duplicateOfParticipants.length}} other participant record(s). Reject duplicate keeps the Kronos accreditation.
+                                                            </div>
+                                                            <div ng-if="participant.statusError" class="text-danger">{{participant.statusError}}</div>
                                                         </td>
                                                         <td ng-show="participant.meeting.length">
                                                             Kronos Contact
@@ -798,7 +806,8 @@ a.label:focus {
                                                                 <span class="label label-default" ng-if="participant.isOnline">Online</span>
                                                                 <span class="label label-default" ng-if="participant.needsVisa">Visa</span>
                                                                 <span class="label label-success" ng-if="participant.accredited">Accredited</span>
-                                                                <span class="label label-danger" ng-if="participant.rejected">Rejected</span>
+                                                                <span class="label label-danger" ng-if="participant.rejected && !participant.rejectedAsDuplicate">Rejected</span>
+                                                                <span class="label label-danger" ng-if="participant.rejectedAsDuplicate">Rejected (duplicate)</span>
                                                                 <span class="label label-primary" ng-if="participant.kronosId">Nominated in kronos</span>
                                                                 <span class="label label-primary" ng-if="request.focalPoint == participant._id">Focal point</span>
                                                                 <span class="label label-primary" ng-if="request.head == participant._id">Head</span>
@@ -908,7 +917,8 @@ a.label:focus {
                                                                                     <i class="fa fa-square-o"></i>
                                                                                 </button>
                                                                                 <button type="button" class="btn btn-success" ng-click="mediaRequestCtrl.removeKronosContact(request, participant, kctc)"
-                                                                                    ng-if="kctc.isLinked">
+                                                                                    ng-if="kctc.isLinked" ng-disabled="participant.rejectedAsDuplicate || participant.duplicateOfParticipants.length"
+                                                                                    title="{{(participant.rejectedAsDuplicate || participant.duplicateOfParticipants.length) ? 'Unlinking would remove the Kronos accreditation shared with the duplicate record' : ''}}">
                                                                                     <i class="fa fa-check-square"></i>
                                                                                 </button>
                                                                                 &nbsp;
