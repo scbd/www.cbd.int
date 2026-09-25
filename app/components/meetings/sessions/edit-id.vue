@@ -146,14 +146,20 @@
       <div class="panel panel-default border rounded mb-3">
         <div class="card-header d-flex align-items-center justify-content-between">
           <h4 style="color:inherit" class="mb-0">Videos</h4>
-          <button type="button" class="btn btn-light btn-sm" @click="addVideo" :disabled="saving"><i class="fa fa-plus"></i> Add video</button>
+          <div class="btn-group btn-group-sm">
+            <button type="button" class="btn btn-light" @click="addVideo" :disabled="saving"><i class="fa fa-plus"></i> Add video</button>
+            <button type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" :disabled="saving || importingVideos"><i class="fa" :class="importingVideos ? 'fa-cog fa-spin' : 'fa-caret-down'"></i></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" :class="{ disabled: !reservationId }" href="#" @click.prevent="reservationId && importVideosFromReservation()"><i class="fa fa-download"></i> Import from reservation</a>
+            </div>
+          </div>
         </div>
 
         <div class="card-body">
           <div class="form-row mb-2" v-for="(video, index) in videos" :key="index">
             <div class="col-12 col-md-6">
               <div class="input-group">
-                <input type="url" class="form-control" placeholder="URL" v-model="video.url" :disabled="saving">
+                <input type="url" class="form-control" placeholder="URL" v-model="video.url" @input="onVideoUrl(video)" :disabled="saving">
                 <div class="input-group-append">
                   <a class="btn btn-light" :class="{ disabled: !/^https?:\/\//i.test(video.url || '') }" :href="video.url" target="_blank" rel="noopener noreferrer" title="Open in a new tab"><i class="fa fa-external-link"></i></a>
                 </div>
@@ -202,14 +208,6 @@ const DATETIME_LOCAL = "yyyy-MM-dd'T'HH:mm";
 
 const TITLE_LABELS = [ 'Plenary', 'Working Group I', 'Working Group II', 'High Level Segment' ];
 
-// Eunomia reservation types that carry statements (same as the kronos statements sync)
-const RESERVATION_TYPE_LABELS = {
-  '570fd1ac2e3fa5cfa61d90f5': 'Plenary',
-  '58379a233456cf0001550cac': 'Working Group I',
-  '58379a293456cf0001550cad': 'Working Group II',
-  '5aff32171a0ff600010c28a8': 'High Level Segment',
-};
-
 const VIDEO_PROVIDERS = [
   { type: 'unWebTv', priority: 0, test: url => /^https?:\/\/webtv\.un\.org\/([a-z]+\/)?asset\//i.test(url) },
   { type: 'youtube', priority: 1, test: url => /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//i.test(url) },
@@ -234,6 +232,7 @@ export default {
               },
   computed  : {
                 isNew()       { return this.route.params.sessionId === 'new' },
+                reservationId() { return this.session?._id || this.route.params.reservationId },
                 headerCode()  { return this.conference?.code || this.routeMeeting?.normalizedSymbol || '' },
                 titleLabels() { return TITLE_LABELS },
                 checkedMeetings,
@@ -258,6 +257,8 @@ export default {
                 otherMeetingSymbol,
                 hasSubItems,
                 addVideo,
+                onVideoUrl,
+                importVideosFromReservation,
                 save,
                 findOverlappingSessions,
                 remove,
@@ -286,6 +287,7 @@ function data(){
     cutoffDate       : '',
     cutoffGracePeriod: 0,
     videos           : [],
+    importingVideos  : false,
   }
 }
 
@@ -350,7 +352,7 @@ function loadSession(session){
 }
 
 // Pre-fill a new session from an Eunomia reservation, the same way the kronos statements sync does
-function loadReservation(reservation){
+async function loadReservation(reservation){
   if(!reservation) throw new Error('Reservation not found');
 
   if(this.conference && reservation.location?.conference !== this.conference._id)
@@ -359,10 +361,10 @@ function loadReservation(reservation){
   const { agenda = {} } = reservation;
   const ids = agenda.meetingIds?.length
             ? agenda.meetingIds.map(remapCode)
-            : Object.keys(agenda.meetings || {}).map(code=>this.meetings.find(m=>m.normalizedSymbol === remapCode(code).toUpperCase())?._id);
+            : Object.keys(agenda.meetings || {}).filter(code=>agenda.meetings[code] === true).map(code=>this.meetings.find(m=>m.normalizedSymbol === remapCode(code).toUpperCase())?._id);
 
   const meetingIds = ids.filter(id=>this.meetings.some(m=>m._id === id));
-  const label      = RESERVATION_TYPE_LABELS[reservation.type];
+  const [ type ]   = reservation.type ? await this.api.queryReservationTypes([ reservation.type ]) : [];
 
   if(meetingIds.length) this.meetingIds = meetingIds;
 
@@ -370,7 +372,7 @@ function loadReservation(reservation){
   this.summary = (reservation.title || '').replace(/^[\s:]*/, '').trim();
   this.videos  = toVideos(reservation.links);
 
-  if(label) this.title = this.regularTitle(label);
+  if(type?.title) this.title = this.regularTitle(type.title);
 }
 
 function checkedMeetings(){
@@ -484,6 +486,36 @@ function addVideo(){
   this.videos.push({ url: '', type: VIDEO_TYPES[0].value, language: 'xx' });
 }
 
+function onVideoUrl(video){
+  const type = videoTypeOf(video.url);
+
+  if(type) video.type = type;
+}
+
+// Adds the reservation's video links (same _id as the session) that are not already listed
+async function importVideosFromReservation(){
+  this.importingVideos = true;
+
+  try {
+    const reservation = await this.api.getReservation(this.reservationId).catch(e=>{ if(e?.statusCode === 404) return null; throw e });
+
+    if(!reservation) return alert('No reservation exists with the same id as this session');
+
+    const urls   = new Set(this.videos.map(v=>(v.url || '').trim()));
+    const videos = toVideos(reservation.links).filter(v=>!urls.has(v.url));
+
+    if(!videos.length) return alert('No new video link found on the reservation');
+
+    this.videos.push(...videos);
+  }
+  catch(e) {
+    this.error = e.message || `${e}`;
+  }
+  finally {
+    this.importingVideos = false;
+  }
+}
+
 async function save(){
   if(this.errors.length) return;
 
@@ -586,6 +618,18 @@ async function getSession(api, sessionId){
     if(e?.statusCode === 404) return null;
     throw e;
   }
+}
+
+function videoTypeOf(url){
+  let host;
+
+  try     { host = new URL((url || '').trim()).hostname.replace(/^(www|m)\./, '') }
+  catch(e){ return null }
+
+  if(host === 'webtv.un.org')                     return 'unWebTv';
+  if(host === 'youtube.com' || host === 'youtu.be') return 'youtube';
+
+  return null;
 }
 
 function toLocal(isoDate, timezone){
