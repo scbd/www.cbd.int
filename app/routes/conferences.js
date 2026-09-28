@@ -22,6 +22,7 @@ const notificationIdView    = { component: ()=>import('~/views/notifications/ind
 const virtualTableView      = { component: ()=>import('~/views/virtual-tables/index')                        .catch(traceError) }
 const sessionListView       = { component: ()=>import('~/components/meetings/sessions/session-list.vue')     .catch(traceError) }
 const sessionIdView         = { component: ()=>import('~/components/meetings/sessions/manage-interventions.vue').catch(traceError) }
+const sessionEditView       = { component: ()=>import('~/components/meetings/sessions/edit-id.vue')          .catch(traceError) }
 const interpretersPanelView = { component: ()=>import('~/components/meetings/sessions/interpreters-view.vue').catch(traceError) }
 const infoNote              = { component: ()=>import('~/views/conferences/info-note.vue')        .catch(traceError) }
 const lang_switch           = { component: ()=>import('~/views/shared/lang')        .catch(traceError) }
@@ -50,6 +51,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:code/insession',                     { ...mapView(angularViewWrapper),  resolve: { ...inSessionView }, reloadOnSearch:false })
     .when('/:code/sessions',                      { ...mapView(vueViewWrapper),      resolve: { ...sessionListView,        user : securize(STATEMENT_ADMIN_ROLES) }, reloadOnSearch:false })
     .when('/:code/sessions/:sessionId',           { ...mapView(vueViewWrapper),      resolve: { ...sessionIdView,          user : securize(STATEMENT_ADMIN_ROLES) }, reloadOnSearch:false })
+    .when('/:code/sessions/:sessionId/edit',      { ...mapView(vueViewWrapper),      resolve: { ...sessionEditView,        user : securize(STATEMENT_ADMIN_ROLES) }, reloadOnSearch:false })
     .when('/:code/interpreter-panel',             { ...mapView(vueViewWrapper),      resolve: { ...interpretersPanelView,  user : securize([ ...STATEMENT_ADMIN_ROLES, "ScbdStaff", "Interpreters"]) }, reloadOnSearch:false })
     .when('/:code/:meeting',                      { ...mapView(introductionView),    resolve: { routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) } })
     .when('/:code/:meeting/documents',            { ...mapView(documentsView),       resolve: { showMeeting : resolveLiteral(false) },                    reloadOnSearch:false })

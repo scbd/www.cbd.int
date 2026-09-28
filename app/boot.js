@@ -50,7 +50,7 @@ export default function bootApp(window, require, defineX) {
           'PageHeader'        : `${cdnUrl}npm/@scbd/page-header@0.0.70/dist/PageHeader.umd.min`,
           'PageFooter'        : `${cdnUrl}npm/@scbd/page-footer/dist/PageFooter.umd.min`,
           'nlp'               : `${cdnUrl}npm/compromise/builds/compromise.min`,
-          'luxon'             : `${cdnUrl}npm/luxon@1.25.0/build/amd/luxon`,
+          'luxon'             : `${cdnUrl}npm/luxon@1.28.1/build/amd/luxon`,
           'axios'             : `${cdnUrl}npm/axios@0.21.1/dist/axios.min`,
           'vue-multiselect'   : `${cdnUrl}npm/vue-multiselect@2.1.6/dist/vue-multiselect.min`,
           'vue-i18n'          : `${cdnUrl}npm/vue-i18n@8.21.1/dist/vue-i18n.min`,

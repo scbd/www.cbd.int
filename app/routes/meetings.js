@@ -10,6 +10,7 @@ import * as documentsView from '~/views/meetings/documents/documents'
 // On-demand views
 const sessionListView        = { component: ()=>import('~/components/meetings/sessions/session-list.vue') }
 const sessionIdView          = { component: ()=>import('~/components/meetings/sessions/manage-interventions.vue') }
+const sessionEditView        = { component: ()=>import('~/components/meetings/sessions/edit-id.vue') }
 const interpretersPanelView  = { component: ()=>import('~/components/meetings/sessions/interpreters-view.vue') }
 
 const importTranslationsView = { component: ()=>import('~/views/meetings/documents/management/translations') }
@@ -26,6 +27,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:meeting/documents/:id',       { ...mapView(angularViewWrapper),   resolve : { ...editDocumentIdView,     user : securize(["Administrator","EditorialService"]) },  reloadOnSearch:false })
     .when('/:meeting/sessions',            { ...mapView(vueViewWrapper),       resolve : { ...sessionListView,        user : securize(STATEMENT_ADMIN_ROLES) }, reloadOnSearch:false })
     .when('/:meeting/sessions/:sessionId', { ...mapView(vueViewWrapper),       resolve : { ...sessionIdView,          user : securize(STATEMENT_ADMIN_ROLES) }, reloadOnSearch:false })
+    .when('/:meeting/sessions/:sessionId/edit', { ...mapView(vueViewWrapper),  resolve : { ...sessionEditView,        user : securize(STATEMENT_ADMIN_ROLES) }, reloadOnSearch:false })
     .when('/:meeting/interpreter-panel',   { ...mapView(vueViewWrapper),       resolve : { ...interpretersPanelView,  user : securize([ ...STATEMENT_ADMIN_ROLES, "ScbdStaff", "Interpreters"]) }, reloadOnSearch:false })
     .when('/:meeting/documents',           { redirectTo  : '/:meeting'} )
     .when('/:meeting',                     { ...mapView(documentsView),        resolve : { showMeeting : resolveLiteral(true) }, reloadOnSearch:false })
