@@ -55,13 +55,13 @@ export default class SolrApi extends ApiBase
 }
 
 function serializeSolrParams(params) {
-  const params = new URLSearchParams();
+  const searchParams = new URLSearchParams();
   for(const [key, value] of Object.entries(params)) {
     if(value === undefined || value === null || value === '') continue;
     for(const item of (Array.isArray(value) ? value : [value]))
-      params.append(key, item);
+      searchParams.append(key, item);
   }
-  return params.toString()
+  return searchParams.toString()
 }
 
 export function escape(value) {
