@@ -231,7 +231,8 @@
                             <div class="form-group">
                                 <label for="elementSubject">CBD Subjects</label><br>
                                 <div ng-repeat="item in self.subjects" class="input-group"
-                                    style="margin-bottom:2px;overflow-y:hidden" title="{{(collections.subjectsMap[item].title|lstring)||item}}">
+                                    style="margin-bottom:2px;overflow-y:hidden"
+                                    title="{{(collections.subjectsMap[item].title|lstring)||item}}">
                                     <span
                                         class="form-control">{{(collections.subjectsMap[item].title|lstring)||item}}</span>
                                     <div class="input-group-append">
@@ -408,7 +409,8 @@
                             <div class="form-group">
                                 <label for="elementSubject">Subjects</label><br>
                                 <div ng-repeat="item in self.element.subjects" class="input-group"
-                                    style="margin-bottom:2px;overflow-y:hidden" title="{{(collections.subjectsMap[item].title|lstring)||item}}">
+                                    style="margin-bottom:2px;overflow-y:hidden"
+                                    title="{{(collections.subjectsMap[item].title|lstring)||item}}">
                                     <span
                                         class="form-control">{{(collections.subjectsMap[item].title|lstring)||item}}</span>
                                     <div class="input-group-append">
@@ -454,7 +456,7 @@
                                 <select ng-if="::canEdit" class="btn btn-primary btn-xs" id="elementDirectedTo"
                                     ng-model="selectedActor"
                                     ng-options="actor.code as actor.title group by actor.group for actor in collections.actorsMap"
-                                    ng-change="addTo(selectedActor, element.actors)"
+                                    ng-change="addTo(selectedActor, element.actors); selectedActor=''"
                                     ng-disabled="element.nodeType!='paragraph'">
                                     <option value="">add an actor</option>
                                 </select>
@@ -605,7 +607,8 @@
                                     </div>
                                 </div>
                                 <button ng-if="::canEdit" class="btn btn-primary btn-xs"
-                                    ng-disabled="element.nodeType!='paragraph'" ng-click="selectMeeting('meetings')">add a
+                                    ng-disabled="element.nodeType!='paragraph'" ng-click="selectMeeting('meetings')">add
+                                    a
                                     meeting</button>
                             </div>
 

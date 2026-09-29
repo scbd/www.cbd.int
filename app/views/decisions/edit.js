@@ -191,6 +191,12 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             selectedNode.nodeType = selectedNode.annex ? 'annex' : 'paragraph';
             selectedNode.documents = selectedNode.documents || [];
             selectedNode.subjects  = selectedNode.subjects  || [];
+            selectedNode.actors    = selectedNode.actors    || [];
+            selectedNode.statuses  = selectedNode.statuses  || [];
+            selectedNode.gbfGoals     = selectedNode.gbfGoals     || [];
+            selectedNode.gbfTargets   = selectedNode.gbfTargets   || [];
+            selectedNode.aichiTargets = selectedNode.aichiTargets || [];
+            selectedNode.decisions    = selectedNode.decisions    || [];
             
             $scope.selectedNode = selectedNode;
             $scope.element = _.cloneDeep(selectedNode);
