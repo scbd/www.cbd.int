@@ -252,6 +252,7 @@
                 <h2>
                     <span ng-if="isEvent">Events</span>
                     <span ng-if="isPublication">Publications</span>
+                    <span ng-if="isChmKnowledgeFair">Posters</span>
                 </h2>
                 <hr/>
             </div>
@@ -270,6 +271,7 @@
                 <div class="alert alert-info"  role="alert" >
                     <span ng-if="isEvent">No events available</span>
                     <span ng-if="isPublication">No publications available</span>
+                    <span ng-if="isChmKnowledgeFair">No posters available</span>
                 </div>
             </div>
             <div class="col-md-12" >  
@@ -368,6 +370,14 @@
                        <input type="checkbox" ng-model="includePastEvents"> Include past events
                     </button>
                 </div>    
+                <div class="btn-group pull-right" style="margin-right: 10px;" ng-if="isChmKnowledgeFair">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-filter"></i> {{chmKnowledgeFairType[filterByChmKnowledgeFairType]}}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li ng-repeat="(key, type) in chmKnowledgeFairType" ng-click="setFilterByField(key, 'filterByChmKnowledgeFairType')"><a class="dropdown-item" href="#" >{{type}}</a></li>
+                    </ul>
+                </div>                  
             </script>
 
         <span id="poster-description" style="display: none;">

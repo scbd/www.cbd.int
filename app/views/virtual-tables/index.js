@@ -29,6 +29,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     $scope.filterByType = 'all';
     $scope.filterByMeeting = 'all';
     $scope.filterByEventType = 'all';
+    $scope.filterByChmKnowledgeFairType = 'all';
 
     $scope.publicationType = {
         'all'                              : 'All type',
@@ -40,6 +41,13 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         'report'                           : 'Report',
         'other'                            : 'Other'
     }
+
+    $scope.chmKnowledgeFairType = {
+        'all'                            : 'All submissions',
+        'party'                          : 'Submitted by parties',
+        'organization'                   : 'Submitted by organizations'
+    }
+
     $scope.meetingType = {
         'all':'All meetings'
     }
@@ -53,6 +61,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     $scope.filterAdminTags = ["virtual-table"];
     $scope.isEvent = $route.current.params.type == 'event';
     $scope.isPublication = $route.current.params.type == 'publication';
+    $scope.isChmKnowledgeFair = $route.current.params.type == 'chm-knowledge-fair';
 
     $scope.isAdmin = (user.roles||[]).find(r=>['administrator', 'oasisArticleEditor'].includes(r))!=undefined;
     $scope.introductionArticleTags = ['virtual-table', 'introduction', encodeURIComponent($route.current.params.code)]
@@ -72,6 +81,7 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         &&  ($scope.filterByMeeting == 'all'  || item[$scope.filterByMeeting])
         &&  ($scope.filterByType    == 'all'  || item[$scope.filterByType])
         &&  ($scope.filterByEventType    == 'all'  || item[$scope.filterByEventType])
+        &&  ($scope.filterByChmKnowledgeFairType == 'all' || item[$scope.filterByChmKnowledgeFairType])  
 
     }
 
@@ -147,6 +157,8 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
                         }
                         if( $scope.eventType[t])
                             article[t] = true;
+                        if(($scope.chmKnowledgeFairType[t]))
+                            article[t] = true;  
                     })
                 }
             });
