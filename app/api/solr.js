@@ -7,7 +7,7 @@ export default class SolrApi extends ApiBase
     super(options);
   }
   
-  async query(q, { start, rows, fl, facetField, facetQuery, facetLimit, facetMinCount, sort, group, groupField} = {})  {
+  async query(q, { start, rows, fl, facetField, facetQuery, facetPivot, facetLimit, facetMinCount, sort, group, groupField} = {})  {
     const params = {
       q,
       fl,
@@ -24,6 +24,11 @@ export default class SolrApi extends ApiBase
     if(facetQuery) {
       params.facet = 'true';
       params['facet.query'] = facetQuery;
+    }
+
+    if(facetPivot) {
+      params.facet = 'true';
+      params['facet.pivot'] = facetPivot;
     }
 
     if(Boolean(facetLimit)) params['facet.limit']    = facetLimit;
