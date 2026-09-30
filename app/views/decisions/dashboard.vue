@@ -16,6 +16,29 @@
 
         <div class="alert alert-danger" v-if="error">{{error}}</div>
 
+        <div class="filter-chips">
+            <span v-if="typeFilter">
+                <span class="badge chip badge-primary">
+                    {{typeTitle(typeFilter)}}
+                    <i class="fa fa-minus-circle" @click="toggleType(typeFilter)"></i>
+                </span>
+            </span>
+
+            <span v-if="subjectFilter">
+                <span class="badge chip badge-primary">
+                    {{subjectLabel(subjectFilter)}}
+                    <i class="fa fa-minus-circle" @click="toggleSubject(subjectFilter)"></i>
+                </span>
+            </span>
+
+            <span v-if="statusFilter">
+                <span class="badge chip badge-primary">
+                    {{statusTitle(statusFilter)}}
+                    <i class="fa fa-minus-circle" @click="toggleStatus(statusFilter)"></i>
+                </span>
+            </span>
+        </div>
+
         <div class="row">
             <div class="col-md-4">
                 <h5>Decision type</h5>
@@ -40,22 +63,6 @@
                     Decisions
                     <small class="text-muted" v-if="recordsCount!==null">{{recordsCount}} found</small>
                 </h5>
-
-                <div class="filter-chips" v-if="typeFilter || subjectFilter">
-                    <span v-if="typeFilter">
-                        <span class="badge chip badge-primary">
-                            {{typeTitle(typeFilter)}}
-                            <i class="fa fa-minus-circle" @click="toggleType(typeFilter)"></i>
-                        </span>
-                    </span>
-
-                    <span v-if="subjectFilter">
-                        <span class="badge chip badge-primary">
-                            {{subjectLabel(subjectFilter)}}
-                            <i class="fa fa-minus-circle" @click="toggleSubject(subjectFilter)"></i>
-                        </span>
-                    </span>
-                </div>
 
                 <table class="table table-striped">
                     <thead>
@@ -103,6 +110,7 @@ import lstring from '~/filters/lstring.js';
 import SolrApi from '../../api/solr.js';
 import ThesaurusApi from '../../api/thesaurus.js';
 import sessionsList from './data/sessions.js';
+import statusesList from './data/statuses.js';
 import typesList from './data/types.js';
 
 const solr      = new SolrApi     ({prefixUrl:window.scbd.apiUrl});
@@ -112,10 +120,20 @@ const baseIndexQuery = 'schema_s:decision-text';
 
 const MAX_DECISIONS = 1000;   // DTT holds 506 COP decisions today
 
-const TYPE_COLORS = { operational: '#17a2b8', informational: '#6c757d', subject: '#449951' };
+const TYPE_COLORS = { operational: '#17a2b8', informational: '#6c757d' };
+
+const STATUS_COLORS = { active: '#28a745', implemented: '#17a2b8', elapsed: '#ffc107', superseded: '#6f42c1', retired: '#343a40' };
+
+// Stack order of the subjects chart and the codes the status filter takes. A status only
+// counts on operational paragraphs; informational ones are 'not applicable' whatever they carry.
+const STATUS_BUCKETS = [
+    ...statusesList.map(({code, title}) => ({ code, title, color: STATUS_COLORS[code] })),
+    { code: 'not-available',  title: 'Not available',  color: '#adb5bd' },   // operational without a status
+    { code: 'not-applicable', title: 'Not applicable', color: '#dee2e6' }    // informational
+];
 
 // dttActor_ss values are case-sensitive and must match the index exactly.
-const TREND_ACTORS = [
+const ACTORS = [
     { code: 'executive-secretary', title: 'Executive Secretary', color: '#1c473b' },
     { code: 'SBSTTA',              title: 'SBSTTA',              color: '#1565c0' },
     { code: 'SBI',                 title: 'SBI',                 color: '#ef6c00' }
@@ -129,6 +147,7 @@ export default {
             selectedSession: '',
             typeFilter    : null,
             subjectFilter : null,
+            statusFilter  : null,
             subjectTerms  : {},
             records       : null,
             recordsCount  : null,
@@ -141,9 +160,9 @@ export default {
     mounted,
     beforeDestroy,
     methods: {
-        onSessionChange, toggleType, toggleSubject,
+        onSessionChange, toggleType, toggleSubject, toggleStatus, toggleSegment,
         previousPage, nextPage,
-        subjectLabel, typeTitle,
+        subjectLabel, typeTitle, statusTitle,
         loadCharts, loadTrend, loadTable
     }
 }
@@ -174,15 +193,29 @@ function beforeDestroy() {
 
 async function loadCharts() {
     try {
-        const { facet_counts } = await solr.query(AND([baseIndexQuery, sessionQuery(this.selectedSession)]), {
-            rows          : 0,
-            facetField    : ['dttType_ss', 'dttSubject_ss'],
-            facetLimit    : 15,
-            facetMinCount : 1
-        });
+        // Untyped paragraphs have no status bucket, so both charts count typed ones only.
+        const query = AND([baseIndexQuery, sessionQuery(this.selectedSession), 'dttType_ss:*']);
 
-        const types    = pairs(facet_counts?.facet_fields?.dttType_ss);
-        const subjects = pairs(facet_counts?.facet_fields?.dttSubject_ss);
+        const [charts, unavailable] = await Promise.all([
+            solr.query(query, {
+                rows          : 0,
+                facetField    : ['dttType_ss'],
+                facetPivot    : 'dttSubject_ss,dttType_ss,dttStatus_ss',
+                facetLimit    : 15,
+                facetMinCount : 1
+            }),
+            // The index proxy rejects facet.missing, so operational paragraphs without a status are counted apart.
+            solr.query(AND([query, statusQuery('not-available')]), {
+                rows          : 0,
+                facetField    : ['dttSubject_ss'],
+                facetLimit    : -1,
+                facetMinCount : 1
+            })
+        ]);
+
+        const types        = pairs(charts.facet_counts?.facet_fields?.dttType_ss);
+        const notAvailable = pairs(unavailable.facet_counts?.facet_fields?.dttSubject_ss);
+        const subjects     = charts.facet_counts?.facet_pivot?.['dttSubject_ss,dttType_ss,dttStatus_ss'] || [];
 
         renderDonut(this, typesList.map(({code, title}) => ({
             code, title,
@@ -190,10 +223,19 @@ async function loadCharts() {
             color: TYPE_COLORS[code]
         })));
 
-        renderSubjects(this, _(subjects)
-            .map((count, code) => ({ code, count, label: this.subjectLabel(code) }))
-            .value()
-            .sort((a, b) => b.count - a.count));
+        // Pivot keeps Solr's count order, so no re-sort. A paragraph with several statuses lands
+        // in each of them, so a bar can run slightly past `count` (its distinct paragraphs).
+        renderSubjects(this, subjects.map(({value: code, count, pivot}) => {
+            const byType = Object.fromEntries((pivot || []).map(t => [t.value, t]));
+
+            return {
+                code, count,
+                label           : this.subjectLabel(code),
+                ...Object.fromEntries((byType.operational?.pivot || []).map(s => [s.value, s.count])),
+                'not-available' : notAvailable[code] || 0,
+                'not-applicable': byType.informational?.count || 0
+            };
+        }));
     }
     catch(err) { this.error = errorMessage(err, 'Unable to load the charts.'); }
 }
@@ -206,7 +248,7 @@ async function loadTrend() {
         const facetQuery = [];
 
         for(const session of sessionsList)
-            for(const actor of TREND_ACTORS) {
+            for(const actor of ACTORS) {
                 // facet keys must be plain identifiers, so strip the dashes the codes carry
                 const key = `${session.code}_${actor.code}`.replace(/-/g, '_');
                 keys[key] = { session: session.title, actor: actor.code };
@@ -235,7 +277,8 @@ async function loadTable() {
             baseIndexQuery,
             sessionQuery(this.selectedSession),
             this.typeFilter    ? `dttType_ss:(${solr.escape(this.typeFilter)})`       : null,
-            this.subjectFilter ? `dttSubject_ss:(${solr.escape(this.subjectFilter)})` : null
+            this.subjectFilter ? `dttSubject_ss:(${solr.escape(this.subjectFilter)})` : null,
+            statusQuery(this.statusFilter)
         ]);
 
         // Wanted order is newest COP first but decisions ascending within it, and dttCode_s is
@@ -326,21 +369,24 @@ function renderSubjects(vm, data) {
         'marginLeft'   : 240,
         'marginRight'  : 20,
         'marginTop'    : 10,
-        'marginBottom' : 45,
-        'valueAxes'    : [{ 'title': 'Paragraphs' }],
-        'graphs'       : [{
+        'marginBottom' : 60,   // room for the 'Paragraphs' axis title above the bottom legend
+        'valueAxes'    : [{ 'title': 'Paragraphs', 'stackType': 'regular' }],
+        // no value column and natural widths, or the legend stacks one item per row and squeezes out subject labels
+        'legend'       : { 'position': 'bottom', 'markerType': 'square', 'valueText': '', 'equalWidths': false },
+        'graphs'       : STATUS_BUCKETS.map(({code, title, color}) => ({
+            'title'      : title,
             'type'       : 'column',
-            'valueField' : 'count',
+            'valueField' : code,
             'fillAlphas' : 0.9,
             'lineAlpha'  : 0.2,
-            'fillColors' : TYPE_COLORS.subject,
-            'lineColor'  : TYPE_COLORS.subject,
-            'balloonText': '[[category]]: [[value]] paragraphs'
-        }],
+            'fillColors' : color,
+            'lineColor'  : color,
+            'balloonText': '[[category]] — [[title]]: [[value]] of [[count]] paragraphs'
+        })),
         'startDuration': 0
     });
 
-    vm.subjects.addListener('clickGraphItem', e => vm.toggleSubject(e.item.dataContext.code));
+    vm.subjects.addListener('clickGraphItem', e => vm.toggleSegment(e.item.dataContext.code, e.graph.valueField));
 }
 
 function renderTrend(vm, data) {
@@ -354,9 +400,9 @@ function renderTrend(vm, data) {
         'categoryField': 'session',
         'categoryAxis' : { 'autoGridCount': false, 'gridCount': sessionsList.length, 'labelRotation': 45 },
         'valueAxes'    : [{ 'title': 'Paragraphs', 'minimum': 0 }],
-        'legend'       : { 'position': 'top' },
+        'legend'       : { 'position': 'bottom' },
         'chartCursor'  : { 'cursorPosition': 'mouse', 'zoomable': false },
-        'graphs'       : TREND_ACTORS.map(({code, title, color}) => ({
+        'graphs'       : ACTORS.map(({code, title, color}) => ({
             'title'      : title,
             'type'       : 'line',
             'valueField' : code,
@@ -403,6 +449,24 @@ function toggleSubject(code) {
     this.loadTable();
 }
 
+function toggleStatus(code) {
+    this.error = null;
+    this.statusFilter = this.statusFilter === code ? null : code;
+    this.currentPage  = 0;
+    this.loadTable();
+}
+
+// A subjects-chart segment is one subject × status; clicking the selected one again clears both.
+function toggleSegment(subject, status) {
+    const selected = this.subjectFilter === subject && this.statusFilter === status;
+
+    this.error = null;
+    this.subjectFilter = selected ? null : subject;
+    this.statusFilter  = selected ? null : status;
+    this.currentPage   = 0;
+    this.loadTable();
+}
+
 function previousPage() {
     if(this.currentPage > 0) { this.error = null; this.currentPage--; this.loadTable(); }
 }
@@ -424,6 +488,10 @@ function typeTitle(code) {
     return typesList.find(t => t.code === code)?.title || code;
 }
 
+function statusTitle(code) {
+    return STATUS_BUCKETS.find(s => s.code === code)?.title || code;
+}
+
 // ====================================
 // Helpers
 // ====================================
@@ -433,6 +501,15 @@ function sessionQuery(sessionCode) {
     if(!sessionCode) return null;
 
     return `dttCode_s:${escapePath(`CBD/${padInt(sessionCode).replace(/-/g, '/')}/`)}*`;
+}
+
+// Mirrors STATUS_BUCKETS: a real status only matches operational paragraphs.
+function statusQuery(code) {
+    if(!code) return null;
+    if(code === 'not-applicable') return 'dttType_ss:informational';
+    if(code === 'not-available')  return '(dttType_ss:operational AND -dttStatus_ss:*)';
+
+    return `(dttType_ss:operational AND dttStatus_ss:${solr.escape(code)})`;
 }
 
 // 'CBD/COP/16/01' -> { session: 16, decision: 1 } for ordering; both are zero-padded in the code.
@@ -466,7 +543,7 @@ function errorMessage(err, fallback) {
 .chart    { width: 100%; }
 .chart-sm { height: 300px; }
 .chart-lg { height: 340px; }
-.chart-tall { height: 420px; }
+.chart-tall { height: 450px; }
 .chip {
     display: inline-block;
     padding: 5px;
@@ -475,7 +552,7 @@ function errorMessage(err, fallback) {
     margin: 2px;
     cursor: pointer;
 }
-.filter-chips { margin-bottom: 12px; }
+.filter-chips { min-height: 30px; margin-top: 10px; }
 
 /* pagination rules copied from decision-search.vue so both pages match */
 .pagination {
