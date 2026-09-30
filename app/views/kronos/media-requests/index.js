@@ -499,7 +499,10 @@ $scope.$watch(function(){
 
             const { organization }  = request;
 
-            if(!organization && !searchText) return;
+            if(!organization && !searchText){
+                if(request.kronos) request.kronos.organizations = [];
+                return;
+            }
 
             const   organizationIds = organization?.kronosIds || [];
             const   freeText        = searchText || organization?.title || '';
