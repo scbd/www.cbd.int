@@ -45,7 +45,7 @@ export default class SolrApi extends ApiBase
     // serializer emits `facet.field[]=a`, which Solr ignores. Scoped to facet calls so the
     // plain query/paging callers keep axios' encoding untouched.
     const config = { params };
-    if(facetField || facetQuery) config.paramsSerializer = serializeSolrParams;
+    if(facetField || facetQuery || facetPivot) config.paramsSerializer = serializeSolrParams;
 
     const result = await this.http.get(`api/v2013/index`, config)
                                   .then(res => res.data)

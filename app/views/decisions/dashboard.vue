@@ -43,10 +43,13 @@
             <div class="col-md-4">
                 <h5>Decision type</h5>
                 <div id="dashboard-type-chart" class="chart chart-sm"></div>
+
+                <h5>Decision status</h5>
+                <div id="dashboard-status-chart" class="chart chart-md"></div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8 d-flex flex-column">
                 <h5>Subjects</h5>
-                <div id="dashboard-subject-chart" class="chart chart-tall"></div>
+                <div id="dashboard-subject-chart" class="chart chart-fill"></div>
             </div>
         </div>
 
@@ -120,6 +123,9 @@ const baseIndexQuery = 'schema_s:decision-text';
 
 const MAX_DECISIONS = 1000;   // DTT holds 506 COP decisions today
 
+// ponytail: fixed row count sized for the two stacked donuts; derive it from the plot height if that layout changes.
+const SUBJECT_ROWS = 30;
+
 const TYPE_COLORS = { operational: '#17a2b8', informational: '#6c757d' };
 
 const STATUS_COLORS = { active: '#28a745', implemented: '#17a2b8', elapsed: '#ffc107', superseded: '#6f42c1', retired: '#343a40' };
@@ -188,7 +194,7 @@ async function mounted() {
 }
 
 function beforeDestroy() {
-    [this.donut, this.subjects, this.trend].forEach(chart => chart && chart.clear());
+    [this.donut, this.statusDonut, this.subjects, this.trend].forEach(chart => chart && chart.clear());
 }
 
 async function loadCharts() {
@@ -200,8 +206,8 @@ async function loadCharts() {
             solr.query(query, {
                 rows          : 0,
                 facetField    : ['dttType_ss'],
-                facetPivot    : 'dttSubject_ss,dttType_ss,dttStatus_ss',
-                facetLimit    : 15,
+                facetPivot    : ['dttSubject_ss,dttType_ss,dttStatus_ss', 'dttType_ss,dttStatus_ss'],
+                facetLimit    : -1,
                 facetMinCount : 1
             }),
             // The index proxy rejects facet.missing, so operational paragraphs without a status are counted apart.
@@ -216,15 +222,25 @@ async function loadCharts() {
         const types        = pairs(charts.facet_counts?.facet_fields?.dttType_ss);
         const notAvailable = pairs(unavailable.facet_counts?.facet_fields?.dttSubject_ss);
         const subjects     = charts.facet_counts?.facet_pivot?.['dttSubject_ss,dttType_ss,dttStatus_ss'] || [];
+        const byTypeAll    = Object.fromEntries((charts.facet_counts?.facet_pivot?.['dttType_ss,dttStatus_ss'] || []).map(t => [t.value, t]));
+        const operational  = Object.fromEntries((byTypeAll.operational?.pivot || []).map(s => [s.value, s.count]));
 
-        renderDonut(this, typesList.map(({code, title}) => ({
+        renderDonut(this, 'donut', 'dashboard-type-chart', code => this.toggleType(code), typesList.map(({code, title}) => ({
             code, title,
             count: types[code] || 0,
             color: TYPE_COLORS[code]
         })));
 
-        // Pivot keeps Solr's count order, so no re-sort. A paragraph with several statuses lands
-        // in each of them, so a bar can run slightly past `count` (its distinct paragraphs).
+        // A paragraph with several statuses counts in each, as on the subjects chart.
+        const statusCounts = { ...operational, 'not-available': unavailable.response?.numFound || 0, 'not-applicable': types.informational || 0 };
+
+        renderDonut(this, 'statusDonut', 'dashboard-status-chart', code => this.toggleStatus(code), STATUS_BUCKETS.map(({code, title, color}) => ({
+            code, title, color,
+            count: statusCounts[code] || 0
+        })));
+
+        // With facet.limit=-1 Solr sorts by value, not count, hence the re-sort. A paragraph with several
+        // statuses lands in each of them, so a bar can run slightly past `count` (its distinct paragraphs).
         renderSubjects(this, subjects.map(({value: code, count, pivot}) => {
             const byType = Object.fromEntries((pivot || []).map(t => [t.value, t]));
 
@@ -235,7 +251,7 @@ async function loadCharts() {
                 'not-available' : notAvailable[code] || 0,
                 'not-applicable': byType.informational?.count || 0
             };
-        }));
+        }).sort((a, b) => b.count - a.count));
     }
     catch(err) { this.error = errorMessage(err, 'Unable to load the charts.'); }
 }
@@ -331,10 +347,10 @@ async function queryDecisions(codes) {
 // Charts
 // ====================================
 
-function renderDonut(vm, data) {
-    if(vm.donut) { vm.donut.dataProvider = data; vm.donut.validateData(); return; }
+function renderDonut(vm, name, elementId, onSlice, data) {
+    if(vm[name]) { vm[name].dataProvider = data; vm[name].validateData(); return; }
 
-    vm.donut = AmCharts.makeChart('dashboard-type-chart', { //jshint ignore:line
+    vm[name] = AmCharts.makeChart(elementId, { //jshint ignore:line
         'type'         : 'pie',
         'theme'        : 'light',
         'creditsPosition': 'bottom-right',
@@ -351,7 +367,7 @@ function renderDonut(vm, data) {
         'startDuration': 0
     });
 
-    vm.donut.addListener('clickSlice', e => vm.toggleType(e.dataItem.dataContext.code));
+    vm[name].addListener('clickSlice', e => onSlice(e.dataItem.dataContext.code));
 }
 
 function renderSubjects(vm, data) {
@@ -367,9 +383,13 @@ function renderSubjects(vm, data) {
         'categoryAxis' : { 'gridPosition': 'start', 'labelsEnabled': true },
         'autoMargins'  : false,
         'marginLeft'   : 240,
-        'marginRight'  : 20,
+        'marginRight'  : 40,
         'marginTop'    : 10,
         'marginBottom' : 60,   // room for the 'Paragraphs' axis title above the bottom legend
+        'chartScrollbar': { 'scrollbarHeight': 10, 'resizeEnabled': false, 'hideResizeGrips': true, 'updateOnReleaseOnly': false },
+        'zoomOutOnDataUpdate': false,
+        'zoomOutText'  : '', 'zoomOutButtonImage': '',   // "Show all" would break the fixed window (and its icon path 404s)
+        'listeners'    : [{ 'event': 'dataUpdated', 'method': e => e.chart.zoomToIndexes(0, Math.min(SUBJECT_ROWS, e.chart.dataProvider.length) - 1) }],
         'valueAxes'    : [{ 'title': 'Paragraphs', 'stackType': 'regular' }],
         // no value column and natural widths, or the legend stacks one item per row and squeezes out subject labels
         'legend'       : { 'position': 'bottom', 'markerType': 'square', 'valueText': '', 'equalWidths': false },
@@ -542,8 +562,9 @@ function errorMessage(err, fallback) {
 .decisions-dashboard h5 { margin-top: 20px; }
 .chart    { width: 100%; }
 .chart-sm { height: 300px; }
+.chart-md { height: 420px; }
 .chart-lg { height: 340px; }
-.chart-tall { height: 450px; }
+.chart-fill { flex: 1; min-height: 450px; }
 .chip {
     display: inline-block;
     padding: 5px;
