@@ -55,7 +55,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <h5>Requests to the Executive Secretariat, SBSTTA and SBI per COP <small class="text-muted">(all COPs — not affected by the filters)</small></h5>
+                <h5>Requests to the Executive Secretariat, SBSTTA and SBI per COP <small class="text-muted">(all COPs — not affected by the COP selector)</small></h5>
                 <div id="dashboard-trend-chart" class="chart chart-lg"></div>
             </div>
         </div>
@@ -166,7 +166,7 @@ export default {
     mounted,
     beforeDestroy,
     methods: {
-        onSessionChange, toggleType, toggleSubject, toggleStatus, toggleSegment,
+        onSessionChange, onFilterChange, toggleType, toggleSubject, toggleStatus, toggleSegment,
         previousPage, nextPage,
         subjectLabel, typeTitle, statusTitle,
         loadCharts, loadTrend, loadTable
@@ -199,19 +199,32 @@ function beforeDestroy() {
 
 async function loadCharts() {
     try {
-        // Untyped paragraphs have no status bucket, so both charts count typed ones only.
-        const query = AND([baseIndexQuery, sessionQuery(this.selectedSession), 'dttType_ss:*']);
+        // Untyped paragraphs have no status bucket, so the charts count typed ones only. Each chart
+        // skips the selection on its own dimension (see filterClauses), hence one query per chart.
+        const chartQuery    = except => AND([baseIndexQuery, 'dttType_ss:*', ...filterClauses(this, except)]);
+        const subjectsQuery = chartQuery('subject');
 
-        const [charts, unavailable] = await Promise.all([
-            solr.query(query, {
+        // The index proxy rejects facet.missing, so operational paragraphs without a status are counted apart.
+        const [typeChart, statusChart, subjectsChart, unavailable] = await Promise.all([
+            solr.query(chartQuery('type'), {
                 rows          : 0,
                 facetField    : ['dttType_ss'],
-                facetPivot    : ['dttSubject_ss,dttType_ss,dttStatus_ss', 'dttType_ss,dttStatus_ss'],
+                facetMinCount : 1
+            }),
+            solr.query(chartQuery('status'), {
+                rows          : 0,
+                facetPivot    : 'dttType_ss,dttStatus_ss',
+                facetQuery    : [`{!key=notAvailable}${statusQuery('not-available')}`],
                 facetLimit    : -1,
                 facetMinCount : 1
             }),
-            // The index proxy rejects facet.missing, so operational paragraphs without a status are counted apart.
-            solr.query(AND([query, statusQuery('not-available')]), {
+            solr.query(subjectsQuery, {
+                rows          : 0,
+                facetPivot    : 'dttSubject_ss,dttType_ss,dttStatus_ss',
+                facetLimit    : -1,   // every subject; the chart scrolls through them
+                facetMinCount : 1
+            }),
+            solr.query(AND([subjectsQuery, statusQuery('not-available')]), {
                 rows          : 0,
                 facetField    : ['dttSubject_ss'],
                 facetLimit    : -1,
@@ -219,11 +232,9 @@ async function loadCharts() {
             })
         ]);
 
-        const types        = pairs(charts.facet_counts?.facet_fields?.dttType_ss);
+        const types        = pairs(typeChart.facet_counts?.facet_fields?.dttType_ss);
         const notAvailable = pairs(unavailable.facet_counts?.facet_fields?.dttSubject_ss);
-        const subjects     = charts.facet_counts?.facet_pivot?.['dttSubject_ss,dttType_ss,dttStatus_ss'] || [];
-        const byTypeAll    = Object.fromEntries((charts.facet_counts?.facet_pivot?.['dttType_ss,dttStatus_ss'] || []).map(t => [t.value, t]));
-        const operational  = Object.fromEntries((byTypeAll.operational?.pivot || []).map(s => [s.value, s.count]));
+        const subjects     = subjectsChart.facet_counts?.facet_pivot?.['dttSubject_ss,dttType_ss,dttStatus_ss'] || [];
 
         renderDonut(this, 'donut', 'dashboard-type-chart', code => this.toggleType(code), typesList.map(({code, title}) => ({
             code, title,
@@ -232,7 +243,8 @@ async function loadCharts() {
         })));
 
         // A paragraph with several statuses counts in each, as on the subjects chart.
-        const statusCounts = { ...operational, 'not-available': unavailable.response?.numFound || 0, 'not-applicable': types.informational || 0 };
+        const statusCounts = bucketCounts(statusChart.facet_counts?.facet_pivot?.['dttType_ss,dttStatus_ss'],
+                                          statusChart.facet_counts?.facet_queries?.notAvailable);
 
         renderDonut(this, 'statusDonut', 'dashboard-status-chart', code => this.toggleStatus(code), STATUS_BUCKETS.map(({code, title, color}) => ({
             code, title, color,
@@ -241,23 +253,22 @@ async function loadCharts() {
 
         // With facet.limit=-1 Solr sorts by value, not count, hence the re-sort. A paragraph with several
         // statuses lands in each of them, so a bar can run slightly past `count` (its distinct paragraphs).
+        // Under a status selection, keep only that bucket: paragraphs matching it can carry other statuses too.
         renderSubjects(this, subjects.map(({value: code, count, pivot}) => {
-            const byType = Object.fromEntries((pivot || []).map(t => [t.value, t]));
+            const buckets = bucketCounts(pivot, notAvailable[code]);
 
             return {
                 code, count,
-                label           : this.subjectLabel(code),
-                ...Object.fromEntries((byType.operational?.pivot || []).map(s => [s.value, s.count])),
-                'not-available' : notAvailable[code] || 0,
-                'not-applicable': byType.informational?.count || 0
+                label: this.subjectLabel(code),
+                ...(this.statusFilter ? { [this.statusFilter]: buckets[this.statusFilter] || 0 } : buckets)
             };
         }).sort((a, b) => b.count - a.count));
     }
     catch(err) { this.error = errorMessage(err, 'Unable to load the charts.'); }
 }
 
-// The per-COP breakdown ignores the COP filter, so it is fetched once. Paragraph docs carry
-// no session field — only dttCode_s — hence one facet.query per COP/actor pair rather than a pivot.
+// The per-COP breakdown ignores the COP selector (it shows every COP) but follows the chart selections.
+// Paragraph docs carry no session field — only dttCode_s — hence one facet.query per COP/actor pair rather than a pivot.
 async function loadTrend() {
     try {
         const keys       = {};
@@ -271,7 +282,7 @@ async function loadTrend() {
                 facetQuery.push(`{!key=${key}}${sessionQuery(session.code)} AND dttActor_ss:${solr.escape(actor.code)}`);
             }
 
-        const { facet_counts } = await solr.query(baseIndexQuery, { rows: 0, facetQuery });
+        const { facet_counts } = await solr.query(AND([baseIndexQuery, ...filterClauses(this, 'session')]), { rows: 0, facetQuery });
         const counts = facet_counts?.facet_queries || {};
 
         const bySession = _.reduce(keys, (rows, {session, actor}, key) => {
@@ -289,13 +300,7 @@ async function loadTable() {
     try {
         // Grouping on dttCode_s turns the paragraph hits into one row per decision and gives
         // both the decision count (ngroups) and the matching-paragraph count per decision.
-        const query = AND([
-            baseIndexQuery,
-            sessionQuery(this.selectedSession),
-            this.typeFilter    ? `dttType_ss:(${solr.escape(this.typeFilter)})`       : null,
-            this.subjectFilter ? `dttSubject_ss:(${solr.escape(this.subjectFilter)})` : null,
-            statusQuery(this.statusFilter)
-        ]);
+        const query = AND([baseIndexQuery, ...filterClauses(this)]);
 
         // Wanted order is newest COP first but decisions ascending within it, and dttCode_s is
         // the only sortable field on a paragraph doc — one key cannot do both directions. So pull
@@ -455,36 +460,37 @@ function onSessionChange() {
     this.loadTable();
 }
 
-function toggleType(code) {
-    this.error = null;
-    this.typeFilter  = this.typeFilter === code ? null : code;
+// A chart selection filters the other charts too, not only the table.
+function onFilterChange() {
+    this.error       = null;
     this.currentPage = 0;
+    this.loadCharts();
+    this.loadTrend();
     this.loadTable();
+}
+
+function toggleType(code) {
+    this.typeFilter = this.typeFilter === code ? null : code;
+    this.onFilterChange();
 }
 
 function toggleSubject(code) {
-    this.error = null;
     this.subjectFilter = this.subjectFilter === code ? null : code;
-    this.currentPage   = 0;
-    this.loadTable();
+    this.onFilterChange();
 }
 
 function toggleStatus(code) {
-    this.error = null;
     this.statusFilter = this.statusFilter === code ? null : code;
-    this.currentPage  = 0;
-    this.loadTable();
+    this.onFilterChange();
 }
 
 // A subjects-chart segment is one subject × status; clicking the selected one again clears both.
 function toggleSegment(subject, status) {
     const selected = this.subjectFilter === subject && this.statusFilter === status;
 
-    this.error = null;
     this.subjectFilter = selected ? null : subject;
     this.statusFilter  = selected ? null : status;
-    this.currentPage   = 0;
-    this.loadTable();
+    this.onFilterChange();
 }
 
 function previousPage() {
@@ -521,6 +527,28 @@ function sessionQuery(sessionCode) {
     if(!sessionCode) return null;
 
     return `dttCode_s:${escapePath(`CBD/${padInt(sessionCode).replace(/-/g, '/')}/`)}*`;
+}
+
+// Current selections as query clauses. A chart passes its own dimension as `except` (crossfilter),
+// so the options of the chart you clicked stay visible and clickable; the table passes nothing.
+function filterClauses(vm, except) {
+    return [
+        except !== 'session' ? sessionQuery(vm.selectedSession) : null,
+        except !== 'type'    && vm.typeFilter    ? `dttType_ss:(${solr.escape(vm.typeFilter)})`       : null,
+        except !== 'subject' && vm.subjectFilter ? `dttSubject_ss:(${solr.escape(vm.subjectFilter)})` : null,
+        except !== 'status'  ? statusQuery(vm.statusFilter) : null
+    ];
+}
+
+// type → status pivot to STATUS_BUCKETS counts; not-available is counted apart (no facet.missing).
+function bucketCounts(typePivot, notAvailable) {
+    const byType = Object.fromEntries((typePivot || []).map(t => [t.value, t]));
+
+    return {
+        ...Object.fromEntries((byType.operational?.pivot || []).map(s => [s.value, s.count])),
+        'not-available' : notAvailable || 0,
+        'not-applicable': byType.informational?.count || 0
+    };
 }
 
 // Mirrors STATUS_BUCKETS: a real status only matches operational paragraphs.
