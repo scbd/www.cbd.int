@@ -45,6 +45,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:code/virtual-tables',                { ...mapView(angularViewWrapper),  resolve: { ...virtualTableView, user:currentUser(), routePrams: injectRouteParams({type:'publication'}) }, reloadOnSearch:false})
     .when('/:code/virtual-tables/publications',   { ...mapView(angularViewWrapper),  resolve: { ...virtualTableView, user:currentUser(), routePrams: injectRouteParams({type:'publication'}) }, reloadOnSearch:false})
     .when('/:code/virtual-tables/events',         { ...mapView(angularViewWrapper),  resolve: { ...virtualTableView, user:currentUser(), routePrams: injectRouteParams({type:'event'}) }, reloadOnSearch:false})
+    .when('/:code/virtual-tables/chm-knowledge-fair',{ ...mapView(angularViewWrapper),  resolve: { ...virtualTableView, user:currentUser(), routePrams: injectRouteParams({type:'chm-knowledge-fair'}) }, reloadOnSearch:false})
     .when('/:code/info-note',                     { ...mapView(vueViewWrapper),      resolve: { ...infoNote, user:currentUser(),        }, reloadOnSearch:false })
     .when('/:code/schedules',                     { ...mapView(angularViewWrapper),  resolve: { ...scheduleView }, reloadOnSearch:true })
     .when('/:code/schedule',                      { redirectTo : '/:code/schedules'})
