@@ -136,7 +136,7 @@ export default ['$scope', '$http', '$route', '$q', 'streamId', 'conferenceServic
                         r.videoUrl = r.video && (r.videoUrl || r.room.videoUrl)
 
                         if(hasRole) {
-                            r.editUrl       = `https://eunomia.cbd.int/${encodeURIComponent(_ctrl.institution)}/${encodeURIComponent(_ctrl.code)}/schedule?day=${encodeURIComponent(r.start)}&edit=${encodeURIComponent(r._id)}`
+                            r.editUrl       = `${window.scbd.eunomiaUrl}/${encodeURIComponent(_ctrl.institution)}/${encodeURIComponent(_ctrl.code)}/schedule?day=${encodeURIComponent(r.start)}&edit=${encodeURIComponent(r._id)}`
                             r.adminVideoUrl = r?.videoUrl || r?.room?.videoUrl;
                         }
 
