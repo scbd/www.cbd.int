@@ -16,20 +16,46 @@
 
         <div class="alert alert-danger" v-if="error">{{error}}</div>
 
+        <div class="filter-chips">
+            <span v-if="typeFilter">
+                <span class="badge chip badge-primary">
+                    {{typeTitle(typeFilter)}}
+                    <i class="fa fa-minus-circle" @click="toggleType(typeFilter)"></i>
+                </span>
+            </span>
+
+            <span v-if="subjectFilter">
+                <span class="badge chip badge-primary">
+                    {{subjectLabel(subjectFilter)}}
+                    <i class="fa fa-minus-circle" @click="toggleSubject(subjectFilter)"></i>
+                </span>
+            </span>
+
+            <span v-if="statusFilter">
+                <span class="badge chip badge-primary">
+                    {{statusTitle(statusFilter)}}
+                    <i class="fa fa-minus-circle" @click="toggleStatus(statusFilter)"></i>
+                </span>
+            </span>
+        </div>
+
         <div class="row">
             <div class="col-md-4">
                 <h5>Decision type</h5>
                 <div id="dashboard-type-chart" class="chart chart-sm"></div>
+
+                <h5>Decision status</h5>
+                <div id="dashboard-status-chart" class="chart chart-md"></div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8 d-flex flex-column">
                 <h5>Subjects</h5>
-                <div id="dashboard-subject-chart" class="chart chart-tall"></div>
+                <div id="dashboard-subject-chart" class="chart chart-fill"></div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12">
-                <h5>Requests to the Executive Secretariat, SBSTTA and SBI per COP <small class="text-muted">(all COPs — not affected by the filters)</small></h5>
+                <h5>Requests to the Executive Secretariat, SBSTTA and SBI per COP <small class="text-muted">(all COPs — not affected by the COP selector)</small></h5>
                 <div id="dashboard-trend-chart" class="chart chart-lg"></div>
             </div>
         </div>
@@ -40,22 +66,6 @@
                     Decisions
                     <small class="text-muted" v-if="recordsCount!==null">{{recordsCount}} found</small>
                 </h5>
-
-                <div class="filter-chips" v-if="typeFilter || subjectFilter">
-                    <span v-if="typeFilter">
-                        <span class="badge chip badge-primary">
-                            {{typeTitle(typeFilter)}}
-                            <i class="fa fa-minus-circle" @click="toggleType(typeFilter)"></i>
-                        </span>
-                    </span>
-
-                    <span v-if="subjectFilter">
-                        <span class="badge chip badge-primary">
-                            {{subjectLabel(subjectFilter)}}
-                            <i class="fa fa-minus-circle" @click="toggleSubject(subjectFilter)"></i>
-                        </span>
-                    </span>
-                </div>
 
                 <table class="table table-striped">
                     <thead>
@@ -103,6 +113,7 @@ import lstring from '~/filters/lstring.js';
 import SolrApi from '../../api/solr.js';
 import ThesaurusApi from '../../api/thesaurus.js';
 import sessionsList from './data/sessions.js';
+import statusesList from './data/statuses.js';
 import typesList from './data/types.js';
 
 const solr      = new SolrApi     ({prefixUrl:window.scbd.apiUrl});
@@ -112,10 +123,23 @@ const baseIndexQuery = 'schema_s:decision-text';
 
 const MAX_DECISIONS = 1000;   // DTT holds 506 COP decisions today
 
-const TYPE_COLORS = { operational: '#17a2b8', informational: '#6c757d', subject: '#449951' };
+// ponytail: fixed row count sized for the two stacked donuts; derive it from the plot height if that layout changes.
+const SUBJECT_ROWS = 30;
+
+const TYPE_COLORS = { operational: '#17a2b8', informational: '#6c757d' };
+
+const STATUS_COLORS = { active: '#28a745', implemented: '#17a2b8', elapsed: '#ffc107', superseded: '#6f42c1', retired: '#343a40' };
+
+// Stack order of the subjects chart and the codes the status filter takes. A status only
+// counts on operational paragraphs; informational ones are 'not applicable' whatever they carry.
+const STATUS_BUCKETS = [
+    ...statusesList.map(({code, title}) => ({ code, title, color: STATUS_COLORS[code] })),
+    { code: 'not-available',  title: 'Not available',  color: '#adb5bd' },   // operational without a status
+    { code: 'not-applicable', title: 'Not applicable', color: '#dee2e6' }    // informational
+];
 
 // dttActor_ss values are case-sensitive and must match the index exactly.
-const TREND_ACTORS = [
+const ACTORS = [
     { code: 'executive-secretary', title: 'Executive Secretary', color: '#1c473b' },
     { code: 'SBSTTA',              title: 'SBSTTA',              color: '#1565c0' },
     { code: 'SBI',                 title: 'SBI',                 color: '#ef6c00' }
@@ -129,6 +153,7 @@ export default {
             selectedSession: '',
             typeFilter    : null,
             subjectFilter : null,
+            statusFilter  : null,
             subjectTerms  : {},
             records       : null,
             recordsCount  : null,
@@ -141,9 +166,9 @@ export default {
     mounted,
     beforeDestroy,
     methods: {
-        onSessionChange, toggleType, toggleSubject,
+        onSessionChange, onFilterChange, toggleType, toggleSubject, toggleStatus, toggleSegment,
         previousPage, nextPage,
-        subjectLabel, typeTitle,
+        subjectLabel, typeTitle, statusTitle,
         loadCharts, loadTrend, loadTable
     }
 }
@@ -169,51 +194,95 @@ async function mounted() {
 }
 
 function beforeDestroy() {
-    [this.donut, this.subjects, this.trend].forEach(chart => chart && chart.clear());
+    [this.donut, this.statusDonut, this.subjects, this.trend].forEach(chart => chart && chart.clear());
 }
 
 async function loadCharts() {
     try {
-        const { facet_counts } = await solr.query(AND([baseIndexQuery, sessionQuery(this.selectedSession)]), {
-            rows          : 0,
-            facetField    : ['dttType_ss', 'dttSubject_ss'],
-            facetLimit    : 15,
-            facetMinCount : 1
-        });
+        // Untyped paragraphs have no status bucket, so the charts count typed ones only. Each chart
+        // skips the selection on its own dimension (see filterClauses), hence one query per chart.
+        const chartQuery    = except => AND([baseIndexQuery, 'dttType_ss:*', ...filterClauses(this, except)]);
+        const subjectsQuery = chartQuery('subject');
 
-        const types    = pairs(facet_counts?.facet_fields?.dttType_ss);
-        const subjects = pairs(facet_counts?.facet_fields?.dttSubject_ss);
+        // The index proxy rejects facet.missing, so operational paragraphs without a status are counted apart.
+        const [typeChart, statusChart, subjectsChart, unavailable] = await Promise.all([
+            solr.query(chartQuery('type'), {
+                rows          : 0,
+                facetField    : ['dttType_ss'],
+                facetMinCount : 1
+            }),
+            solr.query(chartQuery('status'), {
+                rows          : 0,
+                facetPivot    : 'dttType_ss,dttStatus_ss',
+                facetQuery    : [`{!key=notAvailable}${statusQuery('not-available')}`],
+                facetLimit    : -1,
+                facetMinCount : 1
+            }),
+            solr.query(subjectsQuery, {
+                rows          : 0,
+                facetPivot    : 'dttSubject_ss,dttType_ss,dttStatus_ss',
+                facetLimit    : -1,   // every subject; the chart scrolls through them
+                facetMinCount : 1
+            }),
+            solr.query(AND([subjectsQuery, statusQuery('not-available')]), {
+                rows          : 0,
+                facetField    : ['dttSubject_ss'],
+                facetLimit    : -1,
+                facetMinCount : 1
+            })
+        ]);
 
-        renderDonut(this, typesList.map(({code, title}) => ({
+        const types        = pairs(typeChart.facet_counts?.facet_fields?.dttType_ss);
+        const notAvailable = pairs(unavailable.facet_counts?.facet_fields?.dttSubject_ss);
+        const subjects     = subjectsChart.facet_counts?.facet_pivot?.['dttSubject_ss,dttType_ss,dttStatus_ss'] || [];
+
+        renderDonut(this, 'donut', 'dashboard-type-chart', code => this.toggleType(code), typesList.map(({code, title}) => ({
             code, title,
             count: types[code] || 0,
             color: TYPE_COLORS[code]
         })));
 
-        renderSubjects(this, _(subjects)
-            .map((count, code) => ({ code, count, label: this.subjectLabel(code) }))
-            .value()
-            .sort((a, b) => b.count - a.count));
+        // A paragraph with several statuses counts in each, as on the subjects chart.
+        const statusCounts = bucketCounts(statusChart.facet_counts?.facet_pivot?.['dttType_ss,dttStatus_ss'],
+                                          statusChart.facet_counts?.facet_queries?.notAvailable);
+
+        renderDonut(this, 'statusDonut', 'dashboard-status-chart', code => this.toggleStatus(code), STATUS_BUCKETS.map(({code, title, color}) => ({
+            code, title, color,
+            count: statusCounts[code] || 0
+        })));
+
+        // With facet.limit=-1 Solr sorts by value, not count, hence the re-sort. A paragraph with several
+        // statuses lands in each of them, so a bar can run slightly past `count` (its distinct paragraphs).
+        // Under a status selection, keep only that bucket: paragraphs matching it can carry other statuses too.
+        renderSubjects(this, subjects.map(({value: code, count, pivot}) => {
+            const buckets = bucketCounts(pivot, notAvailable[code]);
+
+            return {
+                code, count,
+                label: this.subjectLabel(code),
+                ...(this.statusFilter ? { [this.statusFilter]: buckets[this.statusFilter] || 0 } : buckets)
+            };
+        }).sort((a, b) => b.count - a.count));
     }
     catch(err) { this.error = errorMessage(err, 'Unable to load the charts.'); }
 }
 
-// The per-COP breakdown ignores the COP filter, so it is fetched once. Paragraph docs carry
-// no session field — only dttCode_s — hence one facet.query per COP/actor pair rather than a pivot.
+// The per-COP breakdown ignores the COP selector (it shows every COP) but follows the chart selections.
+// Paragraph docs carry no session field — only dttCode_s — hence one facet.query per COP/actor pair rather than a pivot.
 async function loadTrend() {
     try {
         const keys       = {};
         const facetQuery = [];
 
         for(const session of sessionsList)
-            for(const actor of TREND_ACTORS) {
+            for(const actor of ACTORS) {
                 // facet keys must be plain identifiers, so strip the dashes the codes carry
                 const key = `${session.code}_${actor.code}`.replace(/-/g, '_');
                 keys[key] = { session: session.title, actor: actor.code };
                 facetQuery.push(`{!key=${key}}${sessionQuery(session.code)} AND dttActor_ss:${solr.escape(actor.code)}`);
             }
 
-        const { facet_counts } = await solr.query(baseIndexQuery, { rows: 0, facetQuery });
+        const { facet_counts } = await solr.query(AND([baseIndexQuery, ...filterClauses(this, 'session')]), { rows: 0, facetQuery });
         const counts = facet_counts?.facet_queries || {};
 
         const bySession = _.reduce(keys, (rows, {session, actor}, key) => {
@@ -231,12 +300,7 @@ async function loadTable() {
     try {
         // Grouping on dttCode_s turns the paragraph hits into one row per decision and gives
         // both the decision count (ngroups) and the matching-paragraph count per decision.
-        const query = AND([
-            baseIndexQuery,
-            sessionQuery(this.selectedSession),
-            this.typeFilter    ? `dttType_ss:(${solr.escape(this.typeFilter)})`       : null,
-            this.subjectFilter ? `dttSubject_ss:(${solr.escape(this.subjectFilter)})` : null
-        ]);
+        const query = AND([baseIndexQuery, ...filterClauses(this)]);
 
         // Wanted order is newest COP first but decisions ascending within it, and dttCode_s is
         // the only sortable field on a paragraph doc — one key cannot do both directions. So pull
@@ -288,10 +352,10 @@ async function queryDecisions(codes) {
 // Charts
 // ====================================
 
-function renderDonut(vm, data) {
-    if(vm.donut) { vm.donut.dataProvider = data; vm.donut.validateData(); return; }
+function renderDonut(vm, name, elementId, onSlice, data) {
+    if(vm[name]) { vm[name].dataProvider = data; vm[name].validateData(); return; }
 
-    vm.donut = AmCharts.makeChart('dashboard-type-chart', { //jshint ignore:line
+    vm[name] = AmCharts.makeChart(elementId, { //jshint ignore:line
         'type'         : 'pie',
         'theme'        : 'light',
         'creditsPosition': 'bottom-right',
@@ -308,7 +372,7 @@ function renderDonut(vm, data) {
         'startDuration': 0
     });
 
-    vm.donut.addListener('clickSlice', e => vm.toggleType(e.dataItem.dataContext.code));
+    vm[name].addListener('clickSlice', e => onSlice(e.dataItem.dataContext.code));
 }
 
 function renderSubjects(vm, data) {
@@ -324,23 +388,30 @@ function renderSubjects(vm, data) {
         'categoryAxis' : { 'gridPosition': 'start', 'labelsEnabled': true },
         'autoMargins'  : false,
         'marginLeft'   : 240,
-        'marginRight'  : 20,
+        'marginRight'  : 40,
         'marginTop'    : 10,
-        'marginBottom' : 45,
-        'valueAxes'    : [{ 'title': 'Paragraphs' }],
-        'graphs'       : [{
+        'marginBottom' : 60,   // room for the 'Paragraphs' axis title above the bottom legend
+        'chartScrollbar': { 'scrollbarHeight': 10, 'resizeEnabled': false, 'hideResizeGrips': true, 'updateOnReleaseOnly': false },
+        'zoomOutOnDataUpdate': false,
+        'zoomOutText'  : '', 'zoomOutButtonImage': '',   // "Show all" would break the fixed window (and its icon path 404s)
+        'listeners'    : [{ 'event': 'dataUpdated', 'method': e => e.chart.zoomToIndexes(0, Math.min(SUBJECT_ROWS, e.chart.dataProvider.length) - 1) }],
+        'valueAxes'    : [{ 'title': 'Paragraphs', 'stackType': 'regular' }],
+        // no value column and natural widths, or the legend stacks one item per row and squeezes out subject labels
+        'legend'       : { 'position': 'bottom', 'markerType': 'square', 'valueText': '', 'equalWidths': false },
+        'graphs'       : STATUS_BUCKETS.map(({code, title, color}) => ({
+            'title'      : title,
             'type'       : 'column',
-            'valueField' : 'count',
+            'valueField' : code,
             'fillAlphas' : 0.9,
             'lineAlpha'  : 0.2,
-            'fillColors' : TYPE_COLORS.subject,
-            'lineColor'  : TYPE_COLORS.subject,
-            'balloonText': '[[category]]: [[value]] paragraphs'
-        }],
+            'fillColors' : color,
+            'lineColor'  : color,
+            'balloonText': '[[category]] — [[title]]: [[value]] of [[count]] paragraphs'
+        })),
         'startDuration': 0
     });
 
-    vm.subjects.addListener('clickGraphItem', e => vm.toggleSubject(e.item.dataContext.code));
+    vm.subjects.addListener('clickGraphItem', e => vm.toggleSegment(e.item.dataContext.code, e.graph.valueField));
 }
 
 function renderTrend(vm, data) {
@@ -354,9 +425,9 @@ function renderTrend(vm, data) {
         'categoryField': 'session',
         'categoryAxis' : { 'autoGridCount': false, 'gridCount': sessionsList.length, 'labelRotation': 45 },
         'valueAxes'    : [{ 'title': 'Paragraphs', 'minimum': 0 }],
-        'legend'       : { 'position': 'top' },
+        'legend'       : { 'position': 'bottom' },
         'chartCursor'  : { 'cursorPosition': 'mouse', 'zoomable': false },
-        'graphs'       : TREND_ACTORS.map(({code, title, color}) => ({
+        'graphs'       : ACTORS.map(({code, title, color}) => ({
             'title'      : title,
             'type'       : 'line',
             'valueField' : code,
@@ -389,18 +460,37 @@ function onSessionChange() {
     this.loadTable();
 }
 
-function toggleType(code) {
-    this.error = null;
-    this.typeFilter  = this.typeFilter === code ? null : code;
+// A chart selection filters the other charts too, not only the table.
+function onFilterChange() {
+    this.error       = null;
     this.currentPage = 0;
+    this.loadCharts();
+    this.loadTrend();
     this.loadTable();
 }
 
+function toggleType(code) {
+    this.typeFilter = this.typeFilter === code ? null : code;
+    this.onFilterChange();
+}
+
 function toggleSubject(code) {
-    this.error = null;
     this.subjectFilter = this.subjectFilter === code ? null : code;
-    this.currentPage   = 0;
-    this.loadTable();
+    this.onFilterChange();
+}
+
+function toggleStatus(code) {
+    this.statusFilter = this.statusFilter === code ? null : code;
+    this.onFilterChange();
+}
+
+// A subjects-chart segment is one subject × status; clicking the selected one again clears both.
+function toggleSegment(subject, status) {
+    const selected = this.subjectFilter === subject && this.statusFilter === status;
+
+    this.subjectFilter = selected ? null : subject;
+    this.statusFilter  = selected ? null : status;
+    this.onFilterChange();
 }
 
 function previousPage() {
@@ -424,6 +514,10 @@ function typeTitle(code) {
     return typesList.find(t => t.code === code)?.title || code;
 }
 
+function statusTitle(code) {
+    return STATUS_BUCKETS.find(s => s.code === code)?.title || code;
+}
+
 // ====================================
 // Helpers
 // ====================================
@@ -433,6 +527,37 @@ function sessionQuery(sessionCode) {
     if(!sessionCode) return null;
 
     return `dttCode_s:${escapePath(`CBD/${padInt(sessionCode).replace(/-/g, '/')}/`)}*`;
+}
+
+// Current selections as query clauses. A chart passes its own dimension as `except` (crossfilter),
+// so the options of the chart you clicked stay visible and clickable; the table passes nothing.
+function filterClauses(vm, except) {
+    return [
+        except !== 'session' ? sessionQuery(vm.selectedSession) : null,
+        except !== 'type'    && vm.typeFilter    ? `dttType_ss:(${solr.escape(vm.typeFilter)})`       : null,
+        except !== 'subject' && vm.subjectFilter ? `dttSubject_ss:(${solr.escape(vm.subjectFilter)})` : null,
+        except !== 'status'  ? statusQuery(vm.statusFilter) : null
+    ];
+}
+
+// type → status pivot to STATUS_BUCKETS counts; not-available is counted apart (no facet.missing).
+function bucketCounts(typePivot, notAvailable) {
+    const byType = Object.fromEntries((typePivot || []).map(t => [t.value, t]));
+
+    return {
+        ...Object.fromEntries((byType.operational?.pivot || []).map(s => [s.value, s.count])),
+        'not-available' : notAvailable || 0,
+        'not-applicable': byType.informational?.count || 0
+    };
+}
+
+// Mirrors STATUS_BUCKETS: a real status only matches operational paragraphs.
+function statusQuery(code) {
+    if(!code) return null;
+    if(code === 'not-applicable') return 'dttType_ss:informational';
+    if(code === 'not-available')  return '(dttType_ss:operational AND -dttStatus_ss:*)';
+
+    return `(dttType_ss:operational AND dttStatus_ss:${solr.escape(code)})`;
 }
 
 // 'CBD/COP/16/01' -> { session: 16, decision: 1 } for ordering; both are zero-padded in the code.
@@ -465,8 +590,9 @@ function errorMessage(err, fallback) {
 .decisions-dashboard h5 { margin-top: 20px; }
 .chart    { width: 100%; }
 .chart-sm { height: 300px; }
+.chart-md { height: 420px; }
 .chart-lg { height: 340px; }
-.chart-tall { height: 420px; }
+.chart-fill { flex: 1; min-height: 450px; }
 .chip {
     display: inline-block;
     padding: 5px;
@@ -475,7 +601,7 @@ function errorMessage(err, fallback) {
     margin: 2px;
     cursor: pointer;
 }
-.filter-chips { margin-bottom: 12px; }
+.filter-chips { min-height: 30px; margin-top: 10px; }
 
 /* pagination rules copied from decision-search.vue so both pages match */
 .pagination {

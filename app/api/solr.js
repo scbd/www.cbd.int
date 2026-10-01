@@ -7,7 +7,7 @@ export default class SolrApi extends ApiBase
     super(options);
   }
   
-  async query(q, { start, rows, fl, facetField, facetQuery, facetLimit, facetMinCount, sort, group, groupField} = {})  {
+  async query(q, { start, rows, fl, facetField, facetQuery, facetPivot, facetLimit, facetMinCount, sort, group, groupField} = {})  {
     const params = {
       q,
       fl,
@@ -26,6 +26,11 @@ export default class SolrApi extends ApiBase
       params['facet.query'] = facetQuery;
     }
 
+    if(facetPivot) {
+      params.facet = 'true';
+      params['facet.pivot'] = facetPivot;
+    }
+
     if(Boolean(facetLimit)) params['facet.limit']    = facetLimit;
     if(Boolean(facetMinCount)) params['facet.mincount'] = facetMinCount;
 
@@ -40,7 +45,7 @@ export default class SolrApi extends ApiBase
     // serializer emits `facet.field[]=a`, which Solr ignores. Scoped to facet calls so the
     // plain query/paging callers keep axios' encoding untouched.
     const config = { params };
-    if(facetField || facetQuery) config.paramsSerializer = serializeSolrParams;
+    if(facetField || facetQuery || facetPivot) config.paramsSerializer = serializeSolrParams;
 
     const result = await this.http.get(`api/v2013/index`, config)
                                   .then(res => res.data)
