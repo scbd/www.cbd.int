@@ -15,7 +15,7 @@ export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$locat
 
         var SORT_PROPS = ['meta.createdOn', 'organization.title', 'meta.modifiedOn'];
         var SORT_DIRS  = ['asc', 'desc'];
-        var STATUSES   = ['new', 'accredited', 'accreditationInProgress', 'rejected', 'draft', 'error'];
+        var STATUSES   = ['new', 'accredited', 'accreditationInProgress', 'rejected', 'draft', 'error', 'archived'];
 
         var initialState  = stateFromSearch($location.search());
         var initialStatus = initialState.status;
@@ -202,8 +202,13 @@ $scope.$watch(function(){
                 }else if(status == 'error'){
                     requestQuery.rejected   = {$exists : false};
                     requestQuery.currentStep = "finished";
+                }else if(status == 'archived'){
+                    delete requestQuery.currentStep;
                 }
             }else delete requestQuery.currentStep;
+
+            // archived requests show under all and archived only
+            if(status) requestQuery.archived = status == 'archived'? true : {$exists : false};
 
             const params = countOnly? { q : requestQuery, c : 1 } : { q : requestQuery };
 
@@ -293,9 +298,9 @@ $scope.$watch(function(){
 
 
                             if(_ctrl.requestStatus === '' || status === ''){
-                                $scope.counts.error                   =  _ctrl.requests.filter(r => r.contactsOnlyError).length;  
-                                $scope.counts.accreditationInProgress =  _ctrl.requests.filter(r => !r.contactsOnlyError && r.accreditationInProgress).length;  
-                                $scope.counts.accredited =  _ctrl.requests.filter(r => !r.contactsOnlyError && !r.accreditationInProgress && r.accredited).length;  
+                                $scope.counts.error                   =  _ctrl.requests.filter(r => r.contactsOnlyError && !r.archived).length;
+                                $scope.counts.accreditationInProgress =  _ctrl.requests.filter(r => !r.contactsOnlyError && r.accreditationInProgress && !r.archived).length;
+                                $scope.counts.accredited =  _ctrl.requests.filter(r => !r.contactsOnlyError && !r.accreditationInProgress && r.accredited && !r.archived).length;
                             }
 
                         if(_ctrl.requestStatus === 'error' || status === 'error'){
@@ -329,7 +334,7 @@ $scope.$watch(function(){
 
             const participants = _.cloneDeep(request.participants||[]).filter(p => p?.meeting?.length);
 
-            return !!participants.filter(p => (!p.accredited || !p.passport || !p.kronosId) && !p.rejected ).length
+            return !!participants.filter(p => (!p.accredited || !p.passport || !p.kronosId) && !p.rejected && !p.archived ).length
         }
 
         function compare( a, b ) {
@@ -389,11 +394,11 @@ $scope.$watch(function(){
         }
         async function loadCounts(){
 
-            const requests = [ LoadRequests('new', true), LoadRequests('accredited', true), LoadRequests('rejected', true), LoadRequests('', true), LoadRequests('draft', true), ]
+            const requests = [ LoadRequests('new', true), LoadRequests('accredited', true), LoadRequests('rejected', true), LoadRequests('', true), LoadRequests('draft', true), LoadRequests('archived', true), ]
 
-            const [newRequests, accredited, rejected, total, draft ] = await Promise.all(requests)
+            const [newRequests, accredited, rejected, total, draft, archived ] = await Promise.all(requests)
 
-            $scope.counts= {...($scope.counts || {}), newRequests,accredited, rejected, total, draft }
+            $scope.counts= {...($scope.counts || {}), newRequests,accredited, rejected, total, draft, archived }
 
             return $scope.counts
         }
@@ -612,6 +617,20 @@ $scope.$watch(function(){
             .then(function(result){ 
                 if(result.status == 200){              
 
+                    if(status == 'archive' || status == 'unarchive'){
+                        request             .archived = status == 'archive';
+                        request.organization.archived = status == 'archive';
+
+                        var excludesRequest = status == 'archive'
+                            ? (_ctrl.requestStatus !== '' && _ctrl.requestStatus !== 'archived')
+                            : (_ctrl.requestStatus === 'archived');
+
+                        if(excludesRequest)
+                            _ctrl.requests = _ctrl.requests.filter(r => r !== request);
+
+                        return loadCounts().then(() => $scope.$applyAsync());
+                    }
+
                     request             .accredited = status == 'accreditate';
                     request.organization.accredited = status == 'accreditate';
                     request             .rejected   = status == 'reject';
@@ -649,6 +668,9 @@ $scope.$watch(function(){
                     if(status == 'accreditate'){
                         participant.accredited = true;
                         delete participant.rejected;
+                    }
+                    else if(status == 'archive'){
+                        participant.archived = true;
                     }
                     else {
                         delete participant.accredited;
