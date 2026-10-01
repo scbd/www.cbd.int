@@ -10,7 +10,7 @@ Website of the Convention on Biological Diversity (AngularJS portions)
 |PORT                       |  8000                       |             |
 |API_URL                    |  https://api.cbd.int        |             |
 |WWW_URL                    |  https://www.cbd.int        |             |
-|WWW_URL                    |  https://www.cbd.int        |             |
+|EUNOMIA_URL                |  https://eunomia.cbd.int    |             |
 |ACCOUNTS_URL               |  https://accounts.cbd.int   |             |
 |CAPTCHA_V2_KEY             |  (secret)                   | from Google service |
 |CAPTCHA_V3_KEY             |  (secret)                   | from Google service |
