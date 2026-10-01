@@ -498,8 +498,14 @@ $scope.$watch(function(){
             if(!request) return;
 
             const { organization }  = request;
+
+            if(!organization && !searchText){
+                if(request.kronos) request.kronos.organizations = [];
+                return;
+            }
+
             const   organizationIds = organization?.kronosIds || [];
-            const   freeText        = searchText || organization.title || '';
+            const   freeText        = searchText || organization?.title || '';
             const   typeIds         = [ KRONOS_MEDIA_TYPE ]
 
             const hasKronosLinksAndNoSearchText = !searchText &&  organizationIds.length
