@@ -243,7 +243,7 @@
                                 </div>
                                 <select ng-if="::canEdit" class="btn btn-primary btn-sm" id="elementDirectedTo"
                                     ng-model="selectedSubject"
-                                    ng-options="subject.identifier as (subject.title|lstring) group by collections.subjectsMap[subject.broaderTerms[0]].name for subject in collections.subjects|filter:noNarrower"
+                                    ng-options="subject.identifier as (subject.title|lstring) for subject in collections.subjects"
                                     ng-change="addTo(selectedSubject, self.subjects); selectedSubject=''">
                                     <option value="">add a subject</option>
                                 </select>
@@ -421,7 +421,7 @@
                                 </div>
                                 <select ng-if="::canEdit" class="btn btn-primary btn-sm" id="elementDirectedTo"
                                     ng-model="selectedNodeSubject"
-                                    ng-options="subject.identifier as (subject.title|lstring) group by collections.subjectsMap[subject.broaderTerms[0]].name for subject in collections.subjects|filter:noNarrower"
+                                    ng-options="subject.identifier as (subject.title|lstring) for subject in collections.subjects"
                                     ng-change="addTo(selectedNodeSubject, self.element.subjects); selectedNodeSubject=''">
                                     <option value="">add a subject</option>
                                 </select>

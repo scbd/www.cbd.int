@@ -179,10 +179,9 @@ export default {
 
 async function mounted() {
     try {
-        const terms = await thesaurus.getDomainTerms('CBD-SUBJECTS');
+        const terms = await thesaurus.getDomainTerms('CBD-TOPICS');
 
-        // dttSubject_ss holds thesaurus identifiers; a few of them are GUIDs rather than
-        // CBD-SUBJECT-* codes, but both are the term's `identifier`.
+        // dttSubject_ss holds CBD-TOPICS identifiers (CBD-TOPIC-* and CBD-SUBJECT-* codes).
         this.subjectTerms = terms.reduce((map, term) => {
             if(term.identifier) map[term.identifier] = term;
             return map;

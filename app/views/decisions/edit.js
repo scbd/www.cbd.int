@@ -126,19 +126,18 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         //===========================
         function load() {
 
-            var q0 = $http.get('/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms',  { cache: true } );
+            var q0 = $http.get('/api/v2013/thesaurus/domains/CBD-TOPICS/terms',    { cache: true } );
             var q1 = $http.get('/api/v2013/thesaurus/domains/AICHI-TARGETS/terms', { cache: true } );
             var q2 = $http.get('/api/v2015/treaties/'+ encodeURIComponent(treaty.code), { cache: true } );
             var q3 = $http.get('/api/v2013/thesaurus/domains/GBF-TARGETS/terms', { cache: true } );
             var q4 = $http.get('/api/v2013/thesaurus/domains/GBF-GOALS/terms', { cache: true } );
-            var q5 = $http.get('/api/v2013/thesaurus/domains/GBF-TARGETS-CONSIDERATIONS/terms', { cache: true } );
 
-            $q.all([q0, q1, q2, q3, q4, q5]).then(function(res) {
+            $q.all([q0, q1, q2, q3, q4]).then(function(res) {
 
-                $scope.collections.subjects        =   res[0].data.concat(res[5].data);
-                $scope.collections.aichiTargets    =   res[1].data;
-                $scope.collections.gbfTargets      =   res[3].data;
-                $scope.collections.gbfGoals        =   res[4].data;
+                $scope.collections.subjects        =   _.sortBy(res[0].data, 'name');
+                $scope.collections.aichiTargets    =   _.sortBy(res[1].data, 'identifier');
+                $scope.collections.gbfTargets      =   _.sortBy(res[3].data, 'name');
+                $scope.collections.gbfGoals        =   _.sortBy(res[4].data, 'name');
                 $scope.collections.subjectsMap     = _($scope.collections.subjects).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
                 $scope.collections.aichiTargetsMap = _(res[1].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
                 $scope.collections.gbfTargetsMap   = _(res[3].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});

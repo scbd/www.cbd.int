@@ -68,12 +68,9 @@
                                                         @change="addFilters('subjects', selectedSubject); selectedSubject=''; search({page:0})">
                                                         <option value="">Select...</option>
                                                         <option v-if="filters.subjects.length" value="{CLEAR}">any subjects</option>
-                                                        <optgroup v-for="group in lists.subjects" :key="group.name"
-                                                            :label="group.name">
-                                                            <option v-for="subject in group.subjects"
-                                                                :key="subject.identifier" :value="subject.identifier">{{
-                                                                subject.name }}</option>
-                                                        </optgroup>
+                                                        <option v-for="subject in lists.subjects"
+                                                            :key="subject.identifier" :value="subject.identifier">{{
+                                                            subject.name }}</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-2">
@@ -414,7 +411,7 @@ export default {
 
 async function created() {
     let aichiTargetsList    = getDomainTerms('AICHI-TARGETS');
-    let subjectList         = getDomainTerms('CBD-SUBJECTS');
+    let subjectList         = getDomainTerms('CBD-TOPICS');
     let gbfTargetsList      = getDomainTerms('GBF-TARGETS');
     let gbfGoalsList        = getDomainTerms('GBF-GOALS');
 
@@ -459,28 +456,7 @@ async function created() {
         return groups;
     }, {});
 
-    this.lists.subjects     = _(subjectList)        .reduce((groups, subject) => {
-        subject.broaderTerms.forEach(bt => {
-            const key = bt.identifier;
-            const title = subjectList.find(item => item.identifier === key);
-
-            if (!groups[key]) {
-                groups[key] = {
-                    key: key,
-                    name: termName(title),
-                    subjects: []
-                };
-            }
-            groups[key].subjects.push({
-                termId: subject.termId,
-                identifier: subject.identifier,
-                name: subject.name,
-                title: subject.title
-            });
-        });
-        return groups;
-    }, {});
-    
+    this.lists.subjects     = _.sortBy(subjectList, 'name');
 }
 
 function getTitle(list, code) {
