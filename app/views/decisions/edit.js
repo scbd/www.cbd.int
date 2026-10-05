@@ -135,9 +135,9 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             $q.all([q0, q1, q2, q3, q4]).then(function(res) {
 
                 $scope.collections.subjects        =   _.sortBy(res[0].data, 'name');
-                $scope.collections.aichiTargets    =   res[1].data;
-                $scope.collections.gbfTargets      =   res[3].data;
-                $scope.collections.gbfGoals        =   res[4].data;
+                $scope.collections.aichiTargets    =   _.sortBy(res[1].data, 'name');
+                $scope.collections.gbfTargets      =   _.sortBy(res[3].data, 'name');
+                $scope.collections.gbfGoals        =   _.sortBy(res[4].data, 'name');
                 $scope.collections.subjectsMap     = _($scope.collections.subjects).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
                 $scope.collections.aichiTargetsMap = _(res[1].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
                 $scope.collections.gbfTargetsMap   = _(res[3].data).reduce(function(r,v){ r[v.identifier] = v; return r; }, {});
