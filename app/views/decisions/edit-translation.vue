@@ -121,7 +121,7 @@ async function created() {
 	const session   = parseInt($route.params.session);
 	const number    = parseInt($route.params.decision);
 
-	if(body=='COP') treaty = { code : "XXVII8" } ;
+	if(body=='COP' || body=='EXCOP') treaty = { code : "XXVII8" } ;
 
 	if(!treaty) {
 		//alert('ONLY "COP" DECISIONS ARE SUPPORTED');

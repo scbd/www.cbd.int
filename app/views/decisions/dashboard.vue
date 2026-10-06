@@ -72,7 +72,7 @@
                         <tr>
                             <th scope="col">Symbol</th>
                             <th scope="col">Title</th>
-                            <th scope="col">COP</th>
+                            <th scope="col">Meeting</th>
                             <th scope="col" class="text-right">Paragraphs</th>
                         </tr>
                     </thead>
@@ -84,7 +84,7 @@
                                 </a>
                             </td>
                             <td>{{record.title}}</td>
-                            <td nowrap>COP {{record.session}}</td>
+                            <td nowrap>{{record.body}} {{record.session}}</td>
                             <td class="text-right">{{record.paragraphs}}</td>
                         </tr>
                         <tr v-if="records && !records.length">
@@ -318,7 +318,7 @@ async function loadTable() {
 
         const ordered = groups
             .map(({groupValue, doclist}) => ({ ...parseCode(groupValue), code: groupValue, paragraphs: doclist.numFound }))
-            .sort((a, b) => b.session - a.session || a.decision - b.decision || a.code.localeCompare(b.code));
+            .sort((a, b) => sessionIndex(b) - sessionIndex(a) || a.decision - b.decision || a.code.localeCompare(b.code));
 
         const start = this.currentPage * this.pageSize;
         const page  = ordered.slice(start, start + this.pageSize);
@@ -559,11 +559,16 @@ function statusQuery(code) {
     return `(dttType_ss:operational AND dttStatus_ss:${solr.escape(code)})`;
 }
 
-// 'CBD/COP/16/01' -> { session: 16, decision: 1 } for ordering; both are zero-padded in the code.
+// 'CBD/COP/16/01' -> { body: 'COP', session: 16, decision: 1 } for ordering; both numbers are zero-padded in the code.
 function parseCode(code) {
-    const [, , session, decision] = (code || '').split('/');
+    const [, body, session, decision] = (code || '').split('/');
 
-    return { session: parseInt(session, 10) || 0, decision: parseInt(decision, 10) || 0 };
+    return { body, session: parseInt(session, 10) || 0, decision: parseInt(decision, 10) || 0 };
+}
+
+// Chronological rank from sessions.js order (ExCOP sits between COPs); unknown sessions rank last.
+function sessionIndex({ body, session }) {
+    return sessionsList.findIndex(s => s.code === `${body}-${session}`);
 }
 
 function escapePath(value) { return solr.escape(value).replace(/\//g, '\\/'); }

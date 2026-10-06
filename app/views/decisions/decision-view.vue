@@ -55,6 +55,7 @@
 						<dt v-if="decision.body">Body</dt>
 						<dd v-if="decision.body">
 							<span v-if="decision.body === 'COP'">Conference of the Parties (COP)</span>
+							<span v-else-if="decision.body === 'EXCOP'">Extraordinary Meeting of the Conference of the Parties (ExCOP)</span>
 							<span v-else>{{ decision.body | uppercase }}</span>
 						</dd>
 
@@ -344,6 +345,8 @@ export default {
 		pageTitle() {
 			if(!this.decision) return '';
 			let { body, session, decision } = this.decision;
+			// ponytail: arabic session only; ExCOP-1 would need roman (EM-I/1) if it ever enters DTT
+			if(body == 'EXCOP') return `Decision EM-${session}/${decision}`;
 			if(body == 'COP' && session < 14) {
 				session = roman.romanize(session);
 			}
@@ -479,7 +482,7 @@ async function load() {
 
 	const body      = $route.params.body.toUpperCase();
 
-	if(body=='COP') treaty = { code : "XXVII8" } ;
+	if(body=='COP' || body=='EXCOP') treaty = { code : "XXVII8" } ;
 
 	if(!treaty) {
 		//alert('ONLY "COP" DECISIONS ARE SUPPORTED');
@@ -569,7 +572,7 @@ async function onChangeSelectedNode(selectedNode) {
 async function loadDecisionDocuments(decision) {
 	const params = {
 		fl: 'id,symbol_s,schema_s,position_i,meeting_ss,title_*, description_*,file_ss,url_ss',
-		q : 'treaty_s:'+decision.treaty + ' AND body_s:'+decision.body + ' AND session_i:'+decision.session + ' AND decision_i:'+decision.decision, 
+		q : 'treaty_s:'+decision.treaty + '* AND body_s:'+decision.body + ' AND session_i:'+decision.session + ' AND decision_i:'+decision.decision, 
 	};
 
 	const result = await this.api.queryDecisionDocuments(params);
