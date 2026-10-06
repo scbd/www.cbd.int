@@ -5,6 +5,7 @@
         { code : 'COP-2',      title: 'COP 2',               group: 'COP'     },
         { code : 'COP-3',      title: 'COP 3',               group: 'COP'     },
         { code : 'COP-4',      title: 'COP 4',               group: 'COP'     },
+        { code : 'EXCOP-1',    title: 'EXCOP 1',             group: 'EXCOP'   },
         { code : 'COP-5',      title: 'COP 5',               group: 'COP'     },
         { code : 'COP-6',      title: 'COP 6',               group: 'COP'     },
         { code : 'COP-7',      title: 'COP 7',               group: 'COP'     },
@@ -15,6 +16,7 @@
         { code : 'COP-12',     title: 'COP 12',              group: 'COP'     },
         { code : 'COP-13',     title: 'COP 13',              group: 'COP'     },
         { code : 'COP-14',     title: 'COP 14',              group: 'COP'     },
+        { code : 'EXCOP-2',    title: 'EXCOP 2',             group: 'EXCOP'   },
         { code : 'COP-15',     title: 'COP 15',              group: 'COP'     },
         { code : 'COP-16',     title: 'COP 16',              group: 'COP'     }
 
