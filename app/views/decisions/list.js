@@ -9,7 +9,7 @@ import './directives/header-decisions';
         var body          = $route.current.params.body.toUpperCase();
         var session       = parseInt($route.current.params.session);
 
-             if(body=='COP') treaty = { code : "XXVII8" } ;
+             if(body=='COP' || body=='EXCOP') treaty = { code : "XXVII8" } ;
     //  else if(body=='CP')  treaty = "XXVII8a";
     //  else if(body=='NP')  treaty = "XXVII8b";
 
