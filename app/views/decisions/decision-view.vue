@@ -345,11 +345,11 @@ export default {
 		pageTitle() {
 			if(!this.decision) return '';
 			let { body, session, decision } = this.decision;
-			// ponytail: arabic session only; ExCOP-1 would need roman (EM-I/1) if it ever enters DTT
-			if(body == 'EXCOP') return `Decision EM-${session}/${decision}`;
-			if(body == 'COP' && session < 14) {
+			// official symbols: COP I–XIII and EM-I are roman, later sessions arabic
+			if((body == 'COP' && session < 14) || (body == 'EXCOP' && session == 1)) {
 				session = roman.romanize(session);
 			}
+			if(body == 'EXCOP') return `Decision EM-${session}/${decision}`;
 
 			return `Decision ${body} ${session}/${decision}`;
 		},
