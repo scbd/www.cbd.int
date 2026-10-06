@@ -32,7 +32,8 @@
 
 			  <dt>Body</dt>
 			  <dd ng-if="body=='COP'">Conference of the Parties (COP)</dd>
-			  <dd ng-if="body!='COP'">{{body|uppercase}}</dd><br>
+			  <dd ng-if="body=='EXCOP'">Extraordinary Meeting of the Conference of the Parties (ExCOP)</dd>
+			  <dd ng-if="body!='COP' && body!='EXCOP'">{{body|uppercase}}</dd><br>
 
 			  <dt ng-if="::decisions[0].meeting">Meeting</dt>
               <dd ng-if="::decisions[0].meeting">

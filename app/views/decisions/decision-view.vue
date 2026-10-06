@@ -55,6 +55,7 @@
 						<dt v-if="decision.body">Body</dt>
 						<dd v-if="decision.body">
 							<span v-if="decision.body === 'COP'">Conference of the Parties (COP)</span>
+							<span v-else-if="decision.body === 'EXCOP'">Extraordinary Meeting of the Conference of the Parties (ExCOP)</span>
 							<span v-else>{{ decision.body | uppercase }}</span>
 						</dd>
 
@@ -344,9 +345,11 @@ export default {
 		pageTitle() {
 			if(!this.decision) return '';
 			let { body, session, decision } = this.decision;
-			if(body == 'COP' && session < 14) {
+			// official symbols: COP I–XIII and EM-I are roman, later sessions arabic
+			if((body == 'COP' && session < 14) || (body == 'EXCOP' && session == 1)) {
 				session = roman.romanize(session);
 			}
+			if(body == 'EXCOP') return `Decision EM-${session}/${decision}`;
 
 			return `Decision ${body} ${session}/${decision}`;
 		},
@@ -479,7 +482,7 @@ async function load() {
 
 	const body      = $route.params.body.toUpperCase();
 
-	if(body=='COP') treaty = { code : "XXVII8" } ;
+	if(body=='COP' || body=='EXCOP') treaty = { code : "XXVII8" } ;
 
 	if(!treaty) {
 		//alert('ONLY "COP" DECISIONS ARE SUPPORTED');

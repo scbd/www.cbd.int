@@ -46,7 +46,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         $scope.editComment = editComment;
         $scope.allowAddNodes = false;
 
-        if(body=='COP') treaty = { code : "XXVII8" } ;
+        if(body=='COP' || body=='EXCOP') treaty = { code : "XXVII8" } ;
         //  else if(body=='CP')  treaty = "XXVII8a";
         //  else if(body=='NP')  treaty = "XXVII8b";
 
