@@ -572,7 +572,7 @@ async function onChangeSelectedNode(selectedNode) {
 async function loadDecisionDocuments(decision) {
 	const params = {
 		fl: 'id,symbol_s,schema_s,position_i,meeting_ss,title_*, description_*,file_ss,url_ss',
-		q : 'treaty_s:'+decision.treaty + '* AND body_s:'+decision.body + ' AND session_i:'+decision.session + ' AND decision_i:'+decision.decision, 
+		q : 'treaty_s:'+decision.treaty + ' AND body_s:'+decision.body + ' AND session_i:'+decision.session + ' AND decision_i:'+decision.decision, 
 	};
 
 	const result = await this.api.queryDecisionDocuments(params);
