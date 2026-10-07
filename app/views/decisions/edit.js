@@ -191,6 +191,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             selectedNode.documents = selectedNode.documents || [];
             selectedNode.subjects  = selectedNode.subjects  || [];
             selectedNode.actors    = selectedNode.actors    || [];
+            selectedNode.actorInfo = selectedNode.actorInfo || selectedNode.actorsInfo;
             selectedNode.statuses  = selectedNode.statuses  || [];
             selectedNode.gbfGoals     = selectedNode.gbfGoals     || [];
             selectedNode.gbfTargets   = selectedNode.gbfTargets   || [];
