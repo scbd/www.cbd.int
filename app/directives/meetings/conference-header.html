@@ -317,6 +317,9 @@
                </div>
            </div>
        </div>
+       <style ng-if="meeting.conference.customFooter.style" ng-bind="meeting.conference.customFooter.style"></style>
+       <div class="menu-footer" ng-if="meeting.conference.customFooter.html" ng-bind-html="meeting.conference.customFooter.html | lstring | safeHtml">
+       </div>
    </div>
    <div id="menu-templates">
         <script type="text/ng-template" id="menu">
