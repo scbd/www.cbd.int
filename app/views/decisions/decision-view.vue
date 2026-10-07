@@ -121,9 +121,22 @@
 									style="margin-right:3px;"
 									@click.prevent="toggleFilters({ actors : [actor.code] })" 
 									:class="`${!isFilterSelected('actors', actor.code) && 'disabled'} ${actor.class || 'badge-secondary'}`" >
-									{{counts.actors[actor.code]}} {{actor.title}} 
+									{{counts.actors[actor.code]}} {{actor.title}}
 									<i class="fa fa-filter" aria-hidden="true"></i>
 								</a>
+							</dd>
+						</div>
+
+						<div v-show="timelineMeetingCount > 0 || timelines.dates.length > 0 || timelines.continuous">
+							<dt>Timeline</dt>
+							<dd>
+								<meeting-card-list :meetings="timelines.meetings" @update:count="timelineMeetingCount = $event" />
+								<div v-for="date in timelines.dates" :key="date">
+									<i class="fa fa-calendar" aria-hidden="true"></i> By {{ date | utcDate }}
+								</div>
+								<div v-if="timelines.continuous">
+									<i class="fa fa-refresh" aria-hidden="true"></i> Continuous (no expiration)
+								</div>
 							</dd>
 						</div>
 
@@ -318,6 +331,9 @@ export default {
         },
         lowercase(text) {
             return (text??'').toString().toLowerCase()
+        },
+        utcDate(date) { // 'YYYY-MM-DD' => '31 Dec 2030'
+            return new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
         }
     },
     props: {
@@ -332,7 +348,8 @@ export default {
 			allFilters: {},
 			selectedNode: null,
 			selectedLocale: 'en',
-			relatedDecisionCount: 0
+			relatedDecisionCount: 0,
+			timelineMeetingCount: 0
 		}
 	},
     computed: {
@@ -416,6 +433,18 @@ export default {
 			const src = findNode(decision, selectedNode) || decision;
 
 			return getTags(src, 'meetings') || [];
+		},
+		timelines() {
+			const {decision, selectedNode} = this;
+
+			const src  = findNode(decision, selectedNode) || decision;
+			const list = src ? getTags(src, 'timeline') : [];
+
+			return {
+				meetings:   _(list).filter({ type: 'meeting' }).map('meeting').uniq().value(),
+				dates:      _(list).filter({ type: 'date' }).map('date').uniq().sortBy().value(),
+				continuous: _.some(list, { type: 'continuous' }),
+			};
 		},
 		notifications() {
 			const {decision, selectedNode} = this;
