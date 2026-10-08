@@ -64,7 +64,9 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     $scope.isChmKnowledgeFair = $route.current.params.type == 'chm-knowledge-fair';
 
     $scope.isAdmin = (user.roles||[]).find(r=>['administrator', 'oasisArticleEditor'].includes(r))!=undefined;
-    $scope.introductionArticleTags = ['virtual-table', 'introduction', encodeURIComponent($route.current.params.code)]
+    $scope.introductionArticleTags = ['virtual-table', 'introduction', 
+        encodeURIComponent($route.current.params.code), encodeURIComponent($route.current.params.type)];
+    
     $scope.vueOptions = {
         components : {cbdAddNewArticle}
     }
@@ -85,6 +87,11 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
 
     }
 
+    //resized 2:1 crop of an attachments.cbd.int image, e.g. size "1200x600"
+    $scope.dialogImage = function(url, size){
+        return url && url.replace(/attachments\.cbd\.int\//, '$&'+size+'/');
+    }
+
     $scope.showArticle =function(article){
         
         ngDialog.open({
@@ -93,6 +100,17 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
             scope : $scope,
             controller : ['$scope', '$element', function($scope, $element){
                 
+                    $scope.isLoading = true;
+                    $scope.virtualArticle = article;
+
+                    //show the light version right away, swap to the original once it has loaded in the background
+                    var originalUrl = article.coverImage && article.coverImage.url;
+                    $scope.dialogImageSrc = $scope.dialogImage(originalUrl, '1200x600');
+                    if(originalUrl){
+                        var original = new Image();
+                        original.onload = function(){ $scope.$applyAsync(function(){ $scope.dialogImageSrc = originalUrl; }); };
+                        original.src = originalUrl;
+                    }
                     $scope.virtualArticleQuery = { ag : JSON.stringify([{"$match"   : {_id: { $oid: article._id}} }]) };
                     $scope.closeDialog = function(){
                         ngDialog.close();                                            
@@ -117,7 +135,13 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         $scope.loading = true;
         var ag = [];
         var sortBy = {$sort : {'customProperties.sortOrder':-1 }};
-        ag.push({"$match":{ "$and" : [{"adminTags":{"$all":$scope.filterAdminTags}}]}});
+        ag.push({"$match":{ 
+                "$and" : [
+                    {"adminTags":{"$all":$scope.filterAdminTags}},
+                    {"adminTags":{"$ne":"introduction"}}
+                ]
+            }
+        });
         
         if($scope.isEvent){
             if(!$scope.includePastEvents)
