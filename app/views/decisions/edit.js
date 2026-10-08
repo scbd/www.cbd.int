@@ -191,12 +191,14 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             selectedNode.documents = selectedNode.documents || [];
             selectedNode.subjects  = selectedNode.subjects  || [];
             selectedNode.actors    = selectedNode.actors    || [];
+            selectedNode.actorInfo = selectedNode.actorInfo || selectedNode.actorsInfo;
             selectedNode.statuses  = selectedNode.statuses  || [];
             selectedNode.gbfGoals     = selectedNode.gbfGoals     || [];
             selectedNode.gbfTargets   = selectedNode.gbfTargets   || [];
             selectedNode.aichiTargets = selectedNode.aichiTargets || [];
             selectedNode.decisions    = selectedNode.decisions    || [];
-            
+            if(selectedNode.timeline && selectedNode.timeline.date) selectedNode.timeline.date = new Date(selectedNode.timeline.date); // input[type=date] needs a Date
+
             $scope.selectedNode = selectedNode;
             $scope.element = _.cloneDeep(selectedNode);
 
@@ -252,7 +254,10 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
                 if(element.nodeType !== 'annex') element.annex = null;
                 else element.annex = element.annex || annexList[0].value;
 
-                await $scope.api.updateDecisionNode(decisionId, element._id, element);
+                const timeline = element.timeline && element.timeline.type ? { ...element.timeline } : null; // null clears it
+                if(timeline && timeline.date) timeline.date = timeline.date.toISOString().slice(0, 10);
+
+                await $scope.api.updateDecisionNode(decisionId, element._id, { ...element, timeline });
                 load();
                 updateSelectedNode(selectedNode);
                 saved = true;
@@ -577,6 +582,7 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
             const b = _.pick(selectedNode, (e) => !!e);
 
             if(!areEquals(a, b)) return true;
+            if(!_.isEqual(element.timeline, _.get(selectedNode, 'timeline'))) return true; // areEquals sees all Dates as equal
 
             return false;
         }

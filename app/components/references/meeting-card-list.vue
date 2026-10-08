@@ -48,7 +48,8 @@ async function refresh() {
 
     const meetings = await this.lookupMeetings(codes.filter(c => !isUrl(c)));
 
-    this.meetingList = [...linkMeetings, ...meetings]; 
+    this.meetingList = [...linkMeetings, ...meetings];
+    this.$emit('update:count', this.meetingList.length);
 }
 
 async function lookupMeetings(codes) {

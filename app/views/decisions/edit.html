@@ -431,11 +431,31 @@
 
                         <div class="col-sm-6">
 
-                            <div class="form-group" ng-show="element.elementTimeline=='due'">
-                                <label for="elementTimelineDate" style="font-weight:inherit">Details about
-                                    <i>Timelines</i></label>
-                                <input type='date' class="form-control" id="elementTimelineDate"
-                                    ng-model="element.elementTimelineDate">
+                            <div class="form-group">
+                                <label for="elementTimeline">Timeline</label>
+                                <select class="form-control" id="elementTimeline" ng-model="element.timeline.type"
+                                    ng-change="element.timeline = { type: element.timeline.type }"
+                                    ng-disabled="!canEdit">
+                                    <option value=""></option>
+                                    <option value="date">By date</option>
+                                    <option value="meeting">By meeting</option>
+                                    <option value="continuous">Continuous (no expiration)</option>
+                                </select>
+                                <input ng-if="element.timeline.type=='date'" type="date" class="form-control"
+                                    style="margin-top:4px" ng-model="element.timeline.date"
+                                    ng-model-options="{ timezone: 'UTC' }" ng-disabled="!canEdit">
+                                <div ng-if="element.timeline.type=='meeting'">
+                                    <input type="text" class="form-control"
+                                        style="margin-top:4px;text-transform:uppercase"
+                                        placeholder="Meeting code, e.g. COP-17" ng-model="element.timeline.meeting"
+                                        ng-model-options="{ debounce: 500 }" ng-disabled="!canEdit">
+                                    <div class="panel panel-default" style="margin-top:4px"
+                                        ng-repeat="code in [element.timeline.meeting] track by code" ng-if="code">
+                                        <div class="panel-body" style="padding:12px;font-size:0.9em">
+                                            <decision-meeting symbol="code"></decision-meeting>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="form-group">
@@ -464,11 +484,11 @@
 
                             </div>
 
-                            <div class="form-group" ng-show="element.actors.length || element.actorsInfo">
+                            <div class="form-group" ng-show="element.actors.length || element.actorInfo">
                                 <label for="elementDirectedToDetails" style="font-weight:inherit">Additional details
                                     about the actor(s)</i></label>
                                 <textarea class="form-control" id="elementDirectedToDetails" ng-disabled="!canEdit"
-                                    ng-model="element.actorsInfo"></textarea>
+                                    ng-model="element.actorInfo"></textarea>
                             </div>
 
                         </div>

@@ -24,6 +24,12 @@
                     <span>{{statusName(status)}}</span>
                 </span>
 
+                <span v-if="timeline" class="pull-right badge badge-secondary" style="opacity:0.5;margin-right:6px" :title="timeline.title">
+                    <i class="fa" :class="timeline.icon" aria-hidden="true"></i>
+                    <a v-if="timeline.url" :href="timeline.url" @click.stop style="color:inherit">{{timeline.text}}</a>
+                    <span v-else>{{timeline.text}}</span>
+                </span>
+
                 <span 
                     v-for="actor in node.actors" 
                     :key="actor"
@@ -81,6 +87,7 @@ import statuses from '~/views/decisions/data/statuses.js';
 import _ from 'lodash';
 import lstring from '~/filters/lstring.js';
 import { sanitizeHtml } from '~/services/html';
+import MeetingsApi from '~/components/meetings/api.js';
 
 export default {
     name: 'ViewElement',
@@ -115,7 +122,27 @@ export default {
             default: 'en'
         }
     },
+    data() {
+        return { timelineMeeting: null };
+    },
+    watch: {
+        'node.timeline.meeting': { immediate: true, handler: lookupTimelineMeeting }
+    },
     computed: {
+        timeline() {
+            const { type, date } = this.node.timeline || {};
+            const meeting = this.timelineMeeting;
+
+            if(type === 'continuous')       return { icon: 'fa-refresh',  text: 'Continuous' };
+            if(type === 'date' && date)     return { icon: 'fa-calendar', text: `By ${formatDate(date, 'UTC')}` };
+            if(type === 'meeting' && meeting) return { // not found in lookup => no badge
+                icon:  'fa-calendar',
+                text:  `By ${meeting.EVT_CD || meeting.normalizedSymbol}`,
+                url:   `/meetings/${encodeURIComponent(meeting.normalizedSymbol || meeting.EVT_CD)}`,
+                title: `${lstring(meeting.title, this.locale)} (${formatDate(meeting.EVT_FROM_DT)} - ${formatDate(meeting.EVT_TO_DT)})`,
+            };
+            return null;
+        },
         actors() { return actors},
         statuses() { return statuses},
         name() {
@@ -198,6 +225,27 @@ function statusName(text) {
     const lowerText = this.$options.filters.lowercase(text);
     return statuses.find(s => this.$options.filters.lowercase(s.code) === lowerText)?.title 
         || this.$options.filters.uppercase(text);
+}
+
+async function lookupTimelineMeeting(code) {
+    this.timelineMeeting = null;
+
+    if(!code) return;
+
+    try {
+        const q = { normalizedSymbol: code.toUpperCase() };
+        const f = { EVT_CD: 1, normalizedSymbol: 1, title: 1, EVT_FROM_DT: 1, EVT_TO_DT: 1 };
+        const [meeting] = await new MeetingsApi().queryMeetings({ q, f, cache: true });
+
+        this.timelineMeeting = meeting || null;
+    }
+    catch(err) {
+        console.error(err); // badge stays hidden
+    }
+}
+
+function formatDate(date, timeZone) {
+    return new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone });
 }
 
 function setSelectedNode() {
