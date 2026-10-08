@@ -200,7 +200,7 @@
                         max-width: 90%;
                         width: 100%;
                         height: 100%;
-                        text-align: justify;
+                        text-align: left;
                     }
                 }
 
@@ -280,37 +280,38 @@
                     ag-infinite-scroll-distance="100" id="articlesBody">
 
                     <article class="card white-panel" ng-repeat="article in filterPosters = (posters | filter:filterBy)"
-                        ng-click="showArticle(article)" style="cursor:pointer"> 
-                        <div ng-if="article.coverImage.url_600" class="img cover-image cover-image-position-{{article.coverImage.position||'none'}} cover-image-size-{{article.coverImage.size||'none'}}" 
-                            style="background-image: url({{::cssEscape(article.coverImage.url_600)}});">
-                        </div>
-                                       
-                        <div class="inside">    
-                            <div class="image-wrapper1" >                                    
-                                <h3>{{::article.title|lstring}}</h3>
-                                <div class="description" ng-bind-html="::article.summary | lstring | limitTo:100 | safeHtml"></div>
-                                
-                            </div>    
-                            <span class="article-date">{{article.meta.createdOn|moment:'toDate'|date:'yyyy-MM-dd':'UTC'}}</span>
-                        </div>
-                        
-                        <div style="border-top: 1px solid #eee">
-                            <div class="btn-group pull-right" ng-if="isAdmin">
-                                <a class="btn" href="https://www.cbd.int/management/articles/{{article._id}}/edit">
-                                    <i class="fa fa-edit"></i>
-                                </a>
+                        ng-click="showArticle(article)" ng-keydown="$event.keyCode===13 && showArticle(article)"
+                        tabindex="0" role="button" style="cursor:pointer">
+                        <div class="img" style="position: relative;">
+                            <div ng-if="article.coverImage.url_600" class="cover-image cover-image-position-{{article.coverImage.position||'none'}} cover-image-size-{{article.coverImage.size||'none'}}"
+                                style="background-image: url({{::cssEscape(article.coverImage.url_600)}});">
                             </div>
                         </div>
-                    </article>                    
+
+                        <div class="inside">
+                            <h3>{{::article.title|lstring}}</h3>
+                            <div class="description" ng-bind-html="::article.summary | lstring | limitTo:100 | safeHtml"></div>
+                        </div>
+
+                        <div class="inside clearfix" style="border-top: 1px solid #eee; padding-top: 8px; padding-bottom: 8px;">
+                            <span class="article-date1" style="color: #777; font-size: 12px; letter-spacing: .5px; text-transform: uppercase; line-height: 22px;">
+                                <i class="fa fa-calendar-o" style="margin-right: 4px;"></i>{{article.meta.createdOn|moment:'toDate'|date:'d MMM yyyy':'UTC'}}
+                            </span>
+                            <a class="btn btn-default btn-xs pull-right" ng-if="isAdmin" ng-click="$event.stopPropagation()"
+                                href="https://www.cbd.int/management/articles/{{article._id}}/edit">
+                                <i class="fa fa-edit"></i> Edit
+                            </a>
+                        </div>
+                    </article>                   
                 </div>
 
             </div>
             <script type="text/ng-template" id="articleDetails">
                 <div class="modal-body">	                   
 
-                    <header id="image-header" style="text-align:center">
+                    <header id="image-header" style="text-align:center" ng-if="virtualArticle.coverImage.url">
                         <div class="collapse" id="imageBox" aria-expanded="false">
-                            <img src="{{virtualArticle.coverImage.url_1200}}" class="img-fluid rounded mx-auto d-block" style="width:100%">                            
+                            <img ng-src="{{dialogImageSrc}}" alt="{{virtualArticle.title|lstring}}" class="img-fluid rounded mx-auto d-block" style="width:auto">
                         </div>
                         <a role="button" class="expand collapsed" data-toggle="collapse" href="#imageBox" aria-expanded="false" aria-controls="imageBox"
                             style="font-size:small;color:black;font-weight: bold;">
@@ -322,7 +323,12 @@
                         <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;text-align: center;">               
                             <h3>{{virtualArticle.title|lstring}}</h3>
                             <hr/>
-                            <strong>{{virtualArticle.meta.createdOn|moment:'toDate'|date:'yyyy-MM-dd':'UTC'}}</strong>
+                            <span style="color: #777; font-size: 12px; letter-spacing: .5px; text-transform: uppercase;">
+                                <i class="fa fa-calendar-o" style="margin-right: 4px;"></i>{{virtualArticle.meta.createdOn|moment:'toDate'|date:'d MMM yyyy':'UTC'}}
+                            </span>
+                        </div>
+                        <div class="text-center" ng-if="isLoading" style="padding: 20px;">
+                            <i class="fa fa-spin fa-spinner fa-2x"></i>
                         </div>
                         <div class="content"  ng-if="virtualArticleQuery">                           
                             <span class="badge rounded-pill bg-dark" ng-repeat="type in virtualArticle.meetingTypes">{{type}}</span>
