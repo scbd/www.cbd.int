@@ -36,7 +36,8 @@ const wwwUrl     =  process.env.WWW_URL || 'https://www.cbd.int';
 const kronosUrl  =  process.env.KRONOS_URL || 'https://kronos.cbddev.xyz'; //https://kronos.cbd.int
 const kronosCbdEventsUrl  =  process.env.KRONOS_CBD_EVENTS_URL || 'https://cbd.kronos.cbddev.xyz'; //https://cbd.kronos-events.net
 const eunomiaUrl =  process.env.EUNOMIA_URL || 'https://eunomia.cbd.int';
-const gitVersion = (process.env.COMMIT  || 'UNKNOWN').substr(0, 8);
+const gitVersion = (process.env.COMMIT  || `UNKNOWN`).replace(/^([a-f0-9]{8})[a-f0-9]+$/i, '$1');
+const isCachableCommit = /^([a-f0-9]{8,40}|[0-9]{4}\.[0-9]+(\.[0-9]+)*)$/i.test(process.env.COMMIT || ''); //test commit hash or version number (e.g. 2020.1.2)
 const siteAlert  =  process.env.SITE_ALERT || '';
 const siteAlertWarning = process.env.SITE_ALERT_LEVEL || 'danger';
 
@@ -95,7 +96,7 @@ app.get('/language-switch',        cmsLanguageSwitch);
 app.use(prerender); // set env PRERENDER_SERVICE_URL
 
 app.get('/*', function(req, res) {
-    res.setHeader('Cache-Control', 'public');
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     res.render('template', {...appTemplateParams}); 
 });
 app.all('/*', send404);
@@ -134,8 +135,8 @@ function setChunkCacheControl(res, path) {
 
 function setCustomCacheControl(res, path) {
 
-	if(res.req.query && res.req.query.v && res.req.query.v==gitVersion && gitVersion!='UNKNOWN')
-        return res.setHeader('Cache-Control', `public, max-age=${oneDay}`);
+	if(res.req.query && res.req.query.v && res.req.query.v==gitVersion && isCachableCommit)
+        return res.setHeader('Cache-Control', `public, max-age=${oneYear}`);
 
     res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
 }
