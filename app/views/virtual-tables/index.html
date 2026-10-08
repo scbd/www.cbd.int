@@ -200,7 +200,7 @@
                         max-width: 90%;
                         width: 100%;
                         height: 100%;
-                        text-align: justify;
+                        text-align: left;
                     }
                 }
 
@@ -309,9 +309,9 @@
             <script type="text/ng-template" id="articleDetails">
                 <div class="modal-body">	                   
 
-                    <header id="image-header" style="text-align:center">
+                    <header id="image-header" style="text-align:center" ng-if="virtualArticle.coverImage.url">
                         <div class="collapse" id="imageBox" aria-expanded="false">
-                            <img src="{{virtualArticle.coverImage.url_1200}}" class="img-fluid rounded mx-auto d-block" style="width:100%">                            
+                            <img ng-src="{{dialogImageSrc}}" alt="{{virtualArticle.title|lstring}}" class="img-fluid rounded mx-auto d-block" style="width:auto">
                         </div>
                         <a role="button" class="expand collapsed" data-toggle="collapse" href="#imageBox" aria-expanded="false" aria-controls="imageBox"
                             style="font-size:small;color:black;font-weight: bold;">
@@ -323,7 +323,12 @@
                         <div class="col-lg-12 col-md-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:5px;text-align: center;">               
                             <h3>{{virtualArticle.title|lstring}}</h3>
                             <hr/>
-                            <strong>{{virtualArticle.meta.createdOn|moment:'toDate'|date:'yyyy-MM-dd':'UTC'}}</strong>
+                            <span style="color: #777; font-size: 12px; letter-spacing: .5px; text-transform: uppercase;">
+                                <i class="fa fa-calendar-o" style="margin-right: 4px;"></i>{{virtualArticle.meta.createdOn|moment:'toDate'|date:'d MMM yyyy':'UTC'}}
+                            </span>
+                        </div>
+                        <div class="text-center" ng-if="isLoading" style="padding: 20px;">
+                            <i class="fa fa-spin fa-spinner fa-2x"></i>
                         </div>
                         <div class="content"  ng-if="virtualArticleQuery">                           
                             <span class="badge rounded-pill bg-dark" ng-repeat="type in virtualArticle.meetingTypes">{{type}}</span>
