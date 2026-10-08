@@ -280,28 +280,29 @@
                     ag-infinite-scroll-distance="100" id="articlesBody">
 
                     <article class="card white-panel" ng-repeat="article in filterPosters = (posters | filter:filterBy)"
-                        ng-click="showArticle(article)" style="cursor:pointer"> 
-                        <div ng-if="article.coverImage.url_600" class="img cover-image cover-image-position-{{article.coverImage.position||'none'}} cover-image-size-{{article.coverImage.size||'none'}}" 
-                            style="background-image: url({{::cssEscape(article.coverImage.url_600)}});">
-                        </div>
-                                       
-                        <div class="inside">    
-                            <div class="image-wrapper1" >                                    
-                                <h3>{{::article.title|lstring}}</h3>
-                                <div class="description" ng-bind-html="::article.summary | lstring | limitTo:100 | safeHtml"></div>
-                                
-                            </div>    
-                            <span class="article-date">{{article.meta.createdOn|moment:'toDate'|date:'yyyy-MM-dd':'UTC'}}</span>
-                        </div>
-                        
-                        <div style="border-top: 1px solid #eee">
-                            <div class="btn-group pull-right" ng-if="isAdmin">
-                                <a class="btn" href="https://www.cbd.int/management/articles/{{article._id}}/edit">
-                                    <i class="fa fa-edit"></i>
-                                </a>
+                        ng-click="showArticle(article)" ng-keydown="$event.keyCode===13 && showArticle(article)"
+                        tabindex="0" role="button" style="cursor:pointer">
+                        <div class="img" style="position: relative;">
+                            <div ng-if="article.coverImage.url_600" class="cover-image cover-image-position-{{article.coverImage.position||'none'}} cover-image-size-{{article.coverImage.size||'none'}}"
+                                style="background-image: url({{::cssEscape(article.coverImage.url_600)}});">
                             </div>
                         </div>
-                    </article>                    
+
+                        <div class="inside">
+                            <h3>{{::article.title|lstring}}</h3>
+                            <div class="description" ng-bind-html="::article.summary | lstring | limitTo:100 | safeHtml"></div>
+                        </div>
+
+                        <div class="inside clearfix" style="border-top: 1px solid #eee; padding-top: 8px; padding-bottom: 8px;">
+                            <span class="article-date1" style="color: #777; font-size: 12px; letter-spacing: .5px; text-transform: uppercase; line-height: 22px;">
+                                <i class="fa fa-calendar-o" style="margin-right: 4px;"></i>{{article.meta.createdOn|moment:'toDate'|date:'d MMM yyyy':'UTC'}}
+                            </span>
+                            <a class="btn btn-default btn-xs pull-right" ng-if="isAdmin" ng-click="$event.stopPropagation()"
+                                href="https://www.cbd.int/management/articles/{{article._id}}/edit">
+                                <i class="fa fa-edit"></i> Edit
+                            </a>
+                        </div>
+                    </article>                   
                 </div>
 
             </div>
