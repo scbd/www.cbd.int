@@ -64,7 +64,9 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
     $scope.isChmKnowledgeFair = $route.current.params.type == 'chm-knowledge-fair';
 
     $scope.isAdmin = (user.roles||[]).find(r=>['administrator', 'oasisArticleEditor'].includes(r))!=undefined;
-    $scope.introductionArticleTags = ['virtual-table', 'introduction', encodeURIComponent($route.current.params.code)]
+    $scope.introductionArticleTags = ['virtual-table', 'introduction', 
+        encodeURIComponent($route.current.params.code), encodeURIComponent($route.current.params.type)];
+    
     $scope.vueOptions = {
         components : {cbdAddNewArticle}
     }
@@ -117,7 +119,13 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         $scope.loading = true;
         var ag = [];
         var sortBy = {$sort : {'customProperties.sortOrder':-1 }};
-        ag.push({"$match":{ "$and" : [{"adminTags":{"$all":$scope.filterAdminTags}}]}});
+        ag.push({"$match":{ 
+                "$and" : [
+                    {"adminTags":{"$all":$scope.filterAdminTags}},
+                    {"adminTags":{"$ne":"introduction"}}
+                ]
+            }
+        });
         
         if($scope.isEvent){
             if(!$scope.includePastEvents)
