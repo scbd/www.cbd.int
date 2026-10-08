@@ -1,5 +1,6 @@
 // rollup.config.js (building more than one bundle)
 import path                     from 'path'
+import fs                       from 'fs'
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 import alias                    from '@rollup/plugin-alias';
 import nodeResolve              from '@rollup/plugin-node-resolve'
@@ -43,7 +44,8 @@ function bundle(relativePath, baseDir='app') {
       sourcemap: true,
       dir : path.join(outputDir, path.dirname(relativePath)),
       name : relativePath.replace(/[^a-z0-9]/ig, "_"),
-      exports: 'named'
+      exports: 'named',
+      assetFileNames: '[name]-[hash][extname]'
     }],
     external: externals,
     plugins : [
@@ -53,6 +55,7 @@ function bundle(relativePath, baseDir='app') {
         { find: /^cdn!(.*)/,  replacement:`${cdnUrl}$1` },
       ]}),
       stripBom(),
+      emitAppAssets(),
       string({ include: "**/*.html" }),
       json({ namedExports: true }),
       injectCssToDom(),
@@ -190,6 +193,57 @@ function stripBom(options = {}) {
         code = code.replace(/^\uFEFF/gm, "").replace(/^\u00BB\u00BF/gm,"");
 
       return { code, map: this.getCombinedSourcemap() };
+    }
+  };
+}
+
+// Emit /app/(images|fonts|data)/* files referenced in sources as hashed assets (cacheable by CDN)
+function emitAppAssets() {
+
+  const appUrl      = /\/app\/((?:images|fonts|data)\/[\w\-./]+\.[a-z0-9]+)(?![\w\-./?{$])/gi;
+  const placeholder = /__APP_ASSET_([\w$]+)__/g;
+  let refIds, moduleRefIds;
+
+  return {
+    name: 'emitAppAssets',
+
+    buildStart() {
+      refIds       = new Map(); // file path => referenceId
+      moduleRefIds = new Map(); // module id => [referenceId]
+    },
+
+    transform(code, id) {
+
+      const ids = [];
+
+      code = code.replace(appUrl, (url, name) => {
+
+        const file = path.join('app', name);
+
+        if(!refIds.has(name)) {
+          if(!fs.existsSync(file)) return url;
+          refIds.set(name, this.emitFile({ type: 'asset', name, source: fs.readFileSync(file) }));
+        }
+
+        ids.push(refIds.get(name));
+
+        return `__APP_ASSET_${refIds.get(name)}__`;
+      });
+
+      if(!ids.length) return null;
+
+      moduleRefIds.set(id, ids);
+
+      return { code, map: null };
+    },
+
+    augmentChunkHash(chunk) { // asset names are resolved in renderChunk; include them in chunk hash
+      return Object.keys(chunk.modules).flatMap(id => moduleRefIds.get(id) || []).map(ref => this.getFileName(ref)).join();
+    },
+
+    renderChunk(code) {
+      if(!code.includes('__APP_ASSET_')) return null;
+      return { code: code.replace(placeholder, (_, ref) => `/app/${this.getFileName(ref)}`), map: null };
     }
   };
 }
