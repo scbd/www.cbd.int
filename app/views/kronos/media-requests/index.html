@@ -755,10 +755,10 @@ a.label:focus {
                                                     <tr >
                                                         <td ng-class="{'active':participant._id == mediaRequestCtrl.selectedParticipant._id, 'text-right': participant.meeting.length}" >
                                                             <h3 ng-if="!participant.meeting.length">Contact Only</h3>
-                                                            <div ng-if="participant.meeting.length && participant.kronosId" role="group" class="btn-group btn-grousm" ng-if="request.currentStep=='finished'">
-                                                                <div ng-if="!participant.kronosId" class="alert alert-danger">
+                                                            <div ng-if="participant.meeting.length" role="group" class="btn-group btn-grousm" ng-if="request.currentStep=='finished'">
+                                                                <div ng-if="!participant.kronosId && !participant.rejected" class="alert alert-danger">
 
-                                                                    <span>Link to kronos before accreditation <br/>or rejection, by searching and the check box</span>
+                                                                    <span>Link to kronos before accreditation, <br/>by searching and the check box</span>
                                                                 </div>
                                                                 <button   ng-if="participant.kronosId && !participant.passport" type="button" class="btn btn-danger" ng-click="participant.showPassportForm=!participant.showPassportForm;"  >
                                                                     <i class="fa fa-id-card-o "></i> Passport
@@ -767,7 +767,7 @@ a.label:focus {
                                                                     ng-disabled="participant.accredited || !participant.passport">
                                                                     <i class="fa fa-thumbs-up"></i> Accreditate
                                                                 </button>
-                                                                <button   ng-if="participant.kronosId " type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateParticipantStatus(participant, request, 'reject')" 
+                                                                <button   type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateParticipantStatus(participant, request, 'reject')" 
                                                                 ng-disabled="participant.rejected">
                                                                     <i class="fa fa-thumbs-down"></i> Reject
                                                                 </button>
