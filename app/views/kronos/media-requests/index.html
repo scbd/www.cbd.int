@@ -652,7 +652,7 @@ a.label:focus {
 
                                                     <table class="table table-striped table-hover table-condensed">
                                                         <tbody ng-repeat="korg in request.kronos.organizations">
-                                                            <tr class="small">
+                                                            <tr class="small" ng-class="{'danger': korg.isLinked && korg.notMediaOrgType}">
                                                                 <td  class="small">
                                                                     <button type="button" class="btn btn-sm btn-outline-dark" ng-click="mediaRequestCtrl.toggle(korg)" ng-if="!korg.showMore">
                                                                         <i class="fa fa-chevron-circle-down"></i>
@@ -660,9 +660,12 @@ a.label:focus {
                                                                     <button type="button" class="btn btn-sm btn-outline-dark" ng-click="mediaRequestCtrl.toggle(korg)" ng-if="korg.showMore">
                                                                         <i class="fa fa-chevron-circle-up"></i>
                                                                     </button>
-                                                                    <span>{{korg.name}}</span>
+                                                                    <span ng-class="{'text-danger': korg.isLinked && korg.notMediaOrgType}">{{korg.name}}</span>
                                                                     <span ng-if="korg.memberCount != null">({{korg.memberCount}})</span>
                                                                     <span ng-if="korg.OrganizationAcronym">({{korg.acronym}})</span>
+                                                                    <div ng-if="korg.isLinked && korg.notMediaOrgType" class="text-danger">
+                                                                        <i class="fa fa-exclamation-triangle"></i> Linked organization is not a media organization in Kronos<span ng-if="korg.organizationType"> ({{korg.organizationType}})</span>
+                                                                    </div>
                                                                 </td>
                                                                 <td>{{korg.country|lowercase|term}}</td>
                                                                 <td>
@@ -885,7 +888,7 @@ a.label:focus {
                                                         <td ng-show="participant.meeting.length" style="border-left:1px solid #eee">                                                        
                                                             <table class="table table-striped table-hover table-condensed">
                                                                 <tbody ng-repeat="kctc in participant.kronos.contacts">
-                                                                    <tr ng-class="{'active':kctc.isLinked && !kctc.notInMediaOrg && !kctc.registrationMismatch, 'danger':kctc.notInMediaOrg || kctc.registrationMismatch}">
+                                                                    <tr ng-class="{'active':kctc.isLinked && !kctc.notInLinkedOrg && !kctc.notMediaOrgType && !kctc.registrationMismatch, 'danger':kctc.notInLinkedOrg || kctc.notMediaOrgType || kctc.registrationMismatch}">
                                                                         <td>
                                                                             <button type="button" class="btn btn-sm" ng-click="mediaRequestCtrl.toggle(kctc)" ng-if="!kctc.showMore">
                                                                                 <i class="fa fa-chevron-circle-down"></i>
@@ -893,9 +896,12 @@ a.label:focus {
                                                                             <button type="button" class="btn btn-sm" ng-click="mediaRequestCtrl.toggle(kctc)" ng-if="kctc.showMore">
                                                                                 <i class="fa fa-chevron-circle-up"></i>
                                                                             </button>
-                                                                            <span ng-class="{'text-danger':kctc.notInMediaOrg || kctc.registrationMismatch}">{{kctc.firstName}} {{kctc.lastName}}</span>
-                                                                            <div ng-if="kctc.notInMediaOrg" class="text-danger">
-                                                                                <i class="fa fa-exclamation-triangle"></i> Contact not in media organization
+                                                                            <span ng-class="{'text-danger':kctc.notInLinkedOrg || kctc.notMediaOrgType || kctc.registrationMismatch}">{{kctc.firstName}} {{kctc.lastName}}</span>
+                                                                            <div ng-if="kctc.notInLinkedOrg" class="text-danger">
+                                                                                <i class="fa fa-exclamation-triangle"></i> Contact is not in the organization linked to this request<span ng-if="kctc.organization.name"> (filed under {{kctc.organization.name}})</span>
+                                                                            </div>
+                                                                            <div ng-if="kctc.notMediaOrgType" class="text-danger">
+                                                                                <i class="fa fa-exclamation-triangle"></i> Contact's organization is not a media organization in Kronos<span ng-if="kctc.organization.organizationType"> ({{kctc.organization.organizationType}})</span>
                                                                             </div>
                                                                             <div ng-if="kctc.registrationMismatch" class="text-danger">
                                                                                 <i class="fa fa-exclamation-triangle"></i> Kronos accreditation does not match this request
@@ -947,7 +953,7 @@ a.label:focus {
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
-                                                                <tfoot ng-if="participant._id == mediaRequestCtrl.selectedParticipant._id && !participant.kronosId && request.currentStep=='finished'">
+                                                                <tfoot ng-if="!participant.kronosId && request.currentStep=='finished'">
                                                                     <tr>
                                                                         <td colspan="2">
                                                                             <button class="btn btn-sm btn-primary" ng-click="mediaRequestCtrl.createKronosContact(participant, request)"
