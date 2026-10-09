@@ -103,7 +103,7 @@ export default function bootApp(window, require, defineX) {
         if(isAbsolute) return '';
         if(hasHash   ) return '';
 
-        return 'v=' + gitVersion;
+        return (url.indexOf('?') === -1 ? '?' : '&') + 'v=' + gitVersion;
       }
   });
 
