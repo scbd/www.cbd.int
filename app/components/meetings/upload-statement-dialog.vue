@@ -301,6 +301,13 @@ export default {
                                 })
             }
 
+            const selectableItems = this.meetings.flatMap(({ _id: meetingId, agenda }) =>
+                agenda.items.filter(({ item }) => !this.hasSubItems(agenda.items, item))
+                            .map(({ item }) => ({ meetingId, item })));
+
+            if(selectableItems.length == 1)
+                this.selectedAgendaItem = selectableItems[0];
+
             try { grecaptcha.reset(); } catch(e) {}
         },
 
