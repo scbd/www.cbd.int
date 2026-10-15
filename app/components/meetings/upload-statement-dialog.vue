@@ -301,6 +301,13 @@ export default {
                                 })
             }
 
+            const selectableItems = this.meetings.flatMap(({ _id: meetingId, agenda }) =>
+                agenda.items.filter(({ item }) => !this.hasSubItems(agenda.items, item))
+                            .map(({ item }) => ({ meetingId, item })));
+
+            if(selectableItems.length == 1)
+                this.selectedAgendaItem = selectableItems[0];
+
             try { grecaptcha.reset(); } catch(e) {}
         },
 
@@ -479,7 +486,8 @@ export default {
                 this.rememberMe = !!this.participantIdentity;
             }
 
-            if(this.route.query.uploadStatementBy) {
+            // ?uploadStatementBy=open-only opens the dialog, without prefilling the identity.
+            if(this.route.query.uploadStatementBy && this.route.query.uploadStatementBy != 'open-only') {
                 this.participantIdentity = this.route.query.uploadStatementBy;
             }
 
