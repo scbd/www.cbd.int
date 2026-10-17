@@ -141,7 +141,7 @@
 
                             <div class="col-md-11 pt-2">
 
-                                <span v-if="words.length">
+                                <span v-if="words.length || phrases.length">
                                     <span class="badge chip badge-primary">
                                         {{freeText.trim()}}
                                         <i class="fa fa-minus-circle"
@@ -346,10 +346,15 @@ export default {
         // Split on any run of non-letter/non-number chars (spaces, hyphens, slashes, commas…)
         // so phrases like "capacity-building" tokenize the same way Solr's text analyzer
         // splits the indexed title_t field. \p{L}=letters, \p{N}=numbers, /u enables unicode.
-        words() { return this.freeText.split(/[^\p{L}\p{N}]+/u).filter(w=>!!w) },
+        // Text inside double quotes is removed here and searched as an exact phrase (see phrases).
+        words() { return this.freeText.replace(/"[^"]*"/g, ' ').split(/[^\p{L}\p{N}]+/u).filter(w=>!!w) },
+        // "quoted text" => exact Solr phrase query (no fuzzy ~), e.g. "InforMEA" or "knowledge management".
+        // An unbalanced quote is ignored and the text falls back to fuzzy words. Phrases without any
+        // letter/number (e.g. "*" or "!!!") are dropped: Solr would analyse them to nothing and match everything.
+        phrases() { return (this.freeText.match(/"[^"]+"/g) || []).map(p=>p.slice(1, -1).trim()).filter(p=>/[\p{L}\p{N}]/u.test(p)) },
         freeTextEmpty() {
             const hasFilters = _(Object.values(this.filters)).flatten().compact().size()>0
-            return this.searched && !hasFilters && !this.words.length;
+            return this.searched && !hasFilters && !this.words.length && !this.phrases.length;
         },
         queryParts
     },
@@ -561,7 +566,7 @@ function removeFilters(section, value) {
 
 function queryParts() {
 
-    const { filters, words } = this;
+    const { filters, words, phrases } = this;
 
     let freetext        = null;
     let sessions        = null;
@@ -573,7 +578,11 @@ function queryParts() {
     let actors          = null;
     let statuses        = null;
 
-    if(!_.isEmpty(words))                freetext     = 'title_t:'            + AND(words.map(w=>`${solr.escape(w)}~`));
+    const freeTextTerms = [
+        ...phrases.map(p => `"${p.replace(/\\/g, '\\\\')}"`), // exact phrase; quotes cannot occur inside (see phrases)
+        ...words.map(w => `${solr.escape(w)}~`),                  // fuzzy word
+    ];
+    if(!_.isEmpty(freeTextTerms))        freetext     = 'title_t:'            + AND(freeTextTerms);
     if(!_.isEmpty(filters.sessions))     sessions     = `dttCode_s:           (${filters.sessions      .map(o => `CBD/${padInt(o).replace(/-/g, '\/')}/`).map(solr.escape).map(o=>o+'*').join(' ')})`;
     if(!_.isEmpty(filters.types))        types        = `dttType_ss:          (${filters.types         .map(solr.escape).join(' ')})`;
     if(!_.isEmpty(filters.subjects))     subjects     = `dttSubject_ss:       (${filters.subjects      .map(solr.escape).join(' ')})`;
