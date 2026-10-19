@@ -74,7 +74,7 @@ export { default as template } from './documents.html';
             else                _ctrl.statsMode = _ctrl.isStaff ? 'full' : 'simple';
         }
         
-        _ctrl.selectedDocuments = () => allDocuments.filter(o => o.selected);
+        _ctrl.selectedDocuments = () => _.uniq(allDocuments.filter(o => o.selected), '_id');
 
         $scope.$watch('documentsCtrl.sort', function(s){
             $location.search('sort', s=='agenda' ? 'agenda' : null);
@@ -457,7 +457,7 @@ export { default as template } from './documents.html';
 
                 if(!report) return;
 
-                report = normalizeDocument(report);
+                report = _.find(allDocuments, { _id: report._id }) || normalizeDocument(report);
 
                 if(!isDocumentVisible(report))
                     return;
@@ -475,7 +475,7 @@ export { default as template } from './documents.html';
             if(!docs || !docs.length)
                 return;
 
-            docs.forEach((d) => allDocuments.push(d));
+            docs.forEach((d) => { if(!allDocuments.some(o => o._id === d._id)) allDocuments.push(d); });
 
             options = _.defaults(options||{}, {
                 section: null,
