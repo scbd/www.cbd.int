@@ -486,7 +486,8 @@ export default {
                 this.rememberMe = !!this.participantIdentity;
             }
 
-            if(this.route.query.uploadStatementBy) {
+            // ?uploadStatementBy=open-only opens the dialog, without prefilling the identity.
+            if(this.route.query.uploadStatementBy && this.route.query.uploadStatementBy != 'open-only') {
                 this.participantIdentity = this.route.query.uploadStatementBy;
             }
 

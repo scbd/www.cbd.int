@@ -40,7 +40,7 @@
 <script>
 
 import moment from 'moment'
-import 'css!cdn!npm/@scbd/ckeditor5-build-inline-full@35.0.0/build/content-style.css';
+import 'css!cdn!npm/@scbd/ckeditor5-build-inline-full@48.5.2/build/content-style.css';
 import ArticlesApi from '../../api/articles';
 import cbdArticle from './cbd-article.vue'
 import cbdAddNewArticle from './cbd-add-new-article.vue';

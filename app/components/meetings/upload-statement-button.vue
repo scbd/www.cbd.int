@@ -57,6 +57,11 @@ export default {
         if(this.route.query.uploadStatementBy) {
             this.showDialog = true;
         }
+
+        if(this.route.query.uploadStatementBy == 'open-only') {
+            const { uploadStatementBy, ...query } = this.route.query;
+            this.$router.replace({ query });
+        }
     }
 }
 </script>
