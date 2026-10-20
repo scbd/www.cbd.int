@@ -41,27 +41,23 @@
             .ngdialog.printsmart .ngdialog-content > .modal-content {
                 border:none;
                 border-radius: 0px;
-                overflow: hidden;
-                display: flex;
-                flex-direction: column;
+                overflow-y: auto;
             }
 
-            .ngdialog.printsmart .ngdialog-content > .modal-content > .modal-header,
-            .ngdialog.printsmart .ngdialog-content > .modal-content > .modal-footer {
-                position: static;
-                flex: none;
+            .ngdialog.printsmart .ngdialog-content > .modal-content > .modal-header {
+                position: sticky;
+                top: 0px;
+                z-index: 1;
                 background-color: white;
             }
 
             .ngdialog.printsmart .ngdialog-content > .modal-content > .modal-body {
-                flex: 1 1 auto;
-                min-height: 0;
                 margin: 0px;
-                padding-bottom: 1rem;
-                overflow-y: auto;
             }
 
             .ngdialog.printsmart .ngdialog-content > .modal-content > .modal-footer {
+                position: static;
+                background-color: white;
                 padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
             }
         }
