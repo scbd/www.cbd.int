@@ -89,8 +89,8 @@
 
 
         </td>
-        <td   class="languages-bar hidden-print">
-            <document-files ng-if="!viewOnly" files="document.files"></document-files>
+        <td   class="languages-bar hidden-print" ng-if="!viewOnly">
+            <document-files files="document.files"></document-files>
         </td>
 
         <td class="hidden-print" ng-click="document.selected=!document.selected;" style="width:20px; position:relative; text-align:left;">
