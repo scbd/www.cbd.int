@@ -101,7 +101,7 @@ export { default as template } from './documents.html';
                     isMontreal : /montr.al.*canada/i.test((res.data.venueText||{}).en||'')
                 });
 
-                meta.title(`${meeting.code} - Documents`);
+                if(!$scope.keepPageTitle) meta.title(`${meeting.code} - Documents`);
 
                 if(meeting.uploadStatement) {
                     registerComponents({uploadStatementButton : UploadStatementButton });

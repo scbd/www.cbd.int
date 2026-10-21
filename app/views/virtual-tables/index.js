@@ -13,11 +13,13 @@ import '~/services/conference-service'
 import CbdArticle from '~/directives/articles/cbd-article.vue';
 import Vue from 'Vue';
 import { cssEscape } from '~/util/css.escape';
+import lstring from '~/services/lstring'
+import * as meta from '~/services/meta'
       
 export { default as template  } from './index.html';
 
-export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articleService', 'angularGridInstance', 'ngDialog', '$route', 'conferenceService',
- function( $q, user,$http, $scope,  $rootScope, $timeout, articleService, angularGridInstance, ngDialog, $route, conferenceService) {
+export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articleService', 'angularGridInstance', 'ngDialog', '$route', 'conferenceService', 'locale',
+ function( $q, user,$http, $scope,  $rootScope, $timeout, articleService, angularGridInstance, ngDialog, $route, conferenceService, locale) {
 
     Vue.component('CbdArticle', CbdArticle)
     var basePath  = $scope.basePath = (angular.element('base').attr('href')||'').replace(/\/+$/g, '');
@@ -26,6 +28,11 @@ export default ['$q', 'user','$http','$scope', '$rootScope', '$timeout', 'articl
         title : "Virtual display table : " + ($route.current.params.type||'').toUpperCase(),
         description : $('#poster-description').text()
     };
+    $scope.onIntroductionLoad = function(article){
+        var title = (article && lstring(article.title, locale)) || _.startCase($route.current.params.type);
+        meta.title(title);
+    }
+
     $scope.filterByType = 'all';
     $scope.filterByMeeting = 'all';
     $scope.filterByEventType = 'all';
