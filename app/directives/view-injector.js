@@ -19,6 +19,7 @@ import ng from 'angular';
                     let view = null;
 
                     if(options.module === 'views/schedules/index-id') view = await import('~/views/schedules/index-id');
+                    if(options.module === 'views/meetings/documents/documents') view = await import('~/views/meetings/documents/documents');
                     if(view === null) throw new Error('Unknown module');
 
                     const {

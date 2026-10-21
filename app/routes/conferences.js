@@ -54,7 +54,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:code/sessions/:sessionId',           { ...mapView(vueViewWrapper),      resolve: { ...sessionIdView,          user : securize(STATEMENT_ADMIN_ROLES) }, reloadOnSearch:false })
     .when('/:code/sessions/:sessionId/edit',      { ...mapView(vueViewWrapper),      resolve: { ...sessionEditView,        user : securize(STATEMENT_ADMIN_ROLES) }, reloadOnSearch:false })
     .when('/:code/interpreter-panel',             { ...mapView(vueViewWrapper),      resolve: { ...interpretersPanelView,  user : securize([ ...STATEMENT_ADMIN_ROLES, "ScbdStaff", "Interpreters"]) }, reloadOnSearch:false })
-    .when('/:code/:meeting',                      { ...mapView(introductionView),    resolve: { routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) } })
+    .when('/:code/:meeting',                      { ...mapView(introductionView),    resolve: { routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
     .when('/:code/:meeting/documents',            { ...mapView(documentsView),       resolve: { showMeeting : resolveLiteral(false) },                    reloadOnSearch:false })
     .when('/:code/:meeting/documents/:id',        { ...mapView(angularViewWrapper),  resolve: { ...documentIdView, user : securize(["Administrator","EditorialService"]) },  reloadOnSearch:false })
     .when('/:code/submissions/:symbol',           { ...mapView(angularViewWrapper),  resolve: { ...notificationIdView, showMeeting : resolveLiteral(false) } })
