@@ -4,6 +4,7 @@ import { securize, resolveLiteral, injectRouteParams, mapView, currentUser } fro
 import { STATEMENT_ADMIN_ROLES } from '~/components/meetings/sessions/roles';
 import * as angularViewWrapper from '~/views/angular-view-wrapper'
 import * as vueViewWrapper     from '~/views/vue-view-wrapper'
+import * as meta               from '~/services/meta'
 
 
 // Static views
@@ -74,6 +75,12 @@ app.run(['$compile', '$rootScope','$location', async function($compile, $rootSco
     var conferenceHeader = angular.element("#conferenceHeader");
     conferenceHeader.html('').append('<conference-header ng-if="showConferenceHeader()"><conference-header>')
     $compile(conferenceHeader.contents())($rootScope);
+
+    // Views set their own title once loaded; reset it so it never leaks from the previous route
+    const defaultTitle = meta.title();
+    $rootScope.$on('$routeChangeStart', (evnt, next, current)=>{
+        if(current) meta.title(defaultTitle);
+    });
 }]);
 
 function traceError(e) {

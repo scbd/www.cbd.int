@@ -6,14 +6,17 @@ import CbdArticle from '~/directives/articles/cbd-article.vue';
 import UploadStatementButton from '~/components/meetings/upload-statement-button.vue'
 import Vue from 'Vue';
 import _ from 'lodash'
+import lstring from '~/services/lstring'
+import * as meta from '~/services/meta'
 
 export { default as template } from './introduction.html';
 
-export default ['$scope', '$route', '$location', '$http', '$rootScope', '$timeout',
- function ($scope,  $route, $location, $http, $rootScope, $timeout) {
+export default ['$scope', '$route', '$location', '$http', '$rootScope', '$timeout', 'locale',
+ function ($scope,  $route, $location, $http, $rootScope, $timeout, locale) {
 
             Vue.component('CbdArticle', CbdArticle)
             $scope.isLoading = true;
+            $scope.keepPageTitle = true; // inherited by the embedded documents view
             $scope.vueOptions = { components: { UploadStatementButton } };
             $scope.resolveLiteral = function(value) { return function() { return value; }; };
             // without query: the embedded documents button already handles ?uploadStatementBy auto-open
@@ -60,12 +63,17 @@ export default ['$scope', '$route', '$location', '$http', '$rootScope', '$timeou
 
                 $scope.showDocuments = !(($rootScope.conference||{}).selectedMenu||{}).hideDocumentsLink;
 
-                $http.get("/api/v2016/meetings/"+encodeURIComponent($route.current.params.meeting.toUpperCase()), { params: { f: { uploadStatement:1 } }, cache:true }).then(function(res){
+                var articleTitle = lstring(article.title, locale);
+                if(articleTitle) meta.title(articleTitle);
+
+                $http.get("/api/v2016/meetings/"+encodeURIComponent($route.current.params.meeting.toUpperCase()), { params: { f: { EVT_CD:1, title:1, uploadStatement:1 } }, cache:true }).then(function(res){
                     $scope.meeting = res.data;
                 }).catch(function(){
                     $scope.meeting = null;
                 }).then(function(){
                     var meeting = $scope.meeting;
+                    if(!articleTitle && meeting) meta.title(`${meeting.EVT_CD} - ${lstring(meeting.title, locale)}`);
+
                     return $timeout(function(){
                         var articleBlock = document.getElementById('intro-article');
                         $scope.documentsTall = !!meeting && $scope.showDocuments && !!articleBlock && articleBlock.offsetHeight > window.innerHeight;
