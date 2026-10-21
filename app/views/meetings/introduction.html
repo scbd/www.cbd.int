@@ -42,11 +42,9 @@
             <cbd-article ng-vue ng-vue-expose="&onArticleLoad" :query="articleQuery" v-if="articleQuery" :admin-tags="articleAdminTags" 
             @load="onArticleLoad($event)" hide-cover-image="true" show-edit="true"></cbd-article>
         </div>        
-        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="padding-top:15px;" ng-if="article">
+        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 order-2 order-lg-1" style="padding-top:15px;" ng-if="article">
             <social-media></social-media>
         </div>
-    </div>
-    <div class="row" id="documents" ng-if="meeting && showDocuments">
-        <div class="col-12" view-injector="{ module: 'views/meetings/documents/documents', resolve: { showMeeting: resolveLiteral(false) } }"></div>
+        <div class="col-12 order-1 order-lg-2" id="documents" ng-if="meeting && showDocuments" view-injector="{ module: 'views/meetings/documents/documents', resolve: { showMeeting: resolveLiteral(false) } }"></div>
     </div>
 </div>
