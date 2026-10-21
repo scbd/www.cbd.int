@@ -75,6 +75,7 @@ export { default as template } from './documents.html';
         }
         
         _ctrl.selectedDocuments = () => allDocuments.filter(o => o.selected);
+        _ctrl.hasDocuments = () => _ctrl.tabs.some(t => t.sections.some(s => !s.component)); // statements are component sections
 
         $scope.$watch('documentsCtrl.sort', function(s){
             $location.search('sort', s=='agenda' ? 'agenda' : null);
