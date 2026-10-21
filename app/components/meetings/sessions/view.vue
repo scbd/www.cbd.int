@@ -167,11 +167,6 @@ async function created(){
     }
   });
 
-  if(sessions.length==1) {
-    const [ session ] = sessions; 
-    this.loadInterventions(session._id)
-  }
-
   //Inject virtual session with Pending Statement... for staff
 
   if(meeting._id != altMeetingId) //Rempap Meeting
@@ -190,6 +185,11 @@ async function created(){
       refreshing        : false,
       hasAiTranslations : false,
     });
+  }
+
+  if(this.sessions.length==1) {
+    const [ session ] = this.sessions;
+    this.loadInterventions(session._id)
   }
 }
 

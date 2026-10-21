@@ -5,10 +5,12 @@ import ArticlesAccordion from '~/directives/articles/articles-accordion.vue';
 import Vue from 'Vue';
 import _ from 'lodash'
 import { cssEscape } from '~/util/css.escape';
+import lstring from '~/services/lstring'
+import * as meta from '~/services/meta'
 
 export { default as template } from './index.html'
 
-export default ['$scope', '$route', function ($scope,  $route) {
+export default ['$scope', '$route', 'locale', function ($scope,  $route, locale) {
        
             Vue.component('CbdArticle', CbdArticle);
             Vue.component('ArticlesAccordion', ArticlesAccordion)
@@ -44,6 +46,9 @@ export default ['$scope', '$route', function ($scope,  $route) {
             $scope.onArticleLoad = function(article){
 
                 $scope.article = article;
+
+                var articleTitle = article && lstring(article.title, locale);
+                if(articleTitle) meta.title(articleTitle);
 
                 if(article.customProperties?.accordionTags){
                     $scope.showAccordion = true
