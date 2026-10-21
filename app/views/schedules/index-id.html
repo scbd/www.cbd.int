@@ -105,7 +105,7 @@
 
                                               <span ng-switch-when="570fd0a52e3fa5cfa61d90ee"> 
                                                   <!-- Side Event -->
-                                                  <a href="https://www.cbd.int/side-events/" target="sideEvent" style="color:inherit">
+                                                  <a ng-href="https://www.cbd.int/side-events/{{r.sideEvent ? r.sideEvent.id : ''}}" target="sideEvent" style="color:inherit">
                                                       <span class="text-{{r.type.style}}" >
                                                           {{r.type.title}}
                                                       </span>
