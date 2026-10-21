@@ -7,6 +7,8 @@ import '~/services/conference-service'
 import '~/services/article-service'
 import '~/directives/social-media'
 import CbdArticle from '~/directives/articles/cbd-article.vue';
+import lstring from '~/services/lstring'
+import * as meta from '~/services/meta'
 
 export { default as template } from './index.html'
 
@@ -14,8 +16,8 @@ var VueComponent = Vue.component('conference-cal', ConferenceCalComp)
 app.value('ConferenceCal',VueComponent)
 
 
-export default ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', '$q',
-        function ($location,$scope,$timeout,  $route, $sce, conferenceService, $q) {
+export default ['$location','$scope','$timeout', '$route', '$sce', 'conferenceService', '$q', 'locale',
+        function ($location,$scope,$timeout,  $route, $sce, conferenceService, $q, locale) {
        
             Vue.component('CbdArticle', CbdArticle)
 			var _ctrl = this;
@@ -54,5 +56,8 @@ export default ['$location','$scope','$timeout', '$route', '$sce', 'conferenceSe
                 
                 $scope.article = article;
                 $scope.isLoading = false;
+
+                var articleTitle = article && lstring(article.title, locale);
+                if(articleTitle) meta.title(articleTitle);
             } 
     }];

@@ -4,11 +4,13 @@ import CbdArticle from '~/directives/articles/cbd-article.vue';
 import Vue from 'Vue';
 import _ from 'lodash';
 import { cssEscape } from '~/util/css.escape';
+import lstring from '~/services/lstring'
+import * as meta from '~/services/meta'
 
 export { default as template } from './parallel-meetings.html'
 
-export default ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope',
- function ($scope,  $route, $location, conferenceService, $q, $rootScope) {
+export default ['$scope', '$route', '$location', 'conferenceService', '$q', '$rootScope', 'locale',
+ function ($scope,  $route, $location, conferenceService, $q, $rootScope, locale) {
        
             Vue.component('CbdArticle', CbdArticle)
             $scope.isLoading = true;
@@ -41,6 +43,9 @@ export default ['$scope', '$route', '$location', 'conferenceService', '$q', '$ro
             $scope.onArticleLoad = function(article){
                     $scope.article = article;
                     $scope.finishLoading = true;
+
+                    var articleTitle = article && lstring(article.title, locale);
+                    if(articleTitle) meta.title(articleTitle);
             }
             $scope.getUrl = function(parallelMeeting){
 

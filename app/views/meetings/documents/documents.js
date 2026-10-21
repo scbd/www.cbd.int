@@ -75,6 +75,7 @@ export { default as template } from './documents.html';
         }
         
         _ctrl.selectedDocuments = () => _.uniq(allDocuments.filter(o => o.selected), '_id');
+        _ctrl.hasDocuments = () => _ctrl.tabs.some(t => t.sections.some(s => !s.component)); // statements are component sections
 
         $scope.$watch('documentsCtrl.sort', function(s){
             $location.search('sort', s=='agenda' ? 'agenda' : null);
@@ -101,7 +102,7 @@ export { default as template } from './documents.html';
                     isMontreal : /montr.al.*canada/i.test((res.data.venueText||{}).en||'')
                 });
 
-                meta.title(`${meeting.code} - Documents`);
+                if(!$scope.keepPageTitle) meta.title(`${meeting.code} - Documents`);
 
                 if(meeting.uploadStatement) {
                     registerComponents({uploadStatementButton : UploadStatementButton });
