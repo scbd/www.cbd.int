@@ -526,4 +526,10 @@ export default {
 .invalid-feedback.captcha{
     display: block;
 }
+.modal-header {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    background-color: #fff;
+}
 </style>
