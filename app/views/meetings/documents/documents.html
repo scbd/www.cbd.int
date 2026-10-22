@@ -31,7 +31,7 @@
         </span>
     </div>
 
-    <div ng-if="!documentsCtrl.error" id="print-smart-checkout" ng-cloak class="pull-right hidden-print">
+    <div ng-if="!documentsCtrl.error && (!documentsCtrl.hideEmptyControls || documentsCtrl.isEditor || documentsCtrl.tabs.length)" id="print-smart-checkout" ng-cloak class="pull-right hidden-print">
 
         <span ng-if="documentsCtrl.edit" class="edit">
             <button type="button" class="btn btn-light" ng-click="documentsCtrl.edit(null)"><i class="fa fa-plus"></i></button>
