@@ -7,6 +7,7 @@ import '~/filters/lstring'
 import '~/filters/moment'
 import 'css!./meeting-documents.css'
 import 'css!./agenda.css'
+import app from '~/app'
 import _ from 'lodash'
 import ng from 'angular'
 import moment from 'moment'
@@ -20,11 +21,13 @@ import '~/filters/to-display-symbol';
 
 export { default as template } from './documents.html';
 
+app.value('hideEmptyControls', false); // default; overridden by the embedding page's resolve
+
     //'css!./agenda.css' // moved to template
     var STATISTICS = {}; 
 
-	export default ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', '$cookies', 'apiToken', 'locale', 
-           function ($scope,   $route,   $http,   $q,   $location,   $rootScope,   authentication,   showMeeting,   CacheFactory,   $cookies,   apiToken,   locale) {
+	export default ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'hideEmptyControls', 'CacheFactory', '$cookies', 'apiToken', 'locale', 
+           function ($scope,   $route,   $http,   $q,   $location,   $rootScope,   authentication,   showMeeting,   hideEmptyControls,   CacheFactory,   $cookies,   apiToken,   locale) {
 
         var _ctrl = $scope.documentsCtrl = this;
         var meetingCode = $route.current.params.meeting.toUpperCase();
@@ -60,6 +63,7 @@ export { default as template } from './documents.html';
 
         _ctrl.jumpTo = jumpTo;
         _ctrl.showMeeting = showMeeting===undefined ? true : !!showMeeting;
+        _ctrl.hideEmptyControls = !!hideEmptyControls;
         _ctrl.statsMode = null;
         _ctrl.uploadStatement = false;
         _ctrl.sort = $location.search().sort == 'agenda' ? 'agenda' : 'document';
@@ -82,6 +86,7 @@ export { default as template } from './documents.html';
         });
 
         $scope.$watch('$root.deviceSize', updateMaxTabCount);
+        $scope.$watch(() => _ctrl.tabs.length, count => $scope.$emit('documents:tabs', count)); // lets an embedding page react to available content
 
         initAffix(); //to be fixed later
         initSecurity();

@@ -11,8 +11,8 @@ import * as meta from '~/services/meta'
 
 export { default as template } from './introduction.html';
 
-export default ['$scope', '$route', '$location', '$http', '$rootScope', '$timeout', 'locale',
- function ($scope,  $route, $location, $http, $rootScope, $timeout, locale) {
+export default ['$scope', '$route', '$location', '$http', '$rootScope', 'locale',
+ function ($scope,  $route, $location, $http, $rootScope, locale) {
 
             Vue.component('CbdArticle', CbdArticle)
             $scope.isLoading = true;
@@ -73,13 +73,13 @@ export default ['$scope', '$route', '$location', '$http', '$rootScope', '$timeou
                 }).then(function(){
                     var meeting = $scope.meeting;
                     if(!articleTitle && meeting) meta.title(`${meeting.EVT_CD} - ${lstring(meeting.title, locale)}`);
-
-                    return $timeout(function(){
-                        var articleBlock = document.getElementById('intro-article');
-                        $scope.documentsTall = !!meeting && $scope.showDocuments && !!articleBlock && articleBlock.offsetHeight > window.innerHeight;
-                    });
                 });
             }
+
+            // reported by the embedded documents view
+            $scope.$on('documents:tabs', function(evt, count){
+                $scope.hasDocumentTabs = count > 0;
+            });
             
             function kebabCase(val){
                 return val.toLowerCase().replace(/\s/g, '-')

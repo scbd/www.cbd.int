@@ -23,9 +23,9 @@
                 transform: scale(1.1);
             }
             </style>
-            <a class="btn btn-default btn-lg pull-right hvr-grow" href ng-click="scrollToDocuments()"
-                style="margin: 10px;top: 0px;background: rgba(0, 0, 0, .7);color: #fff;padding: 5px 8px;position: absolute;"
-             ng-if="article.coverImage && documentsTall">
+            <a class="btn btn-default pull-right hvr-grow" href ng-click="scrollToDocuments()"
+                style="margin: 10px;top: 0px;background: rgba(0, 0, 0, .7);color: #fff;position: absolute;"
+             ng-if="article.coverImage && hasDocumentTabs">
                 <i class="fa fa-file"></i> View Documents
             </a>
         </cbd-article-cover-image>
@@ -34,9 +34,9 @@
             <span ng-if="meeting.uploadStatement" class="pull-right" style="margin:5px;">
                 <upload-statement-button ng-vue="vueOptions" :route="uploadRoute" />
             </span>
-            <a  class="btn btn-default btn-lg pull-right hvr-grow" href ng-click="scrollToDocuments()"
-             style="margin:5px;background: rgba(0, 0, 0, .7);color: #fff;padding: 5px 8px;"
-             ng-if="!article.coverImage && documentsTall">
+            <a  class="btn btn-default pull-right hvr-grow" href ng-click="scrollToDocuments()"
+             style="margin:5px;background: rgba(0, 0, 0, .7);color: #fff;"
+             ng-if="!article.coverImage && hasDocumentTabs">
                 <i class="fa fa-file"></i> View Documents
             </a>
             <cbd-article ng-vue ng-vue-expose="&onArticleLoad" :query="articleQuery" v-if="articleQuery" :admin-tags="articleAdminTags" 
@@ -45,6 +45,6 @@
         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 order-2 order-lg-1" style="padding-top:15px;" ng-if="article">
             <social-media></social-media>
         </div>
-        <div class="col-12 order-1 order-lg-2" id="documents" ng-if="meeting && showDocuments" view-injector="{ module: 'views/meetings/documents/documents', resolve: { showMeeting: resolveLiteral(false) } }"></div>
+        <div class="col-12 order-1 order-lg-2" id="documents" ng-if="meeting && showDocuments" view-injector="{ module: 'views/meetings/documents/documents', resolve: { showMeeting: resolveLiteral(false), hideEmptyControls: resolveLiteral(true) } }"></div>
     </div>
 </div>
