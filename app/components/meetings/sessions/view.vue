@@ -112,9 +112,10 @@ import   Session           from './session.vue'
 import   InterventionRow   from './intervention-row.vue'
 import   VideoLink         from './video-link.vue'
 import   i18n              from '../locales.js'
-import { format, timezone as setTimezone } from '../datetime.js'
+import { format, timezone as setTimezone, asDateTime } from '../datetime.js'
 import remapCode from './re-map.js'
 import { STATEMENT_ADMIN_ROLES } from './roles.js'
+import { getTranscriptUrl } from '~/util/un-web-tv'
 
 const STAFF_ROLES = [ 'ScbdStaff', 'EditorialService' ]; // same definition of "staff" as documents.js
 
@@ -166,7 +167,7 @@ async function created(){
     return {
       ...session,
       videos,
-      transcriptUrl     : transcriptUrl(videos, session.date, session.endDate),
+      transcriptUrl     : hasTranscript(session) ? getTranscriptUrl(videos.map(v=>v.url)) : null,
       interventions     : null, //Make it reactive
       lastUpdated       : null, //Make it reactive
       refreshing        : false,//Make it reactive
@@ -260,23 +261,11 @@ function adminUrl(sessionId){
   else     return `/meetings/${encodeURIComponent(meeting)}/sessions/${encodeURIComponent(sessionId)}`;
 }
 
-// UN Web TV assets have a transcript page at the same path on transcripts.un.org, once the session has ended or has run for 45 minutes.
-function transcriptUrl(videos, date, endDate){
-  const now       = new Date();
-  const hasEnded  = !!endDate && now > new Date(endDate);
-  const isRunning = !!date    && now > new Date(new Date(date).getTime() + 45*60*1000);
+// Transcripts become available once the session has ended, or 45 minutes after its start when no end is set.
+function hasTranscript({ date, endDate }){
+  const end = endDate ? asDateTime(endDate) : asDateTime(date).plus({ minutes: 45 });
 
-  if(!hasEnded && !isRunning) return null;
-
-  const video = (videos||[]).find(v=>v.url && new URL(v.url).hostname == 'webtv.un.org');
-  if(!video) return null;
-
-  const url = new URL(video.url);
-  url.hostname = 'transcripts.un.org';
-  url.search   = '';
-  url.hash     = '';
-
-  return url.toString();
+  return end.toJSDate() < new Date();
 }
 
 async function editId(interventionId, sessionId){

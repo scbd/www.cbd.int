@@ -49,6 +49,7 @@
   import * as ResService from '~/services/reservation'
   import { getLanguageName } from '~/data/languages'
   import _ from 'lodash';
+  import { isUnWebTv, getTranscriptUrl } from '~/util/un-web-tv'
 
   export default {
     name      : 'ReservationLinks',
@@ -68,7 +69,7 @@
   /* vue life cycle
   /****************/
   function data () { 
-    return { refresherInterval: undefined, isEnded: false } 
+    return { refresherInterval: undefined } 
   }
   
   function created(){ this.refresher() }
@@ -84,9 +85,7 @@
   /* vue methods
   /****************/
   function refresher(){
-    const { displayLinksImmediately, end } = this.reservation
-
-    this.isEnded = !!end && new Date() > new Date(end)
+    const { displayLinksImmediately } = this.reservation
 
     if(displayLinksImmediately) return
 
@@ -112,19 +111,12 @@
     return links[0]?.url;
   }
 
-  // UN Web TV assets have a transcript page at the same path on transcripts.un.org, once the reservation has ended.
   function transcriptUrl() {
-    if(!this.isEnded) return null;
+    const { end } = this.reservation;
 
-    const link = this.videoLinks.find(l=>l.isUnWebTv);
-    if(!link) return null;
+    if(!end || new Date(end) > new Date()) return null;
 
-    const url = new URL(link.url);
-    url.hostname = 'transcripts.un.org';
-    url.search   = '';
-    url.hash     = '';
-
-    return url.toString();
+    return getTranscriptUrl(this.videoLinks.map(l=>l.url));
   }
 
   function videoLinks(){
@@ -154,10 +146,6 @@
 
   function isYoutube(url) {
     return /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(url||'');
-  }
-
-  function isUnWebTv(url) {
-    return /^https?:\/\/webtv.un.org\//.test(url||'');
   }
 
   function buildSortKey(link) {
