@@ -28,11 +28,11 @@
             </span>
 
             <span class="video" v-if="videos && videos.length" @click.stop>
-              <VideoLink class="pull-right" :videos="videos" title="Full session webcast"/>
+              <VideoLink class="pull-right" :videos="videos" button-class="btn-sm btn-outline-dark border-0" title="Full session webcast"/>
             </span>
 
-            <span class="video" v-if="transcriptUrl(videos, date, endDate)" @click.stop>
-              <a class="btn btn-sm btn-outline-dark" :href="transcriptUrl(videos, date, endDate)" target="transcript" title="Full session transcript">
+            <span class="transcript" v-if="transcriptUrl(videos, date, endDate)" @click.stop>
+              <a class="btn btn-sm btn-outline-dark border-0" :href="transcriptUrl(videos, date, endDate)" target="transcript" title="Transcript">
                 <i class="fa fa-file-text-o" aria-hidden="true"></i>
               </a>
             </span>
@@ -317,6 +317,7 @@ function hasAiTranslations(interventions) {
   .video ,
   .card-header .video { float: right; color: #404040; }
   .card-header .video { margin-right: -7px; }
+  .card-header .transcript { float: right; margin-right: 3px; }
 
   .card-header .admin-link  { float: right; margin-left: 10px; }
   .card-header .last-update { float: right; margin-left: 10px; }

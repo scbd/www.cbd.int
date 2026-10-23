@@ -1,7 +1,7 @@
 <template>
   <div  v-if="isVisible">
     <div v-if="videoLinks.length" class="position-relative m-1" :class="{'dropleft': this.position==='left', 'dropright': this.position==='right' }">
-      <a v-if="transcriptUrl" class="btn btn-outline-dark" :class="{'btn-xs':size=='xs'}" :href="transcriptUrl" target="transcript" title="Full session transcript">
+      <a v-if="transcriptUrl" class="btn btn-outline-dark" :class="{'btn-xs':size=='xs'}" :href="transcriptUrl" target="transcript" title="Transcript">
         <i class="fa fa-file-text-o" aria-hidden="true"></i>
       </a>
       <a class="btn btn-dark" 
