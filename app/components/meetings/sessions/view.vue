@@ -3,7 +3,7 @@
     <Session :_id="_id" class="card"
       :body-class="{'collapse':true, 'show': numberOfSessions==1 }"
       :body-id="`sid${_id}`"
-      v-for="{ title, _id, interventions, date, videos, count, timezone, earlySubmission, cutoffDate, lastUpdated, refreshing, hasAiTranslations } in sessions" :key="_id">
+      v-for="{ title, _id, interventions, date, endDate, videos, count, timezone, earlySubmission, cutoffDate, lastUpdated, refreshing, hasAiTranslations } in sessions" :key="_id">
 
       <template v-slot:header>
 
@@ -29,6 +29,12 @@
 
             <span class="video" v-if="videos && videos.length" @click.stop>
               <VideoLink class="pull-right" :videos="videos" title="Full session webcast"/>
+            </span>
+
+            <span class="video" v-if="transcriptUrl(videos, date, endDate)" @click.stop>
+              <a class="btn btn-sm btn-outline-dark" :href="transcriptUrl(videos, date, endDate)" target="transcript" title="Full session transcript">
+                <i class="fa fa-file-text-o" aria-hidden="true"></i>
+              </a>
             </span>
 
             <small v-if="isStaff && lastUpdated" class="text-muted tiny last-update" title="Auto-refreshed every minute">
@@ -124,7 +130,7 @@ export default {
                 },
   computed   : { numberOfSessions, isStaff },
   filters    : { format, setTimezone },
-  methods    : { loadInterventions, refreshOpenSessions, adminUrl, editId, editClose },
+  methods    : { loadInterventions, refreshOpenSessions, adminUrl, transcriptUrl, editId, editClose },
   created, mounted, beforeDestroy, data,
   i18n,
 }
@@ -251,6 +257,25 @@ function adminUrl(sessionId){
 
   if(code) return `/conferences/${encodeURIComponent(code)}/sessions/${encodeURIComponent(sessionId)}`
   else     return `/meetings/${encodeURIComponent(meeting)}/sessions/${encodeURIComponent(sessionId)}`;
+}
+
+// UN Web TV assets have a transcript page at the same path on transcripts.un.org, once the session has ended or has run for 45 minutes.
+function transcriptUrl(videos, date, endDate){
+  const now       = new Date();
+  const hasEnded  = !!endDate && now > new Date(endDate);
+  const isRunning = !!date    && now > new Date(new Date(date).getTime() + 45*60*1000);
+
+  if(!hasEnded && !isRunning) return null;
+
+  const video = (videos||[]).find(v=>v.url && new URL(v.url).hostname == 'webtv.un.org');
+  if(!video) return null;
+
+  const url = new URL(video.url);
+  url.hostname = 'transcripts.un.org';
+  url.search   = '';
+  url.hash     = '';
+
+  return url.toString();
 }
 
 async function editId(interventionId, sessionId){

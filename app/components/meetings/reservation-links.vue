@@ -1,6 +1,9 @@
 <template>
   <div  v-if="isVisible">
     <div v-if="videoLinks.length" class="position-relative m-1" :class="{'dropleft': this.position==='left', 'dropright': this.position==='right' }">
+      <a v-if="transcriptUrl" class="btn btn-outline-dark" :class="{'btn-xs':size=='xs'}" :href="transcriptUrl" target="transcript" title="Full session transcript">
+        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+      </a>
       <a class="btn btn-dark" 
         :class="{'dropdown-toggle':!defaultVideoUrl,'btn-xs':size=='xs'}" 
         :href="defaultVideoUrl||'#'" 
@@ -55,7 +58,7 @@
                   size       : { type: String, required: false },
                   position   : { type: String, default: ''}
                 },
-    computed  : { isVisible, defaultVideoUrl, videoLinks, nonVideoLinks, displayLinksImmediately },
+    computed  : { isVisible, defaultVideoUrl, transcriptUrl, videoLinks, nonVideoLinks, displayLinksImmediately },
     methods   : { refresher, clearRefresher },
     filters   : { langText: getLanguageName },
     data, created, mounted, beforeDestroy
@@ -65,7 +68,7 @@
   /* vue life cycle
   /****************/
   function data () { 
-    return { refresherInterval: undefined } 
+    return { refresherInterval: undefined, isEnded: false } 
   }
   
   function created(){ this.refresher() }
@@ -81,7 +84,9 @@
   /* vue methods
   /****************/
   function refresher(){
-    const { displayLinksImmediately } = this.reservation
+    const { displayLinksImmediately, end } = this.reservation
+
+    this.isEnded = !!end && new Date() > new Date(end)
 
     if(displayLinksImmediately) return
 
@@ -105,6 +110,21 @@
   function defaultVideoUrl() {
     let links = this.videoLinks || [];
     return links[0]?.url;
+  }
+
+  // UN Web TV assets have a transcript page at the same path on transcripts.un.org, once the reservation has ended.
+  function transcriptUrl() {
+    if(!this.isEnded) return null;
+
+    const link = this.videoLinks.find(l=>l.isUnWebTv);
+    if(!link) return null;
+
+    const url = new URL(link.url);
+    url.hostname = 'transcripts.un.org';
+    url.search   = '';
+    url.hash     = '';
+
+    return url.toString();
   }
 
   function videoLinks(){
