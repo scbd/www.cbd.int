@@ -3,7 +3,7 @@
     <Session :_id="_id" class="card"
       :body-class="{'collapse':true, 'show': numberOfSessions==1 }"
       :body-id="`sid${_id}`"
-      v-for="{ title, _id, interventions, date, endDate, videos, count, timezone, earlySubmission, cutoffDate, lastUpdated, refreshing, hasAiTranslations } in sessions" :key="_id">
+      v-for="{ title, _id, interventions, date, videos, transcriptUrl, count, timezone, earlySubmission, cutoffDate, lastUpdated, refreshing, hasAiTranslations } in sessions" :key="_id">
 
       <template v-slot:header>
 
@@ -31,8 +31,8 @@
               <VideoLink class="pull-right" :videos="videos" button-class="btn-sm btn-outline-dark border-0" title="Full session webcast"/>
             </span>
 
-            <span class="transcript" v-if="transcriptUrl(videos, date, endDate)" @click.stop>
-              <a class="btn btn-sm btn-outline-dark border-0" :href="transcriptUrl(videos, date, endDate)" target="transcript" title="Transcript">
+            <span class="transcript" v-if="transcriptUrl" @click.stop>
+              <a class="btn btn-sm btn-outline-dark border-0" :href="transcriptUrl" target="transcript" title="Transcript">
                 <i class="fa fa-file-text-o" aria-hidden="true"></i>
               </a>
             </span>
@@ -130,7 +130,7 @@ export default {
                 },
   computed   : { numberOfSessions, isStaff },
   filters    : { format, setTimezone },
-  methods    : { loadInterventions, refreshOpenSessions, adminUrl, transcriptUrl, editId, editClose },
+  methods    : { loadInterventions, refreshOpenSessions, adminUrl, editId, editClose },
   created, mounted, beforeDestroy, data,
   i18n,
 }
@@ -166,6 +166,7 @@ async function created(){
     return {
       ...session,
       videos,
+      transcriptUrl     : transcriptUrl(videos, session.date, session.endDate),
       interventions     : null, //Make it reactive
       lastUpdated       : null, //Make it reactive
       refreshing        : false,//Make it reactive
