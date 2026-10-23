@@ -2,7 +2,7 @@
   <span v-if="entries.length">
 
     <!-- Single Video -->
-    <a v-if="entries.length==1" :href="entries[0].url" class="btn btn-link">
+    <a v-if="entries.length==1" :href="entries[0].url" class="btn btn-link" target="video" rel="noopener">
       <i class="fa fa-video-camera" aria-hidden="true"></i>
     </a>
 
@@ -12,7 +12,7 @@
         <i class="fa fa-video-camera" aria-hidden="true"></i>
       </button>
       <div class="dropdown-menu">
-        <a class="fix dropdown-item text-nowrap" :href="url" v-for="{ language, url } in entries" :key="url" target="video">
+        <a class="fix dropdown-item text-nowrap" :href="url" v-for="{ language, url } in entries" :key="url" target="video" rel="noopener">
           <i class="fa fa-play-circle" aria-hidden="true"></i> {{language | getLanguageName }}
         </a>
       </div>
