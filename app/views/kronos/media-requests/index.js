@@ -10,8 +10,10 @@ export { default as template } from './index.html'
     var KRONOS_MEDIA_TYPE = '0000000052000000cbd05ebe0000000b';
     var KRONOS_STATUS_ACCREDITED  = 2;
 
-export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter) {
+export default ['$http', 'kronos', '$q','$scope','$routeParams','$route','$location', '$filter', 'user' ,function($http, kronos, $q, $scope, $routeParams, $route, $location, $filter, user) {
         var _ctrl = this;
+
+        _ctrl.canViewParticipants = ['Administrator', 'SCBDMedia'].some(role => user?.roles?.includes(role));
 
         var SORT_PROPS = ['meta.createdOn', 'organization.title', 'meta.modifiedOn'];
         var SORT_DIRS  = ['asc', 'desc'];
@@ -347,6 +349,11 @@ $scope.$watch(function(){
             return request?.organization?.kronosIds?.length
         }
 
+        _ctrl.canActOnParticipants = canActOnParticipants;
+        function canActOnParticipants(request){
+            return !!(hasLinkedOrgs(request) && request.organization.accredited);
+        }
+
         async function loadAllParticipants(results){
             let requests = _.clone(results)
             const mediaRequestQueries = []
@@ -641,6 +648,8 @@ $scope.$watch(function(){
             })
         }
         function updateParticipantStatus(participant, request, status){
+
+            if(!canActOnParticipants(request)) return $q.resolve();
             
             return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
             '/participants/' + participant._id + '/' + status)            
@@ -704,6 +713,8 @@ $scope.$watch(function(){
 
         function linkKronosContact(request, participant, kcontact){
 
+            if(!canActOnParticipants(request)) return $q.resolve();
+
             //link KRONOS contact with Media request particiapnt
             return $http.put('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
             '/participants/' + participant._id+ '/link-kronos/' + kcontact.contactId)            
@@ -722,6 +733,8 @@ $scope.$watch(function(){
         }
 
         function removeKronosContact(request, participant, kcontact){
+
+            if(!canActOnParticipants(request)) return $q.resolve();
             
             return $http.delete('/api/v2018/kronos/participation-request/' + request._id + '/organizations/' + request.organization._id + 
             '/participants/' + participant._id+ '/link-kronos/' + kcontact.contactId)
@@ -780,7 +793,7 @@ $scope.$watch(function(){
         
         function createKronosContact(participant, request){
 
-            if((request.organization.kronosIds||[]).length == 0){
+            if(!canActOnParticipants(request)){
                return;
             }
 
