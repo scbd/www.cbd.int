@@ -46,6 +46,7 @@ $scope.$watch(function(){
         _ctrl.removeKronosContact               = removeKronosContact;        
         _ctrl.updateOrganizationStatus          = updateOrganizationStatus; 
         _ctrl.updateParticipantStatus           = updateParticipantStatus;
+        _ctrl.rejectDuplicateParticipant        = rejectDuplicateParticipant;
         _ctrl.searchKronosOrg                   = searchKronosOrg;
         _ctrl.searchKronosContact               = searchKronosContact;
         _ctrl.lookUpKronosOrganizations         = lookUpKronosOrganizations;
@@ -449,6 +450,7 @@ $scope.$watch(function(){
                     _ctrl.searchKronosContact(participant.kronos.search, participant, request)
                 }
                 
+                flagDuplicateParticipants(request.participants);
                 return;
             }
             request.loadingParticipants = true;
@@ -468,6 +470,8 @@ $scope.$watch(function(){
                 participant.needsVisa = (participant.tags || []).includes('visa')
                 participant.isOnline = (participant.tags || []).includes('online')
               }
+
+              flagDuplicateParticipants(request.participants);
 
               const selectedRequests = [] ;
               for (const participant of request.participants)
@@ -649,11 +653,18 @@ $scope.$watch(function(){
                     if(status == 'accreditate'){
                         participant.accredited = true;
                         delete participant.rejected;
+                        delete participant.rejectedAsDuplicate;
+                    }
+                    else if(status == 'reject-duplicate'){
+                        delete participant.accredited;
+                        participant.rejected = true;
+                        participant.rejectedAsDuplicate = true;
                     }
                     else {
                         delete participant.accredited;
                         participant.rejected = true;
                     }
+                    flagDuplicateParticipants(request.participants);
                 }
             }).catch(function(err) {
                console.log(err)
@@ -663,6 +674,22 @@ $scope.$watch(function(){
             })
         }
         
+
+        // Flags participants of this request whose Kronos contact is also linked to another, non-rejected participant of the same request
+        function flagDuplicateParticipants(participants = []){
+            for (const participant of participants)
+                participant.duplicateOfParticipants = participant.kronosId ? participants.filter(p => p !== participant && !p.rejected && p.kronosId === participant.kronosId).map(p => p._id) : [];
+        }
+
+        // Rejects a duplicate participant record without removing the Kronos accreditation of the contact it shares
+        function rejectDuplicateParticipant(participant, request){
+            delete participant.statusError;
+
+            return updateParticipantStatus(participant, request, 'reject-duplicate').then(function(){
+                if(!participant.rejectedAsDuplicate)
+                    participant.statusError = 'Could not reject this participant as a duplicate. Please try again.';
+            });
+        }
 
         function linkKronsOrganization(request, korg){
 
@@ -713,6 +740,7 @@ $scope.$watch(function(){
                     _.map(participant.kronos.contacts, function(con){con.isLinked=false;})                    
                     participant.kronosId = kcontact.contactId;
                     kcontact.isLinked = participant.isNominated = kcontact.isNominated = true;
+                    flagDuplicateParticipants(request.participants);
                 }
             }).catch(function(err) {
                console.log(err)
@@ -729,6 +757,7 @@ $scope.$watch(function(){
                 if(result.status == 200){             
                     participant.kronosId = undefined;
                     participant.accredited = participant.isNominated = kcontact.isNominated = kcontact.isLinked = participant.rejected = false;
+                    flagDuplicateParticipants(request.participants);
                 }
             }).catch(function(err) {
                console.log(err)
