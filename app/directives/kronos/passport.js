@@ -12,6 +12,8 @@ import   participationT              from '~/i18n/participation/index.js' ;
 import { toFile         , toDataUrl,
          sniffFileType , decodableImageTypes} from '~/services/data-converter.js'  ;
 
+const REQUEST_TIMEOUT_MS = 30000;
+
 app.directive('passport', ['$http','$filter','translationService','locale','kronos',function($http, $filter, $i18n, locale, kronos) {
 
     return {
@@ -45,9 +47,17 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
               if(!passportObj) return
 
 
-              const signedUrl = await $http.post('/api/v2018/kronos/participation-requests/'+encodeURIComponent(passportObj.url)+'/sign');
+              const signedUrl = await $http.post('/api/v2018/kronos/participation-requests/'+encodeURIComponent(passportObj.url)+'/sign', undefined, { timeout: REQUEST_TIMEOUT_MS });
 
-              const res = await  fetch(signedUrl.data.url || signedUrl.data.signedUrl );
+              const fetchController = new AbortController();
+              const fetchTimeout    = setTimeout(()=> fetchController.abort(), REQUEST_TIMEOUT_MS);
+
+              let res;
+              try {
+                res = await fetch(signedUrl.data.url || signedUrl.data.signedUrl, { signal: fetchController.signal });
+              } finally {
+                clearTimeout(fetchTimeout);
+              }
 
               const tBlob = (await res.blob());
 
@@ -90,7 +100,7 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
               const headers = { 'Content-type':  body.type };
 
 
-              const { imageSrc, fields, valid } = (await $http.post(`${kronos.kronosCbdEventsUrl}/api/passports/read`, body, { headers })).data;
+              const { imageSrc, fields, valid } = (await $http.post(`${kronos.kronosCbdEventsUrl}/api/passports/read`, body, { headers, timeout: REQUEST_TIMEOUT_MS })).data;
 
               if(!valid) $scope.triggerForm();
 
@@ -117,12 +127,13 @@ app.directive('passport', ['$http','$filter','translationService','locale','kron
                                     $scope.image = imageSrc;
                                     $scope.binding.imageSrc = imageSrc;
                                   });
-              else
-                // stop the spinner, but only blame the file when we know the format is the problem
-                $scope.$applyAsync(()=> $scope.loadFailed = !$scope.imageError);
 
             }
             finally{
+              // every exit (no passport attachment, a pdf read without an image back, a failure)
+              // must leave the spinner; only blame the file when we know the format is the problem
+              $scope.$applyAsync(()=> $scope.loadFailed = !$scope.image && !$scope.imageError);
+
               if(!$scope.valid) $scope.passportForm.$submitted = true;
             }
         }
