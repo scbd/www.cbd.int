@@ -1,6 +1,7 @@
 ﻿import '~/app'
 import '~/services/article-service'
 import '~/services/conference-service'
+import { CONFERENCE_MENU_ROLES } from '~/views/conferences/roles'
 import '~/directives/social-media'
 import '~/filters/lstring'
 import '~/filters/moment'
@@ -9,8 +10,8 @@ import ng from 'angular';
 
 export { default as template } from './conferences.html'
 
-export default ['$location','$scope','conferenceService', '$q', 'articleService',
-        function ($location, $scope, conferenceService, $q, articleService) {
+export default ['$location','$scope','conferenceService', '$q', 'articleService', 'user',
+        function ($location, $scope, conferenceService, $q, articleService, user) {
        
 			var _ctrl = this;
                 // institution:'CBD',
@@ -49,6 +50,8 @@ export default ['$location','$scope','conferenceService', '$q', 'articleService'
                 });
             });
 
+
+            $scope.canEditMenu = (user.roles||[]).some(role=>CONFERENCE_MENU_ROLES.includes(role));
 
             $scope.showConference = function(code){
                 //$location.path(encodeURIComponent(code)); // TOO BAD NOT WORKING
