@@ -2,6 +2,7 @@ import '~/directives/meetings/conference-header'
 import app from '~/app';
 import { securize, resolveLiteral, injectRouteParams, mapView, currentUser } from './mixin';
 import { STATEMENT_ADMIN_ROLES } from '~/components/meetings/sessions/roles';
+import { CONFERENCE_MENU_ROLES } from '~/views/conferences/roles';
 import * as angularViewWrapper from '~/views/angular-view-wrapper'
 import * as vueViewWrapper     from '~/views/vue-view-wrapper'
 
@@ -25,6 +26,7 @@ const sessionIdView         = { component: ()=>import('~/components/meetings/ses
 const sessionEditView       = { component: ()=>import('~/components/meetings/sessions/edit-id.vue')          .catch(traceError) }
 const interpretersPanelView = { component: ()=>import('~/components/meetings/sessions/interpreters-view.vue').catch(traceError) }
 const infoNote              = { component: ()=>import('~/views/conferences/info-note.vue')        .catch(traceError) }
+const editMenuView          = { component: ()=>import('~/views/conferences/edit-menu.vue')        .catch(traceError) }
 const lang_switch           = { component: ()=>import('~/views/shared/lang')        .catch(traceError) }
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
@@ -34,7 +36,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
     $routeProvider
     //legacy redirect
-    .when('/',                                    { ...mapView(conferencesView) })
+    .when('/',                                    { ...mapView(conferencesView),     resolve: { user:currentUser() } })
     .when('/language-switch/:langCode',           { ...mapView(angularViewWrapper), "label":"language switch","resolve":{ ...lang_switch, },"resolveController":true})
     .when('/:code',                               { ...mapView(conferencesIdView),   resolve: { }, reloadOnSearch:false })
     .when('/:code/parallel-meetings',             { ...mapView(angularViewWrapper),  resolve: { ...parallelMeetingsView, routePrams: injectRouteParams({urlTag: ['conferences', 'parallel-meetings', 'introduction'] }) }, reloadOnSearch:false })
@@ -47,6 +49,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:code/virtual-tables/events',         { ...mapView(angularViewWrapper),  resolve: { ...virtualTableView, user:currentUser(), routePrams: injectRouteParams({type:'event'}) }, reloadOnSearch:false})
     .when('/:code/virtual-tables/chm-knowledge-fair',{ ...mapView(angularViewWrapper),  resolve: { ...virtualTableView, user:currentUser(), routePrams: injectRouteParams({type:'chm-knowledge-fair'}) }, reloadOnSearch:false})
     .when('/:code/info-note',                     { ...mapView(vueViewWrapper),      resolve: { ...infoNote, user:currentUser(),        }, reloadOnSearch:false })
+    .when('/:code/edit-menu',                     { ...mapView(vueViewWrapper),      resolve: { ...editMenuView,           user : securize(CONFERENCE_MENU_ROLES) }, reloadOnSearch:false })
     .when('/:code/schedules',                     { ...mapView(angularViewWrapper),  resolve: { ...scheduleView }, reloadOnSearch:true })
     .when('/:code/schedule',                      { redirectTo : '/:code/schedules'})
     .when('/:code/insession',                     { ...mapView(angularViewWrapper),  resolve: { ...inSessionView }, reloadOnSearch:false })
