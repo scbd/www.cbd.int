@@ -1,6 +1,6 @@
 
 import axios from 'axios'
-import { isFunction, isEmpty, cloneDeep } from 'lodash'
+import { isFunction, isEmpty, isPlainObject, cloneDeep } from 'lodash'
 
 let sitePrefixUrl = window.scbd.apiUrl;
 
@@ -72,6 +72,33 @@ export default class Api
     const conference = await this.http.get(`api/v2016/conferences`, { params: searchParams }).then(res => res.data).catch(tryCastToApiError);
 
     return conference
+  }
+
+  // Conference portal settings (the `conference` field only), optimistic-locked with an ETag.
+  // The caller keeps `etag` next to the settings it was loaded with and passes it back on save: never fetch it at save time.
+  async getConferencePortalSettings(idOrCode){
+
+    return this.http.get(portalSettingsUrl(idOrCode))
+                    .then(res => {
+                      console.log(res)
+                      return {
+                        settings: res.data, etag: etagOf(res.data)
+                      }
+                })
+                    .catch(tryCastToPortalError);
+  }
+
+  // Replaces the stored settings: send the complete object that was loaded, never a partial one.
+  async updateConferencePortalSettings(idOrCode, settings, etag){
+
+    if(!etag)                     throw new ConferencePortalError('missing-etag',     'Cannot save: the version of the settings (ETag) is missing. Load the settings first.');
+    if(!isPlainObject(settings))  throw new ConferencePortalError('invalid-settings', 'Cannot save: settings must be the complete settings object.');
+
+    const { meta, ...body } = settings; // `meta` is owned by the server
+
+    return this.http.put(portalSettingsUrl(idOrCode), body, { headers: { 'If-Match': etag, 'Content-Type': 'application/json' } })
+                    .then(res => ({ settings: res.data, etag: etagOf(res.data) }))
+                    .catch(tryCastToPortalError);
   }
 
   async getConferenceByMeetingId(meetingId){
@@ -475,6 +502,49 @@ export function markSupersededInterventions(interventions) {
 //////////////////////////
 // Helpers
 ////////////////////////
+
+export class ConferencePortalError extends Error {
+  constructor(code, message, status) {
+    super(message);
+    this.name   = 'ConferencePortalError';
+    this.code   = code;   // 'bad-request' | 'unauthorized' | 'forbidden' | 'not-found' | 'conflict' | 'missing-etag' | 'invalid-settings'
+    this.status = status; // http status when it came from Gaia
+  }
+}
+
+const PORTAL_ERRORS = {
+  400: ['bad-request',  'The settings were rejected: the request body must be a JSON object and the version (ETag) must be valid.'],
+  401: ['unauthorized', 'You are not signed in, or your session has expired. Sign in again.'],
+  403: ['forbidden',    'You do not have permission to view or edit the conference portal settings.'],
+  404: ['not-found',    'Conference not found, or it has no portal settings.'],
+  412: ['conflict',     'This conference was changed by someone else since you opened it. Reload the latest settings and re-apply your changes.'],
+  428: ['missing-etag', 'The server did not receive the version of the settings (If-Match). Reload the settings and try again.'],
+};
+
+function portalSettingsUrl(idOrCode) {
+  return `api/v2025/conferences/${encodeURIComponent(idOrCode)}/portal`;
+}
+
+// The version token is built from the body (`meta.updatedOn`), not from the ETag header, so it does not depend on CORS exposing that header.
+// Gaia compares it as the quoted value it used to send in the header, and `"none"` when the settings were never edited.
+function etagOf(settings) {
+
+  const updatedOn = settings && settings.meta && settings.meta.updatedOn;
+
+  return `"${updatedOn || 'none'}"`;
+}
+
+function tryCastToPortalError(error) {
+
+  if(error instanceof ConferencePortalError) throw error;
+
+  const status = error && error.response && error.response.status;
+  const known  = PORTAL_ERRORS[status];
+
+  if(known) throw new ConferencePortalError(known[0], known[1], status);
+
+  return tryCastToApiError(error);
+}
 
 export function tryCastToApiError(error) {
 
