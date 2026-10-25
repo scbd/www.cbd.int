@@ -12,6 +12,7 @@ import '~/filters/html-sanitizer.js';
 			template : html,
             replace: true,
 			scope: {
+                previewConference : '=?' // draft conference (menus not yet saved): when set, it is shown instead of the active conference
             },
 			link: function ($scope) {
 
@@ -20,11 +21,22 @@ import '~/filters/html-sanitizer.js';
 
                     angular.element('body').addClass("conference")
 
+                    if($scope.previewConference)
+                        return;
+
                     $q.when(conferenceService.getActiveConference()).then(function(conference){
                         $scope.conference = $scope.meeting = conference; //Keep meeting for tmp compatibility
                     });   
 
                 });
+
+                $scope.$watch('previewConference', function(draft){
+                    if(!draft) return;
+
+                    var conference = ng.copy(draft); // normalizeMenus adds circular parent refs, never normalize the watched object
+                    conferenceService.normalizeMenus(conference.conference.menus || [], conference);
+                    $scope.conference = $scope.meeting = conference;
+                }, true);
 
                 $scope.cssClass = function(code){
                     return (code||'').replace(/\-([a-z]{3})\-.*/, '').toUpperCase();

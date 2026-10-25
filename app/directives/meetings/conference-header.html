@@ -344,6 +344,7 @@
                 </a>
                 <div ng-if="::!menu.url && !menu.xsUrl" data-toggle="{{::(menu.links ? 'dropdown' : '')}}">
                     <a href="#">
+                    <i class="fa hidden-xs {{::menu.icon}}" ng-if="::!menu.title && menu.icon" style="font-size:24px" ></i>
                     <div class="visible-md visible-lg">
                         <div class="menu-title" style="font-weight:bold" ng-bind-html="::menu.title|lstring"></div>
                     </div> 
