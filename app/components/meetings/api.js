@@ -79,12 +79,7 @@ export default class Api
   async getConferencePortalSettings(idOrCode){
 
     return this.http.get(portalSettingsUrl(idOrCode))
-                    .then(res => {
-                      console.log(res)
-                      return {
-                        settings: res.data, etag: etagOf(res.data)
-                      }
-                })
+                    .then(res => ({ settings: res.data, etag: etagOf(res.data) }))
                     .catch(tryCastToPortalError);
   }
 
