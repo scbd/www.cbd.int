@@ -74,25 +74,25 @@ export default class Api
     return conference
   }
 
-  // Conference portal settings (the `conference` field only), optimistic-locked with an ETag.
-  // The caller keeps `etag` next to the settings it was loaded with and passes it back on save: never fetch it at save time.
+  // Conference portal settings (the `conference` field only), optimistic-locked with `meta._version` (a read-only hash of the stored settings).
+  // The caller keeps `version` next to the settings it was loaded with and passes it back on save: never fetch it at save time.
   async getConferencePortalSettings(idOrCode){
 
     return this.http.get(portalSettingsUrl(idOrCode))
-                    .then(res => ({ settings: res.data, etag: etagOf(res.data) }))
+                    .then(res => ({ settings: res.data, version: versionOf(res.data) }))
                     .catch(tryCastToPortalError);
   }
 
   // Replaces the stored settings: send the complete object that was loaded, never a partial one.
-  async updateConferencePortalSettings(idOrCode, settings, etag){
+  async updateConferencePortalSettings(idOrCode, settings, version){
 
-    if(!etag)                     throw new ConferencePortalError('missing-etag',     'Cannot save: the version of the settings (ETag) is missing. Load the settings first.');
+    if(!version)                  throw new ConferencePortalError('missing-version',  'Cannot save: the version of the settings is missing. Load the settings first.');
     if(!isPlainObject(settings))  throw new ConferencePortalError('invalid-settings', 'Cannot save: settings must be the complete settings object.');
 
-    const { meta, ...body } = settings; // `meta` is owned by the server
+    const { meta, ...body } = settings; // `meta` (incl. the derived _version and _updatedBy) is owned by the server
 
-    return this.http.put(portalSettingsUrl(idOrCode), body, { headers: { 'If-Match': etag, 'Content-Type': 'application/json' } })
-                    .then(res => ({ settings: res.data, etag: etagOf(res.data) }))
+    return this.http.put(portalSettingsUrl(idOrCode), body, { headers: { 'If-Match': version, 'Content-Type': 'application/json' } })
+                    .then(res => ({ settings: res.data, version: versionOf(res.data) }))
                     .catch(tryCastToPortalError);
   }
 
@@ -502,31 +502,32 @@ export class ConferencePortalError extends Error {
   constructor(code, message, status) {
     super(message);
     this.name   = 'ConferencePortalError';
-    this.code   = code;   // 'bad-request' | 'unauthorized' | 'forbidden' | 'not-found' | 'conflict' | 'missing-etag' | 'invalid-settings'
+    this.code   = code;   // 'bad-request' | 'unauthorized' | 'forbidden' | 'not-found' | 'conflict' | 'missing-version' | 'invalid-response' | 'invalid-settings'
     this.status = status; // http status when it came from Gaia
   }
 }
 
 const PORTAL_ERRORS = {
-  400: ['bad-request',  'The settings were rejected: the request body must be a JSON object and the version (ETag) must be valid.'],
+  400: ['bad-request',  'The settings were rejected: the body must be a JSON object and the version must be a valid 64-character value. Reload the settings and try again.'],
   401: ['unauthorized', 'You are not signed in, or your session has expired. Sign in again.'],
   403: ['forbidden',    'You do not have permission to view or edit the conference portal settings.'],
-  404: ['not-found',    'Conference not found, or it has no portal settings.'],
-  412: ['conflict',     'This conference was changed by someone else since you opened it. Reload the latest settings and re-apply your changes.'],
-  428: ['missing-etag', 'The server did not receive the version of the settings (If-Match). Reload the settings and try again.'],
+  404: ['not-found',    'Conference not found, or it has no settings.'],
+  412: ['conflict',     'The settings changed since you loaded them (someone else may have saved, or they were changed outside the editor). Reload the latest settings and re-apply your changes.'],
+  428: ['missing-version', 'The version of the settings (If-Match) was not sent. Reload the settings and try again.'],
 };
 
 function portalSettingsUrl(idOrCode) {
   return `api/v2025/conferences/${encodeURIComponent(idOrCode)}/portal`;
 }
 
-// The version token is built from the body (`meta.updatedOn`), not from the ETag header, so it does not depend on CORS exposing that header.
-// Gaia compares it as the quoted value it used to send in the header, and `"none"` when the settings were never edited.
-function etagOf(settings) {
+// The version is `meta._version` in the body of GET and PUT responses (no ETag header is read or sent)
+function versionOf(settings) {
 
-  const updatedOn = settings && settings.meta && settings.meta.updatedOn;
+  const version = settings && settings.meta && settings.meta._version;
 
-  return `"${updatedOn || 'none'}"`;
+  if(!version) throw new ConferencePortalError('invalid-response', 'The response did not include the version of the settings (meta._version).');
+
+  return version;
 }
 
 function tryCastToPortalError(error) {
