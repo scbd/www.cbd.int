@@ -40,6 +40,7 @@
                 </div>
                 <a href="#" @click.prevent="toggleLangs(field.key)">
                     <small>{{ showAll[field.key] ? 'Hide translations' : 'Show translations' }}</small>
+                    <span v-if="translationCount(field.key)" class="cm-nav-count" style="margin-left:6px" title="Languages other than English that have a value">+{{ translationCount(field.key) }}</span>
                 </a>
             </div>
 
@@ -140,6 +141,7 @@ export default {
     },
     methods: {
         newConferenceMenu,
+        translationCount(key) { return LANGUAGES.filter(lang => lang !== 'en' && this.item[key] && this.item[key][lang]).length },
         langs(key)       { return this.showAll[key] ? LANGUAGES : ['en'] },
         toggleLangs(key) { this.$set(this.showAll, key, !this.showAll[key]) },
         move(i, dir)     {
