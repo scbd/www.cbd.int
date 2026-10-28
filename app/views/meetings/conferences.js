@@ -1,4 +1,4 @@
-﻿import '~/app'
+import '~/app'
 import '~/services/article-service'
 import '~/services/conference-service'
 import { CONFERENCE_MENU_ROLES } from '~/views/conferences/roles'
@@ -27,7 +27,7 @@ export default ['$location','$scope','conferenceService', '$q', 'articleService'
             $q.when(conferenceService.getConferences(query, fields, { active:-1, StartDate:-1})).then(({ data })=> data )
             .then(async (conferences) => {
 
-                const articleIds = conferences.map(c=>c.conference?.articleId || c.articleId);
+                const articleIds = conferences.map(c=>c.conference?.articleId || c.articleId).filter(Boolean);
 
                 var ag = [
                     {"$match"   : { "_id" : { $in: articleIds.map(id=>({ $oid: id })) } } },

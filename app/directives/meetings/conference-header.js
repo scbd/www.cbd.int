@@ -12,7 +12,8 @@ import '~/filters/html-sanitizer.js';
 			template : html,
             replace: true,
 			scope: {
-                previewConference : '=?' // draft conference (menus not yet saved): when set, it is shown instead of the active conference
+                previewConference : '=?', // draft conference (menus not yet saved): when set, it is shown instead of the active conference
+                previewSelected   : '=?'  // preview only: code of the menu to treat as the current page (its sub-menus show on small screens)
             },
 			link: function ($scope) {
 
@@ -69,6 +70,9 @@ import '~/filters/html-sanitizer.js';
                         return selected;
                     },
                     isMajorEventSelected : function(code){
+                        if($scope.previewConference) // the page url says nothing about a draft
+                            return !!code && code === $scope.previewSelected;
+
                         if(!$scope.meeting)
                             return;
                         var isSelected = false; 

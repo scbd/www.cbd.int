@@ -15,12 +15,26 @@
 
             <template v-if="conference">
                 <section class="cm-card">
+                    <div class="cm-card-head"><h2>Conference</h2></div>
+                    <div class="cm-card-body">
+                        <h3 style="margin:0 0 4px">{{ conference.Title && conference.Title.en }}</h3>
+                        <p v-if="conference.Description && conference.Description.en" class="text-muted">{{ conference.Description.en }}</p>
+                        <dl class="cm-info">
+                            <dt>Code</dt><dd>{{ conference.code }}</dd>
+                            <dt>Venue</dt><dd>{{ conference.Venue && conference.Venue.en }}</dd>
+                            <dt>Timezone</dt><dd>{{ conference.timezone }}</dd>
+                            <dt>Start</dt><dd>{{ formatDate(conference.StartDate) }}</dd>
+                            <dt>End</dt><dd>{{ formatDate(conference.EndDate) }}</dd>
+                        </dl>
+                    </div>
+                </section>
+
+                <section class="cm-card">
                     <div class="cm-card-head"><h2>Last modified</h2></div>
                     <div class="cm-card-body">
                         <template v-if="lastModified.on">
-                            <b>{{ lastModified.on.toLocaleString() }}</b>
+                            <b>{{ formatDate(lastModified.on) }}</b>
                             <span v-if="lastModified.by !== undefined"> by <b>{{ lastModified.by }}</b></span>
-                            <small class="text-muted"> ({{ lastModified.on.toISOString() }})</small>
                         </template>
                         <span v-else class="text-muted">These settings have not been edited yet.</span>
                     </div>
@@ -62,7 +76,7 @@
                     </div>
                     <div class="cm-card-body">
                         <div v-if="!menus.length" class="cm-empty-state">No menus yet. Click "Add menu" to get started.</div>
-                        <conference-menu-item-editor v-for="(menu, i) in menus" :key="i" :item="menu" :index="i"
+                        <conference-menu-item-editor v-for="(menu, i) in menus" :key="i" :item="menu" :index="i" :timezone="timezone"
                             :can-move-up="i > 0" :can-move-down="i < menus.length - 1"
                             @onDelete="menus.splice(i, 1)" @onMoveUp="move(i, -1)" @onMoveDown="move(i, 1)" />
                     </div>
@@ -126,6 +140,7 @@
 </template>
 
 <script>
+import moment from 'moment-timezone'
 import Api, { ConferencePortalError } from '~/components/meetings/api.js'
 import remapCode from '~/components/meetings/sessions/re-map.js'
 import conferenceMenuPreview from '~/components/meetings/conference-menu-preview.vue'
@@ -138,6 +153,7 @@ const GENERAL_FIELDS  = [
 ]
 
 const LANGUAGES       = ['en', 'ar', 'es', 'fr', 'ru', 'zh']
+const DATE_FORMAT     = 'D MMM YYYY, HH:mm'
 const CUSTOM_SECTIONS = [{ key: 'customHeader', label: 'Header' }, { key: 'customFooter', label: 'Footer' }]
 
 const PREVIEW_MODES = [
@@ -181,6 +197,7 @@ export default {
         finally  { this.loading = false }
     },
     computed: {
+        timezone() { return validTimezone(this.conference && this.conference.timezone) },
         currentMode() { return PREVIEW_MODES.find(m => m.id === this.previewMode) },
         cleanMenus() { return this.menus.map(clean) }, // same shape that gets saved
         // Custom header/footer hold raw html/css: only Administrator may change them. conferencePortalAdministrator (see
@@ -227,6 +244,9 @@ export default {
             catch(e){ this.error = e.message || `${e}` }
             finally { this.loading = false }
         },
+        formatDate(date) { // shown in the conference's own timezone
+            return date ? `${moment.tz(date, this.timezone).format(DATE_FORMAT)} (${this.timezone})` : ''
+        },
         translationCount(key) { return LANGUAGES.filter(lang => lang !== 'en' && this.custom[key].html[lang]).length },
         snapshot() { return JSON.stringify([this.cleanMenus, this.cleanCustom, this.cleanGeneral]) },
         move(i, dir) {
@@ -255,6 +275,10 @@ export default {
             finally  { this.saving = false }
         }
     }
+}
+
+function validTimezone(timeZone) { // an unknown name makes moment fall back to UTC offsets silently: be explicit
+    return moment.tz.zone(timeZone) ? timeZone : 'UTC'
 }
 
 function emptyGeneral() {
@@ -385,6 +409,10 @@ function cleanText(text) {
 .cm-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--scbd-ink-3); }
 .cm-unsaved .cm-dot { background: var(--scbd-accent); }
 .cm-saved .cm-dot { background: var(--scbd-ok); }
+
+.cm-info { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 0; }
+.cm-info dt { color: var(--scbd-ink-3); font-weight: 600; }
+.cm-info dd { margin: 0; }
 
 /* Count badge, e.g. the number of translated languages */
 .cm-nav-count { font-size: 11px; background: var(--scbd-navy-50); color: var(--scbd-navy); border-radius: 10px; padding: 1px 8px; font-weight: 600; }

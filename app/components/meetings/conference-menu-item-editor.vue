@@ -66,11 +66,11 @@
                     </select>
                 </div>
                 <div class="col-sm-4 form-group">
-                    <label>Visible from (UTC)</label>
+                    <label>Visible from ({{ timezone }})</label>
                     <input v-model="startDate" type="datetime-local" class="cm-inp">
                 </div>
                 <div class="col-sm-4 form-group">
-                    <label>Visible until (UTC)</label>
+                    <label>Visible until ({{ timezone }})</label>
                     <input v-model="endDate" type="datetime-local" class="cm-inp">
                 </div>
             </div>
@@ -99,7 +99,7 @@
                     <button type="button" class="cm-btn-ghost-sm" @click="item.menus.push(newConferenceMenu())"><i class="fa fa-plus"></i> Add sub-menu</button>
                 </div>
                 <div style="padding-left:15px">
-                    <conference-menu-item-editor v-for="(sub, i) in item.menus" :key="i" :item="sub" :index="i"
+                    <conference-menu-item-editor v-for="(sub, i) in item.menus" :key="i" :item="sub" :index="i" :timezone="timezone"
                         :can-move-up="i > 0" :can-move-down="i < item.menus.length - 1"
                         @onDelete="item.menus.splice(i, 1)" @onMoveUp="move(i, -1)" @onMoveDown="move(i, 1)" />
                 </div>
@@ -109,6 +109,7 @@
 </template>
 
 <script>
+import moment from 'moment-timezone'
 import { sanitizeHtml } from '~/services/html'
 
 export const LANGUAGES = ['en', 'ar', 'es', 'fr', 'ru', 'zh']
@@ -121,23 +122,25 @@ export function newConferenceMenu() {
     return { code: '', icon: '', title: {}, shortTitle: {}, url: '', behavior: '', links: [], startDate: '', endDate: '', menus: [], style: '', target: '', description: '' }
 }
 
-// ISO <-> datetime-local (UTC)
-const toLocal = (d) => d ? new Date(d).toISOString().slice(0, 16) : ''
-const toIso   = (v) => v ? new Date(`${v}Z`).toISOString() : ''
+// ISO <-> datetime-local, as wall-clock time in the conference timezone
+const DATETIME_LOCAL_FORMAT = 'YYYY-MM-DDTHH:mm'
+const toLocal = (d, tz)  => d ? moment.tz(d, tz).format(DATETIME_LOCAL_FORMAT) : ''
+const toIso   = (v, tz)  => v ? moment.tz(v, tz).toISOString() : ''
 
 export default {
     name  : 'ConferenceMenuItemEditor',
     props : {
         item        : { type: Object,  required: true },
         index       : { type: Number,  required: true },
+        timezone    : { type: String,  default: 'UTC' },
         canMoveUp   : { type: Boolean, default: false },
         canMoveDown : { type: Boolean, default: false },
     },
     data() { return { expanded: false, showAll: {}, LOCALIZED } },
     computed: {
         titleHtml() { return sanitizeHtml(this.item.title.en) }, // titles may hold html: render it like the header does, sanitized
-        startDate: { get() { return toLocal(this.item.startDate) }, set(v) { this.item.startDate = toIso(v) } },
-        endDate  : { get() { return toLocal(this.item.endDate)   }, set(v) { this.item.endDate   = toIso(v) } },
+        startDate: { get() { return toLocal(this.item.startDate, this.timezone) }, set(v) { this.item.startDate = toIso(v, this.timezone) } },
+        endDate  : { get() { return toLocal(this.item.endDate, this.timezone) }, set(v) { this.item.endDate   = toIso(v, this.timezone) } },
     },
     methods: {
         newConferenceMenu,
