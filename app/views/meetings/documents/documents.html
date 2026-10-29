@@ -31,14 +31,14 @@
         </span>
     </div>
 
-    <div ng-if="!documentsCtrl.error" id="print-smart-checkout" ng-cloak class="pull-right hidden-print">
+    <div ng-if="!documentsCtrl.error && (!documentsCtrl.hideEmptyControls || documentsCtrl.isEditor || documentsCtrl.tabs.length)" id="print-smart-checkout" ng-cloak class="pull-right hidden-print">
 
         <span ng-if="documentsCtrl.edit" class="edit">
             <button type="button" class="btn btn-light" ng-click="documentsCtrl.edit(null)"><i class="fa fa-plus"></i></button>
             <button type="button" class="btn btn-light" ng-class="{active:documentsCtrl.editMode, 'btn-info': documentsCtrl.editMode }" ng-click="documentsCtrl.editMode=!documentsCtrl.editMode"><i class="fa fa-edit"></i></button>
         </span>
 
-        <button type="button" class="btn btn-light hidden-xs hidden-sm" ng-class="{active:documentsCtrl.statsMode, 'btn-info': documentsCtrl.statsMode }" ng-click="documentsCtrl.toggleStatsMode()"><i class="fa fa-bar-chart"></i></button>
+        <button type="button" class="btn btn-light hidden-xs hidden-sm" ng-if="documentsCtrl.hasDocuments()" ng-class="{active:documentsCtrl.statsMode, 'btn-info': documentsCtrl.statsMode }" ng-click="documentsCtrl.toggleStatsMode()"><i class="fa fa-bar-chart"></i></button>
 
         <span ng-if="documentsCtrl.meeting.uploadStatement">
             <upload-statement-button ng-vue="vueOptions" :show.sync="documentsCtrl.uploadStatement" :route="route" @notify="documentsCtrl.notify" />
@@ -58,7 +58,7 @@
         </span>
       
         <!-- Sort/Display -->
-        <span ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length" class="hidden-print btn-group">
+        <span ng-cloak ng-if="documentsCtrl.meeting.agenda.items.length && documentsCtrl.hasDocuments()" class="hidden-print btn-group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 Sort By
             </button>

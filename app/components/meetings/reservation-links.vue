@@ -1,6 +1,9 @@
 <template>
   <div  v-if="isVisible">
     <div v-if="videoLinks.length" class="position-relative m-1" :class="{'dropleft': this.position==='left', 'dropright': this.position==='right' }">
+      <a v-if="transcriptUrl" class="btn btn-outline-dark" :class="{'btn-xs':size=='xs'}" :href="transcriptUrl" target="transcript" title="Transcript">
+        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+      </a>
       <a class="btn btn-dark" 
         :class="{'dropdown-toggle':!defaultVideoUrl,'btn-xs':size=='xs'}" 
         :href="defaultVideoUrl||'#'" 
@@ -46,6 +49,7 @@
   import * as ResService from '~/services/reservation'
   import { getLanguageName } from '~/data/languages'
   import _ from 'lodash';
+  import { isUnWebTv, getTranscriptUrl } from '~/util/un-web-tv'
 
   export default {
     name      : 'ReservationLinks',
@@ -55,7 +59,7 @@
                   size       : { type: String, required: false },
                   position   : { type: String, default: ''}
                 },
-    computed  : { isVisible, defaultVideoUrl, videoLinks, nonVideoLinks, displayLinksImmediately },
+    computed  : { isVisible, defaultVideoUrl, transcriptUrl, videoLinks, nonVideoLinks, displayLinksImmediately },
     methods   : { refresher, clearRefresher },
     filters   : { langText: getLanguageName },
     data, created, mounted, beforeDestroy
@@ -107,6 +111,14 @@
     return links[0]?.url;
   }
 
+  function transcriptUrl() {
+    const { end } = this.reservation;
+
+    if(!end || new Date(end) > new Date()) return null;
+
+    return getTranscriptUrl(this.videoLinks.map(l=>l.url));
+  }
+
   function videoLinks(){
     let links = this.reservation?.links || [];
 
@@ -134,10 +146,6 @@
 
   function isYoutube(url) {
     return /^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(url||'');
-  }
-
-  function isUnWebTv(url) {
-    return /^https?:\/\/webtv.un.org\//.test(url||'');
   }
 
   function buildSortKey(link) {

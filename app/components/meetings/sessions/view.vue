@@ -3,7 +3,7 @@
     <Session :_id="_id" class="card"
       :body-class="{'collapse':true, 'show': numberOfSessions==1 }"
       :body-id="`sid${_id}`"
-      v-for="{ title, _id, interventions, date, videos, count, timezone, earlySubmission, cutoffDate, lastUpdated, refreshing, hasAiTranslations } in sessions" :key="_id">
+      v-for="{ title, _id, interventions, date, videos, transcriptUrl, count, timezone, earlySubmission, cutoffDate, lastUpdated, refreshing, hasAiTranslations } in sessions" :key="_id">
 
       <template v-slot:header>
 
@@ -28,7 +28,13 @@
             </span>
 
             <span class="video" v-if="videos && videos.length" @click.stop>
-              <VideoLink class="pull-right" :videos="videos" title="Full session webcast"/>
+              <VideoLink class="pull-right" :videos="videos" button-class="btn-sm btn-outline-dark border-0" title="Full session webcast"/>
+            </span>
+
+            <span class="transcript" v-if="transcriptUrl" @click.stop>
+              <a class="btn btn-sm btn-outline-dark border-0" :href="transcriptUrl" target="transcript" title="Transcript">
+                <i class="fa fa-file-text-o" aria-hidden="true"></i>
+              </a>
             </span>
 
             <small v-if="isStaff && lastUpdated" class="text-muted tiny last-update" title="Auto-refreshed every minute">
@@ -106,9 +112,10 @@ import   Session           from './session.vue'
 import   InterventionRow   from './intervention-row.vue'
 import   VideoLink         from './video-link.vue'
 import   i18n              from '../locales.js'
-import { format, timezone as setTimezone } from '../datetime.js'
+import { format, timezone as setTimezone, asDateTime } from '../datetime.js'
 import remapCode from './re-map.js'
 import { STATEMENT_ADMIN_ROLES } from './roles.js'
+import { getTranscriptUrl } from '~/util/un-web-tv'
 
 const STAFF_ROLES = [ 'ScbdStaff', 'EditorialService' ]; // same definition of "staff" as documents.js
 
@@ -160,17 +167,13 @@ async function created(){
     return {
       ...session,
       videos,
+      transcriptUrl     : hasTranscript(session) ? getTranscriptUrl(videos.map(v=>v.url)) : null,
       interventions     : null, //Make it reactive
       lastUpdated       : null, //Make it reactive
       refreshing        : false,//Make it reactive
       hasAiTranslations : false,//Make it reactive
     }
   });
-
-  if(sessions.length==1) {
-    const [ session ] = sessions; 
-    this.loadInterventions(session._id)
-  }
 
   //Inject virtual session with Pending Statement... for staff
 
@@ -190,6 +193,11 @@ async function created(){
       refreshing        : false,
       hasAiTranslations : false,
     });
+  }
+
+  if(this.sessions.length==1) {
+    const [ session ] = this.sessions;
+    this.loadInterventions(session._id)
   }
 }
 
@@ -253,6 +261,13 @@ function adminUrl(sessionId){
   else     return `/meetings/${encodeURIComponent(meeting)}/sessions/${encodeURIComponent(sessionId)}`;
 }
 
+// Transcripts become available once the session has ended, or 45 minutes after its start when no end is set.
+function hasTranscript({ date, endDate }){
+  const end = endDate ? asDateTime(endDate) : asDateTime(date).plus({ minutes: 45 });
+
+  return end.toJSDate() < new Date();
+}
+
 async function editId(interventionId, sessionId){
   this.editSession        = this.sessions.find(o=>o._id == sessionId);
   this.editedIntervention = await this.api.getInterventionById(interventionId);
@@ -292,6 +307,7 @@ function hasAiTranslations(interventions) {
   .video ,
   .card-header .video { float: right; color: #404040; }
   .card-header .video { margin-right: -7px; }
+  .card-header .transcript { float: right; margin-right: 3px; }
 
   .card-header .admin-link  { float: right; margin-left: 10px; }
   .card-header .last-update { float: right; margin-left: 10px; }

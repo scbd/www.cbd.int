@@ -7,6 +7,7 @@ import '~/filters/lstring'
 import '~/filters/moment'
 import 'css!./meeting-documents.css'
 import 'css!./agenda.css'
+import app from '~/app'
 import _ from 'lodash'
 import ng from 'angular'
 import moment from 'moment'
@@ -20,11 +21,13 @@ import '~/filters/to-display-symbol';
 
 export { default as template } from './documents.html';
 
+app.value('hideEmptyControls', false); // default; overridden by the embedding page's resolve
+
     //'css!./agenda.css' // moved to template
     var STATISTICS = {}; 
 
-	export default ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'CacheFactory', '$cookies', 'apiToken', 'locale', 
-           function ($scope,   $route,   $http,   $q,   $location,   $rootScope,   authentication,   showMeeting,   CacheFactory,   $cookies,   apiToken,   locale) {
+	export default ["$scope", "$route", "$http", '$q', '$location', '$rootScope', 'authentication', 'showMeeting', 'hideEmptyControls', 'CacheFactory', '$cookies', 'apiToken', 'locale', 
+           function ($scope,   $route,   $http,   $q,   $location,   $rootScope,   authentication,   showMeeting,   hideEmptyControls,   CacheFactory,   $cookies,   apiToken,   locale) {
 
         var _ctrl = $scope.documentsCtrl = this;
         var meetingCode = $route.current.params.meeting.toUpperCase();
@@ -60,6 +63,7 @@ export { default as template } from './documents.html';
 
         _ctrl.jumpTo = jumpTo;
         _ctrl.showMeeting = showMeeting===undefined ? true : !!showMeeting;
+        _ctrl.hideEmptyControls = !!hideEmptyControls;
         _ctrl.statsMode = null;
         _ctrl.uploadStatement = false;
         _ctrl.sort = $location.search().sort == 'agenda' ? 'agenda' : 'document';
@@ -74,13 +78,15 @@ export { default as template } from './documents.html';
             else                _ctrl.statsMode = _ctrl.isStaff ? 'full' : 'simple';
         }
         
-        _ctrl.selectedDocuments = () => allDocuments.filter(o => o.selected);
+        _ctrl.selectedDocuments = () => _.uniq(allDocuments.filter(o => o.selected), '_id');
+        _ctrl.hasDocuments = () => _ctrl.tabs.some(t => t.sections.some(s => !s.component)); // statements are component sections
 
         $scope.$watch('documentsCtrl.sort', function(s){
             $location.search('sort', s=='agenda' ? 'agenda' : null);
         });
 
         $scope.$watch('$root.deviceSize', updateMaxTabCount);
+        $scope.$watch(() => _ctrl.tabs.length, count => $scope.$emit('documents:tabs', count)); // lets an embedding page react to available content
 
         initAffix(); //to be fixed later
         initSecurity();
@@ -90,6 +96,7 @@ export { default as template } from './documents.html';
         //
         //==============================
         function load() {
+            allDocuments = [];
             let documents = null;
             _ctrl.inSessionEnabled = false; //to adjust the height for non insession case
             const qMeeting = $http.get('/api/v2016/meetings/'+meetingCode, { cache: httpCache, params: { f : { EVT_CD:1, reportDocument:1,  printSmart:1, insession:1, uploadStatement:1, agenda:1, links:1, title:1, venueText:1, dateText:1, EVT_WEB:1, EVT_INFO_PART_URL:1, EVT_REG_NOW_YN:1, EVT_STY_CD:1, alerts:1, displayGroups:1 }, cache:true } }).then(async function(res){ 
@@ -100,7 +107,7 @@ export { default as template } from './documents.html';
                     isMontreal : /montr.al.*canada/i.test((res.data.venueText||{}).en||'')
                 });
 
-                meta.title(`${meeting.code} - Documents`);
+                if(!$scope.keepPageTitle) meta.title(`${meeting.code} - Documents`);
 
                 if(meeting.uploadStatement) {
                     registerComponents({uploadStatementButton : UploadStatementButton });
@@ -457,7 +464,7 @@ export { default as template } from './documents.html';
 
                 if(!report) return;
 
-                report = normalizeDocument(report);
+                report = _.find(allDocuments, { _id: report._id }) || normalizeDocument(report);
 
                 if(!isDocumentVisible(report))
                     return;
@@ -475,7 +482,7 @@ export { default as template } from './documents.html';
             if(!docs || !docs.length)
                 return;
 
-            docs.forEach((d) => allDocuments.push(d));
+            docs.forEach((d) => { if(!allDocuments.some(o => o._id === d._id)) allDocuments.push(d); });
 
             options = _.defaults(options||{}, {
                 section: null,

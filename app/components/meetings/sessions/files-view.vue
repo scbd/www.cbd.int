@@ -84,7 +84,7 @@ function hasAiFiles() {
 }
 
 function langTextFilter(langCode){
-  return languages[langCode] || 'Not Specified'
+  return languages[langCode] || langCode?.toUpperCase() || 'Not Specified'
 }
 
 function getMimeConfig(mimeType){

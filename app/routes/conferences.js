@@ -5,6 +5,7 @@ import { STATEMENT_ADMIN_ROLES } from '~/components/meetings/sessions/roles';
 import { CONFERENCE_MENU_ROLES } from '~/views/conferences/roles';
 import * as angularViewWrapper from '~/views/angular-view-wrapper'
 import * as vueViewWrapper     from '~/views/vue-view-wrapper'
+import * as meta               from '~/services/meta'
 
 
 // Static views
@@ -57,7 +58,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
     .when('/:code/sessions/:sessionId',           { ...mapView(vueViewWrapper),      resolve: { ...sessionIdView,          user : securize(STATEMENT_ADMIN_ROLES) }, reloadOnSearch:false })
     .when('/:code/sessions/:sessionId/edit',      { ...mapView(vueViewWrapper),      resolve: { ...sessionEditView,        user : securize(STATEMENT_ADMIN_ROLES) }, reloadOnSearch:false })
     .when('/:code/interpreter-panel',             { ...mapView(vueViewWrapper),      resolve: { ...interpretersPanelView,  user : securize([ ...STATEMENT_ADMIN_ROLES, "ScbdStaff", "Interpreters"]) }, reloadOnSearch:false })
-    .when('/:code/:meeting',                      { ...mapView(introductionView),    resolve: { routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) } })
+    .when('/:code/:meeting',                      { ...mapView(introductionView),    resolve: { routePrams: injectRouteParams({ urlTag: ['conferences']}), showMeeting : resolveLiteral(false) }, reloadOnSearch:false })
     .when('/:code/:meeting/documents',            { ...mapView(documentsView),       resolve: { showMeeting : resolveLiteral(false) },                    reloadOnSearch:false })
     .when('/:code/:meeting/documents/:id',        { ...mapView(angularViewWrapper),  resolve: { ...documentIdView, user : securize(["Administrator","EditorialService"]) },  reloadOnSearch:false })
     .when('/:code/submissions/:symbol',           { ...mapView(angularViewWrapper),  resolve: { ...notificationIdView, showMeeting : resolveLiteral(false) } })
@@ -77,6 +78,12 @@ app.run(['$compile', '$rootScope','$location', async function($compile, $rootSco
     var conferenceHeader = angular.element("#conferenceHeader");
     conferenceHeader.html('').append('<conference-header ng-if="showConferenceHeader()"><conference-header>')
     $compile(conferenceHeader.contents())($rootScope);
+
+    // Views set their own title once loaded; reset it so it never leaks from the previous route
+    const defaultTitle = meta.title();
+    $rootScope.$on('$routeChangeStart', (evnt, next, current)=>{
+        if(current) meta.title(defaultTitle);
+    });
 }]);
 
 function traceError(e) {

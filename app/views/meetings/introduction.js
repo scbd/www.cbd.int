@@ -1,17 +1,30 @@
 ﻿import '~/directives/social-media';
 import '~/services/conference-service';
+import '~/directives/view-injector'
 import app from '~/app'
 import CbdArticle from '~/directives/articles/cbd-article.vue';
+import UploadStatementButton from '~/components/meetings/upload-statement-button.vue'
 import Vue from 'Vue';
 import _ from 'lodash'
+import lstring from '~/services/lstring'
+import * as meta from '~/services/meta'
 
 export { default as template } from './introduction.html';
 
-export default ['$scope', '$route', '$location', '$http', '$rootScope',
- function ($scope,  $route, $location, $http, $rootScope) {
-            
+export default ['$scope', '$route', '$location', '$http', '$rootScope', 'locale',
+ function ($scope,  $route, $location, $http, $rootScope, locale) {
+
             Vue.component('CbdArticle', CbdArticle)
             $scope.isLoading = true;
+            $scope.keepPageTitle = true; // inherited by the embedded documents view
+            $scope.vueOptions = { components: { UploadStatementButton } };
+            $scope.resolveLiteral = function(value) { return function() { return value; }; };
+            // without query: the embedded documents button already handles ?uploadStatementBy auto-open
+            $scope.uploadRoute = { params: $route.current.params, query: {} };
+
+            $scope.scrollToDocuments = function(){
+                document.getElementById('documents').scrollIntoView({ behavior: 'smooth' });
+            }
 
             function buildQuery(){
                 var ag   = [];
@@ -48,15 +61,25 @@ export default ['$scope', '$route', '$location', '$http', '$rootScope',
                 $scope.isLoading = false;                
                 $scope.selectedMenu = ($rootScope.conference||{}).selectedMenu;
 
-                if(($rootScope.conference||{}).selectedMenu && $rootScope.conference.selectedMenu.hideDocumentsLink)
-                    $scope.documentsLink = undefined;
-                else {
-                    $http.get("/api/v2016/meetings/"+encodeURIComponent($route.current.params.meeting)+"/documents/statistics", { params: {c:1},  cache:true}).then(function(res){
-                        if((res.data||{}).count)
-                            $scope.documentsLink = $location.path()+'/documents'
-                    });
-                }
+                $scope.showDocuments = !(($rootScope.conference||{}).selectedMenu||{}).hideDocumentsLink;
+
+                var articleTitle = lstring(article.title, locale);
+                if(articleTitle) meta.title(articleTitle);
+
+                $http.get("/api/v2016/meetings/"+encodeURIComponent($route.current.params.meeting.toUpperCase()), { params: { f: { EVT_CD:1, title:1, uploadStatement:1 } }, cache:true }).then(function(res){
+                    $scope.meeting = res.data;
+                }).catch(function(){
+                    $scope.meeting = null;
+                }).then(function(){
+                    var meeting = $scope.meeting;
+                    if(!articleTitle && meeting) meta.title(`${meeting.EVT_CD} - ${lstring(meeting.title, locale)}`);
+                });
             }
+
+            // reported by the embedded documents view
+            $scope.$on('documents:tabs', function(evt, count){
+                $scope.hasDocumentTabs = count > 0;
+            });
             
             function kebabCase(val){
                 return val.toLowerCase().replace(/\s/g, '-')

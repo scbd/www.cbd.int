@@ -41,39 +41,26 @@
             .ngdialog.printsmart .ngdialog-content > .modal-content {
                 border:none;
                 border-radius: 0px;
-                overflow-y:scroll;
+                overflow-y: auto;
             }
 
             .ngdialog.printsmart .ngdialog-content > .modal-content > .modal-header {
-                position: fixed;
-                right: 0px; top:0px; left:0px;
-                background-color: white;
+                position: sticky;
+                top: 0px;
                 z-index: 1;
+                background-color: white;
             }
 
             .ngdialog.printsmart .ngdialog-content > .modal-content > .modal-body {
-                margin-top: 64px;
-                margin-bottom: 73px;
+                margin: 0px;
+                padding-bottom: 15px;
             }
-
 
             .ngdialog.printsmart .ngdialog-content > .modal-content > .modal-footer {
-                position: fixed;
-                right: 0px; bottom:0px; left:0px;
+                position: static;
                 background-color: white;
+                padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
             }
-        }
-        .mobile-app .modal-body{ 
-          padding-bottom: 60px;
-        }
-        .mobile-app .modal-footer { 
-            padding-bottom: 110px; 
-            background:#fff;
-            position: fixed;
-            right: 0px; bottom:0px; left:0px;
-        }
-        .mobile-app .ngdialog.printsmart .ngdialog-content > .modal-content > .modal-body {
-            margin-bottom: 120px;
         }
     </style>
     <div ng-class="{ 'btn-group' : $root.deviceSize!='xs' }">
