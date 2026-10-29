@@ -321,6 +321,12 @@ export default class Api
     return this.http.delete(`api/v2021/meeting-sessions/${encodeURIComponent(sessionId)}`).then(res => res.data).catch(tryCastToApiError);
   }
 
+  // Server processes every eligible session at once: allow up to 2 minutes
+  publishEarlyStatements() {
+
+    return this.http.post(`api/v2021/meeting-sessions/publish-early-statements`, null, { timeout: 2*60*1000 }).then(res => res.data).catch(tryCastToApiError);
+  }
+
   //////////////////////////
   // Temporary Files
   ////////////////////////

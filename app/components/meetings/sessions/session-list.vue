@@ -19,6 +19,12 @@
         <span v-if="!candidates.length && !loadingCandidates" class="dropdown-item disabled">No candidate reservations</span>
       </div>
     </div>
+    <div v-if="startedEarlySessions.length" class="float-right mr-2 text-right">
+      <button type="button" class="btn btn-outline-dark" :disabled="!canPublishEarlyStatements || publishing" @click="publishPendingStatements">
+        <i class="fa" :class="publishing ? 'fa-cog fa-spin' : 'fa-paper-plane'"></i> Publish pending early statements
+      </button>
+      <small v-if="!canPublishEarlyStatements" class="d-block text-muted">available {{ earlyStatementsReadyIn }}</small>
+    </div>
     <h1>Meeting Sessions
       <small class="text-muted">
         <span v-for="{normalizedSymbol} in meetings" :key="normalizedSymbol">
@@ -69,6 +75,7 @@ import   Api           , { mapObjectId }from '../api.js'
 import { format, timezone }             from '../datetime.js'
 import   moment                         from 'moment'
 import   remapCode                      from './re-map.js'
+import { showSuccess, showInfo, showError } from '~/services/toast.js'
 
 // Eunomia reservation types that carry statements: Plenary, High Level Segment, Working Group I & II
 const STATEMENT_RESERVATION_TYPES = [ '570fd1ac2e3fa5cfa61d90f5', '5aff32171a0ff600010c28a8', '58379a233456cf0001550cac', '58379a293456cf0001550cad' ];
@@ -79,16 +86,22 @@ export default {
                   route:       { type: Object, required: false },
                   tokenReader: { type: Function, required: false }
                 },
-  methods    : { getUrl, newUrl, meetingQuery,conferenceQuery, loadCandidates, loadAllCandidates, reservationMeetingCodes, sessionNumber, isInProgress, now },
-  computed   : { now, nearestStart },
+  methods    : { getUrl, newUrl, meetingQuery,conferenceQuery, loadCandidates, loadAllCandidates, reservationMeetingCodes, sessionNumber, isInProgress, now, loadEarlySessions, publishPendingStatements },
+  computed   : { now, nearestStart, startedEarlySessions, earlyStatementsReadyOn, canPublishEarlyStatements, earlyStatementsReadyIn },
   filters    : { formatDate: format, tz: timezone },
-  created, 
+  created,
+  beforeDestroy,
   data
 }
 
 function data(){
-  return { 
+  return {
     sessions: [],
+    sessionsQuery: null,
+    earlySessions: [],
+    publishing: false,
+    clock: moment(),
+    clockTimer: null,
     candidates: [],
     allCandidates: false,
     loadingCandidates: false,
@@ -117,10 +130,64 @@ async function created(){
   const isMeeting = this.route?.params?.meeting;
   const q         = isMeeting? await this.meetingQuery() : await this.conferenceQuery();
 
-  this.sessions  = await this.api.querySessions({ q, s: { date:-1 } });
+  this.sessions      = await this.api.querySessions({ q, s: { date:-1 } });
+  this.sessionsQuery = q;
+
+  await this.loadEarlySessions();
+  this.clockTimer = setInterval(()=>this.clock = moment(), 15000);
 
   try     { this.candidates = await this.loadCandidates() }
   catch(e){ console.error('Failed to load candidate reservations', e) }
+}
+
+function beforeDestroy(){
+  clearInterval(this.clockTimer);
+}
+
+// Early submission sessions not released yet: their pending statements can be published once the cutoff has passed
+async function loadEarlySessions(){
+  const q = { ...this.sessionsQuery, earlySubmission: true, earlyReleasedOn: null };
+
+  try     { this.earlySessions = await this.api.querySessions({ q, f: { date: 1, cutoffDate: 1 } }) || [] }
+  catch(e){ console.error('Failed to load early submission sessions', e) }
+}
+
+function startedEarlySessions(){
+  return this.earlySessions.filter(s=>moment(s.date).isSameOrBefore(this.clock));
+}
+
+function earlyStatementsReadyOn(){
+  const cutoffs = this.startedEarlySessions.map(s=>moment(s.cutoffDate));
+
+  return cutoffs.length ? moment.min(cutoffs) : null;
+}
+
+function canPublishEarlyStatements(){
+  return !!this.earlyStatementsReadyOn?.isSameOrBefore(this.clock);
+}
+
+function earlyStatementsReadyIn(){
+  return this.earlyStatementsReadyOn?.from(this.clock);
+}
+
+async function publishPendingStatements(){
+  if(!confirm('Publish the pending early statements of all early submission sessions whose cutoff has passed?')) return;
+
+  this.publishing = true;
+
+  try {
+    const { sessions, published } = await this.api.publishEarlyStatements();
+
+    if(sessions) showSuccess(`Sessions released: ${sessions} - Statements published: ${published}`);
+    else         showInfo('No session ready to release');
+
+    await this.loadEarlySessions();
+  }
+  catch(e){
+    console.error('Failed to publish pending statements', e);
+    showError('Failed to publish pending statements');
+  }
+  finally { this.publishing = false }
 }
 
 async function loadAllCandidates(){
