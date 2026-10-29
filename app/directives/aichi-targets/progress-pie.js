@@ -186,7 +186,7 @@ import template from './progress-pie.html'
 
                     var queryParameters = {
                         'q': queryText(),
-                        'sort': 'createdDate_dt desc, title_t asc',
+                        'sort': 'createdDate_dt desc, title_s asc',
                         'fl': 'identifier_s,progress_EN_t,nationalTarget_EN_t,government_s',
                         'wt': 'json',
                         'start': 0,
