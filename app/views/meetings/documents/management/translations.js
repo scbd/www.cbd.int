@@ -29,6 +29,7 @@ export { default as template } from './translations.html';
 
         $scope.FILETYPES  = MIMES;
         $scope.LANGUAGES  = LANGUAGES;
+        $scope.options    = { generatePdf : true };
 
         initDropdown();
 
@@ -175,7 +176,7 @@ export { default as template } from './translations.html';
         //==============================
         function addFile(docId, url) {
 
-            return $http.post('/api/v2016/documents/'+docId+'/files', { url : url, generatePdf: true }).then(resData).catch(function(err) {
+            return $http.post('/api/v2016/documents/'+docId+'/files', { url : url, generatePdf: !!$scope.options.generatePdf }).then(resData).catch(function(err) {
                 file.error = "ADD_FILE";
                 throw err;
             });
