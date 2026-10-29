@@ -186,7 +186,7 @@ import row from './target-row.html'
 
                     var queryParameters = {
                         'q': queryText(),
-                        'sort': 'createdDate_dt desc, title_t asc',
+                        'sort': 'createdDate_dt desc, title_s asc',
                         'fl': 'reportType_s,documentID,identifier_s,id,title_t,description_t,url_ss,schema_EN_t,date_dt,government_EN_t,schema_s,number_d,aichiTarget_ss,reference_s,sender_s,meeting_ss,recipient_ss,symbol_s,eventCity_EN_t,eventCountry_EN_t,startDate_s,endDate_s,body_s,code_s,meeting_s,group_s,function_t,department_t,organization_t,summary_EN_t,reportType_EN_t,completion_EN_t,jurisdiction_EN_t,development_EN_t,_latest_s,nationalTarget_EN_t,progress_EN_t,year_i,text_EN_txt,nationalTarget_EN_t,government_s,nationalTargetMainAichiTargets_ss,nationalTarget_s',
                         'wt': 'json',
                         'start': 0,
@@ -214,7 +214,7 @@ import row from './target-row.html'
 
                     var queryParameters = {
                         'q'    : 'realm_ss:chm AND schema_s:nationalTarget AND (aichiTargets_ss:"' + targetText+ '")',   // OR otherAichiTargets_ss:'+ targetText+ '")',
-                        'sort': 'createdDate_dt desc, title_t asc',
+                        'sort': 'createdDate_dt desc, title_s asc',
                         'fl':'isAichiTarget_b,government_s,isAichiTarget_b,title_s,description_s',
                         'wt': 'json',
                         'start': 0,
