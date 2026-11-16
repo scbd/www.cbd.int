@@ -26,13 +26,12 @@ export default ['$scope', '$http', '$route', '$location', '$compile', '$anchorSc
         var number    = parseInt($route.current.params.decision);
         var decision;
 
-             if(body=='COP') treaty = { code : "XXVII8" } ;
-    //  else if(body=='CP')  treaty = "XXVII8a";
-    //  else if(body=='NP')  treaty = "XXVII8b";
+        if(body=='COP' || body=='EXCOP') 	treaty = { code : "XXVII8" } ;
+        else if(body=='CP')  				treaty = "XXVII8a";
+        else if(body=='NP')  				treaty = "XXVII8b";
 
         if(!treaty) {
-            alert('ONLY "COP" DECISIONS ARE SUPPORTED');
-            throw 'ONLY "COP" DECISIONS ARE SUPPORTED';
+            throw 'ONLY "COP / CP / NP" DECISIONS ARE SUPPORTED';
         }
 
         $scope.canComment    = canComment();

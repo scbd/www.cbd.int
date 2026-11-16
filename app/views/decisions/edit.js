@@ -46,13 +46,12 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         $scope.editComment = editComment;
         $scope.allowAddNodes = false;
 
-        if(body=='COP' || body=='EXCOP') treaty = { code : "XXVII8" } ;
-        //  else if(body=='CP')  treaty = "XXVII8a";
-        //  else if(body=='NP')  treaty = "XXVII8b";
+        if(body=='COP' || body=='EXCOP') 	treaty = { code : "XXVII8" } ;
+        else if(body=='CP')  				treaty = "XXVII8a";
+        else if(body=='NP')  				treaty = "XXVII8b";
 
         if(!treaty) {
-            alert('ONLY "COP" DECISIONS ARE SUPPORTED');
-            throw 'ONLY "COP" DECISIONS ARE SUPPORTED';
+            throw 'ONLY "COP / CP / NP" DECISIONS ARE SUPPORTED';
         }
 
         if(!_.isFinite(session)  || session <1) { $scope.paramError = "session_invalid";  return this; }
