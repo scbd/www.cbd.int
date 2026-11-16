@@ -511,11 +511,12 @@ async function load() {
 
 	const body      = $route.params.body.toUpperCase();
 
-	if(body=='COP' || body=='EXCOP') treaty = { code : "XXVII8" } ;
+	if(body=='COP' || body=='EXCOP') 	treaty = { code : "XXVII8" } ;
+    else if(body=='CP')  				treaty = "XXVII8a";
+    else if(body=='NP')  				treaty = "XXVII8b";
 
 	if(!treaty) {
-		//alert('ONLY "COP" DECISIONS ARE SUPPORTED');
-		throw 'ONLY "COP" DECISIONS ARE SUPPORTED';
+		throw 'ONLY "COP / CP / NP" DECISIONS ARE SUPPORTED';
 	}
 
 	const pathParser = /^(?<dec>\d+)(?:\/(?<para>.*))?/;

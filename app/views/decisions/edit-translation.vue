@@ -121,11 +121,12 @@ async function created() {
 	const session   = parseInt($route.params.session);
 	const number    = parseInt($route.params.decision);
 
-	if(body=='COP' || body=='EXCOP') treaty = { code : "XXVII8" } ;
+	if(body=='COP' || body=='EXCOP') 	treaty = { code : "XXVII8" } ;
+    else if(body=='CP')  				treaty = "XXVII8a";
+    else if(body=='NP')  				treaty = "XXVII8b";
 
 	if(!treaty) {
-		//alert('ONLY "COP" DECISIONS ARE SUPPORTED');
-		throw 'ONLY "COP" DECISIONS ARE SUPPORTED';
+		throw 'ONLY "COP / CP / NP" DECISIONS ARE SUPPORTED';
 	}
 
 	treaty = await this.api.getTreaties(treaty.code);
