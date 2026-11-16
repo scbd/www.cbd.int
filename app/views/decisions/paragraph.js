@@ -36,7 +36,7 @@ export default ['$scope', '$http', '$route', '$location', '$compile', '$anchorSc
             throw 'ONLY "COP / CP / NP" DECISIONS ARE SUPPORTED';
         }
 
-        var code = 'CBD/COP/'+pad(session) + '/' + pad(number) + '.' + (section + pad(paragraph)) + ((item && '.'+pad(item))||'') + ((subItem && '.'+pad(subItem))||'');
+        var code = 'CBD/'+body+'/'+pad(session) + '/' + pad(number) + '.' + (section + pad(paragraph)) + ((item && '.'+pad(item))||'') + ((subItem && '.'+pad(subItem))||'');
 
         $scope.code      = code;
         $scope.romanize      = romanize;

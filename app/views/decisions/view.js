@@ -59,7 +59,7 @@ export default ['$scope', '$http', '$route', '$location', '$compile', '$anchorSc
 
             treaty = res.data;
 
-            const code = treaty.acronym+'/'+body+'/'+pad(session)+'/'+pad(number);
+            const code = 'CBD/'+body+'/'+pad(session)+'/'+pad(number);
 
             return $q.all([
                 $http.get('/api/v2016/decision-texts', { params : { q: { treaty:treaty.code, body: body, session: session, decision: number }, fo: 1 }, cache:true }),

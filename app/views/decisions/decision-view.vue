@@ -56,6 +56,8 @@
 						<dd v-if="decision.body">
 							<span v-if="decision.body === 'COP'">Conference of the Parties (COP)</span>
 							<span v-else-if="decision.body === 'EXCOP'">Extraordinary Meeting of the Conference of the Parties (ExCOP)</span>
+							<span v-else-if="decision.body === 'CP'">Conference of the Parties serving as the meeting of the Parties to the Cartagena Protocol (CP-MOP)</span>
+							<span v-else-if="decision.body === 'NP'">Conference of the Parties serving as the meeting of the Parties to the Nagoya Protocol (NP-MOP)</span>
 							<span v-else>{{ decision.body | uppercase }}</span>
 						</dd>
 
@@ -530,7 +532,7 @@ async function load() {
 
 	treaty 			= await this.api.getTreaties(treaty.code);
 
-	const code = treaty.acronym+'/'+body+'/'+pad(session)+'/'+pad(number);
+	const code = 'CBD/'+body+'/'+pad(session)+'/'+pad(number);
 
 	const decision = await this.api.queryDecisionTree(code);
 	const relatedDecisions = await this.loadRelatedDecisions(decision.code);
