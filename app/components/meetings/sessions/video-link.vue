@@ -2,13 +2,13 @@
   <span v-if="entries.length">
 
     <!-- Single Video -->
-    <a v-if="entries.length==1" :href="entries[0].url" class="btn btn-link">
+    <a v-if="entries.length==1" :href="entries[0].url" class="btn" :class="buttonClass">
       <i class="fa fa-video-camera" aria-hidden="true"></i>
     </a>
 
     <!-- Mutiple Videos -->
     <div v-if="entries.length>1" class="btn-group dropleft" role="group">
-      <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+      <button type="button" class="btn dropdown-toggle" :class="buttonClass" data-toggle="dropdown">
         <i class="fa fa-video-camera" aria-hidden="true"></i>
       </button>
       <div class="dropdown-menu">
@@ -36,6 +36,7 @@ export default {
   props     : { 
     videos  : { type: Array,         required: true, default:[] },
     startAt : { type: [String,Date], required: false },
+    buttonClass : { type: String,    required: false, default: 'btn-link' },
   },
   filters : { getLanguageName },
   computed: {

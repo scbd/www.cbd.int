@@ -121,16 +121,18 @@ async function created() {
 	const session   = parseInt($route.params.session);
 	const number    = parseInt($route.params.decision);
 
-	if(body=='COP' || body=='EXCOP') treaty = { code : "XXVII8" } ;
+	if(body=='COP' || body=='EXCOP') 	treaty = { code : "XXVII8" } ;
+    else if(body=='CP')  				treaty = { code : "XXVII8a" };
+    else if(body=='NP')  				treaty = { code : "XXVII8b" };
 
 	if(!treaty) {
-		//alert('ONLY "COP" DECISIONS ARE SUPPORTED');
-		throw 'ONLY "COP" DECISIONS ARE SUPPORTED';
+		this.$router.replace({ path: '/' });
+		return;
 	}
 
 	treaty = await this.api.getTreaties(treaty.code);
 
-	const code = treaty.acronym+'/'+encodeURIComponent(body)+'/'+encodeURIComponent(pad(session))+'/'+encodeURIComponent(pad(number));
+	const code = 'CBD/'+encodeURIComponent(body)+'/'+encodeURIComponent(pad(session))+'/'+encodeURIComponent(pad(number));
 
 
     const decision = await this.api.getDecision(code);

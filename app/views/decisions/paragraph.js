@@ -28,16 +28,16 @@ export default ['$scope', '$http', '$route', '$location', '$compile', '$anchorSc
         var subItem   = parsePart(parts[4]);
         var decision;
 
-             if(body=='COP') treaty = { code : "XXVII8" } ;
-    //  else if(body=='CP')  treaty = "XXVII8a";
-    //  else if(body=='NP')  treaty = "XXVII8b";
+        if(body=='COP' || body=='EXCOP') 	treaty = { code : "XXVII8" } ;
+        else if(body=='CP')  				treaty = { code : "XXVII8a" };
+        else if(body=='NP')  				treaty = { code : "XXVII8b" };
 
         if(!treaty) {
-            alert('ONLY "COP" DECISIONS ARE SUPPORTED');
-            throw 'ONLY "COP" DECISIONS ARE SUPPORTED';
+            $location.url('/').replace();
+            return;
         }
 
-        var code = 'CBD/COP/'+pad(session) + '/' + pad(number) + '.' + (section + pad(paragraph)) + ((item && '.'+pad(item))||'') + ((subItem && '.'+pad(subItem))||'');
+        var code = 'CBD/'+body+'/'+pad(session) + '/' + pad(number) + '.' + (section + pad(paragraph)) + ((item && '.'+pad(item))||'') + ((subItem && '.'+pad(subItem))||'');
 
         $scope.code      = code;
         $scope.romanize      = romanize;

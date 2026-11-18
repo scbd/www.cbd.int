@@ -97,7 +97,7 @@ import 'angular-cache'
 
                       menu.isParent = true;
                       normalizeMenus(menu.menus, meeting, menu);
-                      menu.xsUrl = menu.url || menu.menus[0].url;
+                      menu.xsUrl = menu.url || menu.menus?.[0]?.url;
                     }
                 });
 
@@ -155,7 +155,8 @@ import 'angular-cache'
                 getFuture               : getFuture,
                 getConference           : getConference,
                 getActiveConference     : getActiveConference,
-                getConferences          : getConferences
+                getConferences          : getConferences,
+                normalizeMenus          : normalizeMenus
             }
 
     }]);

@@ -19,7 +19,11 @@
             <th>File</th>
             <th style="width:10px">Language</th>
             <th>Document</th>
-            <th></th>
+            <th class="text-right">
+                <label class="text-nowrap" style="margin:0;font-weight:normal" title="Generate a PDF rendition of the uploaded files">
+                    <input type="checkbox" ng-model="options.generatePdf"> Generate PDF
+                </label>
+            </th>
         </tr>
         <tr ng-repeat="f in files" ng-class="{ danger : f.status=='error', success: f.status=='completed', warning : f.status=='canceled' }">
             <td style="width:10px">{{$index+1}}.</td>

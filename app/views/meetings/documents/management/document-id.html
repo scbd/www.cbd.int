@@ -441,7 +441,7 @@
         <div class="form-group">
             <label class="control-label" for="agendaItems">Agenda Item(s)</label>
 
-            <select ng-disabled="uploading" class="form-control" ng-options="item.item as (item.item + ' ' + item.title) for item in editCtrl.meeting.agenda.items|orderBy:item.item" ng-model="editCtrl.selectedItem" ng-change="editCtrl.addItem(editCtrl.selectedItem); editCtrl.selectedItem='';">
+            <select ng-disabled="uploading" class="form-control" ng-options="item.item as (item.item + ' ' + (item.shortTitle || item.title)) for item in editCtrl.meeting.agenda.items|orderBy:item.item" ng-model="editCtrl.selectedItem" ng-change="editCtrl.addItem(editCtrl.selectedItem); editCtrl.selectedItem='';">
                 <option value="">Select an item to add......</option>
             </select>
 

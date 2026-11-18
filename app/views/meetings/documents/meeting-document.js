@@ -4,7 +4,9 @@ import html from './meeting-document.html'
 import '~/directives/meetings/documents/document-files'
 import '~/directives/checkbox'
 import '~/filters/html-sanitizer'
-import '~/filters/to-display-symbol'; 
+import '~/authentication'
+import lstring from '~/services/lstring'
+import toDisplaySymbol from '~/filters/to-display-symbol'
 import copyLink from '~/components/link.vue';
 import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
 
@@ -23,7 +25,7 @@ import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
         'default':                                                                    { priority:999,  color: 'orange', btn: 'btn-default', icon: 'fa-file-o' }
     };
 
-	app.directive('meetingDocument', ['$rootScope',function($rootScope) {
+	app.directive('meetingDocument', ['$rootScope', '$q', '$timeout', 'authentication', 'locale', function($rootScope, $q, $timeout, authentication, locale) {
 		return {
 			restrict : "E",
 			template : html,
@@ -46,6 +48,38 @@ import AgendaItem from '~/components/meetings/sessions/agenda-item.vue'
                 $scope.LANGUAGES      = LANGUAGES
                 $scope.vueOptions = { components: { copyLink, AgendaItem } } ;
                 $scope.dateFormat = ()=>$scope.showStatistics=='full' ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd';
+                $scope.copyForSharing = copyForSharing;
+
+                $q.when(authentication.getUser()).then(function(user) {
+                    $scope.isEditor = authentication.isInRole(user, ["EditorialService"]);
+                });
+
+                //==============================
+                // Copies "symbol (linked) / title [prefix code]" as rich text with a plain-text fallback
+                //==============================
+                function copyForSharing() {
+
+                    const { document } = $scope;
+                    const symbol = toDisplaySymbol(document.symbol);
+                    const url    = new URL(document.url, window.location.href).href;
+                    const items  = (document.agendaItems||[]).map(i=>`${i.prefix||''} ${i.code||i.item||i}`.trim());
+                    const title  = lstring(document.title, locale) + (items.length ? ` [${items.join(', ')}]` : '');
+
+                    const html  = `<b><a href="${escapeHtml(url)}" style="font-weight:bold">${escapeHtml(symbol)}</a></b><br>${escapeHtml(title)}`;
+                    const plain = `${symbol}\n${title}`;
+
+                    navigator.clipboard.write([new ClipboardItem({
+                        'text/html' : new Blob([html],  { type: 'text/html' }),
+                        'text/plain': new Blob([plain], { type: 'text/plain' })
+                    })]).then(function() {
+                        $scope.$applyAsync(()=>$scope.copied = true);
+                        $timeout(()=>$scope.copied = false, 2000);
+                    });
+                }
+
+                function escapeHtml(text) {
+                    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+                }
 
                 //==============================
                 //

@@ -43,7 +43,8 @@
                     
                         <a ng-href="{{::titleUrl}}" target="_blank" style="color: inherit;">
                             {{::document.title|lstring}}
-                        </a> 
+                        </a>
+                        <i ng-if="!viewOnly && isEditor && document.symbol && document.url" ng-click="$event.stopPropagation(); copyForSharing()" class="fa" ng-class="copied ? 'fa-check text-success' : 'fa-copy'" style="cursor:pointer" title="Copy symbol, title and agenda items for sharing"></i>
 
                         <span ng-if="!viewOnly && !document.symbol && document.url">
                             <copy-Link ng-vue="vueOptions" v-if="!document.symbol && document.url" :link="document.url"></copy-Link>

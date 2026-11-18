@@ -31,6 +31,9 @@
                 </div>
                 <div ng-click="showConference(activeConference.code)" ng-bind="activeConference.Description|lstring"
                     style="text-align: justify;cursor: pointer;white-space:pre-line;" class="mr-1"></div>
+                <a ng-if="canEditMenu" ng-href="/conferences/{{activeConference.code}}/edit-menu" class="btn btn-default btn-sm" style="margin-top:8px">
+                    <i class="fa fa-edit"></i> Edit menu
+                </a>
             </div>
         </div>
     </div>
@@ -60,6 +63,9 @@
                     </div>
                     <div ng-click="showConference(conference.code)" ng-bind="conference.Description|lstring"
                         style="text-align: justify;cursor: pointer;white-space:pre-line;"></div>
+                    <a ng-if="canEditMenu" ng-href="/conferences/{{conference.code}}/edit-menu" class="btn btn-default btn-sm" style="margin-top:8px">
+                        <i class="fa fa-edit"></i> Edit menu
+                    </a>
                 </div>
             </div>
             <!-- <div class="panel panel-default">

@@ -3,7 +3,7 @@
   "description": "Website of the Convention on Biological Diversity",
   "type": "module",
   "engines": {
-    "node": ">=20.11"
+    "node": ">=22.23.4"
   },
   "dependencies": {
     "change-case": "5.4.4",
@@ -48,6 +48,7 @@
     "build": "rm -rf ./dist && npx rollup -c",
     "dev": "rm -rf ./dist && npx rollup -c --watch",
     "server": "node server",
+    "test": "node --import ./test/setup.mjs --test \"test/**/*.test.mjs\"",
     "clean-reinstall": "rm -rf ./node_modules && rm -rf ./app/libs && npm install"
   }
 }
