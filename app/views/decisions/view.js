@@ -31,7 +31,8 @@ export default ['$scope', '$http', '$route', '$location', '$compile', '$anchorSc
         else if(body=='NP')  				treaty = { code : "XXVII8b" };
 
         if(!treaty) {
-            throw 'ONLY "COP / CP / NP" DECISIONS ARE SUPPORTED';
+            $location.url('/').replace();
+            return;
         }
 
         $scope.canComment    = canComment();

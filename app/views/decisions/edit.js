@@ -51,7 +51,8 @@ export default ['$scope', '$http', '$route', '$location', '$q', 'ngDialog', 'use
         else if(body=='NP')  				treaty = { code : "XXVII8b" };
 
         if(!treaty) {
-            throw 'ONLY "COP / CP / NP" DECISIONS ARE SUPPORTED';
+            $location.url('/').replace();
+            return;
         }
 
         if(!_.isFinite(session)  || session <1) { $scope.paramError = "session_invalid";  return this; }

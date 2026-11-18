@@ -126,7 +126,8 @@ async function created() {
     else if(body=='NP')  				treaty = { code : "XXVII8b" };
 
 	if(!treaty) {
-		throw 'ONLY "COP / CP / NP" DECISIONS ARE SUPPORTED';
+		this.$router.replace({ path: '/' });
+		return;
 	}
 
 	treaty = await this.api.getTreaties(treaty.code);

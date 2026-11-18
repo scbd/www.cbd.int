@@ -518,7 +518,8 @@ async function load() {
     else if(body=='NP')  				treaty = { code : "XXVII8b" };
 
 	if(!treaty) {
-		throw 'ONLY "COP / CP / NP" DECISIONS ARE SUPPORTED';
+		$router.replace({ path: '/' });
+		return;
 	}
 
 	const pathParser = /^(?<dec>\d+)(?:\/(?<para>.*))?/;

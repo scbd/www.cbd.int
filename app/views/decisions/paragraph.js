@@ -33,7 +33,8 @@ export default ['$scope', '$http', '$route', '$location', '$compile', '$anchorSc
         else if(body=='NP')  				treaty = { code : "XXVII8b" };
 
         if(!treaty) {
-            throw 'ONLY "COP / CP / NP" DECISIONS ARE SUPPORTED';
+            $location.url('/').replace();
+            return;
         }
 
         var code = 'CBD/'+body+'/'+pad(session) + '/' + pad(number) + '.' + (section + pad(paragraph)) + ((item && '.'+pad(item))||'') + ((subItem && '.'+pad(subItem))||'');
