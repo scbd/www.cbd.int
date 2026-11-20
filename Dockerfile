@@ -17,11 +17,11 @@ COPY . ./
 
 RUN npm run build
 
-ENV PORT 8000
+ENV PORT=8000
 
 EXPOSE 8000
 
 ARG COMMIT
-ENV COMMIT $COMMIT
+ENV COMMIT=$COMMIT
 
 CMD ["node", "server"]
