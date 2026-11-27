@@ -384,7 +384,7 @@ export default {
 }
 
 .flag-icon {
-    background-image: url(https://cdn.cbd.int/@scbd/www-css@0.0.17/dist/images/icon_language_neg.png);
+    background-image: url(https://cdn.jsdelivr.net/npm/@scbd/www-css@0.0.17/dist/images/icon_language_neg.png);
     background-repeat: no-repeat;
     height: 12px;
     width: 12px;
