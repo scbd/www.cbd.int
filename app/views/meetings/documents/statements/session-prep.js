@@ -2,7 +2,7 @@ import _ from 'lodash';
 import ng from 'angular';
 import sessionEdit from 'components/meetings/sessions/edit';
 import 'angular-vue';
-import 'css!https://cdn.cbd.int/vue-multiselect@2.1.6/dist/vue-multiselect.min.css';
+import 'css!cdn!npm/vue-multiselect@2.1.6/dist/vue-multiselect.min.css';
 
 
 	export default ['$scope', 'apiToken', '$route', function ($scope, apiToken, $route) {
