@@ -56,6 +56,8 @@
 						<dd v-if="decision.body">
 							<span v-if="decision.body === 'COP'">Conference of the Parties (COP)</span>
 							<span v-else-if="decision.body === 'EXCOP'">Extraordinary Meeting of the Conference of the Parties (ExCOP)</span>
+							<span v-else-if="decision.body === 'CP'">Conference of the Parties serving as the meeting of the Parties to the Cartagena Protocol (CP-MOP)</span>
+							<span v-else-if="decision.body === 'NP'">Conference of the Parties serving as the meeting of the Parties to the Nagoya Protocol (NP-MOP)</span>
 							<span v-else>{{ decision.body | uppercase }}</span>
 						</dd>
 
@@ -511,11 +513,13 @@ async function load() {
 
 	const body      = $route.params.body.toUpperCase();
 
-	if(body=='COP' || body=='EXCOP') treaty = { code : "XXVII8" } ;
+	if(body=='COP' || body=='EXCOP') 	treaty = { code : "XXVII8" } ;
+    else if(body=='CP')  				treaty = { code : "XXVII8a" };
+    else if(body=='NP')  				treaty = { code : "XXVII8b" };
 
 	if(!treaty) {
-		//alert('ONLY "COP" DECISIONS ARE SUPPORTED');
-		throw 'ONLY "COP" DECISIONS ARE SUPPORTED';
+		$router.replace({ path: '/' });
+		return;
 	}
 
 	const pathParser = /^(?<dec>\d+)(?:\/(?<para>.*))?/;
@@ -529,7 +533,7 @@ async function load() {
 
 	treaty 			= await this.api.getTreaties(treaty.code);
 
-	const code = treaty.acronym+'/'+body+'/'+pad(session)+'/'+pad(number);
+	const code = 'CBD/'+body+'/'+pad(session)+'/'+pad(number);
 
 	const decision = await this.api.queryDecisionTree(code);
 	const relatedDecisions = await this.loadRelatedDecisions(decision.code);
@@ -601,7 +605,7 @@ async function onChangeSelectedNode(selectedNode) {
 async function loadDecisionDocuments(decision) {
 	const params = {
 		fl: 'id,symbol_s,schema_s,position_i,meeting_ss,title_*, description_*,file_ss,url_ss',
-		q : 'treaty_s:'+decision.treaty + ' AND body_s:'+decision.body + ' AND session_i:'+decision.session + ' AND decision_i:'+decision.decision, 
+		q : 'treaty_s:'+decision.treaty + ' AND body_s:'+decision.body.replace(/^(CP|NP)$/, '$1MOP') + ' AND session_i:'+decision.session + ' AND decision_i:'+decision.decision, // index body_s uses CPMOP/NPMOP
 	};
 
 	const result = await this.api.queryDecisionDocuments(params);
