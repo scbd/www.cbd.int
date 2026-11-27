@@ -553,18 +553,21 @@ a.label:focus {
                                                 <div class="pull-right">
 
                                                     <div  role="group" class="btn-group btn-group-sm" ng-if="request.currentStep=='finished'">
-                                                        <button  ng-if="request.organization.kronosIds.length" type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'accreditate')"
+                                                        <button  ng-if="request.organization && request.organization.kronosIds.length" type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'accreditate')"
                                                             ng-disabled="request.organization.accredited">
                                                             <i class="fa fa-thumbs-up"></i> Accreditate
                                                         </button>
-                                                        <button type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'reject')" ng-disabled="request.organization.rejected">
+                                                        <button ng-if="request.organization" type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.updateOrganizationStatus(request, 'reject')" ng-disabled="request.organization.rejected">
                                                             <i class="fa fa-thumbs-down"></i> Reject
                                                         </button>
                                                         <button  ng-if="!request.organization.kronosIds.length" type="button" class="btn btn-outline-dark" ng-click="mediaRequestCtrl.sendBack(request)" >
                                                           <i class="fa fa-paper-plane"></i> Send Back
                                                       </button>
                                                     </div>
-                                                    <div ng-if="!request.organization.kronosIds.length" class="alert alert-danger">
+                                                    <div ng-if="request.currentStep=='finished' && !request.organization" class="alert alert-danger">
+                                                      <span>This request has no organization</span>
+                                                  </div>
+                                                    <div ng-if="request.organization && !request.organization.kronosIds.length" class="alert alert-danger">
                                                       <span>Link to kronos before accreditation <br/>or rejection, by searching and the check box</span>
                                                   </div>
                                                 </div>
@@ -669,10 +672,10 @@ a.label:focus {
 
                                                                     <div role="group" class="btn-group pull-right">
                                                                         
-                                                                        <button type="button" class="btn btn-sm btn-outline-dark" ng-click="mediaRequestCtrl.linkKronsOrganization(request, korg)" ng-if="!korg.isLinked">
+                                                                        <button type="button" class="btn btn-sm btn-outline-dark" ng-click="mediaRequestCtrl.linkKronsOrganization(request, korg)" ng-if="request.organization && !korg.isLinked">
                                                                             <i class="fa fa-square-o"></i>
                                                                         </button>
-                                                                        <button type="button" class="btn btn-sm btn-success" ng-click="mediaRequestCtrl.removeKronsOrganization(request, korg)" ng-if="korg.isLinked">
+                                                                        <button type="button" class="btn btn-sm btn-success" ng-click="mediaRequestCtrl.removeKronsOrganization(request, korg)" ng-if="request.organization && korg.isLinked">
                                                                             <i class="fa fa-check-square"></i>
                                                                         </button>
                                                                         &nbsp;
@@ -702,7 +705,7 @@ a.label:focus {
                                                                 </td>
                                                             </tr>
                                                         </tbody>
-                                                        <tfoot ng-if="request._id == mediaRequestCtrl.selectedRequest._id && !mediaRequestCtrl.hasLinkedOrgs(request)">
+                                                        <tfoot ng-if="request.organization && request._id == mediaRequestCtrl.selectedRequest._id && !mediaRequestCtrl.hasLinkedOrgs(request)">
                                                             <tr>
                                                                 <td>{{mediaRequestCtrl.hasLinkedOrgs(request)}}
                                                                     <button class="btn btn-sm btn-primary" ng-click="mediaRequestCtrl.createKronosOrg(request)">Create Kronos Organization</button>
